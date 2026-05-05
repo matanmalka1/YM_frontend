@@ -7,11 +7,7 @@ import {
   formatRelativeDueLabel,
   isCurrentReportingPeriod,
 } from '@/components/ui/table/groupedPeriodRow.utils'
-import {
-  taxDeadlinesApi,
-  taxDeadlinesQK,
-  getDeadlineTypeLabel,
-} from '../api'
+import { taxDeadlinesApi, taxDeadlinesQK, getDeadlineTypeLabel } from '../api'
 import type { DeadlineGroup, TaxDeadlineResponse } from '../api'
 import { getTaxDeadlinePeriodLabel } from '../utils'
 import { cn } from '../../../utils/utils'

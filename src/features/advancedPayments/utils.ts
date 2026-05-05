@@ -1,7 +1,4 @@
-import {
-  getReportingPeriodMonthLabel,
-  MONTH_NAMES,
-} from '@/constants/periodOptions.constants'
+import { getReportingPeriodMonthLabel, MONTH_NAMES } from '@/constants/periodOptions.constants'
 
 export { fmtCurrency, MONTH_OPTIONS } from '../../utils/utils'
 export { MONTH_NAMES }

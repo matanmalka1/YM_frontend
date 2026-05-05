@@ -245,7 +245,10 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
 }) => {
   const dueDate = batch.due_date ?? getAdvancePaymentDueDateFallback(batch)
   const period = `${batch.year}-${String(batch.month).padStart(2, '0')}`
-  const periodLabel = `${getAdvancePaymentMonthLabel(period, batch.period_months_count)} ${batch.year}`.replace('-', '–')
+  const periodLabel = `${getAdvancePaymentMonthLabel(period, batch.period_months_count)} ${batch.year}`.replace(
+    '-',
+    '–',
+  )
   const metrics: PeriodSummaryMetric[] = [
     { label: 'לקוחות', value: batch.client_count },
     { label: 'ממתינים', value: batch.pending_count, tone: batch.pending_count > 0 ? 'warning' : 'muted' },

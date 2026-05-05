@@ -51,11 +51,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Node
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(target) &&
-        !listRef.current?.contains(target)
-      ) {
+      if (containerRef.current && !containerRef.current.contains(target) && !listRef.current?.contains(target)) {
         setOpen(false)
         setHighlightedIndex(-1)
       }
@@ -191,7 +187,8 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
         }
       />
 
-      {open && results.length > 0 && (
+      {open &&
+        results.length > 0 &&
         createPortal(
           <ul
             ref={listRef}
@@ -223,8 +220,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
             ))}
           </ul>,
           document.body,
-        )
-      )}
+        )}
     </div>
   )
 }

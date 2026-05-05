@@ -41,12 +41,10 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
   const generationFrequency: 1 | 2 | null =
     advancePaymentFrequency === 'bimonthly' ? 2 : advancePaymentFrequency === 'monthly' ? 1 : null
 
-  const displayFrequency: 1 | 2 | null =
-    rows.length > 0 ? rows[0].period_months_count : generationFrequency
+  const displayFrequency: 1 | 2 | null = rows.length > 0 ? rows[0].period_months_count : generationFrequency
 
   const generateMutation = useMutation({
-    mutationFn: (periodMonthsCount: 1 | 2) =>
-      advancePaymentsApi.generateSchedule(clientId, year, periodMonthsCount),
+    mutationFn: (periodMonthsCount: 1 | 2) => advancePaymentsApi.generateSchedule(clientId, year, periodMonthsCount),
     onSuccess: (data) => {
       const msg = data.created > 0 ? `נוצרו ${data.created} מקדמות` : 'הכול קיים'
       toast.success(msg)
@@ -137,11 +135,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
 
       <AdvancePaymentsKPICards clientId={clientId} year={year} />
 
-      <ClientAdvancePaymentCards
-        rows={rows}
-        isLoading={isLoading}
-        onRowClick={(row) => setDrawerRow(row)}
-      />
+      <ClientAdvancePaymentCards rows={rows} isLoading={isLoading} onRowClick={(row) => setDrawerRow(row)} />
 
       {totalPages > 1 && (
         <PaginationCard page={page} totalPages={totalPages} total={total} label="מקדמות" onPageChange={setPage} />

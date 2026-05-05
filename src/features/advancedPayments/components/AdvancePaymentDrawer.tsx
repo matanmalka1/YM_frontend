@@ -5,15 +5,42 @@ import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
 import { DatePicker } from '../../../components/ui/inputs/DatePicker'
 import { Button } from '../../../components/ui/primitives/Button'
-import type { AdvancePaymentRow, UpdateAdvancePaymentPayload } from '../types'
+import type { AdvancePaymentOverviewRow, AdvancePaymentRow, UpdateAdvancePaymentPayload } from '../types'
 import { ADVANCE_PAYMENT_STATUS_OPTIONS, ADVANCE_PAYMENT_METHOD_OPTIONS } from '../constants'
 import { fmtCurrency, getAdvancePaymentMonthLabel } from '../utils'
 import { formatDate } from '../../../utils/utils'
 import { toEditableAmount } from './advancePaymentComponent.utils'
 import { toast } from '../../../utils/toast'
 
+type AdvancePaymentDrawerRow = AdvancePaymentRow | AdvancePaymentOverviewRow
+
+interface ClientContextItem {
+  label: string
+  value: string
+}
+
+const getOfficeClientNumber = (row: AdvancePaymentDrawerRow) =>
+  'office_client_number' in row ? row.office_client_number : null
+
+const getIdNumber = (row: AdvancePaymentDrawerRow) => ('id_number' in row ? row.id_number : null)
+
+const getAdvanceRate = (row: AdvancePaymentDrawerRow) => ('advance_rate' in row ? row.advance_rate : null)
+
+const getPaidAt = (row: AdvancePaymentDrawerRow) => ('paid_at' in row ? row.paid_at : null)
+
+const getNotes = (row: AdvancePaymentDrawerRow) => ('notes' in row ? row.notes : null)
+
+const getPaidLate = (row: AdvancePaymentDrawerRow) => ('paid_late' in row ? row.paid_late : false)
+
+const formatAdvanceRate = (value: string | null | undefined) => {
+  if (value == null || value === '') return null
+  const numericValue = Number(value)
+  if (!Number.isFinite(numericValue)) return `${value}%`
+  return `${numericValue.toLocaleString('he-IL', { maximumFractionDigits: 2 })}%`
+}
+
 interface AdvancePaymentDrawerProps {
-  row: AdvancePaymentRow | null
+  row: AdvancePaymentDrawerRow | null
   open: boolean
   isUpdating: boolean
   isDeleting?: boolean
@@ -43,74 +70,112 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
 
   useEffect(() => {
     if (!row) return
+    const nextPaidAt = getPaidAt(row)
     setPaidAmount(toEditableAmount(row.paid_amount))
     setExpectedAmount(toEditableAmount(row.expected_amount))
     setStatus(row.status)
     setPaymentMethod(row.payment_method ?? '')
-    setPaidAt(row.paid_at ? row.paid_at.split('T')[0] : '')
-    setNotes(row.notes ?? '')
+    setPaidAt(nextPaidAt ? nextPaidAt.split('T')[0] : '')
+    setNotes(getNotes(row) ?? '')
     setConfirmDelete(false)
   }, [row])
 
   if (!row) return null
+
+  const normalizedPaidAmount = paidAmount.trim()
+  const normalizedExpectedAmount = expectedAmount.trim()
+  const normalizedPaymentMethod = paymentMethod.trim()
+  const normalizedPaidAt = paidAt.trim()
+  const normalizedNotes = notes.trim()
+  const rowPaidAt = getPaidAt(row)
+  const rowNotes = getNotes(row)
+  const currentPaidAt = rowPaidAt ? rowPaidAt.split('T')[0] : ''
+  const isPaymentStatus = status === 'paid' || status === 'partial'
+  const paidLate = getPaidLate(row)
+  const timingStatusLabel = paidLate ? 'שולם באיחור' : row.timing_status === 'overdue' ? 'באיחור' : null
+  const timingStatusClass = paidLate ? 'text-warning-600' : 'text-error-600'
+  const clientDisplayName = row.business_name ?? null
+  const officeClientNumber = getOfficeClientNumber(row)
+  const idNumber = getIdNumber(row)
+  const advanceRate = formatAdvanceRate(getAdvanceRate(row))
+  const subtitleParts = [
+    clientDisplayName,
+    officeClientNumber != null ? `מס׳ לקוח ${officeClientNumber}` : null,
+  ].filter(Boolean)
+  const clientContextItems: ClientContextItem[] = [
+    ...(clientDisplayName ? [{ label: 'לקוח', value: clientDisplayName }] : []),
+    ...(officeClientNumber != null ? [{ label: 'מס׳ לקוח', value: String(officeClientNumber) }] : []),
+    ...(idNumber ? [{ label: 'ת.ז / ח.פ', value: idNumber }] : []),
+    ...(advanceRate ? [{ label: 'שיעור מקדמה', value: advanceRate }] : []),
+  ]
 
   const isDirty =
     toEditableAmount(row.paid_amount) !== paidAmount ||
     toEditableAmount(row.expected_amount) !== expectedAmount ||
     row.status !== status ||
     (row.payment_method ?? '') !== paymentMethod ||
-    (row.paid_at ? row.paid_at.split('T')[0] : '') !== paidAt ||
-    (row.notes ?? '') !== notes
+    currentPaidAt !== paidAt ||
+    (rowNotes ?? '') !== notes
 
   const handleSave = async () => {
     const payload: UpdateAdvancePaymentPayload = {}
-    const numericPaid = Number(paidAmount || 0)
-    const numericExpected = Number(expectedAmount)
+    const paidAmountPayload = normalizedPaidAmount === '' ? '0' : normalizedPaidAmount
+    const expectedAmountPayload = normalizedExpectedAmount === '' ? null : normalizedExpectedAmount
+    const numericPaid = Number(paidAmountPayload)
+    const numericExpected = expectedAmountPayload === null ? null : Number(expectedAmountPayload)
 
     if (!Number.isFinite(numericPaid) || numericPaid < 0) {
       toast.error('סכום ששולם חייב להיות מספר תקין שאינו שלילי')
       return
     }
-    if ((status === 'paid' || status === 'partial') && numericPaid <= 0) {
+    if (numericExpected !== null && (!Number.isFinite(numericExpected) || numericExpected < 0)) {
+      toast.error('סכום צפוי חייב להיות מספר תקין שאינו שלילי')
+      return
+    }
+    if (isPaymentStatus && numericPaid <= 0) {
       toast.error('סטטוס שולם או חלקי מחייב סכום ששולם גדול מאפס')
       return
     }
-    if (status === 'paid' && expectedAmount !== '' && Number.isFinite(numericExpected) && numericPaid < numericExpected) {
+    if (isPaymentStatus && normalizedPaidAt === '') {
+      toast.error('תאריך ביצוע תשלום נדרש כאשר הסטטוס שולם או חלקי')
+      return
+    }
+    if (status === 'paid' && numericExpected !== null && numericPaid < numericExpected) {
       toast.error('סכום ששולם נמוך מהסכום הצפוי. יש לבחור סטטוס חלקי')
       return
     }
 
-    if (paidAmount !== toEditableAmount(row.paid_amount)) payload.paid_amount = paidAmount === '' ? '0' : paidAmount
-    if (expectedAmount !== toEditableAmount(row.expected_amount))
-      payload.expected_amount = expectedAmount === '' ? null : expectedAmount
+    if (paidAmount !== toEditableAmount(row.paid_amount)) payload.paid_amount = paidAmountPayload
+    if (expectedAmount !== toEditableAmount(row.expected_amount)) payload.expected_amount = expectedAmountPayload
     if (status !== row.status) payload.status = status as UpdateAdvancePaymentPayload['status']
     if (paymentMethod !== (row.payment_method ?? ''))
-      payload.payment_method = (paymentMethod || null) as UpdateAdvancePaymentPayload['payment_method']
-    if (paidAt !== (row.paid_at ? row.paid_at.split('T')[0] : '')) payload.paid_at = paidAt || null
-    if (notes !== (row.notes ?? '')) payload.notes = notes || null
+      payload.payment_method = (normalizedPaymentMethod || null) as UpdateAdvancePaymentPayload['payment_method']
+    if (paidAt !== currentPaidAt) payload.paid_at = normalizedPaidAt || null
+    if (notes !== (rowNotes ?? '')) payload.notes = normalizedNotes || null
 
     if (Object.keys(payload).length === 0) return onClose()
     await onSave(row.id, payload)
   }
 
-  const turnoverLabel = row.reported_turnover
-    ? `${fmtCurrency(row.reported_turnover)} (מאושר)`
-    : row.live_turnover
-      ? `${fmtCurrency(row.live_turnover)} (מחזור חי מדוח מע"מ)`
-      : null
+  const turnoverLabel =
+    row.reported_turnover != null
+      ? `${fmtCurrency(row.reported_turnover)} (מאושר)`
+      : row.live_turnover != null
+        ? `${fmtCurrency(row.live_turnover)} (מחזור חי מדוח מע"מ)`
+        : null
 
-  const title = getAdvancePaymentMonthLabel(row.period, row.period_months_count)
+  const title = `מקדמה - ${getAdvancePaymentMonthLabel(row.period, row.period_months_count)}`
 
   return (
     <DetailDrawer
       open={open}
       title={title}
-      subtitle={row.business_name ?? undefined}
+      subtitle={subtitleParts.length > 0 ? subtitleParts.join(' · ') : undefined}
       onClose={onClose}
       isDirty={isDirty}
       footer={
         canEdit ? (
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex w-full items-center justify-between gap-2">
             {onDelete &&
               (confirmDelete ? (
                 <div className="flex items-center gap-2">
@@ -120,11 +185,19 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
                     size="sm"
                     className="text-error-600 hover:bg-error-50"
                     isLoading={isDeleting}
-                    onClick={() => onDelete(row.id)}
+                    onClick={async () => {
+                      await onDelete(row.id)
+                    }}
+                    disabled={isUpdating || isDeleting}
                   >
                     כן, מחק
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => setConfirmDelete(false)} disabled={isDeleting}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setConfirmDelete(false)}
+                    disabled={isUpdating || isDeleting}
+                  >
                     ביטול
                   </Button>
                 </div>
@@ -134,16 +207,18 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
                   size="sm"
                   className="text-gray-400 hover:text-error-600 hover:bg-error-50"
                   onClick={() => setConfirmDelete(true)}
-                  disabled={isUpdating}
+                  disabled={isUpdating || isDeleting}
+                  aria-label="מחק מקדמה"
+                  title="מחק מקדמה"
                 >
                   <Trash2 size={14} />
                 </Button>
               ))}
-            <div className="flex gap-2 mr-auto">
+            <div className="flex gap-2 ms-auto">
               <Button variant="outline" onClick={onClose} disabled={isUpdating || isDeleting}>
                 ביטול
               </Button>
-              <Button variant="primary" isLoading={isUpdating} onClick={handleSave} disabled={isDeleting}>
+              <Button variant="primary" isLoading={isUpdating} onClick={handleSave} disabled={isUpdating || isDeleting}>
                 שמור
               </Button>
             </div>
@@ -159,56 +234,67 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
           </div>
         )}
 
+        {clientContextItems.length > 0 && (
+          <div className="rounded-lg border border-gray-100 bg-gray-50/50 px-3 py-2.5">
+            <dl className="grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2">
+              {clientContextItems.map((item) => (
+                <div key={item.label} className="min-w-0">
+                  <dt className="text-xs text-gray-500">{item.label}</dt>
+                  <dd className="truncate text-sm font-medium text-gray-900">{item.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        )}
+
         <DrawerSection title="פרטי תקופה">
           <DrawerField label="תאריך יעד" value={formatDate(row.due_date)} />
           <DrawerField
             label="מחזור לתקופה"
             value={turnoverLabel ?? <span className="text-gray-400 text-xs">דוח מע״מ טרם הוגש</span>}
           />
-          {row.timing_status === 'overdue' && (
+          {timingStatusLabel && (
             <DrawerField
               label="סטטוס עמידה"
-              value={<span className="text-error-600 text-xs font-medium">באיחור</span>}
-            />
-          )}
-          {row.paid_late && (
-            <DrawerField
-              label="סטטוס עמידה"
-              value={<span className="text-warning-600 text-xs font-medium">שולם באיחור</span>}
+              value={<span className={`${timingStatusClass} text-xs font-medium`}>{timingStatusLabel}</span>}
             />
           )}
         </DrawerSection>
 
         {canEdit ? (
           <DrawerSection title="עדכון תשלום">
-            <div className="py-3 space-y-3">
-              <Input
-                label="סכום שולם"
-                type="number"
-                min={0}
-                value={paidAmount}
-                onChange={(e) => setPaidAmount(e.target.value)}
-              />
-              <Input
-                label="סכום צפוי"
-                type="number"
-                min={0}
-                value={expectedAmount}
-                onChange={(e) => setExpectedAmount(e.target.value)}
-              />
-              <Select
-                label="סטטוס"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                options={ADVANCE_PAYMENT_STATUS_OPTIONS}
-              />
-              <Select
-                label="שיטת תשלום"
-                value={paymentMethod}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-                options={[{ value: '', label: 'ללא' }, ...ADVANCE_PAYMENT_METHOD_OPTIONS]}
-              />
-              <DatePicker label="תאריך ביצוע תשלום" value={paidAt} onChange={setPaidAt} />
+            <div className="py-4 space-y-4">
+              <div className="space-y-3">
+                <Input
+                  label="סכום צפוי"
+                  type="number"
+                  min={0}
+                  value={expectedAmount}
+                  onChange={(e) => setExpectedAmount(e.target.value)}
+                />
+                <Input
+                  label="סכום שולם"
+                  type="number"
+                  min={0}
+                  value={paidAmount}
+                  onChange={(e) => setPaidAmount(e.target.value)}
+                />
+              </div>
+              <div className="space-y-3">
+                <Select
+                  label="סטטוס"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  options={ADVANCE_PAYMENT_STATUS_OPTIONS}
+                />
+                <Select
+                  label="שיטת תשלום"
+                  value={paymentMethod}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  options={[{ value: '', label: 'ללא' }, ...ADVANCE_PAYMENT_METHOD_OPTIONS]}
+                />
+                <DatePicker label="תאריך ביצוע תשלום" value={paidAt} onChange={setPaidAt} />
+              </div>
               <div className="space-y-1">
                 <label className="block text-sm font-medium text-gray-700">הערות</label>
                 <textarea
@@ -226,8 +312,8 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
             <DrawerField label="סכום שולם" value={fmtCurrency(row.paid_amount)} />
             <DrawerField label="סכום צפוי" value={fmtCurrency(row.expected_amount)} />
             <DrawerField label="שיטת תשלום" value={row.payment_method ?? null} />
-            <DrawerField label="תאריך ביצוע" value={row.paid_at ? formatDate(row.paid_at) : null} />
-            <DrawerField label="הערות" value={row.notes} />
+            <DrawerField label="תאריך ביצוע" value={rowPaidAt ? formatDate(rowPaidAt) : null} />
+            <DrawerField label="הערות" value={rowNotes} />
           </DrawerSection>
         )}
       </div>

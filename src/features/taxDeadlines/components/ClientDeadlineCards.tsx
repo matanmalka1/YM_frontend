@@ -93,9 +93,7 @@ const DeadlineRow = ({
   const isPending = deadline.status === 'pending'
   const daysRemaining = calculateDaysRemaining(deadline.due_date)
   const urgencyText =
-    isPending && deadline.urgency_level !== 'none'
-      ? getDeadlineDaysLabelShort(daysRemaining, false)
-      : null
+    isPending && deadline.urgency_level !== 'none' ? getDeadlineDaysLabelShort(daysRemaining, false) : null
   const { label: sourceLabel, severity: sourceSeverity } = getSourceState(deadline)
   const Icon = TYPE_ICON[deadline.deadline_type] ?? CalendarClock
   const iconBg = TYPE_ICON_BG[deadline.deadline_type] ?? 'bg-gray-100 text-gray-400'
@@ -119,25 +117,17 @@ const DeadlineRow = ({
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         {/* Line 1: type · period */}
         <div className="flex items-baseline gap-1.5 min-w-0">
-          <span className="shrink-0 text-[11px] text-gray-400">
-            {getDeadlineTypeLabel(deadline.deadline_type)}
-          </span>
+          <span className="shrink-0 text-[11px] text-gray-400">{getDeadlineTypeLabel(deadline.deadline_type)}</span>
           <span className="text-gray-300 text-[11px]">·</span>
-          <span className="truncate text-sm font-semibold text-gray-800">
-            {getTaxDeadlinePeriodLabel(deadline)}
-          </span>
+          <span className="truncate text-sm font-semibold text-gray-800">{getTaxDeadlinePeriodLabel(deadline)}</span>
         </div>
         {/* Line 2: due date · days · source */}
         <div className="flex items-center gap-1 min-w-0 flex-wrap">
-          <span className="text-xs font-medium tabular-nums text-gray-600">
-            {formatDate(deadline.due_date)}
-          </span>
+          <span className="text-xs font-medium tabular-nums text-gray-600">{formatDate(deadline.due_date)}</span>
           {urgencyText && (
             <>
               <span className="text-gray-300 text-[11px]">·</span>
-              <span className={cn('text-xs font-medium', URGENCY_TEXT[deadline.urgency_level])}>
-                {urgencyText}
-              </span>
+              <span className={cn('text-xs font-medium', URGENCY_TEXT[deadline.urgency_level])}>{urgencyText}</span>
             </>
           )}
           <span className="text-gray-200 text-[11px]">·</span>
@@ -159,10 +149,7 @@ const DeadlineRow = ({
       </div>
 
       {/* Left: status + actions */}
-      <div
-        className="flex shrink-0 flex-col items-end gap-1"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="flex shrink-0 flex-col items-end gap-1" onClick={(e) => e.stopPropagation()}>
         <DeadlineStatusBadge status={deadline.status} />
         <TaxDeadlineRowActions
           deadline={deadline}
@@ -227,9 +214,7 @@ const SidePanel = ({
                 <span className={cn('h-1.5 w-1.5 shrink-0 rounded-full', dot)} />
                 <span className="text-xs text-gray-600">{label}</span>
               </div>
-              <span className={cn('text-sm font-semibold tabular-nums', valueClass)}>
-                {counts[key]}
-              </span>
+              <span className={cn('text-sm font-semibold tabular-nums', valueClass)}>{counts[key]}</span>
             </div>
           ))}
         </div>
@@ -246,25 +231,16 @@ const SidePanel = ({
               return (
                 <div
                   key={d.id}
-                  className={cn(
-                    'py-2',
-                    onRowClick && 'cursor-pointer rounded transition-colors hover:bg-gray-50/60',
-                  )}
+                  className={cn('py-2', onRowClick && 'cursor-pointer rounded transition-colors hover:bg-gray-50/60')}
                   onClick={() => onRowClick?.(d)}
                 >
                   <div className="flex items-baseline justify-between gap-1">
-                    <span className="truncate text-xs font-semibold text-gray-800">
-                      {getTaxDeadlinePeriodLabel(d)}
-                    </span>
-                    <span className="shrink-0 text-[11px] text-gray-400">
-                      {getDeadlineTypeLabel(d.deadline_type)}
-                    </span>
+                    <span className="truncate text-xs font-semibold text-gray-800">{getTaxDeadlinePeriodLabel(d)}</span>
+                    <span className="shrink-0 text-[11px] text-gray-400">{getDeadlineTypeLabel(d.deadline_type)}</span>
                   </div>
                   <div className="mt-0.5 flex items-center justify-between gap-1">
                     <span className="text-[11px] tabular-nums text-gray-500">{formatDate(d.due_date)}</span>
-                    <span className={cn('text-[11px] font-medium', URGENCY_TEXT[d.urgency_level])}>
-                      {daysLabel}
-                    </span>
+                    <span className={cn('text-[11px] font-medium', URGENCY_TEXT[d.urgency_level])}>{daysLabel}</span>
                   </div>
                 </div>
               )
@@ -278,8 +254,7 @@ const SidePanel = ({
 
 // ── Main export ───────────────────────────────────────────────────────────────
 
-const hasActiveFilters = (filters?: ClientDeadlineFilters) =>
-  Boolean(filters?.deadline_type || filters?.status)
+const hasActiveFilters = (filters?: ClientDeadlineFilters) => Boolean(filters?.deadline_type || filters?.status)
 
 export const ClientDeadlineCards = ({
   deadlines,

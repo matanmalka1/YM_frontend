@@ -149,8 +149,7 @@ export const AdvancePayments: React.FC = () => {
   })
 
   const generateMutation = useMutation({
-    mutationFn: (periodMonthsCount: 1 | 2) =>
-      advancePaymentsApi.generateSchedule(genClientId, year, periodMonthsCount),
+    mutationFn: (periodMonthsCount: 1 | 2) => advancePaymentsApi.generateSchedule(genClientId, year, periodMonthsCount),
     onSuccess: (data) => {
       toast.success(data.created > 0 ? `נוצרו ${data.created} מקדמות, דולגו ${data.skipped}` : 'לא נוצרו מקדמות חדשות')
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
@@ -290,7 +289,7 @@ export const AdvancePayments: React.FC = () => {
 
       {/* Drawer */}
       <AdvancePaymentDrawer
-        row={drawerRow as never}
+        row={drawerRow}
         open={drawerRow !== null}
         isUpdating={updateMutation.isPending}
         canEdit={isAdvisor}

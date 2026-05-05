@@ -10,7 +10,4 @@ export { TaxDeadlinesFilters } from './components/TaxDeadlinesFilters'
 export { useTaxDeadlines } from './hooks/useTaxDeadlines'
 export { TaxDeadlines } from './pages/TaxDeadlinesPage'
 export { getDeadlineDaysLabelShort, getTaxDeadlinePeriodLabel } from './utils'
-export type {
-  TaxDeadlineResponse,
-  DeadlineUrgentItem,
-} from './api'
+export type { TaxDeadlineResponse, DeadlineUrgentItem } from './api'

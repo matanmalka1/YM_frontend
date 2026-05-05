@@ -21,7 +21,14 @@ export const Modal: React.FC<ModalProps> = ({ open, title, children, footer, onC
 
   return (
     <>
-      <OverlayContainer open={open} variant="modal" title={title} footer={footer} onClose={handleClose} className={className}>
+      <OverlayContainer
+        open={open}
+        variant="modal"
+        title={title}
+        footer={footer}
+        onClose={handleClose}
+        className={className}
+      >
         {children}
       </OverlayContainer>
 
