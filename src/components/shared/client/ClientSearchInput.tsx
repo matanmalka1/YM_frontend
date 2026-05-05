@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/inputs/Input'
 import { searchApi } from '@/features/search/api'
@@ -30,11 +31,31 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const listRef = useRef<HTMLUListElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const [listPosition, setListPosition] = useState<React.CSSProperties>({})
+
+  const updateListPosition = () => {
+    const container = containerRef.current
+    if (!container) return
+    const rect = container.getBoundingClientRect()
+    setListPosition({
+      position: 'fixed',
+      top: rect.bottom + 2,
+      left: rect.left,
+      width: rect.width,
+      zIndex: 80,
+    })
+  }
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      const target = e.target as Node
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(target) &&
+        !listRef.current?.contains(target)
+      ) {
         setOpen(false)
         setHighlightedIndex(-1)
       }
@@ -42,6 +63,17 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
+
+  useEffect(() => {
+    if (!open) return
+    updateListPosition()
+    window.addEventListener('resize', updateListPosition)
+    window.addEventListener('scroll', updateListPosition, true)
+    return () => {
+      window.removeEventListener('resize', updateListPosition)
+      window.removeEventListener('scroll', updateListPosition, true)
+    }
+  }, [open, results.length])
 
   const handleChange = (query: string) => {
     onChange(query)
@@ -61,6 +93,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
         const clientResults = res.results.filter((r) => r.result_type === 'client')
         setResults(clientResults)
         setOpen(clientResults.length > 0)
+        if (clientResults.length > 0) requestAnimationFrame(updateListPosition)
         setHighlightedIndex(clientResults.length > 0 ? 0 : -1)
       } catch {
         setResults([])
@@ -159,28 +192,38 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
       />
 
       {open && results.length > 0 && (
-        <ul
-          id="client-search-results"
-          role="listbox"
-          className="absolute z-50 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg"
-        >
-          {results.map((result, index) => (
-            <li
-              id={`client-search-option-${result.client_id}`}
-              key={result.client_id}
-              role="option"
-              aria-selected={highlightedIndex === index}
-              onMouseDown={() => handleSelect(result)}
-              onMouseEnter={() => setHighlightedIndex(index)}
-              className={`flex cursor-pointer items-center justify-between px-4 py-2.5 text-sm ${
-                highlightedIndex === index ? 'bg-primary-50' : 'hover:bg-primary-50'
-              }`}
-            >
-              <span className="font-medium text-gray-900">{result.client_name}</span>
-              <span className="text-xs text-gray-400">{formatClientOfficeId(result.client_id)}</span>
-            </li>
-          ))}
-        </ul>
+        createPortal(
+          <ul
+            ref={listRef}
+            id="client-search-results"
+            role="listbox"
+            className="box-border max-h-72 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 text-right shadow-xl"
+            style={listPosition}
+            dir="rtl"
+          >
+            {results.map((result, index) => (
+              <li
+                id={`client-search-option-${result.client_id}`}
+                key={result.client_id}
+                role="option"
+                aria-selected={highlightedIndex === index}
+                onMouseDown={() => handleSelect(result)}
+                onMouseEnter={() => setHighlightedIndex(index)}
+                className={`flex cursor-pointer flex-col gap-0.5 px-4 py-2.5 text-sm ${
+                  highlightedIndex === index ? 'bg-primary-50' : 'hover:bg-primary-50'
+                }`}
+              >
+                <span className="font-medium leading-5 text-gray-900">{result.client_name}</span>
+                <span className="text-xs leading-4 text-gray-400">
+                  {result.office_client_number != null
+                    ? `מס׳ לקוח ${formatClientOfficeId(result.office_client_number)}`
+                    : 'מס׳ לקוח לא זמין'}
+                </span>
+              </li>
+            ))}
+          </ul>,
+          document.body,
+        )
       )}
     </div>
   )

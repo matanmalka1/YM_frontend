@@ -8,11 +8,12 @@ interface ModalProps {
   children: React.ReactNode
   footer: React.ReactNode
   onClose: () => void
+  className?: string
   /** When true, closing shows a confirmation prompt before discarding */
   isDirty?: boolean
 }
 
-export const Modal: React.FC<ModalProps> = ({ open, title, children, footer, onClose, isDirty = false }) => {
+export const Modal: React.FC<ModalProps> = ({ open, title, children, footer, onClose, className, isDirty = false }) => {
   const { showGuard, handleClose, handleContinue, handleDiscard } = useUnsavedChangesGuard({
     isDirty,
     onClose,
@@ -20,7 +21,7 @@ export const Modal: React.FC<ModalProps> = ({ open, title, children, footer, onC
 
   return (
     <>
-      <OverlayContainer open={open} variant="modal" title={title} footer={footer} onClose={handleClose}>
+      <OverlayContainer open={open} variant="modal" title={title} footer={footer} onClose={handleClose} className={className}>
         {children}
       </OverlayContainer>
 

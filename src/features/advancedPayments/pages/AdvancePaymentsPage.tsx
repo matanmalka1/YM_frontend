@@ -303,6 +303,7 @@ export const AdvancePayments: React.FC = () => {
       <Modal
         open={createPickerOpen && createClientId === null}
         title="הוסף מקדמה — בחר לקוח"
+        className="min-h-[240px]"
         onClose={() => {
           setCreatePickerOpen(false)
           createPicker.resetClientPicker()
