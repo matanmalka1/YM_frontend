@@ -8,6 +8,13 @@ export const formatPeriodDueDateLabel = (date: string | null | undefined): strin
   return `לתשלום עד ${format(parsed, 'dd/MM/yyyy', { locale: he })}`
 }
 
+export const formatDueDateLabel = (date: string | null | undefined, prefix = 'לתשלום עד'): string | null => {
+  if (!date) return null
+  const parsed = parseISO(date)
+  if (!isValid(parsed)) return null
+  return `${prefix} ${format(parsed, 'dd/MM/yyyy', { locale: he })}`
+}
+
 export const formatRelativeDueLabel = (date: string | null | undefined): string | null => {
   if (!date) return null
   const parsed = parseISO(date)

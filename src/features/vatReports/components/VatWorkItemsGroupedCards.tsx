@@ -6,7 +6,7 @@ import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { DataTable, type Column } from '@/components/ui/table/DataTable'
 import { MonthlyAccordionList } from '@/components/ui/table/MonthlyAccordionGroup'
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
-import { isCurrentReportingPeriod } from '@/components/ui/table/groupedPeriodRow.utils'
+import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { vatReportsApi, vatReportsQK } from '../api'
 import type { VatWorkItemResponse, VatWorkItemGroupSummary } from '../api'
@@ -45,8 +45,8 @@ const GroupContent = memo(
     const itemParams = { page, page_size: PAGE_SIZE, status: filters?.status, client_name: filters?.client_name }
 
     const { data, isLoading } = useQuery({
-      queryKey: vatReportsQK.groupItems(group.period, itemParams),
-      queryFn: () => vatReportsApi.listGroupItems(group.period, itemParams),
+      queryKey: vatReportsQK.groupItems(group.group_key, itemParams),
+      queryFn: () => vatReportsApi.listGroupItems(group.group_key, itemParams),
       staleTime: 30_000,
     })
 
@@ -86,7 +86,7 @@ export const VatWorkItemsGroupedCards = ({
   emptyState,
   filters,
 }: VatWorkItemsGroupedCardsProps) => {
-  const sortedGroups = [...groups].sort((a, b) => a.period.localeCompare(b.period))
+  const sortedGroups = [...groups].sort((a, b) => a.due_date.localeCompare(b.due_date))
 
   return (
     <MonthlyAccordionList
@@ -101,7 +101,12 @@ export const VatWorkItemsGroupedCards = ({
     >
       {error && <div className="text-sm text-negative-600">{error}</div>}
       {sortedGroups.map((group) => {
-        const isCurrent = isCurrentReportingPeriod(group.period, group.period_type === 'bimonthly' ? 2 : 1)
+        const periodLabels = (
+          group.periods?.length ? group.periods : [{ period: group.period, period_type: group.period_type }]
+        )
+          .map((period) => formatVatPeriodTitle(period.period, period.period_type))
+          .filter((label, index, labels) => labels.indexOf(label) === index)
+          .join(' · ')
         const metrics: PeriodSummaryMetric[] = [
           { label: 'לקוחות', value: group.total_count },
           { label: 'ממתינים', value: group.pending_count, tone: group.pending_count > 0 ? 'warning' : 'muted' },
@@ -110,11 +115,11 @@ export const VatWorkItemsGroupedCards = ({
 
         return (
           <GroupedPeriodRow
-            key={group.period}
+            key={group.group_key}
             typeLabel="מע״מ"
-            periodLabel={formatVatPeriodTitle(group.period, group.period_type)}
-            isCurrentPeriod={isCurrent}
-            defaultOpen={isCurrent}
+            primaryLabel={formatDueDateLabel(group.due_date, 'להגשה עד') ?? group.due_date}
+            secondaryLabel={periodLabels ? `כולל תקופות: ${periodLabels}` : null}
+            relativeDueLabel={formatRelativeDueLabel(group.due_date)}
             metrics={metrics}
             ctaLabel="פתח לקוחות"
           >

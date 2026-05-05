@@ -2,16 +2,13 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Inbox } from 'lucide-react'
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
-import {
-  formatPeriodDueDateLabel,
-  formatRelativeDueLabel,
-  isCurrentReportingPeriod,
-} from '@/components/ui/table/groupedPeriodRow.utils'
+import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
 import { taxDeadlinesApi, taxDeadlinesQK, getDeadlineTypeLabel } from '../api'
 import type { DeadlineGroup, TaxDeadlineResponse } from '../api'
 import { getTaxDeadlinePeriodLabel } from '../utils'
-import { cn } from '../../../utils/utils'
-import { DeadlineStatusBadge, DeadlineAmountCell } from './TaxDeadlineTableParts'
+import { getTaxDeadlineSourcePath } from '../sourcePath'
+import { cn, formatDate } from '../../../utils/utils'
+import { DeadlineStatusBadge } from './TaxDeadlineTableParts'
 import { TaxDeadlineRowActions } from './TaxDeadlineRowActions'
 import { StateCard } from '../../../components/ui/feedback/StateCard'
 
@@ -86,8 +83,11 @@ const ClientsSubTable = ({
         <thead>
           <tr className="border-b border-gray-100 bg-gray-50/80 text-right">
             <th className="px-4 py-2 text-xs font-semibold text-gray-500">לקוח</th>
-            <th className="px-4 py-2 text-xs font-semibold text-gray-500">סכום</th>
+            <th className="px-4 py-2 text-xs font-semibold text-gray-500">סוג מועד</th>
+            <th className="px-4 py-2 text-xs font-semibold text-gray-500">תקופה / שנת מס</th>
+            <th className="px-4 py-2 text-xs font-semibold text-gray-500">תאריך יעד</th>
             <th className="px-4 py-2 text-xs font-semibold text-gray-500">סטטוס</th>
+            <th className="px-4 py-2 text-xs font-semibold text-gray-500">מקור מקושר</th>
             <th className="w-10 px-4 py-2" />
           </tr>
         </thead>
@@ -107,12 +107,13 @@ const ClientsSubTable = ({
                   {d.client_name ?? `לקוח #${d.client_record_id}`}
                 </span>
               </td>
-              <td className="px-4 py-2">
-                <DeadlineAmountCell amount={d.payment_amount} status={d.status} />
-              </td>
+              <td className="px-4 py-2">{getDeadlineTypeLabel(d.deadline_type)}</td>
+              <td className="px-4 py-2">{getTaxDeadlinePeriodLabel(d)}</td>
+              <td className="px-4 py-2 font-mono tabular-nums">{formatDate(d.due_date)}</td>
               <td className="px-4 py-2">
                 <DeadlineStatusBadge status={d.status} />
               </td>
+              <td className="px-4 py-2">{getTaxDeadlineSourcePath(d) ? 'קיים' : 'חסר'}</td>
               <td className="px-4 py-2">
                 <TaxDeadlineRowActions
                   deadline={d}
@@ -173,9 +174,7 @@ const GroupRow = ({
     period_months_count: group.period_months_count,
     tax_year: group.tax_year,
   })
-
-  const isCurrentPeriod =
-    group.period != null ? isCurrentReportingPeriod(group.period, group.period_months_count ?? 1) : false
+  const secondaryLabel = getGroupSecondaryLabel(group)
 
   const metrics: PeriodSummaryMetric[] = [
     { label: 'לקוחות', value: group.total_clients },
@@ -187,10 +186,9 @@ const GroupRow = ({
   return (
     <GroupedPeriodRow
       typeLabel={getDeadlineTypeLabel(group.deadline_type)}
-      periodLabel={periodLabel}
-      dueDateLabel={formatPeriodDueDateLabel(group.due_date)}
+      primaryLabel={formatDueDateLabel(group.due_date, getDeadlineDueDatePrefix(group.deadline_type)) ?? periodLabel}
+      secondaryLabel={secondaryLabel}
       relativeDueLabel={group.worst_urgency === 'none' ? null : formatRelativeDueLabel(group.due_date)}
-      isCurrentPeriod={isCurrentPeriod}
       isOpen={expanded}
       onToggle={setExpanded}
       metrics={metrics}
@@ -214,6 +212,37 @@ const GroupRow = ({
       />
     </GroupedPeriodRow>
   )
+}
+
+const getDeadlineDueDatePrefix = (deadlineType: string) => {
+  if (deadlineType === 'advance_payment') return 'לתשלום עד'
+  if (deadlineType === 'vat' || deadlineType === 'annual_report') return 'להגשה עד'
+  return 'מועד עד'
+}
+
+const getGroupSecondaryLabel = (group: DeadlineGroup): string | null => {
+  if (group.deadline_type === 'annual_report') {
+    const years = group.tax_years?.length ? group.tax_years : group.tax_year != null ? [group.tax_year] : []
+    return years.length ? `שנת מס: ${years.join(' · ')}` : null
+  }
+  if (group.deadline_type !== 'vat' && group.deadline_type !== 'advance_payment') return null
+  const periods = (
+    group.periods?.length
+      ? group.periods
+      : group.period
+        ? [{ period: group.period, period_months_count: group.period_months_count }]
+        : []
+  )
+    .map((period) =>
+      getTaxDeadlinePeriodLabel({
+        deadline_type: group.deadline_type,
+        period: period.period,
+        period_months_count: period.period_months_count,
+        tax_year: null,
+      }),
+    )
+    .filter((label, index, labels) => labels.indexOf(label) === index)
+  return periods.length ? `כולל תקופות: ${periods.join(' · ')}` : null
 }
 
 export const TaxDeadlinesGroupedTable = ({

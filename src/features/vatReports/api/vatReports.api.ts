@@ -128,10 +128,10 @@ export const vatReportsApi = {
   },
 
   listGroupItems: async (
-    period: string,
+    groupKey: string,
     params: VatWorkItemGroupItemsParams = {},
   ): Promise<VatWorkItemGroupItemsResponse> => {
-    const response = await api.get<VatWorkItemGroupItemsResponse>(VAT_ENDPOINTS.vatWorkItemGroupItems(period), {
+    const response = await api.get<VatWorkItemGroupItemsResponse>(VAT_ENDPOINTS.vatWorkItemGroupItems(groupKey), {
       params: toQueryParams(params),
     })
     return response.data

@@ -44,6 +44,8 @@ export interface DeadlineGroup {
   period: string | null
   period_months_count?: 1 | 2 | null
   tax_year: number | null
+  periods?: { period: string; period_months_count?: 1 | 2 | null }[]
+  tax_years?: number[]
   due_date: string
   total_clients: number
   pending_count: number

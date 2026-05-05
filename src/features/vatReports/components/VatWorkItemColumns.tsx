@@ -9,6 +9,7 @@ import { VatWorkItemRowActions } from './VatWorkItemRowActions'
 import type { ColumnOpts } from '../types'
 import { Badge } from '../../../components/ui/primitives/Badge'
 import { semanticMonoToneClasses } from '../../../utils/semanticColors'
+import { formatVatPeriodTitle } from '../view.helpers'
 
 export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemResponse>[] => [
   monoColumn({
@@ -35,6 +36,11 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemRes
     key: 'client_id_number',
     header: 'ת.ז / ח.פ',
     getValue: (item) => item.client_id_number,
+  }),
+  textColumn({
+    key: 'period',
+    header: 'תקופת דיווח',
+    getValue: (item) => formatVatPeriodTitle(item.period, item.period_type),
   }),
   statusColumn({
     key: 'status',

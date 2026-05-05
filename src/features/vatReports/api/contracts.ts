@@ -168,8 +168,11 @@ export interface VatPeriodRow {
 }
 
 export interface VatWorkItemGroupSummary {
+  group_key: string
+  due_date: string
   period: string
   period_type: string | null
+  periods?: { period: string; period_type: string | null }[]
   total_count: number
   filed_count: number
   pending_count: number

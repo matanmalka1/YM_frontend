@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useQueries } from '@tanstack/react-query'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
-import { formatPeriodDueDateLabel, formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
+import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
 import type { MonthBatchSummary, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../types'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import { fmtCurrency, getAdvancePaymentDueDateFallback, getAdvancePaymentMonthLabel } from '../utils'
@@ -249,6 +249,13 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
     '-',
     '–',
   )
+  const includedPeriods = (batch.source_batches ?? [batch])
+    .map((source) => {
+      const sourcePeriod = `${source.year}-${String(source.month).padStart(2, '0')}`
+      return `${getAdvancePaymentMonthLabel(sourcePeriod, source.period_months_count)} ${source.year}`.replace('-', '–')
+    })
+    .filter((label, index, labels) => labels.indexOf(label) === index)
+    .join(' · ')
   const metrics: PeriodSummaryMetric[] = [
     { label: 'לקוחות', value: batch.client_count },
     { label: 'ממתינים', value: batch.pending_count, tone: batch.pending_count > 0 ? 'warning' : 'muted' },
@@ -262,10 +269,10 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   return (
     <GroupedPeriodRow
       typeLabel="מקדמות"
-      periodLabel={periodLabel}
-      dueDateLabel={formatPeriodDueDateLabel(dueDate)}
+      primaryLabel={formatDueDateLabel(dueDate, 'לתשלום עד') ?? periodLabel}
+      secondaryLabel={includedPeriods ? `כולל תקופות: ${includedPeriods}` : null}
       relativeDueLabel={formatRelativeDueLabel(dueDate)}
-      isCurrentPeriod={isCurrent}
+      isCurrentPeriod={false}
       defaultOpen={isCurrent}
       metrics={metrics}
       ctaLabel="פתח לקוחות"
