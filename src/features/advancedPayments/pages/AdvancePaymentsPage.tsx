@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { getYear } from 'date-fns'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -12,7 +12,7 @@ import { ClientPickerField } from '@/components/shared/client/ClientPickerField'
 import { useClientPickerState } from '@/components/shared/client/useClientPickerState'
 import { useAdvancePaymentBatches } from '../hooks/useAdvancePaymentBatches'
 import { OverviewKPICards } from '../components/OverviewKPICards'
-import { AdvancePaymentBatchRow } from '../components/AdvancePaymentBatchRow'
+import { AdvancePaymentBatchRow, type AdvancePaymentGroupStats } from '../components/AdvancePaymentBatchRow'
 import { AdvancePaymentDrawer } from '../components/AdvancePaymentDrawer'
 import { CreateAdvancePaymentModal } from '../components/CreateAdvancePaymentModal'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
@@ -67,6 +67,7 @@ export const AdvancePayments: React.FC = () => {
 
   const [drawerRow, setDrawerRow] = useState<AdvancePaymentOverviewRow | null>(null)
   const [filters, setFilters] = useState({ client_id: '', client_name: '', status: '', period: '' })
+  const [loadedGroupStats, setLoadedGroupStats] = useState<Record<string, AdvancePaymentGroupStats>>({})
 
   const [createPickerOpen, setCreatePickerOpen] = useState(false)
   const [createClientId, setCreateClientId] = useState<number | null>(null)
@@ -92,11 +93,6 @@ export const AdvancePayments: React.FC = () => {
           : null
 
   const { batches, isLoading } = useAdvancePaymentBatches(year)
-
-  const totalExpected = batches.reduce((s, b) => s + Number(b.total_expected ?? 0), 0)
-  const totalPaid = batches.reduce((s, b) => s + Number(b.total_paid ?? 0), 0)
-  const collectionRate = totalExpected > 0 ? Math.round((totalPaid / totalExpected) * 100) : 0
-  const overdueTotal = batches.reduce((s, b) => s + b.overdue_count, 0)
 
   const handleFilterChange = (key: string, value: string) => {
     if (key === 'year') {
@@ -191,6 +187,22 @@ export const AdvancePayments: React.FC = () => {
     }
   }
 
+  const handleGroupStatsLoad = useCallback((dueDate: string, stats: AdvancePaymentGroupStats) => {
+    setLoadedGroupStats((prev) => {
+      const current = prev[dueDate]
+      if (
+        current &&
+        current.clientCount === stats.clientCount &&
+        current.pendingCount === stats.pendingCount &&
+        current.missingTurnoverCount === stats.missingTurnoverCount &&
+        current.overdueCount === stats.overdueCount
+      ) {
+        return prev
+      }
+      return { ...prev, [dueDate]: stats }
+    })
+  }, [])
+
   const periodFilter = filters.period === '' ? null : (Number(filters.period) as 1 | 2)
   const statusFilter = filters.status as AdvancePaymentStatus | ''
 
@@ -226,6 +238,35 @@ export const AdvancePayments: React.FC = () => {
     return [...map.values()].sort((a, b) => String(a.due_date).localeCompare(String(b.due_date)))
   }, [batches, periodFilter])
 
+  const workflowStats = useMemo(() => {
+    const now = new Date()
+    const currentYear = now.getFullYear()
+    const currentMonth = now.getMonth() + 1
+
+    return displayBatches.reduce(
+      (stats, batch) => {
+        const dueDate = batch.due_date ?? getAdvancePaymentDueDateFallback(batch)
+        const dueYear = Number(dueDate.substring(0, 4))
+        const dueMonth = Number(dueDate.substring(5, 7))
+
+        const loadedStats = loadedGroupStats[dueDate]
+
+        if (dueYear === currentYear && dueMonth === currentMonth) {
+          stats.dueThisMonthCount += 1
+        }
+
+        stats.pendingCount = Math.max(stats.pendingCount, loadedStats?.pendingCount ?? batch.pending_count)
+        stats.missingTurnoverCount = Math.max(
+          stats.missingTurnoverCount,
+          loadedStats?.missingTurnoverCount ?? batch.missing_turnover_count,
+        )
+        stats.overdueCount = Math.max(stats.overdueCount, loadedStats?.overdueCount ?? batch.overdue_count)
+        return stats
+      },
+      { dueThisMonthCount: 0, pendingCount: 0, missingTurnoverCount: 0, overdueCount: 0 },
+    )
+  }, [displayBatches, loadedGroupStats])
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -248,11 +289,10 @@ export const AdvancePayments: React.FC = () => {
       />
 
       <OverviewKPICards
-        year={year}
-        totalExpected={String(totalExpected)}
-        totalPaid={String(totalPaid)}
-        collectionRate={collectionRate}
-        overdueCount={overdueTotal}
+        dueThisMonthCount={workflowStats.dueThisMonthCount}
+        pendingCount={workflowStats.pendingCount}
+        missingTurnoverCount={workflowStats.missingTurnoverCount}
+        overdueCount={workflowStats.overdueCount}
       />
 
       <FilterPanel
@@ -272,6 +312,7 @@ export const AdvancePayments: React.FC = () => {
       >
         {displayBatches.map((batch) => {
           const period = `${batch.year}-${String(batch.month).padStart(2, '0')}`
+          const dueDate = batch.due_date ?? getAdvancePaymentDueDateFallback(batch)
           const isCurrent = isCurrentReportingPeriod(period, batch.period_months_count)
           return (
             <AdvancePaymentBatchRow
@@ -282,6 +323,8 @@ export const AdvancePayments: React.FC = () => {
               statusFilter={statusFilter}
               periodFilter={periodFilter}
               onRowClick={handleRowClick}
+              onStatsLoad={handleGroupStatsLoad}
+              statsOverride={loadedGroupStats[dueDate]}
             />
           )
         })}

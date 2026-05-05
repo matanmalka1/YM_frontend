@@ -1,49 +1,43 @@
-import { TrendingUp, Banknote, CheckCircle, Clock } from 'lucide-react'
+import { AlertTriangle, CalendarClock, Clock, ListChecks } from 'lucide-react'
 import { StatsCard } from '../../../components/ui/layout/StatsCard'
-import { fmtCurrency } from '../utils'
-import { getCollectionPercent } from './advancePaymentComponent.utils'
 
 interface OverviewKPICardsProps {
-  year: number
-  totalExpected: string | number | null
-  totalPaid: string | number | null
-  collectionRate: number | null
-  overdueCount?: number
+  dueThisMonthCount: number
+  pendingCount: number
+  missingTurnoverCount: number
+  overdueCount: number
 }
 
 export const OverviewKPICards: React.FC<OverviewKPICardsProps> = ({
-  year,
-  totalExpected,
-  totalPaid,
-  collectionRate,
+  dueThisMonthCount,
+  pendingCount,
+  missingTurnoverCount,
   overdueCount,
 }) => {
-  const pct = getCollectionPercent(collectionRate, true)
-
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
       <StatsCard
-        title="סה״כ צפוי"
-        value={fmtCurrency(totalExpected)}
-        icon={Banknote}
+        title="לתשלום החודש"
+        value={dueThisMonthCount}
+        icon={CalendarClock}
         variant="blue"
-        description={`שנת ${year}`}
+        description="מועדים קרובים"
       />
       <StatsCard
-        title="סה״כ שולם"
-        value={fmtCurrency(totalPaid)}
-        icon={CheckCircle}
-        variant="green"
-        description="לפי הסינון הנבחר"
+        title="לקוחות ממתינים"
+        value={pendingCount}
+        icon={ListChecks}
+        variant="orange"
+        description="דורשים טיפול"
       />
       <StatsCard
-        title="שיעור גבייה"
-        value={pct !== null ? `${pct}%` : '—'}
-        icon={TrendingUp}
-        variant="purple"
-        progress={pct ?? undefined}
+        title="חסרי מחזור"
+        value={missingTurnoverCount}
+        icon={AlertTriangle}
+        variant="orange"
+        description="לא ניתן לחשב מקדמה"
       />
-      <StatsCard title="באיחור" value={overdueCount != null ? String(overdueCount) : '—'} icon={Clock} variant="red" />
+      <StatsCard title="באיחור" value={overdueCount} icon={Clock} variant="red" description="עבר תאריך יעד" />
     </div>
   )
 }
