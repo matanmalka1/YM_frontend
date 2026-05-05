@@ -1,9 +1,9 @@
 import { AlertTriangle, ExternalLink, Edit } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useQueries } from '@tanstack/react-query'
-import { MONTH_NAMES } from '@/constants/periodOptions.constants'
-import { MonthlyAccordionGroup } from '@/components/ui/table/MonthlyAccordionGroup'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
+import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
+import { formatPeriodDueDateLabel, formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
 import type { MonthBatchSummary, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../types'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import { fmtCurrency, getAdvancePaymentDueDateFallback, getAdvancePaymentMonthLabel } from '../utils'
@@ -244,21 +244,29 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   onRowClick,
 }) => {
   const dueDate = batch.due_date ?? getAdvancePaymentDueDateFallback(batch)
-  const dueMonth = Number(dueDate.substring(5, 7))
-  const dueYear = dueDate.substring(0, 4)
-  const title = `${MONTH_NAMES[dueMonth - 1]} ${dueYear}`
-  const summary = `לתשלום עד ${formatDate(dueDate)} · ${batch.client_count} לקוחות · ${batch.pending_count} ממתינים`
+  const period = `${batch.year}-${String(batch.month).padStart(2, '0')}`
+  const periodLabel = `${getAdvancePaymentMonthLabel(period, batch.period_months_count)} ${batch.year}`.replace('-', '–')
+  const metrics: PeriodSummaryMetric[] = [
+    { label: 'לקוחות', value: batch.client_count },
+    { label: 'ממתינים', value: batch.pending_count, tone: batch.pending_count > 0 ? 'warning' : 'muted' },
+    { label: 'באיחור', value: batch.overdue_count, tone: batch.overdue_count > 0 ? 'danger' : 'muted' },
+  ]
 
-  const badge =
-    batch.missing_turnover_count > 0 ? (
-      <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600">
-        <AlertTriangle className="h-3 w-3" />
-        {batch.missing_turnover_count} חסרי מחזור
-      </span>
-    ) : undefined
+  if (batch.missing_turnover_count > 0) {
+    metrics.push({ label: 'חסרי מחזור', value: batch.missing_turnover_count, tone: 'warning' })
+  }
 
   return (
-    <MonthlyAccordionGroup title={title} summary={summary} isCurrent={isCurrent} defaultOpen={isCurrent} badges={badge}>
+    <GroupedPeriodRow
+      typeLabel="מקדמות"
+      periodLabel={periodLabel}
+      dueDateLabel={formatPeriodDueDateLabel(dueDate)}
+      relativeDueLabel={formatRelativeDueLabel(dueDate)}
+      isCurrentPeriod={isCurrent}
+      defaultOpen={isCurrent}
+      metrics={metrics}
+      ctaLabel="פתח לקוחות"
+    >
       <BatchContent
         batch={batch}
         search={search}
@@ -266,7 +274,7 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
         periodFilter={periodFilter}
         onRowClick={onRowClick}
       />
-    </MonthlyAccordionGroup>
+    </GroupedPeriodRow>
   )
 }
 

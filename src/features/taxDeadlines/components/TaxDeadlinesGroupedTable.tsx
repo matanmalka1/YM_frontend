@@ -1,27 +1,21 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { ChevronDown, ChevronLeft, Inbox, Users } from 'lucide-react'
-import { Card } from '../../../components/ui/primitives/Card'
-import { Badge } from '../../../components/ui/primitives/Badge'
+import { Inbox } from 'lucide-react'
+import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
+import {
+  formatPeriodDueDateLabel,
+  formatRelativeDueLabel,
+  isCurrentReportingPeriod,
+} from '@/components/ui/table/groupedPeriodRow.utils'
 import {
   taxDeadlinesApi,
   taxDeadlinesQK,
   getDeadlineTypeLabel,
-  formatCurrency,
-  getUrgencyColor,
-  calculateDaysRemaining,
 } from '../api'
-import type { DeadlineGroup, TaxDeadlineResponse, DeadlineUrgencyLevel } from '../api'
-import { getTaxDeadlinePeriodLabel, getDeadlineDaysLabelShort } from '../utils'
+import type { DeadlineGroup, TaxDeadlineResponse } from '../api'
+import { getTaxDeadlinePeriodLabel } from '../utils'
 import { cn } from '../../../utils/utils'
-
-const DaysRemainingLabel = ({ dueDate, urgency }: { dueDate: string; urgency: DeadlineUrgencyLevel }) => {
-  if (urgency === 'none') return null
-  const days = calculateDaysRemaining(dueDate)
-  const label = getDeadlineDaysLabelShort(days, false)
-  return <span className="text-xs text-gray-400">{label}</span>
-}
-import { DeadlineDateCell, DeadlineStatusBadge, DeadlineAmountCell } from './TaxDeadlineTableParts'
+import { DeadlineStatusBadge, DeadlineAmountCell } from './TaxDeadlineTableParts'
 import { TaxDeadlineRowActions } from './TaxDeadlineRowActions'
 import { StateCard } from '../../../components/ui/feedback/StateCard'
 
@@ -184,83 +178,45 @@ const GroupRow = ({
     tax_year: group.tax_year,
   })
 
-  const allDone = group.pending_count === 0 && group.completed_count === group.total_clients
+  const isCurrentPeriod =
+    group.period != null ? isCurrentReportingPeriod(group.period, group.period_months_count ?? 1) : false
+
+  const metrics: PeriodSummaryMetric[] = [
+    { label: 'לקוחות', value: group.total_clients },
+    { label: 'ממתינים', value: group.pending_count, tone: group.pending_count > 0 ? 'warning' : 'muted' },
+    { label: 'הושלמו', value: group.completed_count, tone: group.completed_count > 0 ? 'success' : 'muted' },
+    { label: 'באיחור', value: group.overdue_count, tone: group.overdue_count > 0 ? 'danger' : 'muted' },
+  ]
 
   return (
-    <Card
+    <GroupedPeriodRow
+      typeLabel={getDeadlineTypeLabel(group.deadline_type)}
+      periodLabel={periodLabel}
+      dueDateLabel={formatPeriodDueDateLabel(group.due_date)}
+      relativeDueLabel={group.worst_urgency === 'none' ? null : formatRelativeDueLabel(group.due_date)}
+      isCurrentPeriod={isCurrentPeriod}
+      isOpen={expanded}
+      onToggle={setExpanded}
+      metrics={metrics}
+      ctaLabel="פתח לקוחות"
       className={cn(
-        'overflow-hidden p-0 transition-shadow',
         group.overdue_count > 0 && 'border-r-4 border-negative-500',
         group.worst_urgency === 'critical' && !group.overdue_count && 'border-r-4 border-negative-400',
         group.worst_urgency === 'warning' && !group.overdue_count && 'border-r-4 border-warning-400',
       )}
     >
-      <button
-        type="button"
-        onClick={() => setExpanded((v) => !v)}
-        className="flex w-full items-center gap-4 px-4 py-3 text-right hover:bg-gray-50/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset"
-      >
-        <span className="text-gray-400">
-          {expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-        </span>
-
-        <span className="min-w-[140px] text-sm font-semibold text-gray-900">
-          {getDeadlineTypeLabel(group.deadline_type)}
-        </span>
-
-        <span className="min-w-[100px] text-sm text-gray-600">{periodLabel}</span>
-
-        <span className="flex min-w-[160px] flex-col gap-0.5">
-          <DeadlineDateCell dueDate={group.due_date} />
-          <DaysRemainingLabel dueDate={group.due_date} urgency={group.worst_urgency} />
-        </span>
-
-        <span className="flex items-center gap-1.5 text-sm text-gray-500">
-          <Users className="h-3.5 w-3.5" />
-          <span>{group.total_clients} לקוחות</span>
-        </span>
-
-        <span className="flex gap-1.5">
-          {group.overdue_count > 0 && (
-            <Badge className={cn('border text-xs', getUrgencyColor('overdue'))}>{group.overdue_count} באיחור</Badge>
-          )}
-          {group.pending_count > 0 && group.overdue_count === 0 && (
-            <Badge variant="warning" className="text-xs">
-              {group.pending_count} ממתינים
-            </Badge>
-          )}
-          {allDone && (
-            <Badge variant="success" className="text-xs">
-              הושלם
-            </Badge>
-          )}
-        </span>
-
-        <span className="mr-auto text-sm font-medium text-gray-700">
-          {group.open_amount !== null
-            ? formatCurrency(group.open_amount)
-            : group.total_amount !== null
-              ? formatCurrency(group.total_amount)
-              : '—'}
-        </span>
-
-        <span className="text-xs text-primary-600 font-medium">{expanded ? 'סגור' : 'פתח לקוחות'}</span>
-      </button>
-
-      {expanded && (
-        <ClientsSubTable
-          groupKey={group.group_key}
-          onComplete={onComplete}
-          onReopen={onReopen}
-          completingId={completingId}
-          reopeningId={reopeningId}
-          onRowClick={onRowClick}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          deletingId={deletingId}
-        />
-      )}
-    </Card>
+      <ClientsSubTable
+        groupKey={group.group_key}
+        onComplete={onComplete}
+        onReopen={onReopen}
+        completingId={completingId}
+        reopeningId={reopeningId}
+        onRowClick={onRowClick}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        deletingId={deletingId}
+      />
+    </GroupedPeriodRow>
   )
 }
 

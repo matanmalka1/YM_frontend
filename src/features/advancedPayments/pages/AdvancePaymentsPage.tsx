@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { getYear, getMonth } from 'date-fns'
+import { getYear } from 'date-fns'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { PlusCircle, Calendar } from 'lucide-react'
@@ -25,6 +25,7 @@ import type {
 import { ADVANCE_PAYMENT_STATUS_OPTIONS_WITH_ALL } from '../constants'
 import { getAdvancePaymentDueDateFallback } from '../utils'
 import { parsePositiveInt } from '@/utils/utils'
+import { isCurrentReportingPeriod } from '@/components/ui/table/groupedPeriodRow.utils'
 import { toast } from '../../../utils/toast'
 import { showErrorToast } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
@@ -61,9 +62,7 @@ export const AdvancePayments: React.FC = () => {
   const queryClient = useQueryClient()
   const { isAdvisor } = useRole()
 
-  const today = new Date()
-  const todayYear = getYear(today)
-  const todayMonth = getMonth(today) + 1
+  const todayYear = getYear(new Date())
   const year = parsePositiveInt(searchParams.get('year'), todayYear)
 
   const [drawerRow, setDrawerRow] = useState<AdvancePaymentOverviewRow | null>(null)
@@ -273,11 +272,11 @@ export const AdvancePayments: React.FC = () => {
         skeletonCols={11}
       >
         {displayBatches.map((batch) => {
-          const dueDate = new Date(`${batch.due_date}T00:00:00`)
-          const isCurrent = dueDate.getFullYear() === todayYear && dueDate.getMonth() + 1 === todayMonth
+          const period = `${batch.year}-${String(batch.month).padStart(2, '0')}`
+          const isCurrent = isCurrentReportingPeriod(period, batch.period_months_count)
           return (
             <AdvancePaymentBatchRow
-              key={batch.due_date}
+              key={`${batch.year}-${batch.month}-${batch.period_months_count}`}
               batch={batch}
               isCurrent={isCurrent}
               search={filters.client_name}

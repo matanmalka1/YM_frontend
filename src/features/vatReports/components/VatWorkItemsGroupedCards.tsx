@@ -4,21 +4,13 @@ import { Inbox } from 'lucide-react'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { DataTable, type Column } from '@/components/ui/table/DataTable'
-import { MonthlyAccordionGroup, MonthlyAccordionList } from '@/components/ui/table/MonthlyAccordionGroup'
+import { MonthlyAccordionList } from '@/components/ui/table/MonthlyAccordionGroup'
+import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
+import { isCurrentReportingPeriod } from '@/components/ui/table/groupedPeriodRow.utils'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { vatReportsApi, vatReportsQK } from '../api'
 import type { VatWorkItemResponse, VatWorkItemGroupSummary } from '../api'
 import { formatVatPeriodTitle } from '../view.helpers'
-
-const getActivePeriodPrefix = (): string => {
-  const now = new Date()
-  const d = new Date(now.getFullYear(), now.getMonth() - 1, 1)
-  const year = d.getFullYear()
-  const month = String(d.getMonth() + 1).padStart(2, '0')
-  return `${year}-${month}`
-}
-
-const isActivePeriod = (period: string): boolean => period.startsWith(getActivePeriodPrefix())
 
 interface VatWorkItemsGroupedCardsProps {
   groups: VatWorkItemGroupSummary[]
@@ -109,18 +101,25 @@ export const VatWorkItemsGroupedCards = ({
     >
       {error && <div className="text-sm text-negative-600">{error}</div>}
       {sortedGroups.map((group) => {
-        const isCurrent = isActivePeriod(group.period)
-        const summary = `${group.total_count} תיקים · ${group.pending_count} ממתינים · ${group.filed_count} הוגשו`
+        const isCurrent = isCurrentReportingPeriod(group.period, group.period_type === 'bimonthly' ? 2 : 1)
+        const metrics: PeriodSummaryMetric[] = [
+          { label: 'לקוחות', value: group.total_count },
+          { label: 'ממתינים', value: group.pending_count, tone: group.pending_count > 0 ? 'warning' : 'muted' },
+          { label: 'הוגשו', value: group.filed_count, tone: group.filed_count > 0 ? 'success' : 'muted' },
+        ]
+
         return (
-          <MonthlyAccordionGroup
+          <GroupedPeriodRow
             key={group.period}
-            title={formatVatPeriodTitle(group.period, group.period_type)}
-            summary={summary}
-            isCurrent={isCurrent}
+            typeLabel="מע״מ"
+            periodLabel={formatVatPeriodTitle(group.period, group.period_type)}
+            isCurrentPeriod={isCurrent}
             defaultOpen={isCurrent}
+            metrics={metrics}
+            ctaLabel="פתח לקוחות"
           >
             <GroupContent group={group} columns={columns} onRowClick={onRowClick} filters={filters} />
-          </MonthlyAccordionGroup>
+          </GroupedPeriodRow>
         )
       })}
     </MonthlyAccordionList>
