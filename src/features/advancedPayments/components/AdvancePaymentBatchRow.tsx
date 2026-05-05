@@ -4,7 +4,7 @@ import { useQueries } from '@tanstack/react-query'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
 import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
-import type { MonthBatchSummary, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../types'
+import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../types'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import { fmtCurrency, getAdvancePaymentDueDateFallback, getAdvancePaymentMonthLabel } from '../utils'
 import { formatDate, formatClientOfficeId } from '../../../utils/utils'
@@ -59,12 +59,24 @@ const TABLE_HEADERS = [
 ]
 
 interface AdvancePaymentBatchRowProps {
-  batch: MonthBatchSummary
+  batch: AdvancePaymentDueDateGroup
   isCurrent: boolean
   search: string
   statusFilter: AdvancePaymentStatus | ''
   periodFilter: 1 | 2 | null
   onRowClick: (row: AdvancePaymentOverviewRow) => void
+}
+
+const formatAdvancePaymentPeriod = (batch: AdvancePaymentDueDateGroup): string => {
+  const period = `${batch.year}-${String(batch.month).padStart(2, '0')}`
+  return `${getAdvancePaymentMonthLabel(period, batch.period_months_count)} ${batch.year}`.replace('-', '–')
+}
+
+const getIncludedPeriodLabel = (batch: AdvancePaymentDueDateGroup): string | null => {
+  const labels = (batch.source_batches ?? [batch])
+    .map(formatAdvancePaymentPeriod)
+    .filter((label, index, allLabels) => allLabels.indexOf(label) === index)
+  return labels.length > 0 ? `כולל תקופות: ${labels.join(' · ')}` : null
 }
 
 const BatchContent = ({
@@ -244,18 +256,6 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   onRowClick,
 }) => {
   const dueDate = batch.due_date ?? getAdvancePaymentDueDateFallback(batch)
-  const period = `${batch.year}-${String(batch.month).padStart(2, '0')}`
-  const periodLabel = `${getAdvancePaymentMonthLabel(period, batch.period_months_count)} ${batch.year}`.replace(
-    '-',
-    '–',
-  )
-  const includedPeriods = (batch.source_batches ?? [batch])
-    .map((source) => {
-      const sourcePeriod = `${source.year}-${String(source.month).padStart(2, '0')}`
-      return `${getAdvancePaymentMonthLabel(sourcePeriod, source.period_months_count)} ${source.year}`.replace('-', '–')
-    })
-    .filter((label, index, labels) => labels.indexOf(label) === index)
-    .join(' · ')
   const metrics: PeriodSummaryMetric[] = [
     { label: 'לקוחות', value: batch.client_count },
     { label: 'ממתינים', value: batch.pending_count, tone: batch.pending_count > 0 ? 'warning' : 'muted' },
@@ -269,8 +269,8 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   return (
     <GroupedPeriodRow
       typeLabel="מקדמות"
-      primaryLabel={formatDueDateLabel(dueDate, 'לתשלום עד') ?? periodLabel}
-      secondaryLabel={includedPeriods ? `כולל תקופות: ${includedPeriods}` : null}
+      primaryLabel={formatDueDateLabel(dueDate, 'לתשלום עד') ?? dueDate}
+      secondaryLabel={getIncludedPeriodLabel(batch)}
       relativeDueLabel={formatRelativeDueLabel(dueDate)}
       isCurrentPeriod={false}
       defaultOpen={isCurrent}

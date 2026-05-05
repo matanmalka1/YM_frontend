@@ -1,13 +1,6 @@
 import { differenceInCalendarDays, format, isValid, parseISO } from 'date-fns'
 import { he } from 'date-fns/locale'
 
-export const formatPeriodDueDateLabel = (date: string | null | undefined): string | null => {
-  if (!date) return null
-  const parsed = parseISO(date)
-  if (!isValid(parsed)) return null
-  return `לתשלום עד ${format(parsed, 'dd/MM/yyyy', { locale: he })}`
-}
-
 export const formatDueDateLabel = (date: string | null | undefined, prefix = 'לתשלום עד'): string | null => {
   if (!date) return null
   const parsed = parseISO(date)

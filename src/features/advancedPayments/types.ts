@@ -108,6 +108,8 @@ export interface MonthBatchSummary {
   collection_rate: number
 }
 
+export type AdvancePaymentDueDateGroup = MonthBatchSummary
+
 export interface AdvancePaymentSuggestionResponse {
   client_record_id: number
   year: number

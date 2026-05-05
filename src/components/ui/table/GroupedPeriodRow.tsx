@@ -13,10 +13,8 @@ export interface PeriodSummaryMetric {
 
 interface GroupedPeriodRowProps {
   typeLabel: string
-  periodLabel?: string
-  primaryLabel?: string
+  primaryLabel: string
   secondaryLabel?: string | null
-  dueDateLabel?: string | null
   relativeDueLabel?: string | null
   isCurrentPeriod?: boolean
   metrics: PeriodSummaryMetric[]
@@ -39,10 +37,8 @@ const metricToneClass: Record<PeriodMetricTone, string> = {
 export const GroupedPeriodRow = memo(
   ({
     typeLabel,
-    periodLabel,
     primaryLabel,
     secondaryLabel,
-    dueDateLabel,
     relativeDueLabel,
     isCurrentPeriod = false,
     metrics,
@@ -86,12 +82,11 @@ export const GroupedPeriodRow = memo(
                 </span>
               )}
             </span>
-            <span className="truncate text-base font-bold text-gray-950">{primaryLabel ?? periodLabel}</span>
+            <span className="truncate text-base font-bold text-gray-950">{primaryLabel}</span>
             {secondaryLabel && <span className="truncate text-xs font-medium text-gray-500">{secondaryLabel}</span>}
           </span>
 
           <span className="flex min-w-0 flex-col gap-0.5 text-sm">
-            {dueDateLabel && <span className="font-medium text-gray-700">{dueDateLabel}</span>}
             {relativeDueLabel && <span className="text-xs text-gray-500">{relativeDueLabel}</span>}
           </span>
 

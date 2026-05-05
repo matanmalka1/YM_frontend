@@ -167,13 +167,6 @@ const GroupRow = ({
   deletingId,
 }: GroupRowProps) => {
   const [expanded, setExpanded] = useState(false)
-
-  const periodLabel = getTaxDeadlinePeriodLabel({
-    deadline_type: group.deadline_type,
-    period: group.period,
-    period_months_count: group.period_months_count,
-    tax_year: group.tax_year,
-  })
   const secondaryLabel = getGroupSecondaryLabel(group)
 
   const metrics: PeriodSummaryMetric[] = [
@@ -186,7 +179,7 @@ const GroupRow = ({
   return (
     <GroupedPeriodRow
       typeLabel={getDeadlineTypeLabel(group.deadline_type)}
-      primaryLabel={formatDueDateLabel(group.due_date, getDeadlineDueDatePrefix(group.deadline_type)) ?? periodLabel}
+      primaryLabel={formatDueDateLabel(group.due_date, getDeadlineDueDatePrefix(group.deadline_type)) ?? group.due_date}
       secondaryLabel={secondaryLabel}
       relativeDueLabel={group.worst_urgency === 'none' ? null : formatRelativeDueLabel(group.due_date)}
       isOpen={expanded}

@@ -19,6 +19,7 @@ export type {
   VatAnnualSummary,
   VatClientSummaryResponse,
   FileVatReturnPayload,
+  VatGroupPeriod,
   VatWorkItemGroupSummary,
   VatWorkItemGroupsResponse,
   VatWorkItemGroupItemsResponse,

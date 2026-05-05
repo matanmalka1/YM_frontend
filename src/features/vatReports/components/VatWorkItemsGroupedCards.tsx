@@ -24,6 +24,13 @@ interface VatWorkItemsGroupedCardsProps {
 
 const PAGE_SIZE = 50
 
+const getVatGroupSecondaryLabel = (group: VatWorkItemGroupSummary): string | null => {
+  const periodLabels = (group.periods?.length ? group.periods : [{ period: group.period, period_type: group.period_type }])
+    .map((period) => formatVatPeriodTitle(period.period, period.period_type))
+    .filter((label, index, labels) => labels.indexOf(label) === index)
+  return periodLabels.length > 0 ? `כולל תקופות: ${periodLabels.join(' · ')}` : null
+}
+
 const GroupContent = memo(
   ({
     group,
@@ -101,12 +108,6 @@ export const VatWorkItemsGroupedCards = ({
     >
       {error && <div className="text-sm text-negative-600">{error}</div>}
       {sortedGroups.map((group) => {
-        const periodLabels = (
-          group.periods?.length ? group.periods : [{ period: group.period, period_type: group.period_type }]
-        )
-          .map((period) => formatVatPeriodTitle(period.period, period.period_type))
-          .filter((label, index, labels) => labels.indexOf(label) === index)
-          .join(' · ')
         const metrics: PeriodSummaryMetric[] = [
           { label: 'לקוחות', value: group.total_count },
           { label: 'ממתינים', value: group.pending_count, tone: group.pending_count > 0 ? 'warning' : 'muted' },
@@ -118,7 +119,7 @@ export const VatWorkItemsGroupedCards = ({
             key={group.group_key}
             typeLabel="מע״מ"
             primaryLabel={formatDueDateLabel(group.due_date, 'להגשה עד') ?? group.due_date}
-            secondaryLabel={periodLabels ? `כולל תקופות: ${periodLabels}` : null}
+            secondaryLabel={getVatGroupSecondaryLabel(group)}
             relativeDueLabel={formatRelativeDueLabel(group.due_date)}
             metrics={metrics}
             ctaLabel="פתח לקוחות"

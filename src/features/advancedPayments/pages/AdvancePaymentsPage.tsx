@@ -275,7 +275,7 @@ export const AdvancePayments: React.FC = () => {
           const isCurrent = isCurrentReportingPeriod(period, batch.period_months_count)
           return (
             <AdvancePaymentBatchRow
-              key={`${batch.year}-${batch.month}-${batch.period_months_count}`}
+              key={batch.due_date}
               batch={batch}
               isCurrent={isCurrent}
               search={filters.client_name}

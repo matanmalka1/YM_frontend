@@ -38,13 +38,18 @@ export interface DeadlineUrgentItem {
 
 export type TaxDeadlineListResponse = PaginatedResponse<TaxDeadlineResponse>
 
+export interface DeadlineGroupPeriod {
+  period: string
+  period_months_count?: 1 | 2 | null
+}
+
 export interface DeadlineGroup {
   group_key: string
   deadline_type: string
   period: string | null
   period_months_count?: 1 | 2 | null
   tax_year: number | null
-  periods?: { period: string; period_months_count?: 1 | 2 | null }[]
+  periods?: DeadlineGroupPeriod[]
   tax_years?: number[]
   due_date: string
   total_clients: number
