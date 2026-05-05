@@ -23,6 +23,7 @@ import type {
   CreateAdvancePaymentPayload,
 } from '../types'
 import { ADVANCE_PAYMENT_STATUS_OPTIONS_WITH_ALL } from '../constants'
+import { getAdvancePaymentDueDateFallback } from '../utils'
 import { parsePositiveInt } from '@/utils/utils'
 import { toast } from '../../../utils/toast'
 import { showErrorToast } from '../../../utils/utils'
@@ -196,24 +197,35 @@ export const AdvancePayments: React.FC = () => {
   const statusFilter = filters.status as AdvancePaymentStatus | ''
 
   const displayBatches = useMemo(() => {
-    if (periodFilter !== 2) return batches
-    const map = new Map<number, (typeof batches)[0]>()
-    for (const b of batches) {
-      const canon = b.month % 2 === 0 ? b.month - 1 : b.month
-      const existing = map.get(canon)
+    const canonicalBatches = batches.filter((b) => b.period_months_count !== 2 || b.month % 2 === 1)
+    const filteredBatches =
+      periodFilter === null ? canonicalBatches : canonicalBatches.filter((b) => b.period_months_count === periodFilter)
+    const map = new Map<string, (typeof filteredBatches)[0]>()
+    const getDueDate = (batch: (typeof filteredBatches)[0]) => {
+      if (batch.due_date) return batch.due_date
+      return getAdvancePaymentDueDateFallback(batch)
+    }
+
+    for (const b of filteredBatches) {
+      const dueDate = getDueDate(b)
+      const existing = map.get(dueDate)
       if (existing) {
-        map.set(canon, {
+        map.set(dueDate, {
           ...existing,
+          due_date: dueDate,
+          source_batches: [...(existing.source_batches ?? [existing]), b],
           client_count: existing.client_count + b.client_count,
           pending_count: existing.pending_count + b.pending_count,
           overdue_count: existing.overdue_count + b.overdue_count,
           missing_turnover_count: existing.missing_turnover_count + b.missing_turnover_count,
+          total_expected: String(Number(existing.total_expected ?? 0) + Number(b.total_expected ?? 0)),
+          total_paid: String(Number(existing.total_paid ?? 0) + Number(b.total_paid ?? 0)),
         })
       } else {
-        map.set(canon, { ...b, month: canon })
+        map.set(dueDate, { ...b, due_date: dueDate, source_batches: [b] })
       }
     }
-    return [...map.values()].sort((a, b) => a.month - b.month)
+    return [...map.values()].sort((a, b) => String(a.due_date).localeCompare(String(b.due_date)))
   }, [batches, periodFilter])
 
   return (
@@ -258,13 +270,14 @@ export const AdvancePayments: React.FC = () => {
         isLoading={isLoading}
         isEmpty={!isLoading && batches.length === 0}
         emptyState={{ message: `אין מקדמות לשנה ${year}` }}
-        skeletonCols={10}
+        skeletonCols={11}
       >
         {displayBatches.map((batch) => {
-          const isCurrent = batch.year === todayYear && batch.month === todayMonth && year === todayYear
+          const dueDate = new Date(`${batch.due_date}T00:00:00`)
+          const isCurrent = dueDate.getFullYear() === todayYear && dueDate.getMonth() + 1 === todayMonth
           return (
             <AdvancePaymentBatchRow
-              key={`${batch.year}-${batch.month}`}
+              key={batch.due_date}
               batch={batch}
               isCurrent={isCurrent}
               search={filters.client_name}

@@ -1,17 +1,17 @@
 import { AlertTriangle, ExternalLink, Edit } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useQueries } from '@tanstack/react-query'
 import { MONTH_NAMES } from '@/constants/periodOptions.constants'
 import { MonthlyAccordionGroup } from '@/components/ui/table/MonthlyAccordionGroup'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
 import type { MonthBatchSummary, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../types'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
-import { fmtCurrency } from '../utils'
+import { fmtCurrency, getAdvancePaymentDueDateFallback, getAdvancePaymentMonthLabel } from '../utils'
 import { formatDate, formatClientOfficeId } from '../../../utils/utils'
 import { AdvancePaymentStatusBadge } from './AdvancePaymentStatusBadge'
 import { RowActionsMenu, RowActionItem } from '../../../components/ui/table/RowActions'
 
-const COL_COUNT = 10
+const COL_COUNT = 11
 
 const TABLE_HEADERS = [
   {
@@ -22,6 +22,10 @@ const TABLE_HEADERS = [
     label: 'שם לקוח',
     className:
       'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-right align-middle w-[22%]',
+  },
+  {
+    label: 'תקופת מקדמה',
+    className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-right align-middle w-36',
   },
   {
     label: 'תאריך יעד',
@@ -71,28 +75,41 @@ const BatchContent = ({
   onRowClick,
 }: Omit<AdvancePaymentBatchRowProps, 'isCurrent'>) => {
   const statusParam = statusFilter ? [statusFilter] : undefined
+  const sourceBatches = batch.source_batches ?? [batch]
 
-  const { data, isLoading } = useQuery({
-    queryKey: advancedPaymentsQK.overview({
-      year: batch.year,
-      month: batch.month,
-      page_size: 200,
-      status: statusParam,
-    }),
-    queryFn: () =>
-      advancePaymentsApi.overview({
-        year: batch.year,
-        month: batch.month,
+  const queries = useQueries({
+    queries: sourceBatches.map((sourceBatch) => ({
+      queryKey: advancedPaymentsQK.overview({
+        year: sourceBatch.year,
+        month: sourceBatch.month,
         page_size: 200,
         status: statusParam,
       }),
-    staleTime: 30_000,
+      queryFn: () =>
+        advancePaymentsApi.overview({
+          year: sourceBatch.year,
+          month: sourceBatch.month,
+          page_size: 200,
+          status: statusParam,
+        }),
+      staleTime: 30_000,
+    })),
   })
 
-  if (isLoading) return <TableSkeleton rows={3} columns={COL_COUNT} />
+  if (queries.some((query) => query.isLoading)) return <TableSkeleton rows={3} columns={COL_COUNT} />
 
-  const rows = data?.items ?? []
-  const filtered = rows.filter((r) => {
+  const rowsById = new Map<number, AdvancePaymentOverviewRow>()
+  queries.forEach((query, index) => {
+    const sourceBatch = sourceBatches[index]
+    const rows = query.data?.items ?? []
+    rows.forEach((row) => {
+      const rowStartMonth = Number(row.period.substring(5, 7))
+      if (rowStartMonth !== sourceBatch.month || row.period_months_count !== sourceBatch.period_months_count) return
+      rowsById.set(row.id, row)
+    })
+  })
+
+  const filtered = Array.from(rowsById.values()).filter((r) => {
     if (search) {
       const q = search.toLowerCase()
       const matchName = r.business_name.toLowerCase().includes(q)
@@ -100,11 +117,6 @@ const BatchContent = ({
       if (!matchName && !matchId) return false
     }
     if (periodFilter !== null && r.period_months_count !== periodFilter) return false
-    if (periodFilter === 2) {
-      const startMonth = parseInt(r.period.substring(5, 7))
-      const canonicalStart = startMonth % 2 === 0 ? startMonth - 1 : startMonth
-      if (canonicalStart !== batch.month) return false
-    }
     return true
   })
   const sorted = [...filtered].sort((a, b) => (b.missing_turnover ? 1 : 0) - (a.missing_turnover ? 1 : 0))
@@ -156,6 +168,9 @@ const BatchContent = ({
                         חסר מחזור
                       </span>
                     )}
+                  </td>
+                  <td className="px-3 py-1.5 text-sm text-gray-600 whitespace-nowrap align-middle">
+                    {getAdvancePaymentMonthLabel(row.period, row.period_months_count)} {row.period.substring(0, 4)}
                   </td>
                   <td
                     className={`px-3 py-1.5 text-sm tabular-nums whitespace-nowrap align-middle ${isOverdue ? 'text-red-500 font-medium' : 'text-gray-500'}`}
@@ -228,12 +243,11 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   periodFilter,
   onRowClick,
 }) => {
-  const startName = MONTH_NAMES[batch.month - 1]
-  const title =
-    batch.period_months_count === 2
-      ? `${startName}–${MONTH_NAMES[batch.month]} ${batch.year}`
-      : `${startName} ${batch.year}`
-  const summary = `${batch.client_count} לקוחות · ${batch.pending_count} ממתינים`
+  const dueDate = batch.due_date ?? getAdvancePaymentDueDateFallback(batch)
+  const dueMonth = Number(dueDate.substring(5, 7))
+  const dueYear = dueDate.substring(0, 4)
+  const title = `${MONTH_NAMES[dueMonth - 1]} ${dueYear}`
+  const summary = `לתשלום עד ${formatDate(dueDate)} · ${batch.client_count} לקוחות · ${batch.pending_count} ממתינים`
 
   const badge =
     batch.missing_turnover_count > 0 ? (

@@ -96,6 +96,8 @@ export interface AdvancePaymentOverviewResponse {
 export interface MonthBatchSummary {
   year: number
   month: number
+  due_date?: string
+  source_batches?: MonthBatchSummary[]
   period_months_count: 1 | 2
   client_count: number
   missing_turnover_count: number
