@@ -2,7 +2,7 @@ import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { STATUS_LABELS } from '../../api/utils'
 import type { AnnualReportStatus } from '../../api/contracts'
 import { ALL_STATUSES_OPTION, ALL_YEARS_OPTION } from '@/constants/filterOptions.constants'
-import { getActiveReportYearOptions, getOperationalTaxYear } from '@/constants/periodOptions.constants'
+import { getActiveReportYearOptions } from '@/constants/periodOptions.constants'
 
 export interface AnnualReportsFilters {
   client_id: string
@@ -13,6 +13,7 @@ export interface AnnualReportsFilters {
 
 interface AnnualReportsFiltersBarProps {
   filters: AnnualReportsFilters
+  defaultYear?: number
   onFilterChange: (key: keyof AnnualReportsFilters, value: string) => void
   onReset: () => void
 }
@@ -25,25 +26,32 @@ const STATUS_OPTIONS = [
   })),
 ]
 
-const getFields = () => [
+const getYearOptions = (defaultYear?: number) => {
+  const options = getActiveReportYearOptions()
+  if (!defaultYear || options.some((option) => option.value === String(defaultYear))) return options
+  return [{ value: String(defaultYear), label: String(defaultYear) }, ...options]
+}
+
+const getFields = (defaultYear?: number) => [
   { type: 'client-picker' as const, idKey: 'client_id', nameKey: 'client_name' },
   { type: 'select' as const, key: 'status', label: 'סטטוס', options: STATUS_OPTIONS },
   {
     type: 'select' as const,
     key: 'year',
     label: 'שנת מס',
-    options: [ALL_YEARS_OPTION, ...getActiveReportYearOptions()],
-    defaultValue: String(getOperationalTaxYear()),
+    options: [ALL_YEARS_OPTION, ...getYearOptions(defaultYear)],
+    defaultValue: defaultYear ? String(defaultYear) : '',
   },
 ]
 
 export const AnnualReportsFiltersBar: React.FC<AnnualReportsFiltersBarProps> = ({
   filters,
+  defaultYear,
   onFilterChange,
   onReset,
 }) => (
   <FilterPanel
-    fields={getFields()}
+    fields={getFields(defaultYear)}
     values={filters}
     onChange={(key, value) => onFilterChange(key as keyof AnnualReportsFilters, value)}
     onReset={onReset}

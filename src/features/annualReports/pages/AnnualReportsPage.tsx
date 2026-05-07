@@ -18,6 +18,7 @@ export const AnnualReportsPage: React.FC = () => {
   const {
     taxYear,
     filingSeasonYear,
+    defaultTaxYear,
     showCreate,
     openCreate,
     closeCreate,
@@ -45,7 +46,12 @@ export const AnnualReportsPage: React.FC = () => {
 
       {season.overdue.length > 0 && <OverdueBanner overdue={season.overdue} onSelect={openReport} />}
 
-      <AnnualReportsFiltersBar filters={filters} onFilterChange={handleFilterChange} onReset={handleResetFilters} />
+      <AnnualReportsFiltersBar
+        filters={filters}
+        defaultYear={defaultTaxYear}
+        onFilterChange={handleFilterChange}
+        onReset={handleResetFilters}
+      />
 
       {season.isLoading && <PageLoading message="טוען נתוני עונה..." />}
       {season.error && <Alert variant="error" message={season.error} />}

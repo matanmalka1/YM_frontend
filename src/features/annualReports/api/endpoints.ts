@@ -26,6 +26,7 @@ export const ANNUAL_REPORT_ENDPOINTS = {
   clientAnnualReports: (clientId: number | string) => `/clients/${clientId}/annual-reports`,
   activeTaxYearSummary: '/tax-year/active/summary',
   activeTaxYearReports: '/tax-year/active/reports',
+  defaultTaxYear: '/tax-year/default',
   taxYearSummary: (taxYear: number | string) => `/tax-year/${taxYear}/summary`,
   taxYearReports: (taxYear: number | string) => `/tax-year/${taxYear}/reports`,
   annualReportTaxSave: (id: number | string) => `/annual-reports/${id}/tax-calculation/save`,

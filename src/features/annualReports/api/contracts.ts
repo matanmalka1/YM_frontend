@@ -191,6 +191,10 @@ export interface SeasonSummary {
   overdue_count: number
 }
 
+export interface DefaultTaxYearResponse {
+  tax_year: number
+}
+
 export type AnnualReportListResponse = PaginatedResponse<AnnualReportFull>
 
 export interface CreateAnnualReportPayload {

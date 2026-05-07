@@ -7,6 +7,7 @@ export const annualReportsQK = {
   statusHistory: (id: number | string) => ['tax', 'annual-reports', 'status-history', id] as const,
   seasonSummary: (taxYear: number) => ['tax', 'annual-reports', 'season', taxYear, 'summary'] as const,
   seasonList: (taxYear: number) => ['tax', 'annual-reports', 'season', taxYear, 'list'] as const,
+  defaultTaxYear: ['tax', 'annual-reports', 'default-tax-year'] as const,
   activeSeasonSummary: ['tax', 'annual-reports', 'season', 'active', 'summary'] as const,
   activeSeasonList: ['tax', 'annual-reports', 'season', 'active', 'list'] as const,
   overdue: (taxYear: number) => ['tax', 'annual-reports', 'overdue', taxYear] as const,
