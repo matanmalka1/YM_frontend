@@ -50,6 +50,11 @@ export const CreateClientTaxStep: React.FC<Props> = ({
   const vatFrequencyValue = useWatch({ control, name: 'vat_reporting_frequency' })
   const advancePaymentFrequencyValue = useWatch({ control, name: 'advance_payment_frequency' })
   const accountantValue = useWatch({ control, name: 'accountant_id' })
+  const vatExemptCeilingText = impactData
+    ? impactData.vat_exempt_ceiling
+      ? formatShekelAmount(impactData.vat_exempt_ceiling)
+      : 'לא נמצאה תקרת פטור בהגדרות המערכת'
+    : 'תקרת עוסק פטור תיקבע אוטומטית לפי שנת המס.'
 
   return (
     <div className="space-y-4">
@@ -81,9 +86,7 @@ export const CreateClientTaxStep: React.FC<Props> = ({
                 ? 'טוען...'
                 : impactError
                   ? 'לא ניתן לטעון את תקרת הפטור כרגע'
-                  : impactData?.vat_exempt_ceiling
-                    ? formatShekelAmount(impactData.vat_exempt_ceiling)
-                    : 'לא נמצאה תקרת פטור בהגדרות המערכת'}
+                  : vatExemptCeilingText}
             </div>
             <p className="mt-1 text-xs text-gray-400">נגזר אוטומטית לפי הגדרת המערכת</p>
           </div>

@@ -21,7 +21,7 @@ export const useClientCreationImpact = (
   const enabled = !!(
     params?.entity_type &&
     (params.entity_type === 'osek_patur' || params?.vat_reporting_frequency) &&
-    params?.advance_payment_frequency
+    (params.entity_type === 'osek_patur' || params?.advance_payment_frequency)
   )
 
   return useQuery({

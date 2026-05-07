@@ -66,8 +66,11 @@ export const CreateClientModal: React.FC<Props> = ({
   const deletedClient = conflict?.deleted_clients?.[0]
   const hasDeletedConflict = Boolean(deletedClient)
 
+  const canPreviewImpact = Boolean(
+    currentEntityType && (isExempt || (currentVatFrequency && currentAdvancePaymentFrequency)),
+  )
   const impactQuery = useClientCreationImpact(
-    currentEntityType && (isExempt || currentVatFrequency) && currentAdvancePaymentFrequency
+    canPreviewImpact
       ? {
           entity_type: currentEntityType,
           vat_reporting_frequency: currentVatFrequency,
