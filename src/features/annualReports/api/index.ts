@@ -3,7 +3,6 @@ export { annualReportFinancialsApi } from './annualReports.financials.api'
 export { annualReportStatusApi } from './annualReports.status.api'
 export { annualReportTaxApi } from './annualReports.tax.api'
 export { annualReportSeasonApi } from './annualReports.season.api'
-export { annualReportChargesApi } from './annualReports.charges.api'
 export { annualReportsQK } from './queryKeys'
 export {
   STATUS_LABELS,
@@ -47,6 +46,4 @@ export type {
   TaxCalculationSaveRequest,
   TaxCalculationSaveResponse,
   VatAutoPopulateResponse,
-  ChargeItem,
-  ChargesListResponse,
 } from './contracts'

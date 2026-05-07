@@ -54,7 +54,10 @@ export const useAnnualReportsPage = () => {
   const handleResetFilters = () =>
     setFilters({ ...DEFAULT_FILTERS, year: defaultTaxYear == null ? '' : String(defaultTaxYear) })
 
-  const baseReports = allYearsMode ? (allReportsQuery.data?.items ?? []) : season.reports
+  const baseReports = useMemo(
+    () => (allYearsMode ? (allReportsQuery.data?.items ?? []) : season.reports),
+    [allYearsMode, allReportsQuery.data?.items, season.reports],
+  )
 
   const filteredReports = useMemo(() => {
     let reports = baseReports

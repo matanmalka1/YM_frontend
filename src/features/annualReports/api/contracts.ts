@@ -355,14 +355,3 @@ export interface VatAutoPopulateResponse {
   expense_total: string
   lines_deleted: number
 }
-
-export interface ChargeItem {
-  id: number
-  business_id: number
-  amount: string
-  status: string
-  description: string | null
-  created_at: string
-}
-
-export type ChargesListResponse = PaginatedResponse<ChargeItem>
