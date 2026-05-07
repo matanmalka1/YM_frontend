@@ -5,7 +5,7 @@ import type { ChargesListResponse } from './contracts'
 export const annualReportChargesApi = {
   listCharges: async (reportId: number, page = 1, pageSize = 20): Promise<ChargesListResponse> => {
     const response = await api.get<ChargesListResponse>(
-      `${ANNUAL_REPORT_ENDPOINTS.annualReportCharges(reportId)}?page=${page}&page_size=${pageSize}`,
+      `${ANNUAL_REPORT_ENDPOINTS.charges(reportId)}?page=${page}&page_size=${pageSize}`,
     )
     return response.data
   },

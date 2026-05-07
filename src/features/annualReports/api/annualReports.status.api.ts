@@ -5,7 +5,7 @@ import type { AnnualReportFull, DeadlineType, StageKey, StatusTransitionPayload 
 export const annualReportStatusApi = {
   transitionStatus: async (reportId: number, payload: StatusTransitionPayload): Promise<AnnualReportFull> => {
     const response = await api.post<AnnualReportFull>(
-      ANNUAL_REPORT_ENDPOINTS.annualReportTransitionStatus(reportId),
+      ANNUAL_REPORT_ENDPOINTS.status(reportId),
       payload,
     )
     return response.data
@@ -20,12 +20,12 @@ export const annualReportStatusApi = {
       note?: string | null
     } = {},
   ): Promise<AnnualReportFull> => {
-    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.annualReportSubmit(reportId), payload)
+    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.submit(reportId), payload)
     return response.data
   },
 
   transitionStage: async (reportId: number, toStage: StageKey): Promise<AnnualReportFull> => {
-    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.annualReportTransition(reportId), {
+    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.transition(reportId), {
       to_stage: toStage,
     })
     return response.data
@@ -35,7 +35,7 @@ export const annualReportStatusApi = {
     reportId: number,
     payload: { deadline_type: DeadlineType; custom_deadline_note?: string | null },
   ): Promise<AnnualReportFull> => {
-    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.annualReportDeadline(reportId), payload)
+    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.deadline(reportId), payload)
     return response.data
   },
 }

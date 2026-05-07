@@ -11,12 +11,12 @@ import type {
 
 export const annualReportFinancialsApi = {
   getFinancials: async (reportId: number): Promise<FinancialSummaryResponse> => {
-    const response = await api.get<FinancialSummaryResponse>(ANNUAL_REPORT_ENDPOINTS.annualReportFinancials(reportId))
+    const response = await api.get<FinancialSummaryResponse>(ANNUAL_REPORT_ENDPOINTS.financials(reportId))
     return response.data
   },
 
   addIncomeLine: async (reportId: number, payload: IncomeLinePayload): Promise<IncomeLineResponse> => {
-    const response = await api.post<IncomeLineResponse>(ANNUAL_REPORT_ENDPOINTS.annualReportIncome(reportId), payload)
+    const response = await api.post<IncomeLineResponse>(ANNUAL_REPORT_ENDPOINTS.income(reportId), payload)
     return response.data
   },
 
@@ -26,19 +26,19 @@ export const annualReportFinancialsApi = {
     payload: Partial<IncomeLinePayload>,
   ): Promise<IncomeLineResponse> => {
     const response = await api.patch<IncomeLineResponse>(
-      ANNUAL_REPORT_ENDPOINTS.annualReportIncomeById(reportId, lineId),
+      ANNUAL_REPORT_ENDPOINTS.incomeLine(reportId, lineId),
       payload,
     )
     return response.data
   },
 
   deleteIncomeLine: async (reportId: number, lineId: number): Promise<void> => {
-    await api.delete(ANNUAL_REPORT_ENDPOINTS.annualReportIncomeById(reportId, lineId))
+    await api.delete(ANNUAL_REPORT_ENDPOINTS.incomeLine(reportId, lineId))
   },
 
   addExpenseLine: async (reportId: number, payload: ExpenseLinePayload): Promise<ExpenseLineResponse> => {
     const response = await api.post<ExpenseLineResponse>(
-      ANNUAL_REPORT_ENDPOINTS.annualReportExpenses(reportId),
+      ANNUAL_REPORT_ENDPOINTS.expenses(reportId),
       payload,
     )
     return response.data
@@ -50,19 +50,19 @@ export const annualReportFinancialsApi = {
     payload: Partial<ExpenseLinePayload>,
   ): Promise<ExpenseLineResponse> => {
     const response = await api.patch<ExpenseLineResponse>(
-      ANNUAL_REPORT_ENDPOINTS.annualReportExpenseById(reportId, lineId),
+      ANNUAL_REPORT_ENDPOINTS.expenseLine(reportId, lineId),
       payload,
     )
     return response.data
   },
 
   deleteExpenseLine: async (reportId: number, lineId: number): Promise<void> => {
-    await api.delete(ANNUAL_REPORT_ENDPOINTS.annualReportExpenseById(reportId, lineId))
+    await api.delete(ANNUAL_REPORT_ENDPOINTS.expenseLine(reportId, lineId))
   },
 
   autoPopulate: async (reportId: number, force = false): Promise<VatAutoPopulateResponse> => {
     const response = await api.post<VatAutoPopulateResponse>(
-      `${ANNUAL_REPORT_ENDPOINTS.annualReportAutoPopulate(reportId)}?force=${force}`,
+      `${ANNUAL_REPORT_ENDPOINTS.autoPopulate(reportId)}?force=${force}`,
     )
     return response.data
   },

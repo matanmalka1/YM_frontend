@@ -10,17 +10,17 @@ import type {
 
 export const annualReportTaxApi = {
   getTaxCalculation: async (reportId: number): Promise<TaxCalculationResult> => {
-    const response = await api.get<TaxCalculationResult>(ANNUAL_REPORT_ENDPOINTS.annualReportTaxCalculation(reportId))
+    const response = await api.get<TaxCalculationResult>(ANNUAL_REPORT_ENDPOINTS.taxCalculation(reportId))
     return response.data
   },
 
   getAdvancesSummary: async (reportId: number): Promise<AdvancesSummary> => {
-    const response = await api.get<AdvancesSummary>(ANNUAL_REPORT_ENDPOINTS.annualReportAdvancesSummary(reportId))
+    const response = await api.get<AdvancesSummary>(ANNUAL_REPORT_ENDPOINTS.advancesSummary(reportId))
     return response.data
   },
 
   getReadiness: async (reportId: number): Promise<ReadinessCheckResponse> => {
-    const response = await api.get<ReadinessCheckResponse>(ANNUAL_REPORT_ENDPOINTS.annualReportReadiness(reportId))
+    const response = await api.get<ReadinessCheckResponse>(ANNUAL_REPORT_ENDPOINTS.readiness(reportId))
     return response.data
   },
 
@@ -29,7 +29,7 @@ export const annualReportTaxApi = {
     payload: TaxCalculationSaveRequest,
   ): Promise<TaxCalculationSaveResponse> => {
     const response = await api.post<TaxCalculationSaveResponse>(
-      ANNUAL_REPORT_ENDPOINTS.annualReportTaxSave(reportId),
+      ANNUAL_REPORT_ENDPOINTS.saveTaxCalculation(reportId),
       payload,
     )
     return response.data

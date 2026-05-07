@@ -16,12 +16,12 @@ import type {
 
 export const annualReportsApi = {
   createReport: async (payload: CreateAnnualReportPayload): Promise<AnnualReportFull> => {
-    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.annualReports, payload)
+    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.list, payload)
     return response.data
   },
 
   getReport: async (reportId: number): Promise<AnnualReportFull> => {
-    const response = await api.get<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.annualReportById(reportId))
+    const response = await api.get<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.byId(reportId))
     return response.data
   },
 
@@ -30,19 +30,19 @@ export const annualReportsApi = {
     page?: number
     page_size?: number
   }): Promise<AnnualReportListResponse> => {
-    const response = await api.get<AnnualReportListResponse>(ANNUAL_REPORT_ENDPOINTS.annualReports, {
+    const response = await api.get<AnnualReportListResponse>(ANNUAL_REPORT_ENDPOINTS.list, {
       params: toQueryParams(params),
     })
     return response.data
   },
 
   listClientReports: async (clientId: number): Promise<AnnualReportFull[]> => {
-    const response = await api.get<AnnualReportListResponse>(ANNUAL_REPORT_ENDPOINTS.clientAnnualReports(clientId))
+    const response = await api.get<AnnualReportListResponse>(ANNUAL_REPORT_ENDPOINTS.clientReports(clientId))
     return response.data.items
   },
 
   getSchedules: async (reportId: number): Promise<ScheduleEntry[]> => {
-    const response = await api.get<ScheduleEntry[]>(ANNUAL_REPORT_ENDPOINTS.annualReportSchedules(reportId))
+    const response = await api.get<ScheduleEntry[]>(ANNUAL_REPORT_ENDPOINTS.schedules(reportId))
     return response.data
   },
 
@@ -50,24 +50,24 @@ export const annualReportsApi = {
     reportId: number,
     payload: { schedule: AnnualReportScheduleKey; notes?: string | null },
   ): Promise<ScheduleEntry> => {
-    const response = await api.post<ScheduleEntry>(ANNUAL_REPORT_ENDPOINTS.annualReportSchedules(reportId), payload)
+    const response = await api.post<ScheduleEntry>(ANNUAL_REPORT_ENDPOINTS.schedules(reportId), payload)
     return response.data
   },
 
   completeSchedule: async (reportId: number, schedule: AnnualReportScheduleKey): Promise<ScheduleEntry> => {
-    const response = await api.post<ScheduleEntry>(ANNUAL_REPORT_ENDPOINTS.annualReportSchedulesComplete(reportId), {
+    const response = await api.post<ScheduleEntry>(ANNUAL_REPORT_ENDPOINTS.completeSchedules(reportId), {
       schedule,
     })
     return response.data
   },
 
   getHistory: async (reportId: number): Promise<StatusHistoryPagedResponse> => {
-    const response = await api.get<StatusHistoryPagedResponse>(ANNUAL_REPORT_ENDPOINTS.annualReportHistory(reportId))
+    const response = await api.get<StatusHistoryPagedResponse>(ANNUAL_REPORT_ENDPOINTS.history(reportId))
     return response.data
   },
 
   getReportDetails: async (reportId: number): Promise<ReportDetailResponse> => {
-    const response = await api.get<ReportDetailResponse>(ANNUAL_REPORT_ENDPOINTS.annualReportDetails(reportId))
+    const response = await api.get<ReportDetailResponse>(ANNUAL_REPORT_ENDPOINTS.details(reportId))
     return response.data
   },
 
@@ -76,19 +76,19 @@ export const annualReportsApi = {
     payload: Partial<ReportDetailResponse>,
   ): Promise<ReportDetailResponse> => {
     const response = await api.patch<ReportDetailResponse>(
-      ANNUAL_REPORT_ENDPOINTS.annualReportDetails(reportId),
+      ANNUAL_REPORT_ENDPOINTS.details(reportId),
       payload,
     )
     return response.data
   },
 
   deleteReport: async (reportId: number): Promise<void> => {
-    await api.delete(ANNUAL_REPORT_ENDPOINTS.annualReportById(reportId))
+    await api.delete(ANNUAL_REPORT_ENDPOINTS.byId(reportId))
   },
 
   getAnnexLines: async (reportId: number, schedule: AnnualReportScheduleKey): Promise<AnnexDataPagedResponse> => {
     const response = await api.get<AnnexDataPagedResponse>(
-      ANNUAL_REPORT_ENDPOINTS.annualReportAnnex(reportId, schedule),
+      ANNUAL_REPORT_ENDPOINTS.annex(reportId, schedule),
     )
     return response.data
   },
@@ -99,7 +99,7 @@ export const annualReportsApi = {
     payload: AnnexDataAddPayload,
   ): Promise<AnnexDataLine> => {
     const response = await api.post<AnnexDataLine>(
-      ANNUAL_REPORT_ENDPOINTS.annualReportAnnex(reportId, schedule),
+      ANNUAL_REPORT_ENDPOINTS.annex(reportId, schedule),
       payload,
     )
     return response.data
@@ -112,14 +112,14 @@ export const annualReportsApi = {
     payload: AnnexDataAddPayload,
   ): Promise<AnnexDataLine> => {
     const response = await api.patch<AnnexDataLine>(
-      ANNUAL_REPORT_ENDPOINTS.annualReportAnnexLine(reportId, schedule, lineId),
+      ANNUAL_REPORT_ENDPOINTS.annexLine(reportId, schedule, lineId),
       payload,
     )
     return response.data
   },
 
   deleteAnnexLine: async (reportId: number, schedule: AnnualReportScheduleKey, lineId: number): Promise<void> => {
-    await api.delete(ANNUAL_REPORT_ENDPOINTS.annualReportAnnexLine(reportId, schedule, lineId))
+    await api.delete(ANNUAL_REPORT_ENDPOINTS.annexLine(reportId, schedule, lineId))
   },
 
   taxPreview: async (payload: {
@@ -130,21 +130,21 @@ export const annualReportsApi = {
     credit_points: number
   }): Promise<{ net_profit: number; estimated_tax: number; balance: number }> => {
     const response = await api.post<{ net_profit: number; estimated_tax: number; balance: number }>(
-      ANNUAL_REPORT_ENDPOINTS.annualReportTaxPreview,
+      ANNUAL_REPORT_ENDPOINTS.taxPreview,
       payload,
     )
     return response.data
   },
 
   amend: async (reportId: number, reason: string): Promise<AnnualReportFull> => {
-    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.annualReportAmend(reportId), {
+    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.amend(reportId), {
       reason,
     })
     return response.data
   },
 
   exportPdf: async (reportId: number, taxYear: number): Promise<void> => {
-    const response = await api.get<Blob>(ANNUAL_REPORT_ENDPOINTS.annualReportExportPdf(reportId), {
+    const response = await api.get<Blob>(ANNUAL_REPORT_ENDPOINTS.exportPdf(reportId), {
       responseType: 'blob',
     })
     const blob = new Blob([response.data], { type: 'application/pdf' })
