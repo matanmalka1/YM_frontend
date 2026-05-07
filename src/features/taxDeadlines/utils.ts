@@ -4,6 +4,7 @@ import { getReportingPeriodMonthLabel, MONTH_NAMES } from '@/constants/periodOpt
 import type { CreateTaxDeadlineForm, EditTaxDeadlineForm } from './types'
 
 type DeadlinePeriodFields = Pick<TaxDeadlineResponse, 'deadline_type' | 'period' | 'period_months_count' | 'tax_year'>
+type CoveredDeadlinePeriod = Pick<TaxDeadlineResponse, 'period' | 'period_months_count'>
 
 export const isAnnualReportDeadline = (deadlineType: string) => deadlineType === 'annual_report'
 
@@ -62,6 +63,29 @@ export const getTaxDeadlinePeriodLabel = (deadline: DeadlinePeriodFields): strin
   const month = getReportingPeriodMonthLabel(deadline.period, periodMonthsCount)
 
   return month ? `${month} ${year}` : deadline.period
+}
+
+export const getTaxDeadlineCoveredPeriodsLabel = (
+  deadlineType: string,
+  periods: CoveredDeadlinePeriod[],
+): string | null => {
+  const labels = [...periods]
+    .sort((a, b) => {
+      const monthsDiff = (b.period_months_count ?? 1) - (a.period_months_count ?? 1)
+      if (monthsDiff !== 0) return monthsDiff
+      return (a.period ?? '').localeCompare(b.period ?? '')
+    })
+    .map((period) =>
+      getTaxDeadlinePeriodLabel({
+        deadline_type: deadlineType,
+        period: period.period,
+        period_months_count: period.period_months_count,
+        tax_year: null,
+      }),
+    )
+    .filter((label, index, allLabels) => allLabels.indexOf(label) === index)
+
+  return labels.length ? `כולל תקופות: ${labels.join(', ')}` : null
 }
 
 export const getTaxDeadlineMonthGroupKey = (dueDate: string): string => {

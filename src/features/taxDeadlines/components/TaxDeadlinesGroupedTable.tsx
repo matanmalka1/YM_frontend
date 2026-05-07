@@ -5,7 +5,7 @@ import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/tabl
 import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
 import { taxDeadlinesApi, taxDeadlinesQK, getDeadlineTypeLabel } from '../api'
 import type { DeadlineGroup, TaxDeadlineResponse } from '../api'
-import { getTaxDeadlinePeriodLabel } from '../utils'
+import { getTaxDeadlineCoveredPeriodsLabel, getTaxDeadlinePeriodLabel } from '../utils'
 import { getTaxDeadlineSourcePath } from '../sourcePath'
 import { cn, formatDate } from '../../../utils/utils'
 import { DeadlineStatusBadge } from './TaxDeadlineTableParts'
@@ -226,16 +226,7 @@ const getGroupSecondaryLabel = (group: DeadlineGroup): string | null => {
         ? [{ period: group.period, period_months_count: group.period_months_count }]
         : []
   )
-    .map((period) =>
-      getTaxDeadlinePeriodLabel({
-        deadline_type: group.deadline_type,
-        period: period.period,
-        period_months_count: period.period_months_count,
-        tax_year: null,
-      }),
-    )
-    .filter((label, index, labels) => labels.indexOf(label) === index)
-  return periods.length ? `כולל תקופות: ${periods.join(' · ')}` : null
+  return getTaxDeadlineCoveredPeriodsLabel(group.deadline_type, periods)
 }
 
 export const TaxDeadlinesGroupedTable = ({
