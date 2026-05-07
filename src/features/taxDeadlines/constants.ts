@@ -7,21 +7,6 @@ export const GENERATE_TAX_DEADLINES_FORM_ID = 'generate-tax-deadlines-form'
 export const REQUIRED_FIELD_MESSAGE = 'שדה חובה'
 export const DUPLICATE_TAX_DEADLINE_MESSAGE = 'קיים כבר מועד פעיל לאותו לקוח, סוג ותקופה'
 
-export const HEBREW_MONTHS = [
-  'ינואר',
-  'פברואר',
-  'מרץ',
-  'אפריל',
-  'מאי',
-  'יוני',
-  'יולי',
-  'אוגוסט',
-  'ספטמבר',
-  'אוקטובר',
-  'נובמבר',
-  'דצמבר',
-]
-
 export const TAX_DEADLINE_TYPE_OPTIONS = Object.entries(TAX_DEADLINE_TYPE_LABELS)
   .filter(([value]) => value !== '')
   .map(([value, label]) => ({ value, label }))

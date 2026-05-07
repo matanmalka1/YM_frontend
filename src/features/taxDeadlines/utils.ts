@@ -1,7 +1,6 @@
 import { calculateDaysRemaining } from './api'
 import type { TaxDeadlineResponse } from './api'
-import { getReportingPeriodShortMonthLabel } from '@/constants/periodOptions.constants'
-import { HEBREW_MONTHS } from './constants'
+import { getReportingPeriodShortMonthLabel, MONTH_NAMES } from '@/constants/periodOptions.constants'
 import type { CreateTaxDeadlineForm, EditTaxDeadlineForm } from './types'
 
 type DeadlinePeriodFields = Pick<TaxDeadlineResponse, 'deadline_type' | 'period' | 'period_months_count' | 'tax_year'>
@@ -72,7 +71,7 @@ export const getTaxDeadlineMonthGroupKey = (dueDate: string): string => {
 
 export const getTaxDeadlineMonthGroupLabel = (key: string): string => {
   const [year, month] = key.split('-')
-  const monthName = HEBREW_MONTHS[Number(month) - 1] ?? month
+  const monthName = MONTH_NAMES[Number(month) - 1] ?? month
   return `${monthName} ${year}`
 }
 
