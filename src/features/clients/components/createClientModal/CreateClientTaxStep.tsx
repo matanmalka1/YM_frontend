@@ -51,7 +51,7 @@ export const CreateClientTaxStep: React.FC<Props> = ({
   const advancePaymentFrequencyValue = useWatch({ control, name: 'advance_payment_frequency' })
   const accountantValue = useWatch({ control, name: 'accountant_id' })
   const vatExemptCeilingText = impactData
-    ? impactData.vat_exempt_ceiling
+    ? impactData.vat_exempt_ceiling != null
       ? formatShekelAmount(impactData.vat_exempt_ceiling)
       : 'לא נמצאה תקרת פטור בהגדרות המערכת'
     : 'תקרת עוסק פטור תיקבע אוטומטית לפי שנת המס.'

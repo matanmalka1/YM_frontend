@@ -6,7 +6,7 @@ type ImpactParams = ClientImpactPreviewPayload
 
 const buildImpactPreviewPayload = (params: ImpactParams): ClientImpactPreviewPayload => ({
   entity_type: params.entity_type,
-  ...(params.entity_type !== 'osek_patur' ? { vat_reporting_frequency: params.vat_reporting_frequency } : {}),
+  ...(params.vat_reporting_frequency ? { vat_reporting_frequency: params.vat_reporting_frequency } : {}),
   ...(params.advance_payment_frequency ? { advance_payment_frequency: params.advance_payment_frequency } : {}),
   ...(params.advance_rate ? { advance_rate: params.advance_rate } : {}),
 })

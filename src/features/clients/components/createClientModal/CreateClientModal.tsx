@@ -73,7 +73,7 @@ export const CreateClientModal: React.FC<Props> = ({
     canPreviewImpact
       ? {
           entity_type: currentEntityType,
-          vat_reporting_frequency: currentVatFrequency,
+          vat_reporting_frequency: isExempt ? 'exempt' : currentVatFrequency,
           advance_payment_frequency: currentAdvancePaymentFrequency,
           advance_rate: currentAdvanceRate,
         }
