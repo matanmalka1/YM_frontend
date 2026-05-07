@@ -20,6 +20,7 @@ import { TasksPage } from '../features/tasks'
 import { Search } from '../features/search'
 import { SigningPage } from '../features/signing'
 import { TaxDeadlines } from '../features/taxDeadlines'
+import { TaxCalendarGroupsPage } from '../features/taxCalendar'
 import { TaxDashboardPage } from '../features/taxDashboard'
 import { Users } from '../features/users'
 import { VatWorkItemDetail, VatWorkItems } from '../features/vatReports'
@@ -116,6 +117,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="tax/reports" element={<AnnualReportsPage />} />
             <Route path="tax/reports/:reportId" element={<AnnualReportDetail />} />
             <Route path="tax/deadlines" element={<TaxDeadlines />} />
+            <Route path="tax/calendar" element={<TaxCalendarGroupsPage />} />
             <Route path="tax/advance-payments" element={<AdvancePayments />} />
             <Route path="tax/vat" element={<VatWorkItems />} />
             <Route path="tax/vat/:id" element={<VatWorkItemDetail />} />

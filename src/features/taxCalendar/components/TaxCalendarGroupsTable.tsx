@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/primitives/Card'
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
 import { cn, formatDate } from '@/utils/utils'
+import { getTaxDeadlinePeriodLabel } from '@/features/taxDeadlines'
 import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarGroup } from '../api'
 
 interface TaxCalendarGroupsTableProps {
@@ -12,7 +13,14 @@ interface TaxCalendarGroupsTableProps {
 }
 
 const formatPeriodLabel = (group: TaxCalendarGroup): string => {
-  if (group.obligation_type === 'annual_report') return String(group.tax_year)
+  const label = getTaxDeadlinePeriodLabel({
+    deadline_type: group.obligation_type,
+    period: group.period,
+    period_months_count: group.period_months_count as 1 | 2 | null,
+    tax_year: group.tax_year,
+  })
+
+  if (label !== 'ללא תקופה') return label
   if (!group.period) return String(group.tax_year)
   return group.period_months_count ? `${group.period} (${group.period_months_count} חודשים)` : group.period
 }

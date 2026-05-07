@@ -8,3 +8,4 @@ export {
 } from './api'
 export { useTaxCalendarGroups } from './hooks/useTaxCalendarGroups'
 export { TaxCalendarGroupsTable } from './components/TaxCalendarGroupsTable'
+export { TaxCalendarGroupsPage } from './pages/TaxCalendarGroupsPage'

@@ -51,6 +51,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { to: '/tax/advance-payments', label: 'מקדמות', icon: CalendarDays },
       { to: '/tax/reports', label: 'דוחות שנתיים', icon: TableProperties },
       { to: '/tax/deadlines', label: 'בקרת מועדים', icon: FileSpreadsheet },
+      { to: '/tax/calendar', label: 'יומן מס', icon: CalendarDays },
     ],
   },
   {
