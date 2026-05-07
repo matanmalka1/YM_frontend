@@ -12,6 +12,7 @@ import {
   TAX_CALENDAR_OBLIGATION_LABELS,
   type TaxCalendarGroup,
   type TaxCalendarGroupItem,
+  type TaxCalendarGroupItemSourceType,
 } from '../api'
 
 interface TaxCalendarGroupsTableProps {
@@ -36,7 +37,7 @@ const MONTH_LABELS = [
 ]
 
 const formatPeriodValue = (period: string | null, monthsCount: number | null, taxYear: number | null): string => {
-  if (!period) return taxYear != null ? `שנת מס ${taxYear}` : 'ללא תקופה'
+  if (!period) return taxYear != null ? `${taxYear}` : 'ללא תקופה'
 
   const match = /^(\d{4})-(\d{2})$/.exec(period)
   if (!match) return monthsCount ? `${period} (${monthsCount} חודשים)` : period
@@ -46,48 +47,32 @@ const formatPeriodValue = (period: string | null, monthsCount: number | null, ta
   const monthLabel = MONTH_LABELS[month - 1] ?? period
   if (monthsCount === 2) {
     const nextMonthLabel = MONTH_LABELS[month] ?? MONTH_LABELS[month - 1] ?? period
-    return `${monthLabel}-${nextMonthLabel} ${year}`
+    return `${monthLabel}–${nextMonthLabel} ${year}`
   }
   return `${monthLabel} ${year}`
 }
 
-const formatPeriodLabel = (group: TaxCalendarGroup): string =>
-  formatPeriodValue(group.period, group.period_months_count, group.tax_year)
+const formatGroupTitle = (group: TaxCalendarGroup): string => {
+  const obligationLabel = TAX_CALENDAR_OBLIGATION_LABELS[group.obligation_type]
+  const periodLabel = formatPeriodValue(group.period, group.period_months_count, group.tax_year)
+  return `${obligationLabel} · ${periodLabel}`
+}
 
-const formatEffectiveDueDate = (group: TaxCalendarGroup): string => {
+const formatEffectiveDueDateRange = (group: TaxCalendarGroup): string => {
   if (group.effective_due_date_min !== group.effective_due_date_max) {
-    return `${formatDate(group.effective_due_date_min)} – ${formatDate(group.effective_due_date_max)}`
+    return `${formatDate(group.effective_due_date_min)}–${formatDate(group.effective_due_date_max)}`
   }
   return formatDate(group.effective_due_date)
 }
 
-const VAT_STATUS_LABELS: Record<string, string> = {
-  pending_materials: 'ממתין לחומרים',
-  material_received: 'חומרים התקבלו',
-  data_entry_in_progress: 'הקלדה בתהליך',
-  ready_for_review: 'ממתין לבדיקה',
-  filed: 'הוגש',
-}
+const hasGroupOverride = (group: TaxCalendarGroup): boolean =>
+  group.effective_due_date_min !== group.regulatory_due_date ||
+  group.effective_due_date_max !== group.regulatory_due_date
 
-const ADVANCE_PAYMENT_STATUS_LABELS: Record<string, string> = {
-  pending: 'ממתין',
-  paid: 'שולם',
-  partial: 'שולם חלקית',
-}
-
-const ANNUAL_REPORT_STATUS_LABELS: Record<string, string> = {
-  not_started: 'טרם התחיל',
-  collecting_docs: 'איסוף מסמכים',
-  docs_complete: 'מסמכים התקבלו',
-  in_preparation: 'בהכנה',
-  pending_client: 'ממתין לאישור לקוח',
-  submitted: 'הוגש',
-  accepted: 'התקבל',
-  assessment_issued: 'שומה הוצאה',
-  objection_filed: 'השגה הוגשה',
-  closed: 'סגור',
-  amended: 'תיקון דוח',
-  canceled: 'בוטל',
+const SOURCE_TYPE_LABELS: Record<TaxCalendarGroupItemSourceType, string> = {
+  vat_work_item: 'מע״מ',
+  advance_payment: 'מקדמה',
+  annual_report: 'דוח שנתי',
 }
 
 const getItemPath = (item: TaxCalendarGroupItem): string => {
@@ -95,15 +80,6 @@ const getItemPath = (item: TaxCalendarGroupItem): string => {
   if (item.source_type === 'annual_report') return `/tax/reports/${item.source_id}`
   return `/clients/${item.client_record_id}/advance-payments`
 }
-
-const getItemStatusLabel = (item: TaxCalendarGroupItem): string => {
-  if (item.source_type === 'vat_work_item') return VAT_STATUS_LABELS[item.status] ?? 'לא ידוע'
-  if (item.source_type === 'annual_report') return ANNUAL_REPORT_STATUS_LABELS[item.status] ?? 'לא ידוע'
-  return ADVANCE_PAYMENT_STATUS_LABELS[item.status] ?? 'לא ידוע'
-}
-
-const formatItemPeriodLabel = (item: TaxCalendarGroupItem): string =>
-  formatPeriodValue(item.period, item.period_months_count, item.tax_year)
 
 const getStateLabel = (item: TaxCalendarGroupItem): string => {
   if (item.done) return 'הושלם'
@@ -169,10 +145,7 @@ const GroupItemsRows = ({
           <tr className="border-b border-gray-100 text-gray-400">
             <th className="px-3 py-1.5 text-xs font-medium">לקוח</th>
             <th className="px-3 py-1.5 text-xs font-medium">מס׳ לקוח</th>
-            <th className="px-3 py-1.5 text-xs font-medium">תקופה / שנת מס</th>
-            <th className="px-3 py-1.5 text-xs font-medium">סטטוס</th>
-            <th className="px-3 py-1.5 text-xs font-medium">מועד רגולטורי</th>
-            <th className="px-3 py-1.5 text-xs font-medium">מועד אפקטיבי</th>
+            <th className="px-3 py-1.5 text-xs font-medium">סוג רשומה</th>
             <th className="px-3 py-1.5 text-xs font-medium">מצב</th>
             <th className="px-3 py-1.5 text-xs font-medium">פעולה</th>
           </tr>
@@ -191,15 +164,8 @@ const GroupItemsRows = ({
               <td className="px-3 py-1.5 font-mono tabular-nums text-gray-600">
                 {formatPlainIdentifier(item.office_client_number)}
               </td>
-              <td className="px-3 py-1.5">
-                <span className="font-medium text-gray-700">{formatItemPeriodLabel(item)}</span>
-              </td>
-              <td className="px-3 py-1.5 text-gray-600">{getItemStatusLabel(item)}</td>
-              <td className="px-3 py-1.5 font-mono tabular-nums text-gray-600">
-                {formatDate(item.regulatory_due_date)}
-              </td>
-              <td className="px-3 py-1.5 font-mono tabular-nums text-gray-700">
-                {formatDate(item.effective_due_date)}
+              <td className="px-3 py-1.5 text-gray-600">
+                {SOURCE_TYPE_LABELS[item.source_type]}
               </td>
               <td className="px-3 py-1.5">
                 <Badge variant={getStateVariant(item)}>{getStateLabel(item)}</Badge>
@@ -252,9 +218,13 @@ export const TaxCalendarGroupsTable = ({
         return (
           <GroupedPeriodRow
             key={group.tax_calendar_entry_id}
-            typeLabel={TAX_CALENDAR_OBLIGATION_LABELS[group.obligation_type]}
-            primaryLabel={`${getDueDatePrefix(group)}: ${formatEffectiveDueDate(group)}`}
-            secondaryLabel={`${formatPeriodLabel(group)} · מועד רגולטורי: ${formatDate(group.regulatory_due_date)}`}
+            typeLabel={formatGroupTitle(group)}
+            primaryLabel={`${getDueDatePrefix(group)}: ${formatEffectiveDueDateRange(group)}`}
+            secondaryLabel={
+              hasGroupOverride(group)
+                ? `מועד רגולטורי: ${formatDate(group.regulatory_due_date)} · מועד אפקטיבי: ${formatEffectiveDueDateRange(group)}`
+                : `מועד רגולטורי: ${formatDate(group.regulatory_due_date)}`
+            }
             relativeDueLabel={effectiveRelativeLabel}
             isOpen={isOpen}
             onToggle={(nextOpen) => setOpenEntryId(nextOpen ? group.tax_calendar_entry_id : null)}
