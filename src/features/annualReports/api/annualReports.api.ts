@@ -41,11 +41,6 @@ export const annualReportsApi = {
     return response.data.items
   },
 
-  getSchedules: async (reportId: number): Promise<ScheduleEntry[]> => {
-    const response = await api.get<ScheduleEntry[]>(ANNUAL_REPORT_ENDPOINTS.schedules(reportId))
-    return response.data
-  },
-
   addSchedule: async (
     reportId: number,
     payload: { schedule: AnnualReportScheduleKey; notes?: string | null },
@@ -63,11 +58,6 @@ export const annualReportsApi = {
 
   getHistory: async (reportId: number): Promise<StatusHistoryPagedResponse> => {
     const response = await api.get<StatusHistoryPagedResponse>(ANNUAL_REPORT_ENDPOINTS.history(reportId))
-    return response.data
-  },
-
-  getReportDetails: async (reportId: number): Promise<ReportDetailResponse> => {
-    const response = await api.get<ReportDetailResponse>(ANNUAL_REPORT_ENDPOINTS.details(reportId))
     return response.data
   },
 

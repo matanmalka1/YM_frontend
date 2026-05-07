@@ -1,6 +1,6 @@
 import { api } from '@/api/client'
 import { ANNUAL_REPORT_ENDPOINTS } from './endpoints'
-import type { AnnualReportFull, DeadlineType, StageKey, StatusTransitionPayload } from './contracts'
+import type { AnnualReportFull, DeadlineType, StatusTransitionPayload } from './contracts'
 
 export const annualReportStatusApi = {
   transitionStatus: async (reportId: number, payload: StatusTransitionPayload): Promise<AnnualReportFull> => {
@@ -21,13 +21,6 @@ export const annualReportStatusApi = {
     } = {},
   ): Promise<AnnualReportFull> => {
     const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.submit(reportId), payload)
-    return response.data
-  },
-
-  transitionStage: async (reportId: number, toStage: StageKey): Promise<AnnualReportFull> => {
-    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.transition(reportId), {
-      to_stage: toStage,
-    })
     return response.data
   },
 
