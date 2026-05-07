@@ -1,6 +1,6 @@
 import { calculateDaysRemaining } from './api'
 import type { TaxDeadlineResponse } from './api'
-import { getReportingPeriodShortMonthLabel, MONTH_NAMES } from '@/constants/periodOptions.constants'
+import { getReportingPeriodMonthLabel, MONTH_NAMES } from '@/constants/periodOptions.constants'
 import type { CreateTaxDeadlineForm, EditTaxDeadlineForm } from './types'
 
 type DeadlinePeriodFields = Pick<TaxDeadlineResponse, 'deadline_type' | 'period' | 'period_months_count' | 'tax_year'>
@@ -59,7 +59,7 @@ export const getTaxDeadlinePeriodLabel = (deadline: DeadlinePeriodFields): strin
 
   const year = periodMatch[1]
   const periodMonthsCount = deadline.period_months_count ?? 1
-  const month = getReportingPeriodShortMonthLabel(deadline.period, periodMonthsCount)
+  const month = getReportingPeriodMonthLabel(deadline.period, periodMonthsCount)
 
   return month ? `${month} ${year}` : deadline.period
 }
