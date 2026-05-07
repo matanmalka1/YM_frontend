@@ -19,6 +19,7 @@ interface GroupedPeriodRowProps {
   isCurrentPeriod?: boolean
   metrics: PeriodSummaryMetric[]
   ctaLabel: string
+  closeLabel?: string
   isOpen?: boolean
   defaultOpen?: boolean
   onToggle?: (isOpen: boolean) => void
@@ -43,6 +44,7 @@ export const GroupedPeriodRow = memo(
     isCurrentPeriod = false,
     metrics,
     ctaLabel,
+    closeLabel = 'סגור',
     isOpen,
     defaultOpen,
     onToggle,
@@ -102,7 +104,7 @@ export const GroupedPeriodRow = memo(
           </span>
 
           <span className="mr-auto inline-flex items-center gap-2 text-sm font-semibold text-primary-700 max-lg:mr-0">
-            <span>{open ? 'סגור' : ctaLabel}</span>
+            <span>{open ? closeLabel : ctaLabel}</span>
             {open ? <ChevronDown className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
           </span>
         </button>

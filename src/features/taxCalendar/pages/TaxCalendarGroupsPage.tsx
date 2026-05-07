@@ -2,15 +2,16 @@ import { useMemo, useState } from 'react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
-import { Card } from '@/components/ui/primitives/Card'
 import { Checkbox } from '@/components/ui/primitives/Checkbox'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
+import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
 import { getErrorMessage } from '@/utils/utils'
 import { TaxCalendarGroupsTable } from '../components/TaxCalendarGroupsTable'
 import { useTaxCalendarGroups } from '../hooks/useTaxCalendarGroups'
 import {
   TAX_CALENDAR_OBLIGATION_LABELS,
+  type TaxCalendarGroup,
   type TaxCalendarGroupsParams,
   type TaxCalendarObligationType,
 } from '../api'
@@ -24,11 +25,55 @@ const OBLIGATION_TYPE_OPTIONS = [
   { value: 'annual_report', label: TAX_CALENDAR_OBLIGATION_LABELS.annual_report },
 ]
 
+const STATUS_OPTIONS = [
+  { value: 'all', label: 'כל המצבים' },
+  { value: 'open', label: 'פתוחים' },
+  { value: 'overdue', label: 'באיחור' },
+  { value: 'done', label: 'הושלמו' },
+]
+
+const SummaryStrip = ({ groups }: { groups: TaxCalendarGroup[] }) => {
+  const summary = groups.reduce(
+    (acc, group) => ({
+      groups: acc.groups + 1,
+      linked: acc.linked + group.linked_count,
+      open: acc.open + group.open_count,
+      overdue: acc.overdue + group.overdue_count,
+      done: acc.done + group.done_count,
+    }),
+    { groups: 0, linked: 0, open: 0, overdue: 0, done: 0 },
+  )
+
+  const items = [
+    { label: 'סה״כ קבוצות', value: summary.groups, className: 'text-gray-900' },
+    { label: 'לקוחות מקושרים', value: summary.linked, className: 'text-gray-900' },
+    { label: 'פתוחים', value: summary.open, className: 'text-warning-700' },
+    { label: 'באיחור', value: summary.overdue, className: 'text-negative-700' },
+    { label: 'הושלמו', value: summary.done, className: 'text-positive-700' },
+  ]
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {items.map((item) => (
+        <div
+          key={item.label}
+          className="inline-flex items-baseline gap-2 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm"
+        >
+          <span className="text-xs font-medium text-gray-500">{item.label}</span>
+          <span className={`font-mono font-semibold tabular-nums ${item.className}`}>{item.value}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export const TaxCalendarGroupsPage = () => {
   const [startYear, setStartYear] = useState(String(currentYear))
   const [endYear, setEndYear] = useState(String(currentYear + 1))
   const [obligationType, setObligationType] = useState('')
   const [includeEmpty, setIncludeEmpty] = useState(false)
+  const [status, setStatus] = useState('all')
+  const [clientSearchText, setClientSearchText] = useState('')
 
   const params = useMemo<TaxCalendarGroupsParams>(
     () => ({
@@ -47,14 +92,24 @@ export const TaxCalendarGroupsPage = () => {
     setEndYear(String(currentYear + 1))
     setObligationType('')
     setIncludeEmpty(false)
+    setStatus('all')
+    setClientSearchText('')
   }
 
-  return (
-    <div className="space-y-6" dir="rtl">
-      <PageHeader title="יומן מס" description="תצוגה מרוכזת לפי חובת דיווח, תקופה ומועד" />
+  const groups = useMemo(() => groupsQuery.data ?? [], [groupsQuery.data])
+  const displayedGroups = useMemo(() => {
+    if (status === 'open') return groups.filter((group) => group.open_count > 0)
+    if (status === 'overdue') return groups.filter((group) => group.overdue_count > 0)
+    if (status === 'done') return groups.filter((group) => group.done_count > 0)
+    return groups
+  }, [groups, status])
 
-      <Card className="p-4">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+  return (
+    <div className="space-y-4" dir="rtl">
+      <PageHeader title="יומן מס" size="lg" />
+
+      <ToolbarContainer>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-7">
           <Input
             type="number"
             label="משנת מס"
@@ -77,6 +132,18 @@ export const TaxCalendarGroupsPage = () => {
             onChange={(event) => setObligationType(event.target.value)}
             options={OBLIGATION_TYPE_OPTIONS}
           />
+          <Select
+            label="מצב"
+            value={status}
+            onChange={(event) => setStatus(event.target.value)}
+            options={STATUS_OPTIONS}
+          />
+          <Input
+            label="חיפוש לקוח"
+            value={clientSearchText}
+            onChange={(event) => setClientSearchText(event.target.value)}
+            placeholder="שם או מספר לקוח"
+          />
           <div className="flex items-end">
             <Checkbox
               checked={includeEmpty}
@@ -92,13 +159,19 @@ export const TaxCalendarGroupsPage = () => {
             </Button>
           </div>
         </div>
-      </Card>
+      </ToolbarContainer>
 
       {groupsQuery.isError ? (
         <Alert variant="error" message={getErrorMessage(groupsQuery.error, 'שגיאה בטעינת יומן המס')} />
       ) : null}
 
-      <TaxCalendarGroupsTable groups={groupsQuery.data ?? []} isLoading={groupsQuery.isPending} />
+      <SummaryStrip groups={groups} />
+
+      <TaxCalendarGroupsTable
+        groups={displayedGroups}
+        isLoading={groupsQuery.isPending}
+        clientSearchText={clientSearchText}
+      />
     </div>
   )
 }

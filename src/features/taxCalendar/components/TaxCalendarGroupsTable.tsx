@@ -1,37 +1,58 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronDown, Inbox } from 'lucide-react'
+import { Inbox } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
-import { Card } from '@/components/ui/primitives/Card'
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
+import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
+import { formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
 import { cn, formatDate, formatPlainIdentifier, getErrorMessage } from '@/utils/utils'
-import { getTaxDeadlinePeriodLabel } from '@/features/taxDeadlines'
 import { useTaxCalendarGroupItems } from '../hooks/useTaxCalendarGroupItems'
 import {
   TAX_CALENDAR_OBLIGATION_LABELS,
   type TaxCalendarGroup,
   type TaxCalendarGroupItem,
-  type TaxCalendarGroupItemSourceType,
 } from '../api'
 
 interface TaxCalendarGroupsTableProps {
   groups: TaxCalendarGroup[]
   isLoading?: boolean
+  clientSearchText?: string
 }
 
-const formatPeriodLabel = (group: TaxCalendarGroup): string => {
-  const label = getTaxDeadlinePeriodLabel({
-    deadline_type: group.obligation_type,
-    period: group.period,
-    period_months_count: group.period_months_count as 1 | 2 | null,
-    tax_year: group.tax_year,
-  })
+const MONTH_LABELS = [
+  'ינואר',
+  'פברואר',
+  'מרץ',
+  'אפריל',
+  'מאי',
+  'יוני',
+  'יולי',
+  'אוגוסט',
+  'ספטמבר',
+  'אוקטובר',
+  'נובמבר',
+  'דצמבר',
+]
 
-  if (label !== 'ללא תקופה') return label
-  if (!group.period) return String(group.tax_year)
-  return group.period_months_count ? `${group.period} (${group.period_months_count} חודשים)` : group.period
+const formatPeriodValue = (period: string | null, monthsCount: number | null, taxYear: number | null): string => {
+  if (!period) return taxYear != null ? `שנת מס ${taxYear}` : 'ללא תקופה'
+
+  const match = /^(\d{4})-(\d{2})$/.exec(period)
+  if (!match) return monthsCount ? `${period} (${monthsCount} חודשים)` : period
+
+  const year = Number(match[1])
+  const month = Number(match[2])
+  const monthLabel = MONTH_LABELS[month - 1] ?? period
+  if (monthsCount === 2) {
+    const nextMonthLabel = MONTH_LABELS[month] ?? MONTH_LABELS[month - 1] ?? period
+    return `${monthLabel}-${nextMonthLabel} ${year}`
+  }
+  return `${monthLabel} ${year}`
 }
+
+const formatPeriodLabel = (group: TaxCalendarGroup): string =>
+  formatPeriodValue(group.period, group.period_months_count, group.tax_year)
 
 const formatEffectiveDueDate = (group: TaxCalendarGroup): string => {
   if (group.effective_due_date_min !== group.effective_due_date_max) {
@@ -40,33 +61,49 @@ const formatEffectiveDueDate = (group: TaxCalendarGroup): string => {
   return formatDate(group.effective_due_date)
 }
 
-const countClassName = (count: number, tone: 'neutral' | 'success' | 'danger') =>
-  cn(
-    'font-mono text-sm font-semibold tabular-nums',
-    tone === 'success' && count > 0 && 'text-positive-700',
-    tone === 'danger' && count > 0 && 'text-negative-700',
-    tone === 'neutral' && 'text-gray-900',
-  )
+const VAT_STATUS_LABELS: Record<string, string> = {
+  pending_materials: 'ממתין לחומרים',
+  material_received: 'חומרים התקבלו',
+  data_entry_in_progress: 'הקלדה בתהליך',
+  ready_for_review: 'ממתין לבדיקה',
+  filed: 'הוגש',
+}
 
-const SOURCE_TYPE_LABELS: Record<TaxCalendarGroupItemSourceType, string> = {
-  vat_work_item: 'דוח מע״מ',
-  advance_payment: 'מקדמה',
-  annual_report: 'דוח שנתי',
+const ADVANCE_PAYMENT_STATUS_LABELS: Record<string, string> = {
+  pending: 'ממתין',
+  paid: 'שולם',
+  partial: 'שולם חלקית',
+}
+
+const ANNUAL_REPORT_STATUS_LABELS: Record<string, string> = {
+  not_started: 'טרם התחיל',
+  collecting_docs: 'איסוף מסמכים',
+  docs_complete: 'מסמכים התקבלו',
+  in_preparation: 'בהכנה',
+  pending_client: 'ממתין לאישור לקוח',
+  submitted: 'הוגש',
+  accepted: 'התקבל',
+  assessment_issued: 'שומה הוצאה',
+  objection_filed: 'השגה הוגשה',
+  closed: 'סגור',
+  amended: 'תיקון דוח',
+  canceled: 'בוטל',
 }
 
 const getItemPath = (item: TaxCalendarGroupItem): string => {
   if (item.source_type === 'vat_work_item') return `/tax/vat/${item.source_id}`
   if (item.source_type === 'annual_report') return `/tax/reports/${item.source_id}`
-  return `/tax/advance-payments?focus=${item.source_id}`
+  return `/clients/${item.client_record_id}/advance-payments`
+}
+
+const getItemStatusLabel = (item: TaxCalendarGroupItem): string => {
+  if (item.source_type === 'vat_work_item') return VAT_STATUS_LABELS[item.status] ?? 'לא ידוע'
+  if (item.source_type === 'annual_report') return ANNUAL_REPORT_STATUS_LABELS[item.status] ?? 'לא ידוע'
+  return ADVANCE_PAYMENT_STATUS_LABELS[item.status] ?? 'לא ידוע'
 }
 
 const formatItemPeriodLabel = (item: TaxCalendarGroupItem): string =>
-  getTaxDeadlinePeriodLabel({
-    deadline_type: item.source_type === 'annual_report' ? 'annual_report' : item.source_type,
-    period: item.period,
-    period_months_count: item.period_months_count as 1 | 2 | null,
-    tax_year: item.tax_year,
-  })
+  formatPeriodValue(item.period, item.period_months_count, item.tax_year)
 
 const getStateLabel = (item: TaxCalendarGroupItem): string => {
   if (item.done) return 'הושלם'
@@ -80,87 +117,111 @@ const getStateVariant = (item: TaxCalendarGroupItem): 'success' | 'warning' | 'e
   return 'warning'
 }
 
-const GroupItemsRows = ({ group, isOpen }: { group: TaxCalendarGroup; isOpen: boolean }) => {
+const matchesClientSearch = (item: TaxCalendarGroupItem, searchText: string): boolean => {
+  const normalized = searchText.trim().toLowerCase()
+  if (!normalized) return true
+  return [
+    item.client_name,
+    String(item.client_record_id),
+    item.office_client_number != null ? String(item.office_client_number) : null,
+  ].some((value) => value?.toLowerCase().includes(normalized))
+}
+
+const getDueDatePrefix = (group: TaxCalendarGroup): string =>
+  group.obligation_type === 'advance_payment' ? 'מועד תשלום' : 'מועד דיווח'
+
+const GroupItemsRows = ({
+  group,
+  isOpen,
+  clientSearchText,
+}: {
+  group: TaxCalendarGroup
+  isOpen: boolean
+  clientSearchText: string
+}) => {
   const { data, isPending, isError, error } = useTaxCalendarGroupItems(group.tax_calendar_entry_id, isOpen)
-  const items = data?.items ?? []
+  const items = (data?.items ?? []).filter((item) => matchesClientSearch(item, clientSearchText))
 
   if (isPending) {
-    return (
-      <tr>
-        <td colSpan={8} className="bg-gray-50 px-4 py-4 text-center text-sm text-gray-500">
-          טוען רשומות מקושרות...
-        </td>
-      </tr>
-    )
+    return <div className="py-4 text-center text-sm text-gray-400">טוען רשומות מקושרות...</div>
   }
 
   if (isError) {
     return (
-      <tr>
-        <td colSpan={8} className="bg-negative-50 px-4 py-4 text-sm text-negative-700">
-          {getErrorMessage(error, 'שגיאה בטעינת רשומות מקושרות')}
-        </td>
-      </tr>
+      <div className="bg-negative-50 px-4 py-4 text-sm text-negative-700">
+        {getErrorMessage(error, 'שגיאה בטעינת רשומות מקושרות')}
+      </div>
     )
   }
 
   if (items.length === 0) {
     return (
-      <tr>
-        <td colSpan={8} className="bg-gray-50 px-4 py-4 text-center text-sm text-gray-500">
-          אין רשומות מקושרות לקבוצה זו
-        </td>
-      </tr>
+      <div className="py-4 text-center text-sm text-gray-400">
+        {clientSearchText.trim() ? 'אין לקוחות תואמים בקבוצה זו' : 'אין רשומות מקושרות לקבוצה זו'}
+      </div>
     )
   }
 
   return (
-    <tr>
-      <td colSpan={8} className="bg-gray-50 p-0">
-        <div className="overflow-x-auto border-t border-gray-100">
-          <table className="w-full border-collapse text-right text-sm">
-            <thead>
-              <tr className="border-b border-gray-100 bg-gray-100/80">
-                <th className="px-4 py-2 text-xs font-semibold text-gray-500">לקוח</th>
-                <th className="px-4 py-2 text-xs font-semibold text-gray-500">מס׳ לקוח</th>
-                <th className="px-4 py-2 text-xs font-semibold text-gray-500">סוג רשומה</th>
-                <th className="px-4 py-2 text-xs font-semibold text-gray-500">תקופה / שנת מס</th>
-                <th className="px-4 py-2 text-xs font-semibold text-gray-500">סטטוס</th>
-                <th className="px-4 py-2 text-xs font-semibold text-gray-500">מועד רגולטורי</th>
-                <th className="px-4 py-2 text-xs font-semibold text-gray-500">מועד אפקטיבי</th>
-                <th className="px-4 py-2 text-xs font-semibold text-gray-500">מצב</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 bg-white">
-              {items.map((item) => (
-                <tr key={`${item.source_type}-${item.source_id}`} className="hover:bg-primary-50/30">
-                  <td className="px-4 py-2">
-                    <Link className="font-medium text-primary-700 hover:text-primary-900" to={getItemPath(item)}>
-                      {item.client_name ?? `לקוח #${item.client_record_id}`}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-2 font-mono tabular-nums text-gray-700">
-                    {formatPlainIdentifier(item.office_client_number)}
-                  </td>
-                  <td className="px-4 py-2">{SOURCE_TYPE_LABELS[item.source_type]}</td>
-                  <td className="px-4 py-2">{formatItemPeriodLabel(item)}</td>
-                  <td className="px-4 py-2">{item.status}</td>
-                  <td className="px-4 py-2 font-mono tabular-nums">{formatDate(item.regulatory_due_date)}</td>
-                  <td className="px-4 py-2 font-mono tabular-nums">{formatDate(item.effective_due_date)}</td>
-                  <td className="px-4 py-2">
-                    <Badge variant={getStateVariant(item)}>{getStateLabel(item)}</Badge>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </td>
-    </tr>
+    <div className="bg-gray-50/70 px-2 py-2">
+      <table className="w-full border-collapse text-right text-sm">
+        <thead>
+          <tr className="border-b border-gray-100 text-gray-400">
+            <th className="px-3 py-1.5 text-xs font-medium">לקוח</th>
+            <th className="px-3 py-1.5 text-xs font-medium">מס׳ לקוח</th>
+            <th className="px-3 py-1.5 text-xs font-medium">תקופה / שנת מס</th>
+            <th className="px-3 py-1.5 text-xs font-medium">סטטוס</th>
+            <th className="px-3 py-1.5 text-xs font-medium">מועד רגולטורי</th>
+            <th className="px-3 py-1.5 text-xs font-medium">מועד אפקטיבי</th>
+            <th className="px-3 py-1.5 text-xs font-medium">מצב</th>
+            <th className="px-3 py-1.5 text-xs font-medium">פעולה</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-100/80">
+          {items.map((item) => (
+            <tr key={`${item.source_type}-${item.source_id}`} className="transition-colors hover:bg-white/70">
+              <td className="px-3 py-1.5">
+                <Link
+                  className="block max-w-[240px] truncate font-medium text-primary-700 hover:text-primary-900"
+                  to={`/clients/${item.client_record_id}`}
+                >
+                  {item.client_name ?? `לקוח #${item.client_record_id}`}
+                </Link>
+              </td>
+              <td className="px-3 py-1.5 font-mono tabular-nums text-gray-600">
+                {formatPlainIdentifier(item.office_client_number)}
+              </td>
+              <td className="px-3 py-1.5">
+                <span className="font-medium text-gray-700">{formatItemPeriodLabel(item)}</span>
+              </td>
+              <td className="px-3 py-1.5 text-gray-600">{getItemStatusLabel(item)}</td>
+              <td className="px-3 py-1.5 font-mono tabular-nums text-gray-600">
+                {formatDate(item.regulatory_due_date)}
+              </td>
+              <td className="px-3 py-1.5 font-mono tabular-nums text-gray-700">
+                {formatDate(item.effective_due_date)}
+              </td>
+              <td className="px-3 py-1.5">
+                <Badge variant={getStateVariant(item)}>{getStateLabel(item)}</Badge>
+              </td>
+              <td className="px-3 py-1.5">
+                <Link className="font-medium text-primary-700 hover:text-primary-900" to={getItemPath(item)}>
+                  פתח
+                </Link>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
-export const TaxCalendarGroupsTable = ({ groups, isLoading = false }: TaxCalendarGroupsTableProps) => {
+export const TaxCalendarGroupsTable = ({
+  groups,
+  isLoading = false,
+  clientSearchText = '',
+}: TaxCalendarGroupsTableProps) => {
   const [openEntryId, setOpenEntryId] = useState<number | null>(null)
 
   if (isLoading) return <TableSkeleton rows={5} columns={8} />
@@ -177,66 +238,36 @@ export const TaxCalendarGroupsTable = ({ groups, isLoading = false }: TaxCalenda
   }
 
   return (
-    <Card className="overflow-hidden p-0" dir="rtl">
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-right">
-          <thead>
-            <tr className="border-b border-gray-200 bg-gray-50">
-              <th className="px-4 py-3 text-xs font-semibold text-gray-500">סוג חובה</th>
-              <th className="px-4 py-3 text-xs font-semibold text-gray-500">תקופה / שנת מס</th>
-              <th className="px-4 py-3 text-xs font-semibold text-gray-500">מועד רגולטורי</th>
-              <th className="px-4 py-3 text-xs font-semibold text-gray-500">מועד אפקטיבי</th>
-              <th className="px-4 py-3 text-xs font-semibold text-gray-500">פתוחים</th>
-              <th className="px-4 py-3 text-xs font-semibold text-gray-500">הושלמו</th>
-              <th className="px-4 py-3 text-xs font-semibold text-gray-500">באיחור</th>
-              <th className="px-4 py-3 text-xs font-semibold text-gray-500">סה״כ מקושרים</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100 bg-white">
-            {groups.map((group) => {
-              const isOpen = openEntryId === group.tax_calendar_entry_id
-              return (
-                <Fragment key={group.tax_calendar_entry_id}>
-                  <tr
-                    className="cursor-pointer hover:bg-primary-50/30"
-                    onClick={() => setOpenEntryId(isOpen ? null : group.tax_calendar_entry_id)}
-                  >
-                    <td className="px-4 py-3">
-                      <span className="inline-flex items-center gap-2">
-                        <ChevronDown
-                          className={cn('h-4 w-4 text-gray-500 transition-transform', !isOpen && '-rotate-90')}
-                        />
-                        <Badge variant="neutral">{TAX_CALENDAR_OBLIGATION_LABELS[group.obligation_type]}</Badge>
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">{formatPeriodLabel(group)}</td>
-                    <td className="px-4 py-3 font-mono text-sm tabular-nums text-gray-700">
-                      {formatDate(group.regulatory_due_date)}
-                    </td>
-                    <td className="px-4 py-3 font-mono text-sm tabular-nums text-gray-900">
-                      {formatEffectiveDueDate(group)}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={countClassName(group.open_count, 'neutral')}>{group.open_count}</span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={countClassName(group.done_count, 'success')}>{group.done_count}</span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={countClassName(group.overdue_count, 'danger')}>{group.overdue_count}</span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={countClassName(group.linked_count, 'neutral')}>{group.linked_count}</span>
-                    </td>
-                  </tr>
-                  {isOpen && <GroupItemsRows group={group} isOpen={isOpen} />}
-                </Fragment>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
-    </Card>
+    <div className="space-y-2" dir="rtl">
+      {groups.map((group) => {
+        const isOpen = openEntryId === group.tax_calendar_entry_id
+        const effectiveRelativeLabel = formatRelativeDueLabel(group.effective_due_date)
+        const metrics: PeriodSummaryMetric[] = [
+          { label: 'סה״כ מקושרים', value: group.linked_count },
+          { label: 'פתוחים', value: group.open_count, tone: group.open_count > 0 ? 'warning' : 'muted' },
+          { label: 'באיחור', value: group.overdue_count, tone: group.overdue_count > 0 ? 'danger' : 'muted' },
+          { label: 'הושלמו', value: group.done_count, tone: group.done_count > 0 ? 'success' : 'muted' },
+        ]
+
+        return (
+          <GroupedPeriodRow
+            key={group.tax_calendar_entry_id}
+            typeLabel={TAX_CALENDAR_OBLIGATION_LABELS[group.obligation_type]}
+            primaryLabel={`${getDueDatePrefix(group)}: ${formatEffectiveDueDate(group)}`}
+            secondaryLabel={`${formatPeriodLabel(group)} · מועד רגולטורי: ${formatDate(group.regulatory_due_date)}`}
+            relativeDueLabel={effectiveRelativeLabel}
+            isOpen={isOpen}
+            onToggle={(nextOpen) => setOpenEntryId(nextOpen ? group.tax_calendar_entry_id : null)}
+            metrics={metrics}
+            ctaLabel="פתח לקוחות"
+            closeLabel="סגור"
+            className={cn(group.overdue_count > 0 && 'border-r-4 border-r-negative-500')}
+          >
+            <GroupItemsRows group={group} isOpen={isOpen} clientSearchText={clientSearchText} />
+          </GroupedPeriodRow>
+        )
+      })}
+    </div>
   )
 }
 
