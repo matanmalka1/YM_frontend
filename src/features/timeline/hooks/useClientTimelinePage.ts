@@ -6,13 +6,9 @@ import { getErrorMessage, isPositiveInt, parsePositiveInt } from '../../../utils
 import { useActionRunner } from '@/features/actions'
 import type { TimelineEvent } from '../api'
 import { normalizeTimelineEvents, type NormalizedTimelineEvent, type TimelineFilterKey } from '../normalize'
+import { buildTimelineFilterStats, type EventTypeStat } from '../lib/timelineStats'
 
-// ── Types ─────────────────────────────────────────────────────────────────────
-
-export interface EventTypeStat {
-  type: TimelineFilterKey
-  count: number
-}
+export type { EventTypeStat }
 
 const eventMatchesFilters = (
   event: NormalizedTimelineEvent,
@@ -60,21 +56,7 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
 
   const { historicalEvents } = useMemo(() => normalizeTimelineEvents(events), [events])
 
-  const eventTypeStats = useMemo<EventTypeStat[]>(() => {
-    const counts: Partial<Record<TimelineFilterKey, number>> = {
-      all: historicalEvents.length,
-      past: historicalEvents.length,
-    }
-    for (const event of historicalEvents) {
-      for (const key of event.filterKeys) {
-        counts[key] = (counts[key] ?? 0) + 1
-      }
-    }
-    return Object.entries(counts).map(([type, count]) => ({
-      type: type as TimelineFilterKey,
-      count: count ?? 0,
-    }))
-  }, [historicalEvents])
+  const eventTypeStats = useMemo<EventTypeStat[]>(() => buildTimelineFilterStats(historicalEvents), [historicalEvents])
 
   const lastEventTimestamp = useMemo<string | null>(() => {
     if (historicalEvents.length === 0) return null
@@ -182,8 +164,7 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
     },
 
     summary: {
-      totalOnPage: events.length,
-      filteredTotal: filteredEvents.length,
+      totalOnPage: filteredEvents.length,
       lastEventTimestamp,
     },
   }

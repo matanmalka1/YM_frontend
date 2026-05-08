@@ -5,7 +5,7 @@ import { Button } from '../../../components/ui/primitives/Button'
 import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
 import { cn } from '../../../utils/utils'
-import type { EventTypeStat } from '../hooks/useClientTimelinePage'
+import type { EventTypeStat } from '../lib/timelineStats'
 import type { TimelineFilterKey } from '../normalize'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -81,7 +81,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
           <Input
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="חיפוש לפי תיאור, מספר קלסר או חיוב..."
+            placeholder="חיפוש לפי תיאור, קלסר, חיוב או מסמך..."
             startIcon={<Search className="h-4 w-4" />}
             className="py-2 text-sm bg-gray-50 focus:bg-white"
           />
@@ -119,7 +119,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
                 onChange={(e) => onPageSizeChange(e.target.value)}
                 className="w-20 appearance-none pr-3 pl-7 text-sm"
               >
-                {[20, 50, 100, 200].map((n) => (
+                {[25, 50, 100].map((n) => (
                   <option key={n} value={n}>
                     {n}
                   </option>
@@ -152,6 +152,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
 
         {FILTER_ORDER.map((type) => {
           const count = getFilterCount(eventTypeStats, type)
+          if (type === 'future' && count === 0) return null
           const isActive = typeFilters.includes(type)
           return (
             <button

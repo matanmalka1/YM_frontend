@@ -10,7 +10,25 @@ const BINDER_STATUS_LABEL_MAP: Record<TimelineBinderStatus, string> = {
   returned: BINDER_STATUS_LABELS.returned,
 }
 
+const ANNUAL_REPORT_STATUS_LABEL_MAP: Record<string, string> = {
+  not_started: 'טרם התחיל',
+  collecting_docs: 'איסוף מסמכים',
+  docs_complete: 'מסמכים התקבלו',
+  in_preparation: 'בהכנה',
+  pending_client: 'ממתין ללקוח',
+  submitted: 'הוגש',
+  amended: 'תוקן',
+  accepted: 'התקבל',
+  assessment_issued: 'שומה הופקה',
+  objection_filed: 'הוגשה השגה',
+  closed: 'נסגר',
+  canceled: 'בוטל',
+}
+
 // ── Typed lookup helpers ──────────────────────────────────────────────────────
 
 export const getTimelineStatusLabel = (status: string): string =>
   BINDER_STATUS_LABEL_MAP[status as TimelineBinderStatus] ?? 'לא ידוע'
+
+export const getAnnualReportStatusLabel = (status: string): string =>
+  ANNUAL_REPORT_STATUS_LABEL_MAP[status] ?? status

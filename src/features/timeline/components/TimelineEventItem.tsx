@@ -7,7 +7,7 @@ import type { ActionCommand } from '@/lib/actions/types'
 import { cn } from '../../../utils/utils'
 import { staggerDelay } from '../../../utils/animation'
 import { getEventColor } from '../constants'
-import { getTimelineStatusLabel } from '../labels'
+import { getAnnualReportStatusLabel, getTimelineStatusLabel } from '../labels'
 import { formatTimelineDate, formatTimestamp, getEventIcon } from '../utils'
 
 // ── Metadata sub-components ───────────────────────────────────────────────────
@@ -89,9 +89,12 @@ const EventMetadata: React.FC<{ metadata: TimelineEventMetadata; eventType: stri
       {eventType === 'annual_report_status_changed' && (from_status || to_status || tax_year || form_type || note) && (
         <MetaRow className="bg-indigo-50 border-indigo-100">
           {tax_year != null && <MetaField label="שנת מס" value={String(tax_year)} />}
-          {form_type && <MetaField label="סוג טופס" value={form_type} />}
+          {form_type && <MetaField label="טופס" value={form_type} />}
           {from_status && to_status && (
-            <MetaField label="מעבר סטטוס" value={`${from_status} ← ${to_status}`} />
+            <MetaField
+              label="מעבר סטטוס"
+              value={`${getAnnualReportStatusLabel(from_status)} ← ${getAnnualReportStatusLabel(to_status)}`}
+            />
           )}
           {note && <MetaField label="הערה" value={note} />}
         </MetaRow>
