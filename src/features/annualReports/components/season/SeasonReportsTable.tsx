@@ -2,7 +2,16 @@ import { DataTable, type Column } from '../../../../components/ui/table/DataTabl
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import type { AnnualReportFull } from '../../api'
 import { getStatusLabel, getStatusVariant, getClientTypeLabel } from '../../api'
-import { getDeadlineTypeLabel } from '@/features/taxDeadlines'
+
+const FILING_DEADLINE_TYPE_LABELS: Record<string, string> = {
+  vat: 'מע״מ',
+  advance_payment: 'מקדמות',
+  national_insurance: 'ביטוח לאומי',
+  annual_report: 'דוח שנתי',
+}
+
+const getDeadlineTypeLabel = (type: string | null | undefined): string =>
+  (type && FILING_DEADLINE_TYPE_LABELS[type]) ?? 'סוג מועד לא ידוע'
 import { formatClientOfficeId, formatDate } from '../../../../utils/utils'
 import { AlertTriangle, Clock } from 'lucide-react'
 import { cn } from '../../../../utils/utils'

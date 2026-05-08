@@ -25,7 +25,9 @@ interface VatWorkItemsGroupedCardsProps {
 const PAGE_SIZE = 50
 
 const getVatGroupSecondaryLabel = (group: VatWorkItemGroupSummary): string | null => {
-  const periodLabels = (group.periods?.length ? group.periods : [{ period: group.period, period_type: group.period_type }])
+  const periodLabels = (
+    group.periods?.length ? group.periods : [{ period: group.period, period_type: group.period_type }]
+  )
     .map((period) => formatVatPeriodTitle(period.period, period.period_type))
     .filter((label, index, labels) => labels.indexOf(label) === index)
   return periodLabels.length > 0 ? `כולל תקופות: ${periodLabels.join(' · ')}` : null

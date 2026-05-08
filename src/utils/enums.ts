@@ -168,14 +168,3 @@ export const DOCUMENT_TYPE_LABELS: Record<string, string> = {
 }
 
 export const getDocumentTypeLabel = makeLabelGetter(DOCUMENT_TYPE_LABELS)
-
-// ── Tax deadline ───────────────────────────────────────────────────────────
-
-export const TAX_DEADLINE_TYPE_LABELS: Record<string, string> = {
-  vat: 'מע״מ',
-  advance_payment: 'מקדמות',
-  national_insurance: 'ביטוח לאומי',
-  annual_report: 'דוח שנתי',
-}
-
-export const getDeadlineTypeLabel = makeLabelGetter(TAX_DEADLINE_TYPE_LABELS, 'סוג מועד לא ידוע')

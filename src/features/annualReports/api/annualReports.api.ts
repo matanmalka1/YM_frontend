@@ -65,10 +65,7 @@ export const annualReportsApi = {
     reportId: number,
     payload: Partial<ReportDetailResponse>,
   ): Promise<ReportDetailResponse> => {
-    const response = await api.patch<ReportDetailResponse>(
-      ANNUAL_REPORT_ENDPOINTS.details(reportId),
-      payload,
-    )
+    const response = await api.patch<ReportDetailResponse>(ANNUAL_REPORT_ENDPOINTS.details(reportId), payload)
     return response.data
   },
 
@@ -77,9 +74,7 @@ export const annualReportsApi = {
   },
 
   getAnnexLines: async (reportId: number, schedule: AnnualReportScheduleKey): Promise<AnnexDataPagedResponse> => {
-    const response = await api.get<AnnexDataPagedResponse>(
-      ANNUAL_REPORT_ENDPOINTS.annex(reportId, schedule),
-    )
+    const response = await api.get<AnnexDataPagedResponse>(ANNUAL_REPORT_ENDPOINTS.annex(reportId, schedule))
     return response.data
   },
 
@@ -88,10 +83,7 @@ export const annualReportsApi = {
     schedule: AnnualReportScheduleKey,
     payload: AnnexDataAddPayload,
   ): Promise<AnnexDataLine> => {
-    const response = await api.post<AnnexDataLine>(
-      ANNUAL_REPORT_ENDPOINTS.annex(reportId, schedule),
-      payload,
-    )
+    const response = await api.post<AnnexDataLine>(ANNUAL_REPORT_ENDPOINTS.annex(reportId, schedule), payload)
     return response.data
   },
 

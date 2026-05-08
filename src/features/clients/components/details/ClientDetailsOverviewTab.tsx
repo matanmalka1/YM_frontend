@@ -23,7 +23,6 @@ import { ClientAnnualReportsTab } from '@/features/annualReports'
 import { ClientAdvancePaymentsTab } from '@/features/advancedPayments'
 import { ClientDocumentsTab } from '@/features/documents'
 import { ClientNotesCard } from '@/features/notes'
-import { FilingTimeline } from '@/features/taxDeadlines'
 import { VatClientSummaryPanel } from '@/features/vatReports'
 import type { UpdateClientPayload, ClientResponse } from '../../api'
 import { useFirstBusinessId } from '../../hooks/useFirstBusinessId'
@@ -131,7 +130,6 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
 
       {activeTab === 'timeline' && <ClientTimelineTab clientId={String(client.id)} />}
       {activeTab === 'documents' && <ClientDocumentsTab clientId={client.id} />}
-      {activeTab === 'deadlines' && <FilingTimeline clientId={client.id} />}
       {activeTab === 'vat' && <VatClientSummaryPanel clientId={client.id} />}
       {activeTab === 'advance-payments' && <ClientAdvancePaymentsTab clientId={client.id} />}
       {activeTab === 'annual-reports' && <ClientAnnualReportsTab clientId={client.id} />}

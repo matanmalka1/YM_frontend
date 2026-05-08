@@ -4,7 +4,6 @@ import type { AdvancePaymentFrequency, ClientResponse, ClientStatus, EntityType,
 export type ActiveClientDetailsTab =
   | 'details'
   | 'documents'
-  | 'deadlines'
   | 'timeline'
   | 'vat'
   | 'advance-payments'
@@ -18,7 +17,6 @@ export type ClientSortOrder = 'asc' | 'desc'
 export const CLIENT_DETAILS_TABS: ActiveClientDetailsTab[] = [
   'details',
   'documents',
-  'deadlines',
   'timeline',
   'vat',
   'advance-payments',
@@ -30,7 +28,6 @@ export const CLIENT_DETAILS_TABS: ActiveClientDetailsTab[] = [
 export const CLIENT_DETAILS_TAB_LABELS: Record<ActiveClientDetailsTab, string> = {
   details: 'פרטים',
   documents: 'מסמכים',
-  deadlines: 'מועדים',
   timeline: 'ציר זמן',
   vat: 'מע"מ (לקוח)',
   'advance-payments': 'מקדמות',

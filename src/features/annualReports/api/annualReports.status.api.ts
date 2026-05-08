@@ -4,10 +4,7 @@ import type { AnnualReportFull, DeadlineType, StatusTransitionPayload } from './
 
 export const annualReportStatusApi = {
   transitionStatus: async (reportId: number, payload: StatusTransitionPayload): Promise<AnnualReportFull> => {
-    const response = await api.post<AnnualReportFull>(
-      ANNUAL_REPORT_ENDPOINTS.status(reportId),
-      payload,
-    )
+    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.status(reportId), payload)
     return response.data
   },
 

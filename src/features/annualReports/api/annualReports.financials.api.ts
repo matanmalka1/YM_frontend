@@ -25,10 +25,7 @@ export const annualReportFinancialsApi = {
     lineId: number,
     payload: Partial<IncomeLinePayload>,
   ): Promise<IncomeLineResponse> => {
-    const response = await api.patch<IncomeLineResponse>(
-      ANNUAL_REPORT_ENDPOINTS.incomeLine(reportId, lineId),
-      payload,
-    )
+    const response = await api.patch<IncomeLineResponse>(ANNUAL_REPORT_ENDPOINTS.incomeLine(reportId, lineId), payload)
     return response.data
   },
 
@@ -37,10 +34,7 @@ export const annualReportFinancialsApi = {
   },
 
   addExpenseLine: async (reportId: number, payload: ExpenseLinePayload): Promise<ExpenseLineResponse> => {
-    const response = await api.post<ExpenseLineResponse>(
-      ANNUAL_REPORT_ENDPOINTS.expenses(reportId),
-      payload,
-    )
+    const response = await api.post<ExpenseLineResponse>(ANNUAL_REPORT_ENDPOINTS.expenses(reportId), payload)
     return response.data
   },
 

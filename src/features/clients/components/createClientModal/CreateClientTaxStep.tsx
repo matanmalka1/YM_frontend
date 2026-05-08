@@ -82,11 +82,7 @@ export const CreateClientTaxStep: React.FC<Props> = ({
           <div>
             <p className="mb-2 text-sm font-medium text-gray-700">תקרת פטור מע״מ</p>
             <div className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-600">
-              {impactLoading
-                ? 'טוען...'
-                : impactError
-                  ? 'לא ניתן לטעון את תקרת הפטור כרגע'
-                  : vatExemptCeilingText}
+              {impactLoading ? 'טוען...' : impactError ? 'לא ניתן לטעון את תקרת הפטור כרגע' : vatExemptCeilingText}
             </div>
             <p className="mt-1 text-xs text-gray-400">נגזר אוטומטית לפי הגדרת המערכת</p>
           </div>

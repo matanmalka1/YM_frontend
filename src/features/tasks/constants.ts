@@ -2,7 +2,6 @@ import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import type { TaskType, TaskUrgency } from './api/contracts'
 
 export const taskTypeValues = [
-  'tax_deadline',
   'vat_filing',
   'annual_report',
   'advance_payment',
@@ -12,7 +11,6 @@ export const taskTypeValues = [
 export const taskUrgencyValues = ['overdue', 'approaching', 'upcoming'] as const
 
 export const taskTypeLabels: Record<TaskType, string> = {
-  tax_deadline: 'מועד מס',
   vat_filing: 'דוח מע"מ',
   annual_report: 'דוח שנתי',
   advance_payment: 'מקדמה',

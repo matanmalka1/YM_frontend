@@ -6,8 +6,6 @@ export const ACTION_ENDPOINT_PATTERNS: RegExp[] = [
   /^\/charges\/\d+\/mark-paid$/,
   /^\/charges\/\d+\/cancel$/,
   /^\/clients\/\d+\/businesses\/\d+$/,
-  /^\/tax-deadlines\/\d+\/complete$/,
-  /^\/tax-deadlines\/\d+$/,
   /^\/annual-reports\/\d+\/amend$/,
   /^\/annual-reports\/\d+\/submit$/,
 ] as const

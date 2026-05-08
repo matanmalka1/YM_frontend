@@ -19,7 +19,6 @@ import { RemindersPage } from '../features/reminders'
 import { TasksPage } from '../features/tasks'
 import { Search } from '../features/search'
 import { SigningPage } from '../features/signing'
-import { TaxDeadlines } from '../features/taxDeadlines'
 import { TaxCalendarGroupsPage } from '../features/taxCalendar'
 import { TaxDashboardPage } from '../features/taxDashboard'
 import { Users } from '../features/users'
@@ -99,7 +98,6 @@ export const AppRoutes: React.FC = () => {
             <Route path="clients" element={<Clients />} />
             <Route path="clients/:clientId" element={<ClientDetails />} />
             <Route path="clients/:clientId/documents" element={<ClientDetails initialTab="documents" />} />
-            <Route path="clients/:clientId/deadlines" element={<ClientDetails initialTab="deadlines" />} />
             <Route path="clients/:clientId/timeline" element={<ClientDetails initialTab="timeline" />} />
             <Route path="clients/:clientId/vat" element={<ClientDetails initialTab="vat" />} />
             <Route
@@ -112,11 +110,10 @@ export const AppRoutes: React.FC = () => {
             <Route path="clients/:clientId/businesses/:businessId" element={<BusinessDetails />} />
             <Route path="search" element={<Search />} />
             <Route path="charges" element={<Charges />} />
-            <Route path="tax" element={<Navigate to="/tax/deadlines" replace />} />
+            <Route path="tax" element={<Navigate to="/tax/calendar" replace />} />
             <Route path="tax/dashboard" element={<TaxDashboardPage />} />
             <Route path="tax/reports" element={<AnnualReportsPage />} />
             <Route path="tax/reports/:reportId" element={<AnnualReportDetail />} />
-            <Route path="tax/deadlines" element={<TaxDeadlines />} />
             <Route path="tax/calendar" element={<TaxCalendarGroupsPage />} />
             <Route path="tax/advance-payments" element={<AdvancePayments />} />
             <Route path="tax/vat" element={<VatWorkItems />} />

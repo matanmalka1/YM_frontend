@@ -15,9 +15,8 @@ const getUnifiedItemHref = (item: UnifiedItem) => {
       return '/tax/advance-payments'
     case 'unpaid_charge':
       return '/charges'
-    case 'tax_deadline':
     default:
-      return '/tax/deadlines'
+      return '/'
   }
 }
 

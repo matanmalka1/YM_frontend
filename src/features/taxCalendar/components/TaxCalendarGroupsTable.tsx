@@ -164,9 +164,7 @@ const GroupItemsRows = ({
               <td className="px-3 py-1.5 font-mono tabular-nums text-gray-600">
                 {formatPlainIdentifier(item.office_client_number)}
               </td>
-              <td className="px-3 py-1.5 text-gray-600">
-                {SOURCE_TYPE_LABELS[item.source_type]}
-              </td>
+              <td className="px-3 py-1.5 text-gray-600">{SOURCE_TYPE_LABELS[item.source_type]}</td>
               <td className="px-3 py-1.5">
                 <Badge variant={getStateVariant(item)}>{getStateLabel(item)}</Badge>
               </td>

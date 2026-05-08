@@ -1,4 +1,4 @@
-import { endOfDay, isAfter, isBefore, parseISO, startOfDay } from 'date-fns'
+import { parseISO } from 'date-fns'
 import { mapActions } from '@/lib/actions/mapActions'
 import type { ActionCommand } from '@/lib/actions/types'
 import type { TimelineEvent, TimelineEventMetadata } from './api'
@@ -26,15 +26,6 @@ export interface NormalizedTimelineEvent extends TimelineEvent {
   actionsList: ActionCommand[]
 }
 
-const DEADLINE_TYPE_LABELS: Record<string, string> = {
-  advance_payment: 'מקדמה',
-  advance: 'מקדמה',
-  vat: 'מע״מ',
-  national_insurance: 'ביטוח לאומי',
-  annual_report: 'דוח שנתי',
-  other: 'אחר',
-}
-
 const FILTER_BY_EVENT_TYPE: Record<string, TimelineFilterKey[]> = {
   charge_created: ['past', 'finance'],
   charge_issued: ['past', 'finance'],
@@ -45,7 +36,6 @@ const FILTER_BY_EVENT_TYPE: Record<string, TimelineFilterKey[]> = {
   binder_returned: ['past', 'binders'],
   binder_status_change: ['past', 'binders'],
   document_uploaded: ['past', 'documents'],
-  tax_deadline_due: ['tax'],
   annual_report_status_changed: ['past', 'tax'],
   reminder_created: ['past', 'communication'],
   notification: ['past', 'communication'],
@@ -71,22 +61,6 @@ const getMetadataString = (metadata: TimelineEventMetadata | null | undefined, k
   return null
 }
 
-export const getDeadlineTypeLabel = (metadata: TimelineEventMetadata | null | undefined): string => {
-  const type = getMetadataString(metadata, ['deadline_type', 'type'])
-  return type ? (DEADLINE_TYPE_LABELS[type] ?? 'אחר') : 'אחר'
-}
-
-const getDeadlineDate = (event: TimelineEvent): string => {
-  const value = getMetadataString(event.metadata, ['deadline_date', 'due_date', 'date'])
-  return value ?? event.timestamp
-}
-
-const isFutureDeadline = (event: TimelineEvent, now: Date): boolean =>
-  event.event_type === 'tax_deadline_due' && isAfter(endOfDay(parseISO(getDeadlineDate(event))), now)
-
-const isPastEvent = (event: TimelineEvent, now: Date): boolean =>
-  event.event_type !== 'tax_deadline_due' || isBefore(startOfDay(parseISO(getDeadlineDate(event))), startOfDay(now))
-
 const shouldHideEvent = (event: TimelineEvent): boolean =>
   event.event_type === 'binder_status_change' &&
   event.metadata?.old_status != null &&
@@ -104,9 +78,8 @@ const getRelatedEntity = (event: TimelineEvent): string | null => {
 }
 
 const buildTitle = (event: TimelineEvent, groupedCount?: number): string => {
-  if (event.event_type === 'tax_deadline_due') return getDeadlineTypeLabel(event.metadata)
   if (event.event_type === 'reminder_created' && groupedCount && groupedCount > 1) {
-    return `נוצרו ${groupedCount} תזכורות למועדי מס`
+    return `נוצרו ${groupedCount} תזכורות`
   }
   return getEventTypeLabel(event.event_type)
 }
@@ -117,9 +90,6 @@ const buildSecondary = (event: TimelineEvent, groupedCount?: number): string | n
     const newLabel = getTimelineStatusLabel(String(event.metadata?.new_status ?? ''))
     return `${oldLabel} ← ${newLabel}`
   }
-  if (event.event_type === 'tax_deadline_due') {
-    return event.description && event.description !== 'מועד מס' ? event.description : null
-  }
   if (event.event_type === 'reminder_created' && groupedCount && groupedCount > 1) {
     const trigger = event.metadata?.trigger ? getTimelineTriggerLabel(String(event.metadata.trigger)) : null
     return trigger ? `סוג תזכורת: ${trigger}` : null
@@ -127,18 +97,16 @@ const buildSecondary = (event: TimelineEvent, groupedCount?: number): string | n
   return event.description || null
 }
 
-const normalizeEvent = (event: TimelineEvent, now: Date, groupedCount?: number): NormalizedTimelineEvent => {
-  const isDeadline = event.event_type === 'tax_deadline_due'
-  const future = isDeadline && isFutureDeadline(event, now)
+const normalizeEvent = (event: TimelineEvent, groupedCount?: number): NormalizedTimelineEvent => {
   const filterKeys = FILTER_BY_EVENT_TYPE[event.event_type] ?? ['past']
 
   return {
     ...event,
     title: buildTitle(event, groupedCount),
     secondary: buildSecondary(event, groupedCount),
-    displayTimestamp: isDeadline ? getDeadlineDate(event) : event.timestamp,
-    isDateOnly: isDeadline,
-    filterKeys: future ? ['future', 'tax'] : filterKeys,
+    displayTimestamp: event.timestamp,
+    isDateOnly: false,
+    filterKeys,
     importance: STRONG_EVENTS.has(event.event_type) ? 'strong' : 'quiet',
     relatedEntity: getRelatedEntity(event),
     actionsList: mapActions(event.actions ?? event.available_actions),
@@ -171,17 +139,12 @@ const groupReminders = (events: TimelineEvent[]): Array<TimelineEvent & { groupe
   return output
 }
 
-export const normalizeTimelineEvents = (events: TimelineEvent[], now = new Date()) => {
+export const normalizeTimelineEvents = (events: TimelineEvent[]) => {
   const visible = events.filter((event) => !shouldHideEvent(event))
-  const upcomingDeadlines = visible
-    .filter((event) => isFutureDeadline(event, now))
-    .sort((a, b) => parseISO(getDeadlineDate(a)).getTime() - parseISO(getDeadlineDate(b)).getTime())
-    .slice(0, 5)
-    .map((event) => normalizeEvent(event, now))
 
-  const historicalEvents = groupReminders(visible.filter((event) => isPastEvent(event, now)))
-    .map((event) => normalizeEvent(event, now, event.groupedCount))
+  const historicalEvents = groupReminders(visible)
+    .map((event) => normalizeEvent(event, event.groupedCount))
     .sort((a, b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime())
 
-  return { historicalEvents, upcomingDeadlines }
+  return { historicalEvents, upcomingDeadlines: [] as NormalizedTimelineEvent[] }
 }

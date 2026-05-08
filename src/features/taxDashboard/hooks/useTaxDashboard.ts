@@ -1,15 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { getYear } from 'date-fns'
 import { taxDashboardApi, taxDashboardQK } from '../api'
-import { taxDeadlinesApi } from '@/features/taxDeadlines'
 import type { TaxSubmissionWidgetResponse } from '../api'
-import type { DeadlineUrgentItem, TaxDeadlineResponse } from '@/features/taxDeadlines'
 
 export interface TaxDashboardData {
   currentYear: number
   submissions: TaxSubmissionWidgetResponse | undefined
-  urgentDeadlines: DeadlineUrgentItem[]
-  upcomingDeadlines: TaxDeadlineResponse[]
   isLoading: boolean
   hasError: boolean
 }
@@ -22,17 +18,10 @@ export const useTaxDashboard = (): TaxDashboardData => {
     queryFn: () => taxDashboardApi.getTaxSubmissionsWidget(currentYear),
   })
 
-  const deadlinesQuery = useQuery({
-    queryKey: taxDashboardQK.urgentDeadlines,
-    queryFn: () => taxDeadlinesApi.getDashboardDeadlines(),
-  })
-
   return {
     currentYear,
     submissions: submissionsQuery.data,
-    urgentDeadlines: deadlinesQuery.data?.urgent ?? [],
-    upcomingDeadlines: deadlinesQuery.data?.upcoming ?? [],
-    isLoading: submissionsQuery.isPending || deadlinesQuery.isPending,
-    hasError: Boolean(submissionsQuery.error || deadlinesQuery.error),
+    isLoading: submissionsQuery.isPending,
+    hasError: Boolean(submissionsQuery.error),
   }
 }

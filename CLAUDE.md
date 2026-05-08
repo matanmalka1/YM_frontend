@@ -136,8 +136,8 @@ Active top-level feature folders:
 - `actions`, `advancedPayments`, `annualReports`, `auth`, `authorityContacts`
 - `binders`, `businesses`, `charges`, `clients`, `correspondence`
 - `dashboard`, `documents`, `importExport`, `notifications`, `reminders`
-- `reports`, `search`, `signatureRequests`, `signing`, `taxDashboard`
-- `taxDeadlines`, `taxProfile`, `timeline`, `users`, `vatReports`
+- `reports`, `search`, `signatureRequests`, `signing`, `taxCalendar`, `taxDashboard`
+- `taxProfile`, `timeline`, `users`, `vatReports`
 
 ---
 
@@ -300,16 +300,16 @@ Always use `options={[...]}` for new code. The `children` path exists for compat
 | What               | Convention                                | Example                        |
 | ------------------ | ----------------------------------------- | ------------------------------ |
 | Feature folders    | camelCase                                 | `annualReports`                |
-| Components         | PascalCase                                | `TaxDeadlineDrawer.tsx`        |
+| Components         | PascalCase                                | `AnnualReportDrawer.tsx`       |
 | Hooks              | `use` + camelCase                         | `useTaxProfile.ts`             |
 | Pages              | `*Page.tsx`                               | `DashboardPage.tsx`            |
-| Feature API files  | `<feature>.api.ts` or scoped API files    | `taxDeadlines.api.ts`          |
+| Feature API files  | `<feature>.api.ts` or scoped API files    | `annualReports.api.ts`         |
 | Feature contracts  | `contracts.ts`                            | `api/contracts.ts`             |
 | Feature query keys | `queryKeys.ts`                            | `api/queryKeys.ts`             |
 | Feature barrel     | `index.ts`                                | `features/taxProfile/index.ts` |
 | Constants          | `constants.ts` or scoped `*.constants.ts` | `history.constants.ts`         |
 | Request types      | `*Payload` / `*Params`                    | `CreateCorrespondencePayload`  |
-| Response types     | `*Response`                               | `TaxDeadlineResponse`          |
+| Response types     | `*Response`                               | `AnnualReportResponse`         |
 
 ---
 
