@@ -153,7 +153,7 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
   entityType,
   entityId,
   title = 'היסטוריית שינויים',
-  subtitle = 'פעולות שבוצעו על הלקוח',
+  subtitle = 'פעולות שבוצעו על הרשומה',
   compact = false,
 }) => {
   const [page, setPage] = useState(0)
