@@ -36,7 +36,7 @@ export const CLIENT_DETAILS_TAB_LABELS: Record<ActiveClientDetailsTab, string> =
   'annual-reports': 'דוחות שנתיים',
   communication: 'תקשורת',
   reminders: 'תזכורות',
-  history: 'היסטוריה',
+  history: 'יומן שינויים',
 }
 
 export const CLIENT_ID_NUMBER_TYPES = [
