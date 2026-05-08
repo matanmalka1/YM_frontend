@@ -11,13 +11,32 @@ export type TimelineNotificationTrigger = 'binder_received' | 'binder_ready_for_
 // ── Metadata ──────────────────────────────────────────────────────────────────
 
 export interface TimelineEventMetadata {
+  // binder status change
   old_status?: TimelineBinderStatus | null
   new_status?: TimelineBinderStatus | null
+  // charge / invoice
   amount?: number | string | null
-  channel?: TimelineNotificationChannel | null
-  trigger?: TimelineNotificationTrigger | null
   provider?: string | null
   external_invoice_id?: string | number | null
+  // notification (legacy)
+  channel?: TimelineNotificationChannel | null
+  trigger?: TimelineNotificationTrigger | null
+  // annual report
+  history_id?: number | null
+  annual_report_id?: number | null
+  tax_year?: number | string | null
+  form_type?: string | null
+  from_status?: string | null
+  to_status?: string | null
+  note?: string | null
+  // signature lifecycle
+  signature_request_id?: number | null
+  request_type?: string | null
+  status?: string | null
+  document_id?: number | null
+  signer_name?: string | null
+  reason?: string | null
+  notes?: string | null
   [key: string]: unknown
 }
 

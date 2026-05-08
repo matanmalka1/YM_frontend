@@ -6,7 +6,6 @@ import {
   ArrowLeftRight,
   Bell,
   CheckCircle,
-  Clock,
   CreditCard,
   FileText,
   FolderInput,
@@ -15,8 +14,8 @@ import {
   Receipt,
   Settings,
   Upload,
-  UserCog,
   UserPlus,
+  XCircle,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -38,14 +37,15 @@ const EVENT_REGISTRY: Record<string, EventMeta> = {
   charge_issued: { label: 'הנפקת חיוב', icon: CreditCard },
   charge_paid: { label: 'תשלום חיוב', icon: CheckCircle },
   notification: { label: 'התראה', icon: Bell },
-  notification_sent: { label: 'התראה נשלחה', icon: Bell },
-annual_report_status_changed: { label: 'דוח שנתי', icon: FileText },
+  annual_report_status_changed: { label: 'דוח שנתי', icon: FileText },
   client_created: { label: 'לקוח נוצר', icon: UserPlus },
-  client_info_updated: { label: 'פרטי לקוח עודכנו', icon: UserCog },
   tax_profile_updated: { label: 'פרופיל מס עודכן', icon: Settings },
-  reminder_created: { label: 'תזכורת נוצרה', icon: Clock },
   document_uploaded: { label: 'מסמך הועלה', icon: Upload },
-  signature_request_created: { label: 'בקשת חתימה נוצרה', icon: PenLine },
+  signature_request_sent: { label: 'בקשת חתימה נשלחה', icon: PenLine },
+  signature_request_signed: { label: 'מסמך נחתם', icon: CheckCircle },
+  signature_request_declined: { label: 'חתימה נדחתה', icon: XCircle },
+  signature_request_canceled: { label: 'בקשת חתימה בוטלה', icon: XCircle },
+  signature_request_expired: { label: 'בקשת חתימה פגה', icon: XCircle },
 }
 
 const FALLBACK: EventMeta = { label: 'אירוע', icon: AlertCircle }

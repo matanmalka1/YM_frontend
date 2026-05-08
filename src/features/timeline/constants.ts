@@ -60,14 +60,15 @@ const EVENT_COLOR_MAP: Record<string, TailwindColor> = {
   charge_issued: 'orange',
   charge_paid: 'green',
   notification: 'rose',
-  notification_sent: 'rose',
-annual_report_status_changed: 'indigo',
+  annual_report_status_changed: 'indigo',
   client_created: 'primary',
-  client_info_updated: 'sky',
   tax_profile_updated: 'slate',
-  reminder_created: 'amber',
   document_uploaded: 'emerald',
-  signature_request_created: 'violet',
+  signature_request_sent: 'violet',
+  signature_request_signed: 'emerald',
+  signature_request_declined: 'rose',
+  signature_request_canceled: 'slate',
+  signature_request_expired: 'amber',
 }
 
 const DEFAULT_EVENT_COLOR: EventColorConfig = makeColor('gray')

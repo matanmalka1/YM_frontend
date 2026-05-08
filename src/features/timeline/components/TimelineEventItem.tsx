@@ -42,8 +42,32 @@ const StatusTransition: React.FC<{ oldStatus: string; newStatus: string }> = ({ 
 
 // ── Metadata panel ────────────────────────────────────────────────────────────
 
+const SIGNATURE_EVENT_TYPES = new Set([
+  'signature_request_sent',
+  'signature_request_signed',
+  'signature_request_declined',
+  'signature_request_canceled',
+  'signature_request_expired',
+])
+
 const EventMetadata: React.FC<{ metadata: TimelineEventMetadata; eventType: string }> = ({ metadata, eventType }) => {
-  const { old_status, new_status, amount, trigger, channel, provider, external_invoice_id } = metadata
+  const {
+    old_status,
+    new_status,
+    amount,
+    trigger,
+    channel,
+    provider,
+    external_invoice_id,
+    tax_year,
+    form_type,
+    from_status,
+    to_status,
+    note,
+    signer_name,
+    reason,
+    notes,
+  } = metadata
 
   return (
     <>
@@ -68,6 +92,25 @@ const EventMetadata: React.FC<{ metadata: TimelineEventMetadata; eventType: stri
         <MetaRow className="bg-orange-50 border-orange-100">
           <MetaField label="ספק" value={String(provider ?? 'לא ידוע')} />
           <MetaField label="ID חשבונית" value={String(external_invoice_id)} />
+        </MetaRow>
+      )}
+
+      {eventType === 'annual_report_status_changed' && (from_status || to_status || tax_year || form_type || note) && (
+        <MetaRow className="bg-indigo-50 border-indigo-100">
+          {tax_year != null && <MetaField label="שנת מס" value={String(tax_year)} />}
+          {form_type && <MetaField label="סוג טופס" value={form_type} />}
+          {from_status && to_status && (
+            <MetaField label="מעבר סטטוס" value={`${from_status} ← ${to_status}`} />
+          )}
+          {note && <MetaField label="הערה" value={note} />}
+        </MetaRow>
+      )}
+
+      {SIGNATURE_EVENT_TYPES.has(eventType) && (signer_name || reason || notes) && (
+        <MetaRow className="bg-violet-50 border-violet-100">
+          {signer_name && <MetaField label="חותם" value={signer_name} />}
+          {reason && <MetaField label="סיבת דחייה" value={reason} />}
+          {notes && <MetaField label="הערות" value={notes} />}
         </MetaRow>
       )}
     </>

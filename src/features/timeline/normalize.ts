@@ -2,7 +2,7 @@ import { parseISO } from 'date-fns'
 import { mapActions } from '@/lib/actions/mapActions'
 import type { ActionCommand } from '@/lib/actions/types'
 import type { TimelineEvent, TimelineEventMetadata } from './api'
-import { getTimelineStatusLabel, getTimelineTriggerLabel } from './labels'
+import { getTimelineStatusLabel } from './labels'
 import { getEventTypeLabel } from './utils'
 
 export type TimelineFilterKey =
@@ -37,10 +37,12 @@ const FILTER_BY_EVENT_TYPE: Record<string, TimelineFilterKey[]> = {
   binder_status_change: ['past', 'binders'],
   document_uploaded: ['past', 'documents'],
   annual_report_status_changed: ['past', 'tax'],
-  reminder_created: ['past', 'communication'],
   notification: ['past', 'communication'],
-  notification_sent: ['past', 'communication'],
-  signature_request_created: ['past', 'communication', 'documents'],
+  signature_request_sent: ['past', 'documents'],
+  signature_request_signed: ['past', 'documents'],
+  signature_request_declined: ['past', 'documents'],
+  signature_request_canceled: ['past', 'documents'],
+  signature_request_expired: ['past', 'documents'],
 }
 
 const STRONG_EVENTS = new Set([
@@ -48,9 +50,11 @@ const STRONG_EVENTS = new Set([
   'charge_issued',
   'charge_paid',
   'annual_report_status_changed',
-  'signature_request_created',
   'binder_status_change',
   'document_uploaded',
+  'signature_request_sent',
+  'signature_request_signed',
+  'signature_request_declined',
 ])
 
 const getMetadataString = (metadata: TimelineEventMetadata | null | undefined, keys: string[]): string | null => {
@@ -72,38 +76,38 @@ const getRelatedEntity = (event: TimelineEvent): string | null => {
   if (event.binder_id != null) return `קלסר #${event.binder_id}`
   const documentName = getMetadataString(event.metadata, ['document_name', 'filename'])
   if (documentName) return `מסמך ${documentName}`
-  const reportYear = event.metadata?.report_year
-  if (reportYear != null) return `דוח שנתי ${String(reportYear)}`
+  const taxYear = event.metadata?.tax_year ?? event.metadata?.report_year
+  if (taxYear != null) return `דוח שנתי ${String(taxYear)}`
   return null
 }
 
-const buildTitle = (event: TimelineEvent, groupedCount?: number): string => {
-  if (event.event_type === 'reminder_created' && groupedCount && groupedCount > 1) {
-    return `נוצרו ${groupedCount} תזכורות`
+const buildTitle = (event: TimelineEvent): string => {
+  if (event.event_type === 'annual_report_status_changed') {
+    const { tax_year, form_type } = event.metadata ?? {}
+    if (tax_year != null) {
+      const typeLabel = form_type ? ` (${String(form_type)})` : ''
+      return `דוח שנתי ${String(tax_year)}${typeLabel}`
+    }
   }
   return getEventTypeLabel(event.event_type)
 }
 
-const buildSecondary = (event: TimelineEvent, groupedCount?: number): string | null => {
+const buildSecondary = (event: TimelineEvent): string | null => {
   if (event.event_type === 'binder_status_change') {
     const oldLabel = getTimelineStatusLabel(String(event.metadata?.old_status ?? ''))
     const newLabel = getTimelineStatusLabel(String(event.metadata?.new_status ?? ''))
     return `${oldLabel} ← ${newLabel}`
   }
-  if (event.event_type === 'reminder_created' && groupedCount && groupedCount > 1) {
-    const trigger = event.metadata?.trigger ? getTimelineTriggerLabel(String(event.metadata.trigger)) : null
-    return trigger ? `סוג תזכורת: ${trigger}` : null
-  }
   return event.description || null
 }
 
-const normalizeEvent = (event: TimelineEvent, groupedCount?: number): NormalizedTimelineEvent => {
+const normalizeEvent = (event: TimelineEvent): NormalizedTimelineEvent => {
   const filterKeys = FILTER_BY_EVENT_TYPE[event.event_type] ?? ['past']
 
   return {
     ...event,
-    title: buildTitle(event, groupedCount),
-    secondary: buildSecondary(event, groupedCount),
+    title: buildTitle(event),
+    secondary: buildSecondary(event),
     displayTimestamp: event.timestamp,
     isDateOnly: false,
     filterKeys,
@@ -113,37 +117,10 @@ const normalizeEvent = (event: TimelineEvent, groupedCount?: number): Normalized
   }
 }
 
-const reminderGroupKey = (event: TimelineEvent): string =>
-  [event.event_type, event.timestamp.slice(0, 10), event.description, event.metadata?.trigger ?? ''].join('|')
-
-const groupReminders = (events: TimelineEvent[]): Array<TimelineEvent & { groupedCount?: number }> => {
-  const grouped = new Map<string, TimelineEvent & { groupedCount?: number }>()
-  const output: Array<TimelineEvent & { groupedCount?: number }> = []
-
-  for (const event of events) {
-    if (event.event_type !== 'reminder_created') {
-      output.push(event)
-      continue
-    }
-    const key = reminderGroupKey(event)
-    const existing = grouped.get(key)
-    if (existing) {
-      existing.groupedCount = (existing.groupedCount ?? 1) + 1
-    } else {
-      const next = { ...event, groupedCount: 1 }
-      grouped.set(key, next)
-      output.push(next)
-    }
-  }
-
-  return output
-}
-
 export const normalizeTimelineEvents = (events: TimelineEvent[]) => {
-  const visible = events.filter((event) => !shouldHideEvent(event))
-
-  const historicalEvents = groupReminders(visible)
-    .map((event) => normalizeEvent(event, event.groupedCount))
+  const historicalEvents = events
+    .filter((event) => !shouldHideEvent(event))
+    .map(normalizeEvent)
     .sort((a, b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime())
 
   return { historicalEvents, upcomingDeadlines: [] as NormalizedTimelineEvent[] }
