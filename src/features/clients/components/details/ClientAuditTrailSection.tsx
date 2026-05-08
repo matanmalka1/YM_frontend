@@ -37,36 +37,44 @@ const parseAuditValue = (value: string | null): unknown => {
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value)
 
+const unwrapScalarPayload = (value: unknown): unknown => {
+  if (isRecord(value) && Object.keys(value).length === 1 && 'value' in value) return value.value
+  return value
+}
+
 const formatValue = (value: unknown): string => {
-  if (value === null || value === undefined) return ''
+  if (value === null || value === undefined) return '—'
   if (typeof value === 'string') return value
   if (typeof value === 'number' || typeof value === 'boolean') return String(value)
   return JSON.stringify(value)
 }
 
 const formatParsedDiff = (oldValue: unknown, newValue: unknown): string | null => {
-  if (isRecord(oldValue) || isRecord(newValue)) {
-    const oldRecord = isRecord(oldValue) ? oldValue : {}
-    const newRecord = isRecord(newValue) ? newValue : {}
+  const oldPayload = unwrapScalarPayload(oldValue)
+  const newPayload = unwrapScalarPayload(newValue)
+
+  if (isRecord(oldPayload) || isRecord(newPayload)) {
+    const oldRecord = isRecord(oldPayload) ? oldPayload : {}
+    const newRecord = isRecord(newPayload) ? newPayload : {}
     const keys = Array.from(new Set([...Object.keys(oldRecord), ...Object.keys(newRecord)]))
 
     return keys
       .map((key) => {
         const oldText = formatValue(oldRecord[key])
         const newText = formatValue(newRecord[key])
-        if (!oldText) return `${key}: ${newText}`
-        if (!newText) return `${key}: ${oldText}`
-        return `${key}: ${oldText} -> ${newText}`
+        if (!(key in oldRecord)) return `${key}: ${newText}`
+        if (!(key in newRecord)) return `${key}: ${oldText}`
+        return `${key}: ${oldText} → ${newText}`
       })
       .filter(Boolean)
       .join('; ')
   }
 
-  if (oldValue !== null && oldValue !== undefined && newValue !== null && newValue !== undefined) {
-    return `${formatValue(oldValue)} -> ${formatValue(newValue)}`
+  if (oldPayload !== null && oldPayload !== undefined && newPayload !== null && newPayload !== undefined) {
+    return `${formatValue(oldPayload)} → ${formatValue(newPayload)}`
   }
-  if (newValue !== null && newValue !== undefined) return formatValue(newValue)
-  if (oldValue !== null && oldValue !== undefined) return formatValue(oldValue)
+  if (newPayload !== null && newPayload !== undefined) return formatValue(newPayload)
+  if (oldPayload !== null && oldPayload !== undefined) return formatValue(oldPayload)
   return null
 }
 
@@ -75,7 +83,7 @@ const formatAuditDetails = (entry: EntityAuditLogEntry): string => {
   const newParsed = parseAuditValue(entry.new_value)
   const parsedText =
     oldParsed === undefined || newParsed === undefined ? null : formatParsedDiff(oldParsed, newParsed)
-  const rawText = [entry.old_value, entry.new_value].filter(Boolean).map((value) => shorten(value ?? '')).join(' -> ')
+  const rawText = [entry.old_value, entry.new_value].filter(Boolean).map((value) => shorten(value ?? '')).join(' → ')
   const details = parsedText || rawText
 
   return [details, entry.note].filter(Boolean).join('; ')
