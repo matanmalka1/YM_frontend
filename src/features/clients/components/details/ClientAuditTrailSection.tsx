@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/primitives/Button'
+import { Card } from '@/components/ui/primitives/Card'
 import { formatDateTime } from '@/utils/utils'
 import type { EntityAuditLogEntry } from '../../api/contracts'
 import { useClientAuditTrail } from '../../hooks/useClientAuditTrail'
@@ -21,6 +22,20 @@ const ACTION_LABELS: Record<string, string> = {
   expense_added: 'נוספה הוצאה',
   expense_updated: 'עודכנה הוצאה',
   expense_deleted: 'נמחקה הוצאה',
+}
+
+const FIELD_LABELS: Record<string, string> = {
+  full_name: 'שם לקוח',
+  id_number: 'מספר מזהה',
+  entity_type: 'סוג ישות',
+  office_client_number: 'מספר לקוח',
+  status: 'סטטוס',
+  vat_reporting_frequency: 'תדירות מע״מ',
+  advance_payment_frequency: 'תדירות מקדמות',
+  advance_rate: 'שיעור מקדמות',
+  accountant_id: 'רואה חשבון',
+  phone: 'טלפון',
+  email: 'אימייל',
 }
 
 const shorten = (value: string): string => (value.length > 120 ? `${value.slice(0, 117)}...` : value)
@@ -49,6 +64,8 @@ const formatValue = (value: unknown): string => {
   return JSON.stringify(value)
 }
 
+const formatFieldLabel = (key: string): string => FIELD_LABELS[key] ?? key
+
 const formatParsedDiff = (oldValue: unknown, newValue: unknown): string | null => {
   const oldPayload = unwrapScalarPayload(oldValue)
   const newPayload = unwrapScalarPayload(newValue)
@@ -60,11 +77,12 @@ const formatParsedDiff = (oldValue: unknown, newValue: unknown): string | null =
 
     return keys
       .map((key) => {
+        const label = formatFieldLabel(key)
         const oldText = formatValue(oldRecord[key])
         const newText = formatValue(newRecord[key])
-        if (!(key in oldRecord)) return `${key}: ${newText}`
-        if (!(key in newRecord)) return `${key}: ${oldText}`
-        return `${key}: ${oldText} → ${newText}`
+        if (!(key in oldRecord)) return `${label}: ${newText}`
+        if (!(key in newRecord)) return `${label}: ${oldText}`
+        return `${label}: ${oldText} → ${newText}`
       })
       .filter(Boolean)
       .join('; ')
@@ -86,7 +104,14 @@ const formatAuditDetails = (entry: EntityAuditLogEntry): string => {
   const rawText = [entry.old_value, entry.new_value].filter(Boolean).map((value) => shorten(value ?? '')).join(' → ')
   const details = parsedText || rawText
 
-  return [details, entry.note].filter(Boolean).join('; ')
+  const fallbackDetails =
+    {
+      created: 'הרשומה נוצרה',
+      deleted: 'הרשומה נמחקה',
+      restored: 'הרשומה שוחזרה',
+    }[entry.action] ?? '—'
+
+  return [details || fallbackDetails, entry.note].filter(Boolean).join('; ')
 }
 
 type ClientAuditTrailSectionProps = {
@@ -100,63 +125,87 @@ export const ClientAuditTrailSection: React.FC<ClientAuditTrailSectionProps> = (
   const maxPage = totalPages - 1
   const safePage = Math.min(page, maxPage)
 
-  if (isPending) return <p className="py-8 text-center text-sm text-gray-400">טוען...</p>
-  if (isError) return <p className="py-8 text-center text-sm text-negative-600">שגיאה בטעינת ההיסטוריה</p>
-  if (total === 0) return <p className="py-8 text-center text-sm text-gray-400">אין היסטוריית שינויים</p>
+  if (isPending) {
+    return (
+      <Card title="היסטוריית שינויים" subtitle="פעולות שבוצעו על הלקוח" className="shadow-sm">
+        <p className="py-8 text-center text-sm text-gray-400">טוען...</p>
+      </Card>
+    )
+  }
+
+  if (isError) {
+    return (
+      <Card title="היסטוריית שינויים" subtitle="פעולות שבוצעו על הלקוח" className="shadow-sm">
+        <p className="py-8 text-center text-sm text-negative-600">שגיאה בטעינת ההיסטוריה</p>
+      </Card>
+    )
+  }
+
+  if (total === 0) {
+    return (
+      <Card title="היסטוריית שינויים" subtitle="פעולות שבוצעו על הלקוח" className="shadow-sm">
+        <p className="py-8 text-center text-sm text-gray-400">אין היסטוריית שינויים</p>
+      </Card>
+    )
+  }
 
   return (
-    <div className="space-y-3">
-      <div className="overflow-x-auto rounded-lg border border-gray-100" dir="rtl">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
-            <tr>
-              <th className="px-4 py-3 text-right">תאריך</th>
-              <th className="px-4 py-3 text-right">פעולה</th>
-              <th className="px-4 py-3 text-right">פרטים</th>
-              <th className="px-4 py-3 text-right">בוצע ע&quot;י</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100 bg-white">
-            {items.map((entry) => (
-              <tr key={entry.id} className="hover:bg-gray-50/60">
-                <td className="px-4 py-3 text-gray-500 tabular-nums whitespace-nowrap">
-                  {formatDateTime(entry.performed_at)}
-                </td>
-                <td className="px-4 py-3 font-medium text-gray-800">{ACTION_LABELS[entry.action] ?? entry.action}</td>
-                <td className="px-4 py-3 text-xs text-gray-500 max-w-xl">{formatAuditDetails(entry)}</td>
-                <td className="px-4 py-3 font-mono text-xs text-gray-400">
-                  {entry.performed_by_name ?? `#${entry.performed_by}`}
-                </td>
+    <Card title="היסטוריית שינויים" subtitle="פעולות שבוצעו על הלקוח" className="shadow-sm">
+      <div className="space-y-3">
+        <div className="overflow-x-auto rounded-lg border border-gray-100" dir="rtl">
+          <table className="w-full border-collapse text-sm">
+            <thead className="bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
+              <tr>
+                <th className="px-4 py-3 text-right">תאריך</th>
+                <th className="px-4 py-3 text-right">פעולה</th>
+                <th className="px-4 py-3 text-right">פרטים</th>
+                <th className="px-4 py-3 text-right">בוצע ע&quot;י</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between text-sm text-gray-500" dir="rtl">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => setPage((currentPage) => Math.max(0, currentPage - 1))}
-            disabled={safePage === 0 || isFetching}
-          >
-            הקודם
-          </Button>
-          <span>{isFetching ? 'טוען...' : `עמוד ${safePage + 1} מתוך ${totalPages}`}</span>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => setPage((currentPage) => Math.min(maxPage, currentPage + 1))}
-            disabled={safePage >= maxPage || isFetching}
-          >
-            הבא
-          </Button>
+            </thead>
+            <tbody className="divide-y divide-gray-100 bg-white">
+              {items.map((entry) => (
+                <tr key={entry.id} className="hover:bg-gray-50/60">
+                  <td className="px-4 py-3 text-gray-500 tabular-nums whitespace-nowrap">
+                    {formatDateTime(entry.performed_at)}
+                  </td>
+                  <td className="px-4 py-3 font-medium text-gray-800">
+                    {ACTION_LABELS[entry.action] ?? entry.action}
+                  </td>
+                  <td className="px-4 py-3 text-xs text-gray-500 max-w-xl">{formatAuditDetails(entry)}</td>
+                  <td className="px-4 py-3 font-mono text-xs text-gray-400">
+                    {entry.performed_by_name ?? `#${entry.performed_by}`}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
-    </div>
+
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between text-sm text-gray-500" dir="rtl">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setPage((currentPage) => Math.max(0, currentPage - 1))}
+              disabled={safePage === 0 || isFetching}
+            >
+              הקודם
+            </Button>
+            <span>{isFetching ? 'טוען...' : `עמוד ${safePage + 1} מתוך ${totalPages}`}</span>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setPage((currentPage) => Math.min(maxPage, currentPage + 1))}
+              disabled={safePage >= maxPage || isFetching}
+            >
+              הבא
+            </Button>
+          </div>
+        )}
+      </div>
+    </Card>
   )
 }
 
