@@ -36,7 +36,6 @@ const FILTER_LABELS: Record<TimelineFilterKey, string> = {
   binders: 'קלסרים',
   documents: 'מסמכים',
   tax: 'מיסים',
-  communication: 'תקשורת',
 }
 
 const FILTER_ORDER: TimelineFilterKey[] = [
@@ -47,7 +46,6 @@ const FILTER_ORDER: TimelineFilterKey[] = [
   'binders',
   'documents',
   'tax',
-  'communication',
 ]
 
 const getFilterCount = (stats: EventTypeStat[], key: TimelineFilterKey): number =>

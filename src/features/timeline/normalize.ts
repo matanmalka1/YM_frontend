@@ -13,7 +13,6 @@ export type TimelineFilterKey =
   | 'binders'
   | 'documents'
   | 'tax'
-  | 'communication'
 
 export interface NormalizedTimelineEvent extends TimelineEvent {
   title: string
@@ -30,14 +29,12 @@ const FILTER_BY_EVENT_TYPE: Record<string, TimelineFilterKey[]> = {
   charge_created: ['past', 'finance'],
   charge_issued: ['past', 'finance'],
   charge_paid: ['past', 'finance'],
-  invoice_created: ['past', 'finance'],
   invoice_attached: ['past', 'finance'],
   binder_received: ['past', 'binders'],
   binder_returned: ['past', 'binders'],
   binder_status_change: ['past', 'binders'],
   document_uploaded: ['past', 'documents'],
   annual_report_status_changed: ['past', 'tax'],
-  notification: ['past', 'communication'],
   signature_request_sent: ['past', 'documents'],
   signature_request_signed: ['past', 'documents'],
   signature_request_declined: ['past', 'documents'],
@@ -76,7 +73,7 @@ const getRelatedEntity = (event: TimelineEvent): string | null => {
   if (event.binder_id != null) return `קלסר #${event.binder_id}`
   const documentName = getMetadataString(event.metadata, ['document_name', 'filename'])
   if (documentName) return `מסמך ${documentName}`
-  const taxYear = event.metadata?.tax_year ?? event.metadata?.report_year
+  const taxYear = event.metadata?.tax_year
   if (taxYear != null) return `דוח שנתי ${String(taxYear)}`
   return null
 }

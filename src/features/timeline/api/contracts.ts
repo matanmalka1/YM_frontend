@@ -4,10 +4,6 @@ import type { BackendAction } from '@/lib/actions/types'
 
 export type TimelineBinderStatus = 'none' | 'in_office' | 'ready_for_pickup' | 'returned'
 
-export type TimelineNotificationChannel = 'whatsapp' | 'email' | 'sms'
-
-export type TimelineNotificationTrigger = 'binder_received' | 'binder_ready_for_pickup' | 'manual_payment_reminder'
-
 // ── Metadata ──────────────────────────────────────────────────────────────────
 
 export interface TimelineEventMetadata {
@@ -18,9 +14,6 @@ export interface TimelineEventMetadata {
   amount?: number | string | null
   provider?: string | null
   external_invoice_id?: string | number | null
-  // notification (legacy)
-  channel?: TimelineNotificationChannel | null
-  trigger?: TimelineNotificationTrigger | null
   // annual report
   history_id?: number | null
   annual_report_id?: number | null

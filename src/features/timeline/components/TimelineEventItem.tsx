@@ -7,7 +7,7 @@ import type { ActionCommand } from '@/lib/actions/types'
 import { cn } from '../../../utils/utils'
 import { staggerDelay } from '../../../utils/animation'
 import { getEventColor } from '../constants'
-import { getTimelineChannelLabel, getTimelineStatusLabel, getTimelineTriggerLabel } from '../labels'
+import { getTimelineStatusLabel } from '../labels'
 import { formatTimelineDate, formatTimestamp, getEventIcon } from '../utils'
 
 // ── Metadata sub-components ───────────────────────────────────────────────────
@@ -55,8 +55,6 @@ const EventMetadata: React.FC<{ metadata: TimelineEventMetadata; eventType: stri
     old_status,
     new_status,
     amount,
-    trigger,
-    channel,
     provider,
     external_invoice_id,
     tax_year,
@@ -78,13 +76,6 @@ const EventMetadata: React.FC<{ metadata: TimelineEventMetadata; eventType: stri
       {amount != null && (
         <MetaRow className="bg-emerald-50 border-emerald-100">
           <MetaField label="סכום" value={`₪${Number(amount).toFixed(2)}`} />
-        </MetaRow>
-      )}
-
-      {trigger && channel && (
-        <MetaRow className="bg-purple-50 border-purple-100">
-          <MetaField label="ערוץ" value={getTimelineChannelLabel(channel)} />
-          <MetaField label="סוג" value={getTimelineTriggerLabel(trigger)} />
         </MetaRow>
       )}
 
