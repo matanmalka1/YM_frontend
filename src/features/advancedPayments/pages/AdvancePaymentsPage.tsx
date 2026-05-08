@@ -66,7 +66,13 @@ export const AdvancePayments: React.FC = () => {
   const year = parsePositiveInt(searchParams.get('year'), todayYear)
 
   const [drawerRow, setDrawerRow] = useState<AdvancePaymentOverviewRow | null>(null)
-  const [filters, setFilters] = useState({ client_id: '', client_name: '', status: '', period: '' })
+  const initialPeriodFilter = searchParams.get('period')
+  const [filters, setFilters] = useState({
+    client_id: '',
+    client_name: '',
+    status: '',
+    period: initialPeriodFilter === '1' || initialPeriodFilter === '2' ? initialPeriodFilter : '',
+  })
   const [loadedGroupStats, setLoadedGroupStats] = useState<Record<string, AdvancePaymentGroupStats>>({})
 
   const [createPickerOpen, setCreatePickerOpen] = useState(false)

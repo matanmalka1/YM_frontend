@@ -46,10 +46,12 @@ const ProgressBar = ({ label, percent, href }: ProgressBarProps) => {
   return content
 }
 
-export const VatInsightsRow: React.FC<Props> = ({ vatStats }) => {
+export const TaxInsightsRow: React.FC<Props> = ({ vatStats }) => {
   const { stats: seasonStats } = useSeasonSummary()
-  const { monthly, bimonthly, segmentation } = vatStats
+  const { monthly, bimonthly, advance_payments: advancePayments, segmentation } = vatStats
   const vatHref = (period: string, type: string) => `/tax/vat?period=${period}&period_type=${type}`
+  const advanceHref = (year: string, periodMonthsCount: 1 | 2) =>
+    `/tax/advance-payments?year=${year}&period=${periodMonthsCount}`
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -101,6 +103,16 @@ export const VatInsightsRow: React.FC<Props> = ({ vatStats }) => {
               percent={bimonthly.completion_percent}
               href={vatHref(bimonthly.period, 'bimonthly')}
             />
+            <ProgressBar
+              label={`מקדמות חודשי · ${advancePayments.monthly.period_label}`}
+              percent={advancePayments.monthly.completion_percent}
+              href={advanceHref(advancePayments.monthly.period.slice(0, 4), 1)}
+            />
+            <ProgressBar
+              label={`מקדמות דו-חודשי · ${advancePayments.bimonthly.period_label}`}
+              percent={advancePayments.bimonthly.completion_percent}
+              href={advanceHref(advancePayments.bimonthly.period.slice(0, 4), 2)}
+            />
             {seasonStats && seasonStats.total > 0 && (
               <ProgressBar
                 label={`דוחות שנתיים ${seasonStats.taxYear}`}
@@ -115,4 +127,4 @@ export const VatInsightsRow: React.FC<Props> = ({ vatStats }) => {
   )
 }
 
-VatInsightsRow.displayName = 'VatInsightsRow'
+TaxInsightsRow.displayName = 'TaxInsightsRow'

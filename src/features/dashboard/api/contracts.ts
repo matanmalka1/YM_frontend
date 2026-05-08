@@ -98,5 +98,11 @@ export interface VatSegmentStat {
 export interface VatDashboardStats {
   monthly: VatDashboardPeriodStat
   bimonthly: VatDashboardPeriodStat
+  advance_payments: AdvancePaymentDashboardStats
   segmentation: VatSegmentStat[]
+}
+
+export interface AdvancePaymentDashboardStats {
+  monthly: VatDashboardPeriodStat
+  bimonthly: VatDashboardPeriodStat
 }
