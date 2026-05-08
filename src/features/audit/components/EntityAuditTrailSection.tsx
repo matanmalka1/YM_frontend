@@ -1,0 +1,221 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/primitives/Button'
+import { Card } from '@/components/ui/primitives/Card'
+import { formatDateTime } from '@/utils/utils'
+import type { EntityAuditLogEntry, EntityAuditType } from '../api'
+import { useEntityAuditTrail } from '../hooks/useEntityAuditTrail'
+
+const PAGE_SIZE = 50
+
+const ACTION_LABELS: Record<string, string> = {
+  created: 'נוצר',
+  updated: 'עודכן',
+  deleted: 'נמחק',
+  restored: 'שוחזר',
+  status_changed: 'שינוי סטטוס',
+  issued: 'הונפק',
+  paid: 'שולם',
+  canceled: 'בוטל',
+  income_added: 'נוספה הכנסה',
+  income_updated: 'עודכנה הכנסה',
+  income_deleted: 'נמחקה הכנסה',
+  expense_added: 'נוספה הוצאה',
+  expense_updated: 'עודכנה הוצאה',
+  expense_deleted: 'נמחקה הוצאה',
+}
+
+const FIELD_LABELS: Record<string, string> = {
+  full_name: 'שם לקוח',
+  id_number: 'מספר מזהה',
+  entity_type: 'סוג ישות',
+  office_client_number: 'מספר לקוח',
+  status: 'סטטוס',
+  vat_reporting_frequency: 'תדירות מע״מ',
+  advance_payment_frequency: 'תדירות מקדמות',
+  advance_rate: 'שיעור מקדמות',
+  accountant_id: 'רואה חשבון',
+  phone: 'טלפון',
+  email: 'אימייל',
+  address_street: 'רחוב',
+  address_building_number: 'מספר בית',
+  address_apartment: 'דירה',
+  address_city: 'עיר',
+  address_zip_code: 'מיקוד',
+  annual_revenue: 'מחזור שנתי',
+  advance_rate_updated_at: 'תאריך עדכון שיעור מקדמות',
+}
+
+const shorten = (value: string): string => (value.length > 120 ? `${value.slice(0, 117)}...` : value)
+
+const parseAuditValue = (value: string | null): unknown => {
+  if (!value) return null
+  try {
+    return JSON.parse(value)
+  } catch {
+    return undefined
+  }
+}
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value)
+
+const unwrapScalarPayload = (value: unknown): unknown => {
+  if (isRecord(value) && Object.keys(value).length === 1 && 'value' in value) return value.value
+  return value
+}
+
+const formatValue = (value: unknown): string => {
+  if (value === null || value === undefined) return '—'
+  if (typeof value === 'string') return value
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value)
+  return JSON.stringify(value)
+}
+
+const formatFieldLabel = (key: string): string => FIELD_LABELS[key] ?? key
+
+const formatParsedDiff = (oldValue: unknown, newValue: unknown): string | null => {
+  const oldPayload = unwrapScalarPayload(oldValue)
+  const newPayload = unwrapScalarPayload(newValue)
+
+  if (isRecord(oldPayload) || isRecord(newPayload)) {
+    const oldRecord = isRecord(oldPayload) ? oldPayload : {}
+    const newRecord = isRecord(newPayload) ? newPayload : {}
+    const keys = Array.from(new Set([...Object.keys(oldRecord), ...Object.keys(newRecord)]))
+
+    return keys
+      .map((key) => {
+        const label = formatFieldLabel(key)
+        const oldText = formatValue(oldRecord[key])
+        const newText = formatValue(newRecord[key])
+        if (!(key in oldRecord)) return `${label}: ${newText}`
+        if (!(key in newRecord)) return `${label}: ${oldText}`
+        return `${label}: ${oldText} → ${newText}`
+      })
+      .filter(Boolean)
+      .join('; ')
+  }
+
+  if (oldPayload !== null && oldPayload !== undefined && newPayload !== null && newPayload !== undefined) {
+    return `${formatValue(oldPayload)} → ${formatValue(newPayload)}`
+  }
+  if (newPayload !== null && newPayload !== undefined) return formatValue(newPayload)
+  if (oldPayload !== null && oldPayload !== undefined) return formatValue(oldPayload)
+  return null
+}
+
+const formatAuditDetails = (entry: EntityAuditLogEntry): string => {
+  const oldParsed = parseAuditValue(entry.old_value)
+  const newParsed = parseAuditValue(entry.new_value)
+  const parsedText =
+    oldParsed === undefined || newParsed === undefined ? null : formatParsedDiff(oldParsed, newParsed)
+  const rawText = [entry.old_value, entry.new_value].filter(Boolean).map((value) => shorten(value ?? '')).join(' → ')
+  const details = parsedText || rawText
+
+  const fallbackDetails =
+    {
+      created: 'ללא פרטים נוספים',
+      deleted: 'ללא פרטים נוספים',
+      restored: 'ללא פרטים נוספים',
+    }[entry.action] ?? '—'
+
+  return [details || fallbackDetails, entry.note].filter(Boolean).join('; ')
+}
+
+type EntityAuditTrailSectionProps = {
+  entityType: EntityAuditType
+  entityId: number
+  title?: string
+  subtitle?: string
+}
+
+export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = ({
+  entityType,
+  entityId,
+  title = 'היסטוריית שינויים',
+  subtitle = 'פעולות שבוצעו על הלקוח',
+}) => {
+  const [page, setPage] = useState(0)
+  const { items, total, isError, isFetching, isPending } = useEntityAuditTrail(entityType, entityId, page, PAGE_SIZE)
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  const maxPage = totalPages - 1
+  const safePage = Math.min(page, maxPage)
+
+  const renderState = (message: string, className = 'text-gray-400') => (
+    <Card title={title} subtitle={subtitle} className="shadow-sm">
+      <p className={`py-8 text-center text-sm ${className}`}>{message}</p>
+    </Card>
+  )
+
+  if (isPending) {
+    return renderState('טוען...')
+  }
+
+  if (isError) {
+    return renderState('שגיאה בטעינת ההיסטוריה', 'text-negative-600')
+  }
+
+  if (total === 0) {
+    return renderState('אין היסטוריית שינויים')
+  }
+
+  return (
+    <Card title={title} subtitle={subtitle} className="shadow-sm">
+      <div className="space-y-3">
+        <div className="overflow-x-auto rounded-lg border border-gray-100" dir="rtl">
+          <table className="w-full border-collapse text-sm">
+            <thead className="bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
+              <tr>
+                <th className="px-4 py-3 text-right">תאריך</th>
+                <th className="px-4 py-3 text-right">פעולה</th>
+                <th className="px-4 py-3 text-right">פרטים</th>
+                <th className="px-4 py-3 text-right">בוצע ע&quot;י</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 bg-white">
+              {items.map((entry) => (
+                <tr key={entry.id} className="hover:bg-gray-50/60">
+                  <td className="px-4 py-3 text-gray-500 tabular-nums whitespace-nowrap">
+                    {formatDateTime(entry.performed_at)}
+                  </td>
+                  <td className="px-4 py-3 font-medium text-gray-800">
+                    {ACTION_LABELS[entry.action] ?? entry.action}
+                  </td>
+                  <td className="px-4 py-3 text-xs text-gray-500 max-w-xl">{formatAuditDetails(entry)}</td>
+                  <td className="px-4 py-3 font-mono text-xs text-gray-400">
+                    {entry.performed_by_name ?? `#${entry.performed_by}`}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between text-sm text-gray-500" dir="rtl">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setPage((currentPage) => Math.max(0, currentPage - 1))}
+              disabled={safePage === 0 || isFetching}
+            >
+              הקודם
+            </Button>
+            <span>{isFetching ? 'טוען...' : `עמוד ${safePage + 1} מתוך ${totalPages}`}</span>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setPage((currentPage) => Math.min(maxPage, currentPage + 1))}
+              disabled={safePage >= maxPage || isFetching}
+            >
+              הבא
+            </Button>
+          </div>
+        )}
+      </div>
+    </Card>
+  )
+}
+
+EntityAuditTrailSection.displayName = 'EntityAuditTrailSection'

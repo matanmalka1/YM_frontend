@@ -4,7 +4,6 @@ export const CLIENT_ENDPOINTS = {
   clientRestore: (clientId: number | string) => `/clients/${clientId}/restore`,
   clientStatusCard: (clientId: number | string) => `/clients/${clientId}/status-card`,
   clientConflictByIdNumber: (idNumber: string) => `/clients/conflict/${idNumber}`,
-  clientAuditTrail: (clientId: number | string) => `/audit/client/${clientId}`,
   clientsExport: '/clients/export',
   clientsTemplate: '/clients/template',
   clientsImport: '/clients/import',

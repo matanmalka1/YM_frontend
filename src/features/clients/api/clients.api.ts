@@ -16,8 +16,6 @@ import type {
   UpdateClientPayload,
   CreateBusinessPayload,
   UpdateBusinessPayload,
-  EntityAuditTrailParams,
-  EntityAuditTrailResponse,
   ClientCreationImpactResponse,
 } from './contracts'
 
@@ -94,16 +92,6 @@ export const clientsApi = {
   getStatusCard: async (clientId: number, year?: number): Promise<BusinessStatusCardResponse> => {
     const response = await api.get<BusinessStatusCardResponse>(CLIENT_ENDPOINTS.clientStatusCard(clientId), {
       params: year ? { year } : undefined,
-    })
-    return response.data
-  },
-
-  getAuditTrail: async (
-    clientId: number,
-    params: EntityAuditTrailParams = {},
-  ): Promise<EntityAuditTrailResponse> => {
-    const response = await api.get<EntityAuditTrailResponse>(CLIENT_ENDPOINTS.clientAuditTrail(clientId), {
-      params: toQueryParams(params),
     })
     return response.data
   },
