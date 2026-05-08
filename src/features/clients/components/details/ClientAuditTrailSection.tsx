@@ -36,6 +36,13 @@ const FIELD_LABELS: Record<string, string> = {
   accountant_id: 'רואה חשבון',
   phone: 'טלפון',
   email: 'אימייל',
+  address_street: 'רחוב',
+  address_building_number: 'מספר בית',
+  address_apartment: 'דירה',
+  address_city: 'עיר',
+  address_zip_code: 'מיקוד',
+  annual_revenue: 'מחזור שנתי',
+  advance_rate_updated_at: 'תאריך עדכון שיעור מקדמות',
 }
 
 const shorten = (value: string): string => (value.length > 120 ? `${value.slice(0, 117)}...` : value)
@@ -125,28 +132,22 @@ export const ClientAuditTrailSection: React.FC<ClientAuditTrailSectionProps> = (
   const maxPage = totalPages - 1
   const safePage = Math.min(page, maxPage)
 
+  const renderState = (message: string, className = 'text-gray-400') => (
+    <Card title="היסטוריית שינויים" subtitle="פעולות שבוצעו על הלקוח" className="shadow-sm">
+      <p className={`py-8 text-center text-sm ${className}`}>{message}</p>
+    </Card>
+  )
+
   if (isPending) {
-    return (
-      <Card title="היסטוריית שינויים" subtitle="פעולות שבוצעו על הלקוח" className="shadow-sm">
-        <p className="py-8 text-center text-sm text-gray-400">טוען...</p>
-      </Card>
-    )
+    return renderState('טוען...')
   }
 
   if (isError) {
-    return (
-      <Card title="היסטוריית שינויים" subtitle="פעולות שבוצעו על הלקוח" className="shadow-sm">
-        <p className="py-8 text-center text-sm text-negative-600">שגיאה בטעינת ההיסטוריה</p>
-      </Card>
-    )
+    return renderState('שגיאה בטעינת ההיסטוריה', 'text-negative-600')
   }
 
   if (total === 0) {
-    return (
-      <Card title="היסטוריית שינויים" subtitle="פעולות שבוצעו על הלקוח" className="shadow-sm">
-        <p className="py-8 text-center text-sm text-gray-400">אין היסטוריית שינויים</p>
-      </Card>
-    )
+    return renderState('אין היסטוריית שינויים')
   }
 
   return (
