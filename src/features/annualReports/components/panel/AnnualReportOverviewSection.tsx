@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronDown, ChevronUp, BarChart3 } from 'lucide-react'
+import { EntityAuditTrailSection } from '@/features/audit'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { ReportAlertBanners } from './ReportAlertBanners'
 import { ReportSummaryCards } from './ReportSummaryCards'
@@ -125,6 +126,13 @@ export const AnnualReportOverviewSection: React.FC<Props> = ({
         <h3 className="mb-4 text-sm font-semibold text-gray-700">היסטוריית סטטוסים</h3>
         <StatusHistoryTimeline history={history?.items ?? []} />
       </div>
+
+      <EntityAuditTrailSection
+        entityType="annual_report"
+        entityId={report.id}
+        title="יומן שינויים"
+        subtitle="שינויים שבוצעו בדוח השנתי"
+      />
     </div>
   )
 }

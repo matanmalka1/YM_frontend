@@ -27,11 +27,23 @@ const ACTION_LABELS: Record<string, string> = {
 const FIELD_LABELS: Record<string, string> = {
   full_name: 'שם לקוח',
   client_record_id: 'לקוח',
+  client_type: 'סוג לקוח',
   id_number: 'מספר מזהה',
   entity_type: 'סוג ישות',
   business_name: 'שם עסק',
+  business_id: 'עסק',
   office_client_number: 'מספר לקוח',
   status: 'סטטוס',
+  amount: 'סכום',
+  charge_type: 'סוג חיוב',
+  category: 'קטגוריה',
+  description: 'תיאור',
+  form_type: 'סוג טופס',
+  line_id: 'שורת דיווח',
+  period: 'תקופה',
+  months_covered: 'חודשים',
+  source_type: 'סוג הכנסה',
+  tax_year: 'שנת מס',
   vat_reporting_frequency: 'תדירות מע״מ',
   advance_payment_frequency: 'תדירות מקדמות',
   advance_rate: 'שיעור מקדמות',
@@ -45,6 +57,10 @@ const FIELD_LABELS: Record<string, string> = {
   address_zip_code: 'מיקוד',
   opened_at: 'נפתח בתאריך',
   closed_at: 'נסגר בתאריך',
+  issued_at: 'תאריך הנפקה',
+  paid_at: 'תאריך תשלום',
+  canceled_at: 'תאריך ביטול',
+  cancellation_reason: 'סיבת ביטול',
   annual_revenue: 'מחזור שנתי',
   advance_rate_updated_at: 'תאריך עדכון שיעור מקדמות',
 }
@@ -130,6 +146,7 @@ type EntityAuditTrailSectionProps = {
   entityId: number
   title?: string
   subtitle?: string
+  compact?: boolean
 }
 
 export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = ({
@@ -137,15 +154,17 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
   entityId,
   title = 'היסטוריית שינויים',
   subtitle = 'פעולות שבוצעו על הלקוח',
+  compact = false,
 }) => {
   const [page, setPage] = useState(0)
   const { items, total, isError, isFetching, isPending } = useEntityAuditTrail(entityType, entityId, page, PAGE_SIZE)
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
   const maxPage = totalPages - 1
   const safePage = Math.min(page, maxPage)
+  const cardClassName = compact ? 'shadow-none rounded-lg' : 'shadow-sm'
 
   const renderState = (message: string, className = 'text-gray-400') => (
-    <Card title={title} subtitle={subtitle} className="shadow-sm">
+    <Card title={title} subtitle={subtitle} className={cardClassName}>
       <p className={`py-8 text-center text-sm ${className}`}>{message}</p>
     </Card>
   )
@@ -163,7 +182,7 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
   }
 
   return (
-    <Card title={title} subtitle={subtitle} className="shadow-sm">
+    <Card title={title} subtitle={subtitle} className={cardClassName}>
       <div className="space-y-3">
         <div className="overflow-x-auto rounded-lg border border-gray-100" dir="rtl">
           <table className="w-full border-collapse text-sm">

@@ -7,6 +7,7 @@ import { Alert } from '../../../components/ui/overlays/Alert'
 import { Button } from '../../../components/ui/primitives/Button'
 import { ConfirmDialog } from '../../../components/ui/overlays/ConfirmDialog'
 import { StatusBadge } from '../../../components/ui/primitives/StatusBadge'
+import { EntityAuditTrailSection } from '@/features/audit'
 import {
   getChargeAmountText,
   getChargeClientLabel,
@@ -129,35 +130,45 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
         {denied && <Alert variant="warning" message="אין לך הרשאה לבצע פעולה זו" />}
 
         {charge && (
-          <DrawerSection title="פרטים">
-            <DrawerField
-              label="לקוח"
-              value={
-                <Link
-                  to={`/clients/${charge.client_record_id}`}
-                  className="text-primary-600 hover:underline"
-                  onClick={onClose}
-                >
-                  {clientLabel}
-                </Link>
-              }
-            />
-            <DrawerField label="סוג" value={getChargeTypeLabel(charge.charge_type)} />
-            {charge.amount != null && (
+          <>
+            <DrawerSection title="פרטים">
               <DrawerField
-                label="סכום"
-                value={<span className="font-semibold text-gray-900">{getChargeAmountText(charge)}</span>}
+                label="לקוח"
+                value={
+                  <Link
+                    to={`/clients/${charge.client_record_id}`}
+                    className="text-primary-600 hover:underline"
+                    onClick={onClose}
+                  >
+                    {clientLabel}
+                  </Link>
+                }
               />
-            )}
-            <DrawerField label="תקופה" value={getChargePeriodLabel(charge.period, charge.months_covered)} />
-            {charge.description && <DrawerField label="תיאור" value={charge.description} />}
-            {charge.annual_report_id && <DrawerField label="דוח שנתי" value={`#${charge.annual_report_id}`} />}
-            <DrawerField label="נוצר" value={formatDateTime(charge.created_at)} />
-            <DrawerField label="הונפק" value={formatDateTime(charge.issued_at)} />
-            <DrawerField label="שולם" value={formatDateTime(charge.paid_at)} />
-            <DrawerField label="בוטל" value={formatDateTime(charge.canceled_at)} />
-            {charge.cancellation_reason && <DrawerField label="סיבת ביטול" value={charge.cancellation_reason} />}
-          </DrawerSection>
+              <DrawerField label="סוג" value={getChargeTypeLabel(charge.charge_type)} />
+              {charge.amount != null && (
+                <DrawerField
+                  label="סכום"
+                  value={<span className="font-semibold text-gray-900">{getChargeAmountText(charge)}</span>}
+                />
+              )}
+              <DrawerField label="תקופה" value={getChargePeriodLabel(charge.period, charge.months_covered)} />
+              {charge.description && <DrawerField label="תיאור" value={charge.description} />}
+              {charge.annual_report_id && <DrawerField label="דוח שנתי" value={`#${charge.annual_report_id}`} />}
+              <DrawerField label="נוצר" value={formatDateTime(charge.created_at)} />
+              <DrawerField label="הונפק" value={formatDateTime(charge.issued_at)} />
+              <DrawerField label="שולם" value={formatDateTime(charge.paid_at)} />
+              <DrawerField label="בוטל" value={formatDateTime(charge.canceled_at)} />
+              {charge.cancellation_reason && <DrawerField label="סיבת ביטול" value={charge.cancellation_reason} />}
+            </DrawerSection>
+
+            <EntityAuditTrailSection
+              entityType="charge"
+              entityId={charge.id}
+              title="יומן שינויים"
+              subtitle="שינויים שבוצעו בחיוב"
+              compact
+            />
+          </>
         )}
       </DetailDrawer>
     </>
