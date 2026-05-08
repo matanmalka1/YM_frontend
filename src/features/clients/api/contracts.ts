@@ -208,8 +208,16 @@ export interface EntityAuditLogEntry {
   performed_at: string
 }
 
+export interface EntityAuditTrailParams {
+  limit?: number
+  offset?: number
+}
+
 export interface EntityAuditTrailResponse {
   items: EntityAuditLogEntry[]
+  total: number
+  limit: number
+  offset: number
 }
 
 export interface VatSummaryCard {

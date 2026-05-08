@@ -24,6 +24,7 @@ import { ClientAdvancePaymentsTab } from '@/features/advancedPayments'
 import { ClientDocumentsTab } from '@/features/documents'
 import { ClientNotesCard } from '@/features/notes'
 import { VatClientSummaryPanel } from '@/features/vatReports'
+import { ClientAuditTrailSection } from './ClientAuditTrailSection'
 import type { UpdateClientPayload, ClientResponse } from '../../api'
 import { useFirstBusinessId } from '../../hooks/useFirstBusinessId'
 import { useClientDetailsActions } from '../../hooks/useClientDetailsActions'
@@ -133,6 +134,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
       {activeTab === 'vat' && <VatClientSummaryPanel clientId={client.id} />}
       {activeTab === 'advance-payments' && <ClientAdvancePaymentsTab clientId={client.id} />}
       {activeTab === 'annual-reports' && <ClientAnnualReportsTab clientId={client.id} />}
+      {activeTab === 'history' && <ClientAuditTrailSection clientId={client.id} />}
 
       {activeTab === 'reminders' && (
         <div className="space-y-6">
