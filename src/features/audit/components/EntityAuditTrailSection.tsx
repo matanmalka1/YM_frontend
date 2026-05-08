@@ -22,6 +22,11 @@ const ACTION_LABELS: Record<string, string> = {
   expense_added: 'נוספה הוצאה',
   expense_updated: 'עודכנה הוצאה',
   expense_deleted: 'נמחקה הוצאה',
+  annual_report_detail_updated: 'עודכנו פרטי דוח',
+  annual_report_deadline_updated: 'עודכן מועד הגשה',
+  annex_line_added: 'נוספה שורת נספח',
+  annex_line_updated: 'עודכנה שורת נספח',
+  annex_line_deleted: 'נמחקה שורת נספח',
 }
 
 const FIELD_LABELS: Record<string, string> = {
@@ -61,11 +66,28 @@ const FIELD_LABELS: Record<string, string> = {
   paid_at: 'תאריך תשלום',
   canceled_at: 'תאריך ביטול',
   cancellation_reason: 'סיבת ביטול',
+  custom_deadline_note: 'הערת מועד מותאם',
+  data: 'נתונים',
+  deadline_type: 'סוג מועד',
+  donation_amount: 'תרומות',
+  filing_deadline: 'מועד הגשה',
+  internal_notes: 'הערות פנימיות',
+  line_number: 'מספר שורה',
+  notes: 'הערות',
+  schedule: 'נספח',
   annual_revenue: 'מחזור שנתי',
   advance_rate_updated_at: 'תאריך עדכון שיעור מקדמות',
 }
 
 const shorten = (value: string): string => (value.length > 120 ? `${value.slice(0, 117)}...` : value)
+
+const stringifyCompact = (value: unknown): string => {
+  try {
+    return shorten(JSON.stringify(value))
+  } catch {
+    return '—'
+  }
+}
 
 const parseAuditValue = (value: string | null): unknown => {
   if (!value) return null
@@ -88,7 +110,7 @@ const formatValue = (value: unknown): string => {
   if (value === null || value === undefined) return '—'
   if (typeof value === 'string') return value
   if (typeof value === 'number' || typeof value === 'boolean') return String(value)
-  return JSON.stringify(value)
+  return stringifyCompact(value)
 }
 
 const formatFieldLabel = (key: string): string => FIELD_LABELS[key] ?? key
