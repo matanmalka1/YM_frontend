@@ -1,6 +1,6 @@
 import { format, parseISO } from 'date-fns'
 import { he } from 'date-fns/locale'
-import { ChevronDown, Filter, RefreshCw, Search, X } from 'lucide-react'
+import { ChevronDown, Filter, RefreshCw, Search, Star, X } from 'lucide-react'
 import { Button } from '../../../components/ui/primitives/Button'
 import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
@@ -20,6 +20,8 @@ export interface TimelineCommandBarProps {
   onSearchChange: (value: string) => void
   typeFilters: TimelineFilterKey[]
   onToggleTypeFilter: (type: TimelineFilterKey) => void
+  importantOnly: boolean
+  onImportantOnlyChange: (value: boolean) => void
   onClearFilters: () => void
   onExpandAll: () => void
   onCollapseAll: () => void
@@ -63,6 +65,8 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
   onSearchChange,
   typeFilters,
   onToggleTypeFilter,
+  importantOnly,
+  onImportantOnlyChange,
   onClearFilters,
   onExpandAll,
   onCollapseAll,
@@ -180,6 +184,20 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
             </button>
           )
         })}
+
+        <button
+          onClick={() => onImportantOnlyChange(!importantOnly)}
+          className={cn(
+            'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium',
+            'transition-all duration-150 border',
+            importantOnly
+              ? 'bg-amber-100 text-amber-800 border-amber-300 shadow-sm'
+              : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-100',
+          )}
+        >
+          <Star className={cn('h-3 w-3', importantOnly ? 'fill-amber-500 text-amber-500' : 'text-gray-400')} />
+          חשובים בלבד
+        </button>
 
         {hasActiveFilters && (
           <Button

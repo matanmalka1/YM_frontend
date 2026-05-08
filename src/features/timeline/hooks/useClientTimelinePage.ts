@@ -7,23 +7,9 @@ import { useActionRunner } from '@/features/actions'
 import type { TimelineEvent } from '../api'
 import { normalizeTimelineEvents, type NormalizedTimelineEvent, type TimelineFilterKey } from '../normalize'
 import { buildTimelineFilterStats, type EventTypeStat } from '../lib/timelineStats'
+import { eventMatchesSearch, eventMatchesImportance, eventMatchesTypeFilters } from '../lib/timelineSearch'
 
 export type { EventTypeStat }
-
-const eventMatchesFilters = (
-  event: NormalizedTimelineEvent,
-  filters: TimelineFilterKey[],
-  hasGroupedFilter: boolean,
-): boolean => !hasGroupedFilter || event.filterKeys.some((key) => filters.includes(key))
-
-const eventMatchesSearch = (event: NormalizedTimelineEvent, query: string, includeIds = false): boolean =>
-  !query ||
-  event.title.toLowerCase().includes(query) ||
-  event.secondary?.toLowerCase().includes(query) ||
-  event.relatedEntity?.toLowerCase().includes(query) ||
-  event.description?.toLowerCase().includes(query) ||
-  (includeIds && event.binder_id != null && String(event.binder_id).includes(query)) ||
-  (includeIds && event.charge_id != null && String(event.charge_id).includes(query))
 
 // ── Hook ──────────────────────────────────────────────────────────────────────
 
@@ -39,6 +25,7 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
 
   const [searchTerm, setSearchTerm] = useState('')
   const [typeFilters, setTypeFilters] = useState<TimelineFilterKey[]>(['all'])
+  const [importantOnly, setImportantOnly] = useState(false)
 
   // ── Query ──────────────────────────────────────────────────────────────────
 
@@ -56,8 +43,6 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
 
   const { historicalEvents } = useMemo(() => normalizeTimelineEvents(events), [events])
 
-  const eventTypeStats = useMemo<EventTypeStat[]>(() => buildTimelineFilterStats(historicalEvents), [historicalEvents])
-
   const lastEventTimestamp = useMemo<string | null>(() => {
     if (historicalEvents.length === 0) return null
     return historicalEvents.reduce(
@@ -66,20 +51,31 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
     )
   }, [historicalEvents])
 
-  // ── Filtering ──────────────────────────────────────────────────────────────
+  // ── Filtering — two steps ─────────────────────────────────────────────────
+  // Step 1: search + importance. Stats are built from this base so chip counts
+  // reflect the current search context but are not collapsed by category selection.
+  // Step 2: category filter applied on top of the base to produce visible events.
 
   const hasGroupedFilter = typeFilters.length > 0 && !typeFilters.includes('all')
-  const hasActiveFilters = hasGroupedFilter || searchTerm.trim().length > 0
+  const hasActiveFilters = hasGroupedFilter || searchTerm.trim().length > 0 || importantOnly
 
-  const filteredEvents = useMemo<NormalizedTimelineEvent[]>(() => {
-    if (!hasActiveFilters) return historicalEvents
-
+  const baseFilteredEvents = useMemo<NormalizedTimelineEvent[]>(() => {
     const query = searchTerm.trim().toLowerCase()
+    if (!query && !importantOnly) return historicalEvents
+    return historicalEvents.filter(
+      (event) => eventMatchesSearch(event, query) && eventMatchesImportance(event, importantOnly),
+    )
+  }, [historicalEvents, searchTerm, importantOnly])
 
-    return historicalEvents.filter((event) => {
-      return eventMatchesFilters(event, typeFilters, hasGroupedFilter) && eventMatchesSearch(event, query, true)
-    })
-  }, [historicalEvents, searchTerm, typeFilters, hasActiveFilters, hasGroupedFilter])
+  const filteredEvents = useMemo<NormalizedTimelineEvent[]>(
+    () =>
+      hasGroupedFilter
+        ? baseFilteredEvents.filter((event) => eventMatchesTypeFilters(event, typeFilters, hasGroupedFilter))
+        : baseFilteredEvents,
+    [baseFilteredEvents, typeFilters, hasGroupedFilter],
+  )
+
+  const eventTypeStats = useMemo<EventTypeStat[]>(() => buildTimelineFilterStats(baseFilteredEvents), [baseFilteredEvents])
 
   // ── Actions ────────────────────────────────────────────────────────────────
 
@@ -121,6 +117,7 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
   const clearFilters = () => {
     setSearchTerm('')
     setTypeFilters(['all'])
+    setImportantOnly(false)
   }
 
   // ── Error ──────────────────────────────────────────────────────────────────
@@ -159,6 +156,8 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
       setSearchTerm,
       typeFilters,
       toggleTypeFilter,
+      importantOnly,
+      setImportantOnly,
       clearFilters,
       hasActiveFilters,
     },
