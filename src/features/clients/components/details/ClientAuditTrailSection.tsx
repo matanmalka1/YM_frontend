@@ -113,9 +113,9 @@ const formatAuditDetails = (entry: EntityAuditLogEntry): string => {
 
   const fallbackDetails =
     {
-      created: 'הרשומה נוצרה',
-      deleted: 'הרשומה נמחקה',
-      restored: 'הרשומה שוחזרה',
+      created: 'ללא פרטים נוספים',
+      deleted: 'ללא פרטים נוספים',
+      restored: 'ללא פרטים נוספים',
     }[entry.action] ?? '—'
 
   return [details || fallbackDetails, entry.note].filter(Boolean).join('; ')
