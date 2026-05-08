@@ -26,8 +26,10 @@ const ACTION_LABELS: Record<string, string> = {
 
 const FIELD_LABELS: Record<string, string> = {
   full_name: 'שם לקוח',
+  client_record_id: 'לקוח',
   id_number: 'מספר מזהה',
   entity_type: 'סוג ישות',
+  business_name: 'שם עסק',
   office_client_number: 'מספר לקוח',
   status: 'סטטוס',
   vat_reporting_frequency: 'תדירות מע״מ',
@@ -41,6 +43,8 @@ const FIELD_LABELS: Record<string, string> = {
   address_apartment: 'דירה',
   address_city: 'עיר',
   address_zip_code: 'מיקוד',
+  opened_at: 'נפתח בתאריך',
+  closed_at: 'נסגר בתאריך',
   annual_revenue: 'מחזור שנתי',
   advance_rate_updated_at: 'תאריך עדכון שיעור מקדמות',
 }
