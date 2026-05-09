@@ -320,7 +320,8 @@ export const AdvancePayments: React.FC = () => {
       >
         {displayBatches.map((batch) => {
           const period = `${batch.year}-${String(batch.month).padStart(2, '0')}`
-          const stableKey = batch.due_date ?? `${batch.year}-${String(batch.month).padStart(2, '0')}-${batch.period_months_count}`
+          const stableKey =
+            batch.due_date ?? `${batch.year}-${String(batch.month).padStart(2, '0')}-${batch.period_months_count}`
           const isCurrent = isCurrentReportingPeriod(period, batch.period_months_count)
           return (
             <AdvancePaymentBatchRow

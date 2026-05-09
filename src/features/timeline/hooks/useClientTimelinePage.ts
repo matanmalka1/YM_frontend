@@ -75,7 +75,10 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
     [baseFilteredEvents, typeFilters, hasGroupedFilter],
   )
 
-  const eventTypeStats = useMemo<EventTypeStat[]>(() => buildTimelineFilterStats(baseFilteredEvents), [baseFilteredEvents])
+  const eventTypeStats = useMemo<EventTypeStat[]>(
+    () => buildTimelineFilterStats(baseFilteredEvents),
+    [baseFilteredEvents],
+  )
 
   // ── Actions ────────────────────────────────────────────────────────────────
 

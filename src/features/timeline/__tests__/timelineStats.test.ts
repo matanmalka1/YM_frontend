@@ -58,11 +58,7 @@ describe('buildTimelineFilterStats', () => {
   })
 
   it('category counts are independent for each category', () => {
-    const events = [
-      makeEvent(['past', 'finance']),
-      makeEvent(['past', 'binders']),
-      makeEvent(['past', 'finance']),
-    ]
+    const events = [makeEvent(['past', 'finance']), makeEvent(['past', 'binders']), makeEvent(['past', 'finance'])]
     const stats = buildTimelineFilterStats(events)
     expect(getTimelineFilterCount(stats, 'finance')).toBe(2)
     expect(getTimelineFilterCount(stats, 'binders')).toBe(1)

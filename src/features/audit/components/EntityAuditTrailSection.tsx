@@ -148,9 +148,11 @@ const formatParsedDiff = (oldValue: unknown, newValue: unknown): string | null =
 const formatAuditDetails = (entry: EntityAuditLogEntry): string => {
   const oldParsed = parseAuditValue(entry.old_value)
   const newParsed = parseAuditValue(entry.new_value)
-  const parsedText =
-    oldParsed === undefined || newParsed === undefined ? null : formatParsedDiff(oldParsed, newParsed)
-  const rawText = [entry.old_value, entry.new_value].filter(Boolean).map((value) => shorten(value ?? '')).join(' → ')
+  const parsedText = oldParsed === undefined || newParsed === undefined ? null : formatParsedDiff(oldParsed, newParsed)
+  const rawText = [entry.old_value, entry.new_value]
+    .filter(Boolean)
+    .map((value) => shorten(value ?? ''))
+    .join(' → ')
   const details = parsedText || rawText
 
   const fallbackDetails =
@@ -222,9 +224,7 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
                   <td className="px-4 py-3 text-gray-500 tabular-nums whitespace-nowrap">
                     {formatDateTime(entry.performed_at)}
                   </td>
-                  <td className="px-4 py-3 font-medium text-gray-800">
-                    {ACTION_LABELS[entry.action] ?? entry.action}
-                  </td>
+                  <td className="px-4 py-3 font-medium text-gray-800">{ACTION_LABELS[entry.action] ?? entry.action}</td>
                   <td className="px-4 py-3 text-xs text-gray-500 max-w-xl">{formatAuditDetails(entry)}</td>
                   <td className="px-4 py-3 font-mono text-xs text-gray-400">
                     {entry.performed_by_name ?? `#${entry.performed_by}`}

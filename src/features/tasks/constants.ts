@@ -1,12 +1,7 @@
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import type { TaskType, TaskUrgency } from './api/contracts'
 
-export const taskTypeValues = [
-  'vat_filing',
-  'annual_report',
-  'advance_payment',
-  'unpaid_charge',
-] as const
+export const taskTypeValues = ['vat_filing', 'annual_report', 'advance_payment', 'unpaid_charge'] as const
 
 export const taskUrgencyValues = ['overdue', 'approaching', 'upcoming'] as const
 

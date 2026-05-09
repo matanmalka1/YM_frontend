@@ -5,14 +5,7 @@ import type { TimelineEvent, TimelineEventMetadata } from './api'
 import { getTimelineStatusLabel } from './labels'
 import { getEventTypeLabel } from './utils'
 
-export type TimelineFilterKey =
-  | 'all'
-  | 'past'
-  | 'future'
-  | 'finance'
-  | 'binders'
-  | 'documents'
-  | 'tax'
+export type TimelineFilterKey = 'all' | 'past' | 'future' | 'finance' | 'binders' | 'documents' | 'tax'
 
 export interface NormalizedTimelineEvent extends TimelineEvent {
   title: string

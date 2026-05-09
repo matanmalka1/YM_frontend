@@ -40,14 +40,7 @@ const FILTER_LABELS: Record<TimelineFilterKey, string> = {
   tax: 'מיסים',
 }
 
-const FILTER_ORDER: TimelineFilterKey[] = [
-  'all',
-  'future',
-  'finance',
-  'binders',
-  'documents',
-  'tax',
-]
+const FILTER_ORDER: TimelineFilterKey[] = ['all', 'future', 'finance', 'binders', 'documents', 'tax']
 
 const getFilterCount = (stats: EventTypeStat[], key: TimelineFilterKey): number =>
   stats.find((stat) => stat.type === key)?.count ?? 0

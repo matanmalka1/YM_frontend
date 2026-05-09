@@ -188,7 +188,10 @@ export const TimelineEventItem: React.FC<TimelineEventItemProps> = ({
               {ev.title}
             </span>
 
-            <time dateTime={ev.displayTimestamp} className="text-[11px] text-gray-400 font-mono tabular-nums flex-shrink-0">
+            <time
+              dateTime={ev.displayTimestamp}
+              className="text-[11px] text-gray-400 font-mono tabular-nums flex-shrink-0"
+            >
               {displayDate}
             </time>
           </div>

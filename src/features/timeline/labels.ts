@@ -30,5 +30,4 @@ const ANNUAL_REPORT_STATUS_LABEL_MAP: Record<string, string> = {
 export const getTimelineStatusLabel = (status: string): string =>
   BINDER_STATUS_LABEL_MAP[status as TimelineBinderStatus] ?? 'לא ידוע'
 
-export const getAnnualReportStatusLabel = (status: string): string =>
-  ANNUAL_REPORT_STATUS_LABEL_MAP[status] ?? status
+export const getAnnualReportStatusLabel = (status: string): string => ANNUAL_REPORT_STATUS_LABEL_MAP[status] ?? status
