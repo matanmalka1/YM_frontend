@@ -2,12 +2,12 @@ import { CheckSquare } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { StateCard } from '@/components/ui/feedback/StateCard'
-import { useTasks } from '../hooks/useTasks'
-import { TasksSummaryCards } from '../components/TasksSummaryCards'
-import { TasksFiltersBar } from '../components/TasksFiltersBar'
-import { TasksTable } from '../components/TasksTable'
+import { useWorkQueuePage } from '../hooks/useWorkQueuePage'
+import { WorkQueueSummaryCards } from '../components/WorkQueueSummaryCards'
+import { WorkQueueFiltersBar } from '../components/WorkQueueFiltersBar'
+import { WorkQueueTable } from '../components/WorkQueueTable'
 
-export const TasksPage: React.FC = () => {
+export const WorkQueuePage: React.FC = () => {
   const {
     items,
     allItems,
@@ -19,7 +19,7 @@ export const TasksPage: React.FC = () => {
     setTypeFilter,
     hasFilters,
     clearFilters,
-  } = useTasks()
+  } = useWorkQueuePage()
 
   const header = <PageHeader title="משימות" description="כלל המשימות הפעילות: מועדי מס, מקדמות, דוחות וחיובים פתוחים" />
 
@@ -45,14 +45,14 @@ export const TasksPage: React.FC = () => {
       )
     }
 
-    return <TasksTable items={items} />
+    return <WorkQueueTable items={items} />
   }
 
   return (
     <PageStateGuard isLoading={isLoading} error={error} header={header} loadingMessage="טוען משימות...">
-      <TasksSummaryCards items={allItems} urgencyFilter={urgencyFilter} onFilter={setUrgencyFilter} />
+      <WorkQueueSummaryCards items={allItems} urgencyFilter={urgencyFilter} onFilter={setUrgencyFilter} />
 
-      <TasksFiltersBar
+      <WorkQueueFiltersBar
         typeFilter={typeFilter}
         onTypeChange={setTypeFilter}
         hasFilters={hasFilters}

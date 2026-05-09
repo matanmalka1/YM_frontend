@@ -1,8 +1,8 @@
 import { Select } from '@/components/ui/inputs/Select'
 import { Button } from '@/components/ui/primitives/Button'
-import { taskTypeLabels, taskTypeValues } from '../constants'
+import { workQueueSourceTypeLabels, workQueueSourceTypeValues } from '../constants'
 
-interface TasksFiltersBarProps {
+interface WorkQueueFiltersBarProps {
   typeFilter: string | null
   onTypeChange: (value: string | null) => void
   hasFilters: boolean
@@ -11,10 +11,10 @@ interface TasksFiltersBarProps {
 
 const typeOptions = [
   { value: '', label: 'כל הסוגים' },
-  ...taskTypeValues.map((v) => ({ value: v, label: taskTypeLabels[v] })),
+  ...workQueueSourceTypeValues.map((v) => ({ value: v, label: workQueueSourceTypeLabels[v] })),
 ]
 
-export const TasksFiltersBar: React.FC<TasksFiltersBarProps> = ({ typeFilter, onTypeChange, hasFilters, onClear }) => (
+export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({ typeFilter, onTypeChange, hasFilters, onClear }) => (
   <div className="flex items-center gap-3 flex-wrap">
     <Select
       options={typeOptions}

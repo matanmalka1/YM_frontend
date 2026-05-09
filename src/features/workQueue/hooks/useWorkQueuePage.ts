@@ -1,15 +1,14 @@
 import { useMemo, useState } from 'react'
-import { useUnifiedTasks } from './useUnifiedTasks'
-import type { TaskUrgency } from '../api/contracts'
-import type { UnifiedItem } from '../api/contracts'
+import { useWorkQueue } from './useWorkQueue'
+import type { WorkQueueItem, WorkQueueUrgency } from '../api/contracts'
 
-export const useTasks = () => {
-  const [urgencyFilter, setUrgencyFilter] = useState<TaskUrgency | null>(null)
+export const useWorkQueuePage = () => {
+  const [urgencyFilter, setUrgencyFilter] = useState<WorkQueueUrgency | null>(null)
   const [typeFilter, setTypeFilter] = useState<string | null>(null)
 
-  const { data = [], isLoading, error } = useUnifiedTasks()
+  const { data = [], isLoading, error } = useWorkQueue()
 
-  const filtered = useMemo<UnifiedItem[]>(() => {
+  const filtered = useMemo<WorkQueueItem[]>(() => {
     let items = data
     if (urgencyFilter) items = items.filter((i) => i.urgency === urgencyFilter)
     if (typeFilter) items = items.filter((i) => i.source_type === typeFilter)

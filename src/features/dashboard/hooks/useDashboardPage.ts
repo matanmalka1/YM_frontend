@@ -7,7 +7,7 @@ import { getErrorMessage, getHttpStatus } from '../../../utils/utils'
 import type { ActionCommand } from '../../../lib/actions/types'
 import { useRole } from '../../../hooks/useRole'
 import { useActionRunner } from '@/features/actions'
-import { useUnifiedTasks } from '@/features/tasks'
+import { useWorkQueue } from '@/features/workQueue'
 import type { StatItem } from '../components/DashboardStatsGrid'
 import { DASHBOARD_COPY } from '../dashboardConstants'
 import { buildDashboardStats } from '../dashboardStats'
@@ -31,10 +31,9 @@ export const useDashboardPage = () => {
     queryFn: dashboardApi.getOverview,
   })
 
-  const unifiedTasksQuery = useUnifiedTasks(
+  const workQueueQuery = useWorkQueue(
     {
       exclude_source_types: ['vat_filing', 'annual_report', 'unpaid_charge'],
-      include_reminders: false,
     },
     hasRole && isAdvisor,
   )
@@ -124,7 +123,7 @@ export const useDashboardPage = () => {
     confirmPendingAction,
     pendingQuickAction,
     quickActions,
-    unifiedItems: unifiedTasksQuery.data ?? [],
+    workQueueItems: workQueueQuery.data ?? [],
     emptyState,
     attentionEmptyChecks,
     cancelPendingAction,

@@ -3,16 +3,20 @@ import { format, parseISO } from 'date-fns'
 import { he } from 'date-fns/locale'
 import { DataTable } from '@/components/ui/table/DataTable'
 import { Badge } from '@/components/ui/primitives/Badge'
-import type { UnifiedItem } from '../api/contracts'
-import { taskTypeLabels, taskUrgencyLabels, taskUrgencyVariant } from '../constants'
+import type { WorkQueueItem } from '../api/contracts'
+import {
+  workQueueSourceTypeLabels,
+  workQueueUrgencyLabels,
+  workQueueUrgencyVariant,
+} from '../constants'
 
-interface TasksTableProps {
-  items: UnifiedItem[]
+interface WorkQueueTableProps {
+  items: WorkQueueItem[]
   isLoading?: boolean
 }
 
 const typeLabel = (sourceType: string): string =>
-  taskTypeLabels[sourceType as keyof typeof taskTypeLabels] ?? sourceType
+  workQueueSourceTypeLabels[sourceType as keyof typeof workQueueSourceTypeLabels] ?? sourceType
 
 const formatDueDate = (dateStr: string): string => {
   try {
@@ -22,33 +26,33 @@ const formatDueDate = (dateStr: string): string => {
   }
 }
 
-export const TasksTable: React.FC<TasksTableProps> = ({ items, isLoading }) => {
+export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading }) => {
   const columns = [
     {
       key: 'label',
       header: 'משימה',
-      render: (item: UnifiedItem) => <span className="font-medium text-gray-900">{item.label}</span>,
+      render: (item: WorkQueueItem) => <span className="font-medium text-gray-900">{item.label}</span>,
     },
     {
       key: 'type',
       header: 'סוג',
-      render: (item: UnifiedItem) => <span className="text-sm text-gray-600">{typeLabel(item.source_type)}</span>,
+      render: (item: WorkQueueItem) => <span className="text-sm text-gray-600">{typeLabel(item.source_type)}</span>,
     },
     {
       key: 'due_date',
       header: 'תאריך יעד',
-      render: (item: UnifiedItem) => (
+      render: (item: WorkQueueItem) => (
         <span className="text-sm tabular-nums text-gray-700">{formatDueDate(item.due_date)}</span>
       ),
     },
     {
       key: 'urgency',
       header: 'דחיפות',
-      render: (item: UnifiedItem) => {
+      render: (item: WorkQueueItem) => {
         const urgency = item.urgency ?? 'upcoming'
         return (
-          <Badge variant={taskUrgencyVariant[urgency as keyof typeof taskUrgencyVariant] ?? 'neutral'}>
-            {taskUrgencyLabels[urgency as keyof typeof taskUrgencyLabels] ?? urgency}
+          <Badge variant={workQueueUrgencyVariant[urgency as keyof typeof workQueueUrgencyVariant] ?? 'neutral'}>
+            {workQueueUrgencyLabels[urgency as keyof typeof workQueueUrgencyLabels] ?? urgency}
           </Badge>
         )
       },
@@ -56,7 +60,7 @@ export const TasksTable: React.FC<TasksTableProps> = ({ items, isLoading }) => {
     {
       key: 'client',
       header: 'לקוח',
-      render: (item: UnifiedItem) =>
+      render: (item: WorkQueueItem) =>
         item.client_record_id != null ? (
           <Link
             to={`/clients/${item.client_record_id}`}

@@ -18,7 +18,10 @@ import {
   buildQuickActionSections,
   type PanelSection,
 } from '../attentionBoardSections'
-import { isAdvancePaymentTask, mapAdvancePaymentToPanelItem } from '../advancePaymentPanelItems'
+import {
+  isAdvancePaymentWorkQueueItem,
+  mapAdvancePaymentToPanelItem,
+} from '../advancePaymentPanelItems'
 
 const StatsSkeleton = () => (
   <div className="grid animate-pulse grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
@@ -43,7 +46,7 @@ export const DashboardPage: React.FC = () => {
     emptyState,
     attentionEmptyChecks,
     stats,
-    unifiedItems,
+    workQueueItems,
     vatStats,
   } = useDashboardPage()
 
@@ -58,11 +61,13 @@ export const DashboardPage: React.FC = () => {
         title: 'מקדמות מס הכנסה',
         icon: CalendarClock,
         tone: 'amber',
-        items: unifiedItems.filter(isAdvancePaymentTask).map(mapAdvancePaymentToPanelItem),
+        items: workQueueItems
+          .filter(isAdvancePaymentWorkQueueItem)
+          .map(mapAdvancePaymentToPanelItem),
       },
       ...buildQuickActionSections(quickActions ?? []),
     ]
-  }, [attentionItems, quickActions, isAdvisorView, unifiedItems])
+  }, [attentionItems, quickActions, isAdvisorView, workQueueItems])
 
   return (
     <DashboardSurface>
