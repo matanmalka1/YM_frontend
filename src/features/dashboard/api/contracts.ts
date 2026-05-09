@@ -51,35 +51,6 @@ export interface AdvisorTodayResponse {
   reminder_items: AdvisorTodayItem[]
 }
 
-export interface DashboardOverviewResponse {
-  total_clients: number
-  active_clients: number
-  active_binders: number
-  binders_in_office: number
-  binders_ready_for_pickup: number
-  open_reminders: number
-  open_charges_count: number
-  open_charges_amount_ils: string | null
-  vat_stats: VatDashboardStats
-  quick_actions: BackendAction[]
-  attention: AttentionResponse
-  advisor_today: AdvisorTodayResponse
-  attention_empty_checks: AttentionEmptyCheck[]
-}
-
-export interface DashboardSummaryResponse {
-  total_clients: number
-  active_clients: number
-  active_binders: number
-  binders_in_office: number
-  binders_ready_for_pickup: number
-  open_reminders: number
-  open_charges_count: number
-  open_charges_amount_ils: string | null
-  vat_stats: VatDashboardStats
-  attention: AttentionResponse
-}
-
 export interface VatDashboardPeriodStat {
   period: string
   period_label: string
@@ -90,19 +61,27 @@ export interface VatDashboardPeriodStat {
   completion_percent: number
 }
 
-export interface VatSegmentStat {
-  label: string
-  count: number
+export interface AdvancePaymentDashboardStats {
+  monthly: VatDashboardPeriodStat
+  bimonthly: VatDashboardPeriodStat
 }
 
 export interface VatDashboardStats {
   monthly: VatDashboardPeriodStat
   bimonthly: VatDashboardPeriodStat
   advance_payments: AdvancePaymentDashboardStats
-  segmentation: VatSegmentStat[]
 }
 
-export interface AdvancePaymentDashboardStats {
-  monthly: VatDashboardPeriodStat
-  bimonthly: VatDashboardPeriodStat
+export interface DashboardOverviewResponse {
+  total_clients: number
+  binders_in_office: number
+  binders_ready_for_pickup: number
+  manual_reminders_due_now: number
+  open_charges_count: number
+  open_charges_amount_ils: string | null
+  vat_stats: VatDashboardStats
+  quick_actions: BackendAction[]
+  attention: AttentionResponse
+  advisor_today: AdvisorTodayResponse
+  attention_empty_checks: AttentionEmptyCheck[]
 }

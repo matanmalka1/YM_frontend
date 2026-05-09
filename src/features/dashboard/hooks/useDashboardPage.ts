@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { dashboardApi, dashboardQK } from '../api'
-import type { DashboardOverviewResponse, DashboardSummaryResponse } from '../api'
+import type { DashboardOverviewResponse } from '../api'
 import { getErrorMessage, getHttpStatus } from '../../../utils/utils'
 import type { ActionCommand } from '../../../lib/actions/types'
 import { useRole } from '../../../hooks/useRole'
@@ -12,34 +12,25 @@ import type { StatItem } from '../components/DashboardStatsGrid'
 import { DASHBOARD_COPY } from '../dashboardConstants'
 import { buildDashboardStats } from '../dashboardStats'
 
-type DashboardData =
-  | (DashboardOverviewResponse & { role_view: 'advisor' })
-  | (DashboardSummaryResponse & { role_view: 'secretary' })
 type DashboardState = {
   status: 'idle' | 'loading' | 'ok' | 'error'
   message: string
-  data: DashboardData | null
+  data: DashboardOverviewResponse | null
 }
-
-const isOverviewData = (
-  data: DashboardData | DashboardOverviewResponse | DashboardSummaryResponse | null | undefined,
-): data is DashboardOverviewResponse => Boolean(data && 'quick_actions' in data)
-
-const isSummaryData = (
-  data: DashboardData | DashboardOverviewResponse | DashboardSummaryResponse | null | undefined,
-): data is DashboardSummaryResponse => Boolean(data && !('quick_actions' in data))
 
 export const useDashboardPage = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
-  const { role, isAdvisor, isSecretary } = useRole()
+  const { role, isAdvisor } = useRole()
   const [actionDenied, setActionDenied] = useState(false)
   const hasRole = Boolean(role)
-  const dashboardQuery = useQuery<DashboardOverviewResponse | DashboardSummaryResponse>({
+
+  const dashboardQuery = useQuery<DashboardOverviewResponse>({
     enabled: hasRole,
-    queryKey: isAdvisor ? dashboardQK.overview : dashboardQK.summary,
-    queryFn: isAdvisor ? dashboardApi.getOverview : dashboardApi.getSummary,
+    queryKey: dashboardQK.overview,
+    queryFn: dashboardApi.getOverview,
   })
+
   const unifiedTasksQuery = useUnifiedTasks(
     {
       exclude_source_types: ['vat_filing', 'annual_report', 'unpaid_charge'],
@@ -72,21 +63,11 @@ export const useDashboardPage = () => {
 
   const dashboard = useMemo<DashboardState>(() => {
     if (!hasRole) {
-      return {
-        status: 'error',
-        message: DASHBOARD_COPY.roleMissing,
-        data: null,
-      }
+      return { status: 'error', message: DASHBOARD_COPY.roleMissing, data: null }
     }
-
     if (dashboardQuery.isPending) {
-      return {
-        status: 'loading',
-        message: DASHBOARD_COPY.loadingDashboard,
-        data: null,
-      }
+      return { status: 'loading', message: DASHBOARD_COPY.loadingDashboard, data: null }
     }
-
     if (dashboardQuery.error) {
       return {
         status: 'error',
@@ -94,37 +75,23 @@ export const useDashboardPage = () => {
         data: null,
       }
     }
-
-    if (isAdvisor && isOverviewData(dashboardQuery.data)) {
-      return {
-        status: 'ok',
-        message: DASHBOARD_COPY.dashboardLoaded,
-        data: { role_view: 'advisor', ...dashboardQuery.data },
-      }
+    if (dashboardQuery.data) {
+      return { status: 'ok', message: DASHBOARD_COPY.dashboardLoaded, data: dashboardQuery.data }
     }
-
-    if (isSecretary && isSummaryData(dashboardQuery.data)) {
-      return {
-        status: 'ok',
-        message: DASHBOARD_COPY.dashboardLoaded,
-        data: { role_view: 'secretary', ...dashboardQuery.data },
-      }
-    }
-
     return { status: 'idle', message: '', data: null }
-  }, [dashboardQuery.data, dashboardQuery.error, dashboardQuery.isPending, hasRole, isAdvisor, isSecretary])
+  }, [dashboardQuery.data, dashboardQuery.error, dashboardQuery.isPending, hasRole])
 
   const attentionItems = dashboardQuery.data?.attention.items ?? []
+  const isAdvisorView = dashboard.status === 'ok' && isAdvisor
+  const quickActions = isAdvisorView ? (dashboard.data?.quick_actions ?? []) : undefined
+  const emptyState = dashboard.data ? { is_empty: dashboard.data.total_clients === 0 } : undefined
+  const attentionEmptyChecks = dashboard.data?.attention_empty_checks ?? []
+  const vatStats = dashboard.data?.vat_stats
 
   const stats = useMemo<StatItem[]>(() => {
     if (dashboard.status !== 'ok' || !dashboard.data) return []
     return buildDashboardStats(dashboard.data, isAdvisor)
   }, [dashboard, isAdvisor])
-  const isAdvisorView = dashboard.status === 'ok' && dashboard.data?.role_view === 'advisor'
-  const quickActions = isOverviewData(dashboard.data) ? dashboard.data.quick_actions : undefined
-  const advisorToday = isOverviewData(dashboard.data) ? dashboard.data.advisor_today : undefined
-  const emptyState = dashboard.data ? { is_empty: dashboard.data.total_clients === 0 } : undefined
-  const attentionEmptyChecks = isOverviewData(dashboard.data) ? dashboard.data.attention_empty_checks : []
 
   const handleQuickAction = useCallback(
     (action: ActionCommand) => {
@@ -148,8 +115,6 @@ export const useDashboardPage = () => {
     cancelPendingActionBase()
   }, [cancelPendingActionBase])
 
-  const vatStats = dashboardQuery.data?.vat_stats
-
   return {
     activeQuickAction,
     attentionItems,
@@ -159,7 +124,6 @@ export const useDashboardPage = () => {
     confirmPendingAction,
     pendingQuickAction,
     quickActions,
-    advisorToday,
     unifiedItems: unifiedTasksQuery.data ?? [],
     emptyState,
     attentionEmptyChecks,

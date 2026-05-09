@@ -1,10 +1,10 @@
 import { Archive, Bell, CreditCard, FileText } from 'lucide-react'
-import type { DashboardOverviewResponse, DashboardSummaryResponse } from './api'
+import type { DashboardOverviewResponse } from './api'
 import type { StatItem } from './components/DashboardStatsGrid'
 
 type DashboardStatsData = Pick<
-  DashboardOverviewResponse | DashboardSummaryResponse,
-  | 'open_reminders'
+  DashboardOverviewResponse,
+  | 'manual_reminders_due_now'
   | 'vat_stats'
   | 'binders_in_office'
   | 'binders_ready_for_pickup'
@@ -20,7 +20,7 @@ const HREFS = {
   remindersReady: withParams('/reminders', { status: 'pending', due: 'ready' }),
   vat: (period: string, periodType: VatPeriodType) => withParams('/tax/vat', { period, period_type: periodType }),
   advancePayments: (period: '1' | '2') => withParams('/tax/advance-payments', { period }),
-  bindersInOffice: withParams('/binders', { status: 'in_office' }),
+  bindersReadyForPickup: withParams('/binders', { status: 'ready_for_pickup' }),
   openCharges: withParams('/charges', { status: 'issued' }),
 }
 
@@ -67,13 +67,13 @@ export const buildDashboardStats = (data: DashboardStatsData, isAdvisor: boolean
     {
       key: 'ready_reminders',
       title: 'תזכורות ידניות',
-      value: `${data.open_reminders.toLocaleString('he-IL')} לטיפול עכשיו`,
-      description: 'תזכורות ידניות שמועד הטיפול שלהן הגיע',
+      value: `${data.manual_reminders_due_now.toLocaleString('he-IL')} לטיפול עכשיו`,
+      description: 'תזכורות שמועד הטיפול שלהן הגיע',
       icon: Bell,
       variant: 'amber',
-      urgent: data.open_reminders > 0,
+      urgent: data.manual_reminders_due_now > 0,
       href: HREFS.remindersReady,
-      actionLabel: data.open_reminders > 0 ? 'פתח תזכורות' : 'צור תזכורת ראשונה',
+      actionLabel: data.manual_reminders_due_now > 0 ? 'פתח תזכורות' : 'צור תזכורת ראשונה',
     },
     buildVatStat('monthly_vat', 'מע״מ חודשי', data.vat_stats.monthly, 'monthly'),
     buildVatStat('bimonthly_vat', 'מע״מ דו־חודשי', data.vat_stats.bimonthly, 'bimonthly'),
@@ -95,17 +95,17 @@ export const buildDashboardStats = (data: DashboardStatsData, isAdvisor: boolean
     })
 
     stats.push({
-      key: 'binders_in_office',
-      title: 'קלסרים במשרד',
-      value: `${data.binders_in_office.toLocaleString('he-IL')} קלסרים במשרד`,
+      key: 'binders_pickup',
+      title: 'קלסרים לאיסוף',
+      value: `${data.binders_ready_for_pickup.toLocaleString('he-IL')} ממתינים לאיסוף`,
       description:
-        data.binders_ready_for_pickup > 0
-          ? `${data.binders_ready_for_pickup.toLocaleString('he-IL')} ממתינים לאיסוף`
-          : 'אין קלסרים ממתינים לאיסוף',
+        data.binders_in_office > 0
+          ? `${data.binders_in_office.toLocaleString('he-IL')} קלסרים במשרד`
+          : 'אין קלסרים במשרד',
       icon: Archive,
       variant: data.binders_ready_for_pickup > 0 ? 'amber' : 'blue',
       urgent: data.binders_ready_for_pickup > 0,
-      href: HREFS.bindersInOffice,
+      href: HREFS.bindersReadyForPickup,
       actionLabel: 'פתח קלסרים',
     })
   }
