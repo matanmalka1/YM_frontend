@@ -220,8 +220,8 @@ export const TaxCalendarGroupsTable = ({
             primaryLabel={`${getDueDatePrefix(group)}: ${formatEffectiveDueDateRange(group)}`}
             secondaryLabel={
               hasGroupOverride(group)
-                ? `מועד רגולטורי: ${formatDate(group.regulatory_due_date)} · מועד אפקטיבי: ${formatEffectiveDueDateRange(group)}`
-                : `מועד רגולטורי: ${formatDate(group.regulatory_due_date)}`
+                ? `מועד רשמי: ${formatDate(group.regulatory_due_date)} · מועד אפקטיבי: ${formatEffectiveDueDateRange(group)}`
+                : `מועד רשמי: ${formatDate(group.regulatory_due_date)}`
             }
             relativeDueLabel={effectiveRelativeLabel}
             isOpen={isOpen}
