@@ -41,7 +41,10 @@ export const useDashboardPage = () => {
     queryFn: isAdvisor ? dashboardApi.getOverview : dashboardApi.getSummary,
   })
   const unifiedTasksQuery = useUnifiedTasks(
-    { exclude_source_types: ['vat_filing', 'annual_report'] },
+    {
+      exclude_source_types: ['vat_filing', 'annual_report', 'unpaid_charge'],
+      include_reminders: false,
+    },
     hasRole && isAdvisor,
   )
 

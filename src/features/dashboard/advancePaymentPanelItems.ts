@@ -1,24 +1,9 @@
 import { formatDate, getReportingPeriodMonthLabel } from '@/utils/utils'
 import { taskTypeLabels, taskUrgencyLabels } from '@/features/tasks'
 import type { TaskType, TaskUrgency, UnifiedItem } from '@/features/tasks'
-import type { PanelItem } from './attentionPanelSections'
+import type { PanelItem } from './attentionBoardSections'
 
-const getUnifiedItemHref = (item: UnifiedItem) => {
-  if (item.item_type === 'reminder') return '/reminders'
-
-  switch (item.source_type) {
-    case 'vat_filing':
-      return '/tax/vat'
-    case 'annual_report':
-      return '/tax/reports'
-    case 'advance_payment':
-      return '/tax/advance-payments'
-    case 'unpaid_charge':
-      return '/charges'
-    default:
-      return '/'
-  }
-}
+const ADVANCE_PAYMENTS_HREF = '/tax/advance-payments'
 
 const formatPeriod = (value: string): string => {
   return /^\d{4}-\d{2}$/.test(value) ? getReportingPeriodMonthLabel(value) : value
@@ -42,7 +27,6 @@ const getTaskTitle = (item: UnifiedItem): string => {
 }
 
 const getSourceLabel = (item: UnifiedItem): string => {
-  if (item.item_type === 'reminder') return 'תזכורת'
   return taskTypeLabels[item.source_type as TaskType] ?? item.source_type
 }
 
@@ -52,14 +36,9 @@ const getUrgencyLabel = (urgency?: string | null): string | undefined => {
 }
 
 const getTaskSubtitle = (item: UnifiedItem): string => {
-  if (item.item_type === 'reminder') return 'תזכורת'
-
   const sourceLabel = getSourceLabel(item)
   const period = getPayloadString(item, 'period')
   if (period) return `${sourceLabel} · ${formatPeriod(period)}`
-
-  const taxYear = getPayloadString(item, 'tax_year')
-  if (taxYear) return `${sourceLabel} · ${taxYear}`
 
   const detail = getLabelDetail(item.label)
   if (detail) return `${sourceLabel} · ${detail}`
@@ -68,15 +47,18 @@ const getTaskSubtitle = (item: UnifiedItem): string => {
   return `${sourceLabel} · ${item.label}`
 }
 
-export const mapUnifiedItemToPanelItem = (item: UnifiedItem): PanelItem => {
+export const mapAdvancePaymentToPanelItem = (item: UnifiedItem): PanelItem => {
   const urgencyLabel = getUrgencyLabel(item.urgency)
   return {
     id: `${item.item_type}-${item.source_type}-${item.source_id}`,
     label: getTaskTitle(item),
     sublabel: getTaskSubtitle(item),
-    href: getUnifiedItemHref(item),
+    href: ADVANCE_PAYMENTS_HREF,
     meta: {
       description: [urgencyLabel, formatDate(item.due_date)].filter(Boolean).join(' · '),
     },
   }
 }
+
+export const isAdvancePaymentTask = (item: UnifiedItem): boolean =>
+  item.item_type === 'task' && item.source_type === 'advance_payment'

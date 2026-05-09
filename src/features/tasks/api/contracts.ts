@@ -36,4 +36,5 @@ export interface TasksParams {
   client_record_id?: number
   business_id?: number
   exclude_source_types?: TaskType[]
+  include_reminders?: boolean
 }

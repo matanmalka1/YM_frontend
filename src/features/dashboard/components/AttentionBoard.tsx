@@ -5,7 +5,7 @@ import type { LucideIcon } from 'lucide-react'
 import { cn } from '@/utils/utils'
 import type { ActionCommand } from '@/lib/actions/types'
 import type { AttentionEmptyCheck } from '../api'
-import type { PanelItem, PanelSection, AttentionTone } from '../attentionPanelSections'
+import type { PanelItem, PanelSection, AttentionTone } from '../attentionBoardSections'
 import { DashboardEmptyState, DashboardPanel, DashboardSectionHeader } from './DashboardPrimitives'
 
 const ATTENTION_BATCH_SIZE = 5
@@ -128,19 +128,19 @@ const TaskCard = ({ item, tone, sectionIcon: SectionIcon, activeActionKey, onAct
   return <div className={baseClass}>{cardContent}</div>
 }
 
-interface AttentionPanelProps {
+interface AttentionBoardProps {
   sections: PanelSection[]
   emptyChecks?: AttentionEmptyCheck[]
   activeActionKey?: string | null
   onAction?: (action: ActionCommand) => void
 }
 
-export const AttentionPanel = ({
+export const AttentionBoard = ({
   sections,
   emptyChecks = [],
   activeActionKey = null,
   onAction = () => {},
-}: AttentionPanelProps) => {
+}: AttentionBoardProps) => {
   const sectionEntries = useMemo(
     () =>
       sections.map((section, index) => ({
@@ -210,7 +210,6 @@ export const AttentionPanel = ({
         </div>
       ) : (
         <>
-          {/* Summary tiles */}
           <div className="grid grid-cols-2 gap-4 border-b border-gray-100 p-6 sm:grid-cols-3 md:grid-cols-5">
             {sectionEntries.map(({ section, stateKey }) => {
               const isActive = activeTab === stateKey
@@ -251,7 +250,7 @@ export const AttentionPanel = ({
 
               return (
                 <>
-                  <div key={activeSection.key} className="space-y-4 p-6">
+                  <div className="space-y-4 p-6">
                     {visibleItems.length > 0 ? (
                       visibleItems.map((item) => (
                         <TaskCard
@@ -313,4 +312,4 @@ export const AttentionPanel = ({
   )
 }
 
-AttentionPanel.displayName = 'AttentionPanel'
+AttentionBoard.displayName = 'AttentionBoard'

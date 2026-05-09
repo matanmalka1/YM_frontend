@@ -4,7 +4,7 @@ import { Alert } from '@/components/ui/overlays/Alert'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { SignatureRequestsDashboardPanel } from '@/features/signatureRequests'
 import {
-  AttentionPanel,
+  AttentionBoard,
   DashboardOnboardingEmptyState,
   DashboardStatsGrid,
   SeasonSummaryWidget,
@@ -14,11 +14,11 @@ import { DASHBOARD_COPY, DASHBOARD_LOADING_CARD_COUNT } from '../dashboardConsta
 import { DashboardSurface } from '../components/DashboardPrimitives'
 import { TaxInsightsRow } from '../components/TaxInsightsRow'
 import {
-  attentionSectionsToPanelSections,
-  quickActionsToPanelSections,
+  buildOpenChargeSection,
+  buildQuickActionSections,
   type PanelSection,
-} from '../attentionPanelSections'
-import { mapUnifiedItemToPanelItem } from '../unifiedTaskDisplay'
+} from '../attentionBoardSections'
+import { isAdvancePaymentTask, mapAdvancePaymentToPanelItem } from '../advancePaymentPanelItems'
 
 const StatsSkeleton = () => (
   <div className="grid animate-pulse grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
@@ -48,19 +48,19 @@ export const DashboardPage: React.FC = () => {
   } = useDashboardPage()
 
   const attentionSections = useMemo<PanelSection[]>(() => {
-    const base = attentionSectionsToPanelSections(attentionItems)
-    if (!isAdvisorView) return base
+    const openChargeSection = buildOpenChargeSection(attentionItems)
+    if (!isAdvisorView) return [openChargeSection]
 
     return [
-      ...base,
+      openChargeSection,
       {
-        key: 'unified_tasks',
-        title: 'מה צריך לעשות עכשיו',
+        key: 'advance_payments',
+        title: 'מקדמות מס הכנסה',
         icon: CalendarClock,
         tone: 'amber',
-        items: unifiedItems.map(mapUnifiedItemToPanelItem),
+        items: unifiedItems.filter(isAdvancePaymentTask).map(mapAdvancePaymentToPanelItem),
       },
-      ...quickActionsToPanelSections(quickActions ?? []),
+      ...buildQuickActionSections(quickActions ?? []),
     ]
   }, [attentionItems, quickActions, isAdvisorView, unifiedItems])
 
@@ -87,14 +87,14 @@ export const DashboardPage: React.FC = () => {
       {dashboard.status === 'loading' ? (
         <div className="h-80 animate-pulse rounded-2xl bg-gray-100" />
       ) : isAdvisorView ? (
-        <AttentionPanel
+        <AttentionBoard
           sections={attentionSections}
           emptyChecks={attentionEmptyChecks}
           activeActionKey={activeQuickAction}
           onAction={handleQuickAction}
         />
       ) : (
-        <AttentionPanel sections={attentionSections} emptyChecks={attentionEmptyChecks} />
+        <AttentionBoard sections={attentionSections} emptyChecks={attentionEmptyChecks} />
       )}
 
       {vatStats && !emptyState?.is_empty && <TaxInsightsRow vatStats={vatStats} />}

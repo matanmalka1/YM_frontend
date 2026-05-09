@@ -1,6 +1,6 @@
 import type { BackendAction } from '@/lib/actions/types'
 
-export type AttentionItemType = 'unpaid_charge' | 'unpaid_charges' | 'ready_for_pickup'
+export type AttentionItemType = 'unpaid_charge' | 'unpaid_charges'
 
 interface BaseAttentionItem {
   item_type: AttentionItemType
@@ -26,11 +26,7 @@ export interface UnpaidChargesAttentionItem extends BaseAttentionItem {
   item_type: 'unpaid_charges'
 }
 
-export interface ReadyForPickupAttentionItem extends BaseAttentionItem {
-  item_type: 'ready_for_pickup'
-}
-
-export type AttentionItem = UnpaidChargeAttentionItem | UnpaidChargesAttentionItem | ReadyForPickupAttentionItem
+export type AttentionItem = UnpaidChargeAttentionItem | UnpaidChargesAttentionItem
 
 export interface AttentionResponse {
   items: AttentionItem[]

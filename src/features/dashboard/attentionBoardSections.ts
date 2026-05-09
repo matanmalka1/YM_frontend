@@ -7,14 +7,6 @@ import type { BackendAction, ActionCommand } from '@/lib/actions/types'
 
 export type AttentionTone = 'amber' | 'green' | 'red' | 'blue'
 
-export interface SectionItem {
-  id: number
-  label: string
-  sublabel?: string
-  description?: string
-  href?: string
-}
-
 export interface PanelItemAction {
   uiKey: string
   label: string
@@ -28,14 +20,12 @@ export interface PanelItem {
   label: string
   sublabel?: string
   href: string
-  /** Section-specific metadata for richer row rendering */
   meta?: {
-    tag?: string // pill text (e.g. due date, period)
-    tagTone?: AttentionTone
-    badge?: string // small badge (e.g. "באיחור")
+    tag?: string
+    badge?: string
     badgeTone?: AttentionTone
-    description?: string // secondary line below sublabel
-    amount?: string // monetary amount (e.g. charge total)
+    description?: string
+    amount?: string
   }
   actions?: PanelItemAction[]
 }
@@ -45,37 +35,17 @@ export interface PanelSection {
   title: string
   icon: LucideIcon
   tone: AttentionTone
-  viewAllHref?: string
   items: PanelItem[]
 }
 
-// ── Attention items → PanelSections ────────────────────────────────────────
+const OPEN_CHARGES_HREF = '/charges?status=issued'
+const OPEN_CHARGE_TYPES: readonly AttentionItemType[] = ['unpaid_charge', 'unpaid_charges']
 
-const ATTENTION_SECTIONS: Array<{
-  key: string
-  title: string
-  icon: LucideIcon
-  tone: AttentionTone
-  types: readonly AttentionItemType[]
-  viewAllHref: string
-}> = [
-  {
-    key: 'unpaid',
-    title: 'חשבוניות פתוחות',
-    icon: DollarSign,
-    tone: 'amber',
-    types: ['unpaid_charge', 'unpaid_charges'],
-    viewAllHref: '/charges?status=issued',
-  },
-]
-
-const KNOWN_ATTENTION_TYPES = new Set<AttentionItemType>(ATTENTION_SECTIONS.flatMap((s) => s.types))
-
-const getAttentionItemHref = (item: AttentionItem, fallback: string | undefined): string => {
+const getChargeAttentionHref = (item: AttentionItem): string => {
   if (item.item_type === 'unpaid_charge') return `/charges?charge_id=${item.charge_id}`
   if (item.client_id && item.business_id) return `/clients/${item.client_id}/businesses/${item.business_id}`
   if (item.client_id) return `/clients/${item.client_id}`
-  return fallback ?? '/'
+  return OPEN_CHARGES_HREF
 }
 
 const getChargeItemDescription = (item: AttentionItem): string | undefined => {
@@ -89,32 +59,25 @@ const getChargeAmount = (item: AttentionItem): string | undefined => {
   return item.charge_amount ?? undefined
 }
 
-export const attentionSectionsToPanelSections = (items: AttentionItem[]): PanelSection[] => {
-  const visible = items.filter((i) => KNOWN_ATTENTION_TYPES.has(i.item_type))
-  return ATTENTION_SECTIONS.map((section) => ({
-    key: section.key,
-    title: section.title,
-    icon: section.icon,
-    tone: section.tone,
-    viewAllHref: section.viewAllHref,
-    items: visible
-      .filter((i) => section.types.includes(i.item_type))
-      .map((i) => ({
-        id: `${i.item_type}-${i.binder_id ?? i.business_id ?? i.client_id}`,
-        label: i.client_name ?? '',
-        sublabel: i.description,
-        href: getAttentionItemHref(i, section.viewAllHref),
-        meta: {
-          tag: i.item_type === 'unpaid_charges' ? 'מרובות' : undefined,
-          tagTone: 'amber' as AttentionTone,
-          description: getChargeItemDescription(i),
-          amount: getChargeAmount(i),
-        },
-      })),
-  }))
-}
-
-// ── Quick actions → PanelSections ──────────────────────────────────────────
+export const buildOpenChargeSection = (items: AttentionItem[]): PanelSection => ({
+  key: 'open_charges',
+  title: 'חשבוניות פתוחות',
+  icon: DollarSign,
+  tone: 'amber',
+  items: items
+    .filter((item) => OPEN_CHARGE_TYPES.includes(item.item_type))
+    .map((item) => ({
+      id: `${item.item_type}-${item.binder_id ?? item.business_id ?? item.client_id}`,
+      label: item.client_name ?? '',
+      sublabel: item.description,
+      href: getChargeAttentionHref(item),
+      meta: {
+        tag: item.item_type === 'unpaid_charges' ? 'מרובות' : undefined,
+        description: getChargeItemDescription(item),
+        amount: getChargeAmount(item),
+      },
+    })),
+})
 
 const QA_CATEGORY_LABELS: Record<string, string> = {
   binders: 'קלסרים',
@@ -132,7 +95,7 @@ const QA_CATEGORY_META: Record<string, { icon: LucideIcon; tone: AttentionTone; 
 
 const DEFAULT_META = { icon: Zap, tone: 'amber' as AttentionTone, href: '/' }
 
-export const quickActionsToPanelSections = (rawActions: BackendAction[]): PanelSection[] => {
+export const buildQuickActionSections = (rawActions: BackendAction[]): PanelSection[] => {
   const actions = mapActions(rawActions)
   const grouped = new Map<string, PanelItemAction[]>()
 
@@ -161,7 +124,6 @@ export const quickActionsToPanelSections = (rawActions: BackendAction[]): PanelS
       title: QA_CATEGORY_LABELS[cat] ?? cat,
       icon: meta.icon,
       tone: meta.tone,
-      viewAllHref: meta.href,
       items: catActions.map((a, idx) => ({
         id: `${cat}-${a.uiKey}-${idx}`,
         label: a.action.clientName ?? a.action.binderNumber ?? a.label,
