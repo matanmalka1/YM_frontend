@@ -1,5 +1,5 @@
 import { makeLabelGetter } from '../../utils/labels'
-import type { AdvancePaymentFrequency, ClientResponse, ClientStatus, EntityType, VatType } from './api'
+import type { AdvancePaymentFrequency, ClientRecordResponse, ClientStatus, EntityType, VatType } from './api'
 
 export type ActiveClientDetailsTab =
   | 'details'
@@ -11,7 +11,7 @@ export type ActiveClientDetailsTab =
   | 'communication'
   | 'reminders'
   | 'history'
-export type ClientIdNumberType = Exclude<ClientResponse['id_number_type'], null>
+export type ClientIdNumberType = Exclude<ClientRecordResponse['id_number_type'], null>
 export type ClientSortBy = 'full_name' | 'created_at' | 'status' | 'entity_type'
 export type ClientSortOrder = 'asc' | 'desc'
 
@@ -229,7 +229,7 @@ export const getClientStatusLabel = makeLabelGetter(CLIENT_STATUS_LABELS)
 export const getVatTypeLabel = makeLabelGetter(VAT_TYPE_LABELS)
 
 export const getClientVatReportingLabel = (
-  client: Pick<ClientResponse, 'entity_type' | 'vat_reporting_frequency'>,
+  client: Pick<ClientRecordResponse, 'entity_type' | 'vat_reporting_frequency'>,
 ): string => {
   if (client.entity_type === 'employee') return 'לא רלוונטי'
   return client.vat_reporting_frequency ? getVatTypeLabel(client.vat_reporting_frequency) : '—'

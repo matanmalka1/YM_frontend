@@ -17,7 +17,7 @@ import {
   type ActiveClientDetailsTab,
 } from '../constants'
 import { ClientDetailsTabContent, useClientDetails } from '@/features/clients'
-import type { ClientResponse } from '../api'
+import type { ClientRecordResponse } from '../api'
 
 interface ClientDetailsProps {
   initialTab?: ActiveClientDetailsTab
@@ -30,7 +30,7 @@ const ClientHeaderMetaItem: FC<{ icon: React.ReactNode; label: React.ReactNode }
   </span>
 )
 
-const buildClientHeader = (client: ClientResponse) => ({
+const buildClientHeader = (client: ClientRecordResponse) => ({
   title: (
     <span className="flex min-w-0 flex-wrap items-center gap-2">
       <span className="truncate">{client.full_name}</span>

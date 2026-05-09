@@ -3,14 +3,14 @@ import { BUSINESS_ENDPOINTS } from '@/features/businesses'
 import { toQueryParams } from '@/api/queryParams'
 import { CLIENT_ENDPOINTS } from './endpoints'
 import type {
-  ClientResponse,
-  ClientListResponse,
+  ClientRecordResponse,
+  ClientRecordListResponse,
   ListClientsParams,
   ClientConflictInfo,
   BusinessResponse,
   ClientBusinessesResponse,
   BusinessStatusCardResponse,
-  CreateClientResponse,
+  CreateClientRecordResponse,
   CreateClientPayload,
   ClientImpactPreviewPayload,
   UpdateClientPayload,
@@ -24,15 +24,15 @@ const CLIENT_BUSINESSES_PAGE_SIZE = 100
 export const clientsApi = {
   // ── Queries ──────────────────────────────────────────────────────────────
 
-  list: async (params: ListClientsParams): Promise<ClientListResponse> => {
-    const response = await api.get<ClientListResponse>(CLIENT_ENDPOINTS.clients, {
+  list: async (params: ListClientsParams): Promise<ClientRecordListResponse> => {
+    const response = await api.get<ClientRecordListResponse>(CLIENT_ENDPOINTS.clients, {
       params: toQueryParams(params),
     })
     return response.data
   },
 
-  getById: async (clientId: number, taxYear?: number): Promise<ClientResponse> => {
-    const response = await api.get<ClientResponse>(CLIENT_ENDPOINTS.clientById(clientId), {
+  getById: async (clientId: number, taxYear?: number): Promise<ClientRecordResponse> => {
+    const response = await api.get<ClientRecordResponse>(CLIENT_ENDPOINTS.clientById(clientId), {
       params: taxYear ? { tax_year: taxYear } : undefined,
     })
     return response.data
@@ -98,9 +98,9 @@ export const clientsApi = {
 
   // ── Mutations ────────────────────────────────────────────────────────────
 
-  create: async (payload: CreateClientPayload): Promise<CreateClientResponse> => {
+  create: async (payload: CreateClientPayload): Promise<CreateClientRecordResponse> => {
     const { business_name, business_opened_at, ...clientPayload } = payload
-    const response = await api.post<CreateClientResponse>(CLIENT_ENDPOINTS.clients, {
+    const response = await api.post<CreateClientRecordResponse>(CLIENT_ENDPOINTS.clients, {
       client: clientPayload,
       business: {
         business_name,
@@ -117,8 +117,8 @@ export const clientsApi = {
     return response.data
   },
 
-  update: async (clientId: number, payload: UpdateClientPayload): Promise<ClientResponse> => {
-    const response = await api.patch<ClientResponse>(CLIENT_ENDPOINTS.clientById(clientId), payload)
+  update: async (clientId: number, payload: UpdateClientPayload): Promise<ClientRecordResponse> => {
+    const response = await api.patch<ClientRecordResponse>(CLIENT_ENDPOINTS.clientById(clientId), payload)
     return response.data
   },
 
@@ -126,8 +126,8 @@ export const clientsApi = {
     await api.delete(CLIENT_ENDPOINTS.clientById(clientId))
   },
 
-  restore: async (clientId: number): Promise<ClientResponse> => {
-    const response = await api.post<ClientResponse>(CLIENT_ENDPOINTS.clientRestore(clientId))
+  restore: async (clientId: number): Promise<ClientRecordResponse> => {
+    const response = await api.post<ClientRecordResponse>(CLIENT_ENDPOINTS.clientRestore(clientId))
     return response.data
   },
 

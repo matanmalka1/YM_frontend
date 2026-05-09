@@ -7,7 +7,7 @@ import {
   textColumn,
   type Column,
 } from '../../../../components/ui/table'
-import type { ClientResponse } from '../../api'
+import type { ClientRecordResponse } from '../../api'
 import { formatClientOfficeId } from '@/utils/utils'
 import { ClientRowActions } from './ClientRowActions'
 import {
@@ -22,7 +22,7 @@ interface BuildClientColumnsParams {
   onToggleSelect?: (id: number) => void
   onToggleAll?: (ids: number[]) => void
   allIds?: number[]
-  onEditClient?: (client: ClientResponse) => void
+  onEditClient?: (client: ClientRecordResponse) => void
 }
 
 export const buildClientColumns = ({
@@ -31,8 +31,8 @@ export const buildClientColumns = ({
   onToggleAll,
   allIds = [],
   onEditClient,
-}: BuildClientColumnsParams = {}): Column<ClientResponse>[] => {
-  const dataColumns: Column<ClientResponse>[] = [
+}: BuildClientColumnsParams = {}): Column<ClientRecordResponse>[] => {
+  const dataColumns: Column<ClientRecordResponse>[] = [
     monoColumn({
       key: 'office_client_number',
       header: "מס' לקוח",
@@ -103,7 +103,7 @@ export const buildClientColumns = ({
   }
 
   return [
-    buildSelectionColumn<ClientResponse>({
+    buildSelectionColumn<ClientRecordResponse>({
       allIds,
       selectedIds,
       onToggleSelect,

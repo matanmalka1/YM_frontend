@@ -2,7 +2,7 @@ import type { ControllerRenderProps, FieldErrors, UseFormRegister } from 'react-
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
 import { useAdvisorOptions } from '@/features/users'
-import type { ClientResponse } from '../../api'
+import type { ClientRecordResponse } from '../../api'
 import {
   ADVANCE_PAYMENT_FREQUENCY_OPTIONS,
   CLIENT_ID_NUMBER_TYPE_LABELS,
@@ -20,7 +20,7 @@ type StatusField = ControllerRenderProps<ClientEditFormValues, 'status'>
 type AccountantIdField = ControllerRenderProps<ClientEditFormValues, 'accountant_id'>
 
 type SharedSectionProps = {
-  client: ClientResponse
+  client: ClientRecordResponse
   errors: FieldErrors<ClientEditFormValues>
   isLoading: boolean
   register: UseFormRegister<ClientEditFormValues>

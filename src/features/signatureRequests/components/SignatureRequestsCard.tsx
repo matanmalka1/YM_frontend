@@ -11,10 +11,10 @@ import { CreateSignatureRequestModal } from './CreateSignatureRequestModal'
 import { useClientSignatureRequests } from '../hooks/useClientSignatureRequests'
 import { useSignatureRequestActions } from '../hooks/useSignatureRequestActions'
 import { useSignatureRequestSigningUrls } from '../utils'
-import type { ClientResponse } from '@/features/clients'
+import type { ClientRecordResponse } from '@/features/clients'
 
 interface Props {
-  client: ClientResponse
+  client: ClientRecordResponse
   businessId: number | null | undefined
   canManage: boolean
 }

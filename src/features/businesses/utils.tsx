@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { Breadcrumb } from '@/components/layout/PageHeader'
 import type { DefinitionItem } from '@/components/ui/layout/DefinitionList'
-import { CLIENT_ROUTES, type BusinessResponse, type ClientResponse } from '@/features/clients'
+import { CLIENT_ROUTES, type BusinessResponse, type ClientRecordResponse } from '@/features/clients'
 import { formatClientOfficeId, formatDate } from '@/utils/utils'
 import { BUSINESS_DETAILS_COPY, getBusinessStatusLabel } from './constants'
 
@@ -43,7 +43,7 @@ export const buildBusinessBreadcrumbs = ({
 
 export const buildBusinessSummaryItems = (
   business: BusinessResponse,
-  client: ClientResponse | null,
+  client: ClientRecordResponse | null,
 ): DefinitionItem[] => [
   {
     label: BUSINESS_DETAILS_COPY.systemIdLabel,

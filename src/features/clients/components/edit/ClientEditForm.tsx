@@ -3,7 +3,7 @@ import { useController, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
-import type { ClientResponse, UpdateClientPayload } from '../../api'
+import type { ClientRecordResponse, UpdateClientPayload } from '../../api'
 import { clientEditSchema, type ClientEditFormValues } from '../../schemas'
 import { buildClientEditImpactMessage } from '../../utils/clientEditImpact'
 import { buildClientUpdatePayload, hasClientUpdatePayload } from '../../utils/buildClientUpdatePayload'
@@ -15,7 +15,7 @@ import {
 } from './ClientEditFormSections'
 
 interface ClientEditFormProps {
-  client: ClientResponse
+  client: ClientRecordResponse
   onSave: (data: UpdateClientPayload) => Promise<void>
   onCancel: () => void
   isLoading?: boolean
@@ -25,7 +25,7 @@ interface ClientEditFormProps {
   formId?: string
 }
 
-const getClientDefaultValues = (client: ClientResponse): ClientEditFormValues => ({
+const getClientDefaultValues = (client: ClientRecordResponse): ClientEditFormValues => ({
   full_name: client.full_name,
   status: client.status,
   phone: client.phone ?? '',

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import { clientsApi, clientsQK, type UpdateClientPayload, type ClientResponse } from '../api'
+import { clientsApi, clientsQK, type UpdateClientPayload, type ClientRecordResponse } from '../api'
 import { getErrorMessage, isPositiveInt, showErrorToast } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
 import { toast } from '../../../utils/toast'
@@ -8,7 +8,7 @@ import { toast } from '../../../utils/toast'
 type UseClientDetailsParams = { clientId: number | null; taxYear?: number }
 
 type UseClientDetailsResult = {
-  client: ClientResponse | null
+  client: ClientRecordResponse | null
   isValidId: boolean
   isLoading: boolean
   error: string | null

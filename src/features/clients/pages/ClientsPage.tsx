@@ -17,7 +17,7 @@ import {
   DeletedClientDialog,
   useClientsPage,
 } from '@/features/clients'
-import type { ClientResponse } from '@/features/clients'
+import type { ClientRecordResponse } from '@/features/clients'
 import { CLIENT_ROUTES } from '@/features/clients'
 import { ImportExportModal } from '@/features/importExport'
 
@@ -28,7 +28,7 @@ export const Clients: React.FC = () => {
   const [searchParams] = useSearchParams()
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showImportExport, setShowImportExport] = useState(false)
-  const [editingClient, setEditingClient] = useState<ClientResponse | null>(null)
+  const [editingClient, setEditingClient] = useState<ClientRecordResponse | null>(null)
   const {
     activeActionKey,
     clients,

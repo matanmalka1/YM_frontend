@@ -25,14 +25,14 @@ import { ClientDocumentsTab } from '@/features/documents'
 import { ClientNotesCard } from '@/features/notes'
 import { VatClientSummaryPanel } from '@/features/vatReports'
 import { ClientAuditTrailSection } from './ClientAuditTrailSection'
-import type { UpdateClientPayload, ClientResponse } from '../../api'
+import type { UpdateClientPayload, ClientRecordResponse } from '../../api'
 import { useFirstBusinessId } from '../../hooks/useFirstBusinessId'
 import { useClientDetailsActions } from '../../hooks/useClientDetailsActions'
 
 const EDIT_FORM_ID = 'client-edit-form'
 
 export type ClientDetailsOverviewTabProps = {
-  client: ClientResponse
+  client: ClientRecordResponse
   clientId: number
   canEditClients: boolean
   updateClient: (payload: UpdateClientPayload) => Promise<void>

@@ -2,13 +2,15 @@ export { clientsApi } from './clients.api'
 export { clientsQK } from './queryKeys'
 export type { ISODateString } from '@/types'
 export type {
-  ClientResponse,
+  ClientRecordResponse,
   ActiveClientSummary,
   DeletedClientSummary,
   DeletedClientInfo,
   ClientConflictInfo,
-  ClientListResponse,
+  ClientRecordListResponse,
+  ClientRecordListStats,
   ListClientsParams,
+  CreateClientRecordResponse,
   CreateClientPayload,
   UpdateClientPayload,
   BulkClientActionPayload,

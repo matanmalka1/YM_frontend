@@ -1,14 +1,14 @@
 import { Card } from '@/components/ui/primitives/Card'
 import { DefinitionList } from '@/components/ui/layout/DefinitionList'
 import { EntityAuditTrailSection } from '@/features/audit'
-import type { BusinessResponse, ClientResponse } from '@/features/clients'
+import type { BusinessResponse, ClientRecordResponse } from '@/features/clients'
 import { BusinessNotesCard } from '@/features/notes'
 import { BUSINESS_DETAILS_COPY } from '../constants'
 import { buildBusinessSummaryItems } from '../utils'
 
 type BusinessDetailsCardProps = {
   business: BusinessResponse
-  client: ClientResponse | null
+  client: ClientRecordResponse | null
   canEdit?: boolean
 }
 

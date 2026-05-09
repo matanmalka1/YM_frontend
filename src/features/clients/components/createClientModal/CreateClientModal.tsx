@@ -3,7 +3,7 @@ import { useController, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Modal } from '../../../../components/ui/overlays/Modal'
 import { useAdvisorOptions } from '@/features/users'
-import type { ClientResponse, CreateClientPayload } from '../../api'
+import type { ClientRecordResponse, CreateClientPayload } from '../../api'
 import { useClientCreationImpact } from '../../hooks/useClientCreationImpact'
 import { CREATE_CLIENT_DEFAULT_VALUES } from '../../constants'
 import { createClientSchema, type CreateClientFormValues } from '../../schemas'
@@ -18,7 +18,7 @@ interface Props {
   open: boolean
   onClose: () => void
   onSubmit: (data: CreateClientPayload) => Promise<void>
-  onRestoreDeletedClient: (clientId: number) => Promise<ClientResponse>
+  onRestoreDeletedClient: (clientId: number) => Promise<ClientRecordResponse>
   isAdvisor: boolean
   isLoading?: boolean
   restoreLoading?: boolean

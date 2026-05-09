@@ -1,6 +1,6 @@
 import { type FC, type ReactNode } from 'react'
 import { formatDate, formatPlainIdentifier, formatShekelAmount } from '@/utils/utils'
-import type { ClientResponse } from '../../api'
+import type { ClientRecordResponse } from '../../api'
 import {
   getClientIdNumberTypeLabel,
   getClientStatusLabel,
@@ -21,7 +21,7 @@ const CURRENT_YEAR = new Date().getFullYear()
 const YEAR_OPTIONS = Array.from({ length: 5 }, (_, i) => CURRENT_YEAR - i)
 
 type ClientInfoSectionProps = {
-  client: ClientResponse
+  client: ClientRecordResponse
   taxYear: number
   onTaxYearChange: (year: number) => void
   sideContent?: ReactNode

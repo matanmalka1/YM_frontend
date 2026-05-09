@@ -14,7 +14,7 @@ export { useClientDetailsActions } from './hooks/useClientDetailsActions'
 export { ClientDetails } from './pages/ClientDetailsPage'
 export { Clients } from './pages/ClientsPage'
 export type {
-  ClientResponse,
+  ClientRecordResponse,
   BusinessResponse,
   BusinessWithClientResponse,
   BusinessListResponse,

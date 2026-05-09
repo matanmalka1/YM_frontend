@@ -1,7 +1,7 @@
 import type { BackendAction } from '@/lib/actions/types'
 import type { ISODateString, PaginatedResponse } from '@/types'
 
-export interface ClientResponse {
+export interface ClientRecordResponse {
   id: number
   full_name: string
   id_number: string
@@ -24,8 +24,9 @@ export interface ClientResponse {
   advance_rate_updated_at: string | null
   annual_revenue: string | null
   accountant_id: number | null
-  created_at: string
+  created_at: string | null
   updated_at: string | null
+  created_by: number | null
   active_binder_number: string | null
   annual_turnover: AnnualTurnover | null
 }
@@ -55,13 +56,13 @@ export interface ClientConflictInfo {
   deleted_clients: DeletedClientSummary[]
 }
 
-export interface ClientListStats {
+export interface ClientRecordListStats {
   active: number
   frozen: number
   closed: number
 }
 
-export type ClientListResponse = PaginatedResponse<ClientResponse> & { stats: ClientListStats }
+export type ClientRecordListResponse = PaginatedResponse<ClientRecordResponse> & { stats: ClientRecordListStats }
 
 export interface ListClientsParams {
   search?: string
@@ -111,12 +112,13 @@ export interface CreationImpactItem {
 export interface ClientCreationImpactResponse {
   items: CreationImpactItem[]
   years_scope: number
-  note?: string | null
-  vat_exempt_ceiling?: string | null
+  note: string | null
+  vat_exempt_ceiling: string | null
 }
 
-export interface CreateClientResponse {
-  client: ClientResponse
+export interface CreateClientRecordResponse {
+  client_record_id: number
+  client: ClientRecordResponse
   business: BusinessResponse
   impact: ClientCreationImpactResponse
 }

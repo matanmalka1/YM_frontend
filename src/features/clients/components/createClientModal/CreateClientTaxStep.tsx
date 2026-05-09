@@ -2,21 +2,10 @@ import { useWatch, type Control, type FieldErrors, type UseFormRegister } from '
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
 import { ADVANCE_PAYMENT_FREQUENCY_OPTIONS, CREATE_CLIENT_VAT_OPTIONS } from '../../constants'
+import type { ClientCreationImpactResponse } from '../../api/contracts'
 import type { CreateClientFormValues } from '../../schemas'
 import { formatShekelAmount } from '@/utils/utils'
 import { stripNonDecimal } from './createClientFormUtils'
-
-interface ImpactItem {
-  label: string
-  count: number
-}
-
-interface ImpactData {
-  items: ImpactItem[]
-  note?: string | null
-  years_scope: number
-  vat_exempt_ceiling?: string | null
-}
 
 interface Props {
   advisorOptions: Array<{ value: string; label: string }>
@@ -24,7 +13,7 @@ interface Props {
   control: Control<CreateClientFormValues>
   disabled: boolean
   errors: FieldErrors<CreateClientFormValues>
-  impactData?: ImpactData
+  impactData?: ClientCreationImpactResponse
   impactError: boolean
   impactLoading: boolean
   isCompany: boolean
