@@ -73,7 +73,7 @@ export interface VatDashboardStats {
 }
 
 export interface DashboardOverviewResponse {
-  total_clients: number
+  is_empty: boolean
   binders_in_office: number
   binders_ready_for_pickup: number
   manual_reminders_due_now: number
