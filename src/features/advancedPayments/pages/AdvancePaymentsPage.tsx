@@ -23,7 +23,6 @@ import type {
   CreateAdvancePaymentPayload,
 } from '../types'
 import { ADVANCE_PAYMENT_STATUS_OPTIONS_WITH_ALL } from '../constants'
-import { getAdvancePaymentDueDateFallback } from '../utils'
 import { parsePositiveInt } from '@/utils/utils'
 import { isCurrentReportingPeriod } from '@/components/ui/table/groupedPeriodRow.utils'
 import { toast } from '../../../utils/toast'
@@ -217,18 +216,17 @@ export const AdvancePayments: React.FC = () => {
     const filteredBatches =
       periodFilter === null ? canonicalBatches : canonicalBatches.filter((b) => b.period_months_count === periodFilter)
     const map = new Map<string, (typeof filteredBatches)[0]>()
-    const getDueDate = (batch: (typeof filteredBatches)[0]) => {
-      if (batch.due_date) return batch.due_date
-      return getAdvancePaymentDueDateFallback(batch)
-    }
+    // Group by due_date when available (merges bimonthly source batches sharing the same deadline).
+    // Fall back to a stable period key so batches with no due_date never collapse into one row.
+    const groupKey = (batch: (typeof filteredBatches)[0]) =>
+      batch.due_date ?? `${batch.year}-${String(batch.month).padStart(2, '0')}-${batch.period_months_count}`
 
     for (const b of filteredBatches) {
-      const dueDate = getDueDate(b)
-      const existing = map.get(dueDate)
+      const key = groupKey(b)
+      const existing = map.get(key)
       if (existing) {
-        map.set(dueDate, {
+        map.set(key, {
           ...existing,
-          due_date: dueDate,
           source_batches: [...(existing.source_batches ?? [existing]), b],
           client_count: existing.client_count + b.client_count,
           pending_count: existing.pending_count + b.pending_count,
@@ -238,10 +236,14 @@ export const AdvancePayments: React.FC = () => {
           total_paid: String(Number(existing.total_paid ?? 0) + Number(b.total_paid ?? 0)),
         })
       } else {
-        map.set(dueDate, { ...b, due_date: dueDate, source_batches: [b] })
+        map.set(key, { ...b, source_batches: [b] })
       }
     }
-    return [...map.values()].sort((a, b) => String(a.due_date).localeCompare(String(b.due_date)))
+    return [...map.values()].sort((a, b) => {
+      const aKey = a.due_date ?? `${a.year}-${String(a.month).padStart(2, '0')}`
+      const bKey = b.due_date ?? `${b.year}-${String(b.month).padStart(2, '0')}`
+      return aKey.localeCompare(bKey)
+    })
   }, [batches, periodFilter])
 
   const workflowStats = useMemo(() => {
@@ -251,11 +253,11 @@ export const AdvancePayments: React.FC = () => {
 
     return displayBatches.reduce(
       (stats, batch) => {
-        const dueDate = batch.due_date ?? getAdvancePaymentDueDateFallback(batch)
-        const dueYear = Number(dueDate.substring(0, 4))
-        const dueMonth = Number(dueDate.substring(5, 7))
+        const dueDate = batch.due_date ?? ''
+        const dueYear = dueDate ? Number(dueDate.substring(0, 4)) : null
+        const dueMonth = dueDate ? Number(dueDate.substring(5, 7)) : null
 
-        const loadedStats = loadedGroupStats[dueDate]
+        const loadedStats = dueDate ? loadedGroupStats[dueDate] : undefined
 
         if (dueYear === currentYear && dueMonth === currentMonth) {
           stats.dueThisMonthCount += 1
@@ -318,11 +320,11 @@ export const AdvancePayments: React.FC = () => {
       >
         {displayBatches.map((batch) => {
           const period = `${batch.year}-${String(batch.month).padStart(2, '0')}`
-          const dueDate = batch.due_date ?? getAdvancePaymentDueDateFallback(batch)
+          const stableKey = batch.due_date ?? `${batch.year}-${String(batch.month).padStart(2, '0')}-${batch.period_months_count}`
           const isCurrent = isCurrentReportingPeriod(period, batch.period_months_count)
           return (
             <AdvancePaymentBatchRow
-              key={batch.due_date}
+              key={stableKey}
               batch={batch}
               isCurrent={isCurrent}
               search={filters.client_name}
@@ -330,7 +332,7 @@ export const AdvancePayments: React.FC = () => {
               periodFilter={periodFilter}
               onRowClick={handleRowClick}
               onStatsLoad={handleGroupStatsLoad}
-              statsOverride={loadedGroupStats[dueDate]}
+              statsOverride={batch.due_date ? loadedGroupStats[batch.due_date] : undefined}
             />
           )
         })}

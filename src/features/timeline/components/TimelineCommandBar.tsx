@@ -42,7 +42,6 @@ const FILTER_LABELS: Record<TimelineFilterKey, string> = {
 
 const FILTER_ORDER: TimelineFilterKey[] = [
   'all',
-  'past',
   'future',
   'finance',
   'binders',

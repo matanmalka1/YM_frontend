@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { ChevronDown, Clock, InboxIcon } from 'lucide-react'
+import { ChevronDown, InboxIcon } from 'lucide-react'
 import type { NormalizedTimelineEvent } from '../normalize'
 import { TimelineEventItem } from './TimelineEventItem'
 import { Button } from '../../../components/ui/primitives/Button'
@@ -43,22 +43,19 @@ interface GroupHeaderProps {
 }
 
 const GroupHeader: React.FC<GroupHeaderProps> = ({ date, count, isFirst, expanded, controlsId, onToggle }) => (
-  <div className={cn('flex items-center gap-3 px-1 py-2', !isFirst && 'mt-4')}>
+  <div className={cn('flex items-center gap-2 px-1 py-1', !isFirst && 'mt-2')}>
     <button
       type="button"
       aria-expanded={expanded}
       aria-controls={controlsId}
       onClick={onToggle}
-      className="flex items-center gap-2 rounded-full border border-slate-200/80 bg-slate-100 px-3.5 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-200/70 focus:outline-none focus:ring-2 focus:ring-primary-300"
+      className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-200/70 focus:outline-none focus:ring-2 focus:ring-primary-300"
     >
-      <ChevronDown className={cn('h-3.5 w-3.5 text-slate-400 transition-transform', !expanded && 'rotate-90')} />
-      <Clock className="h-3.5 w-3.5 text-slate-400" />
+      <ChevronDown className={cn('h-3 w-3 text-slate-400 transition-transform', !expanded && '-rotate-90')} />
       {date}
+      <span className="text-slate-400 font-normal">· {count}</span>
     </button>
-    <div className="flex-1 h-px bg-gradient-to-l from-transparent to-slate-200" />
-    <span className="text-[11px] text-gray-400 whitespace-nowrap">
-      {count} {count === 1 ? 'אירוע' : 'אירועים'}
-    </span>
+    <div className="flex-1 h-px bg-slate-100" />
   </div>
 )
 
@@ -88,7 +85,7 @@ export const TimelineCard: React.FC<TimelineCardProps> = ({
   if (events.length === 0) return <EmptyTimeline hasActiveFilters={hasActiveFilters} onClearFilters={onClearFilters} />
 
   return (
-    <div className="space-y-2 animate-fade-in">
+    <div className="space-y-1 animate-fade-in">
       {groups.map((group, groupIndex) => {
         const expanded = expandedDateKeys.has(group.date)
         const controlsId = `timeline-date-${groupIndex}`
@@ -105,22 +102,17 @@ export const TimelineCard: React.FC<TimelineCardProps> = ({
             />
 
             {expanded && (
-              <div id={controlsId} className="relative pr-5">
-                {/* Vertical connector line */}
-                <div className="pointer-events-none absolute top-3 bottom-3 right-[9px] w-px bg-gradient-to-b from-slate-200 via-slate-200/70 to-transparent" />
-
-                <ul className="space-y-4">
-                  {group.items.map((event, index) => (
-                    <TimelineEventItem
-                      key={`${event.timestamp}-${event.event_type}-${index}`}
-                      timelineEvent={event}
-                      index={index + groupIndex * 1000}
-                      onAction={onAction}
-                      activeActionKey={activeActionKey}
-                    />
-                  ))}
-                </ul>
-              </div>
+              <ul id={controlsId} className="space-y-1 pt-1">
+                {group.items.map((event, index) => (
+                  <TimelineEventItem
+                    key={`${event.timestamp}-${event.event_type}-${index}`}
+                    timelineEvent={event}
+                    index={index + groupIndex * 1000}
+                    onAction={onAction}
+                    activeActionKey={activeActionKey}
+                  />
+                ))}
+              </ul>
             )}
           </section>
         )

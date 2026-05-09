@@ -5,7 +5,6 @@ import type { TimelineEventMetadata } from '../api'
 import type { NormalizedTimelineEvent } from '../normalize'
 import type { ActionCommand } from '@/lib/actions/types'
 import { cn } from '../../../utils/utils'
-import { staggerDelay } from '../../../utils/animation'
 import { getEventColor } from '../constants'
 import { getAnnualReportStatusLabel, getTimelineStatusLabel } from '../labels'
 import { formatTimelineDate, formatTimestamp, getEventIcon } from '../utils'
@@ -17,7 +16,7 @@ interface MetaRowProps {
   children: React.ReactNode
 }
 const MetaRow: React.FC<MetaRowProps> = ({ className, children }) => (
-  <div className={cn('text-xs text-gray-600 rounded px-3 py-2 border', className)}>{children}</div>
+  <div className={cn('text-xs text-gray-600 rounded px-2 py-1 border', className)}>{children}</div>
 )
 
 const MetaField: React.FC<{ label: string; value: string }> = ({ label, value }) => (
@@ -30,11 +29,11 @@ const MetaField: React.FC<{ label: string; value: string }> = ({ label, value })
 
 const StatusTransition: React.FC<{ oldStatus: string; newStatus: string }> = ({ oldStatus, newStatus }) => (
   <MetaRow className="bg-info-50 border-info-100 flex items-center gap-2">
-    <span className="px-2 py-0.5 rounded bg-info-100 text-info-700 font-medium text-[11px]">
+    <span className="px-1.5 py-0.5 rounded bg-info-100 text-info-700 font-medium text-[10px]">
       {getTimelineStatusLabel(oldStatus)}
     </span>
     <span className="text-info-400">←</span>
-    <span className="px-2 py-0.5 rounded bg-positive-100 text-positive-700 font-medium text-[11px]">
+    <span className="px-1.5 py-0.5 rounded bg-positive-100 text-positive-700 font-medium text-[10px]">
       {getTimelineStatusLabel(newStatus)}
     </span>
   </MetaRow>
@@ -120,7 +119,7 @@ const RelatedIds: React.FC<{
 }> = ({ binderId, chargeId, relatedEntity }) => {
   if (!binderId && !chargeId && !relatedEntity) return null
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-1.5">
       {binderId != null && (
         <IconLabel
           icon={<FileText className="h-3 w-3" />}
@@ -157,7 +156,6 @@ interface TimelineEventItemProps {
 
 export const TimelineEventItem: React.FC<TimelineEventItemProps> = ({
   timelineEvent: ev,
-  index,
   onAction,
   activeActionKey,
 }) => {
@@ -167,69 +165,53 @@ export const TimelineEventItem: React.FC<TimelineEventItemProps> = ({
   const isQuiet = ev.importance === 'quiet'
 
   return (
-    <li className="relative flex gap-4 animate-fade-in" style={{ animationDelay: staggerDelay(index) }}>
-      {/* Timeline dot */}
-      <div className="relative z-10 flex-shrink-0 mt-3.5">
-        <div className={cn('h-[10px] w-[10px] rounded-full border-2 bg-white shadow-sm', colors.dotBorder)}>
-          <div className={cn('absolute inset-0 m-auto h-[4px] w-[4px] rounded-full', colors.dotBg)} />
-        </div>
-      </div>
-
-      {/* Event card */}
+    <li className="animate-fade-in">
       <div
         className={cn(
-          'flex-1 mb-2 rounded-lg border border-gray-100 bg-white/95 overflow-hidden',
+          'rounded-md border border-gray-100 bg-white/95 overflow-hidden',
           'border-r-2',
           colors.cardBorder,
-          'transition-all duration-200 hover:shadow-md hover:border-gray-200',
-          isQuiet && 'bg-gray-50/70 border-gray-100',
+          'transition-colors duration-150 hover:border-gray-200 hover:shadow-sm',
+          isQuiet && 'bg-gray-50/60',
         )}
       >
-        {/* Top tint bar */}
-        <div className={cn('h-1 w-full bg-gradient-to-l', colors.cardTint, 'to-transparent')} />
+        <div className="px-3 py-2 space-y-1.5">
+          {/* Header: type badge + timestamp */}
+          <div className="flex items-center justify-between gap-2">
+            <span
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-semibold',
+                isQuiet ? 'bg-gray-100 text-gray-600' : cn(colors.badgeBg, colors.badgeText),
+              )}
+            >
+              <span className={isQuiet ? 'text-gray-500' : colors.iconColor}>{getEventIcon(ev.event_type)}</span>
+              {ev.title}
+            </span>
 
-        <div className="px-4 py-3 space-y-3">
-          {/* Header: title + timestamp */}
-          <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0 space-y-1">
-              <span
-                className={cn(
-                  'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold',
-                  isQuiet ? 'bg-gray-100 text-gray-600' : cn(colors.badgeBg, colors.badgeText),
-                )}
-              >
-                <span className={isQuiet ? 'text-gray-500' : colors.iconColor}>{getEventIcon(ev.event_type)}</span>
-                {ev.title}
-              </span>
-            </div>
-
-            <time dateTime={ev.displayTimestamp} className="text-xs text-gray-400 font-mono tabular-nums flex-shrink-0">
+            <time dateTime={ev.displayTimestamp} className="text-[11px] text-gray-400 font-mono tabular-nums flex-shrink-0">
               {displayDate}
             </time>
           </div>
 
-          {/* Description */}
           {ev.secondary && (
-            <p className={cn('text-sm leading-relaxed', isQuiet ? 'text-gray-500' : 'text-gray-700')}>{ev.secondary}</p>
+            <p className={cn('text-xs leading-snug', isQuiet ? 'text-gray-400' : 'text-gray-600')}>{ev.secondary}</p>
           )}
 
-          {/* Related IDs */}
           <RelatedIds binderId={ev.binder_id} chargeId={ev.charge_id} relatedEntity={ev.relatedEntity} />
 
-          {/* Metadata */}
           {ev.metadata && <EventMetadata metadata={ev.metadata} eventType={ev.event_type} />}
 
           {primaryAction && onAction && (
-            <div className="flex justify-end">
+            <div className="flex justify-end pt-0.5">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => onAction(primaryAction)}
                 isLoading={activeActionKey === primaryAction.uiKey}
-                className="gap-1.5 text-xs"
+                className="gap-1 text-xs h-6 px-2 py-0"
               >
-                <ExternalLink className="h-3.5 w-3.5" />
+                <ExternalLink className="h-3 w-3" />
                 פתח
               </Button>
             </div>

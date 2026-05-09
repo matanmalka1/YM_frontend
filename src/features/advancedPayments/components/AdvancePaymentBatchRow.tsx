@@ -7,7 +7,7 @@ import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/tabl
 import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../types'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
-import { fmtCurrency, getAdvancePaymentDueDateFallback, getAdvancePaymentMonthLabel } from '../utils'
+import { fmtCurrency, getAdvancePaymentMonthLabel } from '../utils'
 import { formatDate, formatClientOfficeId } from '../../../utils/utils'
 import { AdvancePaymentStatusBadge } from './AdvancePaymentStatusBadge'
 import { RowActionsMenu, RowActionItem } from '../../../components/ui/table/RowActions'
@@ -166,8 +166,7 @@ const BatchContent = ({
 
   useEffect(() => {
     if (isLoading) return
-    const dueDate = batch.due_date ?? getAdvancePaymentDueDateFallback(batch)
-    onStatsLoad?.(dueDate, stats)
+    if (batch.due_date) onStatsLoad?.(batch.due_date, stats)
   }, [batch, isLoading, onStatsLoad, stats])
 
   if (isLoading) return <TableSkeleton rows={3} columns={COL_COUNT} />
@@ -298,7 +297,7 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   onStatsLoad,
   statsOverride,
 }) => {
-  const dueDate = batch.due_date ?? getAdvancePaymentDueDateFallback(batch)
+  const dueDate = batch.due_date ?? null
   const clientCount = statsOverride?.clientCount ?? batch.client_count
   const pendingCount = statsOverride?.pendingCount ?? batch.pending_count
   const overdueCount = statsOverride?.overdueCount ?? batch.overdue_count
@@ -316,7 +315,7 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   return (
     <GroupedPeriodRow
       typeLabel="מקדמות"
-      primaryLabel={formatDueDateLabel(dueDate, 'לתשלום עד') ?? dueDate}
+      primaryLabel={formatDueDateLabel(dueDate, 'לתשלום עד') ?? dueDate ?? '—'}
       secondaryLabel={getIncludedPeriodLabel(batch)}
       relativeDueLabel={formatRelativeDueLabel(dueDate)}
       isCurrentPeriod={false}
