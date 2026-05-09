@@ -1,6 +1,5 @@
 import type { ElementType } from 'react'
 import {
-  Bell,
   Briefcase,
   CalendarDays,
   CheckSquare,
@@ -57,7 +56,6 @@ export const NAV_GROUPS: NavGroup[] = [
     label: 'מסמכים ותפעול',
     items: [
       { to: '/binders', label: 'קלסרים', icon: Briefcase },
-      { to: '/reminders', label: 'תזכורות', icon: Bell },
       { to: '/tasks', label: 'משימות', icon: CheckSquare },
     ],
   },

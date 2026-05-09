@@ -1,10 +1,9 @@
-import { Archive, Bell, CreditCard, FileText } from 'lucide-react'
+import { Archive, CreditCard, FileText } from 'lucide-react'
 import type { DashboardOverviewResponse } from './api'
 import type { StatItem } from './components/DashboardStatsGrid'
 
 type DashboardStatsData = Pick<
   DashboardOverviewResponse,
-  | 'manual_reminders_due_now'
   | 'vat_stats'
   | 'binders_in_office'
   | 'binders_ready_for_pickup'
@@ -17,7 +16,6 @@ type VatPeriodType = 'monthly' | 'bimonthly'
 const withParams = (base: string, params: Record<string, string>) => `${base}?${new URLSearchParams(params).toString()}`
 
 const HREFS = {
-  remindersReady: withParams('/reminders', { status: 'pending', due: 'ready' }),
   vat: (period: string, periodType: VatPeriodType) => withParams('/tax/vat', { period, period_type: periodType }),
   advancePayments: (period: '1' | '2') => withParams('/tax/advance-payments', { period }),
   bindersReadyForPickup: withParams('/binders', { status: 'ready_for_pickup' }),
@@ -64,17 +62,6 @@ const buildAdvanceStat = (
 
 export const buildDashboardStats = (data: DashboardStatsData, isAdvisor: boolean): StatItem[] => {
   const stats: StatItem[] = [
-    {
-      key: 'ready_reminders',
-      title: 'תזכורות ידניות',
-      value: `${data.manual_reminders_due_now.toLocaleString('he-IL')} לטיפול עכשיו`,
-      description: 'תזכורות שמועד הטיפול שלהן הגיע',
-      icon: Bell,
-      variant: 'amber',
-      urgent: data.manual_reminders_due_now > 0,
-      href: HREFS.remindersReady,
-      actionLabel: data.manual_reminders_due_now > 0 ? 'פתח תזכורות' : 'צור תזכורת ראשונה',
-    },
     buildVatStat('monthly_vat', 'מע״מ חודשי', data.vat_stats.monthly, 'monthly'),
     buildVatStat('bimonthly_vat', 'מע״מ דו־חודשי', data.vat_stats.bimonthly, 'bimonthly'),
     buildAdvanceStat('monthly_advance', 'מקדמות חודשיות', data.vat_stats.advance_payments.monthly, '1'),

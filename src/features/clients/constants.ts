@@ -9,7 +9,6 @@ export type ActiveClientDetailsTab =
   | 'advance-payments'
   | 'annual-reports'
   | 'communication'
-  | 'reminders'
   | 'history'
 export type ClientIdNumberType = Exclude<ClientRecordResponse['id_number_type'], null>
 export type ClientSortBy = 'full_name' | 'created_at' | 'status' | 'entity_type'
@@ -23,7 +22,6 @@ export const CLIENT_DETAILS_TABS: ActiveClientDetailsTab[] = [
   'advance-payments',
   'annual-reports',
   'communication',
-  'reminders',
   'history',
 ]
 
@@ -35,7 +33,6 @@ export const CLIENT_DETAILS_TAB_LABELS: Record<ActiveClientDetailsTab, string> =
   'advance-payments': 'מקדמות',
   'annual-reports': 'דוחות שנתיים',
   communication: 'תקשורת',
-  reminders: 'תזכורות',
   history: 'יומן שינויים',
 }
 

@@ -9,8 +9,6 @@ import { DeleteClientModal } from './DeleteClientModal'
 import { AuthorityContactsCard } from '@/features/authorityContacts'
 import { CorrespondenceCard } from '@/features/correspondence'
 import { SignatureRequestsCard } from '@/features/signatureRequests'
-import { ClientRemindersCard } from '@/features/reminders'
-import { NotificationsTab } from '@/features/notifications'
 import { ClientStatusCard } from './ClientStatusCard'
 import { ClientInfoSection } from './ClientInfoSection'
 import { ClientBusinessesCard } from './ClientBusinessesCard'
@@ -135,13 +133,6 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
       {activeTab === 'advance-payments' && <ClientAdvancePaymentsTab clientId={client.id} />}
       {activeTab === 'annual-reports' && <ClientAnnualReportsTab clientId={client.id} />}
       {activeTab === 'history' && <ClientAuditTrailSection clientId={client.id} />}
-
-      {activeTab === 'reminders' && (
-        <div className="space-y-6">
-          <ClientRemindersCard clientId={client.id} clientName={client.full_name} />
-          <NotificationsTab businessId={firstBusinessId ?? undefined} />
-        </div>
-      )}
 
       <DeleteClientModal
         open={isConfirmingDelete}

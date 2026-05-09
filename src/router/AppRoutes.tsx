@@ -15,7 +15,6 @@ import { DashboardPage } from '../features/dashboard'
 import { Navbar } from '../components/layout/Navbar'
 import { Sidebar } from '../components/layout/Sidebar/Sidebar'
 import { PageLayout } from '../components/layout/PageLayout'
-import { RemindersPage } from '../features/reminders'
 import { WorkQueuePage } from '../features/workQueue'
 import { Search } from '../features/search'
 import { SigningPage } from '../features/signing'
@@ -106,7 +105,6 @@ export const AppRoutes: React.FC = () => {
             />
             <Route path="clients/:clientId/annual-reports" element={<ClientDetails initialTab="annual-reports" />} />
             <Route path="clients/:clientId/communication" element={<ClientDetails initialTab="communication" />} />
-            <Route path="clients/:clientId/reminders" element={<ClientDetails initialTab="reminders" />} />
             <Route path="clients/:clientId/history" element={<ClientDetails initialTab="history" />} />
             <Route path="clients/:clientId/businesses/:businessId" element={<BusinessDetails />} />
             <Route path="search" element={<Search />} />
@@ -124,7 +122,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="reports/aging" element={<AgingReportView />} />
             <Route path="reports/annual-status" element={<AnnualReportStatusView />} />
             <Route path="reports/advance-payments" element={<AdvancePaymentReportView />} />
-            <Route path="reminders" element={<RemindersPage />} />
+            <Route path="reminders" element={<Navigate to="/" replace />} />
             <Route path="tasks" element={<WorkQueuePage />} />
           </Route>
         </Route>

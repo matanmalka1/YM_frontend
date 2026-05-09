@@ -16,7 +16,6 @@ export const buildClientEditImpactMessage = (
   if (statusChangesToDestructive) {
     const label = newStatus === 'frozen' ? 'מוקפא' : 'סגור'
     lines.push(`שינוי סטטוס ל"${label}" יבטל את כל הפעולות הממתינות הבאות:`)
-    lines.push('• תזכורות ממתינות')
     lines.push('• מועדי מס ממתינים')
     lines.push('• דיווחי מע"מ פתוחים')
     lines.push('• דוחות שנתיים פתוחים')
