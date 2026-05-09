@@ -21,7 +21,7 @@ import {
 import { mapUnifiedItemToPanelItem } from '../unifiedTaskDisplay'
 
 const StatsSkeleton = () => (
-  <div className="grid animate-pulse grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+  <div className="grid animate-pulse grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
     {Array.from({ length: DASHBOARD_LOADING_CARD_COUNT }, (_, i) => (
       <div key={i} className="h-32 rounded-xl bg-gray-100" />
     ))}
