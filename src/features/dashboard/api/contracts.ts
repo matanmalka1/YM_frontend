@@ -58,6 +58,8 @@ export interface DashboardOverviewResponse {
   binders_in_office: number
   binders_ready_for_pickup: number
   open_reminders: number
+  open_charges_count: number
+  open_charges_amount_ils: string | null
   vat_stats: VatDashboardStats
   quick_actions: BackendAction[]
   attention: AttentionResponse
@@ -72,6 +74,8 @@ export interface DashboardSummaryResponse {
   binders_in_office: number
   binders_ready_for_pickup: number
   open_reminders: number
+  open_charges_count: number
+  open_charges_amount_ils: string | null
   vat_stats: VatDashboardStats
   attention: AttentionResponse
 }

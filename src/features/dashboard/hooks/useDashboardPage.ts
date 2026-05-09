@@ -118,8 +118,8 @@ export const useDashboardPage = () => {
 
   const stats = useMemo<StatItem[]>(() => {
     if (dashboard.status !== 'ok' || !dashboard.data) return []
-    return buildDashboardStats(dashboard.data)
-  }, [dashboard])
+    return buildDashboardStats(dashboard.data, isAdvisor)
+  }, [dashboard, isAdvisor])
   const isAdvisorView = dashboard.status === 'ok' && dashboard.data?.role_view === 'advisor'
   const quickActions = isOverviewData(dashboard.data) ? dashboard.data.quick_actions : undefined
   const advisorToday = isOverviewData(dashboard.data) ? dashboard.data.advisor_today : undefined
