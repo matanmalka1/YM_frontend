@@ -23,13 +23,13 @@ const baseFields = {
 }
 
 // FK id fields that are irrelevant for a given type are present but optional/empty
-const unusedIds = {
+const optionalFkFields = {
   binder_id: z.string().optional(),
 }
 
 const buildLinkedReminderSchema = <
   TReminderType extends Exclude<ReminderType, 'document_missing' | 'custom'>,
-  TField extends keyof typeof unusedIds,
+  TField extends keyof typeof optionalFkFields,
 >(
   reminderType: TReminderType,
   requiredField: TField,
@@ -38,7 +38,7 @@ const buildLinkedReminderSchema = <
   z.object({
     ...baseFields,
     reminder_type: z.literal(reminderType),
-    ...unusedIds,
+    ...optionalFkFields,
     [requiredField]: positiveIdString(fieldLabel),
     message: z.string().optional(),
   })
@@ -49,13 +49,13 @@ export const createReminderSchema = z.discriminatedUnion('reminder_type', [
     ...baseFields,
     reminder_type: z.literal('document_missing'),
     message: z.string().optional(),
-    ...unusedIds,
+    ...optionalFkFields,
   }),
   z.object({
     ...baseFields,
     reminder_type: z.literal('custom'),
     message: z.string().min(1, 'נא להזין הודעת תזכורת'),
-    ...unusedIds,
+    ...optionalFkFields,
   }),
 ])
 
