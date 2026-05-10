@@ -1,10 +1,15 @@
 import { useMemo } from 'react'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
+import { Modal } from '@/components/ui/overlays/Modal'
+import { Button } from '@/components/ui/primitives/Button'
+import { ClientPickerField } from '@/components/shared/client/ClientPickerField'
+import { CreateAdvancePaymentModal } from '@/features/advancedPayments'
 import { ChargesCreateModal } from '@/features/charges'
 import { CreateClientModal, DeletedClientDialog, type ClientRecordResponse } from '@/features/clients'
 import { SignatureRequestsDashboardPanel } from '@/features/signatureRequests'
 import { VatWorkItemsCreateModal } from '@/features/vatReports'
+import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import {
   AttentionBoard,
   DashboardOnboardingEmptyState,
@@ -56,13 +61,17 @@ export const DashboardPage: React.FC = () => {
     closeCreateModal,
     chargeCreateMutation,
     vatCreateMutation,
+    advancePaymentCreateMutation,
     clientCreateMutation,
     restoreClientMutation,
     submitChargeCreate,
     submitVatCreate,
+    submitAdvancePaymentCreate,
     submitClientCreate,
     chargeCreateError,
     vatCreateError,
+    advancePaymentClientId,
+    advancePaymentClientPicker,
   } = useDashboardCreateModals()
 
   const attentionSections = useMemo<PanelSection[]>(() => {
@@ -107,15 +116,17 @@ export const DashboardPage: React.FC = () => {
                 onAction={handleQuickAction}
               />
             )}
-            <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,24rem)_minmax(0,1fr)]">
-              <QuickActionsPanel
-                actions={quickActions ?? []}
-                activeActionKey={activeQuickAction}
-                onAction={handleQuickAction}
-                onOpenModal={setActiveCreateModal}
-              />
+            <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,24rem)_minmax(0,1fr)]">
+              <div className="space-y-5">
+                <QuickActionsPanel
+                  actions={quickActions ?? []}
+                  activeActionKey={activeQuickAction}
+                  onAction={handleQuickAction}
+                  onOpenModal={setActiveCreateModal}
+                />
+                {vatStats && <TaxInsightsRow vatStats={vatStats} />}
+              </div>
               <SignatureRequestsDashboardPanel />
-              {vatStats && <TaxInsightsRow vatStats={vatStats} />}
             </div>
           </div>
         </div>
@@ -151,6 +162,35 @@ export const DashboardPage: React.FC = () => {
         onClose={closeCreateModal}
         onSubmit={submitVatCreate}
       />
+      <Modal
+        open={activeCreateModal === 'advancePayment' && advancePaymentClientId === null}
+        title="מקדמה חדשה — בחר לקוח"
+        className="min-h-[240px]"
+        onClose={closeCreateModal}
+        footer={
+          <Button variant="outline" onClick={closeCreateModal}>
+            ביטול
+          </Button>
+        }
+      >
+        <ClientPickerField
+          selectedClient={advancePaymentClientPicker.selectedClient}
+          clientQuery={advancePaymentClientPicker.clientQuery}
+          onQueryChange={advancePaymentClientPicker.handleClientQueryChange}
+          onSelect={advancePaymentClientPicker.handleSelectClient}
+          onClear={advancePaymentClientPicker.handleClearClient}
+        />
+      </Modal>
+      {activeCreateModal === 'advancePayment' && advancePaymentClientId !== null && (
+        <CreateAdvancePaymentModal
+          open={true}
+          clientId={advancePaymentClientId}
+          year={getOperationalTaxYear()}
+          isCreating={advancePaymentCreateMutation.isPending}
+          onClose={closeCreateModal}
+          onCreate={submitAdvancePaymentCreate}
+        />
+      )}
       <CreateClientModal
         open={activeCreateModal === 'client' && deletedClientInfo === null}
         onClose={closeCreateModal}

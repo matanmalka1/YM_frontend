@@ -1,14 +1,20 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
+import {
+  advancePaymentsApi,
+  advancedPaymentsQK,
+  type CreateAdvancePaymentPayload,
+} from '@/features/advancedPayments'
 import { chargesApi, chargesQK, type CreateChargePayload } from '@/features/charges'
 import { CLIENT_ROUTES, clientsApi, clientsQK, extractClientErrorCode } from '@/features/clients'
 import { vatReportsApi, vatReportsQK, type CreateVatWorkItemPayload } from '@/features/vatReports'
+import { useClientPickerState } from '@/components/shared/client/useClientPickerState'
 import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { dashboardQK } from '../api/queryKeys'
 
-export type DashboardCreateModal = 'charge' | 'client' | 'vat'
+export type DashboardCreateModal = 'charge' | 'client' | 'vat' | 'advancePayment'
 
 type DeletedClientInfo = {
   id: number
@@ -22,6 +28,11 @@ export const useDashboardCreateModals = () => {
   const queryClient = useQueryClient()
   const [activeCreateModal, setActiveCreateModal] = useState<DashboardCreateModal | null>(null)
   const [deletedClientInfo, setDeletedClientInfo] = useState<DeletedClientInfo | null>(null)
+  const [advancePaymentClientId, setAdvancePaymentClientId] = useState<number | null>(null)
+  const advancePaymentClientPicker = useClientPickerState({
+    onSelect: (client) => setAdvancePaymentClientId(client.id),
+    onClear: () => setAdvancePaymentClientId(null),
+  })
 
   const invalidateDashboardData = async () => {
     await queryClient.invalidateQueries({ queryKey: dashboardQK.all })
@@ -41,6 +52,21 @@ export const useDashboardCreateModals = () => {
       toast.success('תיק מע"מ נוצר בהצלחה')
       await Promise.all([queryClient.invalidateQueries({ queryKey: vatReportsQK.all }), invalidateDashboardData()])
     },
+  })
+
+  const advancePaymentCreateMutation = useMutation({
+    mutationFn: (payload: CreateAdvancePaymentPayload) => advancePaymentsApi.create(advancePaymentClientId!, payload),
+    onSuccess: async () => {
+      toast.success('מקדמה נוצרה בהצלחה')
+      setAdvancePaymentClientId(null)
+      setActiveCreateModal(null)
+      advancePaymentClientPicker.resetClientPicker()
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all }),
+        invalidateDashboardData(),
+      ])
+    },
+    onError: (err) => showErrorToast(err, 'שגיאה ביצירת מקדמה'),
   })
 
   const clientCreateMutation = useMutation({
@@ -77,7 +103,11 @@ export const useDashboardCreateModals = () => {
     onError: (err) => showErrorToast(err, 'שגיאה בשחזור לקוח'),
   })
 
-  const closeCreateModal = () => setActiveCreateModal(null)
+  const closeCreateModal = () => {
+    setActiveCreateModal(null)
+    setAdvancePaymentClientId(null)
+    advancePaymentClientPicker.resetClientPicker()
+  }
 
   const submitChargeCreate = async (payload: CreateChargePayload): Promise<boolean> => {
     try {
@@ -103,6 +133,10 @@ export const useDashboardCreateModals = () => {
     await clientCreateMutation.mutateAsync(payload)
   }
 
+  const submitAdvancePaymentCreate = async (payload: CreateAdvancePaymentPayload): Promise<void> => {
+    await advancePaymentCreateMutation.mutateAsync(payload)
+  }
+
   return {
     activeCreateModal,
     setActiveCreateModal,
@@ -111,11 +145,16 @@ export const useDashboardCreateModals = () => {
     closeCreateModal,
     chargeCreateMutation,
     vatCreateMutation,
+    advancePaymentCreateMutation,
     clientCreateMutation,
     restoreClientMutation,
     submitChargeCreate,
     submitVatCreate,
+    submitAdvancePaymentCreate,
     submitClientCreate,
+    advancePaymentClientId,
+    setAdvancePaymentClientId,
+    advancePaymentClientPicker,
     chargeCreateError: chargeCreateMutation.error
       ? getErrorMessage(chargeCreateMutation.error, 'שגיאה ביצירת חיוב')
       : null,

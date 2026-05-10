@@ -1,10 +1,11 @@
+import { ChevronLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from '@/utils/utils'
 import { mapActions } from '@/lib/actions/mapActions'
 import type { ActionCommand, BackendAction } from '@/lib/actions/types'
 import { DashboardPanel, DashboardSectionHeader } from './DashboardPrimitives'
 
-const MAX_VISIBLE_ACTIONS = 6
+const MAX_VISIBLE_ACTIONS = 4
 
 interface QuickActionView {
   id: string
@@ -12,7 +13,7 @@ interface QuickActionView {
   description: string
   command?: ActionCommand
   href?: string
-  modal?: 'charge' | 'client' | 'vat'
+  modal?: 'charge' | 'client' | 'vat' | 'advancePayment'
 }
 
 interface QuickActionsPanelProps {
@@ -53,27 +54,27 @@ const DEFAULT_ACTION_META = {
 const STATIC_ACTIONS: QuickActionView[] = [
   {
     id: 'create-vat',
-    label: 'פתח דוח מע״מ חדש',
+    label: 'צור דוח מע״מ חדש',
     description: 'יצירת דוח לתקופה חדשה',
     modal: 'vat',
   },
   {
     id: 'create-charge',
-    label: 'פתח חיוב חדש',
+    label: 'צור חיוב חדש',
     description: 'יצירת חיוב ללקוח',
     modal: 'charge',
   },
   {
     id: 'create-client',
-    label: 'פתח לקוח חדש',
+    label: 'צור לקוח חדש',
     description: 'יצירת כרטיס לקוח',
     modal: 'client',
   },
   {
-    id: 'charges',
-    label: 'חיובים פתוחים',
-    description: 'מעבר לרשימת חיובים לטיפול',
-    href: '/charges?status=issued',
+    id: 'advance-payments',
+    label: 'צור מקדמה חדשה',
+    description: 'פתיחת טופס מקדמה חדשה',
+    modal: 'advancePayment',
   },
 ]
 
@@ -123,10 +124,11 @@ const QuickActionItem = ({
       {isLoading && (
         <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
       )}
+      {!isLoading && <ChevronLeft className="h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />}
     </>
   )
   const className = cn(
-    'flex w-full items-center gap-3 border-b border-slate-100 px-5 py-4 text-right transition-colors last:border-b-0 hover:bg-slate-50',
+    'flex w-full items-center gap-3 border-b border-slate-100 px-5 py-3 text-right transition-colors last:border-b-0 hover:bg-slate-50',
     isDisabled && 'cursor-not-allowed opacity-50',
   )
 
@@ -168,7 +170,7 @@ export const QuickActionsPanel = ({
 
   return (
     <DashboardPanel className="w-full xl:max-w-sm xl:justify-self-start">
-      <div className="border-b border-slate-100 px-5 py-4">
+      <div className="border-b border-slate-100 px-5 py-3">
         <DashboardSectionHeader title="פעולות מהירות" count={quickActions.length} tone="neutral" />
       </div>
       <div>
