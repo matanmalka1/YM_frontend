@@ -5,6 +5,6 @@ export interface TaxSubmissionWidgetResponse {
   reports_in_progress: number
   reports_not_started: number
   submission_percentage: number
-  total_refund_due: number
-  total_tax_due: number
+  total_refund_due: string
+  total_tax_due: string
 }

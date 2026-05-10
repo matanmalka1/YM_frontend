@@ -13,7 +13,8 @@ export interface DocumentSearchResult {
   id: number
   client_record_id: number
   office_client_number?: number | null
-  business_id: number
+  business_id?: number | null
+  business_name?: string | null
   client_name: string
   document_type: string
   original_filename: string | null

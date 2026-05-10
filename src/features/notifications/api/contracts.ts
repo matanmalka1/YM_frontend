@@ -2,7 +2,8 @@ export type NotificationSeverity = 'info' | 'warning' | 'urgent' | 'critical'
 
 export interface NotificationItem {
   id: number
-  business_id: number
+  client_record_id: number
+  business_id: number | null
   business_name?: string | null
   binder_id?: number | null
   trigger: string
@@ -37,14 +38,14 @@ export interface MarkReadResponse {
 }
 
 export interface ListNotificationsParams {
+  client_record_id?: number
   business_id?: number
-  limit?: number
   page?: number
   page_size?: number
 }
 
 export interface SendNotificationPayload {
-  business_id?: number
+  business_id: number
   channel: 'whatsapp' | 'email'
   message: string
   severity?: string

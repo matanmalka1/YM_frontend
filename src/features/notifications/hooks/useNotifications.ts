@@ -7,8 +7,8 @@ export const useNotifications = (clientId?: number) => {
   const queryClient = useQueryClient()
 
   const { data: notifications = [], isLoading } = useQuery({
-    queryKey: notificationsQK.list(clientId != null ? { business_id: clientId } : {}),
-    queryFn: () => notificationsApi.list(clientId != null ? { business_id: clientId } : undefined),
+    queryKey: notificationsQK.list(clientId != null ? { client_record_id: clientId } : {}),
+    queryFn: () => notificationsApi.list(clientId != null ? { client_record_id: clientId } : undefined),
   })
 
   const { data: unreadData } = useQuery({

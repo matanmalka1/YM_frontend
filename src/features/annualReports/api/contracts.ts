@@ -99,7 +99,6 @@ export interface AnnualReportFull {
   has_capital_gains: boolean
   has_foreign_income: boolean
   has_depreciation: boolean
-  has_exempt_rental: boolean
   submission_method: string | null
   extension_reason: string | null
   notes: string | null
@@ -210,7 +209,6 @@ export interface CreateAnnualReportPayload {
   has_capital_gains?: boolean
   has_foreign_income?: boolean
   has_depreciation?: boolean
-  has_exempt_rental?: boolean
 }
 
 export interface StatusTransitionPayload {
@@ -240,7 +238,7 @@ export interface ExpenseLineResponse {
   amount: string
   recognition_rate: string
   recognized_amount: string
-  supporting_document_ref: string | null
+  external_document_reference: string | null
   supporting_document_id: number | null
   supporting_document_filename: string | null
   description: string | null
@@ -331,7 +329,7 @@ export interface ExpenseLinePayload {
   amount: string
   description?: string | null
   recognition_rate?: string | null
-  supporting_document_ref?: string | null
+  external_document_reference?: string | null
   supporting_document_id?: number | null
 }
 

@@ -12,7 +12,7 @@ export interface AddExpensePayload {
   amount: string
   description?: string
   recognition_rate?: string
-  supporting_document_ref?: string
+  external_document_reference?: string
 }
 
 export const toOptionalText = (value: string): string | undefined => value.trim() || undefined
@@ -67,7 +67,7 @@ export const buildExpensePayload = (
       amount: String(parsedAmount),
       description: toOptionalText(description),
       recognition_rate: String(rate),
-      supporting_document_ref: toOptionalText(documentReference),
+      external_document_reference: toOptionalText(documentReference),
     },
   }
 }

@@ -14,6 +14,8 @@ export interface TaxSubmissionStat {
 }
 
 export const buildTaxSubmissionStats = (data: TaxSubmissionWidgetResponse): TaxSubmissionStat[] => {
+  const totalRefundDue = Number(data.total_refund_due)
+  const totalTaxDue = Number(data.total_tax_due)
   const stats: TaxSubmissionStat[] = [
     {
       key: 'total',
@@ -55,21 +57,21 @@ export const buildTaxSubmissionStats = (data: TaxSubmissionWidgetResponse): TaxS
     },
   ]
 
-  if (data.total_refund_due > 0) {
+  if (totalRefundDue > 0) {
     stats.push({
       key: 'refund',
       title: TAX_SUBMISSION_STAT_TITLES.refund,
-      value: fmtCurrency(data.total_refund_due),
+      value: fmtCurrency(totalRefundDue),
       icon: Banknote,
       variant: 'green',
     })
   }
 
-  if (data.total_tax_due > 0) {
+  if (totalTaxDue > 0) {
     stats.push({
       key: 'tax_due',
       title: TAX_SUBMISSION_STAT_TITLES.taxDue,
-      value: fmtCurrency(data.total_tax_due),
+      value: fmtCurrency(totalTaxDue),
       icon: Banknote,
       variant: 'red',
     })

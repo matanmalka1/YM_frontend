@@ -16,7 +16,7 @@ interface EditExpenseLineFormProps {
     amount: string
     description?: string
     recognition_rate?: string
-    supporting_document_ref?: string
+    external_document_reference?: string
   }) => void
   onCancel: () => void
 }

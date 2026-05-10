@@ -1,6 +1,4 @@
 import type { BackendAction } from '@/lib/actions/types'
-import type { PaginatedResponse } from '@/types'
-
 export interface VatWorkItemResponse {
   id: number
   client_record_id: number
@@ -40,7 +38,10 @@ export interface VatWorkItemResponse {
   available_actions?: BackendAction[]
 }
 
-export type VatWorkItemListResponse = PaginatedResponse<VatWorkItemResponse>
+export interface VatWorkItemListResponse {
+  items: VatWorkItemResponse[]
+  total: number
+}
 
 export interface VatWorkItemsListParams {
   status?: string

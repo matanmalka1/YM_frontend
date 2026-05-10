@@ -43,7 +43,7 @@ export const useIncomeExpenseMutations = (reportId: number) => {
         amount: String(payload.amount),
         description: payload.description,
         recognition_rate: payload.recognition_rate != null ? String(payload.recognition_rate) : undefined,
-        supporting_document_ref: payload.supporting_document_ref,
+        external_document_reference: payload.external_document_reference,
       }),
     onSuccess: () => {
       toast.success('הוצאה נוספה')

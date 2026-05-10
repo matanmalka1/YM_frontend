@@ -143,7 +143,7 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
                 amount={l.amount}
                 description={l.description}
                 recognitionRate={l.recognition_rate}
-                supportingDocumentRef={l.supporting_document_ref}
+                supportingDocumentRef={l.external_document_reference}
                 supportingDocumentId={l.supporting_document_id}
                 supportingDocumentFilename={l.supporting_document_filename}
                 onEdit={() => toggleEdit('expense', l.id)}

@@ -11,6 +11,7 @@ export interface CorrespondenceEntry {
   notes: string | null
   occurred_at: string
   created_by: number
+  created_at: string
 }
 
 export interface CreateCorrespondencePayload {

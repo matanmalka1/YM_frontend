@@ -234,7 +234,6 @@ export interface DocumentsCard {
 
 export interface BusinessStatusCardResponse {
   client_id: number
-  business_id: number
   year: number
   client_vat: VatSummaryCard // shared across all businesses of this client
   annual_report: AnnualReportCard

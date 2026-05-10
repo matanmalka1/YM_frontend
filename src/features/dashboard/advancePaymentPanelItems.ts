@@ -55,7 +55,7 @@ export const mapAdvancePaymentToPanelItem = (item: WorkQueueItem): PanelItem => 
     sublabel: getItemSubtitle(item),
     href: ADVANCE_PAYMENTS_HREF,
     meta: {
-      description: [urgencyLabel, formatDate(item.due_date)].filter(Boolean).join(' · '),
+      description: [urgencyLabel, formatDate(item.due_date ?? null)].filter(Boolean).join(' · '),
     },
   }
 }

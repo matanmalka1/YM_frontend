@@ -47,7 +47,7 @@ export const useExpenseLineForm = (initial?: ExpenseLineResponse, onSubmit?: (pa
   const [amount, setAmount] = useState(initial ? String(initial.amount) : '')
   const [description, setDescription] = useState(initial?.description ?? '')
   const [recognitionRate, setRecognitionRate] = useState(String(initial?.recognition_rate ?? DEFAULT_RECOGNITION_RATE))
-  const [documentReference, setDocumentReference] = useState(initial?.supporting_document_ref ?? '')
+  const [documentReference, setDocumentReference] = useState(initial?.external_document_reference ?? '')
   const [error, setError] = useState<string | null>(null)
 
   const reset = () => {
