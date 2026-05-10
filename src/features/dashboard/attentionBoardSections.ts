@@ -2,7 +2,7 @@ import { Bell, DollarSign, Zap } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { mapActions } from '@/lib/actions/mapActions'
 import { formatDate } from '@/utils/utils'
-import type { AttentionItem, AttentionItemType } from './api'
+import type { AttentionItem } from './api'
 import type { BackendAction, ActionCommand } from '@/lib/actions/types'
 
 export type AttentionTone = 'amber' | 'green' | 'red' | 'blue'
@@ -39,23 +39,17 @@ export interface PanelSection {
 }
 
 const OPEN_CHARGES_HREF = '/charges?status=issued'
-const OPEN_CHARGE_TYPES: readonly AttentionItemType[] = ['unpaid_charge', 'unpaid_charges']
 
 const getChargeAttentionHref = (item: AttentionItem): string => {
-  if (item.item_type === 'unpaid_charge') return `/charges?charge_id=${item.charge_id}`
-  if (item.client_id && item.business_id) return `/clients/${item.client_id}/businesses/${item.business_id}`
-  if (item.client_id) return `/clients/${item.client_id}`
-  return OPEN_CHARGES_HREF
+  return item.charge_id ? `/charges?charge_id=${item.charge_id}` : OPEN_CHARGES_HREF
 }
 
 const getChargeItemDescription = (item: AttentionItem): string | undefined => {
-  if (item.item_type !== 'unpaid_charge') return undefined
   const parts = [item.charge_subject, item.charge_date ? `תאריך חיוב ${formatDate(item.charge_date)}` : null]
   return parts.filter(Boolean).join(' · ') || undefined
 }
 
 const getChargeAmount = (item: AttentionItem): string | undefined => {
-  if (item.item_type !== 'unpaid_charge') return undefined
   return item.charge_amount ?? undefined
 }
 
@@ -64,19 +58,16 @@ export const buildOpenChargeSection = (items: AttentionItem[]): PanelSection => 
   title: 'חשבוניות פתוחות',
   icon: DollarSign,
   tone: 'amber',
-  items: items
-    .filter((item) => OPEN_CHARGE_TYPES.includes(item.item_type))
-    .map((item) => ({
-      id: `${item.item_type}-${item.binder_id ?? item.business_id ?? item.client_id}`,
-      label: item.client_name ?? '',
-      sublabel: item.description,
-      href: getChargeAttentionHref(item),
-      meta: {
-        tag: item.item_type === 'unpaid_charges' ? 'מרובות' : undefined,
-        description: getChargeItemDescription(item),
-        amount: getChargeAmount(item),
-      },
-    })),
+  items: items.map((item) => ({
+    id: `${item.item_type}-${item.charge_id}`,
+    label: item.client_name ?? '',
+    sublabel: item.description,
+    href: getChargeAttentionHref(item),
+    meta: {
+      description: getChargeItemDescription(item),
+      amount: getChargeAmount(item),
+    },
+  })),
 })
 
 const QA_CATEGORY_LABELS: Record<string, string> = {

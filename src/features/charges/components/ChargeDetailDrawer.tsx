@@ -100,9 +100,13 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
         cancelLabel="ביטול"
         isLoading={isDeleting}
         onConfirm={async () => {
-          await deleteCharge()
-          setIsConfirmingDelete(false)
-          onClose()
+          try {
+            await deleteCharge()
+            setIsConfirmingDelete(false)
+            onClose()
+          } catch {
+            setIsConfirmingDelete(false)
+          }
         }}
         onCancel={() => setIsConfirmingDelete(false)}
       />

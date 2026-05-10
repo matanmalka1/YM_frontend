@@ -1,9 +1,7 @@
 import type { BackendAction } from '@/lib/actions/types'
 
-export type AttentionItemType = 'unpaid_charge' | 'unpaid_charges'
-
 interface BaseAttentionItem {
-  item_type: AttentionItemType
+  item_type: 'unpaid_charge'
   binder_id: number | null
   client_id: number | null
   business_id: number | null
@@ -22,11 +20,7 @@ export interface UnpaidChargeAttentionItem extends BaseAttentionItem {
   charge_period: string | null
 }
 
-export interface UnpaidChargesAttentionItem extends BaseAttentionItem {
-  item_type: 'unpaid_charges'
-}
-
-export type AttentionItem = UnpaidChargeAttentionItem | UnpaidChargesAttentionItem
+export type AttentionItem = UnpaidChargeAttentionItem
 
 export interface AttentionResponse {
   items: AttentionItem[]

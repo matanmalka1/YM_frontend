@@ -3,7 +3,6 @@ export { dashboardQK } from './queryKeys'
 export type {
   DashboardOverviewResponse,
   AttentionItem,
-  AttentionItemType,
   AttentionResponse,
   AttentionEmptyCheck,
   VatDashboardStats,
