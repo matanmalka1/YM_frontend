@@ -22,35 +22,35 @@ const TABLE_HEADERS = [
   {
     label: 'שם לקוח',
     className:
-      'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-right align-middle w-[22%]',
+      'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-right align-middle w-48',
   },
   {
     label: 'תקופת מקדמה',
-    className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-right align-middle w-36',
-  },
-  {
-    label: 'תאריך יעד',
     className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-right align-middle w-28',
   },
   {
+    label: 'תאריך יעד',
+    className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-right align-middle w-24',
+  },
+  {
     label: 'מחזור מדווח',
-    className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-left align-middle w-[10%]',
+    className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-center align-middle w-24',
   },
   {
     label: 'צפוי',
-    className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-left align-middle w-[10%]',
+    className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-center align-middle w-20',
   },
   {
     label: 'שולם',
-    className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-left align-middle w-[10%]',
+    className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-center align-middle w-20',
   },
   {
     label: 'יתרה',
-    className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-left align-middle w-[10%]',
+    className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-center align-middle w-20',
   },
   {
     label: 'אחוז מקדמה',
-    className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-left align-middle w-24',
+    className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-center align-middle w-20',
   },
   {
     label: 'סטטוס',
@@ -206,7 +206,7 @@ const BatchContent = ({
                   <td className="px-3 py-1.5 text-sm text-gray-400 tabular-nums align-middle">
                     {formatClientOfficeId(row.office_client_number)}
                   </td>
-                  <td className="px-3 py-1.5 align-middle">
+                  <td className="px-3 py-1.5 align-middle w-48">
                     <Link
                       to={`/clients/${row.client_record_id}/advance-payments`}
                       className="text-sm font-medium text-gray-900 hover:text-blue-600 hover:underline leading-snug block"
@@ -229,35 +229,35 @@ const BatchContent = ({
                   >
                     {formatDate(row.due_date)}
                   </td>
-                  <td className="px-3 py-1.5 text-sm tabular-nums text-left align-middle">
+                  <td className="px-3 py-1.5 text-sm tabular-nums text-center align-middle">
                     {row.reported_turnover ? (
                       <span className="text-gray-700">{fmtCurrency(row.reported_turnover)}</span>
                     ) : row.live_turnover ? (
                       <span className="text-gray-400 italic">{fmtCurrency(row.live_turnover)}</span>
                     ) : (
-                      <span className="text-gray-300">—</span>
+                      <span className="text-gray-500">—</span>
                     )}
                   </td>
-                  <td className="px-3 py-1.5 text-sm font-semibold tabular-nums text-gray-800 text-left align-middle">
+                  <td className="px-3 py-1.5 text-sm font-semibold tabular-nums text-gray-800 text-center align-middle">
                     {fmtCurrency(row.expected_amount)}
                   </td>
-                  <td className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-left align-middle">
+                  <td className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-center align-middle">
                     {fmtCurrency(row.paid_amount)}
                   </td>
-                  <td className="px-3 py-1.5 text-sm tabular-nums text-left align-middle">
+                  <td className="px-3 py-1.5 text-sm tabular-nums text-center align-middle">
                     {row.delta == null ? (
-                      <span className="text-gray-300">—</span>
+                      <span className="text-gray-500">—</span>
                     ) : Number(row.delta) > 0 ? (
                       <span className="font-semibold text-red-500">{fmtCurrency(row.delta)}</span>
                     ) : (
                       <span className="text-gray-500">{fmtCurrency(row.delta)}</span>
                     )}
                   </td>
-                  <td className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-left align-middle">
+                  <td className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-center align-middle">
                     {row.advance_rate != null ? (
                       `${Number(row.advance_rate).toFixed(2)}%`
                     ) : (
-                      <span className="text-gray-300">—</span>
+                      <span className="text-gray-500">—</span>
                     )}
                   </td>
                   <td className="px-3 py-1.5 text-center align-middle">

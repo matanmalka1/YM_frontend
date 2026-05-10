@@ -23,13 +23,13 @@ interface StatusRendererProps<TStatus extends string> {
 export const renderEmptyFallback = (emptyValue: ReactNode = EMPTY_VALUE): ReactNode => emptyValue
 
 export const renderMutedText = ({ value, className, emptyValue }: TextRendererProps): ReactNode => (
-  <span className={cn('text-sm text-gray-500', className)}>
+  <span className={cn('text-sm text-gray-700', className)}>
     {isEmptyValue(value) ? renderEmptyFallback(emptyValue) : value}
   </span>
 )
 
 export const renderMonoText = ({ value, className, emptyValue }: TextRendererProps): ReactNode => (
-  <span className={cn('font-mono text-sm text-gray-500 tabular-nums', className)}>
+  <span className={cn('font-mono text-sm text-gray-700 tabular-nums', className)}>
     {isEmptyValue(value) ? renderEmptyFallback(emptyValue) : value}
   </span>
 )
@@ -43,7 +43,7 @@ export const renderDateText = ({
   className?: string
   emptyValue?: ReactNode
 }): ReactNode => (
-  <span className={cn('text-sm text-gray-500 tabular-nums', className)}>
+  <span className={cn('text-sm text-gray-600 tabular-nums', className)}>
     {value ? formatDate(value) : renderEmptyFallback(emptyValue)}
   </span>
 )

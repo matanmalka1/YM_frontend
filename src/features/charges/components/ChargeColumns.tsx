@@ -41,17 +41,9 @@ export const buildChargeColumns = ({
     monoColumn({
       key: 'office_client_number',
       header: "מס' לקוח",
-      headerClassName: 'w-28',
-      className: 'w-28',
+      headerClassName: 'w-20',
+      className: 'w-20',
       getValue: (charge) => formatClientOfficeId(charge.office_client_number),
-    }),
-    monoColumn({
-      key: 'id',
-      header: '#',
-      headerClassName: 'w-10 text-center',
-      className: 'w-10 text-center',
-      valueClassName: 'text-xs text-gray-400',
-      getValue: (charge) => charge.id,
     }),
     {
       key: 'client_record_id',
@@ -70,8 +62,8 @@ export const buildChargeColumns = ({
     textColumn({
       key: 'period',
       header: 'תקופה',
-      headerClassName: 'w-40',
-      className: 'w-40',
+      headerClassName: 'w-28',
+      className: 'w-28',
       getValue: (charge) => getChargePeriodLabel(charge.period, charge.months_covered),
     }),
     statusColumn({
@@ -88,7 +80,6 @@ export const buildChargeColumns = ({
       header: 'הונפק',
       headerClassName: 'w-24',
       className: 'w-24',
-      valueClassName: 'text-gray-500',
       getValue: (charge) => charge.issued_at,
     }),
     dateColumn({
@@ -96,7 +87,6 @@ export const buildChargeColumns = ({
       header: 'שולם',
       headerClassName: 'w-24',
       className: 'w-24',
-      valueClassName: 'text-gray-500',
       getValue: (charge) => charge.paid_at,
     }),
     monoColumn({
@@ -112,7 +102,7 @@ export const buildChargeColumns = ({
       header: 'נוצר',
       headerClassName: 'w-24',
       className: 'w-24',
-      valueClassName: 'text-gray-400',
+      valueClassName: 'text-gray-500',
       getValue: (charge) => charge.created_at,
     }),
     actionsColumn({
@@ -132,6 +122,14 @@ export const buildChargeColumns = ({
     }),
   ]
 
+  const idColumn: Column<ChargeResponse> = monoColumn({
+    key: 'id',
+    header: "מס' חיוב",
+    headerClassName: 'w-20',
+    className: 'w-20',
+    getValue: (charge) => `#${charge.id}`,
+  })
+
   if (isAdvisor && onToggleSelect) {
     return [
       buildSelectionColumn<ChargeResponse>({
@@ -142,9 +140,10 @@ export const buildChargeColumns = ({
         getId: (charge) => charge.id,
         getItemAriaLabel: (charge) => `בחר חיוב ${charge.id}`,
       }),
+      idColumn,
       ...dataColumns,
     ]
   }
 
-  return dataColumns
+  return [idColumn, ...dataColumns]
 }

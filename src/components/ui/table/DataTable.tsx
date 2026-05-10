@@ -90,7 +90,7 @@ export const DataTable = <T,>({
                 <th
                   key={column.key}
                   className={cn(
-                    'px-3 py-2 text-xs font-semibold uppercase tracking-wide text-gray-500',
+                    'px-3 py-2 text-center text-xs font-semibold uppercase tracking-wide text-gray-500',
                     column.headerClassName,
                   )}
                 >
@@ -99,15 +99,15 @@ export const DataTable = <T,>({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100 bg-white">
+          <tbody className="divide-y divide-gray-200 bg-white">
             {data.map((item, index) => (
               <tr
                 key={getRowKey(item)}
                 className={cn(
                   'transition-colors duration-100',
                   onRowClick &&
-                    'cursor-pointer hover:bg-primary-50/40 active:bg-primary-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset',
-                  !onRowClick && 'hover:bg-gray-50/60',
+                    'cursor-pointer hover:bg-primary-50/60 active:bg-primary-50/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset',
+                  !onRowClick && 'hover:bg-gray-50/80',
                   rowClassName?.(item, index),
                 )}
                 onClick={() => onRowClick?.(item)}
@@ -115,7 +115,7 @@ export const DataTable = <T,>({
                 tabIndex={onRowClick ? 0 : undefined}
               >
                 {columns.map((column) => (
-                  <td key={column.key} className={cn('px-3 py-2.5 align-middle', column.className)}>
+                  <td key={column.key} className={cn('px-3 py-3 align-middle text-center', column.className)}>
                     {column.render(item, index)}
                   </td>
                 ))}
