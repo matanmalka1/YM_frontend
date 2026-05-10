@@ -9,7 +9,7 @@ export const workQueueItemSchema = z.object({
   source_type: z.enum(workQueueSourceTypeValues),
   source_id: z.number().int(),
   label: z.string(),
-  due_date: z.string(),
+  due_date: z.string().nullable().optional(),
   urgency: z.enum(workQueueUrgencyValues),
   client_record_id: z.number().int().optional().nullable(),
   client_name: z.string().optional().nullable(),

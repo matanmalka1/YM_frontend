@@ -18,7 +18,8 @@ interface WorkQueueTableProps {
 const typeLabel = (sourceType: string): string =>
   workQueueSourceTypeLabels[sourceType as keyof typeof workQueueSourceTypeLabels] ?? sourceType
 
-const formatDueDate = (dateStr: string): string => {
+const formatDueDate = (dateStr?: string | null): string => {
+  if (!dateStr) return '—'
   try {
     return format(parseISO(dateStr), 'dd/MM/yyyy', { locale: he })
   } catch {
