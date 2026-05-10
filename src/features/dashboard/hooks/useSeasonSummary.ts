@@ -31,12 +31,31 @@ const buildStats = (data: SeasonSummaryData) => {
 }
 
 export const useSeasonSummary = () => {
-  const { data, isPending } = useQuery({
+  const activeSummaryQuery = useQuery({
     queryKey: annualReportsQK.activeSeasonSummary,
     queryFn: annualReportSeasonApi.getActiveSeasonSummary,
   })
 
-  const stats = useMemo(() => (data ? buildStats(data) : null), [data])
+  const activeStats = useMemo(
+    () => (activeSummaryQuery.data ? buildStats(activeSummaryQuery.data) : null),
+    [activeSummaryQuery.data],
+  )
+  const shouldCheckNextTaxYear = activeStats !== null && activeStats.total === 0
+  const nextTaxYear = activeStats ? activeStats.taxYear + 1 : null
+
+  const nextSummaryQuery = useQuery({
+    enabled: shouldCheckNextTaxYear && nextTaxYear !== null,
+    queryKey: nextTaxYear ? annualReportsQK.seasonSummary(nextTaxYear) : annualReportsQK.activeSeasonSummary,
+    queryFn: () => annualReportSeasonApi.getSeasonSummary(nextTaxYear!),
+  })
+
+  const nextStats = useMemo(
+    () => (nextSummaryQuery.data ? buildStats(nextSummaryQuery.data) : null),
+    [nextSummaryQuery.data],
+  )
+
+  const stats = nextStats && nextStats.total > 0 ? nextStats : activeStats
+  const isPending = activeSummaryQuery.isPending || (shouldCheckNextTaxYear && nextSummaryQuery.isPending)
 
   return { stats, isPending }
 }

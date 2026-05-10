@@ -59,6 +59,12 @@ const STATIC_ACTIONS: QuickActionView[] = [
     modal: 'vat',
   },
   {
+    id: 'advance-payments',
+    label: 'צור מקדמה חדשה',
+    description: 'פתיחת טופס מקדמה חדשה',
+    modal: 'advancePayment',
+  },
+  {
     id: 'create-charge',
     label: 'צור חיוב חדש',
     description: 'יצירת חיוב ללקוח',
@@ -69,12 +75,6 @@ const STATIC_ACTIONS: QuickActionView[] = [
     label: 'צור לקוח חדש',
     description: 'יצירת כרטיס לקוח',
     modal: 'client',
-  },
-  {
-    id: 'advance-payments',
-    label: 'צור מקדמה חדשה',
-    description: 'פתיחת טופס מקדמה חדשה',
-    modal: 'advancePayment',
   },
 ]
 

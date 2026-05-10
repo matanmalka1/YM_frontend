@@ -97,14 +97,16 @@ export const DashboardPage: React.FC = () => {
         <DashboardStatsGrid stats={stats} />
       ) : null}
 
-      {isAdvisorView && !emptyState?.is_empty && <SeasonSummaryWidget />}
+      {isAdvisorView && !emptyState?.is_empty && (
+        <SeasonSummaryWidget sideContent={vatStats ? <TaxInsightsRow vatStats={vatStats} embedded /> : undefined} />
+      )}
 
       {isAdvisorView && !emptyState?.is_empty ? (
-        <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
-          <div className="grid gap-5 md:grid-cols-2 lg:col-start-2 lg:row-start-1 lg:grid-cols-1">
+        <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+          <aside className="grid gap-5 md:grid-cols-2 lg:col-start-2 lg:row-start-1 lg:grid-cols-1">
             <UpcomingDeadlinesPanel />
             <RecentActivityPanel items={recentActivity} />
-          </div>
+          </aside>
           <div className="space-y-5 lg:col-start-1 lg:row-start-1">
             {dashboard.status === 'loading' ? (
               <div className="h-80 animate-pulse rounded-2xl bg-gray-100" />
@@ -116,17 +118,14 @@ export const DashboardPage: React.FC = () => {
                 onAction={handleQuickAction}
               />
             )}
-            <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,24rem)_minmax(0,1fr)]">
-              <div className="space-y-5">
-                <QuickActionsPanel
-                  actions={quickActions ?? []}
-                  activeActionKey={activeQuickAction}
-                  onAction={handleQuickAction}
-                  onOpenModal={setActiveCreateModal}
-                />
-                {vatStats && <TaxInsightsRow vatStats={vatStats} />}
-              </div>
+            <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_24rem]">
               <SignatureRequestsDashboardPanel />
+              <QuickActionsPanel
+                actions={quickActions ?? []}
+                activeActionKey={activeQuickAction}
+                onAction={handleQuickAction}
+                onOpenModal={setActiveCreateModal}
+              />
             </div>
           </div>
         </div>
