@@ -47,14 +47,10 @@ export const SeasonSummaryWidget: React.FC<SeasonSummaryWidgetProps> = ({ sideCo
               <div className="h-2 w-0 rounded-full bg-blue-500" />
             </div>
 
-            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400">
-              <span>
-                <span className="font-semibold text-gray-500">0</span> דוחות
-              </span>
-              <span>
-                <span className="font-semibold text-gray-500">0%</span> התקדמות
-              </span>
-            </div>
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            <SeasonStatusTile label="דוחות" value={0} />
+            <SeasonStatusTile label="התקדמות" value="0%" />
+          </div>
           </Link>
           {sideContent && (
             <div className="border-t border-slate-100 pt-5 xl:border-r xl:border-t-0 xl:pr-5 xl:pt-0">
@@ -113,11 +109,11 @@ export const SeasonSummaryWidget: React.FC<SeasonSummaryWidgetProps> = ({ sideCo
             />
           </div>
 
-          <div className="mt-4 grid grid-cols-2 gap-x-5 gap-y-2 text-xs text-gray-500 sm:grid-cols-4">
-            <StatLabel count={stats.notStarted} label="לא התחילו" />
-            <StatLabel count={stats.inProgress} label="בעבודה" className={semanticMonoToneClasses.info} />
-            <StatLabel count={stats.submitted} label="הוגשו" className={semanticMonoToneClasses.positive} />
-            <StatLabel count={stats.closed} label="סגורים" />
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <SeasonStatusTile label="לא התחילו" value={stats.notStarted} />
+            <SeasonStatusTile label="בעבודה" value={stats.inProgress} valueClassName={semanticMonoToneClasses.info} />
+            <SeasonStatusTile label="הוגשו" value={stats.submitted} valueClassName={semanticMonoToneClasses.positive} />
+            <SeasonStatusTile label="סגורים" value={stats.closed} />
           </div>
         </Link>
         {sideContent && (
@@ -130,12 +126,19 @@ export const SeasonSummaryWidget: React.FC<SeasonSummaryWidgetProps> = ({ sideCo
   )
 }
 
-const StatLabel = ({ count, label, className }: { count: number; label: string; className?: string }) => {
-  return (
-    <span className="min-w-0">
-      <span className={cn('font-semibold text-gray-700', count > 0 && className)}>{count}</span> {label}
-    </span>
-  )
-}
+const SeasonStatusTile = ({
+  label,
+  value,
+  valueClassName,
+}: {
+  label: string
+  value: number | string
+  valueClassName?: string
+}) => (
+  <div className="min-w-0 rounded-xl bg-slate-50 px-3 py-2">
+    <p className={cn('truncate text-base font-bold text-slate-800', value !== 0 && valueClassName)}>{value}</p>
+    <p className="mt-0.5 truncate text-xs font-semibold text-slate-400">{label}</p>
+  </div>
+)
 
 SeasonSummaryWidget.displayName = 'SeasonSummaryWidget'
