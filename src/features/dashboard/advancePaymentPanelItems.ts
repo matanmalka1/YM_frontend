@@ -1,33 +1,12 @@
-import { formatDate, getReportingPeriodMonthLabel } from '@/utils/utils'
+import { formatDate } from '@/utils/utils'
 import { workQueueSourceTypeLabels, workQueueUrgencyLabels } from '@/features/workQueue'
-import type { WorkQueueItem, WorkQueueSourceType, WorkQueueUrgency } from '@/features/workQueue'
+import type { AdvancePaymentWorkQueueItem, WorkQueueItem, WorkQueueUrgency } from '@/features/workQueue'
 import type { PanelItem } from './attentionBoardSections'
 
 const ADVANCE_PAYMENTS_HREF = '/tax/advance-payments'
 
-const formatPeriod = (value: string): string => {
-  return /^\d{4}-\d{2}$/.test(value) ? getReportingPeriodMonthLabel(value) : value
-}
-
-const getPayloadString = (item: WorkQueueItem, key: string): string | null => {
-  const value = item.payload?.[key]
-  if (typeof value === 'string') return value
-  if (typeof value === 'number') return String(value)
-  return null
-}
-
-const getLabelDetail = (label: string): string | null => {
-  const detail = label.split(':').slice(1).join(':').trim()
-  if (!detail) return null
-  return formatPeriod(detail)
-}
-
-const getItemTitle = (item: WorkQueueItem): string => {
-  return item.client_name || item.label || 'לקוח ללא שם'
-}
-
-const getSourceLabel = (item: WorkQueueItem): string => {
-  return workQueueSourceTypeLabels[item.source_type as WorkQueueSourceType] ?? item.source_type
+const getItemTitle = (item: AdvancePaymentWorkQueueItem): string => {
+  return item.client_name || 'לקוח לא ידוע'
 }
 
 const getUrgencyLabel = (urgency?: string | null): string | undefined => {
@@ -35,19 +14,14 @@ const getUrgencyLabel = (urgency?: string | null): string | undefined => {
   return workQueueUrgencyLabels[urgency as WorkQueueUrgency] ?? urgency
 }
 
-const getItemSubtitle = (item: WorkQueueItem): string => {
-  const sourceLabel = getSourceLabel(item)
-  const period = getPayloadString(item, 'period')
-  if (period) return `${sourceLabel} · ${formatPeriod(period)}`
-
-  const detail = getLabelDetail(item.label)
-  if (detail) return `${sourceLabel} · ${detail}`
-
-  if (item.label.startsWith(sourceLabel)) return item.label
-  return `${sourceLabel} · ${item.label}`
+const getItemSubtitle = (item: AdvancePaymentWorkQueueItem): string => {
+  const officeNumber = item.client_office_number == null ? null : `#${item.client_office_number}`
+  const sourceLabel = workQueueSourceTypeLabels.advance_payment
+  const periodLabel = item.payload.period_label || item.payload.period
+  return [officeNumber, sourceLabel, periodLabel].filter(Boolean).join(' · ')
 }
 
-export const mapAdvancePaymentToPanelItem = (item: WorkQueueItem): PanelItem => {
+export const mapAdvancePaymentToPanelItem = (item: AdvancePaymentWorkQueueItem): PanelItem => {
   const urgencyLabel = getUrgencyLabel(item.urgency)
   return {
     id: `work-queue-${item.source_type}-${item.source_id}`,
@@ -60,5 +34,5 @@ export const mapAdvancePaymentToPanelItem = (item: WorkQueueItem): PanelItem => 
   }
 }
 
-export const isAdvancePaymentWorkQueueItem = (item: WorkQueueItem): boolean =>
+export const isAdvancePaymentWorkQueueItem = (item: WorkQueueItem): item is AdvancePaymentWorkQueueItem =>
   item.source_type === 'advance_payment'
