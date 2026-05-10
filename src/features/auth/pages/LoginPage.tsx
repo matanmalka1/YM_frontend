@@ -67,7 +67,8 @@ export const Login: React.FC = () => {
           {/* Form */}
           <form onSubmit={onSubmit} noValidate className="space-y-5">
             <Input
-              type="email"
+              type="text"
+              inputMode="email"
               label="כתובת דוא״ל"
               placeholder="name@company.co.il"
               disabled={isLoading}

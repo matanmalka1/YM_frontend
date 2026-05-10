@@ -81,20 +81,22 @@ export const buildDashboardStats = (data: DashboardStatsData, isAdvisor: boolean
       actionLabel: data.open_charges_count > 0 ? 'פתח חיובים' : 'כל החיובים שולמו',
     })
 
-    stats.push({
-      key: 'binders_pickup',
-      title: 'קלסרים לאיסוף',
-      value: `${data.binders_ready_for_pickup.toLocaleString('he-IL')} ממתינים לאיסוף`,
-      description:
-        data.binders_in_office > 0
-          ? `${data.binders_in_office.toLocaleString('he-IL')} קלסרים במשרד`
-          : 'אין קלסרים במשרד',
-      icon: Archive,
-      variant: data.binders_ready_for_pickup > 0 ? 'amber' : 'blue',
-      urgent: data.binders_ready_for_pickup > 0,
-      href: HREFS.bindersReadyForPickup,
-      actionLabel: 'פתח קלסרים',
-    })
+    if (data.binders_ready_for_pickup > 0) {
+      stats.push({
+        key: 'binders_pickup',
+        title: 'קלסרים לאיסוף',
+        value: `${data.binders_ready_for_pickup.toLocaleString('he-IL')} ממתינים לאיסוף`,
+        description:
+          data.binders_in_office > 0
+            ? `${data.binders_in_office.toLocaleString('he-IL')} קלסרים במשרד`
+            : 'אין קלסרים במשרד',
+        icon: Archive,
+        variant: 'amber',
+        urgent: true,
+        href: HREFS.bindersReadyForPickup,
+        actionLabel: 'פתח קלסרים',
+      })
+    }
   }
 
   return stats
