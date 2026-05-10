@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { AlertTriangle, ChevronDown, ChevronUp } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
 import type { AnnualReportFull } from '../../api'
-import { formatDate, cn } from '../../../../utils/utils'
+import { cn } from '../../../../utils/utils'
 import { getClientReportName, getDaysOverdue } from './annualReports.helpers'
-import { OVERDUE_PREVIEW_LIMIT } from './annualReports.constants'
+import { formatAnnualReportDate, OVERDUE_PREVIEW_LIMIT } from './annualReports.constants'
 
 interface OverdueBannerProps {
   overdue: AnnualReportFull[]
@@ -69,7 +69,7 @@ export const OverdueBanner: React.FC<OverdueBannerProps> = ({ overdue, onSelect 
             >
               <span className="text-sm font-medium text-gray-900 truncate">{getClientReportName(report)}</span>
               <div className="flex items-center gap-3 shrink-0 text-xs text-gray-500">
-                <span className="tabular-nums">{formatDate(report.filing_deadline)}</span>
+                <span className="tabular-nums">{formatAnnualReportDate(report.filing_deadline)}</span>
                 {days !== null && <span className="font-semibold text-negative-600 tabular-nums">{days} ימים</span>}
               </div>
             </div>

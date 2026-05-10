@@ -1,7 +1,12 @@
 import type { AnnualReportFull } from '../../api'
 import { STATUS_LABELS } from '../../api'
 import type { TimelineEventStatus } from '../statusTransition/TimelineEvent'
-import { formatAnnualReportDate, REQUIRED_DOCUMENT_TYPES, WARNING_DEADLINE_DAYS } from './annualReports.constants'
+import {
+  formatAnnualReportDate,
+  parseAnnualReportCalendarDate,
+  REQUIRED_DOCUMENT_TYPES,
+  WARNING_DEADLINE_DAYS,
+} from './annualReports.constants'
 
 export interface AnnualReportTimelineEvent {
   title: string
@@ -17,15 +22,17 @@ export const getClientReportName = (report: AnnualReportFull): string =>
   report.client_name ?? `לקוח #${report.client_record_id}`
 
 export const getDaysOverdue = (deadline: string | null): number | null => {
-  if (!deadline) return null
-  const diff = Math.floor((Date.now() - new Date(deadline).getTime()) / 86_400_000)
+  const deadlineDate = parseAnnualReportCalendarDate(deadline)
+  if (!deadlineDate) return null
+  const diff = Math.floor((Date.now() - deadlineDate.getTime()) / 86_400_000)
   return diff > 0 ? diff : null
 }
 
 export const getDeadlineStatus = (report: AnnualReportFull): TimelineEventStatus => {
-  if (!report.filing_deadline) return 'pending'
+  const deadline = parseAnnualReportCalendarDate(report.filing_deadline)
+  if (!deadline) return 'pending'
   if (report.submitted_at) return 'done'
-  const daysUntilDeadline = (new Date(report.filing_deadline).getTime() - Date.now()) / 86_400_000
+  const daysUntilDeadline = (deadline.getTime() - Date.now()) / 86_400_000
   if (daysUntilDeadline < 0) return 'overdue'
   return daysUntilDeadline < WARNING_DEADLINE_DAYS ? 'warning' : 'pending'
 }
@@ -43,7 +50,8 @@ export const buildTimelineEvents = (reports: AnnualReportFull[]): AnnualReportTi
 
       if (report.submitted_at) {
         const submittedTime = new Date(report.submitted_at).getTime()
-        const onTime = report.filing_deadline && submittedTime <= new Date(report.filing_deadline).getTime()
+        const deadlineTime = parseAnnualReportCalendarDate(report.filing_deadline)?.getTime()
+        const onTime = deadlineTime != null && submittedTime < deadlineTime + 86_400_000
         events.push({
           title: `הוגש — ${name} (${report.tax_year})`,
           description: getReportStatusDescription(report),
@@ -54,7 +62,7 @@ export const buildTimelineEvents = (reports: AnnualReportFull[]): AnnualReportTi
       }
 
       if (report.filing_deadline && !report.submitted_at) {
-        const deadlineTime = new Date(report.filing_deadline).getTime()
+        const deadlineTime = parseAnnualReportCalendarDate(report.filing_deadline)?.getTime() ?? 0
         events.push({
           title: `מועד הגשה — ${name} (${report.tax_year})`,
           description: getReportStatusDescription(report),
@@ -72,10 +80,14 @@ export const getFilingStats = (reports: AnnualReportFull[]) => {
   const total = reports.length
   const pct = (n: number) => (total > 0 ? Math.round((n / total) * 100) : 0)
   const submittedOnTime = reports.filter(
-    (report) =>
-      report.submitted_at &&
-      report.filing_deadline &&
-      new Date(report.submitted_at) <= new Date(report.filing_deadline),
+    (report) => {
+      const deadlineTime = parseAnnualReportCalendarDate(report.filing_deadline)?.getTime()
+      return (
+        report.submitted_at &&
+        deadlineTime != null &&
+        new Date(report.submitted_at).getTime() < deadlineTime + 86_400_000
+      )
+    },
   ).length
   const pending = reports.filter((report) => !report.submitted_at).length
   const amended = reports.filter((report) => report.status === 'amended').length

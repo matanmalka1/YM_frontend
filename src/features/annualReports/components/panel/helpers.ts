@@ -1,6 +1,7 @@
 import type { AnnualReportFull, AdvancesSummary } from '../../api'
 import { formatClientOfficeId, formatCurrencyILS } from '@/utils/utils'
 import { ALERT_WINDOW_DAYS, CLIENT_TYPE_LABELS, LOCALE } from './constants'
+import { formatAnnualReportDate, parseAnnualReportCalendarDate } from '../shared/annualReports.constants'
 
 export type AlertVariant = 'error' | 'warning' | 'info' | 'success'
 export type AlertIcon = 'alert' | 'check' | 'info' | 'x'
@@ -70,14 +71,15 @@ export const getAlertBanners = (report: AnnualReportFull, advances?: BalanceAler
   }
 
   if (report.filing_deadline) {
-    const deadline = new Date(report.filing_deadline)
+    const deadline = parseAnnualReportCalendarDate(report.filing_deadline)
+    if (!deadline) return banners
     const daysLeft = Math.ceil((deadline.getTime() - Date.now()) / 86_400_000)
 
     if (daysLeft > 0 && daysLeft <= ALERT_WINDOW_DAYS) {
       banners.push({
         variant: 'warning',
         icon: 'alert',
-        message: `מועד הגשת הדוח לשנת מס ${report.tax_year} הוא ${formatPanelDate(report.filing_deadline)} — נותרו ${daysLeft} ימים.`,
+        message: `מועד הגשת הדוח לשנת מס ${report.tax_year} הוא ${formatAnnualReportDate(report.filing_deadline)} — נותרו ${daysLeft} ימים.`,
       })
     }
 

@@ -4,7 +4,7 @@ import type { AnnualReportFull } from '../../api'
 import type { TimelineEventStatus } from '../statusTransition/TimelineEvent'
 import { cn } from '../../../../utils/utils'
 import { STATUS_LABELS } from '../../api'
-import { formatAnnualReportDate } from './annualReports.constants'
+import { formatAnnualReportDate, parseAnnualReportCalendarDate } from './annualReports.constants'
 import { getAnnualReportName, getDeadlineStatus } from './annualReports.helpers'
 
 interface Props {
@@ -28,7 +28,11 @@ const STATUS_ICONS: Record<TimelineEventStatus, React.ReactNode> = {
 export const UpcomingDeadlinesList: React.FC<Props> = ({ reports }) => {
   const upcoming = [...reports]
     .filter((r) => !r.submitted_at && r.filing_deadline)
-    .sort((a, b) => new Date(a.filing_deadline!).getTime() - new Date(b.filing_deadline!).getTime())
+    .sort(
+      (a, b) =>
+        (parseAnnualReportCalendarDate(a.filing_deadline)?.getTime() ?? 0) -
+        (parseAnnualReportCalendarDate(b.filing_deadline)?.getTime() ?? 0),
+    )
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">

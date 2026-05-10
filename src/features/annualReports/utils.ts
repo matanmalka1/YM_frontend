@@ -1,5 +1,6 @@
-import { differenceInCalendarDays, parseISO } from 'date-fns'
+import { differenceInCalendarDays } from 'date-fns'
 import type { StageKey, TransitionForm } from './types'
+import { parseAnnualReportCalendarDate } from './components/shared/annualReports.constants'
 
 export const STAGE_ACCENT: Record<StageKey, string> = {
   material_collection: 'from-gray-400 to-gray-500',
@@ -13,8 +14,9 @@ export const STAGE_ACCENT: Record<StageKey, string> = {
 export const TERMINAL_STATUSES = new Set(['submitted', 'accepted', 'closed'])
 
 export const daysUntil = (dateStr: string | null): number | null => {
-  if (!dateStr) return null
-  return differenceInCalendarDays(parseISO(dateStr), new Date())
+  const deadline = parseAnnualReportCalendarDate(dateStr)
+  if (!deadline) return null
+  return differenceInCalendarDays(deadline, new Date())
 }
 
 type FlagFieldName = 'has_rental_income' | 'has_capital_gains' | 'has_foreign_income' | 'has_depreciation'

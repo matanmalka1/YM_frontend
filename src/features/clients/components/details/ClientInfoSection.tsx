@@ -2,6 +2,7 @@ import { type FC, type ReactNode } from 'react'
 import { formatDate, formatPlainIdentifier, formatShekelAmount } from '@/utils/utils'
 import type { ClientRecordResponse } from '../../api'
 import {
+  ADVANCE_PAYMENT_FREQUENCY_LABELS,
   getClientIdNumberTypeLabel,
   getClientStatusLabel,
   getClientVatReportingLabel,
@@ -97,6 +98,12 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client, taxYear,
     {
       label: 'אחוז מקדמה',
       value: client.advance_rate != null ? `${client.advance_rate}%` : 'לא אומת',
+    },
+    {
+      label: 'תדירות מקדמות מס הכנסה',
+      value: client.advance_payment_frequency
+        ? ADVANCE_PAYMENT_FREQUENCY_LABELS[client.advance_payment_frequency]
+        : EMPTY_VALUE,
     },
     {
       label: `מחזור שנתי (${taxYear})`,

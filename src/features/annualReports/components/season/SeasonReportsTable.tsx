@@ -17,6 +17,7 @@ import { AlertTriangle, Clock } from 'lucide-react'
 import { cn } from '../../../../utils/utils'
 import { TERMINAL_STATUSES, daysUntil } from '../../utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
+import { formatAnnualReportDate } from '../shared/annualReports.constants'
 
 interface SeasonReportsTableProps {
   reports: AnnualReportFull[]
@@ -33,7 +34,7 @@ const DeadlineCell: React.FC<{ report: AnnualReportFull }> = ({ report }) => {
   return (
     <div className="flex flex-col gap-0.5">
       <span className={cn('text-sm', overdue && semanticMonoToneClasses.negative)}>
-        {formatDate(report.filing_deadline)}
+        {formatAnnualReportDate(report.filing_deadline)}
       </span>
       {days !== null && !isTerminal && (
         <span

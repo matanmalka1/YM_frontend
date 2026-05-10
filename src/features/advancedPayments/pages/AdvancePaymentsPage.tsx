@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { getYear } from 'date-fns'
+import { format, getYear } from 'date-fns'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { PlusCircle, Calendar } from 'lucide-react'
@@ -17,6 +17,7 @@ import { AdvancePaymentDrawer } from '../components/AdvancePaymentDrawer'
 import { CreateAdvancePaymentModal } from '../components/CreateAdvancePaymentModal'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import type {
+  AdvancePaymentDueDateGroup,
   AdvancePaymentOverviewRow,
   UpdateAdvancePaymentPayload,
   AdvancePaymentStatus,
@@ -24,7 +25,6 @@ import type {
 } from '../types'
 import { ADVANCE_PAYMENT_STATUS_OPTIONS_WITH_ALL } from '../constants'
 import { parsePositiveInt } from '@/utils/utils'
-import { isCurrentReportingPeriod } from '@/components/ui/table/groupedPeriodRow.utils'
 import { toast } from '../../../utils/toast'
 import { showErrorToast } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
@@ -54,6 +54,9 @@ const FILTER_FIELDS = [
   },
   { type: 'select' as const, key: 'period', label: 'תקופת מקדמה', options: PERIOD_OPTIONS },
 ]
+
+const getBatchStableKey = (batch: AdvancePaymentDueDateGroup): string =>
+  batch.due_date ?? `${batch.year}-${String(batch.month).padStart(2, '0')}-${batch.period_months_count}`
 
 export const AdvancePayments: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -246,6 +249,26 @@ export const AdvancePayments: React.FC = () => {
     })
   }, [batches, periodFilter])
 
+  const todayKey = format(new Date(), 'yyyy-MM-dd')
+  const defaultOpenBatchKey = useMemo(() => {
+    const batchesWithDueDate = displayBatches.filter((batch) => batch.due_date)
+    const upcoming = batchesWithDueDate
+      .filter((batch) => batch.due_date! >= todayKey)
+      .sort(
+        (a, b) => a.due_date!.localeCompare(b.due_date!) || getBatchStableKey(a).localeCompare(getBatchStableKey(b)),
+      )
+
+    if (upcoming[0]) return getBatchStableKey(upcoming[0])
+
+    const latestPast = batchesWithDueDate
+      .sort(
+        (a, b) => b.due_date!.localeCompare(a.due_date!) || getBatchStableKey(a).localeCompare(getBatchStableKey(b)),
+      )
+      .at(0)
+
+    return latestPast ? getBatchStableKey(latestPast) : displayBatches[0] ? getBatchStableKey(displayBatches[0]) : null
+  }, [displayBatches, todayKey])
+
   const workflowStats = useMemo(() => {
     const now = new Date()
     const currentYear = now.getFullYear()
@@ -319,15 +342,13 @@ export const AdvancePayments: React.FC = () => {
         skeletonCols={11}
       >
         {displayBatches.map((batch) => {
-          const period = `${batch.year}-${String(batch.month).padStart(2, '0')}`
-          const stableKey =
-            batch.due_date ?? `${batch.year}-${String(batch.month).padStart(2, '0')}-${batch.period_months_count}`
-          const isCurrent = isCurrentReportingPeriod(period, batch.period_months_count)
+          const stableKey = getBatchStableKey(batch)
+          const isDefaultOpen = stableKey === defaultOpenBatchKey
           return (
             <AdvancePaymentBatchRow
               key={stableKey}
               batch={batch}
-              isCurrent={isCurrent}
+              isCurrent={isDefaultOpen}
               search={filters.client_name}
               statusFilter={statusFilter}
               periodFilter={periodFilter}

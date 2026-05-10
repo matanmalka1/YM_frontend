@@ -1,4 +1,5 @@
 import { Archive, CreditCard, FileText } from 'lucide-react'
+import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import type { DashboardOverviewResponse } from './api'
 import type { StatItem } from './components/DashboardStatsGrid'
 
@@ -17,7 +18,8 @@ const withParams = (base: string, params: Record<string, string>) => `${base}?${
 
 const HREFS = {
   vat: (period: string, periodType: VatPeriodType) => withParams('/tax/vat', { period, period_type: periodType }),
-  advancePayments: (period: '1' | '2') => withParams('/tax/advance-payments', { period }),
+  advancePayments: (period: '1' | '2', year: number) =>
+    withParams('/tax/advance-payments', { year: String(year), period }),
   bindersReadyForPickup: withParams('/binders', { status: 'ready_for_pickup' }),
   openCharges: withParams('/charges', { status: 'issued' }),
 }
@@ -55,7 +57,7 @@ const buildAdvanceStat = (
   icon: CreditCard,
   variant: vatVariant(stat.pending),
   urgent: stat.pending > 0,
-  href: HREFS.advancePayments(period),
+  href: HREFS.advancePayments(period, getOperationalTaxYear()),
   progress: stat.completion_percent,
   actionLabel: 'פתח מקדמות מס הכנסה',
 })

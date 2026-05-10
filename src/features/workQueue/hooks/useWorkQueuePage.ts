@@ -1,12 +1,16 @@
 import { useMemo, useState } from 'react'
+import { useRole } from '@/hooks/useRole'
+import { getErrorMessage } from '@/utils/utils'
 import { useWorkQueue } from './useWorkQueue'
 import type { WorkQueueItem, WorkQueueUrgency } from '../api/contracts'
 
 export const useWorkQueuePage = () => {
   const [urgencyFilter, setUrgencyFilter] = useState<WorkQueueUrgency | null>(null)
   const [typeFilter, setTypeFilter] = useState<string | null>(null)
+  const { role } = useRole()
+  const hasRole = Boolean(role)
 
-  const { data = [], isLoading, error } = useWorkQueue()
+  const { data = [], isLoading, error } = useWorkQueue(undefined, hasRole)
 
   const filtered = useMemo<WorkQueueItem[]>(() => {
     let items = data
@@ -25,8 +29,12 @@ export const useWorkQueuePage = () => {
   return {
     items: filtered,
     allItems: data,
-    isLoading,
-    error: error ? 'שגיאה בטעינת המשימות' : null,
+    isLoading: isLoading && !error,
+    error: !hasRole
+      ? 'לא ניתן לזהות תפקיד משתמש'
+      : error
+        ? getErrorMessage(error, 'שגיאה בטעינת המשימות')
+        : null,
     urgencyFilter,
     setUrgencyFilter,
     typeFilter,

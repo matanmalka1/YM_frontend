@@ -56,7 +56,7 @@ export const buildClientColumns = ({
     }),
     monoColumn({
       key: 'active_binder_number',
-      header: 'קלסר פעיל',
+      header: 'מס׳ קלסר פעיל',
       getValue: (client) => client.active_binder_number,
       emptyValue: <span className="text-gray-400 text-sm">אין קלסר פתוח</span>,
     }),
