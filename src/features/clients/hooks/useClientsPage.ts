@@ -19,14 +19,7 @@ import {
 import { useActionRunner } from '@/features/actions'
 import { useRole } from '../../../hooks/useRole'
 import { toast } from '../../../utils/toast'
-import { isAxiosError } from 'axios'
-
-const extractErrorCode = (err: unknown): string | null => {
-  if (isAxiosError(err)) {
-    return err.response?.data?.error ?? err.response?.data?.code ?? err.response?.data?.detail?.error ?? null
-  }
-  return null
-}
+import { extractClientErrorCode } from '../utils/clientErrors'
 
 export const useClientsPage = () => {
   const queryClient = useQueryClient()
@@ -85,7 +78,7 @@ export const useClientsPage = () => {
       setDeletedClientInfo(null)
     },
     onError: async (err, payload) => {
-      const code = extractErrorCode(err)
+      const code = extractClientErrorCode(err)
       if (code === 'CLIENT.DELETED_EXISTS') {
         try {
           const deleted = await clientsApi.getConflictByIdNumber(payload.id_number)

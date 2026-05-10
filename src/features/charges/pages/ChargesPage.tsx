@@ -65,6 +65,14 @@ export const Charges: React.FC = () => {
     }
   }, [chargeIdParam])
 
+  useEffect(() => {
+    if (searchParams.get('create') !== '1' || !isAdvisor) return
+    setShowCreateModal(true)
+    const next = new URLSearchParams(searchParams)
+    next.delete('create')
+    setSearchParams(next, { replace: true })
+  }, [isAdvisor, searchParams, setSearchParams])
+
   const closeChargeDetail = () => {
     setSelectedChargeId(null)
     const next = new URLSearchParams(searchParams)

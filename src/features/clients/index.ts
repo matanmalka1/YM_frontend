@@ -13,6 +13,7 @@ export { useFirstBusinessId } from './hooks/useFirstBusinessId'
 export { useClientDetailsActions } from './hooks/useClientDetailsActions'
 export { ClientDetails } from './pages/ClientDetailsPage'
 export { Clients } from './pages/ClientsPage'
+export { extractClientErrorCode } from './utils/clientErrors'
 export type {
   ClientRecordResponse,
   BusinessResponse,

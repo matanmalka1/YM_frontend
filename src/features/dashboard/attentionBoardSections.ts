@@ -1,9 +1,8 @@
-import { Bell, DollarSign, Zap } from 'lucide-react'
+import { DollarSign } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import { mapActions } from '@/lib/actions/mapActions'
 import { formatDate } from '@/utils/utils'
 import type { AttentionItem } from './api'
-import type { BackendAction, ActionCommand } from '@/lib/actions/types'
+import type { ActionCommand } from '@/lib/actions/types'
 
 export type AttentionTone = 'amber' | 'green' | 'red' | 'blue'
 
@@ -69,59 +68,3 @@ export const buildOpenChargeSection = (items: AttentionItem[]): PanelSection => 
     },
   })),
 })
-
-const QA_CATEGORY_LABELS: Record<string, string> = {
-  binders: 'קלסרים',
-  annual_reports: 'דו"חות שנתיים',
-}
-
-const QA_CATEGORY_ORDER = ['annual_reports', 'binders'] as const
-
-const QA_CATEGORY_META: Record<string, { icon: LucideIcon; tone: AttentionTone; href: string }> = {
-  annual_reports: { icon: Zap, tone: 'red', href: '/tax/reports' },
-  binders: { icon: Bell, tone: 'blue', href: '/binders' },
-}
-
-const DEFAULT_META = { icon: Zap, tone: 'amber' as AttentionTone, href: '/' }
-
-export const buildQuickActionSections = (rawActions: BackendAction[]): PanelSection[] => {
-  const actions = mapActions(rawActions)
-  const grouped = new Map<string, PanelItemAction[]>()
-
-  for (const action of actions) {
-    const cat = action.category ?? 'general'
-
-    grouped.set(cat, [
-      ...(grouped.get(cat) ?? []),
-      {
-        uiKey: action.uiKey,
-        label: action.label,
-        urgency: action.urgency,
-        dueLabel: action.dueLabel,
-        action,
-      },
-    ])
-  }
-
-  const ordered = [...QA_CATEGORY_ORDER, ...[...grouped.keys()].filter((k) => !QA_CATEGORY_ORDER.includes(k as never))]
-
-  return ordered.map((cat) => {
-    const catActions = grouped.get(cat) ?? []
-    const meta = QA_CATEGORY_META[cat] ?? DEFAULT_META
-
-    return {
-      key: cat,
-      title: QA_CATEGORY_LABELS[cat] ?? cat,
-      icon: meta.icon,
-      tone: meta.tone,
-      items: catActions.map((a, idx) => ({
-        id: `${cat}-${a.uiKey}-${idx}`,
-        label: a.action.clientName ?? a.action.binderNumber ?? a.label,
-        sublabel: a.dueLabel ?? QA_CATEGORY_LABELS[cat] ?? undefined,
-        href: meta.href,
-        meta: a.action.description ? { description: a.action.description } : undefined,
-        actions: [a],
-      })),
-    } satisfies PanelSection
-  })
-}

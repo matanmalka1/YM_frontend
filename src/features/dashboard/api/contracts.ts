@@ -77,8 +77,6 @@ export interface RecentActivityItem {
 
 export interface DashboardOverviewResponse {
   is_empty: boolean
-  binders_in_office: number
-  binders_ready_for_pickup: number
   open_charges_count: number
   open_charges_amount_ils: string | null
   vat_stats: VatDashboardStats

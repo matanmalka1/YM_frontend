@@ -1,15 +1,11 @@
-import { Archive, CreditCard, FileText } from 'lucide-react'
+import { CreditCard, FileText } from 'lucide-react'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import type { DashboardOverviewResponse } from './api'
 import type { StatItem } from './components/DashboardStatsGrid'
 
 type DashboardStatsData = Pick<
   DashboardOverviewResponse,
-  | 'vat_stats'
-  | 'binders_in_office'
-  | 'binders_ready_for_pickup'
-  | 'open_charges_count'
-  | 'open_charges_amount_ils'
+  'vat_stats' | 'open_charges_count' | 'open_charges_amount_ils'
 >
 
 type VatPeriodType = 'monthly' | 'bimonthly'
@@ -20,7 +16,6 @@ const HREFS = {
   vat: (period: string, periodType: VatPeriodType) => withParams('/tax/vat', { period, period_type: periodType }),
   advancePayments: (period: '1' | '2', year: number) =>
     withParams('/tax/advance-payments', { year: String(year), period }),
-  bindersReadyForPickup: withParams('/binders', { status: 'ready_for_pickup' }),
   openCharges: withParams('/charges', { status: 'issued' }),
 }
 
@@ -82,23 +77,6 @@ export const buildDashboardStats = (data: DashboardStatsData, isAdvisor: boolean
       href: HREFS.openCharges,
       actionLabel: data.open_charges_count > 0 ? 'פתח חיובים' : 'כל החיובים שולמו',
     })
-
-    if (data.binders_ready_for_pickup > 0) {
-      stats.push({
-        key: 'binders_pickup',
-        title: 'קלסרים לאיסוף',
-        value: `${data.binders_ready_for_pickup.toLocaleString('he-IL')} ממתינים לאיסוף`,
-        description:
-          data.binders_in_office > 0
-            ? `${data.binders_in_office.toLocaleString('he-IL')} קלסרים במשרד`
-            : 'אין קלסרים במשרד',
-        icon: Archive,
-        variant: 'amber',
-        urgent: true,
-        href: HREFS.bindersReadyForPickup,
-        actionLabel: 'פתח קלסרים',
-      })
-    }
   }
 
   return stats

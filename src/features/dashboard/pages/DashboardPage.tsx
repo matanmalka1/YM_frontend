@@ -1,7 +1,10 @@
 import { useMemo } from 'react'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
+import { ChargesCreateModal } from '@/features/charges'
+import { CreateClientModal, DeletedClientDialog, type ClientRecordResponse } from '@/features/clients'
 import { SignatureRequestsDashboardPanel } from '@/features/signatureRequests'
+import { VatWorkItemsCreateModal } from '@/features/vatReports'
 import {
   AttentionBoard,
   DashboardOnboardingEmptyState,
@@ -12,13 +15,11 @@ import {
 import { DASHBOARD_COPY, DASHBOARD_LOADING_CARD_COUNT } from '../dashboardConstants'
 import { DashboardSurface } from '../components/DashboardPrimitives'
 import { RecentActivityPanel } from '../components/RecentActivityPanel'
+import { QuickActionsPanel } from '../components/QuickActionsPanel'
 import { TaxInsightsRow } from '../components/TaxInsightsRow'
 import { UpcomingDeadlinesPanel } from '../components/UpcomingDeadlinesPanel'
-import {
-  buildOpenChargeSection,
-  buildQuickActionSections,
-  type PanelSection,
-} from '../attentionBoardSections'
+import { buildOpenChargeSection, type PanelSection } from '../attentionBoardSections'
+import { useDashboardCreateModals } from '../hooks/useDashboardCreateModals'
 
 const StatsSkeleton = () => (
   <div className="grid animate-pulse grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
@@ -47,15 +48,27 @@ export const DashboardPage: React.FC = () => {
     recentActivity,
   } = useDashboardPage()
 
+  const {
+    activeCreateModal,
+    setActiveCreateModal,
+    deletedClientInfo,
+    setDeletedClientInfo,
+    closeCreateModal,
+    chargeCreateMutation,
+    vatCreateMutation,
+    clientCreateMutation,
+    restoreClientMutation,
+    submitChargeCreate,
+    submitVatCreate,
+    submitClientCreate,
+    chargeCreateError,
+    vatCreateError,
+  } = useDashboardCreateModals()
+
   const attentionSections = useMemo<PanelSection[]>(() => {
     const openChargeSection = buildOpenChargeSection(attentionItems)
-    if (!isAdvisorView) return [openChargeSection]
-
-    return [
-      openChargeSection,
-      ...buildQuickActionSections(quickActions ?? []),
-    ]
-  }, [attentionItems, quickActions, isAdvisorView])
+    return openChargeSection.items.length > 0 ? [openChargeSection] : []
+  }, [attentionItems])
 
   return (
     <DashboardSurface>
@@ -94,9 +107,15 @@ export const DashboardPage: React.FC = () => {
                 onAction={handleQuickAction}
               />
             )}
-            <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
+            <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,24rem)_minmax(0,1fr)]">
+              <QuickActionsPanel
+                actions={quickActions ?? []}
+                activeActionKey={activeQuickAction}
+                onAction={handleQuickAction}
+                onOpenModal={setActiveCreateModal}
+              />
+              <SignatureRequestsDashboardPanel />
               {vatStats && <TaxInsightsRow vatStats={vatStats} />}
-              <SignatureRequestsDashboardPanel compact />
             </div>
           </div>
         </div>
@@ -117,6 +136,44 @@ export const DashboardPage: React.FC = () => {
         isLoading={activeQuickAction === pendingQuickAction?.uiKey}
         onConfirm={confirmPendingAction}
         onCancel={cancelPendingAction}
+      />
+      <ChargesCreateModal
+        open={activeCreateModal === 'charge'}
+        createError={chargeCreateError}
+        createLoading={chargeCreateMutation.isPending}
+        onClose={closeCreateModal}
+        onSubmit={submitChargeCreate}
+      />
+      <VatWorkItemsCreateModal
+        open={activeCreateModal === 'vat'}
+        createError={vatCreateError}
+        createLoading={vatCreateMutation.isPending}
+        onClose={closeCreateModal}
+        onSubmit={submitVatCreate}
+      />
+      <CreateClientModal
+        open={activeCreateModal === 'client' && deletedClientInfo === null}
+        onClose={closeCreateModal}
+        onSubmit={submitClientCreate}
+        onRestoreDeletedClient={async (clientId): Promise<ClientRecordResponse> => {
+          const restored = await restoreClientMutation.mutateAsync(clientId)
+          return restored
+        }}
+        isAdvisor={isAdvisorView}
+        isLoading={clientCreateMutation.isPending}
+        restoreLoading={restoreClientMutation.isPending}
+      />
+      <DeletedClientDialog
+        open={deletedClientInfo !== null}
+        deletedClient={deletedClientInfo}
+        isAdvisor={isAdvisorView}
+        onRestore={() => {
+          if (deletedClientInfo) restoreClientMutation.mutate(deletedClientInfo.id)
+        }}
+        onForceCreate={() => setDeletedClientInfo(null)}
+        onDismiss={() => setDeletedClientInfo(null)}
+        restoreLoading={restoreClientMutation.isPending}
+        forceCreateLoading={false}
       />
     </DashboardSurface>
   )
