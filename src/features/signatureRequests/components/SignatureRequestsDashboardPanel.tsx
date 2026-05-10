@@ -121,14 +121,16 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
 
   return (
     <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-      <div className={cn('border-b border-gray-100', compact ? 'px-4 py-3' : 'px-5 py-4')}>
+      <div className={cn('border-b border-gray-100', compact ? 'px-5 py-4' : 'px-5 py-4')}>
         <div className="flex items-center justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3">
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
               <FileSignature className="h-3.5 w-3.5" />
             </span>
             <div className="min-w-0">
-              <h2 className="truncate text-sm font-bold text-gray-900">בקשות חתימה</h2>
+              <h2 className={cn('truncate font-bold text-gray-900', compact ? 'text-base' : 'text-sm')}>
+                בקשות חתימה
+              </h2>
               {!compact && (
                 <p className="mt-0.5 truncate text-xs text-gray-500">
                   {error ?? 'ניהול בקשות חתימה פעילות מכל הלקוחות'}
@@ -137,7 +139,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-full bg-slate-100 px-2 text-xs font-bold tabular-nums text-slate-700">
+            <span className="inline-flex h-8 min-w-8 items-center justify-center rounded-full bg-slate-100 px-2.5 text-sm font-bold tabular-nums text-slate-700">
               {total}
             </span>
             <Button variant="ghost" size="sm" onClick={() => setShowCreate(true)}>
@@ -148,11 +150,11 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
         </div>
       </div>
 
-      <div className={cn('space-y-3', compact ? 'p-3' : 'p-4')}>
+      <div className={cn('space-y-4', compact ? 'p-5' : 'p-4')}>
         <div className="flex items-center justify-between gap-2">
           <span
             className={cn(
-              'inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold',
+              'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-bold',
               displayedItems.length > 0 ? 'bg-blue-50 text-blue-700' : 'bg-slate-100 text-slate-700',
             )}
           >
@@ -176,7 +178,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
         ) : compact ? (
           <div className="divide-y divide-gray-100 rounded-lg border border-gray-100">
             {tableItems.length === 0 ? (
-              <div className="px-3 py-4 text-center text-xs font-semibold text-gray-500">אין בקשות חתימה פעילות</div>
+              <div className="px-3 py-6 text-center text-sm font-semibold text-gray-500">אין בקשות חתימה פעילות</div>
             ) : (
               tableItems.map((req) => (
                 <button

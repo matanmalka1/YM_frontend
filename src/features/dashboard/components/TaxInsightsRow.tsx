@@ -19,11 +19,11 @@ const ProgressBar = ({ label, percent, href }: ProgressBarProps) => {
 
   const content = (
     <div className="group">
-      <div className="mb-1 flex items-center justify-between text-xs font-semibold">
+      <div className="mb-1.5 flex items-center justify-between text-sm font-semibold">
         <span className={cn('text-gray-700', href && 'transition-colors group-hover:text-primary')}>{label}</span>
         <span className="tabular-nums text-primary">{percent}%</span>
       </div>
-      <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+      <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
         <div
           className={cn('h-full rounded-full transition-all duration-700', color)}
           style={{ width: `${Math.min(percent, 100)}%` }}
@@ -45,9 +45,9 @@ export const TaxInsightsRow: React.FC<Props> = ({ vatStats }) => {
 
   return (
     <DashboardPanel>
-      <div className="p-4">
-        <h3 className="mb-4 text-sm font-bold text-gray-900">סטטוס הגשות</h3>
-        <div className="space-y-4">
+      <div className="p-5">
+        <h3 className="mb-5 text-base font-bold text-gray-900">סטטוס הגשות</h3>
+        <div className="space-y-5">
           <ProgressBar
             label={`מע״מ חודשי · ${monthly.period_label}`}
             percent={monthly.completion_percent}

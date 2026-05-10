@@ -72,14 +72,12 @@ export const buildOpenChargeSection = (items: AttentionItem[]): PanelSection => 
 
 const QA_CATEGORY_LABELS: Record<string, string> = {
   binders: 'קלסרים',
-  vat: 'מע"מ',
   annual_reports: 'דו"חות שנתיים',
 }
 
-const QA_CATEGORY_ORDER = ['vat', 'annual_reports', 'binders'] as const
+const QA_CATEGORY_ORDER = ['annual_reports', 'binders'] as const
 
 const QA_CATEGORY_META: Record<string, { icon: LucideIcon; tone: AttentionTone; href: string }> = {
-  vat: { icon: Zap, tone: 'amber', href: '/vat' },
   annual_reports: { icon: Zap, tone: 'red', href: '/tax/reports' },
   binders: { icon: Bell, tone: 'blue', href: '/binders' },
 }
@@ -92,6 +90,7 @@ export const buildQuickActionSections = (rawActions: BackendAction[]): PanelSect
 
   for (const action of actions) {
     const cat = action.category ?? 'general'
+
     grouped.set(cat, [
       ...(grouped.get(cat) ?? []),
       {

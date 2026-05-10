@@ -7,7 +7,6 @@ import { getErrorMessage, getHttpStatus } from '../../../utils/utils'
 import type { ActionCommand } from '../../../lib/actions/types'
 import { useRole } from '../../../hooks/useRole'
 import { useActionRunner } from '@/features/actions'
-import { useWorkQueue } from '@/features/workQueue'
 import type { StatItem } from '../components/DashboardStatsGrid'
 import { DASHBOARD_COPY } from '../dashboardConstants'
 import { buildDashboardStats } from '../dashboardStats'
@@ -30,13 +29,6 @@ export const useDashboardPage = () => {
     queryKey: dashboardQK.overview,
     queryFn: dashboardApi.getOverview,
   })
-
-  const workQueueQuery = useWorkQueue(
-    {
-      exclude_source_types: ['vat_filing', 'annual_report', 'unpaid_charge'],
-    },
-    hasRole && isAdvisor,
-  )
 
   const {
     activeActionKey: activeQuickAction,
@@ -86,6 +78,7 @@ export const useDashboardPage = () => {
   const emptyState = dashboard.data ? { is_empty: dashboard.data.is_empty } : undefined
   const attentionEmptyChecks = dashboard.data?.attention_empty_checks ?? []
   const vatStats = dashboard.data?.vat_stats
+  const recentActivity = dashboard.data?.recent_activity ?? []
 
   const stats = useMemo<StatItem[]>(() => {
     if (dashboard.status !== 'ok' || !dashboard.data) return []
@@ -123,12 +116,12 @@ export const useDashboardPage = () => {
     confirmPendingAction,
     pendingQuickAction,
     quickActions,
-    workQueueItems: workQueueQuery.data ?? [],
     emptyState,
     attentionEmptyChecks,
     cancelPendingAction,
     isAdvisorView,
     stats,
     vatStats,
+    recentActivity,
   }
 }

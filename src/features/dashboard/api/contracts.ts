@@ -65,6 +65,16 @@ export interface VatDashboardStats {
   advance_payments: AdvancePaymentDashboardStats
 }
 
+export interface RecentActivityItem {
+  id: number
+  date: string
+  time: string
+  label: string
+  client_name: string
+  href: string
+  activity_type: string
+}
+
 export interface DashboardOverviewResponse {
   is_empty: boolean
   binders_in_office: number
@@ -76,4 +86,5 @@ export interface DashboardOverviewResponse {
   attention: AttentionResponse
   advisor_today: AdvisorTodayResponse
   attention_empty_checks: AttentionEmptyCheck[]
+  recent_activity: RecentActivityItem[]
 }

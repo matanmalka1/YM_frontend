@@ -5,5 +5,6 @@ export type {
   AttentionItem,
   AttentionResponse,
   AttentionEmptyCheck,
+  RecentActivityItem,
   VatDashboardStats,
 } from './contracts'

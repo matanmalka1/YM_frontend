@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import { CalendarClock } from 'lucide-react'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { SignatureRequestsDashboardPanel } from '@/features/signatureRequests'
@@ -12,16 +11,14 @@ import {
 } from '@/features/dashboard'
 import { DASHBOARD_COPY, DASHBOARD_LOADING_CARD_COUNT } from '../dashboardConstants'
 import { DashboardSurface } from '../components/DashboardPrimitives'
+import { RecentActivityPanel } from '../components/RecentActivityPanel'
 import { TaxInsightsRow } from '../components/TaxInsightsRow'
+import { UpcomingDeadlinesPanel } from '../components/UpcomingDeadlinesPanel'
 import {
   buildOpenChargeSection,
   buildQuickActionSections,
   type PanelSection,
 } from '../attentionBoardSections'
-import {
-  isAdvancePaymentWorkQueueItem,
-  mapAdvancePaymentToPanelItem,
-} from '../advancePaymentPanelItems'
 
 const StatsSkeleton = () => (
   <div className="grid animate-pulse grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
@@ -46,8 +43,8 @@ export const DashboardPage: React.FC = () => {
     emptyState,
     attentionEmptyChecks,
     stats,
-    workQueueItems,
     vatStats,
+    recentActivity,
   } = useDashboardPage()
 
   const attentionSections = useMemo<PanelSection[]>(() => {
@@ -56,18 +53,9 @@ export const DashboardPage: React.FC = () => {
 
     return [
       openChargeSection,
-      {
-        key: 'advance_payments',
-        title: 'מקדמות מס הכנסה',
-        icon: CalendarClock,
-        tone: 'amber',
-        items: workQueueItems
-          .filter(isAdvancePaymentWorkQueueItem)
-          .map(mapAdvancePaymentToPanelItem),
-      },
       ...buildQuickActionSections(quickActions ?? []),
     ]
-  }, [attentionItems, quickActions, isAdvisorView, workQueueItems])
+  }, [attentionItems, quickActions, isAdvisorView])
 
   return (
     <DashboardSurface>
@@ -89,22 +77,36 @@ export const DashboardPage: React.FC = () => {
 
       {isAdvisorView && !emptyState?.is_empty && <SeasonSummaryWidget />}
 
-      {dashboard.status === 'loading' ? (
+      {isAdvisorView && !emptyState?.is_empty ? (
+        <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
+          <div className="grid gap-5 md:grid-cols-2 lg:col-start-2 lg:row-start-1 lg:grid-cols-1">
+            <UpcomingDeadlinesPanel />
+            <RecentActivityPanel items={recentActivity} />
+          </div>
+          <div className="space-y-5 lg:col-start-1 lg:row-start-1">
+            {dashboard.status === 'loading' ? (
+              <div className="h-80 animate-pulse rounded-2xl bg-gray-100" />
+            ) : (
+              <AttentionBoard
+                sections={attentionSections}
+                emptyChecks={attentionEmptyChecks}
+                activeActionKey={activeQuickAction}
+                onAction={handleQuickAction}
+              />
+            )}
+            <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
+              {vatStats && <TaxInsightsRow vatStats={vatStats} />}
+              <SignatureRequestsDashboardPanel compact />
+            </div>
+          </div>
+        </div>
+      ) : dashboard.status === 'loading' ? (
         <div className="h-80 animate-pulse rounded-2xl bg-gray-100" />
-      ) : isAdvisorView ? (
-        <AttentionBoard
-          sections={attentionSections}
-          emptyChecks={attentionEmptyChecks}
-          activeActionKey={activeQuickAction}
-          onAction={handleQuickAction}
-        />
       ) : (
         <AttentionBoard sections={attentionSections} emptyChecks={attentionEmptyChecks} />
       )}
 
-      {vatStats && !emptyState?.is_empty && <TaxInsightsRow vatStats={vatStats} />}
-
-      {isAdvisorView && !emptyState?.is_empty && <SignatureRequestsDashboardPanel compact />}
+      {vatStats && !emptyState?.is_empty && !isAdvisorView && <TaxInsightsRow vatStats={vatStats} />}
 
       <ConfirmDialog
         open={Boolean(pendingQuickAction)}
