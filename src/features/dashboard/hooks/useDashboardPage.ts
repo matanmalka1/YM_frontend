@@ -76,7 +76,6 @@ export const useDashboardPage = () => {
   const isAdvisorView = dashboard.status === 'ok' && isAdvisor
   const quickActions = isAdvisorView ? (dashboard.data?.quick_actions ?? []) : undefined
   const emptyState = dashboard.data ? { is_empty: dashboard.data.is_empty } : undefined
-  const attentionEmptyChecks = dashboard.data?.attention_empty_checks ?? []
   const vatStats = dashboard.data?.vat_stats
   const recentActivity = dashboard.data?.recent_activity ?? []
 
@@ -117,7 +116,6 @@ export const useDashboardPage = () => {
     pendingQuickAction,
     quickActions,
     emptyState,
-    attentionEmptyChecks,
     cancelPendingAction,
     isAdvisorView,
     stats,

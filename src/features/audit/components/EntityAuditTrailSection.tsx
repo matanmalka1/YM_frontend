@@ -2,6 +2,12 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
 import { formatDateTime } from '@/utils/utils'
+import {
+  ENTITY_TYPE_LABELS,
+  CLIENT_STATUS_LABELS,
+  VAT_TYPE_LABELS,
+  ADVANCE_PAYMENT_FREQUENCY_LABELS,
+} from '@/features/clients/constants'
 import type { EntityAuditLogEntry, EntityAuditType } from '../api'
 import { useEntityAuditTrail } from '../hooks/useEntityAuditTrail'
 
@@ -79,6 +85,17 @@ const FIELD_LABELS: Record<string, string> = {
   advance_rate_updated_at: 'תאריך עדכון שיעור מקדמות',
 }
 
+const FIELD_VALUE_LABELS: Partial<Record<string, Record<string, string>>> = {
+  entity_type: ENTITY_TYPE_LABELS,
+  client_type: ENTITY_TYPE_LABELS,
+  status: CLIENT_STATUS_LABELS,
+  vat_reporting_frequency: VAT_TYPE_LABELS,
+  advance_payment_frequency: ADVANCE_PAYMENT_FREQUENCY_LABELS,
+}
+
+const translateValue = (field: string | null, value: string): string =>
+  (field ? FIELD_VALUE_LABELS[field]?.[value] : undefined) ?? value
+
 const shorten = (value: string): string => (value.length > 120 ? `${value.slice(0, 117)}...` : value)
 
 const stringifyCompact = (value: unknown): string => {
@@ -106,9 +123,9 @@ const unwrapScalarPayload = (value: unknown): unknown => {
   return value
 }
 
-const formatValue = (value: unknown): string => {
+const formatValue = (value: unknown, field: string | null = null): string => {
   if (value === null || value === undefined) return '—'
-  if (typeof value === 'string') return value
+  if (typeof value === 'string') return translateValue(field, value)
   if (typeof value === 'number' || typeof value === 'boolean') return String(value)
   return stringifyCompact(value)
 }
@@ -127,8 +144,8 @@ const formatParsedDiff = (oldValue: unknown, newValue: unknown): string | null =
     return keys
       .map((key) => {
         const label = formatFieldLabel(key)
-        const oldText = formatValue(oldRecord[key])
-        const newText = formatValue(newRecord[key])
+        const oldText = formatValue(oldRecord[key], key)
+        const newText = formatValue(newRecord[key], key)
         if (!(key in oldRecord)) return `${label}: ${newText}`
         if (!(key in newRecord)) return `${label}: ${oldText}`
         return `${label}: ${oldText} → ${newText}`

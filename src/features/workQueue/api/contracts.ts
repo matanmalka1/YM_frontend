@@ -37,7 +37,7 @@ export const advancePaymentWorkQueueItemSchema = baseWorkQueueItemSchema.extend(
   payload: advancePaymentWorkQueuePayloadSchema,
 })
 
-const nonAdvanceSourceTypeSchema = z.enum(['vat_filing', 'annual_report', 'unpaid_charge', 'task'])
+const nonAdvanceSourceTypeSchema = z.enum(['vat_filing', 'annual_report', 'unpaid_charge', 'task', 'stale_binder'])
 
 const genericWorkQueueItemSchema = baseWorkQueueItemSchema.extend({
   source_type: nonAdvanceSourceTypeSchema,

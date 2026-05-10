@@ -11,6 +11,7 @@ interface WorkQueueSummaryCardsProps {
 export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({ items, urgencyFilter, onFilter }) => {
   const overdue = items.filter((i) => i.urgency === 'overdue').length
   const approaching = items.filter((i) => i.urgency === 'approaching').length
+  const important = items.filter((i) => i.urgency === 'important').length
   const upcoming = items.filter((i) => i.urgency === 'upcoming').length
 
   const stats = [
@@ -25,20 +26,27 @@ export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({ it
       icon: Clock,
       variant: 'orange' as const,
       count: approaching,
-      label: 'מתקרב (עד 7 ימים)',
+      label: 'דחוף (עד 7 ימים)',
       value: 'approaching' as WorkQueueUrgency,
+    },
+    {
+      icon: Clock,
+      variant: 'orange' as const,
+      count: important,
+      label: 'חשוב (8–21 ימים)',
+      value: 'important' as WorkQueueUrgency,
     },
     {
       icon: Calendar,
       variant: 'blue' as const,
       count: upcoming,
-      label: 'קרוב (8–14 ימים)',
+      label: 'קרוב (22+ ימים)',
       value: 'upcoming' as WorkQueueUrgency,
     },
   ]
 
   return (
-    <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
       {stats.map(({ icon, variant, count, label, value }) => (
         <StatsCard
           key={value}

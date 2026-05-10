@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Modal } from '@/components/ui/overlays/Modal'
@@ -23,7 +22,6 @@ import { RecentActivityPanel } from '../components/RecentActivityPanel'
 import { QuickActionsPanel } from '../components/QuickActionsPanel'
 import { TaxInsightsRow } from '../components/TaxInsightsRow'
 import { UpcomingDeadlinesPanel } from '../components/UpcomingDeadlinesPanel'
-import { buildOpenChargeSection, type PanelSection } from '../attentionBoardSections'
 import { useDashboardCreateModals } from '../hooks/useDashboardCreateModals'
 
 const StatsSkeleton = () => (
@@ -47,7 +45,6 @@ export const DashboardPage: React.FC = () => {
     pendingQuickAction,
     quickActions,
     emptyState,
-    attentionEmptyChecks,
     stats,
     vatStats,
     recentActivity,
@@ -73,11 +70,6 @@ export const DashboardPage: React.FC = () => {
     advancePaymentClientId,
     advancePaymentClientPicker,
   } = useDashboardCreateModals()
-
-  const attentionSections = useMemo<PanelSection[]>(() => {
-    const openChargeSection = buildOpenChargeSection(attentionItems)
-    return openChargeSection.items.length > 0 ? [openChargeSection] : []
-  }, [attentionItems])
 
   return (
     <DashboardSurface>
@@ -111,12 +103,7 @@ export const DashboardPage: React.FC = () => {
             {dashboard.status === 'loading' ? (
               <div className="h-80 animate-pulse rounded-2xl bg-gray-100" />
             ) : (
-              <AttentionBoard
-                sections={attentionSections}
-                emptyChecks={attentionEmptyChecks}
-                activeActionKey={activeQuickAction}
-                onAction={handleQuickAction}
-              />
+              <AttentionBoard items={attentionItems} />
             )}
             <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_24rem]">
               <SignatureRequestsDashboardPanel />
@@ -132,7 +119,7 @@ export const DashboardPage: React.FC = () => {
       ) : dashboard.status === 'loading' ? (
         <div className="h-80 animate-pulse rounded-2xl bg-gray-100" />
       ) : (
-        <AttentionBoard sections={attentionSections} emptyChecks={attentionEmptyChecks} />
+        <AttentionBoard items={attentionItems} />
       )}
 
       {vatStats && !emptyState?.is_empty && !isAdvisorView && <TaxInsightsRow vatStats={vatStats} />}

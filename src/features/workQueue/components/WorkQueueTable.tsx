@@ -68,7 +68,7 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
             className="text-sm text-primary-600 hover:underline"
             onClick={(e) => e.stopPropagation()}
           >
-            לפרופיל לקוח
+            {item.client_name ?? 'לפרופיל לקוח'}
           </Link>
         ) : (
           <span className="text-sm text-gray-400">—</span>

@@ -1,47 +1,22 @@
 import type { BackendAction } from '@/lib/actions/types'
 
-interface BaseAttentionItem {
-  item_type: 'unpaid_charge'
-  binder_id: number | null
-  client_id: number | null
-  business_id: number | null
+export interface AttentionBoardItem {
+  id: string
+  source_type: string
+  source_id: number
+  title: string
   client_name: string | null
-  description: string
+  due_date: string | null
+  days_delta: number
+  reason: string | null
+  amount: string | null
+  urgency: 'overdue' | 'approaching' | 'important' | 'upcoming'
+  href: string
 }
-
-export interface UnpaidChargeAttentionItem extends BaseAttentionItem {
-  item_type: 'unpaid_charge'
-  charge_id: number
-  business_name: string | null
-  charge_subject: string
-  charge_date: string | null
-  charge_amount: string
-  charge_invoice_number: string
-  charge_period: string | null
-}
-
-export type AttentionItem = UnpaidChargeAttentionItem
 
 export interface AttentionResponse {
-  items: AttentionItem[]
+  items: AttentionBoardItem[]
   total: number
-}
-
-export interface AttentionEmptyCheck {
-  key: string
-  label: string
-}
-
-export interface AdvisorTodayItem {
-  id: number
-  label: string
-  sublabel?: string | null
-  description?: string | null
-  href?: string | null
-}
-
-export interface AdvisorTodayResponse {
-  deadline_items: AdvisorTodayItem[]
 }
 
 export interface VatDashboardPeriodStat {
@@ -82,7 +57,5 @@ export interface DashboardOverviewResponse {
   vat_stats: VatDashboardStats
   quick_actions: BackendAction[]
   attention: AttentionResponse
-  advisor_today: AdvisorTodayResponse
-  attention_empty_checks: AttentionEmptyCheck[]
   recent_activity: RecentActivityItem[]
 }
