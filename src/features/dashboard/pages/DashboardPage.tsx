@@ -94,8 +94,14 @@ export const DashboardPage: React.FC = () => {
       )}
 
       {isAdvisorView && !emptyState?.is_empty ? (
-        <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
-          <aside className="grid gap-5 md:grid-cols-2 lg:col-start-2 lg:row-start-1 lg:grid-cols-1">
+        <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+          <aside className="grid gap-5 lg:col-start-2 lg:row-start-1">
+            <QuickActionsPanel
+              actions={quickActions ?? []}
+              activeActionKey={activeQuickAction}
+              onAction={handleQuickAction}
+              onOpenModal={setActiveCreateModal}
+            />
             <UpcomingDeadlinesPanel />
             <RecentActivityPanel items={recentActivity} />
           </aside>
@@ -105,15 +111,7 @@ export const DashboardPage: React.FC = () => {
             ) : (
               <AttentionBoard items={attentionItems} />
             )}
-            <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_24rem]">
-              <SignatureRequestsDashboardPanel />
-              <QuickActionsPanel
-                actions={quickActions ?? []}
-                activeActionKey={activeQuickAction}
-                onAction={handleQuickAction}
-                onOpenModal={setActiveCreateModal}
-              />
-            </div>
+            <SignatureRequestsDashboardPanel />
           </div>
         </div>
       ) : dashboard.status === 'loading' ? (

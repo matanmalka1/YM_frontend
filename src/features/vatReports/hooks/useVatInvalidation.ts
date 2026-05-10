@@ -15,7 +15,10 @@ const getCachedClientRecordId = (queryClient: QueryClient, workItemId: number | 
 }
 
 export const invalidateVatLists = (queryClient: QueryClient) =>
-  queryClient.invalidateQueries({ queryKey: vatReportsQK.lists() })
+  Promise.all([
+    queryClient.invalidateQueries({ queryKey: vatReportsQK.lists() }),
+    queryClient.invalidateQueries({ queryKey: vatReportsQK.groups() }),
+  ])
 
 export const invalidateVatWorkItem = async (
   queryClient: QueryClient,

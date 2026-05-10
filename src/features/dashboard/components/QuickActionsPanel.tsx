@@ -169,7 +169,7 @@ export const QuickActionsPanel = ({
   const quickActions = dedupeActions([...buildDynamicActions(actions), ...STATIC_ACTIONS]).slice(0, MAX_VISIBLE_ACTIONS)
 
   return (
-    <DashboardPanel className="w-full xl:max-w-sm xl:justify-self-start">
+    <DashboardPanel className="w-full">
       <div className="border-b border-slate-100 px-5 py-3">
         <DashboardSectionHeader title="פעולות מהירות" count={quickActions.length} tone="neutral" />
       </div>

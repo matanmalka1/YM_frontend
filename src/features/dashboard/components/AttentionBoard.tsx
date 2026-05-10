@@ -92,7 +92,7 @@ export const AttentionBoard = ({ items }: AttentionBoardProps) => (
         הכל תקין — אין דברים דחופים לטיפול
       </div>
     ) : (
-      <div className="space-y-2 p-4">
+      <div className="max-h-[640px] space-y-2 overflow-y-auto p-4">
         {items.map((item) => (
           <AttentionItemRow key={item.id} item={item} />
         ))}

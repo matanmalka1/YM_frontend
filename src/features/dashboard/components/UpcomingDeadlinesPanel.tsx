@@ -109,7 +109,7 @@ export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string 
     .slice(0, UPCOMING_DEADLINES_LIMIT)
 
   return (
-    <DashboardPanel className={`flex flex-col xl:min-h-[620px] ${className}`}>
+    <DashboardPanel className={`flex flex-col ${className}`}>
       <div className="flex items-center justify-between px-4 py-4">
         <h2 className="text-lg font-bold text-gray-950">מועדי מס קרובים</h2>
         <CalendarDays className="h-5 w-5 text-gray-900" />
