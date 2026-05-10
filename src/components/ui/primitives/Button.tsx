@@ -1,4 +1,5 @@
 import { cn } from '../../../utils/utils'
+import { Tooltip } from './Tooltip'
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
@@ -6,6 +7,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean
   loadingLabel?: string
   fullWidth?: boolean
+  tooltip?: string
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -17,6 +19,7 @@ export const Button: React.FC<ButtonProps> = ({
   loadingLabel,
   disabled,
   fullWidth = false,
+  tooltip,
   ...props
 }) => {
   const variants = {
@@ -32,7 +35,7 @@ export const Button: React.FC<ButtonProps> = ({
     md: 'px-4 py-2 text-base',
   }
 
-  return (
+  const btn = (
     <button
       className={cn(
         'rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2',
@@ -55,4 +58,6 @@ export const Button: React.FC<ButtonProps> = ({
       )}
     </button>
   )
+
+  return tooltip ? <Tooltip text={tooltip}>{btn}</Tooltip> : btn
 }

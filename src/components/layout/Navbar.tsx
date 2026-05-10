@@ -24,7 +24,11 @@ export const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
       </div>
 
       <div className="flex items-center gap-4">
-        <Link to="/search" className="p-2 rounded-md hover:bg-gray-100 text-gray-600" aria-label="חיפוש">
+        <Link
+          to="/search"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          aria-label="חיפוש"
+        >
           <Search className="w-5 h-5" />
         </Link>
         <NotificationBell />

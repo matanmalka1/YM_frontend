@@ -9,7 +9,7 @@ export const NotificationBell: React.FC = () => {
       <button
         type="button"
         onClick={handleOpen}
-        className="relative p-2 rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+        className="relative inline-flex h-9 w-9 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         aria-label="התראות"
       >
         <Bell className="w-5 h-5" />

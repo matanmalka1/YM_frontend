@@ -1,6 +1,5 @@
 import { ExternalLink } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { RowActionItem, RowActionsMenu } from '@/components/ui/table'
 import type { SearchResult } from '../api'
 import { toQueryParams } from '../../../api/queryParams'
 
@@ -24,9 +23,18 @@ export const SearchRowActions: React.FC<SearchRowActionsProps> = ({ result }) =>
   if (!url) return <span className="text-sm text-gray-300">—</span>
 
   return (
-    <RowActionsMenu ariaLabel="פעולות">
-      <RowActionItem label="פירוט" onClick={() => navigate(url)} icon={<ExternalLink className="h-4 w-4" />} />
-    </RowActionsMenu>
+    <button
+      type="button"
+      title="פירוט"
+      aria-label="פירוט"
+      onClick={(e) => {
+        e.stopPropagation()
+        navigate(url)
+      }}
+      className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+    >
+      <ExternalLink className="h-4 w-4" />
+    </button>
   )
 }
 
