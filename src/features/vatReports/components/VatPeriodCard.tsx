@@ -6,7 +6,7 @@ import { cn } from '@/utils/utils'
 import type { VatPeriodRow } from '../api'
 import { VAT_CLIENT_SUMMARY_STATUS_VARIANTS } from '../constants'
 import { getVatWorkItemStatusLabel } from '@/utils/enums'
-import { formatVatAmountLtrSafe } from '../utils'
+import { formatVatAmount } from '../utils'
 import { formatVatPeriodLabel, getNetVatTone } from '../view.helpers'
 
 const formatDeadlineDate = (iso: string | null): string => {
@@ -96,12 +96,12 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
           <VatMetricRow
             icon={<TrendingUp className="h-4 w-4" />}
             label="מע״מ עסקאות"
-            value={formatVatAmountLtrSafe(row.total_output_vat)}
+            value={formatVatAmount(row.total_output_vat)}
           />
           <VatMetricRow
             icon={<TrendingDown className="h-4 w-4" />}
             label="מע״מ תשומות"
-            value={formatVatAmountLtrSafe(row.total_input_vat)}
+            value={formatVatAmount(row.total_input_vat)}
           />
         </div>
 
@@ -113,7 +113,7 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
               {netLabel}
             </span>
             <span dir="ltr" className={cn('text-lg font-bold font-mono tabular-nums', netTextClass)}>
-              {formatVatAmountLtrSafe(Math.abs(netVat))}
+              {formatVatAmount(Math.abs(netVat))}
             </span>
           </div>
         </div>

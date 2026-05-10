@@ -56,7 +56,27 @@ const makeTextColumnFn =
   })
 
 export const textColumn = makeTextColumnFn(renderMutedText)
-export const monoColumn = makeTextColumnFn(renderMonoText)
+
+const makeMonoColumnFn =
+  (renderFn: typeof renderMonoText) =>
+  <T,>({
+    key,
+    header,
+    className,
+    headerClassName,
+    valueClassName,
+    emptyValue,
+    getValue,
+  }: TextColumnOptions<T>): Column<T> => ({
+    key,
+    header,
+    className,
+    headerClassName,
+    dir: 'ltr',
+    render: (item, index) => renderFn({ value: getValue(item, index), className: valueClassName, emptyValue }),
+  })
+
+export const monoColumn = makeMonoColumnFn(renderMonoText)
 
 export const dateColumn = <T,>({
   key,
@@ -71,6 +91,7 @@ export const dateColumn = <T,>({
   header,
   className,
   headerClassName,
+  dir: 'ltr',
   render: (item, index) => renderDateText({ value: getValue(item, index), className: valueClassName, emptyValue }),
 })
 

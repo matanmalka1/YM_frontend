@@ -229,7 +229,7 @@ const BatchContent = ({
                   >
                     {formatDate(row.due_date)}
                   </td>
-                  <td className="px-3 py-1.5 text-sm tabular-nums text-center align-middle">
+                  <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-center align-middle">
                     {row.reported_turnover ? (
                       <span className="text-gray-700">{fmtCurrency(row.reported_turnover)}</span>
                     ) : row.live_turnover ? (
@@ -238,13 +238,13 @@ const BatchContent = ({
                       <span className="text-gray-500">—</span>
                     )}
                   </td>
-                  <td className="px-3 py-1.5 text-sm font-semibold tabular-nums text-gray-800 text-center align-middle">
+                  <td dir="ltr" className="px-3 py-1.5 text-sm font-semibold tabular-nums text-gray-800 text-center align-middle">
                     {fmtCurrency(row.expected_amount)}
                   </td>
-                  <td className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-center align-middle">
+                  <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-center align-middle">
                     {fmtCurrency(row.paid_amount)}
                   </td>
-                  <td className="px-3 py-1.5 text-sm tabular-nums text-center align-middle">
+                  <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-center align-middle">
                     {row.delta == null ? (
                       <span className="text-gray-500">—</span>
                     ) : Number(row.delta) > 0 ? (
@@ -253,7 +253,7 @@ const BatchContent = ({
                       <span className="text-gray-500">{fmtCurrency(row.delta)}</span>
                     )}
                   </td>
-                  <td className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-center align-middle">
+                  <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-center align-middle">
                     {row.advance_rate != null ? (
                       `${Number(row.advance_rate).toFixed(2)}%`
                     ) : (

@@ -8,12 +8,12 @@ import { VatPeriodCard } from './VatPeriodCard'
 import type { CreateVatWorkItemPayload, VatAnnualSummary, VatPeriodRow } from '../api'
 import { showErrorToast } from '../../../utils/utils'
 import { useAuthStore } from '../../../store/auth.store'
-import { formatVatAmountLtrSafe } from '../utils'
+import { formatVatAmount } from '../utils'
 import { useVatClientSummary } from '../hooks/useVatClientSummary'
 import type { VatClientSummaryPanelProps } from '../types'
 import { canOpenVatPeriodRow, getClientSummaryRowsForYear } from '../view.helpers'
 
-const fmt = formatVatAmountLtrSafe
+const fmt = formatVatAmount
 
 const YearSummary = ({ annual }: { annual: VatAnnualSummary }) => {
   const avgNetVat = annual.periods_count > 0 ? (Number(annual.net_vat) / annual.periods_count).toFixed(2) : null

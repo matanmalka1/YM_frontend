@@ -34,9 +34,17 @@ export const formatPlainIdentifier = (value: number | string | null | undefined,
   return String(value)
 }
 
+const fmtShekel = (numeric: number): string => {
+  const abs = Math.abs(numeric)
+  const formatted = `₪${abs.toLocaleString('he-IL')}`
+  return numeric < 0 ? `-${formatted}` : formatted
+}
+
 export const formatShekelAmount = (value: string | number | null | undefined, fallback = '—'): string => {
   if (value == null || value === '') return fallback
-  return `₪${Number(value).toLocaleString('he-IL')}`
+  const numeric = Number(value)
+  if (Number.isNaN(numeric)) return fallback
+  return fmtShekel(numeric)
 }
 
 export const formatBinderNumber = (binderNumber: string | null | undefined): string => {
@@ -64,7 +72,9 @@ export const fmtCurrency = (n: string | number | null | undefined): string => {
   if (n == null) return '—'
   const numeric = Number(n)
   if (Number.isNaN(numeric)) return '—'
-  return `₪${numeric.toLocaleString('he-IL', { minimumFractionDigits: 0 })}`
+  const abs = Math.abs(numeric)
+  const formatted = `₪${abs.toLocaleString('he-IL', { minimumFractionDigits: 0 })}`
+  return numeric < 0 ? `-${formatted}` : formatted
 }
 
 const toILSNumeric = (value: string | number | null | undefined): number | null => {
@@ -76,17 +86,20 @@ const toILSNumeric = (value: string | number | null | undefined): number | null 
 export const formatCurrencyILS = (value: string | number | null | undefined, maximumFractionDigits = 0): string => {
   const numeric = toILSNumeric(value)
   if (numeric === null) return '—'
-  return numeric.toLocaleString('he-IL', {
+  const abs = Math.abs(numeric)
+  const formatted = abs.toLocaleString('he-IL', {
     style: 'currency',
     currency: 'ILS',
     maximumFractionDigits,
   })
+  return numeric < 0 ? `-${formatted}` : formatted
 }
 
 export const formatCompactCurrencyILS = (value: string | number | null | undefined, fractionDigits = 2): string => {
   const numeric = toILSNumeric(value)
   if (numeric === null) return '—'
-  return numeric
+  const abs = Math.abs(numeric)
+  const formatted = abs
     .toLocaleString('he-IL', {
       style: 'currency',
       currency: 'ILS',
@@ -94,6 +107,7 @@ export const formatCompactCurrencyILS = (value: string | number | null | undefin
       maximumFractionDigits: fractionDigits,
     })
     .replace(/\s/g, '')
+  return numeric < 0 ? `-${formatted}` : formatted
 }
 
 export const formatFileSize = (bytes: number | null | undefined): string => {

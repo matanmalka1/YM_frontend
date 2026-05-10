@@ -23,17 +23,11 @@ export const canFile = (actions: BackendAction[] | null | undefined): boolean =>
 
 export const isFiled = (status: string): boolean => status === 'filed'
 
-/** Formats a VAT amount as ₪X.XX, or "—" for null/NaN */
 export const formatVatAmount = (amount: string | number | null | undefined): string => {
   if (amount === null || amount === undefined || isNaN(Number(amount))) return '—'
-  return `₪${Number(amount).toFixed(2)}`
-}
-
-/** LTR-safe currency (negative sign before ₪), or "—" for null/NaN */
-export const formatVatAmountLtrSafe = (amount: string | number | null | undefined): string => {
-  if (amount === null || amount === undefined || isNaN(Number(amount))) return '—'
   const n = Number(amount)
-  return n < 0 ? `-₪${Math.abs(n).toFixed(2)}` : `₪${n.toFixed(2)}`
+  const abs = `₪${Math.abs(n).toFixed(2)}`
+  return n < 0 ? `-${abs}` : abs
 }
 
 export const getVatDeductionRateLabel = (rate: string | number): string => {

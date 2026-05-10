@@ -4,7 +4,7 @@ import type { VatWorkItemResponse } from '../api'
 import { getVatWorkItemStatusLabel } from '../../../utils/enums'
 import { formatClientOfficeId, formatDate } from '@/utils/utils'
 import { VAT_DEADLINE_WARNING_DAYS, VAT_STATUS_BADGE_VARIANTS } from '../constants'
-import { formatVatAmountLtrSafe } from '../utils'
+import { formatVatAmount, isFiled } from '../utils'
 import { VatWorkItemRowActions } from './VatWorkItemRowActions'
 import type { ColumnOpts } from '../types'
 import { Badge } from '../../../components/ui/primitives/Badge'
@@ -58,6 +58,7 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemRes
       const amount = item.is_overridden && item.final_vat_amount != null ? item.final_vat_amount : item.net_vat
       return (
         <span
+          dir="ltr"
           className={`inline-flex items-center gap-1 font-mono text-sm font-semibold tabular-nums ${
             Number(amount) === 0
               ? 'text-gray-400'
@@ -66,7 +67,7 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemRes
                 : semanticMonoToneClasses.positive
           }`}
         >
-          {formatVatAmountLtrSafe(amount)}
+          {formatVatAmount(amount)}
           {item.is_overridden && (
             <Badge variant="warning" className="px-1 py-0.5 text-xs font-medium">
               עוקף
@@ -82,14 +83,16 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemRes
     render: (item) => {
       const displayDeadline = item.extended_deadline ?? item.submission_deadline
       if (!displayDeadline) return <span className="text-gray-400 text-sm">—</span>
-      const cls = item.is_overdue
+      const filed = isFiled(item.status)
+      const overdue = item.is_overdue && !filed
+      const cls = overdue
         ? `${semanticMonoToneClasses.negative} font-semibold`
-        : item.days_until_deadline != null && item.days_until_deadline <= VAT_DEADLINE_WARNING_DAYS
+        : !filed && item.days_until_deadline != null && item.days_until_deadline <= VAT_DEADLINE_WARNING_DAYS
           ? `${semanticMonoToneClasses.warning} font-medium`
           : 'text-gray-600'
       return (
         <span className={`font-mono text-sm tabular-nums inline-flex items-center gap-1 ${cls}`}>
-          {item.is_overdue && <AlertTriangle className="h-3.5 w-3.5" />}
+          {overdue && <AlertTriangle className="h-3.5 w-3.5" />}
           {formatDate(displayDeadline)}
         </span>
       )

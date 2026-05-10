@@ -17,7 +17,7 @@ export const NotificationBell: React.FC = () => {
           <span
             role="status"
             aria-label={`${unreadCount > 99 ? '99+' : unreadCount} התראות חדשות`}
-            className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-negative-500 text-[10px] font-bold text-white leading-none"
+            className="absolute -top-1 -right-1 flex min-w-[18px] h-[18px] px-1 items-center justify-center rounded-full bg-negative-500 text-[10px] font-bold text-white leading-none"
           >
             <span aria-hidden="true">{unreadCount > 99 ? '99+' : unreadCount}</span>
           </span>
