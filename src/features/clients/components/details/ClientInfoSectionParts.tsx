@@ -18,7 +18,7 @@ const displayValue = (value: ReactNode) => {
 }
 
 const SectionCard = ({ title, children, className }: { title: string; children: ReactNode; className?: string }) => (
-  <Card title={title} className={cn('shadow-sm', className)}>
+  <Card title={title} size="compact" className={cn('shadow-sm', className)}>
     {children}
   </Card>
 )
@@ -39,7 +39,7 @@ export const DefinitionSectionCard = ({
     <DefinitionList
       columns={columns}
       items={items.map((item) => ({ ...item, value: displayValue(item.value) }))}
-      className="gap-x-5 gap-y-3"
+      className="gap-x-4 gap-y-2"
     />
   </SectionCard>
 )

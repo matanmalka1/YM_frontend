@@ -1,4 +1,5 @@
-import { type FC, type ReactNode } from 'react'
+import { type FC } from 'react'
+import { SelectDropdown } from '@/components/ui/inputs/SelectDropdown'
 import { formatDate, formatPhoneNumber, formatPlainIdentifier, formatShekelAmount } from '@/utils/utils'
 import type { ClientRecordResponse } from '../../api'
 import {
@@ -107,6 +108,9 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client, taxYear,
       label: 'עדכון מקדמה',
       value: client.advance_rate_updated_at ? formatDate(client.advance_rate_updated_at) : EMPTY_VALUE,
     },
+  ]
+
+  const authorityItems = [
     { label: 'סניף מע"מ', value: officeByType('vat_branch') ?? EMPTY_VALUE },
     { label: 'סניף ביטוח לאומי', value: officeByType('national_insurance') ?? EMPTY_VALUE },
     { label: 'סניף מס הכנסה', value: officeByType('assessing_officer') ?? EMPTY_VALUE },
@@ -132,33 +136,34 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client, taxYear,
 
   return (
     <div className="space-y-4">
-      <DefinitionSectionCard title="פרטי קשר" items={contactItems} columns={3} />
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        <DefinitionSectionCard title="פרטי קשר" items={contactItems} columns={2} />
+        <DefinitionSectionCard
+          title="פרופיל מס"
+          items={taxItems}
+          columns={2}
+          headerAction={
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <span>שנת מס:</span>
+              <select
+                value={taxYear}
+                onChange={(e) => onTaxYearChange(Number(e.target.value))}
+                className="rounded border border-gray-200 bg-white px-2 py-0.5 text-sm text-gray-700 focus:outline-none"
+              >
+                {YEAR_OPTIONS.map((y) => (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
+                ))}
+              </select>
+            </div>
+          }
+        />
+      </div>
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
-        <div className="space-y-4">
-          <DefinitionSectionCard
-            title="פרופיל מס"
-            items={taxItems}
-            columns={3}
-            headerAction={
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <span>שנת מס:</span>
-                <select
-                  value={taxYear}
-                  onChange={(e) => onTaxYearChange(Number(e.target.value))}
-                  className="rounded border border-gray-200 bg-white px-2 py-0.5 text-sm text-gray-700 focus:outline-none"
-                >
-                  {YEAR_OPTIONS.map((y) => (
-                    <option key={y} value={y}>
-                      {y}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            }
-          />
-          <DefinitionSectionCard title="פרטי משרד" items={officeItems} columns={3} />
-        </div>
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+        <DefinitionSectionCard title="פרטי משרד" items={officeItems} columns={2} />
+        <DefinitionSectionCard title="רשויות" items={authorityItems} columns={2} />
         {sideContent ? <div className="min-w-0">{sideContent}</div> : null}
       </div>
     </div>

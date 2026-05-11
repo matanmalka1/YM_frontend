@@ -11,6 +11,7 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   footer?: React.ReactNode
   variant?: 'default' | 'elevated'
   interactive?: boolean
+  size?: 'default' | 'compact'
   style?: React.CSSProperties
 }
 
@@ -23,6 +24,7 @@ export const Card: React.FC<CardProps> = ({
   footer,
   variant = 'default',
   interactive = false,
+  size = 'default',
   style,
   ...rest
 }) => {
@@ -30,6 +32,10 @@ export const Card: React.FC<CardProps> = ({
     default: 'bg-white border border-gray-200/80',
     elevated: 'bg-white border-0 shadow-elevation-2',
   }
+
+  const headerPadding = size === 'compact' ? 'px-4 py-2.5' : 'px-6 py-4'
+  const bodyPadding = size === 'compact' ? 'p-4' : 'p-6'
+  const footerPadding = size === 'compact' ? 'px-4 py-2.5' : 'px-6 py-4'
 
   return (
     <div
@@ -44,14 +50,14 @@ export const Card: React.FC<CardProps> = ({
       {...rest}
     >
       {(title || subtitle || actions) && (
-        <div className="px-6 py-4 border-b border-gray-100/80 bg-gradient-to-r from-gray-50/50 to-transparent">
+        <div className={cn(headerPadding, 'border-b border-gray-100/80 bg-gradient-to-r from-gray-50/50 to-transparent')}>
           <SectionHeader title={title!} subtitle={subtitle} actions={actions} size="sm" />
         </div>
       )}
 
-      <div className="p-6">{children}</div>
+      <div className={bodyPadding}>{children}</div>
 
-      {footer && <div className="px-6 py-4 border-t border-gray-100/80 bg-gray-50/50">{footer}</div>}
+      {footer && <div className={cn(footerPadding, 'border-t border-gray-100/80 bg-gray-50/50')}>{footer}</div>}
     </div>
   )
 }

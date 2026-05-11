@@ -86,6 +86,7 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
     <>
       <Card
         title="עסקים"
+        size="compact"
         className="shadow-none"
         actions={
           canEdit ? (
@@ -103,7 +104,7 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
         ) : (
           <ul className="divide-y divide-gray-100">
             {businesses.map((biz) => (
-              <li key={biz.id} className="flex items-center gap-3 py-3">
+              <li key={biz.id} className="flex items-center gap-3 py-2">
                 <div className="min-w-0 flex-1">
                   <Link
                     to={CLIENT_ROUTES.businessDetail(clientId, biz.id)}

@@ -24,16 +24,16 @@ const Tile: React.FC<TileProps> = ({ icon, title, primary, secondary, onClick })
   <button
     type="button"
     disabled={!onClick}
-    className={`flex min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-right transition-colors ${
+    className={`flex min-w-0 items-center gap-1.5 rounded-md px-2 py-1 text-right transition-colors ${
       onClick ? 'hover:bg-gray-50' : 'cursor-default'
     }`}
     onClick={onClick}
   >
     <div className="shrink-0 text-gray-400">{icon}</div>
     <div className="min-w-0 flex-1">
-      <p className="truncate text-[11px] font-medium text-gray-500">{title}</p>
-      <p className="truncate text-sm font-semibold leading-tight text-gray-900">{primary}</p>
-      <p className="truncate text-[11px] text-gray-500">{secondary}</p>
+      <p className="truncate text-[10px] font-medium text-gray-500">{title}</p>
+      <p className="truncate text-xs font-semibold leading-tight text-gray-900">{primary}</p>
+      <p className="truncate text-[10px] text-gray-500">{secondary}</p>
     </div>
   </button>
 )
@@ -105,13 +105,13 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
 
   if (isLoading) {
     return (
-      <section className="h-full space-y-2 rounded-lg border border-gray-100 bg-white px-4 py-3">
+      <section className="w-full max-w-2xl space-y-1.5 rounded-lg border border-gray-200/80 bg-white px-3 py-2.5">
         <div className="flex items-center justify-between gap-3">
           <h3 className="text-sm font-semibold text-gray-900">סטטוס לקוח</h3>
         </div>
         <div className="grid grid-cols-2 gap-1 md:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <SkeletonBlock key={i} width="w-full" height="h-12" rounded="md" />
+            <SkeletonBlock key={i} width="w-full" height="h-10" rounded="md" />
           ))}
         </div>
       </section>
@@ -137,12 +137,12 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
         : '—'
 
   return (
-    <section className="h-full space-y-2 rounded-lg border border-gray-100 bg-white px-4 py-3">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <section className="w-full max-w-2xl space-y-1.5 rounded-lg border border-gray-200/80 bg-white px-3 py-2.5">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-sm font-semibold text-gray-900">סטטוס לקוח — {year}</h3>
         {yearSelector}
       </div>
-      <div className="grid grid-cols-2 gap-1 md:grid-cols-3">
+      <div className="grid grid-cols-2 gap-0.5 md:grid-cols-3">
         <Tile
           icon={<Receipt size={14} />}
           title='מע"מ (לקוח)'
