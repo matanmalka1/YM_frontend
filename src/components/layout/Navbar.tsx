@@ -73,7 +73,9 @@ export const Navbar: React.FC = () => {
     ...group,
     items: group.items.filter((item) => canShowItem(item, user?.role)),
   })).filter((group) => group.items.length > 0)
-  const hasActiveMoreItem = moreGroups.some((group) => group.items.some((item) => isRouteActive(location.pathname, item)))
+  const hasActiveMoreItem = moreGroups.some((group) =>
+    group.items.some((item) => isRouteActive(location.pathname, item)),
+  )
 
   useDismissibleLayer({
     open: moreOpen,
@@ -155,7 +157,9 @@ export const Navbar: React.FC = () => {
                           onClick={() => setMoreOpen(false)}
                           className={cn(
                             'flex items-center justify-between gap-3 px-3 py-2 text-sm transition',
-                            active ? 'bg-primary-50 text-primary-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-950',
+                            active
+                              ? 'bg-primary-50 text-primary-700'
+                              : 'text-gray-700 hover:bg-gray-50 hover:text-gray-950',
                           )}
                           role="menuitem"
                         >

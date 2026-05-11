@@ -120,7 +120,9 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ op
           {selectedClient && clientContact && (
             <p className="text-xs text-gray-500 pe-1">
               {channel === 'whatsapp'
-                ? (clientContact.phone ? formatPhoneNumber(clientContact.phone) : 'אין מספר טלפון ללקוח')
+                ? clientContact.phone
+                  ? formatPhoneNumber(clientContact.phone)
+                  : 'אין מספר טלפון ללקוח'
                 : (clientContact.email ?? 'אין כתובת אימייל ללקוח')}
             </p>
           )}

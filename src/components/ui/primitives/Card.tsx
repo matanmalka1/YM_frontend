@@ -50,7 +50,9 @@ export const Card: React.FC<CardProps> = ({
       {...rest}
     >
       {(title || subtitle || actions) && (
-        <div className={cn(headerPadding, 'border-b border-gray-100/80 bg-gradient-to-r from-gray-50/50 to-transparent')}>
+        <div
+          className={cn(headerPadding, 'border-b border-gray-100/80 bg-gradient-to-r from-gray-50/50 to-transparent')}
+        >
           <SectionHeader title={title!} subtitle={subtitle} actions={actions} size="sm" />
         </div>
       )}

@@ -30,7 +30,9 @@ const ClientHeaderMetaItem: FC<{ icon: React.ReactNode; label: string; value: Re
   value,
 }) => (
   <span className="inline-flex min-w-[136px] items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm">
-    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-gray-50 text-gray-500">{icon}</span>
+    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-gray-50 text-gray-500">
+      {icon}
+    </span>
     <span className="min-w-0 text-right leading-tight">
       <span className="block text-[11px] font-semibold text-gray-400">{label}</span>
       <span className="block truncate text-sm font-bold text-gray-900">{value}</span>

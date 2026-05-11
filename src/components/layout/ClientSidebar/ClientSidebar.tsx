@@ -22,10 +22,7 @@ const GROUP_MODES: Array<{ value: GroupMode; label: string }> = [
   { value: 'vat', label: 'מע״מ' },
 ]
 
-const getGroupInfo = (
-  client: ClientSidebarItem,
-  groupMode: GroupMode,
-): { key: string; label: string } => {
+const getGroupInfo = (client: ClientSidebarItem, groupMode: GroupMode): { key: string; label: string } => {
   if (groupMode === 'entity') {
     const key = client.entityType ?? 'unknown'
     return { key, label: client.entityType ? ENTITY_TYPE_LABELS[client.entityType] : 'ללא סוג' }
@@ -198,7 +195,9 @@ export const ClientSidebar: React.FC = () => {
             </div>
             <div className="min-w-0 text-right">
               <p className="truncate text-xs font-medium leading-tight text-gray-900">{user?.full_name || 'אורח'}</p>
-              {user?.role && <p className="truncate text-[11px] leading-tight text-gray-400">{getRoleLabel(user.role)}</p>}
+              {user?.role && (
+                <p className="truncate text-[11px] leading-tight text-gray-400">{getRoleLabel(user.role)}</p>
+              )}
             </div>
           </div>
           <button

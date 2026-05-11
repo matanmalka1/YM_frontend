@@ -16,7 +16,6 @@ const displayValue = (value: ReactNode) => {
   return value
 }
 
-
 export const DefinitionSectionCard = ({
   title,
   items,

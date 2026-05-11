@@ -29,9 +29,9 @@ const useUserNameMap = () => {
 
 const NOTE_TAGS = [
   { key: 'תזכורת', label: 'תזכורת', color: 'text-orange-600 bg-orange-50 border-orange-200' },
-  { key: 'פגישה',  label: 'פגישה',  color: 'text-purple-600 bg-purple-50 border-purple-200' },
-  { key: 'טיפול',  label: 'טיפול',  color: 'text-rose-600 bg-rose-50 border-rose-200' },
-  { key: 'תיעוד',  label: 'תיעוד',  color: 'text-gray-600 bg-gray-100 border-gray-200' },
+  { key: 'פגישה', label: 'פגישה', color: 'text-purple-600 bg-purple-50 border-purple-200' },
+  { key: 'טיפול', label: 'טיפול', color: 'text-rose-600 bg-rose-50 border-rose-200' },
+  { key: 'תיעוד', label: 'תיעוד', color: 'text-gray-600 bg-gray-100 border-gray-200' },
 ] as const
 
 type NoteTagKey = (typeof NOTE_TAGS)[number]['key']
@@ -102,7 +102,9 @@ const NoteComposer = ({ value, onChange, onSave, onCancel, isLoading, initialTag
               onClick={() => toggleTag(tag.key)}
               className={cn(
                 'rounded border px-2 py-0.5 text-xs font-medium transition-colors',
-                selectedTag === tag.key ? tag.color : 'border-transparent text-gray-400 hover:text-gray-600 hover:bg-gray-50',
+                selectedTag === tag.key
+                  ? tag.color
+                  : 'border-transparent text-gray-400 hover:text-gray-600 hover:bg-gray-50',
               )}
             >
               {tag.label}
@@ -139,43 +141,45 @@ const NoteRow = ({ note, isDeleting, onEdit, onDelete, nameMap }: NoteRowProps) 
   const { tag, body } = parseNote(note.note)
   const author = note.created_by != null ? (nameMap.get(note.created_by) ?? null) : null
   return (
-  <li className="flex items-start gap-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
-    <div className="flex-1 min-w-0">
-      {tag && (
-        <span className={cn('mb-1.5 inline-block rounded border px-1.5 py-0.5 text-[11px] font-semibold', TAG_COLOR[tag])}>
-          {tag}
-        </span>
-      )}
-      <p className="text-sm font-semibold text-gray-900 whitespace-pre-wrap break-words">{body}</p>
-      <p className="mt-1.5 text-xs text-gray-400">
-        {author && <span>{author} • </span>}
-        {formatDate(note.created_at)}
-      </p>
-    </div>
-    <div className="flex items-center gap-1 shrink-0">
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={() => onEdit(note)}
-        className="h-8 w-8 px-0 text-gray-500"
-        title="ערוך"
-      >
-        <Pencil className="h-4 w-4" />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={() => onDelete(note.id)}
-        disabled={isDeleting}
-        className="h-8 w-8 px-0 text-gray-500 hover:text-negative-600"
-        title="מחק"
-      >
-        <Trash2 className="h-4 w-4" />
-      </Button>
-    </div>
-  </li>
+    <li className="flex items-start gap-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+      <div className="flex-1 min-w-0">
+        {tag && (
+          <span
+            className={cn('mb-1.5 inline-block rounded border px-1.5 py-0.5 text-[11px] font-semibold', TAG_COLOR[tag])}
+          >
+            {tag}
+          </span>
+        )}
+        <p className="text-sm font-semibold text-gray-900 whitespace-pre-wrap break-words">{body}</p>
+        <p className="mt-1.5 text-xs text-gray-400">
+          {author && <span>{author} • </span>}
+          {formatDate(note.created_at)}
+        </p>
+      </div>
+      <div className="flex items-center gap-1 shrink-0">
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={() => onEdit(note)}
+          className="h-8 w-8 px-0 text-gray-500"
+          title="ערוך"
+        >
+          <Pencil className="h-4 w-4" />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={() => onDelete(note.id)}
+          disabled={isDeleting}
+          className="h-8 w-8 px-0 text-gray-500 hover:text-negative-600"
+          title="מחק"
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </div>
+    </li>
   )
 }
 
@@ -212,11 +216,7 @@ export const NotesCard = ({ hook, canEdit }: NotesCardProps) => {
 
   return (
     <>
-      <Card
-        title="הערות"
-        subtitle={total > 0 ? `${total} הערות` : undefined}
-        className="shadow-sm"
-      >
+      <Card title="הערות" subtitle={total > 0 ? `${total} הערות` : undefined} className="shadow-sm">
         {error && <Alert variant="error" message={error} />}
 
         {canEdit && (
@@ -224,7 +224,10 @@ export const NotesCard = ({ hook, canEdit }: NotesCardProps) => {
             <NoteComposer
               value={addText}
               onChange={setAddText}
-              onSave={async (text) => { await addNote(text); setAddText('') }}
+              onSave={async (text) => {
+                await addNote(text)
+                setAddText('')
+              }}
               onCancel={() => setAddText('')}
               isLoading={isAdding}
             />

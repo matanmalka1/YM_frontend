@@ -79,11 +79,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
     <div className="space-y-6">
       {activeTab === 'details' && (
         <>
-          <ClientInfoSection
-            client={client}
-            taxYear={taxYear}
-            onTaxYearChange={onTaxYearChange}
-          />
+          <ClientInfoSection client={client} taxYear={taxYear} onTaxYearChange={onTaxYearChange} />
           <ClientStatusCard clientId={client.id} />
           <ClientBusinessesCard
             clientId={client.id}

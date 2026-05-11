@@ -2,11 +2,7 @@ import { type FC } from 'react'
 import { SelectDropdown } from '@/components/ui/inputs/SelectDropdown'
 import { formatDate, formatPhoneNumber, formatPlainIdentifier, formatShekelAmount } from '@/utils/utils'
 import type { ClientRecordResponse } from '../../api'
-import {
-  ADVANCE_PAYMENT_FREQUENCY_LABELS,
-  getClientStatusLabel,
-  getClientVatReportingLabel,
-} from '../../constants'
+import { ADVANCE_PAYMENT_FREQUENCY_LABELS, getClientStatusLabel, getClientVatReportingLabel } from '../../constants'
 import { useClientAuthorityContacts } from '../../hooks/useClientAuthorityContacts'
 import { useAdvisorOptions } from '@/features/users'
 import { DefinitionSectionCard } from './ClientInfoSectionParts'
