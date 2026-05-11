@@ -26,7 +26,7 @@ export const CLIENT_DETAILS_TABS: ActiveClientDetailsTab[] = [
 ]
 
 export const CLIENT_DETAILS_TAB_LABELS: Record<ActiveClientDetailsTab, string> = {
-  details: 'פרטים',
+  details: 'סקירה כללית',
   documents: 'מסמכים',
   timeline: 'ציר זמן',
   vat: 'מע"מ (לקוח)',

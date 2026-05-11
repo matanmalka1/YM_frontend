@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Routes, Route, Navigate, Outlet, useNavigate } from 'react-router-dom'
 import { AUTH_EXPIRED_EVENT } from '../api/client'
 import { useAuthStore } from '../store/auth.store'
@@ -13,7 +13,7 @@ import { ClientDetails, Clients } from '../features/clients'
 import { BusinessDetails } from '../features/businesses'
 import { DashboardPage } from '../features/dashboard'
 import { Navbar } from '../components/layout/Navbar'
-import { Sidebar } from '../components/layout/Sidebar/Sidebar'
+import { ClientSidebar } from '../components/layout/ClientSidebar/ClientSidebar'
 import { PageLayout } from '../components/layout/PageLayout'
 import { WorkQueuePage } from '../features/workQueue'
 import { TasksPage } from '../features/tasks'
@@ -69,14 +69,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ requiredRole }) => {
 }
 
 const AuthenticatedLayout: React.FC = () => {
-  const [isSidebarOpen, setSidebarOpen] = useState(true)
-  const toggleSidebar = () => setSidebarOpen((prev) => !prev)
-
   return (
     <div className="flex flex-1 overflow-hidden h-screen">
-      <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <ClientSidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Navbar toggleSidebar={toggleSidebar} />
+        <Navbar />
         <PageLayout>
           <Outlet />
         </PageLayout>
