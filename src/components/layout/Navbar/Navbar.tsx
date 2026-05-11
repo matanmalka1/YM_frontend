@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react'
 import { ChevronDown, Search } from 'lucide-react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { NotificationBell } from './NotificationBell'
+import { NotificationBell } from '../NotificationBell'
 import { useAuthStore } from '@/store/auth.store'
 import type { UserRole } from '@/types'
 import { cn } from '@/utils/utils'
-import { NAV_GROUPS, type NavItem } from './Sidebar/sidebar.constants'
-import { useDismissibleLayer } from '../ui/overlays/useDismissibleLayer'
+import { NAV_GROUPS, type NavItem } from './Navbar.constants'
+import { useDismissibleLayer } from '../../ui/overlays/useDismissibleLayer'
 
 type TopNavItem = Pick<NavItem, 'to' | 'label' | 'end' | 'roles'>
 

@@ -6,7 +6,6 @@ interface AlertProps {
   variant?: 'warning' | 'info' | 'error' | 'success'
   dismissible?: boolean
   onDismiss?: () => void
-  /** Shows a retry button — only meaningful with variant="error" */
   onRetry?: () => void
   className?: string
 }
@@ -96,5 +95,3 @@ export const Alert: React.FC<AlertProps> = ({
     </div>
   )
 }
-
-Alert.displayName = 'Alert'
