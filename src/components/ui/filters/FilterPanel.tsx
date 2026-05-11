@@ -5,7 +5,7 @@ import { Select } from '@/components/ui/inputs/Select'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
 import { ActiveFilterBadges } from '@/components/ui/table/ActiveFilterBadges'
-import { ClientFilterControl } from '@/components/shared/client/ClientFilterControl'
+import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client'
 import type { FilterBadge } from '@/components/ui/table/ActiveFilterBadges'
 import { cn, formatDate } from '@/utils/utils'
 import { useState, useEffect, useRef, useImperativeHandle, forwardRef, useCallback } from 'react'
@@ -119,24 +119,33 @@ function ClientPickerField({
   }, [idVal])
 
   return (
-    <ClientFilterControl
-      label={field.label}
-      placeholder={field.placeholder}
-      selectedClient={selectedClient}
-      clientQuery={clientQuery}
-      onQueryChange={setClientQuery}
-      onSelect={(client) => {
-        setClientQuery(client.name)
-        const updates: Record<string, string> = { [field.idKey]: String(client.id) }
-        if (field.nameKey) updates[field.nameKey] = client.name
-        onMultiChange(updates)
-      }}
-      onClear={() => {
-        const updates: Record<string, string> = { [field.idKey]: '' }
-        if (field.nameKey) updates[field.nameKey] = ''
-        onMultiChange(updates)
-      }}
-    />
+    <div>
+      {selectedClient ? (
+        <SelectedClientDisplay
+          name={selectedClient.name}
+          id={selectedClient.id}
+          label={field.label}
+          onClear={() => {
+            const updates: Record<string, string> = { [field.idKey]: '' }
+            if (field.nameKey) updates[field.nameKey] = ''
+            onMultiChange(updates)
+          }}
+        />
+      ) : (
+        <ClientSearchInput
+          label={field.label}
+          value={clientQuery}
+          onChange={setClientQuery}
+          placeholder={field.placeholder}
+          onSelect={(client) => {
+            setClientQuery(client.name)
+            const updates: Record<string, string> = { [field.idKey]: String(client.id) }
+            if (field.nameKey) updates[field.nameKey] = client.name
+            onMultiChange(updates)
+          }}
+        />
+      )}
+    </div>
   )
 }
 
