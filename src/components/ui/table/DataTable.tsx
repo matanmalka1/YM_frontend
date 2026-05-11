@@ -116,7 +116,11 @@ export const DataTable = <T,>({
                 tabIndex={onRowClick ? 0 : undefined}
               >
                 {columns.map((column) => (
-                  <td key={column.key} dir={column.dir} className={cn('px-3 py-3 align-middle text-center', column.className)}>
+                  <td
+                    key={column.key}
+                    dir={column.dir}
+                    className={cn('px-3 py-3 align-middle text-center', column.className)}
+                  >
                     {column.render(item, index)}
                   </td>
                 ))}

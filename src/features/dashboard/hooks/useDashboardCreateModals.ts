@@ -1,11 +1,7 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import {
-  advancePaymentsApi,
-  advancedPaymentsQK,
-  type CreateAdvancePaymentPayload,
-} from '@/features/advancedPayments'
+import { advancePaymentsApi, advancedPaymentsQK, type CreateAdvancePaymentPayload } from '@/features/advancedPayments'
 import { chargesApi, chargesQK, type CreateChargePayload } from '@/features/charges'
 import { CLIENT_ROUTES, clientsApi, clientsQK, extractClientErrorCode } from '@/features/clients'
 import { vatReportsApi, vatReportsQK, type CreateVatWorkItemPayload } from '@/features/vatReports'
@@ -158,8 +154,6 @@ export const useDashboardCreateModals = () => {
     chargeCreateError: chargeCreateMutation.error
       ? getErrorMessage(chargeCreateMutation.error, 'שגיאה ביצירת חיוב')
       : null,
-    vatCreateError: vatCreateMutation.error
-      ? getErrorMessage(vatCreateMutation.error, 'שגיאה ביצירת תיק מע"מ')
-      : null,
+    vatCreateError: vatCreateMutation.error ? getErrorMessage(vatCreateMutation.error, 'שגיאה ביצירת תיק מע"מ') : null,
   }
 }

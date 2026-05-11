@@ -22,7 +22,10 @@ export const ClientRowActions: React.FC<ClientRowActionsProps> = ({ clientId, of
         tooltip="פתח פרופיל"
         aria-label="פתח פרופיל"
         className="p-1.5 text-gray-400 hover:text-gray-700"
-        onClick={(e) => { e.stopPropagation(); navigate(CLIENT_ROUTES.detail(clientId)) }}
+        onClick={(e) => {
+          e.stopPropagation()
+          navigate(CLIENT_ROUTES.detail(clientId))
+        }}
       >
         <UserCircle className="h-4 w-4" />
       </Button>
@@ -33,7 +36,10 @@ export const ClientRowActions: React.FC<ClientRowActionsProps> = ({ clientId, of
           tooltip="עריכת לקוח"
           aria-label="עריכת לקוח"
           className="p-1.5 text-gray-400 hover:text-gray-700"
-          onClick={(e) => { e.stopPropagation(); onEditClient() }}
+          onClick={(e) => {
+            e.stopPropagation()
+            onEditClient()
+          }}
         >
           <Pencil className="h-4 w-4" />
         </Button>
@@ -44,7 +50,10 @@ export const ClientRowActions: React.FC<ClientRowActionsProps> = ({ clientId, of
         tooltip="ציר זמן"
         aria-label="ציר זמן"
         className="p-1.5 text-gray-400 hover:text-gray-700"
-        onClick={(e) => { e.stopPropagation(); navigate(CLIENT_ROUTES.timeline(clientId)) }}
+        onClick={(e) => {
+          e.stopPropagation()
+          navigate(CLIENT_ROUTES.timeline(clientId))
+        }}
       >
         <Clock className="h-4 w-4" />
       </Button>

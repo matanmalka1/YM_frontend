@@ -79,16 +79,12 @@ export const buildTimelineEvents = (reports: AnnualReportFull[]): AnnualReportTi
 export const getFilingStats = (reports: AnnualReportFull[]) => {
   const total = reports.length
   const pct = (n: number) => (total > 0 ? Math.round((n / total) * 100) : 0)
-  const submittedOnTime = reports.filter(
-    (report) => {
-      const deadlineTime = parseAnnualReportCalendarDate(report.filing_deadline)?.getTime()
-      return (
-        report.submitted_at &&
-        deadlineTime != null &&
-        new Date(report.submitted_at).getTime() < deadlineTime + 86_400_000
-      )
-    },
-  ).length
+  const submittedOnTime = reports.filter((report) => {
+    const deadlineTime = parseAnnualReportCalendarDate(report.filing_deadline)?.getTime()
+    return (
+      report.submitted_at && deadlineTime != null && new Date(report.submitted_at).getTime() < deadlineTime + 86_400_000
+    )
+  }).length
   const pending = reports.filter((report) => !report.submitted_at).length
   const amended = reports.filter((report) => report.status === 'amended').length
 

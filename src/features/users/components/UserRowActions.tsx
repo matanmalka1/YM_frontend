@@ -25,7 +25,10 @@ export const UserRowActions: React.FC<UserRowActionsProps> = ({
       tooltip="עריכה"
       aria-label="עריכה"
       className="p-1.5 text-gray-400 hover:text-gray-700"
-      onClick={(e) => { e.stopPropagation(); onEdit(user) }}
+      onClick={(e) => {
+        e.stopPropagation()
+        onEdit(user)
+      }}
     >
       <Pencil className="h-4 w-4" />
     </Button>
@@ -35,7 +38,10 @@ export const UserRowActions: React.FC<UserRowActionsProps> = ({
       tooltip="איפוס סיסמה"
       aria-label="איפוס סיסמה"
       className="p-1.5 text-gray-400 hover:text-gray-700"
-      onClick={(e) => { e.stopPropagation(); onResetPassword(user) }}
+      onClick={(e) => {
+        e.stopPropagation()
+        onResetPassword(user)
+      }}
     >
       <KeyRound className="h-4 w-4" />
     </Button>

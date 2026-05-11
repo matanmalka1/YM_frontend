@@ -65,12 +65,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ onSubmit, onCl
             onChange={(e) => setPriority(e.target.value as TaskPriority | '')}
             label="עדיפות"
           />
-          <Input
-            label="תאריך יעד"
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-          />
+          <Input label="תאריך יעד" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
           <Select
             options={roleOptions}
             value={assignedRole}

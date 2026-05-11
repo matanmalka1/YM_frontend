@@ -21,8 +21,7 @@ const TABLE_HEADERS = [
   },
   {
     label: 'שם לקוח',
-    className:
-      'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-right align-middle w-48',
+    className: 'px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide text-right align-middle w-48',
   },
   {
     label: 'תקופת מקדמה',
@@ -238,7 +237,10 @@ const BatchContent = ({
                       <span className="text-gray-500">—</span>
                     )}
                   </td>
-                  <td dir="ltr" className="px-3 py-1.5 text-sm font-semibold tabular-nums text-gray-800 text-center align-middle">
+                  <td
+                    dir="ltr"
+                    className="px-3 py-1.5 text-sm font-semibold tabular-nums text-gray-800 text-center align-middle"
+                  >
                     {fmtCurrency(row.expected_amount)}
                   </td>
                   <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-center align-middle">

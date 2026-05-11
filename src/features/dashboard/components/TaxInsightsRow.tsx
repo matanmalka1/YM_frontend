@@ -69,7 +69,11 @@ export const TaxInsightsRow: React.FC<Props> = ({ vatStats, embedded = false }) 
           href={advanceHref(advancePayments.bimonthly.period.slice(0, 4), 2)}
         />
         {seasonStats && seasonStats.total > 0 && (
-          <ProgressBar label={`דוחות שנתיים ${seasonStats.taxYear}`} percent={seasonStats.completionPct} href="/tax/reports" />
+          <ProgressBar
+            label={`דוחות שנתיים ${seasonStats.taxYear}`}
+            percent={seasonStats.completionPct}
+            href="/tax/reports"
+          />
         )}
       </div>
     </div>

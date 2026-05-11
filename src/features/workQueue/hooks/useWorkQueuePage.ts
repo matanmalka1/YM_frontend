@@ -30,11 +30,7 @@ export const useWorkQueuePage = () => {
     items: filtered,
     allItems: data,
     isLoading: isLoading && !error,
-    error: !hasRole
-      ? 'לא ניתן לזהות תפקיד משתמש'
-      : error
-        ? getErrorMessage(error, 'שגיאה בטעינת המשימות')
-        : null,
+    error: !hasRole ? 'לא ניתן לזהות תפקיד משתמש' : error ? getErrorMessage(error, 'שגיאה בטעינת המשימות') : null,
     urgencyFilter,
     setUrgencyFilter,
     typeFilter,

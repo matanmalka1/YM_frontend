@@ -38,7 +38,9 @@ export const TasksTable: React.FC<TasksTableProps> = ({ items, isLoading, onStar
     {
       key: 'priority',
       header: 'עדיפות',
-      render: (t: Task) => <span className="text-sm text-gray-600">{taskPriorityLabels[t.priority] ?? t.priority}</span>,
+      render: (t: Task) => (
+        <span className="text-sm text-gray-600">{taskPriorityLabels[t.priority] ?? t.priority}</span>
+      ),
     },
     {
       key: 'due_date',

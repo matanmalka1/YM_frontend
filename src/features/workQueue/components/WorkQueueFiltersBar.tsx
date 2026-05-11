@@ -14,7 +14,12 @@ const typeOptions = [
   ...workQueueSourceTypeValues.map((v) => ({ value: v, label: workQueueSourceTypeLabels[v] })),
 ]
 
-export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({ typeFilter, onTypeChange, hasFilters, onClear }) => (
+export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
+  typeFilter,
+  onTypeChange,
+  hasFilters,
+  onClear,
+}) => (
   <div className="flex items-center gap-3 flex-wrap">
     <Select
       options={typeOptions}

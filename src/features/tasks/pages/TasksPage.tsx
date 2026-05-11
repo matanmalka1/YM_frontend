@@ -41,7 +41,12 @@ export const TasksPage: React.FC = () => {
   )
 
   return (
-    <PageStateGuard isLoading={isLoading} error={error ? 'שגיאה בטעינת המשימות' : null} header={header} loadingMessage="טוען משימות...">
+    <PageStateGuard
+      isLoading={isLoading}
+      error={error ? 'שגיאה בטעינת המשימות' : null}
+      header={header}
+      loadingMessage="טוען משימות..."
+    >
       <div className="flex gap-3 mb-4 items-center">
         <Select
           options={statusOptions}

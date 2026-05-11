@@ -4,11 +4,7 @@ import { he } from 'date-fns/locale'
 import { DataTable } from '@/components/ui/table/DataTable'
 import { Badge } from '@/components/ui/primitives/Badge'
 import type { WorkQueueItem } from '../api/contracts'
-import {
-  workQueueSourceTypeLabels,
-  workQueueUrgencyLabels,
-  workQueueUrgencyVariant,
-} from '../constants'
+import { workQueueSourceTypeLabels, workQueueUrgencyLabels, workQueueUrgencyVariant } from '../constants'
 
 interface WorkQueueTableProps {
   items: WorkQueueItem[]

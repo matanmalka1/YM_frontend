@@ -128,9 +128,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
               <FileSignature className="h-3.5 w-3.5" />
             </span>
             <div className="min-w-0">
-              <h2 className={cn('truncate font-bold text-gray-900', compact ? 'text-base' : 'text-sm')}>
-                בקשות חתימה
-              </h2>
+              <h2 className={cn('truncate font-bold text-gray-900', compact ? 'text-base' : 'text-sm')}>בקשות חתימה</h2>
               {!compact && (
                 <p className="mt-0.5 truncate text-xs text-gray-500">
                   {error ?? 'ניהול בקשות חתימה פעילות מכל הלקוחות'}

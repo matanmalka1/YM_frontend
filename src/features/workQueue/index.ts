@@ -9,11 +9,7 @@ export {
   type WorkQueueSourceType,
   type WorkQueueUrgency,
 } from './api'
-export {
-  workQueueSourceTypeLabels,
-  workQueueUrgencyLabels,
-  workQueueUrgencyVariant,
-} from './constants'
+export { workQueueSourceTypeLabels, workQueueUrgencyLabels, workQueueUrgencyVariant } from './constants'
 export { useWorkQueue } from './hooks/useWorkQueue'
 export { useWorkQueuePage } from './hooks/useWorkQueuePage'
 export { WorkQueuePage } from './pages/WorkQueuePage'

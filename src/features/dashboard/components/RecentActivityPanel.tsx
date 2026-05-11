@@ -27,6 +27,5 @@ export const RecentActivityPanel = ({ items }: { items: RecentActivityItem[] }) 
     ) : (
       <DashboardEmptyState title="אין פעילות אחרונה" className="py-8" />
     )}
-
   </DashboardPanel>
 )

@@ -48,12 +48,8 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold text-gray-900">{item.title}</p>
         <div className="mt-0.5 flex items-center gap-2 truncate">
-          {item.client_name && (
-            <span className="truncate text-xs text-gray-500">{item.client_name}</span>
-          )}
-          {item.reason && !item.client_name && (
-            <span className="truncate text-xs text-gray-500">{item.reason}</span>
-          )}
+          {item.client_name && <span className="truncate text-xs text-gray-500">{item.client_name}</span>}
+          {item.reason && !item.client_name && <span className="truncate text-xs text-gray-500">{item.reason}</span>}
           {item.amount && (
             <span className="shrink-0 text-xs font-semibold tabular-nums text-gray-700">{item.amount}</span>
           )}
@@ -61,9 +57,7 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
       </div>
 
       {/* Left: badge */}
-      <span className={cn('shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold', badge.cls)}>
-        {badge.label}
-      </span>
+      <span className={cn('shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold', badge.cls)}>{badge.label}</span>
     </div>
   )
 

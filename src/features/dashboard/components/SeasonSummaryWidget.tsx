@@ -47,10 +47,10 @@ export const SeasonSummaryWidget: React.FC<SeasonSummaryWidgetProps> = ({ sideCo
               <div className="h-2 w-0 rounded-full bg-blue-500" />
             </div>
 
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <SeasonStatusTile label="דוחות" value={0} />
-            <SeasonStatusTile label="התקדמות" value="0%" />
-          </div>
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              <SeasonStatusTile label="דוחות" value={0} />
+              <SeasonStatusTile label="התקדמות" value="0%" />
+            </div>
           </Link>
           {sideContent && (
             <div className="border-t border-slate-100 pt-5 xl:border-r xl:border-t-0 xl:pr-5 xl:pt-0">
@@ -117,9 +117,7 @@ export const SeasonSummaryWidget: React.FC<SeasonSummaryWidgetProps> = ({ sideCo
           </div>
         </Link>
         {sideContent && (
-          <div className="border-t border-slate-100 pt-5 xl:border-r xl:border-t-0 xl:pr-5 xl:pt-0">
-            {sideContent}
-          </div>
+          <div className="border-t border-slate-100 pt-5 xl:border-r xl:border-t-0 xl:pr-5 xl:pt-0">{sideContent}</div>
         )}
       </div>
     </DashboardPanel>
