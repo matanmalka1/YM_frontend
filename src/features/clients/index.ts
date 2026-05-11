@@ -3,8 +3,10 @@ export { clientsApi, clientsQK } from './api'
 export { CLIENT_ENDPOINTS, CLIENT_ROUTES } from './api/endpoints'
 export {
   ADVANCE_PAYMENT_FREQUENCY_LABELS,
+  CLIENT_STATUS_OPTIONS,
   CLIENT_STATUS_LABELS,
   ENTITY_TYPE_LABELS,
+  ENTITY_TYPE_OPTIONS,
   VAT_TYPE_LABELS,
 } from './constants'
 export { ClientEditForm } from './components/edit/ClientEditForm'

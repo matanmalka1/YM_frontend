@@ -2,7 +2,7 @@ import { RotateCcw, SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-rea
 import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
 import { Button } from '../../../components/ui/primitives/Button'
-import { CLIENT_STATUS_OPTIONS, ENTITY_TYPE_OPTIONS } from '../../clients/constants'
+import { CLIENT_STATUS_OPTIONS, ENTITY_TYPE_OPTIONS } from '@/features/clients'
 import { BINDER_STATUS_OPTIONS } from '../../binders'
 import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFiltersBarProps } from '../types'
 
