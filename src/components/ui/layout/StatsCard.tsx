@@ -89,7 +89,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
     },
     purple: {
       accent: 'bg-violet-500',
-      border: 'border-r-4 border-r-violet-500',
+      border: 'border-r-2 border-r-violet-500',
       iconBg: 'bg-violet-50 text-violet-500',
       value: 'text-violet-700',
       strip: 'from-violet-500/10 to-transparent',
@@ -118,7 +118,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
         className,
       )}
     >
-      <div className={cn('absolute bottom-0 right-0 top-0 w-1 rounded-r-xl', config.accent)} />
+      <div className={cn('absolute bottom-0 right-0 top-0 w-0.5 rounded-r-xl', config.accent)} />
 
       <div
         className={cn(

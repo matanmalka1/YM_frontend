@@ -36,7 +36,7 @@ const VAT_CARD_CLASSES: Record<VatCardTone, { border: string; title: string; but
 const VatCard: React.FC<VatCardProps> = ({ title, tone, onNavigate, children }) => {
   const classes = VAT_CARD_CLASSES[tone]
   return (
-    <div className={`rounded-xl border border-gray-100 border-r-4 ${classes.border} bg-white p-4 shadow-sm`} dir="rtl">
+    <div className={`rounded-xl border border-gray-100 border-r-2 ${classes.border} bg-white p-4 shadow-sm`} dir="rtl">
       <div className="mb-3 flex items-center justify-between">
         <p className={`text-xs font-semibold uppercase tracking-wide ${classes.title}`}>{title}</p>
         {onNavigate && (

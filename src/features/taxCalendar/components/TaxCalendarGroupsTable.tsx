@@ -229,7 +229,7 @@ export const TaxCalendarGroupsTable = ({
             metrics={metrics}
             ctaLabel="פתח לקוחות"
             closeLabel="סגור"
-            className={cn(group.overdue_count > 0 && 'border-r-4 border-r-negative-500')}
+            className={cn(group.overdue_count > 0 && 'border-r-2 border-r-negative-500')}
           >
             <GroupItemsRows group={group} isOpen={isOpen} clientSearchText={clientSearchText} />
           </GroupedPeriodRow>

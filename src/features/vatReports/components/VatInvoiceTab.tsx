@@ -35,7 +35,7 @@ export const VatInvoiceTab: React.FC<VatInvoiceTabProps> = ({
     <div dir="rtl">
       <Card
         title={title}
-        className={`border-r-4 ${borderColor}`}
+        className={`border-r-2 ${borderColor}`}
         actions={
           <Badge variant="neutral" className="text-xs">
             {filtered.length} רשומות
