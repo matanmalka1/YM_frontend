@@ -3,11 +3,11 @@ import { Plus } from 'lucide-react'
 import { Modal } from '../../../components/ui/overlays/Modal'
 import { Button } from '../../../components/ui/primitives/Button'
 import { DocumentCard } from './DocumentCard'
-import { DocumentsUploadCard } from './DocumentsUploadCard'
+import { DocumentsUploadCard, type DocumentUploadSubmitPayload } from './DocumentsUploadCard'
 import { DocumentVersionsPanel } from './DocumentVersionsPanel'
 import { DocumentPreviewModal } from './DocumentPreviewModal'
 import { ConfirmDialog } from '../../../components/ui/overlays/ConfirmDialog'
-import type { OperationalSignalsResponse, PermanentDocumentResponse, UploadDocumentPayload } from '../api'
+import type { OperationalSignalsResponse, PermanentDocumentResponse } from '../api'
 import { useAuthStore } from '../../../store/auth.store'
 import type { BusinessResponse } from '@/features/clients'
 import { UPLOAD_FORM_ID } from './DocumentsDataCards.constants'
@@ -23,12 +23,7 @@ interface DocumentsDataCardsProps {
   onTaxYearChange: (year: number | null) => void
   businesses: BusinessResponse[]
   businessesLoading: boolean
-  submitUpload: (payload: {
-    document_type: UploadDocumentPayload['document_type']
-    business_id?: number | null
-    file: File
-    tax_year?: number | null
-  }) => Promise<boolean>
+  submitUpload: (payload: DocumentUploadSubmitPayload) => Promise<boolean>
   uploadError: string | null
   uploading: boolean
   onDelete: (id: number) => Promise<void>

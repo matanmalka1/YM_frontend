@@ -13,15 +13,17 @@ import { UPLOAD_DOCUMENT_TYPE_OPTIONS, UPLOAD_TAX_YEAR_OPTIONS } from './Documen
 import { getBusinessOptions } from './DocumentsDataCards.utils'
 import { validateDocumentFile } from './DocumentsUploadCard.helpers'
 
+export type DocumentUploadSubmitPayload = {
+  document_type: UploadDocumentPayload['document_type']
+  business_id?: number | null
+  file: File
+  tax_year?: number | null
+}
+
 interface DocumentsUploadCardProps {
   businesses: BusinessResponse[]
   businessesLoading: boolean
-  submitUpload: (payload: {
-    document_type: UploadDocumentPayload['document_type']
-    business_id?: number | null
-    file: File
-    tax_year?: number | null
-  }) => Promise<boolean>
+  submitUpload: (payload: DocumentUploadSubmitPayload) => Promise<boolean>
   uploadError: string | null
   uploading: boolean
   initialTaxYear?: number | null

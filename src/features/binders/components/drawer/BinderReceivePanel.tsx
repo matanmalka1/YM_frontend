@@ -13,7 +13,7 @@ import { BINDER_TYPE_OPTIONS } from '../../constants'
 import type { ReceiveBinderFormValues } from '../../schemas'
 import { BinderPeriodFields } from './BinderPeriodFields'
 
-interface BinderReceivePanelProps {
+export interface BinderReceivePanelProps {
   form: UseFormReturn<ReceiveBinderFormValues>
   clientQuery: string
   selectedClient: { id: number; name: string; client_status?: string | null } | null

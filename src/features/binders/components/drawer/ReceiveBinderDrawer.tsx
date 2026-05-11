@@ -1,23 +1,9 @@
-import type { UseFormReturn } from 'react-hook-form'
 import { DetailDrawer } from '@/components/ui/overlays/DetailDrawer'
-import type { ReceiveBinderFormValues } from '../../schemas'
-import type { AnnualReportFull } from '@/features/annualReports'
 import { BinderReceivePanel } from './BinderReceivePanel'
+import type { BinderReceivePanelProps } from './BinderReceivePanel'
 
-interface ReceiveBinderDrawerProps {
+interface ReceiveBinderDrawerProps extends BinderReceivePanelProps {
   open: boolean
-  onClose: () => void
-  form: UseFormReturn<ReceiveBinderFormValues>
-  clientQuery: string
-  selectedClient: { id: number; name: string; client_status?: string | null } | null
-  businesses: { id: number; business_name: string | null }[]
-  annualReports: AnnualReportFull[]
-  hasActiveBinder: boolean
-  vatType: 'monthly' | 'bimonthly' | 'exempt' | null
-  onClientSelect: (client: { id: number; name: string; id_number: string; client_status?: string | null }) => void
-  onClientQueryChange: (query: string) => void
-  onSubmit: (e?: React.BaseSyntheticEvent) => void
-  isSubmitting: boolean
 }
 
 export const ReceiveBinderDrawer: React.FC<ReceiveBinderDrawerProps> = ({
