@@ -1,6 +1,12 @@
 // Public surface of the clients feature — only import from this barrel externally
 export { clientsApi, clientsQK } from './api'
 export { CLIENT_ENDPOINTS, CLIENT_ROUTES } from './api/endpoints'
+export {
+  ADVANCE_PAYMENT_FREQUENCY_LABELS,
+  CLIENT_STATUS_LABELS,
+  ENTITY_TYPE_LABELS,
+  VAT_TYPE_LABELS,
+} from './constants'
 export { ClientEditForm } from './components/edit/ClientEditForm'
 export { buildClientColumns } from './components/list/ClientColumns'
 export { ClientDetailsTabContent } from './components/details/ClientDetailsTabContent'

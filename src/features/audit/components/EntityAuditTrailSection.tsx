@@ -7,7 +7,7 @@ import {
   CLIENT_STATUS_LABELS,
   VAT_TYPE_LABELS,
   ADVANCE_PAYMENT_FREQUENCY_LABELS,
-} from '@/features/clients/constants'
+} from '@/features/clients'
 import type { EntityAuditLogEntry, EntityAuditType } from '../api'
 import { useEntityAuditTrail } from '../hooks/useEntityAuditTrail'
 
