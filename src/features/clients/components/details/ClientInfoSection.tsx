@@ -3,10 +3,8 @@ import { formatDate, formatPlainIdentifier, formatShekelAmount } from '@/utils/u
 import type { ClientRecordResponse } from '../../api'
 import {
   ADVANCE_PAYMENT_FREQUENCY_LABELS,
-  getClientIdNumberTypeLabel,
   getClientStatusLabel,
   getClientVatReportingLabel,
-  getEntityTypeLabel,
 } from '../../constants'
 import { useClientAuthorityContacts } from '../../hooks/useClientAuthorityContacts'
 import { useAdvisorOptions } from '@/features/users'
@@ -33,18 +31,6 @@ const EMPTY_VALUE = '—'
 export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client, taxYear, onTaxYearChange, sideContent }) => {
   const { nameById } = useAdvisorOptions()
   const { officeByType } = useClientAuthorityContacts(client.id, client.address_city)
-
-  const idNumberTypeLabel = client.id_number_type ? getClientIdNumberTypeLabel(client.id_number_type) : EMPTY_VALUE
-
-  const identityItems = [
-    { label: 'שם מלא / שם משפטי', value: client.full_name },
-    { label: 'מספר מזהה', value: client.id_number || EMPTY_VALUE },
-    { label: 'סוג מזהה', value: idNumberTypeLabel },
-    {
-      label: 'סוג ישות',
-      value: client.entity_type ? getEntityTypeLabel(client.entity_type) : EMPTY_VALUE,
-    },
-  ]
 
   const contactItems = [
     {
@@ -146,10 +132,7 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client, taxYear,
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-        <DefinitionSectionCard title="זהות משפטית" items={identityItems} columns={2} />
-        <DefinitionSectionCard title="פרטי קשר" items={contactItems} columns={3} />
-      </div>
+      <DefinitionSectionCard title="פרטי קשר" items={contactItems} columns={3} />
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
         <div className="space-y-4">

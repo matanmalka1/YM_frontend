@@ -1,7 +1,7 @@
 import { type FC, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { BriefcaseBusiness, Edit2, Fingerprint } from 'lucide-react'
+import { BriefcaseBusiness, Edit2, Fingerprint, IdCard } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
@@ -12,6 +12,7 @@ import { DOC_TYPE_LABELS, documentsApi, documentsQK } from '@/features/documents
 import { CLIENT_ROUTES } from '../api/endpoints'
 import {
   CLIENT_STATUS_BADGE_VARIANTS,
+  getClientIdNumberTypeLabel,
   getClientStatusLabel,
   getEntityTypeLabel,
   type ActiveClientDetailsTab,
@@ -23,27 +24,47 @@ interface ClientDetailsProps {
   initialTab?: ActiveClientDetailsTab
 }
 
-const ClientHeaderMetaItem: FC<{ icon: React.ReactNode; label: React.ReactNode }> = ({ icon, label }) => (
-  <span className="inline-flex min-w-0 items-center gap-1.5 text-sm font-medium text-gray-600">
-    <span className="shrink-0 text-gray-500">{icon}</span>
-    <span className="truncate">{label}</span>
+const ClientHeaderMetaItem: FC<{ icon: React.ReactNode; label: string; value: React.ReactNode }> = ({
+  icon,
+  label,
+  value,
+}) => (
+  <span className="inline-flex min-w-[136px] items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm">
+    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-gray-50 text-gray-500">{icon}</span>
+    <span className="min-w-0 text-right leading-tight">
+      <span className="block text-[11px] font-semibold text-gray-400">{label}</span>
+      <span className="block truncate text-sm font-bold text-gray-900">{value}</span>
+    </span>
   </span>
 )
 
 const buildClientHeader = (client: ClientRecordResponse) => ({
   title: (
-    <span className="flex min-w-0 flex-wrap items-center gap-2">
-      <span className="truncate">{client.full_name}</span>
-      <Badge variant={CLIENT_STATUS_BADGE_VARIANTS[client.status]}>{getClientStatusLabel(client.status)}</Badge>
-      <span className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1 text-sm font-normal text-gray-500 mr-1">
+    <span className="flex min-w-0 flex-col gap-3">
+      <span className="flex min-w-0 flex-wrap items-center gap-2">
+        <span className="truncate">{client.full_name}</span>
+        <Badge variant={CLIENT_STATUS_BADGE_VARIANTS[client.status]} className="text-sm">
+          {getClientStatusLabel(client.status)}
+        </Badge>
+      </span>
+      <span className="flex min-w-0 flex-wrap items-center gap-2">
         <ClientHeaderMetaItem
-          icon={<Fingerprint className="h-3.5 w-3.5" />}
-          label={formatPlainIdentifier(client.id_number, 'לא הוגדר')}
+          icon={<Fingerprint className="h-4 w-4" />}
+          label="ת.ז / ח.פ"
+          value={formatPlainIdentifier(client.id_number, 'לא הוגדר')}
         />
+        {client.id_number_type && (
+          <ClientHeaderMetaItem
+            icon={<IdCard className="h-4 w-4" />}
+            label="סוג מזהה"
+            value={getClientIdNumberTypeLabel(client.id_number_type)}
+          />
+        )}
         {client.entity_type && (
           <ClientHeaderMetaItem
-            icon={<BriefcaseBusiness className="h-3.5 w-3.5" />}
-            label={getEntityTypeLabel(client.entity_type)}
+            icon={<BriefcaseBusiness className="h-4 w-4" />}
+            label="סוג ישות"
+            value={getEntityTypeLabel(client.entity_type)}
           />
         )}
       </span>
