@@ -5,18 +5,19 @@ import { FormField } from './FormField'
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
   error?: string
+  labelClassName?: string
   startIcon?: React.ReactNode
   endIcon?: React.ReactNode
   endElement?: React.ReactNode
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, className, startIcon, endIcon, endElement, ...props }, ref) => {
+  ({ label, error, labelClassName, className, startIcon, endIcon, endElement, ...props }, ref) => {
     const hasStart = Boolean(startIcon)
     const hasEnd = Boolean(endIcon || endElement)
 
     return (
-      <FormField label={label} error={error} className="w-full">
+      <FormField label={label} error={error} labelClassName={labelClassName} className="w-full">
         <div className="relative">
           {startIcon && (
             <span className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-gray-400">

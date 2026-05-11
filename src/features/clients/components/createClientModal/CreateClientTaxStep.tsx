@@ -31,7 +31,6 @@ export const CreateClientTaxStep: React.FC<Props> = ({
   impactData,
   impactError,
   impactLoading,
-  isCompany,
   isExempt,
   register,
   showVatFrequency,
@@ -76,14 +75,17 @@ export const CreateClientTaxStep: React.FC<Props> = ({
             <p className="mt-1 text-xs text-gray-400">נגזר אוטומטית לפי הגדרת המערכת</p>
           </div>
         )}
-        <Input
-          label="שיעור מקדמות מס הכנסה (%)"
-          placeholder="ריק = אין מקדמות / לא ידוע"
-          error={errors.advance_rate?.message}
-          disabled={disabled}
-          onInput={stripNonDecimal}
-          {...register('advance_rate')}
-        />
+        <div className={isExempt ? undefined : 'col-span-1 max-w-[48%]'}>
+          <Input
+            label="שיעור מקדמות מס הכנסה (%)"
+            labelClassName="whitespace-nowrap"
+            placeholder="ריק = אין מקדמות / לא ידוע"
+            error={errors.advance_rate?.message}
+            disabled={disabled}
+            onInput={stripNonDecimal}
+            {...register('advance_rate')}
+          />
+        </div>
       </div>
       <Select
         label="רואה חשבון מלווה"
@@ -93,39 +95,6 @@ export const CreateClientTaxStep: React.FC<Props> = ({
         value={accountantValue ?? ''}
         {...register('accountant_id')}
       />
-      <div className="rounded-lg border border-blue-200 bg-blue-50 p-4" dir="rtl">
-        <p className="mb-2 text-sm font-semibold text-blue-800">מה ייווצר לאחר שמירה?</p>
-        {impactLoading ? (
-          <div className="space-y-2">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-4 animate-pulse rounded bg-blue-100" />
-            ))}
-          </div>
-        ) : impactData ? (
-          <>
-            <ul className="space-y-1">
-              {impactData.items.map((item) => (
-                <li key={item.label} className="flex items-baseline gap-2 text-sm text-blue-700">
-                  <span className="font-medium">{item.count}</span>
-                  <span>{item.label}</span>
-                </li>
-              ))}
-            </ul>
-            {impactData.note && <p className="mt-2 text-xs text-blue-600">{impactData.note}</p>}
-            {impactData.years_scope === 2 && (
-              <p className="mt-1 text-xs text-blue-600">ייווצר עבור השנה הנוכחית והשנה הבאה</p>
-            )}
-          </>
-        ) : (
-          <p className="text-sm text-blue-700">
-            {isExempt
-              ? 'ייווצר קלסר ודוח שנתי. מועדי מע"מ תקופתיים לא ייווצרו'
-              : isCompany
-                ? 'ייווצר קלסר, מועדי מע"מ לפי תדירות ודוח שנתי לחברה'
-                : 'ייווצר קלסר, מועדי מע"מ לפי תדירות ודוח שנתי'}
-          </p>
-        )}
-      </div>
     </div>
   )
 }

@@ -22,6 +22,11 @@ export const CREATE_CLIENT_STEPS = [
     label: 'מס ומע״מ',
     fields: ['vat_reporting_frequency', 'advance_payment_frequency', 'advance_rate', 'accountant_id'],
   },
+  {
+    key: 'review',
+    label: 'סקירה',
+    fields: [],
+  },
 ] as const satisfies ReadonlyArray<{
   key: string
   label: string

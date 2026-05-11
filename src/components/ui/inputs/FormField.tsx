@@ -6,9 +6,10 @@ interface FormFieldProps {
   error?: string
   children: ReactElement<{ id?: string }>
   className?: string
+  labelClassName?: string
 }
 
-export const FormField: React.FC<FormFieldProps> = ({ label, error, children, className }) => {
+export const FormField: React.FC<FormFieldProps> = ({ label, error, children, className, labelClassName }) => {
   const generatedId = useId()
   const controlId = children.props.id ?? generatedId
   const child = isValidElement(children) ? cloneElement(children, { id: controlId }) : children
@@ -16,7 +17,7 @@ export const FormField: React.FC<FormFieldProps> = ({ label, error, children, cl
   return (
     <div className={cn('space-y-1', className)}>
       {label && (
-        <label htmlFor={controlId} className="block text-sm font-medium text-gray-700">
+        <label htmlFor={controlId} className={cn('block text-sm font-medium text-gray-700', labelClassName)}>
           {label}
         </label>
       )}

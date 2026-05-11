@@ -123,7 +123,7 @@ export const ClientSidebar: React.FC = () => {
 
       {/* Client list — only this scrolls */}
       <nav
-        className="min-h-0 flex-1 overflow-y-auto px-1.5 py-1.5 [scrollbar-color:rgba(148,163,184,0.28)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-400/25 [&::-webkit-scrollbar-thumb:hover]:bg-slate-400/40"
+        className="min-h-0 flex-1 overflow-y-auto px-1.5 py-1.5"
         aria-label="לקוחות"
       >
         {/* TODO: Add client alerts once alert counts are exposed for this navigation surface. */}

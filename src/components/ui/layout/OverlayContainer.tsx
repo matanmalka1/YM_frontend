@@ -41,6 +41,12 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
 
   useEffect(() => {
     if (!open) return
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
 
     lastFocusedElementRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
     const frame = requestAnimationFrame(() => {

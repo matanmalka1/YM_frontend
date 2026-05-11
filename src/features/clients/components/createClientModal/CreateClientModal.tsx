@@ -164,6 +164,7 @@ export const CreateClientModal: React.FC<Props> = ({
           onRestoreDeletedClient={onRestoreDeletedClient}
           showVatFrequency={showVatFrequency}
           stepIndex={stepIndex}
+          formValues={watch()}
         />
       </form>
     </Modal>

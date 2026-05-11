@@ -3,6 +3,7 @@ import type { ActiveClientSummary, ClientCreationImpactResponse, DeletedClientSu
 import type { CreateClientFormValues } from '../../schemas'
 import { CreateClientBusinessStep } from './CreateClientBusinessStep'
 import { CreateClientIdentityStep } from './CreateClientIdentityStep'
+import { CreateClientReviewStep } from './CreateClientReviewStep'
 import { CreateClientTaxStep } from './CreateClientTaxStep'
 
 interface Props {
@@ -26,6 +27,7 @@ interface Props {
   onRestoreDeletedClient: (clientId: number) => void
   showVatFrequency: boolean
   stepIndex: number
+  formValues: CreateClientFormValues
 }
 
 export const CreateClientStepContent: React.FC<Props> = ({
@@ -49,6 +51,7 @@ export const CreateClientStepContent: React.FC<Props> = ({
   onRestoreDeletedClient,
   showVatFrequency,
   stepIndex,
+  formValues,
 }) => {
   if (stepIndex === 0) {
     return (
@@ -80,20 +83,32 @@ export const CreateClientStepContent: React.FC<Props> = ({
     )
   }
 
+  if (stepIndex === 2) {
+    return (
+      <CreateClientTaxStep
+        advisorOptions={advisorOptions}
+        advisorsLoading={advisorsLoading}
+        control={control}
+        disabled={disabled}
+        errors={errors}
+        impactData={impactData}
+        impactError={impactError}
+        impactLoading={impactLoading}
+        isCompany={isCompany}
+        isExempt={isExempt}
+        register={register}
+        showVatFrequency={showVatFrequency}
+      />
+    )
+  }
+
   return (
-    <CreateClientTaxStep
+    <CreateClientReviewStep
+      values={formValues}
       advisorOptions={advisorOptions}
-      advisorsLoading={advisorsLoading}
-      control={control}
-      disabled={disabled}
-      errors={errors}
       impactData={impactData}
-      impactError={impactError}
       impactLoading={impactLoading}
-      isCompany={isCompany}
-      isExempt={isExempt}
-      register={register}
-      showVatFrequency={showVatFrequency}
+      impactError={impactError}
     />
   )
 }
