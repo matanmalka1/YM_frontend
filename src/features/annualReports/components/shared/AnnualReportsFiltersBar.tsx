@@ -2,7 +2,7 @@ import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { STATUS_LABELS } from '../../api/utils'
 import type { AnnualReportStatus } from '../../api/contracts'
 import { ALL_STATUSES_OPTION, ALL_YEARS_OPTION } from '@/constants/filterOptions.constants'
-import { getActiveReportYearOptions } from '@/constants/periodOptions.constants'
+import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 
 export interface AnnualReportsFilters {
   client_id: string
@@ -27,7 +27,7 @@ const STATUS_OPTIONS = [
 ]
 
 const getYearOptions = (defaultYear?: number) => {
-  const options = getActiveReportYearOptions()
+  const options = getOperationalYearOptions()
   if (!defaultYear || options.some((option) => option.value === String(defaultYear))) return options
   return [{ value: String(defaultYear), label: String(defaultYear) }, ...options]
 }

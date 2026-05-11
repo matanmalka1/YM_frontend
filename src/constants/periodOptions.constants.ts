@@ -60,18 +60,6 @@ export const getOperationalYearOptions = (count = 7): { value: string; label: st
   }))
 }
 
-/** current year - 1: the most recent completed tax year. */
-export const getActiveReportTaxYear = (): number => new Date().getFullYear() - 1
-
-/** 7 years descending from operational tax year (includes current and upcoming filing years). */
-export const getActiveReportYearOptions = (count = 7): { value: string; label: string }[] => {
-  const top = getOperationalTaxYear()
-  return Array.from({ length: count }, (_, i) => ({
-    value: String(top - i),
-    label: String(top - i),
-  }))
-}
-
 const getPeriodLabel = (
   names: typeof MONTH_NAMES | typeof MONTH_SHORT_NAMES,
   period: string,

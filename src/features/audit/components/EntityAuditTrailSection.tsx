@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
-import { formatDateTime } from '@/utils/utils'
 import {
   ENTITY_TYPE_LABELS,
   CLIENT_STATUS_LABELS,
@@ -10,6 +8,7 @@ import {
 } from '@/features/clients'
 import type { EntityAuditLogEntry, EntityAuditType } from '../api'
 import { useEntityAuditTrail } from '../hooks/useEntityAuditTrail'
+import { AuditTrailTable } from './AuditTrailTable'
 
 const PAGE_SIZE = 50
 
@@ -224,58 +223,16 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
 
   return (
     <Card title={title} subtitle={subtitle} className={cardClassName}>
-      <div className="space-y-3">
-        <div className="overflow-x-auto rounded-lg border border-gray-100" dir="rtl">
-          <table className="w-full border-collapse text-sm">
-            <thead className="bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
-              <tr>
-                <th className="px-4 py-3 text-right">תאריך</th>
-                <th className="px-4 py-3 text-right">פעולה</th>
-                <th className="px-4 py-3 text-right">פרטים</th>
-                <th className="px-4 py-3 text-right">בוצע ע&quot;י</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 bg-white">
-              {items.map((entry) => (
-                <tr key={entry.id} className="hover:bg-gray-50/60">
-                  <td className="px-4 py-3 text-gray-500 tabular-nums whitespace-nowrap">
-                    {formatDateTime(entry.performed_at)}
-                  </td>
-                  <td className="px-4 py-3 font-medium text-gray-800">{ACTION_LABELS[entry.action] ?? entry.action}</td>
-                  <td className="px-4 py-3 text-xs text-gray-500 max-w-xl">{formatAuditDetails(entry)}</td>
-                  <td className="px-4 py-3 font-mono text-xs text-gray-400">
-                    {entry.performed_by_name ?? `#${entry.performed_by}`}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between text-sm text-gray-500" dir="rtl">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => setPage((currentPage) => Math.max(0, currentPage - 1))}
-              disabled={safePage === 0 || isFetching}
-            >
-              הקודם
-            </Button>
-            <span>{isFetching ? 'טוען...' : `עמוד ${safePage + 1} מתוך ${totalPages}`}</span>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => setPage((currentPage) => Math.min(maxPage, currentPage + 1))}
-              disabled={safePage >= maxPage || isFetching}
-            >
-              הבא
-            </Button>
-          </div>
-        )}
-      </div>
+      <AuditTrailTable
+        items={items}
+        actionLabels={ACTION_LABELS}
+        formatDetails={formatAuditDetails}
+        totalPages={totalPages}
+        maxPage={maxPage}
+        safePage={safePage}
+        isFetching={isFetching}
+        setPage={setPage}
+      />
     </Card>
   )
 }
