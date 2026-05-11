@@ -83,7 +83,6 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
             client={client}
             taxYear={taxYear}
             onTaxYearChange={onTaxYearChange}
-            sideContent={<ClientNotesCard clientId={client.id} canEdit={canEditClients} />}
           />
           <ClientStatusCard clientId={client.id} />
           <ClientBusinessesCard
@@ -132,6 +131,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
       {activeTab === 'vat' && <VatClientSummaryPanel clientId={client.id} />}
       {activeTab === 'advance-payments' && <ClientAdvancePaymentsTab clientId={client.id} />}
       {activeTab === 'annual-reports' && <ClientAnnualReportsTab clientId={client.id} />}
+      {activeTab === 'notes' && <ClientNotesCard clientId={client.id} canEdit={canEditClients} />}
       {activeTab === 'history' && <ClientAuditTrailSection clientId={client.id} />}
 
       <DeleteClientModal

@@ -1,7 +1,6 @@
 import { type ReactNode } from 'react'
 import { Card } from '../../../../components/ui/primitives/Card'
 import { DefinitionList } from '../../../../components/ui/layout/DefinitionList'
-import { cn } from '@/utils/utils'
 
 const EMPTY_VALUE = '—'
 
@@ -17,11 +16,6 @@ const displayValue = (value: ReactNode) => {
   return value
 }
 
-const SectionCard = ({ title, children, className }: { title: string; children: ReactNode; className?: string }) => (
-  <Card title={title} size="compact" className={cn('shadow-sm', className)}>
-    {children}
-  </Card>
-)
 
 export const DefinitionSectionCard = ({
   title,
@@ -34,12 +28,11 @@ export const DefinitionSectionCard = ({
   columns: 2 | 3
   headerAction?: ReactNode
 }) => (
-  <SectionCard title={title}>
-    {headerAction && <div className="mb-3">{headerAction}</div>}
+  <Card title={title} size="compact" className="shadow-sm" actions={headerAction}>
     <DefinitionList
       columns={columns}
       items={items.map((item) => ({ ...item, value: displayValue(item.value) }))}
       className="gap-x-4 gap-y-2"
     />
-  </SectionCard>
+  </Card>
 )

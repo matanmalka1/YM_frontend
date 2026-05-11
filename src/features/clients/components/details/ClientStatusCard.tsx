@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { FileText, Receipt, CreditCard, TrendingUp, FolderOpen, FileCheck } from 'lucide-react'
+import { SelectDropdown } from '@/components/ui/inputs/SelectDropdown'
 import { clientsApi, clientsQK } from '../../api'
 import { CLIENT_ROUTES } from '../../api/endpoints'
 import { vatReportsApi, vatReportsQK } from '@/features/vatReports'
@@ -24,16 +25,16 @@ const Tile: React.FC<TileProps> = ({ icon, title, primary, secondary, onClick })
   <button
     type="button"
     disabled={!onClick}
-    className={`flex min-w-0 items-center gap-1.5 rounded-md px-2 py-1 text-right transition-colors ${
+    className={`flex min-w-0 items-center gap-2 rounded-md px-3 py-2 text-right transition-colors ${
       onClick ? 'hover:bg-gray-50' : 'cursor-default'
     }`}
     onClick={onClick}
   >
     <div className="shrink-0 text-gray-400">{icon}</div>
     <div className="min-w-0 flex-1">
-      <p className="truncate text-[10px] font-medium text-gray-500">{title}</p>
-      <p className="truncate text-xs font-semibold leading-tight text-gray-900">{primary}</p>
-      <p className="truncate text-[10px] text-gray-500">{secondary}</p>
+      <p className="truncate text-xs font-medium text-gray-500">{title}</p>
+      <p className="truncate text-sm font-semibold leading-tight text-gray-900">{primary}</p>
+      <p className="truncate text-xs text-gray-500">{secondary}</p>
     </div>
   </button>
 )
@@ -87,25 +88,19 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
     : 'אין דיווחים'
 
   const yearSelector = (
-    <div className="flex gap-1">
-      {yearOptions.map((y) => (
-        <button
-          key={y}
-          type="button"
-          onClick={() => setSelectedYear(y)}
-          className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
-            selectedYear === y ? 'bg-primary-100 text-primary-700' : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          {y}
-        </button>
-      ))}
+    <div className="w-[7rem] ">
+      <SelectDropdown
+        options={yearOptions.map((y) => ({ value: String(y), label: String(y) }))}
+        value={String(selectedYear)}
+        onChange={(e) => setSelectedYear(Number(e.target.value))}
+        className="px-2"
+      />
     </div>
   )
 
   if (isLoading) {
     return (
-      <section className="w-full max-w-2xl space-y-1.5 rounded-lg border border-gray-200/80 bg-white px-3 py-2.5">
+      <section className="w-full max-w-4xl space-y-1.5 rounded-lg border border-gray-200/80 bg-white px-3 py-2.5">
         <div className="flex items-center justify-between gap-3">
           <h3 className="text-sm font-semibold text-gray-900">סטטוס לקוח</h3>
         </div>
@@ -137,7 +132,7 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
         : '—'
 
   return (
-    <section className="w-full max-w-2xl space-y-1.5 rounded-lg border border-gray-200/80 bg-white px-3 py-2.5">
+    <section className="w-full max-w-4xl space-y-1.5 rounded-lg border border-gray-200/80 bg-white px-3 py-2.5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-sm font-semibold text-gray-900">סטטוס לקוח — {year}</h3>
         {yearSelector}

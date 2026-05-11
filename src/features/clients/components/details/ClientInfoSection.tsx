@@ -24,12 +24,11 @@ type ClientInfoSectionProps = {
   client: ClientRecordResponse
   taxYear: number
   onTaxYearChange: (year: number) => void
-  sideContent?: ReactNode
 }
 
 const EMPTY_VALUE = '—'
 
-export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client, taxYear, onTaxYearChange, sideContent }) => {
+export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client, taxYear, onTaxYearChange }) => {
   const { nameById } = useAdvisorOptions()
   const { officeByType } = useClientAuthorityContacts(client.id, client.address_city)
 
@@ -144,27 +143,21 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client, taxYear,
           columns={2}
           headerAction={
             <div className="flex items-center gap-2 text-sm text-gray-600">
-              <span>שנת מס:</span>
-              <select
-                value={taxYear}
+              <span className="whitespace-nowrap">שנת מס:</span>
+              <SelectDropdown
+                options={YEAR_OPTIONS.map((y) => ({ value: String(y), label: String(y) }))}
+                value={String(taxYear)}
                 onChange={(e) => onTaxYearChange(Number(e.target.value))}
-                className="rounded border border-gray-200 bg-white px-2 py-0.5 text-sm text-gray-700 focus:outline-none"
-              >
-                {YEAR_OPTIONS.map((y) => (
-                  <option key={y} value={y}>
-                    {y}
-                  </option>
-                ))}
-              </select>
+                className="w-20"
+              />
             </div>
           }
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         <DefinitionSectionCard title="פרטי משרד" items={officeItems} columns={2} />
         <DefinitionSectionCard title="רשויות" items={authorityItems} columns={2} />
-        {sideContent ? <div className="min-w-0">{sideContent}</div> : null}
       </div>
     </div>
   )
