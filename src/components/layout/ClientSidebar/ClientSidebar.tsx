@@ -6,7 +6,7 @@ import { CLIENT_ROUTES } from '@/features/clients'
 import { ENTITY_TYPE_LABELS, VAT_TYPE_LABELS } from '@/features/clients/constants'
 import { useRole } from '@/hooks/useRole'
 import { getRoleLabel } from '@/utils/enums'
-import { cn, formatClientOfficeId } from '@/utils/utils'
+import { cn, formatClientOfficeId, formatPhoneNumber } from '@/utils/utils'
 import { useClientSidebarClients, type ClientSidebarItem } from './useClientSidebarClients'
 
 type GroupMode = 'entity' | 'vat'
@@ -170,13 +170,15 @@ export const ClientSidebar: React.FC = () => {
                           <span className="shrink-0 text-[12px] leading-5 text-gray-400">
                             {formatClientOfficeId(client.officeClientNumber)}
                           </span>
-                            {client.phone ? (
-                          <span dir="ltr" className="block truncate text-left shrink-0 text-[12px] leading-4 text-gray-400">
-                            {client.phone}
-                          </span>
-                        ) : null}
+                          {client.phone ? (
+                            <span
+                              dir="ltr"
+                              className="block shrink-0 truncate text-left text-[12px] leading-4 text-gray-400"
+                            >
+                              {formatPhoneNumber(client.phone)}
+                            </span>
+                          ) : null}
                         </div>
-                      
                       </NavLink>
                     </li>
                   ))}

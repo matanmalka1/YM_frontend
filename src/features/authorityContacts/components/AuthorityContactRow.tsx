@@ -1,6 +1,7 @@
 import { Edit2, Mail, MapPin, Phone, Trash2 } from 'lucide-react'
 import { Button } from '../../../components/ui/primitives/Button'
 import { Badge } from '../../../components/ui/primitives/Badge'
+import { formatPhoneNumber } from '@/utils/utils'
 import { getContactTypeLabel, type AuthorityContactResponse } from '../api'
 
 interface AuthorityContactRowProps {
@@ -28,7 +29,7 @@ export const AuthorityContactRow: React.FC<AuthorityContactRowProps> = ({ contac
         {contact.phone && (
           <span className="flex items-center gap-1">
             <Phone className="h-3.5 w-3.5 shrink-0" />
-            {contact.phone}
+            {formatPhoneNumber(contact.phone)}
           </span>
         )}
         {contact.email && (

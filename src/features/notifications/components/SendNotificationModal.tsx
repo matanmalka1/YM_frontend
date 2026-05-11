@@ -5,6 +5,7 @@ import { Button } from '../../../components/ui/primitives/Button'
 import { Textarea } from '../../../components/ui/inputs/Textarea'
 import { Select } from '../../../components/ui/inputs/Select'
 import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client'
+import { formatPhoneNumber } from '@/utils/utils'
 import { useSendNotification } from '../hooks/useSendNotification'
 import { useClientForNotification } from '../hooks/useClientForNotification'
 import type { SendNotificationModalProps } from '../types'
@@ -119,7 +120,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ op
           {selectedClient && clientContact && (
             <p className="text-xs text-gray-500 pe-1">
               {channel === 'whatsapp'
-                ? (clientContact.phone ?? 'אין מספר טלפון ללקוח')
+                ? (clientContact.phone ? formatPhoneNumber(clientContact.phone) : 'אין מספר טלפון ללקוח')
                 : (clientContact.email ?? 'אין כתובת אימייל ללקוח')}
             </p>
           )}

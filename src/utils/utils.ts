@@ -34,6 +34,19 @@ export const formatPlainIdentifier = (value: number | string | null | undefined,
   return String(value)
 }
 
+export const formatPhoneNumber = (value: string | null | undefined, fallback = '—'): string => {
+  if (!value) return fallback
+
+  const raw = value.trim()
+  const digits = raw.replace(/\D/g, '')
+
+  if (digits.length === 10 && digits.startsWith('05')) return `${digits.slice(0, 3)}-${digits.slice(3)}`
+  if (digits.length === 10 && digits.startsWith('0')) return `${digits.slice(0, 3)}-${digits.slice(3)}`
+  if (digits.length === 9 && digits.startsWith('0')) return `${digits.slice(0, 2)}-${digits.slice(2)}`
+
+  return raw || fallback
+}
+
 const fmtShekel = (numeric: number): string => {
   const abs = Math.abs(numeric)
   const formatted = `₪${abs.toLocaleString('he-IL')}`

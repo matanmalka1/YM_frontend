@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { signatureRequestsApi, signatureRequestsQK } from '../api'
 import { DetailDrawer, DrawerField, DrawerSection } from '../../../components/ui/overlays/DetailDrawer'
 import { StatusBadge } from '../../../components/ui/primitives/StatusBadge'
-import { formatDate, formatDateTime } from '../../../utils/utils'
+import { formatDate, formatDateTime, formatPhoneNumber } from '../../../utils/utils'
 import { getSignatureRequestTypeLabel, getSignatureRequestStatusLabel } from '../../../utils/enums'
 import { signatureRequestStatusVariants } from '../utils'
 
@@ -70,7 +70,7 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
             />
             <DrawerField label="חותם" value={data.signer_name} />
             {data.signer_email && <DrawerField label='דוא"ל' value={data.signer_email} />}
-            {data.signer_phone && <DrawerField label="טלפון" value={data.signer_phone} />}
+            {data.signer_phone && <DrawerField label="טלפון" value={formatPhoneNumber(data.signer_phone)} />}
             <DrawerField label="נוצר" value={formatDateTime(data.created_at)} />
             {data.sent_at && <DrawerField label="נשלח" value={formatDateTime(data.sent_at)} />}
             {data.expires_at && <DrawerField label="תפוגה" value={formatDate(data.expires_at)} />}

@@ -8,7 +8,7 @@ import {
   type Column,
 } from '../../../../components/ui/table'
 import type { ClientRecordResponse } from '../../api'
-import { formatClientOfficeId } from '@/utils/utils'
+import { formatClientOfficeId, formatPhoneNumber } from '@/utils/utils'
 import { ClientRowActions } from './ClientRowActions'
 import {
   CLIENT_STATUS_BADGE_VARIANTS,
@@ -75,7 +75,7 @@ export const buildClientColumns = ({
     monoColumn({
       key: 'phone',
       header: 'טלפון',
-      getValue: (client) => client.phone,
+      getValue: (client) => formatPhoneNumber(client.phone),
     }),
     textColumn({
       key: 'email',

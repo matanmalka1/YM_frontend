@@ -1,5 +1,5 @@
 import { type FC, type ReactNode } from 'react'
-import { formatDate, formatPlainIdentifier, formatShekelAmount } from '@/utils/utils'
+import { formatDate, formatPhoneNumber, formatPlainIdentifier, formatShekelAmount } from '@/utils/utils'
 import type { ClientRecordResponse } from '../../api'
 import {
   ADVANCE_PAYMENT_FREQUENCY_LABELS,
@@ -37,7 +37,7 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client, taxYear,
       label: 'טלפון',
       value: client.phone ? (
         <a href={`tel:${client.phone}`} className="text-primary-600 hover:underline">
-          {client.phone}
+          {formatPhoneNumber(client.phone)}
         </a>
       ) : (
         EMPTY_VALUE
