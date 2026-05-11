@@ -81,6 +81,9 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     key: 'settings',
     label: 'ניהול',
-    items: [{ to: '/settings/users', label: 'משתמשים', icon: Settings, roles: ['advisor'] }],
+    items: [
+      { to: '/settings/users', label: 'משתמשים', icon: Settings, roles: ['advisor'] },
+      { to: '/settings/tax-calendar', label: 'הגדרות יומן מס', icon: CalendarDays, roles: ['advisor'] },
+    ],
   },
 ]

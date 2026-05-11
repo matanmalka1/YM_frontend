@@ -39,7 +39,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar }
     <aside
       className={cn(
         'relative flex flex-col border-r border-gray-200 bg-white text-gray-900 shadow-xl shadow-gray-200/70 transition-all duration-200',
-        isSidebarOpen ? 'w-56' : 'w-16',
+        isSidebarOpen ? 'w-46' : 'w-16',
       )}
     >
       <div className="flex h-16 shrink-0 items-center justify-between border-b border-gray-200 px-4">

@@ -20,6 +20,7 @@ import { TasksPage } from '../features/tasks'
 import { Search } from '../features/search'
 import { SigningPage } from '../features/signing'
 import { TaxCalendarGroupsPage } from '../features/taxCalendar'
+import { TaxCalendarSettingsPage } from '../features/taxCalendarSettings'
 import { TaxDashboardPage } from '../features/taxDashboard'
 import { Users } from '../features/users'
 import { VatWorkItemDetail, VatWorkItems } from '../features/vatReports'
@@ -132,6 +133,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/" element={<ProtectedRoute requiredRole="advisor" />}>
           <Route element={<AuthenticatedLayout />}>
             <Route path="settings/users" element={<Users />} />
+            <Route path="settings/tax-calendar" element={<TaxCalendarSettingsPage />} />
           </Route>
         </Route>
 

@@ -1,10 +1,10 @@
-import { cloneElement, isValidElement, useId } from 'react'
+import { cloneElement, isValidElement, useId, type ReactElement } from 'react'
 import { cn } from '../../../utils/utils'
 
 interface FormFieldProps {
   label?: string
   error?: string
-  children: React.ReactElement
+  children: ReactElement<{ id?: string }>
   className?: string
 }
 
