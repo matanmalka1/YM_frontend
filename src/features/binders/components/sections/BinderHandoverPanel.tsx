@@ -83,11 +83,12 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
             readyBinders.map((binder) => {
               const checked = selectedIds.includes(binder.id)
               return (
-                <label
+                <div
                   key={binder.id}
                   className="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 bg-white px-3 py-2"
                 >
                   <Checkbox
+                    id={`handover-binder-${binder.id}`}
                     checked={checked}
                     onChange={() =>
                       setSelectedIds((current) =>
@@ -96,15 +97,15 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
                     }
                     inputClassName="mt-0.5"
                   />
-                  <div className="min-w-0">
+                  <label htmlFor={`handover-binder-${binder.id}`} className="min-w-0 cursor-pointer">
                     <div className="text-sm font-medium text-gray-900">{binder.binder_number}</div>
                     <div className="text-xs text-gray-500">
                       {binder.period_start
                         ? `${formatMonthYear(binder.period_start)} - ${binder.period_end ? formatMonthYear(binder.period_end) : 'פעיל'}`
                         : 'ללא תקופה'}
                     </div>
-                  </div>
-                </label>
+                  </label>
+                </div>
               )
             })
           )}

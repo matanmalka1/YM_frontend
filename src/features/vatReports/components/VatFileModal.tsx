@@ -103,8 +103,11 @@ export const VatFileModal: React.FC<VatFileModalProps> = ({
     >
       <div className="space-y-4" dir="rtl">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">אופן הגשה</label>
+          <label htmlFor="vat-file-submission-method" className="block text-sm font-medium text-gray-700 mb-1">
+            אופן הגשה
+          </label>
           <SelectDropdown
+            id="vat-file-submission-method"
             value={filingMethod}
             onChange={(e) =>
               setValue('submission_method', e.target.value as VatFileModalFormValues['submission_method'], {

@@ -126,16 +126,15 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ op
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">ערוץ שליחה</label>
-          <Select {...register('channel', { required: true })}>
+          <Select label="ערוץ שליחה" {...register('channel', { required: true })}>
             <option value="email">אימייל</option>
             <option value="whatsapp">וואטסאפ</option>
           </Select>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">תוכן ההודעה</label>
           <Textarea
+            label="תוכן ההודעה"
             {...register('message', {
               required: 'שדה חובה',
               maxLength: { value: 1000, message: 'עד 1000 תווים' },

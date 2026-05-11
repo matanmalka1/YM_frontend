@@ -58,40 +58,46 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
     }
   }, [open])
 
-  const handleContainerKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (event) => {
-    if (event.key === 'Escape' && onClose) {
-      event.preventDefault()
-      onClose()
-      return
-    }
-
-    if (event.key !== 'Tab') return
+  useEffect(() => {
     const container = containerRef.current
-    if (!container) return
+    if (!open || !container) return
 
-    const focusable = Array.from(
-      container.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-      ),
-    ).filter((element) => !element.hasAttribute('disabled') && element.tabIndex !== -1)
+    const handleContainerKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && onClose) {
+        event.preventDefault()
+        onClose()
+        return
+      }
 
-    if (focusable.length === 0) return
+      if (event.key !== 'Tab') return
 
-    const first = focusable[0]
-    const last = focusable[focusable.length - 1]
-    const active = document.activeElement as HTMLElement | null
+      const focusable = Array.from(
+        container.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((element) => !element.hasAttribute('disabled') && element.tabIndex !== -1)
 
-    if (event.shiftKey && active === first) {
-      event.preventDefault()
-      last.focus()
-      return
+      if (focusable.length === 0) return
+
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      const active = document.activeElement as HTMLElement | null
+
+      if (event.shiftKey && active === first) {
+        event.preventDefault()
+        last.focus()
+        return
+      }
+
+      if (!event.shiftKey && active === last) {
+        event.preventDefault()
+        first.focus()
+      }
     }
 
-    if (!event.shiftKey && active === last) {
-      event.preventDefault()
-      first.focus()
-    }
-  }
+    container.addEventListener('keydown', handleContainerKeyDown)
+    return () => container.removeEventListener('keydown', handleContainerKeyDown)
+  }, [onClose, open])
 
   if (variant === 'drawer') {
     return (
@@ -120,7 +126,7 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
           role="dialog"
           aria-modal="true"
           aria-label={typeof title === 'string' ? title : undefined}
-          onKeyDown={handleContainerKeyDown}
+          tabIndex={-1}
         >
           {title && (
             <div className="flex shrink-0 items-start justify-between border-b border-gray-100 px-6 py-4" dir="rtl">
@@ -156,7 +162,9 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
         ref={containerRef}
         className="fixed inset-0 flex items-center justify-center bg-black/40 px-4"
         style={{ zIndex: z }}
-        onKeyDown={handleContainerKeyDown}
+        role="dialog"
+        aria-modal="true"
+        tabIndex={-1}
       >
         <div className={cn('w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl', className)}>{children}</div>
       </div>
@@ -171,7 +179,10 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
       ref={containerRef}
       className="fixed inset-0 flex items-center justify-center bg-black/30 px-4"
       style={{ zIndex: z }}
-      onKeyDown={handleContainerKeyDown}
+      role="dialog"
+      aria-modal="true"
+      aria-label={typeof title === 'string' ? title : undefined}
+      tabIndex={-1}
     >
       <div className={cn('flex max-h-[92vh] w-full max-w-xl flex-col rounded-xl bg-white shadow-xl', className)}>
         {title && (

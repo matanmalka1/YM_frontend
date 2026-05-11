@@ -296,8 +296,11 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
                 <DatePicker label="תאריך ביצוע תשלום" value={paidAt} onChange={setPaidAt} />
               </div>
               <div className="space-y-1">
-                <label className="block text-sm font-medium text-gray-700">הערות</label>
+                <label htmlFor="advance-payment-notes" className="block text-sm font-medium text-gray-700">
+                  הערות
+                </label>
                 <textarea
+                  id="advance-payment-notes"
                   rows={3}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}

@@ -19,6 +19,7 @@ interface SelectDropdownProps {
   disabled?: boolean
   className?: string
   name?: string
+  id?: string
 }
 
 const CHEVRON = <ChevronDown className="h-4 w-4 shrink-0 text-gray-400" />
@@ -32,6 +33,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   disabled,
   className,
   name,
+  id,
 }) => {
   const [open, setOpen] = useState(false)
   const [internalValue, setInternalValue] = useState<string>('')
@@ -188,6 +190,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
       <button
         ref={triggerRef}
         type="button"
+        id={id}
         onClick={toggle}
         onKeyDown={handleTriggerKeyDown}
         disabled={disabled}

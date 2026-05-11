@@ -162,6 +162,7 @@ export const DropdownMenu = ({ ariaLabel, children, title }: DropdownMenuProps) 
             onClick={(e) => e.stopPropagation()}
             onKeyDown={handleMenuKeyDown}
             role="menu"
+            tabIndex={-1}
           >
             {children}
           </div>,

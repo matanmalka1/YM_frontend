@@ -19,6 +19,7 @@ export default defineConfig([
       ...reactHooks.configs['recommended-latest'].rules,
       ...jsxA11y.flatConfigs.recommended.rules,
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'jsx-a11y/no-autofocus': 'off',
     },
     languageOptions: {
       ecmaVersion: 2020,

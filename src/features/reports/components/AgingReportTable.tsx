@@ -30,10 +30,11 @@ export const AgingReportTable: React.FC<AgingReportTableProps> = ({ items }) => 
   return (
     <div className="grid grid-cols-1 gap-4 xl:grid-cols-2" dir="rtl">
       {items.map((item) => (
-        <div
+        <button
+          type="button"
           key={item.client_record_id}
           onClick={() => navigate(`/clients/${item.client_record_id}`)}
-          className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm animate-fade-in cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+          className="rounded-xl border border-gray-200 bg-white p-5 text-right shadow-sm animate-fade-in cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
         >
           <div className="mb-4 flex items-start justify-between">
             <div>
@@ -85,7 +86,7 @@ export const AgingReportTable: React.FC<AgingReportTableProps> = ({ items }) => 
               )}
             </div>
           )}
-        </div>
+        </button>
       ))}
     </div>
   );

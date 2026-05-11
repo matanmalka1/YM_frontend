@@ -193,8 +193,16 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
           )}
         />
         <div className="space-y-1">
-          <label className="block text-sm font-medium text-gray-700">הערות (אופציונלי)</label>
-          <textarea {...register('notes')} rows={2} className={NOTES_TEXTAREA_CLASS} placeholder="הערות..." />
+          <label htmlFor="create-advance-payment-notes" className="block text-sm font-medium text-gray-700">
+            הערות (אופציונלי)
+          </label>
+          <textarea
+            {...register('notes')}
+            id="create-advance-payment-notes"
+            rows={2}
+            className={NOTES_TEXTAREA_CLASS}
+            placeholder="הערות..."
+          />
         </div>
       </form>
     </Modal>

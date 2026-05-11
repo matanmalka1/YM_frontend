@@ -8,7 +8,7 @@ interface RowActionsMenuProps {
 }
 
 export const RowActionsMenu: React.FC<RowActionsMenuProps> = ({ ariaLabel, children, title }) => (
-  <div className="flex justify-center" onClick={(event) => event.stopPropagation()}>
+  <div className="flex justify-center">
     <DropdownMenu ariaLabel={ariaLabel ?? 'פעולות'} title={title}>
       {children}
     </DropdownMenu>
@@ -24,12 +24,14 @@ export const RowActionSeparator = () => <div className="my-1 border-t border-gra
 RowActionSeparator.displayName = 'RowActionSeparator'
 
 interface RowActionLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  href: string
   label: string
   icon: React.ReactNode
 }
 
-export const RowActionLink: React.FC<RowActionLinkProps> = ({ label, icon, className, onClick, ...props }) => (
+export const RowActionLink: React.FC<RowActionLinkProps> = ({ href, label, icon, className, onClick, ...props }) => (
   <a
+    href={href}
     className={
       className ?? 'block w-full px-3 py-2 text-right text-sm text-gray-700 transition-colors hover:bg-gray-50'
     }
@@ -37,6 +39,7 @@ export const RowActionLink: React.FC<RowActionLinkProps> = ({ label, icon, class
       event.stopPropagation()
       onClick?.(event)
     }}
+    onKeyDown={(event) => event.stopPropagation()}
     {...props}
   >
     <span className="grid w-full grid-cols-[minmax(0,1fr)_1rem] items-center gap-2">
