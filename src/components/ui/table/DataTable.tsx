@@ -119,7 +119,7 @@ export const DataTable = <T,>({
                   <td
                     key={column.key}
                     dir={column.dir}
-                    className={cn('px-3 py-3 align-middle text-center', column.className)}
+                    className={cn('px-3 py-3 align-middle text-center whitespace-nowrap', column.className)}
                   >
                     {column.render(item, index)}
                   </td>
