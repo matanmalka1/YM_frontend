@@ -15,7 +15,7 @@ import { ClientBusinessesCard } from './ClientBusinessesCard'
 import { ClientRelatedData } from './ClientRelatedData'
 import { CreateBusinessModal } from '../business/CreateBusinessModal'
 import { ClientEditForm } from '../edit/ClientEditForm'
-import { ChargesCreateModal } from '@/features/charges'
+import { ChargesCreateModal, ClientChargesTab } from '@/features/charges'
 import { ClientTimelineTab } from '@/features/timeline'
 import { ClientAnnualReportsTab } from '@/features/annualReports'
 import { ClientAdvancePaymentsTab } from '@/features/advancedPayments'
@@ -124,6 +124,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
 
       {activeTab === 'timeline' && <ClientTimelineTab clientId={String(client.id)} />}
       {activeTab === 'documents' && <ClientDocumentsTab clientId={client.id} />}
+      {activeTab === 'charges' && <ClientChargesTab clientId={client.id} clientName={client.full_name} />}
       {activeTab === 'vat' && <VatClientSummaryPanel clientId={client.id} />}
       {activeTab === 'advance-payments' && <ClientAdvancePaymentsTab clientId={client.id} />}
       {activeTab === 'annual-reports' && <ClientAnnualReportsTab clientId={client.id} />}

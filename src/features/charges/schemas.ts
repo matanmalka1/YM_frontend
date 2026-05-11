@@ -26,6 +26,7 @@ export const chargeCreateSchema = z.object({
     .refine((value) => !value || CHARGE_PERIOD_PATTERN.test(value), {
       message: 'פורמט תקופה חייב להיות YYYY-MM',
     }),
+  business_id: z.number().int().positive().optional().nullable(),
 })
 
 export type ChargeCreateFormValues = z.infer<typeof chargeCreateSchema>
@@ -36,6 +37,7 @@ export const chargeCreateDefaultValues: ChargeCreateFormValues = {
   charge_type: 'monthly_retainer',
   months_covered: 1,
   period: '',
+  business_id: null,
 }
 
 export const toCreateChargePayload = (values: ChargeCreateFormValues): CreateChargePayload => ({
@@ -44,4 +46,5 @@ export const toCreateChargePayload = (values: ChargeCreateFormValues): CreateCha
   charge_type: values.charge_type,
   months_covered: values.months_covered,
   period: values.period?.trim() ? values.period.trim() : null,
+  business_id: values.business_id ?? null,
 })

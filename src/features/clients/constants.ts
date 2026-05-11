@@ -5,6 +5,7 @@ export type ActiveClientDetailsTab =
   | 'details'
   | 'documents'
   | 'timeline'
+  | 'charges'
   | 'vat'
   | 'advance-payments'
   | 'annual-reports'
@@ -19,6 +20,7 @@ export const CLIENT_DETAILS_TABS: ActiveClientDetailsTab[] = [
   'details',
   'documents',
   'timeline',
+  'charges',
   'vat',
   'advance-payments',
   'annual-reports',
@@ -31,6 +33,7 @@ export const CLIENT_DETAILS_TAB_LABELS: Record<ActiveClientDetailsTab, string> =
   details: 'סקירה כללית',
   documents: 'מסמכים',
   timeline: 'ציר זמן',
+  charges: 'חיובים',
   vat: 'מע"מ (לקוח)',
   'advance-payments': 'מקדמות',
   'annual-reports': 'דוחות שנתיים',

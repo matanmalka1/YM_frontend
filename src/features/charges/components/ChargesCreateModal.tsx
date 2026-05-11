@@ -5,6 +5,7 @@ import { ClientPickerField, createClientIdPickerHandlers, useClientPickerState }
 import { MONTHS_COVERED_OPTIONS } from '@/constants/periodOptions.constants'
 import { FormField, Input, SelectDropdown } from '@/components/ui/inputs'
 import { Modal, ModalFormActions } from '@/components/ui/overlays'
+import type { BusinessResponse } from '@/features/clients'
 import type { CreateChargePayload } from '../api'
 import { CHARGE_CREATE_FORM_ID, CHARGE_TYPE_OPTIONS } from '../constants'
 import {
@@ -22,6 +23,8 @@ interface ChargesCreateModalProps {
   onClose: () => void
   onSubmit: (payload: CreateChargePayload) => Promise<boolean>
   initialClient?: { id: number; name: string } | null
+  initialBusiness?: { id: number; name: string } | null
+  businesses?: BusinessResponse[]
 }
 
 export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
@@ -31,6 +34,8 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
   onClose,
   onSubmit,
   initialClient,
+  initialBusiness,
+  businesses = [],
 }) => {
   const currencySuffix = <span className="text-sm text-gray-400">₪</span>
 
@@ -58,20 +63,29 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
     createClientIdPickerHandlers((value, options) => setValue('client_record_id', value, options)),
   )
 
-  // Pre-select client when modal opens with an initialClient
+  // Pre-select client and business when modal opens
   const didSeedRef = useRef(false)
   useEffect(() => {
-    if (open && initialClient && !didSeedRef.current) {
-      handleSelectClient({ id: initialClient.id, name: initialClient.name })
+    if (open && !didSeedRef.current) {
+      if (initialClient) handleSelectClient({ id: initialClient.id, name: initialClient.name })
+      if (initialBusiness) setValue('business_id', initialBusiness.id)
       didSeedRef.current = true
     }
     if (!open) {
       didSeedRef.current = false
     }
-  }, [open, initialClient]) // eslint-disable-line react-hooks/exhaustive-deps
-  const monthsCovered = watch('months_covered') ?? 1
+  }, [open, initialClient, initialBusiness]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  const monthsCovered = watch('months_covered') ?? 1
   const periodOptions = useMemo(() => buildChargePeriodOptions(monthsCovered), [monthsCovered])
+
+  const businessOptions = useMemo(
+    () => [
+      { value: '', label: 'ללא שיוך עסקי' },
+      ...businesses.map((b) => ({ value: String(b.id), label: b.business_name ?? `עסק #${b.id}` })),
+    ],
+    [businesses],
+  )
 
   const handleClose = () => {
     reset(chargeCreateDefaultValues)
@@ -119,6 +133,35 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
               label="לקוח *"
             />
           </div>
+
+          {businesses.length > 1 && (
+            <div className="col-span-2">
+              <Controller
+                control={control}
+                name="business_id"
+                render={({ field }) => (
+                  <FormField label="עסק" className="w-full">
+                    <SelectDropdown
+                      value={field.value != null ? String(field.value) : ''}
+                      onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : null)}
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      options={businessOptions}
+                    />
+                  </FormField>
+                )}
+              />
+            </div>
+          )}
+
+          {businesses.length === 1 && initialBusiness && (
+            <div className="col-span-2">
+              <FormField label="עסק">
+                <Input value={initialBusiness.name} readOnly disabled />
+              </FormField>
+            </div>
+          )}
+
           <Input
             label="סכום *"
             type="number"
@@ -149,7 +192,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
             control={control}
             name="months_covered"
             render={({ field }) => (
-              <FormField label="תדירות" error={errors.months_covered?.message} className="w-full">
+              <FormField label="חודשים לחיוב" error={errors.months_covered?.message} className="w-full">
                 <SelectDropdown
                   value={String(field.value ?? 1)}
                   onChange={(e) => field.onChange(Number(e.target.value) as 1 | 2)}

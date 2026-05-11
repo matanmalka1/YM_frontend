@@ -13,5 +13,6 @@ export const useFirstBusinessId = (clientId: number) => {
     staleTime: 60_000,
   })
 
-  return { id: data?.items?.[0]?.id ?? null, isLoading }
+  const first = data?.items?.[0] ?? null
+  return { id: first?.id ?? null, name: first?.business_name ?? null, isLoading }
 }

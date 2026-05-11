@@ -31,11 +31,17 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
   safePage,
   isFetching,
   setPage,
-  detailsClassName = 'text-xs text-gray-500 max-w-xl',
+  detailsClassName = 'text-xs text-gray-500',
 }: AuditTrailTableProps<TEntry>) => (
   <div className="space-y-3">
     <div className="overflow-x-auto rounded-lg border border-gray-100" dir="rtl">
       <table className="w-full border-collapse text-sm">
+        <colgroup>
+          <col className="w-36" />
+          <col className="w-24" />
+          <col className="min-w-48" />
+          <col className="w-24" />
+        </colgroup>
         <thead className="bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
           <tr>
             <th className="px-4 py-3 text-right">תאריך</th>
@@ -51,7 +57,7 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
                 {formatDateTime(entry.performed_at)}
               </td>
               <td className="px-4 py-3 font-medium text-gray-800">{actionLabels[entry.action] ?? entry.action}</td>
-              <td className={`px-4 py-3 ${detailsClassName}`}>{formatDetails(entry)}</td>
+              <td className={`px-4 py-3 ${detailsClassName}`} style={{ wordBreak: 'break-word' }}>{formatDetails(entry)}</td>
               <td className="px-4 py-3 font-mono text-xs text-gray-400">
                 {entry.performed_by_name ?? `#${entry.performed_by}`}
               </td>

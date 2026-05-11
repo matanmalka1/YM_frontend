@@ -6,6 +6,7 @@ import {
   VAT_TYPE_LABELS,
   ADVANCE_PAYMENT_FREQUENCY_LABELS,
 } from '@/features/clients'
+import { CHARGE_STATUS_LABELS, CHARGE_TYPE_LABELS } from '@/utils/enums'
 import type { EntityAuditLogEntry, EntityAuditType } from '../api'
 import { useEntityAuditTrail } from '../hooks/useEntityAuditTrail'
 import { AuditTrailTable } from './AuditTrailTable'
@@ -84,10 +85,13 @@ const FIELD_LABELS: Record<string, string> = {
   advance_rate_updated_at: 'תאריך עדכון שיעור מקדמות',
 }
 
+const CHARGE_STATUS_COMBINED: Record<string, string> = { ...CLIENT_STATUS_LABELS, ...CHARGE_STATUS_LABELS }
+
 const FIELD_VALUE_LABELS: Partial<Record<string, Record<string, string>>> = {
   entity_type: ENTITY_TYPE_LABELS,
   client_type: ENTITY_TYPE_LABELS,
-  status: CLIENT_STATUS_LABELS,
+  status: CHARGE_STATUS_COMBINED,
+  charge_type: CHARGE_TYPE_LABELS,
   vat_reporting_frequency: VAT_TYPE_LABELS,
   advance_payment_frequency: ADVANCE_PAYMENT_FREQUENCY_LABELS,
 }
