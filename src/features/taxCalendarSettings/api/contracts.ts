@@ -30,3 +30,17 @@ export interface TaxCalendarSettingsSummary {
   per_year: Record<string, Record<string, number>>
   warnings: string[]
 }
+
+export type TaxCalendarBootstrapPayload = TaxCalendarSettingsYearRangeParams
+
+export interface TaxCalendarBootstrapResult {
+  start_year: number
+  end_year: number
+  rules_created: number
+  rules_skipped: number
+  rules_by_type: Record<string, string>
+  entries_created: number
+  entries_skipped: number
+  total_entries_for_range: number
+  warnings: string[]
+}

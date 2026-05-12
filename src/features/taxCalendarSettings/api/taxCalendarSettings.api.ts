@@ -1,7 +1,10 @@
 import { api } from '@/api/client'
 import { toQueryParams } from '@/api/queryParams'
+import { randomUUID } from '@/utils/random'
 import { TAX_CALENDAR_SETTINGS_ENDPOINTS } from './endpoints'
 import type {
+  TaxCalendarBootstrapPayload,
+  TaxCalendarBootstrapResult,
   TaxCalendarDeadlineRule,
   TaxCalendarSettingsEntry,
   TaxCalendarSettingsSummary,
@@ -24,6 +27,15 @@ export const taxCalendarSettingsApi = {
   getSummary: async (params: TaxCalendarSettingsYearRangeParams): Promise<TaxCalendarSettingsSummary> => {
     const response = await api.get<TaxCalendarSettingsSummary>(TAX_CALENDAR_SETTINGS_ENDPOINTS.summary, {
       params: toQueryParams(params),
+    })
+    return response.data
+  },
+
+  bootstrap: async (payload: TaxCalendarBootstrapPayload): Promise<TaxCalendarBootstrapResult> => {
+    const response = await api.post<TaxCalendarBootstrapResult>(TAX_CALENDAR_SETTINGS_ENDPOINTS.bootstrap, payload, {
+      headers: {
+        'X-Idempotency-Key': randomUUID(),
+      },
     })
     return response.data
   },

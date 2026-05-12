@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { AlertTriangle, CalendarDays, ListChecks } from 'lucide-react'
+import { AlertTriangle, CalendarDays, ListChecks, Play } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
@@ -191,7 +191,7 @@ export const TaxCalendarSettingsPage = () => {
     }
   }, [endYearState.value, hasInvalidRange, startYearState.value])
 
-  const { rulesQuery, entriesQuery, summaryQuery } = useTaxCalendarSettings(params, params !== null)
+  const { rulesQuery, entriesQuery, summaryQuery, bootstrapMutation } = useTaxCalendarSettings(params, params !== null)
   const hasForbiddenError = isForbidden(rulesQuery.error, entriesQuery.error, summaryQuery.error)
   const rules = rulesQuery.data ?? []
   const entryGroups = useMemo(() => groupEntries(entriesQuery.data ?? []), [entriesQuery.data])
@@ -201,6 +201,11 @@ export const TaxCalendarSettingsPage = () => {
   const resetFilters = () => {
     setStartYear(String(currentYear))
     setEndYear(String(currentYear + 1))
+  }
+
+  const handleBootstrap = () => {
+    if (!params) return
+    bootstrapMutation.mutate(params)
   }
 
   if (hasForbiddenError) {
@@ -217,7 +222,7 @@ export const TaxCalendarSettingsPage = () => {
       <PageHeader title="הגדרות יומן מס" description="צפייה בכללי תאריכי יעד וברשומות שנוצרו ליומן המס" />
 
       <ToolbarContainer>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,180px)_minmax(0,180px)_auto]">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,180px)_minmax(0,180px)_auto_auto]">
           <Input
             type="number"
             label="משנת מס"
@@ -239,6 +244,19 @@ export const TaxCalendarSettingsPage = () => {
           <div className="flex items-end">
             <Button type="button" variant="outline" size="sm" onClick={resetFilters}>
               איפוס שנים
+            </Button>
+          </div>
+          <div className="flex items-end">
+            <Button
+              type="button"
+              size="sm"
+              onClick={handleBootstrap}
+              disabled={params === null || hasInvalidRange}
+              isLoading={bootstrapMutation.isPending}
+              loadingLabel="מאתחל..."
+            >
+              <Play className="h-4 w-4" />
+              אתחול יומן מס
             </Button>
           </div>
         </div>
@@ -302,6 +320,15 @@ export const TaxCalendarSettingsPage = () => {
             <Alert key={warning} variant="warning" message={warning} className="border-warning-300 bg-warning-50" />
           ))}
         </div>
+      ) : null}
+
+      {bootstrapMutation.data ? (
+        <Alert
+          variant={bootstrapMutation.data.warnings.length > 0 ? 'warning' : 'success'}
+          message={`אתחול הושלם: ${formatNumber(bootstrapMutation.data.entries_created)} רשומות נוצרו, ${formatNumber(
+            bootstrapMutation.data.entries_skipped,
+          )} רשומות דולגו, ${formatNumber(bootstrapMutation.data.total_entries_for_range)} רשומות קיימות בטווח.`}
+        />
       ) : null}
 
       <section className="space-y-3">
