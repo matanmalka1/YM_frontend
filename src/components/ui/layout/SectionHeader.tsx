@@ -41,14 +41,14 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
         <h3 className="text-lg font-semibold text-gray-900 tracking-tight">{title}</h3>
       )}
       {subtitle && (
-        <p
+        <div
           className={cn(
             'text-gray-600',
             size === 'lg' ? 'mt-1.5 text-base md:text-lg max-w-3xl leading-relaxed' : 'mt-1 text-sm',
           )}
         >
           {subtitle}
-        </p>
+        </div>
       )}
     </div>
     {actions && <div className="shrink-0">{actions}</div>}

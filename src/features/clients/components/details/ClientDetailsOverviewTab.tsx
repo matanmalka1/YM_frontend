@@ -40,8 +40,6 @@ export type ClientDetailsOverviewTabProps = {
   activeTab: ActiveClientDetailsTab
   isEditing: boolean
   onEditClose: () => void
-  taxYear: number
-  onTaxYearChange: (year: number) => void
 }
 
 export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
@@ -54,8 +52,6 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
   activeTab,
   isEditing,
   onEditClose,
-  taxYear,
-  onTaxYearChange,
 }) => {
   const { id: firstBusinessId } = useFirstBusinessId(client.id)
   const navigate = useNavigate()
@@ -79,7 +75,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
     <div className="space-y-6">
       {activeTab === 'details' && (
         <>
-          <ClientInfoSection client={client} taxYear={taxYear} onTaxYearChange={onTaxYearChange} />
+          <ClientInfoSection client={client} />
           <ClientStatusCard clientId={client.id} />
           <ClientBusinessesCard
             clientId={client.id}

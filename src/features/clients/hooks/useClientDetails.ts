@@ -5,7 +5,7 @@ import { getErrorMessage, isPositiveInt, showErrorToast } from '../../../utils/u
 import { useRole } from '../../../hooks/useRole'
 import { toast } from '../../../utils/toast'
 
-type UseClientDetailsParams = { clientId: number | null; taxYear?: number }
+type UseClientDetailsParams = { clientId: number | null }
 
 type UseClientDetailsResult = {
   client: ClientRecordResponse | null
@@ -19,7 +19,7 @@ type UseClientDetailsResult = {
   can: ReturnType<typeof useRole>['can']
 }
 
-export const useClientDetails = ({ clientId, taxYear }: UseClientDetailsParams): UseClientDetailsResult => {
+export const useClientDetails = ({ clientId }: UseClientDetailsParams): UseClientDetailsResult => {
   const id = Number(clientId)
   const isValidId = isPositiveInt(id)
   const queryClient = useQueryClient()
@@ -27,8 +27,8 @@ export const useClientDetails = ({ clientId, taxYear }: UseClientDetailsParams):
   const { can } = useRole()
 
   const clientQuery = useQuery({
-    queryKey: clientsQK.detail(id, taxYear),
-    queryFn: () => clientsApi.getById(id, taxYear),
+    queryKey: clientsQK.detail(id),
+    queryFn: () => clientsApi.getById(id),
     enabled: isValidId,
   })
 
@@ -36,7 +36,7 @@ export const useClientDetails = ({ clientId, taxYear }: UseClientDetailsParams):
     mutationFn: (payload: UpdateClientPayload) => clientsApi.update(id, payload),
     onSuccess: async (updated) => {
       toast.success('פרטי הלקוח עודכנו')
-      queryClient.setQueryData(clientsQK.detail(id, taxYear), updated)
+      queryClient.setQueryData(clientsQK.detail(id), updated)
       await queryClient.invalidateQueries({ queryKey: clientsQK.all })
     },
     onError: (err) => showErrorToast(err, 'שגיאה בעדכון פרטי לקוח'),

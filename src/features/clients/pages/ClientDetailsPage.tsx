@@ -114,9 +114,8 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
   const { clientId } = useParams<{ clientId: string }>()
   const clientIdNum = clientId ? Number(clientId) : null
   const [isEditing, setIsEditing] = useState(false)
-  const [taxYear, setTaxYear] = useState<number>(new Date().getFullYear())
   const { client, isValidId, isLoading, error, updateClient, isUpdating, deleteClient, isDeleting, can } =
-    useClientDetails({ clientId: clientIdNum, taxYear })
+    useClientDetails({ clientId: clientIdNum })
 
   useEffect(() => {
     if (initialTab !== 'details') setIsEditing(false)
@@ -177,8 +176,6 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
             isDeleting,
             isEditing,
             onEditClose: () => setIsEditing(false),
-            taxYear,
-            onTaxYearChange: setTaxYear,
           }}
         />
       ) : null}

@@ -7,6 +7,7 @@ import {
   ENTITY_TYPE_LABELS,
   VAT_TYPE_LABELS,
 } from '../../constants'
+import { formatDate } from '@/utils/utils'
 
 interface Props {
   values: CreateClientFormValues
@@ -111,7 +112,7 @@ export const CreateClientReviewStep: React.FC<Props> = ({
         <ReviewRow label={isCompany ? 'שם מסחרי' : 'שם עסק'} value={businessDisplayName} />
         <ReviewRow
           label={isCompany ? 'תאריך התאגדות' : 'תאריך פתיחת תיק'}
-          value={values.business_opened_at ?? null}
+          value={formatDate(values.business_opened_at ?? null)}
         />
         <ReviewRow label="טלפון" value={values.phone} />
         <ReviewRow label="אימייל" value={values.email} />

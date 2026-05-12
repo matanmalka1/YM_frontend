@@ -1,5 +1,4 @@
 import { type FC } from 'react'
-import { SelectDropdown } from '@/components/ui/inputs/SelectDropdown'
 import { formatDate, formatPhoneNumber, formatPlainIdentifier, formatShekelAmount } from '@/utils/utils'
 import type { ClientRecordResponse } from '../../api'
 import { ADVANCE_PAYMENT_FREQUENCY_LABELS, getClientStatusLabel, getClientVatReportingLabel } from '../../constants'
@@ -13,18 +12,13 @@ const TURNOVER_SOURCE_LABELS: Record<string, string> = {
   none: '',
 }
 
-const CURRENT_YEAR = new Date().getFullYear()
-const YEAR_OPTIONS = Array.from({ length: 5 }, (_, i) => CURRENT_YEAR - i)
-
 type ClientInfoSectionProps = {
   client: ClientRecordResponse
-  taxYear: number
-  onTaxYearChange: (year: number) => void
 }
 
 const EMPTY_VALUE = '—'
 
-export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client, taxYear, onTaxYearChange }) => {
+export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client }) => {
   const { nameById } = useAdvisorOptions()
   const { officeByType } = useClientAuthorityContacts(client.id, client.address_city)
 
@@ -88,7 +82,7 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client, taxYear,
         : EMPTY_VALUE,
     },
     {
-      label: `מחזור שנתי (${taxYear})`,
+      label: 'מחזור שנתי',
       value:
         !client.annual_turnover || client.annual_turnover.source === 'none' ? (
           EMPTY_VALUE
@@ -133,22 +127,7 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client, taxYear,
     <div className="space-y-4">
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         <DefinitionSectionCard title="פרטי קשר" items={contactItems} columns={2} />
-        <DefinitionSectionCard
-          title="פרופיל מס"
-          items={taxItems}
-          columns={2}
-          headerAction={
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <span className="whitespace-nowrap">שנת מס:</span>
-              <SelectDropdown
-                options={YEAR_OPTIONS.map((y) => ({ value: String(y), label: String(y) }))}
-                value={String(taxYear)}
-                onChange={(e) => onTaxYearChange(Number(e.target.value))}
-                className="w-20"
-              />
-            </div>
-          }
-        />
+        <DefinitionSectionCard title="פרופיל מס" items={taxItems} columns={2} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
