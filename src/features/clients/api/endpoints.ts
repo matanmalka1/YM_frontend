@@ -18,6 +18,7 @@ export const CLIENT_ROUTES = {
   timeline: (clientId: number | string) => `/clients/${clientId}/timeline`,
   charges: (clientId: number | string) => `/clients/${clientId}/charges`,
   vat: (clientId: number | string) => `/clients/${clientId}/vat`,
+  taxCalendar: (clientId: number | string) => `/clients/${clientId}/tax-calendar`,
   advancePayments: (clientId: number | string) => `/clients/${clientId}/advance-payments`,
   annualReports: (clientId: number | string) => `/clients/${clientId}/annual-reports`,
   documents: (clientId: number | string) => `/clients/${clientId}/documents`,

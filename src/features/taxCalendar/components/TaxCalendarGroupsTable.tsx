@@ -19,6 +19,7 @@ interface TaxCalendarGroupsTableProps {
   groups: TaxCalendarGroup[]
   isLoading?: boolean
   clientSearchText?: string
+  clientRecordId?: number
 }
 
 const MONTH_LABELS = [
@@ -103,6 +104,9 @@ const matchesClientSearch = (item: TaxCalendarGroupItem, searchText: string): bo
   ].some((value) => value?.toLowerCase().includes(normalized))
 }
 
+const matchesClientRecord = (item: TaxCalendarGroupItem, clientRecordId?: number): boolean =>
+  clientRecordId == null || item.client_record_id === clientRecordId
+
 const getDueDatePrefix = (group: TaxCalendarGroup): string =>
   group.obligation_type === 'advance_payment' ? 'מועד תשלום' : 'מועד דיווח'
 
@@ -110,13 +114,17 @@ const GroupItemsRows = ({
   group,
   isOpen,
   clientSearchText,
+  clientRecordId,
 }: {
   group: TaxCalendarGroup
   isOpen: boolean
   clientSearchText: string
+  clientRecordId?: number
 }) => {
   const { data, isPending, isError, error } = useTaxCalendarGroupItems(group.tax_calendar_entry_id, isOpen)
-  const items = (data?.items ?? []).filter((item) => matchesClientSearch(item, clientSearchText))
+  const items = (data?.items ?? []).filter(
+    (item) => matchesClientRecord(item, clientRecordId) && matchesClientSearch(item, clientSearchText),
+  )
 
   if (isPending) {
     return <div className="py-4 text-center text-sm text-gray-400">טוען רשומות מקושרות...</div>
@@ -185,6 +193,7 @@ export const TaxCalendarGroupsTable = ({
   groups,
   isLoading = false,
   clientSearchText = '',
+  clientRecordId,
 }: TaxCalendarGroupsTableProps) => {
   const [openEntryId, setOpenEntryId] = useState<number | null>(null)
 
@@ -231,7 +240,12 @@ export const TaxCalendarGroupsTable = ({
             closeLabel="סגור"
             className={cn(group.overdue_count > 0 && 'border-r-2 border-r-negative-500')}
           >
-            <GroupItemsRows group={group} isOpen={isOpen} clientSearchText={clientSearchText} />
+            <GroupItemsRows
+              group={group}
+              isOpen={isOpen}
+              clientSearchText={clientSearchText}
+              clientRecordId={clientRecordId}
+            />
           </GroupedPeriodRow>
         )
       })}

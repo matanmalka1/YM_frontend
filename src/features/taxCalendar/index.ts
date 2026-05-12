@@ -12,4 +12,5 @@ export {
 export { useTaxCalendarGroups } from './hooks/useTaxCalendarGroups'
 export { useTaxCalendarGroupItems } from './hooks/useTaxCalendarGroupItems'
 export { TaxCalendarGroupsTable } from './components/TaxCalendarGroupsTable'
+export { ClientTaxCalendarTab } from './components/ClientTaxCalendarTab'
 export { TaxCalendarGroupsPage } from './pages/TaxCalendarGroupsPage'

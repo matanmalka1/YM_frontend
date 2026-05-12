@@ -24,6 +24,7 @@ export interface TaxCalendarGroupsParams {
   end_year?: number
   obligation_type?: TaxCalendarObligationType
   include_empty?: boolean
+  client_record_id?: number
 }
 
 export type TaxCalendarGroupItemSourceType = 'vat_work_item' | 'advance_payment' | 'annual_report'
