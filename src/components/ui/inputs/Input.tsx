@@ -2,19 +2,33 @@ import React from 'react'
 import { cn } from '../../../utils/utils'
 import { FormField } from './FormField'
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string
   error?: string
+  size?: 'xs' | 'sm' | 'md'
   labelClassName?: string
   startIcon?: React.ReactNode
   endIcon?: React.ReactNode
   endElement?: React.ReactNode
 }
 
+const inputSizeClasses = {
+  xs: 'h-7 px-2 py-1 text-xs',
+  sm: 'h-8 px-2.5 py-1.5 text-sm',
+  md: 'h-9 px-3 py-2 sm:text-sm',
+}
+
+const inputIconPadding = {
+  xs: { start: 'ps-8', end: 'pe-8', defaultStart: 'ps-2', defaultEnd: 'pe-2' },
+  sm: { start: 'ps-9', end: 'pe-9', defaultStart: 'ps-2.5', defaultEnd: 'pe-2.5' },
+  md: { start: 'ps-11', end: 'pe-11', defaultStart: 'ps-3', defaultEnd: 'pe-3' },
+}
+
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, labelClassName, className, startIcon, endIcon, endElement, ...props }, ref) => {
+  ({ label, error, size = 'md', labelClassName, className, startIcon, endIcon, endElement, ...props }, ref) => {
     const hasStart = Boolean(startIcon)
     const hasEnd = Boolean(endIcon || endElement)
+    const padding = inputIconPadding[size]
 
     return (
       <FormField label={label} error={error} labelClassName={labelClassName} className="w-full">
@@ -28,11 +42,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             className={cn(
-              'h-9 w-full rounded-lg border px-3 py-2 shadow-sm transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500 sm:text-sm',
+              'w-full rounded-lg border shadow-sm transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500',
+              inputSizeClasses[size],
               error ? 'border-negative-500' : 'border-gray-300',
               props.disabled ? 'bg-gray-50 cursor-not-allowed' : 'bg-white',
-              hasStart ? 'ps-11' : 'ps-3',
-              hasEnd ? 'pe-11' : 'pe-3',
+              hasStart ? padding.start : padding.defaultStart,
+              hasEnd ? padding.end : padding.defaultEnd,
               className,
             )}
             {...props}

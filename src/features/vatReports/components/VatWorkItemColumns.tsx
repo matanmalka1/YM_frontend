@@ -69,7 +69,7 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemRes
         >
           {formatVatAmount(amount)}
           {item.is_overridden && (
-            <Badge variant="warning" className="px-1 py-0.5 text-xs font-medium">
+            <Badge variant="warning" size="xs">
               עוקף
             </Badge>
           )}

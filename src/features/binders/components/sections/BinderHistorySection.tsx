@@ -35,13 +35,13 @@ export const BinderHistorySection: React.FC<BinderHistorySectionProps> = ({ bind
               <div className="mb-1 flex flex-wrap items-center gap-1.5 text-sm">
                 {entry.old_status && (
                   <>
-                    <Badge variant={BINDER_STATUS_VARIANTS[entry.old_status] ?? 'neutral'} className="text-xs">
+                    <Badge variant={BINDER_STATUS_VARIANTS[entry.old_status] ?? 'neutral'}>
                       {getStatusLabel(entry.old_status)}
                     </Badge>
                     <ArrowRight className="h-3 w-3 text-gray-400" />
                   </>
                 )}
-                <Badge variant={BINDER_STATUS_VARIANTS[entry.new_status] ?? 'neutral'} className="text-xs">
+                <Badge variant={BINDER_STATUS_VARIANTS[entry.new_status] ?? 'neutral'}>
                   {getStatusLabel(entry.new_status)}
                 </Badge>
               </div>

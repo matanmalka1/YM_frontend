@@ -161,7 +161,7 @@ export const VatWorkItemsGroupedTable: React.FC<VatWorkItemsGroupedTableProps> =
                           </button>
                           <div className="flex flex-wrap gap-1.5">
                             {getStatusSummary(group.items).map(([status, count]) => (
-                              <Badge key={status} variant="neutral" className="px-2 py-0.5 text-xs">
+                              <Badge key={status} variant="neutral" size="xs">
                                 {getVatWorkItemStatusLabel(status)}: {count}
                               </Badge>
                             ))}

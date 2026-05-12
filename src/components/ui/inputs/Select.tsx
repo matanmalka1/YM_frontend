@@ -1,3 +1,4 @@
+import { ChevronDown } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { FormField } from './FormField'
 import { SelectDropdown } from './SelectDropdown'
@@ -8,30 +9,35 @@ interface SelectOption {
   disabled?: boolean
 }
 
-interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
   label?: string
   error?: string
+  size?: 'xs' | 'sm' | 'md'
   options?: SelectOption[]
 }
 
-const ChevronIcon = () => (
-  <svg
-    className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 20 20"
-    fill="currentColor"
-  >
-    <path
-      fillRule="evenodd"
-      d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-      clipRule="evenodd"
-    />
-  </svg>
+const selectSizeClasses = {
+  xs: 'h-7 px-2 py-1 pr-8 text-xs',
+  sm: 'h-8 px-2.5 py-1.5 pr-8 text-sm',
+  md: 'px-3 py-2.5 pr-9 text-sm',
+}
+
+const chevronSizeClasses = {
+  xs: 'right-2 h-3.5 w-3.5',
+  sm: 'right-2 h-4 w-4',
+  md: 'right-2.5 h-4 w-4',
+}
+
+const ChevronIcon = ({ size }: { size: NonNullable<SelectProps['size']> }) => (
+  <ChevronDown
+    className={cn('pointer-events-none absolute top-1/2 -translate-y-1/2 text-gray-400', chevronSizeClasses[size])}
+  />
 )
 
 export const Select: React.FC<SelectProps> = ({
   label,
   error,
+  size = 'md',
   className,
   options,
   children,
@@ -50,6 +56,7 @@ export const Select: React.FC<SelectProps> = ({
         onBlur={onBlur}
         options={options}
         disabled={disabled}
+        size={size}
         name={name}
         className={cn(error ? 'border-negative-500' : undefined, className)}
       />
@@ -62,7 +69,8 @@ export const Select: React.FC<SelectProps> = ({
           disabled={disabled}
           name={name}
           className={cn(
-            'appearance-none w-full px-3 py-2.5 pr-9 bg-white border rounded-lg text-sm text-gray-800 cursor-pointer transition-colors',
+            'appearance-none w-full bg-white border rounded-lg text-gray-800 cursor-pointer transition-colors',
+            selectSizeClasses[size],
             'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 hover:border-primary-300',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             error ? 'border-negative-500' : 'border-gray-200',
@@ -72,7 +80,7 @@ export const Select: React.FC<SelectProps> = ({
         >
           {children}
         </select>
-        <ChevronIcon />
+        <ChevronIcon size={size} />
       </div>
     )}
   </FormField>

@@ -125,7 +125,7 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
       {workItem.is_overridden && (
         <AlertBanner tone="warning">
           <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="warning" className="px-1.5 py-0.5 text-xs font-semibold">
+            <Badge variant="warning" size="xs" className="font-semibold">
               סכום מע&quot;מ עוקף
             </Badge>
             {workItem.override_justification && (

@@ -1,4 +1,4 @@
-import { AlertTriangle, Info, AlertCircle, CheckCircle, RotateCcw } from 'lucide-react'
+import { AlertTriangle, Info, AlertCircle, CheckCircle, RotateCcw, X } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 
 interface AlertProps {
@@ -90,9 +90,7 @@ export const Alert: React.FC<AlertProps> = ({
           className={cn('shrink-0 rounded-lg p-1.5 transition-colors hover:bg-white/50', c.text)}
           aria-label="סגור התראה"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <X className="h-4 w-4" />
         </button>
       )}
     </div>

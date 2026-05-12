@@ -88,7 +88,7 @@ const columns: Column<AnnualReportFull>[] = [
     render: (r) => (
       <div className="flex flex-col gap-0.5">
         <span className="text-sm text-gray-700">{getClientTypeLabel(r.client_type)}</span>
-        <Badge variant="neutral" className="font-mono text-xs w-fit">
+        <Badge variant="neutral" className="w-fit font-mono">
           {r.form_type}
         </Badge>
       </div>

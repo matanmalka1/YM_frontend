@@ -1,12 +1,12 @@
-import { Badge } from './Badge'
-
-type Variant = 'success' | 'warning' | 'error' | 'info' | 'neutral'
+import { Badge, type BadgeSize, type BadgeVariant } from './Badge'
 
 interface StatusBadgeProps {
   status: string
   getLabel: (status: string) => string
-  variantMap: Record<string, Variant>
-  defaultVariant?: Variant
+  variantMap: Record<string, BadgeVariant>
+  defaultVariant?: BadgeVariant
+  size?: BadgeSize
+  className?: string
 }
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({
@@ -14,8 +14,14 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   getLabel,
   variantMap,
   defaultVariant = 'neutral',
+  size,
+  className,
 }) => {
   const label = getLabel(status)
   const variant = variantMap[status] ?? defaultVariant
-  return <Badge variant={variant}>{label}</Badge>
+  return (
+    <Badge variant={variant} size={size} className={className}>
+      {label}
+    </Badge>
+  )
 }

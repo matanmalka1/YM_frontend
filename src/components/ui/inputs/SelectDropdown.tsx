@@ -17,12 +17,29 @@ interface SelectDropdownProps {
   onKeyDown?: React.KeyboardEventHandler<HTMLButtonElement>
   options: SelectOption[]
   disabled?: boolean
+  size?: 'xs' | 'sm' | 'md'
   className?: string
   name?: string
   id?: string
 }
 
-const CHEVRON = <ChevronDown className="h-4 w-4 shrink-0 text-gray-400" />
+const triggerSizeClasses = {
+  xs: 'h-7 px-2 py-1 text-xs',
+  sm: 'h-8 px-2.5 py-1.5 text-sm',
+  md: 'h-9 px-3 py-2 text-sm',
+}
+
+const optionSizeClasses = {
+  xs: 'px-2 py-1.5 text-xs',
+  sm: 'px-2.5 py-1.5 text-sm',
+  md: 'px-3 py-2 text-sm',
+}
+
+const iconSizeClasses = {
+  xs: 'h-3.5 w-3.5',
+  sm: 'h-4 w-4',
+  md: 'h-4 w-4',
+}
 
 export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   value,
@@ -31,6 +48,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   onKeyDown,
   options,
   disabled,
+  size = 'md',
   className,
   name,
   id,
@@ -178,7 +196,8 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   }
 
   const triggerClass = cn(
-    'flex h-9 w-full items-center gap-2 px-3 py-2 bg-white border rounded-lg text-sm transition-colors',
+    'flex w-full items-center gap-2 bg-white border rounded-lg transition-colors',
+    triggerSizeClasses[size],
     'hover:border-primary-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:border-primary-500',
     'disabled:opacity-50 disabled:cursor-not-allowed',
     open ? 'border-primary-500 ring-2 ring-primary-500' : 'border-gray-200',
@@ -202,7 +221,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
         <span className={cn('flex-1 truncate text-right', !currentValue ? 'text-gray-400' : 'text-gray-800')}>
           {selectedLabel}
         </span>
-        {CHEVRON}
+        <ChevronDown className={cn('shrink-0 text-gray-400', iconSizeClasses[size])} />
       </button>
 
       {open &&
@@ -229,7 +248,8 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
                 onClick={() => select(opt.value)}
                 onMouseEnter={() => !opt.disabled && setHighlightedIndex(index)}
                 className={cn(
-                  'flex w-full items-center gap-2 px-3 py-2 text-right text-sm transition-colors',
+                  'flex w-full items-center gap-2 text-right transition-colors',
+                  optionSizeClasses[size],
                   'disabled:opacity-40 disabled:cursor-not-allowed',
                   highlightedIndex === index ? 'bg-primary-50' : 'hover:bg-primary-50',
                   currentValue === String(opt.value) ? 'text-primary-600 font-medium' : 'text-gray-700',
@@ -238,7 +258,9 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
                 aria-selected={currentValue === String(opt.value)}
               >
                 <span className="flex-1 truncate">{opt.label}</span>
-                {currentValue === String(opt.value) && <Check className="h-3.5 w-3.5 shrink-0 text-primary-500" />}
+                {currentValue === String(opt.value) && (
+                  <Check className={cn('shrink-0 text-primary-500', iconSizeClasses[size])} />
+                )}
               </button>
             ))}
           </div>,

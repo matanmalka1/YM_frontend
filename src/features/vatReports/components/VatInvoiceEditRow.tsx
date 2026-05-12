@@ -62,7 +62,8 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
         <Input
           {...register('invoice_number')}
           onKeyDown={handleEscapeKeyDown}
-          className="h-7 w-28 text-xs px-1 font-mono"
+          size="xs"
+          className="w-28 font-mono"
         />
       </td>
       <td className="px-2 py-1.5 w-32">
@@ -83,13 +84,14 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
         />
       </td>
       <td className="px-2 py-1.5">
-        <Input {...register('counterparty_name')} onKeyDown={handleEscapeKeyDown} className="h-7 w-36 text-xs px-1" />
+        <Input {...register('counterparty_name')} onKeyDown={handleEscapeKeyDown} size="xs" className="w-36" />
       </td>
       <td className="px-2 py-1.5">
         <Input
           {...register('counterparty_id')}
           onKeyDown={handleEscapeKeyDown}
-          className="h-7 w-28 text-xs px-1 font-mono"
+          size="xs"
+          className="w-28 font-mono"
           placeholder="—"
           dir="ltr"
         />
@@ -110,7 +112,8 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
                   onChange={field.onChange}
                   onBlur={field.onBlur}
                   onKeyDown={handleEscapeKeyDown}
-                  className="h-7 text-xs flex-1"
+                  size="xs"
+                  className="flex-1"
                   options={VAT_EXPENSE_CATEGORY_OPTIONS}
                 />
               )}
@@ -127,7 +130,8 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
         <Input
           {...register('net_amount')}
           dir="ltr"
-          className="h-7 w-24 text-xs px-1 font-mono"
+          size="xs"
+          className="w-24 font-mono"
           inputMode="decimal"
           onKeyDown={(e) => {
             if (e.key === 'Escape') {
