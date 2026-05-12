@@ -1,31 +1,12 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Pencil, Trash2, X, Check } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
 import { Card } from '@/components/ui/primitives/Card'
 import { Button } from '@/components/ui/primitives/Button'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Textarea } from '@/components/ui/inputs/Textarea'
-import { cn, formatDate } from '@/utils/utils'
-import { usersApi, usersQK } from '@/features/users'
+import { cn, formatDateTime } from '@/utils/utils'
 import type { EntityNote } from '../api'
-
-const useUserNameMap = () => {
-  const { data } = useQuery({
-    queryKey: usersQK.list({ page: 1, page_size: 200 }),
-    queryFn: () => usersApi.list({ page: 1, page_size: 200 }),
-    staleTime: 5 * 60_000,
-  })
-  return useMemo(() => {
-    const map = new Map<number, string>()
-    data?.items.forEach((u) => {
-      const parts = u.full_name.trim().split(' ')
-      const short = parts.length >= 2 ? `${parts[0][0]}. ${parts.slice(1).join(' ')}` : u.full_name
-      map.set(u.id, short)
-    })
-    return map
-  }, [data])
-}
 
 const NOTE_TAGS = [
   { key: 'תזכורת', label: 'תזכורת', color: 'text-orange-600 bg-orange-50 border-orange-200' },
@@ -44,6 +25,13 @@ const parseNote = (raw: string): { tag: NoteTagKey | null; body: string } => {
   const m = raw.match(TAG_PREFIX_RE)
   if (m && m[1] in TAG_COLOR) return { tag: m[1] as NoteTagKey, body: raw.slice(m[0].length) }
   return { tag: null, body: raw }
+}
+
+const getInitials = (name: string | null): string => {
+  if (!name?.trim()) return ''
+  const parts = name.trim().split(/\s+/)
+  if (parts.length === 1) return parts[0].slice(0, 2)
+  return `${parts[0][0]}${parts[parts.length - 1][0]}`
 }
 
 interface NoteComposerProps {
@@ -134,50 +122,53 @@ interface NoteRowProps {
   isDeleting: boolean
   onEdit: (note: EntityNote) => void
   onDelete: (id: number) => void
-  nameMap: Map<number, string>
 }
 
-const NoteRow = ({ note, isDeleting, onEdit, onDelete, nameMap }: NoteRowProps) => {
+const NoteRow = ({ note, isDeleting, onEdit, onDelete }: NoteRowProps) => {
   const { tag, body } = parseNote(note.note)
-  const author = note.created_by != null ? (nameMap.get(note.created_by) ?? null) : null
+  const author = note.created_by_name
+  const initials = getInitials(author)
   return (
     <li className="flex items-start gap-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+      {initials && (
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-900">
+          {initials}
+        </div>
+      )}
       <div className="flex-1 min-w-0">
-        {tag && (
-          <span
-            className={cn('mb-1.5 inline-block rounded border px-1.5 py-0.5 text-[11px] font-semibold', TAG_COLOR[tag])}
-          >
-            {tag}
-          </span>
-        )}
+        <div className="mb-2 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+          {author && <span className="text-sm font-semibold text-gray-900">{author}</span>}
+          <span className="text-xs text-gray-400">{formatDateTime(note.created_at)}</span>
+        </div>
         <p className="text-sm font-semibold text-gray-900 whitespace-pre-wrap break-words">{body}</p>
-        <p className="mt-1.5 text-xs text-gray-400">
-          {author && <span>{author} • </span>}
-          {formatDate(note.created_at)}
-        </p>
       </div>
-      <div className="flex items-center gap-1 shrink-0">
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={() => onEdit(note)}
-          className="h-8 w-8 px-0 text-gray-500"
-          title="ערוך"
-        >
-          <Pencil className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={() => onDelete(note.id)}
-          disabled={isDeleting}
-          className="h-8 w-8 px-0 text-gray-500 hover:text-negative-600"
-          title="מחק"
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+      <div className="flex shrink-0 flex-col items-end gap-2">
+        {tag && (
+          <span className={cn('rounded border px-1.5 py-0.5 text-[11px] font-semibold', TAG_COLOR[tag])}>{tag}</span>
+        )}
+        <div className="flex items-center gap-1">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => onEdit(note)}
+            className="h-8 w-8 px-0 text-gray-500"
+            title="ערוך"
+          >
+            <Pencil className="h-4 w-4" />
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => onDelete(note.id)}
+            disabled={isDeleting}
+            className="h-8 w-8 px-0 text-gray-500 hover:text-negative-600"
+            title="מחק"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </li>
   )
@@ -190,7 +181,6 @@ interface NotesCardProps {
 
 export const NotesCard = ({ hook, canEdit }: NotesCardProps) => {
   const { notes, total, isLoading, error, addNote, isAdding, updateNote, isUpdating, deleteNote, deletingId } = hook
-  const nameMap = useUserNameMap()
 
   const [addText, setAddText] = useState('')
   const [editing, setEditing] = useState<EntityNote | null>(null)
@@ -263,7 +253,6 @@ export const NotesCard = ({ hook, canEdit }: NotesCardProps) => {
                   isDeleting={deletingId === note.id}
                   onEdit={handleEditStart}
                   onDelete={(id) => setConfirmDeleteId(id)}
-                  nameMap={nameMap}
                 />
               ),
             )}
