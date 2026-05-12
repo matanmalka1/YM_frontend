@@ -1,137 +1,142 @@
 import { isAxiosError } from 'axios'
-import { toast } from './toast'
-import { format, parseISO } from 'date-fns'
+import { format, isValid, parseISO } from 'date-fns'
 import { he } from 'date-fns/locale'
-export { getReportingPeriodMonthLabel, MONTH_NAMES, MONTH_OPTIONS } from '@/constants/periodOptions.constants'
-// ============================================================================
-// STRING & TYPE UTILITIES
-// ============================================================================
 
-export const cn = (...classes: (string | boolean | undefined | null)[]): string => {
+import { toast } from './toast'
+
+export { getReportingPeriodMonthLabel, MONTH_NAMES, MONTH_OPTIONS } from '@/constants/periodOptions.constants'
+
+const EMPTY_VALUE = '—'
+
+export const cn = (...classes: Array<string | false | null | undefined>): string => {
   return classes.filter(Boolean).join(' ')
 }
 
-// ============================================================================
-// NUMBER UTILITIES
-// ============================================================================
-
 export const parsePositiveInt = (value: string | null, fallback: number): number => {
+  if (!value || !/^\d+$/.test(value)) return fallback
+
   const parsed = Number(value)
-  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback
+  return parsed > 0 ? parsed : fallback
 }
 
 export const isPositiveInt = (value: number | null | undefined): value is number => {
-  return value != null && value > 0
+  return typeof value === 'number' && Number.isInteger(value) && value > 0
 }
 
 export const formatClientOfficeId = (value: number | string | null | undefined): string => {
-  if (value == null || value === '') return '—'
+  if (value == null || value === '') return EMPTY_VALUE
   return `#${value}`
 }
 
-export const formatPlainIdentifier = (value: number | string | null | undefined, fallback = '—'): string => {
+export const formatPlainIdentifier = (value: number | string | null | undefined, fallback = EMPTY_VALUE): string => {
   if (value == null || value === '') return fallback
   return String(value)
 }
 
-export const formatPhoneNumber = (value: string | null | undefined, fallback = '—'): string => {
-  if (!value) return fallback
+export const formatPhoneNumber = (value: string | null | undefined, fallback = EMPTY_VALUE): string => {
+  const raw = value?.trim()
+  if (!raw) return fallback
 
-  const raw = value.trim()
   const digits = raw.replace(/\D/g, '')
 
-  if (digits.length === 10 && digits.startsWith('05')) return `${digits.slice(0, 3)}-${digits.slice(3)}`
-  if (digits.length === 10 && digits.startsWith('0')) return `${digits.slice(0, 3)}-${digits.slice(3)}`
-  if (digits.length === 9 && digits.startsWith('0')) return `${digits.slice(0, 2)}-${digits.slice(2)}`
+  if (digits.length === 10 && digits.startsWith('0')) {
+    return `${digits.slice(0, 3)}-${digits.slice(3)}`
+  }
 
-  return raw || fallback
+  if (digits.length === 9 && digits.startsWith('0')) {
+    return `${digits.slice(0, 2)}-${digits.slice(2)}`
+  }
+
+  return raw
 }
 
-const fmtShekel = (numeric: number): string => {
-  const abs = Math.abs(numeric)
-  const formatted = `₪${abs.toLocaleString('he-IL')}`
-  return numeric < 0 ? `-${formatted}` : formatted
-}
-
-export const formatShekelAmount = (value: string | number | null | undefined, fallback = '—'): string => {
-  if (value == null || value === '') return fallback
-  const numeric = Number(value)
-  if (Number.isNaN(numeric)) return fallback
-  return fmtShekel(numeric)
-}
-
-export const formatBinderNumber = (binderNumber: string | null | undefined): string => {
-  if (!binderNumber) return '—'
-  const parts = binderNumber.split('/')
-  return parts[parts.length - 1]
-}
-
-export const formatDate = (value: string | null): string => {
-  if (!value) return '—'
-  return format(parseISO(value), 'dd/MM/yyyy', { locale: he })
-}
-
-export const formatMonthYear = (value: string | null): string => {
-  if (!value) return '—'
-  return format(parseISO(value), 'MM.yyyy', { locale: he })
-}
-
-export const formatDateTime = (value: string | null): string => {
-  if (!value) return '—'
-  return format(parseISO(value), 'dd/MM/yyyy HH:mm', { locale: he })
-}
-
-export const fmtCurrency = (n: string | number | null | undefined): string => {
-  if (n == null) return '—'
-  const numeric = Number(n)
-  if (Number.isNaN(numeric)) return '—'
-  const abs = Math.abs(numeric)
-  const formatted = `₪${abs.toLocaleString('he-IL', { minimumFractionDigits: 0 })}`
-  return numeric < 0 ? `-${formatted}` : formatted
-}
-
-const toILSNumeric = (value: string | number | null | undefined): number | null => {
+const toNumberOrNull = (value: string | number | null | undefined): number | null => {
   if (value == null || value === '') return null
+
   const numeric = Number(value)
-  return Number.isNaN(numeric) ? null : numeric
+  return Number.isFinite(numeric) ? numeric : null
 }
 
-export const formatCurrencyILS = (value: string | number | null | undefined, maximumFractionDigits = 0): string => {
-  const numeric = toILSNumeric(value)
-  if (numeric === null) return '—'
-  const abs = Math.abs(numeric)
-  const formatted = abs.toLocaleString('he-IL', {
+export const formatCurrencyILS = (
+  value: string | number | null | undefined,
+  maximumFractionDigits = 0,
+  fallback = EMPTY_VALUE,
+): string => {
+  const numeric = toNumberOrNull(value)
+  if (numeric === null) return fallback
+
+  return new Intl.NumberFormat('he-IL', {
     style: 'currency',
     currency: 'ILS',
     maximumFractionDigits,
-  })
-  return numeric < 0 ? `-${formatted}` : formatted
+  }).format(numeric)
 }
 
-export const formatCompactCurrencyILS = (value: string | number | null | undefined, fractionDigits = 2): string => {
-  const numeric = toILSNumeric(value)
-  if (numeric === null) return '—'
-  const abs = Math.abs(numeric)
-  const formatted = abs
-    .toLocaleString('he-IL', {
-      style: 'currency',
-      currency: 'ILS',
-      minimumFractionDigits: fractionDigits,
-      maximumFractionDigits: fractionDigits,
-    })
+export const formatCompactCurrencyILS = (
+  value: string | number | null | undefined,
+  fractionDigits = 2,
+  fallback = EMPTY_VALUE,
+): string => {
+  const numeric = toNumberOrNull(value)
+  if (numeric === null) return fallback
+
+  return new Intl.NumberFormat('he-IL', {
+    style: 'currency',
+    currency: 'ILS',
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  })
+    .format(numeric)
     .replace(/\s/g, '')
-  return numeric < 0 ? `-${formatted}` : formatted
+}
+
+export const formatShekelAmount = (value: string | number | null | undefined, fallback = EMPTY_VALUE): string => {
+  return formatCurrencyILS(value, 0, fallback)
+}
+
+export const fmtCurrency = formatShekelAmount
+
+export const formatBinderNumber = (binderNumber: string | null | undefined): string => {
+  if (!binderNumber) return EMPTY_VALUE
+
+  const parts = binderNumber.split('/')
+  return parts.at(-1) || EMPTY_VALUE
+}
+
+const formatSafeDate = (value: string | null | undefined, pattern: string, fallback = EMPTY_VALUE): string => {
+  if (!value) return fallback
+
+  const date = parseISO(value)
+  if (!isValid(date)) return fallback
+
+  return format(date, pattern, { locale: he })
+}
+
+export const formatDate = (value: string | null | undefined): string => {
+  return formatSafeDate(value, 'dd/MM/yyyy')
+}
+
+export const formatMonthYear = (value: string | null | undefined): string => {
+  return formatSafeDate(value, 'MM.yyyy')
+}
+
+export const formatDateTime = (value: string | null | undefined): string => {
+  return formatSafeDate(value, 'dd/MM/yyyy HH:mm')
 }
 
 export const formatFileSize = (bytes: number | null | undefined): string => {
-  if (bytes == null) return '—'
+  if (bytes == null || !Number.isFinite(bytes)) return EMPTY_VALUE
+  if (bytes < 0) return EMPTY_VALUE
+
   if (bytes < 1024) return `${bytes} B`
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
 export const getHttpStatus = (error: unknown): number | null => {
   if (!isAxiosError(error)) return null
+
   const status = error.response?.status
   return typeof status === 'number' ? status : null
 }
@@ -140,11 +145,37 @@ type ErrorOptions = {
   canonicalAction?: boolean
 }
 
+const getCanonicalErrorMessage = (status: number | null): string | null => {
+  if (status === 403) return 'אין הרשאה לבצע פעולה זו'
+  if (status === 500) return 'שגיאת שרת פנימית. נסה שוב בעוד מספר רגעים'
+
+  return null
+}
+
+const getAxiosDetailMessage = (detail: unknown): string | null => {
+  if (typeof detail === 'string' && detail.trim()) {
+    return detail.trim()
+  }
+
+  if (Array.isArray(detail) && detail.length > 0) {
+    const msg = detail[0]?.msg
+    return typeof msg === 'string' && msg.trim() ? msg.trim() : null
+  }
+
+  if (detail && typeof detail === 'object') {
+    const nestedDetail = (detail as { detail?: unknown }).detail
+    if (typeof nestedDetail === 'string' && nestedDetail.trim()) {
+      return nestedDetail.trim()
+    }
+  }
+
+  return null
+}
+
 const resolveErrorMessage = (error: unknown, fallbackMessage: string, options?: ErrorOptions): string => {
   if (options?.canonicalAction) {
-    const status = getHttpStatus(error)
-    if (status === 403) return 'אין הרשאה לבצע פעולה זו'
-    if (status === 500) return 'שגיאת שרת פנימית. נסה שוב בעוד מספר רגעים'
+    const canonicalMessage = getCanonicalErrorMessage(getHttpStatus(error))
+    if (canonicalMessage) return canonicalMessage
   }
 
   if (isAxiosError(error)) {
@@ -156,20 +187,8 @@ const resolveErrorMessage = (error: unknown, fallbackMessage: string, options?: 
       return 'אין חיבור לשרת. בדוק את החיבור שלך ונסה שוב.'
     }
 
-    const detail = error.response?.data?.detail
-    if (typeof detail === 'string' && detail.trim()) return detail.trim()
-    if (Array.isArray(detail) && detail.length > 0) {
-      const msg = detail[0]?.msg
-      if (typeof msg === 'string' && msg.trim()) return msg.trim()
-      return fallbackMessage
-    }
-
-    if (detail && typeof detail === 'object') {
-      const nestedDetail = (detail as { detail?: unknown }).detail
-      if (typeof nestedDetail === 'string' && nestedDetail.trim()) {
-        return nestedDetail.trim()
-      }
-    }
+    const detailMessage = getAxiosDetailMessage(error.response?.data?.detail)
+    if (detailMessage) return detailMessage
 
     const errorMetaDetail = error.response?.data?.error_meta?.detail
     if (typeof errorMetaDetail === 'string' && errorMetaDetail.trim()) {
@@ -177,23 +196,17 @@ const resolveErrorMessage = (error: unknown, fallbackMessage: string, options?: 
     }
   }
 
-  if (error instanceof Error && error.message) {
-    return error.message
+  if (error instanceof Error && error.message.trim()) {
+    return error.message.trim()
   }
 
   return fallbackMessage
 }
 
-export const getErrorMessage = (error: unknown, fallbackMessage: string, options?: ErrorOptions): string =>
-  resolveErrorMessage(error, fallbackMessage, options)
+export const getErrorMessage = (error: unknown, fallbackMessage: string, options?: ErrorOptions): string => {
+  return resolveErrorMessage(error, fallbackMessage, options)
+}
 
-/**
- * Convenience companion to `toast.error(message)`.
- * This is the intentional entry point when the caller has an unknown error
- * object and wants message extraction plus toast display in one step.
- *
- * It returns the resolved message so callers can also surface it inline.
- */
 export const showErrorToast = (error: unknown, fallbackMessage: string, options?: ErrorOptions): string => {
   const message = resolveErrorMessage(error, fallbackMessage, options)
   toast.error(message)

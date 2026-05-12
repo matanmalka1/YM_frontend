@@ -1,19 +1,23 @@
-// src/utils/validation.ts
+const ISRAELI_IDENTIFIER_LENGTH = 9
 
-/**
- * Israeli ID / Company number (ח.פ) checksum validation.
- * Both use the same Luhn-based algorithm.
- */
-export const validateIsraeliIdChecksum = (id: string): boolean => {
-  if (id.length !== 9 || !/^\d+$/.test(id)) return false
+const DIGITS_ONLY_REGEX = /^\d+$/
+
+export const validateIsraeliIdentifierChecksum = (value: string): boolean => {
+  if (value.length !== ISRAELI_IDENTIFIER_LENGTH) return false
+  if (!DIGITS_ONLY_REGEX.test(value)) return false
+
   let total = 0
-  for (let i = 0; i < 9; i++) {
-    let n = Number(id[i])
-    if (i % 2 === 1) {
+
+  for (let index = 0; index < value.length; index += 1) {
+    let n = Number(value[index])
+
+    if (index % 2 === 1) {
       n *= 2
       if (n > 9) n -= 9
     }
+
     total += n
   }
+
   return total % 10 === 0
 }

@@ -57,7 +57,9 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
                 {formatDateTime(entry.performed_at)}
               </td>
               <td className="px-4 py-3 font-medium text-gray-800">{actionLabels[entry.action] ?? entry.action}</td>
-              <td className={`px-4 py-3 ${detailsClassName}`} style={{ wordBreak: 'break-word' }}>{formatDetails(entry)}</td>
+              <td className={`px-4 py-3 ${detailsClassName}`} style={{ wordBreak: 'break-word' }}>
+                {formatDetails(entry)}
+              </td>
               <td className="px-4 py-3 font-mono text-xs text-gray-400">
                 {entry.performed_by_name ?? `#${entry.performed_by}`}
               </td>

@@ -74,9 +74,8 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
     [businesses],
   )
 
-  const selectedBusiness = selectedBusinessId != null
-    ? businesses.find((b) => b.id === selectedBusinessId) ?? null
-    : null
+  const selectedBusiness =
+    selectedBusinessId != null ? (businesses.find((b) => b.id === selectedBusinessId) ?? null) : null
 
   return (
     <div className="space-y-4">
@@ -103,7 +102,12 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
         </div>
       </div>
 
-      <ChargesSummaryBar stats={stats} isAdvisor={isAdvisor} currentStatus={currentStatus} onStatusClick={handleStatusChange} />
+      <ChargesSummaryBar
+        stats={stats}
+        isAdvisor={isAdvisor}
+        currentStatus={currentStatus}
+        onStatusClick={handleStatusChange}
+      />
 
       {!isAdvisor && <Alert variant="info" message="צפייה בלבד. יצירה ושינוי חיובים זמינים ליועץ בלבד." />}
 
@@ -141,7 +145,11 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
         onClose={() => setShowCreateModal(false)}
         onSubmit={submitCreate}
         initialClient={{ id: clientId, name: clientName }}
-        initialBusiness={selectedBusiness ? { id: selectedBusiness.id, name: selectedBusiness.business_name ?? `עסק #${selectedBusiness.id}` } : null}
+        initialBusiness={
+          selectedBusiness
+            ? { id: selectedBusiness.id, name: selectedBusiness.business_name ?? `עסק #${selectedBusiness.id}` }
+            : null
+        }
         businesses={businesses}
       />
     </div>

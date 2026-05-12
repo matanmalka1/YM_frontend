@@ -122,10 +122,7 @@ export const ClientSidebar: React.FC = () => {
       </div>
 
       {/* Client list — only this scrolls */}
-      <nav
-        className="min-h-0 flex-1 overflow-y-auto px-1.5 py-1.5"
-        aria-label="לקוחות"
-      >
+      <nav className="min-h-0 flex-1 overflow-y-auto px-1.5 py-1.5" aria-label="לקוחות">
         {/* TODO: Add client alerts once alert counts are exposed for this navigation surface. */}
         {isLoading ? (
           <p className="px-3 py-2 text-sm text-gray-500">טוען לקוחות...</p>

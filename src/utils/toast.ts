@@ -1,41 +1,38 @@
 import { toast as sonnerToast } from 'sonner'
+import type { CSSProperties } from 'react'
 
-const RTL_STYLE: React.CSSProperties = { direction: 'rtl' }
+type ToastType = 'success' | 'error' | 'info' | 'warning'
+
+const RTL_STYLE: CSSProperties = { direction: 'rtl' }
+
+const TOAST_DURATION_BY_TYPE: Record<ToastType, number> = {
+  success: 4000,
+  error: 6000,
+  info: 4000,
+  warning: 5000,
+}
 
 interface ToastOptions {
   duration?: number
   description?: string
-  action?: { label: string; onClick: () => void }
+  action?: {
+    label: string
+    onClick: () => void
+  }
 }
 
-/**
- * App-level toast wrapper around Sonner.
- * Import this module from feature code instead of importing `sonner` directly.
- *
- * Use `toast.error(message)` when the caller already has a display-ready message.
- * Use `showErrorToast(error, fallback)` from `utils.ts` when starting from an
- * unknown error object and a fallback message.
- */
-const notify = (type: 'success' | 'error' | 'info' | 'warning', message: string, options?: ToastOptions) => {
-  const base = { style: RTL_STYLE }
-  const durationDefaults: Record<typeof type, number> = {
-    success: 4000,
-    error: 6000,
-    info: 4000,
-    warning: 5000,
-  }
-
+const notify = (type: ToastType, message: string, options?: ToastOptions): void => {
   sonnerToast[type](message, {
-    ...base,
+    style: RTL_STYLE,
     description: options?.description,
-    duration: options?.duration ?? durationDefaults[type],
+    duration: options?.duration ?? TOAST_DURATION_BY_TYPE[type],
     action: options?.action,
   })
 }
 
-export const toast = {
-  success: (message: string, options?: ToastOptions) => notify('success', message, options),
-  error: (message: string, options?: ToastOptions) => notify('error', message, options),
-  info: (message: string, options?: ToastOptions) => notify('info', message, options),
-  warning: (message: string, options?: ToastOptions) => notify('warning', message, options),
+export const toast: Record<ToastType, (message: string, options?: ToastOptions) => void> = {
+  success: (message, options) => notify('success', message, options),
+  error: (message, options) => notify('error', message, options),
+  info: (message, options) => notify('info', message, options),
+  warning: (message, options) => notify('warning', message, options),
 }

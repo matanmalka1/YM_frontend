@@ -38,15 +38,11 @@ export const StatusHistoryTimeline: React.FC<StatusHistoryTimelineProps> = ({ hi
                 <div className="mb-1 flex flex-wrap items-center gap-1.5 text-sm">
                   {entry.from_status && (
                     <>
-                      <Badge variant={getStatusVariant(entry.from_status)}>
-                        {getStatusLabel(entry.from_status)}
-                      </Badge>
+                      <Badge variant={getStatusVariant(entry.from_status)}>{getStatusLabel(entry.from_status)}</Badge>
                       <ArrowLeft className="h-3 w-3 text-gray-400" />
                     </>
                   )}
-                  <Badge variant={getStatusVariant(entry.to_status)}>
-                    {getStatusLabel(entry.to_status)}
-                  </Badge>
+                  <Badge variant={getStatusVariant(entry.to_status)}>{getStatusLabel(entry.to_status)}</Badge>
                 </div>
 
                 <div className="flex items-center justify-between gap-2 text-xs text-gray-500">

@@ -42,7 +42,9 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
   useEffect(() => {
     if (!open) return
     document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = '' }
+    return () => {
+      document.body.style.overflow = ''
+    }
   }, [open])
 
   useEffect(() => {

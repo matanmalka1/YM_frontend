@@ -59,12 +59,7 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
   return (
     <tr className="bg-info-50/40">
       <td className={`border-r-2 ${accentBorder} px-2 py-1.5`}>
-        <Input
-          {...register('invoice_number')}
-          onKeyDown={handleEscapeKeyDown}
-          size="xs"
-          className="w-28 font-mono"
-        />
+        <Input {...register('invoice_number')} onKeyDown={handleEscapeKeyDown} size="xs" className="w-28 font-mono" />
       </td>
       <td className="px-2 py-1.5 w-32">
         <Controller

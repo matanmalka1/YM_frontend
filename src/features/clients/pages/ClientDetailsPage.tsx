@@ -96,9 +96,7 @@ const ClientHeaderMissingDocuments: FC<{ clientId: number; active: boolean }> = 
         חסרים {missingDocuments.length}
       </span>
 
-      <span className="min-w-0 flex-1 truncate text-amber-900">
-        {labels.join(' · ')}
-      </span>
+      <span className="min-w-0 flex-1 truncate text-amber-900">{labels.join(' · ')}</span>
 
       <Link
         to={`/clients/${clientId}/documents`}

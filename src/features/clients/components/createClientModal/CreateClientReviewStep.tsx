@@ -2,11 +2,7 @@ import { CreditCard, FileText, FolderOpen, ReceiptText } from 'lucide-react'
 
 import type { ClientCreationImpactResponse } from '../../api/contracts'
 import type { CreateClientFormValues } from '../../schemas'
-import {
-  ADVANCE_PAYMENT_FREQUENCY_LABELS,
-  ENTITY_TYPE_LABELS,
-  VAT_TYPE_LABELS,
-} from '../../constants'
+import { ADVANCE_PAYMENT_FREQUENCY_LABELS, ENTITY_TYPE_LABELS, VAT_TYPE_LABELS } from '../../constants'
 import { formatDate } from '@/utils/utils'
 
 interface Props {
@@ -68,12 +64,11 @@ export const CreateClientReviewStep: React.FC<Props> = ({
   const isExempt = values.entity_type === 'osek_patur'
   const isCompany = values.entity_type === 'company_ltd'
 
-  const vatLabel =
-    isExempt
-      ? 'פטור'
-      : values.vat_reporting_frequency
-        ? VAT_TYPE_LABELS[values.vat_reporting_frequency]
-        : null
+  const vatLabel = isExempt
+    ? 'פטור'
+    : values.vat_reporting_frequency
+      ? VAT_TYPE_LABELS[values.vat_reporting_frequency]
+      : null
 
   const advanceLabel = values.advance_payment_frequency
     ? ADVANCE_PAYMENT_FREQUENCY_LABELS[values.advance_payment_frequency]
@@ -81,9 +76,7 @@ export const CreateClientReviewStep: React.FC<Props> = ({
 
   const advisorLabel = advisorOptions.find((o) => o.value === values.accountant_id)?.label
 
-  const businessDisplayName =
-    values.business_name?.trim() ||
-    (isCompany ? null : values.full_name?.trim())
+  const businessDisplayName = values.business_name?.trim() || (isCompany ? null : values.full_name?.trim())
 
   const impactTotal = impactData?.items.reduce((sum, item) => sum + item.count, 0) ?? 0
 
@@ -122,10 +115,7 @@ export const CreateClientReviewStep: React.FC<Props> = ({
       <ReviewSection title="מס ומע״מ">
         {!isExempt && <ReviewRow label="תדירות דיווח מע״מ" value={vatLabel} />}
         <ReviewRow label="תדירות מקדמות" value={advanceLabel} />
-        <ReviewRow
-          label="שיעור מקדמות"
-          value={values.advance_rate ? `${values.advance_rate}%` : null}
-        />
+        <ReviewRow label="שיעור מקדמות" value={values.advance_rate ? `${values.advance_rate}%` : null} />
         <ReviewRow label="רואה חשבון" value={advisorLabel ?? null} />
       </ReviewSection>
 
@@ -161,12 +151,8 @@ export const CreateClientReviewStep: React.FC<Props> = ({
                     <ImpactIcon label={item.label} />
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-base font-semibold leading-5 text-blue-950">
-                      {item.count}
-                    </span>
-                    <span className="block truncate text-xs font-medium text-blue-700">
-                      {item.label}
-                    </span>
+                    <span className="block text-base font-semibold leading-5 text-blue-950">{item.count}</span>
+                    <span className="block truncate text-xs font-medium text-blue-700">{item.label}</span>
                   </span>
                 </li>
               ))}

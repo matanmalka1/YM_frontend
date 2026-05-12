@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { validateIsraeliIdChecksum } from '../../utils/validation'
+import { validateIsraeliIdentifierChecksum } from '../../utils/validation'
 import {
   ADVANCE_PAYMENT_FREQUENCY_VALUES,
   CREATE_CLIENT_VALIDATION_MESSAGES,
@@ -103,7 +103,7 @@ export const createClientSchema = z
       return
     }
 
-    if (!validateIsraeliIdChecksum(trimmedId)) {
+    if (!validateIsraeliIdentifierChecksum(trimmedId)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['id_number'],
