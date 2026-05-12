@@ -1,3 +1,5 @@
+import { CreditCard, FileText, FolderOpen, ReceiptText } from 'lucide-react'
+
 import type { ClientCreationImpactResponse } from '../../api/contracts'
 import type { CreateClientFormValues } from '../../schemas'
 import {
@@ -29,6 +31,20 @@ const ReviewRow: React.FC<ReviewRowProps> = ({ label, value }) => (
 interface SectionProps {
   title: string
   children: React.ReactNode
+}
+
+const impactIconClasses = 'h-4 w-4'
+
+const impactIconByLabel = {
+  'קלסר פעיל': FolderOpen,
+  'דוחות מע"מ': ReceiptText,
+  'תשלומי מקדמות': CreditCard,
+  'דוח שנתי': FileText,
+} as const
+
+const ImpactIcon: React.FC<{ label: string }> = ({ label }) => {
+  const Icon = impactIconByLabel[label as keyof typeof impactIconByLabel] ?? FileText
+  return <Icon className={impactIconClasses} aria-hidden="true" />
 }
 
 const ReviewSection: React.FC<SectionProps> = ({ title, children }) => (
@@ -67,6 +83,8 @@ export const CreateClientReviewStep: React.FC<Props> = ({
   const businessDisplayName =
     values.business_name?.trim() ||
     (isCompany ? null : values.full_name?.trim())
+
+  const impactTotal = impactData?.items.reduce((sum, item) => sum + item.count, 0) ?? 0
 
   const addressParts = [
     values.address_street,
@@ -110,8 +128,18 @@ export const CreateClientReviewStep: React.FC<Props> = ({
         <ReviewRow label="רואה חשבון" value={advisorLabel ?? null} />
       </ReviewSection>
 
-      <div className="rounded-lg border border-blue-200 bg-blue-50 p-4" dir="rtl">
-        <p className="mb-2 text-sm font-semibold text-blue-800">מה ייווצר לאחר שמירה?</p>
+      <div className="rounded-lg border border-blue-200 bg-blue-50/70 p-4" dir="rtl">
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <div>
+            <p className="text-sm font-semibold text-blue-900">מה ייווצר לאחר שמירה?</p>
+            <p className="mt-0.5 text-xs text-blue-700">פריטים חדשים שייווצרו עבור הלקוח</p>
+          </div>
+          {impactData && (
+            <span className="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-semibold text-blue-700 shadow-sm ring-1 ring-blue-100">
+              {impactTotal} פריטים
+            </span>
+          )}
+        </div>
         {impactLoading ? (
           <div className="space-y-2">
             {[1, 2, 3].map((i) => (
@@ -122,11 +150,23 @@ export const CreateClientReviewStep: React.FC<Props> = ({
           <p className="text-sm text-blue-700">לא ניתן לטעון את הפרטים כרגע</p>
         ) : impactData ? (
           <>
-            <ul className="space-y-1">
+            <ul className="grid gap-2 sm:grid-cols-2">
               {impactData.items.map((item) => (
-                <li key={item.label} className="flex items-baseline gap-2 text-sm text-blue-700">
-                  <span className="font-medium">{item.count}</span>
-                  <span>{item.label}</span>
+                <li
+                  key={item.label}
+                  className="flex items-center gap-3 rounded-md bg-white px-3 py-2.5 text-blue-900 shadow-sm ring-1 ring-blue-100"
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-blue-100 text-blue-700">
+                    <ImpactIcon label={item.label} />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-base font-semibold leading-5 text-blue-950">
+                      {item.count}
+                    </span>
+                    <span className="block truncate text-xs font-medium text-blue-700">
+                      {item.label}
+                    </span>
+                  </span>
                 </li>
               ))}
             </ul>
