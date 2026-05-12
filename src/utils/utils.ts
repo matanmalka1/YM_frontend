@@ -152,6 +152,10 @@ const resolveErrorMessage = (error: unknown, fallbackMessage: string, options?: 
       return 'הבקשה נמשכה יותר מדי זמן. נסה שוב.'
     }
 
+    if (error.code === 'ERR_NETWORK' || (!error.response && error.request)) {
+      return 'אין חיבור לשרת. בדוק את החיבור שלך ונסה שוב.'
+    }
+
     const detail = error.response?.data?.detail
     if (typeof detail === 'string' && detail.trim()) return detail.trim()
     if (Array.isArray(detail) && detail.length > 0) {

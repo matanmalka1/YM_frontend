@@ -4,6 +4,7 @@ import { cn } from '../../../utils/utils'
 interface AlertProps {
   message: string
   variant?: 'warning' | 'info' | 'error' | 'success'
+  size?: 'sm' | 'md'
   dismissible?: boolean
   onDismiss?: () => void
   onRetry?: () => void
@@ -44,6 +45,7 @@ const config = {
 export const Alert: React.FC<AlertProps> = ({
   message,
   variant = 'warning',
+  size = 'md',
   dismissible = false,
   onDismiss,
   onRetry,
@@ -51,23 +53,24 @@ export const Alert: React.FC<AlertProps> = ({
 }) => {
   const c = config[variant]
   const Icon = c.Icon
+  const isSmall = size === 'sm'
 
   return (
     <div
       className={cn(
-        'flex items-start gap-4 rounded-xl border p-4 shadow-sm',
-        'transition-all duration-300 animate-slide-in',
+        'flex items-start rounded-xl border transition-all duration-300 animate-slide-in',
+        isSmall ? 'gap-2.5 p-2.5 shadow-none' : 'gap-4 p-4 shadow-sm',
         c.container,
         className,
       )}
       role="alert"
     >
-      <div className={cn('rounded-lg p-2 shrink-0', c.iconBg)}>
-        <Icon className={cn('h-5 w-5', c.icon)} />
+      <div className={cn('shrink-0', isSmall ? 'rounded-md p-1' : 'rounded-lg p-2', c.iconBg)}>
+        <Icon className={cn(isSmall ? 'h-4 w-4' : 'h-5 w-5', c.icon)} />
       </div>
 
-      <div className="flex-1 pt-0.5">
-        <p className={cn('text-sm font-medium leading-relaxed', c.text)}>{message}</p>
+      <div className={cn('flex-1', isSmall ? '' : 'pt-0.5')}>
+        <p className={cn('font-medium leading-relaxed', isSmall ? 'text-xs' : 'text-sm', c.text)}>{message}</p>
       </div>
 
       {onRetry && (

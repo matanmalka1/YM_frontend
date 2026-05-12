@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form'
 import { Navigate } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock, ArrowLeft, LoaderCircle } from 'lucide-react'
 
-import { Input } from '@/components/ui/inputs/Input'
 import { Alert } from '@/components/ui/overlays/Alert'
+import { Input } from '@/components/ui/inputs/Input'
 import { Button } from '@/components/ui/primitives/Button'
 import { loginDefaultValues, loginSchema, type LoginFormValues } from '@/features/auth'
 import { useAuthStore } from '@/store/auth.store'
@@ -112,7 +112,7 @@ export const Login: React.FC = () => {
                   <span>בודקים את פרטי ההתחברות...</span>
                 </div>
               ) : error ? (
-                <Alert variant="error" message={error} className="rounded-xl" />
+                <Alert variant="error" size="sm" message={error} className="rounded-xl" />
               ) : null}
             </div>
 
