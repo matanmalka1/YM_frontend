@@ -5,7 +5,7 @@ interface Props {
 }
 
 export const CreateClientStepIndicator: React.FC<Props> = ({ stepIndex }) => (
-  <div className="grid grid-cols-3 gap-2" aria-label="שלבי יצירת לקוח">
+  <div className="grid grid-cols-4 gap-2" aria-label="שלבי יצירת לקוח">
     {CREATE_CLIENT_STEPS.map((step, index) => (
       <div
         key={step.key}
