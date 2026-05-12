@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { ChevronDown, Search } from 'lucide-react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { NotificationBell } from '../NotificationBell'
@@ -10,9 +10,13 @@ import { useDismissibleLayer } from '../../ui/overlays/useDismissibleLayer'
 
 type TopNavItem = Pick<NavItem, 'to' | 'label' | 'end' | 'roles'>
 
+const NAV_ITEMS_BY_ROUTE = new Map(NAV_GROUPS.flatMap((group) => group.items.map((item) => [item.to, item] as const)))
+
 const getNavItem = (to: string): NavItem => {
-  const item = NAV_GROUPS.flatMap((group) => group.items).find((navItem) => navItem.to === to)
-  if (!item) throw new Error(`Missing nav item for route: ${to}`)
+  const item = NAV_ITEMS_BY_ROUTE.get(to)
+  if (!item) {
+    throw new Error(`Navbar configuration references "${to}", but NAV_GROUPS does not define that route.`)
+  }
   return item
 }
 
@@ -48,11 +52,7 @@ const MORE_NAV_GROUPS: MoreNavGroup[] = [
   },
   {
     label: 'ניהול',
-    items: [
-      getNavItem('/reports/aging'),
-      { ...getNavItem('/reports/vat-compliance'), menuLabel: 'דוחות ניתוח' },
-      getNavItem('/settings/users'),
-    ],
+    items: [getNavItem('/reports/aging'), { ...getNavItem('/reports/vat-compliance'), menuLabel: 'דוחות ניתוח' }],
   },
 ]
 
@@ -62,10 +62,13 @@ const canShowItem = (item: Pick<NavItem, 'roles'>, role?: UserRole) =>
 const isRouteActive = (pathname: string, item: Pick<NavItem, 'to' | 'end'>) =>
   item.end ? pathname === item.to : pathname === item.to || pathname.startsWith(`${item.to}/`)
 
+const isMenuItem = (item: HTMLAnchorElement | null): item is HTMLAnchorElement => item !== null
+
 export const Navbar: React.FC = () => {
   const [moreOpen, setMoreOpen] = useState(false)
   const moreButtonRef = useRef<HTMLButtonElement>(null)
   const moreMenuRef = useRef<HTMLDivElement>(null)
+  const moreMenuItemRefs = useRef<Array<HTMLAnchorElement | null>>([])
   const user = useAuthStore((s) => s.user)
   const location = useLocation()
   const visibleNavItems = TOP_NAV_ITEMS.filter((item) => canShowItem(item, user?.role))
@@ -81,9 +84,57 @@ export const Navbar: React.FC = () => {
     open: moreOpen,
     triggerRef: moreButtonRef,
     layerRef: moreMenuRef,
-    onDismiss: () => setMoreOpen(false),
+    onDismiss: () => {
+      setMoreOpen(false)
+      moreButtonRef.current?.focus()
+    },
     closeOnEscape: true,
   })
+
+  useEffect(() => {
+    if (!moreOpen) {
+      moreMenuItemRefs.current = []
+      return
+    }
+    moreMenuItemRefs.current[0]?.focus()
+  }, [moreOpen])
+
+  const closeMoreMenu = () => {
+    setMoreOpen(false)
+    moreButtonRef.current?.focus()
+  }
+
+  const handleMoreMenuKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    const items = moreMenuItemRefs.current.filter(isMenuItem)
+    if (items.length === 0) return
+
+    const currentIndex = items.findIndex((item) => item === document.activeElement)
+
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault()
+      const direction = event.key === 'ArrowDown' ? 1 : -1
+      const nextIndex = currentIndex === -1 ? 0 : (currentIndex + direction + items.length) % items.length
+      items[nextIndex]?.focus()
+      return
+    }
+
+    if (event.key === 'Home') {
+      event.preventDefault()
+      items[0]?.focus()
+      return
+    }
+
+    if (event.key === 'End') {
+      event.preventDefault()
+      items[items.length - 1]?.focus()
+      return
+    }
+
+    if (event.key === 'Escape') {
+      event.preventDefault()
+      closeMoreMenu()
+    }
+  }
 
   return (
     <header
@@ -141,35 +192,46 @@ export const Navbar: React.FC = () => {
                 ref={moreMenuRef}
                 className="absolute right-0 top-full z-50 mt-2 max-h-[calc(100vh-5rem)] w-64 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 text-right shadow-lg"
                 role="menu"
+                onKeyDown={handleMoreMenuKeyDown}
               >
-                {moreGroups.map((group, groupIndex) => (
-                  <div key={group.label} className={cn('py-1', groupIndex > 0 && 'border-t border-gray-100')}>
-                    <p className="px-3 pb-1 text-xs font-semibold text-gray-400">{group.label}</p>
-                    {group.items.map((item) => {
-                      const Icon = item.icon
-                      const active = isRouteActive(location.pathname, item)
+                {moreGroups.map((group, groupIndex) => {
+                  const previousItemCount = moreGroups
+                    .slice(0, groupIndex)
+                    .reduce((count, previousGroup) => count + previousGroup.items.length, 0)
 
-                      return (
-                        <NavLink
-                          key={`${group.label}-${item.to}`}
-                          to={item.to}
-                          end={item.end}
-                          onClick={() => setMoreOpen(false)}
-                          className={cn(
-                            'flex items-center justify-between gap-3 px-3 py-2 text-sm transition',
-                            active
-                              ? 'bg-primary-50 text-primary-700'
-                              : 'text-gray-700 hover:bg-gray-50 hover:text-gray-950',
-                          )}
-                          role="menuitem"
-                        >
-                          <Icon className="h-4 w-4 shrink-0 text-gray-400" />
-                          <span className="min-w-0 flex-1 truncate">{item.menuLabel ?? item.label}</span>
-                        </NavLink>
-                      )
-                    })}
-                  </div>
-                ))}
+                  return (
+                    <div key={group.label} className={cn('py-1', groupIndex > 0 && 'border-t border-gray-100')}>
+                      <p className="px-3 pb-1 text-xs font-semibold text-gray-400">{group.label}</p>
+                      {group.items.map((item, itemIndex) => {
+                        const Icon = item.icon
+                        const active = isRouteActive(location.pathname, item)
+                        const menuItemIndex = previousItemCount + itemIndex
+
+                        return (
+                          <NavLink
+                            ref={(node) => {
+                              moreMenuItemRefs.current[menuItemIndex] = node
+                            }}
+                            key={`${group.label}-${item.to}`}
+                            to={item.to}
+                            end={item.end}
+                            onClick={() => setMoreOpen(false)}
+                            className={cn(
+                              'flex items-center justify-between gap-3 px-3 py-2 text-sm transition',
+                              active
+                                ? 'bg-primary-50 text-primary-700'
+                                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-950',
+                            )}
+                            role="menuitem"
+                          >
+                            <Icon className="h-4 w-4 shrink-0 text-gray-400" />
+                            <span className="min-w-0 flex-1 truncate">{item.menuLabel ?? item.label}</span>
+                          </NavLink>
+                        )
+                      })}
+                    </div>
+                  )
+                })}
               </div>
             ) : null}
           </div>

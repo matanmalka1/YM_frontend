@@ -1,15 +1,16 @@
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { clientsApi, clientsQK, type ClientRecordResponse } from '@/features/clients'
+import type { ListClientsParams } from '@/features/clients/api'
 
-const CLIENT_SIDEBAR_PAGE_SIZE = 100
+export const CLIENT_SIDEBAR_PAGE_SIZE = 100
 
-const QUERY_PARAMS = {
+const BASE_QUERY_PARAMS = {
   page: 1,
   page_size: CLIENT_SIDEBAR_PAGE_SIZE,
   sort_by: 'full_name',
   sort_order: 'asc',
-} as const
+} satisfies ListClientsParams
 
 export interface ClientSidebarItem {
   id: number
@@ -33,32 +34,29 @@ const toSidebarItem = (client: ClientRecordResponse): ClientSidebarItem => ({
   vatReportingFrequency: client.vat_reporting_frequency,
 })
 
-const matchesSearch = (client: ClientSidebarItem, search: string): boolean => {
-  if (!search) return true
-
-  return [
-    client.displayName,
-    client.officeClientNumber == null ? null : String(client.officeClientNumber),
-    client.phone,
-    client.email,
-  ].some((value) => normalizeSearch(value ?? '').includes(search))
-}
-
 export const useClientSidebarClients = (searchValue: string) => {
+  const search = normalizeSearch(searchValue)
+  const queryParams = useMemo<ListClientsParams>(
+    () => ({
+      ...BASE_QUERY_PARAMS,
+      search: search || undefined,
+    }),
+    [search],
+  )
+
   const query = useQuery({
-    queryKey: clientsQK.list(QUERY_PARAMS),
-    queryFn: () => clientsApi.list(QUERY_PARAMS),
+    queryKey: clientsQK.list(queryParams),
+    queryFn: () => clientsApi.list(queryParams),
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
   })
 
-  const search = normalizeSearch(searchValue)
-  const clients = useMemo(
-    () => (query.data?.items ?? []).map(toSidebarItem).filter((client) => matchesSearch(client, search)),
-    [query.data?.items, search],
-  )
+  const clients = useMemo(() => (query.data?.items ?? []).map(toSidebarItem), [query.data?.items])
 
   return {
     clients,
     total: query.data?.total ?? 0,
+    hasSearch: search.length > 0,
     isLoading: query.isPending,
     isError: query.isError,
   }

@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { ChevronDown, LogOut, Plus, Search, User as UserIcon } from 'lucide-react'
+import { LogOut, Plus, Search, User as UserIcon } from 'lucide-react'
 import { useAuthStore } from '@/store/auth.store'
 import { CLIENT_ROUTES } from '@/features/clients'
 import { ENTITY_TYPE_LABELS, VAT_TYPE_LABELS } from '@/features/clients/constants'
 import { useRole } from '@/hooks/useRole'
 import { getRoleLabel } from '@/utils/enums'
 import { cn, formatClientOfficeId, formatPhoneNumber } from '@/utils/utils'
-import { useClientSidebarClients, type ClientSidebarItem } from './useClientSidebarClients'
+import { CLIENT_SIDEBAR_PAGE_SIZE, useClientSidebarClients, type ClientSidebarItem } from './useClientSidebarClients'
 
 type GroupMode = 'entity' | 'vat'
 
@@ -57,10 +57,11 @@ const groupClients = (clients: ClientSidebarItem[], groupMode: GroupMode): Clien
 export const ClientSidebar: React.FC = () => {
   const [searchValue, setSearchValue] = useState('')
   const [groupMode, setGroupMode] = useState<GroupMode>('entity')
-  const { clients, total, isLoading, isError } = useClientSidebarClients(searchValue)
+  const { clients, total, hasSearch, isLoading, isError } = useClientSidebarClients(searchValue)
   const { user, logout } = useAuthStore()
   const { can } = useRole()
   const clientGroups = useMemo(() => groupClients(clients, groupMode), [clients, groupMode])
+  const isTruncated = !hasSearch && total > clients.length && clients.length >= CLIENT_SIDEBAR_PAGE_SIZE
 
   return (
     <aside className="hidden h-screen w-[220px] shrink-0 flex-col border-l border-gray-200 bg-white text-gray-900 md:flex 2xl:w-[230px]">
@@ -88,7 +89,7 @@ export const ClientSidebar: React.FC = () => {
           <div className="flex items-center gap-1">
             <span className="text-xs font-semibold text-gray-600">לקוחות</span>
             <span className="min-w-[18px] rounded-full bg-gray-100 px-1.5 text-center text-[11px] font-semibold tabular-nums text-gray-500">
-              {total.toLocaleString('he-IL')}
+              {(hasSearch ? clients.length : total).toLocaleString('he-IL')}
             </span>
           </div>
           {can.createClients && (
@@ -132,11 +133,15 @@ export const ClientSidebar: React.FC = () => {
           <p className="px-3 py-2 text-sm text-gray-500">לא נמצאו לקוחות</p>
         ) : (
           <div className="space-y-4">
+            {isTruncated ? (
+              <p className="rounded-md bg-warning-50 px-2 py-1.5 text-[11px] font-medium text-warning-700">
+                מוצגים {CLIENT_SIDEBAR_PAGE_SIZE.toLocaleString('he-IL')} מתוך {total.toLocaleString('he-IL')}
+              </p>
+            ) : null}
             {clientGroups.map((group) => (
               <section key={group.key} aria-label={group.label}>
                 {/* Group header */}
                 <div className="mb-1 flex items-center gap-1 px-2 py-0.5">
-                  <ChevronDown className="h-3 w-3 shrink-0 text-gray-400" />
                   <span className="flex-1 truncate text-[11px] font-semibold uppercase tracking-wide text-gray-500">
                     {group.label}
                   </span>
