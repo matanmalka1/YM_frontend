@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSearchParams, useParams, Navigate } from 'react-router-dom'
+import { useParams, Navigate } from 'react-router-dom'
 import { LayoutDashboard, ClipboardList, ArrowUpCircle, Clock } from 'lucide-react'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Badge } from '@/components/ui/primitives/Badge'
@@ -14,6 +14,7 @@ import {
   VatWorkItemSummaryBar,
   VatInvoiceTab,
 } from '@/features/vatReports'
+import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 
 type TabKey = 'summary' | 'income' | 'expense' | 'history'
 
@@ -22,7 +23,7 @@ const TAB_KEYS = ['summary', 'income', 'expense', 'history'] as const
 const isTabKey = (tab: string | null): tab is TabKey => TAB_KEYS.some((tabKey) => tabKey === tab)
 
 const VatDetailContent: React.FC<{ workItemId: number }> = ({ workItemId }) => {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const { searchParams, setSearchParams } = useSearchParamFilters()
   const [isFilingPending, setIsFilingPending] = useState(false)
   const requestedTab = searchParams.get('tab')
   const activeTab = isTabKey(requestedTab) ? requestedTab : 'summary'

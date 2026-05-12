@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMutationWithToast } from '../../../hooks/useMutationWithToast'
 import { getErrorMessage, parsePositiveInt, showErrorToast } from '../../../utils/utils'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
@@ -62,6 +62,7 @@ export const useClientsPage = () => {
   } = useQuery({
     queryKey: clientsQK.list(apiParams),
     queryFn: () => clientsApi.list(apiParams),
+    placeholderData: keepPreviousData,
   })
 
   const clientItems = listData?.items ?? []

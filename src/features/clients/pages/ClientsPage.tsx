@@ -76,7 +76,7 @@ export const Clients: React.FC = () => {
     setShowCreateModal(true)
     const nextParams = new URLSearchParams(searchParams)
     nextParams.delete('create')
-    navigate({ search: nextParams.toString() }, { replace: true })
+    navigate({ search: nextParams.toString() }, { replace: true, preventScrollReset: true })
   }, [can.createClients, searchParams, navigate])
 
   const closeCreateModal = () => {

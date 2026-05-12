@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { bindersApi, bindersQK } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
 import { useBindersFilters } from './useBindersFilters'
@@ -23,6 +23,7 @@ export const useBindersPage = () => {
   const bindersQuery = useQuery({
     queryKey: bindersQK.list(listParams),
     queryFn: () => bindersApi.list(listParams),
+    placeholderData: keepPreviousData,
   })
 
   const pageItems = bindersQuery.data?.items ?? []

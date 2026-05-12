@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useSearchParams } from 'react-router-dom'
 import { timelineApi, timelineQK } from '../api'
 import { getErrorMessage, isPositiveInt, parsePositiveInt } from '../../../utils/utils'
+import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { useActionRunner } from '@/features/actions'
 import type { TimelineEvent } from '../api'
 import { normalizeTimelineEvents, type NormalizedTimelineEvent, type TimelineFilterKey } from '../normalize'
@@ -15,7 +15,7 @@ export type { EventTypeStat }
 
 export const useClientTimelinePage = (clientId: string | undefined) => {
   const queryClient = useQueryClient()
-  const [searchParams, setSearchParams] = useSearchParams()
+  const { searchParams, setSearchParams } = useSearchParamFilters()
 
   const page = parsePositiveInt(searchParams.get('page'), 1)
   const pageSize = parsePositiveInt(searchParams.get('page_size'), 50)

@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
@@ -14,10 +13,11 @@ import {
   ChargesSummaryBar,
   useChargesPage,
 } from '@/features/charges'
+import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { getChargeRowClassName, getChargesEmptyState } from '../helpers'
 
 export const Charges: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const { searchParams, setSearchParams } = useSearchParamFilters()
   const [selectedChargeId, setSelectedChargeId] = useState<number | null>(null)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const {
@@ -37,6 +37,7 @@ export const Charges: React.FC = () => {
     toggleSelectAll,
     clearSelection,
     setFilter,
+    setPage,
     stats,
     submitCreate,
     total,
@@ -132,7 +133,7 @@ export const Charges: React.FC = () => {
         pageSize={filters.page_size}
         total={total}
         label="חיובים"
-        onPageChange={(page) => setFilter('page', String(page))}
+        onPageChange={setPage}
         onPageSizeChange={(pageSize) => setFilter('page_size', String(pageSize))}
         rowClassName={(charge) => getChargeRowClassName(charge.status)}
         emptyMessage="אין חיובים להצגה"

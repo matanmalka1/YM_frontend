@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { usersApi, usersQK } from '../api'
 import type { CreateUserPayload, UpdateUserPayload, UserResponse } from '../api'
 import { toast } from '../../../utils/toast'
@@ -30,6 +30,7 @@ export const useUsersPage = () => {
   const listQuery = useQuery({
     queryKey: usersQK.list(filters),
     queryFn: () => usersApi.list(filters),
+    placeholderData: keepPreviousData,
   })
 
   // ── Modal state ──────────────────────────────────────────────────────────────

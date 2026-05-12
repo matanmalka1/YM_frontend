@@ -73,12 +73,13 @@ export const PaginationCard: React.FC<PaginationCardProps> = ({
                   key={visiblePage}
                   type="button"
                   className={cn(
-                    'inline-flex h-9 min-w-9 items-center justify-center rounded-md px-3 font-semibold tabular-nums transition-colors',
+                    'inline-flex h-9 w-9 items-center justify-center rounded-md font-semibold tabular-nums',
                     visiblePage === page
                       ? 'bg-primary-600 text-white shadow-sm'
                       : 'border border-transparent text-gray-600 hover:border-gray-200 hover:bg-gray-50 hover:text-gray-900',
                   )}
                   onClick={() => onPageChange(visiblePage)}
+                  disabled={visiblePage === page}
                   aria-current={visiblePage === page ? 'page' : undefined}
                   aria-label={`עמוד ${visiblePage}`}
                 >

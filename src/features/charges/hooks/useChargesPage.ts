@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { chargesApi, chargesQK, type BulkChargeActionPayload, type CreateChargePayload } from '../api'
 import { getErrorMessage, showErrorToast } from '../../../utils/utils'
@@ -12,7 +12,7 @@ import type { ChargeAction } from '../types'
 
 export const useChargesPage = () => {
   const queryClient = useQueryClient()
-  const { searchParams, setFilter, setSearchParams } = useSearchParamFilters()
+  const { searchParams, setFilter, setPage, setSearchParams } = useSearchParamFilters()
 
   const filters = getChargesFilters(searchParams)
   const apiParams = toChargesListParams(filters)
@@ -24,6 +24,7 @@ export const useChargesPage = () => {
   } = useQuery({
     queryKey: chargesQK.list(apiParams),
     queryFn: () => chargesApi.list(apiParams),
+    placeholderData: keepPreviousData,
   })
 
   const chargeItems = listData?.items ?? []
@@ -152,6 +153,7 @@ export const useChargesPage = () => {
     toggleSelectAll,
     clearSelection,
     setFilter,
+    setPage,
     setSearchParams,
     stats,
     submitCreate,

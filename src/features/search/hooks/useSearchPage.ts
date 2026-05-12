@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { useSearchParams } from 'react-router-dom'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { searchApi, searchQK } from '../api'
 import { getErrorMessage, parsePositiveInt } from '../../../utils/utils'
+import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFilters } from '../types'
 
 export const useSearchPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const { searchParams, setSearchParams } = useSearchParamFilters()
 
   const filters = useMemo<SearchFilters>(
     () => ({
@@ -42,6 +42,7 @@ export const useSearchPage = () => {
         page_size: filters.page_size,
       }),
     enabled: hasAnyFilter,
+    placeholderData: keepPreviousData,
   })
 
   const handleFilterChange = useCallback(

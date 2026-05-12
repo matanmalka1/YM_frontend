@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { format, getYear } from 'date-fns'
-import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { PlusCircle, Calendar } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
@@ -28,6 +28,7 @@ import { parsePositiveInt } from '@/utils/utils'
 import { toast } from '../../../utils/toast'
 import { showErrorToast } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
+import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { getOperationalTaxYear, getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { useTaxProfile } from '@/features/taxProfile'
 
@@ -59,7 +60,7 @@ const getBatchStableKey = (batch: AdvancePaymentDueDateGroup): string =>
   batch.due_date ?? `${batch.year}-${String(batch.month).padStart(2, '0')}-${batch.period_months_count}`
 
 export const AdvancePayments: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const { searchParams, setSearchParams } = useSearchParamFilters()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { isAdvisor } = useRole()

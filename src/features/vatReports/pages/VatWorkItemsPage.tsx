@@ -58,7 +58,7 @@ export const VatWorkItems: React.FC = () => {
     setShowCreateModal(true)
     const nextParams = new URLSearchParams(urlParams)
     nextParams.delete('create')
-    navigate({ search: nextParams.toString() }, { replace: true })
+    navigate({ search: nextParams.toString() }, { replace: true, preventScrollReset: true })
   }, [urlParams, navigate])
 
   const closeCreateModal = () => {

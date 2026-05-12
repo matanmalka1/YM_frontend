@@ -1,5 +1,5 @@
 import { AlertTriangle } from 'lucide-react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { computeVatBreakdown } from '../vatBreakdown.utils'
 import { VatOutputCard, VatInputCard } from './VatBreakdownCards'
 import { VatCategoryTable } from './VatCategoryTable'
@@ -7,7 +7,7 @@ import { formatVatAmount } from '../utils'
 import type { VatSummaryTabProps } from '../types'
 
 export const VatSummaryTab: React.FC<VatSummaryTabProps> = ({ workItem, invoices }) => {
-  const [, setSearchParams] = useSearchParams()
+  const { setSearchParams } = useSearchParamFilters()
   const data = computeVatBreakdown(invoices, workItem.total_output_vat, workItem.total_input_vat)
 
   return (
