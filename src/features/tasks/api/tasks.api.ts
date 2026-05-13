@@ -63,4 +63,8 @@ export const tasksApi = {
     const response = await api.post<Task>(TASKS_ENDPOINTS.cancel(id))
     return taskSchema.parse(response.data)
   },
+
+  delete: async (id: number): Promise<void> => {
+    await api.delete(TASKS_ENDPOINTS.delete(id))
+  },
 }

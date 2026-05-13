@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { CheckSquare } from 'lucide-react'
 import { api } from '@/api/client'
@@ -7,7 +7,9 @@ import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
-import { tasksQK } from '@/features/tasks/api'
+import { Button } from '@/components/ui/primitives/Button'
+import { TaskModal, type TaskSourceContext } from '@/features/tasks/components/TaskModal'
+import { tasksApi, tasksQK, type TaskCreateRequest, type TaskUpdateRequest } from '@/features/tasks/api'
 import { toast } from '@/utils/toast'
 import { useWorkQueuePage } from '../hooks/useWorkQueuePage'
 import { WorkQueueSummaryCards } from '../components/WorkQueueSummaryCards'
@@ -39,20 +41,46 @@ const groupLabel = (item: WorkQueueItem): string => {
   return context ? `${type} · ${context} · ${datePart}` : `${type} · ${datePart}`
 }
 
-const groupItems = (items: WorkQueueItem[]) => {
-  const groups = new Map<string, WorkQueueItem[]>()
-  for (const item of items) {
-    const label = groupLabel(item)
-    groups.set(label, [...(groups.get(label) ?? []), item])
-  }
-  return Array.from(groups, ([label, rows]) => ({ label, rows }))
+const groupKey = (item: WorkQueueItem): string => {
+  const period = metadataText(metadataValue(item, 'period'))
+  const taxYear = metadataText(metadataValue(item, 'tax_year'))
+  return [item.source_type, period ?? taxYear ?? 'none', item.due_date ?? 'no-due-date'].join(':')
 }
+
+const groupItems = (items: WorkQueueItem[]) => {
+  const groups = new Map<string, { label: string; rows: WorkQueueItem[] }>()
+  for (const item of items) {
+    const key = groupKey(item)
+    const label = groupLabel(item)
+    const group = groups.get(key)
+    if (group) group.rows.push(item)
+    else groups.set(key, { label, rows: [item] })
+  }
+  return Array.from(groups, ([key, group]) => ({ key, ...group }))
+}
+
+type TaskModalState = {
+  mode: 'create' | 'edit' | 'view'
+  taskId?: number
+  source?: TaskSourceContext | null
+}
+
+const sourceContext = (item: WorkQueueItem): TaskSourceContext => ({
+  source_domain: item.source_type,
+  source_id: item.source_id,
+  title: item.title,
+  client_name: item.client_name,
+  due_date: item.due_date,
+  linked_tasks_count: item.linked_tasks_count,
+  linked_tasks: item.linked_tasks,
+})
 
 export const WorkQueuePage: React.FC = () => {
   const navigate = useNavigate()
   const qc = useQueryClient()
   const [pendingConfirm, setPendingConfirm] = useState<{ item: WorkQueueItem; action: WorkQueueAction } | null>(null)
   const [activeActionKey, setActiveActionKey] = useState<string | null>(null)
+  const [taskModal, setTaskModal] = useState<TaskModalState | null>(null)
   const {
     items,
     allItems,
@@ -64,15 +92,37 @@ export const WorkQueuePage: React.FC = () => {
     setUrgencyFilter,
     typeFilter,
     setTypeFilter,
+    statusFilter,
+    setStatusFilter,
     linkedFilter,
     setLinkedFilter,
+    scopeFilter,
+    setScopeFilter,
+    historyMode,
+    setHistoryMode,
     specialFilter,
     setSpecialFilter,
     hasFilters,
     clearFilters,
   } = useWorkQueuePage()
 
-  const header = <PageHeader title="משימות" description="כלל המשימות הפעילות: מועדי מס, מקדמות, דוחות וחיובים פתוחים" />
+  const taskDetail = useQuery({
+    queryKey: taskModal?.taskId ? tasksQK.detail(taskModal.taskId) : ['tasks', 'detail', 'idle'],
+    queryFn: () => tasksApi.get(taskModal!.taskId!),
+    enabled: Boolean(taskModal?.taskId),
+  })
+
+  const header = (
+    <PageHeader
+      title="עבודה לטיפול"
+      description="כל מה שדורש טיפול: דוחות, חיובים, מקדמות, קלסרים ומשימות ידניות."
+      actions={
+        <Button size="sm" onClick={() => setTaskModal({ mode: 'create', source: null })}>
+          + משימה חדשה
+        </Button>
+      }
+    />
+  )
 
   const actionMutation = useMutation({
     mutationFn: async ({ action }: { item: WorkQueueItem; action: WorkQueueAction }) => {
@@ -93,6 +143,28 @@ export const WorkQueuePage: React.FC = () => {
     onSettled: () => setActiveActionKey(null),
   })
 
+  const createTaskMutation = useMutation({
+    mutationFn: (data: TaskCreateRequest) => tasksApi.create(data),
+    onSuccess: async () => {
+      toast.success('המשימה נוצרה בהצלחה')
+      setTaskModal(null)
+      await qc.invalidateQueries({ queryKey: tasksQK.all })
+      await qc.invalidateQueries({ queryKey: workQueueQK.all })
+    },
+    onError: (err) => toast.error(err instanceof Error ? err.message : 'יצירת המשימה נכשלה'),
+  })
+
+  const updateTaskMutation = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: TaskUpdateRequest }) => tasksApi.update(id, data),
+    onSuccess: async () => {
+      toast.success('המשימה עודכנה בהצלחה')
+      setTaskModal(null)
+      await qc.invalidateQueries({ queryKey: tasksQK.all })
+      await qc.invalidateQueries({ queryKey: workQueueQK.all })
+    },
+    onError: (err) => toast.error(err instanceof Error ? err.message : 'עדכון המשימה נכשל'),
+  })
+
   const runAction = (item: WorkQueueItem, action: WorkQueueAction) => {
     if (action.disabled) {
       if (action.disabled_reason) toast.warning(action.disabled_reason)
@@ -100,6 +172,19 @@ export const WorkQueuePage: React.FC = () => {
     }
     if (action.type === 'link') {
       if (action.route) navigate(action.route)
+      return
+    }
+    if (action.type === 'modal') {
+      if (action.key === 'create_linked_task') {
+        setTaskModal({ mode: 'create', source: sourceContext(item) })
+        return
+      }
+      const taskId = action.task_id ?? (item.source_type === 'task' ? item.source_id : undefined)
+      if (!taskId) {
+        toast.error('לא נמצאה משימה לפתיחה')
+        return
+      }
+      setTaskModal({ mode: action.key.startsWith('edit_task') ? 'edit' : 'view', taskId })
       return
     }
     if (action.confirm) {
@@ -124,8 +209,8 @@ export const WorkQueuePage: React.FC = () => {
         return (
           <StateCard
             icon={CheckSquare}
-            title="לא נמצאו משימות"
-            message="לא נמצאו משימות התואמות את הסינון"
+            title="אין תוצאות"
+            message="אין תוצאות שתואמות לסינון"
             secondaryAction={{ label: 'אפס סינון', onClick: clearFilters }}
           />
         )
@@ -134,8 +219,12 @@ export const WorkQueuePage: React.FC = () => {
         <StateCard
           icon={CheckSquare}
           variant="illustration"
-          title="אין משימות פעילות"
-          message="כל המשימות הושלמו או שאין מועדים קרובים."
+          title={historyMode ? 'אין היסטוריה' : 'אין עבודה לטיפול'}
+          message={
+            historyMode
+              ? 'אין משימות היסטוריות להצגה.'
+              : 'אין כרגע עבודה לטיפול. כל הדוחות, התשלומים והמשימות הפעילות מסודרים.'
+          }
         />
       )
     }
@@ -143,7 +232,7 @@ export const WorkQueuePage: React.FC = () => {
     return (
       <div className="space-y-5">
         {groupItems(items).map((group) => (
-          <section key={group.label} className="space-y-3">
+          <section key={group.key} className="space-y-3">
             <div className="flex items-center justify-between border-b border-gray-200 pb-2">
               <h2 className="text-sm font-semibold text-gray-900">{group.label}</h2>
               <span className="text-xs text-gray-500">{group.rows.length} פריטים</span>
@@ -172,8 +261,14 @@ export const WorkQueuePage: React.FC = () => {
         onUrgencyChange={setUrgencyFilter}
         typeFilter={typeFilter}
         onTypeChange={setTypeFilter}
+        statusFilter={statusFilter}
+        onStatusChange={setStatusFilter}
         linkedFilter={linkedFilter}
         onLinkedChange={setLinkedFilter}
+        scopeFilter={scopeFilter}
+        onScopeChange={setScopeFilter}
+        historyMode={historyMode}
+        onHistoryModeChange={setHistoryMode}
         hasFilters={hasFilters}
         onClear={clearFilters}
       />
@@ -190,6 +285,22 @@ export const WorkQueuePage: React.FC = () => {
         onConfirm={confirmAction}
         onCancel={() => setPendingConfirm(null)}
       />
+
+      {taskModal && (
+        <TaskModal
+          mode={taskModal.mode}
+          task={taskDetail.data}
+          source={taskModal.source}
+          isLoading={createTaskMutation.isPending || updateTaskMutation.isPending || taskDetail.isLoading}
+          onClose={() => setTaskModal(null)}
+          onSubmit={(data) => {
+            if (taskModal.mode === 'create') createTaskMutation.mutate(data as TaskCreateRequest)
+            if (taskModal.mode === 'edit' && taskModal.taskId) {
+              updateTaskMutation.mutate({ id: taskModal.taskId, data: data as TaskUpdateRequest })
+            }
+          }}
+        />
+      )}
     </PageStateGuard>
   )
 }

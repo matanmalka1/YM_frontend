@@ -8,7 +8,9 @@ import {
   workQueueUrgencyLabels,
   workQueueUrgencyValues,
 } from '../constants'
+import { taskStatusLabels, taskStatusValues } from '@/features/tasks/constants'
 import type { WorkQueueUrgency } from '../api/contracts'
+import type { TaskStatus } from '@/features/tasks/api'
 
 interface WorkQueueFiltersBarProps {
   search: string
@@ -17,8 +19,14 @@ interface WorkQueueFiltersBarProps {
   onUrgencyChange: (value: WorkQueueUrgency | null) => void
   typeFilter: string | null
   onTypeChange: (value: string | null) => void
+  statusFilter: TaskStatus | null
+  onStatusChange: (value: TaskStatus | null) => void
   linkedFilter: 'linked' | 'unlinked' | null
   onLinkedChange: (value: 'linked' | 'unlinked' | null) => void
+  scopeFilter: 'system' | 'manual' | null
+  onScopeChange: (value: 'system' | 'manual' | null) => void
+  historyMode: boolean
+  onHistoryModeChange: (value: boolean) => void
   hasFilters: boolean
   onClear: () => void
 }
@@ -39,6 +47,17 @@ const linkedOptions = [
   { value: 'unlinked', label: 'ללא משימה קשורה' },
 ]
 
+const statusOptions = [
+  { value: '', label: 'כל סטטוסי המשימה' },
+  ...taskStatusValues.map((v) => ({ value: v, label: taskStatusLabels[v] })),
+]
+
+const scopeOptions = [
+  { value: '', label: 'מערכת ומשימות' },
+  { value: 'system', label: 'מערכת בלבד' },
+  { value: 'manual', label: 'משימות ידניות בלבד' },
+]
+
 export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
   search,
   onSearchChange,
@@ -46,12 +65,18 @@ export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
   onUrgencyChange,
   typeFilter,
   onTypeChange,
+  statusFilter,
+  onStatusChange,
   linkedFilter,
   onLinkedChange,
+  scopeFilter,
+  onScopeChange,
+  historyMode,
+  onHistoryModeChange,
   hasFilters,
   onClear,
 }) => (
-  <div className="grid grid-cols-1 gap-3 md:grid-cols-[minmax(220px,1fr)_180px_180px_190px_auto]">
+  <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(220px,1fr)_150px_150px_170px_170px_170px_auto]">
     <Input
       value={search}
       onChange={(e) => onSearchChange(e.target.value)}
@@ -69,10 +94,23 @@ export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
       onChange={(e) => onTypeChange(e.target.value || null)}
     />
     <Select
+      options={statusOptions}
+      value={statusFilter ?? ''}
+      onChange={(e) => onStatusChange((e.target.value || null) as TaskStatus | null)}
+    />
+    <Select
       options={linkedOptions}
       value={linkedFilter ?? ''}
       onChange={(e) => onLinkedChange((e.target.value || null) as 'linked' | 'unlinked' | null)}
     />
+    <Select
+      options={scopeOptions}
+      value={scopeFilter ?? ''}
+      onChange={(e) => onScopeChange((e.target.value || null) as 'system' | 'manual' | null)}
+    />
+    <Button variant={historyMode ? 'secondary' : 'ghost'} size="sm" onClick={() => onHistoryModeChange(!historyMode)}>
+      היסטוריה
+    </Button>
     {hasFilters && (
       <Button variant="ghost" size="sm" onClick={onClear}>
         אפס סינון

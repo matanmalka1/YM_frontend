@@ -39,7 +39,7 @@ interface MoreNavGroup {
 const MORE_NAV_GROUPS: MoreNavGroup[] = [
   {
     label: 'תפעול',
-    items: [getNavItem('/binders'), getNavItem('/tasks')],
+    items: [getNavItem('/binders')],
   },
   {
     label: 'מס',

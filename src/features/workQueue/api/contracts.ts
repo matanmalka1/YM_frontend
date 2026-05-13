@@ -8,10 +8,11 @@ export type WorkQueueUrgency = (typeof workQueueUrgencyValues)[number]
 export const workQueueActionSchema = z.object({
   key: z.string(),
   label: z.string(),
-  type: z.enum(['link', 'mutation']),
+  type: z.enum(['link', 'mutation', 'modal']),
   route: z.string().nullable().optional(),
   endpoint: z.string().nullable().optional(),
   method: z.enum(['get', 'post', 'patch', 'put', 'delete']).nullable().optional(),
+  task_id: z.number().int().nullable().optional(),
   payload_schema: z.enum(['none', 'simple', 'requires_input']).optional(),
   confirm: z.boolean().optional(),
   confirm_title: z.string().nullable().optional(),
@@ -107,4 +108,5 @@ export interface WorkQueueParams {
   client_record_id?: number
   business_id?: number
   exclude_source_types?: WorkQueueSourceType[]
+  include_task_history?: boolean
 }

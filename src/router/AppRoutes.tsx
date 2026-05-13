@@ -16,7 +16,6 @@ import { Navbar } from '../components/layout/Navbar/Navbar'
 import { ClientSidebar } from '../components/layout/ClientSidebar/ClientSidebar'
 import { PageLayout } from '../components/layout/PageLayout'
 import { WorkQueuePage } from '../features/workQueue'
-import { TasksPage } from '../features/tasks'
 import { Search } from '../features/search'
 import { SigningPage } from '../features/signing'
 import { TaxCalendarGroupsPage } from '../features/taxCalendar'
@@ -125,7 +124,6 @@ export const AppRoutes: React.FC = () => {
             <Route path="reports/annual-status" element={<AnnualReportStatusView />} />
             <Route path="reports/advance-payments" element={<AdvancePaymentReportView />} />
             <Route path="reminders" element={<Navigate to="/" replace />} />
-            <Route path="tasks" element={<TasksPage />} />
             <Route path="work-queue" element={<WorkQueuePage />} />
           </Route>
         </Route>

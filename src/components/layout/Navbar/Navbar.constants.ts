@@ -6,7 +6,6 @@ import {
   ClipboardList,
   ChartColumn,
   LayoutDashboard,
-  ListTodo,
   ReceiptText,
   Search,
   Settings,
@@ -58,7 +57,6 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { to: '/binders', label: 'קלסרים', icon: Briefcase },
       { to: '/work-queue', label: 'עבודה לטיפול', icon: CheckSquare },
-      { to: '/tasks', label: 'משימות ידניות', icon: ListTodo },
     ],
   },
   {

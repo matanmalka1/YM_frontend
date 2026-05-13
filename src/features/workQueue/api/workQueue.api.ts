@@ -8,6 +8,7 @@ const toSearchParams = (params?: WorkQueueParams): URLSearchParams | undefined =
   const search = new URLSearchParams()
   if (params.client_record_id != null) search.set('client_record_id', String(params.client_record_id))
   if (params.business_id != null) search.set('business_id', String(params.business_id))
+  if (params.include_task_history) search.set('include_task_history', 'true')
   params.exclude_source_types?.forEach((type) => search.append('exclude_source_types', type))
   return search
 }
