@@ -5,19 +5,68 @@ export type WorkQueueSourceType = (typeof workQueueSourceTypeValues)[number]
 
 export type WorkQueueUrgency = (typeof workQueueUrgencyValues)[number]
 
-const baseWorkQueueItemSchema = z.object({
-  source_type: z.enum(workQueueSourceTypeValues),
+export const workQueueActionSchema = z.object({
+  key: z.string(),
+  label: z.string(),
+  type: z.enum(['link', 'mutation']),
+  route: z.string().nullable().optional(),
+  endpoint: z.string().nullable().optional(),
+  method: z.enum(['get', 'post', 'patch', 'put', 'delete']).nullable().optional(),
+  payload_schema: z.enum(['none', 'simple', 'requires_input']).optional(),
+  confirm: z.boolean().optional(),
+  confirm_title: z.string().nullable().optional(),
+  confirm_message: z.string().nullable().optional(),
+  variant: z.enum(['primary', 'secondary', 'danger']).nullable().optional(),
+  disabled: z.boolean().optional(),
+  disabled_reason: z.string().nullable().optional(),
+})
+
+export const linkedTaskSummarySchema = z.object({
+  id: z.number().int(),
+  title: z.string(),
+  status: z.string(),
+  due_date: z.string().nullable().optional(),
+  priority: z.string().nullable().optional(),
+  assigned_user_id: z.number().int().nullable().optional(),
+  assigned_role: z.string().nullable().optional(),
+})
+
+export const workQueueWarningSchema = z.object({
+  key: z.string(),
+  label: z.string(),
+  severity: z.enum(['info', 'warning', 'danger']),
+})
+
+export const sourceSummarySchema = z.object({
+  source_type: z.string(),
   source_id: z.number().int(),
   label: z.string(),
+  route: z.string().nullable().optional(),
+})
+
+const baseWorkQueueItemSchema = z.object({
+  id: z.string(),
+  source_type: z.enum(workQueueSourceTypeValues),
+  source_id: z.number().int(),
+  title: z.string(),
+  description: z.string().nullable().optional(),
+  type_label: z.string().nullable().optional(),
+  status_label: z.string().nullable().optional(),
   due_date: z.string().nullable().optional(),
   urgency: z.enum(workQueueUrgencyValues),
   client_record_id: z.number().int().optional().nullable(),
   client_name: z.string().optional().nullable(),
-  client_office_number: z.number().int().optional().nullable(),
+  office_client_number: z.number().int().optional().nullable(),
   business_id: z.number().int().optional().nullable(),
+  source_summary: sourceSummarySchema.nullable().optional(),
+  linked_tasks: z.array(linkedTaskSummarySchema),
+  linked_tasks_count: z.number().int(),
+  warnings: z.array(workQueueWarningSchema),
+  available_actions: z.array(workQueueActionSchema),
+  metadata: z.record(z.string(), z.unknown()).nullable().optional(),
 })
 
-export const advancePaymentWorkQueuePayloadSchema = z.object({
+export const advancePaymentWorkQueueMetadataSchema = z.object({
   period: z.string(),
   period_label: z.string().optional().nullable(),
   period_months_count: z.number().int(),
@@ -34,14 +83,13 @@ export const advancePaymentWorkQueuePayloadSchema = z.object({
 
 export const advancePaymentWorkQueueItemSchema = baseWorkQueueItemSchema.extend({
   source_type: z.literal('advance_payment'),
-  payload: advancePaymentWorkQueuePayloadSchema,
+  metadata: advancePaymentWorkQueueMetadataSchema,
 })
 
-const nonAdvanceSourceTypeSchema = z.enum(['vat_filing', 'annual_report', 'unpaid_charge', 'task', 'stale_binder'])
+const nonAdvanceSourceTypeSchema = z.enum(['vat_work_item', 'annual_report', 'charge', 'binder', 'task'])
 
 const genericWorkQueueItemSchema = baseWorkQueueItemSchema.extend({
   source_type: nonAdvanceSourceTypeSchema,
-  payload: z.record(z.string(), z.unknown()).optional().nullable(),
 })
 
 export const workQueueItemSchema = z.discriminatedUnion('source_type', [
@@ -51,6 +99,9 @@ export const workQueueItemSchema = z.discriminatedUnion('source_type', [
 
 export type WorkQueueItem = z.infer<typeof workQueueItemSchema>
 export type AdvancePaymentWorkQueueItem = z.infer<typeof advancePaymentWorkQueueItemSchema>
+export type WorkQueueAction = z.infer<typeof workQueueActionSchema>
+export type LinkedTaskSummary = z.infer<typeof linkedTaskSummarySchema>
+export type WorkQueueWarning = z.infer<typeof workQueueWarningSchema>
 
 export interface WorkQueueParams {
   client_record_id?: number

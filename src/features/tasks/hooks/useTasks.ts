@@ -24,7 +24,10 @@ export const useStartTask = () => {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (id: number) => tasksApi.start(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: tasksQK.all }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: tasksQK.all })
+      qc.invalidateQueries({ queryKey: workQueueQK.all })
+    },
   })
 }
 
@@ -32,7 +35,10 @@ export const useCompleteTask = () => {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (id: number) => tasksApi.complete(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: tasksQK.all }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: tasksQK.all })
+      qc.invalidateQueries({ queryKey: workQueueQK.all })
+    },
   })
 }
 
@@ -40,6 +46,9 @@ export const useCancelTask = () => {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (id: number) => tasksApi.cancel(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: tasksQK.all }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: tasksQK.all })
+      qc.invalidateQueries({ queryKey: workQueueQK.all })
+    },
   })
 }

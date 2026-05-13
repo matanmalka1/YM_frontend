@@ -2,8 +2,11 @@ export { workQueueApi, workQueueQK } from './api'
 export {
   workQueueItemSchema,
   advancePaymentWorkQueueItemSchema,
-  advancePaymentWorkQueuePayloadSchema,
+  advancePaymentWorkQueueMetadataSchema,
   type WorkQueueItem,
+  type WorkQueueAction,
+  type LinkedTaskSummary,
+  type WorkQueueWarning,
   type AdvancePaymentWorkQueueItem,
   type WorkQueueParams,
   type WorkQueueSourceType,

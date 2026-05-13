@@ -3,8 +3,11 @@ export { workQueueQK } from './queryKeys'
 export {
   workQueueItemSchema,
   advancePaymentWorkQueueItemSchema,
-  advancePaymentWorkQueuePayloadSchema,
+  advancePaymentWorkQueueMetadataSchema,
   type WorkQueueItem,
+  type WorkQueueAction,
+  type LinkedTaskSummary,
+  type WorkQueueWarning,
   type AdvancePaymentWorkQueueItem,
   type WorkQueueParams,
   type WorkQueueSourceType,
