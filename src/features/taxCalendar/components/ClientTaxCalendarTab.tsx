@@ -145,11 +145,7 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
 
       <SummaryStrip groups={groups} />
 
-      <TaxCalendarGroupsTable
-        groups={displayedGroups}
-        isLoading={groupsQuery.isPending}
-        clientRecordId={clientId}
-      />
+      <TaxCalendarGroupsTable groups={displayedGroups} isLoading={groupsQuery.isPending} clientRecordId={clientId} />
     </div>
   )
 }

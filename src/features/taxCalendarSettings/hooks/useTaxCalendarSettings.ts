@@ -36,9 +36,7 @@ export const useTaxCalendarSettings = (params: TaxCalendarSettingsYearRangeParam
   const bootstrapMutation = useMutation({
     mutationFn: (payload: TaxCalendarBootstrapPayload) => taxCalendarSettingsApi.bootstrap(payload),
     onSuccess: async (result) => {
-      toast.success(
-        `יומן המס אותחל: ${result.entries_created} רשומות נוצרו, ${result.entries_skipped} רשומות דולגו.`,
-      )
+      toast.success(`יומן המס אותחל: ${result.entries_created} רשומות נוצרו, ${result.entries_skipped} רשומות דולגו.`)
       await queryClient.invalidateQueries({ queryKey: taxCalendarSettingsQK.all })
     },
     onError: (error) => showErrorToast(error, 'שגיאה באתחול יומן המס'),
