@@ -1,12 +1,11 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { format, parseISO } from 'date-fns'
-import { he } from 'date-fns/locale'
 import { CheckCircle2, ExternalLink, Loader2, Play, XCircle } from 'lucide-react'
 import { DataTable } from '@/components/ui/table/DataTable'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
 import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
+import { formatDate } from '@/utils/utils'
 import type { WorkQueueAction, WorkQueueItem, WorkQueueSourceType, WorkQueueWarning } from '../api/contracts'
 import { workQueueSourceTypeLabels, workQueueUrgencyLabels, workQueueUrgencyVariant } from '../constants'
 
@@ -19,15 +18,6 @@ interface WorkQueueTableProps {
 
 const typeLabel = (sourceType: WorkQueueSourceType): string =>
   workQueueSourceTypeLabels[sourceType] ?? sourceType
-
-const formatDueDate = (dateStr?: string | null): string => {
-  if (!dateStr) return '—'
-  try {
-    return format(parseISO(dateStr), 'dd/MM/yyyy', { locale: he })
-  } catch {
-    return dateStr
-  }
-}
 
 const warningVariant = (warning: WorkQueueWarning) => {
   if (warning.severity === 'danger') return 'error'
@@ -99,7 +89,7 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
       key: 'due_date',
       header: 'תאריך יעד',
       render: (item: WorkQueueItem) => (
-        <span className="text-sm tabular-nums text-gray-700">{formatDueDate(item.due_date)}</span>
+        <span className="text-sm tabular-nums text-gray-700">{formatDate(item.due_date)}</span>
       ),
     },
     {

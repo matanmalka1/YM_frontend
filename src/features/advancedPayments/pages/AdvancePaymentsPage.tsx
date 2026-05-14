@@ -38,13 +38,15 @@ const PERIOD_OPTIONS = [
   { value: '2', label: 'דו-חודשי' },
 ]
 
+const YEAR_OPTIONS = [{ value: 'all', label: 'כל השנים' }, ...getOperationalYearOptions()]
+
 const FILTER_FIELDS = [
   { type: 'client-picker' as const, idKey: 'client_id', nameKey: 'client_name', label: 'לקוח' },
   {
     type: 'select' as const,
     key: 'year',
     label: 'שנה',
-    options: getOperationalYearOptions(),
+    options: YEAR_OPTIONS,
     defaultValue: String(getOperationalTaxYear()),
   },
   {
@@ -59,6 +61,8 @@ const FILTER_FIELDS = [
 const getBatchStableKey = (batch: AdvancePaymentDueDateGroup): string =>
   batch.due_date ?? `${batch.year}-${String(batch.month).padStart(2, '0')}-${batch.period_months_count}`
 
+const safeCount = (value: unknown): number => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
+
 export const AdvancePayments: React.FC = () => {
   const { searchParams, setSearchParams } = useSearchParamFilters()
   const navigate = useNavigate()
@@ -66,7 +70,8 @@ export const AdvancePayments: React.FC = () => {
   const { isAdvisor } = useRole()
 
   const todayYear = getYear(new Date())
-  const year = parsePositiveInt(searchParams.get('year'), todayYear)
+  const rawYear = searchParams.get('year') ?? String(getOperationalTaxYear())
+  const year: number | null = rawYear === 'all' ? null : parsePositiveInt(rawYear, todayYear)
 
   const [drawerRow, setDrawerRow] = useState<AdvancePaymentOverviewRow | null>(null)
   const initialPeriodFilter = searchParams.get('period')
@@ -154,7 +159,7 @@ export const AdvancePayments: React.FC = () => {
   })
 
   const generateMutation = useMutation({
-    mutationFn: (periodMonthsCount: 1 | 2) => advancePaymentsApi.generateSchedule(genClientId, year, periodMonthsCount),
+    mutationFn: (periodMonthsCount: 1 | 2) => advancePaymentsApi.generateSchedule(genClientId, year ?? todayYear, periodMonthsCount),
     onSuccess: (data) => {
       toast.success(data.created > 0 ? `נוצרו ${data.created} מקדמות, דולגו ${data.skipped}` : 'לא נוצרו מקדמות חדשות')
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
@@ -287,12 +292,12 @@ export const AdvancePayments: React.FC = () => {
           stats.dueThisMonthCount += 1
         }
 
-        stats.pendingCount = Math.max(stats.pendingCount, loadedStats?.pendingCount ?? batch.pending_count)
+        stats.pendingCount = Math.max(stats.pendingCount, safeCount(loadedStats?.pendingCount ?? batch.pending_count))
         stats.missingTurnoverCount = Math.max(
           stats.missingTurnoverCount,
-          loadedStats?.missingTurnoverCount ?? batch.missing_turnover_count,
+          safeCount(loadedStats?.missingTurnoverCount ?? batch.missing_turnover_count),
         )
-        stats.overdueCount = Math.max(stats.overdueCount, loadedStats?.overdueCount ?? batch.overdue_count)
+        stats.overdueCount = Math.max(stats.overdueCount, safeCount(loadedStats?.overdueCount ?? batch.overdue_count))
         return stats
       },
       { dueThisMonthCount: 0, pendingCount: 0, missingTurnoverCount: 0, overdueCount: 0 },
@@ -329,7 +334,7 @@ export const AdvancePayments: React.FC = () => {
 
       <FilterPanel
         fields={FILTER_FIELDS}
-        values={{ ...filters, year: String(year) }}
+        values={{ ...filters, year: year === null ? 'all' : String(year) }}
         onChange={handleFilterChange}
         onMultiChange={handleMultiFilterChange}
         onReset={handleFilterReset}
@@ -339,7 +344,7 @@ export const AdvancePayments: React.FC = () => {
       <MonthlyAccordionList
         isLoading={isLoading}
         isEmpty={!isLoading && batches.length === 0}
-        emptyState={{ message: `אין מקדמות לשנה ${year}` }}
+        emptyState={{ message: year === null ? 'אין מקדמות' : `אין מקדמות לשנה ${year}` }}
         skeletonCols={11}
       >
         {displayBatches.map((batch) => {
@@ -406,7 +411,7 @@ export const AdvancePayments: React.FC = () => {
         <CreateAdvancePaymentModal
           open={true}
           clientId={createClientId}
-          year={year}
+          year={year ?? todayYear}
           isCreating={createMutation.isPending}
           onClose={() => {
             setCreateClientId(null)

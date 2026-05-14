@@ -11,7 +11,7 @@ export const VatWorkItemsFiltersCard = ({
   onMultiFilterChange,
 }: VatWorkItemsFiltersCardProps) => {
   const fields = useMemo(() => {
-    const yearOptions = [{ value: '', label: 'כל השנים' }, ...getOperationalYearOptions()]
+    const yearOptions = [{ value: 'all', label: 'כל השנים' }, ...getOperationalYearOptions()]
     const defaultYear = String(getOperationalTaxYear())
     return [
       { type: 'client-picker' as const, idKey: 'clientSearch', nameKey: 'clientSearchName' },
@@ -43,7 +43,7 @@ export const VatWorkItemsFiltersCard = ({
       values={{
         clientSearch: filters.clientSearch ?? '',
         clientSearchName: filters.clientSearchName ?? '',
-        year: filters.year ?? '',
+        year: filters.year || 'all',
         status: filters.status ?? '',
         period_type: filters.period_type ?? '',
       }}

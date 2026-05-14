@@ -6,5 +6,5 @@ export const advancedPaymentsQK = {
     ['tax', 'advance-payments', 'client', clientId, year, periodMonthsCount, 'suggest'] as const,
   overview: (params: object) => ['tax', 'advance-payments', 'overview', params] as const,
   kpi: (clientId: number, year: number) => ['tax', 'advance-payments', 'client', clientId, year, 'kpi'] as const,
-  batches: (year: number) => ['tax', 'advance-payments', 'batches', year] as const,
+  batches: (year: number | null) => ['tax', 'advance-payments', 'batches', year] as const,
 } as const

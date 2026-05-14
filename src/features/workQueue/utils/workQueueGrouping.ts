@@ -1,3 +1,4 @@
+import { formatDate } from '@/utils/utils'
 import { workQueueSourceTypeLabels } from '../constants'
 import type { WorkQueueItem } from '../api'
 
@@ -15,9 +16,9 @@ const metadataValue = (item: WorkQueueItem, key: string): unknown => {
 const groupLabel = (item: WorkQueueItem): string => {
   if (item.source_type === 'task') return 'משימות ידניות'
   const type = item.type_label ?? workQueueSourceTypeLabels[item.source_type] ?? item.source_type
-  const period = metadataText(metadataValue(item, 'period'))
+  const period = metadataText(metadataValue(item, 'period_label')) ?? metadataText(metadataValue(item, 'period'))
   const taxYear = metadataText(metadataValue(item, 'tax_year'))
-  const datePart = item.due_date ? `יעד ${item.due_date}` : 'ללא תאריך יעד'
+  const datePart = item.due_date ? `תאריך יעד  ${formatDate(item.due_date)}` : 'ללא תאריך יעד'
   const context = period ?? taxYear
   return context ? `${type} · ${context} · ${datePart}` : `${type} · ${datePart}`
 }

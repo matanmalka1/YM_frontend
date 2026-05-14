@@ -28,9 +28,10 @@ export const useVatWorkItemsPage = () => {
   const { searchParams, setFilter, setFilters, setSearchParams } = useSearchParamFilters()
   const { isAdvisor } = useRole()
 
+  const rawYear = searchParams.get('year') ?? String(getOperationalTaxYear())
   const filters = {
     status: searchParams.get('status') ?? '',
-    year: searchParams.get('year') ?? String(getOperationalTaxYear()),
+    year: rawYear === 'all' ? '' : rawYear,
     period_type: toVatPeriodTypeFilter(searchParams.get('period_type')),
     clientSearch: searchParams.get('clientSearch') ?? '',
     clientSearchName: searchParams.get('clientSearchName') ?? '',
