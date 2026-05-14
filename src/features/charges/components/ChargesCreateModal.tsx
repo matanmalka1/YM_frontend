@@ -37,8 +37,6 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
   initialBusiness,
   businesses = [],
 }) => {
-  const currencySuffix = <span className="text-sm text-gray-400">₪</span>
-
   const {
     formState: { errors, isDirty },
     handleSubmit,
@@ -63,18 +61,41 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
     createClientIdPickerHandlers((value, options) => setValue('client_record_id', value, options)),
   )
 
-  // Pre-select client and business when modal opens
+  const selectedSingleBusiness = useMemo(() => {
+    if (initialBusiness) {
+      return initialBusiness
+    }
+
+    if (businesses.length !== 1) {
+      return null
+    }
+
+    const [business] = businesses
+    return {
+      id: business.id,
+      name: business.business_name ?? `עסק #${business.id}`,
+    }
+  }, [businesses, initialBusiness])
+
+  // Pre-select client when modal opens
   const didSeedRef = useRef(false)
   useEffect(() => {
     if (open && !didSeedRef.current) {
       if (initialClient) handleSelectClient({ id: initialClient.id, name: initialClient.name })
-      if (initialBusiness) setValue('business_id', initialBusiness.id)
       didSeedRef.current = true
     }
     if (!open) {
       didSeedRef.current = false
     }
-  }, [open, initialClient, initialBusiness]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [handleSelectClient, initialClient, open])
+
+  useEffect(() => {
+    if (!open || !selectedSingleBusiness) {
+      return
+    }
+
+    setValue('business_id', selectedSingleBusiness.id, { shouldDirty: false })
+  }, [open, selectedSingleBusiness, setValue])
 
   const monthsCovered = watch('months_covered') ?? 1
   const periodOptions = useMemo(() => buildChargePeriodOptions(monthsCovered), [monthsCovered])
@@ -153,10 +174,10 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
             </div>
           )}
 
-          {businesses.length === 1 && initialBusiness && (
+          {businesses.length === 1 && selectedSingleBusiness && (
             <div className="col-span-2">
               <FormField label="עסק">
-                <Input value={initialBusiness.name} readOnly disabled />
+                <Input value={selectedSingleBusiness.name} readOnly disabled />
               </FormField>
             </div>
           )}
@@ -168,7 +189,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
             step="0.01"
             placeholder="0.00"
             error={errors.amount?.message}
-            endElement={currencySuffix}
+            endElement={<span className="text-sm text-gray-400">₪</span>}
             {...register('amount')}
           />
           <Controller
@@ -193,7 +214,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
               <Select
                 label="חודשים לחיוב"
                 error={errors.months_covered?.message}
-                value={String(field.value ?? 1)}
+                value={field.value != null ? String(field.value) : '1'}
                 onChange={(e) => field.onChange(Number(e.target.value) as 1 | 2)}
                 onBlur={field.onBlur}
                 name={field.name}
