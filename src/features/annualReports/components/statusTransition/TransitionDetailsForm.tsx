@@ -39,7 +39,7 @@ export const TransitionDetailsForm = ({
         </>
       )}
 
-      {selected === 'assessment_issued' && (
+      {selected === 'closed' && (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <Input
             label="סכום שומה (₪)"

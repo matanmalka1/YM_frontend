@@ -48,22 +48,6 @@ export const SeasonProgressBar: React.FC<SeasonProgressBarProps> = ({ summary })
           )
         })}
       </div>
-
-      {/* Additional stats row */}
-      {(summary.assessment_issued > 0 || summary.objection_filed > 0) && (
-        <div className="mt-4 flex gap-4 border-t border-gray-100 pt-4 text-sm text-gray-600">
-          {summary.assessment_issued > 0 && (
-            <span>
-              שומות שהוצאו: <strong>{summary.assessment_issued}</strong>
-            </span>
-          )}
-          {summary.objection_filed > 0 && (
-            <span>
-              השגות: <strong className="text-negative-600">{summary.objection_filed}</strong>
-            </span>
-          )}
-        </div>
-      )}
     </Card>
   )
 }

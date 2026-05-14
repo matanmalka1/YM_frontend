@@ -6,15 +6,10 @@ import type { AnnualReportFull, AnnualReportStatus, ClientTypeForReport, AnnualR
 export const STATUS_LABELS: Record<AnnualReportStatus, string> = {
   not_started: 'טרם התחיל',
   collecting_docs: 'איסוף מסמכים',
-  docs_complete: 'מסמכים התקבלו',
   in_preparation: 'בהכנה',
   pending_client: 'ממתין לאישור לקוח',
   submitted: 'הוגש',
-  accepted: 'התקבל',
-  assessment_issued: 'שומה הוצאה',
-  objection_filed: 'השגה הוגשה',
   closed: 'סגור',
-  amended: 'תיקון דוח',
   canceled: 'בוטל',
 }
 
@@ -27,15 +22,10 @@ type BadgeVariant = 'neutral' | 'info' | 'warning' | 'success' | 'error'
 const statusVariants: Record<AnnualReportStatus, BadgeVariant> = {
   not_started: 'neutral',
   collecting_docs: 'info',
-  docs_complete: 'info',
   in_preparation: 'info',
   pending_client: 'warning',
   submitted: 'success',
-  accepted: 'success',
-  assessment_issued: 'warning',
-  objection_filed: 'error',
   closed: 'neutral',
-  amended: 'warning',
   canceled: 'neutral',
 }
 

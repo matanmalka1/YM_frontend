@@ -100,7 +100,7 @@ export const getAlertBanners = (report: AnnualReportFull, advances?: BalanceAler
     })
   }
 
-  if (report.status === 'accepted' || report.status === 'closed') {
+  if (report.status === 'closed') {
     banners.push({
       variant: 'success',
       icon: 'check',

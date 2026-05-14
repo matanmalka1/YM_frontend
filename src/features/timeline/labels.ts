@@ -13,14 +13,9 @@ const BINDER_STATUS_LABEL_MAP: Record<TimelineBinderStatus, string> = {
 const ANNUAL_REPORT_STATUS_LABEL_MAP: Record<string, string> = {
   not_started: 'טרם התחיל',
   collecting_docs: 'איסוף מסמכים',
-  docs_complete: 'מסמכים התקבלו',
   in_preparation: 'בהכנה',
   pending_client: 'ממתין ללקוח',
   submitted: 'הוגש',
-  amended: 'תוקן',
-  accepted: 'התקבל',
-  assessment_issued: 'שומה הופקה',
-  objection_filed: 'הוגשה השגה',
   closed: 'נסגר',
   canceled: 'בוטל',
 }

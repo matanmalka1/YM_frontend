@@ -4,15 +4,10 @@ import type { PaginatedResponse } from '@/types'
 export type AnnualReportStatus =
   | 'not_started'
   | 'collecting_docs'
-  | 'docs_complete'
   | 'in_preparation'
   | 'pending_client'
   | 'submitted'
-  | 'accepted'
-  | 'assessment_issued'
-  | 'objection_filed'
   | 'closed'
-  | 'amended'
   | 'canceled'
 
 export type ClientTypeForReport =
@@ -177,15 +172,11 @@ export interface SeasonSummary {
   total: number
   not_started: number
   collecting_docs: number
-  docs_complete: number
   in_preparation: number
   pending_client: number
   submitted: number
-  accepted: number
-  assessment_issued: number
-  objection_filed: number
   closed: number
-  amended: number
+  canceled: number
   completion_rate: number
   overdue_count: number
 }

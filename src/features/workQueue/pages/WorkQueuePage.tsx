@@ -118,10 +118,6 @@ export const WorkQueuePage: React.FC = () => {
         summaryError={summaryError}
         urgencyFilter={urgencyFilter}
         onFilter={setUrgencyFilter}
-        scopeFilter={scopeFilter}
-        linkedFilter={linkedFilter}
-        onScopeFilter={setScopeFilter}
-        onLinkedFilter={setLinkedFilter}
       />
 
       <WorkQueueFiltersBar
@@ -142,6 +138,7 @@ export const WorkQueuePage: React.FC = () => {
         hasFilters={hasFilters}
         onClear={clearFilters}
       />
+
 
       {renderBody()}
 

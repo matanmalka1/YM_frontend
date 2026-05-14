@@ -173,7 +173,7 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
               {primary.label}
             </Button>
             {secondary.length > 0 && (
-              <RowActionsMenu>
+              <RowActionsMenu menuClassName="w-50">
                 {secondary.map((action) => {
                   const key = `${item.id}:${action.key}`
                   return (

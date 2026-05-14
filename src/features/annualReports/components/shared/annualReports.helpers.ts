@@ -86,7 +86,7 @@ export const getFilingStats = (reports: AnnualReportFull[]) => {
     )
   }).length
   const pending = reports.filter((report) => !report.submitted_at).length
-  const amended = reports.filter((report) => report.status === 'amended').length
+  const reopened = reports.filter((report) => report.amendment_reason).length
 
   return [
     {
@@ -96,6 +96,6 @@ export const getFilingStats = (reports: AnnualReportFull[]) => {
       color: 'bg-positive-500',
     },
     { label: 'ממתין להגשה', count: pending, pct: pct(pending), color: 'bg-info-400' },
-    { label: 'עם תיקונים', count: amended, pct: pct(amended), color: 'bg-warning-400' },
+    { label: 'נפתחו לתיקון', count: reopened, pct: pct(reopened), color: 'bg-warning-400' },
   ]
 }

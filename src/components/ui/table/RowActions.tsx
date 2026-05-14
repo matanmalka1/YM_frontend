@@ -1,10 +1,12 @@
 import type { AnchorHTMLAttributes } from 'react'
-import { useLayoutEffect, useRef, useState } from 'react'
+import { createContext, useContext, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { MoreHorizontal } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { computeDropdownPosition } from '../../../utils/dropdownMenuUtils'
 import { useDismissibleLayer } from '../overlays/useDismissibleLayer'
+
+const DropdownCloseContext = createContext<(() => void) | null>(null)
 
 interface DropdownPos {
   top: number
@@ -16,9 +18,10 @@ interface DropdownMenuProps {
   ariaLabel?: string
   children: React.ReactNode
   title?: string
+  menuClassName?: string
 }
 
-const DropdownMenu = ({ ariaLabel, children, title }: DropdownMenuProps) => {
+const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMenuProps) => {
   const [open, setOpen] = useState(false)
   const [triggerRect, setTriggerRect] = useState<DOMRect | null>(null)
   const [pos, setPos] = useState<DropdownPos | null>(null)
@@ -138,34 +141,36 @@ const DropdownMenu = ({ ariaLabel, children, title }: DropdownMenuProps) => {
 
       {open &&
         createPortal(
-          <div
-            ref={portalRef}
-            style={
-              pos
-                ? {
-                    position: 'fixed',
-                    top: pos.top,
-                    left: pos.left,
-                    maxHeight: pos.maxHeight,
-                    overflowY: pos.maxHeight ? 'auto' : undefined,
-                    zIndex: 9999,
-                  }
-                : {
-                    position: 'fixed',
-                    visibility: 'hidden' as const,
-                    top: -9999,
-                    left: -9999,
-                    zIndex: 9999,
-                  }
-            }
-            className="min-w-40 rounded-lg border border-gray-200 bg-white py-1 shadow-lg"
-            onClick={(event) => event.stopPropagation()}
-            onKeyDown={handleMenuKeyDown}
-            role="menu"
-            tabIndex={-1}
-          >
-            {children}
-          </div>,
+          <DropdownCloseContext.Provider value={() => setOpen(false)}>
+            <div
+              ref={portalRef}
+              style={
+                pos
+                  ? {
+                      position: 'fixed',
+                      top: pos.top,
+                      left: pos.left,
+                      maxHeight: pos.maxHeight,
+                      overflowY: pos.maxHeight ? 'auto' : undefined,
+                      zIndex: 9999,
+                    }
+                  : {
+                      position: 'fixed',
+                      visibility: 'hidden' as const,
+                      top: -9999,
+                      left: -9999,
+                      zIndex: 9999,
+                    }
+              }
+              className={cn('rounded-lg border border-gray-200 bg-white py-1 shadow-lg', menuClassName ?? 'min-w-40')}
+              onClick={(event) => event.stopPropagation()}
+              onKeyDown={handleMenuKeyDown}
+              role="menu"
+              tabIndex={-1}
+            >
+              {children}
+            </div>
+          </DropdownCloseContext.Provider>,
           document.body,
         )}
     </>
@@ -186,25 +191,29 @@ const DropdownMenuItem = ({
   icon: React.ReactNode
   danger?: boolean
   disabled?: boolean
-}) => (
-  <button
-    type="button"
-    disabled={disabled}
-    onClick={(event) => {
-      event.stopPropagation()
-      onClick()
-    }}
-    className={cn(
-      'w-full px-3 py-2 text-right text-sm transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40',
-      danger ? 'text-negative-600 hover:bg-negative-50' : 'text-gray-700',
-    )}
-  >
-    <span className="grid w-full grid-cols-[minmax(0,1fr)_1rem] items-center gap-2">
-      <span className="truncate">{label}</span>
-      <span className="flex h-4 w-4 items-center justify-center">{icon}</span>
-    </span>
-  </button>
-)
+}) => {
+  const close = useContext(DropdownCloseContext)
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={(event) => {
+        event.stopPropagation()
+        close?.()
+        onClick()
+      }}
+      className={cn(
+        'w-full px-3 py-2 text-right text-sm transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40',
+        danger ? 'text-negative-600 hover:bg-negative-50' : 'text-gray-700',
+      )}
+    >
+      <span className="grid w-full grid-cols-[minmax(0,1fr)_1rem] items-center gap-2">
+        <span className="truncate">{label}</span>
+        <span className="flex h-4 w-4 items-center justify-center">{icon}</span>
+      </span>
+    </button>
+  )
+}
 
 DropdownMenuItem.displayName = 'DropdownMenuItem'
 
@@ -212,11 +221,12 @@ interface RowActionsMenuProps {
   ariaLabel?: string
   children: React.ReactNode
   title?: string
+  menuClassName?: string
 }
 
-export const RowActionsMenu: React.FC<RowActionsMenuProps> = ({ ariaLabel, children, title }) => (
+export const RowActionsMenu: React.FC<RowActionsMenuProps> = ({ ariaLabel, children, title, menuClassName }) => (
   <div className="flex justify-center">
-    <DropdownMenu ariaLabel={ariaLabel ?? 'פעולות'} title={title}>
+    <DropdownMenu ariaLabel={ariaLabel ?? 'פעולות'} title={title} menuClassName={menuClassName}>
       {children}
     </DropdownMenu>
   </div>

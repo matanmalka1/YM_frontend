@@ -11,7 +11,7 @@ export const STAGE_ACCENT: Record<StageKey, string> = {
   post_submission: 'from-warning-400 to-warning-500',
 }
 
-export const TERMINAL_STATUSES = new Set(['submitted', 'accepted', 'closed'])
+export const TERMINAL_STATUSES = new Set(['submitted', 'closed', 'canceled'])
 
 export const daysUntil = (dateStr: string | null): number | null => {
   const deadline = parseAnnualReportCalendarDate(dateStr)

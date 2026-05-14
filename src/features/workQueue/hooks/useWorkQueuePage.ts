@@ -52,11 +52,19 @@ export const useWorkQueuePage = () => {
     error,
   } = useWorkQueue(listParams, hasRole)
 
+  const summaryParams = useMemo<WorkQueueParams>(
+    () => ({
+      include_task_history: historyMode,
+      search: search.trim() || undefined,
+    }),
+    [historyMode, search],
+  )
+
   const {
     data: summary,
     isFetching: isSummaryFetching,
     error: summaryError,
-  } = useWorkQueueSummary(baseParams, hasRole)
+  } = useWorkQueueSummary(summaryParams, hasRole)
 
   const items = data?.items ?? []
   const total = data?.total ?? 0

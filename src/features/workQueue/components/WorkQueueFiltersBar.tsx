@@ -6,8 +6,6 @@ import { Button } from '@/components/ui/primitives/Button'
 import {
   workQueueSourceTypeLabels,
   workQueueSourceTypeValues,
-  workQueueUrgencyLabels,
-  workQueueUrgencyValues,
 } from '../constants'
 import { taskStatusLabels, taskStatusValues } from '@/features/tasks/constants'
 import type { WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
@@ -37,32 +35,10 @@ const typeOptions = [
   ...workQueueSourceTypeValues.map((v) => ({ value: v, label: workQueueSourceTypeLabels[v] })),
 ]
 
-const urgencyOptions = [
-  { value: '', label: 'כל הדחיפויות' },
-  ...workQueueUrgencyValues.map((v) => ({ value: v, label: workQueueUrgencyLabels[v] })),
-]
-
-const linkedOptions = [
-  { value: '', label: 'כל המשימות' },
-  { value: 'linked', label: 'עם משימה קשורה' },
-  { value: 'unlinked', label: 'ללא משימה קשורה' },
-]
-
 const statusOptions = [
   { value: '', label: 'כל סטטוסי המשימה' },
   ...taskStatusValues.map((v) => ({ value: v, label: taskStatusLabels[v] })),
 ]
-
-const scopeOptions = [
-  { value: '', label: 'מערכת ומשימות' },
-  { value: 'system', label: 'מערכת בלבד' },
-  { value: 'manual', label: 'משימות ידניות בלבד' },
-]
-
-const parseUrgency = (value: string): WorkQueueUrgency | null => {
-  const result = z.enum(workQueueUrgencyValues).safeParse(value)
-  return result.success ? result.data : null
-}
 
 const parseSourceType = (value: string): WorkQueueSourceType | null => {
   const result = z.enum(workQueueSourceTypeValues).safeParse(value)
@@ -74,21 +50,11 @@ const parseTaskStatus = (value: string): TaskStatus | null => {
   return result.success ? result.data : null
 }
 
-const parseLinked = (value: string): 'linked' | 'unlinked' | null => {
-  const result = z.enum(['linked', 'unlinked'] as const).safeParse(value)
-  return result.success ? result.data : null
-}
-
-const parseScope = (value: string): 'system' | 'manual' | null => {
-  const result = z.enum(['system', 'manual'] as const).safeParse(value)
-  return result.success ? result.data : null
-}
-
 export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
   search,
   onSearchChange,
-  urgencyFilter,
-  onUrgencyChange,
+  urgencyFilter: _urgencyFilter,
+  onUrgencyChange: _onUrgencyChange,
   typeFilter,
   onTypeChange,
   statusFilter,
@@ -102,39 +68,48 @@ export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
   hasFilters,
   onClear,
 }) => (
-  <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(220px,1fr)_150px_150px_170px_170px_170px_auto]">
-    <Input
-      value={search}
-      onChange={(e) => onSearchChange(e.target.value)}
-      placeholder="חיפוש לפי לקוח, מספר, כותרת או משימה"
-      startIcon={<Search className="h-4 w-4" />}
-    />
-    <Select
-      options={urgencyOptions}
-      value={urgencyFilter ?? ''}
-      onChange={(e) => onUrgencyChange(parseUrgency(e.target.value))}
-    />
-    <Select
-      options={typeOptions}
-      value={typeFilter ?? ''}
-      onChange={(e) => onTypeChange(parseSourceType(e.target.value))}
-    />
-    <Select
-      options={statusOptions}
-      value={statusFilter ?? ''}
-      onChange={(e) => onStatusChange(parseTaskStatus(e.target.value))}
-    />
-    <Select
-      options={linkedOptions}
-      value={linkedFilter ?? ''}
-      onChange={(e) => onLinkedChange(parseLinked(e.target.value))}
-    />
-    <Select
-      options={scopeOptions}
-      value={scopeFilter ?? ''}
-      onChange={(e) => onScopeChange(parseScope(e.target.value))}
-    />
-    <Button variant={historyMode ? 'secondary' : 'ghost'} size="sm" onClick={() => onHistoryModeChange(!historyMode)}>
+  <div className="flex flex-wrap items-center gap-2">
+    <div className="min-w-[220px] flex-1">
+      <Input
+        value={search}
+        onChange={(e) => onSearchChange(e.target.value)}
+        placeholder="חיפוש לפי לקוח, מספר, כותרת או משימה"
+        startIcon={<Search className="h-4 w-4" />}
+      />
+    </div>
+    <div className="w-36 shrink-0">
+      <Select
+        options={typeOptions}
+        value={typeFilter ?? ''}
+        onChange={(e) => onTypeChange(parseSourceType(e.target.value))}
+      />
+    </div>
+    <div className="w-44 shrink-0">
+      <Select
+        options={statusOptions}
+        value={statusFilter ?? ''}
+        onChange={(e) => onStatusChange(parseTaskStatus(e.target.value))}
+      />
+    </div>
+    <Button
+      variant={scopeFilter === 'manual' ? 'secondary' : 'ghost'}
+      size="sm"
+      onClick={() => onScopeChange(scopeFilter === 'manual' ? null : 'manual')}
+    >
+      משימות ידניות
+    </Button>
+    <Button
+      variant={linkedFilter === 'linked' ? 'secondary' : 'ghost'}
+      size="sm"
+      onClick={() => onLinkedChange(linkedFilter === 'linked' ? null : 'linked')}
+    >
+      עם משימה קשורה
+    </Button>
+    <Button
+      variant={historyMode ? 'secondary' : 'ghost'}
+      size="sm"
+      onClick={() => onHistoryModeChange(!historyMode)}
+    >
       היסטוריה
     </Button>
     {hasFilters && (

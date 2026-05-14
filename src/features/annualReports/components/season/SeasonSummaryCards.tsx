@@ -7,7 +7,7 @@ interface SeasonSummaryCardsProps {
 }
 
 export const SeasonSummaryCards: React.FC<SeasonSummaryCardsProps> = ({ summary }) => {
-  const done = summary.submitted + summary.accepted + summary.closed
+  const done = summary.submitted + summary.closed
 
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
