@@ -1,9 +1,21 @@
-import type { ActionCommand, BackendAction } from './types'
+import type { ActionCommand, BackendAction, BackendActionConfirm } from './types'
 
 const HIDDEN_ACTION_KEYS = new Set<string>(['freeze', 'activate'])
 
-const mapConfirm = (confirm?: BackendAction['confirm'] | null): ActionCommand['confirm'] => {
-  if (!confirm) return undefined
+const mapConfirm = (action: BackendAction): ActionCommand['confirm'] => {
+  if (typeof action.confirm === 'boolean' && action.confirm) {
+    return {
+      title: action.confirm_title ?? 'אישור פעולה',
+      message: action.confirm_message ?? 'האם להמשיך?',
+      confirmLabel: 'אישור',
+      cancelLabel: 'ביטול',
+      inputs: undefined,
+    }
+  }
+
+  if (!action.confirm || typeof action.confirm !== 'object') return undefined
+
+  const confirm = action.confirm as BackendActionConfirm
   return {
     title: confirm.title,
     message: confirm.message,
@@ -23,13 +35,13 @@ export const mapActions = (actions: BackendAction[] | null | undefined): ActionC
 
       return {
         key: action.key,
-        uiKey: action.id,
-        id: action.id,
+        uiKey: action.id ?? action.key,
+        id: action.id ?? action.key,
         label: action.label,
         method: action.method,
         endpoint: action.endpoint,
         payload: action.payload ?? undefined,
-        confirm: mapConfirm(action.confirm),
+        confirm: mapConfirm(action),
         clientName: action.client_name ?? null,
         binderNumber: action.binder_number ?? null,
         category: action.category ?? null,

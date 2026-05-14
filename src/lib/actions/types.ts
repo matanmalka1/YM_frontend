@@ -18,13 +18,17 @@ export interface BackendActionConfirm {
 }
 
 export interface BackendAction {
-  id: string
+  id?: string | null
   key: string
   label: string
   method: ActionMethod
   endpoint: string
   payload?: Record<string, unknown> | null
-  confirm?: BackendActionConfirm | null
+  payload_schema?: 'none' | 'simple' | 'requires_input'
+  confirm?: boolean | BackendActionConfirm | null
+  confirm_title?: string | null
+  confirm_message?: string | null
+  variant?: 'primary' | 'secondary' | 'danger' | null
   binder_id?: number | null
   charge_id?: number | null
   client_id?: number | null
