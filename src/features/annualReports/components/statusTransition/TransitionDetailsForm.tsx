@@ -30,13 +30,12 @@ export const TransitionDetailsForm = ({
             onChange={onFieldChange('itaRef')}
             placeholder="מספר אסמכתא ממס הכנסה"
           />
-          <Select label="שיטת הגשה" value={form.submissionMethod} onChange={onFieldChange('submissionMethod')}>
-            {SUBMISSION_METHOD_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </Select>
+          <Select
+            label="שיטת הגשה"
+            value={form.submissionMethod}
+            onChange={onFieldChange('submissionMethod')}
+            options={SUBMISSION_METHOD_OPTIONS}
+          />
         </>
       )}
 

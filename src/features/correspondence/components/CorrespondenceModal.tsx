@@ -76,13 +76,12 @@ export const CorrespondenceModal: React.FC<CorrespondenceModalProps> = ({
       }
     >
       <form onSubmit={submit} className="space-y-4">
-        <Select label="סוג" error={errors.correspondence_type?.message} {...register('correspondence_type')}>
-          {CORRESPONDENCE_TYPE_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </Select>
+        <Select
+          label="סוג"
+          error={errors.correspondence_type?.message}
+          options={CORRESPONDENCE_TYPE_OPTIONS}
+          {...register('correspondence_type')}
+        />
 
         <Input label="נושא *" error={errors.subject?.message} {...register('subject')} />
 
@@ -112,15 +111,14 @@ export const CorrespondenceModal: React.FC<CorrespondenceModalProps> = ({
                   const val = e.target.value
                   field.onChange(val === '' ? null : Number(val))
                 }}
-              >
-                <option value="">ללא איש קשר</option>
-                {contacts.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                    {c.office ? ` — ${c.office}` : ''}
-                  </option>
-                ))}
-              </Select>
+                options={[
+                  { value: '', label: 'ללא איש קשר' },
+                  ...contacts.map((c) => ({
+                    value: String(c.id),
+                    label: `${c.name}${c.office ? ` — ${c.office}` : ''}`,
+                  })),
+                ]}
+              />
             )}
           />
         )}

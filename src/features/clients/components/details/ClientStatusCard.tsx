@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { FileText, Receipt, CreditCard, TrendingUp, FolderOpen, FileCheck } from 'lucide-react'
-import { SelectDropdown } from '@/components/ui/inputs/SelectDropdown'
+import { Select } from '@/components/ui/inputs/Select'
 import { clientsApi, clientsQK } from '../../api'
 import { CLIENT_ROUTES } from '../../api/endpoints'
 import { vatReportsApi, vatReportsQK } from '@/features/vatReports'
@@ -88,14 +88,13 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
     : 'אין דיווחים'
 
   const yearSelector = (
-    <div className="w-[7rem] ">
-      <SelectDropdown
-        options={yearOptions.map((y) => ({ value: String(y), label: String(y) }))}
-        value={String(selectedYear)}
-        onChange={(e) => setSelectedYear(Number(e.target.value))}
-        className="px-2"
-      />
-    </div>
+    <Select
+      fieldClassName="w-[7rem]"
+      options={yearOptions.map((y) => ({ value: String(y), label: String(y) }))}
+      value={String(selectedYear)}
+      onChange={(e) => setSelectedYear(Number(e.target.value))}
+      className="px-2"
+    />
   )
 
   if (isLoading) {

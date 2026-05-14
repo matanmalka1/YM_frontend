@@ -4,7 +4,7 @@ import { AdvancePaymentReportTable } from "./AdvancePaymentReportTable";
 import { useAdvancePaymentReport } from "../hooks/useAdvancePaymentReport";
 import { MONTH_OPTIONS as BASE_MONTH_OPTIONS } from "../../../utils/utils";
 import { getOperationalYearOptions } from "@/constants/periodOptions.constants";
-import { SelectDropdown } from "../../../components/ui/inputs/SelectDropdown";
+import { Select } from "../../../components/ui/inputs/Select";
 import { ALL_MONTHS_OPTION } from "@/constants/filterOptions.constants";
 
 const MONTH_OPTIONS = [ALL_MONTHS_OPTION, ...BASE_MONTH_OPTIONS];
@@ -15,19 +15,19 @@ export const AdvancePaymentReportView: React.FC = () => {
 
   const actions = (
     <div className="flex items-center gap-2">
-      <SelectDropdown
+      <Select
         value={String(year)}
         onChange={(e) => setYear(Number(e.target.value))}
         options={getOperationalYearOptions()}
-        className="w-28"
+        fieldClassName="w-28"
       />
-      <SelectDropdown
+      <Select
         value={month != null ? String(month) : ""}
         onChange={(e) =>
           setMonth(e.target.value ? Number(e.target.value) : undefined)
         }
         options={MONTH_OPTIONS}
-        className="w-36"
+        fieldClassName="w-36"
       />
     </div>
   );

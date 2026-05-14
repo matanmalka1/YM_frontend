@@ -33,10 +33,15 @@ export const UserFormFields: React.FC<UserFormFieldsProps> = ({ register, errors
         placeholder="user@example.com"
       />
       <Input label="טלפון" {...reg('phone')} error={err.phone?.message} placeholder="050-0000000" />
-      <Select label="תפקיד *" {...reg('role')} error={err.role?.message}>
-        <option value="secretary">מזכירה</option>
-        <option value="advisor">יועץ</option>
-      </Select>
+      <Select
+        label="תפקיד *"
+        options={[
+          { value: 'secretary', label: 'מזכירה' },
+          { value: 'advisor', label: 'יועץ' },
+        ]}
+        {...reg('role')}
+        error={err.role?.message}
+      />
       {showPassword && (
         <Input
           label="סיסמה *"

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Card } from '../../../components/ui/primitives/Card'
 import { Badge } from '../../../components/ui/primitives/Badge'
-import { SelectDropdown } from '../../../components/ui/inputs/SelectDropdown'
+import { Select } from '../../../components/ui/inputs/Select'
 import { canAddInvoice } from '../utils'
 import { isClientClosed } from '../../../utils/clientStatus'
 import { useAddInvoice } from '../hooks/useVatInvoiceMutations'
@@ -39,13 +39,12 @@ export const VatInvoiceTab: React.FC<VatInvoiceTabProps> = ({
         actions={<Badge variant="neutral">{filtered.length} רשומות</Badge>}
       >
         {isExpense && (
-          <div className="mb-3 w-52">
-            <SelectDropdown
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              options={VAT_EXPENSE_CATEGORY_FILTER_OPTIONS}
-            />
-          </div>
+          <Select
+            fieldClassName="mb-3 w-52"
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            options={VAT_EXPENSE_CATEGORY_FILTER_OPTIONS}
+          />
         )}
         <VatInvoiceTable
           invoices={filtered}

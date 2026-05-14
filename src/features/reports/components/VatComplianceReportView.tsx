@@ -3,7 +3,7 @@ import { useVatComplianceReport } from "../hooks/useVatComplianceReport";
 import { PageHeader } from "../../../components/layout/PageHeader";
 import { PageStateGuard } from "../../../components/ui/layout/PageStateGuard";
 import { Badge } from "../../../components/ui/primitives/Badge";
-import { SelectDropdown } from "../../../components/ui/inputs/SelectDropdown";
+import { Select } from "../../../components/ui/inputs/Select";
 import { getOperationalYearOptions } from "@/constants/periodOptions.constants";
 import { getVatTypeLabel } from "../../../utils/enums";
 
@@ -111,11 +111,11 @@ export const VatComplianceReportView: React.FC = () => {
       title='דוח ציות מע"מ'
       description={description}
       actions={
-        <SelectDropdown
+        <Select
           value={String(year)}
           onChange={(e) => setYear(Number(e.target.value))}
           options={getOperationalYearOptions()}
-          className="w-28"
+          fieldClassName="w-28"
         />
       }
     />

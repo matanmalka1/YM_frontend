@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { ClientPickerField, createClientIdPickerHandlers, useClientPickerState } from '@/components/shared/client'
 import { MONTHS_COVERED_OPTIONS } from '@/constants/periodOptions.constants'
-import { FormField, Input, SelectDropdown } from '@/components/ui/inputs'
+import { FormField, Input, Select } from '@/components/ui/inputs'
 import { Modal, ModalFormActions } from '@/components/ui/overlays'
 import type { BusinessResponse } from '@/features/clients'
 import type { CreateChargePayload } from '../api'
@@ -140,15 +140,14 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
                 control={control}
                 name="business_id"
                 render={({ field }) => (
-                  <FormField label="עסק" className="w-full">
-                    <SelectDropdown
-                      value={field.value != null ? String(field.value) : ''}
-                      onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : null)}
-                      onBlur={field.onBlur}
-                      name={field.name}
-                      options={businessOptions}
-                    />
-                  </FormField>
+                  <Select
+                    label="עסק"
+                    value={field.value != null ? String(field.value) : ''}
+                    onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : null)}
+                    onBlur={field.onBlur}
+                    name={field.name}
+                    options={businessOptions}
+                  />
                 )}
               />
             </div>
@@ -176,46 +175,45 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
             control={control}
             name="charge_type"
             render={({ field }) => (
-              <FormField label="סוג חיוב *" error={errors.charge_type?.message} className="w-full">
-                <SelectDropdown
-                  value={field.value}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  name={field.name}
-                  options={CHARGE_TYPE_OPTIONS}
-                  className={errors.charge_type ? 'border-negative-500' : undefined}
-                />
-              </FormField>
+              <Select
+                label="סוג חיוב *"
+                error={errors.charge_type?.message}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                name={field.name}
+                options={CHARGE_TYPE_OPTIONS}
+              />
             )}
           />
           <Controller
             control={control}
             name="months_covered"
             render={({ field }) => (
-              <FormField label="חודשים לחיוב" error={errors.months_covered?.message} className="w-full">
-                <SelectDropdown
-                  value={String(field.value ?? 1)}
-                  onChange={(e) => field.onChange(Number(e.target.value) as 1 | 2)}
-                  onBlur={field.onBlur}
-                  name={field.name}
-                  options={MONTHS_COVERED_OPTIONS}
-                />
-              </FormField>
+              <Select
+                label="חודשים לחיוב"
+                error={errors.months_covered?.message}
+                value={String(field.value ?? 1)}
+                onChange={(e) => field.onChange(Number(e.target.value) as 1 | 2)}
+                onBlur={field.onBlur}
+                name={field.name}
+                options={MONTHS_COVERED_OPTIONS}
+              />
             )}
           />
           <Controller
             control={control}
             name="period"
             render={({ field }) => (
-              <FormField label="תקופה" error={errors.period?.message} className="w-full">
-                <SelectDropdown
-                  value={field.value ?? ''}
-                  onChange={(e) => field.onChange(e.target.value)}
-                  onBlur={field.onBlur}
-                  name={field.name}
-                  options={periodOptions}
-                />
-              </FormField>
+              <Select
+                label="תקופה"
+                error={errors.period?.message}
+                value={field.value ?? ''}
+                onChange={(e) => field.onChange(e.target.value)}
+                onBlur={field.onBlur}
+                name={field.name}
+                options={periodOptions}
+              />
             )}
           />
         </div>

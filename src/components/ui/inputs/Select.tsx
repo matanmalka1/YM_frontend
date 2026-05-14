@@ -14,6 +14,7 @@ interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>
   error?: string
   size?: 'xs' | 'sm' | 'md'
   options?: SelectOption[]
+  fieldClassName?: string
 }
 
 const selectSizeClasses = {
@@ -39,6 +40,7 @@ export const Select: React.FC<SelectProps> = ({
   error,
   size = 'md',
   className,
+  fieldClassName,
   options,
   children,
   value,
@@ -46,11 +48,13 @@ export const Select: React.FC<SelectProps> = ({
   onBlur,
   disabled,
   name,
+  id,
   ...props
 }) => (
-  <FormField label={label} error={error} className="w-full">
+  <FormField label={label} error={error} className={cn('w-full', fieldClassName)}>
     {Array.isArray(options) ? (
       <SelectDropdown
+        id={id}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
@@ -68,6 +72,7 @@ export const Select: React.FC<SelectProps> = ({
           onBlur={onBlur}
           disabled={disabled}
           name={name}
+          id={id}
           className={cn(
             'appearance-none w-full bg-white border rounded-lg text-gray-800 cursor-pointer transition-colors',
             selectSizeClasses[size],

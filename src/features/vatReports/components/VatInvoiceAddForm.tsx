@@ -4,7 +4,7 @@ import { Plus } from 'lucide-react'
 import { Button } from '../../../components/ui/primitives/Button'
 import { FormField } from '../../../components/ui/inputs/FormField'
 import { Input } from '../../../components/ui/inputs/Input'
-import { SelectDropdown } from '../../../components/ui/inputs/SelectDropdown'
+import { Select } from '../../../components/ui/inputs/Select'
 import { DatePicker } from '../../../components/ui/inputs/DatePicker'
 import { vatInvoiceRowSchema, toInvoiceRowPayload, type VatInvoiceRowValues } from '../schemas/invoice.schema'
 import {
@@ -80,58 +80,60 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({
         </FormField>
 
         {/* VAT type */}
-        <FormField label='סוג מע"מ' className="w-32 shrink-0">
+        <Controller
+          control={control}
+          name="rate_type"
+          render={({ field }) => (
+            <Select
+              label='סוג מע"מ'
+              fieldClassName="w-32 shrink-0"
+              name={field.name}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              options={VAT_RATE_TYPE_OPTIONS}
+            />
+          )}
+        />
+
+        {/* Expense-only: category */}
+        {isExpense && (
           <Controller
             control={control}
-            name="rate_type"
+            name="expense_category"
             render={({ field }) => (
-              <SelectDropdown
+              <Select
+                label="קטגוריה"
+                error={errors.expense_category?.message}
+                fieldClassName="w-44 shrink-0"
                 name={field.name}
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
-                options={VAT_RATE_TYPE_OPTIONS}
+                options={VAT_EXPENSE_CATEGORY_OPTIONS}
               />
             )}
           />
-        </FormField>
-
-        {/* Expense-only: category */}
-        {isExpense && (
-          <FormField label="קטגוריה" error={errors.expense_category?.message} className="w-44 shrink-0">
-            <Controller
-              control={control}
-              name="expense_category"
-              render={({ field }) => (
-                <SelectDropdown
-                  name={field.name}
-                  value={field.value}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  options={VAT_EXPENSE_CATEGORY_OPTIONS}
-                />
-              )}
-            />
-          </FormField>
         )}
 
         {/* Expense-only: document type */}
         {isExpense && (
-          <FormField label="סוג מסמך" error={errors.document_type?.message} className="w-40 shrink-0">
-            <Controller
-              control={control}
-              name="document_type"
-              render={({ field }) => (
-                <SelectDropdown
-                  name={field.name}
-                  value={field.value ?? ''}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  options={[{ value: '', label: '— בחר —' }, ...DOCUMENT_TYPE_OPTIONS]}
-                />
-              )}
-            />
-          </FormField>
+          <Controller
+            control={control}
+            name="document_type"
+            render={({ field }) => (
+              <Select
+                label="סוג מסמך"
+                error={errors.document_type?.message}
+                fieldClassName="w-40 shrink-0"
+                name={field.name}
+                value={field.value ?? ''}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                options={[{ value: '', label: '— בחר —' }, ...DOCUMENT_TYPE_OPTIONS]}
+              />
+            )}
+          />
         )}
 
         {/* Optional: invoice number */}

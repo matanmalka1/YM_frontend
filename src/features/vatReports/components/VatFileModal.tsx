@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Modal } from '../../../components/ui/overlays/Modal'
 import { Button } from '../../../components/ui/primitives/Button'
 import { Input } from '../../../components/ui/inputs/Input'
-import { SelectDropdown } from '../../../components/ui/inputs/SelectDropdown'
+import { Select } from '../../../components/ui/inputs/Select'
 import { vatReportsApi } from '../api'
 import { toast } from '../../../utils/toast'
 import { showErrorToast } from '../../../utils/utils'
@@ -103,11 +103,9 @@ export const VatFileModal: React.FC<VatFileModalProps> = ({
     >
       <div className="space-y-4" dir="rtl">
         <div>
-          <label htmlFor="vat-file-submission-method" className="block text-sm font-medium text-gray-700 mb-1">
-            אופן הגשה
-          </label>
-          <SelectDropdown
+          <Select
             id="vat-file-submission-method"
+            label="אופן הגשה"
             value={filingMethod}
             onChange={(e) =>
               setValue('submission_method', e.target.value as VatFileModalFormValues['submission_method'], {

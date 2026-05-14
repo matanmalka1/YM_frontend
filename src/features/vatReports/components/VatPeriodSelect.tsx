@@ -1,7 +1,5 @@
 import { useMemo } from 'react'
-import { cn } from '../../../utils/utils'
-import { FormField } from '../../../components/ui/inputs/FormField'
-import { SelectDropdown } from '../../../components/ui/inputs/SelectDropdown'
+import { Select } from '../../../components/ui/inputs/Select'
 import { useVatPeriodOptions } from '../hooks/useVatPeriodOptions'
 
 interface VatPeriodSelectProps {
@@ -45,14 +43,15 @@ export const VatPeriodSelect: React.FC<VatPeriodSelectProps> = ({
 
   return (
     <>
-      <FormField label="תקופת דיווח *" error={combinedError} className={cn('w-full', className)}>
-        <SelectDropdown
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          options={options}
-          disabled={!isValidClient || isLoading}
-        />
-      </FormField>
+      <Select
+        label="תקופת דיווח *"
+        error={combinedError}
+        fieldClassName={className}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        options={options}
+        disabled={!isValidClient || isLoading}
+      />
       {periodType === 'bimonthly' && (
         <p className={`text-xs text-gray-500 ${className ?? ''}`}>הלקוח מוגדר לדיווח דו-חודשי</p>
       )}

@@ -129,10 +129,14 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ op
         </div>
 
         <div>
-          <Select label="ערוץ שליחה" {...register('channel', { required: true })}>
-            <option value="email">אימייל</option>
-            <option value="whatsapp">וואטסאפ</option>
-          </Select>
+          <Select
+            label="ערוץ שליחה"
+            options={[
+              { value: 'email', label: 'אימייל' },
+              { value: 'whatsapp', label: 'וואטסאפ' },
+            ]}
+            {...register('channel', { required: true })}
+          />
         </div>
 
         <div>

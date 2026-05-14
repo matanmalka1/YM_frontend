@@ -92,11 +92,5 @@ interface SelectOptionsProps {
 }
 
 export const SelectOptions = ({ label, options, error, registerProps }: SelectOptionsProps) => (
-  <Select label={label} error={error} {...registerProps}>
-    {options.map((option) => (
-      <option key={option.value} value={option.value}>
-        {option.label}
-      </option>
-    ))}
-  </Select>
+  <Select label={label} error={error} options={options} {...registerProps} />
 )
