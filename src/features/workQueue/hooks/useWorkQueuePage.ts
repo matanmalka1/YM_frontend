@@ -45,12 +45,7 @@ export const useWorkQueuePage = () => {
     setPage(1)
   }, [historyMode, search, typeFilter, urgencyFilter, statusFilter, linkedFilter, scopeFilter])
 
-  const {
-    data,
-    isLoading,
-    isFetching,
-    error,
-  } = useWorkQueue(listParams, hasRole)
+  const { data, isLoading, isFetching, error } = useWorkQueue(listParams, hasRole)
 
   const summaryParams = useMemo<WorkQueueParams>(
     () => ({
@@ -97,11 +92,7 @@ export const useWorkQueuePage = () => {
     isSummaryFetching,
     summaryError: summaryError ? getErrorMessage(summaryError, 'שגיאה בטעינת הסיכום') : null,
     isLoading,
-    error: !hasRole
-      ? 'לא ניתן לזהות תפקיד משתמש'
-      : error
-        ? getErrorMessage(error, 'שגיאה בטעינת המשימות')
-        : null,
+    error: !hasRole ? 'לא ניתן לזהות תפקיד משתמש' : error ? getErrorMessage(error, 'שגיאה בטעינת המשימות') : null,
     search,
     setSearch,
     urgencyFilter,

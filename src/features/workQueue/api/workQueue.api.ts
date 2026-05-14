@@ -1,6 +1,12 @@
 import { api } from '@/api/client'
 import { WORK_QUEUE_ENDPOINTS } from './endpoints'
-import { workQueueListResponseSchema, workQueueSummarySchema, type WorkQueueListResponse, type WorkQueueParams, type WorkQueueSummary } from './contracts'
+import {
+  workQueueListResponseSchema,
+  workQueueSummarySchema,
+  type WorkQueueListResponse,
+  type WorkQueueParams,
+  type WorkQueueSummary,
+} from './contracts'
 
 const toSearchParams = (params?: WorkQueueParams): URLSearchParams | undefined => {
   if (!params) return undefined

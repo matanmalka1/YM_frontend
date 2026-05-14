@@ -192,6 +192,7 @@ export const Navbar: React.FC = () => {
                 ref={moreMenuRef}
                 className="absolute right-0 top-full z-50 mt-2 max-h-[calc(100vh-5rem)] w-64 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 text-right shadow-lg"
                 role="menu"
+                tabIndex={-1}
                 onKeyDown={handleMoreMenuKeyDown}
               >
                 {moreGroups.map((group, groupIndex) => {

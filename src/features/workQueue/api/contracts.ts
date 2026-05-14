@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { workQueueSourceTypeValues, workQueueUrgencyValues } from '../constants'
-import { taskStatusValues } from '@/features/tasks/constants'
+import { taskStatusValues } from '@/features/tasks'
 
 export type WorkQueueSourceType = (typeof workQueueSourceTypeValues)[number]
 

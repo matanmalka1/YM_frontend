@@ -3,13 +3,10 @@ import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
 import { Button } from '@/components/ui/primitives/Button'
-import {
-  workQueueSourceTypeLabels,
-  workQueueSourceTypeValues,
-} from '../constants'
-import { taskStatusLabels, taskStatusValues } from '@/features/tasks/constants'
+import { workQueueSourceTypeLabels, workQueueSourceTypeValues } from '../constants'
+import { taskStatusLabels, taskStatusValues } from '@/features/tasks'
 import type { WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
-import type { TaskStatus } from '@/features/tasks/api'
+import type { TaskStatus } from '@/features/tasks'
 
 interface WorkQueueFiltersBarProps {
   search: string
@@ -105,11 +102,7 @@ export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
     >
       עם משימה קשורה
     </Button>
-    <Button
-      variant={historyMode ? 'secondary' : 'ghost'}
-      size="sm"
-      onClick={() => onHistoryModeChange(!historyMode)}
-    >
+    <Button variant={historyMode ? 'secondary' : 'ghost'} size="sm" onClick={() => onHistoryModeChange(!historyMode)}>
       היסטוריה
     </Button>
     {hasFilters && (

@@ -6,7 +6,7 @@ import { StateCard } from '@/components/ui/feedback/StateCard'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Button } from '@/components/ui/primitives/Button'
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
-import { TaskModal } from '@/features/tasks/components/TaskModal'
+import { TaskModal } from '@/features/tasks'
 import { useWorkQueuePage } from '../hooks/useWorkQueuePage'
 import { useWorkQueueActions } from '../hooks/useWorkQueueActions'
 import { WorkQueueSummaryCards } from '../components/WorkQueueSummaryCards'
@@ -67,9 +67,9 @@ export const WorkQueuePage: React.FC = () => {
       title="עבודה לטיפול"
       description="כל מה שדורש טיפול: דוחות, חיובים, מקדמות, קלסרים ומשימות ידניות."
       actions={
-        <Button size="sm" variant='ghost' onClick={openCreateTask}>
+        <Button size="sm" variant="ghost" onClick={openCreateTask}>
           משימה חדשה
-           <Plus className="h-3.5 w-3.5" />
+          <Plus className="h-3.5 w-3.5" />
         </Button>
       }
     />
@@ -139,7 +139,6 @@ export const WorkQueuePage: React.FC = () => {
         hasFilters={hasFilters}
         onClear={clearFilters}
       />
-
 
       {renderBody()}
 

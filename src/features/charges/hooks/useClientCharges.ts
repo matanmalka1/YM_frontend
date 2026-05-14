@@ -52,7 +52,7 @@ export const useClientCharges = (clientId: number) => {
   const total = listData?.total ?? 0
   const stats = listData?.stats ?? DEFAULT_CHARGE_LIST_STATS
   const error = listError ? getErrorMessage(listError, 'שגיאה בטעינת חיובי הלקוח') : null
-  const allIds = useMemo(() => charges.map((c) => c.id), [charges])
+  const allIds = useMemo(() => listData?.items.map((c) => c.id) ?? [], [listData])
 
   const createMutation = useMutationWithToast<Awaited<ReturnType<typeof chargesApi.create>>, CreateChargePayload>({
     mutationFn: (payload) => chargesApi.create(payload),

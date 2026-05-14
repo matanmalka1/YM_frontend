@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { api } from '@/api/client'
 import { tasksApi, tasksQK, type TaskCreateRequest, type TaskUpdateRequest } from '@/features/tasks/api'
-import type { TaskSourceContext } from '@/features/tasks/components/TaskModal'
+import type { TaskSourceContext } from '@/features/tasks'
 import { toast } from '@/utils/toast'
 import { workQueueQK } from '../api'
 import type { WorkQueueAction, WorkQueueItem } from '../api'
@@ -103,7 +103,10 @@ export const useWorkQueueActions = () => {
         toast.error('לא נמצאה משימה לפתיחה')
         return
       }
-      setTaskModal({ mode: (action.key.startsWith('continue_task') || action.key.startsWith('edit_task')) ? 'edit' : 'view', taskId })
+      setTaskModal({
+        mode: action.key.startsWith('continue_task') || action.key.startsWith('edit_task') ? 'edit' : 'view',
+        taskId,
+      })
       return
     }
     if (action.confirm) {
