@@ -13,7 +13,7 @@ const getProgressColor = (pct: number) => {
 
 const buildStats = (data: SeasonSummaryData) => {
   const completionPct = Math.round(data.completion_rate)
-  const done = data.submitted + data.accepted + data.closed
+  const done = data.submitted + data.closed
   return {
     taxYear: data.tax_year,
     filingSeasonYear: data.filing_season_year,
