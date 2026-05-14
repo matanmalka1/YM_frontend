@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { AlertTriangle, Clock, Calendar, CheckSquare, Link2 } from 'lucide-react'
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
@@ -40,7 +41,7 @@ export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
   }
 
   const emptyValue = !summary || isLoading ? '—' : 0
-  const stats = [
+  const stats = useMemo(() => [
     {
       icon: AlertTriangle,
       variant: 'red' as const,
@@ -66,10 +67,10 @@ export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
       icon: Calendar,
       variant: 'blue' as const,
       count: summary?.upcoming ?? emptyValue,
-      label: 'קרוב (22+ ימים)',
+      label: `קרוב (${IMPORTANT_DAYS + 1}+ ימים)`,
       value: 'upcoming' as WorkQueueUrgency,
     },
-  ]
+  ], [summary, isLoading])
 
   return (
     <div className="grid grid-cols-1 gap-3 md:grid-cols-3 xl:grid-cols-6">

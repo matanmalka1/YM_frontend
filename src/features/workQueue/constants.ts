@@ -1,4 +1,5 @@
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
+import type { WorkQueueSourceType, WorkQueueUrgency } from './api/contracts'
 
 export const APPROACHING_DAYS = 7
 export const IMPORTANT_DAYS = 21
@@ -13,9 +14,6 @@ export const workQueueSourceTypeValues = [
 ] as const
 
 export const workQueueUrgencyValues = ['overdue', 'approaching', 'important', 'upcoming'] as const
-
-type WorkQueueSourceType = (typeof workQueueSourceTypeValues)[number]
-type WorkQueueUrgency = (typeof workQueueUrgencyValues)[number]
 
 export const workQueueSourceTypeLabels: Record<WorkQueueSourceType, string> = {
   vat_work_item: 'דוח מע"מ',

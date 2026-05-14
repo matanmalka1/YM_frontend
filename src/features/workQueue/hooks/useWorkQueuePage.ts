@@ -54,7 +54,7 @@ export const useWorkQueuePage = () => {
 
   const {
     data: summary,
-    isFetching: isSummaryLoading,
+    isFetching: isSummaryFetching,
     error: summaryError,
   } = useWorkQueueSummary(baseParams, hasRole)
 
@@ -86,7 +86,7 @@ export const useWorkQueuePage = () => {
     items,
     summary,
     isFetching,
-    isSummaryLoading,
+    isSummaryFetching,
     summaryError: summaryError ? getErrorMessage(summaryError, 'שגיאה בטעינת הסיכום') : null,
     isLoading,
     error: !hasRole
@@ -112,7 +112,6 @@ export const useWorkQueuePage = () => {
     hasFilters,
     clearFilters,
     page,
-    pageSize: WORK_QUEUE_PAGE_SIZE,
     total,
     totalPages,
     setPage,

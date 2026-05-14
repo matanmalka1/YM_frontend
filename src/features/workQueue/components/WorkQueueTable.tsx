@@ -7,7 +7,7 @@ import { DataTable } from '@/components/ui/table/DataTable'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
 import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
-import type { WorkQueueAction, WorkQueueItem, WorkQueueWarning } from '../api/contracts'
+import type { WorkQueueAction, WorkQueueItem, WorkQueueSourceType, WorkQueueWarning } from '../api/contracts'
 import { workQueueSourceTypeLabels, workQueueUrgencyLabels, workQueueUrgencyVariant } from '../constants'
 
 interface WorkQueueTableProps {
@@ -17,8 +17,8 @@ interface WorkQueueTableProps {
   onAction: (item: WorkQueueItem, action: WorkQueueAction) => void
 }
 
-const typeLabel = (sourceType: string): string =>
-  workQueueSourceTypeLabels[sourceType as keyof typeof workQueueSourceTypeLabels] ?? sourceType
+const typeLabel = (sourceType: WorkQueueSourceType): string =>
+  workQueueSourceTypeLabels[sourceType] ?? sourceType
 
 const formatDueDate = (dateStr?: string | null): string => {
   if (!dateStr) return '—'
@@ -44,15 +44,16 @@ const actionIcon = (action: WorkQueueAction) => {
   return <Play className="h-4 w-4" />
 }
 
-const actionVariant = (action: WorkQueueAction): 'primary' | 'secondary' | 'ghost' | 'danger' => {
+const actionVariant = (action: WorkQueueAction): 'ghost' | 'danger' => {
   if (action.variant === 'danger') return 'danger'
-  if (action.variant === 'primary') return 'ghost'
   return 'ghost'
 }
 
 export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading, activeActionKey, onAction }) => {
-  const showLinkedTasks = useMemo(() => items.some((item) => item.linked_tasks_count > 0), [items])
-  const showWarnings = useMemo(() => items.some((item) => item.warnings.length > 0), [items])
+  const { showLinkedTasks, showWarnings } = useMemo(() => ({
+    showLinkedTasks: items.some((item) => item.linked_tasks_count > 0),
+    showWarnings: items.some((item) => item.warnings.length > 0),
+  }), [items])
   const columns = useMemo(() => [
     {
       key: 'type',
@@ -104,14 +105,11 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
     {
       key: 'urgency',
       header: 'דחיפות',
-      render: (item: WorkQueueItem) => {
-        const urgency = item.urgency ?? 'upcoming'
-        return (
-          <Badge variant={workQueueUrgencyVariant[urgency as keyof typeof workQueueUrgencyVariant] ?? 'neutral'}>
-            {workQueueUrgencyLabels[urgency as keyof typeof workQueueUrgencyLabels] ?? urgency}
-          </Badge>
-        )
-      },
+      render: (item: WorkQueueItem) => (
+        <Badge variant={workQueueUrgencyVariant[item.urgency]}>
+          {workQueueUrgencyLabels[item.urgency]}
+        </Badge>
+      ),
     },
     {
       key: 'status',

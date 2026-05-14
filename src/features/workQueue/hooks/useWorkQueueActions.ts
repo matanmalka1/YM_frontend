@@ -110,6 +110,7 @@ export const useWorkQueueActions = () => {
       setPendingConfirm({ item, action })
       return
     }
+    if (actionMutation.isPending) return
     setActiveActionKey(actionKey(item, action))
     actionMutation.mutate({ item, action })
   }
@@ -123,8 +124,10 @@ export const useWorkQueueActions = () => {
   }
 
   const submitTask = (data: TaskCreateRequest | TaskUpdateRequest) => {
-    if (taskModal?.mode === 'create') createTaskMutation.mutate(data as TaskCreateRequest)
-    if (taskModal?.mode === 'edit' && taskModal.taskId) {
+    if (!taskModal || taskModal.mode === 'view') return
+    if (taskModal.mode === 'create') {
+      createTaskMutation.mutate(data as TaskCreateRequest)
+    } else if (taskModal.taskId) {
       updateTaskMutation.mutate({ id: taskModal.taskId, data: data as TaskUpdateRequest })
     }
   }

@@ -59,6 +59,31 @@ const scopeOptions = [
   { value: 'manual', label: 'משימות ידניות בלבד' },
 ]
 
+const parseUrgency = (value: string): WorkQueueUrgency | null => {
+  const result = z.enum(workQueueUrgencyValues).safeParse(value)
+  return result.success ? result.data : null
+}
+
+const parseSourceType = (value: string): WorkQueueSourceType | null => {
+  const result = z.enum(workQueueSourceTypeValues).safeParse(value)
+  return result.success ? result.data : null
+}
+
+const parseTaskStatus = (value: string): TaskStatus | null => {
+  const result = z.enum(taskStatusValues).safeParse(value)
+  return result.success ? result.data : null
+}
+
+const parseLinked = (value: string): 'linked' | 'unlinked' | null => {
+  const result = z.enum(['linked', 'unlinked'] as const).safeParse(value)
+  return result.success ? result.data : null
+}
+
+const parseScope = (value: string): 'system' | 'manual' | null => {
+  const result = z.enum(['system', 'manual'] as const).safeParse(value)
+  return result.success ? result.data : null
+}
+
 export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
   search,
   onSearchChange,
@@ -87,42 +112,27 @@ export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
     <Select
       options={urgencyOptions}
       value={urgencyFilter ?? ''}
-      onChange={(e) => {
-        const result = z.enum(workQueueUrgencyValues).safeParse(e.target.value)
-        onUrgencyChange(result.success ? result.data : null)
-      }}
+      onChange={(e) => onUrgencyChange(parseUrgency(e.target.value))}
     />
     <Select
       options={typeOptions}
       value={typeFilter ?? ''}
-      onChange={(e) => {
-        const result = z.enum(workQueueSourceTypeValues).safeParse(e.target.value)
-        onTypeChange(result.success ? result.data : null)
-      }}
+      onChange={(e) => onTypeChange(parseSourceType(e.target.value))}
     />
     <Select
       options={statusOptions}
       value={statusFilter ?? ''}
-      onChange={(e) => {
-        const result = z.enum(taskStatusValues).safeParse(e.target.value)
-        onStatusChange(result.success ? result.data : null)
-      }}
+      onChange={(e) => onStatusChange(parseTaskStatus(e.target.value))}
     />
     <Select
       options={linkedOptions}
       value={linkedFilter ?? ''}
-      onChange={(e) => {
-        const result = z.enum(['linked', 'unlinked'] as const).safeParse(e.target.value)
-        onLinkedChange(result.success ? result.data : null)
-      }}
+      onChange={(e) => onLinkedChange(parseLinked(e.target.value))}
     />
     <Select
       options={scopeOptions}
       value={scopeFilter ?? ''}
-      onChange={(e) => {
-        const result = z.enum(['system', 'manual'] as const).safeParse(e.target.value)
-        onScopeChange(result.success ? result.data : null)
-      }}
+      onChange={(e) => onScopeChange(parseScope(e.target.value))}
     />
     <Button variant={historyMode ? 'secondary' : 'ghost'} size="sm" onClick={() => onHistoryModeChange(!historyMode)}>
       היסטוריה

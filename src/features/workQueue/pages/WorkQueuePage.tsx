@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { CheckSquare } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
@@ -17,7 +18,7 @@ export const WorkQueuePage: React.FC = () => {
   const {
     items,
     summary,
-    isSummaryLoading,
+    isSummaryFetching,
     summaryError,
     isLoading,
     isFetching,
@@ -73,6 +74,8 @@ export const WorkQueuePage: React.FC = () => {
     />
   )
 
+  const groups = useMemo(() => groupWorkQueueItems(items), [items])
+
   const renderBody = () => {
     if (!isLoading && !isFetching && items.length === 0) {
       if (hasContentFilters) {
@@ -94,7 +97,7 @@ export const WorkQueuePage: React.FC = () => {
 
     return (
       <div className="space-y-5">
-        {groupWorkQueueItems(items).map((group) => (
+        {groups.map((group) => (
           <section key={group.key} className="space-y-3">
             <div className="flex items-center justify-between border-b border-gray-200 pb-2">
               <h2 className="text-sm font-semibold text-gray-900">{group.label}</h2>
@@ -111,7 +114,7 @@ export const WorkQueuePage: React.FC = () => {
     <PageStateGuard isLoading={isLoading} error={error} header={header} loadingMessage="טוען משימות...">
       <WorkQueueSummaryCards
         summary={summary}
-        isLoading={isSummaryLoading}
+        isLoading={isSummaryFetching}
         summaryError={summaryError}
         urgencyFilter={urgencyFilter}
         onFilter={setUrgencyFilter}
@@ -142,7 +145,7 @@ export const WorkQueuePage: React.FC = () => {
 
       {renderBody()}
 
-      {!isLoading && total > 0 && (
+      {!isLoading && !isFetching && total > 0 && (
         <PaginationCard page={page} totalPages={totalPages} total={total} label="משימות" onPageChange={setPage} />
       )}
 
@@ -160,7 +163,7 @@ export const WorkQueuePage: React.FC = () => {
       {taskModal && (
         <TaskModal
           mode={taskModal.mode}
-          task={taskDetail.data?.id === taskModal.taskId ? taskDetail.data : undefined}
+          task={taskDetail.data}
           source={taskModal.source}
           isLoading={createTaskMutation.isPending || updateTaskMutation.isPending || taskDetail.isLoading}
           onClose={closeTaskModal}
