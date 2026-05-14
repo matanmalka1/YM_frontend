@@ -1,9 +1,8 @@
 import { useMemo, useState } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { timelineApi, timelineQK } from '../api'
 import { getErrorMessage, isPositiveInt, parsePositiveInt } from '../../../utils/utils'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
-import { useActionRunner } from '@/features/actions'
 import type { TimelineEvent } from '../api'
 import { normalizeTimelineEvents, type NormalizedTimelineEvent, type TimelineFilterKey } from '../normalize'
 import { buildTimelineFilterStats, type EventTypeStat } from '../lib/timelineStats'
@@ -14,7 +13,6 @@ export type { EventTypeStat }
 // ── Hook ──────────────────────────────────────────────────────────────────────
 
 export const useClientTimelinePage = (clientId: string | undefined) => {
-  const queryClient = useQueryClient()
   const { searchParams, setSearchParams } = useSearchParamFilters()
 
   const page = parsePositiveInt(searchParams.get('page'), 1)
@@ -80,14 +78,6 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
     [baseFilteredEvents],
   )
 
-  // ── Actions ────────────────────────────────────────────────────────────────
-
-  const { activeActionKey, cancelPendingAction, confirmPendingAction, handleAction, pendingAction } = useActionRunner({
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: timelineQK.clientRoot(clientIdNumber) }),
-    errorFallback: 'שגיאה בביצוע פעולה',
-    canonicalAction: true,
-  })
-
   // ── Navigation helpers ─────────────────────────────────────────────────────
 
   const setPage = (nextPage: number) => {
@@ -147,12 +137,6 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
 
     filteredEvents,
     eventTypeStats,
-
-    activeActionKey,
-    handleAction,
-    pendingAction,
-    confirmPendingAction,
-    cancelPendingAction,
 
     filters: {
       searchTerm,

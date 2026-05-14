@@ -1,5 +1,3 @@
-import type { BackendAction } from '@/lib/actions/types'
-
 // ── Domain enums ──────────────────────────────────────────────────────────────
 
 export type TimelineBinderStatus = 'none' | 'in_office' | 'ready_for_pickup' | 'returned'
@@ -42,9 +40,6 @@ export interface TimelineEvent {
   charge_id: number | null
   description: string
   metadata?: TimelineEventMetadata | null
-  /** Single canonical field – backend may send either name */
-  actions?: BackendAction[] | null
-  available_actions?: BackendAction[] | null
 }
 
 // ── API contracts ─────────────────────────────────────────────────────────────

@@ -67,8 +67,6 @@ export interface TimelineCardProps {
   onToggleDate: (dateKey: string) => void
   hasActiveFilters?: boolean
   onClearFilters?: () => void
-  onAction?: (action: NormalizedTimelineEvent['actionsList'][number]) => void
-  activeActionKey?: string | null
 }
 
 export const TimelineCard: React.FC<TimelineCardProps> = ({
@@ -77,8 +75,6 @@ export const TimelineCard: React.FC<TimelineCardProps> = ({
   onToggleDate,
   hasActiveFilters,
   onClearFilters,
-  onAction,
-  activeActionKey,
 }) => {
   const groups = useMemo(() => groupTimelineEventsByDate(events), [events])
 
@@ -108,8 +104,6 @@ export const TimelineCard: React.FC<TimelineCardProps> = ({
                     key={`${event.timestamp}-${event.event_type}-${index}`}
                     timelineEvent={event}
                     index={index + groupIndex * 1000}
-                    onAction={onAction}
-                    activeActionKey={activeActionKey}
                   />
                 ))}
               </ul>

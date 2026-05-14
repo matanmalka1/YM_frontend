@@ -6,7 +6,6 @@ import { groupTimelineEventsByDate, getDefaultOpenTimelineGroups } from '../lib/
 import { PaginationCard } from '../../../components/ui/table/PaginationCard'
 import { PageLoading } from '../../../components/ui/layout/PageLoading'
 import { Alert } from '../../../components/ui/overlays/Alert'
-import { ConfirmDialog } from '../../../components/ui/overlays/ConfirmDialog'
 
 interface ClientTimelineTabProps {
   clientId: string | undefined
@@ -27,11 +26,6 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
     filters,
     eventTypeStats,
     summary,
-    activeActionKey,
-    handleAction,
-    pendingAction,
-    confirmPendingAction,
-    cancelPendingAction,
   } = useClientTimelinePage(clientId)
 
   const timelineGroups = useMemo(() => groupTimelineEventsByDate(filteredEvents), [filteredEvents])
@@ -89,24 +83,11 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
         onToggleDate={toggleDate}
         hasActiveFilters={filters.hasActiveFilters}
         onClearFilters={filters.clearFilters}
-        onAction={handleAction}
-        activeActionKey={activeActionKey}
       />
 
       {totalPages > 1 && (
         <PaginationCard page={page} totalPages={totalPages} total={total} label="אירועים" onPageChange={setPage} />
       )}
-
-      <ConfirmDialog
-        open={Boolean(pendingAction)}
-        title={pendingAction?.confirm?.title || 'אישור פעולה'}
-        message={pendingAction?.confirm?.message || 'האם להמשיך בביצוע הפעולה?'}
-        confirmLabel={pendingAction?.confirm?.confirmLabel || 'אישור'}
-        cancelLabel={pendingAction?.confirm?.cancelLabel || 'ביטול'}
-        isLoading={activeActionKey === pendingAction?.uiKey}
-        onConfirm={confirmPendingAction}
-        onCancel={cancelPendingAction}
-      />
     </div>
   )
 }

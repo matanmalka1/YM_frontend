@@ -1,6 +1,4 @@
 import { parseISO } from 'date-fns'
-import { mapActions } from '@/lib/actions/mapActions'
-import type { ActionCommand } from '@/lib/actions/types'
 import type { TimelineEvent, TimelineEventMetadata } from './api'
 import { getTimelineStatusLabel } from './labels'
 import { getEventTypeLabel } from './utils'
@@ -15,7 +13,6 @@ export interface NormalizedTimelineEvent extends TimelineEvent {
   filterKeys: TimelineFilterKey[]
   importance: 'strong' | 'quiet'
   relatedEntity: string | null
-  actionsList: ActionCommand[]
 }
 
 const FILTER_BY_EVENT_TYPE: Record<string, TimelineFilterKey[]> = {
@@ -103,7 +100,6 @@ const normalizeEvent = (event: TimelineEvent): NormalizedTimelineEvent => {
     filterKeys,
     importance: STRONG_EVENTS.has(event.event_type) ? 'strong' : 'quiet',
     relatedEntity: getRelatedEntity(event),
-    actionsList: mapActions(event.actions ?? event.available_actions),
   }
 }
 

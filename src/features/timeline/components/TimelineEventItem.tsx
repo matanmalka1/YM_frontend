@@ -1,9 +1,7 @@
-import { CreditCard, ExternalLink, FileText } from 'lucide-react'
+import { CreditCard, FileText } from 'lucide-react'
 import { IconLabel } from '../../../components/ui/primitives/IconLabel'
-import { Button } from '../../../components/ui/primitives/Button'
 import type { TimelineEventMetadata } from '../api'
 import type { NormalizedTimelineEvent } from '../normalize'
-import type { ActionCommand } from '@/lib/actions/types'
 import { cn } from '../../../utils/utils'
 import { getEventColor } from '../constants'
 import { getAnnualReportStatusLabel, getTimelineStatusLabel } from '../labels'
@@ -150,18 +148,11 @@ const RelatedIds: React.FC<{
 interface TimelineEventItemProps {
   timelineEvent: NormalizedTimelineEvent
   index: number
-  onAction?: (action: ActionCommand) => void
-  activeActionKey?: string | null
 }
 
-export const TimelineEventItem: React.FC<TimelineEventItemProps> = ({
-  timelineEvent: ev,
-  onAction,
-  activeActionKey,
-}) => {
+export const TimelineEventItem: React.FC<TimelineEventItemProps> = ({ timelineEvent: ev }) => {
   const colors = getEventColor(ev.event_type)
   const displayDate = ev.isDateOnly ? formatTimelineDate(ev.displayTimestamp) : formatTimestamp(ev.displayTimestamp)
-  const primaryAction = ev.actionsList[0]
   const isQuiet = ev.importance === 'quiet'
 
   return (
@@ -203,22 +194,6 @@ export const TimelineEventItem: React.FC<TimelineEventItemProps> = ({
           <RelatedIds binderId={ev.binder_id} chargeId={ev.charge_id} relatedEntity={ev.relatedEntity} />
 
           {ev.metadata && <EventMetadata metadata={ev.metadata} eventType={ev.event_type} />}
-
-          {primaryAction && onAction && (
-            <div className="flex justify-end pt-0.5">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => onAction(primaryAction)}
-                isLoading={activeActionKey === primaryAction.uiKey}
-                className="gap-1 text-xs h-6 px-2 py-0"
-              >
-                <ExternalLink className="h-3 w-3" />
-                פתח
-              </Button>
-            </div>
-          )}
         </div>
       </div>
     </li>

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { CheckSquare } from 'lucide-react'
+import { CheckSquare, Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { StateCard } from '@/components/ui/feedback/StateCard'
@@ -67,8 +67,9 @@ export const WorkQueuePage: React.FC = () => {
       title="עבודה לטיפול"
       description="כל מה שדורש טיפול: דוחות, חיובים, מקדמות, קלסרים ומשימות ידניות."
       actions={
-        <Button size="sm" onClick={openCreateTask}>
+        <Button size="sm" variant='ghost' onClick={openCreateTask}>
           משימה חדשה
+           <Plus className="h-3.5 w-3.5" />
         </Button>
       }
     />
