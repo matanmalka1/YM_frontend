@@ -20,17 +20,6 @@ export const useCreateTask = () => {
   })
 }
 
-export const useStartTask = () => {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: (id: number) => tasksApi.start(id),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: tasksQK.all })
-      qc.invalidateQueries({ queryKey: workQueueQK.all })
-    },
-  })
-}
-
 export const useCompleteTask = () => {
   const qc = useQueryClient()
   return useMutation({

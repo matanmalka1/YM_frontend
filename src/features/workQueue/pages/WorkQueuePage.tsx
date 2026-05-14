@@ -66,7 +66,7 @@ export const WorkQueuePage: React.FC = () => {
       description="כל מה שדורש טיפול: דוחות, חיובים, מקדמות, קלסרים ומשימות ידניות."
       actions={
         <Button size="sm" onClick={openCreateTask}>
-          + משימה חדשה
+          משימה חדשה
         </Button>
       }
     />

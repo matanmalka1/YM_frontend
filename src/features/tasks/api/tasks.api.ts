@@ -49,11 +49,6 @@ export const tasksApi = {
     return taskSchema.parse(response.data)
   },
 
-  start: async (id: number): Promise<Task> => {
-    const response = await api.post<Task>(TASKS_ENDPOINTS.start(id))
-    return taskSchema.parse(response.data)
-  },
-
   complete: async (id: number): Promise<Task> => {
     const response = await api.post<Task>(TASKS_ENDPOINTS.complete(id))
     return taskSchema.parse(response.data)

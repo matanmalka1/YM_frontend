@@ -1,5 +1,5 @@
 import { VAT_RATE_TYPE_LABELS, DOCUMENT_TYPE_LABELS, getVatWorkItemStatusLabel } from '../../utils/enums'
-import { CATEGORY_COLOR_TOKENS } from '../../utils/chartColors'
+import { CATEGORY_COLOR_TOKENS } from './visualizationTokens'
 import { ALL_STATUSES_OPTION, ALL_CATEGORIES_OPTION } from '@/constants/filterOptions.constants'
 
 export { VAT_RATE_TYPE_LABELS, DOCUMENT_TYPE_LABELS }
