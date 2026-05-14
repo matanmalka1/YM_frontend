@@ -202,13 +202,13 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
         try {
           const existing = await vatReportsApi.lookup(values.client_record_id, period)
           if (existing) {
-            toast.info('קיים תיק מע״מ לתקופה זו', {
+            toast.info('קיים דוח מע״מ לתקופה זו', {
               action: { label: 'פתח', onClick: () => navigate(`/tax/vat/${existing.id}`) },
             })
           } else {
             toast.info('לא קיים תיק מע"מ לתקופה זו', {
               action: {
-                label: 'צור תיק מע״מ',
+                label: 'צור דוח מע״מ',
                 onClick: () => navigate(`/tax/vat?create=1&client_id=${values.client_record_id}&period=${period}`),
               },
             })

@@ -142,7 +142,7 @@ export const VatFileModal: React.FC<VatFileModalProps> = ({
             label="מזהה ההגשה המקורית"
             type="number"
             min={1}
-            placeholder="מזהה תיק מע״מ מקורי"
+            placeholder="מזהה דוח מע״מ מקורי"
             error={errors.amends_item_id?.message}
             {...register('amends_item_id')}
           />

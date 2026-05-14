@@ -25,7 +25,7 @@ export const VatClientActionBar = ({
       <div className="flex md:order-2">
         <Button onClick={onCreateClick} size="sm" variant="ghost" className="w-full justify-center sm:w-auto">
           <Plus className="h-4 w-4" />
-          פתיחת תיק מע״מ
+          פתיחת דוח מע״מ
         </Button>
       </div>
 

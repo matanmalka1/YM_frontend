@@ -36,7 +36,7 @@ const buildVatStat = (
   urgent: stat.pending > 0,
   href: HREFS.vat(stat.period, periodType),
   progress: stat.completion_percent,
-  actionLabel: stat.required > 0 ? 'פתח דוחות מע״מ' : 'צור תיק מע״מ ראשון',
+  actionLabel: stat.required > 0 ? 'פתח דוחות מע״מ' : 'צור דוח מע״מ ראשון',
 })
 
 const buildAdvanceStat = (
