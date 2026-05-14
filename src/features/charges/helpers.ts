@@ -1,5 +1,5 @@
 import type { DataTableProps } from '@/components/ui/table'
-import { formatCompactCurrencyILS, parsePositiveInt } from '@/utils/utils'
+import { formatCurrencyILS, parsePositiveInt } from '@/utils/utils'
 import { toOptionalNumber, toOptionalString } from '@/utils/filters'
 import { chargesApi, type ChargeStatusStat, type ChargesListParams } from './api'
 import { CHARGE_PERIOD_YEAR_SPAN, CHARGE_STATUS_OPTIONS, CHARGE_TYPE_OPTIONS_WITH_ALL } from './constants'
@@ -56,7 +56,7 @@ export const runChargeActionRequest = (chargeId: number, action: ChargeAction, r
 }
 
 export const getChargeStatusStatDisplay = (stat: ChargeStatusStat, isAdvisor: boolean): string =>
-  isAdvisor ? formatCompactCurrencyILS(stat.amount) : String(stat.count)
+  isAdvisor ? formatCurrencyILS(stat.amount, { compact: true, fractionDigits: 2 }) : String(stat.count)
 
 export const getChargeRowClassName = (status: string): string => {
   if (status === 'canceled') return 'text-gray-400'

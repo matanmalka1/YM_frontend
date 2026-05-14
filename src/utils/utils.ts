@@ -13,9 +13,10 @@ export const cn = (...classes: Array<string | false | null | undefined>): string
 }
 
 export const parsePositiveInt = (value: string | null, fallback: number): number => {
-  if (!value || !/^\d+$/.test(value)) return fallback
+  const normalized = value?.trim()
+  if (!normalized || !/^\d+$/.test(normalized)) return fallback
 
-  const parsed = Number(value)
+  const parsed = Number(normalized)
   return parsed > 0 ? parsed : fallback
 }
 
@@ -57,43 +58,50 @@ const toNumberOrNull = (value: string | number | null | undefined): number | nul
   return Number.isFinite(numeric) ? numeric : null
 }
 
-export const formatCurrencyILS = (
-  value: string | number | null | undefined,
-  maximumFractionDigits = 0,
-  fallback = EMPTY_VALUE,
-): string => {
-  const numeric = toNumberOrNull(value)
-  if (numeric === null) return fallback
-
-  return new Intl.NumberFormat('he-IL', {
-    style: 'currency',
-    currency: 'ILS',
-    maximumFractionDigits,
-  }).format(numeric)
+type CurrencyFormatOptions = {
+  compact?: boolean
+  fallback?: string
+  fractionDigits?: number
+  maximumFractionDigits?: number
+  minimumFractionDigits?: number
 }
 
-export const formatCompactCurrencyILS = (
-  value: string | number | null | undefined,
-  fractionDigits = 2,
-  fallback = EMPTY_VALUE,
-): string => {
-  const numeric = toNumberOrNull(value)
-  if (numeric === null) return fallback
+type FormatCurrencyILS = {
+  (value: string | number | null | undefined, options?: CurrencyFormatOptions): string
+  (value: string | number | null | undefined, maximumFractionDigits?: number, fallback?: string): string
+}
 
-  return new Intl.NumberFormat('he-IL', {
+export const formatCurrencyILS: FormatCurrencyILS = (
+  value,
+  optionsOrMaximumFractionDigits: CurrencyFormatOptions | number = 0,
+  legacyFallback: string = EMPTY_VALUE,
+): string => {
+  const options: CurrencyFormatOptions =
+    typeof optionsOrMaximumFractionDigits === 'number'
+      ? { fallback: legacyFallback, maximumFractionDigits: optionsOrMaximumFractionDigits }
+      : optionsOrMaximumFractionDigits
+  const numeric = toNumberOrNull(value)
+  if (numeric === null) return options.fallback ?? EMPTY_VALUE
+
+  const fractionDigits = options.fractionDigits
+  const minimumFractionDigits = options.minimumFractionDigits ?? fractionDigits
+  const maximumFractionDigits = options.maximumFractionDigits ?? fractionDigits ?? 0
+
+  const formatted = new Intl.NumberFormat('he-IL', {
     style: 'currency',
     currency: 'ILS',
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
-  })
-    .format(numeric)
-    .replace(/\s/g, '')
+    minimumFractionDigits,
+    maximumFractionDigits,
+  }).format(numeric)
+
+  return options.compact ? formatted.replace(/\s/g, '') : formatted
 }
 
 export const formatShekelAmount = (value: string | number | null | undefined, fallback = EMPTY_VALUE): string => {
   return formatCurrencyILS(value, 0, fallback)
 }
 
+/** @deprecated Use formatShekelAmount or formatCurrencyILS directly. */
 export const fmtCurrency = formatShekelAmount
 
 export const formatBinderNumber = (binderNumber: string | null | undefined): string => {
@@ -130,8 +138,9 @@ export const formatFileSize = (bytes: number | null | undefined): string => {
 
   if (bytes < 1024) return `${bytes} B`
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+  if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+  return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`
 }
 
 export const getHttpStatus = (error: unknown): number | null => {
