@@ -1,55 +1,70 @@
 import { AlertTriangle, Clock, Calendar, CheckSquare, Link2 } from 'lucide-react'
+import { StateCard } from '@/components/ui/feedback/StateCard'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
-import type { WorkQueueItem, WorkQueueUrgency } from '../api/contracts'
+import type { WorkQueueSummary, WorkQueueUrgency } from '../api/contracts'
 
 interface WorkQueueSummaryCardsProps {
-  items: WorkQueueItem[]
+  summary: WorkQueueSummary | undefined
+  isLoading?: boolean
+  summaryError?: string | null
   urgencyFilter: WorkQueueUrgency | null
   onFilter: (urgency: WorkQueueUrgency | null) => void
-  specialFilter: 'manual' | 'linked' | null
-  onSpecialFilter: (filter: 'manual' | 'linked' | null) => void
+  scopeFilter: 'system' | 'manual' | null
+  linkedFilter: 'linked' | 'unlinked' | null
+  onScopeFilter: (filter: 'system' | 'manual' | null) => void
+  onLinkedFilter: (filter: 'linked' | 'unlinked' | null) => void
 }
 
 export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
-  items,
+  summary,
+  isLoading,
+  summaryError,
   urgencyFilter,
   onFilter,
-  specialFilter,
-  onSpecialFilter,
+  scopeFilter,
+  linkedFilter,
+  onScopeFilter,
+  onLinkedFilter,
 }) => {
-  const overdue = items.filter((i) => i.urgency === 'overdue').length
-  const approaching = items.filter((i) => i.urgency === 'approaching').length
-  const important = items.filter((i) => i.urgency === 'important').length
-  const upcoming = items.filter((i) => i.urgency === 'upcoming').length
-  const manual = items.filter((i) => i.source_type === 'task').length
-  const linked = items.filter((i) => i.linked_tasks_count > 0).length
+  if (summaryError) {
+    return (
+      <StateCard
+        icon={AlertTriangle}
+        variant="error"
+        size="compact"
+        title="שגיאה בטעינת הסיכום"
+        message={summaryError}
+      />
+    )
+  }
 
+  const emptyValue = !summary || isLoading ? '—' : 0
   const stats = [
     {
       icon: AlertTriangle,
       variant: 'red' as const,
-      count: overdue,
+      count: summary?.overdue ?? emptyValue,
       label: 'באיחור',
       value: 'overdue' as WorkQueueUrgency,
     },
     {
       icon: Clock,
       variant: 'orange' as const,
-      count: approaching,
+      count: summary?.approaching ?? emptyValue,
       label: 'דחוף (עד 7 ימים)',
       value: 'approaching' as WorkQueueUrgency,
     },
     {
       icon: Clock,
       variant: 'orange' as const,
-      count: important,
+      count: summary?.important ?? emptyValue,
       label: 'חשוב (8–21 ימים)',
       value: 'important' as WorkQueueUrgency,
     },
     {
       icon: Calendar,
       variant: 'blue' as const,
-      count: upcoming,
+      count: summary?.upcoming ?? emptyValue,
       label: 'קרוב (22+ ימים)',
       value: 'upcoming' as WorkQueueUrgency,
     },
@@ -71,20 +86,20 @@ export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
       ))}
       <StatsCard
         title="משימות ידניות"
-        value={manual}
+        value={summary?.manual_tasks ?? emptyValue}
         icon={CheckSquare}
         variant="blue"
-        selected={specialFilter === 'manual'}
-        onClick={() => onSpecialFilter(specialFilter === 'manual' ? null : 'manual')}
+        selected={scopeFilter === 'manual'}
+        onClick={() => onScopeFilter(scopeFilter === 'manual' ? null : 'manual')}
         className="h-full w-full"
       />
       <StatsCard
         title="עם משימה קשורה"
-        value={linked}
+        value={summary?.linked ?? emptyValue}
         icon={Link2}
         variant="green"
-        selected={specialFilter === 'linked'}
-        onClick={() => onSpecialFilter(specialFilter === 'linked' ? null : 'linked')}
+        selected={linkedFilter === 'linked'}
+        onClick={() => onLinkedFilter(linkedFilter === 'linked' ? null : 'linked')}
         className="h-full w-full"
       />
     </div>

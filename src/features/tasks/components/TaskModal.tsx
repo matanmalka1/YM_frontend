@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/primitives/Button'
+import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
+import { Textarea } from '@/components/ui/inputs/Textarea'
 import { taskPriorityLabels, taskPriorityValues } from '../constants'
 import type { Task, TaskCreateRequest, TaskPriority, TaskUpdateRequest } from '../api/contracts'
 
@@ -33,7 +35,7 @@ const roleOptions = [
 ]
 
 const toDateInput = (value?: string | null) => value?.slice(0, 10) ?? ''
-const toApiDateTime = (value: string) => (value ? `${value}T00:00:00` : undefined)
+const toApiDateTime = (value: string) => (value ? `${value}T00:00:00Z` : undefined)
 
 export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoading, onSubmit, onClose }) => {
   const [title, setTitle] = useState('')
@@ -41,10 +43,10 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
   const [priority, setPriority] = useState<TaskPriority>('normal')
   const [dueDate, setDueDate] = useState('')
   const [assignedRole, setAssignedRole] = useState('')
-  const [assignedUserId, setAssignedUserId] = useState('')
 
   const readonly = mode === 'view'
   const linkedCount = source?.linked_tasks_count ?? source?.linked_tasks?.length ?? 0
+  const isTaskLoading = mode !== 'create' && !task
 
   useEffect(() => {
     setTitle(task?.title ?? '')
@@ -52,7 +54,6 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
     setPriority(task?.priority ?? 'normal')
     setDueDate(toDateInput(task?.due_date ?? source?.due_date))
     setAssignedRole(task?.assigned_role ?? '')
-    setAssignedUserId(task?.assigned_to_user_id != null ? String(task.assigned_to_user_id) : '')
   }, [task, source])
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -64,7 +65,6 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
       priority,
       due_date: toApiDateTime(dueDate),
       assigned_role: assignedRole || undefined,
-      assigned_to_user_id: assignedUserId ? Number(assignedUserId) : undefined,
     }
     onSubmit(
       mode === 'create' && source
@@ -101,31 +101,43 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
           )}
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="כותרת *"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            disabled={readonly}
-            required
-          />
-          <Input
-            label="פרטים"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            disabled={readonly}
-          />
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            <Select
-              options={priorityOptions}
-              value={priority}
-              onChange={(e) => setPriority(e.target.value as TaskPriority)}
-              label="עדיפות"
-              disabled={readonly}
-            />
-            <Input label="תאריך יעד" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} disabled={readonly} />
+        {isTaskLoading ? (
+          <div className="space-y-4">
+            <div className="rounded-md border border-gray-200 bg-gray-50 px-4 py-8 text-center text-sm text-gray-600">
+              טוען פרטי משימה...
+            </div>
+            <div className="flex justify-end">
+              <Button type="button" variant="ghost" onClick={onClose}>
+                סגור
+              </Button>
+            </div>
           </div>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              label="כותרת *"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              disabled={readonly}
+              required
+            />
+            <Textarea
+              label="פרטים"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              disabled={readonly}
+              rows={4}
+            />
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              <Select
+                options={priorityOptions}
+                value={priority}
+                onChange={(e) => setPriority(e.target.value as TaskPriority)}
+                label="עדיפות"
+                disabled={readonly}
+              />
+              <DatePicker label="תאריך יעד" value={dueDate} onChange={setDueDate} disabled={readonly} />
+            </div>
             <Select
               options={roleOptions}
               value={assignedRole}
@@ -133,26 +145,18 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
               label="שיוך לתפקיד"
               disabled={readonly}
             />
-            <Input
-              label="שיוך למשתמש"
-              type="number"
-              min="1"
-              value={assignedUserId}
-              onChange={(e) => setAssignedUserId(e.target.value)}
-              disabled={readonly}
-            />
-          </div>
-          <div className="flex justify-end gap-3 pt-2">
-            <Button type="button" variant="ghost" onClick={onClose}>
-              סגור
-            </Button>
-            {!readonly && (
-              <Button type="submit" disabled={!title.trim() || isLoading} isLoading={isLoading}>
-                {mode === 'edit' ? 'שמור' : 'צור משימה'}
+            <div className="flex justify-end gap-3 pt-2">
+              <Button type="button" variant="ghost" onClick={onClose}>
+                סגור
               </Button>
-            )}
-          </div>
-        </form>
+              {!readonly && (
+                <Button type="submit" disabled={!title.trim() || isLoading} isLoading={isLoading}>
+                  {mode === 'edit' ? 'שמור' : 'צור משימה'}
+                </Button>
+              )}
+            </div>
+          </form>
+        )}
       </div>
     </div>
   )

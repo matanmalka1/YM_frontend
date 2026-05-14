@@ -7,3 +7,10 @@ export const useWorkQueue = (params?: WorkQueueParams, enabled = true) =>
     queryFn: () => workQueueApi.list(params),
     enabled,
   })
+
+export const useWorkQueueSummary = (params?: WorkQueueParams, enabled = true) =>
+  useQuery({
+    queryKey: workQueueQK.summary(params),
+    queryFn: () => workQueueApi.getSummary(params),
+    enabled,
+  })

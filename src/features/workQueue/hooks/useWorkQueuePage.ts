@@ -1,84 +1,70 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRole } from '@/hooks/useRole'
 import { getErrorMessage } from '@/utils/utils'
-import { useWorkQueue } from './useWorkQueue'
-import type { WorkQueueItem, WorkQueueUrgency } from '../api/contracts'
+import { useWorkQueue, useWorkQueueSummary } from './useWorkQueue'
+import type { WorkQueueParams, WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
 import type { TaskStatus } from '@/features/tasks/api'
 
-const itemTaskStatus = (item: WorkQueueItem): string | null => {
-  if (item.source_type === 'task') {
-    const metadata = item.metadata as Record<string, unknown> | null | undefined
-    return typeof metadata?.status === 'string' ? metadata.status : null
-  }
-  return null
-}
-
-const isHistoryTask = (item: WorkQueueItem) => {
-  const status = itemTaskStatus(item)
-  return status === 'done' || status === 'canceled'
-}
+const WORK_QUEUE_PAGE_SIZE = 50
 
 export const useWorkQueuePage = () => {
   const [search, setSearch] = useState('')
   const [urgencyFilter, setUrgencyFilter] = useState<WorkQueueUrgency | null>(null)
-  const [typeFilter, setTypeFilter] = useState<string | null>(null)
+  const [typeFilter, setTypeFilter] = useState<WorkQueueSourceType | null>(null)
   const [statusFilter, setStatusFilter] = useState<TaskStatus | null>(null)
   const [linkedFilter, setLinkedFilter] = useState<'linked' | 'unlinked' | null>(null)
   const [scopeFilter, setScopeFilter] = useState<'system' | 'manual' | null>(null)
   const [historyMode, setHistoryMode] = useState(false)
-  const [specialFilter, setSpecialFilter] = useState<'manual' | 'linked' | null>(null)
+  const [page, setPage] = useState(1)
   const { role } = useRole()
   const hasRole = Boolean(role)
 
-  const { data = [], isLoading, error } = useWorkQueue({ include_task_history: historyMode }, hasRole)
+  const baseParams = useMemo<WorkQueueParams>(
+    () => ({
+      include_task_history: historyMode,
+      search: search.trim() || undefined,
+      source_type: typeFilter ?? undefined,
+      urgency: urgencyFilter ?? undefined,
+      task_status: statusFilter ?? undefined,
+      linked: linkedFilter ?? undefined,
+      scope: scopeFilter ?? undefined,
+    }),
+    [historyMode, linkedFilter, scopeFilter, search, statusFilter, typeFilter, urgencyFilter],
+  )
 
-  const filtered = useMemo<WorkQueueItem[]>(() => {
-    let items = data
-    if (historyMode) {
-      items = items.filter(isHistoryTask)
-    } else {
-      items = items.filter((i) => !isHistoryTask(i))
-    }
-    const query = search.trim().toLowerCase()
-    if (query) {
-      items = items.filter((i) => {
-        const haystack = [
-          i.title,
-          i.description,
-          i.client_name,
-          i.office_client_number != null ? String(i.office_client_number) : null,
-          i.type_label,
-          i.status_label,
-          i.source_summary?.label,
-          ...i.linked_tasks.map((task) => task.title),
-        ]
-        return haystack.some((value) => value?.toLowerCase().includes(query))
-      })
-    }
-    if (urgencyFilter) items = items.filter((i) => i.urgency === urgencyFilter)
-    if (typeFilter) items = items.filter((i) => i.source_type === typeFilter)
-    if (statusFilter) {
-      items = items.filter((i) => itemTaskStatus(i) === statusFilter || i.linked_tasks.some((task) => task.status === statusFilter))
-    }
-    if (linkedFilter === 'linked') items = items.filter((i) => i.linked_tasks_count > 0)
-    if (linkedFilter === 'unlinked')
-      items = items.filter((i) => i.linked_tasks_count === 0)
-    if (specialFilter === 'manual') items = items.filter((i) => i.source_type === 'task')
-    if (specialFilter === 'linked') items = items.filter((i) => i.linked_tasks_count > 0)
-    if (scopeFilter === 'manual') items = items.filter((i) => i.source_type === 'task')
-    if (scopeFilter === 'system') items = items.filter((i) => i.source_type !== 'task')
-    return items
-  }, [data, search, urgencyFilter, typeFilter, statusFilter, linkedFilter, scopeFilter, historyMode, specialFilter])
+  const listParams = useMemo<WorkQueueParams>(
+    () => ({
+      ...baseParams,
+      limit: WORK_QUEUE_PAGE_SIZE,
+      offset: (page - 1) * WORK_QUEUE_PAGE_SIZE,
+    }),
+    [baseParams, page],
+  )
 
-  const hasFilters =
+  useEffect(() => {
+    setPage(1)
+  }, [historyMode, search, typeFilter, urgencyFilter, statusFilter, linkedFilter, scopeFilter])
+
+  const {
+    data = [],
+    isLoading,
+    error,
+  } = useWorkQueue(listParams, hasRole)
+
+  const {
+    data: summary,
+    isFetching: isSummaryLoading,
+    error: summaryError,
+  } = useWorkQueueSummary(baseParams, hasRole)
+
+  const hasContentFilters =
     search.trim() !== '' ||
     urgencyFilter !== null ||
     typeFilter !== null ||
     statusFilter !== null ||
     linkedFilter !== null ||
-    scopeFilter !== null ||
-    historyMode ||
-    specialFilter !== null
+    scopeFilter !== null
+  const hasFilters = hasContentFilters || historyMode
 
   const clearFilters = () => {
     setSearch('')
@@ -88,14 +74,24 @@ export const useWorkQueuePage = () => {
     setLinkedFilter(null)
     setScopeFilter(null)
     setHistoryMode(false)
-    setSpecialFilter(null)
+    setPage(1)
   }
 
+  const total = summary?.total ?? data.length
+  const totalPages = Math.max(1, Math.ceil(total / WORK_QUEUE_PAGE_SIZE))
+
   return {
-    items: filtered,
+    items: data,
     allItems: data,
+    summary,
+    isSummaryLoading,
+    summaryError: summaryError ? getErrorMessage(summaryError, 'שגיאה בטעינת הסיכום') : null,
     isLoading: isLoading && !error,
-    error: !hasRole ? 'לא ניתן לזהות תפקיד משתמש' : error ? getErrorMessage(error, 'שגיאה בטעינת המשימות') : null,
+    error: !hasRole
+      ? 'לא ניתן לזהות תפקיד משתמש'
+      : error
+        ? getErrorMessage(error, 'שגיאה בטעינת המשימות')
+        : null,
     search,
     setSearch,
     urgencyFilter,
@@ -110,9 +106,13 @@ export const useWorkQueuePage = () => {
     setScopeFilter,
     historyMode,
     setHistoryMode,
-    specialFilter,
-    setSpecialFilter,
+    hasContentFilters,
     hasFilters,
     clearFilters,
+    page,
+    pageSize: WORK_QUEUE_PAGE_SIZE,
+    total,
+    totalPages,
+    setPage,
   }
 }

@@ -9,7 +9,7 @@ import {
   workQueueUrgencyValues,
 } from '../constants'
 import { taskStatusLabels, taskStatusValues } from '@/features/tasks/constants'
-import type { WorkQueueUrgency } from '../api/contracts'
+import type { WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
 import type { TaskStatus } from '@/features/tasks/api'
 
 interface WorkQueueFiltersBarProps {
@@ -17,8 +17,8 @@ interface WorkQueueFiltersBarProps {
   onSearchChange: (value: string) => void
   urgencyFilter: WorkQueueUrgency | null
   onUrgencyChange: (value: WorkQueueUrgency | null) => void
-  typeFilter: string | null
-  onTypeChange: (value: string | null) => void
+  typeFilter: WorkQueueSourceType | null
+  onTypeChange: (value: WorkQueueSourceType | null) => void
   statusFilter: TaskStatus | null
   onStatusChange: (value: TaskStatus | null) => void
   linkedFilter: 'linked' | 'unlinked' | null
@@ -91,7 +91,7 @@ export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
     <Select
       options={typeOptions}
       value={typeFilter ?? ''}
-      onChange={(e) => onTypeChange(e.target.value || null)}
+      onChange={(e) => onTypeChange((e.target.value || null) as WorkQueueSourceType | null)}
     />
     <Select
       options={statusOptions}

@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { workQueueSourceTypeValues, workQueueUrgencyValues } from '../constants'
+import { taskStatusValues } from '@/features/tasks/constants'
 
 export type WorkQueueSourceType = (typeof workQueueSourceTypeValues)[number]
 
@@ -104,9 +105,32 @@ export type WorkQueueAction = z.infer<typeof workQueueActionSchema>
 export type LinkedTaskSummary = z.infer<typeof linkedTaskSummarySchema>
 export type WorkQueueWarning = z.infer<typeof workQueueWarningSchema>
 
+export const workQueueSummarySchema = z.object({
+  total: z.number().int(),
+  manual_tasks: z.number().int(),
+  linked: z.number().int(),
+  unlinked: z.number().int(),
+  overdue: z.number().int(),
+  approaching: z.number().int(),
+  important: z.number().int(),
+  upcoming: z.number().int(),
+  by_source_type: z.record(z.enum(workQueueSourceTypeValues), z.number().int()),
+  by_task_status: z.record(z.enum(taskStatusValues), z.number().int()),
+})
+
+export type WorkQueueSummary = z.infer<typeof workQueueSummarySchema>
+
 export interface WorkQueueParams {
   client_record_id?: number
   business_id?: number
   exclude_source_types?: WorkQueueSourceType[]
   include_task_history?: boolean
+  search?: string
+  source_type?: WorkQueueSourceType
+  urgency?: WorkQueueUrgency
+  task_status?: (typeof taskStatusValues)[number]
+  linked?: 'linked' | 'unlinked'
+  scope?: 'system' | 'manual'
+  limit?: number
+  offset?: number
 }
