@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
 import { he } from 'date-fns/locale'
@@ -50,9 +51,9 @@ const actionVariant = (action: WorkQueueAction): 'primary' | 'secondary' | 'ghos
 }
 
 export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading, activeActionKey, onAction }) => {
-  const showLinkedTasks = items.some((item) => item.linked_tasks_count > 0)
-  const showWarnings = items.some((item) => item.warnings.length > 0)
-  const columns = [
+  const showLinkedTasks = useMemo(() => items.some((item) => item.linked_tasks_count > 0), [items])
+  const showWarnings = useMemo(() => items.some((item) => item.warnings.length > 0), [items])
+  const columns = useMemo(() => [
     {
       key: 'type',
       header: 'סוג',
@@ -198,7 +199,7 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
     if (column.key === 'linked_tasks') return showLinkedTasks
     if (column.key === 'warnings') return showWarnings
     return true
-  })
+  }), [showLinkedTasks, showWarnings, activeActionKey, onAction])
 
   return (
     <DataTable

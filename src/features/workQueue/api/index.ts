@@ -13,4 +13,6 @@ export {
   type WorkQueueParams,
   type WorkQueueSourceType,
   type WorkQueueUrgency,
+  workQueueListResponseSchema,
+  type WorkQueueListResponse,
 } from './contracts'

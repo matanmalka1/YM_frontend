@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
@@ -86,27 +87,42 @@ export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
     <Select
       options={urgencyOptions}
       value={urgencyFilter ?? ''}
-      onChange={(e) => onUrgencyChange((e.target.value || null) as WorkQueueUrgency | null)}
+      onChange={(e) => {
+        const result = z.enum(workQueueUrgencyValues).safeParse(e.target.value)
+        onUrgencyChange(result.success ? result.data : null)
+      }}
     />
     <Select
       options={typeOptions}
       value={typeFilter ?? ''}
-      onChange={(e) => onTypeChange((e.target.value || null) as WorkQueueSourceType | null)}
+      onChange={(e) => {
+        const result = z.enum(workQueueSourceTypeValues).safeParse(e.target.value)
+        onTypeChange(result.success ? result.data : null)
+      }}
     />
     <Select
       options={statusOptions}
       value={statusFilter ?? ''}
-      onChange={(e) => onStatusChange((e.target.value || null) as TaskStatus | null)}
+      onChange={(e) => {
+        const result = z.enum(taskStatusValues).safeParse(e.target.value)
+        onStatusChange(result.success ? result.data : null)
+      }}
     />
     <Select
       options={linkedOptions}
       value={linkedFilter ?? ''}
-      onChange={(e) => onLinkedChange((e.target.value || null) as 'linked' | 'unlinked' | null)}
+      onChange={(e) => {
+        const result = z.enum(['linked', 'unlinked'] as const).safeParse(e.target.value)
+        onLinkedChange(result.success ? result.data : null)
+      }}
     />
     <Select
       options={scopeOptions}
       value={scopeFilter ?? ''}
-      onChange={(e) => onScopeChange((e.target.value || null) as 'system' | 'manual' | null)}
+      onChange={(e) => {
+        const result = z.enum(['system', 'manual'] as const).safeParse(e.target.value)
+        onScopeChange(result.success ? result.data : null)
+      }}
     />
     <Button variant={historyMode ? 'secondary' : 'ghost'} size="sm" onClick={() => onHistoryModeChange(!historyMode)}>
       היסטוריה

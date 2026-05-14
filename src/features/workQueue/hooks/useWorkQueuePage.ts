@@ -46,8 +46,9 @@ export const useWorkQueuePage = () => {
   }, [historyMode, search, typeFilter, urgencyFilter, statusFilter, linkedFilter, scopeFilter])
 
   const {
-    data = [],
+    data,
     isLoading,
+    isFetching,
     error,
   } = useWorkQueue(listParams, hasRole)
 
@@ -56,6 +57,10 @@ export const useWorkQueuePage = () => {
     isFetching: isSummaryLoading,
     error: summaryError,
   } = useWorkQueueSummary(baseParams, hasRole)
+
+  const items = data?.items ?? []
+  const total = data?.total ?? 0
+  const totalPages = Math.max(1, Math.ceil(total / WORK_QUEUE_PAGE_SIZE))
 
   const hasContentFilters =
     search.trim() !== '' ||
@@ -77,16 +82,13 @@ export const useWorkQueuePage = () => {
     setPage(1)
   }
 
-  const total = summary?.total ?? data.length
-  const totalPages = Math.max(1, Math.ceil(total / WORK_QUEUE_PAGE_SIZE))
-
   return {
-    items: data,
-    allItems: data,
+    items,
     summary,
+    isFetching,
     isSummaryLoading,
     summaryError: summaryError ? getErrorMessage(summaryError, 'שגיאה בטעינת הסיכום') : null,
-    isLoading: isLoading && !error,
+    isLoading,
     error: !hasRole
       ? 'לא ניתן לזהות תפקיד משתמש'
       : error

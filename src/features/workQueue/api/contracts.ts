@@ -120,6 +120,13 @@ export const workQueueSummarySchema = z.object({
 
 export type WorkQueueSummary = z.infer<typeof workQueueSummarySchema>
 
+export const workQueueListResponseSchema = z.object({
+  items: z.array(workQueueItemSchema),
+  total: z.number().int(),
+})
+
+export type WorkQueueListResponse = z.infer<typeof workQueueListResponseSchema>
+
 export interface WorkQueueParams {
   client_record_id?: number
   business_id?: number

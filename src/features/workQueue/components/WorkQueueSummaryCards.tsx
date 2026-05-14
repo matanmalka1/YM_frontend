@@ -2,6 +2,7 @@ import { AlertTriangle, Clock, Calendar, CheckSquare, Link2 } from 'lucide-react
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
 import type { WorkQueueSummary, WorkQueueUrgency } from '../api/contracts'
+import { APPROACHING_DAYS, IMPORTANT_DAYS } from '../constants'
 
 interface WorkQueueSummaryCardsProps {
   summary: WorkQueueSummary | undefined
@@ -51,14 +52,14 @@ export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
       icon: Clock,
       variant: 'orange' as const,
       count: summary?.approaching ?? emptyValue,
-      label: 'דחוף (עד 7 ימים)',
+      label: `דחוף (עד ${APPROACHING_DAYS} ימים)`,
       value: 'approaching' as WorkQueueUrgency,
     },
     {
       icon: Clock,
       variant: 'orange' as const,
       count: summary?.important ?? emptyValue,
-      label: 'חשוב (8–21 ימים)',
+      label: `חשוב (${APPROACHING_DAYS + 1}–${IMPORTANT_DAYS} ימים)`,
       value: 'important' as WorkQueueUrgency,
     },
     {

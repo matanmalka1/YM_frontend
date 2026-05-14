@@ -34,7 +34,7 @@ export const useWorkQueueActions = () => {
   const [taskModal, setTaskModal] = useState<TaskModalState | null>(null)
 
   const taskDetail = useQuery({
-    queryKey: taskModal?.taskId ? tasksQK.detail(taskModal.taskId) : ['tasks', 'detail', 'idle'],
+    queryKey: tasksQK.detail(taskModal?.taskId ?? 0),
     queryFn: () => tasksApi.get(taskModal!.taskId!),
     enabled: Boolean(taskModal?.taskId),
   })
@@ -47,7 +47,7 @@ export const useWorkQueueActions = () => {
     onSuccess: async (_data, variables) => {
       toast.success('הפעולה בוצעה בהצלחה')
       await qc.invalidateQueries({ queryKey: workQueueQK.all })
-      if (variables.action.key.includes('task')) {
+      if (variables.action.task_id != null || variables.item.source_type === 'task') {
         await qc.invalidateQueries({ queryKey: tasksQK.all })
       }
     },
@@ -103,7 +103,7 @@ export const useWorkQueueActions = () => {
         toast.error('לא נמצאה משימה לפתיחה')
         return
       }
-      setTaskModal({ mode: action.key.startsWith('edit_task') ? 'edit' : 'view', taskId })
+      setTaskModal({ mode: (action.key.startsWith('continue_task') || action.key.startsWith('edit_task')) ? 'edit' : 'view', taskId })
       return
     }
     if (action.confirm) {

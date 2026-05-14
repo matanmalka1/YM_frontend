@@ -20,6 +20,7 @@ export const WorkQueuePage: React.FC = () => {
     isSummaryLoading,
     summaryError,
     isLoading,
+    isFetching,
     error,
     search,
     setSearch,
@@ -73,7 +74,7 @@ export const WorkQueuePage: React.FC = () => {
   )
 
   const renderBody = () => {
-    if (items.length === 0) {
+    if (!isLoading && !isFetching && items.length === 0) {
       if (hasContentFilters) {
         return <StateCard icon={CheckSquare} title="אין תוצאות" message="אין תוצאות שתואמות לסינון" />
       }
@@ -159,7 +160,7 @@ export const WorkQueuePage: React.FC = () => {
       {taskModal && (
         <TaskModal
           mode={taskModal.mode}
-          task={taskDetail.data}
+          task={taskDetail.data?.id === taskModal.taskId ? taskDetail.data : undefined}
           source={taskModal.source}
           isLoading={createTaskMutation.isPending || updateTaskMutation.isPending || taskDetail.isLoading}
           onClose={closeTaskModal}

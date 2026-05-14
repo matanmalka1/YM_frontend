@@ -13,6 +13,7 @@ const metadataValue = (item: WorkQueueItem, key: string): unknown => {
 }
 
 const groupLabel = (item: WorkQueueItem): string => {
+  if (item.source_type === 'task') return 'משימות ידניות'
   const type = item.type_label ?? workQueueSourceTypeLabels[item.source_type] ?? item.source_type
   const period = metadataText(metadataValue(item, 'period'))
   const taxYear = metadataText(metadataValue(item, 'tax_year'))
@@ -22,6 +23,7 @@ const groupLabel = (item: WorkQueueItem): string => {
 }
 
 const groupKey = (item: WorkQueueItem): string => {
+  if (item.source_type === 'task') return 'task:standalone'
   const period = metadataText(metadataValue(item, 'period'))
   const taxYear = metadataText(metadataValue(item, 'tax_year'))
   return [item.source_type, period ?? taxYear ?? 'none', item.due_date ?? 'no-due-date'].join(':')

@@ -35,7 +35,6 @@ const roleOptions = [
 ]
 
 const toDateInput = (value?: string | null) => value?.slice(0, 10) ?? ''
-const toApiDateTime = (value: string) => (value ? `${value}T00:00:00Z` : undefined)
 
 export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoading, onSubmit, onClose }) => {
   const [title, setTitle] = useState('')
@@ -49,12 +48,24 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
   const isTaskLoading = mode !== 'create' && !task
 
   useEffect(() => {
-    setTitle(task?.title ?? '')
-    setDescription(task?.description ?? '')
-    setPriority(task?.priority ?? 'normal')
-    setDueDate(toDateInput(task?.due_date ?? source?.due_date))
-    setAssignedRole(task?.assigned_role ?? '')
-  }, [task, source])
+    if (mode === 'create') {
+      setTitle('')
+      setDescription('')
+      setPriority('normal')
+      setDueDate(toDateInput(source?.due_date))
+      setAssignedRole('')
+    }
+  }, [mode, source])
+
+  useEffect(() => {
+    if (mode !== 'create' && task) {
+      setTitle(task.title ?? '')
+      setDescription(task.description ?? '')
+      setPriority(task.priority ?? 'normal')
+      setDueDate(toDateInput(task.due_date))
+      setAssignedRole(task.assigned_role ?? '')
+    }
+  }, [mode, task])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -63,7 +74,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
       title: title.trim(),
       description: description.trim() || undefined,
       priority,
-      due_date: toApiDateTime(dueDate),
+      due_date: dueDate || undefined,
       assigned_role: assignedRole || undefined,
     }
     onSubmit(
