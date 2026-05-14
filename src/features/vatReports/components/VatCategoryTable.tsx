@@ -1,7 +1,7 @@
 import { cn } from '../../../utils/utils'
 import { formatVatAmount, getVatDeductionRateClass, getVatDeductionRateLabel } from '../utils'
 import type { VatCategoryTableProps } from '../types'
-import { VAT_DEDUCTIBLE_ACCENT } from '../../../utils/chartColors'
+import { VAT_DEDUCTIBLE_ACCENT } from '../visualizationTokens'
 
 const TABLE_COLUMNS = ['קטגוריה', '% ניכוי', 'הוצאה ברוטו', 'מע"מ בחשבוניות', 'מע"מ לניכוי']
 

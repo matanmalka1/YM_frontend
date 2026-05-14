@@ -4,7 +4,7 @@ import { Button } from '../../../components/ui/primitives/Button'
 import { vatReportsApi } from '../api'
 import { showErrorToast } from '../../../utils/utils'
 import type { VatExportButtonsProps } from '../types'
-import { FILE_FORMAT_COLORS } from '../../../utils/chartColors'
+import { FILE_FORMAT_COLORS } from '../visualizationTokens'
 
 export const VatExportButtons: React.FC<VatExportButtonsProps> = ({ clientId, period, year }) => {
   const [loadingType, setLoadingType] = useState<'excel' | 'pdf' | null>(null)
