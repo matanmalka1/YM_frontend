@@ -14,7 +14,6 @@ import {
   CLIENT_STATUS_BADGE_VARIANTS,
   getEntityTypeLabel,
   getClientStatusLabel,
-  getClientVatReportingLabel,
 } from '../../constants'
 
 interface BuildClientColumnsParams {
@@ -59,11 +58,6 @@ export const buildClientColumns = ({
       header: 'מס׳ קלסר פעיל',
       getValue: (client) => client.active_binder_number,
       emptyValue: <span className="text-gray-400 text-sm">אין קלסר פתוח</span>,
-    }),
-    textColumn({
-      key: 'vat_reporting_frequency',
-      header: 'סוג דיווח',
-      getValue: (client) => getClientVatReportingLabel(client),
     }),
     statusColumn({
       key: 'status',

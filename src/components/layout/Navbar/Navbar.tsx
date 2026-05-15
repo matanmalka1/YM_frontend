@@ -23,12 +23,13 @@ const getNavItem = (to: string): NavItem => {
 const TOP_NAV_ITEMS: TopNavItem[] = [
   getNavItem('/'),
   getNavItem('/clients'),
+  getNavItem('/binders'),
   getNavItem('/work-queue'),
   { ...getNavItem('/tax/vat'), label: 'מע״מ' },
   getNavItem('/tax/advance-payments'),
+  getNavItem('/tax/calendar'),
   getNavItem('/tax/reports'),
   getNavItem('/charges'),
-  { ...getNavItem('/settings/users'), label: 'הגדרות' },
 ]
 
 interface MoreNavGroup {
@@ -38,14 +39,8 @@ interface MoreNavGroup {
 
 const MORE_NAV_GROUPS: MoreNavGroup[] = [
   {
-    label: 'תפעול',
-    items: [getNavItem('/binders')],
-  },
-  {
     label: 'מס',
     items: [
-      getNavItem('/tax/calendar'),
-      getNavItem('/settings/tax-calendar'),
       getNavItem('/reports/advance-payments'),
       getNavItem('/reports/annual-status'),
     ],
@@ -53,6 +48,13 @@ const MORE_NAV_GROUPS: MoreNavGroup[] = [
   {
     label: 'ניהול',
     items: [getNavItem('/reports/aging'), { ...getNavItem('/reports/vat-compliance'), menuLabel: 'דוחות ניתוח' }],
+  },
+  {
+    label: 'הגדרות',
+    items: [
+      { ...getNavItem('/settings/users'), label: 'משתמשים' },
+      getNavItem('/settings/tax-calendar'),
+    ],
   },
 ]
 
