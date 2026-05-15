@@ -40,11 +40,10 @@ export const notificationsApi = {
     return response.data
   },
 
-  markAllRead: async (clientId?: number): Promise<MarkReadResponse> => {
+  markAllRead: async (clientRecordId?: number): Promise<MarkReadResponse> => {
     const response = await api.post<MarkReadResponse>(
       NOTIFICATION_ENDPOINTS.notificationsMarkAllRead,
-      null,
-      clientId != null ? { params: toQueryParams({ client_record_id: clientId }) } : undefined,
+      clientRecordId != null ? { client_record_id: clientRecordId } : {},
     )
     return response.data
   },
