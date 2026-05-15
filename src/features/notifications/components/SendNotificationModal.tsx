@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { Modal } from '../../../components/ui/overlays/Modal'
 import { Button } from '../../../components/ui/primitives/Button'
@@ -40,14 +40,19 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ op
 
   const channel = useWatch({ control, name: 'channel' })
 
+  const resetRef = useRef(reset)
+  resetRef.current = reset
+  const resetClientRef = useRef(resetClient)
+  resetClientRef.current = resetClient
+
   useEffect(() => {
     if (open) {
-      reset({ channel: 'email', message: '' })
+      resetRef.current({ channel: 'email', message: '' })
       setClientQuery('')
       setClientError(undefined)
-      resetClient(clientId)
+      resetClientRef.current(clientId)
     }
-  }, [open, clientId, reset, resetClient])
+  }, [open, clientId])
 
   const { sendNotification, isSending } = useSendNotification(onClose)
 

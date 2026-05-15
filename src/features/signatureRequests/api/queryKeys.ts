@@ -5,5 +5,6 @@ export const signatureRequestsQK = {
   forClient: (clientId: number) => ['signature-requests', 'client', clientId] as const,
   forClientPage: (clientId: number, params: object) => ['signature-requests', 'client', clientId, params] as const,
   detail: (id: number) => ['signature-requests', 'detail', id] as const,
+  active: (params: object) => ['signature-requests', 'active', params] as const,
   pending: (params: object) => ['signature-requests', 'pending', params] as const,
 } as const

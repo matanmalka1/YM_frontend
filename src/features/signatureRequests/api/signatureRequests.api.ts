@@ -39,6 +39,13 @@ export const signatureRequestsApi = {
     return response.data
   },
 
+  listActive: async (params?: { page?: number; page_size?: number }): Promise<SignatureRequestListResponse> => {
+    const response = await api.get<SignatureRequestListResponse>(SIGNATURE_REQUEST_ENDPOINTS.signatureRequestsActive, {
+      params,
+    })
+    return response.data
+  },
+
   getById: async (id: number): Promise<SignatureRequestWithAudit> => {
     const response = await api.get<SignatureRequestWithAudit>(SIGNATURE_REQUEST_ENDPOINTS.signatureRequestById(id))
     return response.data

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { clientsApi } from '@/features/clients'
 
 interface ClientContact {
@@ -18,7 +18,7 @@ export const useClientForNotification = (initialClientId?: number) => {
   const [selectedBusinessId, setSelectedBusinessId] = useState<number | null>(null)
   const [clientContact, setClientContact] = useState<ClientContact | null>(null)
 
-  const loadClientData = async (clientId: number) => {
+  const loadClientData = useCallback(async (clientId: number) => {
     try {
       const [clientData, bizData] = await Promise.all([
         clientsApi.getById(clientId),
@@ -31,7 +31,7 @@ export const useClientForNotification = (initialClientId?: number) => {
       setClientContact(null)
       setSelectedBusinessId(null)
     }
-  }
+  }, [])
 
   const selectClient = async (client: ClientSelection) => {
     setSelectedClient(client)
@@ -52,7 +52,9 @@ export const useClientForNotification = (initialClientId?: number) => {
       setClientContact(null)
       void loadClientData(clientId)
     } else {
-      clearClient()
+      setSelectedClient(null)
+      setSelectedBusinessId(null)
+      setClientContact(null)
     }
   }
 
