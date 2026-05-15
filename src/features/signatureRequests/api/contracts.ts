@@ -1,6 +1,6 @@
 import type { PaginatedResponse } from '@/types'
 
-export type SignatureRequestStatus = 'draft' | 'pending_signature' | 'signed' | 'declined' | 'expired' | 'canceled'
+export type SignatureRequestStatus = 'pending_signature' | 'signed' | 'declined' | 'expired' | 'canceled'
 
 export type SignatureRequestType =
   | 'engagement_agreement'
@@ -65,17 +65,10 @@ export interface CreateSignatureRequestPayload {
   annual_report_id?: number
   document_id?: number
   content_to_hash?: string
-}
-
-export interface CreateAndSendSignatureRequestPayload extends CreateSignatureRequestPayload {
   expiry_days?: number
 }
 
-export interface SendSignatureRequestPayload {
-  expiry_days?: number
-}
-
-export interface SendSignatureRequestResponse extends SignatureRequestResponse {
+export interface CreateSignatureRequestResponse extends SignatureRequestResponse {
   signing_token: string
   signing_url_hint: string
 }

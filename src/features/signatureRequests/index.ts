@@ -8,7 +8,6 @@ export { usePendingSignatureRequests } from './hooks/usePendingSignatureRequests
 export { useSignatureRequestActions } from './hooks/useSignatureRequestActions'
 export {
   buildSigningUrl,
-  SIGNATURE_REQUEST_TERMINAL_STATUSES,
   signatureRequestStatusVariants,
   useSignatureRequestSigningUrls,
 } from './utils'
@@ -20,7 +19,6 @@ export type {
   SignatureRequestListResponse,
   AuditEvent,
   CreateSignatureRequestPayload,
-  CreateAndSendSignatureRequestPayload,
-  SendSignatureRequestResponse,
+  CreateSignatureRequestResponse,
   SignerViewResponse,
 } from './api'

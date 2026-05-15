@@ -5,7 +5,7 @@ import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
 import { Textarea } from '../../../components/ui/inputs/Textarea'
 import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client'
-import type { CreateAndSendSignatureRequestPayload, SignatureRequestType } from '../api'
+import type { CreateSignatureRequestPayload, SignatureRequestType } from '../api'
 import { getSignatureRequestTypeLabel } from '../../../utils/enums'
 
 const REQUEST_TYPES: SignatureRequestType[] = [
@@ -26,7 +26,7 @@ interface Props {
   signerPhone?: string
   isLoading: boolean
   onClose: () => void
-  onCreateAndSend: (payload: CreateAndSendSignatureRequestPayload) => Promise<unknown>
+  onCreate: (payload: CreateSignatureRequestPayload) => Promise<unknown>
 }
 
 export const CreateSignatureRequestModal: React.FC<Props> = ({
@@ -37,7 +37,7 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
   signerEmail,
   isLoading,
   onClose,
-  onCreateAndSend,
+  onCreate,
 }) => {
   const [selectedClient, setSelectedClient] = useState<{ id: number; name: string } | null>(
     initialClientId != null ? { id: initialClientId, name: initialSignerName } : null,
@@ -68,7 +68,7 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
     e.preventDefault()
     const resolvedSignerNameFinal = overrideName.trim() || resolvedSignerName
     if (!title.trim() || !resolvedClientId || !resolvedSignerNameFinal) return
-    await onCreateAndSend({
+    await onCreate({
       client_record_id: resolvedClientId,
       business_id: businessId,
       request_type: requestType,

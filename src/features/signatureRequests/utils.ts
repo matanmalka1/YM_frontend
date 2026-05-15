@@ -1,9 +1,7 @@
 import { useCallback, useState } from 'react'
-import type { SendSignatureRequestResponse } from './api'
+import type { CreateSignatureRequestResponse } from './api'
 
 export { SIGNATURE_REQUEST_STATUS_VARIANTS as signatureRequestStatusVariants } from '../../utils/enums'
-
-export const SIGNATURE_REQUEST_TERMINAL_STATUSES = new Set(['signed', 'expired', 'canceled', 'declined'])
 
 export const buildSigningUrl = (hint: string): string => {
   // hint may be: a full path like "/sign/<token>", a relative "sign/<token>", or a bare "<token>"
@@ -19,10 +17,10 @@ export const buildSigningUrl = (hint: string): string => {
   return `${window.location.origin}${path}`
 }
 
-export const useSignatureRequestSigningUrls = (sendRequest: (id: number) => Promise<SendSignatureRequestResponse>) => {
+export const useSignatureRequestSigningUrls = () => {
   const [signingUrls, setSigningUrls] = useState<Record<number, string>>({})
 
-  const rememberSigningUrl = useCallback((result: SendSignatureRequestResponse) => {
+  const rememberSigningUrl = useCallback((result: CreateSignatureRequestResponse) => {
     if (!result.signing_url_hint) return
     setSigningUrls((prev) => ({
       ...prev,
@@ -30,17 +28,8 @@ export const useSignatureRequestSigningUrls = (sendRequest: (id: number) => Prom
     }))
   }, [])
 
-  const handleSend = useCallback(
-    async (id: number) => {
-      const result = await sendRequest(id)
-      rememberSigningUrl(result)
-    },
-    [rememberSigningUrl, sendRequest],
-  )
-
   return {
     signingUrls,
-    handleSend,
     rememberSigningUrl,
   }
 }

@@ -24,10 +24,8 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
   const [auditRequestId, setAuditRequestId] = useState<number | null>(null)
 
   const { items, total, isLoading, error } = useClientSignatureRequests({ clientId: client.id })
-  const { createAndSend, isCreatingAndSending, send, isSending, cancel, isCanceling } = useSignatureRequestActions(
-    client.id,
-  )
-  const { signingUrls, handleSend, rememberSigningUrl } = useSignatureRequestSigningUrls(send)
+  const { create, isCreating, cancel, isCanceling } = useSignatureRequestActions(client.id)
+  const { signingUrls, rememberSigningUrl } = useSignatureRequestSigningUrls()
 
   return (
     <>
@@ -69,10 +67,8 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
                   key={req.id}
                   request={req}
                   signingUrl={signingUrls[req.id]}
-                  isSending={isSending}
                   isCanceling={isCanceling}
                   canManage={canManage}
-                  onSend={handleSend}
                   onCancel={cancel}
                   onAudit={setAuditRequestId}
                 />
@@ -91,10 +87,10 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
         signerName={client.full_name}
         signerEmail={client.email ?? undefined}
         signerPhone={client.phone ?? undefined}
-        isLoading={isCreatingAndSending}
+        isLoading={isCreating}
         onClose={() => setShowCreate(false)}
-        onCreateAndSend={async (payload) => {
-          const result = await createAndSend(payload)
+        onCreate={async (payload) => {
+          const result = await create(payload)
           rememberSigningUrl(result)
         }}
       />

@@ -8,12 +8,9 @@ import { SIGNATURE_REQUEST_ENDPOINTS } from './endpoints'
 import type {
   SignatureRequestListResponse,
   SignatureRequestWithAudit,
-  AuditEvent,
-  SignatureRequestResponse,
-  CreateAndSendSignatureRequestPayload,
   CreateSignatureRequestPayload,
-  SendSignatureRequestPayload,
-  SendSignatureRequestResponse,
+  CreateSignatureRequestResponse,
+  SignatureRequestResponse,
   CancelSignatureRequestPayload,
   SignerViewResponse,
   SignerDeclinePayload,
@@ -45,31 +42,10 @@ export const signatureRequestsApi = {
     return response.data
   },
 
-  getAuditTrail: async (id: number): Promise<AuditEvent[]> => {
-    const response = await api.get<AuditEvent[]>(SIGNATURE_REQUEST_ENDPOINTS.signatureRequestAuditTrail(id))
-    return response.data
-  },
-
   // ── Mutations ────────────────────────────────────────────────────────────
 
-  create: async (payload: CreateSignatureRequestPayload): Promise<SignatureRequestResponse> => {
-    const response = await api.post<SignatureRequestResponse>(SIGNATURE_REQUEST_ENDPOINTS.signatureRequests, payload)
-    return response.data
-  },
-
-  createAndSend: async (payload: CreateAndSendSignatureRequestPayload): Promise<SendSignatureRequestResponse> => {
-    const response = await api.post<SendSignatureRequestResponse>(
-      SIGNATURE_REQUEST_ENDPOINTS.signatureRequestsCreateAndSend,
-      payload,
-    )
-    return response.data
-  },
-
-  send: async (id: number, payload?: SendSignatureRequestPayload): Promise<SendSignatureRequestResponse> => {
-    const response = await api.post<SendSignatureRequestResponse>(
-      SIGNATURE_REQUEST_ENDPOINTS.signatureRequestSend(id),
-      payload ?? {},
-    )
+  create: async (payload: CreateSignatureRequestPayload): Promise<CreateSignatureRequestResponse> => {
+    const response = await api.post<CreateSignatureRequestResponse>(SIGNATURE_REQUEST_ENDPOINTS.signatureRequests, payload)
     return response.data
   },
 

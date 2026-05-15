@@ -1,18 +1,15 @@
 import { useState } from 'react'
-import { Send, Link2, Copy, Check, X, History } from 'lucide-react'
+import { Link2, Copy, Check, X, History } from 'lucide-react'
 import { RowActionItem, RowActionLink, RowActionSeparator, RowActionsMenu } from '@/components/ui/table'
 import { ConfirmDialog } from '../../../components/ui/overlays/ConfirmDialog'
 import { toast } from '../../../utils/toast'
 import type { SignatureRequestResponse } from '../api'
-import { SIGNATURE_REQUEST_TERMINAL_STATUSES } from '../utils'
 
 export interface SignatureRequestActionProps {
   request: SignatureRequestResponse
   signingUrl?: string
-  isSending: boolean
   isCanceling: boolean
   canManage: boolean
-  onSend: (id: number) => Promise<unknown>
   onCancel: (id: number) => Promise<unknown>
   onAudit: (id: number) => void
 }
@@ -26,10 +23,8 @@ interface SignatureRequestRowActionsProps extends SignatureRequestActionProps {
 export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProps> = ({
   request,
   signingUrl,
-  isSending,
   isCanceling,
   canManage,
-  onSend,
   onCancel,
   onAudit,
   showOpenLink = false,
@@ -39,9 +34,7 @@ export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProp
   const [copied, setCopied] = useState(false)
   const [confirmCancel, setConfirmCancel] = useState(false)
 
-  const isDraft = request.status === 'draft'
   const isPending = request.status === 'pending_signature'
-  const isTerminal = SIGNATURE_REQUEST_TERMINAL_STATUSES.has(request.status)
 
   const handleCopy = async () => {
     if (!signingUrl) return
@@ -60,14 +53,6 @@ export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProp
   return (
     <>
       <RowActionsMenu ariaLabel={`פעולות לבקשת חתימה ${request.id}`}>
-        {canManage && isDraft && (
-          <RowActionItem
-            label="שלח"
-            onClick={() => void onSend(request.id)}
-            icon={<Send className="h-4 w-4" />}
-            disabled={isSending}
-          />
-        )}
         {isPending && signingUrl && (
           <>
             {showOpenLink && (
@@ -92,7 +77,7 @@ export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProp
           onClick={() => onAudit(request.id)}
           icon={<History className="h-4 w-4" />}
         />
-        {canManage && !isTerminal && (
+        {canManage && isPending && (
           <>
             <RowActionSeparator />
             <RowActionItem

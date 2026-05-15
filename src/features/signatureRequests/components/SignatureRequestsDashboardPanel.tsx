@@ -20,10 +20,10 @@ interface Props {
 
 export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = false }) => {
   const { items, total, businessLookup, isLoading, error } = usePendingSignatureRequests()
-  const { send, isSending, cancel, isCanceling, createAndSend, isCreatingAndSending } = useSignatureRequestActions()
+  const { create, isCreating, cancel, isCanceling } = useSignatureRequestActions()
   const [auditRequestId, setAuditRequestId] = useState<number | null>(null)
   const [showCreate, setShowCreate] = useState(false)
-  const { signingUrls, handleSend, rememberSigningUrl } = useSignatureRequestSigningUrls(send)
+  const { signingUrls, rememberSigningUrl } = useSignatureRequestSigningUrls()
 
   const tableItems = compact ? items.slice(0, 3) : items
 
@@ -94,10 +94,8 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
           <SignatureRequestRowActions
             request={req}
             signingUrl={signingUrls[req.id]}
-            isSending={isSending}
             isCanceling={isCanceling}
             canManage
-            onSend={async (id) => void handleSend(id)}
             onCancel={async (id) => void cancel(id)}
             onAudit={setAuditRequestId}
             showOpenLink
@@ -107,7 +105,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
         ),
       },
     ],
-    [businessLookup, cancel, handleSend, isCanceling, isSending, signingUrls],
+    [businessLookup, cancel, isCanceling, signingUrls],
   )
 
   return (
@@ -194,10 +192,10 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
       <SignatureRequestAuditDrawer requestId={auditRequestId} onClose={() => setAuditRequestId(null)} />
       <CreateSignatureRequestModal
         open={showCreate}
-        isLoading={isCreatingAndSending}
+        isLoading={isCreating}
         onClose={() => setShowCreate(false)}
-        onCreateAndSend={async (payload) => {
-          const result = await createAndSend(payload)
+        onCreate={async (payload) => {
+          const result = await create(payload)
           rememberSigningUrl(result)
         }}
       />

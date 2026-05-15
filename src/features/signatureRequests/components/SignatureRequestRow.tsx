@@ -23,10 +23,8 @@ type Props = SignatureRequestActionProps
 export const SignatureRequestRow: React.FC<Props> = ({
   request,
   signingUrl,
-  isSending,
   isCanceling,
   canManage,
-  onSend,
   onCancel,
   onAudit,
 }) => {
@@ -56,10 +54,8 @@ export const SignatureRequestRow: React.FC<Props> = ({
           <SignatureRequestRowActions
             request={request}
             signingUrl={signingUrl}
-            isSending={isSending}
             isCanceling={isCanceling}
             canManage={canManage}
-            onSend={onSend}
             onCancel={onCancel}
             onAudit={onAudit}
           />

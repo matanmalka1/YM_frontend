@@ -2,8 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   signatureRequestsApi,
   signatureRequestsQK,
-  type CreateAndSendSignatureRequestPayload,
-  type SendSignatureRequestResponse,
+  type CreateSignatureRequestPayload,
+  type CreateSignatureRequestResponse,
 } from '../api'
 import { showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
@@ -24,24 +24,14 @@ export const useSignatureRequestActions = (clientId?: number) => {
     }
   }
 
-  const createAndSendMutation = useMutation({
-    mutationFn: (payload: CreateAndSendSignatureRequestPayload): Promise<SendSignatureRequestResponse> =>
-      signatureRequestsApi.createAndSend(payload),
+  const createMutation = useMutation({
+    mutationFn: (payload: CreateSignatureRequestPayload): Promise<CreateSignatureRequestResponse> =>
+      signatureRequestsApi.create(payload),
     onSuccess: () => {
       toast.success('בקשת החתימה נוצרה ונשלחה')
       invalidate()
     },
     onError: (err) => showErrorToast(err, 'שגיאה ביצירת ושליחת בקשת חתימה'),
-  })
-
-  const sendMutation = useMutation({
-    mutationFn: ({ id, expiryDays }: { id: number; expiryDays?: number }): Promise<SendSignatureRequestResponse> =>
-      signatureRequestsApi.send(id, { expiry_days: expiryDays }),
-    onSuccess: () => {
-      toast.success('בקשת החתימה נשלחה')
-      invalidate()
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה בשליחת בקשת חתימה'),
   })
 
   const cancelMutation = useMutation({
@@ -54,12 +44,8 @@ export const useSignatureRequestActions = (clientId?: number) => {
   })
 
   return {
-    createAndSend: (payload: CreateAndSendSignatureRequestPayload) => createAndSendMutation.mutateAsync(payload),
-    isCreatingAndSending: createAndSendMutation.isPending,
-
-    send: (id: number, expiryDays?: number) => sendMutation.mutateAsync({ id, expiryDays }),
-    isSending: sendMutation.isPending,
-    lastSendResult: sendMutation.data,
+    create: (payload: CreateSignatureRequestPayload) => createMutation.mutateAsync(payload),
+    isCreating: createMutation.isPending,
 
     cancel: (id: number, reason?: string) => cancelMutation.mutateAsync({ id, reason }),
     isCanceling: cancelMutation.isPending,
