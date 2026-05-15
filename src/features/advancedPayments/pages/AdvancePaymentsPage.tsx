@@ -293,12 +293,9 @@ export const AdvancePayments: React.FC = () => {
           stats.dueThisMonthCount += 1
         }
 
-        stats.pendingCount = Math.max(stats.pendingCount, safeCount(loadedStats?.pendingCount ?? batch.pending_count))
-        stats.missingTurnoverCount = Math.max(
-          stats.missingTurnoverCount,
-          safeCount(loadedStats?.missingTurnoverCount ?? batch.missing_turnover_count),
-        )
-        stats.overdueCount = Math.max(stats.overdueCount, safeCount(loadedStats?.overdueCount ?? batch.overdue_count))
+        stats.pendingCount += safeCount(loadedStats?.pendingCount ?? batch.pending_count)
+        stats.missingTurnoverCount += safeCount(loadedStats?.missingTurnoverCount ?? batch.missing_turnover_count)
+        stats.overdueCount += safeCount(loadedStats?.overdueCount ?? batch.overdue_count)
         return stats
       },
       { dueThisMonthCount: 0, pendingCount: 0, missingTurnoverCount: 0, overdueCount: 0 },
