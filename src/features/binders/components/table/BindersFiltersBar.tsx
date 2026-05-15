@@ -22,7 +22,13 @@ const getFields = () => [
   },
 ]
 
-export const BindersFiltersBar = ({ filters, counters, onFilterChange, onReset }: BindersFiltersBarProps) => {
+export const BindersFiltersBar = ({
+  filters,
+  counters,
+  countersLoading = false,
+  onFilterChange,
+  onReset,
+}: BindersFiltersBarProps) => {
   const statusPills = [
     {
       key: '',
@@ -74,7 +80,7 @@ export const BindersFiltersBar = ({ filters, counters, onFilterChange, onReset }
         <StatsCard
           key={pill.key || 'total'}
           title={pill.label}
-          value={pill.count}
+          value={countersLoading ? '...' : pill.count}
           icon={pill.icon}
           variant={pill.variant}
           onClick={() => onFilterChange('status', pill.key)}

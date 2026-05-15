@@ -1,4 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useEffect, useRef } from 'react'
 import { bindersApi, bindersQK } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
 import { useBindersFilters } from './useBindersFilters'
@@ -27,6 +28,20 @@ export const useBindersPage = () => {
   })
 
   const pageItems = bindersQuery.data?.items ?? []
+  const lastCountersRef = useRef({
+    total: 0,
+    in_office: 0,
+    closed_in_office: 0,
+    archived_in_office: 0,
+    ready_for_pickup: 0,
+    returned: 0,
+  })
+
+  useEffect(() => {
+    if (bindersQuery.data?.counters) {
+      lastCountersRef.current = bindersQuery.data.counters
+    }
+  }, [bindersQuery.data?.counters])
 
   const { deepLinkBinderId, selectedBinder, handleSelectBinder, handleCloseDrawer } = useBinderSelection(pageItems)
 
@@ -38,14 +53,7 @@ export const useBindersPage = () => {
     selectedBinder,
     binders: pageItems,
     total: bindersQuery.data?.total ?? 0,
-    counters: bindersQuery.data?.counters ?? {
-      total: 0,
-      in_office: 0,
-      closed_in_office: 0,
-      archived_in_office: 0,
-      ready_for_pickup: 0,
-      returned: 0,
-    },
+    counters: bindersQuery.data?.counters ?? lastCountersRef.current,
     error: bindersQuery.error ? getErrorMessage(bindersQuery.error, 'שגיאה בטעינת רשימת קלסרים') : null,
     filters,
     handleFilterChange,

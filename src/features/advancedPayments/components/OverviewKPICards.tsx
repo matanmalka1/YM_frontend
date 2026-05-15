@@ -28,16 +28,16 @@ export const OverviewKPICards: React.FC<OverviewKPICardsProps> = ({
         value={pendingCount}
         icon={ListChecks}
         variant="orange"
-        description="דורשים טיפול"
+        description="בסינון השנה הנוכחי"
       />
       <StatsCard
         title="חסרי מחזור"
         value={missingTurnoverCount}
         icon={AlertTriangle}
         variant="orange"
-        description="לא ניתן לחשב מקדמה"
+        description="בסינון השנה הנוכחי"
       />
-      <StatsCard title="באיחור" value={overdueCount} icon={Clock} variant="red" description="עבר תאריך יעד" />
+      <StatsCard title="באיחור" value={overdueCount} icon={Clock} variant="red" description="בסינון השנה הנוכחי" />
     </div>
   )
 }

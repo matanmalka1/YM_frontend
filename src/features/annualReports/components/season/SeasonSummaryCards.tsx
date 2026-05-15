@@ -8,12 +8,13 @@ interface SeasonSummaryCardsProps {
 
 export const SeasonSummaryCards: React.FC<SeasonSummaryCardsProps> = ({ summary }) => {
   const done = summary.submitted + summary.closed
+  const total = Math.max(0, summary.total)
 
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
       <StatsCard
         title="סה״כ דוחות"
-        value={summary.total}
+        value={total}
         description={`שנת מס ${summary.tax_year}`}
         icon={Users}
         variant="blue"

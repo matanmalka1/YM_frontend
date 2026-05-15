@@ -177,7 +177,7 @@ const groupedEntriesColumns: Column<TaxCalendarSettingsEntry>[] = [
 
 export const TaxCalendarSettingsPage = () => {
   const [startYear, setStartYear] = useState(String(currentYear))
-  const [endYear, setEndYear] = useState(String(currentYear + 1))
+  const [endYear, setEndYear] = useState(String(currentYear))
 
   const startYearState = useMemo(() => parseYearInput(startYear, 'שנת ההתחלה'), [startYear])
   const endYearState = useMemo(() => parseYearInput(endYear, 'שנת הסיום'), [endYear])

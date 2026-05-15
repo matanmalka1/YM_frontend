@@ -69,14 +69,14 @@ const SummaryStrip = ({ groups }: { groups: TaxCalendarGroup[] }) => {
 
 export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }) => {
   const [startYear, setStartYear] = useState(String(currentYear))
-  const [endYear, setEndYear] = useState(String(currentYear + 1))
+  const [endYear, setEndYear] = useState(String(currentYear))
   const [obligationType, setObligationType] = useState('')
   const [status, setStatus] = useState('all')
 
   const params = useMemo<TaxCalendarGroupsParams>(
     () => ({
       start_year: Number(startYear) || currentYear,
-      end_year: Number(endYear) || currentYear + 1,
+      end_year: Number(endYear) || currentYear,
       obligation_type: obligationType ? (obligationType as TaxCalendarObligationType) : undefined,
       client_record_id: clientId,
     }),
@@ -94,7 +94,7 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
 
   const resetFilters = () => {
     setStartYear(String(currentYear))
-    setEndYear(String(currentYear + 1))
+    setEndYear(String(currentYear))
     setObligationType('')
     setStatus('all')
   }
@@ -143,7 +143,7 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
         <Alert variant="error" message={getErrorMessage(groupsQuery.error, 'שגיאה בטעינת מועדי המס')} />
       ) : null}
 
-      <SummaryStrip groups={groups} />
+      <SummaryStrip groups={displayedGroups} />
 
       <TaxCalendarGroupsTable groups={displayedGroups} isLoading={groupsQuery.isPending} clientRecordId={clientId} />
     </div>

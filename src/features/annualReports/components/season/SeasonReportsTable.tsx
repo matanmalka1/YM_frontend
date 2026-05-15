@@ -4,10 +4,9 @@ import type { AnnualReportFull } from '../../api'
 import { getStatusLabel, getStatusVariant, getClientTypeLabel } from '../../api'
 
 const FILING_DEADLINE_TYPE_LABELS: Record<string, string> = {
-  vat: 'מע״מ',
-  advance_payment: 'מקדמות',
-  national_insurance: 'ביטוח לאומי',
-  annual_report: 'דוח שנתי',
+  standard: 'רגיל',
+  extended: 'מוארך',
+  custom: 'מותאם אישית',
 }
 
 const getDeadlineTypeLabel = (type: string | null | undefined): string =>

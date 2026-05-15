@@ -98,6 +98,7 @@ export type BindersFilters = Omit<ListBindersParams, 'client_name' | 'year'> & {
 export interface BindersFiltersBarProps {
   filters: BindersFilters
   counters: BinderListCounters
+  countersLoading?: boolean
   onFilterChange: (name: string, value: string) => void
   onReset: () => void
 }

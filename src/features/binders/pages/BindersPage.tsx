@@ -90,6 +90,7 @@ export const Binders: React.FC = () => {
       <BindersFiltersBar
         filters={filters}
         counters={counters}
+        countersLoading={loading && total === 0}
         onFilterChange={handleFilterChange}
         onReset={handleReset}
       />
