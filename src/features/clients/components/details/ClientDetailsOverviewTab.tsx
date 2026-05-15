@@ -21,6 +21,7 @@ import { ClientAnnualReportsTab } from '@/features/annualReports'
 import { ClientAdvancePaymentsTab } from '@/features/advancedPayments'
 import { ClientDocumentsTab } from '@/features/documents'
 import { ClientNotesCard } from '@/features/notes'
+import { NotificationsTab } from '@/features/notifications'
 import { ClientTaxCalendarTab } from '@/features/taxCalendar'
 import { VatClientSummaryPanel } from '@/features/vatReports'
 import { ClientAuditTrailSection } from './ClientAuditTrailSection'
@@ -126,6 +127,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
       {activeTab === 'tax-calendar' && <ClientTaxCalendarTab clientId={client.id} />}
       {activeTab === 'advance-payments' && <ClientAdvancePaymentsTab clientId={client.id} />}
       {activeTab === 'annual-reports' && <ClientAnnualReportsTab clientId={client.id} />}
+      {activeTab === 'notifications' && <NotificationsTab clientRecordId={client.id} />}
       {activeTab === 'notes' && <ClientNotesCard clientId={client.id} canEdit={canEditClients} />}
       {activeTab === 'history' && <ClientAuditTrailSection clientId={client.id} />}
 

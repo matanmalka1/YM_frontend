@@ -3,6 +3,7 @@ export type NotificationSeverity = 'info' | 'warning' | 'urgent' | 'critical'
 export interface NotificationItem {
   id: number
   client_record_id: number
+  client_name?: string | null
   business_id: number | null
   business_name?: string | null
   binder_id?: number | null
@@ -16,8 +17,6 @@ export interface NotificationItem {
   failed_at?: string | null
   error_message?: string | null
   retry_count?: number
-  is_read: boolean
-  read_at: string | null
   triggered_by?: number | null
   created_at: string
 }
@@ -33,10 +32,6 @@ export interface UnreadCountResponse {
   unread_count: number
 }
 
-export interface MarkReadResponse {
-  updated: number
-}
-
 export interface ListNotificationsParams {
   client_record_id?: number
   business_id?: number
@@ -44,13 +39,15 @@ export interface ListNotificationsParams {
   page_size?: number
 }
 
-export interface SendNotificationPayload {
-  business_id: number
-  channel: 'whatsapp' | 'email'
+export type NotificationChannel = 'email' | 'whatsapp'
+
+export interface ManualSendPayload {
+  client_record_id: number
+  business_id?: number
+  preferred_channel: NotificationChannel
   message: string
-  severity?: string
 }
 
-export interface SendNotificationResponse {
+export interface ManualSendResponse {
   ok: boolean
 }

@@ -1,32 +1,24 @@
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { X, Send } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { Button } from '../../../components/ui/primitives/Button'
 import { useNotifications } from '../hooks/useNotifications'
-import { useRole } from '../../../hooks/useRole'
 import { useEscapeToClose } from '../../../components/ui/overlays/useEscapeToClose'
+import { useRole } from '../../../hooks/useRole'
 import { SeverityBadge } from './SeverityBadge'
 import { SendNotificationModal } from './SendNotificationModal'
-import type { NotificationItem } from '../api'
 import type { NotificationDrawerProps } from '../types'
 
-export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, onClose }) => {
-  const { notifications, unreadCount, markRead, markAllRead } = useNotifications()
+export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, onClose, clientRecordId }) => {
+  const { notifications } = useNotifications()
   const { isAdvisor } = useRole()
   const [sendOpen, setSendOpen] = useState(false)
   const limited = notifications.slice(0, 20)
 
   useEscapeToClose({ open, onClose })
 
-  const handleItemClick = (item: NotificationItem) => {
-    if (!item.is_read) {
-      markRead([item.id])
-    }
-  }
-
   return (
     <>
-      <SendNotificationModal open={sendOpen} onClose={() => setSendOpen(false)} />
       <div
         className={cn(
           'fixed inset-0 z-40 bg-black/20 transition-opacity duration-200',
@@ -56,21 +48,12 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
                 variant="ghost"
                 size="sm"
                 onClick={() => setSendOpen(true)}
-                className="text-xs text-positive-700 hover:text-positive-700 font-medium px-0 hover:bg-transparent"
+                className="gap-1.5 text-xs text-primary-600 hover:text-primary-700 font-medium px-0 hover:bg-transparent"
               >
+                <Send className="h-3.5 w-3.5" />
                 שלח הודעה
               </Button>
             )}
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => markAllRead()}
-              disabled={unreadCount === 0}
-              className="text-xs text-primary-600 hover:text-primary-700 font-medium px-0 hover:bg-transparent"
-            >
-              סמן הכל כנקרא
-            </Button>
             <Button type="button" variant="ghost" size="sm" onClick={onClose} aria-label="סגירה" className="p-1">
               <X className="h-4 w-4" />
             </Button>
@@ -81,25 +64,19 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
         <div className="flex-1 overflow-y-auto divide-y divide-gray-100">
           {limited.length === 0 && <p className="px-5 py-8 text-center text-sm text-gray-400">אין התראות</p>}
           {limited.map((item) => (
-            <Button
+            <div
               key={item.id}
-              type="button"
-              variant="ghost"
-              onClick={() => handleItemClick(item)}
-              className={cn(
-                'w-full text-right px-5 py-4 flex flex-row gap-3 hover:bg-gray-50 rounded-none items-start',
-                !item.is_read && 'bg-info-50 hover:bg-info-100',
-              )}
+              className="w-full text-right px-5 py-4 flex flex-row gap-3 items-start"
             >
-              {/* Badge column (right side in RTL) */}
               <div className="flex flex-col items-center gap-1.5 pt-0.5 shrink-0">
                 <SeverityBadge severity={item.severity} />
-                {!item.is_read && <span className="h-2 w-2 rounded-full bg-info-500 shrink-0" aria-label="לא נקרא" />}
               </div>
-              {/* Content column */}
               <div className="flex flex-col gap-1 min-w-0 flex-1">
+                {item.client_name && (
+                  <span className="text-xs font-semibold text-gray-900">{item.client_name}</span>
+                )}
                 {item.business_name && (
-                  <span className="text-xs font-semibold text-gray-700">{item.business_name}</span>
+                  <span className="text-xs text-gray-500">{item.business_name}</span>
                 )}
                 <p className="text-sm text-gray-800 leading-relaxed whitespace-normal break-words">
                   {item.content_snapshot}
@@ -112,11 +89,20 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
                   })}
                 </span>
               </div>
-            </Button>
+            </div>
           ))}
         </div>
       </div>
+
+      {isAdvisor && (
+        <SendNotificationModal
+          open={sendOpen}
+          onClose={() => setSendOpen(false)}
+          clientRecordId={clientRecordId}
+        />
+      )}
     </>
   )
 }
+
 NotificationDrawer.displayName = 'NotificationDrawer'

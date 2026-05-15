@@ -1,8 +1,11 @@
+import { useMatch } from 'react-router-dom'
 import { Bell } from 'lucide-react'
 import { NotificationDrawer, useNotificationBell } from '../../features/notifications'
 
 export const NotificationBell: React.FC = () => {
   const { drawerOpen, unreadCount, handleOpen, handleClose } = useNotificationBell()
+  const clientMatch = useMatch('/clients/:clientId/*')
+  const clientRecordId = clientMatch?.params.clientId ? Number(clientMatch.params.clientId) : undefined
 
   return (
     <>
@@ -24,7 +27,7 @@ export const NotificationBell: React.FC = () => {
           </span>
         )}
       </button>
-      <NotificationDrawer open={drawerOpen} onClose={handleClose} />
+      <NotificationDrawer open={drawerOpen} onClose={handleClose} clientRecordId={clientRecordId} />
     </>
   )
 }

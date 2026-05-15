@@ -5,8 +5,8 @@ export type {
   NotificationItem,
   NotificationListResponse,
   UnreadCountResponse,
-  MarkReadResponse,
   ListNotificationsParams,
-  SendNotificationPayload,
-  SendNotificationResponse,
+  NotificationChannel,
+  ManualSendPayload,
+  ManualSendResponse,
 } from './contracts'

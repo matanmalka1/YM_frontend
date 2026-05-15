@@ -1,161 +1,113 @@
-import { useEffect, useRef, useState } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { Modal } from '../../../components/ui/overlays/Modal'
 import { Button } from '../../../components/ui/primitives/Button'
-import { Textarea } from '../../../components/ui/inputs/Textarea'
 import { Select } from '../../../components/ui/inputs/Select'
-import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client'
-import { formatPhoneNumber } from '@/utils/utils'
+import { Textarea } from '../../../components/ui/inputs/Textarea'
+import { ClientPickerField, useClientPickerState } from '../../../components/shared/client'
 import { useSendNotification } from '../hooks/useSendNotification'
-import { useClientForNotification } from '../hooks/useClientForNotification'
-import type { SendNotificationModalProps } from '../types'
+import type { NotificationChannel } from '../api'
 
-interface FormValues {
-  channel: 'whatsapp' | 'email'
-  message: string
+const CHANNEL_OPTIONS: { value: NotificationChannel; label: string }[] = [
+  { value: 'email', label: 'אימייל' },
+  { value: 'whatsapp', label: 'WhatsApp' },
+]
+
+const schema = z.object({
+  channel: z.enum(['email', 'whatsapp'] as const),
+  message: z.string().min(1, 'נדרש תוכן הודעה').max(1000, 'מקסימום 1000 תווים'),
+})
+
+type FormValues = z.infer<typeof schema>
+
+export interface SendNotificationModalProps {
+  open: boolean
+  onClose: () => void
+  clientRecordId?: number
 }
 
-export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ open, onClose, clientId }) => {
-  const [clientQuery, setClientQuery] = useState('')
+export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
+  open,
+  onClose,
+  clientRecordId,
+}) => {
+  const { send, isSending } = useSendNotification()
   const [clientError, setClientError] = useState<string | undefined>()
 
-  const {
-    selectedClient,
-    selectedBusinessId,
-    clientContact,
-    selectClient,
-    clearClient,
-    reset: resetClient,
-  } = useClientForNotification(clientId)
+  const { clientQuery, selectedClient, handleSelectClient, handleClearClient, handleClientQueryChange, resetClientPicker } =
+    useClientPickerState()
 
   const {
     register,
     handleSubmit,
     reset,
-    control,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm<FormValues>({
+    resolver: zodResolver(schema),
     defaultValues: { channel: 'email', message: '' },
   })
 
-  const channel = useWatch({ control, name: 'channel' })
-
-  const resetRef = useRef(reset)
-  resetRef.current = reset
-  const resetClientRef = useRef(resetClient)
-  resetClientRef.current = resetClient
-
   useEffect(() => {
     if (open) {
-      resetRef.current({ channel: 'email', message: '' })
-      setClientQuery('')
+      reset({ channel: 'email', message: '' })
       setClientError(undefined)
-      resetClientRef.current(clientId)
+      resetClientPicker()
     }
-  }, [open, clientId])
+  }, [open, reset, resetClientPicker])
 
-  const { sendNotification, isSending } = useSendNotification(onClose)
+  const resolvedClientRecordId = clientRecordId ?? selectedClient?.id
 
-  const onSubmit = (values: FormValues) => {
-    if (!selectedClient) {
-      setClientError('שדה חובה')
-      return
-    }
-    if (!selectedBusinessId) {
-      setClientError('לא נמצא עסק פעיל ללקוח זה')
+  const submit = handleSubmit((values) => {
+    if (resolvedClientRecordId == null) {
+      setClientError('יש לבחור לקוח')
       return
     }
     setClientError(undefined)
-    sendNotification({
-      business_id: selectedBusinessId,
-      channel: values.channel,
-      message: values.message,
-    })
-  }
+    send({ client_record_id: resolvedClientRecordId, preferred_channel: values.channel, message: values.message }, { onSuccess: onClose })
+  })
 
   return (
     <Modal
       open={open}
-      title="שלח הודעה"
+      title="שליחת הודעה ידנית"
       onClose={onClose}
-      isDirty={isDirty}
       footer={
-        <div className="flex gap-2 justify-start" dir="rtl">
-          <Button type="submit" form="send-notification-form" disabled={isSending}>
-            {isSending ? 'שולח...' : 'שלח'}
-          </Button>
-          <Button type="button" variant="outline" onClick={onClose} disabled={isSending}>
+        <div className="flex gap-2 justify-end">
+          <Button type="button" variant="ghost" disabled={isSending} onClick={onClose}>
             ביטול
+          </Button>
+          <Button type="button" isLoading={isSending} disabled={isSending} onClick={submit}>
+            שלח
           </Button>
         </div>
       }
     >
-      <form id="send-notification-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4" dir="rtl">
-        <div className="space-y-1">
-          {clientId != null ? (
-            <SelectedClientDisplay
-              label="לקוח"
-              name={selectedClient?.name || `לקוח #${clientId}`}
-              id={clientId}
-              onClear={() => {}}
-            />
-          ) : selectedClient ? (
-            <SelectedClientDisplay
-              label="לקוח"
-              name={selectedClient.name}
-              id={selectedClient.id}
-              onClear={() => {
-                clearClient()
-                setClientQuery('')
-              }}
-            />
-          ) : (
-            <ClientSearchInput
-              label="לקוח"
-              value={clientQuery}
-              onChange={setClientQuery}
-              onSelect={async (c) => {
-                setClientError(undefined)
-                await selectClient({ id: c.id, name: c.name })
-              }}
-              error={clientError}
-              placeholder="חפש לפי שם, ת.ז. / ח.פ..."
-            />
-          )}
-          {selectedClient && clientContact && (
-            <p className="text-xs text-gray-500 pe-1">
-              {channel === 'whatsapp'
-                ? clientContact.phone
-                  ? formatPhoneNumber(clientContact.phone)
-                  : 'אין מספר טלפון ללקוח'
-                : (clientContact.email ?? 'אין כתובת אימייל ללקוח')}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <Select
-            label="ערוץ שליחה"
-            options={[
-              { value: 'email', label: 'אימייל' },
-              { value: 'whatsapp', label: 'וואטסאפ' },
-            ]}
-            {...register('channel', { required: true })}
+      <form onSubmit={submit} className="space-y-4" dir="rtl">
+        {clientRecordId == null && (
+          <ClientPickerField
+            selectedClient={selectedClient}
+            clientQuery={clientQuery}
+            onQueryChange={handleClientQueryChange}
+            onSelect={handleSelectClient}
+            onClear={handleClearClient}
+            error={clientError}
           />
-        </div>
-
-        <div>
-          <Textarea
-            label="תוכן ההודעה"
-            {...register('message', {
-              required: 'שדה חובה',
-              maxLength: { value: 1000, message: 'עד 1000 תווים' },
-            })}
-            rows={4}
-            placeholder="הכנס את תוכן ההודעה..."
-          />
-          {errors.message && <p className="mt-1 text-xs text-negative-600">{errors.message.message}</p>}
-        </div>
+        )}
+        <Select
+          label="ערוץ שליחה"
+          error={errors.channel?.message}
+          options={CHANNEL_OPTIONS}
+          {...register('channel')}
+        />
+        <Textarea
+          label="תוכן ההודעה"
+          rows={5}
+          placeholder="הזן את תוכן ההודעה..."
+          error={errors.message?.message}
+          {...register('message')}
+        />
       </form>
     </Modal>
   )
