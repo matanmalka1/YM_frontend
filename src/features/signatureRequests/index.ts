@@ -20,6 +20,7 @@ export type {
   SignatureRequestListResponse,
   AuditEvent,
   CreateSignatureRequestPayload,
+  CreateAndSendSignatureRequestPayload,
   SendSignatureRequestResponse,
   SignerViewResponse,
 } from './api'

@@ -22,21 +22,25 @@ export const buildSigningUrl = (hint: string): string => {
 export const useSignatureRequestSigningUrls = (sendRequest: (id: number) => Promise<SendSignatureRequestResponse>) => {
   const [signingUrls, setSigningUrls] = useState<Record<number, string>>({})
 
+  const rememberSigningUrl = useCallback((result: SendSignatureRequestResponse) => {
+    if (!result.signing_url_hint) return
+    setSigningUrls((prev) => ({
+      ...prev,
+      [result.id]: buildSigningUrl(result.signing_url_hint),
+    }))
+  }, [])
+
   const handleSend = useCallback(
     async (id: number) => {
       const result = await sendRequest(id)
-      if (result?.signing_url_hint) {
-        setSigningUrls((prev) => ({
-          ...prev,
-          [id]: buildSigningUrl(result.signing_url_hint),
-        }))
-      }
+      rememberSigningUrl(result)
     },
-    [sendRequest],
+    [rememberSigningUrl, sendRequest],
   )
 
   return {
     signingUrls,
     handleSend,
+    rememberSigningUrl,
   }
 }

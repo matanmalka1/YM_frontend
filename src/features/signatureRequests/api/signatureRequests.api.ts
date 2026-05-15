@@ -10,6 +10,7 @@ import type {
   SignatureRequestWithAudit,
   AuditEvent,
   SignatureRequestResponse,
+  CreateAndSendSignatureRequestPayload,
   CreateSignatureRequestPayload,
   SendSignatureRequestPayload,
   SendSignatureRequestResponse,
@@ -39,13 +40,6 @@ export const signatureRequestsApi = {
     return response.data
   },
 
-  listActive: async (params?: { page?: number; page_size?: number }): Promise<SignatureRequestListResponse> => {
-    const response = await api.get<SignatureRequestListResponse>(SIGNATURE_REQUEST_ENDPOINTS.signatureRequestsActive, {
-      params,
-    })
-    return response.data
-  },
-
   getById: async (id: number): Promise<SignatureRequestWithAudit> => {
     const response = await api.get<SignatureRequestWithAudit>(SIGNATURE_REQUEST_ENDPOINTS.signatureRequestById(id))
     return response.data
@@ -60,6 +54,14 @@ export const signatureRequestsApi = {
 
   create: async (payload: CreateSignatureRequestPayload): Promise<SignatureRequestResponse> => {
     const response = await api.post<SignatureRequestResponse>(SIGNATURE_REQUEST_ENDPOINTS.signatureRequests, payload)
+    return response.data
+  },
+
+  createAndSend: async (payload: CreateAndSendSignatureRequestPayload): Promise<SendSignatureRequestResponse> => {
+    const response = await api.post<SendSignatureRequestResponse>(
+      SIGNATURE_REQUEST_ENDPOINTS.signatureRequestsCreateAndSend,
+      payload,
+    )
     return response.data
   },
 

@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import { Link2 } from 'lucide-react'
 import { Modal } from '../../../components/ui/overlays/Modal'
 import { ModalFormActions } from '../../../components/ui/overlays/ModalFormActions'
 import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
 import { Textarea } from '../../../components/ui/inputs/Textarea'
 import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client'
-import type { CreateSignatureRequestPayload, SignatureRequestType } from '../api'
+import type { CreateAndSendSignatureRequestPayload, SignatureRequestType } from '../api'
 import { getSignatureRequestTypeLabel } from '../../../utils/enums'
 
 const REQUEST_TYPES: SignatureRequestType[] = [
@@ -27,7 +26,7 @@ interface Props {
   signerPhone?: string
   isLoading: boolean
   onClose: () => void
-  onCreate: (payload: CreateSignatureRequestPayload) => Promise<unknown>
+  onCreateAndSend: (payload: CreateAndSendSignatureRequestPayload) => Promise<unknown>
 }
 
 export const CreateSignatureRequestModal: React.FC<Props> = ({
@@ -38,7 +37,7 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
   signerEmail,
   isLoading,
   onClose,
-  onCreate,
+  onCreateAndSend,
 }) => {
   const [selectedClient, setSelectedClient] = useState<{ id: number; name: string } | null>(
     initialClientId != null ? { id: initialClientId, name: initialSignerName } : null,
@@ -69,7 +68,7 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
     e.preventDefault()
     const resolvedSignerNameFinal = overrideName.trim() || resolvedSignerName
     if (!title.trim() || !resolvedClientId || !resolvedSignerNameFinal) return
-    await onCreate({
+    await onCreateAndSend({
       client_record_id: resolvedClientId,
       business_id: businessId,
       request_type: requestType,
@@ -91,19 +90,13 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
           onCancel={handleClose}
           submitForm={CREATE_SIGNATURE_REQUEST_FORM_ID}
           submitType="submit"
-          submitLabel="יצירה"
+          submitLabel="צור ושלח"
           isLoading={isLoading}
           submitDisabled={isLoading}
         />
       }
     >
       <form id={CREATE_SIGNATURE_REQUEST_FORM_ID} onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex items-start gap-2 rounded-lg border border-info-100 bg-info-50 px-3 py-2.5 text-xs text-info-700">
-          <Link2 className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-          <span>
-            לאחר יצירה, לחץ <strong>שלח</strong> כדי לקבל קישור חתימה שניתן לשלוח ללקוח (וואטסאפ, אימייל, SMS וכד׳).
-          </span>
-        </div>
         {initialClientId == null &&
           (selectedClient ? (
             <SelectedClientDisplay

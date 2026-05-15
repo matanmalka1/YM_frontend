@@ -9,11 +9,7 @@ import { cn, formatClientOfficeId, formatDate } from '@/utils/utils'
 import type { SignatureRequestResponse } from '../api'
 import { usePendingSignatureRequests } from '../hooks/usePendingSignatureRequests'
 import { useSignatureRequestActions } from '../hooks/useSignatureRequestActions'
-import {
-  SIGNATURE_REQUEST_TERMINAL_STATUSES,
-  signatureRequestStatusVariants,
-  useSignatureRequestSigningUrls,
-} from '../utils'
+import { signatureRequestStatusVariants, useSignatureRequestSigningUrls } from '../utils'
 import { CreateSignatureRequestModal } from './CreateSignatureRequestModal'
 import { SignatureRequestAuditDrawer } from './SignatureRequestAuditDrawer'
 import { SignatureRequestRowActions } from './SignatureRequestRowActions'
@@ -24,17 +20,12 @@ interface Props {
 
 export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = false }) => {
   const { items, total, businessLookup, isLoading, error } = usePendingSignatureRequests()
-  const { send, isSending, cancel, isCanceling, create, isCreating } = useSignatureRequestActions()
+  const { send, isSending, cancel, isCanceling, createAndSend, isCreatingAndSending } = useSignatureRequestActions()
   const [auditRequestId, setAuditRequestId] = useState<number | null>(null)
-  const [showAll, setShowAll] = useState(false)
   const [showCreate, setShowCreate] = useState(false)
-  const { signingUrls, handleSend } = useSignatureRequestSigningUrls(send)
+  const { signingUrls, handleSend, rememberSigningUrl } = useSignatureRequestSigningUrls(send)
 
-  const displayedItems = useMemo(
-    () => (showAll ? items : items.filter((r) => !SIGNATURE_REQUEST_TERMINAL_STATUSES.has(r.status))),
-    [items, showAll],
-  )
-  const tableItems = compact ? displayedItems.slice(0, 3) : displayedItems
+  const tableItems = compact ? items.slice(0, 3) : items
 
   const columns = useMemo(
     () => [
@@ -149,22 +140,6 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
       </div>
 
       <div className={cn('space-y-4', compact ? 'p-5' : 'p-4')}>
-        <div className="flex items-center justify-between gap-2">
-          <span
-            className={cn(
-              'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-bold',
-              displayedItems.length > 0 ? 'bg-blue-50 text-blue-700' : 'bg-slate-100 text-slate-700',
-            )}
-          >
-            {showAll ? 'כולל ארכיון' : 'פעילות בלבד'}
-          </span>
-          {!compact && (
-            <Button type="button" variant="ghost" size="sm" onClick={() => setShowAll((v) => !v)}>
-              {showAll ? 'הסתר סגורות' : 'הצג הכל'}
-            </Button>
-          )}
-        </div>
-
         {error ? (
           <div className="flex flex-col items-center justify-center gap-2 py-10 text-center">
             <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gray-100 text-gray-400">
@@ -210,7 +185,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
             emptyState={{
               icon: FileSignature,
               title: 'אין בקשות חתימה',
-              message: showAll ? 'אין בקשות חתימה להצגה' : 'אין בקשות חתימה פעילות',
+              message: 'אין בקשות חתימה פעילות',
             }}
           />
         )}
@@ -219,9 +194,12 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
       <SignatureRequestAuditDrawer requestId={auditRequestId} onClose={() => setAuditRequestId(null)} />
       <CreateSignatureRequestModal
         open={showCreate}
-        isLoading={isCreating}
+        isLoading={isCreatingAndSending}
         onClose={() => setShowCreate(false)}
-        onCreate={create}
+        onCreateAndSend={async (payload) => {
+          const result = await createAndSend(payload)
+          rememberSigningUrl(result)
+        }}
       />
     </section>
   )

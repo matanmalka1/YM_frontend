@@ -15,8 +15,8 @@ type Result = {
 
 export const usePendingSignatureRequests = ({ page = 1, pageSize = 50 }: Params = {}): Result => {
   const listQuery = useQuery({
-    queryKey: signatureRequestsQK.active({ page, page_size: pageSize }),
-    queryFn: () => signatureRequestsApi.listActive({ page, page_size: pageSize }),
+    queryKey: signatureRequestsQK.pending({ page, page_size: pageSize }),
+    queryFn: () => signatureRequestsApi.listPending({ page, page_size: pageSize }),
   })
 
   const items = listQuery.data?.items ?? []

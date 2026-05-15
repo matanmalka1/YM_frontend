@@ -67,6 +67,10 @@ export interface CreateSignatureRequestPayload {
   content_to_hash?: string
 }
 
+export interface CreateAndSendSignatureRequestPayload extends CreateSignatureRequestPayload {
+  expiry_days?: number
+}
+
 export interface SendSignatureRequestPayload {
   expiry_days?: number
 }

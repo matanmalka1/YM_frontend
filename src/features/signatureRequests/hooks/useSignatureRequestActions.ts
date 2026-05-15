@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   signatureRequestsApi,
   signatureRequestsQK,
-  type CreateSignatureRequestPayload,
+  type CreateAndSendSignatureRequestPayload,
   type SendSignatureRequestResponse,
 } from '../api'
 import { showErrorToast } from '../../../utils/utils'
@@ -24,13 +24,14 @@ export const useSignatureRequestActions = (clientId?: number) => {
     }
   }
 
-  const createMutation = useMutation({
-    mutationFn: (payload: CreateSignatureRequestPayload) => signatureRequestsApi.create(payload),
+  const createAndSendMutation = useMutation({
+    mutationFn: (payload: CreateAndSendSignatureRequestPayload): Promise<SendSignatureRequestResponse> =>
+      signatureRequestsApi.createAndSend(payload),
     onSuccess: () => {
-      toast.success('בקשת חתימה נוצרה בהצלחה')
+      toast.success('בקשת החתימה נוצרה ונשלחה')
       invalidate()
     },
-    onError: (err) => showErrorToast(err, 'שגיאה ביצירת בקשת חתימה'),
+    onError: (err) => showErrorToast(err, 'שגיאה ביצירת ושליחת בקשת חתימה'),
   })
 
   const sendMutation = useMutation({
@@ -53,8 +54,8 @@ export const useSignatureRequestActions = (clientId?: number) => {
   })
 
   return {
-    create: (payload: CreateSignatureRequestPayload) => createMutation.mutateAsync(payload),
-    isCreating: createMutation.isPending,
+    createAndSend: (payload: CreateAndSendSignatureRequestPayload) => createAndSendMutation.mutateAsync(payload),
+    isCreatingAndSending: createAndSendMutation.isPending,
 
     send: (id: number, expiryDays?: number) => sendMutation.mutateAsync({ id, expiryDays }),
     isSending: sendMutation.isPending,

@@ -8,6 +8,7 @@ export type {
   SignatureRequestListResponse,
   AuditEvent,
   CreateSignatureRequestPayload,
+  CreateAndSendSignatureRequestPayload,
   SendSignatureRequestPayload,
   SendSignatureRequestResponse,
   CancelSignatureRequestPayload,

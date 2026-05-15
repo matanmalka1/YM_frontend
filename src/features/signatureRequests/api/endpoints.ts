@@ -1,6 +1,6 @@
 export const SIGNATURE_REQUEST_ENDPOINTS = {
   signatureRequests: '/signature-requests',
-  signatureRequestsActive: '/signature-requests/active',
+  signatureRequestsCreateAndSend: '/signature-requests/create-and-send',
   signatureRequestsPending: '/signature-requests/pending',
   signatureRequestById: (id: number | string) => `/signature-requests/${id}`,
   signatureRequestSend: (id: number | string) => `/signature-requests/${id}/send`,
