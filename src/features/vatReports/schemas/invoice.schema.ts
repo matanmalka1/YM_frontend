@@ -2,7 +2,7 @@ import { z } from 'zod'
 import type { CreateVatInvoicePayload, UpdateVatInvoicePayload } from '../api'
 import { VAT_RATE_TYPES, DOCUMENT_TYPES } from '../constants'
 
-const netAmountSchema = z
+const grossAmountSchema = z
   .string()
   .trim()
   .min(1, 'חובה להזין סכום')
@@ -11,7 +11,7 @@ const netAmountSchema = z
   })
 
 const invoiceCommonFields = {
-  net_amount: netAmountSchema,
+  gross_amount: grossAmountSchema,
   expense_category: z.string().optional(),
   rate_type: z.enum(VAT_RATE_TYPES).optional(),
   document_type: z.enum(DOCUMENT_TYPES).optional(),
@@ -53,7 +53,7 @@ const inferCounterpartyIdType = (counterpartyId?: string): 'il_business' | undef
 }
 
 const buildInvoicePayloadBase = (values: VatInvoiceEditValues) => ({
-  net_amount: values.net_amount,
+  gross_amount: values.gross_amount,
   expense_category: values.expense_category || null,
   rate_type: values.rate_type || undefined,
   document_type: values.document_type || null,

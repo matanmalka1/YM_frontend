@@ -52,11 +52,14 @@ export const toDateInputValue = (dateStr: string): string => {
   }
 }
 
+export const getVatInvoiceGrossAmount = (netAmount: string | number, vatAmount: string | number): string =>
+  (Number(netAmount) + Number(vatAmount)).toFixed(2)
+
 export const getVatCategoryLabel = (category: string | null): string =>
   CATEGORY_LABELS[category ?? ''] ?? category ?? 'כללי'
 
 export const getVatInvoiceDefaultValues = (invoiceType: 'income' | 'expense'): VatInvoiceRowValues => ({
   invoice_type: invoiceType,
-  net_amount: '',
+  gross_amount: '',
   expense_category: invoiceType === 'expense' ? EXPENSE_CATEGORIES[0] : undefined,
 })

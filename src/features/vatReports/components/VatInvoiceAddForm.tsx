@@ -57,9 +57,9 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({
     >
       <div className="flex flex-wrap items-end gap-x-3 gap-y-3">
         {/* Required: amount */}
-        <FormField label="סכום נטו ₪" error={errors.net_amount?.message} className="w-32 shrink-0">
+        <FormField label='סכום כולל מע"מ ₪' error={errors.gross_amount?.message} className="w-36 shrink-0">
           <Input
-            {...register('net_amount')}
+            {...register('gross_amount')}
             placeholder="0.00"
             dir="ltr"
             inputMode="decimal"

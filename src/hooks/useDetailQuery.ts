@@ -6,6 +6,7 @@ export const useDetailQuery = <TData>(
   id: string | number | null | undefined,
   options?: Omit<UseQueryOptions<TData>, 'queryKey' | 'queryFn' | 'enabled'>,
 ) =>
+  
   useQuery<TData>({
     queryKey,
     queryFn: fetchFn,

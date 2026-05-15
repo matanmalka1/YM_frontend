@@ -12,7 +12,13 @@ import {
   type VatInvoiceEditValues,
 } from '../schemas/invoice.schema'
 import { EXPENSE_CATEGORIES, CATEGORY_COLORS, VAT_EXPENSE_CATEGORY_OPTIONS } from '../constants'
-import { formatVatAmount, getVatDeductionRateClass, getVatDeductionRateLabel, toDateInputValue } from '../utils'
+import {
+  formatVatAmount,
+  getVatDeductionRateClass,
+  getVatDeductionRateLabel,
+  getVatInvoiceGrossAmount,
+  toDateInputValue,
+} from '../utils'
 import type { VatInvoiceEditRowProps } from '../types'
 import { semanticMonoToneClasses } from '../../../utils/semanticColors'
 import { blockNonNumericKey } from '../view.helpers'
@@ -32,7 +38,7 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
   const { register, handleSubmit, control } = useForm<VatInvoiceEditValues>({
     resolver: zodResolver(vatInvoiceEditSchema),
     defaultValues: {
-      net_amount: String(invoice.net_amount),
+      gross_amount: getVatInvoiceGrossAmount(invoice.net_amount, invoice.vat_amount),
       expense_category: invoice.expense_category ?? undefined,
       invoice_number: invoice.invoice_number,
       invoice_date: toDateInputValue(invoice.invoice_date),
@@ -123,11 +129,12 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
       </td>
       <td className="px-2 py-1.5">
         <Input
-          {...register('net_amount')}
+          {...register('gross_amount')}
           dir="ltr"
           size="xs"
           className="w-24 font-mono"
           inputMode="decimal"
+          aria-label='סכום כולל מע"מ'
           onKeyDown={(e) => {
             if (e.key === 'Escape') {
               e.preventDefault()

@@ -112,7 +112,7 @@ export interface CreateVatInvoicePayload {
   invoice_number?: string
   invoice_date?: string
   counterparty_name?: string
-  net_amount: string
+  gross_amount: string
   counterparty_id?: string | null
   counterparty_id_type?: string | null
   expense_category?: string | null
@@ -121,7 +121,7 @@ export interface CreateVatInvoicePayload {
 }
 
 export interface UpdateVatInvoicePayload {
-  net_amount?: string
+  gross_amount?: string
   invoice_number?: string
   invoice_date?: string
   counterparty_name?: string
