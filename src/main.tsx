@@ -21,7 +21,7 @@ root.render(
       <BrowserRouter>
         <AppErrorBoundary>
           <Suspense fallback={<PageLoading />}>
-            <div className="min-h-screen bg-gray-50 flex flex-col">
+            <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
               <AppRoutes />
               <Toaster richColors position="top-center" />
             </div>
