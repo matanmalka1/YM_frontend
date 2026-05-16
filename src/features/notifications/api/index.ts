@@ -4,7 +4,7 @@ export type {
   NotificationSeverity,
   NotificationItem,
   NotificationListResponse,
-  UnreadCountResponse,
+  NotificationSummaryResponse,
   ListNotificationsParams,
   NotificationChannel,
   ManualSendPayload,

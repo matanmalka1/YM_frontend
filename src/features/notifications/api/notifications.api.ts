@@ -4,7 +4,7 @@ import { toQueryParams } from '@/api/queryParams'
 import type {
   NotificationItem,
   NotificationListResponse,
-  UnreadCountResponse,
+  NotificationSummaryResponse,
   ListNotificationsParams,
   ManualSendPayload,
   ManualSendResponse,
@@ -24,9 +24,9 @@ export const notificationsApi = {
     return normalizeNotifications(response.data)
   },
 
-  getUnreadCount: async (clientId?: number): Promise<UnreadCountResponse> => {
-    const response = await api.get<UnreadCountResponse>(
-      NOTIFICATION_ENDPOINTS.notificationsUnreadCount,
+  getSummary: async (clientId?: number): Promise<NotificationSummaryResponse> => {
+    const response = await api.get<NotificationSummaryResponse>(
+      NOTIFICATION_ENDPOINTS.notificationsSummary,
       clientId != null ? { params: toQueryParams({ client_record_id: clientId }) } : undefined,
     )
     return response.data

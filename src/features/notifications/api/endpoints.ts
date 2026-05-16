@@ -1,5 +1,5 @@
 export const NOTIFICATION_ENDPOINTS = {
   notifications: '/notifications',
-  notificationsUnreadCount: '/notifications/unread-count',
+  notificationsSummary: '/notifications/summary',
   notificationsSend: '/notifications/send',
 } as const

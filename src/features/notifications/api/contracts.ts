@@ -28,8 +28,11 @@ export interface NotificationListResponse {
   page_size: number
 }
 
-export interface UnreadCountResponse {
-  unread_count: number
+export interface NotificationSummaryResponse {
+  pending: number
+  sent: number
+  failed: number
+  total: number
 }
 
 export interface ListNotificationsParams {
@@ -37,6 +40,9 @@ export interface ListNotificationsParams {
   business_id?: number
   page?: number
   page_size?: number
+  status?: string
+  trigger?: string
+  channel?: string
 }
 
 export type NotificationChannel = 'email' | 'whatsapp'

@@ -6,14 +6,14 @@ export const useNotificationBell = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   const { data } = useQuery({
-    queryKey: notificationsQK.unreadCount(),
-    queryFn: () => notificationsApi.getUnreadCount(),
+    queryKey: notificationsQK.summary(),
+    queryFn: () => notificationsApi.getSummary(),
     refetchInterval: 30_000,
   })
 
-  const unreadCount = data?.unread_count ?? 0
+  const badgeCount = (data?.pending ?? 0) + (data?.failed ?? 0)
   const handleOpen = () => setDrawerOpen(true)
   const handleClose = () => setDrawerOpen(false)
 
-  return { drawerOpen, unreadCount, handleOpen, handleClose }
+  return { drawerOpen, badgeCount, handleOpen, handleClose }
 }
