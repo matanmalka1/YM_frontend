@@ -5,4 +5,11 @@ export { NotificationsTab } from './components/NotificationsTab'
 export { SendNotificationModal } from './components/SendNotificationModal'
 export { useNotificationBell } from './hooks/useNotificationBell'
 export { useSendNotification } from './hooks/useSendNotification'
-export type { NotificationSeverity, NotificationItem, ListNotificationsParams, NotificationChannel, ManualSendPayload, ManualSendResponse } from './api'
+export type {
+  NotificationSeverity,
+  NotificationItem,
+  ListNotificationsParams,
+  NotificationChannel,
+  ManualSendPayload,
+  ManualSendResponse,
+} from './api'

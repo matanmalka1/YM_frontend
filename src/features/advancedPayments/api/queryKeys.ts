@@ -1,5 +1,4 @@
 export const advancedPaymentsQK = {
-  forClient: (clientId: number) => ['tax', 'advance-payments', 'client', clientId, 'all'] as const,
   all: ['tax', 'advance-payments'] as const,
   forClientYear: (clientId: number, year: number) => ['tax', 'advance-payments', 'client', clientId, year] as const,
   suggestion: (clientId: number, year: number, periodMonthsCount: 1 | 2) =>

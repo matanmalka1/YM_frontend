@@ -45,7 +45,10 @@ export const signatureRequestsApi = {
   // ── Mutations ────────────────────────────────────────────────────────────
 
   create: async (payload: CreateSignatureRequestPayload): Promise<CreateSignatureRequestResponse> => {
-    const response = await api.post<CreateSignatureRequestResponse>(SIGNATURE_REQUEST_ENDPOINTS.signatureRequests, payload)
+    const response = await api.post<CreateSignatureRequestResponse>(
+      SIGNATURE_REQUEST_ENDPOINTS.signatureRequests,
+      payload,
+    )
     return response.data
   },
 

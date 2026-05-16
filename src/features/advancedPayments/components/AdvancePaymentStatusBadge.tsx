@@ -1,7 +1,7 @@
 import { Badge } from '../../../components/ui/primitives/Badge'
 import { getAdvancePaymentStatusLabel } from '../../../utils/enums'
 import type { AdvancePaymentStatus } from '../types'
-import { STATUS_VARIANT } from '../utils'
+import { ADVANCE_PAYMENT_STATUS_VARIANTS as STATUS_VARIANT } from '../../../utils/enums'
 
 interface AdvancePaymentStatusBadgeProps {
   status: AdvancePaymentStatus

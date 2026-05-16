@@ -40,10 +40,7 @@ interface MoreNavGroup {
 const MORE_NAV_GROUPS: MoreNavGroup[] = [
   {
     label: 'מס',
-    items: [
-      getNavItem('/reports/advance-payments'),
-      getNavItem('/reports/annual-status'),
-    ],
+    items: [getNavItem('/reports/advance-payments'), getNavItem('/reports/annual-status')],
   },
   {
     label: 'ניהול',
@@ -51,10 +48,7 @@ const MORE_NAV_GROUPS: MoreNavGroup[] = [
   },
   {
     label: 'הגדרות',
-    items: [
-      { ...getNavItem('/settings/users'), label: 'משתמשים' },
-      getNavItem('/settings/tax-calendar'),
-    ],
+    items: [{ ...getNavItem('/settings/users'), label: 'משתמשים' }, getNavItem('/settings/tax-calendar')],
   },
 ]
 

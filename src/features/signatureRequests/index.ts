@@ -6,11 +6,7 @@ export { CreateSignatureRequestModal } from './components/CreateSignatureRequest
 export { SignatureRequestAuditDrawer } from './components/SignatureRequestAuditDrawer'
 export { usePendingSignatureRequests } from './hooks/usePendingSignatureRequests'
 export { useSignatureRequestActions } from './hooks/useSignatureRequestActions'
-export {
-  buildSigningUrl,
-  signatureRequestStatusVariants,
-  useSignatureRequestSigningUrls,
-} from './utils'
+export { buildSigningUrl, signatureRequestStatusVariants, useSignatureRequestSigningUrls } from './utils'
 export type {
   SignatureRequestStatus,
   SignatureRequestType,

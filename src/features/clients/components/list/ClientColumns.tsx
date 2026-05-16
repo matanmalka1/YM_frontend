@@ -10,11 +10,7 @@ import {
 import type { ClientRecordResponse } from '../../api'
 import { formatClientOfficeId, formatPhoneNumber } from '@/utils/utils'
 import { ClientRowActions } from './ClientRowActions'
-import {
-  CLIENT_STATUS_BADGE_VARIANTS,
-  getEntityTypeLabel,
-  getClientStatusLabel,
-} from '../../constants'
+import { CLIENT_STATUS_BADGE_VARIANTS, getEntityTypeLabel, getClientStatusLabel } from '../../constants'
 
 interface BuildClientColumnsParams {
   selectedIds?: Set<number>

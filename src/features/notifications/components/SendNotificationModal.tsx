@@ -28,16 +28,18 @@ export interface SendNotificationModalProps {
   clientRecordId?: number
 }
 
-export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
-  open,
-  onClose,
-  clientRecordId,
-}) => {
+export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ open, onClose, clientRecordId }) => {
   const { send, isSending } = useSendNotification()
   const [clientError, setClientError] = useState<string | undefined>()
 
-  const { clientQuery, selectedClient, handleSelectClient, handleClearClient, handleClientQueryChange, resetClientPicker } =
-    useClientPickerState()
+  const {
+    clientQuery,
+    selectedClient,
+    handleSelectClient,
+    handleClearClient,
+    handleClientQueryChange,
+    resetClientPicker,
+  } = useClientPickerState()
 
   const {
     register,
@@ -65,7 +67,10 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
       return
     }
     setClientError(undefined)
-    send({ client_record_id: resolvedClientRecordId, preferred_channel: values.channel, message: values.message }, { onSuccess: onClose })
+    send(
+      { client_record_id: resolvedClientRecordId, preferred_channel: values.channel, message: values.message },
+      { onSuccess: onClose },
+    )
   })
 
   return (
@@ -95,12 +100,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
             error={clientError}
           />
         )}
-        <Select
-          label="ערוץ שליחה"
-          error={errors.channel?.message}
-          options={CHANNEL_OPTIONS}
-          {...register('channel')}
-        />
+        <Select label="ערוץ שליחה" error={errors.channel?.message} options={CHANNEL_OPTIONS} {...register('channel')} />
         <Textarea
           label="תוכן ההודעה"
           rows={5}

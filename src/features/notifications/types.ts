@@ -14,4 +14,3 @@ export interface NotificationsTabProps {
 export interface SeverityBadgeProps {
   severity: NotificationSeverity
 }
-

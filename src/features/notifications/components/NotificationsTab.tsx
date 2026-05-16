@@ -47,11 +47,7 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
       )}
 
       {isAdvisor && clientRecordId != null && (
-        <SendNotificationModal
-          open={sendOpen}
-          onClose={() => setSendOpen(false)}
-          clientRecordId={clientRecordId}
-        />
+        <SendNotificationModal open={sendOpen} onClose={() => setSendOpen(false)} clientRecordId={clientRecordId} />
       )}
     </div>
   )

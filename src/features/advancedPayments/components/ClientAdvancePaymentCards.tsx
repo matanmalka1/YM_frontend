@@ -1,5 +1,6 @@
 import type { AdvancePaymentRow } from '../types'
-import { fmtCurrency, getAdvancePaymentMonthLabel } from '../utils'
+import { fmtCurrency } from '@/utils/utils'
+import { getAdvancePaymentMonthLabel } from './advancePaymentComponent.utils'
 import { formatDate, cn } from '../../../utils/utils'
 import { AdvancePaymentStatusBadge } from './AdvancePaymentStatusBadge'
 import { AdvancePaymentTimingBadge } from './AdvancePaymentTimingBadge'

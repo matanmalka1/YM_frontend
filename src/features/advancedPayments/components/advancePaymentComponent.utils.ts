@@ -1,9 +1,11 @@
-import { BIMONTHLY_START_MONTH_VALUES } from '@/constants/periodOptions.constants'
-import { getAdvancePaymentMonthLabel } from '../utils'
+import { BIMONTHLY_START_MONTH_VALUES, getReportingPeriodMonthLabel } from '@/constants/periodOptions.constants'
 import type { CreateAdvancePaymentFormValues } from '../schemas'
 import type { AdvancePaymentStatus, CreateAdvancePaymentPayload } from '../types'
-import { MONTH_OPTIONS } from '../utils'
+import { MONTH_OPTIONS } from '@/utils/utils'
 import { DEFAULT_BIMONTHLY_START_MONTH } from './advancePaymentComponent.constants'
+
+export const getAdvancePaymentMonthLabel = (period: string, periodMonthsCount: 1 | 2 = 1) =>
+  getReportingPeriodMonthLabel(period, periodMonthsCount)
 
 type MonoTone = 'neutral' | 'positive' | 'negative'
 

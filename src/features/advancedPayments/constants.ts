@@ -14,12 +14,7 @@ export const ADVANCE_PAYMENT_STATUS_OPTIONS: { value: AdvancePaymentStatus; labe
 export const ADVANCE_PAYMENT_STATUS_OPTIONS_WITH_ALL: {
   value: AdvancePaymentStatus | ''
   label: string
-}[] = [
-  ALL_STATUSES_OPTION,
-  { value: 'pending', label: getAdvancePaymentStatusLabel('pending') },
-  { value: 'partial', label: getAdvancePaymentStatusLabel('partial') },
-  { value: 'paid', label: getAdvancePaymentStatusLabel('paid') },
-]
+}[] = [ALL_STATUSES_OPTION, ...ADVANCE_PAYMENT_STATUS_OPTIONS]
 
 export const ADVANCE_PAYMENT_METHOD_OPTIONS: { value: AdvancePaymentMethod; label: string }[] = (
   ['bank_transfer', 'credit_card', 'check', 'direct_debit', 'cash', 'other'] as AdvancePaymentMethod[]

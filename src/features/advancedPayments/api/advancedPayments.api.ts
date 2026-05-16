@@ -24,14 +24,6 @@ export const advancePaymentsApi = {
     return response.data
   },
 
-  listAllForClient: async (clientId: number, pageSize = 100): Promise<PaginatedResponse<AdvancePaymentRow>> => {
-    const response = await api.get<PaginatedResponse<AdvancePaymentRow>>(
-      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePayments(clientId),
-      { params: toQueryParams({ page_size: pageSize }) },
-    )
-    return response.data
-  },
-
   create: async (clientId: number, payload: CreateAdvancePaymentPayload): Promise<AdvancePaymentRow> => {
     const response = await api.post<AdvancePaymentRow>(
       ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePayments(clientId),

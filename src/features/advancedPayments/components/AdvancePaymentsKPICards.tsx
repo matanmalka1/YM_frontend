@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
-import { fmtCurrency } from '../utils'
+import { fmtCurrency } from '@/utils/utils'
 import { getCollectionPercent } from './advancePaymentComponent.utils'
 
 interface AdvancePaymentsKPICardsProps {
