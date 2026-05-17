@@ -1,27 +1,23 @@
 import { useCallback, useMemo, useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useRole } from '@/hooks/useRole'
 import { useBusinessesForClient } from '@/hooks/useBusinessesForClient'
-import { useMutationWithToast } from '@/hooks/useMutationWithToast'
+import { useTableSelection } from '@/hooks/useTableSelection'
 import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
-import { chargesApi, chargesQK, type BulkChargeActionPayload, type CreateChargePayload } from '../api'
+import { chargesApi, chargesQK, type CreateChargePayload } from '../api'
 import { DEFAULT_CHARGE_LIST_STATS } from '../constants'
-import { runChargeActionRequest } from '../helpers'
-import type { ChargeAction } from '../types'
+import { useChargeActions } from './useChargeActions'
+import { useChargeCreateMutation } from './useChargeCreateMutation'
 
 const PAGE_SIZE = 20
 
 export const useClientCharges = (clientId: number) => {
-  const queryClient = useQueryClient()
   const { isAdvisor } = useRole()
 
   const [page, setPage] = useState(1)
   const [status, setStatus] = useState('')
   const [selectedBusinessId, setSelectedBusinessId] = useState<number | null>(null)
-  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set())
-  const [actionLoadingId, setActionLoadingId] = useState<number | null>(null)
-  const [bulkLoading, setBulkLoading] = useState(false)
 
   const { businesses, isLoading: businessesLoading } = useBusinessesForClient({
     clientId,
@@ -53,81 +49,13 @@ export const useClientCharges = (clientId: number) => {
   const stats = listData?.stats ?? DEFAULT_CHARGE_LIST_STATS
   const error = listError ? getErrorMessage(listError, 'שגיאה בטעינת חיובי הלקוח') : null
   const allIds = useMemo(() => listData?.items.map((c) => c.id) ?? [], [listData])
-
-  const createMutation = useMutationWithToast<Awaited<ReturnType<typeof chargesApi.create>>, CreateChargePayload>({
-    mutationFn: (payload) => chargesApi.create(payload),
-    successMessage: 'חיוב נוצר בהצלחה',
-    errorMessage: 'שגיאה ביצירת חיוב',
-    invalidateKeys: [chargesQK.all],
+  const createMutation = useChargeCreateMutation()
+  const { clearSelection, selectedIds, toggleSelect, toggleSelectAll } = useTableSelection<number>()
+  const { actionLoadingId, bulkLoading, runAction, runBulkAction } = useChargeActions({
+    clearSelection,
+    isAdvisor,
+    selectedIds,
   })
-
-  const actionMutation = useMutation({
-    mutationFn: ({ action, chargeId }: { action: ChargeAction; chargeId: number }) =>
-      runChargeActionRequest(chargeId, action),
-    onSuccess: async () => {
-      toast.success('פעולת חיוב בוצעה בהצלחה')
-      await queryClient.invalidateQueries({ queryKey: chargesQK.all })
-    },
-  })
-
-  const toggleSelect = useCallback((id: number) => {
-    setSelectedIds((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-  }, [])
-
-  const toggleSelectAll = useCallback((ids: number[]) => {
-    setSelectedIds((prev) => {
-      const allSelected = ids.every((id) => prev.has(id))
-      return allSelected ? new Set() : new Set(ids)
-    })
-  }, [])
-
-  const clearSelection = useCallback(() => setSelectedIds(new Set()), [])
-
-  const runAction = useCallback(
-    async (chargeId: number, action: ChargeAction) => {
-      if (!isAdvisor) {
-        toast.error('אין הרשאה לבצע פעולת חיוב זו')
-        return
-      }
-      try {
-        setActionLoadingId(chargeId)
-        await actionMutation.mutateAsync({ action, chargeId })
-      } catch (err: unknown) {
-        showErrorToast(err, 'שגיאה בביצוע פעולת חיוב')
-      } finally {
-        setActionLoadingId(null)
-      }
-    },
-    [actionMutation, isAdvisor],
-  )
-
-  const runBulkAction = useCallback(
-    async (action: BulkChargeActionPayload['action'], cancellationReason?: string) => {
-      if (!isAdvisor || selectedIds.size === 0) return
-      setBulkLoading(true)
-      try {
-        const result = await chargesApi.bulkAction({
-          charge_ids: Array.from(selectedIds),
-          action,
-          cancellation_reason: cancellationReason,
-        })
-        if (result.succeeded.length > 0) toast.success(`${result.succeeded.length} חיובים עודכנו בהצלחה`)
-        result.failed.forEach((f) => toast.error(`חיוב #${f.id}: ${f.error}`))
-        await queryClient.invalidateQueries({ queryKey: chargesQK.all })
-        clearSelection()
-      } catch (err: unknown) {
-        showErrorToast(err, 'שגיאה בביצוע פעולה מרובה')
-      } finally {
-        setBulkLoading(false)
-      }
-    },
-    [clearSelection, isAdvisor, queryClient, selectedIds],
-  )
 
   const submitCreate = useCallback(
     async (payload: CreateChargePayload): Promise<boolean> => {
