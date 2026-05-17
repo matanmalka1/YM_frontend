@@ -50,6 +50,9 @@ interface AdvancePaymentDrawerProps {
   onClose: () => void
   onSave: (id: number, payload: UpdateAdvancePaymentPayload) => Promise<void>
   onDelete?: (id: number) => Promise<void>
+  clientName?: string | null
+  clientIdNumber?: string | null
+  officeClientNumber?: number | null
 }
 
 export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
@@ -61,6 +64,9 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
   onClose,
   onSave,
   onDelete,
+  clientName: clientNameProp,
+  clientIdNumber: clientIdNumberProp,
+  officeClientNumber: officeClientNumberProp,
 }) => {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [paidAmount, setPaidAmount] = useState('')
@@ -89,30 +95,40 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
 
   if (!row) return null
 
-  const numT = Number(turnoverAmount)
-  const rowAdvanceRateValue = getAdvanceRate(row)
-  const numR = Number(rowAdvanceRateValue)
-  const liveCalculated =
-    turnoverAmount !== '' && rowAdvanceRateValue != null && Number.isFinite(numT) && Number.isFinite(numR)
-      ? ((numT * numR) / 100).toFixed(2)
-      : null
-  const liveExpected = overrideAmount !== '' ? overrideAmount : liveCalculated
+  // row field accessors
+  const rowPaidAt = getPaidAt(row)
+  const rowNotes = getNotes(row)
+  const rowTurnoverAmount = 'turnover_amount' in row ? (row.turnover_amount ?? null) : null
+  const rowOverrideAmount = 'override_amount' in row ? (row.override_amount ?? null) : null
+  const rowAdvanceRate = getAdvanceRate(row)
 
+  // normalized form values
   const normalizedPaidAmount = paidAmount.trim()
   const normalizedPaymentMethod = paymentMethod.trim()
   const normalizedPaidAt = paidAt.trim()
   const normalizedNotes = notes.trim()
-  const rowPaidAt = getPaidAt(row)
-  const rowNotes = getNotes(row)
   const currentPaidAt = rowPaidAt ? rowPaidAt.split('T')[0] : ''
+
+  // live calculation
+  const numT = Number(turnoverAmount)
+  const numR = Number(rowAdvanceRate)
+  const liveCalculated =
+    turnoverAmount !== '' && rowAdvanceRate != null && Number.isFinite(numT) && Number.isFinite(numR)
+      ? ((numT * numR) / 100).toFixed(2)
+      : null
+  const liveExpected = overrideAmount !== '' ? overrideAmount : liveCalculated
+
+  // payment state
   const isPaymentStatus = status === 'paid' || status === 'partial'
   const paidLate = getPaidLate(row)
   const timingStatusLabel = paidLate ? 'שולם באיחור' : row.timing_status === 'overdue' ? 'באיחור' : null
   const timingStatusClass = paidLate ? 'text-warning-600' : 'text-error-600'
-  const clientDisplayName = row.business_name ?? null
-  const officeClientNumber = getOfficeClientNumber(row)
-  const idNumber = getIdNumber(row)
-  const advanceRateDisplay = formatAdvanceRate(getAdvanceRate(row))
+
+  // AdvancePaymentOverviewRow includes client identity fields; AdvancePaymentRow does not — caller passes them as props instead
+  const clientDisplayName = clientNameProp ?? row.business_name ?? null
+  const officeClientNumber = getOfficeClientNumber(row) ?? officeClientNumberProp ?? null
+  const idNumber = getIdNumber(row) ?? clientIdNumberProp ?? null
+  const advanceRateDisplay = formatAdvanceRate(rowAdvanceRate)
   const subtitleParts = [
     clientDisplayName,
     officeClientNumber != null ? `מס׳ לקוח ${officeClientNumber}` : null,
@@ -123,9 +139,6 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
     ...(idNumber ? [{ label: 'ת.ז / ח.פ', value: idNumber }] : []),
     ...(advanceRateDisplay ? [{ label: 'שיעור מקדמה', value: advanceRateDisplay }] : []),
   ]
-
-  const rowTurnoverAmount = 'turnover_amount' in row ? (row.turnover_amount ?? null) : null
-  const rowOverrideAmount = 'override_amount' in row ? (row.override_amount ?? null) : null
 
   const isDirty =
     toEditableAmount(row.paid_amount) !== paidAmount ||

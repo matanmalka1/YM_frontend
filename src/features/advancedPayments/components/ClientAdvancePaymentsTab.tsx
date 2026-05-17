@@ -19,9 +19,17 @@ import { getTotalPages, toggleAdvancePaymentStatusFilter } from './advancePaymen
 
 interface ClientAdvancePaymentsTabProps {
   clientId: number
+  clientName?: string | null
+  clientIdNumber?: string | null
+  officeClientNumber?: number | null
 }
 
-export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> = ({ clientId }) => {
+export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> = ({
+  clientId,
+  clientName,
+  clientIdNumber,
+  officeClientNumber,
+}) => {
   const [year, setYear] = useState(getOperationalTaxYear)
   const [statusFilter, setStatusFilter] = useState<AdvancePaymentStatus[]>([])
   const [page, setPage] = useState(1)
@@ -150,6 +158,9 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
         onClose={() => setDrawerRow(null)}
         onSave={handleSave}
         onDelete={isAdvisor ? (id) => deleteMutation.mutateAsync(id) : undefined}
+        clientName={clientName}
+        clientIdNumber={clientIdNumber}
+        officeClientNumber={officeClientNumber}
       />
 
       {isAdvisor && (

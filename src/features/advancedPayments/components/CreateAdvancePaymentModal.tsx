@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
 import { Modal } from '../../../components/ui/overlays/Modal'
 import { Input } from '../../../components/ui/inputs/Input'
 import { Button } from '../../../components/ui/primitives/Button'
@@ -12,18 +11,16 @@ import {
   type CreateAdvancePaymentFormValues,
 } from '../schemas'
 import { ADVANCE_PAYMENT_FREQUENCY_OPTIONS } from '../constants'
-import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import type { CreateAdvancePaymentPayload } from '../types'
 import {
   buildCreateAdvancePaymentPayload,
-  formatSuggestionAmount,
   getAdvancePaymentMonthOptions,
   getValidBimonthlyMonth,
   toFrequency,
   toNumberOrNull,
 } from './advancePaymentComponent.utils'
 import { formatShekelAmount } from '@/utils/utils'
-import { ADVANCE_PAYMENT_SUGGESTION_STALE_TIME_MS, NOTES_TEXTAREA_CLASS } from './advancePaymentComponent.constants'
+import { NOTES_TEXTAREA_CLASS } from './advancePaymentComponent.constants'
 
 interface CreateAdvancePaymentModalProps {
   open: boolean
@@ -37,7 +34,6 @@ interface CreateAdvancePaymentModalProps {
 
 export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps> = ({
   open,
-  clientId,
   year,
   defaultPeriodMonthsCount,
   isCreating,
@@ -79,13 +75,6 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
     setValue('month', nextMonth, { shouldValidate: true })
   }, [month, periodMonthsCount, setValue])
 
-  const { data: suggestion } = useQuery({
-    queryKey: advancedPaymentsQK.suggestion(clientId, year, periodMonthsCount),
-    queryFn: () => advancePaymentsApi.getSuggestion(clientId, year, periodMonthsCount),
-    enabled: open && clientId > 0 && year > 0,
-    staleTime: ADVANCE_PAYMENT_SUGGESTION_STALE_TIME_MS,
-  })
-
   const handleClose = () => {
     reset(CREATE_ADVANCE_PAYMENT_DEFAULTS)
     onClose()
@@ -96,12 +85,6 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
     reset(CREATE_ADVANCE_PAYMENT_DEFAULTS)
     onClose()
   })
-
-  const applySuggestion = () => {
-    if (suggestion?.suggested_amount != null) {
-      setValue('override_amount', Number(suggestion.suggested_amount), { shouldValidate: true })
-    }
-  }
 
   return (
     <Modal
@@ -142,6 +125,7 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
               value={String(field.value)}
               onChange={(e) => field.onChange(toFrequency(e.target.value))}
               options={ADVANCE_PAYMENT_FREQUENCY_OPTIONS}
+              disabled={defaultPeriodMonthsCount != null}
             />
           )}
         />
@@ -192,17 +176,6 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
                 onChange={(e) => field.onChange(toNumberOrNull(e.target.value))}
                 error={errors.override_amount?.message}
               />
-              {suggestion?.has_data && suggestion.suggested_amount != null && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={applySuggestion}
-                  className="text-sm text-primary-600 hover:underline text-right w-full px-0 hover:bg-transparent justify-end"
-                >
-                  הצעה לפי מחזור שנה קודמת: ₪{formatSuggestionAmount(suggestion.suggested_amount)} — לחץ למילוי
-                </Button>
-              )}
             </div>
           )}
         />

@@ -66,6 +66,3 @@ export const buildCreateAdvancePaymentPayload = (
   paid_amount: toStringOrNull(data.paid_amount),
   notes: data.notes ?? null,
 })
-
-export const formatSuggestionAmount = (amount: string | null) =>
-  amount == null ? '' : Number(amount).toLocaleString('he-IL')

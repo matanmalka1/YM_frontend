@@ -4,25 +4,22 @@ import { useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { PlusCircle, Calendar } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
-import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { MonthlyAccordionList } from '@/components/ui/table/MonthlyAccordionGroup'
-import { ClientPickerField } from '@/components/shared/client/ClientPickerField'
-import { useClientPickerState } from '@/components/shared/client/useClientPickerState'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { useAdvancePaymentBatches } from '../hooks/useAdvancePaymentBatches'
 import { OverviewKPICards } from '../components/OverviewKPICards'
 import { AdvancePaymentBatchRow, type AdvancePaymentGroupStats } from '../components/AdvancePaymentBatchRow'
 import { AdvancePaymentDrawer } from '../components/AdvancePaymentDrawer'
-import { CreateAdvancePaymentModal } from '../components/CreateAdvancePaymentModal'
+import { CreateAdvancePaymentFlow } from '../components/CreateAdvancePaymentFlow'
+import { GenerateScheduleModal } from '../components/GenerateScheduleModal'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import type {
   AdvancePaymentDueDateGroup,
   AdvancePaymentOverviewRow,
   UpdateAdvancePaymentPayload,
   AdvancePaymentStatus,
-  CreateAdvancePaymentPayload,
 } from '../types'
 import { ADVANCE_PAYMENT_STATUS_OPTIONS_WITH_ALL } from '../constants'
 import { parsePositiveInt } from '@/utils/utils'
@@ -31,7 +28,6 @@ import { showErrorToast } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { getOperationalTaxYear, getOperationalYearOptions } from '@/constants/periodOptions.constants'
-import { useTaxProfile } from '@/features/taxProfile'
 
 const PERIOD_OPTIONS = [
   { value: '', label: 'כל הסוגים' },
@@ -75,6 +71,9 @@ export const AdvancePayments: React.FC = () => {
   const year: number | null = rawYear === 'all' ? null : parsePositiveInt(rawYear, todayYear)
 
   const [drawerRow, setDrawerRow] = useState<AdvancePaymentOverviewRow | null>(null)
+  const [createOpen, setCreateOpen] = useState(false)
+  const [genOpen, setGenOpen] = useState(false)
+
   const initialPeriodFilter = searchParams.get('period')
   const [filters, setFilters] = useState({
     client_id: '',
@@ -83,29 +82,6 @@ export const AdvancePayments: React.FC = () => {
     period: initialPeriodFilter === '1' || initialPeriodFilter === '2' ? initialPeriodFilter : '',
   })
   const [loadedGroupStats, setLoadedGroupStats] = useState<Record<string, AdvancePaymentGroupStats>>({})
-
-  const [createPickerOpen, setCreatePickerOpen] = useState(false)
-  const [createClientId, setCreateClientId] = useState<number | null>(null)
-  const createPicker = useClientPickerState({
-    onSelect: (c) => setCreateClientId(c.id),
-    onClear: () => setCreateClientId(null),
-  })
-
-  const [genPickerOpen, setGenPickerOpen] = useState(false)
-  const genPicker = useClientPickerState()
-
-  const genClientId = genPicker.selectedClient?.id ?? 0
-  const { profile: genProfile, isLoading: isGenProfileLoading, error: genProfileError } = useTaxProfile(genClientId)
-  const isGenProfileError = genProfileError !== null && genClientId > 0
-
-  const generationFrequency: 1 | 2 | null =
-    genClientId === 0
-      ? null
-      : genProfile?.advance_payment_frequency === 'bimonthly'
-        ? 2
-        : genProfile?.advance_payment_frequency === 'monthly'
-          ? 1
-          : null
 
   const { batches, isLoading } = useAdvancePaymentBatches(year)
 
@@ -146,50 +122,6 @@ export const AdvancePayments: React.FC = () => {
     },
     onError: (err) => showErrorToast(err, 'שגיאה בעדכון מקדמה'),
   })
-
-  const createMutation = useMutation({
-    mutationFn: (payload: CreateAdvancePaymentPayload) => advancePaymentsApi.create(createClientId!, payload),
-    onSuccess: () => {
-      toast.success('מקדמה נוצרה')
-      void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
-      setCreatePickerOpen(false)
-      setCreateClientId(null)
-      createPicker.resetClientPicker()
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה ביצירת מקדמה'),
-  })
-
-  const generateMutation = useMutation({
-    mutationFn: (periodMonthsCount: 1 | 2) =>
-      advancePaymentsApi.generateSchedule(genClientId, year ?? todayYear, periodMonthsCount),
-    onSuccess: (data) => {
-      toast.success(data.created > 0 ? `נוצרו ${data.created} מקדמות, דולגו ${data.skipped}` : 'לא נוצרו מקדמות חדשות')
-      void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
-      setGenPickerOpen(false)
-      genPicker.resetClientPicker()
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה ביצירת לוח מקדמות'),
-  })
-
-  const handleGenerate = () => {
-    if (genClientId === 0) {
-      toast.error('לא נבחר לקוח תקין')
-      return
-    }
-    if (isGenProfileLoading) {
-      toast.error('פרופיל הלקוח עדיין נטען')
-      return
-    }
-    if (isGenProfileError) {
-      toast.error('שגיאה בטעינת פרופיל הלקוח')
-      return
-    }
-    if (generationFrequency == null) {
-      toast.error('לא ניתן ליצור לוח בלי תדירות מקדמות בפרופיל הלקוח')
-      return
-    }
-    generateMutation.mutate(generationFrequency)
-  }
 
   const handleSave = async (id: number, payload: UpdateAdvancePaymentPayload) => {
     await updateMutation.mutateAsync({ id, payload })
@@ -297,11 +229,11 @@ export const AdvancePayments: React.FC = () => {
         actions={
           isAdvisor ? (
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" onClick={() => setGenPickerOpen(true)}>
+              <Button variant="ghost" size="sm" onClick={() => setGenOpen(true)}>
                 צור לוח שנתי
                 <Calendar className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => setCreatePickerOpen(true)}>
+              <Button variant="ghost" size="sm" onClick={() => setCreateOpen(true)}>
                 הוסף מקדמה
                 <PlusCircle className="h-4 w-4" />
               </Button>
@@ -351,7 +283,6 @@ export const AdvancePayments: React.FC = () => {
         })}
       </MonthlyAccordionList>
 
-      {/* Drawer */}
       <AdvancePaymentDrawer
         row={drawerRow}
         open={drawerRow !== null}
@@ -361,112 +292,17 @@ export const AdvancePayments: React.FC = () => {
         onSave={handleSave}
       />
 
-      {/* Create: pick client modal */}
-      <Modal
-        open={createPickerOpen && createClientId === null}
-        title="הוסף מקדמה — בחר לקוח"
-        className="min-h-[240px]"
-        onClose={() => {
-          setCreatePickerOpen(false)
-          createPicker.resetClientPicker()
-        }}
-        footer={
-          <Button
-            variant="outline"
-            onClick={() => {
-              setCreatePickerOpen(false)
-              createPicker.resetClientPicker()
-            }}
-          >
-            ביטול
-          </Button>
-        }
-      >
-        <ClientPickerField
-          selectedClient={createPicker.selectedClient}
-          clientQuery={createPicker.clientQuery}
-          onQueryChange={createPicker.handleClientQueryChange}
-          onSelect={createPicker.handleSelectClient}
-          onClear={createPicker.handleClearClient}
-        />
-      </Modal>
+      <CreateAdvancePaymentFlow
+        open={createOpen}
+        year={year ?? todayYear}
+        onClose={() => setCreateOpen(false)}
+      />
 
-      {/* Create: form modal (after client picked) */}
-      {createClientId !== null && (
-        <CreateAdvancePaymentModal
-          open={true}
-          clientId={createClientId}
-          year={year ?? todayYear}
-          isCreating={createMutation.isPending}
-          onClose={() => {
-            setCreateClientId(null)
-            setCreatePickerOpen(false)
-            createPicker.resetClientPicker()
-          }}
-          onCreate={(payload) => createMutation.mutateAsync(payload)}
-        />
-      )}
-
-      {/* Generate schedule modal */}
-      <Modal
-        open={genPickerOpen}
-        title="צור לוח מקדמות שנתי"
-        onClose={() => {
-          setGenPickerOpen(false)
-          genPicker.resetClientPicker()
-        }}
-        footer={
-          <div className="flex justify-end gap-2">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setGenPickerOpen(false)
-                genPicker.resetClientPicker()
-              }}
-            >
-              ביטול
-            </Button>
-            <Button
-              variant="primary"
-              isLoading={generateMutation.isPending}
-              disabled={
-                genPicker.selectedClient === null ||
-                isGenProfileLoading ||
-                isGenProfileError ||
-                generationFrequency == null ||
-                generateMutation.isPending
-              }
-              onClick={handleGenerate}
-            >
-              צור לוח
-            </Button>
-          </div>
-        }
-      >
-        <div className="space-y-4">
-          <ClientPickerField
-            selectedClient={genPicker.selectedClient}
-            clientQuery={genPicker.clientQuery}
-            onQueryChange={genPicker.handleClientQueryChange}
-            onSelect={genPicker.handleSelectClient}
-            onClear={genPicker.handleClearClient}
-          />
-          {genPicker.selectedClient !== null && (
-            <p className="text-sm text-gray-500">
-              {isGenProfileLoading
-                ? 'טוען פרופיל לקוח...'
-                : isGenProfileError
-                  ? 'שגיאה בטעינת פרופיל הלקוח'
-                  : generationFrequency === 1
-                    ? 'תדירות מקדמות: חודשי'
-                    : generationFrequency === 2
-                      ? 'תדירות מקדמות: דו-חודשי'
-                      : 'תדירות מקדמות לא הוגדרה'}
-            </p>
-          )}
-          <p className="text-sm text-gray-500">ייווצרו רק מקדמות שתאריך היעד שלהן מהיום והלאה</p>
-        </div>
-      </Modal>
+      <GenerateScheduleModal
+        open={genOpen}
+        year={year ?? todayYear}
+        onClose={() => setGenOpen(false)}
+      />
     </div>
   )
 }

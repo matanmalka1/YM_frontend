@@ -9,7 +9,6 @@ import type {
   UpdateAdvancePaymentPayload,
   ListAdvancePaymentsOverviewParams,
   AdvancePaymentOverviewResponse,
-  AdvancePaymentSuggestionResponse,
   AnnualKPIResponse,
   MonthBatchSummary,
   PrefillTurnoverResponse,
@@ -52,19 +51,6 @@ export const advancePaymentsApi = {
     await api.delete(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientId, id))
   },
 
-  getSuggestion: async (
-    clientId: number,
-    year: number,
-    periodMonthsCount?: 1 | 2,
-  ): Promise<AdvancePaymentSuggestionResponse> => {
-    const response = await api.get<AdvancePaymentSuggestionResponse>(
-      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentSuggest(clientId),
-      {
-        params: toQueryParams({ year, period_months_count: periodMonthsCount }),
-      },
-    )
-    return response.data
-  },
 
   getAnnualKPIs: async (clientId: number, year: number): Promise<AnnualKPIResponse> => {
     const response = await api.get<AnnualKPIResponse>(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentsKPI(clientId), {
