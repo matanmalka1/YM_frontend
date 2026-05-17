@@ -1,20 +1,21 @@
-import type { PagedFilters } from '@/types'
 import type {
   CreateVatInvoicePayload,
   CreateVatWorkItemPayload,
   UpdateVatInvoicePayload,
   VatInvoiceResponse,
+  VatWorkItemStatus,
   VatWorkItemResponse,
 } from './api'
+import type { VatPeriodTypeFilter } from './constants'
 import type { ExpenseCategoryRow } from './vatBreakdown.utils'
 
-export type VatWorkItemsFilters = PagedFilters<{
-  status: string
+export interface VatWorkItemsFilters {
+  status: VatWorkItemStatus | ''
   year: string
-  period_type: string
+  period_type: VatPeriodTypeFilter | ''
   clientSearch: string
   clientSearchName: string
-}>
+}
 
 export type VatWorkItemAction = 'materialsComplete' | 'readyForReview' | 'sendBack'
 

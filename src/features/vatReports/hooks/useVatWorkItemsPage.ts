@@ -2,14 +2,14 @@ import { useCallback, useState } from 'react'
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { vatReportsApi } from '../api'
-import type { CreateVatWorkItemPayload, VatWorkItemsListParams } from '../api'
+import type { CreateVatWorkItemPayload, VatWorkItemsListParams, VatWorkItemStatus } from '../api'
 import { getErrorMessage, showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
 import { toOptionalString } from '../../../utils/filters'
 import { useRole } from '../../../hooks/useRole'
 import { vatReportsQK } from '../api/queryKeys'
 import { invalidateVatWorkItem } from './useVatInvalidation'
-import type { VatWorkItemAction } from '../types'
+import type { VatWorkItemAction, VatWorkItemsFilters } from '../types'
 import { VAT_WORK_ITEMS_STATS_STATUS_GROUPS } from '../constants'
 import { toOptionalVatPeriodTypeFilter, toVatPeriodTypeFilter } from '../filterUtils'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
@@ -23,14 +23,26 @@ const statsStatuses = [
 
 type VatStatsStatus = (typeof statsStatuses)[number]
 
+const VAT_STATUS_VALUES: readonly VatWorkItemStatus[] = [
+  'pending_materials',
+  'material_received',
+  'data_entry_in_progress',
+  'ready_for_review',
+  'filed',
+  'canceled',
+]
+
+const toOptionalVatStatus = (status: string): VatWorkItemStatus | undefined =>
+  VAT_STATUS_VALUES.includes(status as VatWorkItemStatus) ? (status as VatWorkItemStatus) : undefined
+
 export const useVatWorkItemsPage = () => {
   const queryClient = useQueryClient()
   const { searchParams, setFilter, setFilters, setSearchParams } = useSearchParamFilters()
   const { isAdvisor } = useRole()
 
   const rawYear = searchParams.get('year') ?? String(getOperationalTaxYear())
-  const filters = {
-    status: searchParams.get('status') ?? '',
+  const filters: Pick<VatWorkItemsFilters, 'status' | 'year' | 'period_type' | 'clientSearch' | 'clientSearchName'> = {
+    status: toOptionalVatStatus(searchParams.get('status') ?? '') ?? '',
     year: rawYear === 'all' ? '' : rawYear,
     period_type: toVatPeriodTypeFilter(searchParams.get('period_type')),
     clientSearch: searchParams.get('clientSearch') ?? '',
@@ -38,7 +50,7 @@ export const useVatWorkItemsPage = () => {
   }
 
   const statsBase: VatWorkItemsListParams = {
-    status: toOptionalString(filters.status),
+    status: toOptionalVatStatus(filters.status),
     period_type: toOptionalVatPeriodTypeFilter(filters.period_type),
     client_name: toOptionalString(filters.clientSearchName),
     page: 1,

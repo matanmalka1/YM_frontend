@@ -3,6 +3,7 @@ import { EXPENSE_CATEGORIES } from './constants'
 import type { VatInvoiceRowValues } from './schemas/invoice.schema'
 import { semanticMonoToneClasses } from '../../utils/semanticColors'
 import type { BackendAction } from '@/lib/actions/types'
+import type { VatWorkItemStatus } from './api'
 
 const hasVatAction = (actions: BackendAction[] | null | undefined, key: string): boolean =>
   actions?.some((action) => action.key === key) ?? false
@@ -21,7 +22,7 @@ export const canSendBack = (actions: BackendAction[] | null | undefined): boolea
 export const canFile = (actions: BackendAction[] | null | undefined): boolean =>
   hasVatAction(actions, 'file_vat_return')
 
-export const isFiled = (status: string): boolean => status === 'filed'
+export const isFiled = (status: VatWorkItemStatus): boolean => status === 'filed'
 
 export const formatVatAmount = (amount: string | number | null | undefined): string => {
   if (amount === null || amount === undefined || isNaN(Number(amount))) return '—'

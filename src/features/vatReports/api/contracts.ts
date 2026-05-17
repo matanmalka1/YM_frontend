@@ -1,4 +1,13 @@
 import type { BackendAction } from '@/lib/actions/types'
+
+export type VatWorkItemStatus =
+  | 'pending_materials'
+  | 'material_received'
+  | 'data_entry_in_progress'
+  | 'ready_for_review'
+  | 'filed'
+  | 'canceled'
+
 export interface VatWorkItemResponse {
   id: number
   client_record_id: number
@@ -8,7 +17,7 @@ export interface VatWorkItemResponse {
   client_status: string | null
   period: string
   period_type: string | null
-  status: string
+  status: VatWorkItemStatus
   pending_materials_note: string | null
   total_output_vat: string
   total_input_vat: string
@@ -44,7 +53,7 @@ export interface VatWorkItemListResponse {
 }
 
 export interface VatWorkItemsListParams {
-  status?: string
+  status?: VatWorkItemStatus
   page?: number
   page_size?: number
   period?: string
@@ -54,7 +63,7 @@ export interface VatWorkItemsListParams {
 
 export interface VatWorkItemLookupResponse {
   id: number
-  status: string
+  status: VatWorkItemStatus
   period: string
 }
 
@@ -153,7 +162,7 @@ export interface VatPeriodRow {
   work_item_id: number
   period: string
   period_type: string | null
-  status: string
+  status: VatWorkItemStatus
   total_output_vat: string
   total_input_vat: string
   net_vat: string

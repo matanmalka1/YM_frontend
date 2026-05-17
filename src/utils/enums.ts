@@ -151,6 +151,7 @@ export const VAT_WORK_ITEM_STATUS_LABELS: Record<string, string> = {
   data_entry_in_progress: 'הקלדה בתהליך',
   ready_for_review: 'ממתין לבדיקה',
   filed: 'הוגש',
+  canceled: 'בוטל',
 }
 
 export const getVatWorkItemStatusLabel = makeLabelGetter(VAT_WORK_ITEM_STATUS_LABELS)
