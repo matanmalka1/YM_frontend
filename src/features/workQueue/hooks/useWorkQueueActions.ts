@@ -58,25 +58,22 @@ export const useWorkQueueActions = () => {
     onSettled: () => setActiveActionKey(null),
   })
 
+  const handleTaskMutationSuccess = async (message: string) => {
+    toast.success(message)
+    setTaskModal(null)
+    await qc.invalidateQueries({ queryKey: tasksQK.all })
+    await qc.invalidateQueries({ queryKey: workQueueQK.all })
+  }
+
   const createTaskMutation = useMutation({
     mutationFn: (data: TaskCreateRequest) => tasksApi.create(data),
-    onSuccess: async () => {
-      toast.success('המשימה נוצרה בהצלחה')
-      setTaskModal(null)
-      await qc.invalidateQueries({ queryKey: tasksQK.all })
-      await qc.invalidateQueries({ queryKey: workQueueQK.all })
-    },
+    onSuccess: () => handleTaskMutationSuccess('המשימה נוצרה בהצלחה'),
     onError: (err) => toast.error(err instanceof Error ? err.message : 'יצירת המשימה נכשלה'),
   })
 
   const updateTaskMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: TaskUpdateRequest }) => tasksApi.update(id, data),
-    onSuccess: async () => {
-      toast.success('המשימה עודכנה בהצלחה')
-      setTaskModal(null)
-      await qc.invalidateQueries({ queryKey: tasksQK.all })
-      await qc.invalidateQueries({ queryKey: workQueueQK.all })
-    },
+    onSuccess: () => handleTaskMutationSuccess('המשימה עודכנה בהצלחה'),
     onError: (err) => toast.error(err instanceof Error ? err.message : 'עדכון המשימה נכשל'),
   })
 
