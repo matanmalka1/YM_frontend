@@ -155,6 +155,7 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
     }
   }, [
     selectedTypeKey,
+    binderTypes.length,
     hasPeriodicMaterial,
     hasOnlyAnnualMaterials,
     hasVatMaterial,
