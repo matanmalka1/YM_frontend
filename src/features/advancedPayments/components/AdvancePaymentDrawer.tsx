@@ -16,11 +16,6 @@ import { advancePaymentsApi } from '../api'
 
 type AdvancePaymentDrawerRow = AdvancePaymentRow | AdvancePaymentOverviewRow
 
-interface ClientContextItem {
-  label: string
-  value: string
-}
-
 const getOfficeClientNumber = (row: AdvancePaymentDrawerRow) =>
   'office_client_number' in row ? row.office_client_number : null
 
@@ -129,13 +124,10 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
   const officeClientNumber = getOfficeClientNumber(row) ?? officeClientNumberProp ?? null
   const idNumber = getIdNumber(row) ?? clientIdNumberProp ?? null
   const advanceRateDisplay = formatAdvanceRate(rowAdvanceRate)
-  const subtitleParts = [
-    clientDisplayName,
-    officeClientNumber != null ? `מס׳ לקוח ${officeClientNumber}` : null,
-  ].filter(Boolean)
-  const clientContextItems: ClientContextItem[] = [
-    ...(clientDisplayName ? [{ label: 'לקוח', value: clientDisplayName }] : []),
-    ...(officeClientNumber != null ? [{ label: 'מס׳ לקוח', value: String(officeClientNumber) }] : []),
+  const subtitle = [clientDisplayName, officeClientNumber != null ? `מס׳ לקוח ${officeClientNumber}` : null]
+    .filter(Boolean)
+    .join(' · ')
+  const contextItems = [
     ...(idNumber ? [{ label: 'ת.ז / ח.פ', value: idNumber }] : []),
     ...(advanceRateDisplay ? [{ label: 'שיעור מקדמה', value: advanceRateDisplay }] : []),
   ]
@@ -217,7 +209,7 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
     <DetailDrawer
       open={open}
       title={title}
-      subtitle={subtitleParts.length > 0 ? subtitleParts.join(' · ') : undefined}
+      subtitle={subtitle || undefined}
       onClose={onClose}
       isDirty={isDirty}
       footer={
@@ -281,10 +273,10 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
           </div>
         )}
 
-        {clientContextItems.length > 0 && (
-          <div className="rounded-lg border border-gray-100 bg-gray-50/50 px-3 py-2.5">
+        {contextItems.length > 0 && (
+          <div className="rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
             <dl className="grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2">
-              {clientContextItems.map((item) => (
+              {contextItems.map((item) => (
                 <div key={item.label} className="min-w-0">
                   <dt className="text-xs text-gray-500">{item.label}</dt>
                   <dd className="truncate text-sm font-medium text-gray-900">{item.value}</dd>
@@ -342,12 +334,6 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
                 {prefillSource === 'none' && (
                   <p className="text-xs text-gray-400">לא נמצא דוח מע״מ לתקופה זו</p>
                 )}
-                <div>
-                  <div className="text-xs text-gray-500 mb-1">אחוז מקדמה</div>
-                  <div className="text-sm font-medium text-gray-800">
-                    {advanceRateDisplay ?? '—'}
-                  </div>
-                </div>
                 <div>
                   <div className="text-xs text-gray-500 mb-1">סכום מחושב</div>
                   <div className="text-sm font-medium text-gray-800">

@@ -39,7 +39,7 @@ export const BinderActionsPanel: React.FC<BinderActionsPanelProps> = ({
           type="button"
           variant="outline"
           size="sm"
-          className="border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100"
+          className="border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100 text-xs px-2.5 py-1"
           onClick={onBulkReady}
           disabled={disabled}
         >
@@ -51,7 +51,7 @@ export const BinderActionsPanel: React.FC<BinderActionsPanelProps> = ({
           type="button"
           variant="outline"
           size="sm"
-          className="border-primary-200 bg-primary-50 text-primary-800 hover:bg-primary-100"
+          className="border-primary-200 bg-primary-50 text-primary-800 hover:bg-primary-100 text-xs px-2.5 py-1"
           onClick={onOpenHandover}
           disabled={disabled}
         >

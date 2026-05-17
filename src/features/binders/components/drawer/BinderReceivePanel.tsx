@@ -9,7 +9,8 @@ import { Select } from '@/components/ui/inputs/Select'
 import { Textarea } from '@/components/ui'
 import { isClientLockedForCreate } from '@/utils/clientStatus'
 import { getStatusLabel, type AnnualReportFull } from '@/features/annualReports'
-import { BINDER_TYPE_OPTIONS } from '../../constants'
+import { MONTH_OPTIONS } from '@/constants/periodOptions.constants'
+import { BINDER_TYPE_OPTIONS, PERIODIC_BINDER_TYPES } from '../../constants'
 import type { ReceiveBinderFormValues } from '../../schemas'
 import { BinderPeriodFields } from './BinderPeriodFields'
 
@@ -47,7 +48,15 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
     control,
     formState: { errors },
   } = form
-  const binderType = form.watch('binder_type')
+  const binderTypes = form.watch('binder_types') ?? []
+  const selectedBinderTypes = new Set(binderTypes)
+  const hasSelectedTypes = binderTypes.length > 0
+  const hasVatMaterial = selectedBinderTypes.has('vat')
+  const hasSalaryMaterial = selectedBinderTypes.has('salary')
+  const hasAnnualReportMaterial = selectedBinderTypes.has('annual_report')
+  const periodMaterialType = hasVatMaterial ? 'vat' : binderTypes.find((type) => PERIODIC_BINDER_TYPES.has(type)) ?? binderTypes[0]
+  const periodMonthStart = form.watch('period_month_start')
+  const periodMonthEnd = form.watch('period_month_end')
 
   const clientLocked = isClientLockedForCreate(selectedClient?.client_status)
 
@@ -97,14 +106,40 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
         />
       )}
 
-      <Select
-        label="סוג חומר"
-        error={errors.binder_type?.message}
-        options={BINDER_TYPE_OPTIONS}
-        {...register('binder_type')}
+      <Controller
+        name="binder_types"
+        control={control}
+        render={({ field }) => {
+          const selectedTypes = field.value ?? []
+
+          return (
+            <div className="space-y-2">
+              <div className="text-sm font-medium text-gray-700">סוג חומר</div>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {BINDER_TYPE_OPTIONS.filter((option) => option.value !== '').map((option) => (
+                  <Checkbox
+                    key={option.value}
+                    size="sm"
+                    label={option.label}
+                    checked={selectedTypes.includes(option.value as ReceiveBinderFormValues['binder_types'][number])}
+                    onChange={(event) => {
+                      const nextType = option.value as ReceiveBinderFormValues['binder_types'][number]
+                      field.onChange(
+                        event.target.checked
+                          ? [...selectedTypes, nextType]
+                          : selectedTypes.filter((type) => type !== nextType),
+                      )
+                    }}
+                  />
+                ))}
+              </div>
+              {errors.binder_types?.message && <p className="text-xs text-negative-600">{errors.binder_types.message}</p>}
+            </div>
+          )
+        }}
       />
 
-      {selectedClient && binderType === 'vat' && businesses.length > 0 && (
+      {selectedClient && hasVatMaterial && businesses.length > 0 && (
         <Controller
           name="business_id"
           control={control}
@@ -133,9 +168,38 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
         />
       )}
 
-      {selectedClient && binderType && <BinderPeriodFields form={form} materialType={binderType} vatType={vatType} />}
+      {selectedClient && hasSelectedTypes && (
+        <BinderPeriodFields form={form} materialType={periodMaterialType} vatType={vatType} />
+      )}
 
-      {selectedClient && binderType === 'annual_report' && (
+      {selectedClient && hasVatMaterial && hasSalaryMaterial && (
+        <Controller
+          name="salary_month"
+          control={control}
+          render={({ field }) => {
+            const salaryMonthOptions =
+              periodMonthStart && periodMonthEnd
+                ? MONTH_OPTIONS.filter((option) =>
+                    [periodMonthStart, periodMonthEnd].includes(Number(option.value)),
+                  )
+                : MONTH_OPTIONS
+
+            return (
+              <Select
+                label="חודש שכר"
+                error={errors.salary_month?.message}
+                options={[{ value: '', label: 'בחר חודש שכר...', disabled: true }, ...salaryMonthOptions]}
+                value={field.value ? String(field.value) : ''}
+                onChange={(event) => field.onChange(event.target.value ? Number(event.target.value) : null)}
+                onBlur={field.onBlur}
+                name={field.name}
+              />
+            )
+          }}
+        />
+      )}
+
+      {selectedClient && hasAnnualReportMaterial && (
         <Controller
           name="annual_report_id"
           control={control}

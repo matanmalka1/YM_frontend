@@ -22,11 +22,12 @@ export const receiveBinderSchema = z
   .object({
     client_record_id: z.number({ error: 'נא לבחור לקוח' }).positive('נא לבחור לקוח'),
     business_id: z.number({ error: 'נא לבחור עסק' }).positive('נא לבחור עסק').nullable().optional(),
-    binder_type: z.enum(MATERIAL_TYPES, { error: 'נא לבחור סוג חומר' }),
+    binder_types: z.array(z.enum(MATERIAL_TYPES)).min(1, 'נא לבחור לפחות סוג חומר אחד'),
     annual_report_id: z.number().positive('נא לבחור דוח שנתי').nullable().optional(),
     period_year: z.number({ error: 'נא לבחור שנת דיווח' }).int('נא לבחור שנת דיווח').min(2000, 'נא לבחור שנת דיווח'),
     period_month_start: z.number().int().min(1).max(12).nullable().optional(),
     period_month_end: z.number().int().min(1).max(12).nullable().optional(),
+    salary_month: z.number().int().min(1).max(12).nullable().optional(),
     received_at: z
       .string()
       .min(1, 'נא לבחור תאריך קבלה')
@@ -35,7 +36,9 @@ export const receiveBinderSchema = z
     notes: z.string().optional().nullable(),
   })
   .superRefine((data, ctx) => {
-    if (data.binder_type === 'vat' && data.business_id === undefined) {
+    const selectedTypes = new Set(data.binder_types)
+
+    if (selectedTypes.has('vat') && data.business_id === undefined) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'נא לבחור עסק',
@@ -51,11 +54,10 @@ export const receiveBinderSchema = z
       })
     }
 
-    if (ANNUAL_BINDER_TYPES.has(data.binder_type)) {
-      return
-    }
+    const hasPeriodicMaterial = data.binder_types.some((type) => PERIODIC_BINDER_TYPES.has(type))
+    const hasOnlyAnnualMaterials = data.binder_types.every((type) => ANNUAL_BINDER_TYPES.has(type))
 
-    if (!PERIODIC_BINDER_TYPES.has(data.binder_type)) {
+    if (hasOnlyAnnualMaterials || !hasPeriodicMaterial) {
       return
     }
 
@@ -64,6 +66,14 @@ export const receiveBinderSchema = z
         code: z.ZodIssueCode.custom,
         message: 'נא לבחור חודש דיווח',
         path: ['period_month_start'],
+      })
+    }
+
+    if (selectedTypes.has('salary') && selectedTypes.has('vat') && data.salary_month == null) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'נא לבחור חודש שכר',
+        path: ['salary_month'],
       })
     }
   })
