@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { advancePaymentsApi, advancedPaymentsQK, type CreateAdvancePaymentPayload } from '@/features/advancedPayments'
-import { chargesApi, chargesQK, type CreateChargePayload } from '@/features/charges'
+import { type CreateChargePayload, useChargeCreateMutation } from '@/features/charges'
 import { CLIENT_ROUTES, clientsApi, clientsQK, extractClientErrorCode } from '@/features/clients'
 import { vatReportsApi, vatReportsQK, type CreateVatWorkItemPayload } from '@/features/vatReports'
 import { useClientPickerState } from '@/components/shared/client/useClientPickerState'
@@ -34,13 +34,7 @@ export const useDashboardCreateModals = () => {
     await queryClient.invalidateQueries({ queryKey: dashboardQK.all })
   }
 
-  const chargeCreateMutation = useMutation({
-    mutationFn: (payload: CreateChargePayload) => chargesApi.create(payload),
-    onSuccess: async () => {
-      toast.success('חיוב נוצר בהצלחה')
-      await Promise.all([queryClient.invalidateQueries({ queryKey: chargesQK.all }), invalidateDashboardData()])
-    },
-  })
+  const chargeCreateMutation = useChargeCreateMutation([dashboardQK.all])
 
   const vatCreateMutation = useMutation({
     mutationFn: (payload: CreateVatWorkItemPayload) => vatReportsApi.create(payload),
@@ -109,8 +103,7 @@ export const useDashboardCreateModals = () => {
     try {
       await chargeCreateMutation.mutateAsync(payload)
       return true
-    } catch (err) {
-      showErrorToast(err, 'שגיאה ביצירת חיוב')
+    } catch {
       return false
     }
   }

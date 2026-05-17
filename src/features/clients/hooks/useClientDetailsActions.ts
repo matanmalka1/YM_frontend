@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { clientsApi, clientsQK } from '../api'
 import type { CreateBusinessPayload } from '../api'
-import { chargesApi, chargesQK } from '@/features/charges'
+import { chargesApi, chargesQK, useChargeCreateMutation } from '@/features/charges'
 import type { CreateChargePayload } from '@/features/charges'
 import { bindersApi, bindersQK } from '@/features/binders'
 import { showErrorToast } from '@/utils/utils'
@@ -35,19 +35,7 @@ export const useClientDetailsActions = (clientId: number, activeTab: string) => 
     onError: (err) => showErrorToast(err, 'שגיאה ביצירת עסק'),
   })
 
-  const createChargeMutation = useMutation({
-    mutationFn: (payload: CreateChargePayload) => chargesApi.create(payload),
-    onSuccess: async () => {
-      toast.success('חיוב נוצר בהצלחה')
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: chargesQK.all }),
-        queryClient.invalidateQueries({
-          queryKey: chargesQK.forClientPage(clientId, 1, RELATED_PAGE_SIZE),
-        }),
-      ])
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה ביצירת חיוב'),
-  })
+  const createChargeMutation = useChargeCreateMutation([chargesQK.forClientPage(clientId, 1, RELATED_PAGE_SIZE)])
 
   const handleCreateBusiness = useCallback(
     async (payload: CreateBusinessPayload): Promise<void> => {

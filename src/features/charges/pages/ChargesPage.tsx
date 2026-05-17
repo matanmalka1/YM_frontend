@@ -1,20 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
-import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
-import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import {
-  ChargeBulkToolbar,
   buildChargeColumns,
   ChargesCreateModal,
   ChargeDetailDrawer,
   ChargesFiltersCard,
   ChargesSummaryBar,
+  ChargesTableBlock,
   useChargesPage,
 } from '@/features/charges'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
-import { getChargeRowClassName, getChargesEmptyState } from '../helpers'
 
 export const Charges: React.FC = () => {
   const { searchParams, setSearchParams } = useSearchParamFilters()
@@ -105,39 +102,29 @@ export const Charges: React.FC = () => {
         onStatusClick={(status) => setFilter('status', status)}
       />
 
-      {!isAdvisor && <Alert variant="info" message="צפייה בלבד. יצירה ושינוי חיובים זמינים ליועץ בלבד." />}
-
       <ChargesFiltersCard
         filters={filters}
         onFilterChange={setFilter}
         onClear={() => setSearchParams(new URLSearchParams())}
       />
 
-      {isAdvisor && selectedIds.size > 0 && (
-        <ChargeBulkToolbar
-          selectedCount={selectedIds.size}
-          loading={bulkLoading}
-          onAction={runBulkAction}
-          onClear={clearSelection}
-        />
-      )}
-
-      <PaginatedDataTable
-        data={charges}
+      <ChargesTableBlock
+        charges={charges}
         columns={columns}
-        getRowKey={(charge) => charge.id}
-        onRowClick={(charge) => setSelectedChargeId(charge.id)}
-        isLoading={loading}
         error={error}
+        isAdvisor={isAdvisor}
+        loading={loading}
         page={filters.page}
         pageSize={filters.page_size}
         total={total}
-        label="חיובים"
+        selectedCount={selectedIds.size}
+        bulkLoading={bulkLoading}
+        onBulkAction={runBulkAction}
+        onClearSelection={clearSelection}
+        onCreateCharge={() => setShowCreateModal(true)}
+        onOpenCharge={setSelectedChargeId}
         onPageChange={setPage}
         onPageSizeChange={(pageSize) => setFilter('page_size', String(pageSize))}
-        rowClassName={(charge) => getChargeRowClassName(charge.status)}
-        emptyMessage="אין חיובים להצגה"
-        emptyState={getChargesEmptyState(isAdvisor, () => setShowCreateModal(true))}
       />
 
       <ChargeDetailDrawer chargeId={selectedChargeId} onClose={closeChargeDetail} />
