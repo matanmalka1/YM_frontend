@@ -1,13 +1,13 @@
 import { useState, useMemo } from 'react'
 import { Activity, CheckCircle2, MinusCircle, ReceiptText, WalletCards } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { StatsCard } from '../../../components/ui/layout/StatsCard'
+import { StatsCard } from '@/components/ui/layout/StatsCard'
 import { VatWorkItemsCreateModal } from './VatWorkItemsCreateModal'
 import { VatClientActionBar } from './VatClientActionBar'
 import { VatPeriodCard } from './VatPeriodCard'
 import type { CreateVatWorkItemPayload, VatAnnualSummary, VatPeriodRow } from '../api'
-import { showErrorToast } from '../../../utils/utils'
-import { useAuthStore } from '../../../store/auth.store'
+import { showErrorToast } from '@/utils/utils'
+import { useRole } from '@/hooks/useRole'
 import { formatVatAmount } from '../utils'
 import { useVatClientSummary } from '../hooks/useVatClientSummary'
 import type { VatClientSummaryPanelProps } from '../types'
@@ -53,7 +53,7 @@ const YearSummary = ({ annual }: { annual: VatAnnualSummary }) => {
 }
 
 export const VatClientSummaryPanel = ({ clientId }: VatClientSummaryPanelProps) => {
-  const role = useAuthStore((s) => s.user?.role)
+  const { isAdvisor } = useRole()
   const navigate = useNavigate()
 
   const [createOpen, setCreateOpen] = useState(false)
@@ -96,7 +96,7 @@ export const VatClientSummaryPanel = ({ clientId }: VatClientSummaryPanelProps) 
     <div className="space-y-4" dir="rtl">
       <VatClientActionBar
         clientId={clientId}
-        isAdvisor={role === 'advisor'}
+        isAdvisor={isAdvisor}
         selectedYear={selectedAnnual?.year ?? selectedYear}
         yearOptions={yearOptions}
         onCreateClick={() => setCreateOpen(true)}

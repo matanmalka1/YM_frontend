@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { RotateCcw } from 'lucide-react'
-import { Button } from '../../../components/ui/primitives/Button'
+import { Button } from '@/components/ui/primitives/Button'
+import { Textarea } from '@/components/ui/inputs/Textarea'
 import type { VatSendBackFormProps } from '../types'
 
 export const VatSendBackForm: React.FC<VatSendBackFormProps> = ({ onCancel, onSubmit, loading }) => {
   const [note, setNote] = useState('')
   return (
     <div className="space-y-2 pb-2">
-      <textarea
-        className="w-full rounded border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary-500"
+      <Textarea
         rows={3}
         placeholder="הסבר מה יש לתקן..."
         value={note}

@@ -1,17 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useQueryClient } from '@tanstack/react-query'
-import { Modal } from '../../../components/ui/overlays/Modal'
-import { Button } from '../../../components/ui/primitives/Button'
-import { Input } from '../../../components/ui/inputs/Input'
-import { Select } from '../../../components/ui/inputs/Select'
-import { vatReportsApi } from '../api'
-import { toast } from '../../../utils/toast'
-import { showErrorToast } from '../../../utils/utils'
-import { vatReportsQK } from '../api/queryKeys'
-import { invalidateVatWorkItem } from '../hooks/useVatInvalidation'
-import { VAT_FILE_MODAL_MESSAGES, VAT_FILING_METHOD_LABELS, VAT_FILING_METHODS } from '../constants'
+import { Modal } from '@/components/ui/overlays/Modal'
+import { Button } from '@/components/ui/primitives/Button'
+import { Input } from '@/components/ui/inputs/Input'
+import { Select } from '@/components/ui/inputs/Select'
+import { VAT_FILING_METHOD_LABELS, VAT_FILING_METHODS } from '../constants'
+import { useFileVatReturn } from '../hooks/useFileVatReturn'
 import {
   toFileVatReturnPayload,
   vatFileModalDefaultValues,
@@ -34,8 +29,7 @@ export const VatFileModal: React.FC<VatFileModalProps> = ({
   onFilingStart,
   onFilingEnd,
 }) => {
-  const queryClient = useQueryClient()
-  const [isLoading, setIsLoading] = useState(false)
+  const { fileVatReturn, isLoading } = useFileVatReturn(workItemId)
   const {
     formState: { errors, isDirty },
     handleSubmit,
@@ -61,27 +55,10 @@ export const VatFileModal: React.FC<VatFileModalProps> = ({
   }
 
   const submitForm = handleSubmit(async (values) => {
-    setIsLoading(true)
     onFilingStart?.()
-    try {
-      const workItem = await vatReportsApi.fileVatReturn(workItemId, toFileVatReturnPayload(values))
-      toast.success(VAT_FILE_MODAL_MESSAGES.filingSuccess)
-      queryClient.setQueryData(vatReportsQK.detail(workItemId), (prev: unknown) => {
-        if (!prev || typeof prev !== 'object') return prev
-        return { ...(prev as object), status: 'filed' }
-      })
-      await invalidateVatWorkItem(queryClient, {
-        workItemId,
-        clientRecordId: workItem.client_record_id,
-        includeAudit: true,
-      })
-      handleClose()
-    } catch (err) {
-      showErrorToast(err, VAT_FILE_MODAL_MESSAGES.filingError)
-    } finally {
-      setIsLoading(false)
-      onFilingEnd?.()
-    }
+    const ok = await fileVatReturn(toFileVatReturnPayload(values))
+    onFilingEnd?.()
+    if (ok) handleClose()
   })
 
   return (

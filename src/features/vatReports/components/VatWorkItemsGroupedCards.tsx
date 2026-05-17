@@ -1,5 +1,4 @@
 import { memo, useEffect, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { Inbox } from 'lucide-react'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
@@ -8,7 +7,7 @@ import { MonthlyAccordionList } from '@/components/ui/table/MonthlyAccordionGrou
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
 import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
 import { getTotalPages } from '@/utils/paginationUtils'
-import { vatReportsApi, vatReportsQK } from '../api'
+import { useVatGroupItems } from '../hooks/useVatGroupItems'
 import type { VatWorkItemResponse, VatWorkItemGroupSummary } from '../api'
 import { formatVatPeriodTitle } from '../view.helpers'
 
@@ -25,11 +24,12 @@ interface VatWorkItemsGroupedCardsProps {
 const PAGE_SIZE = 50
 
 const getVatGroupSecondaryLabel = (group: VatWorkItemGroupSummary): string | null => {
+  const seen = new Set<string>()
   const periodLabels = (
     group.periods?.length ? group.periods : [{ period: group.period, period_type: group.period_type }]
   )
     .map((period) => formatVatPeriodTitle(period.period, period.period_type))
-    .filter((label, index, labels) => labels.indexOf(label) === index)
+    .filter((label) => (seen.has(label) ? false : (seen.add(label), true)))
   return periodLabels.length > 0 ? `כולל תקופות: ${periodLabels.join(' · ')}` : null
 }
 
@@ -51,12 +51,11 @@ const GroupContent = memo(
       setPage(1)
     }, [filters?.status, filters?.client_name])
 
-    const itemParams = { page, page_size: PAGE_SIZE, status: filters?.status, client_name: filters?.client_name }
-
-    const { data, isLoading } = useQuery({
-      queryKey: vatReportsQK.groupItems(group.group_key, itemParams),
-      queryFn: () => vatReportsApi.listGroupItems(group.group_key, itemParams),
-      staleTime: 30_000,
+    const { data, isLoading } = useVatGroupItems(group.group_key, {
+      page,
+      page_size: PAGE_SIZE,
+      status: filters?.status,
+      client_name: filters?.client_name,
     })
 
     if (isLoading) return <TableSkeleton rows={3} columns={columns.length} />
