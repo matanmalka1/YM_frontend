@@ -129,70 +129,56 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
             />
           )}
         />
-        <Controller
-          name="turnover_amount"
-          control={control}
-          render={({ field }) => (
-            <Input
-              label="מחזור לתקופה (אופציונלי)"
-              type="number"
-              min={0}
-              value={field.value ?? ''}
-              onChange={(e) => field.onChange(toNumberOrNull(e.target.value))}
-              error={errors.turnover_amount?.message}
-            />
-          )}
-        />
-        <Controller
-          name="advance_rate"
-          control={control}
-          render={({ field }) => (
-            <Input
-              label="אחוז מקדמה (%) (אופציונלי)"
-              type="number"
-              min={0}
-              value={field.value ?? ''}
-              onChange={(e) => field.onChange(toNumberOrNull(e.target.value))}
-              error={errors.advance_rate?.message}
-            />
-          )}
-        />
+        {(
+          [
+            { name: 'turnover_amount', label: 'מחזור לתקופה (אופציונלי)' },
+            { name: 'advance_rate', label: 'אחוז מקדמה (%) (אופציונלי)' },
+          ] as const
+        ).map(({ name, label }) => (
+          <Controller
+            key={name}
+            name={name}
+            control={control}
+            render={({ field }) => (
+              <Input
+                label={label}
+                type="number"
+                min={0}
+                value={field.value ?? ''}
+                onChange={(e) => field.onChange(toNumberOrNull(e.target.value))}
+                error={errors[name]?.message}
+              />
+            )}
+          />
+        ))}
         {liveCalculated != null && (
           <div>
             <div className="text-xs text-gray-500 mb-1">סכום מחושב</div>
             <div className="text-sm font-medium text-gray-800">{formatShekelAmount(liveCalculated)}</div>
           </div>
         )}
-        <Controller
-          name="override_amount"
-          control={control}
-          render={({ field }) => (
-            <div className="space-y-1">
+        {(
+          [
+            { name: 'override_amount', label: 'סכום עקיפה (אופציונלי)' },
+            { name: 'paid_amount', label: 'סכום ששולם (אופציונלי)' },
+          ] as const
+        ).map(({ name, label }) => (
+          <Controller
+            key={name}
+            name={name}
+            control={control}
+            render={({ field }) => (
               <Input
-                label="סכום עקיפה (אופציונלי)"
+                label={label}
                 type="number"
                 min={0}
                 value={field.value ?? ''}
                 onChange={(e) => field.onChange(toNumberOrNull(e.target.value))}
-                error={errors.override_amount?.message}
+                error={errors[name]?.message}
               />
-            </div>
-          )}
-        />
-        <Controller
-          name="paid_amount"
-          control={control}
-          render={({ field }) => (
-            <Input
-              label="סכום ששולם (אופציונלי)"
-              type="number"
-              min={0}
-              value={field.value ?? ''}
-              onChange={(e) => field.onChange(toNumberOrNull(e.target.value))}
-              error={errors.paid_amount?.message}
-            />
-          )}
-        />
+            )}
+          />
+        ))}
         <div className="space-y-1">
           <label htmlFor="create-advance-payment-notes" className="block text-sm font-medium text-gray-700">
             הערות (אופציונלי)
