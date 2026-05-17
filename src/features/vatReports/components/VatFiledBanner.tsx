@@ -1,5 +1,5 @@
 import { CheckCircle2 } from 'lucide-react'
-import { formatDateTime } from '../../../utils/utils'
+import { formatDateTime } from '@/utils/utils'
 import { VAT_FILING_METHOD_LABELS } from '../constants'
 import type { VatFiledBannerProps } from '../types'
 

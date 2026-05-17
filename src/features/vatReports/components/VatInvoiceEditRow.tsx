@@ -1,10 +1,10 @@
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, X } from 'lucide-react'
-import { Button } from '../../../components/ui/primitives/Button'
-import { Input } from '../../../components/ui/inputs/Input'
-import { SelectDropdown } from '../../../components/ui/inputs/SelectDropdown'
-import { DatePicker } from '../../../components/ui/inputs/DatePicker'
+import { Button } from '@/components/ui/primitives/Button'
+import { Input } from '@/components/ui/inputs/Input'
+import { SelectDropdown } from '@/components/ui/inputs/SelectDropdown'
+import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import {
   vatInvoiceEditSchema,
   isCounterpartyIdType,
@@ -20,7 +20,7 @@ import {
   toDateInputValue,
 } from '../utils'
 import type { VatInvoiceEditRowProps } from '../types'
-import { semanticMonoToneClasses } from '../../../utils/semanticColors'
+import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { blockNonNumericKey } from '../view.helpers'
 
 export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({

@@ -1,7 +1,7 @@
 import { Send, RotateCcw, PackageCheck } from 'lucide-react'
-import { Button } from '../../../components/ui/primitives/Button'
+import { Button } from '@/components/ui/primitives/Button'
 import { canMarkMaterialsComplete, canMarkReadyForReview, canFile, canSendBack } from '../utils'
-import { isClientClosed } from '../../../utils/clientStatus'
+import { isClientClosed } from '@/utils/clientStatus'
 import type { VatActionButtonsProps } from '../types'
 
 export const VatActionButtons: React.FC<VatActionButtonsProps> = ({

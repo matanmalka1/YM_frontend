@@ -1,6 +1,6 @@
 import { Plus } from 'lucide-react'
-import { Button } from '../../../components/ui/primitives/Button'
-import { Select } from '../../../components/ui/inputs/Select'
+import { Button } from '@/components/ui/primitives/Button'
+import { Select } from '@/components/ui/inputs/Select'
 import { VatExportButtons } from './VatExportButtons'
 
 interface VatClientActionBarProps {

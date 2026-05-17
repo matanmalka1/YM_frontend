@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Select } from '../../../components/ui/inputs/Select'
+import { Select } from '@/components/ui/inputs/Select'
 import { useVatPeriodOptions } from '../hooks/useVatPeriodOptions'
 
 interface VatPeriodSelectProps {

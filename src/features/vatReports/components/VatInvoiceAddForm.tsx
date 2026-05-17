@@ -1,11 +1,11 @@
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus } from 'lucide-react'
-import { Button } from '../../../components/ui/primitives/Button'
-import { FormField } from '../../../components/ui/inputs/FormField'
-import { Input } from '../../../components/ui/inputs/Input'
-import { Select } from '../../../components/ui/inputs/Select'
-import { DatePicker } from '../../../components/ui/inputs/DatePicker'
+import { Button } from '@/components/ui/primitives/Button'
+import { FormField } from '@/components/ui/inputs/FormField'
+import { Input } from '@/components/ui/inputs/Input'
+import { Select } from '@/components/ui/inputs/Select'
+import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { vatInvoiceRowSchema, toInvoiceRowPayload, type VatInvoiceRowValues } from '../schemas/invoice.schema'
 import {
   DEFAULT_RATE_TYPE,

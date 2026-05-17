@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Card } from '../../../components/ui/primitives/Card'
-import { Badge } from '../../../components/ui/primitives/Badge'
-import { Select } from '../../../components/ui/inputs/Select'
+import { Card } from '@/components/ui/primitives/Card'
+import { Badge } from '@/components/ui/primitives/Badge'
+import { Select } from '@/components/ui/inputs/Select'
 import { canAddInvoice } from '../utils'
-import { isClientClosed } from '../../../utils/clientStatus'
+import { isClientClosed } from '@/utils/clientStatus'
 import { useAddInvoice } from '../hooks/useVatInvoiceMutations'
 import { VAT_EXPENSE_CATEGORY_FILTER_OPTIONS } from '../constants'
 import { VatInvoiceTable } from './VatInvoiceTable'
@@ -28,7 +28,7 @@ export const VatInvoiceTab: React.FC<VatInvoiceTabProps> = ({
     .filter((i) => !isExpense || !categoryFilter || i.expense_category === categoryFilter)
 
   const title = isExpense ? 'תשומות (מע"מ תשומות)' : 'עסקאות (מע"מ עסקאות)'
-  const borderColor = isExpense ? 'border-r-orange-400' : 'border-r-emerald-400'
+  const borderColor = isExpense ? 'border-r-warning-400' : 'border-r-positive-400'
   const emptyMessage = isExpense ? 'עדיין לא הוספו חשבוניות תשומות' : 'עדיין לא הוספו חשבוניות עסקאות'
 
   return (

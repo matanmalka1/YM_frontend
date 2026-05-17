@@ -1,4 +1,4 @@
-import { cn } from '../../../utils/utils'
+import { cn } from '@/utils/utils'
 import { formatVatAmount, getVatDeductionRateClass, getVatDeductionRateLabel } from '../utils'
 import type { VatCategoryTableProps } from '../types'
 import { VAT_DEDUCTIBLE_ACCENT } from '../visualizationTokens'
@@ -46,7 +46,7 @@ export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({
               const grossAmount = row.netAmount + row.grossVat
 
               return (
-                <tr key={row.categoryKey} className="group transition-colors hover:bg-blue-50/30">
+                <tr key={row.categoryKey} className="group transition-colors hover:bg-primary-50/30">
                   <td className="px-4 py-3 font-medium text-gray-900">{row.label}</td>
                   <td className={cn(amountCellClass, getVatDeductionRateClass(row.deductionRate))}>
                     {getVatDeductionRateLabel(row.deductionRate)}

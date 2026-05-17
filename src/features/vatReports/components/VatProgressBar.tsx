@@ -1,4 +1,4 @@
-import { cn } from '../../../utils/utils'
+import { cn } from '@/utils/utils'
 import { VAT_WORKFLOW_STEPS } from '../constants'
 import type { VatProgressBarProps } from '../types'
 

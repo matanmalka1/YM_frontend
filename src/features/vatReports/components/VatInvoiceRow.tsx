@@ -1,5 +1,5 @@
 import { Pencil, Trash2 } from 'lucide-react'
-import { Badge } from '../../../components/ui/primitives/Badge'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { RowActionItem, RowActionSeparator, RowActionsMenu } from '@/components/ui/table'
 import { formatVatAmount, getVatDeductionRateClass, getVatDeductionRateLabel } from '../utils'
 import {
@@ -9,8 +9,8 @@ import {
   VAT_EXCEPTIONAL_INVOICE_TOOLTIP,
   VAT_RATE_TYPE_LABELS,
 } from '../constants'
-import { formatDate, formatDateTime } from '../../../utils/utils'
-import { semanticMonoToneClasses } from '../../../utils/semanticColors'
+import { formatDate, formatDateTime } from '@/utils/utils'
+import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import type { VatInvoiceRowProps } from '../types'
 
 const TD = ({ className = '', children }: { className?: string; children: React.ReactNode }) => (
