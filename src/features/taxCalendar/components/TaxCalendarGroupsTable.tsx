@@ -64,7 +64,7 @@ const formatEffectiveDueDateRange = (group: TaxCalendarGroup): string => {
   if (group.effective_due_date_min !== group.effective_due_date_max) {
     return `${formatDate(group.effective_due_date_min)}–${formatDate(group.effective_due_date_max)}`
   }
-  return formatDate(group.effective_due_date)
+  return formatDate(group.effective_due_date_min)
 }
 
 const hasGroupOverride = (group: TaxCalendarGroup): boolean =>
@@ -197,7 +197,7 @@ export const TaxCalendarGroupsTable = ({
   clientRecordId,
 }: TaxCalendarGroupsTableProps) => {
   const getKey = useCallback((g: TaxCalendarGroup) => String(g.tax_calendar_entry_id), [])
-  const getDueDate = useCallback((g: TaxCalendarGroup) => g.effective_due_date, [])
+  const getDueDate = useCallback((g: TaxCalendarGroup) => g.effective_due_date_min, [])
   const defaultOpenKey = useDefaultOpenGroup(groups, getKey, getDueDate)
 
   const [openEntryId, setOpenEntryId] = useState<number | null>(null)
@@ -222,7 +222,7 @@ export const TaxCalendarGroupsTable = ({
     <div className="space-y-2" dir="rtl">
       {groups.map((group) => {
         const isOpen = openEntryId === group.tax_calendar_entry_id
-        const effectiveRelativeLabel = formatRelativeDueLabel(group.effective_due_date)
+        const effectiveRelativeLabel = formatRelativeDueLabel(group.effective_due_date_min)
         const metrics: PeriodSummaryMetric[] = [
           { label: 'סה״כ מקושרים', value: group.linked_count },
           { label: 'פתוחים', value: group.open_count, tone: group.open_count > 0 ? 'warning' : 'muted' },

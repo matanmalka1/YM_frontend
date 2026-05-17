@@ -10,7 +10,6 @@ export interface TaxCalendarGroup {
   period_months_count: number | null
   tax_year: number
   regulatory_due_date: string
-  effective_due_date: string
   effective_due_date_min: string
   effective_due_date_max: string
   linked_count: number

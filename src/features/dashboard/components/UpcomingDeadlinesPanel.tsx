@@ -57,7 +57,7 @@ const formatObligationTitle = (group: TaxCalendarGroup): string => {
 }
 
 const UpcomingDeadlineRow = ({ group }: { group: TaxCalendarGroup }) => {
-  const dueDate = toDate(group.effective_due_date)
+  const dueDate = toDate(group.effective_due_date_min)
   const Icon = group.obligation_type === 'vat' ? CalendarDays : Landmark
   const countLabel = group.obligation_type === 'advance_payment' ? 'תשלומים' : 'דוחות'
   const iconClassName =
@@ -78,7 +78,7 @@ const UpcomingDeadlineRow = ({ group }: { group: TaxCalendarGroup }) => {
 
       <div className="min-w-0 py-4 text-center">
         <p className="text-base font-bold tabular-nums text-gray-950">
-          {dueDate ? dateFormatter.format(dueDate).replaceAll('/', '.') : group.effective_due_date}
+          {dueDate ? dateFormatter.format(dueDate).replaceAll('/', '.') : group.effective_due_date_min}
         </p>
         {dueDate && <p className="mt-1 text-xs font-semibold text-gray-500">({weekdayFormatter.format(dueDate)})</p>}
         <p className="mt-2 truncate text-sm font-bold text-gray-950">{formatObligationTitle(group)}</p>
@@ -102,7 +102,7 @@ export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string 
 
   const groups = (groupsQuery.data ?? [])
     .filter((group) => {
-      const dueDate = toDate(group.effective_due_date)
+      const dueDate = toDate(group.effective_due_date_min)
       return group.open_count > 0 && dueDate !== null && dueDate >= today
     })
     .sort((a, b) => toTime(a.effective_due_date) - toTime(b.effective_due_date))
