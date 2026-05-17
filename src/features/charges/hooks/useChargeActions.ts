@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
+import { workQueueQK } from '@/features/workQueue/api'
 import { chargesApi, chargesQK, type BulkChargeActionPayload } from '../api'
 import { runChargeActionRequest } from '../helpers'
 import type { ChargeAction } from '../types'
@@ -22,7 +23,10 @@ export const useChargeActions = ({ clearSelection, isAdvisor, selectedIds }: Use
       runChargeActionRequest(chargeId, action),
     onSuccess: async () => {
       toast.success('פעולת חיוב בוצעה בהצלחה')
-      await queryClient.invalidateQueries({ queryKey: chargesQK.all })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: chargesQK.all }),
+        queryClient.invalidateQueries({ queryKey: workQueueQK.all }),
+      ])
     },
   })
   const { mutateAsync: runChargeActionMutation } = actionMutation
@@ -62,7 +66,10 @@ export const useChargeActions = ({ clearSelection, isAdvisor, selectedIds }: Use
         if (result.failed.length > 0) {
           result.failed.forEach((f) => toast.error(`חיוב #${f.id}: ${f.error}`))
         }
-        await queryClient.invalidateQueries({ queryKey: chargesQK.all })
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: chargesQK.all }),
+          queryClient.invalidateQueries({ queryKey: workQueueQK.all }),
+        ])
         clearSelection()
       } catch (err: unknown) {
         showErrorToast(err, 'שגיאה בביצוע פעולה מרובה')

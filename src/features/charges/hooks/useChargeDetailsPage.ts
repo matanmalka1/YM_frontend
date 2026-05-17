@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { workQueueQK } from '@/features/workQueue/api'
 import { chargesApi, chargesQK } from '../api'
 import { toast } from '../../../utils/toast'
 import { getHttpStatus, isPositiveInt, showErrorToast } from '../../../utils/utils'
@@ -32,6 +33,7 @@ export const useChargeDetailsPage = (chargeId: string | undefined) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: chargesQK.detail(chargeIdNumber) }),
         queryClient.invalidateQueries({ queryKey: chargesQK.all }),
+        queryClient.invalidateQueries({ queryKey: workQueueQK.all }),
       ])
     },
   })
