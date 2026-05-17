@@ -5,7 +5,7 @@ import { Button } from '../../../components/ui/primitives/Button'
 import { useNotifications } from '../hooks/useNotifications'
 import { useEscapeToClose } from '../../../components/ui/overlays/useEscapeToClose'
 import { useRole } from '../../../hooks/useRole'
-import { SeverityBadge } from './SeverityBadge'
+import { DrawerNotificationListItem } from './NotificationListItem'
 import { SendNotificationModal } from './SendNotificationModal'
 import type { NotificationDrawerProps } from '../types'
 
@@ -64,25 +64,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
         <div className="flex-1 overflow-y-auto divide-y divide-gray-100">
           {limited.length === 0 && <p className="px-5 py-8 text-center text-sm text-gray-400">אין התראות</p>}
           {limited.map((item) => (
-            <div key={item.id} className="w-full text-right px-5 py-4 flex flex-row gap-3 items-start">
-              <div className="flex flex-col items-center gap-1.5 pt-0.5 shrink-0">
-                <SeverityBadge severity={item.severity} />
-              </div>
-              <div className="flex flex-col gap-1 min-w-0 flex-1">
-                {item.client_name && <span className="text-xs font-semibold text-gray-900">{item.client_name}</span>}
-                {item.business_name && <span className="text-xs text-gray-500">{item.business_name}</span>}
-                <p className="text-sm text-gray-800 leading-relaxed whitespace-normal break-words">
-                  {item.content_snapshot}
-                </p>
-                {item.recipient && <span className="text-xs text-gray-500">נשלח ל: {item.recipient}</span>}
-                <span className="text-xs text-gray-400">
-                  {new Date(item.created_at).toLocaleString('he-IL', {
-                    dateStyle: 'short',
-                    timeStyle: 'short',
-                  })}
-                </span>
-              </div>
-            </div>
+            <DrawerNotificationListItem key={item.id} item={item} />
           ))}
         </div>
       </div>
