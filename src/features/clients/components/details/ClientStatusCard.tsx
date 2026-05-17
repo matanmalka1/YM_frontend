@@ -125,9 +125,9 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
   const arSecondary = annual_report.filing_deadline
     ? `הגשה: ${formatDate(annual_report.filing_deadline)}`
     : annual_report.refund_due != null
-      ? `החזר: ${fmt(annual_report.refund_due)}`
+      ? `החזר: ${formatShekelAmount(annual_report.refund_due)}`
       : annual_report.tax_due != null
-        ? `תשלום: ${fmt(annual_report.tax_due)}`
+        ? `תשלום: ${formatShekelAmount(annual_report.tax_due)}`
         : '—'
 
   return (
@@ -154,14 +154,14 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
         <Tile
           icon={<CreditCard size={14} />}
           title="חיובים פתוחים"
-          primary={fmt(charges.total_outstanding)}
+          primary={formatShekelAmount(charges.total_outstanding)}
           secondary={`${charges.unpaid_count} חיובים`}
           onClick={() => navigate(`/charges?client_record_id=${clientId}`)}
         />
         <Tile
           icon={<TrendingUp size={14} />}
           title="מקדמות"
-          primary={fmt(advance_payments.total_paid)}
+          primary={formatShekelAmount(advance_payments.total_paid)}
           secondary={`${advance_payments.count} תשלומים`}
           onClick={() => navigate(CLIENT_ROUTES.advancePayments(clientId))}
         />
