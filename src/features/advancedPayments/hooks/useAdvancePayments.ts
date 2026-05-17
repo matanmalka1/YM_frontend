@@ -6,7 +6,6 @@ import { getErrorMessage, showErrorToast } from '../../../utils/utils'
 interface UpdatePayload {
   id: number
   paid_amount?: string
-  expected_amount?: string | null
   status?: AdvancePaymentStatus
 }
 
@@ -72,8 +71,7 @@ export const useAdvancePayments = (clientId: number, year: number, statusFilter?
       id: number,
       paid_amount: string | null,
       status?: AdvancePaymentStatus,
-      expected_amount?: string | null,
-    ) => updateMutation.mutateAsync({ id, paid_amount: paid_amount ?? '0', status, expected_amount }),
+    ) => updateMutation.mutateAsync({ id, paid_amount: paid_amount ?? '0', status }),
     isUpdating: updateMutation.isPending,
     updatingId,
     create: createMutation.mutateAsync,

@@ -60,8 +60,9 @@ export const buildCreateAdvancePaymentPayload = (
 ): CreateAdvancePaymentPayload => ({
   period: toPeriod(year, data.month),
   period_months_count: data.period_months_count,
-  due_date: data.due_date,
-  expected_amount: toStringOrNull(data.expected_amount),
+  turnover_amount: toStringOrNull(data.turnover_amount),
+  advance_rate: toStringOrNull(data.advance_rate),
+  override_amount: toStringOrNull(data.override_amount),
   paid_amount: toStringOrNull(data.paid_amount),
   notes: data.notes ?? null,
 })

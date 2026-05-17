@@ -6,7 +6,6 @@ import { Modal } from '../../../components/ui/overlays/Modal'
 import { Input } from '../../../components/ui/inputs/Input'
 import { Button } from '../../../components/ui/primitives/Button'
 import { Select } from '../../../components/ui/inputs/Select'
-import { DatePicker } from '../../../components/ui/inputs/DatePicker'
 import {
   createAdvancePaymentSchema,
   CREATE_ADVANCE_PAYMENT_DEFAULTS,
@@ -23,6 +22,7 @@ import {
   toFrequency,
   toNumberOrNull,
 } from './advancePaymentComponent.utils'
+import { formatShekelAmount } from '@/utils/utils'
 import { ADVANCE_PAYMENT_SUGGESTION_STALE_TIME_MS, NOTES_TEXTAREA_CLASS } from './advancePaymentComponent.constants'
 
 interface CreateAdvancePaymentModalProps {
@@ -58,7 +58,14 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
   })
   const periodMonthsCount = watch('period_months_count')
   const month = watch('month')
+  const turnoverAmount = watch('turnover_amount')
+  const advanceRate = watch('advance_rate')
   const monthOptions = getAdvancePaymentMonthOptions(periodMonthsCount)
+
+  const liveCalculated =
+    turnoverAmount != null && advanceRate != null && turnoverAmount >= 0 && advanceRate >= 0
+      ? ((turnoverAmount * advanceRate) / 100).toFixed(2)
+      : null
 
   useEffect(() => {
     if (!open || defaultPeriodMonthsCount == null) return
@@ -92,7 +99,7 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
 
   const applySuggestion = () => {
     if (suggestion?.suggested_amount != null) {
-      setValue('expected_amount', Number(suggestion.suggested_amount), { shouldValidate: true })
+      setValue('override_amount', Number(suggestion.suggested_amount), { shouldValidate: true })
     }
   }
 
@@ -139,30 +146,51 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
           )}
         />
         <Controller
-          name="due_date"
+          name="turnover_amount"
           control={control}
           render={({ field }) => (
-            <DatePicker
-              label="תאריך יעד"
-              error={errors.due_date?.message}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
+            <Input
+              label="מחזור לתקופה (אופציונלי)"
+              type="number"
+              min={0}
+              value={field.value ?? ''}
+              onChange={(e) => field.onChange(toNumberOrNull(e.target.value))}
+              error={errors.turnover_amount?.message}
             />
           )}
         />
         <Controller
-          name="expected_amount"
+          name="advance_rate"
+          control={control}
+          render={({ field }) => (
+            <Input
+              label="אחוז מקדמה (%) (אופציונלי)"
+              type="number"
+              min={0}
+              value={field.value ?? ''}
+              onChange={(e) => field.onChange(toNumberOrNull(e.target.value))}
+              error={errors.advance_rate?.message}
+            />
+          )}
+        />
+        {liveCalculated != null && (
+          <div>
+            <div className="text-xs text-gray-500 mb-1">סכום מחושב</div>
+            <div className="text-sm font-medium text-gray-800">{formatShekelAmount(liveCalculated)}</div>
+          </div>
+        )}
+        <Controller
+          name="override_amount"
           control={control}
           render={({ field }) => (
             <div className="space-y-1">
               <Input
-                label="סכום צפוי"
+                label="סכום עקיפה (אופציונלי)"
                 type="number"
                 min={0}
                 value={field.value ?? ''}
                 onChange={(e) => field.onChange(toNumberOrNull(e.target.value))}
-                error={errors.expected_amount?.message}
+                error={errors.override_amount?.message}
               />
               {suggestion?.has_data && suggestion.suggested_amount != null && (
                 <Button

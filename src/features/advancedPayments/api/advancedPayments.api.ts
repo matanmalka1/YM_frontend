@@ -12,6 +12,7 @@ import type {
   AdvancePaymentSuggestionResponse,
   AnnualKPIResponse,
   MonthBatchSummary,
+  PrefillTurnoverResponse,
 } from '../types'
 
 export const advancePaymentsApi = {
@@ -76,6 +77,18 @@ export const advancePaymentsApi = {
     const response = await api.get<MonthBatchSummary[]>(ADVANCE_PAYMENT_ENDPOINTS.advancePaymentsBatches, {
       params: toQueryParams(year !== null ? { year } : {}),
     })
+    return response.data
+  },
+
+  getPrefillTurnover: async (
+    clientId: number,
+    period: string,
+    periodMonthsCount: 1 | 2,
+  ): Promise<PrefillTurnoverResponse> => {
+    const response = await api.get<PrefillTurnoverResponse>(
+      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentPrefillTurnover(clientId),
+      { params: toQueryParams({ period, period_months_count: periodMonthsCount }) },
+    )
     return response.data
   },
 

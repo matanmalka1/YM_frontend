@@ -230,8 +230,8 @@ const BatchContent = ({
                     {formatDate(row.due_date)}
                   </td>
                   <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-center align-middle">
-                    {row.reported_turnover ? (
-                      <span className="text-gray-700">{formatShekelAmount(row.reported_turnover)}</span>
+                    {row.turnover_amount ? (
+                      <span className="text-gray-700">{formatShekelAmount(row.turnover_amount)}</span>
                     ) : row.live_turnover ? (
                       <span className="text-gray-400 italic">{formatShekelAmount(row.live_turnover)}</span>
                     ) : (

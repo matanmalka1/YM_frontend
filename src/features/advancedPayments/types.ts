@@ -17,7 +17,10 @@ export interface AdvancePaymentRow {
   annual_report_id: number | null
   notes: string | null
   delta: string | null
-  reported_turnover: string | null
+  turnover_amount: string | null
+  advance_rate: string | null
+  calculated_amount: string | null
+  override_amount: string | null
   live_turnover: string | null
   missing_turnover: boolean
   timing_status: AdvancePaymentTimingStatus
@@ -37,8 +40,9 @@ export interface ListAdvancePaymentsParams {
 export interface CreateAdvancePaymentPayload {
   period: string
   period_months_count?: 1 | 2
-  due_date: string
-  expected_amount?: string | null
+  turnover_amount?: string | null
+  advance_rate?: string | null
+  override_amount?: string | null
   paid_amount?: string | null
   payment_method?: AdvancePaymentMethod | null
   annual_report_id?: number | null
@@ -48,10 +52,20 @@ export interface CreateAdvancePaymentPayload {
 export interface UpdateAdvancePaymentPayload {
   paid_amount?: string
   expected_amount?: string | null
+  turnover_amount?: string | null
+  override_amount?: string | null
   status?: AdvancePaymentStatus
   paid_at?: string | null
   payment_method?: AdvancePaymentMethod | null
   notes?: string | null
+}
+
+export interface PrefillTurnoverResponse {
+  period: string
+  period_months_count: 1 | 2
+  turnover_amount: string | null
+  vat_work_item_id: number | null
+  source: 'vat_filed' | 'vat_pending' | 'none'
 }
 
 export interface AdvancePaymentOverviewRow {
@@ -69,7 +83,9 @@ export interface AdvancePaymentOverviewRow {
   timing_status: AdvancePaymentTimingStatus
   due_date: string
   payment_method: AdvancePaymentMethod | null
-  reported_turnover: string | null
+  turnover_amount: string | null
+  calculated_amount: string | null
+  override_amount: string | null
   live_turnover: string | null
   missing_turnover: boolean
   advance_rate: string | null

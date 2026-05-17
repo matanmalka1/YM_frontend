@@ -44,9 +44,9 @@ export const ClientAdvancePaymentCards: React.FC<Props> = ({ rows, isLoading, on
         const expected = Number(row.expected_amount ?? 0)
         const paid = Number(row.paid_amount ?? 0)
         const balance = Math.max(expected - paid, 0)
-        const turnover = row.reported_turnover ?? row.live_turnover
+        const turnover = row.turnover_amount ?? row.live_turnover
         const hasTurnover = turnover !== null && turnover !== undefined
-        const turnoverSource = row.reported_turnover ? 'דווח ידנית' : row.live_turnover ? 'נגזר ממע״מ' : 'חסר'
+        const turnoverSource = row.turnover_amount ? 'מחזור מוזן' : row.live_turnover ? 'נגזר ממע״מ' : 'חסר'
         const turnoverLabel = row.missing_turnover ? 'חסר מחזור' : `מחזור (${turnoverSource})`
         const isPaid = row.status === 'paid'
         const ctaText = isPaid ? 'צפה בפרטים' : 'עדכן תשלום'
