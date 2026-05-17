@@ -6,13 +6,11 @@ import { Select } from '@/components/ui/inputs/Select'
 import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
 import { getErrorMessage } from '@/utils/utils'
 import { TaxCalendarGroupsTable } from './TaxCalendarGroupsTable'
+import { TaxCalendarSummaryStrip } from './TaxCalendarSummaryStrip'
+import { TAX_CALENDAR_OBLIGATION_TYPE_OPTIONS, TAX_CALENDAR_STATUS_OPTIONS } from '../constants'
 import { useTaxCalendarGroups } from '../hooks/useTaxCalendarGroups'
-import {
-  TAX_CALENDAR_OBLIGATION_LABELS,
-  type TaxCalendarGroup,
-  type TaxCalendarGroupsParams,
-  type TaxCalendarObligationType,
-} from '../api'
+import { filterGroupsByStatus, type TaxCalendarGroupStatusFilter } from '../utils'
+import { type TaxCalendarGroupsParams, type TaxCalendarObligationType } from '../api'
 
 interface ClientTaxCalendarTabProps {
   clientId: number
@@ -20,58 +18,11 @@ interface ClientTaxCalendarTabProps {
 
 const currentYear = new Date().getFullYear()
 
-const OBLIGATION_TYPE_OPTIONS = [
-  { value: '', label: 'כל סוגי החובות' },
-  { value: 'vat', label: TAX_CALENDAR_OBLIGATION_LABELS.vat },
-  { value: 'advance_payment', label: TAX_CALENDAR_OBLIGATION_LABELS.advance_payment },
-  { value: 'annual_report', label: TAX_CALENDAR_OBLIGATION_LABELS.annual_report },
-]
-
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'כל המצבים' },
-  { value: 'open', label: 'פתוחים' },
-  { value: 'overdue', label: 'באיחור' },
-  { value: 'done', label: 'הושלמו' },
-]
-
-const SummaryStrip = ({ groups }: { groups: TaxCalendarGroup[] }) => {
-  const summary = groups.reduce(
-    (acc, group) => ({
-      linked: acc.linked + group.linked_count,
-      open: acc.open + group.open_count,
-      overdue: acc.overdue + group.overdue_count,
-      done: acc.done + group.done_count,
-    }),
-    { linked: 0, open: 0, overdue: 0, done: 0 },
-  )
-
-  const items = [
-    { label: 'מועדים', value: summary.linked, className: 'text-gray-900' },
-    { label: 'פתוחים', value: summary.open, className: 'text-warning-700' },
-    { label: 'באיחור', value: summary.overdue, className: 'text-negative-700' },
-    { label: 'הושלמו', value: summary.done, className: 'text-positive-700' },
-  ]
-
-  return (
-    <div className="flex flex-wrap gap-2">
-      {items.map((item) => (
-        <div
-          key={item.label}
-          className="inline-flex items-baseline gap-2 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm"
-        >
-          <span className="text-xs font-medium text-gray-500">{item.label}</span>
-          <span className={`font-mono font-semibold tabular-nums ${item.className}`}>{item.value}</span>
-        </div>
-      ))}
-    </div>
-  )
-}
-
 export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }) => {
   const [startYear, setStartYear] = useState(String(currentYear))
   const [endYear, setEndYear] = useState(String(currentYear))
   const [obligationType, setObligationType] = useState('')
-  const [status, setStatus] = useState('all')
+  const [status, setStatus] = useState<TaxCalendarGroupStatusFilter>('all')
 
   const params = useMemo<TaxCalendarGroupsParams>(
     () => ({
@@ -85,12 +36,7 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
 
   const groupsQuery = useTaxCalendarGroups(params)
   const groups = useMemo(() => groupsQuery.data ?? [], [groupsQuery.data])
-  const displayedGroups = useMemo(() => {
-    if (status === 'open') return groups.filter((group) => group.open_count > 0)
-    if (status === 'overdue') return groups.filter((group) => group.overdue_count > 0)
-    if (status === 'done') return groups.filter((group) => group.done_count > 0)
-    return groups
-  }, [groups, status])
+  const displayedGroups = useMemo(() => filterGroupsByStatus(groups, status), [groups, status])
 
   const resetFilters = () => {
     setStartYear(String(currentYear))
@@ -123,13 +69,13 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
             label="סוג חובה"
             value={obligationType}
             onChange={(event) => setObligationType(event.target.value)}
-            options={OBLIGATION_TYPE_OPTIONS}
+            options={TAX_CALENDAR_OBLIGATION_TYPE_OPTIONS}
           />
           <Select
             label="מצב"
             value={status}
-            onChange={(event) => setStatus(event.target.value)}
-            options={STATUS_OPTIONS}
+            onChange={(event) => setStatus(event.target.value as TaxCalendarGroupStatusFilter)}
+            options={TAX_CALENDAR_STATUS_OPTIONS}
           />
           <div className="flex items-end">
             <Button type="button" variant="outline" size="sm" onClick={resetFilters}>
@@ -143,7 +89,7 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
         <Alert variant="error" message={getErrorMessage(groupsQuery.error, 'שגיאה בטעינת מועדי המס')} />
       ) : null}
 
-      <SummaryStrip groups={displayedGroups} />
+      <TaxCalendarSummaryStrip groups={displayedGroups} linkedLabel="מועדים" />
 
       <TaxCalendarGroupsTable groups={displayedGroups} isLoading={groupsQuery.isPending} clientRecordId={clientId} />
     </div>
