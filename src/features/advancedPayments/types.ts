@@ -119,6 +119,8 @@ export interface MonthBatchSummary {
   missing_turnover_count: number
   overdue_count: number
   pending_count: number
+  paid_count: number
+  not_paid_count: number
   total_expected: string | null
   total_paid: string | null
   collection_rate: number

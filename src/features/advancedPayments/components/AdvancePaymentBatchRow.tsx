@@ -75,6 +75,8 @@ export interface AdvancePaymentGroupStats {
   pendingCount: number
   missingTurnoverCount: number
   overdueCount: number
+  paidCount: number
+  notPaidCount: number
 }
 
 const formatAdvancePaymentPeriod = (batch: AdvancePaymentDueDateGroup): string => {
@@ -148,12 +150,14 @@ const BatchContent = ({
     const pendingClients = new Set<number>()
     const missingTurnoverClients = new Set<number>()
     const overdueClients = new Set<number>()
+    const paidClients = new Set<number>()
 
     filtered.forEach((row) => {
       clients.add(row.client_record_id)
       if (row.status === 'pending') pendingClients.add(row.client_record_id)
       if (row.missing_turnover) missingTurnoverClients.add(row.client_record_id)
       if (row.timing_status === 'overdue') overdueClients.add(row.client_record_id)
+      if (row.status === 'paid') paidClients.add(row.client_record_id)
     })
 
     return {
@@ -161,6 +165,8 @@ const BatchContent = ({
       pendingCount: pendingClients.size,
       missingTurnoverCount: missingTurnoverClients.size,
       overdueCount: overdueClients.size,
+      paidCount: paidClients.size,
+      notPaidCount: clients.size - paidClients.size,
     }
   }, [filtered])
 
@@ -305,9 +311,13 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   const pendingCount = statsOverride?.pendingCount ?? batch.pending_count
   const overdueCount = statsOverride?.overdueCount ?? batch.overdue_count
   const missingTurnoverCount = statsOverride?.missingTurnoverCount ?? batch.missing_turnover_count
+  const paidCount = statsOverride?.paidCount ?? batch.paid_count
+  const notPaidCount = statsOverride?.notPaidCount ?? batch.not_paid_count
   const metrics: PeriodSummaryMetric[] = [
     { label: 'לקוחות', value: clientCount },
     { label: 'ממתינים', value: pendingCount, tone: pendingCount > 0 ? 'warning' : 'muted' },
+    { label: 'שולם', value: paidCount, tone: paidCount > 0 ? 'success' : 'muted' },
+    { label: 'לא שולם', value: notPaidCount, tone: notPaidCount > 0 ? 'warning' : 'muted' },
     { label: 'באיחור', value: overdueCount, tone: overdueCount > 0 ? 'danger' : 'muted' },
   ]
 

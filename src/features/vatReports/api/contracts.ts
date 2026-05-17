@@ -191,6 +191,8 @@ export interface VatWorkItemGroupSummary {
   total_count: number
   filed_count: number
   pending_count: number
+  not_filed_count: number
+  overdue_count: number
 }
 
 export interface VatWorkItemGroupsResponse {

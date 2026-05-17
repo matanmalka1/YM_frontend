@@ -143,7 +143,9 @@ export const AdvancePayments: React.FC = () => {
         current.clientCount === stats.clientCount &&
         current.pendingCount === stats.pendingCount &&
         current.missingTurnoverCount === stats.missingTurnoverCount &&
-        current.overdueCount === stats.overdueCount
+        current.overdueCount === stats.overdueCount &&
+        current.paidCount === stats.paidCount &&
+        current.notPaidCount === stats.notPaidCount
       ) {
         return prev
       }
