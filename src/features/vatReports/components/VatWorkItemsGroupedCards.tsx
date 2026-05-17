@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { Inbox } from 'lucide-react'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
@@ -6,6 +6,7 @@ import { DataTable, type Column } from '@/components/ui/table/DataTable'
 import { MonthlyAccordionList } from '@/components/ui/table/MonthlyAccordionGroup'
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
 import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
+import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { useVatGroupItems } from '../hooks/useVatGroupItems'
 import type { VatWorkItemResponse, VatWorkItemGroupSummary } from '../api'
@@ -96,6 +97,10 @@ export const VatWorkItemsGroupedCards = ({
 }: VatWorkItemsGroupedCardsProps) => {
   const sortedGroups = [...groups].sort((a, b) => a.due_date.localeCompare(b.due_date))
 
+  const getKey = useCallback((g: VatWorkItemGroupSummary) => g.group_key, [])
+  const getDueDate = useCallback((g: VatWorkItemGroupSummary) => g.due_date, [])
+  const defaultOpenKey = useDefaultOpenGroup(sortedGroups, getKey, getDueDate)
+
   return (
     <MonthlyAccordionList
       isLoading={isLoading}
@@ -122,6 +127,7 @@ export const VatWorkItemsGroupedCards = ({
             primaryLabel={formatDueDateLabel(group.due_date, 'להגשה עד') ?? group.due_date}
             secondaryLabel={getVatGroupSecondaryLabel(group)}
             relativeDueLabel={formatRelativeDueLabel(group.due_date)}
+            defaultOpen={group.group_key === defaultOpenKey}
             metrics={metrics}
             ctaLabel="פתח לקוחות"
           >

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Inbox } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
@@ -7,6 +7,7 @@ import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
 import { formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
 import { cn, formatDate, formatPlainIdentifier, getErrorMessage } from '@/utils/utils'
+import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { useTaxCalendarGroupItems } from '../hooks/useTaxCalendarGroupItems'
 import {
   TAX_CALENDAR_OBLIGATION_LABELS,
@@ -195,7 +196,14 @@ export const TaxCalendarGroupsTable = ({
   clientSearchText = '',
   clientRecordId,
 }: TaxCalendarGroupsTableProps) => {
+  const getKey = useCallback((g: TaxCalendarGroup) => String(g.tax_calendar_entry_id), [])
+  const getDueDate = useCallback((g: TaxCalendarGroup) => g.effective_due_date, [])
+  const defaultOpenKey = useDefaultOpenGroup(groups, getKey, getDueDate)
+
   const [openEntryId, setOpenEntryId] = useState<number | null>(null)
+  useEffect(() => {
+    setOpenEntryId(defaultOpenKey != null ? Number(defaultOpenKey) : null)
+  }, [defaultOpenKey])
 
   if (isLoading) return <TableSkeleton rows={5} columns={8} />
 

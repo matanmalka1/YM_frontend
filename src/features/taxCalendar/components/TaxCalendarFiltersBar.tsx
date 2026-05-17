@@ -39,7 +39,12 @@ export const TaxCalendarFiltersBar = ({
 }: TaxCalendarFiltersBarProps) => {
   const showClientSearch = clientSearchText != null && onClientSearchTextChange
   const showIncludeEmpty = includeEmpty != null && onIncludeEmptyChange
-  const gridColumns = showClientSearch && showIncludeEmpty ? 'lg:grid-cols-7' : showClientSearch || showIncludeEmpty ? 'lg:grid-cols-6' : 'lg:grid-cols-5'
+  const gridColumns =
+    showClientSearch && showIncludeEmpty
+      ? 'lg:grid-cols-7'
+      : showClientSearch || showIncludeEmpty
+        ? 'lg:grid-cols-6'
+        : 'lg:grid-cols-5'
 
   return (
     <ToolbarContainer>

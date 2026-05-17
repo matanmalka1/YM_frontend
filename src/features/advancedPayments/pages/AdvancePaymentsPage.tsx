@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { format, getYear } from 'date-fns'
+import { getYear } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { PlusCircle, Calendar } from 'lucide-react'
@@ -10,6 +10,7 @@ import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { MonthlyAccordionList } from '@/components/ui/table/MonthlyAccordionGroup'
 import { ClientPickerField } from '@/components/shared/client/ClientPickerField'
 import { useClientPickerState } from '@/components/shared/client/useClientPickerState'
+import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { useAdvancePaymentBatches } from '../hooks/useAdvancePaymentBatches'
 import { OverviewKPICards } from '../components/OverviewKPICards'
 import { AdvancePaymentBatchRow, type AdvancePaymentGroupStats } from '../components/AdvancePaymentBatchRow'
@@ -256,25 +257,11 @@ export const AdvancePayments: React.FC = () => {
     })
   }, [batches, periodFilter])
 
-  const todayKey = format(new Date(), 'yyyy-MM-dd')
-  const defaultOpenBatchKey = useMemo(() => {
-    const batchesWithDueDate = displayBatches.filter((batch) => batch.due_date)
-    const upcoming = batchesWithDueDate
-      .filter((batch) => batch.due_date! >= todayKey)
-      .sort(
-        (a, b) => a.due_date!.localeCompare(b.due_date!) || getBatchStableKey(a).localeCompare(getBatchStableKey(b)),
-      )
-
-    if (upcoming[0]) return getBatchStableKey(upcoming[0])
-
-    const latestPast = batchesWithDueDate
-      .sort(
-        (a, b) => b.due_date!.localeCompare(a.due_date!) || getBatchStableKey(a).localeCompare(getBatchStableKey(b)),
-      )
-      .at(0)
-
-    return latestPast ? getBatchStableKey(latestPast) : displayBatches[0] ? getBatchStableKey(displayBatches[0]) : null
-  }, [displayBatches, todayKey])
+  const defaultOpenBatchKey = useDefaultOpenGroup(
+    displayBatches,
+    useCallback((b) => getBatchStableKey(b), []),
+    useCallback((b) => b.due_date ?? null, []),
+  )
 
   const workflowStats = useMemo(() => {
     const now = new Date()
