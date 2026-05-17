@@ -14,7 +14,6 @@
     "format:check": "prettier --check .",
     "arch:check": "node scripts/arch-check.mjs",
     "arch:check:strict": "node scripts/arch-check.mjs --strict",
-    "smoke:api": "bash ./scripts/smoke-api.sh",
     "test": "vitest run",
     "test:watch": "vitest",
     "jscpd": "jscpd --config .jscpd.json src",

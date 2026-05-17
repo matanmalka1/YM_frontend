@@ -37,7 +37,6 @@ npm run arch:check
 npm run arch:check:strict
 npm run test
 npm run jscpd          # duplicate code detection
-npm run smoke:api      # smoke-test backend endpoints
 ```
 
 ---

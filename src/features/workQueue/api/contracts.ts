@@ -1,10 +1,9 @@
 import { z } from 'zod'
 import { workQueueSourceTypeValues, workQueueUrgencyValues } from '../constants'
+import type { WorkQueueSourceType, WorkQueueUrgency } from '../constants'
 import { taskStatusValues } from '@/features/tasks'
 
-export type WorkQueueSourceType = (typeof workQueueSourceTypeValues)[number]
-
-export type WorkQueueUrgency = (typeof workQueueUrgencyValues)[number]
+export type { WorkQueueSourceType, WorkQueueUrgency }
 
 export const workQueueActionSchema = z.object({
   key: z.string(),
