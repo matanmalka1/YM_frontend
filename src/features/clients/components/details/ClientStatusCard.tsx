@@ -7,7 +7,7 @@ import { clientsApi, clientsQK } from '../../api'
 import { CLIENT_ROUTES } from '../../api/endpoints'
 import { vatReportsApi, vatReportsQK } from '@/features/vatReports'
 import { useFirstBusinessId } from '../../hooks/useFirstBusinessId'
-import { fmtCurrency as fmt, formatDate } from '@/utils/utils'
+import { formatShekelAmount, formatDate } from '@/utils/utils'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 interface Props {
   clientId: number
@@ -80,7 +80,7 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
     years.add(data?.year ?? CURRENT_YEAR)
     return Array.from(years).sort((a, b) => b - a)
   }, [data?.year, vatSummary?.annual])
-  const vatPrimary = vatYear ? fmt(vatYear.net_vat) : '—'
+  const vatPrimary = vatYear ? formatShekelAmount(vatYear.net_vat) : '—'
   const vatStatus = vatYear
     ? vatYear.periods_count === 0
       ? 'אין דיווחים'

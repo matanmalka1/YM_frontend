@@ -65,17 +65,10 @@ export const BindersFiltersBar = ({
       icon: Undo2,
       variant: 'neutral' as const,
     },
-    {
-      key: 'archived_in_office',
-      label: 'ארכיון במשרד',
-      count: counters.archived_in_office,
-      icon: Archive,
-      variant: 'neutral' as const,
-    },
   ] as const
 
   const pills = (
-    <div className="grid grid-cols-2 gap-3 xl:grid-cols-6">
+    <div className="grid grid-cols-2 gap-3 xl:grid-cols-5">
       {statusPills.map((pill) => (
         <StatsCard
           key={pill.key || 'total'}

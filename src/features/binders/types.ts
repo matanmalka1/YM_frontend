@@ -29,7 +29,6 @@ export interface BinderListCounters {
   total: number
   in_office: number
   closed_in_office: number
-  archived_in_office: number
   ready_for_pickup: number
   returned: number
 }

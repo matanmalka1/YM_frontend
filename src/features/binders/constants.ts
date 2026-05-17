@@ -8,7 +8,6 @@ export const PERIODIC_BINDER_TYPES = new Set(['vat', 'salary'])
 export const BINDER_STATUS_VARIANTS: Record<string, 'success' | 'warning' | 'error' | 'info' | 'neutral'> = {
   in_office: 'info',
   closed_in_office: 'warning',
-  archived_in_office: 'neutral',
   ready_for_pickup: 'success',
   returned: 'neutral',
 }

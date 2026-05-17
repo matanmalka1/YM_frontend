@@ -1,6 +1,6 @@
 import { Banknote, CheckCircle2, Clock, TrendingUp, Users, XCircle } from 'lucide-react'
 import type { StatsCardProps } from '@/components/ui/layout/StatsCard'
-import { fmtCurrency } from '@/utils/utils'
+import { formatShekelAmount } from '@/utils/utils'
 import type { TaxSubmissionWidgetResponse } from './api'
 import { TAX_SUBMISSION_FILTERS, TAX_SUBMISSION_STAT_TITLES, type TaxSubmissionFilter } from './constants'
 
@@ -61,7 +61,7 @@ export const buildTaxSubmissionStats = (data: TaxSubmissionWidgetResponse): TaxS
     stats.push({
       key: 'refund',
       title: TAX_SUBMISSION_STAT_TITLES.refund,
-      value: fmtCurrency(totalRefundDue),
+      value: formatShekelAmount(totalRefundDue),
       icon: Banknote,
       variant: 'green',
     })
@@ -71,7 +71,7 @@ export const buildTaxSubmissionStats = (data: TaxSubmissionWidgetResponse): TaxS
     stats.push({
       key: 'tax_due',
       title: TAX_SUBMISSION_STAT_TITLES.taxDue,
-      value: fmtCurrency(totalTaxDue),
+      value: formatShekelAmount(totalTaxDue),
       icon: Banknote,
       variant: 'red',
     })

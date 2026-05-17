@@ -7,7 +7,7 @@ import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/tabl
 import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../types'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
-import { fmtCurrency } from '@/utils/utils'
+import { formatShekelAmount } from '@/utils/utils'
 import { getAdvancePaymentMonthLabel } from './advancePaymentComponent.utils'
 import { formatDate, formatClientOfficeId } from '../../../utils/utils'
 import { AdvancePaymentStatusBadge } from './AdvancePaymentStatusBadge'
@@ -231,9 +231,9 @@ const BatchContent = ({
                   </td>
                   <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-center align-middle">
                     {row.reported_turnover ? (
-                      <span className="text-gray-700">{fmtCurrency(row.reported_turnover)}</span>
+                      <span className="text-gray-700">{formatShekelAmount(row.reported_turnover)}</span>
                     ) : row.live_turnover ? (
-                      <span className="text-gray-400 italic">{fmtCurrency(row.live_turnover)}</span>
+                      <span className="text-gray-400 italic">{formatShekelAmount(row.live_turnover)}</span>
                     ) : (
                       <span className="text-gray-500">—</span>
                     )}
@@ -242,18 +242,18 @@ const BatchContent = ({
                     dir="ltr"
                     className="px-3 py-1.5 text-sm font-semibold tabular-nums text-gray-800 text-center align-middle"
                   >
-                    {fmtCurrency(row.expected_amount)}
+                    {formatShekelAmount(row.expected_amount)}
                   </td>
                   <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-center align-middle">
-                    {fmtCurrency(row.paid_amount)}
+                    {formatShekelAmount(row.paid_amount)}
                   </td>
                   <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-center align-middle">
                     {row.delta == null ? (
                       <span className="text-gray-500">—</span>
                     ) : Number(row.delta) > 0 ? (
-                      <span className="font-semibold text-red-500">{fmtCurrency(row.delta)}</span>
+                      <span className="font-semibold text-red-500">{formatShekelAmount(row.delta)}</span>
                     ) : (
-                      <span className="text-gray-500">{fmtCurrency(row.delta)}</span>
+                      <span className="text-gray-500">{formatShekelAmount(row.delta)}</span>
                     )}
                   </td>
                   <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-center align-middle">

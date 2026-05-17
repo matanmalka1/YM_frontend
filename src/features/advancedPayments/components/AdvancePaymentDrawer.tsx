@@ -7,7 +7,7 @@ import { DatePicker } from '../../../components/ui/inputs/DatePicker'
 import { Button } from '../../../components/ui/primitives/Button'
 import type { AdvancePaymentOverviewRow, AdvancePaymentRow, UpdateAdvancePaymentPayload } from '../types'
 import { ADVANCE_PAYMENT_STATUS_OPTIONS, ADVANCE_PAYMENT_METHOD_OPTIONS } from '../constants'
-import { fmtCurrency } from '@/utils/utils'
+import { formatShekelAmount } from '@/utils/utils'
 import { getAdvancePaymentMonthLabel } from './advancePaymentComponent.utils'
 import { formatDate } from '../../../utils/utils'
 import { toEditableAmount } from './advancePaymentComponent.utils'
@@ -160,9 +160,9 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
 
   const turnoverLabel =
     row.reported_turnover != null
-      ? `${fmtCurrency(row.reported_turnover)} (מאושר)`
+      ? `${formatShekelAmount(row.reported_turnover)} (מאושר)`
       : row.live_turnover != null
-        ? `${fmtCurrency(row.live_turnover)} (מחזור חי מדוח מע"מ)`
+        ? `${formatShekelAmount(row.live_turnover)} (מחזור חי מדוח מע"מ)`
         : null
 
   const title = `מקדמה - ${getAdvancePaymentMonthLabel(row.period, row.period_months_count)}`
@@ -313,8 +313,8 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
           </DrawerSection>
         ) : (
           <DrawerSection title="פרטי תשלום">
-            <DrawerField label="סכום שולם" value={fmtCurrency(row.paid_amount)} />
-            <DrawerField label="סכום צפוי" value={fmtCurrency(row.expected_amount)} />
+            <DrawerField label="סכום שולם" value={formatShekelAmount(row.paid_amount)} />
+            <DrawerField label="סכום צפוי" value={formatShekelAmount(row.expected_amount)} />
             <DrawerField label="שיטת תשלום" value={row.payment_method ?? null} />
             <DrawerField label="תאריך ביצוע" value={rowPaidAt ? formatDate(rowPaidAt) : null} />
             <DrawerField label="הערות" value={rowNotes} />

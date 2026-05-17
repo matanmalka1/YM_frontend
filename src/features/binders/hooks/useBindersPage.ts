@@ -32,7 +32,6 @@ export const useBindersPage = () => {
     total: 0,
     in_office: 0,
     closed_in_office: 0,
-    archived_in_office: 0,
     ready_for_pickup: 0,
     returned: 0,
   })

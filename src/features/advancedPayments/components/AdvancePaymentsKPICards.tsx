@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
-import { fmtCurrency } from '@/utils/utils'
+import { formatShekelAmount } from '@/utils/utils'
 import { getCollectionPercent } from './advancePaymentComponent.utils'
 
 interface AdvancePaymentsKPICardsProps {
@@ -20,8 +20,8 @@ export const AdvancePaymentsKPICards: React.FC<AdvancePaymentsKPICardsProps> = (
   const collectionPct = getCollectionPercent(data.collection_rate) ?? 0
 
   const stats = [
-    { label: 'סה״כ צפוי', value: fmtCurrency(data.total_expected), color: 'text-blue-700' },
-    { label: 'סה״כ שולם', value: fmtCurrency(data.total_paid), color: 'text-green-700' },
+    { label: 'סה״כ צפוי', value: formatShekelAmount(data.total_expected), color: 'text-blue-700' },
+    { label: 'סה״כ שולם', value: formatShekelAmount(data.total_paid), color: 'text-green-700' },
     { label: 'שיעור גבייה', value: `${collectionPct}%`, color: 'text-violet-700' },
     {
       label: 'פיגורים',

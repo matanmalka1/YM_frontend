@@ -1,5 +1,5 @@
 import type { AdvancePaymentRow } from '../types'
-import { fmtCurrency } from '@/utils/utils'
+import { formatShekelAmount } from '@/utils/utils'
 import { getAdvancePaymentMonthLabel } from './advancePaymentComponent.utils'
 import { formatDate, cn } from '../../../utils/utils'
 import { AdvancePaymentStatusBadge } from './AdvancePaymentStatusBadge'
@@ -74,7 +74,7 @@ export const ClientAdvancePaymentCards: React.FC<Props> = ({ rows, isLoading, on
 
             <div>
               <div className="text-xs text-gray-400 mb-0.5">צפוי לתשלום</div>
-              <div className="text-2xl font-bold text-success-700">{fmtCurrency(expected)}</div>
+              <div className="text-2xl font-bold text-success-700">{formatShekelAmount(expected)}</div>
             </div>
 
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs text-gray-600">
@@ -90,18 +90,18 @@ export const ClientAdvancePaymentCards: React.FC<Props> = ({ rows, isLoading, on
               )}
               <div>
                 <div className="text-gray-400 mb-0.5">שולם</div>
-                <div className="font-medium text-gray-800">{fmtCurrency(paid)}</div>
+                <div className="font-medium text-gray-800">{formatShekelAmount(paid)}</div>
               </div>
               <div>
                 <div className="text-gray-400 mb-0.5">יתרה</div>
                 <div className={cn('font-medium', balance > 0 ? 'text-error-600' : 'text-success-600')}>
-                  {fmtCurrency(balance)}
+                  {formatShekelAmount(balance)}
                 </div>
               </div>
               <div className="col-span-2">
                 <div className="text-gray-400 mb-0.5">{turnoverLabel}</div>
                 <div className={cn('font-medium', row.missing_turnover ? 'text-error-600' : 'text-gray-800')}>
-                  {hasTurnover ? fmtCurrency(Number(turnover)) : '—'}
+                  {hasTurnover ? formatShekelAmount(Number(turnover)) : '—'}
                 </div>
               </div>
             </div>

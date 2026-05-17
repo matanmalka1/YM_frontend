@@ -66,20 +66,10 @@ type CurrencyFormatOptions = {
   minimumFractionDigits?: number
 }
 
-type FormatCurrencyILS = {
-  (value: string | number | null | undefined, options?: CurrencyFormatOptions): string
-  (value: string | number | null | undefined, maximumFractionDigits?: number, fallback?: string): string
-}
-
-export const formatCurrencyILS: FormatCurrencyILS = (
-  value,
-  optionsOrMaximumFractionDigits: CurrencyFormatOptions | number = 0,
-  legacyFallback: string = EMPTY_VALUE,
+export const formatCurrencyILS = (
+  value: string | number | null | undefined,
+  options: CurrencyFormatOptions = { maximumFractionDigits: 0 },
 ): string => {
-  const options: CurrencyFormatOptions =
-    typeof optionsOrMaximumFractionDigits === 'number'
-      ? { fallback: legacyFallback, maximumFractionDigits: optionsOrMaximumFractionDigits }
-      : optionsOrMaximumFractionDigits
   const numeric = toNumberOrNull(value)
   if (numeric === null) return options.fallback ?? EMPTY_VALUE
 
@@ -98,11 +88,8 @@ export const formatCurrencyILS: FormatCurrencyILS = (
 }
 
 export const formatShekelAmount = (value: string | number | null | undefined, fallback = EMPTY_VALUE): string => {
-  return formatCurrencyILS(value, 0, fallback)
+  return formatCurrencyILS(value, { fallback, maximumFractionDigits: 0 })
 }
-
-/** @deprecated Use formatShekelAmount or formatCurrencyILS directly. */
-export const fmtCurrency = formatShekelAmount
 
 export const formatBinderNumber = (binderNumber: string | null | undefined): string => {
   if (!binderNumber) return EMPTY_VALUE
