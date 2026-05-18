@@ -3,6 +3,7 @@ import { Checkbox } from '@/components/ui/primitives/Checkbox'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
 import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
+import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { TAX_CALENDAR_OBLIGATION_TYPE_OPTIONS, TAX_CALENDAR_STATUS_OPTIONS } from '../constants'
 import type { TaxCalendarGroupStatusFilter } from '../utils'
 
@@ -37,6 +38,7 @@ export const TaxCalendarFiltersBar = ({
   onClientSearchTextChange,
   onIncludeEmptyChange,
 }: TaxCalendarFiltersBarProps) => {
+  const yearOptions = getOperationalYearOptions()
   const showClientSearch = clientSearchText != null && onClientSearchTextChange
   const showIncludeEmpty = includeEmpty != null && onIncludeEmptyChange
   const gridColumns =
@@ -49,20 +51,16 @@ export const TaxCalendarFiltersBar = ({
   return (
     <ToolbarContainer>
       <div className={`grid grid-cols-1 gap-3 sm:grid-cols-2 ${gridColumns}`}>
-        <Input
-          type="number"
+        <Select
           label="משנת מס"
-          min={2000}
-          max={2100}
           value={startYear}
+          options={yearOptions}
           onChange={(event) => onStartYearChange(event.target.value)}
         />
-        <Input
-          type="number"
+        <Select
           label="עד שנת מס"
-          min={2000}
-          max={2100}
           value={endYear}
+          options={yearOptions}
           onChange={(event) => onEndYearChange(event.target.value)}
         />
         <Select
