@@ -47,11 +47,7 @@ export const useWorkQueuePage = () => {
 
   const { data, isLoading, isFetching, error } = useWorkQueue(listParams, hasRole)
 
-  const {
-    data: summary,
-    isFetching: isSummaryFetching,
-    error: summaryError,
-  } = useWorkQueueSummary(baseParams, hasRole)
+  const { data: summary, isFetching: isSummaryFetching, error: summaryError } = useWorkQueueSummary(baseParams, hasRole)
 
   const items = data?.items ?? []
   const total = data?.total ?? 0

@@ -133,12 +133,7 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
       </div>
 
       {selectedClientId && selectedClientName ? (
-        <SelectedClientDisplay
-          name={selectedClientName}
-          id={selectedClientId}
-          onClear={onClientClear}
-          label="לקוח"
-        />
+        <SelectedClientDisplay name={selectedClientName} id={selectedClientId} onClear={onClientClear} label="לקוח" />
       ) : (
         <ClientSearchInput
           value={clientSearch}

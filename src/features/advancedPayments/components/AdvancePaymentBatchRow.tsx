@@ -145,7 +145,10 @@ const BatchContent = ({
     const rows = query.data?.items ?? []
     rows.forEach((row) => {
       const rowStartMonth = Number(row.period.substring(5, 7))
-      if (!batch.due_date && (rowStartMonth !== sourceBatch.month || row.period_months_count !== sourceBatch.period_months_count)) {
+      if (
+        !batch.due_date &&
+        (rowStartMonth !== sourceBatch.month || row.period_months_count !== sourceBatch.period_months_count)
+      ) {
         return
       }
       rowsById.set(row.id, row)
@@ -220,83 +223,83 @@ const BatchContent = ({
                     }`}
                     onClick={() => onRowClick(row)}
                   >
-                  <td className="px-3 py-1.5 text-sm text-gray-400 tabular-nums align-middle">
-                    {formatClientOfficeId(row.office_client_number)}
-                  </td>
-                  <td className="px-3 py-1.5 align-middle w-48">
-                    <Link
-                      to={`/clients/${row.client_record_id}/advance-payments`}
-                      className="text-sm font-medium text-gray-900 hover:text-blue-600 hover:underline leading-snug block"
-                      onClick={(e) => e.stopPropagation()}
+                    <td className="px-3 py-1.5 text-sm text-gray-400 tabular-nums align-middle">
+                      {formatClientOfficeId(row.office_client_number)}
+                    </td>
+                    <td className="px-3 py-1.5 align-middle w-48">
+                      <Link
+                        to={`/clients/${row.client_record_id}/advance-payments`}
+                        className="text-sm font-medium text-gray-900 hover:text-blue-600 hover:underline leading-snug block"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {row.business_name}
+                      </Link>
+                      {row.missing_turnover && (
+                        <span className="inline-flex items-center gap-1 mt-0.5 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded">
+                          <AlertTriangle className="h-2.5 w-2.5" />
+                          חסר מחזור
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-3 py-1.5 text-sm text-gray-600 whitespace-nowrap align-middle">
+                      {getAdvancePaymentMonthLabel(row.period, row.period_months_count)} {row.period.substring(0, 4)}
+                    </td>
+                    <td
+                      className={`px-3 py-1.5 text-sm tabular-nums whitespace-nowrap align-middle ${isOverdue ? 'text-red-500 font-medium' : 'text-gray-500'}`}
                     >
-                      {row.business_name}
-                    </Link>
-                    {row.missing_turnover && (
-                      <span className="inline-flex items-center gap-1 mt-0.5 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded">
-                        <AlertTriangle className="h-2.5 w-2.5" />
-                        חסר מחזור
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-3 py-1.5 text-sm text-gray-600 whitespace-nowrap align-middle">
-                    {getAdvancePaymentMonthLabel(row.period, row.period_months_count)} {row.period.substring(0, 4)}
-                  </td>
-                  <td
-                    className={`px-3 py-1.5 text-sm tabular-nums whitespace-nowrap align-middle ${isOverdue ? 'text-red-500 font-medium' : 'text-gray-500'}`}
-                  >
-                    {formatDate(row.due_date)}
-                  </td>
-                  <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-center align-middle">
-                    {row.turnover_amount ? (
-                      <span className="text-gray-700">{formatShekelAmount(row.turnover_amount)}</span>
-                    ) : row.live_turnover ? (
-                      <span className="text-gray-400 italic">{formatShekelAmount(row.live_turnover)}</span>
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                  <td
-                    dir="ltr"
-                    className="px-3 py-1.5 text-sm font-semibold tabular-nums text-gray-800 text-center align-middle"
-                  >
-                    {formatShekelAmount(row.expected_amount)}
-                  </td>
-                  <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-center align-middle">
-                    {formatShekelAmount(row.paid_amount)}
-                  </td>
-                  <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-center align-middle">
-                    {row.delta == null ? (
-                      <span className="text-gray-500">—</span>
-                    ) : Number(row.delta) > 0 ? (
-                      <span className="font-semibold text-red-500">{formatShekelAmount(row.delta)}</span>
-                    ) : (
-                      <span className="text-gray-500">{formatShekelAmount(row.delta)}</span>
-                    )}
-                  </td>
-                  <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-center align-middle">
-                    {row.advance_rate != null ? (
-                      `${Number(row.advance_rate).toFixed(2)}%`
-                    ) : (
-                      <span className="text-gray-500">—</span>
-                    )}
-                  </td>
-                  <td className="px-3 py-1.5 text-center align-middle">
-                    <AdvancePaymentStatusBadge status={row.status} />
-                  </td>
-                  <td className="px-3 py-1.5 align-middle" onClick={(e) => e.stopPropagation()}>
-                    <RowActionsMenu ariaLabel={`פעולות למקדמה ${row.id}`}>
-                      <RowActionItem
-                        label="עדכן תשלום"
-                        icon={<Edit className="h-3.5 w-3.5" />}
-                        onClick={() => onRowClick(row)}
-                      />
-                      <RowActionItem
-                        label="עבור ללקוח"
-                        icon={<ExternalLink className="h-3.5 w-3.5" />}
-                        onClick={() => window.open(`/clients/${row.client_record_id}/advance-payments`, '_self')}
-                      />
-                    </RowActionsMenu>
-                  </td>
+                      {formatDate(row.due_date)}
+                    </td>
+                    <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-center align-middle">
+                      {row.turnover_amount ? (
+                        <span className="text-gray-700">{formatShekelAmount(row.turnover_amount)}</span>
+                      ) : row.live_turnover ? (
+                        <span className="text-gray-400 italic">{formatShekelAmount(row.live_turnover)}</span>
+                      ) : (
+                        <span className="text-gray-500">—</span>
+                      )}
+                    </td>
+                    <td
+                      dir="ltr"
+                      className="px-3 py-1.5 text-sm font-semibold tabular-nums text-gray-800 text-center align-middle"
+                    >
+                      {formatShekelAmount(row.expected_amount)}
+                    </td>
+                    <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-center align-middle">
+                      {formatShekelAmount(row.paid_amount)}
+                    </td>
+                    <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-center align-middle">
+                      {row.delta == null ? (
+                        <span className="text-gray-500">—</span>
+                      ) : Number(row.delta) > 0 ? (
+                        <span className="font-semibold text-red-500">{formatShekelAmount(row.delta)}</span>
+                      ) : (
+                        <span className="text-gray-500">{formatShekelAmount(row.delta)}</span>
+                      )}
+                    </td>
+                    <td dir="ltr" className="px-3 py-1.5 text-sm tabular-nums text-gray-600 text-center align-middle">
+                      {row.advance_rate != null ? (
+                        `${Number(row.advance_rate).toFixed(2)}%`
+                      ) : (
+                        <span className="text-gray-500">—</span>
+                      )}
+                    </td>
+                    <td className="px-3 py-1.5 text-center align-middle">
+                      <AdvancePaymentStatusBadge status={row.status} />
+                    </td>
+                    <td className="px-3 py-1.5 align-middle" onClick={(e) => e.stopPropagation()}>
+                      <RowActionsMenu ariaLabel={`פעולות למקדמה ${row.id}`}>
+                        <RowActionItem
+                          label="עדכן תשלום"
+                          icon={<Edit className="h-3.5 w-3.5" />}
+                          onClick={() => onRowClick(row)}
+                        />
+                        <RowActionItem
+                          label="עבור ללקוח"
+                          icon={<ExternalLink className="h-3.5 w-3.5" />}
+                          onClick={() => window.open(`/clients/${row.client_record_id}/advance-payments`, '_self')}
+                        />
+                      </RowActionsMenu>
+                    </td>
                   </tr>
                 )
               })

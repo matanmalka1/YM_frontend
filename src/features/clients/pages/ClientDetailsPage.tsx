@@ -12,6 +12,7 @@ import { DOC_TYPE_LABELS, documentsApi, documentsQK } from '@/features/documents
 import { CLIENT_ROUTES } from '../api/endpoints'
 import {
   CLIENT_STATUS_BADGE_VARIANTS,
+  CLIENT_DETAILS_TAB_LABELS,
   getClientIdNumberTypeLabel,
   getClientStatusLabel,
   getEntityTypeLabel,
@@ -122,12 +123,24 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
   if (!isValidId)
     return (
       <div className="space-y-6">
-        <PageHeader title="פרטי לקוח" />
+        <PageHeader title="פרטי לקוח" breadcrumbs={[{ label: 'לקוחות', to: CLIENT_ROUTES.list }]} />
         <Alert variant="error" message="מזהה לקוח לא תקין" />
       </div>
     )
 
   const clientHeader = client ? buildClientHeader(client) : null
+  const breadcrumbs = [
+    { label: 'לקוחות', to: CLIENT_ROUTES.list },
+    { label: client?.full_name ?? 'פרטי לקוח', to: clientId ? CLIENT_ROUTES.detail(clientId) : CLIENT_ROUTES.list },
+    ...(initialTab === 'details'
+      ? []
+      : [
+          {
+            label: CLIENT_DETAILS_TAB_LABELS[initialTab],
+            to: clientId ? CLIENT_ROUTES.tab(clientId, initialTab) : CLIENT_ROUTES.list,
+          },
+        ]),
+  ]
 
   return (
     <PageStateGuard
@@ -152,10 +165,7 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
                 </Button>
               ) : undefined
             }
-            breadcrumbs={[
-              { label: 'לקוחות', to: CLIENT_ROUTES.list },
-              { label: client?.full_name ?? 'פרטי לקוח', to: CLIENT_ROUTES.detail(clientId!) },
-            ]}
+            breadcrumbs={breadcrumbs}
           />
         </>
       }

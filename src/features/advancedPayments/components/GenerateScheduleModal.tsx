@@ -29,16 +29,14 @@ export const GenerateScheduleModal: React.FC<Props> = ({ open, year, onClose }) 
       onClose={handleClose}
       footer={
         <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={handleClose}>ביטול</Button>
+          <Button variant="outline" onClick={handleClose}>
+            ביטול
+          </Button>
           <Button
             variant="primary"
             isLoading={isPending}
             disabled={
-              picker.selectedClient === null ||
-              isProfileLoading ||
-              isProfileError ||
-              frequency == null ||
-              isPending
+              picker.selectedClient === null || isProfileLoading || isProfileError || frequency == null || isPending
             }
             onClick={handleConfirm}
           >

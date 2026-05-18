@@ -67,11 +67,8 @@ export const useAdvancePayments = (clientId: number, year: number, statusFilter?
     totalExpected,
     totalPaid,
     total: listQuery.data?.total ?? 0,
-    updateRow: (
-      id: number,
-      paid_amount: string | null,
-      status?: AdvancePaymentStatus,
-    ) => updateMutation.mutateAsync({ id, paid_amount: paid_amount ?? '0', status }),
+    updateRow: (id: number, paid_amount: string | null, status?: AdvancePaymentStatus) =>
+      updateMutation.mutateAsync({ id, paid_amount: paid_amount ?? '0', status }),
     isUpdating: updateMutation.isPending,
     updatingId,
     create: createMutation.mutateAsync,

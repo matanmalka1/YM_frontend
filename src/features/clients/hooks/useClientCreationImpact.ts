@@ -24,7 +24,6 @@ export const useClientCreationImpact = (
     (params.entity_type === 'osek_patur' || params?.advance_payment_frequency)
   )
 
-
   return useQuery({
     queryKey: [
       ...clientsQK.creationImpact(params?.entity_type, params?.vat_reporting_frequency),
@@ -39,7 +38,7 @@ export const useClientCreationImpact = (
           advance_payment_frequency: params!.advance_payment_frequency,
           advance_rate: params!.advance_rate,
         }),
-    ),
+      ),
     enabled,
     retry: false,
     staleTime: 60_000,

@@ -18,11 +18,7 @@ export const useCreateAdvancePayment = () => {
 
   const { profile } = useTaxProfile(clientId ?? 0)
   const frequency: 1 | 2 | null =
-    profile?.advance_payment_frequency === 'bimonthly'
-      ? 2
-      : profile?.advance_payment_frequency === 'monthly'
-        ? 1
-        : null
+    profile?.advance_payment_frequency === 'bimonthly' ? 2 : profile?.advance_payment_frequency === 'monthly' ? 1 : null
 
   const mutation = useMutation({
     mutationFn: (payload: CreateAdvancePaymentPayload) => advancePaymentsApi.create(clientId!, payload),

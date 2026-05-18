@@ -199,9 +199,10 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
         open_new_binder: values.open_new_binder ?? false,
         notes: values.notes ?? null,
         materials: selectedTypes.map((materialType) => {
-          const monthStart = ANNUAL_BINDER_TYPES.has(materialType) || !PERIODIC_BINDER_TYPES.has(materialType)
-            ? 1
-            : values.period_month_start
+          const monthStart =
+            ANNUAL_BINDER_TYPES.has(materialType) || !PERIODIC_BINDER_TYPES.has(materialType)
+              ? 1
+              : values.period_month_start
           const monthEnd =
             ANNUAL_BINDER_TYPES.has(materialType) || !PERIODIC_BINDER_TYPES.has(materialType)
               ? 12

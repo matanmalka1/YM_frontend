@@ -76,7 +76,9 @@ export const CreateClientReviewStep: React.FC<Props> = ({
 
   const advisorLabel = advisorOptions.find((o) => o.value === values.accountant_id)?.label
 
-  const businessDisplayName = isCompany ? values.full_name?.trim() : values.business_name?.trim() || values.full_name?.trim()
+  const businessDisplayName = isCompany
+    ? values.full_name?.trim()
+    : values.business_name?.trim() || values.full_name?.trim()
 
   const impactTotal = impactData?.items.reduce((sum, item) => sum + item.count, 0) ?? 0
 

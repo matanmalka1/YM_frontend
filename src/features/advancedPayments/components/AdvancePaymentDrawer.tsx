@@ -176,7 +176,12 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
       return
     }
     const effectiveExpected = liveExpected != null ? Number(liveExpected) : Number(row.expected_amount ?? 0)
-    if (status === 'paid' && Number.isFinite(effectiveExpected) && effectiveExpected > 0 && numericPaid < effectiveExpected) {
+    if (
+      status === 'paid' &&
+      Number.isFinite(effectiveExpected) &&
+      effectiveExpected > 0 &&
+      numericPaid < effectiveExpected
+    ) {
       toast.error('סכום ששולם נמוך מהסכום הצפוי. יש לבחור סטטוס חלקי')
       return
     }
@@ -187,10 +192,8 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
       payload.payment_method = (normalizedPaymentMethod || null) as UpdateAdvancePaymentPayload['payment_method']
     if (paidAt !== currentPaidAt) payload.paid_at = normalizedPaidAt || null
     if (notes !== (rowNotes ?? '')) payload.notes = normalizedNotes || null
-    if (turnoverAmount !== toEditableAmount(rowTurnoverAmount))
-      payload.turnover_amount = toStringOrNull(turnoverAmount)
-    if (overrideAmount !== toEditableAmount(rowOverrideAmount))
-      payload.override_amount = toStringOrNull(overrideAmount)
+    if (turnoverAmount !== toEditableAmount(rowTurnoverAmount)) payload.turnover_amount = toStringOrNull(turnoverAmount)
+    if (overrideAmount !== toEditableAmount(rowOverrideAmount)) payload.override_amount = toStringOrNull(overrideAmount)
 
     if (Object.keys(payload).length === 0) return onClose()
     await onSave(row.id, payload)
@@ -331,9 +334,7 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
                     מבוסס על דוח מע״מ שטרם הוגש
                   </div>
                 )}
-                {prefillSource === 'none' && (
-                  <p className="text-xs text-gray-400">לא נמצא דוח מע״מ לתקופה זו</p>
-                )}
+                {prefillSource === 'none' && <p className="text-xs text-gray-400">לא נמצא דוח מע״מ לתקופה זו</p>}
                 <div>
                   <div className="text-xs text-gray-500 mb-1">סכום מחושב</div>
                   <div className="text-sm font-medium text-gray-800">
@@ -409,7 +410,11 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
             <DrawerField label="אחוז מקדמה" value={advanceRateDisplay} />
             <DrawerField
               label="סכום מחושב"
-              value={'calculated_amount' in row && row.calculated_amount != null ? formatShekelAmount(row.calculated_amount) : null}
+              value={
+                'calculated_amount' in row && row.calculated_amount != null
+                  ? formatShekelAmount(row.calculated_amount)
+                  : null
+              }
             />
             <DrawerField
               label="סכום עקיפה"

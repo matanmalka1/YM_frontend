@@ -54,7 +54,9 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
   const hasVatMaterial = selectedBinderTypes.has('vat')
   const hasSalaryMaterial = selectedBinderTypes.has('salary')
   const hasAnnualReportMaterial = selectedBinderTypes.has('annual_report')
-  const periodMaterialType = hasVatMaterial ? 'vat' : binderTypes.find((type) => PERIODIC_BINDER_TYPES.has(type)) ?? binderTypes[0]
+  const periodMaterialType = hasVatMaterial
+    ? 'vat'
+    : (binderTypes.find((type) => PERIODIC_BINDER_TYPES.has(type)) ?? binderTypes[0])
   const periodMonthStart = form.watch('period_month_start')
   const periodMonthEnd = form.watch('period_month_end')
 
@@ -133,7 +135,9 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
                   />
                 ))}
               </div>
-              {errors.binder_types?.message && <p className="text-xs text-negative-600">{errors.binder_types.message}</p>}
+              {errors.binder_types?.message && (
+                <p className="text-xs text-negative-600">{errors.binder_types.message}</p>
+              )}
             </div>
           )
         }}
@@ -179,9 +183,7 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
           render={({ field }) => {
             const salaryMonthOptions =
               periodMonthStart && periodMonthEnd
-                ? MONTH_OPTIONS.filter((option) =>
-                    [periodMonthStart, periodMonthEnd].includes(Number(option.value)),
-                  )
+                ? MONTH_OPTIONS.filter((option) => [periodMonthStart, periodMonthEnd].includes(Number(option.value)))
                 : MONTH_OPTIONS
 
             return (

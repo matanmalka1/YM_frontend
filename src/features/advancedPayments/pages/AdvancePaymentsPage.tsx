@@ -296,17 +296,9 @@ export const AdvancePayments: React.FC = () => {
         onSave={handleSave}
       />
 
-      <CreateAdvancePaymentFlow
-        open={createOpen}
-        year={year ?? todayYear}
-        onClose={() => setCreateOpen(false)}
-      />
+      <CreateAdvancePaymentFlow open={createOpen} year={year ?? todayYear} onClose={() => setCreateOpen(false)} />
 
-      <GenerateScheduleModal
-        open={genOpen}
-        year={year ?? todayYear}
-        onClose={() => setGenOpen(false)}
-      />
+      <GenerateScheduleModal open={genOpen} year={year ?? todayYear} onClose={() => setGenOpen(false)} />
     </div>
   )
 }

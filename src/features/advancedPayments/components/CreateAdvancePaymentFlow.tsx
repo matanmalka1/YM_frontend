@@ -38,7 +38,11 @@ export const CreateAdvancePaymentFlow: React.FC<Props> = ({ open, year, onClose 
       title="הוסף מקדמה — בחר לקוח"
       className="min-h-[240px]"
       onClose={handleClose}
-      footer={<Button variant="outline" onClick={handleClose}>ביטול</Button>}
+      footer={
+        <Button variant="outline" onClick={handleClose}>
+          ביטול
+        </Button>
+      }
     >
       <ClientPickerField
         selectedClient={picker.selectedClient}

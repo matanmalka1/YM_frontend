@@ -131,7 +131,6 @@ export interface MonthBatchSummary {
 
 export type AdvancePaymentDueDateGroup = MonthBatchSummary
 
-
 export interface AnnualKPIResponse {
   client_record_id: number
   year: number

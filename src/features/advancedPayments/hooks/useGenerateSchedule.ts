@@ -23,8 +23,7 @@ export const useGenerateSchedule = (year: number) => {
           : null
 
   const mutation = useMutation({
-    mutationFn: (periodMonthsCount: 1 | 2) =>
-      advancePaymentsApi.generateSchedule(clientId, year, periodMonthsCount),
+    mutationFn: (periodMonthsCount: 1 | 2) => advancePaymentsApi.generateSchedule(clientId, year, periodMonthsCount),
     onSuccess: (data) => {
       toast.success(data.created > 0 ? `נוצרו ${data.created} מקדמות, דולגו ${data.skipped}` : 'לא נוצרו מקדמות חדשות')
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
@@ -33,10 +32,22 @@ export const useGenerateSchedule = (year: number) => {
   })
 
   const handleGenerate = () => {
-    if (clientId === 0) { toast.error('לא נבחר לקוח תקין'); return }
-    if (isProfileLoading) { toast.error('פרופיל הלקוח עדיין נטען'); return }
-    if (isProfileError) { toast.error('שגיאה בטעינת פרופיל הלקוח'); return }
-    if (frequency == null) { toast.error('לא ניתן ליצור לוח בלי תדירות מקדמות בפרופיל הלקוח'); return }
+    if (clientId === 0) {
+      toast.error('לא נבחר לקוח תקין')
+      return
+    }
+    if (isProfileLoading) {
+      toast.error('פרופיל הלקוח עדיין נטען')
+      return
+    }
+    if (isProfileError) {
+      toast.error('שגיאה בטעינת פרופיל הלקוח')
+      return
+    }
+    if (frequency == null) {
+      toast.error('לא ניתן ליצור לוח בלי תדירות מקדמות בפרופיל הלקוח')
+      return
+    }
     mutation.mutate(frequency)
   }
 

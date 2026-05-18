@@ -51,7 +51,6 @@ export const advancePaymentsApi = {
     await api.delete(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientId, id))
   },
 
-
   getAnnualKPIs: async (clientId: number, year: number): Promise<AnnualKPIResponse> => {
     const response = await api.get<AnnualKPIResponse>(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentsKPI(clientId), {
       params: toQueryParams({ year }),

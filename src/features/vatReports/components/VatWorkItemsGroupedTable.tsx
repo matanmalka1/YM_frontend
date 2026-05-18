@@ -179,7 +179,10 @@ export const VatWorkItemsGroupedTable: React.FC<VatWorkItemsGroupedTableProps> =
                           tabIndex={0}
                         >
                           {columns.map((column) => (
-                            <td key={column.key} className={cn('px-3 py-2.5 align-middle text-center', column.className)}>
+                            <td
+                              key={column.key}
+                              className={cn('px-3 py-2.5 align-middle text-center', column.className)}
+                            >
                               {column.render(item, index)}
                             </td>
                           ))}
