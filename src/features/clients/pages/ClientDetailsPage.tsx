@@ -132,7 +132,7 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
   return (
     <PageStateGuard
       isLoading={isLoading}
-      error={error || (!client ? 'שגיאה בטעינת פרטי לקוח' : null)}
+      error={error}
       header={
         <>
           {!can.editClients && <Alert variant="info" message="צפייה בלבד. עריכת פרטי לקוח זמינה ליועצים בלבד." />}

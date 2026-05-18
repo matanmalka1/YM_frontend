@@ -55,7 +55,7 @@ export const useClientDetails = ({ clientId }: UseClientDetailsParams): UseClien
   return {
     client: clientQuery.data ?? null,
     isValidId,
-    isLoading: clientQuery.isLoading,
+    isLoading: clientQuery.isPending && isValidId,
     error: clientQuery.error ? getErrorMessage(clientQuery.error, 'שגיאה בטעינת פרטי לקוח') : null,
     updateClient: async (payload) => {
       await updateMutation.mutateAsync(payload)
