@@ -105,7 +105,7 @@ export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string 
       const dueDate = toDate(group.effective_due_date_min)
       return group.open_count > 0 && dueDate !== null && dueDate >= today
     })
-    .sort((a, b) => toTime(a.effective_due_date) - toTime(b.effective_due_date))
+    .sort((a, b) => toTime(a.effective_due_date_min) - toTime(b.effective_due_date_min))
     .slice(0, UPCOMING_DEADLINES_LIMIT)
 
   return (

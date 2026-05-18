@@ -60,6 +60,12 @@ const getBatchStableKey = (batch: AdvancePaymentDueDateGroup): string =>
 
 const safeCount = (value: unknown): number => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
 
+const batchIncludesMonth = (batch: AdvancePaymentDueDateGroup, year: number, month: number): boolean => {
+  const batchStartMonth = batch.month
+  const batchEndMonth = batchStartMonth + batch.period_months_count - 1
+  return batch.year === year && batchStartMonth <= month && batchEndMonth >= month
+}
+
 export const AdvancePayments: React.FC = () => {
   const { searchParams, setSearchParams } = useSearchParamFilters()
   const navigate = useNavigate()
@@ -204,14 +210,10 @@ export const AdvancePayments: React.FC = () => {
 
     return displayBatches.reduce(
       (stats, batch) => {
-        const dueDate = batch.due_date ?? ''
-        const dueYear = dueDate ? Number(dueDate.substring(0, 4)) : null
-        const dueMonth = dueDate ? Number(dueDate.substring(5, 7)) : null
+        const loadedStats = batch.due_date ? loadedGroupStats[batch.due_date] : undefined
 
-        const loadedStats = dueDate ? loadedGroupStats[dueDate] : undefined
-
-        if (dueYear === currentYear && dueMonth === currentMonth) {
-          stats.dueThisMonthCount += 1
+        if (batchIncludesMonth(batch, currentYear, currentMonth)) {
+          stats.dueThisMonthCount += safeCount(loadedStats?.notPaidCount ?? batch.not_paid_count)
         }
 
         stats.pendingCount += safeCount(loadedStats?.pendingCount ?? batch.pending_count)

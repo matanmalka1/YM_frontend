@@ -1,7 +1,17 @@
 import { useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import type { SetURLSearchParams } from 'react-router-dom'
 
-export const useSearchParamFilters = () => {
+interface SearchParamFilters {
+  searchParams: URLSearchParams
+  setFilter: (key: string, value: string, resetPage?: boolean) => void
+  setFilters: (updates: Record<string, string>, resetPage?: boolean) => void
+  setPage: (page: number) => void
+  resetFilters: (defaults?: Record<string, string>) => void
+  setSearchParams: SetURLSearchParams
+}
+
+export const useSearchParamFilters = (): SearchParamFilters => {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const setStableSearchParams = useCallback<typeof setSearchParams>(

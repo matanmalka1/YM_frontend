@@ -21,7 +21,7 @@ export const OverviewKPICards: React.FC<OverviewKPICardsProps> = ({
         value={dueThisMonthCount}
         icon={CalendarClock}
         variant="blue"
-        description="מועדים קרובים"
+        description="מקדמות לתקופה הנוכחית"
       />
       <StatsCard
         title="לקוחות ממתינים"
