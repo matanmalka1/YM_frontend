@@ -80,19 +80,25 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
         {
           key: 'type',
           header: 'סוג',
+          headerClassName: 'w-28',
+          className: 'w-28',
           render: (item: WorkQueueItem) =>
             item.source_type === 'task' ? (
-              <Badge variant="neutral" className="gap-1">
-                <ClipboardCheck className="h-3 w-3" />
+              <Badge variant="neutral" className="inline-flex items-center justify-center gap-1 whitespace-nowrap">
+                <ClipboardCheck className="h-3 w-3 shrink-0" />
                 {item.type_label ?? typeLabel(item.source_type)}
               </Badge>
             ) : (
-              <Badge variant="neutral">{item.type_label ?? typeLabel(item.source_type)}</Badge>
+              <Badge variant="neutral" className="inline-flex items-center justify-center whitespace-nowrap">
+                {item.type_label ?? typeLabel(item.source_type)}
+              </Badge>
             ),
         },
         {
           key: 'client',
           header: 'לקוח',
+          headerClassName: 'w-48',
+          className: 'w-48',
           render: (item: WorkQueueItem) =>
             item.client_record_id != null ? (
               <Link
@@ -112,10 +118,11 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
         {
           key: 'title',
           header: 'מה צריך לעשות',
-          className: 'min-w-44 whitespace-normal text-center',
+          headerClassName: 'min-w-64 w-[28rem] text-right',
+          className: 'min-w-64 max-w-[30rem] whitespace-normal text-right',
           render: (item: WorkQueueItem) => (
             <div className="space-y-1 text-right">
-              <div className="font-medium text-center text-gray-900">{item.title}</div>
+              <div className="font-medium text-gray-900">{item.title}</div>
               {item.description && <div className="text-xs text-gray-500">{item.description}</div>}
               {item.source_type === 'task' && item.source_summary && (
                 <div className="text-xs text-gray-500">קשורה אל: {item.source_summary.label}</div>
@@ -126,6 +133,8 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
         {
           key: 'due_date',
           header: 'תאריך יעד',
+          headerClassName: 'w-32',
+          className: 'w-32',
           render: (item: WorkQueueItem) => (
             <span className="text-sm tabular-nums text-gray-700">{formatDate(item.due_date)}</span>
           ),
@@ -133,6 +142,8 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
         {
           key: 'urgency',
           header: 'דחיפות זמן',
+          headerClassName: 'w-28',
+          className: 'w-28',
           render: (item: WorkQueueItem) => (
             <Badge variant={workQueueUrgencyVariant[item.urgency]}>{workQueueUrgencyLabels[item.urgency]}</Badge>
           ),
@@ -140,6 +151,8 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
         {
           key: 'task_meta',
           header: 'עדיפות/שיוך',
+          headerClassName: 'w-36',
+          className: 'w-36',
           render: (item: WorkQueueItem) => {
             const priority = taskPriorityLabel(item)
             const assignedRole = assignedRoleLabel(item)
@@ -155,11 +168,15 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
         {
           key: 'status',
           header: 'סטטוס',
+          headerClassName: 'w-28',
+          className: 'w-28',
           render: (item: WorkQueueItem) => <span className="text-sm text-gray-600">{item.status_label ?? '—'}</span>,
         },
         {
           key: 'linked_tasks',
           header: 'משימות קשורות',
+          headerClassName: 'w-40',
+          className: 'w-40 whitespace-normal',
           render: (item: WorkQueueItem) => {
             const count = item.linked_tasks_count
             if (!count) return <span className="text-sm text-gray-400">—</span>
@@ -178,6 +195,8 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
         {
           key: 'warnings',
           header: 'אזהרות',
+          headerClassName: 'w-44',
+          className: 'w-44 whitespace-normal',
           render: (item: WorkQueueItem) =>
             item.warnings.length ? (
               <div className="flex max-w-44 flex-wrap justify-center gap-1">
@@ -194,6 +213,8 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
         {
           key: 'actions',
           header: 'פעולות',
+          headerClassName: 'w-36',
+          className: 'w-36',
           render: (item: WorkQueueItem) => {
             const actions = item.available_actions
             const isUnlinkedTask =
@@ -219,6 +240,7 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
               <Button
                 variant={actionVariant(primary)}
                 size="sm"
+                className="whitespace-nowrap"
                 disabled={primary.disabled || activeActionKey === primaryKey}
                 isLoading={activeActionKey === primaryKey}
                 onClick={(event) => {
