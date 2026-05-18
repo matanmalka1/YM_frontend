@@ -4,7 +4,7 @@ export const CREATE_CLIENT_STEPS = [
   { key: 'identity', label: 'זיהוי', fields: ['entity_type', 'full_name', 'id_number'] },
   {
     key: 'business',
-    label: 'עסק ופרטי קשר',
+    label: 'פרטי עסק / חברה',
     fields: [
       'business_name',
       'business_opened_at',

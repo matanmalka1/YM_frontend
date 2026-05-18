@@ -39,7 +39,7 @@ export const buildCreateClientPayload = (data: CreateClientFormValues): CreateCl
     advance_payment_frequency: data.advance_payment_frequency ?? null,
     advance_rate: data.advance_rate?.trim() ? data.advance_rate.trim() : null,
     accountant_id: data.accountant_id ? Number(data.accountant_id) : null,
-    business_name: data.business_name?.trim() || (data.entity_type !== 'company_ltd' ? data.full_name.trim() : ''),
+    business_name: data.entity_type === 'company_ltd' ? data.full_name.trim() : data.business_name?.trim() || data.full_name.trim(),
     business_opened_at: (data.business_opened_at || null) as ISODateString | null,
   }
 }

@@ -108,7 +108,7 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
               >
                 <span className="truncate">{item.client_name ?? 'לפרופיל לקוח'}</span>
                 {item.office_client_number != null && (
-                  <span className="text-xs text-gray-500">#{item.office_client_number}</span>
+                  <span className="text-xs text-gray-500">{item.office_client_number}</span>
                 )}
               </Link>
             ) : (

@@ -26,7 +26,7 @@ export const isPositiveInt = (value: number | null | undefined): value is number
 
 export const formatClientOfficeId = (value: number | string | null | undefined): string => {
   if (value == null || value === '') return EMPTY_VALUE
-  return `#${value}`
+  return String(value)
 }
 
 export const formatPlainIdentifier = (value: number | string | null | undefined, fallback = EMPTY_VALUE): string => {
@@ -93,9 +93,7 @@ export const formatShekelAmount = (value: string | number | null | undefined, fa
 
 export const formatBinderNumber = (binderNumber: string | null | undefined): string => {
   if (!binderNumber) return EMPTY_VALUE
-
-  const parts = binderNumber.split('/')
-  return parts.at(-1) || EMPTY_VALUE
+  return binderNumber
 }
 
 const formatSafeDate = (value: string | null | undefined, pattern: string, fallback = EMPTY_VALUE): string => {

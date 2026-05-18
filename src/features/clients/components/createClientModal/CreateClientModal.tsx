@@ -128,6 +128,7 @@ export const CreateClientModal: React.FC<Props> = ({
       open={open}
       onClose={handleClose}
       title="יצירת לקוח חדש"
+      className="max-w-2xl"
       footer={
         <CreateClientModalFooter
           isLastStep={isLastStep}

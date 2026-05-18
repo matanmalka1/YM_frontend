@@ -24,25 +24,29 @@ export const CreateClientBusinessStep: React.FC<Props> = ({
     <div className="space-y-4 border-t border-gray-200 pt-4">
       <p className="text-sm font-medium text-gray-700">{isCompany ? 'פרטי חברה ויצירת קשר' : 'פרטי עסק'}</p>
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <Input
-            label={isCompany ? 'שם פעילות / שם מסחרי במערכת' : 'שם עסק'}
-            placeholder={isCompany ? 'ריק = שם החברה' : 'לדוגמה: מסעדת ישראל'}
-            error={errors.business_name?.message}
+        {!isCompany && (
+          <div>
+            <Input
+              label="שם עסק"
+              placeholder="לדוגמה: מסעדת ישראל"
+              error={errors.business_name?.message}
+              disabled={disabled}
+              {...register('business_name')}
+            />
+            <p className="mt-1 text-xs text-gray-400">אם לא יוזן שם עסק, ייעשה שימוש בשם הלקוח.</p>
+          </div>
+        )}
+        <div className={isCompany ? 'col-span-2' : undefined}>
+          <DatePicker
+            label={isCompany ? 'תאריך התאגדות' : 'תאריך פתיחת תיק ברשויות'}
+            error={errors.business_opened_at?.message}
             disabled={disabled}
-            {...register('business_name')}
+            value={businessOpenedAtField.value ?? ''}
+            onChange={businessOpenedAtField.onChange}
+            onBlur={businessOpenedAtField.onBlur}
+            name={businessOpenedAtField.name}
           />
-          {!isCompany && <p className="mt-1 text-xs text-gray-400">אם לא יוזן שם עסק, ייעשה שימוש בשם הלקוח.</p>}
         </div>
-        <DatePicker
-          label={isCompany ? 'תאריך התאגדות' : 'תאריך פתיחת תיק/פעילות'}
-          error={errors.business_opened_at?.message}
-          disabled={disabled}
-          value={businessOpenedAtField.value ?? ''}
-          onChange={businessOpenedAtField.onChange}
-          onBlur={businessOpenedAtField.onBlur}
-          name={businessOpenedAtField.name}
-        />
       </div>
     </div>
     <div className="space-y-4 border-t border-gray-200 pt-4">

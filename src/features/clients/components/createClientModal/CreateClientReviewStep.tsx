@@ -76,7 +76,7 @@ export const CreateClientReviewStep: React.FC<Props> = ({
 
   const advisorLabel = advisorOptions.find((o) => o.value === values.accountant_id)?.label
 
-  const businessDisplayName = values.business_name?.trim() || (isCompany ? null : values.full_name?.trim())
+  const businessDisplayName = isCompany ? values.full_name?.trim() : values.business_name?.trim() || values.full_name?.trim()
 
   const impactTotal = impactData?.items.reduce((sum, item) => sum + item.count, 0) ?? 0
 
@@ -101,8 +101,8 @@ export const CreateClientReviewStep: React.FC<Props> = ({
         <ReviewRow label={isCompany ? 'ח.פ' : 'ת.ז'} value={values.id_number} />
       </ReviewSection>
 
-      <ReviewSection title="עסק ופרטי קשר">
-        <ReviewRow label={isCompany ? 'שם מסחרי' : 'שם עסק'} value={businessDisplayName} />
+      <ReviewSection title={isCompany ? 'חברה ופרטי קשר' : 'עסק ופרטי קשר'}>
+        <ReviewRow label={isCompany ? 'שם חברה' : 'שם עסק'} value={businessDisplayName} />
         <ReviewRow
           label={isCompany ? 'תאריך התאגדות' : 'תאריך פתיחת תיק'}
           value={formatDate(values.business_opened_at ?? null)}

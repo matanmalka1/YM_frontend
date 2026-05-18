@@ -20,12 +20,14 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemRes
   {
     key: 'client_id',
     header: 'לקוח',
+    headerClassName: 'text-center',
+    className: 'text-center',
     render: (item) => {
       const name = item.client_name ?? formatClientOfficeId(item.office_client_number)
       const showPeriod = opts.duplicateClientIds?.has(item.client_record_id)
 
       return (
-        <span className="block max-w-[220px]">
+        <span className="mx-auto block max-w-[220px] text-center">
           <span className="block truncate font-semibold text-gray-900">{name}</span>
           {showPeriod && <span className="block text-xs font-medium text-gray-500">פריט מע״מ #{item.id}</span>}
         </span>

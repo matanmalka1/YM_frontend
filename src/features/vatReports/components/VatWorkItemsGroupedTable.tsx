@@ -125,12 +125,12 @@ export const VatWorkItemsGroupedTable: React.FC<VatWorkItemsGroupedTableProps> =
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="border-b border-gray-200 bg-gray-50 text-right">
+              <tr className="border-b border-gray-200 bg-gray-50 text-center">
                 {columns.map((column) => (
                   <th
                     key={column.key}
                     className={cn(
-                      'px-3 py-2 text-xs font-semibold uppercase tracking-wide text-gray-500',
+                      'px-3 py-2 text-center text-xs font-semibold uppercase tracking-wide text-gray-500',
                       column.headerClassName,
                     )}
                   >
@@ -179,7 +179,7 @@ export const VatWorkItemsGroupedTable: React.FC<VatWorkItemsGroupedTableProps> =
                           tabIndex={0}
                         >
                           {columns.map((column) => (
-                            <td key={column.key} className={cn('px-3 py-2.5 align-middle', column.className)}>
+                            <td key={column.key} className={cn('px-3 py-2.5 align-middle text-center', column.className)}>
                               {column.render(item, index)}
                             </td>
                           ))}

@@ -75,7 +75,7 @@ export const CreateClientTaxStep: React.FC<Props> = ({
             <p className="mt-1 text-xs text-gray-400">נגזר אוטומטית לפי הגדרת המערכת</p>
           </div>
         )}
-        <div className={isExempt ? undefined : 'col-span-1 max-w-[48%]'}>
+        <div className={isExempt ? undefined : 'col-span-1 max-w-[75%]'}>
           <Input
             label="שיעור מקדמות מס הכנסה (%)"
             labelClassName="whitespace-nowrap"
