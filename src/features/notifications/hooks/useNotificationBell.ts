@@ -8,7 +8,9 @@ export const useNotificationBell = () => {
   const { data } = useQuery({
     queryKey: notificationsQK.summary(),
     queryFn: () => notificationsApi.getSummary(),
-    refetchInterval: 30_000,
+    staleTime: 60_000,
+    refetchInterval: drawerOpen ? 60_000 : 120_000,
+    refetchOnWindowFocus: false,
   })
 
   const badgeCount = (data?.pending ?? 0) + (data?.failed ?? 0)
