@@ -1,10 +1,12 @@
 import { AlertTriangle, ExternalLink, Edit } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useQueries } from '@tanstack/react-query'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
+import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
 import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
+import { getTotalPages } from '@/utils/paginationUtils'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../types'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import { formatShekelAmount } from '@/utils/utils'
@@ -14,6 +16,7 @@ import { AdvancePaymentStatusBadge } from './AdvancePaymentStatusBadge'
 import { RowActionsMenu, RowActionItem } from '../../../components/ui/table/RowActions'
 
 const COL_COUNT = 11
+const PAGE_SIZE = 50
 
 const TABLE_HEADERS = [
   {
@@ -99,22 +102,35 @@ const BatchContent = ({
   onRowClick,
   onStatsLoad,
 }: Omit<AdvancePaymentBatchRowProps, 'isCurrent'>) => {
+  const [page, setPage] = useState(1)
   const statusParam = statusFilter ? [statusFilter] : undefined
-  const sourceBatches = batch.source_batches ?? [batch]
+  const sourceBatches = batch.due_date ? [batch] : (batch.source_batches ?? [batch])
+
+  useEffect(() => {
+    setPage(1)
+  }, [batch.due_date, batch.month, batch.period_months_count, periodFilter, search, statusFilter])
 
   const queries = useQueries({
     queries: sourceBatches.map((sourceBatch) => ({
       queryKey: advancedPaymentsQK.overview({
         year: sourceBatch.year,
-        month: sourceBatch.month,
-        page_size: 200,
+        month: batch.due_date ? undefined : sourceBatch.month,
+        due_date: batch.due_date,
+        period_months_count: periodFilter ?? undefined,
+        client_search: search || undefined,
+        page,
+        page_size: PAGE_SIZE,
         status: statusParam,
       }),
       queryFn: () =>
         advancePaymentsApi.overview({
           year: sourceBatch.year,
-          month: sourceBatch.month,
-          page_size: 200,
+          month: batch.due_date ? undefined : sourceBatch.month,
+          due_date: batch.due_date,
+          period_months_count: periodFilter ?? undefined,
+          client_search: search || undefined,
+          page,
+          page_size: PAGE_SIZE,
           status: statusParam,
         }),
       staleTime: 30_000,
@@ -129,21 +145,15 @@ const BatchContent = ({
     const rows = query.data?.items ?? []
     rows.forEach((row) => {
       const rowStartMonth = Number(row.period.substring(5, 7))
-      if (rowStartMonth !== sourceBatch.month || row.period_months_count !== sourceBatch.period_months_count) return
+      if (!batch.due_date && (rowStartMonth !== sourceBatch.month || row.period_months_count !== sourceBatch.period_months_count)) {
+        return
+      }
       rowsById.set(row.id, row)
     })
   })
 
-  const filtered = Array.from(rowsById.values()).filter((r) => {
-    if (search) {
-      const q = search.toLowerCase()
-      const matchName = r.business_name.toLowerCase().includes(q)
-      const matchId = r.id_number?.includes(q) ?? false
-      if (!matchName && !matchId) return false
-    }
-    if (periodFilter !== null && r.period_months_count !== periodFilter) return false
-    return true
-  })
+  const filtered = Array.from(rowsById.values())
+  const total = queries.reduce((sum, query) => sum + (query.data?.total ?? 0), 0)
 
   const stats = useMemo(() => {
     const clients = new Set<number>()
@@ -180,35 +190,36 @@ const BatchContent = ({
   const sorted = [...filtered].sort((a, b) => (b.missing_turnover ? 1 : 0) - (a.missing_turnover ? 1 : 0))
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-right border-collapse min-w-[960px]">
-        <thead>
-          <tr className="border-b border-gray-100 bg-gray-50">
-            {TABLE_HEADERS.map((h) => (
-              <th key={h.label} className={h.className}>
-                {h.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-100">
-          {sorted.length === 0 ? (
-            <tr>
-              <td colSpan={COL_COUNT} className="py-5 text-center text-sm text-gray-400">
-                אין תוצאות
-              </td>
+    <>
+      <div className="overflow-x-auto">
+        <table className="w-full text-right border-collapse min-w-[960px]">
+          <thead>
+            <tr className="border-b border-gray-100 bg-gray-50">
+              {TABLE_HEADERS.map((h) => (
+                <th key={h.label} className={h.className}>
+                  {h.label}
+                </th>
+              ))}
             </tr>
-          ) : (
-            sorted.map((row) => {
-              const isOverdue = row.timing_status === 'overdue'
-              return (
-                <tr
-                  key={row.id}
-                  className={`border-t border-gray-100 cursor-pointer transition-colors ${
-                    isOverdue ? 'bg-red-50/30 hover:bg-red-50/60' : 'hover:bg-blue-50/40'
-                  }`}
-                  onClick={() => onRowClick(row)}
-                >
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {sorted.length === 0 ? (
+              <tr>
+                <td colSpan={COL_COUNT} className="py-5 text-center text-sm text-gray-400">
+                  אין תוצאות
+                </td>
+              </tr>
+            ) : (
+              sorted.map((row) => {
+                const isOverdue = row.timing_status === 'overdue'
+                return (
+                  <tr
+                    key={row.id}
+                    className={`border-t border-gray-100 cursor-pointer transition-colors ${
+                      isOverdue ? 'bg-red-50/30 hover:bg-red-50/60' : 'hover:bg-blue-50/40'
+                    }`}
+                    onClick={() => onRowClick(row)}
+                  >
                   <td className="px-3 py-1.5 text-sm text-gray-400 tabular-nums align-middle">
                     {formatClientOfficeId(row.office_client_number)}
                   </td>
@@ -286,13 +297,23 @@ const BatchContent = ({
                       />
                     </RowActionsMenu>
                   </td>
-                </tr>
-              )
-            })
-          )}
-        </tbody>
-      </table>
-    </div>
+                  </tr>
+                )
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
+      {total > PAGE_SIZE ? (
+        <PaginationCard
+          page={page}
+          totalPages={getTotalPages(total, PAGE_SIZE)}
+          total={total}
+          label="מקדמות"
+          onPageChange={setPage}
+        />
+      ) : null}
+    </>
   )
 }
 

@@ -1,9 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
-import { taxCalendarApi, taxCalendarQK } from '../api'
+import { taxCalendarApi, taxCalendarQK, type TaxCalendarGroupItemsParams } from '../api'
 
-export const useTaxCalendarGroupItems = (taxCalendarEntryId: number, enabled: boolean) =>
+export const useTaxCalendarGroupItems = (
+  taxCalendarEntryId: number,
+  enabled: boolean,
+  params: TaxCalendarGroupItemsParams = {},
+) =>
   useQuery({
-    queryKey: taxCalendarQK.groupItems(taxCalendarEntryId),
-    queryFn: () => taxCalendarApi.getGroupItems(taxCalendarEntryId),
+    queryKey: taxCalendarQK.groupItems(taxCalendarEntryId, params),
+    queryFn: () => taxCalendarApi.getGroupItems(taxCalendarEntryId, params),
     enabled,
   })

@@ -94,6 +94,9 @@ export interface AdvancePaymentOverviewRow {
 export interface ListAdvancePaymentsOverviewParams {
   year: number
   month?: number
+  due_date?: string
+  period_months_count?: 1 | 2
+  client_search?: string
   status?: AdvancePaymentStatus[]
   page?: number
   page_size?: number

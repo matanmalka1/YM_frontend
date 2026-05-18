@@ -1,6 +1,6 @@
 import { type FC, useMemo, useState } from 'react'
 import { useTaxCalendarGroups } from '../hooks/useTaxCalendarGroups'
-import { filterGroupsByStatus, type TaxCalendarGroupStatusFilter } from '../utils'
+import { type TaxCalendarGroupStatusFilter } from '../utils'
 import { type TaxCalendarGroupsParams, type TaxCalendarObligationType } from '../api'
 import { TaxCalendarFiltersBar } from './TaxCalendarFiltersBar'
 import { TaxCalendarGroupsContent } from './TaxCalendarGroupsContent'
@@ -10,8 +10,10 @@ interface ClientTaxCalendarTabProps {
 }
 
 const currentYear = new Date().getFullYear()
+const GROUP_PAGE_SIZE = 25
 
 export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }) => {
+  const [page, setPage] = useState(1)
   const [startYear, setStartYear] = useState(String(currentYear))
   const [endYear, setEndYear] = useState(String(currentYear))
   const [obligationType, setObligationType] = useState('')
@@ -22,20 +24,23 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
       start_year: Number(startYear) || currentYear,
       end_year: Number(endYear) || currentYear,
       obligation_type: obligationType ? (obligationType as TaxCalendarObligationType) : undefined,
+      status,
       client_record_id: clientId,
+      page,
+      page_size: GROUP_PAGE_SIZE,
     }),
-    [clientId, endYear, obligationType, startYear],
+    [clientId, endYear, obligationType, page, startYear, status],
   )
 
   const groupsQuery = useTaxCalendarGroups(params)
-  const groups = useMemo(() => groupsQuery.data ?? [], [groupsQuery.data])
-  const displayedGroups = useMemo(() => filterGroupsByStatus(groups, status), [groups, status])
+  const groups = useMemo(() => groupsQuery.data?.items ?? [], [groupsQuery.data])
 
   const resetFilters = () => {
     setStartYear(String(currentYear))
     setEndYear(String(currentYear))
     setObligationType('')
     setStatus('all')
+    setPage(1)
   }
 
   return (
@@ -45,20 +50,36 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
         endYear={endYear}
         obligationType={obligationType}
         status={status}
-        onStartYearChange={setStartYear}
-        onEndYearChange={setEndYear}
-        onObligationTypeChange={setObligationType}
-        onStatusChange={setStatus}
+        onStartYearChange={(value) => {
+          setStartYear(value)
+          setPage(1)
+        }}
+        onEndYearChange={(value) => {
+          setEndYear(value)
+          setPage(1)
+        }}
+        onObligationTypeChange={(value) => {
+          setObligationType(value)
+          setPage(1)
+        }}
+        onStatusChange={(value) => {
+          setStatus(value)
+          setPage(1)
+        }}
         onReset={resetFilters}
       />
 
       <TaxCalendarGroupsContent
-        groups={displayedGroups}
+        groups={groups}
         isLoading={groupsQuery.isPending}
         error={groupsQuery.error}
         errorFallback="שגיאה בטעינת מועדי המס"
         linkedLabel="מועדים"
         clientRecordId={clientId}
+        page={page}
+        pageSize={GROUP_PAGE_SIZE}
+        total={groupsQuery.data?.total ?? 0}
+        onPageChange={setPage}
       />
     </div>
   )

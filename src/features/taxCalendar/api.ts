@@ -1,5 +1,6 @@
 import { api } from '@/api/client'
 import { toQueryParams } from '@/api/queryParams'
+import type { PaginatedResponse } from '@/types'
 
 export type TaxCalendarObligationType = 'vat' | 'advance_payment' | 'annual_report'
 
@@ -22,8 +23,12 @@ export interface TaxCalendarGroupsParams {
   start_year?: number
   end_year?: number
   obligation_type?: TaxCalendarObligationType
+  status?: 'all' | 'open' | 'overdue' | 'done'
   include_empty?: boolean
   client_record_id?: number
+  client_search?: string
+  page?: number
+  page_size?: number
 }
 
 export type TaxCalendarGroupItemSourceType = 'vat_work_item' | 'advance_payment' | 'annual_report'
@@ -48,6 +53,9 @@ export interface TaxCalendarGroupItemResponse {
   tax_calendar_entry_id: number
   obligation_type: TaxCalendarObligationType
   items: TaxCalendarGroupItem[]
+  page: number
+  page_size: number
+  total: number
 }
 
 export const TAX_CALENDAR_OBLIGATION_LABELS: Record<TaxCalendarObligationType, string> = {
@@ -58,19 +66,32 @@ export const TAX_CALENDAR_OBLIGATION_LABELS: Record<TaxCalendarObligationType, s
 
 export const taxCalendarQK = {
   groups: (params: TaxCalendarGroupsParams) => ['tax-calendar', 'groups', params] as const,
-  groupItems: (taxCalendarEntryId: number) => ['tax-calendar', 'groups', taxCalendarEntryId, 'items'] as const,
+  groupItems: (taxCalendarEntryId: number, params: TaxCalendarGroupItemsParams = {}) =>
+    ['tax-calendar', 'groups', taxCalendarEntryId, 'items', params] as const,
 }
 
 export const taxCalendarApi = {
-  listGroups: async (params: TaxCalendarGroupsParams = {}): Promise<TaxCalendarGroup[]> => {
-    const response = await api.get<TaxCalendarGroup[]>('/tax-calendar/groups', {
+  listGroups: async (params: TaxCalendarGroupsParams = {}): Promise<PaginatedResponse<TaxCalendarGroup>> => {
+    const response = await api.get<PaginatedResponse<TaxCalendarGroup>>('/tax-calendar/groups', {
       params: toQueryParams(params),
     })
     return response.data
   },
 
-  getGroupItems: async (taxCalendarEntryId: number): Promise<TaxCalendarGroupItemResponse> => {
-    const response = await api.get<TaxCalendarGroupItemResponse>(`/tax-calendar/groups/${taxCalendarEntryId}/items`)
+  getGroupItems: async (
+    taxCalendarEntryId: number,
+    params: TaxCalendarGroupItemsParams = {},
+  ): Promise<TaxCalendarGroupItemResponse> => {
+    const response = await api.get<TaxCalendarGroupItemResponse>(`/tax-calendar/groups/${taxCalendarEntryId}/items`, {
+      params: toQueryParams(params),
+    })
     return response.data
   },
+}
+
+export interface TaxCalendarGroupItemsParams {
+  page?: number
+  page_size?: number
+  client_search?: string
+  client_record_id?: number
 }

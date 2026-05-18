@@ -4,8 +4,10 @@ import { Inbox } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
+import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
 import { formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
+import { getTotalPages } from '@/utils/paginationUtils'
 import { cn, formatDate, formatPlainIdentifier, getErrorMessage } from '@/utils/utils'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { useTaxCalendarGroupItems } from '../hooks/useTaxCalendarGroupItems'
@@ -95,21 +97,10 @@ const getStateVariant = (item: TaxCalendarGroupItem): 'success' | 'warning' | 'e
   return 'warning'
 }
 
-const matchesClientSearch = (item: TaxCalendarGroupItem, searchText: string): boolean => {
-  const normalized = searchText.trim().toLowerCase()
-  if (!normalized) return true
-  return [
-    item.client_name,
-    String(item.client_record_id),
-    item.office_client_number != null ? String(item.office_client_number) : null,
-  ].some((value) => value?.toLowerCase().includes(normalized))
-}
-
-const matchesClientRecord = (item: TaxCalendarGroupItem, clientRecordId?: number): boolean =>
-  clientRecordId == null || item.client_record_id === clientRecordId
-
 const getDueDatePrefix = (group: TaxCalendarGroup): string =>
   group.obligation_type === 'advance_payment' ? 'מועד תשלום' : 'מועד דיווח'
+
+const ITEM_PAGE_SIZE = 50
 
 const GroupItemsRows = ({
   group,
@@ -122,10 +113,17 @@ const GroupItemsRows = ({
   clientSearchText: string
   clientRecordId?: number
 }) => {
-  const { data, isPending, isError, error } = useTaxCalendarGroupItems(group.tax_calendar_entry_id, isOpen)
-  const items = (data?.items ?? []).filter(
-    (item) => matchesClientRecord(item, clientRecordId) && matchesClientSearch(item, clientSearchText),
-  )
+  const [page, setPage] = useState(1)
+  useEffect(() => {
+    setPage(1)
+  }, [clientSearchText, group.tax_calendar_entry_id])
+  const { data, isPending, isError, error } = useTaxCalendarGroupItems(group.tax_calendar_entry_id, isOpen, {
+    page,
+    page_size: ITEM_PAGE_SIZE,
+    client_search: clientSearchText.trim() || undefined,
+    client_record_id: clientRecordId,
+  })
+  const items = data?.items ?? []
 
   if (isPending) {
     return <div className="py-4 text-center text-sm text-gray-400">טוען רשומות מקושרות...</div>
@@ -186,6 +184,15 @@ const GroupItemsRows = ({
           ))}
         </tbody>
       </table>
+      {data && data.total > ITEM_PAGE_SIZE ? (
+        <PaginationCard
+          page={page}
+          totalPages={getTotalPages(data.total, ITEM_PAGE_SIZE)}
+          total={data.total}
+          label="רשומות"
+          onPageChange={setPage}
+        />
+      ) : null}
     </div>
   )
 }
