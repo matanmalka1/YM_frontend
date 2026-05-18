@@ -100,7 +100,7 @@ export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string 
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
-  const groups = (groupsQuery.data ?? [])
+  const groups = (groupsQuery.data?.items ?? [])
     .filter((group) => {
       const dueDate = toDate(group.effective_due_date_min)
       return group.open_count > 0 && dueDate !== null && dueDate >= today
