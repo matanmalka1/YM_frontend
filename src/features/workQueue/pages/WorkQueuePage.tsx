@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect } from 'react'
 import { CheckSquare, Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
@@ -12,7 +12,7 @@ import { useWorkQueueActions } from '../hooks/useWorkQueueActions'
 import { WorkQueueSummaryCards } from '../components/WorkQueueSummaryCards'
 import { WorkQueueFiltersBar } from '../components/WorkQueueFiltersBar'
 import { WorkQueueTable } from '../components/WorkQueueTable'
-import { groupWorkQueueItems } from '../utils/workQueueGrouping'
+import { toast } from '@/utils/toast'
 
 export const WorkQueuePage: React.FC = () => {
   const {
@@ -67,7 +67,7 @@ export const WorkQueuePage: React.FC = () => {
       title="עבודה לטיפול"
       description="כל מה שדורש טיפול: דוחות, חיובים, מקדמות, קלסרים ומשימות ידניות."
       actions={
-        <Button size="sm" variant="ghost" onClick={openCreateTask}>
+        <Button size="sm" variant="ghost" data-work-queue-focus-fallback="true" onClick={openCreateTask}>
           משימה חדשה
           <Plus className="h-3.5 w-3.5" />
         </Button>
@@ -75,7 +75,9 @@ export const WorkQueuePage: React.FC = () => {
     />
   )
 
-  const groups = useMemo(() => groupWorkQueueItems(items), [items])
+  useEffect(() => {
+    if (error) toast.error('טעינת העבודה לטיפול נכשלה', { description: error })
+  }, [error])
 
   const renderBody = () => {
     if (!isLoading && !isFetching && items.length === 0) {
@@ -96,19 +98,7 @@ export const WorkQueuePage: React.FC = () => {
       )
     }
 
-    return (
-      <div className="space-y-5">
-        {groups.map((group) => (
-          <section key={group.key} className="space-y-3">
-            <div className="flex items-center justify-between border-b border-gray-200 pb-2">
-              <h2 className="text-sm font-semibold text-gray-900">{group.label}</h2>
-              <span className="text-xs text-gray-500">{group.rows.length} פריטים</span>
-            </div>
-            <WorkQueueTable items={group.rows} activeActionKey={activeActionKey} onAction={runAction} />
-          </section>
-        ))}
-      </div>
-    )
+    return <WorkQueueTable items={items} activeActionKey={activeActionKey} onAction={runAction} />
   }
 
   return (

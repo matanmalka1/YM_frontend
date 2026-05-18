@@ -5,6 +5,7 @@ import { MoreHorizontal } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { computeDropdownPosition } from '../../../utils/dropdownMenuUtils'
 import { useDismissibleLayer } from '../overlays/useDismissibleLayer'
+import { Tooltip } from '../primitives/Tooltip'
 
 const DropdownCloseContext = createContext<(() => void) | null>(null)
 
@@ -32,7 +33,11 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
     open,
     triggerRef,
     layerRef: portalRef,
-    onDismiss: () => setOpen(false),
+    onDismiss: () => {
+      setOpen(false)
+      triggerRef.current?.focus()
+    },
+    closeOnEscape: true,
     closeOnScroll: true,
     closeOnResize: true,
   })
@@ -185,22 +190,24 @@ const DropdownMenuItem = ({
   icon,
   danger = false,
   disabled = false,
+  tooltip,
 }: {
   label: string
-  onClick: () => void
+  onClick: (event?: React.MouseEvent<HTMLButtonElement>) => void
   icon: React.ReactNode
   danger?: boolean
   disabled?: boolean
+  tooltip?: string
 }) => {
   const close = useContext(DropdownCloseContext)
-  return (
+  const item = (
     <button
       type="button"
       disabled={disabled}
       onClick={(event) => {
         event.stopPropagation()
+        onClick(event)
         close?.()
-        onClick()
       }}
       className={cn(
         'w-full px-3 py-2 text-right text-sm transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40',
@@ -213,6 +220,7 @@ const DropdownMenuItem = ({
       </span>
     </button>
   )
+  return tooltip ? <Tooltip text={tooltip}>{item}</Tooltip> : item
 }
 
 DropdownMenuItem.displayName = 'DropdownMenuItem'

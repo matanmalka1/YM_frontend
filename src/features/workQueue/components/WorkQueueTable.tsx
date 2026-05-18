@@ -1,11 +1,13 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { CheckCircle2, ExternalLink, Loader2, Play, XCircle } from 'lucide-react'
+import { CheckCircle2, ClipboardCheck, ExternalLink, Link2, Loader2, Play, XCircle } from 'lucide-react'
 import { DataTable } from '@/components/ui/table/DataTable'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
+import { Tooltip } from '@/components/ui/primitives/Tooltip'
 import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
 import { formatDate } from '@/utils/utils'
+import { taskPriorityLabels, taskRoleLabels } from '@/features/tasks'
 import type { WorkQueueAction, WorkQueueItem, WorkQueueSourceType, WorkQueueWarning } from '../api/contracts'
 import { workQueueSourceTypeLabels, workQueueUrgencyLabels, workQueueUrgencyVariant } from '../constants'
 
@@ -13,7 +15,7 @@ interface WorkQueueTableProps {
   items: WorkQueueItem[]
   isLoading?: boolean
   activeActionKey?: string | null
-  onAction: (item: WorkQueueItem, action: WorkQueueAction) => void
+  onAction: (item: WorkQueueItem, action: WorkQueueAction, focusTarget?: HTMLElement | null) => void
 }
 
 const typeLabel = (sourceType: WorkQueueSourceType): string => workQueueSourceTypeLabels[sourceType] ?? sourceType
@@ -26,6 +28,7 @@ const warningVariant = (warning: WorkQueueWarning) => {
 
 const actionIcon = (action: WorkQueueAction) => {
   if (action.type === 'link') return <ExternalLink className="h-4 w-4" />
+  if (action.key.includes('link')) return <Link2 className="h-4 w-4" />
   if (action.key.includes('complete') || action.key.includes('paid') || action.key.includes('return')) {
     return <CheckCircle2 className="h-4 w-4" />
   }
@@ -36,6 +39,31 @@ const actionIcon = (action: WorkQueueAction) => {
 const actionVariant = (action: WorkQueueAction): 'ghost' | 'danger' => {
   if (action.variant === 'danger') return 'danger'
   return 'ghost'
+}
+
+const metadataValue = (item: WorkQueueItem, key: string): unknown =>
+  item.metadata && typeof item.metadata === 'object' ? (item.metadata as Record<string, unknown>)[key] : undefined
+
+const taskPriorityLabel = (item: WorkQueueItem): string | null => {
+  const priority =
+    item.source_type === 'task'
+      ? metadataValue(item, 'priority')
+      : item.linked_tasks.length === 1
+        ? item.linked_tasks[0].priority
+        : null
+  if (typeof priority !== 'string') return null
+  return taskPriorityLabels[priority] ?? priority
+}
+
+const assignedRoleLabel = (item: WorkQueueItem): string | null => {
+  const role =
+    item.source_type === 'task'
+      ? metadataValue(item, 'assigned_role')
+      : item.linked_tasks.length === 1
+        ? item.linked_tasks[0].assigned_role
+        : null
+  if (typeof role !== 'string' || !role) return null
+  return taskRoleLabels[role] ?? role
 }
 
 export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading, activeActionKey, onAction }) => {
@@ -52,9 +80,15 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
         {
           key: 'type',
           header: 'סוג',
-          render: (item: WorkQueueItem) => (
-            <Badge variant="neutral">{item.type_label ?? typeLabel(item.source_type)}</Badge>
-          ),
+          render: (item: WorkQueueItem) =>
+            item.source_type === 'task' ? (
+              <Badge variant="neutral" className="gap-1">
+                <ClipboardCheck className="h-3 w-3" />
+                {item.type_label ?? typeLabel(item.source_type)}
+              </Badge>
+            ) : (
+              <Badge variant="neutral">{item.type_label ?? typeLabel(item.source_type)}</Badge>
+            ),
         },
         {
           key: 'client',
@@ -98,10 +132,25 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
         },
         {
           key: 'urgency',
-          header: 'דחיפות',
+          header: 'דחיפות זמן',
           render: (item: WorkQueueItem) => (
             <Badge variant={workQueueUrgencyVariant[item.urgency]}>{workQueueUrgencyLabels[item.urgency]}</Badge>
           ),
+        },
+        {
+          key: 'task_meta',
+          header: 'עדיפות/שיוך',
+          render: (item: WorkQueueItem) => {
+            const priority = taskPriorityLabel(item)
+            const assignedRole = assignedRoleLabel(item)
+            if (!priority && !assignedRole) return <span className="text-sm text-gray-400">—</span>
+            return (
+              <div className="flex flex-wrap justify-center gap-1">
+                {priority && <Badge variant={priority === 'דחוף' ? 'error' : 'neutral'}>{priority}</Badge>}
+                {assignedRole && <Badge variant="info">{assignedRole}</Badge>}
+              </div>
+            )
+          },
         },
         {
           key: 'status',
@@ -147,26 +196,45 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
           header: 'פעולות',
           render: (item: WorkQueueItem) => {
             const actions = item.available_actions
-            if (actions.length === 0) return <span className="text-sm text-gray-400">—</span>
+            const isUnlinkedTask =
+              item.source_type === 'task' &&
+              metadataValue(item, 'source_domain') == null &&
+              metadataValue(item, 'source_id') == null
+            if (actions.length === 0 && !isUnlinkedTask) return <span className="text-sm text-gray-400">—</span>
             const [primary, ...secondary] = actions
-            const primaryKey = `${item.id}:${primary.key}`
+            const primaryKey = primary ? `${item.id}:${primary.key}` : ''
+            const tooltipText =
+              primary?.disabled && primary.disabled_reason
+                ? primary.disabled_reason
+                : item.source_type === 'task' && item.description
+                  ? item.description
+                  : undefined
+            const linkAction: WorkQueueAction = {
+              key: 'link_task_to_source',
+              label: 'קשר לפריט',
+              type: 'modal',
+            }
+            const secondaryActions = isUnlinkedTask ? [linkAction, ...secondary] : secondary
+            const primaryBtn = primary ? (
+              <Button
+                variant={actionVariant(primary)}
+                size="sm"
+                disabled={primary.disabled || activeActionKey === primaryKey}
+                isLoading={activeActionKey === primaryKey}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  onAction(item, primary, event.currentTarget)
+                }}
+              >
+                {primary.label}
+              </Button>
+            ) : null
             return (
               <div className="flex items-center justify-center gap-2">
-                <Button
-                  variant={actionVariant(primary)}
-                  size="sm"
-                  disabled={primary.disabled || activeActionKey === primaryKey}
-                  isLoading={activeActionKey === primaryKey}
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    onAction(item, primary)
-                  }}
-                >
-                  {primary.label}
-                </Button>
-                {secondary.length > 0 && (
+                {primaryBtn && tooltipText ? <Tooltip text={tooltipText}>{primaryBtn}</Tooltip> : primaryBtn}
+                {secondaryActions.length > 0 && (
                   <RowActionsMenu menuClassName="w-50">
-                    {secondary.map((action) => {
+                    {secondaryActions.map((action) => {
                       const key = `${item.id}:${action.key}`
                       return (
                         <RowActionItem
@@ -177,7 +245,8 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
                           }
                           danger={action.variant === 'danger'}
                           disabled={action.disabled || activeActionKey === key}
-                          onClick={() => onAction(item, action)}
+                          tooltip={action.disabled_reason ?? undefined}
+                          onClick={(event) => onAction(item, action, event?.currentTarget ?? null)}
                         />
                       )
                     })}
@@ -202,6 +271,7 @@ export const WorkQueueTable: React.FC<WorkQueueTableProps> = ({ items, isLoading
       getRowKey={(item) => item.id}
       isLoading={isLoading}
       emptyMessage="אין משימות להצגה"
+      stickyHeader
     />
   )
 }

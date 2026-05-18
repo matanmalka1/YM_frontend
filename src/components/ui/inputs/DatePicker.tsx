@@ -5,6 +5,7 @@ import { CalendarIcon } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { FormField } from './FormField'
 import { DatePickerCalendar } from './DatePickerCalendar'
+import { useDismissibleLayer } from '../overlays/useDismissibleLayer'
 
 export interface DatePickerProps {
   label?: string
@@ -69,19 +70,16 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     onBlur?.()
   }
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as Node
-      const insideContainer = containerRef.current?.contains(target)
-      const insideTrigger = triggerRef.current?.contains(target)
-      if (!insideContainer && !insideTrigger) {
-        setOpen(false)
-        onBlur?.()
-      }
-    }
-    if (open) document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [open, onBlur])
+  useDismissibleLayer({
+    open,
+    triggerRef,
+    layerRef: containerRef,
+    closeOnEscape: true,
+    onDismiss: () => {
+      setOpen(false)
+      onBlur?.()
+    },
+  })
 
   useEffect(() => {
     if (!open || !usePortal) return
@@ -119,7 +117,15 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         type="button"
         disabled={disabled}
         onClick={handleOpen}
-        onKeyDown={onKeyDown}
+        onKeyDown={(event) => {
+          if (open && event.key === 'Escape') {
+            event.preventDefault()
+            setOpen(false)
+            onBlur?.()
+            return
+          }
+          onKeyDown?.(event)
+        }}
         className={cn(
           'w-full flex items-center justify-between rounded-lg border shadow-sm text-sm transition-all bg-white text-right',
           compact ? 'px-2 py-1 h-7 text-xs' : 'h-9 px-3 py-2',

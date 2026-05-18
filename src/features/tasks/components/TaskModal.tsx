@@ -1,16 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/primitives/Button'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
 import { Textarea } from '@/components/ui/inputs/Textarea'
-import { taskPriorityLabels, taskPriorityValues } from '../constants'
+import { workQueueSourceTypeLabels } from '@/features/workQueue'
+import { taskPriorityLabels, taskPriorityValues, taskRoleLabels } from '../constants'
 import type { Task, TaskCreateRequest, TaskPriority, TaskUpdateRequest } from '../api/contracts'
+import { useTaskSourcePicker } from '../hooks/useTaskSourcePicker'
+import { TaskSourceSection } from './TaskSourceSection'
 
 export interface TaskSourceContext {
   source_domain: string
   source_id: number
   title: string
+  type_label?: string | null
   client_name?: string | null
   due_date?: string | null
   linked_tasks_count?: number
@@ -18,7 +22,7 @@ export interface TaskSourceContext {
 }
 
 interface TaskModalProps {
-  mode: 'create' | 'edit' | 'view'
+  mode: 'create' | 'edit' | 'view' | 'link'
   task?: Task | null
   source?: TaskSourceContext | null
   isLoading?: boolean
@@ -30,11 +34,16 @@ const priorityOptions = taskPriorityValues.map((value) => ({ value, label: taskP
 
 const roleOptions = [
   { value: '', label: 'לא מוגדר' },
-  { value: 'advisor', label: 'יועץ' },
-  { value: 'secretary', label: 'מזכירה' },
+  { value: 'advisor', label: taskRoleLabels.advisor },
+  { value: 'secretary', label: taskRoleLabels.secretary },
 ]
 
 const toDateInput = (value?: string | null) => value?.slice(0, 10) ?? ''
+
+const sourceTypeLabel = (sourceDomain?: string | null) =>
+  sourceDomain && sourceDomain in workQueueSourceTypeLabels
+    ? workQueueSourceTypeLabels[sourceDomain as keyof typeof workQueueSourceTypeLabels]
+    : 'פריט עבודה'
 
 export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoading, onSubmit, onClose }) => {
   const [title, setTitle] = useState('')
@@ -42,10 +51,43 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
   const [priority, setPriority] = useState<TaskPriority>('normal')
   const [dueDate, setDueDate] = useState('')
   const [assignedRole, setAssignedRole] = useState('')
+  const [clientSearch, setClientSearch] = useState('')
+  const [pendingSource, setPendingSource] = useState<{ domain: string; id: number } | null>(null)
+  const [sourceCleared, setSourceCleared] = useState(false)
+  const [sourcePickerOpen, setSourcePickerOpen] = useState(false)
+
+  const {
+    selectedClientId,
+    selectedClientName,
+    selectClient,
+    clearClient,
+    workQueueItems,
+    isLoadingItems,
+    sourceLabel,
+  } = useTaskSourcePicker()
 
   const readonly = mode === 'view'
+  const isLinkMode = mode === 'link'
   const linkedCount = source?.linked_tasks_count ?? source?.linked_tasks?.length ?? 0
-  const isTaskLoading = mode !== 'create' && !task
+  const isTaskLoading = (mode === 'edit' || mode === 'link') && !task
+
+  const existingSourceDomain = task?.source_domain ?? null
+  const existingSourceId = task?.source_id ?? null
+  const hasExistingSource = existingSourceDomain != null && existingSourceId != null
+  const existingSourceTitle = source?.title ?? `${sourceTypeLabel(existingSourceDomain)} #${existingSourceId}`
+
+  const sourceOptions = workQueueItems.map((item) => ({
+    value: `${item.source_type}:${item.source_id}`,
+    label: sourceLabel(item),
+  }))
+
+  const resetSourcePicker = useCallback(() => {
+    setClientSearch('')
+    clearClient()
+    setPendingSource(null)
+    setSourceCleared(false)
+    setSourcePickerOpen(false)
+  }, [clearClient])
 
   useEffect(() => {
     if (mode === 'create') {
@@ -54,22 +96,31 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
       setPriority('normal')
       setDueDate(toDateInput(source?.due_date))
       setAssignedRole('')
+      resetSourcePicker()
     }
-  }, [mode, source])
+  }, [mode, source, resetSourcePicker])
 
   useEffect(() => {
-    if (mode !== 'create' && task) {
+    if ((mode === 'edit' || mode === 'link') && task) {
       setTitle(task.title ?? '')
       setDescription(task.description ?? '')
       setPriority(task.priority ?? 'normal')
       setDueDate(toDateInput(task.due_date))
       setAssignedRole(task.assigned_role ?? '')
+      resetSourcePicker()
+      setSourcePickerOpen(mode === 'link')
     }
-  }, [mode, task])
+  }, [mode, task, resetSourcePicker])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!onSubmit || readonly || !title.trim()) return
+    if (!onSubmit) return
+    if (isLinkMode) {
+      if (hasExistingSource || !pendingSource) return
+      onSubmit({ source_domain: pendingSource.domain, source_id: pendingSource.id })
+      return
+    }
+    if (readonly || !title.trim()) return
     const base = {
       title: title.trim(),
       description: description.trim() || undefined,
@@ -77,37 +128,84 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
       due_date: dueDate || undefined,
       assigned_role: assignedRole || undefined,
     }
-    onSubmit(
-      mode === 'create' && source
+    if (mode === 'create') {
+      const createPayload: TaskCreateRequest = source
         ? { ...base, source_domain: source.source_domain, source_id: source.source_id }
-        : base,
-    )
+        : pendingSource
+          ? { ...base, source_domain: pendingSource.domain, source_id: pendingSource.id }
+          : base
+      onSubmit(createPayload)
+    } else {
+      const updatePayload: TaskUpdateRequest = sourceCleared
+        ? { ...base, source_domain: null, source_id: null }
+        : pendingSource
+          ? { ...base, source_domain: pendingSource.domain, source_id: pendingSource.id }
+          : base
+      onSubmit(updatePayload)
+    }
   }
 
-  const modalTitle =
-    mode === 'create' ? (source ? 'משימה חדשה מקושרת' : 'משימה חדשה') : mode === 'edit' ? 'עריכת משימה' : 'פרטי משימה'
+  const modalTitle = isLinkMode
+    ? 'קישור משימה לפריט עבודה'
+    : mode === 'create'
+      ? source
+        ? 'משימה חדשה לפריט עבודה'
+        : 'משימה חדשה'
+      : mode === 'edit'
+        ? 'עריכת משימה'
+        : 'פרטי משימה'
+
+  const sourceSectionProps = {
+    source,
+    isLinkMode,
+    readonly,
+    linkedCount,
+    hasExistingSource,
+    sourceCleared,
+    existingSourceTitle,
+    sourcePickerOpen,
+    taskTitle: task?.title,
+    selectedClientId,
+    selectedClientName,
+    workQueueItems,
+    isLoadingItems,
+    clientSearch,
+    sourceOptions,
+    pendingSource,
+    onClearSource: () => {
+      setSourceCleared(true)
+      setPendingSource(null)
+      setSourcePickerOpen(false)
+    },
+    onOpenPicker: () => setSourcePickerOpen(true),
+    onCancelPicker: resetSourcePicker,
+    onClientSearchChange: setClientSearch,
+    onClientSelect: (id: number, name: string) => {
+      selectClient(id, name)
+    },
+    onClientClear: () => {
+      clearClient()
+      setClientSearch('')
+      setPendingSource(null)
+    },
+    onSourceSelect: (domain: string, id: number) => {
+      setSourceCleared(false)
+      setPendingSource({ domain, id })
+    },
+    onSourceDeselect: () => {
+      setPendingSource(null)
+      setSourceCleared(false)
+    },
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
       <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl">
         <div className="mb-4">
           <h2 className="text-lg font-semibold text-gray-900">{modalTitle}</h2>
-          {source && (
-            <div className="mt-2 rounded-md border border-blue-100 bg-blue-50 p-3 text-sm text-blue-900">
-              <div>מקור: {source.title}</div>
-              {source.client_name && <div>לקוח: {source.client_name}</div>}
-              {linkedCount > 0 && (
-                <div className="mt-2 font-medium text-orange-800">כבר קיימות {linkedCount} משימות קשורות</div>
-              )}
-              {source.linked_tasks?.length ? (
-                <ul className="mt-2 list-inside list-disc text-xs text-blue-800">
-                  {source.linked_tasks.slice(0, 3).map((linked) => (
-                    <li key={linked.id}>
-                      {linked.title} · {linked.status}
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
+          {!isTaskLoading && !isLinkMode && (source || hasExistingSource) && (
+            <div className="mt-3">
+              <TaskSourceSection {...sourceSectionProps} />
             </div>
           )}
         </div>
@@ -123,6 +221,20 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
               </Button>
             </div>
           </div>
+        ) : isLinkMode ? (
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <TaskSourceSection {...sourceSectionProps} />
+            </div>
+            <div className="flex justify-end gap-3 pt-2">
+              <Button type="button" variant="ghost" onClick={onClose}>
+                ביטול
+              </Button>
+              <Button type="submit" disabled={hasExistingSource || !pendingSource || isLoading} isLoading={isLoading}>
+                שמור קישור
+              </Button>
+            </div>
+          </form>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
@@ -156,6 +268,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
               label="שיוך לתפקיד"
               disabled={readonly}
             />
+            {!source && !hasExistingSource && <TaskSourceSection {...sourceSectionProps} />}
             <div className="flex justify-end gap-3 pt-2">
               <Button type="button" variant="ghost" onClick={onClose}>
                 סגור
@@ -172,3 +285,5 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
     </div>
   )
 }
+
+TaskModal.displayName = 'TaskModal'

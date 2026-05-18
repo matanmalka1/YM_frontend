@@ -13,3 +13,10 @@ export const taskPriorityLabels: Record<string, string> = {
   high: 'גבוהה',
   urgent: 'דחוף',
 }
+
+export const taskRoleLabels: Record<string, string> = {
+  advisor: 'יועץ',
+  secretary: 'מזכירה',
+  ADVISOR: 'יועץ',
+  SECRETARY: 'מזכירה',
+}

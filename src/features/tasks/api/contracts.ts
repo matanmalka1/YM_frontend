@@ -57,6 +57,8 @@ export interface TaskUpdateRequest {
   due_date?: string
   assigned_to_user_id?: number
   assigned_role?: string
+  source_domain?: string | null
+  source_id?: number | null
   action_key?: string
   action_payload?: Record<string, unknown>
 }

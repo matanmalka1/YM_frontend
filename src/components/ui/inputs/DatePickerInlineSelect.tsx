@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '../../../utils/utils'
+import { useDismissibleLayer } from '../overlays/useDismissibleLayer'
 
 interface InlineSelectProps {
   value: number
@@ -30,13 +31,7 @@ export const DatePickerInlineSelect: React.FC<InlineSelectProps> = ({ value, opt
     setHighlightedIndex(selectedIndex >= 0 ? selectedIndex : 0)
   }, [open, options, value])
 
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
-    }
-    if (open) document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [open])
+  useDismissibleLayer({ open, triggerRef: ref, layerRef: listRef, onDismiss: () => setOpen(false) })
 
   const current = options.find((o) => o.value === value)
 

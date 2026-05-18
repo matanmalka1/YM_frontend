@@ -26,6 +26,7 @@ export interface DataTableProps<T> {
   emptyMessage?: string
   isLoading?: boolean
   rowClassName?: (item: T, index: number) => string
+  stickyHeader?: boolean
   emptyState?: Omit<EmptyStateProps, 'icon' | 'message'> & {
     icon?: LucideIcon
     message?: string
@@ -41,6 +42,7 @@ export const DataTable = <T,>({
   emptyMessage = 'אין נתונים להצגה',
   isLoading = false,
   rowClassName,
+  stickyHeader = false,
   emptyState,
 }: DataTableProps<T>) => {
   const handleRowKeyDown = (event: KeyboardEvent<HTMLTableRowElement>, item: T) => {
@@ -82,10 +84,10 @@ export const DataTable = <T,>({
   }
 
   return (
-    <Card className={cn('overflow-hidden p-0', className)}>
+    <Card className={cn(stickyHeader ? 'overflow-visible p-0' : 'overflow-hidden p-0', className)}>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
-          <thead>
+          <thead className={cn(stickyHeader && 'sticky top-0 z-20 shadow-sm')}>
             <tr className="border-b border-gray-200 bg-gray-50 text-right">
               {columns.map((column) => (
                 <th

@@ -20,7 +20,7 @@ export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
   urgencyFilter,
   onFilter,
 }) => {
-  const emptyValue = !summary || isLoading ? '—' : 0
+  const emptyValue = isLoading && !summary ? '—' : 0
   const stats = useMemo(
     () => [
       {

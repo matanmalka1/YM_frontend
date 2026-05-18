@@ -11,4 +11,4 @@ export type {
 export { useTasks } from './hooks/useTasks'
 export { TaskModal } from './components/TaskModal'
 export type { TaskSourceContext } from './components/TaskModal'
-export { taskStatusValues, taskStatusLabels, taskPriorityValues, taskPriorityLabels } from './constants'
+export { taskStatusValues, taskStatusLabels, taskPriorityValues, taskPriorityLabels, taskRoleLabels } from './constants'

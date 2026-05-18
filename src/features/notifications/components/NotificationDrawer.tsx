@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { X, Send } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { Button } from '../../../components/ui/primitives/Button'
@@ -17,7 +18,9 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
 
   useEscapeToClose({ open, onClose })
 
-  return (
+  if (typeof document === 'undefined') return null
+
+  return createPortal(
     <>
       <div
         className={cn(
@@ -72,7 +75,8 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
       {isAdvisor && (
         <SendNotificationModal open={sendOpen} onClose={() => setSendOpen(false)} clientRecordId={clientRecordId} />
       )}
-    </>
+    </>,
+    document.body,
   )
 }
 

@@ -15,6 +15,7 @@ interface ClientSearchInputProps {
   error?: string
   label?: string
   placeholder?: string
+  helperText?: string
 }
 
 export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
@@ -24,6 +25,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
   error,
   label = 'לקוח',
   placeholder = 'חפש לפי שם, ת.ז. / ח.פ...',
+  helperText,
 }) => {
   const [results, setResults] = useState<SearchResult[]>([])
   const [open, setOpen] = useState(false)
@@ -186,6 +188,8 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
           ) : undefined
         }
       />
+
+      {helperText && !value.trim() && <p className="mt-1 text-xs text-gray-500">{helperText}</p>}
 
       {open &&
         results.length > 0 &&

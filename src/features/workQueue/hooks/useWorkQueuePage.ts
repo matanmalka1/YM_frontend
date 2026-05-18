@@ -3,7 +3,7 @@ import { useRole } from '@/hooks/useRole'
 import { getErrorMessage } from '@/utils/utils'
 import { useWorkQueue, useWorkQueueSummary } from './useWorkQueue'
 import type { WorkQueueParams, WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
-import type { TaskStatus } from '@/features/tasks/api'
+import type { TaskStatus } from '@/features/tasks'
 
 const WORK_QUEUE_PAGE_SIZE = 50
 
@@ -47,19 +47,11 @@ export const useWorkQueuePage = () => {
 
   const { data, isLoading, isFetching, error } = useWorkQueue(listParams, hasRole)
 
-  const summaryParams = useMemo<WorkQueueParams>(
-    () => ({
-      include_task_history: historyMode,
-      search: search.trim() || undefined,
-    }),
-    [historyMode, search],
-  )
-
   const {
     data: summary,
     isFetching: isSummaryFetching,
     error: summaryError,
-  } = useWorkQueueSummary(summaryParams, hasRole)
+  } = useWorkQueueSummary(baseParams, hasRole)
 
   const items = data?.items ?? []
   const total = data?.total ?? 0
