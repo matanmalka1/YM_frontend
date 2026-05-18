@@ -4,9 +4,10 @@ import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
-import { Input } from '@/components/ui/inputs/Input'
+import { Select } from '@/components/ui/inputs/Select'
 import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
 import { DataTable, type Column } from '@/components/ui/table/DataTable'
+import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { cn, formatDate, getErrorMessage, getHttpStatus } from '@/utils/utils'
 import { useTaxCalendarSettings } from '../hooks/useTaxCalendarSettings'
 import type { TaxCalendarDeadlineRule, TaxCalendarSettingsEntry } from '../api'
@@ -52,6 +53,13 @@ const formatText = (value: string | null | undefined): string => value || '—'
 const getRuleTypeLabel = (value: string): string => RULE_TYPE_LABELS[value] ?? value
 
 const getObligationLabel = (value: string): string => OBLIGATION_TYPE_LABELS[value] ?? value
+
+const getYearOptions = () => {
+  const nextYear = String(currentYear + 1)
+  const options = getOperationalYearOptions()
+  if (options.some((option) => option.value === nextYear)) return options
+  return [{ value: nextYear, label: nextYear }, ...options]
+}
 
 const isForbidden = (...errors: unknown[]): boolean => errors.some((error) => getHttpStatus(error) === 403)
 
@@ -178,6 +186,7 @@ const groupedEntriesColumns: Column<TaxCalendarSettingsEntry>[] = [
 export const TaxCalendarSettingsPage = () => {
   const [startYear, setStartYear] = useState(String(currentYear))
   const [endYear, setEndYear] = useState(String(currentYear))
+  const yearOptions = useMemo(getYearOptions, [])
 
   const startYearState = useMemo(() => parseYearInput(startYear, 'שנת ההתחלה'), [startYear])
   const endYearState = useMemo(() => parseYearInput(endYear, 'שנת הסיום'), [endYear])
@@ -223,21 +232,17 @@ export const TaxCalendarSettingsPage = () => {
 
       <ToolbarContainer>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,180px)_minmax(0,180px)_auto_auto]">
-          <Input
-            type="number"
+          <Select
             label="משנת מס"
-            min={MIN_YEAR}
-            max={MAX_YEAR}
             value={startYear}
+            options={yearOptions}
             onChange={(event) => setStartYear(event.target.value)}
             error={startYearState.error ?? undefined}
           />
-          <Input
-            type="number"
+          <Select
             label="עד שנת מס"
-            min={MIN_YEAR}
-            max={MAX_YEAR}
             value={endYear}
+            options={yearOptions}
             onChange={(event) => setEndYear(event.target.value)}
             error={endYearState.error ?? undefined}
           />
