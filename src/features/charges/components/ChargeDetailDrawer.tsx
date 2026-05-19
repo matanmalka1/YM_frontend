@@ -16,7 +16,7 @@ import {
   canDeleteCharge,
 } from '../utils'
 import { formatDateTime } from '../../../utils/utils'
-import { getChargeStatusLabel } from '../../../utils/enums'
+import { getChargeStatusLabel } from '../constants'
 import { ChargeActionButtons } from './ChargeActionButtons'
 import { useChargeDetailsPage } from '../hooks/useChargeDetailsPage'
 import { CHARGE_CANCEL_REASON_PLACEHOLDER, chargeStatusVariants } from '../constants'

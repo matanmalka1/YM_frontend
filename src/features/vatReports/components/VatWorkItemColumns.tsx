@@ -1,7 +1,7 @@
 import { AlertTriangle } from 'lucide-react'
 import { monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
 import type { VatWorkItemResponse } from '../api'
-import { getVatWorkItemStatusLabel } from '@/utils/enums'
+import { getVatWorkItemStatusLabel } from '../constants'
 import { formatClientOfficeId, formatDate } from '@/utils/utils'
 import { VAT_DEADLINE_WARNING_DAYS, VAT_STATUS_BADGE_VARIANTS } from '../constants'
 import { formatVatAmount, isFiled } from '../utils'

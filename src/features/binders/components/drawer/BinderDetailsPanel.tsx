@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { MonoValue } from '@/components/ui/primitives/MonoValue'
 import type { BinderResponse } from '../../types'
-import { getStatusLabel } from '@/utils/enums'
+import { getBinderStatusLabel } from '../../constants'
 import { formatBinderNumber, formatClientOfficeId, formatDate, formatMonthYear } from '@/utils/utils'
 import { BINDER_STATUS_VARIANTS } from '../../constants'
 
@@ -39,7 +39,7 @@ export const BinderDetailsPanel: React.FC<BinderDetailsPanelProps> = ({ binder }
         )}
         <DrawerField
           label="סטטוס"
-          value={<StatusBadge status={binder.status} getLabel={getStatusLabel} variantMap={BINDER_STATUS_VARIANTS} />}
+          value={<StatusBadge status={binder.status} getLabel={getBinderStatusLabel} variantMap={BINDER_STATUS_VARIANTS} />}
         />
         {binder.returned_at && <DrawerField label="תאריך החזרה" value={formatDate(binder.returned_at)} />}
         {binder.pickup_person_name && <DrawerField label="נאסף על ידי" value={binder.pickup_person_name} />}

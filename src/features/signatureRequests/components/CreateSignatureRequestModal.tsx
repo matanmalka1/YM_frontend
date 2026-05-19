@@ -6,7 +6,7 @@ import { Select } from '../../../components/ui/inputs/Select'
 import { Textarea } from '../../../components/ui/inputs/Textarea'
 import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client'
 import type { CreateSignatureRequestPayload, SignatureRequestType } from '../api'
-import { getSignatureRequestTypeLabel } from '../../../utils/enums'
+import { getSignatureRequestTypeLabel } from '../constants'
 
 const REQUEST_TYPES: SignatureRequestType[] = [
   'engagement_agreement',

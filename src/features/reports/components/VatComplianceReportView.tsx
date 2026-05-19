@@ -5,7 +5,7 @@ import { PageStateGuard } from "../../../components/ui/layout/PageStateGuard";
 import { Badge } from "../../../components/ui/primitives/Badge";
 import { Select } from "../../../components/ui/inputs/Select";
 import { getOperationalYearOptions } from "@/constants/periodOptions.constants";
-import { getVatTypeLabel } from "../../../utils/enums";
+import { getVatTypeLabel } from "@/features/clients";
 
 const complianceBadgeVariant = (rate: number) => {
   if (rate >= 80) return "success" as const;

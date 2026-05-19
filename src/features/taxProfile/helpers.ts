@@ -1,5 +1,5 @@
 import type { DefinitionItem } from '@/components/ui/layout/DefinitionList'
-import { getVatTypeLabel } from '@/utils/enums'
+import { getVatTypeLabel } from '@/features/clients'
 import {
   EMPTY_TAX_PROFILE_VALUE,
   TAX_PROFILE_FIELD_LABELS,

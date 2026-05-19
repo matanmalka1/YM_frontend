@@ -1,7 +1,7 @@
 import { Badge } from '../../../components/ui/primitives/Badge'
 import { actionsColumn, textColumn, type Column } from '../../../components/ui/table'
 import type { UserResponse } from '../api'
-import { getRoleLabel } from '../../../utils/enums'
+import { getRoleLabel } from '../constants'
 import { formatDateTime } from '../../../utils/utils'
 import { UserRowActions } from './UserRowActions'
 

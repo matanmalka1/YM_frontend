@@ -1,23 +1,51 @@
-import { getAdvancePaymentStatusLabel, getAdvancePaymentMethodLabel } from '../../utils/enums'
+import { makeLabelGetter } from '@/utils/labels'
 import { MONTHS_COVERED_OPTIONS } from '@/constants/periodOptions.constants'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 import type { AdvancePaymentMethod, AdvancePaymentStatus } from './types'
 
-export const ADVANCE_PAYMENT_STATUS_FILTERS: AdvancePaymentStatus[] = ['pending', 'paid', 'partial']
+export const ADVANCE_PAYMENT_STATUS_VALUES = ['pending', 'paid', 'partial'] as const satisfies readonly AdvancePaymentStatus[]
+export const ADVANCE_PAYMENT_STATUS_LABELS: Record<AdvancePaymentStatus, string> = {
+  pending: 'ממתין',
+  paid: 'שולם',
+  partial: 'חלקי',
+}
+export const getAdvancePaymentStatusLabel = makeLabelGetter(ADVANCE_PAYMENT_STATUS_LABELS)
+
+export const ADVANCE_PAYMENT_STATUS_VARIANTS: Record<AdvancePaymentStatus, 'success' | 'warning' | 'error' | 'neutral'> = {
+  paid: 'success',
+  partial: 'warning',
+  pending: 'neutral',
+}
+
+export const ADVANCE_PAYMENT_METHOD_VALUES = [
+  'bank_transfer',
+  'credit_card',
+  'check',
+  'direct_debit',
+  'cash',
+  'other',
+] as const satisfies readonly AdvancePaymentMethod[]
+export const ADVANCE_PAYMENT_METHOD_LABELS: Record<AdvancePaymentMethod, string> = {
+  bank_transfer: 'העברה בנקאית',
+  credit_card: 'כרטיס אשראי',
+  check: "צ'ק",
+  direct_debit: 'הוראת קבע',
+  cash: 'מזומן',
+  other: 'אחר',
+}
+export const getAdvancePaymentMethodLabel = makeLabelGetter(ADVANCE_PAYMENT_METHOD_LABELS)
+
+export const ADVANCE_PAYMENT_STATUS_FILTERS: AdvancePaymentStatus[] = [...ADVANCE_PAYMENT_STATUS_VALUES]
 
 export const ADVANCE_PAYMENT_STATUS_OPTIONS: { value: AdvancePaymentStatus; label: string }[] =
-  ADVANCE_PAYMENT_STATUS_FILTERS.map((status) => ({
-    value: status,
-    label: getAdvancePaymentStatusLabel(status),
-  }))
+  ADVANCE_PAYMENT_STATUS_VALUES.map((status) => ({ value: status, label: ADVANCE_PAYMENT_STATUS_LABELS[status] }))
 
 export const ADVANCE_PAYMENT_STATUS_OPTIONS_WITH_ALL: {
   value: AdvancePaymentStatus | ''
   label: string
 }[] = [ALL_STATUSES_OPTION, ...ADVANCE_PAYMENT_STATUS_OPTIONS]
 
-export const ADVANCE_PAYMENT_METHOD_OPTIONS: { value: AdvancePaymentMethod; label: string }[] = (
-  ['bank_transfer', 'credit_card', 'check', 'direct_debit', 'cash', 'other'] as AdvancePaymentMethod[]
-).map((method) => ({ value: method, label: getAdvancePaymentMethodLabel(method) }))
+export const ADVANCE_PAYMENT_METHOD_OPTIONS: { value: AdvancePaymentMethod; label: string }[] =
+  ADVANCE_PAYMENT_METHOD_VALUES.map((method) => ({ value: method, label: ADVANCE_PAYMENT_METHOD_LABELS[method] }))
 
 export const ADVANCE_PAYMENT_FREQUENCY_OPTIONS = MONTHS_COVERED_OPTIONS

@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/primitives/Badge'
 import { cn } from '@/utils/utils'
 import type { VatPeriodRow } from '../api'
 import { VAT_CLIENT_SUMMARY_STATUS_VARIANTS } from '../constants'
-import { getVatWorkItemStatusLabel } from '@/utils/enums'
+import { getVatWorkItemStatusLabel } from '../constants'
 import { formatVatAmount } from '../utils'
 import { formatVatPeriodLabel, getNetVatTone } from '../view.helpers'
 

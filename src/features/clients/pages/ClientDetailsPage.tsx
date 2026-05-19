@@ -18,7 +18,7 @@ import {
   getEntityTypeLabel,
   type ActiveClientDetailsTab,
 } from '../constants'
-import { ClientDetailsTabContent, useClientDetails } from '@/features/clients'
+import { ClientDetailsTabContent, useClientQuery, useClientMutations } from '@/features/clients'
 import type { ClientRecordResponse } from '../api'
 
 interface ClientDetailsProps {
@@ -113,8 +113,8 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
   const { clientId } = useParams<{ clientId: string }>()
   const clientIdNum = clientId ? Number(clientId) : null
   const [isEditing, setIsEditing] = useState(false)
-  const { client, isValidId, isLoading, error, updateClient, isUpdating, deleteClient, isDeleting, can } =
-    useClientDetails({ clientId: clientIdNum })
+  const { client, isValidId, isLoading, error, can } = useClientQuery({ clientId: clientIdNum })
+  const { updateClient, isUpdating, deleteClient, isDeleting } = useClientMutations(Number(clientIdNum))
 
   useEffect(() => {
     if (initialTab !== 'details') setIsEditing(false)

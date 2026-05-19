@@ -1,17 +1,26 @@
-import {
-  getChargeStatusLabel,
-  CHARGE_TYPE_LABELS,
-  CHARGE_STATUS_VARIANTS as chargeStatusVariants,
-} from '../../utils/enums'
+import { makeLabelGetter } from '@/utils/labels'
 import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION } from '@/constants/filterOptions.constants'
 import type { ChargeListStats, ChargeStatusStat } from './api'
 
-export { CHARGE_TYPE_LABELS, chargeStatusVariants }
+export const CHARGE_STATUS_VALUES = ['draft', 'issued', 'paid', 'canceled'] as const
+export type ChargeStatusValue = (typeof CHARGE_STATUS_VALUES)[number]
+export const CHARGE_STATUSES = CHARGE_STATUS_VALUES
 
-export const CHARGE_CREATE_FORM_ID = 'charges-create-form'
-export const CHARGE_CANCEL_REASON_PLACEHOLDER = 'סיבת ביטול (אופציונלי)'
-export const CHARGE_PERIOD_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/
-export const CHARGE_PERIOD_YEAR_SPAN = 1
+export const CHARGE_STATUS_LABELS: Record<ChargeStatusValue, string> = {
+  draft: 'טיוטה',
+  issued: 'הונפק',
+  paid: 'שולם',
+  canceled: 'בוטל',
+}
+export const getChargeStatusLabel = makeLabelGetter(CHARGE_STATUS_LABELS)
+
+export const chargeStatusVariants: Record<ChargeStatusValue, 'success' | 'warning' | 'error' | 'info' | 'neutral'> = {
+  draft: 'neutral',
+  issued: 'info',
+  paid: 'success',
+  canceled: 'error',
+}
+export const CHARGE_STATUS_VARIANTS = chargeStatusVariants
 
 export const CHARGE_TYPE_VALUES = [
   'monthly_retainer',
@@ -21,8 +30,22 @@ export const CHARGE_TYPE_VALUES = [
   'consultation_fee',
   'other',
 ] as const
+export type ChargeTypeValue = (typeof CHARGE_TYPE_VALUES)[number]
 
-export const CHARGE_STATUSES = ['draft', 'issued', 'paid', 'canceled'] as const
+export const CHARGE_TYPE_LABELS: Record<ChargeTypeValue, string> = {
+  monthly_retainer: 'ריטיינר חודשי',
+  annual_report_fee: 'שכר טרחה לדוח שנתי',
+  vat_filing_fee: 'שכר טרחה לדוח מע״מ',
+  representation_fee: 'שכר טרחה לייצוג',
+  consultation_fee: 'שכר טרחה לייעוץ',
+  other: 'אחר',
+}
+export const getChargeTypeLabel = makeLabelGetter(CHARGE_TYPE_LABELS)
+
+export const CHARGE_CREATE_FORM_ID = 'charges-create-form'
+export const CHARGE_CANCEL_REASON_PLACEHOLDER = 'סיבת ביטול (אופציונלי)'
+export const CHARGE_PERIOD_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/
+export const CHARGE_PERIOD_YEAR_SPAN = 1
 
 export const DEFAULT_CHARGE_STATUS_STAT: ChargeStatusStat = { count: 0, amount: '0' }
 
@@ -35,15 +58,13 @@ export const DEFAULT_CHARGE_LIST_STATS: ChargeListStats = {
 
 export const CHARGE_STATUS_OPTIONS: { value: string; label: string }[] = [
   ALL_STATUSES_OPTION,
-  ...CHARGE_STATUSES.map((status) => ({
-    value: status,
-    label: getChargeStatusLabel(status),
-  })),
+  ...CHARGE_STATUS_VALUES.map((status) => ({ value: status, label: CHARGE_STATUS_LABELS[status] })),
 ]
 
-export const CHARGE_TYPE_OPTIONS: { value: string; label: string }[] = Object.entries(CHARGE_TYPE_LABELS).map(
-  ([value, label]) => ({ value, label }),
-)
+export const CHARGE_TYPE_OPTIONS: { value: string; label: string }[] = CHARGE_TYPE_VALUES.map((value) => ({
+  value,
+  label: CHARGE_TYPE_LABELS[value],
+}))
 
 export const CHARGE_TYPE_OPTIONS_WITH_ALL: { value: string; label: string }[] = [
   ALL_TYPES_OPTION,

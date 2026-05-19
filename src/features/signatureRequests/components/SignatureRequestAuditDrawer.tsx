@@ -3,7 +3,7 @@ import { signatureRequestsApi, signatureRequestsQK } from '../api'
 import { DetailDrawer, DrawerField, DrawerSection } from '../../../components/ui/overlays/DetailDrawer'
 import { StatusBadge } from '../../../components/ui/primitives/StatusBadge'
 import { formatDate, formatDateTime, formatPhoneNumber } from '../../../utils/utils'
-import { getSignatureRequestTypeLabel, getSignatureRequestStatusLabel } from '../../../utils/enums'
+import { getSignatureRequestTypeLabel, getSignatureRequestStatusLabel } from '../constants'
 import { signatureRequestStatusVariants } from '../utils'
 
 interface Props {

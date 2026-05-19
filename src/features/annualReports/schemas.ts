@@ -1,22 +1,20 @@
 import { z } from 'zod'
+import {
+  CREATE_REPORT_CLIENT_TYPES,
+  REPORT_DEADLINE_TYPES,
+  REPORT_SUBMISSION_METHODS,
+  REPORT_EXTENSION_REASONS,
+} from './report.constants'
 
 // ── Create Report ──────────────────────────────────────────────────────────
 
 export const createReportSchema = z.object({
   client_id: z.string().min(1, 'שדה חובה'),
   tax_year: z.string().min(4, 'שנה לא תקינה'),
-  client_type: z.enum([
-    'individual',
-    'self_employed',
-    'corporation',
-    'public_institution',
-    'partnership',
-    'control_holder',
-    'exempt_dealer',
-  ]),
-  deadline_type: z.enum(['standard', 'extended', 'custom']).default('standard'),
-  submission_method: z.enum(['online', 'manual', 'representative']).optional(),
-  extension_reason: z.enum(['military_service', 'health_reason', 'general', 'war_situation']).optional(),
+  client_type: z.enum(CREATE_REPORT_CLIENT_TYPES),
+  deadline_type: z.enum(REPORT_DEADLINE_TYPES).default('standard'),
+  submission_method: z.enum(REPORT_SUBMISSION_METHODS).optional(),
+  extension_reason: z.enum(REPORT_EXTENSION_REASONS).optional(),
   notes: z.string().optional(),
   has_rental_income: z.boolean().default(false),
   has_capital_gains: z.boolean().default(false),

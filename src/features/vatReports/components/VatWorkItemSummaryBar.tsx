@@ -4,7 +4,7 @@ import { ChevronLeft, Clock, FolderOpen, Info, AlertTriangle, User } from 'lucid
 import { formatDate } from '@/utils/utils'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
-import { getVatWorkItemStatusLabel } from '@/utils/enums'
+import { getVatWorkItemStatusLabel } from '../constants'
 import { useRole } from '@/hooks/useRole'
 import { useVatWorkItemActions } from '../hooks/useVatWorkItemActions'
 import { useActiveVatBinder } from '../hooks/useActiveVatBinder'

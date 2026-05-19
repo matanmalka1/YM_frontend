@@ -29,3 +29,17 @@ export const EXPENSE_LABELS: Record<ExpenseCategoryType, string> = {
   bank_fees: 'עמלות בנק',
   other: 'אחר',
 }
+
+export const CREATE_REPORT_CLIENT_TYPES = [
+  'individual',
+  'self_employed',
+  'corporation',
+  'public_institution',
+  'partnership',
+  'control_holder',
+  'exempt_dealer',
+] as const
+
+export const REPORT_DEADLINE_TYPES = ['standard', 'extended', 'custom'] as const
+export const REPORT_SUBMISSION_METHODS = ['online', 'manual', 'representative'] as const
+export const REPORT_EXTENSION_REASONS = ['military_service', 'health_reason', 'general', 'war_situation'] as const

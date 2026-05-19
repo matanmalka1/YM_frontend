@@ -7,7 +7,8 @@ import { Card } from '../../../../components/ui/primitives/Card'
 import type { ChargeResponse } from '@/features/charges'
 import type { BinderDetailResponse } from '@/features/binders'
 import { getChargeTypeLabel } from '@/features/charges'
-import { getChargeStatusLabel, getStatusLabel as getBinderStatusLabel } from '../../../../utils/enums'
+import { getChargeStatusLabel } from '@/features/charges'
+import { getBinderStatusLabel } from '@/features/binders'
 import { formatBinderNumber } from '../../../../utils/utils'
 
 type RelatedItemsSectionProps<T> = {

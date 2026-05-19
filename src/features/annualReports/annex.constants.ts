@@ -80,22 +80,3 @@ export const ALL_SCHEDULES: AnnualReportScheduleKey[] = [
   'form_858',
 ]
 
-export const buildEmptyForm = (schedule: AnnualReportScheduleKey): Record<string, string> =>
-  Object.fromEntries(SCHEDULE_FIELDS[schedule].map((field) => [field.key, '']))
-
-export const mapLineDataToForm = (
-  schedule: AnnualReportScheduleKey,
-  data: Record<string, unknown>,
-): Record<string, string> =>
-  Object.fromEntries(SCHEDULE_FIELDS[schedule].map((field) => [field.key, String(data[field.key] ?? '')]))
-
-export const buildAnnexPayload = (
-  schedule: AnnualReportScheduleKey,
-  formData: Record<string, string>,
-): Record<string, unknown> => {
-  const payload: Record<string, unknown> = {}
-  for (const field of SCHEDULE_FIELDS[schedule]) {
-    payload[field.key] = field.type === 'number' ? parseFloat(formData[field.key] || '0') : formData[field.key]
-  }
-  return payload
-}

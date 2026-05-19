@@ -1,9 +1,53 @@
-import { VAT_RATE_TYPE_LABELS, DOCUMENT_TYPE_LABELS, getVatWorkItemStatusLabel } from '../../utils/enums'
+import { makeLabelGetter } from '@/utils/labels'
 import { CATEGORY_COLOR_TOKENS } from './visualizationTokens'
 import { ALL_STATUSES_OPTION, ALL_CATEGORIES_OPTION } from '@/constants/filterOptions.constants'
 import type { VatWorkItemStatus } from './api'
 
-export { VAT_RATE_TYPE_LABELS, DOCUMENT_TYPE_LABELS }
+export const VAT_RATE_TYPE_VALUES = ['standard', 'exempt', 'zero_rate'] as const
+export type VatRateTypeValue = (typeof VAT_RATE_TYPE_VALUES)[number]
+export const VAT_RATE_TYPE_LABELS: Record<VatRateTypeValue, string> = {
+  standard: 'רגיל',
+  exempt: 'פטור',
+  zero_rate: 'אפס',
+}
+export const getVatRateTypeLabel = makeLabelGetter(VAT_RATE_TYPE_LABELS)
+
+export const VAT_DOCUMENT_TYPE_VALUES = [
+  'tax_invoice',
+  'transaction_invoice',
+  'receipt',
+  'consolidated',
+  'self_invoice',
+  'credit_note',
+] as const
+export type VatDocumentTypeValue = (typeof VAT_DOCUMENT_TYPE_VALUES)[number]
+export const DOCUMENT_TYPE_LABELS: Record<VatDocumentTypeValue, string> = {
+  tax_invoice: 'חשבונית מס',
+  transaction_invoice: 'חשבונית עסקה',
+  receipt: 'קבלה',
+  consolidated: 'חשבונית מרוכזת',
+  self_invoice: 'חשבונית עצמית',
+  credit_note: 'הודעת זיכוי',
+}
+export const getVatDocumentTypeLabel = makeLabelGetter(DOCUMENT_TYPE_LABELS)
+
+export const VAT_WORK_ITEM_STATUS_VALUES = [
+  'pending_materials',
+  'material_received',
+  'data_entry_in_progress',
+  'ready_for_review',
+  'filed',
+  'canceled',
+] as const satisfies readonly VatWorkItemStatus[]
+export const VAT_WORK_ITEM_STATUS_LABELS: Record<VatWorkItemStatus, string> = {
+  pending_materials: 'ממתין לחומרים',
+  material_received: 'חומרים התקבלו',
+  data_entry_in_progress: 'הקלדה בתהליך',
+  ready_for_review: 'ממתין לבדיקה',
+  filed: 'הוגש',
+  canceled: 'בוטל',
+}
+export const getVatWorkItemStatusLabel = makeLabelGetter(VAT_WORK_ITEM_STATUS_LABELS)
 
 export const INCOME_KEY = 'income'
 

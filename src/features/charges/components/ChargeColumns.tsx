@@ -10,7 +10,7 @@ import {
 import type { ChargeResponse } from '../api'
 import { getChargeAmountText, getChargePeriodLabel, getChargeTypeLabel } from '../utils'
 import { formatClientOfficeId } from '../../../utils/utils'
-import { getChargeStatusLabel } from '../../../utils/enums'
+import { getChargeStatusLabel } from '../constants'
 import { ChargeRowActions } from './ChargeRowActions'
 import { chargeStatusVariants } from '../constants'
 import type { ChargeAction } from '../types'

@@ -3,7 +3,7 @@ import { PlusCircle, Calendar, SlidersHorizontal } from 'lucide-react'
 import type { AdvancePaymentStatus } from '../types'
 import { Select } from '../../../components/ui/inputs/Select'
 import { ConfirmDialog } from '../../../components/ui/overlays/ConfirmDialog'
-import { getAdvancePaymentStatusLabel } from '../../../utils/enums'
+import { getAdvancePaymentStatusLabel } from '../constants'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { ADVANCE_PAYMENT_STATUS_FILTERS } from '../constants'
 

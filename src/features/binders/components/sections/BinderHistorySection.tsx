@@ -6,9 +6,8 @@ import { Card } from '@/components/ui/primitives/Card'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Timeline, TimelineEntry } from '@/components/ui/feedback/Timeline'
 import { bindersApi, bindersQK } from '../../api'
-import { getStatusLabel } from '@/utils/enums'
+import { getBinderStatusLabel, BINDER_STATUS_VARIANTS, type BinderStatusValue } from '../../constants'
 import { staggerDelay } from '@/utils/animation'
-import { BINDER_STATUS_VARIANTS } from '../../constants'
 
 interface BinderHistorySectionProps {
   binderId: number
@@ -35,14 +34,14 @@ export const BinderHistorySection: React.FC<BinderHistorySectionProps> = ({ bind
               <div className="mb-1 flex flex-wrap items-center gap-1.5 text-sm">
                 {entry.old_status && (
                   <>
-                    <Badge variant={BINDER_STATUS_VARIANTS[entry.old_status] ?? 'neutral'}>
-                      {getStatusLabel(entry.old_status)}
+                    <Badge variant={BINDER_STATUS_VARIANTS[entry.old_status as BinderStatusValue] ?? 'neutral'}>
+                      {getBinderStatusLabel(entry.old_status)}
                     </Badge>
                     <ArrowRight className="h-3 w-3 text-gray-400" />
                   </>
                 )}
-                <Badge variant={BINDER_STATUS_VARIANTS[entry.new_status] ?? 'neutral'}>
-                  {getStatusLabel(entry.new_status)}
+                <Badge variant={BINDER_STATUS_VARIANTS[entry.new_status as BinderStatusValue] ?? 'neutral'}>
+                  {getBinderStatusLabel(entry.new_status)}
                 </Badge>
               </div>
 

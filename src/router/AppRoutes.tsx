@@ -124,7 +124,6 @@ export const AppRoutes: React.FC = () => {
             <Route path="reports/aging" element={<AgingReportView />} />
             <Route path="reports/annual-status" element={<AnnualReportStatusView />} />
             <Route path="reports/advance-payments" element={<AdvancePaymentReportView />} />
-            <Route path="reminders" element={<Navigate to="/" replace />} />
             <Route path="work-queue" element={<WorkQueuePage />} />
           </Route>
         </Route>

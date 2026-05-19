@@ -9,7 +9,7 @@ import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import type { Column } from '@/components/ui/table'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { cn } from '@/utils/utils'
-import { getVatWorkItemStatusLabel } from '@/utils/enums'
+import { getVatWorkItemStatusLabel } from '../constants'
 import type { VatWorkItemResponse } from '../api'
 import { formatVatPeriodTitle } from '../view.helpers'
 

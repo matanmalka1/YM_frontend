@@ -5,7 +5,7 @@ import { useAuthStore } from '@/store/auth.store'
 import { CLIENT_ROUTES } from '@/features/clients'
 import { ENTITY_TYPE_LABELS, VAT_TYPE_LABELS } from '@/features/clients/constants'
 import { useRole } from '@/hooks/useRole'
-import { getRoleLabel } from '@/utils/enums'
+import { getRoleLabel } from '@/features/users'
 import { cn, formatClientOfficeId, formatPhoneNumber } from '@/utils/utils'
 import { CLIENT_SIDEBAR_PAGE_SIZE, useClientSidebarClients, type ClientSidebarItem } from './useClientSidebarClients'
 

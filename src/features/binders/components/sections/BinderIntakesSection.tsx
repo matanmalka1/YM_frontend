@@ -13,7 +13,7 @@ import { vatReportsApi, vatReportsQK } from '@/features/vatReports'
 import { VAT_STATUS_BADGE_VARIANTS } from '@/features/vatReports'
 import { staggerDelay } from '@/utils/animation'
 import { getBinderTypeLabel } from '../../constants'
-import { getVatWorkItemStatusLabel } from '@/utils/enums'
+import { getVatWorkItemStatusLabel } from '@/features/vatReports'
 import type { BinderIntakeMaterialResponse } from '../../types'
 import { formatStructuredBinderPeriod, toBinderPeriodValue } from '../../utils'
 

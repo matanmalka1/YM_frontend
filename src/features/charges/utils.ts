@@ -3,7 +3,7 @@ import type { ChargeResponse } from './api'
 import { CHARGE_PERIOD_PATTERN } from './constants'
 import type { ChargeAction } from './types'
 import type { BackendAction } from '@/lib/actions/types'
-export { CHARGE_TYPE_LABELS, getChargeTypeLabel } from '../../utils/enums'
+export { CHARGE_TYPE_LABELS, getChargeTypeLabel } from './constants'
 
 const CHARGE_ACTION_KEYS: Record<ChargeAction, string> = {
   issue: 'issue_charge',

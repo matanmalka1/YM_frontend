@@ -8,6 +8,7 @@ export {
   ENTITY_TYPE_LABELS,
   ENTITY_TYPE_OPTIONS,
   VAT_TYPE_LABELS,
+  getVatTypeLabel,
 } from './constants'
 export { ClientEditForm } from './components/edit/ClientEditForm'
 export { buildClientColumns } from './components/list/ClientColumns'
@@ -15,7 +16,8 @@ export { ClientDetailsTabContent } from './components/details/ClientDetailsTabCo
 export { ClientsFiltersBar } from './components/list/ClientsFiltersBar'
 export { CreateClientModal } from './components/createClientModal/CreateClientModal'
 export { DeletedClientDialog } from './components/dialogs/DeletedClientDialog'
-export { useClientDetails } from './hooks/useClientDetails'
+export { useClientQuery } from './hooks/useClientQuery'
+export { useClientMutations } from './hooks/useClientMutations'
 export { useClientsPage } from './hooks/useClientsPage'
 export { useFirstBusinessId } from './hooks/useFirstBusinessId'
 export { useClientDetailsActions } from './hooks/useClientDetailsActions'

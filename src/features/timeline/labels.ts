@@ -1,5 +1,5 @@
 import type { TimelineBinderStatus } from './api/contracts'
-import { BINDER_STATUS_LABELS } from '../../utils/enums'
+import { BINDER_STATUS_LABELS } from '@/features/binders'
 
 // ── Label maps ────────────────────────────────────────────────────────────────
 

@@ -1,19 +1,21 @@
 import { Check, Pencil, Trash2, X } from 'lucide-react'
+import type { FieldErrors, UseFormRegister } from 'react-hook-form'
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Button } from '../../../../components/ui/primitives/Button'
 import type { AnnexDataLine } from '../../api'
 import type { FieldDef } from '../../annex.constants'
 import { ANNEX_TEXT, FIELD_INPUT_CLASS, TABLE_ICON_CLASS } from './annex.constants'
 import { getInputType, getLineFieldValue } from './annex.helpers'
+import type { AnnexFormValues } from './annexSchema'
 
 interface AnnexDataTableProps {
   lines: AnnexDataLine[]
   fields: FieldDef[]
   editingLineId: number | null
-  formData: Record<string, string>
+  register: UseFormRegister<AnnexFormValues>
+  errors: FieldErrors<AnnexFormValues>
   isUpdating: boolean
   isDeleting: boolean
-  onFormChange: (key: string, value: string) => void
   onStartEdit: (line: AnnexDataLine) => void
   onCancelEdit: () => void
   onSaveEdit: (lineId: number) => void
@@ -24,10 +26,10 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
   lines,
   fields,
   editingLineId,
-  formData,
+  register,
+  errors,
   isUpdating,
   isDeleting,
-  onFormChange,
   onStartEdit,
   onCancelEdit,
   onSaveEdit,
@@ -51,13 +53,14 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
           return (
             <tr key={line.id} className="border-b border-gray-100 hover:bg-gray-50">
               {fields.map((field) => (
-                <td key={field.key} className="py-1 px-2 text-gray-700">
+                <td key={field.key} className="py-1 px-2 text-gray-700 align-top">
                   {isEditing ? (
                     <Input
                       type={getInputType(field.type)}
-                      value={formData[field.key] ?? ''}
-                      onChange={(event) => onFormChange(field.key, event.target.value)}
+                      step={field.type === 'number' ? 'any' : undefined}
                       className={FIELD_INPUT_CLASS}
+                      error={errors[field.key]?.message as string | undefined}
+                      {...register(field.key)}
                     />
                   ) : (
                     getLineFieldValue(line, field.key)

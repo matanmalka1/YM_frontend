@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { actionsColumn, monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
 import { MonoValue } from '@/components/ui/primitives/MonoValue'
 import type { BinderResponse } from '../../types'
-import { getStatusLabel } from '@/utils/enums'
+import { getBinderStatusLabel } from '../../constants'
 import { formatBinderNumber, formatClientOfficeId, formatMonthYear } from '@/utils/utils'
 import { BINDER_STATUS_VARIANTS } from '../../constants'
 import { BinderRowActions } from './BinderRowActions'
@@ -67,7 +67,7 @@ export const buildBindersColumns = ({
     key: 'status',
     header: 'סטטוס',
     getStatus: (binder) => binder.status,
-    getLabel: getStatusLabel,
+    getLabel: getBinderStatusLabel,
     variantMap: BINDER_STATUS_VARIANTS,
   }),
   textColumn({
