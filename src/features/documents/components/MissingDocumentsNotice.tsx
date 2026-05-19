@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Card } from '@/components/ui/primitives/Card'
 import { documentsApi, documentsQK } from '../api'
 import { getDocumentTypeLabel } from './DocumentsDataCards.utils'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 interface MissingDocumentsNoticeProps {
   clientId: number
@@ -18,7 +19,7 @@ export const MissingDocumentsNotice: React.FC<MissingDocumentsNoticeProps> = ({
     queryKey: documentsQK.clientSignals(clientId),
     queryFn: () => documentsApi.getSignalsByClient(clientId),
     enabled: clientId > 0,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
     retry: 1,
   })
 

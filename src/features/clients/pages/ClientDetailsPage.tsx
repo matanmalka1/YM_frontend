@@ -20,6 +20,7 @@ import {
 } from '../constants'
 import { ClientDetailsTabContent, useClientQuery, useClientMutations } from '@/features/clients'
 import type { ClientRecordResponse } from '../api'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 interface ClientDetailsProps {
   initialTab?: ActiveClientDetailsTab
@@ -80,7 +81,7 @@ const ClientHeaderMissingDocuments: FC<{ clientId: number; active: boolean }> = 
     queryKey: documentsQK.clientSignals(clientId),
     queryFn: () => documentsApi.getSignalsByClient(clientId),
     enabled: active && clientId > 0,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
     retry: 1,
   })
 

@@ -250,6 +250,12 @@ export const DOCUMENT_TYPE_OPTIONS = DOCUMENT_TYPES.map((documentType) => ({
   label: DOCUMENT_TYPE_LABELS[documentType],
 }))
 
+export const COUNTERPARTY_ID_TYPES = ['il_business', 'il_personal', 'foreign', 'anonymous'] as const
+export type CounterpartyIdType = (typeof COUNTERPARTY_ID_TYPES)[number]
+
+export const INVOICE_TYPES = ['income', 'expense'] as const
+export type InvoiceTypeValue = (typeof INVOICE_TYPES)[number]
+
 export const VAT_DEADLINE_WARNING_DAYS = 3
 
 export const VAT_NUMERIC_KEYS = ['ArrowLeft', 'ArrowRight', 'Delete', 'Backspace', 'Enter', 'Tab']

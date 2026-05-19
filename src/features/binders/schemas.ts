@@ -1,28 +1,14 @@
 import { z } from 'zod'
 import { format } from 'date-fns'
-import { ANNUAL_BINDER_TYPES, PERIODIC_BINDER_TYPES } from './constants'
+import { ANNUAL_BINDER_TYPES, BINDER_TYPE_VALUES, PERIODIC_BINDER_TYPES, type BinderTypeValue } from './constants'
 
-export const MATERIAL_TYPES = [
-  'vat',
-  'income_tax',
-  'annual_report',
-  'salary',
-  'bookkeeping',
-  'national_insurance',
-  'capital_declaration',
-  'pension_and_insurance',
-  'corporate_docs',
-  'tax_assessment',
-  'other',
-] as const
-
-export type MaterialType = (typeof MATERIAL_TYPES)[number]
+export type MaterialType = BinderTypeValue
 
 export const receiveBinderSchema = z
   .object({
     client_record_id: z.number({ error: 'נא לבחור לקוח' }).positive('נא לבחור לקוח'),
     business_id: z.number({ error: 'נא לבחור עסק' }).positive('נא לבחור עסק').nullable().optional(),
-    binder_types: z.array(z.enum(MATERIAL_TYPES)).min(1, 'נא לבחור לפחות סוג חומר אחד'),
+    binder_types: z.array(z.enum(BINDER_TYPE_VALUES)).min(1, 'נא לבחור לפחות סוג חומר אחד'),
     annual_report_id: z.number().positive('נא לבחור דוח שנתי').nullable().optional(),
     period_year: z.number({ error: 'נא לבחור שנת דיווח' }).int('נא לבחור שנת דיווח').min(2000, 'נא לבחור שנת דיווח'),
     period_month_start: z.number().int().min(1).max(12).nullable().optional(),

@@ -8,6 +8,7 @@ import { getStatusLabel, getStatusVariant } from '../../api'
 import { formatCurrencyILS as fmt, formatDate } from '../../../../utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { getFinalBalanceText, sortReportsByTaxYearDesc } from './helpers'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 interface Props {
   clientId: number
@@ -19,7 +20,7 @@ export const ReportHistoryTable: React.FC<Props> = ({ clientId, currentReportId,
   const { data: reports = [], isLoading } = useQuery({
     queryKey: annualReportsQK.forClient(clientId),
     queryFn: () => annualReportsApi.listClientReports(clientId),
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
     enabled: !!clientId,
   })
 

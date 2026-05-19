@@ -4,6 +4,7 @@ import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { CHARGE_STATUS_OPTIONS, CHARGE_TYPE_OPTIONS_WITH_ALL } from '../constants'
 import { clientsApi, clientsQK } from '@/features/clients'
 import type { ChargesFilters } from '../types'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 interface ChargesFiltersCardProps {
   filters: ChargesFilters
@@ -31,7 +32,7 @@ export const ChargesFiltersCard = ({ filters, onClear, onFilterChange }: Charges
     queryKey: clientsQK.detail(urlClientId ?? 0),
     queryFn: () => clientsApi.getById(urlClientId!),
     enabled: urlClientId != null && !clientName,
-    staleTime: 60_000,
+    staleTime: QUERY_STALE_TIME.medium,
   })
 
   useEffect(() => {

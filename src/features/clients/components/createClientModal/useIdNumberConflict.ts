@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { clientsApi } from '../../api'
 import type { ClientConflictInfo } from '../../api/contracts'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 export const useIdNumberConflict = (
   idNumber: string,
@@ -13,7 +14,7 @@ export const useIdNumberConflict = (
     queryKey: ['clients', 'conflict', trimmed],
     queryFn: () => clientsApi.getConflictByIdNumber(trimmed),
     enabled: shouldCheck,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
     retry: false,
   })
 

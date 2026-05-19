@@ -9,6 +9,7 @@ import { vatReportsApi, vatReportsQK } from '@/features/vatReports'
 import { useFirstBusinessId } from '../../hooks/useFirstBusinessId'
 import { formatShekelAmount, formatDate } from '@/utils/utils'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 interface Props {
   clientId: number
 }
@@ -50,7 +51,7 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
     queryKey: vatReportsQK.clientSummary(clientId),
     queryFn: () => vatReportsApi.getClientSummary(clientId),
     enabled: clientId > 0,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
     retry: 1,
   })
 
@@ -58,7 +59,7 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
     queryKey: clientsQK.statusCard(clientId, selectedYear),
     queryFn: () => clientsApi.getStatusCard(clientId, selectedYear),
     enabled: clientId > 0,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
     retry: 1,
   })
 

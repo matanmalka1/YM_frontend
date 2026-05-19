@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { clientsApi, clientsQK } from '@/features/clients'
 import type { BusinessResponse } from '@/features/clients'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 interface UseBusinessesForClientOptions {
   clientId: number | null | undefined
@@ -14,7 +15,7 @@ export const useBusinessesForClient = ({ clientId, enabled = true, onAutoSelect 
     queryKey: clientId ? clientsQK.businessesAll(clientId) : clientsQK.businessesAllFallback(),
     queryFn: () => clientsApi.listAllBusinessesForClient(clientId!),
     enabled: enabled && !!clientId,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
     retry: 1,
     refetchOnWindowFocus: false,
   })

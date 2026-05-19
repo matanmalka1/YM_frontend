@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { vatReportsApi } from '../api'
 import { vatReportsQK } from '../api/queryKeys'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 export const useVatPeriodOptions = (clientId: number, year: number, enabled = true) => {
   const isValidClient = Number.isInteger(clientId) && clientId > 0
@@ -9,7 +10,7 @@ export const useVatPeriodOptions = (clientId: number, year: number, enabled = tr
     queryKey: vatReportsQK.periodOptions(clientId, year),
     queryFn: () => vatReportsApi.getPeriodOptions(clientId, year),
     enabled: enabled && isValidClient,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
     retry: 1,
     refetchOnWindowFocus: false,
   })

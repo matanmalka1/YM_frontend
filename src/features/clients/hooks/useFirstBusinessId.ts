@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { clientsApi, clientsQK } from '../api'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 export const useFirstBusinessId = (clientId: number) => {
   const { data, isLoading } = useQuery({
@@ -10,7 +11,7 @@ export const useFirstBusinessId = (clientId: number) => {
         page_size: 1,
       }),
     enabled: clientId > 0,
-    staleTime: 60_000,
+    staleTime: QUERY_STALE_TIME.medium,
   })
 
   const first = data?.items?.[0] ?? null

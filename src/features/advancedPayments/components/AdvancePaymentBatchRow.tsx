@@ -14,6 +14,7 @@ import { getAdvancePaymentMonthLabel } from './advancePaymentComponent.utils'
 import { formatDate, formatClientOfficeId } from '../../../utils/utils'
 import { AdvancePaymentStatusBadge } from './AdvancePaymentStatusBadge'
 import { RowActionsMenu, RowActionItem } from '../../../components/ui/table/RowActions'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 const COL_COUNT = 11
 const PAGE_SIZE = 50
@@ -133,7 +134,7 @@ const BatchContent = ({
           page_size: PAGE_SIZE,
           status: statusParam,
         }),
-      staleTime: 30_000,
+      staleTime: QUERY_STALE_TIME.default,
     })),
   })
 

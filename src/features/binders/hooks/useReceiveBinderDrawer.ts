@@ -15,6 +15,7 @@ import { getHttpStatus, showErrorToast } from '../../../utils/utils'
 import { receiveBinderSchema, type ReceiveBinderFormValues } from '../schemas'
 import { toBinderPeriodValue } from '../utils'
 import { ANNUAL_BINDER_TYPES, PERIODIC_BINDER_TYPES } from '../constants'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 const DUPLICATE_BINDER_NUMBER_MESSAGE = 'קיים כבר קלסר עם מספר זה ללקוח'
 
@@ -78,7 +79,7 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
     queryKey: clientsQK.businessesAll(clientRecordId!),
     queryFn: () => clientsApi.listAllBusinessesForClient(clientRecordId!),
     enabled: !!clientRecordId,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
     retry: 1,
     refetchOnWindowFocus: false,
   })
@@ -108,7 +109,7 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
     queryKey: bindersQK.list({ client_record_id: clientRecordId, page_size: 10 }),
     queryFn: () => bindersApi.list({ client_record_id: clientRecordId, page_size: 10 }),
     enabled: !!clientRecordId,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
     retry: 1,
     refetchOnWindowFocus: false,
   })
@@ -119,7 +120,7 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
     queryKey: taxProfileQK.forClient(clientRecordId!),
     queryFn: () => taxProfileApi.get(clientRecordId!),
     enabled: typeof clientRecordId === 'number' && clientRecordId > 0,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
     retry: 1,
     refetchOnWindowFocus: false,
   })
@@ -128,7 +129,7 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
     queryKey: annualReportsQK.forClient(typeof clientRecordId === 'number' ? clientRecordId : 0),
     queryFn: () => annualReportsApi.listClientReports(clientRecordId as number),
     enabled: hasAnnualReportMaterial && typeof clientRecordId === 'number' && clientRecordId > 0,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
     retry: 1,
     refetchOnWindowFocus: false,
   })

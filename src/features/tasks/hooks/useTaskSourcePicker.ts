@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { workQueueApi, workQueueQK, workQueueSourceTypeLabels } from '@/features/workQueue'
 import type { WorkQueueItem } from '@/features/workQueue'
 import { formatDate } from '@/utils/utils'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 export const useTaskSourcePicker = () => {
   const [selectedClientId, setSelectedClientId] = useState<number | null>(null)
@@ -22,7 +23,7 @@ export const useTaskSourcePicker = () => {
         limit: 100,
       }),
     enabled: selectedClientId !== null,
-    staleTime: 10_000,
+    staleTime: QUERY_STALE_TIME.short,
   })
 
   const selectClient = useCallback((id: number, name: string) => {

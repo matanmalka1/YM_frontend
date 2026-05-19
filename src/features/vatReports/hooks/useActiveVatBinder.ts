@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { bindersApi, bindersQK } from '@/features/binders'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 export const useActiveVatBinder = (clientRecordId: number) => {
   const query = useQuery({
@@ -11,7 +12,7 @@ export const useActiveVatBinder = (clientRecordId: number) => {
         status: 'in_office',
       }),
     enabled: Number.isInteger(clientRecordId) && clientRecordId > 0,
-    staleTime: 60_000,
+    staleTime: QUERY_STALE_TIME.medium,
   })
 
   return {

@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { clientsApi, clientsQK, type ClientRecordResponse } from '@/features/clients'
 import type { ListClientsParams } from '@/features/clients/api'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 export const CLIENT_SIDEBAR_PAGE_SIZE = 100
 
@@ -47,7 +48,7 @@ export const useClientSidebarClients = (searchValue: string) => {
   const query = useQuery({
     queryKey: clientsQK.list(queryParams),
     queryFn: () => clientsApi.list(queryParams),
-    staleTime: 1000 * 60 * 5,
+    staleTime: QUERY_STALE_TIME.long,
     gcTime: 1000 * 60 * 30,
   })
 

@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useSeasonDashboard } from './useSeasonDashboard'
 import { annualReportSeasonApi, annualReportsApi, annualReportsQK } from '../api'
 import type { AnnualReportsFilters } from '../components/shared/AnnualReportsFiltersBar'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 const DEFAULT_FILTERS: AnnualReportsFilters = {
   client_id: '',
@@ -20,7 +21,7 @@ export const useAnnualReportsPage = () => {
   const defaultTaxYearQuery = useQuery({
     queryKey: annualReportsQK.defaultTaxYear,
     queryFn: annualReportSeasonApi.getDefaultTaxYear,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
   })
   const defaultTaxYear = defaultTaxYearQuery.data?.tax_year
   const defaultTaxYearPending = defaultTaxYearQuery.isPending
@@ -39,7 +40,7 @@ export const useAnnualReportsPage = () => {
     enabled: allYearsMode && !defaultTaxYearPending && !defaultTaxYearQuery.error,
     queryKey: [...annualReportsQK.all, 'all-years'] as const,
     queryFn: () => annualReportsApi.listReports({ page: 1, page_size: 200 }),
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
   })
 
   const taxYear = allYearsMode ? undefined : (season.summary?.tax_year ?? selectedTaxYear)

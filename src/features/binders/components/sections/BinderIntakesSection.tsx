@@ -16,6 +16,7 @@ import { getBinderTypeLabel } from '../../constants'
 import { getVatWorkItemStatusLabel } from '@/features/vatReports'
 import type { BinderIntakeMaterialResponse } from '../../types'
 import { formatStructuredBinderPeriod, toBinderPeriodValue } from '../../utils'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 const VatStatusBadge: React.FC<{ material: BinderIntakeMaterialResponse; clientId: number }> = ({
   material,
@@ -31,7 +32,7 @@ const VatStatusBadge: React.FC<{ material: BinderIntakeMaterialResponse; clientI
     queryKey: vatReportsQK.lookup(clientId, period!),
     queryFn: () => vatReportsApi.lookup(clientId, period!),
     enabled: clientId > 0 && !!period,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
   })
 
   if (!lookup) return null
@@ -76,13 +77,13 @@ export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({
     queryKey: clientsQK.businessesAll(clientId),
     queryFn: () => clientsApi.listAllBusinessesForClient(clientId),
     enabled: clientId > 0,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
   })
   const { data: annualReportsData } = useQuery({
     queryKey: annualReportsQK.forClient(clientId),
     queryFn: () => annualReportsApi.listClientReports(clientId),
     enabled: clientId > 0,
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
   })
 
   const intakes = data?.intakes ?? []

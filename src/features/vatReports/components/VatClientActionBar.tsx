@@ -29,7 +29,7 @@ export const VatClientActionBar = ({
         </Button>
       </div>
 
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center md:order-1" dir="ltr">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center md:order-1">
         {isAdvisor && (
           <div className="flex justify-start">
             <VatExportButtons clientId={clientId} year={selectedYear} />

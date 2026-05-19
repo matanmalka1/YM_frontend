@@ -110,10 +110,10 @@ export const buildWorkQueueColumns = ({
     {
       key: 'title',
       header: 'מה צריך לעשות',
-      headerClassName: 'min-w-64 w-[28rem] text-right',
-      className: 'min-w-64 max-w-[30rem] whitespace-normal text-right',
+      headerClassName: 'min-w-64 w-[28rem] text-start',
+      className: 'min-w-64 max-w-[30rem] whitespace-normal text-start',
       render: (item: WorkQueueItem) => (
-        <div className="space-y-1 text-right">
+        <div className="space-y-1 text-start">
           <div className="font-medium text-gray-900">{item.title}</div>
           {item.description && <div className="text-xs text-gray-500">{item.description}</div>}
           {item.source_type === 'task' && item.source_summary && (

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { clientsApi, clientsQK } from '../api'
 import type { ClientCreationImpactResponse, ClientImpactPreviewPayload } from '../api/contracts'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 type ImpactParams = ClientImpactPreviewPayload
 
@@ -41,6 +42,6 @@ export const useClientCreationImpact = (
       ),
     enabled,
     retry: false,
-    staleTime: 60_000,
+    staleTime: QUERY_STALE_TIME.medium,
   })
 }

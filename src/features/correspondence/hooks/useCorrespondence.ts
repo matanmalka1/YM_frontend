@@ -6,6 +6,7 @@ import type { CorrespondenceFormValues } from '../schemas'
 import { toast } from '../../../utils/toast'
 import { CORRESPONDENCE_CONTACTS_PARAMS, CORRESPONDENCE_LIST_PARAMS } from '../constants'
 import { toCreateCorrespondencePayload, toUpdateCorrespondencePayload } from '../utils'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 export const useCorrespondence = (businessId: number | undefined, clientId?: number) => {
   const queryClient = useQueryClient()
@@ -30,7 +31,7 @@ export const useCorrespondence = (businessId: number | undefined, clientId?: num
         CORRESPONDENCE_CONTACTS_PARAMS.page,
         CORRESPONDENCE_CONTACTS_PARAMS.pageSize,
       ),
-    staleTime: 60_000,
+    staleTime: QUERY_STALE_TIME.medium,
   })
 
   const createMutation = useMutation({

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { notificationsApi, notificationsQK } from '../api'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 export const useNotificationBell = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -8,7 +9,7 @@ export const useNotificationBell = () => {
   const { data } = useQuery({
     queryKey: notificationsQK.summary(),
     queryFn: () => notificationsApi.getSummary(),
-    staleTime: 60_000,
+    staleTime: QUERY_STALE_TIME.medium,
     refetchInterval: drawerOpen ? 60_000 : 120_000,
     refetchOnWindowFocus: false,
   })

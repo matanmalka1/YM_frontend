@@ -13,6 +13,7 @@ import type { VatWorkItemAction, VatWorkItemsFilters } from '../types'
 import { VAT_WORK_ITEMS_STATS_STATUS_GROUPS } from '../constants'
 import { toOptionalVatPeriodTypeFilter, toVatPeriodTypeFilter } from '../filterUtils'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 const statsStatuses = [
   ...VAT_WORK_ITEMS_STATS_STATUS_GROUPS.pending,
@@ -61,7 +62,7 @@ export const useVatWorkItemsPage = () => {
     queries: statsStatuses.map((status) => ({
       queryKey: vatReportsQK.list({ ...statsBase, status }),
       queryFn: () => vatReportsApi.list({ ...statsBase, status }),
-      staleTime: 30_000,
+      staleTime: QUERY_STALE_TIME.default,
     })),
   })
 

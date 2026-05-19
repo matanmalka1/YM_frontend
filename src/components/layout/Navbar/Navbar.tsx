@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
+import { useCallback, useRef, useState, type KeyboardEvent } from 'react'
 import { ChevronDown, Search } from 'lucide-react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { NotificationBell } from '../NotificationBell'
@@ -87,13 +87,10 @@ export const Navbar: React.FC = () => {
     closeOnEscape: true,
   })
 
-  useEffect(() => {
-    if (!moreOpen) {
-      moreMenuItemRefs.current = []
-      return
-    }
-    moreMenuItemRefs.current[0]?.focus()
-  }, [moreOpen])
+  const firstMenuItemRef = useCallback((node: HTMLAnchorElement | null) => {
+    moreMenuItemRefs.current[0] = node
+    node?.focus()
+  }, [])
 
   const closeMoreMenu = () => {
     setMoreOpen(false)
@@ -206,9 +203,13 @@ export const Navbar: React.FC = () => {
 
                         return (
                           <NavLink
-                            ref={(node) => {
-                              moreMenuItemRefs.current[menuItemIndex] = node
-                            }}
+                            ref={
+                              menuItemIndex === 0
+                                ? firstMenuItemRef
+                                : (node) => {
+                                    moreMenuItemRefs.current[menuItemIndex] = node
+                                  }
+                            }
                             key={`${group.label}-${item.to}`}
                             to={item.to}
                             end={item.end}

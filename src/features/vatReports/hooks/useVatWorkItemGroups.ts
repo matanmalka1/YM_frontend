@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { vatReportsApi, vatReportsQK } from '../api'
 import type { VatWorkItemGroupSummary } from '../api'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 interface UseVatWorkItemGroupsParams {
   period_type?: string
@@ -13,7 +14,7 @@ export const useVatWorkItemGroups = (params: UseVatWorkItemGroupsParams = {}) =>
   const { data, isLoading, error } = useQuery({
     queryKey: vatReportsQK.groups(params),
     queryFn: () => vatReportsApi.listGroups(params),
-    staleTime: 30_000,
+    staleTime: QUERY_STALE_TIME.default,
   })
 
   return {

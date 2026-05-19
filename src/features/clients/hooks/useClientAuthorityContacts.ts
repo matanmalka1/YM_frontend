@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { authorityContactsApi, authorityContactsQK, type ContactType } from '@/features/authorityContacts'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 const PAGE = 1
 const PAGE_SIZE = 20
@@ -15,7 +16,7 @@ export const useClientAuthorityContacts = (clientId: number, addressCity?: strin
     queryKey: [...authorityContactsQK.forClient(clientId), { page: PAGE, page_size: PAGE_SIZE }],
     queryFn: () => authorityContactsApi.listAuthorityContacts(clientId, undefined, PAGE, PAGE_SIZE),
     enabled: clientId > 0,
-    staleTime: 60_000,
+    staleTime: QUERY_STALE_TIME.medium,
   })
 
   const contacts = data?.items ?? []
