@@ -5,8 +5,8 @@ import {
   CLIENT_STATUS_LABELS,
   VAT_TYPE_LABELS,
   ADVANCE_PAYMENT_FREQUENCY_LABELS,
-} from '@/features/clients'
-import { CHARGE_STATUS_LABELS, CHARGE_TYPE_LABELS } from '@/features/charges'
+} from '@/features/clients/constants'
+import { CHARGE_STATUS_LABELS, CHARGE_TYPE_LABELS } from '@/features/charges/constants'
 import type { EntityAuditLogEntry, EntityAuditType } from '../api'
 import { useEntityAuditTrail } from '../hooks/useEntityAuditTrail'
 import { AuditTrailTable } from './AuditTrailTable'
