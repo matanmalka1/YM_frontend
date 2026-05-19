@@ -6,6 +6,8 @@ import type {
   ClientRecordResponse,
   ClientRecordListResponse,
   ListClientsParams,
+  ClientSidebarListResponse,
+  ListClientSidebarParams,
   ClientConflictInfo,
   BusinessResponse,
   ClientBusinessesResponse,
@@ -26,6 +28,13 @@ export const clientsApi = {
 
   list: async (params: ListClientsParams): Promise<ClientRecordListResponse> => {
     const response = await api.get<ClientRecordListResponse>(CLIENT_ENDPOINTS.clients, {
+      params: toQueryParams(params),
+    })
+    return response.data
+  },
+
+  listSidebar: async (params: ListClientSidebarParams): Promise<ClientSidebarListResponse> => {
+    const response = await api.get<ClientSidebarListResponse>(CLIENT_ENDPOINTS.clientsSidebar, {
       params: toQueryParams(params),
     })
     return response.data

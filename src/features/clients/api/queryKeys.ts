@@ -3,6 +3,7 @@ import { createQueryKeys } from '@/lib/queryKeys'
 export const clientsQK = {
   ...createQueryKeys('clients'),
   detail: (id: number, taxYear?: number) => ['clients', 'detail', id, taxYear ?? 'current'] as const,
+  sidebar: (params: unknown) => ['clients', 'sidebar', params] as const,
   businessDetail: (clientId: number | 'none', businessId: number | 'none') =>
     ['clients', 'businesses', 'detail', clientId, businessId] as const,
   taxProfile: (id: number) => ['clients', 'tax-profile', id] as const,

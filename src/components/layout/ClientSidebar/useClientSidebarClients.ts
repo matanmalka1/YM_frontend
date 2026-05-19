@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { clientsApi, clientsQK, type ClientRecordResponse } from '@/features/clients'
-import type { ListClientsParams } from '@/features/clients/api'
+import { clientsApi, clientsQK, type ClientSidebarResponse } from '@/features/clients'
+import type { ListClientSidebarParams } from '@/features/clients/api'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 export const CLIENT_SIDEBAR_PAGE_SIZE = 100
@@ -11,7 +11,7 @@ const BASE_QUERY_PARAMS = {
   page_size: CLIENT_SIDEBAR_PAGE_SIZE,
   sort_by: 'full_name',
   sort_order: 'asc',
-} satisfies ListClientsParams
+} satisfies ListClientSidebarParams
 
 export interface ClientSidebarItem {
   id: number
@@ -19,13 +19,13 @@ export interface ClientSidebarItem {
   officeClientNumber: number | null
   phone: string | null
   email: string | null
-  entityType: ClientRecordResponse['entity_type']
-  vatReportingFrequency: ClientRecordResponse['vat_reporting_frequency']
+  entityType: ClientSidebarResponse['entity_type']
+  vatReportingFrequency: ClientSidebarResponse['vat_reporting_frequency']
 }
 
 const normalizeSearch = (value: string): string => value.trim().toLocaleLowerCase('he-IL')
 
-const toSidebarItem = (client: ClientRecordResponse): ClientSidebarItem => ({
+const toSidebarItem = (client: ClientSidebarResponse): ClientSidebarItem => ({
   id: client.id,
   displayName: client.full_name,
   officeClientNumber: client.office_client_number,
@@ -37,7 +37,7 @@ const toSidebarItem = (client: ClientRecordResponse): ClientSidebarItem => ({
 
 export const useClientSidebarClients = (searchValue: string) => {
   const search = normalizeSearch(searchValue)
-  const queryParams = useMemo<ListClientsParams>(
+  const queryParams = useMemo<ListClientSidebarParams>(
     () => ({
       ...BASE_QUERY_PARAMS,
       search: search || undefined,
@@ -46,8 +46,8 @@ export const useClientSidebarClients = (searchValue: string) => {
   )
 
   const query = useQuery({
-    queryKey: clientsQK.list(queryParams),
-    queryFn: () => clientsApi.list(queryParams),
+    queryKey: clientsQK.sidebar(queryParams),
+    queryFn: () => clientsApi.listSidebar(queryParams),
     staleTime: QUERY_STALE_TIME.long,
     gcTime: 1000 * 60 * 30,
   })

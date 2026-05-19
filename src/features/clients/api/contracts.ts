@@ -64,6 +64,18 @@ export interface ClientRecordListStats {
 
 export type ClientRecordListResponse = PaginatedResponse<ClientRecordResponse> & { stats: ClientRecordListStats }
 
+export interface ClientSidebarResponse {
+  id: number
+  full_name: string
+  office_client_number: number | null
+  phone: string | null
+  email: string | null
+  entity_type: EntityType | null
+  vat_reporting_frequency: VatType | null
+}
+
+export type ClientSidebarListResponse = PaginatedResponse<ClientSidebarResponse>
+
 export interface ListClientsParams {
   search?: string
   status?: ClientStatus
@@ -71,6 +83,14 @@ export interface ListClientsParams {
   accountant_id?: number
   tax_year?: number
   sort_by?: 'full_name' | 'created_at' | 'status' | 'entity_type'
+  sort_order?: 'asc' | 'desc'
+  page?: number
+  page_size?: number
+}
+
+export interface ListClientSidebarParams {
+  search?: string
+  sort_by?: 'full_name' | 'office_client_number'
   sort_order?: 'asc' | 'desc'
   page?: number
   page_size?: number

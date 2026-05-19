@@ -26,6 +26,9 @@ export { Clients } from './pages/ClientsPage'
 export { extractClientErrorCode } from './utils/clientErrors'
 export type {
   ClientRecordResponse,
+  ClientSidebarResponse,
+  ClientSidebarListResponse,
+  ListClientSidebarParams,
   BusinessResponse,
   BusinessWithClientResponse,
   BusinessListResponse,

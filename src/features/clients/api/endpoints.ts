@@ -1,5 +1,6 @@
 export const CLIENT_ENDPOINTS = {
   clients: '/clients',
+  clientsSidebar: '/clients/sidebar',
   clientById: (clientId: number | string) => `/clients/${clientId}`,
   clientRestore: (clientId: number | string) => `/clients/${clientId}/restore`,
   clientStatusCard: (clientId: number | string) => `/clients/${clientId}/status-card`,
