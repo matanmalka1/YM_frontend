@@ -124,12 +124,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               }
               if (field.type === 'client-picker') {
                 return (
-                  <ClientPickerFilter
-                    key={field.idKey}
-                    field={field}
-                    values={values}
-                    onMultiChange={handleMulti}
-                  />
+                  <ClientPickerFilter key={field.idKey} field={field} values={values} onMultiChange={handleMulti} />
                 )
               }
               return null

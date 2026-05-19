@@ -1,12 +1,7 @@
 import { makeLabelGetter } from '@/utils/labels'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 
-export const BINDER_STATUS_VALUES = [
-  'in_office',
-  'closed_in_office',
-  'ready_for_pickup',
-  'returned',
-] as const
+export const BINDER_STATUS_VALUES = ['in_office', 'closed_in_office', 'ready_for_pickup', 'returned'] as const
 export type BinderStatusValue = (typeof BINDER_STATUS_VALUES)[number]
 
 export const BINDER_STATUS_LABELS: Record<BinderStatusValue, string> = {

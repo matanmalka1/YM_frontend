@@ -1,6 +1,12 @@
 import { z } from 'zod'
 import type { CreateVatInvoicePayload, UpdateVatInvoicePayload } from '../api'
-import { VAT_RATE_TYPES, DOCUMENT_TYPES, COUNTERPARTY_ID_TYPES, INVOICE_TYPES, type CounterpartyIdType } from '../constants'
+import {
+  VAT_RATE_TYPES,
+  DOCUMENT_TYPES,
+  COUNTERPARTY_ID_TYPES,
+  INVOICE_TYPES,
+  type CounterpartyIdType,
+} from '../constants'
 
 const grossAmountSchema = z
   .string()

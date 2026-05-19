@@ -39,7 +39,9 @@ export const BinderDetailsPanel: React.FC<BinderDetailsPanelProps> = ({ binder }
         )}
         <DrawerField
           label="סטטוס"
-          value={<StatusBadge status={binder.status} getLabel={getBinderStatusLabel} variantMap={BINDER_STATUS_VARIANTS} />}
+          value={
+            <StatusBadge status={binder.status} getLabel={getBinderStatusLabel} variantMap={BINDER_STATUS_VARIANTS} />
+          }
         />
         {binder.returned_at && <DrawerField label="תאריך החזרה" value={formatDate(binder.returned_at)} />}
         {binder.pickup_person_name && <DrawerField label="נאסף על ידי" value={binder.pickup_person_name} />}

@@ -3,7 +3,11 @@ import { MONTHS_COVERED_OPTIONS } from '@/constants/periodOptions.constants'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 import type { AdvancePaymentMethod, AdvancePaymentStatus } from './types'
 
-export const ADVANCE_PAYMENT_STATUS_VALUES = ['pending', 'paid', 'partial'] as const satisfies readonly AdvancePaymentStatus[]
+export const ADVANCE_PAYMENT_STATUS_VALUES = [
+  'pending',
+  'paid',
+  'partial',
+] as const satisfies readonly AdvancePaymentStatus[]
 export const ADVANCE_PAYMENT_STATUS_LABELS: Record<AdvancePaymentStatus, string> = {
   pending: 'ממתין',
   paid: 'שולם',
@@ -11,7 +15,10 @@ export const ADVANCE_PAYMENT_STATUS_LABELS: Record<AdvancePaymentStatus, string>
 }
 export const getAdvancePaymentStatusLabel = makeLabelGetter(ADVANCE_PAYMENT_STATUS_LABELS)
 
-export const ADVANCE_PAYMENT_STATUS_VARIANTS: Record<AdvancePaymentStatus, 'success' | 'warning' | 'error' | 'neutral'> = {
+export const ADVANCE_PAYMENT_STATUS_VARIANTS: Record<
+  AdvancePaymentStatus,
+  'success' | 'warning' | 'error' | 'neutral'
+> = {
   paid: 'success',
   partial: 'warning',
   pending: 'neutral',

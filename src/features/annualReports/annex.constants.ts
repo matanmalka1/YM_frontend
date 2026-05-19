@@ -79,4 +79,3 @@ export const ALL_SCHEDULES: AnnualReportScheduleKey[] = [
   'form_1348',
   'form_858',
 ]
-

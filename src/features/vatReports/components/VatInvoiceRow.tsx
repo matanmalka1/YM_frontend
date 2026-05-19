@@ -51,7 +51,9 @@ export const VatInvoiceRow: React.FC<VatInvoiceRowProps> = ({
       </TD>
       <TD>
         {inv.document_type ? (
-          <Badge variant="neutral">{DOCUMENT_TYPE_LABELS[inv.document_type as VatDocumentTypeValue] ?? inv.document_type}</Badge>
+          <Badge variant="neutral">
+            {DOCUMENT_TYPE_LABELS[inv.document_type as VatDocumentTypeValue] ?? inv.document_type}
+          </Badge>
         ) : (
           '—'
         )}

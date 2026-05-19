@@ -28,6 +28,4 @@ export const mapLineToFormValues = (
   schedule: AnnualReportScheduleKey,
   data: Record<string, unknown>,
 ): AnnexFormValues =>
-  Object.fromEntries(
-    SCHEDULE_FIELDS[schedule].map((f) => [f.key, data[f.key] == null ? '' : String(data[f.key])]),
-  )
+  Object.fromEntries(SCHEDULE_FIELDS[schedule].map((f) => [f.key, data[f.key] == null ? '' : String(data[f.key])]))

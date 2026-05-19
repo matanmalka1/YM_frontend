@@ -80,11 +80,8 @@ const FIELD_LABELS: Record<string, string> = {
   advance_rate_updated_at: 'תאריך עדכון שיעור מקדמות',
 }
 
-const translateValue = (
-  field: string | null,
-  value: string,
-  labels: FieldValueLabels,
-): string => (field ? labels[field]?.[value] : undefined) ?? value
+const translateValue = (field: string | null, value: string, labels: FieldValueLabels): string =>
+  (field ? labels[field]?.[value] : undefined) ?? value
 
 const shorten = (value: string): string => (value.length > 120 ? `${value.slice(0, 117)}...` : value)
 
@@ -156,7 +153,8 @@ const makeAuditFormatter = (labels: FieldValueLabels) => {
   return (entry: EntityAuditLogEntry): string => {
     const oldParsed = parseAuditValue(entry.old_value)
     const newParsed = parseAuditValue(entry.new_value)
-    const parsedText = oldParsed === undefined || newParsed === undefined ? null : formatParsedDiff(oldParsed, newParsed)
+    const parsedText =
+      oldParsed === undefined || newParsed === undefined ? null : formatParsedDiff(oldParsed, newParsed)
     const rawText = [entry.old_value, entry.new_value]
       .filter(Boolean)
       .map((value) => shorten(value ?? ''))

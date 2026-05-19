@@ -254,9 +254,7 @@ export const buildWorkQueueColumns = ({
                     <RowActionItem
                       key={action.key}
                       label={activeActionKey === key ? 'מבצע פעולה...' : action.label}
-                      icon={
-                        activeActionKey === key ? <Loader2 className="h-4 w-4 animate-spin" /> : actionIcon(action)
-                      }
+                      icon={activeActionKey === key ? <Loader2 className="h-4 w-4 animate-spin" /> : actionIcon(action)}
                       danger={action.variant === 'danger'}
                       disabled={action.disabled || activeActionKey === key}
                       tooltip={action.disabled_reason ?? undefined}

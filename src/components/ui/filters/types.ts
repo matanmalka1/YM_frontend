@@ -36,12 +36,7 @@ export interface ClientPickerFieldDef {
   placeholder?: string
 }
 
-export type FilterFieldDef =
-  | SearchFieldDef
-  | SelectFieldDef
-  | DateFieldDef
-  | DateRangeFieldDef
-  | ClientPickerFieldDef
+export type FilterFieldDef = SearchFieldDef | SelectFieldDef | DateFieldDef | DateRangeFieldDef | ClientPickerFieldDef
 
 export interface SearchFieldHandle {
   reset: () => void

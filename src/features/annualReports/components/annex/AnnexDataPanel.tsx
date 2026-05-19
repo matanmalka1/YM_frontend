@@ -58,8 +58,7 @@ export const AnnexDataPanel: React.FC<Props> = ({ reportId, schedule, scheduleLa
   }
 
   const addMutation = useMutation({
-    mutationFn: (values: AnnexFormValues) =>
-      annualReportsApi.addAnnexLine(reportId, schedule, { data: values }),
+    mutationFn: (values: AnnexFormValues) => annualReportsApi.addAnnexLine(reportId, schedule, { data: values }),
     onSuccess: () => {
       invalidate()
       setShowForm(false)
@@ -86,8 +85,10 @@ export const AnnexDataPanel: React.FC<Props> = ({ reportId, schedule, scheduleLa
   })
 
   const onAddSubmit: SubmitHandler<AnnexFormValues> = (values) => addMutation.mutate(values)
-  const onEditSubmit = (lineId: number): SubmitHandler<AnnexFormValues> => (values) =>
-    updateMutation.mutate({ lineId, values })
+  const onEditSubmit =
+    (lineId: number): SubmitHandler<AnnexFormValues> =>
+    (values) =>
+      updateMutation.mutate({ lineId, values })
 
   if (isLoading) return <p className="text-xs text-gray-400 py-2">{ANNEX_TEXT.loading}</p>
 
