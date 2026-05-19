@@ -7,7 +7,7 @@ import { Alert } from '../../../components/ui/overlays/Alert'
 import { Button } from '../../../components/ui/primitives/Button'
 import { ConfirmDialog } from '../../../components/ui/overlays/ConfirmDialog'
 import { StatusBadge } from '../../../components/ui/primitives/StatusBadge'
-import { EntityAuditTrailSection } from '@/features/audit'
+import { EntityAuditTrailSection, type FieldValueLabels } from '@/features/audit'
 import {
   getChargeAmountText,
   getChargeClientLabel,
@@ -16,10 +16,15 @@ import {
   canDeleteCharge,
 } from '../utils'
 import { formatDateTime } from '../../../utils/utils'
-import { getChargeStatusLabel } from '../constants'
+import { CHARGE_STATUS_LABELS, CHARGE_TYPE_LABELS, getChargeStatusLabel } from '../constants'
 import { ChargeActionButtons } from './ChargeActionButtons'
 import { useChargeDetailsPage } from '../hooks/useChargeDetailsPage'
 import { CHARGE_CANCEL_REASON_PLACEHOLDER, chargeStatusVariants } from '../constants'
+
+const FIELD_VALUE_LABELS: FieldValueLabels = {
+  status: CHARGE_STATUS_LABELS,
+  charge_type: CHARGE_TYPE_LABELS,
+}
 
 interface ChargeDetailDrawerProps {
   chargeId: number | null
@@ -171,6 +176,7 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
               title="יומן שינויים"
               subtitle="שינויים שבוצעו בחיוב"
               compact
+              fieldValueLabels={FIELD_VALUE_LABELS}
             />
           </>
         )}

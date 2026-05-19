@@ -1,4 +1,5 @@
 export { EntityAuditTrailSection } from './components/EntityAuditTrailSection'
+export type { FieldValueLabels } from './components/EntityAuditTrailSection'
 export { AuditTrailTable } from './components/AuditTrailTable'
 export { useEntityAuditTrail } from './hooks/useEntityAuditTrail'
 export { auditApi, auditQK, AUDIT_ENDPOINTS } from './api'

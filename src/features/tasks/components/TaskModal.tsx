@@ -9,17 +9,7 @@ import { taskPriorityLabels, taskPriorityValues, taskRoleLabels } from '../const
 import type { Task, TaskCreateRequest, TaskPriority, TaskUpdateRequest } from '../api/contracts'
 import { useTaskSourcePicker } from '../hooks/useTaskSourcePicker'
 import { TaskSourceSection } from './TaskSourceSection'
-
-export interface TaskSourceContext {
-  source_domain: string
-  source_id: number
-  title: string
-  type_label?: string | null
-  client_name?: string | null
-  due_date?: string | null
-  linked_tasks_count?: number
-  linked_tasks?: Array<{ id: number; title: string; status: string }>
-}
+import type { TaskSourceContext } from '../types'
 
 interface TaskModalProps {
   mode: 'create' | 'edit' | 'view' | 'link'

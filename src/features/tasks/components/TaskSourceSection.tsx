@@ -4,7 +4,7 @@ import { Select } from '@/components/ui/inputs/Select'
 import { Tooltip } from '@/components/ui/primitives/Tooltip'
 import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client/ClientSearchInput'
 import type { WorkQueueItem } from '@/features/workQueue'
-import type { TaskSourceContext } from './TaskModal'
+import type { TaskSourceContext } from '../types'
 
 interface TaskSourceSectionProps {
   source: TaskSourceContext | null | undefined

@@ -1,13 +1,8 @@
 import { useState } from 'react'
 import { Card } from '@/components/ui/primitives/Card'
-import {
-  ENTITY_TYPE_LABELS,
-  CLIENT_STATUS_LABELS,
-  VAT_TYPE_LABELS,
-  ADVANCE_PAYMENT_FREQUENCY_LABELS,
-} from '@/features/clients/constants'
-import { CHARGE_STATUS_LABELS, CHARGE_TYPE_LABELS } from '@/features/charges/constants'
 import type { EntityAuditLogEntry, EntityAuditType } from '../api'
+
+export type FieldValueLabels = Partial<Record<string, Record<string, string>>>
 import { useEntityAuditTrail } from '../hooks/useEntityAuditTrail'
 import { AuditTrailTable } from './AuditTrailTable'
 
@@ -85,19 +80,11 @@ const FIELD_LABELS: Record<string, string> = {
   advance_rate_updated_at: 'תאריך עדכון שיעור מקדמות',
 }
 
-const CHARGE_STATUS_COMBINED: Record<string, string> = { ...CLIENT_STATUS_LABELS, ...CHARGE_STATUS_LABELS }
-
-const FIELD_VALUE_LABELS: Partial<Record<string, Record<string, string>>> = {
-  entity_type: ENTITY_TYPE_LABELS,
-  client_type: ENTITY_TYPE_LABELS,
-  status: CHARGE_STATUS_COMBINED,
-  charge_type: CHARGE_TYPE_LABELS,
-  vat_reporting_frequency: VAT_TYPE_LABELS,
-  advance_payment_frequency: ADVANCE_PAYMENT_FREQUENCY_LABELS,
-}
-
-const translateValue = (field: string | null, value: string): string =>
-  (field ? FIELD_VALUE_LABELS[field]?.[value] : undefined) ?? value
+const translateValue = (
+  field: string | null,
+  value: string,
+  labels: FieldValueLabels,
+): string => (field ? labels[field]?.[value] : undefined) ?? value
 
 const shorten = (value: string): string => (value.length > 120 ? `${value.slice(0, 117)}...` : value)
 
@@ -126,63 +113,65 @@ const unwrapScalarPayload = (value: unknown): unknown => {
   return value
 }
 
-const formatValue = (value: unknown, field: string | null = null): string => {
-  if (value === null || value === undefined) return '—'
-  if (typeof value === 'string') return translateValue(field, value)
-  if (typeof value === 'number' || typeof value === 'boolean') return String(value)
-  return stringifyCompact(value)
-}
-
 const formatFieldLabel = (key: string): string => FIELD_LABELS[key] ?? key
 
-const formatParsedDiff = (oldValue: unknown, newValue: unknown): string | null => {
-  const oldPayload = unwrapScalarPayload(oldValue)
-  const newPayload = unwrapScalarPayload(newValue)
+const makeAuditFormatter = (labels: FieldValueLabels) => {
+  const formatValue = (value: unknown, field: string | null = null): string => {
+    if (value === null || value === undefined) return '—'
+    if (typeof value === 'string') return translateValue(field, value, labels)
+    if (typeof value === 'number' || typeof value === 'boolean') return String(value)
+    return stringifyCompact(value)
+  }
 
-  if (isRecord(oldPayload) || isRecord(newPayload)) {
-    const oldRecord = isRecord(oldPayload) ? oldPayload : {}
-    const newRecord = isRecord(newPayload) ? newPayload : {}
-    const keys = Array.from(new Set([...Object.keys(oldRecord), ...Object.keys(newRecord)]))
+  const formatParsedDiff = (oldValue: unknown, newValue: unknown): string | null => {
+    const oldPayload = unwrapScalarPayload(oldValue)
+    const newPayload = unwrapScalarPayload(newValue)
 
-    return keys
-      .map((key) => {
-        const label = formatFieldLabel(key)
-        const oldText = formatValue(oldRecord[key], key)
-        const newText = formatValue(newRecord[key], key)
-        if (!(key in oldRecord)) return `${label}: ${newText}`
-        if (!(key in newRecord)) return `${label}: ${oldText}`
-        return `${label}: ${oldText} → ${newText}`
-      })
+    if (isRecord(oldPayload) || isRecord(newPayload)) {
+      const oldRecord = isRecord(oldPayload) ? oldPayload : {}
+      const newRecord = isRecord(newPayload) ? newPayload : {}
+      const keys = Array.from(new Set([...Object.keys(oldRecord), ...Object.keys(newRecord)]))
+
+      return keys
+        .map((key) => {
+          const label = formatFieldLabel(key)
+          const oldText = formatValue(oldRecord[key], key)
+          const newText = formatValue(newRecord[key], key)
+          if (!(key in oldRecord)) return `${label}: ${newText}`
+          if (!(key in newRecord)) return `${label}: ${oldText}`
+          return `${label}: ${oldText} → ${newText}`
+        })
+        .filter(Boolean)
+        .join('; ')
+    }
+
+    if (oldPayload !== null && oldPayload !== undefined && newPayload !== null && newPayload !== undefined) {
+      return `${formatValue(oldPayload)} → ${formatValue(newPayload)}`
+    }
+    if (newPayload !== null && newPayload !== undefined) return formatValue(newPayload)
+    if (oldPayload !== null && oldPayload !== undefined) return formatValue(oldPayload)
+    return null
+  }
+
+  return (entry: EntityAuditLogEntry): string => {
+    const oldParsed = parseAuditValue(entry.old_value)
+    const newParsed = parseAuditValue(entry.new_value)
+    const parsedText = oldParsed === undefined || newParsed === undefined ? null : formatParsedDiff(oldParsed, newParsed)
+    const rawText = [entry.old_value, entry.new_value]
       .filter(Boolean)
-      .join('; ')
+      .map((value) => shorten(value ?? ''))
+      .join(' → ')
+    const details = parsedText || rawText
+
+    const fallbackDetails =
+      {
+        created: 'ללא פרטים נוספים',
+        deleted: 'ללא פרטים נוספים',
+        restored: 'ללא פרטים נוספים',
+      }[entry.action] ?? '—'
+
+    return [details || fallbackDetails, entry.note].filter(Boolean).join('; ')
   }
-
-  if (oldPayload !== null && oldPayload !== undefined && newPayload !== null && newPayload !== undefined) {
-    return `${formatValue(oldPayload)} → ${formatValue(newPayload)}`
-  }
-  if (newPayload !== null && newPayload !== undefined) return formatValue(newPayload)
-  if (oldPayload !== null && oldPayload !== undefined) return formatValue(oldPayload)
-  return null
-}
-
-const formatAuditDetails = (entry: EntityAuditLogEntry): string => {
-  const oldParsed = parseAuditValue(entry.old_value)
-  const newParsed = parseAuditValue(entry.new_value)
-  const parsedText = oldParsed === undefined || newParsed === undefined ? null : formatParsedDiff(oldParsed, newParsed)
-  const rawText = [entry.old_value, entry.new_value]
-    .filter(Boolean)
-    .map((value) => shorten(value ?? ''))
-    .join(' → ')
-  const details = parsedText || rawText
-
-  const fallbackDetails =
-    {
-      created: 'ללא פרטים נוספים',
-      deleted: 'ללא פרטים נוספים',
-      restored: 'ללא פרטים נוספים',
-    }[entry.action] ?? '—'
-
-  return [details || fallbackDetails, entry.note].filter(Boolean).join('; ')
 }
 
 type EntityAuditTrailSectionProps = {
@@ -191,6 +180,7 @@ type EntityAuditTrailSectionProps = {
   title?: string
   subtitle?: string
   compact?: boolean
+  fieldValueLabels?: FieldValueLabels
 }
 
 export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = ({
@@ -199,8 +189,10 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
   title = 'היסטוריית שינויים',
   subtitle = 'פעולות שבוצעו על הרשומה',
   compact = false,
+  fieldValueLabels = {},
 }) => {
   const [page, setPage] = useState(0)
+  const formatAuditDetails = makeAuditFormatter(fieldValueLabels)
   const { items, total, isError, isFetching, isPending } = useEntityAuditTrail(entityType, entityId, page, PAGE_SIZE)
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
   const maxPage = totalPages - 1
