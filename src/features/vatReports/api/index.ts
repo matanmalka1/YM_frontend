@@ -25,6 +25,7 @@ export type {
   VatGroupPeriod,
   VatWorkItemGroupSummary,
   VatWorkItemGroupsResponse,
+  VatWorkItemGroupsParams,
   VatWorkItemGroupItemsResponse,
   VatWorkItemGroupItemsParams,
 } from './contracts'

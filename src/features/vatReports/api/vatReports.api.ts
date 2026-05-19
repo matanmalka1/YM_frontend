@@ -8,6 +8,7 @@ import type {
   VatWorkItemsListParams,
   VatWorkItemLookupResponse,
   VatWorkItemGroupsResponse,
+  VatWorkItemGroupsParams,
   VatWorkItemGroupItemsResponse,
   VatWorkItemGroupItemsParams,
   VatWorkItemStatusSummaryParams,
@@ -127,9 +128,7 @@ export const vatReportsApi = {
     return response.data
   },
 
-  listGroups: async (
-    params: Omit<VatWorkItemGroupItemsParams, 'page' | 'page_size'> & { period_type?: string } = {},
-  ): Promise<VatWorkItemGroupsResponse> => {
+  listGroups: async (params: VatWorkItemGroupsParams = {}): Promise<VatWorkItemGroupsResponse> => {
     const response = await api.get<VatWorkItemGroupsResponse>(VAT_ENDPOINTS.vatWorkItemGroups, {
       params: toQueryParams(params),
     })

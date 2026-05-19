@@ -10,7 +10,7 @@ import {
   VatWorkItemsFiltersCard,
   VatWorkItemsGroupedCards,
 } from '@/features/vatReports'
-import { buildVatEmptyStateTitle } from '@/features/vatReports/filterUtils'
+import { buildVatEmptyStateTitle, toOptionalVatPeriodTypeFilter } from '@/features/vatReports/filterUtils'
 import type { VatWorkItemResponse } from '@/features/vatReports'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
@@ -42,7 +42,7 @@ export const VatWorkItems: React.FC = () => {
     isLoading: groupsLoading,
     error: groupsError,
   } = useVatWorkItemGroups({
-    period_type: filters.period_type ?? undefined,
+    period_type: toOptionalVatPeriodTypeFilter(filters.period_type),
     status: filters.status || undefined,
     client_name: filters.clientSearchName || undefined,
     year: filters.year ? Number(filters.year) : undefined,

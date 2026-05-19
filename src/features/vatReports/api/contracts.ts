@@ -1,4 +1,5 @@
 import type { BackendAction } from '@/lib/actions/types'
+import type { VatPeriodTypeFilter } from '../constants'
 
 export type VatWorkItemStatus =
   | 'pending_materials'
@@ -57,13 +58,13 @@ export interface VatWorkItemsListParams {
   page?: number
   page_size?: number
   period?: string
-  period_type?: 'monthly' | 'bimonthly'
+  period_type?: VatPeriodTypeFilter
   client_name?: string
 }
 
 export interface VatWorkItemStatusSummaryParams {
   year?: number
-  period_type?: 'monthly' | 'bimonthly'
+  period_type?: VatPeriodTypeFilter
   client_name?: string
 }
 
@@ -210,8 +211,15 @@ export interface VatWorkItemGroupsResponse {
 export interface VatWorkItemGroupItemsParams {
   page?: number
   page_size?: number
-  status?: string
+  status?: VatWorkItemStatus
   client_name?: string
+}
+
+export interface VatWorkItemGroupsParams {
+  status?: VatWorkItemStatus
+  client_name?: string
+  period_type?: VatPeriodTypeFilter
+  year?: number
 }
 
 export interface VatWorkItemGroupItemsResponse {
