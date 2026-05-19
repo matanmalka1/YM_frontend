@@ -11,7 +11,7 @@ import { SendNotificationModal } from './SendNotificationModal'
 import type { NotificationDrawerProps } from '../types'
 
 export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, onClose, clientRecordId }) => {
-  const { notifications } = useNotifications()
+  const { notifications } = useNotifications(clientRecordId, open)
   const { isAdvisor } = useRole()
   const [sendOpen, setSendOpen] = useState(false)
   const limited = notifications.slice(0, 20)

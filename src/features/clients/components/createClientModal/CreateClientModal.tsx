@@ -56,7 +56,7 @@ export const CreateClientModal: React.FC<Props> = ({
   const currentAdvancePaymentFrequency = watch('advance_payment_frequency')
   const currentAdvanceRate = watch('advance_rate')
   const currentIdNumber = watch('id_number')
-  const { options: advisorOptions, isLoading: advisorsLoading } = useAdvisorOptions()
+  const { options: advisorOptions, isLoading: advisorsLoading } = useAdvisorOptions(open)
   const isCompany = currentEntityType === 'company_ltd'
   const isExempt = currentEntityType === 'osek_patur'
   const showVatFrequency = currentEntityType != null && !isExempt
