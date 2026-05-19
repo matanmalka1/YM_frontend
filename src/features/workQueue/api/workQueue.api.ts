@@ -2,10 +2,8 @@ import { api } from '@/api/client'
 import { WORK_QUEUE_ENDPOINTS } from './endpoints'
 import {
   workQueueListResponseSchema,
-  workQueueSummarySchema,
   type WorkQueueListResponse,
   type WorkQueueParams,
-  type WorkQueueSummary,
 } from './contracts'
 
 const toSearchParams = (params?: WorkQueueParams): URLSearchParams | undefined => {
@@ -33,11 +31,5 @@ export const workQueueApi = {
       params: toSearchParams(params),
     })
     return workQueueListResponseSchema.parse(response.data)
-  },
-  getSummary: async (params?: WorkQueueParams): Promise<WorkQueueSummary> => {
-    const response = await api.get<WorkQueueSummary>(WORK_QUEUE_ENDPOINTS.summary, {
-      params: toSearchParams(params),
-    })
-    return workQueueSummarySchema.parse(response.data)
   },
 }

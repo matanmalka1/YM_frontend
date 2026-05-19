@@ -18,8 +18,6 @@ export const WorkQueuePage: React.FC = () => {
   const {
     items,
     summary,
-    isSummaryFetching,
-    summaryError,
     isLoading,
     isFetching,
     error,
@@ -105,8 +103,8 @@ export const WorkQueuePage: React.FC = () => {
     <PageStateGuard isLoading={isLoading} error={error} header={header} loadingMessage="טוען משימות...">
       <WorkQueueSummaryCards
         summary={summary}
-        isLoading={isSummaryFetching}
-        summaryError={summaryError}
+        isLoading={isFetching}
+        summaryError={error}
         urgencyFilter={urgencyFilter}
         onFilter={setUrgencyFilter}
       />

@@ -19,5 +19,4 @@ export const workQueueQK = {
   all: ['work-queue'] as const,
   lists: ['work-queue', 'list'] as const,
   list: (params?: WorkQueueParams) => ['work-queue', 'list', normalizeParams(params)] as const,
-  summary: (params?: WorkQueueParams) => ['work-queue', 'summary', normalizeParams(params)] as const,
 }

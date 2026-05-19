@@ -122,6 +122,7 @@ export type WorkQueueSummary = z.infer<typeof workQueueSummarySchema>
 export const workQueueListResponseSchema = z.object({
   items: z.array(workQueueItemSchema),
   total: z.number().int(),
+  summary: workQueueSummarySchema,
 })
 
 export type WorkQueueListResponse = z.infer<typeof workQueueListResponseSchema>

@@ -8,11 +8,3 @@ export const useWorkQueue = (params?: WorkQueueParams, enabled = true) =>
     placeholderData: keepPreviousData,
     enabled,
   })
-
-export const useWorkQueueSummary = (params?: WorkQueueParams, enabled = true) =>
-  useQuery({
-    queryKey: workQueueQK.summary(params),
-    queryFn: () => workQueueApi.getSummary(params),
-    placeholderData: keepPreviousData,
-    enabled,
-  })

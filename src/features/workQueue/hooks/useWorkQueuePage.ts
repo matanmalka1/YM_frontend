@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRole } from '@/hooks/useRole'
 import { getErrorMessage } from '@/utils/utils'
-import { useWorkQueue, useWorkQueueSummary } from './useWorkQueue'
+import { useWorkQueue } from './useWorkQueue'
 import type { WorkQueueParams, WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
 import type { TaskStatus } from '@/features/tasks'
 
@@ -17,9 +17,9 @@ export const useWorkQueuePage = () => {
   const [historyMode, setHistoryMode] = useState(false)
   const [page, setPage] = useState(1)
   const { role } = useRole()
-  const hasRole = Boolean(role)
+  const hasRole = role != null
 
-  const baseParams = useMemo<WorkQueueParams>(
+  const listParams = useMemo<WorkQueueParams>(
     () => ({
       include_task_history: historyMode,
       search: search.trim() || undefined,
@@ -28,17 +28,10 @@ export const useWorkQueuePage = () => {
       task_status: statusFilter ?? undefined,
       linked: linkedFilter ?? undefined,
       scope: scopeFilter ?? undefined,
-    }),
-    [historyMode, linkedFilter, scopeFilter, search, statusFilter, typeFilter, urgencyFilter],
-  )
-
-  const listParams = useMemo<WorkQueueParams>(
-    () => ({
-      ...baseParams,
       limit: WORK_QUEUE_PAGE_SIZE,
       offset: (page - 1) * WORK_QUEUE_PAGE_SIZE,
     }),
-    [baseParams, page],
+    [historyMode, linkedFilter, page, scopeFilter, search, statusFilter, typeFilter, urgencyFilter],
   )
 
   useEffect(() => {
@@ -47,10 +40,9 @@ export const useWorkQueuePage = () => {
 
   const { data, isLoading, isFetching, error } = useWorkQueue(listParams, hasRole)
 
-  const { data: summary, isFetching: isSummaryFetching, error: summaryError } = useWorkQueueSummary(baseParams, hasRole)
-
   const items = data?.items ?? []
   const total = data?.total ?? 0
+  const summary = data?.summary
   const totalPages = Math.max(1, Math.ceil(total / WORK_QUEUE_PAGE_SIZE))
 
   const hasContentFilters =
@@ -61,8 +53,13 @@ export const useWorkQueuePage = () => {
     linkedFilter !== null ||
     scopeFilter !== null
   const hasFilters = hasContentFilters || historyMode
+  const requestError = !hasRole
+    ? 'לא ניתן לזהות תפקיד משתמש'
+    : error
+      ? getErrorMessage(error, 'שגיאה בטעינת המשימות')
+      : null
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     setSearch('')
     setUrgencyFilter(null)
     setTypeFilter(null)
@@ -71,16 +68,14 @@ export const useWorkQueuePage = () => {
     setScopeFilter(null)
     setHistoryMode(false)
     setPage(1)
-  }
+  }, [])
 
   return {
     items,
     summary,
     isFetching,
-    isSummaryFetching,
-    summaryError: summaryError ? getErrorMessage(summaryError, 'שגיאה בטעינת הסיכום') : null,
     isLoading,
-    error: !hasRole ? 'לא ניתן לזהות תפקיד משתמש' : error ? getErrorMessage(error, 'שגיאה בטעינת המשימות') : null,
+    error: requestError,
     search,
     setSearch,
     urgencyFilter,
