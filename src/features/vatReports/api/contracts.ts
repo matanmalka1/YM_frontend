@@ -61,6 +61,14 @@ export interface VatWorkItemsListParams {
   client_name?: string
 }
 
+export interface VatWorkItemStatusSummaryParams {
+  year?: number
+  period_type?: 'monthly' | 'bimonthly'
+  client_name?: string
+}
+
+export type VatWorkItemStatusSummaryResponse = Record<VatWorkItemStatus, number>
+
 export interface VatWorkItemLookupResponse {
   id: number
   status: VatWorkItemStatus

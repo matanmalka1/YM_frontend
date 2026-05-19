@@ -9,6 +9,7 @@ export const vatReportsQK = {
   invoices: (id: number) => ['tax', 'vat-work-items', 'invoices', id] as const,
   audit: (id: number, params?: object) => ['tax', 'vat-work-items', 'audit', id, params ?? null] as const,
   clientSummary: (clientId: number) => ['tax', 'vat-work-items', 'client-summary', clientId] as const,
+  statusSummary: (params?: object) => ['tax', 'vat-work-items', 'status-summary', params ?? null] as const,
   groups: (params?: object) => ['tax', 'vat-work-items', 'groups', params ?? null] as const,
   groupItems: (groupKey: string, params?: object) =>
     ['tax', 'vat-work-items', 'groups', groupKey, 'items', params ?? null] as const,

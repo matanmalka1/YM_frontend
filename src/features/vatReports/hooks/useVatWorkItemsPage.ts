@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react'
-import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { vatReportsApi } from '../api'
-import type { CreateVatWorkItemPayload, VatWorkItemsListParams, VatWorkItemStatus } from '../api'
+import type { CreateVatWorkItemPayload, VatWorkItemStatus, VatWorkItemStatusSummaryParams } from '../api'
 import { getErrorMessage, showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
 import { toOptionalString } from '../../../utils/filters'
@@ -14,15 +14,6 @@ import { VAT_WORK_ITEMS_STATS_STATUS_GROUPS } from '../constants'
 import { toOptionalVatPeriodTypeFilter, toVatPeriodTypeFilter } from '../filterUtils'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
-
-const statsStatuses = [
-  ...VAT_WORK_ITEMS_STATS_STATUS_GROUPS.pending,
-  ...VAT_WORK_ITEMS_STATS_STATUS_GROUPS.typing,
-  ...VAT_WORK_ITEMS_STATS_STATUS_GROUPS.review,
-  ...VAT_WORK_ITEMS_STATS_STATUS_GROUPS.filed,
-] as const
-
-type VatStatsStatus = (typeof statsStatuses)[number]
 
 const VAT_STATUS_VALUES: readonly VatWorkItemStatus[] = [
   'pending_materials',
@@ -50,28 +41,20 @@ export const useVatWorkItemsPage = () => {
     clientSearchName: searchParams.get('clientSearchName') ?? '',
   }
 
-  const statsBase: VatWorkItemsListParams = {
-    status: toOptionalVatStatus(filters.status),
+  const summaryParams: VatWorkItemStatusSummaryParams = {
+    year: filters.year ? Number(filters.year) : undefined,
     period_type: toOptionalVatPeriodTypeFilter(filters.period_type),
     client_name: toOptionalString(filters.clientSearchName),
-    page: 1,
-    page_size: 1,
   }
 
-  const statsQueries = useQueries({
-    queries: statsStatuses.map((status) => ({
-      queryKey: vatReportsQK.list({ ...statsBase, status }),
-      queryFn: () => vatReportsApi.list({ ...statsBase, status }),
-      staleTime: QUERY_STALE_TIME.default,
-    })),
+  const statusSummaryQuery = useQuery({
+    queryKey: vatReportsQK.statusSummary(summaryParams),
+    queryFn: () => vatReportsApi.getStatusSummary(summaryParams),
+    staleTime: QUERY_STALE_TIME.default,
   })
 
-  const getStatsTotal = (statuses: readonly VatStatsStatus[]) =>
-    statuses.reduce<number | undefined>((sum, status) => {
-      const index = statsStatuses.indexOf(status)
-      const totalForStatus = statsQueries[index]?.data?.total
-      return totalForStatus === undefined || sum === undefined ? undefined : sum + totalForStatus
-    }, 0)
+  const getStatsTotal = (statuses: readonly VatWorkItemStatus[]) =>
+    statuses.reduce((sum, status) => sum + (statusSummaryQuery.data?.[status] ?? 0), 0)
 
   const statsPending = getStatsTotal(VAT_WORK_ITEMS_STATS_STATUS_GROUPS.pending)
   const statsTyping = getStatsTotal(VAT_WORK_ITEMS_STATS_STATUS_GROUPS.typing)
@@ -171,7 +154,7 @@ export const useVatWorkItemsPage = () => {
     createLoading: createMutation.isPending,
     filters,
     isAdvisor,
-    loading: statsQueries.some((q) => q.isLoading),
+    loading: statusSummaryQuery.isLoading,
     runAction,
     sendBackWithNote,
     setFilter,

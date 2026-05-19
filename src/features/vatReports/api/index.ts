@@ -6,6 +6,8 @@ export type {
   VatWorkItemResponse,
   VatWorkItemListResponse,
   VatWorkItemsListParams,
+  VatWorkItemStatusSummaryParams,
+  VatWorkItemStatusSummaryResponse,
   VatWorkItemLookupResponse,
   VatPeriodOptionResponse,
   VatPeriodOptionsResponse,

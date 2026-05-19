@@ -10,6 +10,8 @@ import type {
   VatWorkItemGroupsResponse,
   VatWorkItemGroupItemsResponse,
   VatWorkItemGroupItemsParams,
+  VatWorkItemStatusSummaryParams,
+  VatWorkItemStatusSummaryResponse,
   CreateVatWorkItemPayload,
   VatPeriodOptionsResponse,
   VatInvoiceResponse,
@@ -24,6 +26,13 @@ import type {
 export const vatReportsApi = {
   list: async (params: VatWorkItemsListParams): Promise<VatWorkItemListResponse> => {
     const response = await api.get<VatWorkItemListResponse>(VAT_ENDPOINTS.vatWorkItems, {
+      params: toQueryParams(params),
+    })
+    return response.data
+  },
+
+  getStatusSummary: async (params: VatWorkItemStatusSummaryParams): Promise<VatWorkItemStatusSummaryResponse> => {
+    const response = await api.get<VatWorkItemStatusSummaryResponse>(VAT_ENDPOINTS.vatWorkItemStatusSummary, {
       params: toQueryParams(params),
     })
     return response.data
