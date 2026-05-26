@@ -113,6 +113,7 @@ export const CorrespondenceCard = ({ businessId, clientId }: CorrespondenceCardP
         message="האם למחוק את הרשומה? פעולה זו אינה הפיכה."
         confirmLabel="מחק"
         cancelLabel="ביטול"
+        confirmVariant="danger"
         isLoading={deletingId === confirmDeleteId}
         onConfirm={() => {
           if (confirmDeleteId !== null) {

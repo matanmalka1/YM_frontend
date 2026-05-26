@@ -266,6 +266,7 @@ export const NotesCard = ({ hook, canEdit }: NotesCardProps) => {
         message="האם למחוק את ההערה? פעולה זו אינה הפיכה."
         confirmLabel="מחק"
         cancelLabel="ביטול"
+        confirmVariant="danger"
         isLoading={deletingId === confirmDeleteId}
         onConfirm={() => {
           if (confirmDeleteId !== null) deleteNote(confirmDeleteId)

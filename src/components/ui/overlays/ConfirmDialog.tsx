@@ -1,80 +1,95 @@
-import { useState, useEffect } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { Button } from '../primitives/Button'
-import { Input } from '../inputs/Input'
-import { Modal } from './Modal'
-import type { ActionInputField } from '../../../lib/actions/types'
 
 export interface ConfirmDialogProps {
   open: boolean
   title: string
   message: string
-  confirmLabel: string
-  cancelLabel: string
+  confirmLabel?: string
+  cancelLabel?: string
+  confirmVariant?: 'primary' | 'danger'
+  closeOnBackdrop?: boolean
   isLoading?: boolean
   confirmDisabled?: boolean
-  inputs?: ActionInputField[]
-  onConfirm: (inputValues?: Record<string, string>) => void
+  onConfirm: () => void
   onCancel: () => void
-  children?: React.ReactNode
+  children?: ReactNode
 }
 
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   open,
   title,
   message,
-  confirmLabel,
-  cancelLabel,
+  confirmLabel = 'אישור',
+  cancelLabel = 'ביטול',
+  confirmVariant = 'primary',
+  closeOnBackdrop = true,
   isLoading = false,
   confirmDisabled = false,
-  inputs,
   onConfirm,
   onCancel,
   children,
 }) => {
-  const [inputValues, setInputValues] = useState<Record<string, string>>({})
-
   useEffect(() => {
-    if (open) setInputValues({})
-  }, [open])
+    if (!open) return
 
-  const isConfirmDisabled =
-    isLoading || confirmDisabled || (inputs ?? []).some((f) => f.required && !inputValues[f.name]?.trim())
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onCancel()
+    }
 
-  const handleConfirm = () => {
-    onConfirm(inputs?.length ? inputValues : undefined)
-  }
+    document.addEventListener('keydown', handleKeyDown)
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = ''
+    }
+  }, [open, onCancel])
+
+  if (!open) return null
 
   return (
-    <Modal
-      open={open}
-      title={title}
-      onClose={onCancel}
-      footer={
-        <div className="flex items-center justify-end gap-2">
-          <Button type="button" variant="secondary" disabled={isLoading} onClick={onCancel}>
-            {cancelLabel || '—'}
-          </Button>
-          <Button type="button" isLoading={isLoading} disabled={isConfirmDisabled} onClick={handleConfirm}>
-            {confirmLabel || '—'}
-          </Button>
-        </div>
-      }
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 px-3 pb-3 backdrop-blur-[2px] sm:items-center sm:p-4"
+      onMouseDown={() => closeOnBackdrop && onCancel()}
+      aria-hidden={!open}
     >
-      <p className="text-sm text-gray-700">{message}</p>
-      {inputs && inputs.length > 0 && (
-        <div className="mt-3 space-y-3">
-          {inputs.map((field) => (
-            <Input
-              key={field.name}
-              label={field.required ? `${field.label} *` : field.label}
-              type={field.type}
-              value={inputValues[field.name] ?? ''}
-              onChange={(e) => setInputValues((prev) => ({ ...prev, [field.name]: e.target.value }))}
-            />
-          ))}
+      <section
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirm-sheet-title"
+        aria-describedby="confirm-sheet-description"
+        className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-4 shadow-xl animate-in fade-in zoom-in-95 slide-in-from-bottom-4 duration-150 sm:p-5"
+        onMouseDown={(e) => e.stopPropagation()}
+      >
+        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-gray-200 sm:hidden" />
+
+        <div className="space-y-2 text-right">
+          <h2 id="confirm-sheet-title" className="text-lg font-semibold text-gray-900">
+            {title}
+          </h2>
+          <p id="confirm-sheet-description" className="text-sm leading-6 text-gray-600">
+            {message}
+          </p>
+          {children}
         </div>
-      )}
-      {children}
-    </Modal>
+
+        <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row">
+          <Button variant="secondary" fullWidth disabled={isLoading} onClick={onCancel}>
+            {cancelLabel}
+          </Button>
+          <Button
+            variant={confirmVariant}
+            fullWidth
+            autoFocus
+            isLoading={isLoading}
+            disabled={confirmDisabled || isLoading}
+            onClick={onConfirm}
+          >
+            {confirmLabel}
+          </Button>
+        </div>
+      </section>
+    </div>
   )
 }

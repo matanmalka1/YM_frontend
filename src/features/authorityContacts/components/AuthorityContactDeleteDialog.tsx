@@ -31,6 +31,7 @@ export const AuthorityContactDeleteDialog: React.FC<AuthorityContactDeleteDialog
       message={AUTHORITY_CONTACT_TEXT.deleteMessage}
       confirmLabel={AUTHORITY_CONTACT_TEXT.deleteConfirm}
       cancelLabel={AUTHORITY_CONTACT_TEXT.cancel}
+      confirmVariant="danger"
       isLoading={deletingId === confirmDeleteId}
       onConfirm={handleConfirm}
       onCancel={onCancel}

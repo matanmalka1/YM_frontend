@@ -124,6 +124,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
         message="האם למחוק את החשבונית? פעולה זו אינה הפיכה."
         confirmLabel="מחק"
         cancelLabel="ביטול"
+        confirmVariant="danger"
         isLoading={isDeleting}
         onConfirm={async () => {
           if (confirmId !== null) {

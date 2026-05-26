@@ -190,6 +190,7 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
         message="האם למחוק מסמך זה?"
         confirmLabel="מחק"
         cancelLabel="ביטול"
+        confirmVariant="danger"
         onConfirm={handleConfirmDelete}
         onCancel={() => setConfirmDeleteId(null)}
       />

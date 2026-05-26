@@ -100,6 +100,7 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
       message={`האם למחוק את קלסר ${getBinderNumberLabel(confirmDeleteForId)}? פעולה זו אינה ניתנת לביטול.`}
       confirmLabel="מחק קלסר"
       cancelLabel="ביטול"
+      confirmVariant="danger"
       isLoading={isDeleting}
       onConfirm={onConfirmDelete}
       onCancel={onCancelDelete}

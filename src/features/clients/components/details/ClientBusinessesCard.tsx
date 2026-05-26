@@ -218,6 +218,7 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
         message={`האם למחוק את העסק "${deleteTarget?.business_name ?? ''}"? פעולה זו אינה ניתנת לביטול.`}
         confirmLabel="מחק"
         cancelLabel="ביטול"
+        confirmVariant="danger"
         isLoading={isDeleting}
         onConfirm={() => {
           if (deleteTarget) deleteBusiness(deleteTarget.id)

@@ -103,6 +103,7 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
         message={charge ? `האם למחוק את חיוב #${charge.id}? פעולה זו אינה ניתנת לביטול.` : 'האם למחוק את החיוב?'}
         confirmLabel="מחק חיוב"
         cancelLabel="ביטול"
+        confirmVariant="danger"
         isLoading={isDeleting}
         onConfirm={async () => {
           try {
