@@ -1,4 +1,13 @@
 // Public surface of the auth feature
-export { loginDefaultValues, loginSchema } from './schemas'
+export {
+  forgotPasswordDefaultValues,
+  forgotPasswordSchema,
+  loginDefaultValues,
+  loginSchema,
+  resetPasswordDefaultValues,
+  resetPasswordSchema,
+} from './schemas'
+export { ForgotPassword } from './pages/ForgotPasswordPage'
 export { Login } from './pages/LoginPage'
-export type { LoginFormValues } from './schemas'
+export { ResetPassword } from './pages/ResetPasswordPage'
+export type { ForgotPasswordFormValues, LoginFormValues, ResetPasswordFormValues } from './schemas'

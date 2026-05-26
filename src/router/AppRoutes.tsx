@@ -4,7 +4,7 @@ import { AUTH_EXPIRED_EVENT } from '../api/client'
 import { useAuthStore } from '../store/auth.store'
 import { selectIsAuthenticated } from '../store/auth.selectors'
 import type { UserRole } from '@/types'
-import { Login } from '../features/auth'
+import { ForgotPassword, Login, ResetPassword } from '../features/auth'
 import { AnnualReportDetail, AnnualReportsPage } from '../features/annualReports'
 import { AdvancePayments } from '../features/advancedPayments'
 import { Binders } from '../features/binders'
@@ -98,6 +98,8 @@ export const AppRoutes: React.FC = () => {
       <AuthExpiredNavigationHandler />
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route path="/" element={<ProtectedRoute />}>
           <Route element={<AuthenticatedLayout />}>

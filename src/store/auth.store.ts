@@ -5,6 +5,8 @@ import { setAccessToken } from '../api/auth-session'
 import { getErrorMessage } from '../utils/utils'
 import type { AuthState } from './auth.types'
 
+let bootstrapPromise: Promise<void> | null = null
+
 export const useAuthStore = create<AuthState>()(
   devtools(
     (set, get) => ({
@@ -13,28 +15,36 @@ export const useAuthStore = create<AuthState>()(
       hasBootstrapped: false,
       error: null,
 
-      bootstrap: async () => {
-        if (get().hasBootstrapped || get().isLoading) return
-        set({ isLoading: true, error: null })
+      bootstrap: () => {
+        if (get().hasBootstrapped) return Promise.resolve()
+        if (bootstrapPromise) return bootstrapPromise
 
-        try {
-          await authApi.refresh()
-          const user = await authApi.me()
-          set({
-            user,
-            isLoading: false,
-            hasBootstrapped: true,
-            error: null,
-          })
-        } catch {
-          setAccessToken(null)
-          set({
-            user: null,
-            isLoading: false,
-            hasBootstrapped: true,
-            error: null,
-          })
-        }
+        bootstrapPromise = (async () => {
+          set({ isLoading: true, error: null })
+
+          try {
+            await authApi.refresh()
+            const user = await authApi.me()
+            set({
+              user,
+              isLoading: false,
+              hasBootstrapped: true,
+              error: null,
+            })
+          } catch {
+            setAccessToken(null)
+            set({
+              user: null,
+              isLoading: false,
+              hasBootstrapped: true,
+              error: null,
+            })
+          } finally {
+            bootstrapPromise = null
+          }
+        })()
+
+        return bootstrapPromise
       },
 
       login: async (email: string, password: string) => {
@@ -63,8 +73,9 @@ export const useAuthStore = create<AuthState>()(
         try {
           await authApi.logout()
         } catch {
-          setAccessToken(null)
+          // server logout failure is safe to ignore — local teardown must still happen
         } finally {
+          setAccessToken(null)
           set({
             user: null,
             isLoading: false,

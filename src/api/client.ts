@@ -68,13 +68,16 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !skipIntercept && originalRequest && !originalRequest._authRetry) {
       originalRequest._authRetry = true
 
+      let token: string
       try {
-        const token = await refreshAccessToken()
-        originalRequest.headers.Authorization = `Bearer ${token}`
-        return api(originalRequest)
-      } catch {
+        token = await refreshAccessToken()
+      } catch (refreshError) {
         expireAuthSession()
+        return Promise.reject(refreshError)
       }
+
+      originalRequest.headers.Authorization = `Bearer ${token}`
+      return api(originalRequest)
     }
 
     return Promise.reject(error)

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { getYear } from 'date-fns'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { Navigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock, ArrowLeft, LoaderCircle } from 'lucide-react'
 
 import { Alert } from '@/components/ui/overlays/Alert'
@@ -101,6 +101,15 @@ export const Login: React.FC = () => {
               className="rounded-xl border-slate-200 py-3 text-sm text-slate-900 placeholder:text-slate-300 focus:border-slate-400 focus:ring-slate-900/20 disabled:bg-slate-50"
               {...register('password')}
             />
+
+            <div className="flex justify-start">
+              <Link
+                to="/forgot-password"
+                className="text-sm font-medium text-slate-500 transition-colors hover:text-slate-900"
+              >
+                שכחתי סיסמה
+              </Link>
+            </div>
 
             <div aria-live="polite">
               {isLoading ? (
