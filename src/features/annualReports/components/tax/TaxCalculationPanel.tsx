@@ -80,7 +80,7 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
     },
     onError: (err: unknown) => {
       const msg =
-        (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ?? 'שגיאה בשמירת חישוב המס'
+        (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? 'שגיאה בשמירת חישוב המס'
       toast.error(msg)
     },
   })

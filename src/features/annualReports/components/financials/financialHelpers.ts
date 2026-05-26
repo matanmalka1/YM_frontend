@@ -130,6 +130,6 @@ export const formatPercent = (value: number) => `${(value * 100).toFixed(1)}%`
 export const toProgressWidth = (value: number) => `${Math.min(Math.max(value * 100, MIN_PERCENTAGE), MAX_PERCENTAGE)}%`
 
 export const getApiErrorMessage = (error: unknown, fallback: string) =>
-  (error as { response?: { data?: { detail?: string } } })?.response?.data?.detail ?? fallback
+  (error as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? fallback
 
 export const getApiStatus = (error: unknown) => (error as { response?: { status?: number } })?.response?.status

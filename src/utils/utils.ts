@@ -146,26 +146,6 @@ const getCanonicalErrorMessage = (status: number | null): string | null => {
   return null
 }
 
-const getAxiosDetailMessage = (detail: unknown): string | null => {
-  if (typeof detail === 'string' && detail.trim()) {
-    return detail.trim()
-  }
-
-  if (Array.isArray(detail) && detail.length > 0) {
-    const msg = detail[0]?.msg
-    return typeof msg === 'string' && msg.trim() ? msg.trim() : null
-  }
-
-  if (detail && typeof detail === 'object') {
-    const nestedDetail = (detail as { detail?: unknown }).detail
-    if (typeof nestedDetail === 'string' && nestedDetail.trim()) {
-      return nestedDetail.trim()
-    }
-  }
-
-  return null
-}
-
 const resolveErrorMessage = (error: unknown, fallbackMessage: string, options?: ErrorOptions): string => {
   if (options?.canonicalAction) {
     const canonicalMessage = getCanonicalErrorMessage(getHttpStatus(error))
@@ -181,12 +161,9 @@ const resolveErrorMessage = (error: unknown, fallbackMessage: string, options?: 
       return 'אין חיבור לשרת. בדוק את החיבור שלך ונסה שוב.'
     }
 
-    const detailMessage = getAxiosDetailMessage(error.response?.data?.detail)
-    if (detailMessage) return detailMessage
-
-    const errorMetaDetail = error.response?.data?.error_meta?.detail
-    if (typeof errorMetaDetail === 'string' && errorMetaDetail.trim()) {
-      return errorMetaDetail.trim()
+    const backendMessage = error.response?.data?.error?.message
+    if (typeof backendMessage === 'string' && backendMessage.trim()) {
+      return backendMessage.trim()
     }
   }
 
