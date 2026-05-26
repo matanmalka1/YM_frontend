@@ -1,6 +1,11 @@
 import { isAxiosError } from 'axios'
+import { clsx, type ClassValue } from 'clsx'
 import { format, isValid, parseISO } from 'date-fns'
 import { he } from 'date-fns/locale'
+import { twMerge } from 'tailwind-merge'
+
+export const formatHebrewDate = (d: Date): string =>
+  format(d, "EEEE, d בMMMM", { locale: he })
 
 import { toast } from './toast'
 
@@ -8,8 +13,8 @@ export { getReportingPeriodMonthLabel, MONTH_NAMES, MONTH_OPTIONS } from '@/cons
 
 const EMPTY_VALUE = '—'
 
-export const cn = (...classes: Array<string | false | null | undefined>): string => {
-  return classes.filter(Boolean).join(' ')
+export const cn = (...inputs: ClassValue[]): string => {
+  return twMerge(clsx(inputs))
 }
 
 export const parsePositiveInt = (value: string | null, fallback: number): number => {
@@ -135,23 +140,21 @@ export const getHttpStatus = (error: unknown): number | null => {
   return typeof status === 'number' ? status : null
 }
 
-type ErrorOptions = {
-  canonicalAction?: boolean
-}
+const containsHebrew = (value: string): boolean => /[֐-׿]/.test(value)
 
-const getCanonicalErrorMessage = (status: number | null): string | null => {
+const isSafeBackendMessage = (value: unknown): value is string =>
+  typeof value === 'string' && value.trim().length > 0 && containsHebrew(value)
+
+const messageForStatus = (status: number, fallback: string): string => {
   if (status === 403) return 'אין הרשאה לבצע פעולה זו'
-  if (status === 500) return 'שגיאת שרת פנימית. נסה שוב בעוד מספר רגעים'
-
-  return null
+  if (status === 404) return 'הנתון המבוקש לא נמצא'
+  if (status === 422) return fallback
+  if (status === 429) return 'יותר מדי ניסיונות. נסה שוב בעוד כמה דקות'
+  if (status >= 500) return 'שגיאת שרת פנימית. נסה שוב בעוד מספר רגעים'
+  return fallback
 }
 
-const resolveErrorMessage = (error: unknown, fallbackMessage: string, options?: ErrorOptions): string => {
-  if (options?.canonicalAction) {
-    const canonicalMessage = getCanonicalErrorMessage(getHttpStatus(error))
-    if (canonicalMessage) return canonicalMessage
-  }
-
+const resolveErrorMessage = (error: unknown, fallbackMessage: string): string => {
   if (isAxiosError(error)) {
     if (error.code === 'ECONNABORTED' || /timeout/i.test(error.message ?? '')) {
       return 'הבקשה נמשכה יותר מדי זמן. נסה שוב.'
@@ -161,25 +164,25 @@ const resolveErrorMessage = (error: unknown, fallbackMessage: string, options?: 
       return 'אין חיבור לשרת. בדוק את החיבור שלך ונסה שוב.'
     }
 
-    const backendMessage = error.response?.data?.error?.message
-    if (typeof backendMessage === 'string' && backendMessage.trim()) {
-      return backendMessage.trim()
+    if (error.response) {
+      const status = error.response.status
+      const backendMessage = error.response?.data?.error?.message
+      if (isSafeBackendMessage(backendMessage) && status !== 422) {
+        return backendMessage.trim()
+      }
+      return messageForStatus(status, fallbackMessage)
     }
-  }
-
-  if (error instanceof Error && error.message.trim()) {
-    return error.message.trim()
   }
 
   return fallbackMessage
 }
 
-export const getErrorMessage = (error: unknown, fallbackMessage: string, options?: ErrorOptions): string => {
-  return resolveErrorMessage(error, fallbackMessage, options)
+export const getErrorMessage = (error: unknown, fallbackMessage: string): string => {
+  return resolveErrorMessage(error, fallbackMessage)
 }
 
-export const showErrorToast = (error: unknown, fallbackMessage: string, options?: ErrorOptions): string => {
-  const message = resolveErrorMessage(error, fallbackMessage, options)
+export const showErrorToast = (error: unknown, fallbackMessage: string): string => {
+  const message = resolveErrorMessage(error, fallbackMessage)
   toast.error(message)
   return message
 }

@@ -4,7 +4,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { NotificationBell } from '../NotificationBell'
 import { useAuthStore } from '@/store/auth.store'
 import type { UserRole } from '@/types'
-import { cn } from '@/utils/utils'
+import { cn, formatHebrewDate } from '@/utils/utils'
 import { NAV_GROUPS, type NavItem } from './Navbar.constants'
 import { useDismissibleLayer } from '../../ui/overlays/useDismissibleLayer'
 
@@ -234,6 +234,11 @@ export const Navbar: React.FC = () => {
             ) : null}
           </div>
         ) : null}
+      </div>
+      <div className="hidden shrink-0 items-center border-r border-gray-200 pr-3 md:flex">
+        <span className="text-xs text-gray-400 tabular-nums" suppressHydrationWarning>
+          {formatHebrewDate(new Date())}
+        </span>
       </div>
       <div className="flex shrink-0 items-center gap-1.5 border-r border-gray-200 pr-2">
         <Link

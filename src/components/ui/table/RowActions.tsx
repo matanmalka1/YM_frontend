@@ -135,7 +135,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
         type="button"
         onClick={toggle}
         onKeyDown={handleTriggerKeyDown}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+        className="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-700"
         aria-label={ariaLabel ?? 'פעולות'}
         aria-haspopup="menu"
         aria-expanded={open}
@@ -202,6 +202,7 @@ const DropdownMenuItem = ({
   const close = useContext(DropdownCloseContext)
   const item = (
     <button
+      role="menuitem"
       type="button"
       disabled={disabled}
       onClick={(event) => {

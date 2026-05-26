@@ -89,6 +89,31 @@ body {
   animation-delay: 250ms;
 }
 
+@layer components {
+  .focus-ring {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  .focus-ring:focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-fade-in-up,
+  .animate-scale-in,
+  .animate-slide-in,
+  .animate-shimmer,
+  .stagger-children > * {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 @theme {
   --font-family-sans: 'Heebo', system-ui, sans-serif;
   --font-family-display: 'Heebo', sans-serif;
