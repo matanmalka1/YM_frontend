@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { USER_ROLE_VALUES } from './constants'
+import { passwordSchema } from '@/utils/passwordSchema'
 
 // ── Shared field validators ────────────────────────────────────────────────────
 
@@ -23,7 +24,7 @@ export const createUserSchema = z.object({
   email: emailField,
   phone: phoneField,
   role: roleField,
-  password: z.string().min(8, 'סיסמה חייבת להכיל לפחות 8 תווים'),
+  password: passwordSchema,
 })
 
 export type CreateUserFormValues = z.infer<typeof createUserSchema>
@@ -39,7 +40,7 @@ export type EditUserFormValues = z.infer<typeof editUserSchema>
 
 export const resetPasswordSchema = z
   .object({
-    new_password: z.string().min(8, 'סיסמה חייבת להכיל לפחות 8 תווים'),
+    new_password: passwordSchema,
     confirm_password: z.string(),
   })
   .refine((data) => data.new_password === data.confirm_password, {
