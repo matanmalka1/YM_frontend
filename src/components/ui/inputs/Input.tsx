@@ -2,7 +2,7 @@ import React from 'react'
 import { cn } from '../../../utils/utils'
 import { FormField } from './FormField'
 
-interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string
   error?: string
   size?: 'xs' | 'sm' | 'md'

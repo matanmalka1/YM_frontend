@@ -1,5 +1,6 @@
 import type { UseFormRegister, FieldErrors } from 'react-hook-form'
 import { Input } from '../../../components/ui/inputs/Input'
+import { PasswordInput } from '../../../components/ui/inputs/PasswordInput'
 import { Select } from '../../../components/ui/inputs/Select'
 import type { CreateUserFormValues } from '../schemas'
 import type { EditUserFormValues } from '../schemas'
@@ -43,9 +44,8 @@ export const UserFormFields: React.FC<UserFormFieldsProps> = ({ register, errors
         error={err.role?.message}
       />
       {showPassword && (
-        <Input
+        <PasswordInput
           label="סיסמה *"
-          type="password"
           {...reg('password')}
           error={err.password?.message}
           placeholder="לפחות 8 תווים"

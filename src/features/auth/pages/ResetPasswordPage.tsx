@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ArrowLeft, Eye, EyeOff, Lock, Save } from 'lucide-react'
+import { ArrowLeft, Lock, Save } from 'lucide-react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
 import { authApi } from '@/api/auth.api'
 import { Alert } from '@/components/ui/overlays/Alert'
-import { Input } from '@/components/ui/inputs/Input'
+import { PasswordInput } from '@/components/ui/inputs/PasswordInput'
 import { Button } from '@/components/ui/primitives/Button'
 import { getErrorMessage } from '@/utils/utils'
 import {
@@ -41,8 +41,6 @@ export const ResetPassword: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const {
     formState: { errors },
@@ -97,48 +95,24 @@ export const ResetPassword: React.FC = () => {
       </p>
 
       <form onSubmit={onSubmit} noValidate className="space-y-5">
-        <Input
-          type={showPassword ? 'text' : 'password'}
+        <PasswordInput
           label="סיסמה חדשה"
           placeholder="••••••••"
           disabled={isSubmitting || Boolean(message)}
           autoComplete="new-password"
           error={errors.newPassword?.message}
           startIcon={<Lock className="h-4 w-4" />}
-          endElement={
-            <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              disabled={isSubmitting}
-              className="rounded-md p-1 text-slate-400 transition-colors hover:text-slate-700 disabled:cursor-not-allowed"
-              aria-label={showPassword ? 'הסתר סיסמה' : 'הצג סיסמה'}
-            >
-              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </button>
-          }
           className="rounded-xl border-slate-200 py-3 text-sm text-slate-900 placeholder:text-slate-300 focus:border-slate-400 focus:ring-slate-900/20 disabled:bg-slate-50"
           {...register('newPassword')}
         />
 
-        <Input
-          type={showConfirmPassword ? 'text' : 'password'}
+        <PasswordInput
           label="אימות סיסמה"
           placeholder="••••••••"
           disabled={isSubmitting || Boolean(message)}
           autoComplete="new-password"
           error={errors.confirmPassword?.message}
           startIcon={<Lock className="h-4 w-4" />}
-          endElement={
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword((prev) => !prev)}
-              disabled={isSubmitting}
-              className="rounded-md p-1 text-slate-400 transition-colors hover:text-slate-700 disabled:cursor-not-allowed"
-              aria-label={showConfirmPassword ? 'הסתר סיסמה' : 'הצג סיסמה'}
-            >
-              {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </button>
-          }
           className="rounded-xl border-slate-200 py-3 text-sm text-slate-900 placeholder:text-slate-300 focus:border-slate-400 focus:ring-slate-900/20 disabled:bg-slate-50"
           {...register('confirmPassword')}
         />

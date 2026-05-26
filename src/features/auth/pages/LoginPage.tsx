@@ -1,12 +1,12 @@
-import { useState } from 'react'
 import { getYear } from 'date-fns'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Link, Navigate } from 'react-router-dom'
-import { Eye, EyeOff, Mail, Lock, ArrowLeft, LoaderCircle } from 'lucide-react'
+import { Mail, Lock, ArrowLeft, LoaderCircle } from 'lucide-react'
 
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Input } from '@/components/ui/inputs/Input'
+import { PasswordInput } from '@/components/ui/inputs/PasswordInput'
 import { Button } from '@/components/ui/primitives/Button'
 import { loginDefaultValues, loginSchema, type LoginFormValues } from '@/features/auth'
 import { useAuthStore } from '@/store/auth.store'
@@ -18,7 +18,6 @@ export const Login: React.FC = () => {
   const login = useAuthStore((s) => s.login)
   const clearError = useAuthStore((s) => s.clearError)
   const { isLoading, error } = useAuthStore(useShallow((s) => ({ isLoading: s.isLoading, error: s.error })))
-  const [showPassword, setShowPassword] = useState(false)
 
   const {
     formState: { errors },
@@ -31,10 +30,6 @@ export const Login: React.FC = () => {
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />
-  }
-
-  const handleTogglePassword = () => {
-    setShowPassword((prev) => !prev)
   }
 
   const onSubmit = handleSubmit(async (values) => {
@@ -79,25 +74,13 @@ export const Login: React.FC = () => {
               {...register('email')}
             />
 
-            <Input
-              type={showPassword ? 'text' : 'password'}
+            <PasswordInput
               label="סיסמה"
               placeholder="••••••••"
               disabled={isLoading}
               autoComplete="current-password"
               error={errors.password?.message}
               startIcon={<Lock className="h-4 w-4" />}
-              endElement={
-                <button
-                  type="button"
-                  onClick={handleTogglePassword}
-                  disabled={isLoading}
-                  className="rounded-md p-1 text-slate-400 transition-colors hover:text-slate-700 disabled:cursor-not-allowed"
-                  aria-label={showPassword ? 'הסתר סיסמה' : 'הצג סיסמה'}
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              }
               className="rounded-xl border-slate-200 py-3 text-sm text-slate-900 placeholder:text-slate-300 focus:border-slate-400 focus:ring-slate-900/20 disabled:bg-slate-50"
               {...register('password')}
             />
