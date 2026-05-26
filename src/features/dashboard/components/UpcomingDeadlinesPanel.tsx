@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { CalendarDays, ChevronLeft, Landmark } from 'lucide-react'
-import { DashboardEmptyState, DashboardPanel } from './DashboardPrimitives'
+import { DashboardPanel } from './DashboardPrimitives'
+import { InlineEmptyState } from '@/components/ui/feedback/InlineEmptyState'
 import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarGroup, useTaxCalendarGroups } from '@/features/taxCalendar'
 
 const UPCOMING_DEADLINES_LIMIT = 4
@@ -129,7 +130,7 @@ export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string 
             ))}
           </ol>
         ) : (
-          <DashboardEmptyState title="אין מועדים קרובים" description="כל המועדים הפתוחים רחוקים יותר או הושלמו" />
+          <InlineEmptyState title="אין מועדים קרובים" description="כל המועדים הפתוחים רחוקים יותר או הושלמו" />
         )}
       </div>
 

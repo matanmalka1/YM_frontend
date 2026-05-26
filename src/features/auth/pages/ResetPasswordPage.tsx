@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ArrowLeft, Lock, Save } from 'lucide-react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Lock, Save } from 'lucide-react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
 import { authApi } from '@/api/auth.api'
@@ -14,24 +14,7 @@ import {
   resetPasswordSchema,
   type ResetPasswordFormValues,
 } from '@/features/auth/schemas'
-
-const AuthShell: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="flex min-h-screen items-center justify-center bg-[#F7F6F2] px-6 py-12 text-right" dir="rtl">
-    <div className="w-full max-w-md animate-fade-in">
-      <div className="mb-8">
-        <Link
-          to="/login"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-900"
-        >
-          <ArrowLeft className="h-4 w-4 rotate-180" />
-          חזרה להתחברות
-        </Link>
-        <h1 className="mb-1.5 text-3xl font-black tracking-tight text-slate-900">איפוס סיסמה</h1>
-      </div>
-      {children}
-    </div>
-  </div>
-)
+import { AuthPageShell } from '@/features/auth/components/AuthPageShell'
 
 export const ResetPassword: React.FC = () => {
   const [searchParams] = useSearchParams()
@@ -53,7 +36,7 @@ export const ResetPassword: React.FC = () => {
 
   if (!token) {
     return (
-      <AuthShell>
+      <AuthPageShell title="איפוס סיסמה">
         <div className="space-y-5">
           <Alert
             variant="error"
@@ -70,7 +53,7 @@ export const ResetPassword: React.FC = () => {
             שלח קישור חדש
           </Button>
         </div>
-      </AuthShell>
+      </AuthPageShell>
     )
   }
 
@@ -89,10 +72,10 @@ export const ResetPassword: React.FC = () => {
   })
 
   return (
-    <AuthShell>
-      <p className="-mt-4 mb-6 text-sm leading-relaxed text-slate-500">
-        בחר סיסמה חדשה. הסיסמה חייבת לכלול אות גדולה, אות קטנה ותו מיוחד.
-      </p>
+    <AuthPageShell
+      title="איפוס סיסמה"
+      description="בחר סיסמה חדשה. הסיסמה חייבת לכלול אות גדולה, אות קטנה ותו מיוחד."
+    >
 
       <form onSubmit={onSubmit} noValidate className="space-y-5">
         <PasswordInput
@@ -147,6 +130,6 @@ export const ResetPassword: React.FC = () => {
           </Button>
         )}
       </form>
-    </AuthShell>
+    </AuthPageShell>
   )
 }

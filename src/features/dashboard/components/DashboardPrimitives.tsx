@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
-import { ChevronLeft, Inbox } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
 import { cn } from '@/utils/utils'
 
 type Tone = 'neutral' | 'blue' | 'green' | 'amber' | 'red' | 'purple'
@@ -202,26 +202,4 @@ export const DashboardBadge = ({ children, tone = 'neutral', strong, className }
   >
     {children}
   </span>
-)
-
-interface DashboardEmptyStateProps {
-  title: string
-  description?: string
-  icon?: LucideIcon
-  className?: string
-}
-
-export const DashboardEmptyState = ({
-  title,
-  description,
-  icon: Icon = Inbox,
-  className,
-}: DashboardEmptyStateProps) => (
-  <div className={cn('flex flex-col items-center justify-center gap-2 py-10 text-center', className)}>
-    <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gray-100 text-gray-400">
-      <Icon className="h-5 w-5" />
-    </span>
-    <p className="text-sm font-semibold text-gray-700">{title}</p>
-    {description && <p className="text-xs text-gray-400">{description}</p>}
-  </div>
 )

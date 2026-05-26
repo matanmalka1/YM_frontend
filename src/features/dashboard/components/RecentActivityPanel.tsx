@@ -1,6 +1,7 @@
 import { Clock3 } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { DashboardEmptyState, DashboardPanel } from './DashboardPrimitives'
+import { DashboardPanel } from './DashboardPrimitives'
+import { InlineEmptyState } from '@/components/ui/feedback/InlineEmptyState'
 import type { RecentActivityItem } from '../api'
 
 export const RecentActivityPanel = ({ items }: { items: RecentActivityItem[] }) => (
@@ -25,7 +26,7 @@ export const RecentActivityPanel = ({ items }: { items: RecentActivityItem[] }) 
         ))}
       </ul>
     ) : (
-      <DashboardEmptyState title="אין פעילות אחרונה" className="py-8" />
+      <InlineEmptyState title="אין פעילות אחרונה" className="py-8" />
     )}
   </DashboardPanel>
 )
