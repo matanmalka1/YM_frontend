@@ -39,7 +39,7 @@ export const Login: React.FC = () => {
 
   const onSubmit = handleSubmit(async (values) => {
     clearError()
-    await login(values.email, values.password, true)
+    await login(values.email, values.password)
   })
 
   return (

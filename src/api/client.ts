@@ -1,10 +1,9 @@
 import axios from 'axios'
-import type { AxiosError } from 'axios'
+import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
+import { getAccessToken, setAccessToken } from './auth-session'
 
 export const AUTH_EXPIRED_EVENT = 'auth:expired'
 export const SKIP_AUTH_INTERCEPT_HEADER = 'X-Skip-Auth-Intercept'
-
-export const AUTH_STORAGE_KEY = 'auth-storage'
 
 const baseURL = import.meta.env?.VITE_API_BASE_URL || 'http://localhost:8000/api/v1'
 
@@ -17,22 +16,43 @@ export const api = axios.create({
   withCredentials: true,
 })
 
-const getPersistedAuthToken = (): string | null => {
-  try {
-    const rawValue = localStorage.getItem(AUTH_STORAGE_KEY) ?? sessionStorage.getItem(AUTH_STORAGE_KEY)
-    if (!rawValue) return null
+const refreshClient = axios.create({
+  baseURL,
+  timeout: 15000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true,
+})
 
-    const parsed = JSON.parse(rawValue)
-    return typeof parsed?.state?.token === 'string' ? parsed.state.token : null
-  } catch {
-    return null
-  }
+interface RetriableRequestConfig extends InternalAxiosRequestConfig {
+  _authRetry?: boolean
 }
 
-let authExpiryRefCount = 0
+let refreshPromise: Promise<string> | null = null
+
+const refreshAccessToken = async (): Promise<string> => {
+  refreshPromise ??= refreshClient
+    .post<{ access_token: string }>('/auth/refresh')
+    .then((response) => {
+      const token = response.data.access_token
+      setAccessToken(token)
+      return token
+    })
+    .finally(() => {
+      refreshPromise = null
+    })
+
+  return refreshPromise
+}
+
+const expireAuthSession = (): void => {
+  setAccessToken(null)
+  window.dispatchEvent(new Event(AUTH_EXPIRED_EVENT))
+}
 
 api.interceptors.request.use((config) => {
-  const token = getPersistedAuthToken()
+  const token = getAccessToken()
   if (token && !config.headers.Authorization) {
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -41,34 +61,22 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => response,
-  (error: AxiosError) => {
+  async (error: AxiosError) => {
     const skipIntercept = error.config?.headers?.[SKIP_AUTH_INTERCEPT_HEADER] === '1'
+    const originalRequest = error.config as RetriableRequestConfig | undefined
 
-    if (error.response?.status === 401 && !skipIntercept) {
-      authExpiryRefCount += 1
-      if (authExpiryRefCount === 1) {
-        clearPersistedAuthState()
-        window.dispatchEvent(new Event(AUTH_EXPIRED_EVENT))
+    if (error.response?.status === 401 && !skipIntercept && originalRequest && !originalRequest._authRetry) {
+      originalRequest._authRetry = true
+
+      try {
+        const token = await refreshAccessToken()
+        originalRequest.headers.Authorization = `Bearer ${token}`
+        return api(originalRequest)
+      } catch {
+        expireAuthSession()
       }
-      // Decrement after this rejection has been processed by all handlers.
-      Promise.resolve().then(() => {
-        authExpiryRefCount = Math.max(0, authExpiryRefCount - 1)
-      })
     }
+
     return Promise.reject(error)
   },
 )
-
-const clearPersistedAuthState = (): void => {
-  try {
-    localStorage.removeItem(AUTH_STORAGE_KEY)
-  } catch {
-    /* ignore */
-  }
-
-  try {
-    sessionStorage.removeItem(AUTH_STORAGE_KEY)
-  } catch {
-    /* ignore */
-  }
-}

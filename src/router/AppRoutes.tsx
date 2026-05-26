@@ -60,6 +60,11 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ requiredRole }) => {
   const isAuthenticated = useAuthStore(selectIsAuthenticated)
   const user = useAuthStore((s) => s.user)
+  const hasBootstrapped = useAuthStore((s) => s.hasBootstrapped)
+
+  if (!hasBootstrapped) {
+    return <div className="flex h-screen items-center justify-center bg-gray-50 text-sm text-gray-500">טוען...</div>
+  }
 
   if (!isAuthenticated) return <Navigate to="/login" replace />
   if (requiredRole && user?.role !== requiredRole) return <Navigate to="/" replace />
@@ -82,6 +87,12 @@ const AuthenticatedLayout: React.FC = () => {
 }
 
 export const AppRoutes: React.FC = () => {
+  const bootstrap = useAuthStore((s) => s.bootstrap)
+
+  useEffect(() => {
+    void bootstrap()
+  }, [bootstrap])
+
   return (
     <>
       <AuthExpiredNavigationHandler />
