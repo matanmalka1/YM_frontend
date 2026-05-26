@@ -39,7 +39,6 @@ export const useDashboardPage = () => {
   } = useActionRunner({
     onSuccess: () => queryClient.invalidateQueries({ queryKey: dashboardQK.all }),
     errorFallback: 'שגיאה בביצוע פעולה מהירה',
-    canonicalAction: true,
     onError: (err) => {
       if (getHttpStatus(err) === 403) {
         setActionDenied(true)

@@ -9,7 +9,6 @@ import type { ActionCommand } from '../../../lib/actions/types'
 interface UseActionRunnerOptions {
   onSuccess?: () => Promise<void> | void
   errorFallback?: string
-  canonicalAction?: boolean
   onError?: (error: unknown) => void
 }
 
@@ -32,9 +31,7 @@ export const useActionRunner = (options: UseActionRunnerOptions = {}) => {
       try {
         await actionMutation.mutateAsync(action)
       } catch (err) {
-        showErrorToast(err, options.errorFallback ?? 'שגיאה בביצוע פעולה', {
-          canonicalAction: options.canonicalAction,
-        })
+        showErrorToast(err, options.errorFallback ?? 'שגיאה בביצוע פעולה')
         options.onError?.(err)
       } finally {
         setActiveActionKey(null)

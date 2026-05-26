@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "lint": "eslint . --ext ts,tsx --max-warnings=0",
+    "lint:fix": "eslint . --ext ts,tsx --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "arch:check": "node scripts/arch-check.mjs",

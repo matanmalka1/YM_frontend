@@ -138,7 +138,6 @@ export const useClientsPage = () => {
   } = useActionRunner({
     onSuccess: () => queryClient.invalidateQueries({ queryKey: clientsQK.all }),
     errorFallback: 'שגיאה בביצוע פעולת לקוח',
-    canonicalAction: true,
   })
 
   const handleFilterChange = (

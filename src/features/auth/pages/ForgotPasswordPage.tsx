@@ -7,7 +7,7 @@ import { Alert } from '@/components/ui/overlays/Alert'
 import { Input } from '@/components/ui/inputs/Input'
 import { Button } from '@/components/ui/primitives/Button'
 import { getErrorMessage } from '@/utils/utils'
-import { AuthPageShell } from '@/features/auth/components/AuthPageShell'
+import { AuthPageShell } from '@/features/auth'
 
 export const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState('')

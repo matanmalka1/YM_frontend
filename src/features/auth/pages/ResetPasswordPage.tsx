@@ -8,7 +8,7 @@ import { PasswordInput } from '@/components/ui/inputs/PasswordInput'
 import { Button } from '@/components/ui/primitives/Button'
 import { getErrorMessage } from '@/utils/utils'
 import { passwordSchema } from '@/utils/passwordSchema'
-import { AuthPageShell } from '@/features/auth/components/AuthPageShell'
+import { AuthPageShell } from '@/features/auth'
 
 type FieldErrors = { newPassword?: string; confirmPassword?: string }
 

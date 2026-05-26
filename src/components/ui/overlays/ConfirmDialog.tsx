@@ -50,17 +50,18 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
   return (
     <div
+      role="presentation"
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 px-3 pb-3 backdrop-blur-[2px] sm:items-center sm:p-4"
-      onMouseDown={() => closeOnBackdrop && onCancel()}
-      aria-hidden={!open}
+      onClick={() => closeOnBackdrop && onCancel()}
     >
-      <section
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events */}
+      <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="confirm-sheet-title"
         aria-describedby="confirm-sheet-description"
         className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-4 shadow-xl animate-in fade-in zoom-in-95 slide-in-from-bottom-4 duration-150 sm:p-5"
-        onMouseDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-gray-200 sm:hidden" />
 
@@ -89,7 +90,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             {confirmLabel}
           </Button>
         </div>
-      </section>
+      </div>
     </div>
   )
 }
