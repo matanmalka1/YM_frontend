@@ -70,10 +70,7 @@ export const ResetPassword: React.FC = () => {
   }
 
   return (
-    <AuthPageShell
-      title="איפוס סיסמה"
-      description="בחר סיסמה חדשה. הסיסמה חייבת לכלול אות גדולה, אות קטנה ותו מיוחד."
-    >
+    <AuthPageShell title="איפוס סיסמה" description="בחר סיסמה חדשה. הסיסמה חייבת לכלול אות גדולה, אות קטנה ותו מיוחד.">
       {message ? (
         <div className="space-y-5" aria-live="polite">
           <Alert variant="success" size="sm" message={message} className="rounded-xl" />
@@ -136,7 +133,10 @@ export const ResetPassword: React.FC = () => {
           </Button>
 
           <div className="text-center">
-            <Link to="/forgot-password" className="text-sm font-medium text-slate-500 transition-colors hover:text-slate-900">
+            <Link
+              to="/forgot-password"
+              className="text-sm font-medium text-slate-500 transition-colors hover:text-slate-900"
+            >
               שלח קישור חדש
             </Link>
           </div>

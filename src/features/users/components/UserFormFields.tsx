@@ -44,12 +44,7 @@ export const UserFormFields: React.FC<UserFormFieldsProps> = ({ register, errors
         error={err.role?.message}
       />
       {showPassword && (
-        <PasswordInput
-          label="סיסמה *"
-          {...reg('password')}
-          error={err.password?.message}
-          placeholder="לפחות 8 תווים"
-        />
+        <PasswordInput label="סיסמה *" {...reg('password')} error={err.password?.message} placeholder="לפחות 8 תווים" />
       )}
     </div>
   )

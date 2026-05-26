@@ -9,12 +9,7 @@ interface InlineEmptyStateProps {
   className?: string
 }
 
-export const InlineEmptyState = ({
-  title,
-  description,
-  icon: Icon = Inbox,
-  className,
-}: InlineEmptyStateProps) => (
+export const InlineEmptyState = ({ title, description, icon: Icon = Inbox, className }: InlineEmptyStateProps) => (
   <div className={cn('flex flex-col items-center justify-center gap-2 py-10 text-center', className)}>
     <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gray-100 text-gray-400">
       <Icon className="h-5 w-5" />

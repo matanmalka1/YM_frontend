@@ -4,8 +4,7 @@ import { format, isValid, parseISO } from 'date-fns'
 import { he } from 'date-fns/locale'
 import { twMerge } from 'tailwind-merge'
 
-export const formatHebrewDate = (d: Date): string =>
-  format(d, "EEEE, d בMMMM", { locale: he })
+export const formatHebrewDate = (d: Date): string => format(d, 'EEEE, d בMMMM', { locale: he })
 
 import { toast } from './toast'
 
