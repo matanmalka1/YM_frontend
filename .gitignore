@@ -25,3 +25,6 @@ dist-ssr
 
 /reports/
 /knip.json
+
+*storybook.log
+storybook-static

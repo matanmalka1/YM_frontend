@@ -19,7 +19,9 @@
     "test:watch": "vitest",
     "jscpd": "jscpd --config .jscpd.json src",
     "jscpd:strict": "jscpd --config .jscpd.json --threshold 0 src",
-    "jscpd:report": "jscpd --config .jscpd.json --reporters console,json --output ./reports/jscpd src"
+    "jscpd:report": "jscpd --config .jscpd.json --reporters console,json --output ./reports/jscpd src",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -58,6 +60,17 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.5",
+    "storybook": "^10.4.1",
+    "@storybook/react-vite": "^10.4.1",
+    "@chromatic-com/storybook": "^5.2.1",
+    "@storybook/addon-vitest": "^10.4.1",
+    "@storybook/addon-a11y": "^10.4.1",
+    "@storybook/addon-docs": "^10.4.1",
+    "@storybook/addon-onboarding": "^10.4.1",
+    "eslint-plugin-storybook": "^10.4.1",
+    "playwright": "^1.60.0",
+    "@vitest/browser-playwright": "^4.1.5",
+    "@vitest/coverage-v8": "^4.1.5"
   }
 }
