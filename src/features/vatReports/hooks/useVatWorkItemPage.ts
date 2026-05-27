@@ -15,16 +15,9 @@ export const useVatWorkItemPage = (workItemId: number) => {
     enabled: workItemId > 0,
   })
 
-  const auditQuery = useQuery({
-    queryKey: vatReportsQK.audit(workItemId),
-    queryFn: () => vatReportsApi.getAuditTrail(workItemId),
-    enabled: workItemId > 0,
-  })
-
   return {
     workItem: workItemQuery.data ?? null,
     invoices: invoicesQuery.data?.items ?? [],
-    auditTrail: auditQuery.data?.items ?? [],
     isLoading: workItemQuery.isPending,
     isError: workItemQuery.isError,
     refetch: workItemQuery.refetch,
