@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { AlertTriangle, FileText, Inbox, RefreshCw } from 'lucide-react'
 import { StateCard } from './StateCard'
 

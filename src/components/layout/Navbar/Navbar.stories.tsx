@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { MemoryRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useEffect } from 'react'
@@ -28,22 +28,22 @@ const createStoryQueryClient = () => {
 const StoryShell = ({
   children,
   initialPath = '/',
-  role = 'advisor',
+  userRole = 'advisor',
 }: {
   children: React.ReactNode
   initialPath?: string
-  role?: 'advisor' | 'secretary'
+  userRole?: 'advisor' | 'secretary'
 }) => {
   const queryClient = createStoryQueryClient()
 
   useEffect(() => {
     useAuthStore.setState({
-      user: { id: 1, full_name: 'דנה כהן', role },
+      user: { id: 1, full_name: 'דנה כהן', role: userRole },
       isLoading: false,
       hasBootstrapped: true,
       error: null,
     })
-  }, [role])
+  }, [userRole])
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -70,7 +70,7 @@ export const Advisor: Story = {
 
 export const Secretary: Story = {
   render: () => (
-    <StoryShell role="secretary">
+    <StoryShell userRole="secretary">
       <Navbar />
     </StoryShell>
   ),

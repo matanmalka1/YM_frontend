@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter } from 'react-router-dom'
 import { useEffect } from 'react'
@@ -73,23 +73,23 @@ const createStoryQueryClient = ({
 
 const ClientSidebarStory = ({
   empty = false,
-  role = 'advisor',
+  userRole = 'advisor',
   total,
 }: {
   empty?: boolean
-  role?: 'advisor' | 'secretary'
+  userRole?: 'advisor' | 'secretary'
   total?: number
 }) => {
   const queryClient = createStoryQueryClient({ empty, total })
 
   useEffect(() => {
     useAuthStore.setState({
-      user: { id: 1, full_name: 'דנה כהן', role },
+      user: { id: 1, full_name: 'דנה כהן', role: userRole },
       isLoading: false,
       hasBootstrapped: true,
       error: null,
     })
-  }, [role])
+  }, [userRole])
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -115,7 +115,7 @@ export const Advisor: Story = {
 }
 
 export const Secretary: Story = {
-  render: () => <ClientSidebarStory role="secretary" />,
+  render: () => <ClientSidebarStory userRole="secretary" />,
 }
 
 export const Empty: Story = {

@@ -11,7 +11,7 @@ import {
 import { formatBinderNumber, formatClientOfficeId, formatMonthYear } from '@/utils/utils'
 import { BinderRowActions } from './BinderRowActions'
 
-const ClientCell: React.FC<{ binder: BinderResponse }> = ({ binder }) => (
+const renderClientCell = (binder: BinderResponse) => (
   <span className="flex flex-col gap-0.5">
     <Link
       to={`/clients/${binder.client_record_id}`}
@@ -22,7 +22,6 @@ const ClientCell: React.FC<{ binder: BinderResponse }> = ({ binder }) => (
     </Link>
   </span>
 )
-ClientCell.displayName = 'ClientCell'
 
 interface BuildBindersColumnsParams {
   actionLoadingId: number | null
@@ -52,7 +51,7 @@ export const buildBindersColumns = ({
   onDelete,
 }: BuildBindersColumnsParams): Column<BinderResponse>[] => [
   monoColumn({ key: 'office_client_number', header: "מס' לקוח", getValue: (binder) => formatClientOfficeId(binder.office_client_number) }),
-  textColumn({ key: 'client_name', header: 'לקוח', getValue: (binder) => <ClientCell binder={binder} /> }),
+  textColumn({ key: 'client_name', header: 'לקוח', getValue: (binder) => renderClientCell(binder) }),
   monoColumn({ key: 'client_id_number', header: 'ת.ז / ח.פ', getValue: (binder) => binder.client_id_number }),
   monoColumn({ key: 'binder_number', header: 'מספר קלסר', valueClassName: 'font-semibold text-gray-700', getValue: (binder) => formatBinderNumber(binder.binder_number) }),
   statusColumn({

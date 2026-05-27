@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Edit, Eye, Trash2 } from 'lucide-react'
 import { RowActionItem, RowActionLink, RowActionSeparator, RowActionsMenu } from './RowActions'
 

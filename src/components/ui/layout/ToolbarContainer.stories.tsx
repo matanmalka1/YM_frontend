@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Button } from '../primitives/Button'
 import { Input } from '../inputs/Input'
 import { ToolbarContainer } from './ToolbarContainer'
