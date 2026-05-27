@@ -2,22 +2,46 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { notificationsApi, notificationsQK } from '../api'
 import { toast } from '../../../utils/toast'
 import { getErrorMessage } from '../../../utils/utils'
-import type { ManualSendPayload } from '../api'
+import type { NotificationPreviewRequest, NotificationSendRequest, NotificationResult } from '../api'
+
+export const usePreviewNotification = () => {
+  const mutation = useMutation({
+    mutationFn: (payload: NotificationPreviewRequest) => notificationsApi.preview(payload),
+    onError: (err) => toast.error(getErrorMessage(err, 'שגיאה בטעינת תצוגה מקדימה')),
+  })
+
+  return {
+    preview: mutation.mutate,
+    previewAsync: mutation.mutateAsync,
+    isPreviewing: mutation.isPending,
+    previewData: mutation.data,
+    resetPreview: mutation.reset,
+  }
+}
 
 export const useSendNotification = () => {
   const queryClient = useQueryClient()
 
   const mutation = useMutation({
-    mutationFn: (payload: ManualSendPayload) => notificationsApi.send(payload),
-    onSuccess: () => {
+    mutationFn: (payload: NotificationSendRequest) => notificationsApi.send(payload),
+    onSuccess: (result: NotificationResult) => {
       void queryClient.invalidateQueries({ queryKey: notificationsQK.all })
-      toast.success('ההודעה נשלחה בהצלחה')
+      if (result.status === 'sent') {
+        toast.success('ההודעה נשלחה בהצלחה')
+      } else if (result.status === 'skipped') {
+        toast.warning('ההודעה לא נשלחה — לא נמצאה כתובת אימייל ללקוח')
+      } else if (result.status === 'blocked') {
+        toast.error(result.reason ?? 'שליחת ההודעה חסומה')
+      } else {
+        toast.error(result.reason ?? 'שגיאה בשליחת ההודעה')
+      }
     },
     onError: (err) => toast.error(getErrorMessage(err, 'שגיאה בשליחת ההודעה')),
   })
 
   return {
     send: mutation.mutate,
+    sendAsync: mutation.mutateAsync,
     isSending: mutation.isPending,
   }
 }

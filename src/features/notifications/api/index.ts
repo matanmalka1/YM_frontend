@@ -1,12 +1,15 @@
 export { notificationsApi } from './notifications.api'
 export { notificationsQK } from './queryKeys'
 export type {
-  NotificationSeverity,
+  NotificationTrigger,
+  NotificationChannel,
   NotificationItem,
   NotificationListResponse,
   NotificationSummaryResponse,
   ListNotificationsParams,
-  NotificationChannel,
-  ManualSendPayload,
-  ManualSendResponse,
+  NotificationPreviewRequest,
+  NotificationPreviewResponse,
+  NotificationSendRequest,
+  NotificationResult,
 } from './contracts'
+export { NOTIFICATION_TRIGGER_VALUES, PHASE1_TRIGGERS, TRIGGER_LABELS } from './contracts'

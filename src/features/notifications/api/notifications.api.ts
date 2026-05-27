@@ -6,8 +6,10 @@ import type {
   NotificationListResponse,
   NotificationSummaryResponse,
   ListNotificationsParams,
-  ManualSendPayload,
-  ManualSendResponse,
+  NotificationPreviewRequest,
+  NotificationPreviewResponse,
+  NotificationSendRequest,
+  NotificationResult,
 } from './contracts'
 
 const normalizeNotifications = (data: NotificationItem[] | NotificationListResponse): NotificationItem[] => {
@@ -32,8 +34,16 @@ export const notificationsApi = {
     return response.data
   },
 
-  send: async (payload: ManualSendPayload): Promise<ManualSendResponse> => {
-    const response = await api.post<ManualSendResponse>(NOTIFICATION_ENDPOINTS.notificationsSend, payload)
+  preview: async (payload: NotificationPreviewRequest): Promise<NotificationPreviewResponse> => {
+    const response = await api.post<NotificationPreviewResponse>(
+      NOTIFICATION_ENDPOINTS.notificationsPreview,
+      payload,
+    )
+    return response.data
+  },
+
+  send: async (payload: NotificationSendRequest): Promise<NotificationResult> => {
+    const response = await api.post<NotificationResult>(NOTIFICATION_ENDPOINTS.notificationsSend, payload)
     return response.data
   },
 }
