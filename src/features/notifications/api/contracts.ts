@@ -18,13 +18,19 @@ export const NOTIFICATION_TRIGGER_VALUES = [
 
 export type NotificationTrigger = (typeof NOTIFICATION_TRIGGER_VALUES)[number]
 
-// Phase 1 triggers exposed in the manual send modal
-export const PHASE1_TRIGGERS: NotificationTrigger[] = [
+// Triggers for the generic modal (no entity_id required)
+export const ENABLED_NOTIFICATION_TRIGGERS: NotificationTrigger[] = [
   'client_missing_information',
   'client_documents_request',
   'client_general_message',
   'binder_missing_documents',
   'binder_general_reminder',
+]
+
+// Annual report triggers — only valid when entity_id (annual_report.id) is provided
+export const ANNUAL_REPORT_TRIGGERS: NotificationTrigger[] = [
+  'annual_report_client_reminder',
+  'annual_report_documents_request',
 ]
 
 export const TRIGGER_LABELS: Record<NotificationTrigger, string> = {

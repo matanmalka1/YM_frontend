@@ -12,4 +12,4 @@ export type {
   NotificationSendRequest,
   NotificationResult,
 } from './contracts'
-export { NOTIFICATION_TRIGGER_VALUES, PHASE1_TRIGGERS, TRIGGER_LABELS } from './contracts'
+export { ANNUAL_REPORT_TRIGGERS, ENABLED_NOTIFICATION_TRIGGERS, NOTIFICATION_TRIGGER_VALUES, TRIGGER_LABELS } from './contracts'

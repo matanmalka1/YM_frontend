@@ -30,14 +30,8 @@ const ACTION_META: Record<string, { fallbackDescription: string }> = {
   file_vat_return: {
     fallbackDescription: 'סימון דוח מע"מ כהוגש',
   },
-  annual_report_client_reminder: {
-    fallbackDescription: 'שליחת תזכורת ללקוח',
-  },
   annual_report_navigate: {
     fallbackDescription: 'פתיחת דוח שנתי לטיפול',
-  },
-  binder_handover_reminder: {
-    fallbackDescription: 'שליחת תזכורת מסירת קלסר',
   },
   mark_paid: {
     fallbackDescription: 'סימון חיוב כשולם',

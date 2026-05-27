@@ -6,10 +6,10 @@ import { Input } from '../../../components/ui/inputs/Input'
 import { Textarea } from '../../../components/ui/inputs/Textarea'
 import { ClientPickerField, useClientPickerState } from '../../../components/shared/client'
 import { usePreviewNotification, useSendNotification } from '../hooks/useSendNotification'
-import { PHASE1_TRIGGERS, TRIGGER_LABELS } from '../api'
+import { ENABLED_NOTIFICATION_TRIGGERS, TRIGGER_LABELS } from '../api'
 import type { NotificationTrigger } from '../api'
 
-const TRIGGER_OPTIONS = PHASE1_TRIGGERS.map((t) => ({ value: t, label: TRIGGER_LABELS[t] }))
+const TRIGGER_OPTIONS = ENABLED_NOTIFICATION_TRIGGERS.map((t) => ({ value: t, label: TRIGGER_LABELS[t] }))
 
 export interface SendNotificationModalProps {
   open: boolean
@@ -24,7 +24,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ op
   const { sendAsync, isSending } = useSendNotification()
 
   const [step, setStep] = useState<Step>('compose')
-  const [trigger, setTrigger] = useState<NotificationTrigger>(PHASE1_TRIGGERS[0])
+  const [trigger, setTrigger] = useState<NotificationTrigger>(ENABLED_NOTIFICATION_TRIGGERS[0])
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
   const [subjectError, setSubjectError] = useState<string | undefined>()
@@ -41,7 +41,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ op
   useEffect(() => {
     if (open) {
       setStep('compose')
-      setTrigger(PHASE1_TRIGGERS[0])
+      setTrigger(ENABLED_NOTIFICATION_TRIGGERS[0])
       setSubject('')
       setBody('')
       setSubjectError(undefined)
