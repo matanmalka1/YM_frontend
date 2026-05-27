@@ -1,8 +1,8 @@
 export const ACTION_ENDPOINT_PATTERNS: RegExp[] = [
-  /^\/binders\/\d+\/ready$/,
-  /^\/binders\/\d+\/revert-ready$/,
-  /^\/binders\/\d+\/return$/,
-  /^\/binders\/\d+\/pickup-reminder$/,
+  /^\/binders\/\d+\/mark-ready-for-handover$/,
+  /^\/binders\/\d+\/revert-ready-for-handover$/,
+  /^\/binders\/\d+\/handover-to-client$/,
+  /^\/binders\/\d+\/handover-reminder$/,
   /^\/charges\/\d+\/issue$/,
   /^\/charges\/\d+\/mark-paid$/,
   /^\/charges\/\d+\/cancel$/,

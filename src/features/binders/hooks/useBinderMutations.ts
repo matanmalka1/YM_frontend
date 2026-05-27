@@ -10,51 +10,85 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
     onSuccess: onDeleteSuccess,
   })
 
-  const markReadyMutation = useMutationWithToast<Awaited<ReturnType<typeof bindersApi.ready>>, number>({
-    mutationFn: (binderId) => bindersApi.ready(binderId),
-    successMessage: 'הקלסר סומן כמוכן לאיסוף',
-    errorMessage: 'שגיאה בסימון קלסר כמוכן',
+  const markReadyForHandoverMutation = useMutationWithToast<
+    Awaited<ReturnType<typeof bindersApi.markReadyForHandover>>,
+    number
+  >({
+    mutationFn: (binderId) => bindersApi.markReadyForHandover(binderId),
+    successMessage: 'הקלסר סומן כמוכן למסירה',
+    errorMessage: 'שגיאה בסימון קלסר כמוכן למסירה',
     invalidateKeys: [bindersQK.all],
   })
 
-  const markReadyBulkMutation = useMutationWithToast<
-    Awaited<ReturnType<typeof bindersApi.markReadyBulk>>,
+
+  const receiveMaterialMutation = useMutationWithToast<
+    Awaited<ReturnType<typeof bindersApi.receiveMaterial>>,
+    number
+  >({
+    mutationFn: (binderId) => bindersApi.receiveMaterial(binderId),
+    successMessage: 'קליטת החומר נרשמה',
+    errorMessage: 'שגיאה ברישום קליטת חומר',
+    invalidateKeys: [bindersQK.all],
+  })
+
+  const markFullMutation = useMutationWithToast<Awaited<ReturnType<typeof bindersApi.markFull>>, number>({
+    mutationFn: (binderId) => bindersApi.markFull(binderId),
+    successMessage: 'הקלסר סומן כמלא',
+    errorMessage: 'שגיאה בסימון קלסר כמלא',
+    invalidateKeys: [bindersQK.all],
+  })
+
+  const reopenCapacityMutation = useMutationWithToast<
+    Awaited<ReturnType<typeof bindersApi.reopenCapacity>>,
+    number
+  >({
+    mutationFn: (binderId) => bindersApi.reopenCapacity(binderId),
+    successMessage: 'הקלסר נפתח לקיבולת נוספת',
+    errorMessage: 'שגיאה בפתיחת קיבולת הקלסר',
+    invalidateKeys: [bindersQK.all],
+  })
+
+  const markReadyForHandoverBulkMutation = useMutationWithToast<
+    Awaited<ReturnType<typeof bindersApi.markReadyForHandoverBulk>>,
     { clientId: number; untilPeriodYear: number; untilPeriodMonth: number }
   >({
     mutationFn: ({ clientId, untilPeriodYear, untilPeriodMonth }) =>
-      bindersApi.markReadyBulk({
+      bindersApi.markReadyForHandoverBulk({
         client_record_id: clientId,
         until_period_year: untilPeriodYear,
         until_period_month: untilPeriodMonth,
       }),
     successMessage: (updatedBinders) =>
       updatedBinders.length > 0
-        ? `${updatedBinders.length} קלסרים סומנו כמוכנים לאיסוף`
+        ? `${updatedBinders.length} קלסרים סומנו כמוכנים למסירה`
         : 'לא נמצאו קלסרים מתאימים לסימון',
-    errorMessage: 'שגיאה בסימון קבוצתי כמוכן',
+    errorMessage: 'שגיאה בסימון קבוצתי למסירה',
     invalidateKeys: [bindersQK.all],
   })
 
-  const revertReadyMutation = useMutationWithToast<Awaited<ReturnType<typeof bindersApi.revertReady>>, number>({
-    mutationFn: (binderId) => bindersApi.revertReady(binderId),
-    successMessage: 'סטטוס מוכן לאיסוף בוטל',
-    errorMessage: 'שגיאה בביטול סטטוס מוכן',
-    invalidateKeys: [bindersQK.all],
-  })
-
-  const returnBinderMutation = useMutationWithToast<
-    Awaited<ReturnType<typeof bindersApi.returnBinder>>,
-    { binderId: number; pickupPersonName: string }
+  const revertReadyForHandoverMutation = useMutationWithToast<
+    Awaited<ReturnType<typeof bindersApi.revertReadyForHandover>>,
+    number
   >({
-    mutationFn: ({ binderId, pickupPersonName }) =>
-      bindersApi.returnBinder(binderId, { pickup_person_name: pickupPersonName }),
-    successMessage: 'הקלסר הוחזר בהצלחה',
-    errorMessage: 'שגיאה בהחזרת קלסר',
+    mutationFn: (binderId) => bindersApi.revertReadyForHandover(binderId),
+    successMessage: 'סטטוס מוכן למסירה בוטל',
+    errorMessage: 'שגיאה בביטול סטטוס מוכן למסירה',
     invalidateKeys: [bindersQK.all],
   })
 
-  const handoverMutation = useMutationWithToast<
-    Awaited<ReturnType<typeof bindersApi.handover>>,
+  const handoverToClientMutation = useMutationWithToast<
+    Awaited<ReturnType<typeof bindersApi.handoverToClient>>,
+    { binderId: number; handoverRecipientName: string }
+  >({
+    mutationFn: ({ binderId, handoverRecipientName }) =>
+      bindersApi.handoverToClient(binderId, { handover_recipient_name: handoverRecipientName }),
+    successMessage: 'הקלסר נמסר בהצלחה',
+    errorMessage: 'שגיאה במסירת קלסר',
+    invalidateKeys: [bindersQK.all],
+  })
+
+  const handoverToClientBulkMutation = useMutationWithToast<
+    Awaited<ReturnType<typeof bindersApi.handoverToClientBulk>>,
     {
       clientId: number
       binderIds: number[]
@@ -66,7 +100,7 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
     }
   >({
     mutationFn: (payload) =>
-      bindersApi.handover({
+      bindersApi.handoverToClientBulk({
         client_record_id: payload.clientId,
         binder_ids: payload.binderIds,
         received_by_name: payload.receivedByName,
@@ -80,27 +114,36 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
     invalidateKeys: [bindersQK.all],
   })
 
-  const actionLoadingId = markReadyMutation.isPending
-    ? ((markReadyMutation.variables as number | undefined) ?? null)
-    : revertReadyMutation.isPending
-      ? ((revertReadyMutation.variables as number | undefined) ?? null)
-      : returnBinderMutation.isPending
-        ? ((returnBinderMutation.variables as { binderId: number } | undefined)?.binderId ?? null)
+  const actionLoadingId = receiveMaterialMutation.isPending
+    ? ((receiveMaterialMutation.variables as number | undefined) ?? null)
+    : markFullMutation.isPending
+      ? ((markFullMutation.variables as number | undefined) ?? null)
+      : reopenCapacityMutation.isPending
+        ? ((reopenCapacityMutation.variables as number | undefined) ?? null)
+        : markReadyForHandoverMutation.isPending
+          ? ((markReadyForHandoverMutation.variables as number | undefined) ?? null)
+          : revertReadyForHandoverMutation.isPending
+      ? ((revertReadyForHandoverMutation.variables as number | undefined) ?? null)
+      : handoverToClientMutation.isPending
+        ? ((handoverToClientMutation.variables as { binderId: number } | undefined)?.binderId ?? null)
         : null
 
   return {
     actionLoadingId,
     deleteBinder: (binderId: number) => deleteMutation.mutateAsync(binderId),
     isDeleting: deleteMutation.isPending,
-    markReady: (binderId: number) => markReadyMutation.mutateAsync(binderId),
-    markReadyBulk: (clientId: number, untilPeriodYear: number, untilPeriodMonth: number) =>
-      markReadyBulkMutation.mutateAsync({ clientId, untilPeriodYear, untilPeriodMonth }),
-    isMarkingReadyBulk: markReadyBulkMutation.isPending,
-    revertReady: (binderId: number) => revertReadyMutation.mutateAsync(binderId),
-    returnBinder: (binderId: number, pickupPersonName: string) =>
-      returnBinderMutation.mutateAsync({ binderId, pickupPersonName }),
-    isReturning: returnBinderMutation.isPending,
-    handoverBinders: (
+    receiveMaterial: (binderId: number) => receiveMaterialMutation.mutateAsync(binderId),
+    markFull: (binderId: number) => markFullMutation.mutateAsync(binderId),
+    reopenCapacity: (binderId: number) => reopenCapacityMutation.mutateAsync(binderId),
+    markReadyForHandover: (binderId: number) => markReadyForHandoverMutation.mutateAsync(binderId),
+    markReadyForHandoverBulk: (clientId: number, untilPeriodYear: number, untilPeriodMonth: number) =>
+      markReadyForHandoverBulkMutation.mutateAsync({ clientId, untilPeriodYear, untilPeriodMonth }),
+    isMarkingReadyForHandoverBulk: markReadyForHandoverBulkMutation.isPending,
+    revertReadyForHandover: (binderId: number) => revertReadyForHandoverMutation.mutateAsync(binderId),
+    handoverToClient: (binderId: number, handoverRecipientName: string) =>
+      handoverToClientMutation.mutateAsync({ binderId, handoverRecipientName }),
+    isHandingOverToClient: handoverToClientMutation.isPending,
+    handoverToClientBulk: (
       clientId: number,
       binderIds: number[],
       receivedByName: string,
@@ -109,7 +152,7 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
       untilPeriodMonth: number,
       notes?: string | null,
     ) =>
-      handoverMutation.mutateAsync({
+      handoverToClientBulkMutation.mutateAsync({
         clientId,
         binderIds,
         receivedByName,
@@ -118,6 +161,6 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
         untilPeriodMonth,
         notes,
       }),
-    isHandingOver: handoverMutation.isPending,
+    isHandingOverToClientBulk: handoverToClientBulkMutation.isPending,
   }
 }

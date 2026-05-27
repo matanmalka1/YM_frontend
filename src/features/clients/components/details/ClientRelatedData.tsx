@@ -8,7 +8,7 @@ import type { ChargeResponse } from '@/features/charges'
 import type { BinderDetailResponse } from '@/features/binders'
 import { getChargeTypeLabel } from '@/features/charges'
 import { getChargeStatusLabel } from '@/features/charges'
-import { getBinderStatusLabel } from '@/features/binders'
+import { getBinderLocationStatusLabel } from '@/features/binders'
 import { formatBinderNumber } from '../../../../utils/utils'
 
 type RelatedItemsSectionProps<T> = {
@@ -121,7 +121,7 @@ export const ClientRelatedData: FC<ClientRelatedDataProps> = ({
           emptyText="אין קלסרים להצגה"
           getKey={(binder) => binder.id}
           getTitle={(binder) => `קלסר ${formatBinderNumber(binder.binder_number)}`}
-          getSubtitle={(binder) => getBinderStatusLabel(binder.status)}
+          getSubtitle={(binder) => getBinderLocationStatusLabel(binder.location_status)}
           getItemHref={(binder) => `/binders?client_record_id=${clientId}&binder_id=${binder.id}`}
         />
         {canViewCharges && (

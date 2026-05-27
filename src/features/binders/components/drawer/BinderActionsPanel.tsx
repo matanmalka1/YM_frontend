@@ -1,65 +1,46 @@
-import { Button } from '@/components/ui/primitives/Button'
+import type { BinderResponse } from '../../types'
 import { BinderActionButtons } from './BinderActionButtons'
 
 interface BinderActionsPanelProps {
-  status: string
+  binder: BinderResponse
   disabled?: boolean
-  onMarkReady: React.MouseEventHandler<HTMLButtonElement>
-  onRevertReady?: React.MouseEventHandler<HTMLButtonElement>
-  onReturn?: React.MouseEventHandler<HTMLButtonElement>
-  onBulkReady?: React.MouseEventHandler<HTMLButtonElement>
-  onOpenHandover?: React.MouseEventHandler<HTMLButtonElement>
+  onReceiveMaterial?: React.MouseEventHandler<HTMLButtonElement>
+  onMarkFull?: React.MouseEventHandler<HTMLButtonElement>
+  onReopenCapacity?: React.MouseEventHandler<HTMLButtonElement>
+  onMarkReadyForHandover: React.MouseEventHandler<HTMLButtonElement>
+  onMarkReadyForHandoverBulk?: React.MouseEventHandler<HTMLButtonElement>
+  onRevertReadyForHandover?: React.MouseEventHandler<HTMLButtonElement>
+  onHandoverToClient?: React.MouseEventHandler<HTMLButtonElement>
+  onHandoverToClientBulk?: React.MouseEventHandler<HTMLButtonElement>
 }
 
 export const BinderActionsPanel: React.FC<BinderActionsPanelProps> = ({
-  status,
+  binder,
   disabled = false,
-  onMarkReady,
-  onRevertReady,
-  onReturn,
-  onBulkReady,
-  onOpenHandover,
-}) => {
-  if (status !== 'in_office' && status !== 'closed_in_office' && status !== 'ready_for_pickup') {
-    return null
-  }
-
-  return (
-    <div className="pt-2 flex items-center gap-2">
-      <BinderActionButtons
-        status={status}
-        disabled={disabled}
-        onMarkReady={onMarkReady}
-        onRevertReady={onRevertReady}
-        onReturn={onReturn}
-        size="sm"
-      />
-      {(status === 'in_office' || status === 'closed_in_office') && onBulkReady && (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100 text-xs px-2.5 py-1"
-          onClick={onBulkReady}
-          disabled={disabled}
-        >
-          מוכן עד תקופה
-        </Button>
-      )}
-      {status === 'ready_for_pickup' && onOpenHandover && (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="border-primary-200 bg-primary-50 text-primary-800 hover:bg-primary-100 text-xs px-2.5 py-1"
-          onClick={onOpenHandover}
-          disabled={disabled}
-        >
-          מסירת כמה קלסרים
-        </Button>
-      )}
-    </div>
-  )
-}
+  onReceiveMaterial,
+  onMarkFull,
+  onReopenCapacity,
+  onMarkReadyForHandover,
+  onMarkReadyForHandoverBulk,
+  onRevertReadyForHandover,
+  onHandoverToClient,
+  onHandoverToClientBulk,
+}) => (
+  <div className="flex items-center gap-2 pt-2">
+    <BinderActionButtons
+      binder={binder}
+      disabled={disabled}
+      onReceiveMaterial={onReceiveMaterial}
+      onMarkFull={onMarkFull}
+      onReopenCapacity={onReopenCapacity}
+      onMarkReadyForHandover={onMarkReadyForHandover}
+      onMarkReadyForHandoverBulk={onMarkReadyForHandoverBulk}
+      onRevertReadyForHandover={onRevertReadyForHandover}
+      onHandoverToClient={onHandoverToClient}
+      onHandoverToClientBulk={onHandoverToClientBulk}
+      size="sm"
+    />
+  </div>
+)
 
 BinderActionsPanel.displayName = 'BinderActionsPanel'

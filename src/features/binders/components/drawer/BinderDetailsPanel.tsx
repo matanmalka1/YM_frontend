@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { MonoValue } from '@/components/ui/primitives/MonoValue'
 import type { BinderResponse } from '../../types'
-import { getBinderStatusLabel } from '../../constants'
+import { getBinderCapacityStatusLabel, getBinderLocationStatusLabel } from '../../constants'
 import { formatBinderNumber, formatClientOfficeId, formatDate, formatMonthYear } from '@/utils/utils'
-import { BINDER_STATUS_VARIANTS } from '../../constants'
+import { BINDER_CAPACITY_STATUS_VARIANTS, BINDER_LOCATION_STATUS_VARIANTS } from '../../constants'
 
 const formatPeriod = (start: string | null, end: string | null): string => {
   if (!start) return '—'
@@ -38,13 +38,17 @@ export const BinderDetailsPanel: React.FC<BinderDetailsPanelProps> = ({ binder }
           <DrawerField label="תקופה" value={formatPeriod(binder.period_start, binder.period_end)} />
         )}
         <DrawerField
-          label="סטטוס"
+          label="מיקום"
           value={
-            <StatusBadge status={binder.status} getLabel={getBinderStatusLabel} variantMap={BINDER_STATUS_VARIANTS} />
+            <StatusBadge status={binder.location_status} getLabel={getBinderLocationStatusLabel} variantMap={BINDER_LOCATION_STATUS_VARIANTS} />
           }
         />
-        {binder.returned_at && <DrawerField label="תאריך החזרה" value={formatDate(binder.returned_at)} />}
-        {binder.pickup_person_name && <DrawerField label="נאסף על ידי" value={binder.pickup_person_name} />}
+        <DrawerField
+          label="קיבולת"
+          value={<StatusBadge status={binder.capacity_status} getLabel={getBinderCapacityStatusLabel} variantMap={BINDER_CAPACITY_STATUS_VARIANTS} />}
+        />
+        {binder.handed_over_at && <DrawerField label="תאריך מסירה" value={formatDate(binder.handed_over_at)} />}
+        {binder.handover_recipient_name && <DrawerField label="נמסר לידי" value={binder.handover_recipient_name} />}
         <DrawerField label="ימים במשרד" value={<MonoValue value={binder.days_in_office} format="days" />} />
       </DrawerSection>
     </>

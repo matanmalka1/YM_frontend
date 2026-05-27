@@ -1,3 +1,6 @@
+import type { BinderCapacityStatus, BinderLocationStatus } from '../types'
+import type { PaginatedResponse } from '@/types'
+
 export interface BinderDetailResponse {
   id: number
   client_record_id: number
@@ -7,23 +10,23 @@ export interface BinderDetailResponse {
   binder_number: string
   period_start: string | null
   period_end: string | null
-  status: string
-  returned_at: string | null
-  pickup_person_name: string | null
+  location_status: BinderLocationStatus
+  capacity_status: BinderCapacityStatus
+  handed_over_at: string | null
+  handover_recipient_name: string | null
   days_in_office: number | null
 }
 
-import type { PaginatedResponse } from '@/types'
-
 export type BinderListResponseExtended = PaginatedResponse<BinderDetailResponse>
 
-export interface BinderMarkReadyBulkPayload {
+
+export interface BinderMarkReadyForHandoverBulkPayload {
   client_record_id: number
   until_period_year: number
   until_period_month: number
 }
 
-export interface BinderHandoverPayload {
+export interface BinderHandoverToClientBulkPayload {
   client_record_id: number
   binder_ids: number[]
   received_by_name: string
@@ -33,7 +36,7 @@ export interface BinderHandoverPayload {
   notes?: string | null
 }
 
-export interface BinderHandoverResponse {
+export interface BinderHandoverToClientBulkResponse {
   id: number
   client_record_id: number
   received_by_name: string
@@ -41,6 +44,6 @@ export interface BinderHandoverResponse {
   until_period_year: number
   until_period_month: number
   binder_ids: number[]
-  notes?: string | null
+  notes: string | null
   created_at: string
 }

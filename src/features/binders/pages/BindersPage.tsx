@@ -35,22 +35,25 @@ export const Binders: React.FC = () => {
     loading,
     deleteBinder,
     isDeleting,
-    markReady,
-    markReadyBulk,
-    isMarkingReadyBulk,
-    revertReady,
-    returnBinder,
-    isReturning,
-    handoverBinders,
-    isHandingOver,
+    receiveMaterial,
+    markFull,
+    reopenCapacity,
+    markReadyForHandover,
+    markReadyForHandoverBulk,
+    isMarkingReadyForHandoverBulk,
+    revertReadyForHandover,
+    handoverToClient,
+    isHandingOverToClient,
+    handoverToClientBulk,
+    isHandingOverToClientBulk,
   } = useBindersPage()
 
   const dialogs = useBindersPageDialogs({
     getSelectedBinder: () => selectedBinder,
-    markReadyBulk,
-    returnBinder,
+    markReadyForHandoverBulk,
+    handoverToClient,
+    handoverToClientBulk,
     deleteBinder,
-    handoverBinders,
   })
 
   const receive = useReceiveBinderDrawer({
@@ -63,15 +66,34 @@ export const Binders: React.FC = () => {
     () =>
       buildBindersColumns({
         actionLoadingId,
-        onMarkReady: (id) => void markReady(id),
-        onRevertReady: (id) => void revertReady(id),
-        onReturn: dialogs.openReturnDialog,
+        onReceiveMaterial: (id) => void receiveMaterial(id),
+        onMarkFull: (id) => void markFull(id),
+        onReopenCapacity: (id) => void reopenCapacity(id),
+        onMarkReadyForHandover: (id) => void markReadyForHandover(id),
+        onMarkReadyForHandoverBulk: (id) => {
+          const binder = binders.find((item) => item.id === id) ?? null
+          dialogs.openBulkReadyForHandoverDialog(binder ?? undefined)
+        },
+        onRevertReadyForHandover: (id) => void revertReadyForHandover(id),
+        onHandoverToClient: dialogs.openHandoverToClientDialog,
+        onHandoverToClientBulk: (id) => {
+          const binder = binders.find((item) => item.id === id) ?? null
+          dialogs.openHandoverToClientBulkDialog(binder ?? undefined)
+        },
         onOpenDetail: (id) => handleSelectBinder({ id }),
         onDelete: dialogs.openDeleteDialog,
-        onBulkReady: (binder) => dialogs.openBulkReadyDialog(binder),
-        onHandover: (binder) => dialogs.openHandoverDialog(binder),
       }),
-    [actionLoadingId, dialogs, markReady, revertReady, handleSelectBinder],
+    [
+      actionLoadingId,
+      binders,
+      dialogs,
+      receiveMaterial,
+      markFull,
+      reopenCapacity,
+      markReadyForHandover,
+      revertReadyForHandover,
+      handleSelectBinder,
+    ],
   )
 
   return (
@@ -115,41 +137,44 @@ export const Binders: React.FC = () => {
       />
 
       <BindersPageDialogs
-        confirmReturnForId={dialogs.confirmReturnForId}
+        confirmHandoverForId={dialogs.confirmHandoverForId}
         confirmDeleteForId={dialogs.confirmDeleteForId}
-        pickupPersonName={dialogs.pickupPersonName}
-        setPickupPersonName={dialogs.setPickupPersonName}
-        isReturning={isReturning}
+        handoverRecipientName={dialogs.handoverRecipientName}
+        setHandoverRecipientName={dialogs.setHandoverRecipientName}
+        isHandingOverToClient={isHandingOverToClient}
         isDeleting={isDeleting}
-        onConfirmReturn={() => void dialogs.confirmReturn()}
-        onCancelReturn={dialogs.closeReturnDialog}
+        onConfirmHandoverToClient={() => void dialogs.confirmHandoverToClient()}
+        onCancelHandoverToClient={dialogs.closeHandoverToClientDialog}
         onConfirmDelete={() => void dialogs.confirmDelete()}
         onCancelDelete={dialogs.closeDeleteDialog}
         getBinderNumberLabel={(id) => getBinderNumberLabel(id, binders, selectedBinder)}
-        bulkReadyOpen={dialogs.bulkReadyOpen}
-        onCloseBulkReady={dialogs.closeBulkReadyDialog}
-        onConfirmBulkReady={() => void dialogs.confirmBulkReady()}
-        bulkReadyYear={dialogs.bulkReadyYear}
-        bulkReadyMonth={dialogs.bulkReadyMonth}
-        setBulkReadyYear={dialogs.setBulkReadyYear}
-        setBulkReadyMonth={dialogs.setBulkReadyMonth}
-        isMarkingReadyBulk={isMarkingReadyBulk}
+        bulkReadyForHandoverOpen={dialogs.bulkReadyForHandoverOpen}
+        onCloseBulkReadyForHandover={dialogs.closeBulkReadyForHandoverDialog}
+        onConfirmBulkReadyForHandover={() => void dialogs.confirmBulkReadyForHandover()}
+        bulkReadyForHandoverYear={dialogs.bulkReadyForHandoverYear}
+        bulkReadyForHandoverMonth={dialogs.bulkReadyForHandoverMonth}
+        setBulkReadyForHandoverYear={dialogs.setBulkReadyForHandoverYear}
+        setBulkReadyForHandoverMonth={dialogs.setBulkReadyForHandoverMonth}
+        isMarkingReadyForHandoverBulk={isMarkingReadyForHandoverBulk}
         dialogBinder={dialogs.dialogBinder}
-        handoverOpen={dialogs.handoverOpen}
-        onCloseHandover={dialogs.closeHandoverDialog}
-        onSubmitHandover={(payload) => void dialogs.submitHandover(payload)}
-        isHandingOver={isHandingOver}
+        handoverToClientBulkOpen={dialogs.handoverToClientBulkOpen}
+        onCloseHandoverToClientBulk={dialogs.closeHandoverToClientBulkDialog}
+        onSubmitHandoverToClientBulk={dialogs.submitHandoverToClientBulk}
+        isHandingOverToClientBulk={isHandingOverToClientBulk}
       />
 
       <BinderDetailDrawer
         open={detailOpen}
         binder={selectedBinder}
         onClose={handleCloseDrawer}
-        onMarkReady={selectedBinder ? () => void markReady(selectedBinder.id) : undefined}
-        onRevertReady={selectedBinder ? () => void revertReady(selectedBinder.id) : undefined}
-        onReturn={selectedBinder ? () => dialogs.openReturnDialog(selectedBinder.id) : undefined}
-        onBulkReady={selectedBinder ? () => dialogs.openBulkReadyDialog(selectedBinder) : undefined}
-        onOpenHandover={selectedBinder ? () => dialogs.openHandoverDialog(selectedBinder) : undefined}
+        onReceiveMaterial={selectedBinder ? () => void receiveMaterial(selectedBinder.id) : undefined}
+        onMarkFull={selectedBinder ? () => void markFull(selectedBinder.id) : undefined}
+        onReopenCapacity={selectedBinder ? () => void reopenCapacity(selectedBinder.id) : undefined}
+        onMarkReadyForHandover={selectedBinder ? () => void markReadyForHandover(selectedBinder.id) : undefined}
+        onMarkReadyForHandoverBulk={selectedBinder ? () => dialogs.openBulkReadyForHandoverDialog(selectedBinder) : undefined}
+        onRevertReadyForHandover={selectedBinder ? () => void revertReadyForHandover(selectedBinder.id) : undefined}
+        onHandoverToClient={selectedBinder ? () => dialogs.openHandoverToClientDialog(selectedBinder.id) : undefined}
+        onHandoverToClientBulk={selectedBinder ? () => dialogs.openHandoverToClientBulkDialog(selectedBinder) : undefined}
         onDelete={selectedBinder ? () => dialogs.openDeleteDialog(selectedBinder.id) : undefined}
         actionLoading={selectedBinder ? actionLoadingId === selectedBinder.id : false}
       />

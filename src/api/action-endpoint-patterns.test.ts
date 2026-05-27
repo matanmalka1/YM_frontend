@@ -6,6 +6,6 @@ const isAllowed = (endpoint: string) => ACTION_ENDPOINT_PATTERNS.some((pattern) 
 describe('ACTION_ENDPOINT_PATTERNS', () => {
   it('allows dashboard reminder action endpoints without API prefix', () => {
     expect(isAllowed('/annual-reports/144/client-reminder')).toBe(true)
-    expect(isAllowed('/binders/7/pickup-reminder')).toBe(true)
+    expect(isAllowed('/binders/7/handover-reminder')).toBe(true)
   })
 })

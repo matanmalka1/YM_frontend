@@ -1,7 +1,7 @@
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
-import { Archive, CheckCircle2, FolderKanban, Undo2, Boxes } from 'lucide-react'
-import { BINDER_STATUS_OPTIONS } from '../../constants'
+import { Archive, CheckCircle2, FolderKanban, Undo2 } from 'lucide-react'
+import { BINDER_LOCATION_STATUS_OPTIONS } from '../../constants'
 import type { BindersFiltersBarProps } from '../../types'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 
@@ -13,7 +13,7 @@ const getFields = () => [
     label: 'מספר קלסר',
     placeholder: 'מספר קלסר מדויק...',
   },
-  { type: 'select' as const, key: 'status', label: 'סטטוס', options: BINDER_STATUS_OPTIONS },
+  { type: 'select' as const, key: 'location_status', label: 'מיקום', options: BINDER_LOCATION_STATUS_OPTIONS },
   {
     type: 'select' as const,
     key: 'year',
@@ -40,28 +40,21 @@ export const BindersFiltersBar = ({
     {
       key: 'in_office',
       label: 'במשרד',
-      count: counters.in_office,
+      count: counters.location_in_office,
       icon: Archive,
       variant: 'orange' as const,
     },
     {
-      key: 'closed_in_office',
-      label: 'סגור במשרד',
-      count: counters.closed_in_office,
-      icon: Boxes,
-      variant: 'orange' as const,
-    },
-    {
-      key: 'ready_for_pickup',
-      label: 'מוכן לאיסוף',
-      count: counters.ready_for_pickup,
+      key: 'ready_for_handover',
+      label: 'מוכן למסירה',
+      count: counters.location_ready_for_handover,
       icon: CheckCircle2,
       variant: 'green' as const,
     },
     {
-      key: 'returned',
-      label: 'הוחזר',
-      count: counters.returned,
+      key: 'handed_over',
+      label: 'נמסר ללקוח',
+      count: counters.location_handed_over,
       icon: Undo2,
       variant: 'neutral' as const,
     },
@@ -76,8 +69,8 @@ export const BindersFiltersBar = ({
           value={countersLoading ? '...' : pill.count}
           icon={pill.icon}
           variant={pill.variant}
-          onClick={() => onFilterChange('status', pill.key)}
-          selected={(filters.status ?? '') === pill.key}
+          onClick={() => onFilterChange('location_status', pill.key)}
+          selected={(filters.location_status ?? '') === pill.key}
           className="h-full w-full text-right"
         />
       ))}
@@ -90,7 +83,7 @@ export const BindersFiltersBar = ({
       values={{
         query: filters.query ?? '',
         binder_number: filters.binder_number ?? '',
-        status: filters.status ?? '',
+        location_status: filters.location_status ?? '',
         year: filters.year ?? '',
       }}
       onChange={onFilterChange}

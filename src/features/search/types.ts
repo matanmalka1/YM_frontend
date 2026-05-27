@@ -19,6 +19,6 @@ export const SEARCH_ADVANCED_FILTER_KEYS: (keyof SearchFilters)[] = [
   'binder_number',
   'client_status',
   'entity_type',
-  'binder_status',
+  'binder_location_status',
   'filename',
 ]

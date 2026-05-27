@@ -12,10 +12,13 @@ export type { BinderDetailResponse } from './api'
 export type { BinderResponse } from './types'
 export {
   getBinderTypeLabel,
-  getBinderStatusLabel,
-  BINDER_STATUS_LABELS,
+  getBinderLocationStatusLabel,
+  getBinderCapacityStatusLabel,
+  BINDER_LOCATION_STATUS_LABELS,
+  BINDER_CAPACITY_STATUS_LABELS,
   BINDER_TYPE_LABELS,
-  BINDER_STATUS_OPTIONS,
+  BINDER_LOCATION_STATUS_OPTIONS,
+  BINDER_CAPACITY_STATUS_OPTIONS,
   ANNUAL_BINDER_TYPES,
   PERIODIC_BINDER_TYPES,
 } from './constants'

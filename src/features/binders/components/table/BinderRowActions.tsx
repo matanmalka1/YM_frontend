@@ -1,88 +1,71 @@
-import { ArrowLeft, CheckCircle2, Eye, RotateCcw, Trash2, CalendarCheck, PackageCheck } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, ClipboardCheck, Eye, ListChecks, Lock, RotateCcw, Trash2, Unlock } from 'lucide-react'
 import { RowActionItem, RowActionSeparator, RowActionsMenu } from '@/components/ui/table'
-import { canMarkReady, canReturn, canRevertReady } from '../../utils'
+import { hasBinderAction } from '../../utils'
 import type { BinderResponse } from '../../types'
 
 interface BinderRowActionsProps {
   binder: BinderResponse
   disabled?: boolean
   onOpenDetail: () => void
-  onMarkReady: () => void
-  onRevertReady: () => void
-  onReturn: () => void
+  onReceiveMaterial: () => void
+  onMarkFull: () => void
+  onReopenCapacity: () => void
+  onMarkReadyForHandover: () => void
+  onMarkReadyForHandoverBulk: () => void
+  onRevertReadyForHandover: () => void
+  onHandoverToClient: () => void
+  onHandoverToClientBulk: () => void
   onDelete: () => void
-  onBulkReady?: () => void
-  onHandover?: () => void
 }
 
 export const BinderRowActions: React.FC<BinderRowActionsProps> = ({
   binder,
   disabled = false,
   onOpenDetail,
-  onMarkReady,
-  onRevertReady,
-  onReturn,
+  onReceiveMaterial,
+  onMarkFull,
+  onReopenCapacity,
+  onMarkReadyForHandover,
+  onMarkReadyForHandoverBulk,
+  onRevertReadyForHandover,
+  onHandoverToClient,
+  onHandoverToClientBulk,
   onDelete,
-  onBulkReady,
-  onHandover,
 }) => {
-  const { status } = binder
-  const hasActions = canMarkReady(status) || canRevertReady(status) || canReturn(status)
-  const showBulkReady = (status === 'in_office' || status === 'closed_in_office') && onBulkReady
-  const showHandover = status === 'ready_for_pickup' && onHandover
+  const canReceiveMaterial = hasBinderAction(binder, 'receive_material')
+  const canMarkFull = hasBinderAction(binder, 'mark_full')
+  const canReopenCapacity = hasBinderAction(binder, 'reopen_capacity')
+  const canMarkReady = hasBinderAction(binder, 'mark_ready_for_handover')
+  const canRevertReady = hasBinderAction(binder, 'revert_ready_for_handover')
+  const canHandover = hasBinderAction(binder, 'handover_to_client')
+  const hasActions = canReceiveMaterial || canMarkFull || canReopenCapacity || canMarkReady || canRevertReady || canHandover
 
   return (
     <RowActionsMenu ariaLabel={`פעולות לקלסר ${binder.id}`}>
-      <RowActionItem
-        label="צפייה בפרטים"
-        onClick={onOpenDetail}
-        icon={<Eye className="h-4 w-4" />}
-        disabled={disabled}
-      />
+      <RowActionItem label="צפייה בפרטים" onClick={onOpenDetail} icon={<Eye className="h-4 w-4" />} disabled={disabled} />
       {hasActions && <RowActionSeparator />}
-      {canMarkReady(status) && (
-        <RowActionItem
-          label="מוכן לאיסוף"
-          onClick={onMarkReady}
-          icon={<CheckCircle2 className="h-4 w-4" />}
-          disabled={disabled}
-        />
+      {canReceiveMaterial && (
+        <RowActionItem label="רשום קליטת חומר" onClick={onReceiveMaterial} icon={<ClipboardCheck className="h-4 w-4" />} disabled={disabled} />
       )}
-      {showBulkReady && (
-        <RowActionItem
-          label="מוכן עד תקופה"
-          onClick={onBulkReady}
-          icon={<CalendarCheck className="h-4 w-4" />}
-          disabled={disabled}
-        />
+      {canMarkFull && <RowActionItem label="סמן כמלא" onClick={onMarkFull} icon={<Lock className="h-4 w-4" />} disabled={disabled} />}
+      {canReopenCapacity && <RowActionItem label="פתח קיבולת" onClick={onReopenCapacity} icon={<Unlock className="h-4 w-4" />} disabled={disabled} />}
+      {canMarkReady && (
+        <>
+          <RowActionItem label="מוכן למסירה" onClick={onMarkReadyForHandover} icon={<CheckCircle2 className="h-4 w-4" />} disabled={disabled} />
+          <RowActionItem label="סימון קבוצתי למסירה" onClick={onMarkReadyForHandoverBulk} icon={<ListChecks className="h-4 w-4" />} disabled={disabled} />
+        </>
       )}
-      {canRevertReady(status) && (
-        <RowActionItem
-          label="בטל מוכן לאיסוף"
-          onClick={onRevertReady}
-          icon={<RotateCcw className="h-4 w-4" />}
-          disabled={disabled}
-        />
+      {canRevertReady && (
+        <RowActionItem label="בטל מוכן למסירה" onClick={onRevertReadyForHandover} icon={<RotateCcw className="h-4 w-4" />} disabled={disabled} />
       )}
-      {canReturn(status) && (
-        <RowActionItem label="החזרה" onClick={onReturn} icon={<ArrowLeft className="h-4 w-4" />} disabled={disabled} />
-      )}
-      {showHandover && (
-        <RowActionItem
-          label="מסירת כמה קלסרים"
-          onClick={onHandover}
-          icon={<PackageCheck className="h-4 w-4" />}
-          disabled={disabled}
-        />
+      {canHandover && (
+        <>
+          <RowActionItem label="מסירה ללקוח" onClick={onHandoverToClient} icon={<ArrowLeft className="h-4 w-4" />} disabled={disabled} />
+          <RowActionItem label="מסירה קבוצתית" onClick={onHandoverToClientBulk} icon={<ListChecks className="h-4 w-4" />} disabled={disabled} />
+        </>
       )}
       <RowActionSeparator />
-      <RowActionItem
-        label="מחק קלסר"
-        onClick={onDelete}
-        icon={<Trash2 className="h-4 w-4" />}
-        danger
-        disabled={disabled}
-      />
+      <RowActionItem label="מחק קלסר" onClick={onDelete} icon={<Trash2 className="h-4 w-4" />} danger disabled={disabled} />
     </RowActionsMenu>
   )
 }

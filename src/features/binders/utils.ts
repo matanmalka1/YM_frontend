@@ -1,11 +1,15 @@
 import { MONTH_NAMES } from '@/utils/utils'
-import type { BinderResponse } from './types'
+import type { BinderAction, BinderResponse } from './types'
 
-export const canMarkReady = (status: string): boolean => status === 'in_office' || status === 'closed_in_office'
+export const hasBinderAction = (binder: BinderResponse, action: BinderAction): boolean =>
+  Boolean(binder.available_actions?.includes(action))
 
-export const canRevertReady = (status: string): boolean => status === 'ready_for_pickup'
 
-export const canReturn = (status: string): boolean => status === 'ready_for_pickup'
+export const canMarkReadyForHandover = (locationStatus: string): boolean => locationStatus === 'in_office'
+
+export const canRevertReadyForHandover = (locationStatus: string): boolean => locationStatus === 'ready_for_handover'
+
+export const canHandoverToClient = (locationStatus: string): boolean => locationStatus === 'ready_for_handover'
 
 export const toBinderPeriodValue = (year: number, monthStart: number, monthEnd: number): string => {
   if (monthStart === 1 && monthEnd === 12) return String(year)

@@ -49,8 +49,8 @@ const SIGNATURE_EVENT_TYPES = new Set([
 
 const EventMetadata: React.FC<{ metadata: TimelineEventMetadata; eventType: string }> = ({ metadata, eventType }) => {
   const {
-    old_status,
-    new_status,
+    old_value,
+    new_value,
     amount,
     provider,
     external_invoice_id,
@@ -66,8 +66,8 @@ const EventMetadata: React.FC<{ metadata: TimelineEventMetadata; eventType: stri
 
   return (
     <>
-      {eventType !== 'binder_status_change' && old_status && new_status && (
-        <StatusTransition oldStatus={old_status} newStatus={new_status} />
+      {eventType !== 'binder_lifecycle_change' && old_value && new_value && (
+        <StatusTransition oldStatus={String(old_value)} newStatus={String(new_value)} />
       )}
 
       {amount != null && (

@@ -10,13 +10,13 @@ import type {
   ListBindersParams,
   ListOperationalBindersParams,
   ReceiveBinderPayload,
-  ReturnBinderPayload,
+  HandoverToClientPayload,
 } from '../types'
 import type {
-  BinderHandoverPayload,
-  BinderHandoverResponse,
+  BinderHandoverToClientBulkPayload,
+  BinderHandoverToClientBulkResponse,
   BinderListResponseExtended,
-  BinderMarkReadyBulkPayload,
+  BinderMarkReadyForHandoverBulkPayload,
 } from './contracts'
 
 export const bindersApi = {
@@ -37,28 +37,43 @@ export const bindersApi = {
     return response.data
   },
 
-  ready: async (binderId: number): Promise<BinderResponse> => {
-    const response = await api.post<BinderResponse>(BINDER_ENDPOINTS.binderReady(binderId))
+  receiveMaterial: async (binderId: number): Promise<BinderResponse> => {
+    const response = await api.post<BinderResponse>(BINDER_ENDPOINTS.binderReceiveMaterial(binderId))
     return response.data
   },
 
-  markReadyBulk: async (payload: BinderMarkReadyBulkPayload): Promise<BinderResponse[]> => {
-    const response = await api.post<BinderResponse[]>(BINDER_ENDPOINTS.binderMarkReadyBulk, payload)
+  markFull: async (binderId: number): Promise<BinderResponse> => {
+    const response = await api.post<BinderResponse>(BINDER_ENDPOINTS.binderMarkFull(binderId))
     return response.data
   },
 
-  revertReady: async (binderId: number): Promise<BinderResponse> => {
-    const response = await api.post<BinderResponse>(BINDER_ENDPOINTS.binderRevertReady(binderId))
+  reopenCapacity: async (binderId: number): Promise<BinderResponse> => {
+    const response = await api.post<BinderResponse>(BINDER_ENDPOINTS.binderReopenCapacity(binderId))
     return response.data
   },
 
-  returnBinder: async (binderId: number, payload?: ReturnBinderPayload): Promise<BinderResponse> => {
-    const response = await api.post<BinderResponse>(BINDER_ENDPOINTS.binderReturn(binderId), payload)
+  markReadyForHandover: async (binderId: number): Promise<BinderResponse> => {
+    const response = await api.post<BinderResponse>(BINDER_ENDPOINTS.binderMarkReadyForHandover(binderId))
     return response.data
   },
 
-  handover: async (payload: BinderHandoverPayload): Promise<BinderHandoverResponse> => {
-    const response = await api.post<BinderHandoverResponse>(BINDER_ENDPOINTS.binderHandover, payload)
+  markReadyForHandoverBulk: async (payload: BinderMarkReadyForHandoverBulkPayload): Promise<BinderResponse[]> => {
+    const response = await api.post<BinderResponse[]>(BINDER_ENDPOINTS.binderMarkReadyForHandoverBulk, payload)
+    return response.data
+  },
+
+  revertReadyForHandover: async (binderId: number): Promise<BinderResponse> => {
+    const response = await api.post<BinderResponse>(BINDER_ENDPOINTS.binderRevertReadyForHandover(binderId))
+    return response.data
+  },
+
+  handoverToClient: async (binderId: number, payload?: HandoverToClientPayload): Promise<BinderResponse> => {
+    const response = await api.post<BinderResponse>(BINDER_ENDPOINTS.binderHandoverToClient(binderId), payload)
+    return response.data
+  },
+
+  handoverToClientBulk: async (payload: BinderHandoverToClientBulkPayload): Promise<BinderHandoverToClientBulkResponse> => {
+    const response = await api.post<BinderHandoverToClientBulkResponse>(BINDER_ENDPOINTS.binderHandoverToClientBulk, payload)
     return response.data
   },
 

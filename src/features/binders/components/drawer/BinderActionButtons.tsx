@@ -1,62 +1,81 @@
 import { Button } from '@/components/ui/primitives/Button'
-import { canMarkReady, canReturn, canRevertReady } from '../../utils'
+import type { BinderResponse } from '../../types'
+import { hasBinderAction } from '../../utils'
 
 interface BinderActionButtonsProps {
-  status: string
+  binder: BinderResponse
   disabled?: boolean
-  onMarkReady: React.MouseEventHandler<HTMLButtonElement>
-  onRevertReady?: React.MouseEventHandler<HTMLButtonElement>
-  onReturn?: React.MouseEventHandler<HTMLButtonElement>
+  onReceiveMaterial?: React.MouseEventHandler<HTMLButtonElement>
+  onMarkFull?: React.MouseEventHandler<HTMLButtonElement>
+  onReopenCapacity?: React.MouseEventHandler<HTMLButtonElement>
+  onMarkReadyForHandover: React.MouseEventHandler<HTMLButtonElement>
+  onMarkReadyForHandoverBulk?: React.MouseEventHandler<HTMLButtonElement>
+  onRevertReadyForHandover?: React.MouseEventHandler<HTMLButtonElement>
+  onHandoverToClient?: React.MouseEventHandler<HTMLButtonElement>
+  onHandoverToClientBulk?: React.MouseEventHandler<HTMLButtonElement>
   size?: 'sm' | 'inline'
 }
 
 export const BinderActionButtons: React.FC<BinderActionButtonsProps> = ({
-  status,
+  binder,
   disabled = false,
-  onMarkReady,
-  onRevertReady,
-  onReturn,
+  onReceiveMaterial,
+  onMarkFull,
+  onReopenCapacity,
+  onMarkReadyForHandover,
+  onMarkReadyForHandoverBulk,
+  onRevertReadyForHandover,
+  onHandoverToClient,
+  onHandoverToClientBulk,
   size = 'inline',
 }) => {
   const gap = size === 'sm' ? 'flex flex-wrap gap-2 py-2' : 'flex flex-wrap items-center gap-1.5'
 
   return (
     <div className={gap}>
-      {canMarkReady(status) && (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={disabled}
-          onClick={onMarkReady}
-          className="border-positive-200 bg-positive-50 text-positive-700 hover:bg-positive-100 text-xs px-2.5 py-1"
-        >
-          מוכן לאיסוף
+      {hasBinderAction(binder, 'receive_material') && onReceiveMaterial && (
+        <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onReceiveMaterial}>
+          רשום קליטת חומר
         </Button>
       )}
-      {canRevertReady(status) && (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={disabled}
-          onClick={onRevertReady}
-          className="border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 text-xs px-2.5 py-1"
-        >
-          בטל מוכן לאיסוף
+      {hasBinderAction(binder, 'mark_full') && onMarkFull && (
+        <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onMarkFull}>
+          סמן כמלא
         </Button>
       )}
-      {canReturn(status) && (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={disabled}
-          onClick={onReturn}
-          className="border-primary-200 bg-primary-50 text-primary-700 hover:bg-primary-100 text-xs px-2.5 py-1"
-        >
-          החזרה
+      {hasBinderAction(binder, 'reopen_capacity') && onReopenCapacity && (
+        <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onReopenCapacity}>
+          פתח קיבולת
         </Button>
+      )}
+      {hasBinderAction(binder, 'mark_ready_for_handover') && (
+        <>
+          <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onMarkReadyForHandover}>
+            מוכן למסירה
+          </Button>
+          {onMarkReadyForHandoverBulk && (
+            <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onMarkReadyForHandoverBulk}>
+              סימון קבוצתי למסירה
+            </Button>
+          )}
+        </>
+      )}
+      {hasBinderAction(binder, 'revert_ready_for_handover') && (
+        <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onRevertReadyForHandover}>
+          בטל מוכן למסירה
+        </Button>
+      )}
+      {hasBinderAction(binder, 'handover_to_client') && (
+        <>
+          <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onHandoverToClient}>
+            מסירה ללקוח
+          </Button>
+          {onHandoverToClientBulk && (
+            <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onHandoverToClientBulk}>
+              מסירה קבוצתית
+            </Button>
+          )}
+        </>
       )}
     </div>
   )

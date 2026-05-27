@@ -1,36 +1,36 @@
 import { Input } from '@/components/ui/inputs/Input'
-import { Modal } from '@/components/ui/overlays/Modal'
+import { Select } from '@/components/ui/inputs/Select'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
+import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
+import { NUMERIC_MONTH_OPTIONS, getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import type { BinderResponse } from '../../types'
 import { BinderHandoverPanel } from '../sections/BinderHandoverPanel'
-import { Select } from '@/components/ui/inputs/Select'
-import { NUMERIC_MONTH_OPTIONS, getOperationalYearOptions } from '@/constants/periodOptions.constants'
 
 interface BindersPageDialogsProps {
-  confirmReturnForId: number | null
+  confirmHandoverForId: number | null
   confirmDeleteForId: number | null
-  pickupPersonName: string
-  setPickupPersonName: (value: string) => void
-  isReturning: boolean
+  handoverRecipientName: string
+  setHandoverRecipientName: (value: string) => void
+  isHandingOverToClient: boolean
   isDeleting: boolean
-  onConfirmReturn: () => void
-  onCancelReturn: () => void
+  onConfirmHandoverToClient: () => void
+  onCancelHandoverToClient: () => void
   onConfirmDelete: () => void
   onCancelDelete: () => void
   getBinderNumberLabel: (binderId: number | null) => string | null
-  bulkReadyOpen: boolean
-  onCloseBulkReady: () => void
-  onConfirmBulkReady: () => void
-  bulkReadyYear: number
-  bulkReadyMonth: number
-  setBulkReadyYear: (year: number) => void
-  setBulkReadyMonth: (month: number) => void
-  isMarkingReadyBulk: boolean
+  bulkReadyForHandoverOpen: boolean
+  onCloseBulkReadyForHandover: () => void
+  onConfirmBulkReadyForHandover: () => void
+  bulkReadyForHandoverYear: number
+  bulkReadyForHandoverMonth: number
+  setBulkReadyForHandoverYear: (year: number) => void
+  setBulkReadyForHandoverMonth: (month: number) => void
+  isMarkingReadyForHandoverBulk: boolean
   dialogBinder: BinderResponse | null
-  handoverOpen: boolean
-  onCloseHandover: () => void
-  onSubmitHandover: (payload: {
+  handoverToClientBulkOpen: boolean
+  onCloseHandoverToClientBulk: () => void
+  onSubmitHandoverToClientBulk: (payload: {
     binderIds: number[]
     receivedByName: string
     handedOverAt: string
@@ -38,57 +38,57 @@ interface BindersPageDialogsProps {
     untilPeriodMonth: number
     notes: string | null
   }) => void
-  isHandingOver: boolean
+  isHandingOverToClientBulk: boolean
 }
 
 export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
-  bulkReadyMonth,
-  bulkReadyOpen,
-  bulkReadyYear,
+  bulkReadyForHandoverMonth,
+  bulkReadyForHandoverOpen,
+  bulkReadyForHandoverYear,
   confirmDeleteForId,
-  confirmReturnForId,
-  getBinderNumberLabel,
-  handoverOpen,
-  isDeleting,
-  isHandingOver,
-  isMarkingReadyBulk,
-  isReturning,
-  onCancelDelete,
-  onCancelReturn,
-  onCloseBulkReady,
-  onCloseHandover,
-  onConfirmBulkReady,
-  onConfirmDelete,
-  onConfirmReturn,
-  onSubmitHandover,
-  pickupPersonName,
+  confirmHandoverForId,
   dialogBinder,
-  setBulkReadyMonth,
-  setBulkReadyYear,
-  setPickupPersonName,
+  getBinderNumberLabel,
+  handoverRecipientName,
+  handoverToClientBulkOpen,
+  isDeleting,
+  isHandingOverToClient,
+  isHandingOverToClientBulk,
+  isMarkingReadyForHandoverBulk,
+  onCancelDelete,
+  onCancelHandoverToClient,
+  onCloseBulkReadyForHandover,
+  onCloseHandoverToClientBulk,
+  onConfirmBulkReadyForHandover,
+  onConfirmDelete,
+  onConfirmHandoverToClient,
+  onSubmitHandoverToClientBulk,
+  setBulkReadyForHandoverMonth,
+  setBulkReadyForHandoverYear,
+  setHandoverRecipientName,
 }) => (
   <>
     <ConfirmDialog
-      open={confirmReturnForId !== null}
-      title="החזרת קלסר"
+      open={confirmHandoverForId !== null}
+      title="מסירת קלסר"
       message={
-        confirmReturnForId !== null
-          ? `האם להחזיר את קלסר ${getBinderNumberLabel(confirmReturnForId)}?`
-          : 'האם להחזיר את הקלסר?'
+        confirmHandoverForId !== null
+          ? `האם למסור את קלסר ${getBinderNumberLabel(confirmHandoverForId)} ללקוח?`
+          : 'האם למסור את הקלסר ללקוח?'
       }
-      confirmLabel="החזר קלסר"
+      confirmLabel="מסור קלסר"
       cancelLabel="ביטול"
-      isLoading={isReturning}
-      onConfirm={onConfirmReturn}
-      confirmDisabled={!pickupPersonName.trim()}
-      onCancel={onCancelReturn}
+      isLoading={isHandingOverToClient}
+      onConfirm={onConfirmHandoverToClient}
+      confirmDisabled={!handoverRecipientName.trim()}
+      onCancel={onCancelHandoverToClient}
     >
       <Input
         type="text"
-        label="שם האיש המאסף"
+        label="נמסר לידי"
         placeholder="שם חובה"
-        value={pickupPersonName}
-        onChange={(e) => setPickupPersonName(e.target.value)}
+        value={handoverRecipientName}
+        onChange={(e) => setHandoverRecipientName(e.target.value)}
         className="mt-3"
         required
       />
@@ -107,35 +107,40 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
     />
 
     <Modal
-      open={bulkReadyOpen}
-      title="סימון עד תקופה כמוכן לאיסוף"
-      onClose={onCloseBulkReady}
+      open={bulkReadyForHandoverOpen}
+      title="סימון קבוצתי כמוכן למסירה"
+      onClose={onCloseBulkReadyForHandover}
       footer={
         <div className="flex items-center justify-end gap-2">
-          <Button type="button" variant="secondary" onClick={onCloseBulkReady}>
+          <Button type="button" variant="secondary" onClick={onCloseBulkReadyForHandover}>
             ביטול
           </Button>
-          <Button type="button" isLoading={isMarkingReadyBulk} disabled={!dialogBinder} onClick={onConfirmBulkReady}>
-            סמן כמוכן
+          <Button
+            type="button"
+            isLoading={isMarkingReadyForHandoverBulk}
+            disabled={!dialogBinder}
+            onClick={onConfirmBulkReadyForHandover}
+          >
+            סמן כמוכן למסירה
           </Button>
         </div>
       }
     >
       <div className="space-y-4">
         <p className="text-sm text-gray-700">
-          הפעולה תסמן את כל הקלסרים של הלקוח עד תקופת הדיווח שנבחרה כמוכנים לאיסוף.
+          הפעולה תסמן את כל הקלסרים של הלקוח עד תקופת הדיווח שנבחרה כמוכנים למסירה.
         </p>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Select
             label="עד שנת דיווח"
-            value={String(bulkReadyYear)}
-            onChange={(event) => setBulkReadyYear(Number(event.target.value))}
+            value={String(bulkReadyForHandoverYear)}
+            onChange={(event) => setBulkReadyForHandoverYear(Number(event.target.value))}
             options={getOperationalYearOptions()}
           />
           <Select
             label="עד חודש דיווח"
-            value={String(bulkReadyMonth)}
-            onChange={(event) => setBulkReadyMonth(Number(event.target.value))}
+            value={String(bulkReadyForHandoverMonth)}
+            onChange={(event) => setBulkReadyForHandoverMonth(Number(event.target.value))}
             options={NUMERIC_MONTH_OPTIONS}
           />
         </div>
@@ -143,12 +148,12 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
     </Modal>
 
     <Modal
-      open={handoverOpen}
-      title="מסירת קלסרים"
-      onClose={onCloseHandover}
+      open={handoverToClientBulkOpen}
+      title="מסירת קלסרים ללקוח"
+      onClose={onCloseHandoverToClientBulk}
       footer={
         <div className="flex items-center justify-end">
-          <Button type="button" variant="secondary" onClick={onCloseHandover}>
+          <Button type="button" variant="secondary" onClick={onCloseHandoverToClientBulk}>
             סגור
           </Button>
         </div>
@@ -158,8 +163,8 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
         <BinderHandoverPanel
           clientId={dialogBinder.client_record_id}
           initialBinderId={dialogBinder.id}
-          isSubmitting={isHandingOver}
-          onSubmit={onSubmitHandover}
+          isSubmitting={isHandingOverToClientBulk}
+          onSubmit={onSubmitHandoverToClientBulk}
         />
       ) : null}
     </Modal>

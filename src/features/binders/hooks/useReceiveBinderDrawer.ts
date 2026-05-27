@@ -114,7 +114,7 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
     refetchOnWindowFocus: false,
   })
 
-  const hasActiveBinder = (clientBindersData?.items ?? []).some((b) => b.status === 'in_office')
+  const hasActiveBinder = (clientBindersData?.items ?? []).some((b) => b.location_status === 'in_office')
 
   const { data: taxProfile } = useQuery({
     queryKey: taxProfileQK.forClient(clientRecordId!),

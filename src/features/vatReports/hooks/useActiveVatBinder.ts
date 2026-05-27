@@ -9,7 +9,7 @@ export const useActiveVatBinder = (clientRecordId: number) => {
       bindersApi.list({
         client_record_id: clientRecordId,
         page_size: 1,
-        status: 'in_office',
+        location_status: 'in_office',
       }),
     enabled: Number.isInteger(clientRecordId) && clientRecordId > 0,
     staleTime: QUERY_STALE_TIME.medium,

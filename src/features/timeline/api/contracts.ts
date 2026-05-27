@@ -1,13 +1,14 @@
 // ── Domain enums ──────────────────────────────────────────────────────────────
 
-export type TimelineBinderStatus = 'none' | 'in_office' | 'ready_for_pickup' | 'returned'
+export type TimelineBinderStatus = 'null' | 'in_office' | 'ready_for_handover' | 'handed_over' | 'open' | 'full'
 
 // ── Metadata ──────────────────────────────────────────────────────────────────
 
 export interface TimelineEventMetadata {
-  // binder status change
-  old_status?: TimelineBinderStatus | null
-  new_status?: TimelineBinderStatus | null
+  // binder lifecycle change
+  field_name?: string | null
+  old_value?: TimelineBinderStatus | null
+  new_value?: TimelineBinderStatus | null
   // charge / invoice
   amount?: number | string | null
   provider?: string | null

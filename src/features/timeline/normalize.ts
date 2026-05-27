@@ -21,8 +21,8 @@ const FILTER_BY_EVENT_TYPE: Record<string, TimelineFilterKey[]> = {
   charge_paid: ['past', 'finance'],
   invoice_attached: ['past', 'finance'],
   binder_received: ['past', 'binders'],
-  binder_returned: ['past', 'binders'],
-  binder_status_change: ['past', 'binders'],
+  binder_handed_over: ['past', 'binders'],
+  binder_lifecycle_change: ['past', 'binders'],
   document_uploaded: ['past', 'documents'],
   annual_report_status_changed: ['past', 'tax'],
   signature_request_sent: ['past', 'documents'],
@@ -37,7 +37,7 @@ const STRONG_EVENTS = new Set([
   'charge_issued',
   'charge_paid',
   'annual_report_status_changed',
-  'binder_status_change',
+  'binder_lifecycle_change',
   'document_uploaded',
   'signature_request_sent',
   'signature_request_signed',
@@ -53,10 +53,11 @@ const getMetadataString = (metadata: TimelineEventMetadata | null | undefined, k
 }
 
 const shouldHideEvent = (event: TimelineEvent): boolean =>
-  event.event_type === 'binder_status_change' &&
-  event.metadata?.old_status != null &&
-  event.metadata?.new_status != null &&
-  event.metadata.old_status === event.metadata.new_status
+  event.event_type === 'binder_lifecycle_change' &&
+  event.metadata?.old_value != null &&
+  event.metadata?.new_value != null &&
+  event.metadata.old_value === event.metadata.new_value &&
+  !event.metadata.notes
 
 const getRelatedEntity = (event: TimelineEvent): string | null => {
   if (event.charge_id != null) return `חיוב #${event.charge_id}`
@@ -80,11 +81,15 @@ const buildTitle = (event: TimelineEvent): string => {
 }
 
 const buildSecondary = (event: TimelineEvent): string | null => {
-  if (event.event_type === 'binder_status_change') {
-    const oldLabel = getTimelineStatusLabel(String(event.metadata?.old_status ?? ''))
-    const newLabel = getTimelineStatusLabel(String(event.metadata?.new_status ?? ''))
+  if (event.event_type === 'binder_lifecycle_change') {
+    if (event.metadata?.old_value === event.metadata?.new_value && event.metadata?.notes) {
+      return String(event.metadata.notes)
+    }
+    const oldLabel = getTimelineStatusLabel(String(event.metadata?.old_value ?? ''))
+    const newLabel = getTimelineStatusLabel(String(event.metadata?.new_value ?? ''))
     return `${oldLabel} ← ${newLabel}`
   }
+
   return event.description || null
 }
 

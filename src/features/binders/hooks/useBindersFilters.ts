@@ -5,7 +5,7 @@ export const useBindersFilters = () => {
   const { searchParams, setFilter, setPage, setSearchParams } = useSearchParamFilters()
 
   const filters = {
-    status: searchParams.get('status') ?? '',
+    location_status: searchParams.get('location_status') ?? '',
     client_record_id: parsePositiveInt(searchParams.get('client_record_id'), 0) || undefined,
     query: searchParams.get('query') ?? '',
     binder_number: searchParams.get('binder_number') ?? '',
@@ -20,7 +20,7 @@ export const useBindersFilters = () => {
 
   const handleReset = () => {
     const next = new URLSearchParams(searchParams)
-    next.delete('status')
+    next.delete('location_status')
     next.delete('query')
     next.delete('binder_number')
     next.delete('client_record_id')

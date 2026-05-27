@@ -11,11 +11,14 @@ interface BinderDetailDrawerProps {
   open: boolean
   binder: BinderResponse | null
   onClose: () => void
-  onMarkReady?: () => void
-  onRevertReady?: () => void
-  onReturn?: () => void
-  onBulkReady?: () => void
-  onOpenHandover?: () => void
+  onReceiveMaterial?: () => void
+  onMarkFull?: () => void
+  onReopenCapacity?: () => void
+  onMarkReadyForHandover?: () => void
+  onMarkReadyForHandoverBulk?: () => void
+  onRevertReadyForHandover?: () => void
+  onHandoverToClient?: () => void
+  onHandoverToClientBulk?: () => void
   onDelete?: () => void
   actionLoading?: boolean
 }
@@ -24,11 +27,14 @@ export const BinderDetailDrawer: React.FC<BinderDetailDrawerProps> = ({
   open,
   binder,
   onClose,
-  onMarkReady,
-  onRevertReady,
-  onReturn,
-  onBulkReady,
-  onOpenHandover,
+  onReceiveMaterial,
+  onMarkFull,
+  onReopenCapacity,
+  onMarkReadyForHandover,
+  onMarkReadyForHandoverBulk,
+  onRevertReadyForHandover,
+  onHandoverToClient,
+  onHandoverToClientBulk,
   onDelete,
   actionLoading = false,
 }) => (
@@ -52,13 +58,16 @@ export const BinderDetailDrawer: React.FC<BinderDetailDrawerProps> = ({
       <>
         <BinderDetailsPanel binder={binder} />
         <BinderActionsPanel
-          status={binder.status}
+          binder={binder}
           disabled={actionLoading}
-          onMarkReady={onMarkReady ?? (() => undefined)}
-          onRevertReady={onRevertReady}
-          onReturn={onReturn}
-          onBulkReady={onBulkReady}
-          onOpenHandover={onOpenHandover}
+          onReceiveMaterial={onReceiveMaterial}
+          onMarkFull={onMarkFull}
+          onReopenCapacity={onReopenCapacity}
+          onMarkReadyForHandover={onMarkReadyForHandover ?? (() => undefined)}
+          onMarkReadyForHandoverBulk={onMarkReadyForHandoverBulk}
+          onRevertReadyForHandover={onRevertReadyForHandover}
+          onHandoverToClient={onHandoverToClient}
+          onHandoverToClientBulk={onHandoverToClientBulk}
         />
         <BinderIntakesSection
           binderId={binder.id}

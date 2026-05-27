@@ -42,10 +42,10 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
   const { data, isLoading } = useQuery({
     queryKey: bindersQK.list({
       client_record_id: clientId,
-      status: 'ready_for_pickup',
+      location_status: 'ready_for_handover',
       page_size: 100,
     }),
-    queryFn: () => bindersApi.list({ client_record_id: clientId, status: 'ready_for_pickup', page_size: 100 }),
+    queryFn: () => bindersApi.list({ client_record_id: clientId, location_status: 'ready_for_handover', page_size: 100 }),
     enabled: clientId > 0,
     staleTime: QUERY_STALE_TIME.default,
   })
@@ -73,7 +73,7 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
     <div className="space-y-4">
       <div className="rounded-xl border border-gray-200 bg-gray-50 p-3">
         <p className="text-sm font-medium text-gray-900">בחירת קלסרים למסירה</p>
-        <p className="mt-1 text-xs text-gray-500">בחר את כל הקלסרים במצב "מוכן לאיסוף" שנמסרים ללקוח באותו אירוע.</p>
+        <p className="mt-1 text-xs text-gray-500">בחר את כל הקלסרים במצב "מוכן למסירה" שנמסרים ללקוח באותו אירוע.</p>
 
         <div className="mt-3 space-y-2">
           {isLoading ? (

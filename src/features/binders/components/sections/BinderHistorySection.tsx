@@ -6,11 +6,31 @@ import { Card } from '@/components/ui/primitives/Card'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Timeline, TimelineEntry } from '@/components/ui/feedback/Timeline'
 import { bindersApi, bindersQK } from '../../api'
-import { getBinderStatusLabel, BINDER_STATUS_VARIANTS, type BinderStatusValue } from '../../constants'
+import {
+  BINDER_CAPACITY_STATUS_VARIANTS,
+  BINDER_LOCATION_STATUS_VARIANTS,
+  getBinderCapacityStatusLabel,
+  getBinderLocationStatusLabel,
+  type BinderCapacityStatusValue,
+  type BinderLocationStatusValue,
+} from '../../constants'
 import { staggerDelay } from '@/utils/animation'
 
 interface BinderHistorySectionProps {
   binderId: number
+}
+
+const getHistoryBadge = (fieldName: string, value: string) => {
+  if (fieldName === 'capacity_status') {
+    return {
+      label: getBinderCapacityStatusLabel(value),
+      variant: BINDER_CAPACITY_STATUS_VARIANTS[value as BinderCapacityStatusValue] ?? 'neutral',
+    }
+  }
+  return {
+    label: getBinderLocationStatusLabel(value),
+    variant: BINDER_LOCATION_STATUS_VARIANTS[value as BinderLocationStatusValue] ?? 'neutral',
+  }
 }
 
 export const BinderHistorySection: React.FC<BinderHistorySectionProps> = ({ binderId }) => {
@@ -29,19 +49,22 @@ export const BinderHistorySection: React.FC<BinderHistorySectionProps> = ({ bind
         <p className="text-sm text-gray-500">אין רשומות היסטוריה</p>
       ) : (
         <Timeline>
-          {[...history].reverse().map((entry, index) => (
+          {[...history].reverse().map((entry, index) => {
+            const oldBadge = entry.old_value ? getHistoryBadge(entry.field_name, entry.old_value) : null
+            const newBadge = getHistoryBadge(entry.field_name, entry.new_value)
+            return (
             <TimelineEntry key={index} animationDelay={staggerDelay(index, 40)}>
               <div className="mb-1 flex flex-wrap items-center gap-1.5 text-sm">
-                {entry.old_status && (
+                {entry.old_value && (
                   <>
-                    <Badge variant={BINDER_STATUS_VARIANTS[entry.old_status as BinderStatusValue] ?? 'neutral'}>
-                      {getBinderStatusLabel(entry.old_status)}
+                    <Badge variant={oldBadge?.variant ?? 'neutral'}>
+                      {oldBadge?.label}
                     </Badge>
                     <ArrowRight className="h-3 w-3 text-gray-400" />
                   </>
                 )}
-                <Badge variant={BINDER_STATUS_VARIANTS[entry.new_status as BinderStatusValue] ?? 'neutral'}>
-                  {getBinderStatusLabel(entry.new_status)}
+                <Badge variant={newBadge.variant}>
+                  {newBadge.label}
                 </Badge>
               </div>
 
@@ -56,7 +79,8 @@ export const BinderHistorySection: React.FC<BinderHistorySectionProps> = ({ bind
                 <p className="mt-1.5 text-xs text-gray-600 border-t border-gray-100 pt-1.5">{entry.notes}</p>
               )}
             </TimelineEntry>
-          ))}
+            )
+          })}
         </Timeline>
       )}
     </Card>

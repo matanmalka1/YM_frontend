@@ -3,10 +3,9 @@ import type { BinderResponse } from '../types'
 
 interface UseBindersPageDialogsParams {
   getSelectedBinder: () => BinderResponse | null
-  markReadyBulk: (clientId: number, untilPeriodYear: number, untilPeriodMonth: number) => Promise<unknown>
-  returnBinder: (binderId: number, pickupPersonName: string) => Promise<unknown>
-  deleteBinder: (binderId: number) => Promise<unknown>
-  handoverBinders: (
+  markReadyForHandoverBulk: (clientId: number, untilPeriodYear: number, untilPeriodMonth: number) => Promise<unknown>
+  handoverToClient: (binderId: number, handoverRecipientName: string) => Promise<unknown>
+  handoverToClientBulk: (
     clientId: number,
     binderIds: number[],
     receivedByName: string,
@@ -15,55 +14,56 @@ interface UseBindersPageDialogsParams {
     untilPeriodMonth: number,
     notes?: string | null,
   ) => Promise<unknown>
+  deleteBinder: (binderId: number) => Promise<unknown>
 }
 
 export const useBindersPageDialogs = ({
   getSelectedBinder,
-  markReadyBulk,
-  returnBinder,
+  markReadyForHandoverBulk,
+  handoverToClient,
+  handoverToClientBulk,
   deleteBinder,
-  handoverBinders,
 }: UseBindersPageDialogsParams) => {
   const [confirmDeleteForId, setConfirmDeleteForId] = useState<number | null>(null)
-  const [confirmReturnForId, setConfirmReturnForId] = useState<number | null>(null)
-  const [pickupPersonName, setPickupPersonName] = useState('')
-  const [bulkReadyOpen, setBulkReadyOpen] = useState(false)
-  const [handoverOpen, setHandoverOpen] = useState(false)
-  const [bulkReadyYear, setBulkReadyYear] = useState(new Date().getFullYear())
-  const [bulkReadyMonth, setBulkReadyMonth] = useState(new Date().getMonth() + 1)
+  const [confirmHandoverForId, setConfirmHandoverForId] = useState<number | null>(null)
+  const [handoverRecipientName, setHandoverRecipientName] = useState('')
+  const [bulkReadyForHandoverOpen, setBulkReadyForHandoverOpen] = useState(false)
+  const [handoverToClientBulkOpen, setHandoverToClientBulkOpen] = useState(false)
+  const [bulkReadyForHandoverYear, setBulkReadyForHandoverYear] = useState(new Date().getFullYear())
+  const [bulkReadyForHandoverMonth, setBulkReadyForHandoverMonth] = useState(new Date().getMonth() + 1)
   const [dialogBinder, setDialogBinder] = useState<BinderResponse | null>(null)
 
   const openDeleteDialog = (binderId: number) => setConfirmDeleteForId(binderId)
   const closeDeleteDialog = () => setConfirmDeleteForId(null)
 
-  const openReturnDialog = (binderId: number) => setConfirmReturnForId(binderId)
-  const closeReturnDialog = () => {
-    setConfirmReturnForId(null)
-    setPickupPersonName('')
+  const openHandoverToClientDialog = (binderId: number) => setConfirmHandoverForId(binderId)
+  const closeHandoverToClientDialog = () => {
+    setConfirmHandoverForId(null)
+    setHandoverRecipientName('')
   }
 
-  const openBulkReadyDialog = (binder?: BinderResponse) => {
+  const openBulkReadyForHandoverDialog = (binder?: BinderResponse) => {
     setDialogBinder(binder ?? getSelectedBinder())
-    setBulkReadyOpen(true)
+    setBulkReadyForHandoverOpen(true)
   }
-  const closeBulkReadyDialog = () => {
-    setBulkReadyOpen(false)
+  const closeBulkReadyForHandoverDialog = () => {
+    setBulkReadyForHandoverOpen(false)
     setDialogBinder(null)
   }
 
-  const openHandoverDialog = (binder?: BinderResponse) => {
+  const openHandoverToClientBulkDialog = (binder?: BinderResponse) => {
     setDialogBinder(binder ?? getSelectedBinder())
-    setHandoverOpen(true)
+    setHandoverToClientBulkOpen(true)
   }
-  const closeHandoverDialog = () => {
-    setHandoverOpen(false)
+  const closeHandoverToClientBulkDialog = () => {
+    setHandoverToClientBulkOpen(false)
     setDialogBinder(null)
   }
 
-  const confirmReturn = async () => {
-    if (confirmReturnForId === null) return
-    await returnBinder(confirmReturnForId, pickupPersonName)
-    closeReturnDialog()
+  const confirmHandoverToClient = async () => {
+    if (confirmHandoverForId === null) return
+    await handoverToClient(confirmHandoverForId, handoverRecipientName)
+    closeHandoverToClientDialog()
   }
 
   const confirmDelete = async () => {
@@ -72,14 +72,18 @@ export const useBindersPageDialogs = ({
     closeDeleteDialog()
   }
 
-  const confirmBulkReady = async () => {
+  const confirmBulkReadyForHandover = async () => {
     const binder = dialogBinder
     if (!binder) return
-    await markReadyBulk(binder.client_record_id, bulkReadyYear, bulkReadyMonth)
-    closeBulkReadyDialog()
+    await markReadyForHandoverBulk(
+      binder.client_record_id,
+      bulkReadyForHandoverYear,
+      bulkReadyForHandoverMonth,
+    )
+    closeBulkReadyForHandoverDialog()
   }
 
-  const submitHandover = async (payload: {
+  const submitHandoverToClientBulk = async (payload: {
     binderIds: number[]
     receivedByName: string
     handedOverAt: string
@@ -89,7 +93,7 @@ export const useBindersPageDialogs = ({
   }) => {
     const binder = dialogBinder
     if (!binder) return
-    await handoverBinders(
+    await handoverToClientBulk(
       binder.client_record_id,
       payload.binderIds,
       payload.receivedByName,
@@ -98,32 +102,32 @@ export const useBindersPageDialogs = ({
       payload.untilPeriodMonth,
       payload.notes,
     )
-    closeHandoverDialog()
+    closeHandoverToClientBulkDialog()
   }
 
   return {
-    bulkReadyMonth,
-    bulkReadyOpen,
-    bulkReadyYear,
-    closeBulkReadyDialog,
+    bulkReadyForHandoverMonth,
+    bulkReadyForHandoverOpen,
+    bulkReadyForHandoverYear,
+    closeBulkReadyForHandoverDialog,
     closeDeleteDialog,
-    closeHandoverDialog,
-    closeReturnDialog,
-    confirmBulkReady,
+    closeHandoverToClientBulkDialog,
+    closeHandoverToClientDialog,
+    confirmBulkReadyForHandover,
     confirmDelete,
     confirmDeleteForId,
-    confirmReturn,
-    confirmReturnForId,
+    confirmHandoverForId,
+    confirmHandoverToClient,
     dialogBinder,
-    handoverOpen,
-    openBulkReadyDialog,
+    handoverRecipientName,
+    handoverToClientBulkOpen,
+    openBulkReadyForHandoverDialog,
     openDeleteDialog,
-    openHandoverDialog,
-    openReturnDialog,
-    pickupPersonName,
-    setBulkReadyMonth,
-    setBulkReadyYear,
-    setPickupPersonName,
-    submitHandover,
+    openHandoverToClientBulkDialog,
+    openHandoverToClientDialog,
+    setBulkReadyForHandoverMonth,
+    setBulkReadyForHandoverYear,
+    setHandoverRecipientName,
+    submitHandoverToClientBulk,
   }
 }

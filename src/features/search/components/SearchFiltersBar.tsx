@@ -3,7 +3,7 @@ import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
 import { Button } from '../../../components/ui/primitives/Button'
 import { CLIENT_STATUS_OPTIONS, ENTITY_TYPE_OPTIONS } from '@/features/clients'
-import { BINDER_STATUS_OPTIONS } from '../../binders'
+import { BINDER_LOCATION_STATUS_OPTIONS } from '../../binders'
 import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFiltersBarProps } from '../types'
 
 const withEmptyOption = (label: string, options: { value: string; label: string }[]) => [
@@ -70,10 +70,10 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
               options={withEmptyOption('כל הסוגים', ENTITY_TYPE_OPTIONS)}
             />
             <Select
-              label="סטטוס קלסר"
-              value={filters.binder_status}
-              onChange={(e) => onFilterChange('binder_status', e.target.value)}
-              options={withEmptyOption('כל הסטטוסים', BINDER_STATUS_OPTIONS)}
+              label="מיקום קלסר"
+              value={filters.binder_location_status}
+              onChange={(e) => onFilterChange('binder_location_status', e.target.value)}
+              options={withEmptyOption('כל הסטטוסים', BINDER_LOCATION_STATUS_OPTIONS)}
             />
           </div>
 

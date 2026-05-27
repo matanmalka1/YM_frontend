@@ -52,8 +52,8 @@ const makeColor = (color: TailwindColor): EventColorConfig => {
 
 const EVENT_COLOR_MAP: Record<string, TailwindColor> = {
   binder_received: 'primary',
-  binder_returned: 'emerald',
-  binder_status_change: 'sky',
+  binder_handed_over: 'emerald',
+  binder_lifecycle_change: 'sky',
   invoice_attached: 'violet',
   charge_created: 'amber',
   charge_issued: 'orange',

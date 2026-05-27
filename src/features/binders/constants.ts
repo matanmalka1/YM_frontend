@@ -1,17 +1,25 @@
 import { makeLabelGetter } from '@/utils/labels'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 
-export const BINDER_STATUS_VALUES = ['in_office', 'closed_in_office', 'ready_for_pickup', 'returned'] as const
-export type BinderStatusValue = (typeof BINDER_STATUS_VALUES)[number]
+export const BINDER_LOCATION_STATUS_VALUES = ['in_office', 'ready_for_handover', 'handed_over'] as const
+export type BinderLocationStatusValue = (typeof BINDER_LOCATION_STATUS_VALUES)[number]
 
-export const BINDER_STATUS_LABELS: Record<BinderStatusValue, string> = {
+export const BINDER_CAPACITY_STATUS_VALUES = ['open', 'full'] as const
+export type BinderCapacityStatusValue = (typeof BINDER_CAPACITY_STATUS_VALUES)[number]
+
+export const BINDER_LOCATION_STATUS_LABELS: Record<BinderLocationStatusValue, string> = {
   in_office: 'במשרד',
-  closed_in_office: 'סגור במשרד',
-  ready_for_pickup: 'מוכן לאיסוף',
-  returned: 'הוחזר',
+  ready_for_handover: 'מוכן למסירה',
+  handed_over: 'נמסר ללקוח',
 }
 
-export const getBinderStatusLabel = makeLabelGetter(BINDER_STATUS_LABELS)
+export const BINDER_CAPACITY_STATUS_LABELS: Record<BinderCapacityStatusValue, string> = {
+  open: 'פתוח',
+  full: 'מלא',
+}
+
+export const getBinderLocationStatusLabel = makeLabelGetter(BINDER_LOCATION_STATUS_LABELS)
+export const getBinderCapacityStatusLabel = makeLabelGetter(BINDER_CAPACITY_STATUS_LABELS)
 
 export const BINDER_TYPE_VALUES = [
   'vat',
@@ -47,11 +55,21 @@ export const getBinderTypeLabel = makeLabelGetter(BINDER_TYPE_LABELS)
 export const ANNUAL_BINDER_TYPES = new Set(['annual_report', 'capital_declaration'])
 export const PERIODIC_BINDER_TYPES = new Set(['vat', 'salary'])
 
-export const BINDER_STATUS_VARIANTS: Record<BinderStatusValue, 'success' | 'warning' | 'error' | 'info' | 'neutral'> = {
+export const BINDER_LOCATION_STATUS_VARIANTS: Record<
+  BinderLocationStatusValue,
+  'success' | 'warning' | 'error' | 'info' | 'neutral'
+> = {
   in_office: 'info',
-  closed_in_office: 'warning',
-  ready_for_pickup: 'success',
-  returned: 'neutral',
+  ready_for_handover: 'success',
+  handed_over: 'neutral',
+}
+
+export const BINDER_CAPACITY_STATUS_VARIANTS: Record<
+  BinderCapacityStatusValue,
+  'success' | 'warning' | 'error' | 'info' | 'neutral'
+> = {
+  open: 'success',
+  full: 'warning',
 }
 
 export const BINDER_TYPE_OPTIONS: { value: string; label: string; disabled?: true }[] = [
@@ -59,7 +77,12 @@ export const BINDER_TYPE_OPTIONS: { value: string; label: string; disabled?: tru
   ...BINDER_TYPE_VALUES.map((value) => ({ value, label: BINDER_TYPE_LABELS[value] })),
 ]
 
-export const BINDER_STATUS_OPTIONS: { value: string; label: string }[] = [
+export const BINDER_LOCATION_STATUS_OPTIONS: { value: string; label: string }[] = [
   ALL_STATUSES_OPTION,
-  ...BINDER_STATUS_VALUES.map((value) => ({ value, label: BINDER_STATUS_LABELS[value] })),
+  ...BINDER_LOCATION_STATUS_VALUES.map((value) => ({ value, label: BINDER_LOCATION_STATUS_LABELS[value] })),
+]
+
+export const BINDER_CAPACITY_STATUS_OPTIONS: { value: string; label: string }[] = [
+  ALL_STATUSES_OPTION,
+  ...BINDER_CAPACITY_STATUS_VALUES.map((value) => ({ value, label: BINDER_CAPACITY_STATUS_LABELS[value] })),
 ]

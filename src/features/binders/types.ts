@@ -1,4 +1,12 @@
-import type { BackendAction } from '../../lib/actions/types'
+export type BinderLocationStatus = 'in_office' | 'ready_for_handover' | 'handed_over'
+export type BinderCapacityStatus = 'open' | 'full'
+export type BinderAction =
+  | 'receive_material'
+  | 'mark_full'
+  | 'reopen_capacity'
+  | 'mark_ready_for_handover'
+  | 'revert_ready_for_handover'
+  | 'handover_to_client'
 
 export interface BinderResponse {
   id: number
@@ -9,12 +17,14 @@ export interface BinderResponse {
   binder_number: string
   period_start: string | null
   period_end: string | null
-  status: string
-  returned_at: string | null
-  pickup_person_name?: string | null
+  location_status: BinderLocationStatus
+  capacity_status: BinderCapacityStatus
+  ready_for_handover_at?: string | null
+  handed_over_at: string | null
+  handover_recipient_name?: string | null
   notes?: string | null
   days_in_office?: number | null
-  available_actions?: BackendAction[] | null
+  available_actions?: BinderAction[] | null
 }
 
 export interface BinderListResponse {
@@ -27,16 +37,18 @@ export interface BinderListResponse {
 
 export interface BinderListCounters {
   total: number
-  in_office: number
-  closed_in_office: number
-  ready_for_pickup: number
-  returned: number
+  location_in_office: number
+  location_ready_for_handover: number
+  location_handed_over: number
+  capacity_open: number
+  capacity_full: number
 }
 
 export interface BinderHistoryEntry {
-  old_status: string
-  new_status: string
-  changed_by: number
+  field_name: 'location_status' | 'capacity_status'
+  old_value: string
+  new_value: string
+  changed_by_user_id: number
   changed_by_name?: string | null
   changed_at: string
   notes?: string | null
@@ -48,7 +60,8 @@ export interface BinderHistoryResponse {
 }
 
 export interface ListBindersParams {
-  status?: string
+  location_status?: string
+  capacity_status?: string
   client_record_id?: number
   query?: string
   client_name?: string
@@ -83,10 +96,9 @@ export interface ReceiveBinderPayload {
   }[]
 }
 
-export interface ReturnBinderPayload {
-  pickup_person_name?: string
-  returned_by?: number
-  returned_at?: string
+export interface HandoverToClientPayload {
+  handover_recipient_name?: string | null
+  handed_over_at?: string | null
 }
 
 export type BindersFilters = Omit<ListBindersParams, 'client_name' | 'year'> & {

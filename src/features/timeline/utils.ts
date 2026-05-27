@@ -27,8 +27,8 @@ interface EventMeta {
 
 const EVENT_REGISTRY: Record<string, EventMeta> = {
   binder_received: { label: 'קליטת קלסר', icon: FolderInput },
-  binder_returned: { label: 'החזרת קלסר', icon: FolderOutput },
-  binder_status_change: { label: 'שינוי סטטוס קלסר', icon: ArrowLeftRight },
+  binder_handed_over: { label: 'מסירת קלסר', icon: FolderOutput },
+  binder_lifecycle_change: { label: 'שינוי סטטוס קלסר', icon: ArrowLeftRight },
   invoice_attached: { label: 'חשבונית צורפה', icon: Receipt },
   charge_created: { label: 'יצירת חיוב', icon: CreditCard },
   charge_issued: { label: 'הנפקת חיוב', icon: CreditCard },

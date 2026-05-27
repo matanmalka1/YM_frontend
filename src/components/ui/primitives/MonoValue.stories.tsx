@@ -75,6 +75,6 @@ export const ReturnedDays: Story = {
   args: {
     value: 120,
     format: 'days',
-    returned: true,
+    isInactive: true,
   },
 }

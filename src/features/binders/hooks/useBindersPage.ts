@@ -10,7 +10,7 @@ export const useBindersPage = () => {
   const { filters, setPage, handleFilterChange, handleReset, handleSort } = useBindersFilters()
 
   const listParams = {
-    status: filters.status || undefined,
+    location_status: filters.location_status || undefined,
     client_record_id: filters.client_record_id || undefined,
     query: filters.query || undefined,
     binder_number: filters.binder_number || undefined,
@@ -30,10 +30,11 @@ export const useBindersPage = () => {
   const pageItems = bindersQuery.data?.items ?? []
   const lastCountersRef = useRef({
     total: 0,
-    in_office: 0,
-    closed_in_office: 0,
-    ready_for_pickup: 0,
-    returned: 0,
+    location_in_office: 0,
+    location_ready_for_handover: 0,
+    location_handed_over: 0,
+    capacity_open: 0,
+    capacity_full: 0,
   })
 
   useEffect(() => {

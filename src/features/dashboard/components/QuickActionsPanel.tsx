@@ -36,11 +36,8 @@ const ACTION_META: Record<string, { fallbackDescription: string }> = {
   annual_report_navigate: {
     fallbackDescription: 'פתיחת דוח שנתי לטיפול',
   },
-  binder_pickup_reminder: {
-    fallbackDescription: 'שליחת תזכורת איסוף קלסר',
-  },
-  return: {
-    fallbackDescription: 'סימון קלסר כהוחזר',
+  binder_handover_reminder: {
+    fallbackDescription: 'שליחת תזכורת מסירת קלסר',
   },
   mark_paid: {
     fallbackDescription: 'סימון חיוב כשולם',

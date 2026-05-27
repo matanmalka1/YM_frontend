@@ -2,12 +2,15 @@ import { Link } from 'react-router-dom'
 import { actionsColumn, monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
 import { MonoValue } from '@/components/ui/primitives/MonoValue'
 import type { BinderResponse } from '../../types'
-import { getBinderStatusLabel } from '../../constants'
+import {
+  BINDER_CAPACITY_STATUS_VARIANTS,
+  BINDER_LOCATION_STATUS_VARIANTS,
+  getBinderCapacityStatusLabel,
+  getBinderLocationStatusLabel,
+} from '../../constants'
 import { formatBinderNumber, formatClientOfficeId, formatMonthYear } from '@/utils/utils'
-import { BINDER_STATUS_VARIANTS } from '../../constants'
 import { BinderRowActions } from './BinderRowActions'
 
-// eslint-disable-next-line react-refresh/only-export-components
 const ClientCell: React.FC<{ binder: BinderResponse }> = ({ binder }) => (
   <span className="flex flex-col gap-0.5">
     <Link
@@ -23,61 +26,55 @@ ClientCell.displayName = 'ClientCell'
 
 interface BuildBindersColumnsParams {
   actionLoadingId: number | null
-  onMarkReady: (binderId: number) => void
-  onRevertReady: (binderId: number) => void
-  onReturn: (binderId: number) => void
+  onReceiveMaterial: (binderId: number) => void
+  onMarkFull: (binderId: number) => void
+  onReopenCapacity: (binderId: number) => void
+  onMarkReadyForHandover: (binderId: number) => void
+  onMarkReadyForHandoverBulk: (binderId: number) => void
+  onRevertReadyForHandover: (binderId: number) => void
+  onHandoverToClient: (binderId: number) => void
+  onHandoverToClientBulk: (binderId: number) => void
   onOpenDetail: (binderId: number) => void
   onDelete: (binderId: number) => void
-  onBulkReady?: (binder: BinderResponse) => void
-  onHandover?: (binder: BinderResponse) => void
 }
 
 export const buildBindersColumns = ({
   actionLoadingId,
-  onMarkReady,
-  onRevertReady,
-  onReturn,
+  onReceiveMaterial,
+  onMarkFull,
+  onReopenCapacity,
+  onMarkReadyForHandover,
+  onMarkReadyForHandoverBulk,
+  onRevertReadyForHandover,
+  onHandoverToClient,
+  onHandoverToClientBulk,
   onOpenDetail,
   onDelete,
-  onBulkReady,
-  onHandover,
 }: BuildBindersColumnsParams): Column<BinderResponse>[] => [
-  monoColumn({
-    key: 'office_client_number',
-    header: "מס' לקוח",
-    getValue: (binder) => formatClientOfficeId(binder.office_client_number),
-  }),
-  textColumn({
-    key: 'client_name',
-    header: 'לקוח',
-    getValue: (binder) => <ClientCell binder={binder} />,
-  }),
-  monoColumn({
-    key: 'client_id_number',
-    header: 'ת.ז / ח.פ',
-    getValue: (binder) => binder.client_id_number,
-  }),
-  monoColumn({
-    key: 'binder_number',
-    header: 'מספר קלסר',
-    valueClassName: 'font-semibold text-gray-700',
-    getValue: (binder) => formatBinderNumber(binder.binder_number),
+  monoColumn({ key: 'office_client_number', header: "מס' לקוח", getValue: (binder) => formatClientOfficeId(binder.office_client_number) }),
+  textColumn({ key: 'client_name', header: 'לקוח', getValue: (binder) => <ClientCell binder={binder} /> }),
+  monoColumn({ key: 'client_id_number', header: 'ת.ז / ח.פ', getValue: (binder) => binder.client_id_number }),
+  monoColumn({ key: 'binder_number', header: 'מספר קלסר', valueClassName: 'font-semibold text-gray-700', getValue: (binder) => formatBinderNumber(binder.binder_number) }),
+  statusColumn({
+    key: 'location_status',
+    header: 'מיקום',
+    getStatus: (binder) => binder.location_status,
+    getLabel: getBinderLocationStatusLabel,
+    variantMap: BINDER_LOCATION_STATUS_VARIANTS,
   }),
   statusColumn({
-    key: 'status',
-    header: 'סטטוס',
-    getStatus: (binder) => binder.status,
-    getLabel: getBinderStatusLabel,
-    variantMap: BINDER_STATUS_VARIANTS,
+    key: 'capacity_status',
+    header: 'קיבולת',
+    getStatus: (binder) => binder.capacity_status,
+    getLabel: getBinderCapacityStatusLabel,
+    variantMap: BINDER_CAPACITY_STATUS_VARIANTS,
   }),
   textColumn({
     key: 'period_start',
     header: 'תקופה',
     valueClassName: 'text-gray-600 tabular-nums',
     getValue: (binder) => {
-      if (!binder.period_start && !binder.period_end) {
-        return <span className="text-gray-400">—</span>
-      }
+      if (!binder.period_start && !binder.period_end) return <span className="text-gray-400">—</span>
       const start = formatMonthYear(binder.period_start)
       const end = binder.period_end ? formatMonthYear(binder.period_end) : 'פעיל'
       return `${start} - ${end}`
@@ -86,9 +83,7 @@ export const buildBindersColumns = ({
   {
     key: 'days_in_office',
     header: 'ימים במשרד',
-    render: (binder) => (
-      <MonoValue value={binder.days_in_office} format="days" returned={binder.status === 'returned'} />
-    ),
+    render: (binder) => <MonoValue value={binder.days_in_office} format="days" isInactive={binder.location_status === 'handed_over'} />,
   },
   actionsColumn({
     key: 'actions',
@@ -98,12 +93,15 @@ export const buildBindersColumns = ({
         binder={binder}
         disabled={actionLoadingId === binder.id}
         onOpenDetail={() => onOpenDetail(binder.id)}
-        onMarkReady={() => onMarkReady(binder.id)}
-        onRevertReady={() => onRevertReady(binder.id)}
-        onReturn={() => onReturn(binder.id)}
+        onReceiveMaterial={() => onReceiveMaterial(binder.id)}
+        onMarkFull={() => onMarkFull(binder.id)}
+        onReopenCapacity={() => onReopenCapacity(binder.id)}
+        onMarkReadyForHandover={() => onMarkReadyForHandover(binder.id)}
+        onMarkReadyForHandoverBulk={() => onMarkReadyForHandoverBulk(binder.id)}
+        onRevertReadyForHandover={() => onRevertReadyForHandover(binder.id)}
+        onHandoverToClient={() => onHandoverToClient(binder.id)}
+        onHandoverToClientBulk={() => onHandoverToClientBulk(binder.id)}
         onDelete={() => onDelete(binder.id)}
-        onBulkReady={onBulkReady ? () => onBulkReady(binder) : undefined}
-        onHandover={onHandover ? () => onHandover(binder) : undefined}
       />
     ),
   }),
