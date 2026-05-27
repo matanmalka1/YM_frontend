@@ -8,7 +8,7 @@ type ClientDetailsTabBarProps = {
 }
 
 export const ClientDetailsTabBar: FC<ClientDetailsTabBarProps> = ({ activeTab, onTabChange }) => (
-  <div className="flex items-center gap-1 overflow-x-auto border-b border-gray-200">
+  <div className="flex flex-wrap items-center gap-1 border-b border-gray-200">
     {CLIENT_DETAILS_TABS.map((tab) => {
       const isActive = activeTab === tab
 

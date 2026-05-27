@@ -1,4 +1,5 @@
 export const ACTION_LABELS: Record<string, string> = {
+  work_item_created_pending: 'יצירת פריט בהמתנה לחומרים',
   material_received: 'קבלת חומרים',
   status_changed: 'שינוי סטטוס',
   invoice_added: 'חשבונית נוספה',
