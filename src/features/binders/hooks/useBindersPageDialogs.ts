@@ -75,11 +75,7 @@ export const useBindersPageDialogs = ({
   const confirmBulkReadyForHandover = async () => {
     const binder = dialogBinder
     if (!binder) return
-    await markReadyForHandoverBulk(
-      binder.client_record_id,
-      bulkReadyForHandoverYear,
-      bulkReadyForHandoverMonth,
-    )
+    await markReadyForHandoverBulk(binder.client_record_id, bulkReadyForHandoverYear, bulkReadyForHandoverMonth)
     closeBulkReadyForHandoverDialog()
   }
 

@@ -53,32 +53,28 @@ export const BinderHistorySection: React.FC<BinderHistorySectionProps> = ({ bind
             const oldBadge = entry.old_value ? getHistoryBadge(entry.field_name, entry.old_value) : null
             const newBadge = getHistoryBadge(entry.field_name, entry.new_value)
             return (
-            <TimelineEntry key={index} animationDelay={staggerDelay(index, 40)}>
-              <div className="mb-1 flex flex-wrap items-center gap-1.5 text-sm">
-                {entry.old_value && (
-                  <>
-                    <Badge variant={oldBadge?.variant ?? 'neutral'}>
-                      {oldBadge?.label}
-                    </Badge>
-                    <ArrowRight className="h-3 w-3 text-gray-400" />
-                  </>
+              <TimelineEntry key={index} animationDelay={staggerDelay(index, 40)}>
+                <div className="mb-1 flex flex-wrap items-center gap-1.5 text-sm">
+                  {entry.old_value && (
+                    <>
+                      <Badge variant={oldBadge?.variant ?? 'neutral'}>{oldBadge?.label}</Badge>
+                      <ArrowRight className="h-3 w-3 text-gray-400" />
+                    </>
+                  )}
+                  <Badge variant={newBadge.variant}>{newBadge.label}</Badge>
+                </div>
+
+                <div className="flex items-center justify-end gap-1 text-xs text-gray-500">
+                  {entry.changed_by_name && <span className="text-gray-600">{entry.changed_by_name}</span>}
+                  {entry.changed_by_name && <span>·</span>}
+                  <Clock className="h-3 w-3" />
+                  {format(parseISO(entry.changed_at), 'd MMM yyyy HH:mm', { locale: he })}
+                </div>
+
+                {entry.notes && (
+                  <p className="mt-1.5 text-xs text-gray-600 border-t border-gray-100 pt-1.5">{entry.notes}</p>
                 )}
-                <Badge variant={newBadge.variant}>
-                  {newBadge.label}
-                </Badge>
-              </div>
-
-              <div className="flex items-center justify-end gap-1 text-xs text-gray-500">
-                {entry.changed_by_name && <span className="text-gray-600">{entry.changed_by_name}</span>}
-                {entry.changed_by_name && <span>·</span>}
-                <Clock className="h-3 w-3" />
-                {format(parseISO(entry.changed_at), 'd MMM yyyy HH:mm', { locale: he })}
-              </div>
-
-              {entry.notes && (
-                <p className="mt-1.5 text-xs text-gray-600 border-t border-gray-100 pt-1.5">{entry.notes}</p>
-              )}
-            </TimelineEntry>
+              </TimelineEntry>
             )
           })}
         </Timeline>

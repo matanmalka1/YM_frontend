@@ -32,11 +32,7 @@ export const OneColumn: Story = {
 
 export const ThreeColumns: Story = {
   args: {
-    items: [
-      ...items,
-      { label: 'תאריך פתיחה', value: '01/01/2026' },
-      { label: 'סוג ישות', value: 'עוסק מורשה' },
-    ],
+    items: [...items, { label: 'תאריך פתיחה', value: '01/01/2026' }, { label: 'סוג ישות', value: 'עוסק מורשה' }],
     columns: 3,
   },
 }

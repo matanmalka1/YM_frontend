@@ -20,7 +20,9 @@ export const Default: Story = {
   render: (args) => {
     const [month, setMonth] = useState(args.month)
     const [selected, setSelected] = useState<Date | undefined>(args.selected)
-    return <DatePickerCalendar {...args} month={month} selected={selected} onMonthChange={setMonth} onSelect={setSelected} />
+    return (
+      <DatePickerCalendar {...args} month={month} selected={selected} onMonthChange={setMonth} onSelect={setSelected} />
+    )
   },
 }
 
@@ -34,7 +36,9 @@ export const Selected: Story = {
   render: (args) => {
     const [month, setMonth] = useState(args.month)
     const [selected, setSelected] = useState<Date | undefined>(args.selected)
-    return <DatePickerCalendar {...args} month={month} selected={selected} onMonthChange={setMonth} onSelect={setSelected} />
+    return (
+      <DatePickerCalendar {...args} month={month} selected={selected} onMonthChange={setMonth} onSelect={setSelected} />
+    )
   },
 }
 
@@ -49,6 +53,8 @@ export const WithMaxDate: Story = {
   render: (args) => {
     const [month, setMonth] = useState(args.month)
     const [selected, setSelected] = useState<Date | undefined>(args.selected)
-    return <DatePickerCalendar {...args} month={month} selected={selected} onMonthChange={setMonth} onSelect={setSelected} />
+    return (
+      <DatePickerCalendar {...args} month={month} selected={selected} onMonthChange={setMonth} onSelect={setSelected} />
+    )
   },
 }

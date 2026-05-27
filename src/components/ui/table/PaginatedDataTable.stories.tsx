@@ -21,7 +21,11 @@ const columns: Column<ClientRow>[] = [
   {
     key: 'status',
     header: 'סטטוס',
-    render: (item) => <Badge variant={item.status === 'active' ? 'success' : 'warning'}>{item.status === 'active' ? 'פעיל' : 'ממתין'}</Badge>,
+    render: (item) => (
+      <Badge variant={item.status === 'active' ? 'success' : 'warning'}>
+        {item.status === 'active' ? 'פעיל' : 'ממתין'}
+      </Badge>
+    ),
   },
 ]
 

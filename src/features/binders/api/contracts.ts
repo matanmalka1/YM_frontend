@@ -19,7 +19,6 @@ export interface BinderDetailResponse {
 
 export type BinderListResponseExtended = PaginatedResponse<BinderDetailResponse>
 
-
 export interface BinderMarkReadyForHandoverBulkPayload {
   client_record_id: number
   until_period_year: number

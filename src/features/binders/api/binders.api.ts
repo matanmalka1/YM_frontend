@@ -72,8 +72,13 @@ export const bindersApi = {
     return response.data
   },
 
-  handoverToClientBulk: async (payload: BinderHandoverToClientBulkPayload): Promise<BinderHandoverToClientBulkResponse> => {
-    const response = await api.post<BinderHandoverToClientBulkResponse>(BINDER_ENDPOINTS.binderHandoverToClientBulk, payload)
+  handoverToClientBulk: async (
+    payload: BinderHandoverToClientBulkPayload,
+  ): Promise<BinderHandoverToClientBulkResponse> => {
+    const response = await api.post<BinderHandoverToClientBulkResponse>(
+      BINDER_ENDPOINTS.binderHandoverToClientBulk,
+      payload,
+    )
     return response.data
   },
 

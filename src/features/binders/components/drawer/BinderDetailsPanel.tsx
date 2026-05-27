@@ -40,12 +40,22 @@ export const BinderDetailsPanel: React.FC<BinderDetailsPanelProps> = ({ binder }
         <DrawerField
           label="מיקום"
           value={
-            <StatusBadge status={binder.location_status} getLabel={getBinderLocationStatusLabel} variantMap={BINDER_LOCATION_STATUS_VARIANTS} />
+            <StatusBadge
+              status={binder.location_status}
+              getLabel={getBinderLocationStatusLabel}
+              variantMap={BINDER_LOCATION_STATUS_VARIANTS}
+            />
           }
         />
         <DrawerField
           label="קיבולת"
-          value={<StatusBadge status={binder.capacity_status} getLabel={getBinderCapacityStatusLabel} variantMap={BINDER_CAPACITY_STATUS_VARIANTS} />}
+          value={
+            <StatusBadge
+              status={binder.capacity_status}
+              getLabel={getBinderCapacityStatusLabel}
+              variantMap={BINDER_CAPACITY_STATUS_VARIANTS}
+            />
+          }
         />
         {binder.handed_over_at && <DrawerField label="תאריך מסירה" value={formatDate(binder.handed_over_at)} />}
         {binder.handover_recipient_name && <DrawerField label="נמסר לידי" value={binder.handover_recipient_name} />}

@@ -17,7 +17,13 @@ export const Default: Story = {
     children: (
       <>
         <BulkSelectionActionButton label="סמן כהושלם" disabled={false} loading={false} onClick={() => undefined} />
-        <BulkSelectionActionButton label="מחק" variant="danger" disabled={false} loading={false} onClick={() => undefined} />
+        <BulkSelectionActionButton
+          label="מחק"
+          variant="danger"
+          disabled={false}
+          loading={false}
+          onClick={() => undefined}
+        />
       </>
     ),
   },
@@ -38,6 +44,8 @@ export const WithExtra: Story = {
     loading: false,
     onClear: () => undefined,
     extra: <p className="text-xs text-primary-700">הפעולה תחול על כל הרשומות שנבחרו.</p>,
-    children: <BulkSelectionActionButton label="שלח תזכורת" disabled={false} loading={false} onClick={() => undefined} />,
+    children: (
+      <BulkSelectionActionButton label="שלח תזכורת" disabled={false} loading={false} onClick={() => undefined} />
+    ),
   },
 }

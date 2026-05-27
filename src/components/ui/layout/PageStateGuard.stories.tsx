@@ -17,7 +17,9 @@ export const Loaded: Story = {
     isLoading: false,
     error: null,
     header,
-    children: <div className="rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-600">תוכן הדף נטען.</div>,
+    children: (
+      <div className="rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-600">תוכן הדף נטען.</div>
+    ),
   },
 }
 

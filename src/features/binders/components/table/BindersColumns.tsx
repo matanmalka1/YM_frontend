@@ -50,10 +50,19 @@ export const buildBindersColumns = ({
   onOpenDetail,
   onDelete,
 }: BuildBindersColumnsParams): Column<BinderResponse>[] => [
-  monoColumn({ key: 'office_client_number', header: "מס' לקוח", getValue: (binder) => formatClientOfficeId(binder.office_client_number) }),
+  monoColumn({
+    key: 'office_client_number',
+    header: "מס' לקוח",
+    getValue: (binder) => formatClientOfficeId(binder.office_client_number),
+  }),
   textColumn({ key: 'client_name', header: 'לקוח', getValue: (binder) => renderClientCell(binder) }),
   monoColumn({ key: 'client_id_number', header: 'ת.ז / ח.פ', getValue: (binder) => binder.client_id_number }),
-  monoColumn({ key: 'binder_number', header: 'מספר קלסר', valueClassName: 'font-semibold text-gray-700', getValue: (binder) => formatBinderNumber(binder.binder_number) }),
+  monoColumn({
+    key: 'binder_number',
+    header: 'מספר קלסר',
+    valueClassName: 'font-semibold text-gray-700',
+    getValue: (binder) => formatBinderNumber(binder.binder_number),
+  }),
   statusColumn({
     key: 'location_status',
     header: 'מיקום',
@@ -82,7 +91,9 @@ export const buildBindersColumns = ({
   {
     key: 'days_in_office',
     header: 'ימים במשרד',
-    render: (binder) => <MonoValue value={binder.days_in_office} format="days" isInactive={binder.location_status === 'handed_over'} />,
+    render: (binder) => (
+      <MonoValue value={binder.days_in_office} format="days" isInactive={binder.location_status === 'handed_over'} />
+    ),
   },
   actionsColumn({
     key: 'actions',

@@ -45,7 +45,8 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
       location_status: 'ready_for_handover',
       page_size: 100,
     }),
-    queryFn: () => bindersApi.list({ client_record_id: clientId, location_status: 'ready_for_handover', page_size: 100 }),
+    queryFn: () =>
+      bindersApi.list({ client_record_id: clientId, location_status: 'ready_for_handover', page_size: 100 }),
     enabled: clientId > 0,
     staleTime: QUERY_STALE_TIME.default,
   })

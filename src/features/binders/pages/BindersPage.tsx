@@ -171,10 +171,14 @@ export const Binders: React.FC = () => {
         onMarkFull={selectedBinder ? () => void markFull(selectedBinder.id) : undefined}
         onReopenCapacity={selectedBinder ? () => void reopenCapacity(selectedBinder.id) : undefined}
         onMarkReadyForHandover={selectedBinder ? () => void markReadyForHandover(selectedBinder.id) : undefined}
-        onMarkReadyForHandoverBulk={selectedBinder ? () => dialogs.openBulkReadyForHandoverDialog(selectedBinder) : undefined}
+        onMarkReadyForHandoverBulk={
+          selectedBinder ? () => dialogs.openBulkReadyForHandoverDialog(selectedBinder) : undefined
+        }
         onRevertReadyForHandover={selectedBinder ? () => void revertReadyForHandover(selectedBinder.id) : undefined}
         onHandoverToClient={selectedBinder ? () => dialogs.openHandoverToClientDialog(selectedBinder.id) : undefined}
-        onHandoverToClientBulk={selectedBinder ? () => dialogs.openHandoverToClientBulkDialog(selectedBinder) : undefined}
+        onHandoverToClientBulk={
+          selectedBinder ? () => dialogs.openHandoverToClientBulkDialog(selectedBinder) : undefined
+        }
         onDelete={selectedBinder ? () => dialogs.openDeleteDialog(selectedBinder.id) : undefined}
         actionLoading={selectedBinder ? actionLoadingId === selectedBinder.id : false}
       />

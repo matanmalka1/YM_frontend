@@ -4,7 +4,6 @@ import type { BinderAction, BinderResponse } from './types'
 export const hasBinderAction = (binder: BinderResponse, action: BinderAction): boolean =>
   Boolean(binder.available_actions?.includes(action))
 
-
 export const canMarkReadyForHandover = (locationStatus: string): boolean => locationStatus === 'in_office'
 
 export const canRevertReadyForHandover = (locationStatus: string): boolean => locationStatus === 'ready_for_handover'

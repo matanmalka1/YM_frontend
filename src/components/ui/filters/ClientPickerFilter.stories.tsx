@@ -24,7 +24,13 @@ export const Empty: Story = {
   },
   render: (args) => {
     const [values, setValues] = useState<Record<string, string>>({})
-    return <ClientPickerFilter {...args} values={values} onMultiChange={(updates) => setValues((prev) => ({ ...prev, ...updates }))} />
+    return (
+      <ClientPickerFilter
+        {...args}
+        values={values}
+        onMultiChange={(updates) => setValues((prev) => ({ ...prev, ...updates }))}
+      />
+    )
   },
 }
 
@@ -45,6 +51,12 @@ export const Selected: Story = {
   },
   render: (args) => {
     const [values, setValues] = useState<Record<string, string>>(args.values)
-    return <ClientPickerFilter {...args} values={values} onMultiChange={(updates) => setValues((prev) => ({ ...prev, ...updates }))} />
+    return (
+      <ClientPickerFilter
+        {...args}
+        values={values}
+        onMultiChange={(updates) => setValues((prev) => ({ ...prev, ...updates }))}
+      />
+    )
   },
 }

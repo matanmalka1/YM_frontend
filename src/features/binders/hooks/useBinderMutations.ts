@@ -20,11 +20,7 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
     invalidateKeys: [bindersQK.all],
   })
 
-
-  const receiveMaterialMutation = useMutationWithToast<
-    Awaited<ReturnType<typeof bindersApi.receiveMaterial>>,
-    number
-  >({
+  const receiveMaterialMutation = useMutationWithToast<Awaited<ReturnType<typeof bindersApi.receiveMaterial>>, number>({
     mutationFn: (binderId) => bindersApi.receiveMaterial(binderId),
     successMessage: 'קליטת החומר נרשמה',
     errorMessage: 'שגיאה ברישום קליטת חומר',
@@ -38,10 +34,7 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
     invalidateKeys: [bindersQK.all],
   })
 
-  const reopenCapacityMutation = useMutationWithToast<
-    Awaited<ReturnType<typeof bindersApi.reopenCapacity>>,
-    number
-  >({
+  const reopenCapacityMutation = useMutationWithToast<Awaited<ReturnType<typeof bindersApi.reopenCapacity>>, number>({
     mutationFn: (binderId) => bindersApi.reopenCapacity(binderId),
     successMessage: 'הקלסר נפתח לקיבולת נוספת',
     errorMessage: 'שגיאה בפתיחת קיבולת הקלסר',
@@ -123,10 +116,10 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
         : markReadyForHandoverMutation.isPending
           ? ((markReadyForHandoverMutation.variables as number | undefined) ?? null)
           : revertReadyForHandoverMutation.isPending
-      ? ((revertReadyForHandoverMutation.variables as number | undefined) ?? null)
-      : handoverToClientMutation.isPending
-        ? ((handoverToClientMutation.variables as { binderId: number } | undefined)?.binderId ?? null)
-        : null
+            ? ((revertReadyForHandoverMutation.variables as number | undefined) ?? null)
+            : handoverToClientMutation.isPending
+              ? ((handoverToClientMutation.variables as { binderId: number } | undefined)?.binderId ?? null)
+              : null
 
   return {
     actionLoadingId,
