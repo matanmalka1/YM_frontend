@@ -20,6 +20,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
   useEscapeToClose({ open, onClose })
 
   if (typeof document === 'undefined') return null
+  if (!open && !sendOpen) return null
 
   return createPortal(
     <>
