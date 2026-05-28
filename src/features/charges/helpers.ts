@@ -2,7 +2,7 @@ import type { DataTableProps } from '@/components/ui/table'
 import { formatCurrencyILS, parsePositiveInt } from '@/utils/utils'
 import { toOptionalNumber, toOptionalString } from '@/utils/filters'
 import { chargesApi, type ChargeStatusStat, type ChargesListParams } from './api'
-import { CHARGE_PERIOD_YEAR_SPAN, CHARGE_STATUS_OPTIONS, CHARGE_TYPE_OPTIONS_WITH_ALL } from './constants'
+import { CHARGE_PERIOD_OPTIONS, CHARGE_PERIOD_YEAR_SPAN, CHARGE_STATUS_OPTIONS, CHARGE_TYPE_OPTIONS_WITH_ALL } from './constants'
 import type { ChargeAction, ChargesFilters } from './types'
 import { getChargePeriodLabel } from './utils'
 
@@ -10,6 +10,9 @@ export const getChargesFilters = (searchParams: URLSearchParams): ChargesFilters
   client_record_id: searchParams.get('client_record_id') ?? '',
   status: searchParams.get('status') ?? '',
   charge_type: searchParams.get('charge_type') ?? '',
+  period: searchParams.get('period') ?? '',
+  issued_after: searchParams.get('issued_after') ?? '',
+  issued_before: searchParams.get('issued_before') ?? '',
   page: parsePositiveInt(searchParams.get('page'), 1),
   page_size: parsePositiveInt(searchParams.get('page_size'), 20),
 })
@@ -18,6 +21,9 @@ export const toChargesListParams = (filters: ChargesFilters): ChargesListParams 
   client_record_id: toOptionalNumber(filters.client_record_id),
   status: toOptionalString(filters.status),
   charge_type: toOptionalString(filters.charge_type),
+  period: toOptionalString(filters.period),
+  issued_after: toOptionalString(filters.issued_after),
+  issued_before: toOptionalString(filters.issued_before),
   page: filters.page,
   page_size: filters.page_size,
 })
@@ -47,6 +53,13 @@ export const buildChargeFilterBadges = (
   [
     getFilterBadge('status', filters.status, CHARGE_STATUS_OPTIONS, onFilterChange),
     getFilterBadge('charge_type', filters.charge_type, CHARGE_TYPE_OPTIONS_WITH_ALL, onFilterChange),
+    getFilterBadge('period', filters.period, CHARGE_PERIOD_OPTIONS, onFilterChange),
+    filters.issued_after
+      ? { key: 'issued_after', label: `הונפק מ-${filters.issued_after}`, onRemove: () => onFilterChange('issued_after', '') }
+      : null,
+    filters.issued_before
+      ? { key: 'issued_before', label: `הונפק עד ${filters.issued_before}`, onRemove: () => onFilterChange('issued_before', '') }
+      : null,
   ].filter((badge): badge is NonNullable<typeof badge> => badge !== null)
 
 export const runChargeActionRequest = (chargeId: number, action: ChargeAction, reason?: string) => {

@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { AlertTriangle, ChevronDown, ChevronUp } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
-import type { AnnualReportFull } from '../../api'
+import type { AnnualReportSummary } from '../../api'
 import { cn } from '../../../../utils/utils'
 import { getClientReportName, getDaysOverdue } from './annualReports.helpers'
 import { formatAnnualReportDate, OVERDUE_PREVIEW_LIMIT } from './annualReports.constants'
 
 interface OverdueBannerProps {
-  overdue: AnnualReportFull[]
+  overdue: AnnualReportSummary[]
   onSelect: (id: number) => void
 }
 

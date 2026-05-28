@@ -30,6 +30,7 @@ export { AnnualReportsPage } from './pages/AnnualReportsPage'
 export { STAGE_ORDER, TAB_LABELS } from './types'
 export type {
   AnnualReportFull,
+  AnnualReportSummary,
   AnnualReportStatus,
   AnnualReportScheduleKey,
   ClientTypeForReport,

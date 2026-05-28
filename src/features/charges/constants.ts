@@ -70,3 +70,17 @@ export const CHARGE_TYPE_OPTIONS_WITH_ALL: { value: string; label: string }[] = 
   ALL_TYPES_OPTION,
   ...CHARGE_TYPE_OPTIONS,
 ]
+
+const _currentYear = new Date().getFullYear()
+const _MONTH_LABELS = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר']
+
+export const CHARGE_PERIOD_OPTIONS: { value: string; label: string }[] = [
+  { value: '', label: 'כל התקופות' },
+  ...Array.from({ length: CHARGE_PERIOD_YEAR_SPAN * 2 + 1 }, (_, i) => _currentYear - CHARGE_PERIOD_YEAR_SPAN + i).flatMap(
+    (year) =>
+      Array.from({ length: 12 }, (_, m) => ({
+        value: `${year}-${String(m + 1).padStart(2, '0')}`,
+        label: `${_MONTH_LABELS[m]} ${year}`,
+      })),
+  ),
+]

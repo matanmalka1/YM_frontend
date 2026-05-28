@@ -8,7 +8,7 @@ import { DatePicker } from '@/components/ui'
 import { Select } from '@/components/ui/inputs/Select'
 import { Textarea } from '@/components/ui'
 import { isClientLockedForCreate } from '@/utils/clientStatus'
-import { getStatusLabel, type AnnualReportFull } from '@/features/annualReports'
+import { getStatusLabel, type AnnualReportSummary } from '@/features/annualReports'
 import { MONTH_OPTIONS } from '@/constants/periodOptions.constants'
 import { BINDER_TYPE_OPTIONS, PERIODIC_BINDER_TYPES } from '../../constants'
 import type { ReceiveBinderFormValues } from '../../schemas'
@@ -19,7 +19,7 @@ export interface BinderReceivePanelProps {
   clientQuery: string
   selectedClient: { id: number; name: string; client_status?: string | null } | null
   businesses: { id: number; business_name: string | null }[]
-  annualReports: AnnualReportFull[]
+  annualReports: AnnualReportSummary[]
   hasActiveBinder: boolean
   vatType: 'monthly' | 'bimonthly' | 'exempt' | null
   onClientSelect: (client: { id: number; name: string; id_number: string; client_status?: string | null }) => void

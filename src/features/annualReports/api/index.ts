@@ -17,6 +17,7 @@ export {
 } from './utils'
 export type {
   AnnualReportStatus,
+  AnnualReportSummary,
   AnnualReportFull,
   AnnualReportScheduleKey,
   ClientTypeForReport,

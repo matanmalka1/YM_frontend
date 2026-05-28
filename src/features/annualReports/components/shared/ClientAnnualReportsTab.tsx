@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BarChart2, Check, Clock, Plus } from 'lucide-react'
 import { useClientAnnualReportsTab } from '../../hooks/useClientAnnualReportsTab'
-import type { AnnualReportFull } from '../../api'
+import type { AnnualReportSummary } from '../../api'
 import { STATUS_LABELS } from '../../api'
 import { PageLoading } from '../../../../components/ui/layout/PageLoading'
 import { Alert } from '../../../../components/ui/overlays/Alert'
@@ -19,7 +19,7 @@ interface ClientAnnualReportsTabProps {
 
 const AnnualReportStatusBanner: React.FC<{
   selectedYear: number
-  report: AnnualReportFull | null
+  report: AnnualReportSummary | null
 }> = ({ selectedYear, report }) => {
   const submitted = Boolean(report?.submitted_at)
   const Icon = submitted ? Check : Clock

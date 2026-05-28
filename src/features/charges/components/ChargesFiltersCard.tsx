@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
-import { CHARGE_STATUS_OPTIONS, CHARGE_TYPE_OPTIONS_WITH_ALL } from '../constants'
+import { CHARGE_STATUS_OPTIONS, CHARGE_TYPE_OPTIONS_WITH_ALL, CHARGE_PERIOD_OPTIONS } from '../constants'
 import { clientsApi, clientsQK } from '@/features/clients'
 import type { ChargesFilters } from '../types'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
@@ -20,6 +20,19 @@ const FIELDS = [
     key: 'charge_type',
     label: 'סוג חיוב',
     options: CHARGE_TYPE_OPTIONS_WITH_ALL,
+  },
+  {
+    type: 'select' as const,
+    key: 'period',
+    label: 'תקופה',
+    options: CHARGE_PERIOD_OPTIONS,
+  },
+  {
+    type: 'date-range' as const,
+    fromKey: 'issued_after',
+    toKey: 'issued_before',
+    fromLabel: 'הונפק מתאריך',
+    toLabel: 'הונפק עד תאריך',
   },
 ]
 
@@ -51,6 +64,9 @@ export const ChargesFiltersCard = ({ filters, onClear, onFilterChange }: Charges
         client_name: clientName,
         status: filters.status ?? '',
         charge_type: filters.charge_type ?? '',
+        period: filters.period ?? '',
+        issued_after: filters.issued_after ?? '',
+        issued_before: filters.issued_before ?? '',
       }}
       onChange={(key, value) => {
         if (key === 'client_name') {

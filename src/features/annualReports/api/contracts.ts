@@ -71,7 +71,7 @@ export type ExpenseCategoryType =
   | 'bank_fees'
   | 'other'
 
-export interface AnnualReportFull {
+export interface AnnualReportSummary {
   id: number
   client_record_id: number
   office_client_number?: number | null
@@ -101,6 +101,11 @@ export interface AnnualReportFull {
   updated_at: string
   assigned_to: number | null
   created_by: number
+  available_actions?: BackendAction[]
+  available_transitions?: AnnualReportStatus[]
+}
+
+export interface AnnualReportFull extends AnnualReportSummary {
   schedules?: ScheduleEntry[]
   status_history?: StatusHistoryEntry[]
   pension_contribution?: string | null
@@ -120,8 +125,6 @@ export interface AnnualReportFull {
   taxable_income?: string | null
   profit?: string | null
   final_balance?: string | null
-  available_actions?: BackendAction[]
-  available_transitions?: AnnualReportStatus[]
 }
 
 export interface ReportDetailResponse {
@@ -185,7 +188,7 @@ export interface DefaultTaxYearResponse {
   tax_year: number
 }
 
-export type AnnualReportListResponse = PaginatedResponse<AnnualReportFull>
+export type AnnualReportListResponse = PaginatedResponse<AnnualReportSummary>
 
 export interface CreateAnnualReportPayload {
   client_record_id: number

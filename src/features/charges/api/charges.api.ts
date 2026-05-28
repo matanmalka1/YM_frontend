@@ -4,7 +4,6 @@ import { toQueryParams } from '@/api/queryParams'
 import { randomUUID } from '@/utils/random'
 import type {
   ChargeResponse,
-  ChargeAdvisorResponse,
   ChargesListResponse,
   ChargesListParams,
   CreateChargePayload,
@@ -25,23 +24,23 @@ export const chargesApi = {
     return response.data
   },
 
-  create: async (payload: CreateChargePayload): Promise<ChargeAdvisorResponse> => {
-    const response = await api.post<ChargeAdvisorResponse>(CHARGE_ENDPOINTS.charges, payload)
+  create: async (payload: CreateChargePayload): Promise<ChargeResponse> => {
+    const response = await api.post<ChargeResponse>(CHARGE_ENDPOINTS.charges, payload)
     return response.data
   },
 
-  issue: async (chargeId: number): Promise<ChargeAdvisorResponse> => {
-    const response = await api.post<ChargeAdvisorResponse>(CHARGE_ENDPOINTS.chargeIssue(chargeId))
+  issue: async (chargeId: number): Promise<ChargeResponse> => {
+    const response = await api.post<ChargeResponse>(CHARGE_ENDPOINTS.chargeIssue(chargeId))
     return response.data
   },
 
-  markPaid: async (chargeId: number): Promise<ChargeAdvisorResponse> => {
-    const response = await api.post<ChargeAdvisorResponse>(CHARGE_ENDPOINTS.chargeMarkPaid(chargeId))
+  markPaid: async (chargeId: number): Promise<ChargeResponse> => {
+    const response = await api.post<ChargeResponse>(CHARGE_ENDPOINTS.chargeMarkPaid(chargeId))
     return response.data
   },
 
-  cancel: async (chargeId: number, reason?: string): Promise<ChargeAdvisorResponse> => {
-    const response = await api.post<ChargeAdvisorResponse>(
+  cancel: async (chargeId: number, reason?: string): Promise<ChargeResponse> => {
+    const response = await api.post<ChargeResponse>(
       CHARGE_ENDPOINTS.chargeCancel(chargeId),
       reason ? { reason } : undefined,
     )

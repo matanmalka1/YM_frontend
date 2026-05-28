@@ -1,4 +1,4 @@
-import type { AnnualReportFull } from '../../api'
+import type { AnnualReportSummary } from '../../api'
 import { STATUS_LABELS } from '../../api'
 import type { TimelineEventStatus } from '../statusTransition/TimelineEvent'
 import {
@@ -16,9 +16,9 @@ export interface AnnualReportTimelineEvent {
   sortTime: number
 }
 
-export const getAnnualReportName = (report: AnnualReportFull): string => report.client_name ?? `דוח #${report.id}`
+export const getAnnualReportName = (report: AnnualReportSummary): string => report.client_name ?? `דוח #${report.id}`
 
-export const getClientReportName = (report: AnnualReportFull): string =>
+export const getClientReportName = (report: AnnualReportSummary): string =>
   report.client_name ?? `לקוח #${report.client_record_id}`
 
 export const getDaysOverdue = (deadline: string | null): number | null => {
@@ -28,7 +28,7 @@ export const getDaysOverdue = (deadline: string | null): number | null => {
   return diff > 0 ? diff : null
 }
 
-export const getDeadlineStatus = (report: AnnualReportFull): TimelineEventStatus => {
+export const getDeadlineStatus = (report: AnnualReportSummary): TimelineEventStatus => {
   const deadline = parseAnnualReportCalendarDate(report.filing_deadline)
   if (!deadline) return 'pending'
   if (report.submitted_at) return 'done'
@@ -40,9 +40,9 @@ export const getDeadlineStatus = (report: AnnualReportFull): TimelineEventStatus
 export const getMissingDocumentTypes = (uploadedTypes: Set<string>, signalTypes: string[] | undefined): string[] =>
   signalTypes?.length ? signalTypes : REQUIRED_DOCUMENT_TYPES.filter((type) => !uploadedTypes.has(type))
 
-const getReportStatusDescription = (report: AnnualReportFull): string => `סטטוס: ${STATUS_LABELS[report.status]}`
+const getReportStatusDescription = (report: AnnualReportSummary): string => `סטטוס: ${STATUS_LABELS[report.status]}`
 
-export const buildTimelineEvents = (reports: AnnualReportFull[]): AnnualReportTimelineEvent[] =>
+export const buildTimelineEvents = (reports: AnnualReportSummary[]): AnnualReportTimelineEvent[] =>
   reports
     .flatMap((report) => {
       const name = getAnnualReportName(report)
@@ -76,7 +76,7 @@ export const buildTimelineEvents = (reports: AnnualReportFull[]): AnnualReportTi
     })
     .sort((a, b) => b.sortTime - a.sortTime)
 
-export const getFilingStats = (reports: AnnualReportFull[]) => {
+export const getFilingStats = (reports: AnnualReportSummary[]) => {
   const total = reports.length
   const pct = (n: number) => (total > 0 ? Math.round((n / total) * 100) : 0)
   const submittedOnTime = reports.filter((report) => {
@@ -86,7 +86,6 @@ export const getFilingStats = (reports: AnnualReportFull[]) => {
     )
   }).length
   const pending = reports.filter((report) => !report.submitted_at).length
-  const reopened = reports.filter((report) => report.amendment_reason).length
 
   return [
     {
@@ -96,6 +95,5 @@ export const getFilingStats = (reports: AnnualReportFull[]) => {
       color: 'bg-positive-500',
     },
     { label: 'ממתין להגשה', count: pending, pct: pct(pending), color: 'bg-info-400' },
-    { label: 'נפתחו לתיקון', count: reopened, pct: pct(reopened), color: 'bg-warning-400' },
   ]
 }

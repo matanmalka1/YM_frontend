@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useForm, type UseFormReturn } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { bindersApi, bindersQK } from '../api'
-import { annualReportsApi, annualReportsQK, type AnnualReportFull } from '@/features/annualReports'
+import { annualReportsApi, annualReportsQK, type AnnualReportSummary } from '@/features/annualReports'
 import { clientsApi, clientsQK } from '@/features/clients'
 import { taxProfileApi, taxProfileQK } from '@/features/taxProfile'
 import { vatReportsApi } from '@/features/vatReports'
@@ -166,7 +166,7 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
     form,
   ])
 
-  const annualReports: AnnualReportFull[] = annualReportsData ?? []
+  const annualReports: AnnualReportSummary[] = annualReportsData ?? []
 
   const resetState = () => {
     form.reset(getDefaultValues())

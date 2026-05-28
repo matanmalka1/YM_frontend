@@ -1,13 +1,13 @@
 import React from 'react'
 import { CalendarCheck } from 'lucide-react'
-import type { AnnualReportFull } from '../../api'
+import type { AnnualReportSummary } from '../../api'
 import { TimelineEvent } from '../statusTransition/TimelineEvent'
 import { cn } from '../../../../utils/utils'
 import { UpcomingDeadlinesList } from './UpcomingDeadlinesList'
 import { buildTimelineEvents, getFilingStats } from './annualReports.helpers'
 
 interface Props {
-  reports: AnnualReportFull[]
+  reports: AnnualReportSummary[]
 }
 
 interface ProgressBarProps {

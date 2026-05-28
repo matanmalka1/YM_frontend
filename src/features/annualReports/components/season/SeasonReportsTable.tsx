@@ -1,6 +1,6 @@
 import { DataTable, type Column } from '../../../../components/ui/table/DataTable'
 import { Badge } from '../../../../components/ui/primitives/Badge'
-import type { AnnualReportFull } from '../../api'
+import type { AnnualReportSummary } from '../../api'
 import { getStatusLabel, getStatusVariant, getClientTypeLabel } from '../../api'
 
 const FILING_DEADLINE_TYPE_LABELS: Record<string, string> = {
@@ -19,13 +19,13 @@ import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { formatAnnualReportDate } from '../shared/annualReports.constants'
 
 interface SeasonReportsTableProps {
-  reports: AnnualReportFull[]
+  reports: AnnualReportSummary[]
   isLoading?: boolean
   taxYear?: number
-  onSelect?: (report: AnnualReportFull) => void
+  onSelect?: (report: AnnualReportSummary) => void
 }
 
-const DeadlineCell: React.FC<{ report: AnnualReportFull }> = ({ report }) => {
+const DeadlineCell: React.FC<{ report: AnnualReportSummary }> = ({ report }) => {
   const days = daysUntil(report.filing_deadline)
   const isTerminal = TERMINAL_STATUSES.has(report.status)
   const overdue = days !== null && days < 0 && !isTerminal
@@ -59,7 +59,7 @@ const DeadlineCell: React.FC<{ report: AnnualReportFull }> = ({ report }) => {
   )
 }
 
-const columns: Column<AnnualReportFull>[] = [
+const columns: Column<AnnualReportSummary>[] = [
   {
     key: 'office_client_number',
     header: "מס' לקוח",

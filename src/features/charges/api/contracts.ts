@@ -27,9 +27,6 @@ export interface ChargeResponse {
   available_actions?: BackendAction[]
 }
 
-export type ChargeBase = ChargeResponse
-export type ChargeAdvisorResponse = ChargeResponse
-export type ChargeSecretaryResponse = ChargeResponse
 
 export interface ChargeStatusStat {
   count: number
@@ -50,6 +47,8 @@ export interface ChargesListParams {
   business_id?: number
   status?: string
   charge_type?: string
+  period?: string
+  issued_after?: string
   issued_before?: string
   page?: number
   page_size?: number

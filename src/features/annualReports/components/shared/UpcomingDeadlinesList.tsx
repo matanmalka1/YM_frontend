@@ -1,6 +1,6 @@
 import React from 'react'
 import { CalendarClock, CalendarCheck, AlertCircle, Clock } from 'lucide-react'
-import type { AnnualReportFull } from '../../api'
+import type { AnnualReportSummary } from '../../api'
 import type { TimelineEventStatus } from '../statusTransition/TimelineEvent'
 import { cn } from '../../../../utils/utils'
 import { STATUS_LABELS } from '../../api'
@@ -8,7 +8,7 @@ import { formatAnnualReportDate, parseAnnualReportCalendarDate } from './annualR
 import { getAnnualReportName, getDeadlineStatus } from './annualReports.helpers'
 
 interface Props {
-  reports: AnnualReportFull[]
+  reports: AnnualReportSummary[]
 }
 
 const STATUS_COLORS: Record<TimelineEventStatus, string> = {
