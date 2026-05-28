@@ -1,44 +1,57 @@
-import { useMemo, useState } from 'react'
-import { Bell, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useCallback, useMemo, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { Bell, Eye, Plus, Send } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
-import { Card } from '@/components/ui/primitives/Card'
-import { Badge, type BadgeVariant } from '@/components/ui/primitives/Badge'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
-import { Input } from '@/components/ui/inputs/Input'
+import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { Select } from '@/components/ui/inputs/Select'
-import { DataTable, type Column } from '@/components/ui/table'
+import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
+import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
+import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
+import type { Column } from '@/components/ui/table'
 import { DetailDrawer, DrawerField, DrawerSection } from '@/components/ui/overlays/DetailDrawer'
+import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client'
+import { useRole } from '@/hooks/useRole'
 import { formatDateTime } from '@/utils/utils'
 import {
-  MANUAL_NOTIFICATION_TRIGGERS,
+  ENABLED_NOTIFICATION_TRIGGERS,
   TRIGGER_LABELS,
+  SendNotificationModal,
   useNotificationsPaginated,
   type ListNotificationsParams,
   type NotificationItem,
   type NotificationStatus,
   type NotificationTrigger,
 } from '@/features/notifications'
+import { usersApi, usersQK } from '@/features/users'
+import {
+  NOTIFICATION_DOMAIN_LABELS,
+  NOTIFICATION_STATUS_LABELS,
+  NOTIFICATION_STATUS_OPTIONS,
+  NOTIFICATION_STATUS_VARIANTS,
+  NOTIFICATION_TRIGGER_OPTIONS,
+  NOTIFICATIONS_PAGE_SIZE_OPTIONS,
+  NOTIFICATIONS_USER_FILTER_PARAMS,
+} from './NotificationsPage.constants'
 
-const STATUS_LABELS: Record<NotificationStatus, string> = {
-  pending: 'ממתינה',
-  sent: 'נשלחה',
-  failed: 'נכשלה',
-  skipped: 'דולגה',
+const ENGLISH_TEXT_PATTERN = /[A-Za-z]/
+
+const getTriggerLabel = (item: NotificationItem) => item.trigger_label || TRIGGER_LABELS[item.trigger] || 'הודעה'
+
+const getDomainLabel = (domain: string | null | undefined) => {
+  if (!domain) return 'כללי'
+  if (NOTIFICATION_DOMAIN_LABELS[domain]) return NOTIFICATION_DOMAIN_LABELS[domain]
+  return ENGLISH_TEXT_PATTERN.test(domain) ? 'כללי' : domain
 }
 
-const STATUS_VARIANTS: Record<NotificationStatus, BadgeVariant> = {
-  pending: 'info',
-  sent: 'success',
-  failed: 'error',
-  skipped: 'warning',
+type SelectedClientFilter = {
+  id: number
+  name: string
 }
-
-const TRIGGER_OPTIONS = MANUAL_NOTIFICATION_TRIGGERS.map((trigger) => ({
-  value: trigger,
-  label: TRIGGER_LABELS[trigger],
-}))
 
 export const NotificationsPage: React.FC = () => {
+  const { isAdvisor } = useRole()
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState<25 | 50>(25)
   const [trigger, setTrigger] = useState<NotificationTrigger | ''>('')
@@ -46,11 +59,16 @@ export const NotificationsPage: React.FC = () => {
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
   const [triggeredBy, setTriggeredBy] = useState('')
+  const [clientQuery, setClientQuery] = useState('')
+  const [selectedClient, setSelectedClient] = useState<SelectedClientFilter | null>(null)
   const [selected, setSelected] = useState<NotificationItem | null>(null)
+  const [sendOpen, setSendOpen] = useState(false)
+  const [sendClient, setSendClient] = useState<SelectedClientFilter | null>(null)
 
   const params: ListNotificationsParams = {
     page,
     page_size: pageSize,
+    client_record_id: selectedClient?.id,
     trigger,
     status,
     date_from: dateFrom ? `${dateFrom}T00:00:00` : undefined,
@@ -59,9 +77,23 @@ export const NotificationsPage: React.FC = () => {
   }
 
   const { data, isPending, error } = useNotificationsPaginated(params)
+  const usersQuery = useQuery({
+    queryKey: usersQK.list(NOTIFICATIONS_USER_FILTER_PARAMS),
+    queryFn: () => usersApi.list(NOTIFICATIONS_USER_FILTER_PARAMS),
+    retry: false,
+  })
   const items = data?.items ?? []
   const total = data?.total ?? 0
-  const totalPages = Math.max(1, Math.ceil(total / pageSize))
+  const userOptions = useMemo(
+    () => [
+      { value: '', label: 'כל המשתמשים' },
+      ...(usersQuery.data?.items ?? []).map((user) => ({
+        value: String(user.id),
+        label: user.full_name,
+      })),
+    ],
+    [usersQuery.data?.items],
+  )
 
   const columns = useMemo<Column<NotificationItem>[]>(
     () => [
@@ -75,8 +107,8 @@ export const NotificationsPage: React.FC = () => {
         header: 'סוג',
         render: (item) => (
           <div className="min-w-0 text-right">
-            <div className="text-sm font-medium text-gray-900">{item.trigger_label || TRIGGER_LABELS[item.trigger]}</div>
-            <div className="text-xs text-gray-400">{item.domain_label || 'כללי'}</div>
+            <div className="text-sm font-medium text-gray-900">{getTriggerLabel(item)}</div>
+            <div className="text-xs text-gray-400">{getDomainLabel(item.domain_label)}</div>
           </div>
         ),
       },
@@ -89,8 +121,8 @@ export const NotificationsPage: React.FC = () => {
         key: 'status',
         header: 'סטטוס',
         render: (item) => (
-          <Badge variant={STATUS_VARIANTS[item.status]} size="sm">
-            {STATUS_LABELS[item.status]}
+          <Badge variant={NOTIFICATION_STATUS_VARIANTS[item.status]} size="sm">
+            {NOTIFICATION_STATUS_LABELS[item.status]}
           </Badge>
         ),
       },
@@ -103,61 +135,128 @@ export const NotificationsPage: React.FC = () => {
     [],
   )
 
-  const resetToFirstPage = (fn: () => void) => {
+  const resetToFirstPage = useCallback((fn: () => void) => {
     fn()
     setPage(1)
-  }
+  }, [])
+
+  const openSendModal = useCallback((client?: SelectedClientFilter | null) => {
+    setSendClient(client ?? null)
+    setSendOpen(true)
+  }, [])
+
+  const closeSendModal = useCallback(() => {
+    setSendOpen(false)
+    setSendClient(null)
+  }, [])
+
+  const clearClientFilter = useCallback(() => {
+    setClientQuery('')
+    resetToFirstPage(() => setSelectedClient(null))
+  }, [resetToFirstPage])
+
+  const tableColumns = useMemo<Column<NotificationItem>[]>(
+    () => [
+      ...columns,
+      {
+        key: 'actions',
+        header: '',
+        align: 'center',
+        render: (item) => (
+          <RowActionsMenu ariaLabel="פעולות הודעה">
+            <RowActionItem label="צפייה בפרטים" icon={<Eye className="h-4 w-4" />} onClick={() => setSelected(item)} />
+            {isAdvisor && (
+              <RowActionItem
+                label="שליחת הודעה ללקוח"
+                icon={<Send className="h-4 w-4" />}
+                onClick={() => openSendModal({ id: item.client_record_id, name: item.client_name ?? `#${item.client_record_id}` })}
+              />
+            )}
+          </RowActionsMenu>
+        ),
+      },
+    ],
+    [columns, isAdvisor, openSendModal],
+  )
 
   return (
     <div className="space-y-6" dir="rtl">
-      <PageHeader title="הודעות" description="מרכז הודעות שנשלחו ונרשמו במערכת" />
+      <PageHeader
+        title="הודעות"
+        description="מרכז הודעות שנשלחו ונרשמו במערכת"
+        actions={
+          isAdvisor ? (
+            <Button variant="ghost" size="sm" onClick={() => openSendModal()}>
+              שליחת הודעה
+              <Plus className="h-3.5 w-3.5" />
+            </Button>
+          ) : undefined
+        }
+      />
 
-      <Card>
-        <div className="grid gap-3 md:grid-cols-6">
+      <ToolbarContainer>
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-7">
+          {selectedClient ? (
+            <SelectedClientDisplay
+              label="לקוח"
+              id={selectedClient.id}
+              name={selectedClient.name}
+              onClear={clearClientFilter}
+            />
+          ) : (
+            <ClientSearchInput
+              label="לקוח"
+              value={clientQuery}
+              onChange={setClientQuery}
+              onSelect={(client) => {
+                setClientQuery(client.name)
+                resetToFirstPage(() => setSelectedClient({ id: client.id, name: client.name }))
+              }}
+            />
+          )}
           <Select
             label="סוג הודעה"
             value={trigger}
-            onChange={(e) => resetToFirstPage(() => setTrigger(e.target.value as NotificationTrigger | ''))}
-          >
-            <option value="">כל הסוגים</option>
-            {TRIGGER_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </Select>
+            options={NOTIFICATION_TRIGGER_OPTIONS}
+            onChange={(event) => resetToFirstPage(() => setTrigger(event.target.value as NotificationTrigger | ''))}
+          />
           <Select
             label="סטטוס"
             value={status}
-            onChange={(e) => resetToFirstPage(() => setStatus(e.target.value as NotificationStatus | ''))}
-          >
-            <option value="">כל הסטטוסים</option>
-            {Object.entries(STATUS_LABELS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </Select>
-          <Input label="מתאריך" type="date" value={dateFrom} onChange={(e) => resetToFirstPage(() => setDateFrom(e.target.value))} />
-          <Input label="עד תאריך" type="date" value={dateTo} onChange={(e) => resetToFirstPage(() => setDateTo(e.target.value))} />
-          <Input label="מזהה משתמש שלח" type="number" value={triggeredBy} onChange={(e) => resetToFirstPage(() => setTriggeredBy(e.target.value))} />
+            options={NOTIFICATION_STATUS_OPTIONS}
+            onChange={(event) => resetToFirstPage(() => setStatus(event.target.value as NotificationStatus | ''))}
+          />
+          <DatePicker label="מתאריך" value={dateFrom} onChange={(value) => resetToFirstPage(() => setDateFrom(value))} />
+          <DatePicker label="עד תאריך" value={dateTo} onChange={(value) => resetToFirstPage(() => setDateTo(value))} />
+          <Select
+            label="נשלח על ידי"
+            value={triggeredBy}
+            disabled={usersQuery.isPending}
+            options={userOptions}
+            onChange={(event) => resetToFirstPage(() => setTriggeredBy(event.target.value))}
+          />
           <Select
             label="כמות בעמוד"
             value={String(pageSize)}
-            onChange={(e) => resetToFirstPage(() => setPageSize(Number(e.target.value) as 25 | 50))}
-          >
-            <option value="25">25</option>
-            <option value="50">50</option>
-          </Select>
+            options={NOTIFICATIONS_PAGE_SIZE_OPTIONS}
+            onChange={(event) => resetToFirstPage(() => setPageSize(Number(event.target.value) as 25 | 50))}
+          />
         </div>
-      </Card>
+      </ToolbarContainer>
 
-      <DataTable
+      <PaginatedDataTable
         data={items}
-        columns={columns}
+        columns={tableColumns}
         getRowKey={(item) => item.id}
         onRowClick={setSelected}
         isLoading={isPending}
+        error={error ? 'שגיאה בטעינת הודעות' : null}
+        page={page}
+        pageSize={pageSize}
+        total={total}
+        label="הודעות"
+        onPageChange={setPage}
+        showPagination={total > 0}
         emptyMessage="אין הודעות להצגה"
         emptyState={{
           icon: Bell,
@@ -166,43 +265,35 @@ export const NotificationsPage: React.FC = () => {
         }}
       />
 
-      {total > 0 && (
-        <Card className="flex flex-wrap items-center justify-between gap-3">
-          <span className="text-sm text-gray-500">
-            עמוד {page} מתוך {totalPages} · {total} הודעות
-          </span>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => Math.max(1, p - 1))}>
-              <ChevronRight className="h-4 w-4" />
-              הקודם
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={page >= totalPages}
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            >
-              הבא
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-          </div>
-        </Card>
-      )}
-
       <DetailDrawer
         open={selected !== null}
         title={selected?.subject_snapshot || selected?.trigger_label || 'הודעה'}
         subtitle={selected ? formatDateTime(selected.created_at) : undefined}
         onClose={() => setSelected(null)}
+        footer={
+          selected && isAdvisor ? (
+            <div className="flex justify-end">
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                onClick={() => openSendModal({ id: selected.client_record_id, name: selected.client_name ?? `#${selected.client_record_id}` })}
+              >
+                שליחת הודעה ללקוח
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
+          ) : undefined
+        }
       >
         {selected && (
           <div className="space-y-4">
             <DrawerSection title="פרטים">
-              <DrawerField label="סוג" value={selected.trigger_label || TRIGGER_LABELS[selected.trigger]} />
-              <DrawerField label="תחום" value={selected.domain_label || 'כללי'} />
+              <DrawerField label="סוג" value={getTriggerLabel(selected)} />
+              <DrawerField label="תחום" value={getDomainLabel(selected.domain_label)} />
               <DrawerField label="לקוח" value={selected.client_name ?? `#${selected.client_record_id}`} />
               <DrawerField label="נמען" value={selected.recipient ?? '—'} />
-              <DrawerField label="סטטוס" value={STATUS_LABELS[selected.status]} />
+              <DrawerField label="סטטוס" value={NOTIFICATION_STATUS_LABELS[selected.status]} />
             </DrawerSection>
             <DrawerSection title="תוכן">
               <div className="whitespace-pre-wrap py-3 text-sm leading-7 text-gray-800">
@@ -212,6 +303,15 @@ export const NotificationsPage: React.FC = () => {
           </div>
         )}
       </DetailDrawer>
+
+      {isAdvisor && (
+        <SendNotificationModal
+          open={sendOpen}
+          onClose={closeSendModal}
+          clientRecordId={sendClient?.id}
+          allowedTriggers={ENABLED_NOTIFICATION_TRIGGERS}
+        />
+      )}
     </div>
   )
 }

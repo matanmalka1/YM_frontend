@@ -130,7 +130,7 @@ export const WorkQueuePage: React.FC = () => {
 
       {renderBody()}
 
-      {!isLoading && !isFetching && total > 0 && (
+      {!isLoading && total > 0 && (
         <PaginationCard page={page} totalPages={totalPages} total={total} label="משימות" onPageChange={setPage} />
       )}
 

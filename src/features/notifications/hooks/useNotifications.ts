@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { notificationsApi, notificationsQK } from '../api'
 import type { ListNotificationsParams } from '../api'
 
@@ -17,5 +17,6 @@ export const useNotificationsPaginated = (params: ListNotificationsParams) => {
   return useQuery({
     queryKey: notificationsQK.list(params),
     queryFn: () => notificationsApi.listPaginated(params),
+    placeholderData: keepPreviousData,
   })
 }
