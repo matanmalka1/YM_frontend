@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react'
+import React, { useRef, useCallback } from 'react'
 import { Select } from '@/components/ui/inputs/Select'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
@@ -106,20 +106,18 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               }
               if (field.type === 'date-range') {
                 return (
-                  <>
+                  <React.Fragment key={`${field.fromKey}__${field.toKey}`}>
                     <DatePicker
-                      key={field.fromKey}
                       label={field.fromLabel}
                       value={values[field.fromKey] ?? ''}
                       onChange={(v) => onChange(field.fromKey, v)}
                     />
                     <DatePicker
-                      key={field.toKey}
                       label={field.toLabel}
                       value={values[field.toKey] ?? ''}
                       onChange={(v) => onChange(field.toKey, v)}
                     />
-                  </>
+                  </React.Fragment>
                 )
               }
               if (field.type === 'client-picker') {
