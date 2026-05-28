@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { notificationsApi, notificationsQK } from '../api'
 import { toast } from '../../../utils/toast'
 import { getErrorMessage } from '../../../utils/utils'
-import type { NotificationPreviewRequest, NotificationSendRequest, NotificationResult } from '../api'
+import type { NotificationPreviewRequest, NotificationResult, NotificationSendVariables } from '../api'
 
 export const usePreviewNotification = () => {
   const mutation = useMutation({
@@ -23,7 +23,8 @@ export const useSendNotification = () => {
   const queryClient = useQueryClient()
 
   const mutation = useMutation({
-    mutationFn: (payload: NotificationSendRequest) => notificationsApi.send(payload),
+    mutationFn: ({ payload, idempotencyKey }: NotificationSendVariables) =>
+      notificationsApi.send(payload, idempotencyKey),
     onSuccess: (result: NotificationResult) => {
       void queryClient.invalidateQueries({ queryKey: notificationsQK.all })
       if (result.status === 'sent') {

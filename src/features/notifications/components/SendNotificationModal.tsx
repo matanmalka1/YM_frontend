@@ -143,12 +143,18 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
     if (!valid || resolvedClientRecordId == null) return
 
     await sendAsync({
-      client_record_id: resolvedClientRecordId,
-      trigger,
-      subject: trimmedSubject,
-      body: trimmedBody,
-      entity_id: entityId,
-      confirm_recent_duplicate: warnings.length > 0,
+      payload: {
+        client_record_id: resolvedClientRecordId,
+        trigger,
+        entity_id: entityId,
+        channel: 'email',
+        overrides: {
+          subject: trimmedSubject,
+          body: trimmedBody,
+        },
+        confirm_recent_duplicate: warnings.length > 0,
+      },
+      idempotencyKey: crypto.randomUUID(),
     })
     onClose()
   }

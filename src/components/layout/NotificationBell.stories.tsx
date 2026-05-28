@@ -31,7 +31,7 @@ const NotificationBellStory = ({ pending = 3, failed = 1 }: { pending?: number; 
 
   useEffect(() => {
     useAuthStore.setState({
-      user: { id: 1, full_name: 'דנה כהן', role: 'advisor' },
+      user: { id: 1, full_name: 'דנה כהן', role: 'advisor', email: 'dana@example.com' },
       isLoading: false,
       hasBootstrapped: true,
       error: null,

@@ -68,6 +68,7 @@ export const TRIGGER_LABELS: Record<NotificationTrigger, string> = {
 }
 
 export type NotificationChannel = 'email' | 'whatsapp'
+export type NotificationSendChannel = 'email'
 export type NotificationStatus = 'pending' | 'sent' | 'failed' | 'skipped'
 
 // ── Read types ─────────────────────────────────────────────────────────────────
@@ -150,12 +151,19 @@ export interface NotificationPreviewResponse {
 export interface NotificationSendRequest {
   client_record_id: number
   trigger: NotificationTrigger
-  subject: string
-  body: string
   entity_id?: number
   business_id?: number
-  idempotency_key?: string
+  channel?: NotificationSendChannel
+  overrides?: {
+    subject?: string
+    body?: string
+  }
   confirm_recent_duplicate?: boolean
+}
+
+export interface NotificationSendVariables {
+  payload: NotificationSendRequest
+  idempotencyKey: string
 }
 
 export interface NotificationResult {

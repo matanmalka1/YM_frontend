@@ -25,5 +25,6 @@ export type {
   NotificationPreviewRequest,
   NotificationPreviewResponse,
   NotificationSendRequest,
+  NotificationSendVariables,
   NotificationResult,
 } from './api'

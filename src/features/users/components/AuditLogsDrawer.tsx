@@ -3,10 +3,12 @@ import { useQuery } from '@tanstack/react-query'
 import { DetailDrawer } from '../../../components/ui/overlays/DetailDrawer'
 import { Badge } from '../../../components/ui/primitives/Badge'
 import { Button } from '../../../components/ui/primitives/Button'
+import { DatePicker } from '../../../components/ui/inputs/DatePicker'
 import { SkeletonBlock } from '../../../components/ui/primitives/SkeletonBlock'
 import { usersApi, usersQK } from '../api'
 import { formatDateTime } from '../../../utils/utils'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
+import type { ListAuditLogsParams } from '../api'
 
 const auditActionLabel: Record<string, string> = {
   login_success: 'כניסה למערכת',
@@ -26,7 +28,14 @@ interface AuditLogsDrawerProps {
 
 export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose }) => {
   const [page, setPage] = useState(1)
-  const params = { page, page_size: PAGE_SIZE }
+  const [fromDate, setFromDate] = useState('')
+  const [toDate, setToDate] = useState('')
+  const params: ListAuditLogsParams = {
+    page,
+    page_size: PAGE_SIZE,
+    from: fromDate ? `${fromDate}T00:00:00` : undefined,
+    to: toDate ? `${toDate}T23:59:59` : undefined,
+  }
 
   const { data, isPending, isError } = useQuery({
     queryKey: usersQK.auditLogs(params),
@@ -40,7 +49,19 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
 
   const handleClose = () => {
     setPage(1)
+    setFromDate('')
+    setToDate('')
     onClose()
+  }
+
+  const handleFromDateChange = (value: string) => {
+    setFromDate(value)
+    setPage(1)
+  }
+
+  const handleToDateChange = (value: string) => {
+    setToDate(value)
+    setPage(1)
   }
 
   return (
@@ -50,6 +71,11 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
       title="לוג ביקורת משתמשים"
       subtitle={total > 0 ? `${total} רשומות` : undefined}
     >
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <DatePicker label="מתאריך" value={fromDate} onChange={handleFromDateChange} compact />
+        <DatePicker label="עד תאריך" value={toDate} onChange={handleToDateChange} compact />
+      </div>
+
       {isPending && (
         <div className="space-y-3">
           {Array.from({ length: 6 }).map((_, i) => (

@@ -11,6 +11,7 @@ export type {
   NotificationPreviewRequest,
   NotificationPreviewResponse,
   NotificationSendRequest,
+  NotificationSendVariables,
   NotificationResult,
 } from './contracts'
 export {

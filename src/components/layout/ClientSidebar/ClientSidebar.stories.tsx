@@ -84,7 +84,7 @@ const ClientSidebarStory = ({
 
   useEffect(() => {
     useAuthStore.setState({
-      user: { id: 1, full_name: 'דנה כהן', role: userRole },
+      user: { id: 1, full_name: 'דנה כהן', role: userRole, email: 'dana@example.com' },
       isLoading: false,
       hasBootstrapped: true,
       error: null,

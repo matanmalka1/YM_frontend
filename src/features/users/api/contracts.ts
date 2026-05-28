@@ -60,4 +60,6 @@ export interface ListAuditLogsParams {
   target_user_id?: number
   actor_user_id?: number
   email?: string
+  from?: string
+  to?: string
 }
