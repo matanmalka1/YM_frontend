@@ -8,6 +8,7 @@ import { SkeletonBlock } from '../../../components/ui/primitives/SkeletonBlock'
 import { SignatureRequestRow } from './SignatureRequestRow'
 import { SignatureRequestAuditDrawer } from './SignatureRequestAuditDrawer'
 import { CreateSignatureRequestModal } from './CreateSignatureRequestModal'
+import { SendNotificationModal, type NotificationTrigger } from '@/features/notifications'
 import { useClientSignatureRequests } from '../hooks/useClientSignatureRequests'
 import { useSignatureRequestActions } from '../hooks/useSignatureRequestActions'
 import { useSignatureRequestSigningUrls } from '../utils'
@@ -22,6 +23,10 @@ interface Props {
 export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, canManage }) => {
   const [showCreate, setShowCreate] = useState(false)
   const [auditRequestId, setAuditRequestId] = useState<number | null>(null)
+  const [notificationContext, setNotificationContext] = useState<{
+    requestId: number
+    trigger: NotificationTrigger
+  } | null>(null)
 
   const { items, total, isLoading, error } = useClientSignatureRequests({ clientId: client.id })
   const { create, isCreating, cancel, isCanceling } = useSignatureRequestActions(client.id)
@@ -71,6 +76,7 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
                   canManage={canManage}
                   onCancel={cancel}
                   onAudit={setAuditRequestId}
+                  onSendNotification={(requestId, trigger) => setNotificationContext({ requestId, trigger })}
                 />
               ))}
             </div>
@@ -79,6 +85,17 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
       </Card>
 
       <SignatureRequestAuditDrawer requestId={auditRequestId} onClose={() => setAuditRequestId(null)} />
+
+      {notificationContext && (
+        <SendNotificationModal
+          open={notificationContext !== null}
+          onClose={() => setNotificationContext(null)}
+          clientRecordId={client.id}
+          initialTrigger={notificationContext.trigger}
+          entityId={notificationContext.requestId}
+          disableTriggerChange
+        />
+      )}
 
       <CreateSignatureRequestModal
         open={showCreate}

@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, Clock, FolderOpen, Info, AlertTriangle, User } from 'lucide-react'
+import { Bell, ChevronLeft, Clock, FolderOpen, Info, AlertTriangle, User } from 'lucide-react'
 import { formatDate } from '@/utils/utils'
 import { Badge } from '@/components/ui/primitives/Badge'
+import { Button } from '@/components/ui/primitives/Button'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { getVatWorkItemStatusLabel } from '../constants'
 import { useRole } from '@/hooks/useRole'
@@ -17,6 +18,7 @@ import { VatFileModal } from './VatFileModal'
 import { isFiled } from '../utils'
 import type { VatWorkItemSummaryBarProps } from '../types'
 import { formatVatPeriodTitle, getVatClientTitle } from '../view.helpers'
+import { SendNotificationModal } from '@/features/notifications'
 
 type AlertTone = 'warning' | 'error'
 
@@ -55,6 +57,7 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
   )
   const [showSendBack, setShowSendBack] = useState(false)
   const [showFileModal, setShowFileModal] = useState(false)
+  const [showNotificationModal, setShowNotificationModal] = useState(false)
   const filed = isFiled(workItem.status)
   const { activeBinder } = useActiveVatBinder(workItem.client_record_id)
   const titleClient = getVatClientTitle(workItem.client_name, workItem.client_record_id)
@@ -99,6 +102,12 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
             variantMap={VAT_STATUS_BADGE_VARIANTS}
           />
           {isAdvisor && <VatExportButtons clientId={workItem.client_record_id} period={workItem.period} />}
+          {isAdvisor && (
+            <Button variant="outline" size="sm" onClick={() => setShowNotificationModal(true)} className="gap-1.5">
+              <Bell className="h-3.5 w-3.5" />
+              תזכורת מסמכים
+            </Button>
+          )}
         </div>
       </div>
 
@@ -171,6 +180,14 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
         onClose={() => setShowFileModal(false)}
         onFilingStart={() => onFilingPendingChange?.(true)}
         onFilingEnd={() => onFilingPendingChange?.(false)}
+      />
+      <SendNotificationModal
+        open={showNotificationModal}
+        onClose={() => setShowNotificationModal(false)}
+        clientRecordId={workItem.client_record_id}
+        initialTrigger="vat_documents_reminder"
+        entityId={workItem.id}
+        disableTriggerChange
       />
     </div>
   )

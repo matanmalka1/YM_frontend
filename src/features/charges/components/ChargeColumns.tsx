@@ -15,6 +15,7 @@ import { ChargeRowActions } from './ChargeRowActions'
 import { chargeStatusVariants } from '../constants'
 import type { ChargeAction } from '../types'
 import { ChargeClientCell } from './ChargeClientCell'
+import type { NotificationTrigger } from '@/features/notifications'
 
 interface BuildChargeColumnsParams {
   isAdvisor: boolean
@@ -25,6 +26,7 @@ interface BuildChargeColumnsParams {
   onToggleSelect?: (id: number) => void
   onToggleAll?: (ids: number[]) => void
   allIds?: number[]
+  onSendNotification?: (charge: ChargeResponse, trigger: NotificationTrigger) => void
 }
 
 export const buildChargeColumns = ({
@@ -36,6 +38,7 @@ export const buildChargeColumns = ({
   onToggleSelect,
   onToggleAll,
   allIds = [],
+  onSendNotification,
 }: BuildChargeColumnsParams): Column<ChargeResponse>[] => {
   const dataColumns: Column<ChargeResponse>[] = [
     monoColumn({
@@ -117,6 +120,12 @@ export const buildChargeColumns = ({
           onMarkPaid={() => void runAction(charge.id, 'markPaid')}
           onCancel={() => void runAction(charge.id, 'cancel')}
           showActions={isAdvisor}
+          onSendInvoiceNotification={
+            isAdvisor && onSendNotification ? () => onSendNotification(charge, 'invoice_issued') : undefined
+          }
+          onSendPaymentReminder={
+            isAdvisor && onSendNotification ? () => onSendNotification(charge, 'payment_reminder') : undefined
+          }
         />
       ),
     }),

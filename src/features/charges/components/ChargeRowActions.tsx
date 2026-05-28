@@ -1,4 +1,4 @@
-import { CheckCircle2, Eye, FileText, Trash2 } from 'lucide-react'
+import { Bell, CheckCircle2, Eye, FileText, Trash2 } from 'lucide-react'
 import { RowActionItem, RowActionSeparator, RowActionsMenu } from '@/components/ui/table'
 import { canCancel, canIssue, canMarkPaid } from '../utils'
 import type { BackendAction } from '@/lib/actions/types'
@@ -12,6 +12,8 @@ interface ChargeRowActionsProps {
   onMarkPaid: () => void
   onCancel: () => void
   onOpenDetail: () => void
+  onSendInvoiceNotification?: () => void
+  onSendPaymentReminder?: () => void
 }
 
 export const ChargeRowActions: React.FC<ChargeRowActionsProps> = ({
@@ -23,6 +25,8 @@ export const ChargeRowActions: React.FC<ChargeRowActionsProps> = ({
   onMarkPaid,
   onCancel,
   onOpenDetail,
+  onSendInvoiceNotification,
+  onSendPaymentReminder,
 }) => {
   const hasActions = showActions && (canIssue(actions) || canMarkPaid(actions) || canCancel(actions))
 
@@ -34,6 +38,23 @@ export const ChargeRowActions: React.FC<ChargeRowActionsProps> = ({
         icon={<Eye className="h-4 w-4" />}
         disabled={disabled}
       />
+      {(onSendInvoiceNotification || onSendPaymentReminder) && <RowActionSeparator />}
+      {onSendInvoiceNotification && (
+        <RowActionItem
+          label="שלח הודעת חשבונית"
+          onClick={onSendInvoiceNotification}
+          icon={<Bell className="h-4 w-4" />}
+          disabled={disabled}
+        />
+      )}
+      {onSendPaymentReminder && (
+        <RowActionItem
+          label="שלח תזכורת לתשלום"
+          onClick={onSendPaymentReminder}
+          icon={<Bell className="h-4 w-4" />}
+          disabled={disabled}
+        />
+      )}
       {hasActions && <RowActionSeparator />}
       {showActions && canIssue(actions) && (
         <RowActionItem label="הנפקה" onClick={onIssue} icon={<FileText className="h-4 w-4" />} disabled={disabled} />

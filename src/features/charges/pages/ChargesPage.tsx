@@ -11,12 +11,18 @@ import {
   ChargesTableBlock,
   useChargesPage,
 } from '@/features/charges'
+import { SendNotificationModal, type NotificationTrigger } from '@/features/notifications'
+import type { ChargeResponse } from '@/features/charges'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 
 export const Charges: React.FC = () => {
   const { searchParams, setSearchParams } = useSearchParamFilters()
   const [selectedChargeId, setSelectedChargeId] = useState<number | null>(null)
   const [showCreateModal, setShowCreateModal] = useState(false)
+  const [notificationContext, setNotificationContext] = useState<{
+    charge: ChargeResponse
+    trigger: NotificationTrigger
+  } | null>(null)
   const {
     actionLoadingId,
     bulkLoading,
@@ -51,6 +57,7 @@ export const Charges: React.FC = () => {
         onToggleSelect: toggleSelect,
         onToggleAll: toggleSelectAll,
         allIds,
+        onSendNotification: (charge, trigger) => setNotificationContext({ charge, trigger }),
       }),
     [isAdvisor, actionLoadingId, runAction, selectedIds, toggleSelect, toggleSelectAll, allIds],
   )
@@ -128,6 +135,16 @@ export const Charges: React.FC = () => {
       />
 
       <ChargeDetailDrawer chargeId={selectedChargeId} onClose={closeChargeDetail} />
+      {notificationContext && (
+        <SendNotificationModal
+          open={notificationContext !== null}
+          onClose={() => setNotificationContext(null)}
+          clientRecordId={notificationContext.charge.client_record_id}
+          initialTrigger={notificationContext.trigger}
+          entityId={notificationContext.charge.id}
+          disableTriggerChange
+        />
+      )}
       <ChargesCreateModal
         open={showCreateModal}
         createError={createError}

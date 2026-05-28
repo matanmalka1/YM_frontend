@@ -33,6 +33,24 @@ export const ANNUAL_REPORT_TRIGGERS: NotificationTrigger[] = [
   'annual_report_documents_request',
 ]
 
+export const CHARGE_TRIGGERS: NotificationTrigger[] = [
+  'invoice_issued',
+  'payment_reminder',
+]
+
+export const SIGNATURE_TRIGGERS: NotificationTrigger[] = [
+  'signature_request_sent',
+  'signature_request_reminder',
+]
+
+export const VAT_TRIGGERS: NotificationTrigger[] = [
+  'vat_documents_reminder',
+]
+
+export const MANUAL_NOTIFICATION_TRIGGERS: NotificationTrigger[] = NOTIFICATION_TRIGGER_VALUES.filter(
+  (trigger) => trigger !== 'binder_ready_for_handover',
+)
+
 export const TRIGGER_LABELS: Record<NotificationTrigger, string> = {
   binder_ready_for_handover: 'קלסר מוכן למסירה',
   binder_missing_documents: 'מסמכים חסרים בקלסר',
@@ -50,6 +68,7 @@ export const TRIGGER_LABELS: Record<NotificationTrigger, string> = {
 }
 
 export type NotificationChannel = 'email' | 'whatsapp'
+export type NotificationStatus = 'pending' | 'sent' | 'failed' | 'skipped'
 
 // ── Read types ─────────────────────────────────────────────────────────────────
 
@@ -68,7 +87,7 @@ export interface NotificationItem {
   trigger_label: string
   domain_label: string
   channel: NotificationChannel
-  status: 'pending' | 'sent' | 'failed' | 'skipped'
+  status: NotificationStatus
   recipient?: string | null
   content_snapshot: string
   subject_snapshot?: string | null
@@ -100,9 +119,9 @@ export interface ListNotificationsParams {
   business_id?: number
   page?: number
   page_size?: 25 | 50
-  status?: string
-  trigger?: string
-  channel?: string
+  status?: NotificationStatus | ''
+  trigger?: NotificationTrigger | ''
+  channel?: NotificationChannel | ''
   triggered_by?: number
   date_from?: string
   date_to?: string

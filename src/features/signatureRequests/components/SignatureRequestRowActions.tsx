@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link2, Copy, Check, X, History } from 'lucide-react'
+import { Bell, Link2, Copy, Check, X, History } from 'lucide-react'
 import { RowActionItem, RowActionLink, RowActionSeparator, RowActionsMenu } from '@/components/ui/table'
 import { ConfirmDialog } from '../../../components/ui/overlays/ConfirmDialog'
 import { toast } from '../../../utils/toast'
@@ -12,6 +12,7 @@ export interface SignatureRequestActionProps {
   canManage: boolean
   onCancel: (id: number) => Promise<unknown>
   onAudit: (id: number) => void
+  onSendNotification?: (id: number, trigger: 'signature_request_sent' | 'signature_request_reminder') => void
 }
 
 interface SignatureRequestRowActionsProps extends SignatureRequestActionProps {
@@ -27,6 +28,7 @@ export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProp
   canManage,
   onCancel,
   onAudit,
+  onSendNotification,
   showOpenLink = false,
   separateHistory = false,
   copySuccessMessage = 'הקישור הועתק',
@@ -72,6 +74,23 @@ export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProp
           </>
         )}
         {separateHistory && <RowActionSeparator />}
+        {canManage && isPending && onSendNotification && (
+          <>
+            <RowActionSeparator />
+            <RowActionItem
+              label="שלח בקשת חתימה"
+              onClick={() => onSendNotification(request.id, 'signature_request_sent')}
+              icon={<Bell className="h-4 w-4" />}
+              disabled={isCanceling}
+            />
+            <RowActionItem
+              label="שלח תזכורת לחתימה"
+              onClick={() => onSendNotification(request.id, 'signature_request_reminder')}
+              icon={<Bell className="h-4 w-4" />}
+              disabled={isCanceling}
+            />
+          </>
+        )}
         <RowActionItem
           label="היסטוריית פעילות"
           onClick={() => onAudit(request.id)}

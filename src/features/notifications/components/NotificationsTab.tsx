@@ -4,6 +4,7 @@ import { useNotifications } from '../hooks/useNotifications'
 import { useRole } from '../../../hooks/useRole'
 import { CompactNotificationListItem } from './NotificationListItem'
 import { SendNotificationModal } from './SendNotificationModal'
+import { ENABLED_NOTIFICATION_TRIGGERS } from '../api'
 import { Button } from '../../../components/ui/primitives/Button'
 import type { NotificationsTabProps } from '../types'
 
@@ -40,7 +41,7 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
       )}
 
       {isAdvisor && clientRecordId != null && (
-        <SendNotificationModal open={sendOpen} onClose={() => setSendOpen(false)} clientRecordId={clientRecordId} />
+        <SendNotificationModal open={sendOpen} onClose={() => setSendOpen(false)} clientRecordId={clientRecordId} allowedTriggers={ENABLED_NOTIFICATION_TRIGGERS} />
       )}
     </div>
   )

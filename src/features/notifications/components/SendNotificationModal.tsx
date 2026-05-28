@@ -6,25 +6,58 @@ import { Input } from '../../../components/ui/inputs/Input'
 import { Textarea } from '../../../components/ui/inputs/Textarea'
 import { ClientPickerField, useClientPickerState } from '../../../components/shared/client'
 import { usePreviewNotification, useSendNotification } from '../hooks/useSendNotification'
-import { ENABLED_NOTIFICATION_TRIGGERS, TRIGGER_LABELS } from '../api'
+import { MANUAL_NOTIFICATION_TRIGGERS, TRIGGER_LABELS } from '../api'
 import type { NotificationTrigger } from '../api'
 
-const TRIGGER_OPTIONS = ENABLED_NOTIFICATION_TRIGGERS.map((t) => ({ value: t, label: TRIGGER_LABELS[t] }))
+const DOMAIN_LABELS: Partial<Record<NotificationTrigger, string>> = {
+  binder_missing_documents: 'קלסר',
+  binder_general_reminder: 'קלסר',
+  invoice_issued: 'חיובים',
+  payment_reminder: 'חיובים',
+  vat_documents_reminder: 'מע"מ',
+  annual_report_documents_request: 'דוח שנתי',
+  annual_report_client_reminder: 'דוח שנתי',
+  signature_request_sent: 'חתימה',
+  signature_request_reminder: 'חתימה',
+  client_missing_information: 'לקוח',
+  client_documents_request: 'לקוח',
+  client_general_message: 'לקוח',
+}
+
+const buildTriggerOptions = (triggers: NotificationTrigger[]) =>
+  triggers.map((trigger) => ({
+    value: trigger,
+    label: `${DOMAIN_LABELS[trigger] ?? 'כללי'} — ${TRIGGER_LABELS[trigger]}`,
+  }))
 
 export interface SendNotificationModalProps {
   open: boolean
   onClose: () => void
   clientRecordId?: number
+  initialTrigger?: NotificationTrigger
+  entityId?: number
+  disableTriggerChange?: boolean
+  allowedTriggers?: NotificationTrigger[]
 }
 
 type Step = 'compose' | 'preview'
 
-export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ open, onClose, clientRecordId }) => {
+export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
+  open,
+  onClose,
+  clientRecordId,
+  initialTrigger,
+  entityId,
+  disableTriggerChange = false,
+  allowedTriggers = MANUAL_NOTIFICATION_TRIGGERS,
+}) => {
   const { previewAsync, isPreviewing } = usePreviewNotification()
   const { sendAsync, isSending } = useSendNotification()
 
+  const triggerOptions = buildTriggerOptions(allowedTriggers)
+
   const [step, setStep] = useState<Step>('compose')
-  const [trigger, setTrigger] = useState<NotificationTrigger>(ENABLED_NOTIFICATION_TRIGGERS[0])
+  const [trigger, setTrigger] = useState<NotificationTrigger>(initialTrigger ?? allowedTriggers[0])
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
   const [subjectError, setSubjectError] = useState<string | undefined>()
@@ -38,23 +71,9 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ op
 
   const resolvedClientRecordId = clientRecordId ?? selectedClient?.id
 
-  useEffect(() => {
-    if (open) {
-      setStep('compose')
-      setTrigger(ENABLED_NOTIFICATION_TRIGGERS[0])
-      setSubject('')
-      setBody('')
-      setSubjectError(undefined)
-      setBodyError(undefined)
-      setClientError(undefined)
-      setBlockedReason(undefined)
-      setWarnings([])
-      resetClientPicker()
-    }
-  }, [open, resetClientPicker])
-
-  const handlePreview = async () => {
-    if (resolvedClientRecordId == null) {
+  const handlePreview = async (overrideClientId?: number) => {
+    const cid = overrideClientId ?? resolvedClientRecordId
+    if (cid == null) {
       setClientError('יש לבחור לקוח')
       return
     }
@@ -62,7 +81,11 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ op
     setBlockedReason(undefined)
     setWarnings([])
 
-    const result = await previewAsync({ client_record_id: resolvedClientRecordId, trigger })
+    const result = await previewAsync({
+      client_record_id: cid,
+      trigger,
+      entity_id: entityId,
+    })
     if (result.status === 'blocked') {
       setBlockedReason(result.reason ?? 'שליחת ההודעה חסומה')
       return
@@ -72,6 +95,33 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ op
     if (result.warnings?.length) setWarnings(result.warnings)
     setStep('preview')
   }
+
+  // Reset state on open
+  useEffect(() => {
+    if (open) {
+      setStep('compose')
+      setTrigger(initialTrigger ?? allowedTriggers[0])
+      setSubject('')
+      setBody('')
+      setSubjectError(undefined)
+      setBodyError(undefined)
+      setClientError(undefined)
+      setBlockedReason(undefined)
+      setWarnings([])
+      resetClientPicker()
+    }
+  // allowedTriggers is a stable reference per caller — intentionally excluded
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialTrigger, open, resetClientPicker])
+
+  // Auto-preview when context is fully known on open
+  useEffect(() => {
+    if (open && initialTrigger && entityId != null && clientRecordId != null) {
+      void handlePreview(clientRecordId)
+    }
+  // Run only when the modal opens — trigger/entityId/clientRecordId don't change mid-session
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open])
 
   const handleSend = async () => {
     let valid = true
@@ -92,7 +142,14 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ op
     }
     if (!valid || resolvedClientRecordId == null) return
 
-    await sendAsync({ client_record_id: resolvedClientRecordId, trigger, subject: trimmedSubject, body: trimmedBody })
+    await sendAsync({
+      client_record_id: resolvedClientRecordId,
+      trigger,
+      subject: trimmedSubject,
+      body: trimmedBody,
+      entity_id: entityId,
+      confirm_recent_duplicate: warnings.length > 0,
+    })
     onClose()
   }
 
@@ -139,9 +196,10 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({ op
           <>
             <Select
               label="סוג הודעה"
-              options={TRIGGER_OPTIONS}
+              options={triggerOptions}
               value={trigger}
               onChange={(e) => setTrigger(e.target.value as NotificationTrigger)}
+              disabled={disableTriggerChange}
             />
             {blockedReason && (
               <p className="text-sm text-red-600 font-medium">{blockedReason}</p>

@@ -27,6 +27,7 @@ export const SignatureRequestRow: React.FC<Props> = ({
   canManage,
   onCancel,
   onAudit,
+  onSendNotification,
 }) => {
   const [expanded, setExpanded] = useState(false)
   const isPending = request.status === 'pending_signature'
@@ -58,6 +59,7 @@ export const SignatureRequestRow: React.FC<Props> = ({
             canManage={canManage}
             onCancel={onCancel}
             onAudit={onAudit}
+            onSendNotification={onSendNotification}
           />
           <Button
             type="button"

@@ -2,7 +2,6 @@ import { api } from '@/api/client'
 import { NOTIFICATION_ENDPOINTS } from './endpoints'
 import { toQueryParams } from '@/api/queryParams'
 import type {
-  NotificationItem,
   NotificationListResponse,
   NotificationSummaryResponse,
   ListNotificationsParams,
@@ -12,18 +11,13 @@ import type {
   NotificationResult,
 } from './contracts'
 
-const normalizeNotifications = (data: NotificationItem[] | NotificationListResponse): NotificationItem[] => {
-  if (Array.isArray(data)) return data
-  return Array.isArray(data.items) ? data.items : []
-}
-
 export const notificationsApi = {
-  list: async (params?: ListNotificationsParams): Promise<NotificationItem[]> => {
-    const response = await api.get<NotificationItem[] | NotificationListResponse>(
+  listPaginated: async (params: ListNotificationsParams = {}): Promise<NotificationListResponse> => {
+    const response = await api.get<NotificationListResponse>(
       NOTIFICATION_ENDPOINTS.notifications,
       params ? { params: toQueryParams(params) } : undefined,
     )
-    return normalizeNotifications(response.data)
+    return response.data
   },
 
   getSummary: async (clientId?: number): Promise<NotificationSummaryResponse> => {

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Trash2 } from 'lucide-react'
+import { Bell, Trash2 } from 'lucide-react'
 import { DetailDrawer, DrawerField, DrawerSection } from '../../../components/ui/overlays/DetailDrawer'
 import { Textarea } from '../../../components/ui/inputs/Textarea'
 import { Alert } from '../../../components/ui/overlays/Alert'
@@ -20,6 +20,7 @@ import { CHARGE_STATUS_LABELS, CHARGE_TYPE_LABELS, getChargeStatusLabel } from '
 import { ChargeActionButtons } from './ChargeActionButtons'
 import { useChargeDetailsPage } from '../hooks/useChargeDetailsPage'
 import { CHARGE_CANCEL_REASON_PLACEHOLDER, chargeStatusVariants } from '../constants'
+import { SendNotificationModal, type NotificationTrigger } from '@/features/notifications'
 
 const FIELD_VALUE_LABELS: FieldValueLabels = {
   status: CHARGE_STATUS_LABELS,
@@ -37,6 +38,7 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
   )
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false)
   const [isConfirmingCancel, setIsConfirmingCancel] = useState(false)
+  const [notificationTrigger, setNotificationTrigger] = useState<NotificationTrigger | null>(null)
   const [cancelReason, setCancelReason] = useState('')
   const clientLabel = charge ? getChargeClientLabel(charge) : ''
 
@@ -56,6 +58,30 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
           onMarkPaid={() => void runAction('markPaid')}
           onCancel={() => setIsConfirmingCancel(true)}
         />
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setNotificationTrigger('invoice_issued')}
+            disabled={actionLoading}
+            className="gap-1.5"
+          >
+            <Bell className="h-3.5 w-3.5" />
+            הודעת חשבונית
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setNotificationTrigger('payment_reminder')}
+            disabled={actionLoading}
+            className="gap-1.5"
+          >
+            <Bell className="h-3.5 w-3.5" />
+            תזכורת לתשלום
+          </Button>
+        </div>
         {canDeleteCharge(charge.available_actions) && (
           <Button
             type="button"
@@ -182,6 +208,16 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
           </>
         )}
       </DetailDrawer>
+      {charge && notificationTrigger && (
+        <SendNotificationModal
+          open={notificationTrigger !== null}
+          onClose={() => setNotificationTrigger(null)}
+          clientRecordId={charge.client_record_id}
+          initialTrigger={notificationTrigger}
+          entityId={charge.id}
+          disableTriggerChange
+        />
+      )}
     </>
   )
 }

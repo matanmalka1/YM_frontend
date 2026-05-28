@@ -15,6 +15,7 @@ import { DashboardPage } from '../features/dashboard'
 import { Navbar } from '../components/layout/Navbar/Navbar'
 import { ClientSidebar } from '../components/layout/ClientSidebar/ClientSidebar'
 import { PageLayout } from '../components/layout/PageLayout'
+import { NotificationsPage } from '../features/notifications'
 import { WorkQueuePage } from '../features/workQueue'
 import { Search } from '../features/search'
 import { SigningPage } from '../features/signing'
@@ -124,6 +125,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="clients/:clientId/businesses/:businessId" element={<BusinessDetails />} />
             <Route path="search" element={<Search />} />
             <Route path="charges" element={<Charges />} />
+            <Route path="notifications" element={<NotificationsPage />} />
             <Route path="tax" element={<Navigate to="/tax/calendar" replace />} />
             <Route path="tax/dashboard" element={<TaxDashboardPage />} />
             <Route path="tax/reports" element={<AnnualReportsPage />} />
