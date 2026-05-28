@@ -2,9 +2,9 @@ import type { KeyboardEvent } from 'react'
 import { formatClientOfficeId, getReportingPeriodMonthLabel } from '@/utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { DEDUCTION_RATES, VAT_NUMERIC_KEYS } from './constants'
-import type { VatPeriodRow } from './api'
+import type { VatPeriodRow, VatType } from './api'
 
-export const formatVatPeriodTitle = (period: string, periodType: string | null): string => {
+export const formatVatPeriodTitle = (period: string, periodType: VatType): string => {
   const [year] = period.split('-')
   const yearNumber = Number(year)
   const monthsCount = periodType === 'bimonthly' ? 2 : 1

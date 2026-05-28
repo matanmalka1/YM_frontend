@@ -1,6 +1,8 @@
 import type { BackendAction } from '@/lib/actions/types'
 import type { VatPeriodTypeFilter } from '../constants'
 
+export type VatType = 'monthly' | 'bimonthly' | 'exempt'
+
 export type VatWorkItemStatus =
   | 'pending_materials'
   | 'material_received'
@@ -17,7 +19,7 @@ export interface VatWorkItemResponse {
   client_id_number?: string | null
   client_status: string | null
   period: string
-  period_type: string | null
+  period_type: VatType
   status: VatWorkItemStatus
   pending_materials_note: string | null
   total_output_vat: string
@@ -87,7 +89,7 @@ export interface VatPeriodOptionResponse {
 export interface VatPeriodOptionsResponse {
   client_record_id: number
   year: number
-  period_type: 'monthly' | 'bimonthly' | 'exempt'
+  period_type: VatType
   options: VatPeriodOptionResponse[]
 }
 
@@ -170,7 +172,7 @@ export interface VatAuditTrailResponse {
 export interface VatPeriodRow {
   work_item_id: number
   period: string
-  period_type: string | null
+  period_type: VatType
   status: VatWorkItemStatus
   total_output_vat: string
   total_input_vat: string
@@ -188,14 +190,14 @@ export interface VatPeriodRow {
 
 export interface VatGroupPeriod {
   period: string
-  period_type: string | null
+  period_type: VatType
 }
 
 export interface VatWorkItemGroupSummary {
   group_key: string
   due_date: string
   period: string
-  period_type: string | null
+  period_type: VatType
   periods?: VatGroupPeriod[]
   total_count: number
   filed_count: number

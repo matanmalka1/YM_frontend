@@ -21,6 +21,7 @@ export const taskSchema = z.object({
   created_by_user_id: z.number().int().nullable().optional(),
   completed_by_user_id: z.number().int().nullable().optional(),
   completed_at: z.string().nullable().optional(),
+  canceled_by_user_id: z.number().int().nullable().optional(),
   canceled_at: z.string().nullable().optional(),
   created_at: z.string(),
   updated_at: z.string(),
