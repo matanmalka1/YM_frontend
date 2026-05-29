@@ -1,10 +1,11 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useRole } from '@/hooks/useRole'
 import { useBusinessesForClient } from '@/hooks/useBusinessesForClient'
 import { useTableSelection } from '@/hooks/useTableSelection'
-import { getErrorMessage, showErrorToast } from '@/utils/utils'
+import { getErrorMessage, parsePositiveInt, showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
+import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { chargesApi, chargesQK, type CreateChargePayload } from '../api'
 import { DEFAULT_CHARGE_LIST_STATS } from '../constants'
 import { useChargeActions } from './useChargeActions'
@@ -13,15 +14,19 @@ import { useChargeCreateMutation } from './useChargeCreateMutation'
 const PAGE_SIZE = 20
 
 export const useClientCharges = (clientId: number) => {
-  const { isAdvisor } = useRole()
+  const { isAdvisor, isSecretary } = useRole()
+  const { searchParams, setFilter, setPage: setUrlPage } = useSearchParamFilters()
 
-  const [page, setPage] = useState(1)
-  const [status, setStatus] = useState('')
-  const [selectedBusinessId, setSelectedBusinessId] = useState<number | null>(null)
+  const page = parsePositiveInt(searchParams.get('page'), 1)
+  const status = searchParams.get('status') ?? ''
+  const rawBusinessId = searchParams.get('business_id')
+  const selectedBusinessId = rawBusinessId ? Number(rawBusinessId) : null
 
   const { businesses, isLoading: businessesLoading } = useBusinessesForClient({
     clientId,
-    onAutoSelect: (business) => setSelectedBusinessId(business.id),
+    onAutoSelect: (business) => {
+      if (!rawBusinessId) setFilter('business_id', String(business.id), false)
+    },
   })
 
   const listParams = useMemo(
@@ -53,7 +58,7 @@ export const useClientCharges = (clientId: number) => {
   const { clearSelection, selectedIds, toggleSelect, toggleSelectAll } = useTableSelection<number>()
   const { actionLoadingId, bulkLoading, runAction, runBulkAction } = useChargeActions({
     clearSelection,
-    isAdvisor,
+    canAct: isAdvisor || isSecretary,
     selectedIds,
   })
 
@@ -80,11 +85,15 @@ export const useClientCharges = (clientId: number) => {
 
   const handleStatusChange = useCallback(
     (nextStatus: string) => {
-      setStatus(nextStatus)
-      setPage(1)
+      setFilter('status', nextStatus, true)
       clearSelection()
     },
-    [clearSelection],
+    [clearSelection, setFilter],
+  )
+
+  const setSelectedBusinessId = useCallback(
+    (id: number | null) => setFilter('business_id', id != null ? String(id) : '', false),
+    [setFilter],
   )
 
   return {
@@ -113,7 +122,7 @@ export const useClientCharges = (clientId: number) => {
     runBulkAction,
     submitCreate,
     handleStatusChange,
-    setPage,
+    setPage: setUrlPage,
     currentStatus: status,
   }
 }

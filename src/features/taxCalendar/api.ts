@@ -1,8 +1,23 @@
 import { api } from '@/api/client'
 import { toQueryParams } from '@/api/queryParams'
-import type { PaginatedResponse } from '@/types'
 
 export type TaxCalendarObligationType = 'vat' | 'advance_payment' | 'annual_report'
+
+export interface TaxCalendarGroupsSummary {
+  groups: number
+  linked: number
+  open: number
+  overdue: number
+  done: number
+}
+
+export interface TaxCalendarGroupListResponse {
+  items: TaxCalendarGroup[]
+  page: number
+  page_size: number
+  total: number
+  summary: TaxCalendarGroupsSummary
+}
 
 export interface TaxCalendarGroup {
   tax_calendar_entry_id: number
@@ -71,8 +86,8 @@ export const taxCalendarQK = {
 }
 
 export const taxCalendarApi = {
-  listGroups: async (params: TaxCalendarGroupsParams = {}): Promise<PaginatedResponse<TaxCalendarGroup>> => {
-    const response = await api.get<PaginatedResponse<TaxCalendarGroup>>('/tax-calendar/groups', {
+  listGroups: async (params: TaxCalendarGroupsParams = {}): Promise<TaxCalendarGroupListResponse> => {
+    const response = await api.get<TaxCalendarGroupListResponse>('/tax-calendar/groups', {
       params: toQueryParams(params),
     })
     return response.data

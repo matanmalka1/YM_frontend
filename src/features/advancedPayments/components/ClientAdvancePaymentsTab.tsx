@@ -7,7 +7,8 @@ import { useAdvanceRateInsights } from '../hooks/useAdvanceRateInsights'
 import { useRole } from '../../../hooks/useRole'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import { toast } from '../../../utils/toast'
-import { getHttpStatus, showErrorToast } from '../../../utils/utils'
+import { getHttpStatus, showErrorToast, parsePositiveInt } from '../../../utils/utils'
+import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { ClientAdvancePaymentsHeader } from './ClientAdvancePaymentsHeader'
 import { ClientAdvancePaymentCards } from './ClientAdvancePaymentCards'
 import { AdvancePaymentsKPICards } from './AdvancePaymentsKPICards'
@@ -30,12 +31,17 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
   clientIdNumber,
   officeClientNumber,
 }) => {
-  const [year, setYear] = useState(getOperationalTaxYear)
-  const [statusFilter, setStatusFilter] = useState<AdvancePaymentStatus[]>([])
-  const [page, setPage] = useState(1)
+  const { searchParams, setFilter, setPage: setUrlPage } = useSearchParamFilters()
   const [modalOpen, setModalOpen] = useState(false)
   const [drawerRow, setDrawerRow] = useState<AdvancePaymentRow | null>(null)
   const { isAdvisor } = useRole()
+
+  const year = parsePositiveInt(searchParams.get('year'), getOperationalTaxYear())
+  const page = parsePositiveInt(searchParams.get('page'), 1)
+  const rawStatusFilter = searchParams.get('status_filter') ?? ''
+  const statusFilter: AdvancePaymentStatus[] = rawStatusFilter
+    ? (rawStatusFilter.split(',') as AdvancePaymentStatus[])
+    : []
 
   const queryClient = useQueryClient()
   const { rows, isLoading, total, create, isCreating, deleteRow } = useAdvancePayments(
@@ -99,8 +105,8 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
   }
 
   const handleStatusToggle = (status: AdvancePaymentStatus) => {
-    setPage(1)
-    setStatusFilter((prev) => toggleAdvancePaymentStatusFilter(prev, status))
+    const next = toggleAdvancePaymentStatusFilter(statusFilter, status)
+    setFilter('status_filter', next.join(','), true)
   }
 
   const handleSave = async (id: number, payload: UpdateAdvancePaymentPayload) => {
@@ -129,10 +135,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
         statusFilter={statusFilter}
         onToggleStatus={handleStatusToggle}
         year={year}
-        onYearChange={(nextYear) => {
-          setPage(1)
-          setYear(nextYear)
-        }}
+        onYearChange={(nextYear) => setFilter('year', String(nextYear), true)}
         onOpenCreate={() => setModalOpen(true)}
         onGenerateSchedule={handleGenerateSchedule}
         displayFrequency={displayFrequency}
@@ -146,7 +149,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
       <ClientAdvancePaymentCards rows={rows} isLoading={isLoading} onRowClick={(row) => setDrawerRow(row)} />
 
       {totalPages > 1 && (
-        <PaginationCard page={page} totalPages={totalPages} total={total} label="מקדמות" onPageChange={setPage} />
+        <PaginationCard page={page} totalPages={totalPages} total={total} label="מקדמות" onPageChange={setUrlPage} />
       )}
 
       <AdvancePaymentDrawer

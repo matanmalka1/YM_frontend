@@ -5,6 +5,7 @@ import { Button } from '../../../components/ui/primitives/Button'
 import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
 import { cn } from '../../../utils/utils'
+import { useSearchDebounce } from '../../../hooks/useSearchDebounce'
 import type { EventTypeStat } from '../lib/timelineStats'
 import type { TimelineFilterKey } from '../normalize'
 
@@ -66,6 +67,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
   onPageSizeChange,
   eventTypeStats,
 }) => {
+  const [localSearch, setLocalSearch] = useSearchDebounce(searchTerm, onSearchChange)
   const lastUpdated = lastEventTimestamp ? format(parseISO(lastEventTimestamp), 'd MMM HH:mm', { locale: he }) : null
 
   return (
@@ -75,18 +77,18 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
         {/* Search */}
         <div className="flex-1 relative">
           <Input
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
             placeholder="חיפוש לפי תיאור, קלסר, חיוב או מסמך..."
             startIcon={<Search className="h-4 w-4" />}
             className="py-2 text-sm bg-gray-50 focus:bg-white"
           />
-          {searchTerm && (
+          {localSearch && (
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              onClick={() => onSearchChange('')}
+              onClick={() => { setLocalSearch(''); onSearchChange('') }}
               className="absolute left-3 top-1/2 -translate-y-1/2 p-0.5 text-gray-400 hover:text-gray-600 hover:bg-transparent"
             >
               <X className="h-3.5 w-3.5" />

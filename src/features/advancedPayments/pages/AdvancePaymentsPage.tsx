@@ -67,7 +67,7 @@ const batchIncludesMonth = (batch: AdvancePaymentDueDateGroup, year: number, mon
 }
 
 export const AdvancePayments: React.FC = () => {
-  const { searchParams, setSearchParams } = useSearchParamFilters()
+  const { searchParams, setSearchParams, setFilter, setFilters, resetFilters } = useSearchParamFilters()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { isAdvisor } = useRole()
@@ -80,13 +80,13 @@ export const AdvancePayments: React.FC = () => {
   const [createOpen, setCreateOpen] = useState(false)
   const [genOpen, setGenOpen] = useState(false)
 
-  const initialPeriodFilter = searchParams.get('period')
-  const [filters, setFilters] = useState({
-    client_id: '',
-    client_name: '',
-    status: '',
-    period: initialPeriodFilter === '1' || initialPeriodFilter === '2' ? initialPeriodFilter : '',
-  })
+  const rawPeriod = searchParams.get('period') ?? ''
+  const filters = {
+    client_id: searchParams.get('client_id') ?? '',
+    client_name: searchParams.get('client_name') ?? '',
+    status: searchParams.get('status') ?? '',
+    period: rawPeriod === '1' || rawPeriod === '2' ? rawPeriod : '',
+  }
   const [loadedGroupStats, setLoadedGroupStats] = useState<Record<string, AdvancePaymentGroupStats>>({})
 
   const { batches, isLoading } = useAdvancePaymentBatches(year)
@@ -98,24 +98,15 @@ export const AdvancePayments: React.FC = () => {
       setSearchParams(next)
       return
     }
-    setFilters((prev) => ({ ...prev, [key]: value }))
+    setFilter(key, value)
   }
 
   const handleMultiFilterChange = (updates: Record<string, string>) => {
-    const yearUpdate = updates['year']
-    if (yearUpdate !== undefined) {
-      const next = new URLSearchParams(searchParams)
-      next.set('year', yearUpdate)
-      setSearchParams(next)
-    }
-    setFilters((prev) => ({ ...prev, ...updates }))
+    setFilters(updates, false)
   }
 
   const handleFilterReset = () => {
-    setFilters({ client_id: '', client_name: '', status: '', period: '' })
-    const next = new URLSearchParams(searchParams)
-    next.delete('year')
-    setSearchParams(next)
+    resetFilters()
   }
 
   const updateMutation = useMutation({

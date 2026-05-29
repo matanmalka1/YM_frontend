@@ -25,7 +25,7 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
     refresh,
     filters,
     eventTypeStats,
-    summary,
+    summary: { lastEventTimestamp },
   } = useClientTimelinePage(clientId)
 
   const timelineGroups = useMemo(() => groupTimelineEventsByDate(filteredEvents), [filteredEvents])
@@ -58,9 +58,9 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
   return (
     <div className="space-y-4">
       <TimelineCommandBar
-        total={summary.totalOnPage}
+        total={total}
         hasActiveFilters={filters.hasActiveFilters}
-        lastEventTimestamp={summary.lastEventTimestamp}
+        lastEventTimestamp={lastEventTimestamp}
         refreshing={refreshing}
         onRefresh={refresh}
         searchTerm={filters.searchTerm}

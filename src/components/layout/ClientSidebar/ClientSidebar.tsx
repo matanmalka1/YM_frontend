@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useDebounce } from 'use-debounce'
 import { Link, NavLink } from 'react-router-dom'
 import { LogOut, Plus, Search, User as UserIcon } from 'lucide-react'
 import { useAuthStore } from '@/store/auth.store'
@@ -56,8 +57,9 @@ const groupClients = (clients: ClientSidebarItem[], groupMode: GroupMode): Clien
 
 export const ClientSidebar: React.FC = () => {
   const [searchValue, setSearchValue] = useState('')
+  const [debouncedSearch] = useDebounce(searchValue, 350)
   const [groupMode, setGroupMode] = useState<GroupMode>('entity')
-  const { clients, total, hasSearch, isLoading, isError } = useClientSidebarClients(searchValue)
+  const { clients, total, hasSearch, isLoading, isError } = useClientSidebarClients(debouncedSearch)
   const { user, logout } = useAuthStore()
   const { can } = useRole()
   const clientGroups = useMemo(() => groupClients(clients, groupMode), [clients, groupMode])

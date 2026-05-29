@@ -6,6 +6,8 @@ export {
   type TaxCalendarGroupItem,
   type TaxCalendarGroupItemResponse,
   type TaxCalendarGroupItemSourceType,
+  type TaxCalendarGroupListResponse,
+  type TaxCalendarGroupsSummary,
   type TaxCalendarGroupsParams,
   type TaxCalendarObligationType,
 } from './api'

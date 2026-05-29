@@ -1,5 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
+import { useDebounce } from 'use-debounce'
 import { useRole } from '@/hooks/useRole'
+import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
+import { parsePositiveInt } from '@/utils/utils'
 import { getErrorMessage } from '@/utils/utils'
 import { useWorkQueue } from './useWorkQueue'
 import type { WorkQueueParams, WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
@@ -8,21 +11,25 @@ import type { TaskStatus } from '@/features/tasks'
 const WORK_QUEUE_PAGE_SIZE = 50
 
 export const useWorkQueuePage = () => {
-  const [search, setSearch] = useState('')
-  const [urgencyFilter, setUrgencyFilter] = useState<WorkQueueUrgency | null>(null)
-  const [typeFilter, setTypeFilter] = useState<WorkQueueSourceType | null>(null)
-  const [statusFilter, setStatusFilter] = useState<TaskStatus | null>(null)
-  const [linkedFilter, setLinkedFilter] = useState<'linked' | 'unlinked' | null>(null)
-  const [scopeFilter, setScopeFilter] = useState<'system' | 'manual' | null>(null)
-  const [historyMode, setHistoryMode] = useState(false)
-  const [page, setPage] = useState(1)
+  const { searchParams, setFilter, setFilters, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
   const { role } = useRole()
   const hasRole = role != null
+
+  const search = searchParams.get('search') ?? ''
+  const urgencyFilter = (searchParams.get('urgency') as WorkQueueUrgency) || null
+  const typeFilter = (searchParams.get('source_type') as WorkQueueSourceType) || null
+  const statusFilter = (searchParams.get('task_status') as TaskStatus) || null
+  const linkedFilter = (searchParams.get('linked') as 'linked' | 'unlinked') || null
+  const scopeFilter = (searchParams.get('scope') as 'system' | 'manual') || null
+  const historyMode = searchParams.get('history') === 'true'
+  const page = parsePositiveInt(searchParams.get('page'), 1)
+
+  const [debouncedSearch] = useDebounce(search, 350)
 
   const listParams = useMemo<WorkQueueParams>(
     () => ({
       include_task_history: historyMode,
-      search: search.trim() || undefined,
+      search: debouncedSearch.trim() || undefined,
       source_type: typeFilter ?? undefined,
       urgency: urgencyFilter ?? undefined,
       task_status: statusFilter ?? undefined,
@@ -31,12 +38,8 @@ export const useWorkQueuePage = () => {
       limit: WORK_QUEUE_PAGE_SIZE,
       offset: (page - 1) * WORK_QUEUE_PAGE_SIZE,
     }),
-    [historyMode, linkedFilter, page, scopeFilter, search, statusFilter, typeFilter, urgencyFilter],
+    [historyMode, linkedFilter, page, scopeFilter, debouncedSearch, statusFilter, typeFilter, urgencyFilter],
   )
-
-  useEffect(() => {
-    setPage(1)
-  }, [historyMode, search, typeFilter, urgencyFilter, statusFilter, linkedFilter, scopeFilter])
 
   const { data, isLoading, isFetching, error } = useWorkQueue(listParams, hasRole)
 
@@ -53,22 +56,25 @@ export const useWorkQueuePage = () => {
     linkedFilter !== null ||
     scopeFilter !== null
   const hasFilters = hasContentFilters || historyMode
+
   const requestError = !hasRole
     ? 'לא ניתן לזהות תפקיד משתמש'
     : error
       ? getErrorMessage(error, 'שגיאה בטעינת המשימות')
       : null
 
+  const setSearch = (value: string) => setFilter('search', value)
+  const setUrgencyFilter = (value: WorkQueueUrgency | null) => setFilter('urgency', value ?? '')
+  const setTypeFilter = (value: WorkQueueSourceType | null) => setFilter('source_type', value ?? '')
+  const setStatusFilter = (value: TaskStatus | null) => setFilter('task_status', value ?? '')
+  const setLinkedFilter = (value: 'linked' | 'unlinked' | null) => setFilter('linked', value ?? '')
+  const setScopeFilter = (value: 'system' | 'manual' | null) => setFilter('scope', value ?? '')
+  const setHistoryMode = (value: boolean) => setFilter('history', value ? 'true' : '')
+  const setPage = (nextPage: number) => setUrlPage(nextPage)
+
   const clearFilters = useCallback(() => {
-    setSearch('')
-    setUrgencyFilter(null)
-    setTypeFilter(null)
-    setStatusFilter(null)
-    setLinkedFilter(null)
-    setScopeFilter(null)
-    setHistoryMode(false)
-    setPage(1)
-  }, [])
+    resetFilters()
+  }, [resetFilters])
 
   return {
     items,
@@ -97,5 +103,6 @@ export const useWorkQueuePage = () => {
     total,
     totalPages,
     setPage,
+    setFilters,
   }
 }

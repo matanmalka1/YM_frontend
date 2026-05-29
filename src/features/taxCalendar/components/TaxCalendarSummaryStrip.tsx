@@ -1,27 +1,16 @@
-import type { TaxCalendarGroup } from '../api'
+import type { TaxCalendarGroupsSummary } from '../api'
 
 interface TaxCalendarSummaryStripProps {
-  groups: TaxCalendarGroup[]
+  summary: TaxCalendarGroupsSummary
   linkedLabel: string
   showGroupsCount?: boolean
 }
 
 export const TaxCalendarSummaryStrip = ({
-  groups,
+  summary,
   linkedLabel,
   showGroupsCount = false,
 }: TaxCalendarSummaryStripProps) => {
-  const summary = groups.reduce(
-    (acc, group) => ({
-      groups: acc.groups + 1,
-      linked: acc.linked + group.linked_count,
-      open: acc.open + group.open_count,
-      overdue: acc.overdue + group.overdue_count,
-      done: acc.done + group.done_count,
-    }),
-    { groups: 0, linked: 0, open: 0, overdue: 0, done: 0 },
-  )
-
   const items = [
     ...(showGroupsCount ? [{ label: 'סה״כ קבוצות', value: summary.groups, className: 'text-gray-900' }] : []),
     { label: linkedLabel, value: summary.linked, className: 'text-gray-900' },

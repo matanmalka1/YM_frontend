@@ -9,11 +9,11 @@ import type { ChargeAction } from '../types'
 
 type UseChargeActionsOptions = {
   clearSelection: () => void
-  isAdvisor: boolean
+  canAct: boolean
   selectedIds: Set<number>
 }
 
-export const useChargeActions = ({ clearSelection, isAdvisor, selectedIds }: UseChargeActionsOptions) => {
+export const useChargeActions = ({ clearSelection, canAct, selectedIds }: UseChargeActionsOptions) => {
   const queryClient = useQueryClient()
   const [actionLoadingId, setActionLoadingId] = useState<number | null>(null)
   const [bulkLoading, setBulkLoading] = useState(false)
@@ -33,7 +33,7 @@ export const useChargeActions = ({ clearSelection, isAdvisor, selectedIds }: Use
 
   const runAction = useCallback(
     async (chargeId: number, action: ChargeAction) => {
-      if (!isAdvisor) {
+      if (!canAct) {
         toast.error('אין הרשאה לבצע פעולת חיוב זו')
         return
       }
@@ -47,12 +47,12 @@ export const useChargeActions = ({ clearSelection, isAdvisor, selectedIds }: Use
         setActionLoadingId(null)
       }
     },
-    [isAdvisor, runChargeActionMutation],
+    [canAct, runChargeActionMutation],
   )
 
   const runBulkAction = useCallback(
     async (action: BulkChargeActionPayload['action'], cancellationReason?: string) => {
-      if (!isAdvisor || selectedIds.size === 0) return
+      if (!canAct || selectedIds.size === 0) return
       setBulkLoading(true)
       try {
         const result = await chargesApi.bulkAction({
@@ -77,7 +77,7 @@ export const useChargeActions = ({ clearSelection, isAdvisor, selectedIds }: Use
         setBulkLoading(false)
       }
     },
-    [clearSelection, isAdvisor, queryClient, selectedIds],
+    [clearSelection, canAct, queryClient, selectedIds],
   )
 
   return {

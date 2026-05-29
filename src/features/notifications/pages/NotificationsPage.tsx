@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Bell, Eye, Plus, Send } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
@@ -13,6 +13,8 @@ import type { Column } from '@/components/ui/table'
 import { DetailDrawer, DrawerField, DrawerSection } from '@/components/ui/overlays/DetailDrawer'
 import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client'
 import { useRole } from '@/hooks/useRole'
+import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
+import { parsePositiveInt } from '@/utils/utils'
 import { formatDateTime } from '@/utils/utils'
 import {
   ENABLED_NOTIFICATION_TRIGGERS,
@@ -52,15 +54,24 @@ type SelectedClientFilter = {
 
 export const NotificationsPage: React.FC = () => {
   const { isAdvisor } = useRole()
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState<25 | 50>(25)
-  const [trigger, setTrigger] = useState<NotificationTrigger | ''>('')
-  const [status, setStatus] = useState<NotificationStatus | ''>('')
-  const [dateFrom, setDateFrom] = useState('')
-  const [dateTo, setDateTo] = useState('')
-  const [triggeredBy, setTriggeredBy] = useState('')
-  const [clientQuery, setClientQuery] = useState('')
-  const [selectedClient, setSelectedClient] = useState<SelectedClientFilter | null>(null)
+  const { searchParams, setFilter, setFilters, setPage: setUrlPage } = useSearchParamFilters()
+
+  const page = parsePositiveInt(searchParams.get('page'), 1)
+  const pageSize = (parsePositiveInt(searchParams.get('page_size'), 25) as 25 | 50)
+  const trigger = (searchParams.get('trigger') ?? '') as NotificationTrigger | ''
+  const status = (searchParams.get('status') ?? '') as NotificationStatus | ''
+  const dateFrom = searchParams.get('date_from') ?? ''
+  const dateTo = searchParams.get('date_to') ?? ''
+  const triggeredBy = searchParams.get('triggered_by') ?? ''
+  const clientId = searchParams.get('client_id') ?? ''
+  const clientName = searchParams.get('client_name') ?? ''
+
+  const selectedClient: SelectedClientFilter | null =
+    clientId ? { id: Number(clientId), name: clientName } : null
+
+  // UI-only state (no API effect)
+  const [clientQuery, setClientQuery] = useState(clientName)
+  useEffect(() => { if (!selectedClient) setClientQuery(clientName) }, [clientName]) // eslint-disable-line react-hooks/exhaustive-deps
   const [selected, setSelected] = useState<NotificationItem | null>(null)
   const [sendOpen, setSendOpen] = useState(false)
   const [sendClient, setSendClient] = useState<SelectedClientFilter | null>(null)
@@ -135,11 +146,6 @@ export const NotificationsPage: React.FC = () => {
     [],
   )
 
-  const resetToFirstPage = useCallback((fn: () => void) => {
-    fn()
-    setPage(1)
-  }, [])
-
   const openSendModal = useCallback((client?: SelectedClientFilter | null) => {
     setSendClient(client ?? null)
     setSendOpen(true)
@@ -152,8 +158,8 @@ export const NotificationsPage: React.FC = () => {
 
   const clearClientFilter = useCallback(() => {
     setClientQuery('')
-    resetToFirstPage(() => setSelectedClient(null))
-  }, [resetToFirstPage])
+    setFilters({ client_id: '', client_name: '' })
+  }, [setFilters])
 
   const tableColumns = useMemo<Column<NotificationItem>[]>(
     () => [
@@ -210,7 +216,7 @@ export const NotificationsPage: React.FC = () => {
               onChange={setClientQuery}
               onSelect={(client) => {
                 setClientQuery(client.name)
-                resetToFirstPage(() => setSelectedClient({ id: client.id, name: client.name }))
+                setFilters({ client_id: String(client.id), client_name: client.name })
               }}
             />
           )}
@@ -218,28 +224,28 @@ export const NotificationsPage: React.FC = () => {
             label="סוג הודעה"
             value={trigger}
             options={NOTIFICATION_TRIGGER_OPTIONS}
-            onChange={(event) => resetToFirstPage(() => setTrigger(event.target.value as NotificationTrigger | ''))}
+            onChange={(event) => setFilter('trigger', event.target.value)}
           />
           <Select
             label="סטטוס"
             value={status}
             options={NOTIFICATION_STATUS_OPTIONS}
-            onChange={(event) => resetToFirstPage(() => setStatus(event.target.value as NotificationStatus | ''))}
+            onChange={(event) => setFilter('status', event.target.value)}
           />
-          <DatePicker label="מתאריך" value={dateFrom} onChange={(value) => resetToFirstPage(() => setDateFrom(value))} />
-          <DatePicker label="עד תאריך" value={dateTo} onChange={(value) => resetToFirstPage(() => setDateTo(value))} />
+          <DatePicker label="מתאריך" value={dateFrom} onChange={(value) => setFilter('date_from', value)} />
+          <DatePicker label="עד תאריך" value={dateTo} onChange={(value) => setFilter('date_to', value)} />
           <Select
             label="נשלח על ידי"
             value={triggeredBy}
             disabled={usersQuery.isPending}
             options={userOptions}
-            onChange={(event) => resetToFirstPage(() => setTriggeredBy(event.target.value))}
+            onChange={(event) => setFilter('triggered_by', event.target.value)}
           />
           <Select
             label="כמות בעמוד"
             value={String(pageSize)}
             options={NOTIFICATIONS_PAGE_SIZE_OPTIONS}
-            onChange={(event) => resetToFirstPage(() => setPageSize(Number(event.target.value) as 25 | 50))}
+            onChange={(event) => setFilter('page_size', event.target.value)}
           />
         </div>
       </ToolbarContainer>
@@ -255,7 +261,7 @@ export const NotificationsPage: React.FC = () => {
         pageSize={pageSize}
         total={total}
         label="הודעות"
-        onPageChange={setPage}
+        onPageChange={setUrlPage}
         showPagination={total > 0}
         emptyMessage="אין הודעות להצגה"
         emptyState={{

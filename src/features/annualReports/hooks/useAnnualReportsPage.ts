@@ -1,42 +1,41 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useSeasonDashboard } from './useSeasonDashboard'
 import { annualReportSeasonApi, annualReportsApi, annualReportsQK } from '../api'
-import type { AnnualReportsFilters } from '../components/shared/AnnualReportsFiltersBar'
+import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
-
-const DEFAULT_FILTERS: AnnualReportsFilters = {
-  client_id: '',
-  client_name: '',
-  status: '',
-  year: '',
-}
+import { useState } from 'react'
 
 export const useAnnualReportsPage = () => {
+  const { searchParams, setFilter, setFilters, resetFilters } = useSearchParamFilters()
   const [showCreate, setShowCreate] = useState(false)
-  const [filters, setFilters] = useState<AnnualReportsFilters>(DEFAULT_FILTERS)
   const navigate = useNavigate()
+
+  const clientId = searchParams.get('client_id') ?? ''
+  const clientName = searchParams.get('client_name') ?? ''
+  const status = searchParams.get('status') ?? ''
+  const year = searchParams.get('year') ?? ''
 
   const defaultTaxYearQuery = useQuery({
     queryKey: annualReportsQK.defaultTaxYear,
     queryFn: annualReportSeasonApi.getDefaultTaxYear,
-    staleTime: QUERY_STALE_TIME.default,
+    staleTime: QUERY_STALE_TIME.long,
   })
   const defaultTaxYear = defaultTaxYearQuery.data?.tax_year
   const defaultTaxYearPending = defaultTaxYearQuery.isPending
 
   useEffect(() => {
     if (defaultTaxYear == null) return
-    setFilters((prev) => (prev.year ? prev : { ...prev, year: String(defaultTaxYear) }))
-  }, [defaultTaxYear])
+    if (!year) setFilter('year', String(defaultTaxYear), false)
+  }, [defaultTaxYear]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const selectedTaxYear = filters.year ? Number(filters.year) : undefined
-  const allYearsMode = !filters.year
+  const selectedTaxYear = year ? Number(year) : undefined
+  const allYearsMode = !year
 
   const apiFilters = {
-    client_record_id: filters.client_id ? Number(filters.client_id) : undefined,
-    status: filters.status || undefined,
+    client_record_id: clientId ? Number(clientId) : undefined,
+    status: status || undefined,
   }
 
   const season = useSeasonDashboard(selectedTaxYear, !allYearsMode && !defaultTaxYearPending, apiFilters)
@@ -53,12 +52,14 @@ export const useAnnualReportsPage = () => {
 
   const openReport = (id: number) => navigate(`/tax/reports/${id}`, { state: { from: '/tax/reports' } })
 
-  const handleFilterChange = (key: keyof AnnualReportsFilters, value: string) => {
-    setFilters((prev) => ({ ...prev, [key]: value }))
-  }
+  const filters = { client_id: clientId, client_name: clientName, status, year }
+
+  const handleFilterChange = (key: string, value: string) => setFilter(key, value)
+
+  const handleMultiFilterChange = (updates: Record<string, string>) => setFilters(updates)
 
   const handleResetFilters = () =>
-    setFilters({ ...DEFAULT_FILTERS, year: defaultTaxYear == null ? '' : String(defaultTaxYear) })
+    resetFilters(defaultTaxYear != null ? { year: String(defaultTaxYear) } : {})
 
   const filteredReports = useMemo(
     () => (allYearsMode ? (allReportsQuery.data?.items ?? []) : season.reports),
@@ -84,6 +85,7 @@ export const useAnnualReportsPage = () => {
     openReport,
     filters,
     handleFilterChange,
+    handleMultiFilterChange,
     handleResetFilters,
     filteredReports,
     season: { ...season, isLoading, error },

@@ -30,12 +30,12 @@ export const useChargesPage = () => {
   const total = listData?.total ?? 0
   const stats = listData?.stats ?? DEFAULT_CHARGE_LIST_STATS
   const error = listError ? getErrorMessage(listError, 'שגיאה בטעינת רשימת חיובים') : null
-  const { isAdvisor } = useRole()
+  const { isAdvisor, isSecretary } = useRole()
   const createMutation = useChargeCreateMutation()
   const { clearSelection, selectedIds, toggleSelect, toggleSelectAll } = useTableSelection<number>()
   const { actionLoadingId, bulkLoading, runAction, runBulkAction } = useChargeActions({
     clearSelection,
-    isAdvisor,
+    canAct: isAdvisor || isSecretary,
     selectedIds,
   })
 

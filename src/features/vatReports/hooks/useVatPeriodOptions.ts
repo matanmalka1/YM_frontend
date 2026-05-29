@@ -10,7 +10,7 @@ export const useVatPeriodOptions = (clientId: number, year: number, enabled = tr
     queryKey: vatReportsQK.periodOptions(clientId, year),
     queryFn: () => vatReportsApi.getPeriodOptions(clientId, year),
     enabled: enabled && isValidClient,
-    staleTime: QUERY_STALE_TIME.default,
+    staleTime: QUERY_STALE_TIME.long,
     retry: 1,
     refetchOnWindowFocus: false,
   })

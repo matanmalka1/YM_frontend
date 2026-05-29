@@ -14,7 +14,7 @@ export const useChargeDetailsPage = (chargeId: string | undefined) => {
 
   const chargeIdNumber = Number(chargeId || 0)
   const hasValidChargeId = isPositiveInt(chargeIdNumber)
-  const { isAdvisor } = useRole()
+  const { isAdvisor, isSecretary } = useRole()
 
   const chargeQuery = useQuery({
     enabled: hasValidChargeId,
@@ -32,7 +32,7 @@ export const useChargeDetailsPage = (chargeId: string | undefined) => {
       toast.success('פעולת חיוב בוצעה בהצלחה')
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: chargesQK.detail(chargeIdNumber) }),
-        queryClient.invalidateQueries({ queryKey: chargesQK.all }),
+        queryClient.invalidateQueries({ queryKey: chargesQK.lists() }),
         queryClient.invalidateQueries({ queryKey: workQueueQK.all }),
       ])
     },
@@ -42,13 +42,13 @@ export const useChargeDetailsPage = (chargeId: string | undefined) => {
     mutationFn: () => chargesApi.delete(chargeIdNumber),
     onSuccess: async () => {
       toast.success('החיוב נמחק בהצלחה')
-      await queryClient.invalidateQueries({ queryKey: chargesQK.all })
+      await queryClient.invalidateQueries({ queryKey: chargesQK.lists() })
     },
     onError: (err) => showErrorToast(err, 'שגיאה במחיקת חיוב'),
   })
 
   const runAction = async (action: ChargeAction, reason?: string) => {
-    if (!hasValidChargeId || !isAdvisor) {
+    if (!hasValidChargeId || (!isAdvisor && !isSecretary)) {
       setDenied(true)
       return
     }
@@ -68,6 +68,6 @@ export const useChargeDetailsPage = (chargeId: string | undefined) => {
     runAction,
     deleteCharge: () => deleteMutation.mutateAsync(),
     isDeleting: deleteMutation.isPending,
-    isAdvisor,
+    isAdvisor: isAdvisor || isSecretary,
   }
 }

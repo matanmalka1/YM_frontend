@@ -16,7 +16,7 @@ export const useClientAuthorityContacts = (clientId: number, addressCity?: strin
     queryKey: [...authorityContactsQK.forClient(clientId), { page: PAGE, page_size: PAGE_SIZE }],
     queryFn: () => authorityContactsApi.listAuthorityContacts(clientId, undefined, PAGE, PAGE_SIZE),
     enabled: clientId > 0,
-    staleTime: QUERY_STALE_TIME.medium,
+    staleTime: QUERY_STALE_TIME.long,
   })
 
   const contacts = data?.items ?? []

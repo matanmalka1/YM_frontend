@@ -1,9 +1,11 @@
-import { type FC, useMemo, useState } from 'react'
+import { type FC, useMemo } from 'react'
 import { useTaxCalendarGroups } from '../hooks/useTaxCalendarGroups'
 import { type TaxCalendarGroupStatusFilter } from '../utils'
 import { type TaxCalendarGroupsParams, type TaxCalendarObligationType } from '../api'
 import { TaxCalendarFiltersBar } from './TaxCalendarFiltersBar'
 import { TaxCalendarGroupsContent } from './TaxCalendarGroupsContent'
+import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
+import { parsePositiveInt } from '@/utils/utils'
 
 interface ClientTaxCalendarTabProps {
   clientId: number
@@ -13,11 +15,13 @@ const currentYear = new Date().getFullYear()
 const GROUP_PAGE_SIZE = 25
 
 export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }) => {
-  const [page, setPage] = useState(1)
-  const [startYear, setStartYear] = useState(String(currentYear))
-  const [endYear, setEndYear] = useState(String(currentYear))
-  const [obligationType, setObligationType] = useState('')
-  const [status, setStatus] = useState<TaxCalendarGroupStatusFilter>('all')
+  const { searchParams, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
+
+  const startYear = searchParams.get('start_year') ?? String(currentYear)
+  const endYear = searchParams.get('end_year') ?? String(currentYear)
+  const obligationType = searchParams.get('obligation_type') ?? ''
+  const status = (searchParams.get('status') as TaxCalendarGroupStatusFilter) || 'all'
+  const page = parsePositiveInt(searchParams.get('page'), 1)
 
   const params = useMemo<TaxCalendarGroupsParams>(
     () => ({
@@ -34,14 +38,13 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
 
   const groupsQuery = useTaxCalendarGroups(params)
   const groups = useMemo(() => groupsQuery.data?.items ?? [], [groupsQuery.data])
+  const groupsSummary = groupsQuery.data?.summary
 
-  const resetFilters = () => {
-    setStartYear(String(currentYear))
-    setEndYear(String(currentYear))
-    setObligationType('')
-    setStatus('all')
-    setPage(1)
-  }
+  const resetAllFilters = () =>
+    resetFilters({
+      start_year: String(currentYear),
+      end_year: String(currentYear),
+    })
 
   return (
     <div className="space-y-4" dir="rtl">
@@ -50,27 +53,16 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
         endYear={endYear}
         obligationType={obligationType}
         status={status}
-        onStartYearChange={(value) => {
-          setStartYear(value)
-          setPage(1)
-        }}
-        onEndYearChange={(value) => {
-          setEndYear(value)
-          setPage(1)
-        }}
-        onObligationTypeChange={(value) => {
-          setObligationType(value)
-          setPage(1)
-        }}
-        onStatusChange={(value) => {
-          setStatus(value)
-          setPage(1)
-        }}
-        onReset={resetFilters}
+        onStartYearChange={(value) => setFilter('start_year', value, true)}
+        onEndYearChange={(value) => setFilter('end_year', value, true)}
+        onObligationTypeChange={(value) => setFilter('obligation_type', value, true)}
+        onStatusChange={(value) => setFilter('status', value === 'all' ? '' : value, true)}
+        onReset={resetAllFilters}
       />
 
       <TaxCalendarGroupsContent
         groups={groups}
+        summary={groupsSummary}
         isLoading={groupsQuery.isPending}
         error={groupsQuery.error}
         errorFallback="שגיאה בטעינת מועדי המס"
@@ -79,7 +71,7 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
         page={page}
         pageSize={GROUP_PAGE_SIZE}
         total={groupsQuery.data?.total ?? 0}
-        onPageChange={setPage}
+        onPageChange={setUrlPage}
       />
     </div>
   )

@@ -66,7 +66,7 @@ export const useReportMutations = (reportId: number | null, onDeleted?: () => vo
             : prev,
         )
       }
-      void queryClient.invalidateQueries({ queryKey: annualReportsQK.all })
+      void queryClient.invalidateQueries({ queryKey: annualReportsQK.lists() })
     },
     onError: (err) => showErrorToast(err, 'שגיאה בעדכון דוח'),
   })

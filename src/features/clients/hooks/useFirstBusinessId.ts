@@ -11,7 +11,7 @@ export const useFirstBusinessId = (clientId: number) => {
         page_size: 1,
       }),
     enabled: clientId > 0,
-    staleTime: QUERY_STALE_TIME.medium,
+    staleTime: QUERY_STALE_TIME.long,
   })
 
   const first = data?.items?.[0] ?? null
