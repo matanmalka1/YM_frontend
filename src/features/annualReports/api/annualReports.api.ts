@@ -28,6 +28,8 @@ export const annualReportsApi = {
 
   listReports: async (params: {
     tax_year?: number
+    client_record_id?: number
+    status?: string
     page?: number
     page_size?: number
   }): Promise<AnnualReportListResponse> => {

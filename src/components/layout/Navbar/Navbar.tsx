@@ -25,6 +25,7 @@ const TOP_NAV_ITEMS: TopNavItem[] = [
   getNavItem('/clients'),
   getNavItem('/binders'),
   getNavItem('/work-queue'),
+  getNavItem('/notifications'),
   { ...getNavItem('/tax/vat'), label: 'מע״מ' },
   getNavItem('/tax/advance-payments'),
   getNavItem('/tax/calendar'),

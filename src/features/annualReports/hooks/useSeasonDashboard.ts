@@ -2,7 +2,12 @@ import { useQuery } from '@tanstack/react-query'
 import { annualReportSeasonApi, annualReportsQK } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
 
-export const useSeasonDashboard = (taxYear?: number, enabled = true) => {
+interface SeasonFilters {
+  client_record_id?: number
+  status?: string
+}
+
+export const useSeasonDashboard = (taxYear?: number, enabled = true, filters?: SeasonFilters) => {
   const summaryQuery = useQuery({
     enabled,
     queryKey: taxYear ? annualReportsQK.seasonSummary(taxYear) : annualReportsQK.activeSeasonSummary,
@@ -12,11 +17,13 @@ export const useSeasonDashboard = (taxYear?: number, enabled = true) => {
 
   const reportsQuery = useQuery({
     enabled,
-    queryKey: taxYear ? annualReportsQK.seasonList(taxYear) : annualReportsQK.activeSeasonList,
+    queryKey: taxYear
+      ? [...annualReportsQK.seasonList(taxYear), filters]
+      : [...annualReportsQK.activeSeasonList, filters],
     queryFn: () =>
       taxYear
-        ? annualReportSeasonApi.listSeasonReports(taxYear, { page: 1, page_size: 200 })
-        : annualReportSeasonApi.listActiveSeasonReports({ page: 1, page_size: 200 }),
+        ? annualReportSeasonApi.listSeasonReports(taxYear, { page: 1, page_size: 200, ...filters })
+        : annualReportSeasonApi.listActiveSeasonReports({ page: 1, page_size: 200, ...filters }),
   })
 
   const overdueQuery = useQuery({

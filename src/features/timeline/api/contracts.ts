@@ -56,4 +56,7 @@ export interface TimelineResponse {
 export interface TimelineParams {
   page?: number
   page_size?: number
+  search?: string
+  event_type?: string[]
+  important_only?: boolean
 }

@@ -34,12 +34,17 @@ export const useAnnualReportsPage = () => {
   const selectedTaxYear = filters.year ? Number(filters.year) : undefined
   const allYearsMode = !filters.year
 
-  const season = useSeasonDashboard(selectedTaxYear, !allYearsMode && !defaultTaxYearPending)
+  const apiFilters = {
+    client_record_id: filters.client_id ? Number(filters.client_id) : undefined,
+    status: filters.status || undefined,
+  }
+
+  const season = useSeasonDashboard(selectedTaxYear, !allYearsMode && !defaultTaxYearPending, apiFilters)
 
   const allReportsQuery = useQuery({
     enabled: allYearsMode && !defaultTaxYearPending && !defaultTaxYearQuery.error,
-    queryKey: [...annualReportsQK.all, 'all-years'] as const,
-    queryFn: () => annualReportsApi.listReports({ page: 1, page_size: 200 }),
+    queryKey: [...annualReportsQK.all, 'all-years', apiFilters] as const,
+    queryFn: () => annualReportsApi.listReports({ page: 1, page_size: 200, ...apiFilters }),
     staleTime: QUERY_STALE_TIME.default,
   })
 
@@ -55,21 +60,10 @@ export const useAnnualReportsPage = () => {
   const handleResetFilters = () =>
     setFilters({ ...DEFAULT_FILTERS, year: defaultTaxYear == null ? '' : String(defaultTaxYear) })
 
-  const baseReports = useMemo(
+  const filteredReports = useMemo(
     () => (allYearsMode ? (allReportsQuery.data?.items ?? []) : season.reports),
     [allYearsMode, allReportsQuery.data?.items, season.reports],
   )
-
-  const filteredReports = useMemo(() => {
-    let reports = baseReports
-    if (filters.client_id) {
-      reports = reports.filter((r) => r.client_record_id === Number(filters.client_id))
-    }
-    if (filters.status) {
-      reports = reports.filter((r) => r.status === filters.status)
-    }
-    return reports
-  }, [baseReports, filters.client_id, filters.status])
 
   const isLoading = defaultTaxYearPending || (allYearsMode ? allReportsQuery.isPending : season.isLoading)
   const error = defaultTaxYearQuery.error

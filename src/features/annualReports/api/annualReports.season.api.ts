@@ -19,7 +19,12 @@ export const annualReportSeasonApi = {
     return response.data
   },
 
-  listActiveSeasonReports: async (params: { page?: number; page_size?: number }): Promise<AnnualReportListResponse> => {
+  listActiveSeasonReports: async (params: {
+    page?: number
+    page_size?: number
+    client_record_id?: number
+    status?: string
+  }): Promise<AnnualReportListResponse> => {
     const response = await api.get<AnnualReportListResponse>(ANNUAL_REPORT_ENDPOINTS.activeTaxYearReports, {
       params: toQueryParams(params),
     })
@@ -28,7 +33,7 @@ export const annualReportSeasonApi = {
 
   listSeasonReports: async (
     taxYear: number,
-    params: { page?: number; page_size?: number },
+    params: { page?: number; page_size?: number; client_record_id?: number; status?: string },
   ): Promise<AnnualReportListResponse> => {
     const response = await api.get<AnnualReportListResponse>(ANNUAL_REPORT_ENDPOINTS.taxYearReports(taxYear), {
       params: toQueryParams(params),
