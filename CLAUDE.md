@@ -15,7 +15,7 @@ Source of truth: reference
 Canonical project-wide instructions live in the sibling docs repo:
 
 - `../docs/CLAUDE.md`
-- `../docs/docs/agent/entry-point.md`
+- `../docs/agent/entry-point.md`
 
 This file is a pointer only.
 Do not add project-wide rules here.
