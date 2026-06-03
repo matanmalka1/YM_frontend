@@ -7,7 +7,6 @@ import { Toaster } from 'sonner'
 import { AppRoutes } from './router/AppRoutes'
 import { queryClient } from './lib/queryClient'
 import { AppErrorBoundary } from './components/errors/AppErrorBoundary'
-import { PageLoader } from './components/ui/layout/PageLoader'
 
 const rootElement = document.getElementById('root')
 if (!rootElement) {
@@ -20,7 +19,7 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AppErrorBoundary>
-          <Suspense fallback={<PageLoader />}>
+          <Suspense fallback={<div className="flex h-screen items-center justify-center bg-gray-50"><div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-200 border-t-primary-600" /></div>}>
             <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
               <AppRoutes />
               <Toaster richColors position="top-center" />

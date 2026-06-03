@@ -1,7 +1,32 @@
 @import 'tailwindcss';
 
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  0% { opacity: 0; transform: scale(0.96); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-in {
+  0% { opacity: 0; transform: translateX(12px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
 :root {
-  --font-display: 'Heebo', sans-serif;
+  --font-display: 'Frank Ruhl Libre', 'Heebo', serif;
   --font-body: 'Heebo', sans-serif;
   --font-mono: 'Heebo', sans-serif;
 }
@@ -116,7 +141,7 @@ body {
 
 @theme {
   --font-family-sans: 'Heebo', system-ui, sans-serif;
-  --font-family-display: 'Heebo', sans-serif;
+  --font-family-display: 'Frank Ruhl Libre', 'Heebo', serif;
   --font-family-mono: 'Heebo', sans-serif;
 
   --color-primary-50: #eef2ff;

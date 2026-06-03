@@ -70,7 +70,7 @@ export const ClientSidebar: React.FC = () => {
       {/* Logo */}
       <div className="flex h-14 shrink-0 items-center border-b border-gray-200 px-3.5">
         <Link to="/" className="min-w-0 text-right" aria-label="לוח בקרה">
-          <p className="truncate text-base font-bold leading-tight text-gray-950">YM Tax CRM</p>
+          <p className="font-[family-name:var(--font-display)] truncate text-base font-bold leading-tight text-gray-950">YM Tax CRM</p>
         </Link>
       </div>
 
@@ -161,12 +161,12 @@ export const ClientSidebar: React.FC = () => {
                           cn(
                             'block rounded-md border-r-[3px] px-2 py-1.5 text-right transition',
                             isActive
-                              ? 'border-primary-400 bg-primary-50 text-primary-950'
+                              ? 'border-primary-400 bg-primary-100 font-semibold text-primary-900'
                               : 'border-transparent text-gray-700 hover:bg-gray-50 hover:text-gray-950',
                           )
                         }
                       >
-                        <span className="block truncate text-[14px] font-medium">{client.displayName}</span>
+                        <span className="block truncate text-[14px]">{client.displayName}</span>
                         <div className="flex items-end justify-between gap-2">
                           <span className="shrink-0 text-[12px] leading-5 text-gray-400">
                             {formatClientOfficeId(client.officeClientNumber)}
