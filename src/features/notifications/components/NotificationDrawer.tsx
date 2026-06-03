@@ -75,7 +75,12 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
       </div>
 
       {isAdvisor && (
-        <SendNotificationModal open={sendOpen} onClose={() => setSendOpen(false)} clientRecordId={clientRecordId} allowedTriggers={ENABLED_NOTIFICATION_TRIGGERS} />
+        <SendNotificationModal
+          open={sendOpen}
+          onClose={() => setSendOpen(false)}
+          clientRecordId={clientRecordId}
+          allowedTriggers={ENABLED_NOTIFICATION_TRIGGERS}
+        />
       )}
     </>,
     document.body,

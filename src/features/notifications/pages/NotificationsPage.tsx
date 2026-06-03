@@ -57,7 +57,7 @@ export const NotificationsPage: React.FC = () => {
   const { searchParams, setFilter, setFilters, setPage: setUrlPage } = useSearchParamFilters()
 
   const page = parsePositiveInt(searchParams.get('page'), 1)
-  const pageSize = (parsePositiveInt(searchParams.get('page_size'), 25) as 25 | 50)
+  const pageSize = parsePositiveInt(searchParams.get('page_size'), 25) as 25 | 50
   const trigger = (searchParams.get('trigger') ?? '') as NotificationTrigger | ''
   const status = (searchParams.get('status') ?? '') as NotificationStatus | ''
   const dateFrom = searchParams.get('date_from') ?? ''
@@ -66,12 +66,13 @@ export const NotificationsPage: React.FC = () => {
   const clientId = searchParams.get('client_id') ?? ''
   const clientName = searchParams.get('client_name') ?? ''
 
-  const selectedClient: SelectedClientFilter | null =
-    clientId ? { id: Number(clientId), name: clientName } : null
+  const selectedClient: SelectedClientFilter | null = clientId ? { id: Number(clientId), name: clientName } : null
 
   // UI-only state (no API effect)
   const [clientQuery, setClientQuery] = useState(clientName)
-  useEffect(() => { if (!selectedClient) setClientQuery(clientName) }, [clientName]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!selectedClient) setClientQuery(clientName)
+  }, [clientName]) // eslint-disable-line react-hooks/exhaustive-deps
   const [selected, setSelected] = useState<NotificationItem | null>(null)
   const [sendOpen, setSendOpen] = useState(false)
   const [sendClient, setSendClient] = useState<SelectedClientFilter | null>(null)
@@ -126,7 +127,9 @@ export const NotificationsPage: React.FC = () => {
       {
         key: 'client',
         header: 'לקוח',
-        render: (item) => <span className="text-sm text-gray-700">{item.client_name ?? `#${item.client_record_id}`}</span>,
+        render: (item) => (
+          <span className="text-sm text-gray-700">{item.client_name ?? `#${item.client_record_id}`}</span>
+        ),
       },
       {
         key: 'status',
@@ -175,7 +178,9 @@ export const NotificationsPage: React.FC = () => {
               <RowActionItem
                 label="שליחת הודעה ללקוח"
                 icon={<Send className="h-4 w-4" />}
-                onClick={() => openSendModal({ id: item.client_record_id, name: item.client_name ?? `#${item.client_record_id}` })}
+                onClick={() =>
+                  openSendModal({ id: item.client_record_id, name: item.client_name ?? `#${item.client_record_id}` })
+                }
               />
             )}
           </RowActionsMenu>
@@ -283,7 +288,12 @@ export const NotificationsPage: React.FC = () => {
                 type="button"
                 variant="primary"
                 size="sm"
-                onClick={() => openSendModal({ id: selected.client_record_id, name: selected.client_name ?? `#${selected.client_record_id}` })}
+                onClick={() =>
+                  openSendModal({
+                    id: selected.client_record_id,
+                    name: selected.client_name ?? `#${selected.client_record_id}`,
+                  })
+                }
               >
                 שליחת הודעה ללקוח
                 <Send className="h-4 w-4" />

@@ -58,8 +58,7 @@ export const useAnnualReportsPage = () => {
 
   const handleMultiFilterChange = (updates: Record<string, string>) => setFilters(updates)
 
-  const handleResetFilters = () =>
-    resetFilters(defaultTaxYear != null ? { year: String(defaultTaxYear) } : {})
+  const handleResetFilters = () => resetFilters(defaultTaxYear != null ? { year: String(defaultTaxYear) } : {})
 
   const filteredReports = useMemo(
     () => (allYearsMode ? (allReportsQuery.data?.items ?? []) : season.reports),

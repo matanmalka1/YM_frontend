@@ -1,8 +1,11 @@
 ## Scope
+
 This file owns only:
+
 - Component-local usage and implementation notes for the shared table column kit.
 
 This file must not contain:
+
 - Project-wide frontend architecture rules.
 - Product/domain behavior.
 - Backend API contract rules.

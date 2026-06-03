@@ -33,19 +33,11 @@ export const ANNUAL_REPORT_TRIGGERS: NotificationTrigger[] = [
   'annual_report_documents_request',
 ]
 
-export const CHARGE_TRIGGERS: NotificationTrigger[] = [
-  'invoice_issued',
-  'payment_reminder',
-]
+export const CHARGE_TRIGGERS: NotificationTrigger[] = ['invoice_issued', 'payment_reminder']
 
-export const SIGNATURE_TRIGGERS: NotificationTrigger[] = [
-  'signature_request_sent',
-  'signature_request_reminder',
-]
+export const SIGNATURE_TRIGGERS: NotificationTrigger[] = ['signature_request_sent', 'signature_request_reminder']
 
-export const VAT_TRIGGERS: NotificationTrigger[] = [
-  'vat_documents_reminder',
-]
+export const VAT_TRIGGERS: NotificationTrigger[] = ['vat_documents_reminder']
 
 export const MANUAL_NOTIFICATION_TRIGGERS: NotificationTrigger[] = NOTIFICATION_TRIGGER_VALUES.filter(
   (trigger) => trigger !== 'binder_ready_for_handover',

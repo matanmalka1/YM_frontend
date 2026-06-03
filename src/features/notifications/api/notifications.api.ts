@@ -29,23 +29,16 @@ export const notificationsApi = {
   },
 
   preview: async (payload: NotificationPreviewRequest): Promise<NotificationPreviewResponse> => {
-    const response = await api.post<NotificationPreviewResponse>(
-      NOTIFICATION_ENDPOINTS.notificationsPreview,
-      payload,
-    )
+    const response = await api.post<NotificationPreviewResponse>(NOTIFICATION_ENDPOINTS.notificationsPreview, payload)
     return response.data
   },
 
   send: async (payload: NotificationSendRequest, idempotencyKey: string): Promise<NotificationResult> => {
-    const response = await api.post<NotificationResult>(
-      NOTIFICATION_ENDPOINTS.notificationsSend,
-      payload,
-      {
-        headers: {
-          'X-Idempotency-Key': idempotencyKey,
-        },
+    const response = await api.post<NotificationResult>(NOTIFICATION_ENDPOINTS.notificationsSend, payload, {
+      headers: {
+        'X-Idempotency-Key': idempotencyKey,
       },
-    )
+    })
     return response.data
   },
 }

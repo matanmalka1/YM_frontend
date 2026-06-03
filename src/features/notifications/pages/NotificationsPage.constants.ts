@@ -1,9 +1,5 @@
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
-import {
-  MANUAL_NOTIFICATION_TRIGGERS,
-  TRIGGER_LABELS,
-  type NotificationStatus,
-} from '@/features/notifications/api'
+import { MANUAL_NOTIFICATION_TRIGGERS, TRIGGER_LABELS, type NotificationStatus } from '@/features/notifications/api'
 
 export const NOTIFICATIONS_PAGE_SIZE_OPTIONS = [
   { value: '25', label: '25' },
@@ -50,4 +46,3 @@ export const NOTIFICATION_DOMAIN_LABELS: Record<string, string> = {
   signatures: 'חתימות',
   clients: 'לקוחות',
 }
-

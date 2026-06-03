@@ -66,8 +66,14 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
   const [blockedReason, setBlockedReason] = useState<string | undefined>()
   const [warnings, setWarnings] = useState<string[]>([])
 
-  const { clientQuery, selectedClient, handleSelectClient, handleClearClient, handleClientQueryChange, resetClientPicker } =
-    useClientPickerState()
+  const {
+    clientQuery,
+    selectedClient,
+    handleSelectClient,
+    handleClearClient,
+    handleClientQueryChange,
+    resetClientPicker,
+  } = useClientPickerState()
 
   const resolvedClientRecordId = clientRecordId ?? selectedClient?.id
 
@@ -110,8 +116,8 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
       setWarnings([])
       resetClientPicker()
     }
-  // allowedTriggers is a stable reference per caller — intentionally excluded
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // allowedTriggers is a stable reference per caller — intentionally excluded
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialTrigger, open, resetClientPicker])
 
   // Auto-preview when context is fully known on open
@@ -119,8 +125,8 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
     if (open && initialTrigger && entityId != null && clientRecordId != null) {
       void handlePreview(clientRecordId)
     }
-  // Run only when the modal opens — trigger/entityId/clientRecordId don't change mid-session
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Run only when the modal opens — trigger/entityId/clientRecordId don't change mid-session
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
   const handleSend = async () => {
@@ -207,9 +213,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
               onChange={(e) => setTrigger(e.target.value as NotificationTrigger)}
               disabled={disableTriggerChange}
             />
-            {blockedReason && (
-              <p className="text-sm text-red-600 font-medium">{blockedReason}</p>
-            )}
+            {blockedReason && <p className="text-sm text-red-600 font-medium">{blockedReason}</p>}
           </>
         )}
 
@@ -218,7 +222,9 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
             {warnings.length > 0 && (
               <div className="rounded-md bg-yellow-50 border border-yellow-200 px-3 py-2 space-y-1">
                 {warnings.map((w, i) => (
-                  <p key={i} className="text-xs text-yellow-800">{w}</p>
+                  <p key={i} className="text-xs text-yellow-800">
+                    {w}
+                  </p>
                 ))}
               </div>
             )}

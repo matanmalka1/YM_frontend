@@ -1,8 +1,11 @@
 ## Scope
+
 This file owns only:
+
 - Thin pointer instructions for Claude-style agents starting from the frontend repo.
 
 This file must not contain:
+
 - Project-wide rules, frontend architecture rules, workflow rules, backend rules, or product/domain rules.
 
 Source of truth: reference

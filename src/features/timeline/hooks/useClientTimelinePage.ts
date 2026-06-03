@@ -33,9 +33,7 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
   const searchTerm = searchParams.get('search') ?? ''
   const importantOnly = searchParams.get('important_only') === 'true'
   const rawTypeFilters = searchParams.get('type_filters')
-  const typeFilters: TimelineFilterKey[] = rawTypeFilters
-    ? (rawTypeFilters.split(',') as TimelineFilterKey[])
-    : ['all']
+  const typeFilters: TimelineFilterKey[] = rawTypeFilters ? (rawTypeFilters.split(',') as TimelineFilterKey[]) : ['all']
 
   const clientIdNumber = Number(clientId ?? 0)
   const hasValidClient = isPositiveInt(clientIdNumber)
@@ -81,10 +79,7 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
     )
   }, [historicalEvents])
 
-  const eventTypeStats = useMemo<EventTypeStat[]>(
-    () => buildTimelineFilterStats(historicalEvents),
-    [historicalEvents],
-  )
+  const eventTypeStats = useMemo<EventTypeStat[]>(() => buildTimelineFilterStats(historicalEvents), [historicalEvents])
 
   const hasActiveFilters = hasGroupedFilter || searchTerm.trim().length > 0 || importantOnly
 

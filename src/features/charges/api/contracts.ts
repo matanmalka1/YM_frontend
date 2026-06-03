@@ -27,7 +27,6 @@ export interface ChargeResponse {
   available_actions?: BackendAction[]
 }
 
-
 export interface ChargeStatusStat {
   count: number
   amount: string
