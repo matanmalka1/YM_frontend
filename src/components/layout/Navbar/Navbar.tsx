@@ -151,8 +151,8 @@ export const Navbar: React.FC = () => {
                       cn(
                         'inline-flex h-8 items-center whitespace-nowrap rounded-md px-2.5 text-sm font-medium transition',
                         isActive
-                          ? 'bg-primary-50 text-primary-700 shadow-[inset_0_0_0_1px_rgba(99,102,241,0.08)]'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-950',
+                          ? 'bg-primary-400 text-white shadow-sm'
+                          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-950',
                       )
                     }
                   >
@@ -172,8 +172,8 @@ export const Navbar: React.FC = () => {
               className={cn(
                 'inline-flex h-8 items-center gap-1 whitespace-nowrap rounded-md px-2.5 text-sm font-medium transition',
                 hasActiveMoreItem
-                  ? 'bg-primary-50 text-primary-700 shadow-[inset_0_0_0_1px_rgba(99,102,241,0.08)]'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-950',
+                  ? 'bg-primary-600 text-white shadow-sm'
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-950',
               )}
               aria-haspopup="menu"
               aria-expanded={moreOpen}
