@@ -70,8 +70,8 @@ export const clientsApi = {
 
   listAllBusinessesForClient: async (clientId: number): Promise<ClientBusinessesResponse> => {
     let page = 1
-    let total = 0
-    let client_id = clientId
+    let total: number
+    let client_id: number
     const items: BusinessResponse[] = []
 
     while (true) {

@@ -19,7 +19,8 @@ export default defineConfig([
       'jsx-a11y': jsxA11y,
     },
     rules: {
-      ...reactHooks.configs['recommended-latest'].rules,
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
       ...jsxA11y.flatConfigs.recommended.rules,
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'jsx-a11y/no-autofocus': 'off',

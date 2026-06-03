@@ -34,7 +34,7 @@ interface VatWorkItemsGroupedTableProps {
 
 interface VatWorkItemGroup {
   period: string
-  periodType: string | null
+  periodType: VatWorkItemResponse['period_type']
   items: VatWorkItemResponse[]
 }
 
