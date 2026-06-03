@@ -32,7 +32,9 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   >
     <div>
       {size === 'lg' ? (
-        <h1 className="font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-black md:text-3xl">{title}</h1>
+        <h1 className="font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-black md:text-3xl">
+          {title}
+        </h1>
       ) : size === 'md' ? (
         <h2 className="text-xl font-bold tracking-tight text-gray-900">{title}</h2>
       ) : size === 'xs' ? (

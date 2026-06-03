@@ -22,7 +22,11 @@ const MetaField: React.FC<{ label: string; value: string }> = ({ label, value })
   </div>
 )
 
-const IconLabel: React.FC<{ icon: React.ReactNode; label: string; className?: string }> = ({ icon, label, className }) => (
+const IconLabel: React.FC<{ icon: React.ReactNode; label: string; className?: string }> = ({
+  icon,
+  label,
+  className,
+}) => (
   <span className={cn('inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[11px]', className)}>
     {icon}
     <span>{label}</span>

@@ -27,11 +27,7 @@ import { useDashboardCreateModals } from '../hooks/useDashboardCreateModals'
 const StatsSkeleton = () => (
   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
     {Array.from({ length: DASHBOARD_LOADING_CARD_COUNT }, (_, i) => (
-      <div
-        key={i}
-        className="h-32 rounded-xl overflow-hidden"
-        style={{ animationDelay: `${i * 80}ms` }}
-      >
+      <div key={i} className="h-32 rounded-xl overflow-hidden" style={{ animationDelay: `${i * 80}ms` }}>
         <div
           className="h-full w-full animate-shimmer bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100"
           style={{ backgroundSize: '1000px 100%', animationDelay: `${i * 80}ms` }}

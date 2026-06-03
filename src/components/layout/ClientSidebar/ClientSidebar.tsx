@@ -70,7 +70,9 @@ export const ClientSidebar: React.FC = () => {
       {/* Logo */}
       <div className="flex h-14 shrink-0 items-center border-b border-gray-200 px-3.5">
         <Link to="/" className="min-w-0 text-right" aria-label="לוח בקרה">
-          <p className="font-[family-name:var(--font-display)] truncate text-base font-bold leading-tight text-gray-950">YM Tax CRM</p>
+          <p className="font-[family-name:var(--font-display)] truncate text-base font-bold leading-tight text-gray-950">
+            YM Tax CRM
+          </p>
         </Link>
       </div>
 
