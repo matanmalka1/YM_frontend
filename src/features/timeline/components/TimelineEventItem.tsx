@@ -1,8 +1,7 @@
 import { CreditCard, FileText } from 'lucide-react'
-import { IconLabel } from '../../../components/ui/primitives/IconLabel'
 import type { TimelineEventMetadata } from '../api'
 import type { NormalizedTimelineEvent } from '../normalize'
-import { cn } from '../../../utils/utils'
+import { cn } from '@/utils/utils'
 import { getEventColor } from '../constants'
 import { getAnnualReportStatusLabel, getTimelineStatusLabel } from '../labels'
 import { formatTimelineDate, formatTimestamp, getEventIcon } from '../utils'
@@ -21,6 +20,13 @@ const MetaField: React.FC<{ label: string; value: string }> = ({ label, value })
   <div>
     <span className="font-medium">{label}:</span> {value}
   </div>
+)
+
+const IconLabel: React.FC<{ icon: React.ReactNode; label: string; className?: string }> = ({ icon, label, className }) => (
+  <span className={cn('inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[11px]', className)}>
+    {icon}
+    <span>{label}</span>
+  </span>
 )
 
 // ── Status transition ─────────────────────────────────────────────────────────

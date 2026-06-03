@@ -114,6 +114,7 @@ export interface VatInvoiceResponse {
   counterparty_id_type: string | null
   net_amount: string
   vat_amount: string
+  gross_amount: string
   expense_category: string | null
   rate_type: string
   deduction_rate: string

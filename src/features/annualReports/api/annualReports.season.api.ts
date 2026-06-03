@@ -42,9 +42,9 @@ export const annualReportSeasonApi = {
   },
 
   getOverdue: async (taxYear?: number): Promise<AnnualReportSummary[]> => {
-    const response = await api.get<AnnualReportSummary[]>(ANNUAL_REPORT_ENDPOINTS.overdue, {
+    const response = await api.get<AnnualReportListResponse>(ANNUAL_REPORT_ENDPOINTS.overdue, {
       params: toQueryParams({ tax_year: taxYear }),
     })
-    return response.data
+    return response.data.items
   },
 }
