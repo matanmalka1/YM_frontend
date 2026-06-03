@@ -1,0 +1,59 @@
+name: API Drift Check
+
+on:
+  pull_request:
+
+jobs:
+  api-drift:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout frontend
+        uses: actions/checkout@v4
+        with:
+          path: frontend
+
+      - name: Checkout backend
+        uses: actions/checkout@v4
+        with:
+          repository: matanmalka1/YM_Backend
+          path: backend
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: pip install -r requirements.txt
+
+      - name: Export OpenAPI schema
+        working-directory: backend
+        env:
+          APP_ENV: test
+          JWT_SECRET: ci-drift-check-only
+        run: python -m scripts.tooling.export_openapi --output ../openapi.json
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Generate TypeScript types
+        run: npx --yes openapi-typescript openapi.json -o frontend/src/types/generated.ts
+
+      - name: Check for drift
+        working-directory: frontend
+        run: |
+          git diff --exit-code src/types/generated.ts || {
+            echo ""
+            echo "API drift detected — backend schemas changed but frontend/src/types/generated.ts was not updated."
+            echo "Run locally:"
+            echo "  cd backend && APP_ENV=test JWT_SECRET=x python -m scripts.tooling.export_openapi --output ../openapi.json"
+            echo "  npx openapi-typescript openapi.json -o frontend/src/types/generated.ts"
+            echo "Then commit the updated generated.ts."
+            exit 1
+          }
