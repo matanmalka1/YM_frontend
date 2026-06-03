@@ -112,7 +112,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
         'relative overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-all duration-200 h-full',
         compact ? 'min-h-[150px] px-4 py-3' : 'px-5 py-4',
         'hover:shadow-md',
-        selected && 'ring-2 ring-primary-300 ring-offset-2',
+        selected && 'ring-2 ring-primary-400 ring-offset-0',
         isInteractive && !selected && 'ring-1 ring-transparent',
         config.border,
         className,

@@ -8,7 +8,7 @@ type ClientDetailsTabBarProps = {
 }
 
 export const ClientDetailsTabBar: FC<ClientDetailsTabBarProps> = ({ activeTab, onTabChange }) => (
-  <div className="flex flex-wrap items-center gap-1 border-b border-gray-200">
+  <div role="tablist" aria-label="לשוניות לקוח" className="flex flex-wrap items-center gap-1 border-b border-gray-200">
     {CLIENT_DETAILS_TABS.map((tab) => {
       const isActive = activeTab === tab
 
@@ -16,7 +16,8 @@ export const ClientDetailsTabBar: FC<ClientDetailsTabBarProps> = ({ activeTab, o
         <button
           key={tab}
           type="button"
-          aria-current={isActive ? 'page' : undefined}
+          role="tab"
+          aria-selected={isActive}
           onClick={() => onTabChange(tab)}
           className={cn(
             'relative shrink-0 rounded-t-md px-4 py-2 text-sm font-medium transition-colors',
@@ -26,7 +27,7 @@ export const ClientDetailsTabBar: FC<ClientDetailsTabBarProps> = ({ activeTab, o
         >
           {CLIENT_DETAILS_TAB_LABELS[tab]}
 
-          {isActive && <span className="absolute inset-x-0 bottom-[-1px] h-[3px] rounded-t-full bg-primary" />}
+          {isActive && <span className="absolute inset-x-0 -bottom-px h-[3px] rounded-t-full bg-primary" />}
         </button>
       )
     })}

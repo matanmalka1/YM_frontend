@@ -28,7 +28,7 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
   const badge = urgencyBadge[item.urgency]
 
   const content = (
-    <div className="flex items-center justify-between gap-4 rounded-2xl border border-slate-100 bg-white px-5 py-4 transition-all hover:border-blue-200 hover:shadow-sm">
+    <div className="flex items-center justify-between gap-4 rounded-lg border border-slate-100 bg-white px-5 py-3.5 transition-all hover:border-blue-200 hover:shadow-sm">
       {/* Right: date */}
       <div className="w-24 shrink-0 text-right">
         {item.due_date && (

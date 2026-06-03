@@ -192,7 +192,7 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
       aria-label={typeof title === 'string' ? title : undefined}
       tabIndex={-1}
     >
-      <div className={cn('flex max-h-[92vh] w-full max-w-xl flex-col rounded-xl bg-white shadow-xl', className)}>
+      <div dir="rtl" className={cn('flex max-h-[92vh] w-full max-w-xl flex-col rounded-xl bg-white shadow-xl', className)}>
         {title && (
           <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-6 py-4">
             <h3 className="text-lg font-semibold text-gray-900">{title}</h3>

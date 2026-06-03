@@ -45,10 +45,10 @@ const toneClasses: Record<
     bar: 'bg-red-500',
   },
   purple: {
-    icon: 'bg-slate-100 text-slate-600',
-    badge: 'bg-slate-100 text-slate-700',
-    border: 'border-slate-200',
-    bar: 'bg-slate-500',
+    icon: 'bg-violet-50 text-violet-600',
+    badge: 'bg-violet-50 text-violet-700',
+    border: 'border-violet-200',
+    bar: 'bg-violet-500',
   },
 }
 
