@@ -30,7 +30,7 @@ export const Default: Story = {
 export const Elevated: Story = {
   args: {
     children: toolbarContent,
-    elevated: true,
+    className: 'bg-white shadow-elevation-1',
   },
 }
 
