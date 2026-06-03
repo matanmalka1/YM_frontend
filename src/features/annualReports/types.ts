@@ -26,8 +26,8 @@ export const SECTION_KEYS = ['overview', 'financials', 'tax', 'deductions', 'tim
 export type SectionKey = (typeof SECTION_KEYS)[number]
 
 export interface AnnualReportDetail extends AnnualReportFull {
-  tax_refund_amount: number | null
-  tax_due_amount: number | null
+  tax_refund_amount: string | null
+  tax_due_amount: string | null
   client_approved_at: string | null
   internal_notes: string | null
   stage?: StageKey

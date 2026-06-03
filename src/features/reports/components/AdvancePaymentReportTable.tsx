@@ -1,6 +1,7 @@
 import { DataTable, type Column } from "../../../components/ui/table/DataTable";
 import { formatClientOfficeId } from "../../../utils/utils";
 import type { AdvancePaymentReportItem, AdvancePaymentReportResponse } from "../api";
+import { formatILS, toReportNumber } from "../utils";
 
 interface Props {
   data: AdvancePaymentReportResponse;
@@ -26,22 +27,22 @@ const columns: Column<AdvancePaymentReportItem>[] = [
     key: "total_expected",
     header: "צפוי",
     render: (r) => (
-      <span className="text-sm text-gray-700">₪{r.total_expected.toLocaleString()}</span>
+      <span className="text-sm text-gray-700">{formatILS(r.total_expected)}</span>
     ),
   },
   {
     key: "total_paid",
     header: "שולם",
     render: (r) => (
-      <span className="text-sm text-positive-700">₪{r.total_paid.toLocaleString()}</span>
+      <span className="text-sm text-positive-700">{formatILS(r.total_paid)}</span>
     ),
   },
   {
     key: "gap",
     header: "פער",
     render: (r) => (
-      <span className={`text-sm font-medium ${r.gap > 0 ? "text-negative-600" : "text-gray-500"}`}>
-        ₪{r.gap.toLocaleString()}
+      <span className={`text-sm font-medium ${toReportNumber(r.gap) > 0 ? "text-negative-600" : "text-gray-500"}`}>
+        {formatILS(r.gap)}
       </span>
     ),
   },
@@ -66,10 +67,10 @@ export const AdvancePaymentReportTable: React.FC<Props> = ({ data }) => (
     />
     {data.items.length > 0 && (
       <div className="flex items-center gap-6 px-4 py-3 bg-gray-50 border-t border-gray-200 text-sm font-medium text-gray-700">
-        <span>סה״כ: ₪{data.total_expected.toLocaleString()} צפוי</span>
-        <span className="text-positive-700">₪{data.total_paid.toLocaleString()} שולם</span>
-        <span className={data.total_gap > 0 ? "text-negative-600" : "text-gray-500"}>
-          פער: ₪{data.total_gap.toLocaleString()}
+        <span>סה״כ: {formatILS(data.total_expected)} צפוי</span>
+        <span className="text-positive-700">{formatILS(data.total_paid)} שולם</span>
+        <span className={toReportNumber(data.total_gap) > 0 ? "text-negative-600" : "text-gray-500"}>
+          פער: {formatILS(data.total_gap)}
         </span>
         <span className="mr-auto text-blue-700">
           אחוז גבייה: {data.collection_rate.toFixed(1)}%

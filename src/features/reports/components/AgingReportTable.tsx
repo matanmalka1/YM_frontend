@@ -4,7 +4,7 @@ import { Inbox } from "lucide-react";
 import type { AgingReportItem } from "../api";
 import { formatDate } from "../../../utils/utils";
 import { Badge } from "../../../components/ui/primitives/Badge";
-import { formatILS } from "../utils";
+import { formatILS, toReportNumber, type ReportMoneyValue } from "../utils";
 
 interface AgingReportTableProps {
   items: AgingReportItem[];
@@ -17,8 +17,13 @@ const BUCKETS = [
   { key: "days_90_plus", label: "90+", className: "bg-negative-500" },
 ] as const;
 
-const getBucketPercent = (amount: number, total: number) =>
-  total > 0 ? Math.max((amount / total) * 100, amount > 0 ? 3 : 0) : 0;
+const getBucketPercent = (amount: ReportMoneyValue, total: ReportMoneyValue) => {
+  const numericAmount = toReportNumber(amount);
+  const numericTotal = toReportNumber(total);
+  return numericTotal > 0
+    ? Math.max((numericAmount / numericTotal) * 100, numericAmount > 0 ? 3 : 0)
+    : 0;
+};
 
 export const AgingReportTable: React.FC<AgingReportTableProps> = ({ items }) => {
   const navigate = useNavigate();
@@ -41,7 +46,7 @@ export const AgingReportTable: React.FC<AgingReportTableProps> = ({ items }) => 
               <p className="font-semibold text-gray-900">{item.client_name}</p>
               <p className="text-xs text-gray-500">לקוח #{item.client_record_id}</p>
             </div>
-            {item.days_90_plus > 0 && (
+            {toReportNumber(item.days_90_plus) > 0 && (
               <Badge variant="error">דורש טיפול</Badge>
             )}
           </div>

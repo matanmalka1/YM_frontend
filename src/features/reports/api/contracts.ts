@@ -1,26 +1,26 @@
 export interface AgingBucket {
   total_clients: number;
-  total_current: number;
-  total_30_days: number;
-  total_60_days: number;
-  total_90_plus: number;
+  total_current: string;
+  total_30_days: string;
+  total_60_days: string;
+  total_90_plus: string;
 }
 
 export interface AgingReportItem {
   client_record_id: number;
   client_name: string;
-  total_outstanding: number;
-  current: number;
-  days_30: number;
-  days_60: number;
-  days_90_plus: number;
+  total_outstanding: string;
+  current: string;
+  days_30: string;
+  days_60: string;
+  days_90_plus: string;
   oldest_invoice_date: string | null;
   oldest_invoice_days: number | null;
 }
 
 export interface AgingReportResponse {
   report_date: string;
-  total_outstanding: number;
+  total_outstanding: string;
   items: AgingReportItem[];
   summary: AgingBucket;
   capped: boolean;
@@ -51,19 +51,19 @@ export interface AdvancePaymentReportItem {
   client_record_id: number;
   office_client_number?: number | null;
   client_name: string;
-  total_expected: number;
-  total_paid: number;
+  total_expected: string;
+  total_paid: string;
   overdue_count: number;
-  gap: number;
+  gap: string;
 }
 
 export interface AdvancePaymentReportResponse {
   year: number;
   month: number | null;
-  total_expected: number;
-  total_paid: number;
+  total_expected: string;
+  total_paid: string;
   collection_rate: number;
-  total_gap: number;
+  total_gap: string;
   items: AdvancePaymentReportItem[];
 }
 

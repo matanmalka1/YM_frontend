@@ -118,8 +118,8 @@ export interface AnnualReportFull extends AnnualReportSummary {
   client_approved_at?: string | null
   internal_notes?: string | null
   amendment_reason?: string | null
-  tax_refund_amount?: number | null
-  tax_due_amount?: number | null
+  tax_refund_amount?: string | null
+  tax_due_amount?: string | null
   total_income?: string | null
   total_expenses?: string | null
   taxable_income?: string | null
@@ -136,8 +136,8 @@ export interface ReportDetailResponse {
   pension_credit_points?: number | null
   life_insurance_credit_points?: number | null
   tuition_credit_points?: number | null
-  tax_refund_amount?: number | null
-  tax_due_amount?: number | null
+  tax_refund_amount?: string | null
+  tax_due_amount?: string | null
   client_approved_at: string | null
   internal_notes: string | null
   amendment_reason: string | null

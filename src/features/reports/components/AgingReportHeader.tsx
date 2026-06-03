@@ -1,14 +1,19 @@
 import { AlertTriangle, Clock, DollarSign } from "lucide-react";
 import { StatsCard } from "../../../components/ui/layout/StatsCard";
 import type { AgingReportResponse } from "../api";
-import { formatILS } from "../utils";
+import { formatILS, toReportNumber, type ReportMoneyValue } from "../utils";
 
 interface AgingReportHeaderProps {
   data: AgingReportResponse;
 }
 
-const getBucketShare = (amount: number, total: number) =>
-  total > 0 ? `${Math.round((amount / total) * 100)}% מסך החוב` : "0% מסך החוב";
+const getBucketShare = (amount: ReportMoneyValue, total: ReportMoneyValue) => {
+  const numericAmount = toReportNumber(amount);
+  const numericTotal = toReportNumber(total);
+  return numericTotal > 0
+    ? `${Math.round((numericAmount / numericTotal) * 100)}% מסך החוב`
+    : "0% מסך החוב";
+};
 
 export const AgingReportHeader: React.FC<AgingReportHeaderProps> = ({ data }) => {
   const buckets = [

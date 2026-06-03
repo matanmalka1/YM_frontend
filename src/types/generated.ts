@@ -3050,14 +3050,26 @@ export interface components {
             year: number;
             /** Month */
             month?: number | null;
-            /** Total Expected */
-            total_expected: number;
-            /** Total Paid */
-            total_paid: number;
+            /**
+             * Total Expected
+             * Format: decimal
+             * @example 123.45
+             */
+            total_expected: string;
+            /**
+             * Total Paid
+             * Format: decimal
+             * @example 123.45
+             */
+            total_paid: string;
             /** Collection Rate */
             collection_rate: number;
-            /** Total Gap */
-            total_gap: number;
+            /**
+             * Total Gap
+             * Format: decimal
+             * @example 123.45
+             */
+            total_gap: string;
             /** Items */
             items: components["schemas"]["AdvancePaymentReportItemResponse"][];
         };
@@ -3171,7 +3183,11 @@ export interface components {
             missing_turnover: boolean;
             /** Advance Rate */
             advance_rate?: string | null;
-            /** Delta */
+            /**
+             * Delta
+             * Format: decimal
+             * @example 123.45
+             */
             readonly delta: string;
             /**
              * Timing Status
@@ -3187,14 +3203,26 @@ export interface components {
             office_client_number?: number | null;
             /** Client Name */
             client_name: string;
-            /** Total Expected */
-            total_expected: number;
-            /** Total Paid */
-            total_paid: number;
+            /**
+             * Total Expected
+             * Format: decimal
+             * @example 123.45
+             */
+            total_expected: string;
+            /**
+             * Total Paid
+             * Format: decimal
+             * @example 123.45
+             */
+            total_paid: string;
             /** Overdue Count */
             overdue_count: number;
-            /** Gap */
-            gap: number;
+            /**
+             * Gap
+             * Format: decimal
+             * @example 123.45
+             */
+            gap: string;
         };
         /** AdvancePaymentRow */
         AdvancePaymentRow: {
@@ -3260,7 +3288,11 @@ export interface components {
             created_at: string;
             /** Updated At */
             updated_at?: string | null;
-            /** Delta */
+            /**
+             * Delta
+             * Format: decimal
+             * @example 123.45
+             */
             readonly delta: string;
             /**
              * Timing Status
@@ -3350,16 +3382,36 @@ export interface components {
             client_record_id: number;
             /** Client Name */
             client_name: string;
-            /** Total Outstanding */
-            total_outstanding: number;
-            /** Current */
-            current: number;
-            /** Days 30 */
-            days_30: number;
-            /** Days 60 */
-            days_60: number;
-            /** Days 90 Plus */
-            days_90_plus: number;
+            /**
+             * Total Outstanding
+             * Format: decimal
+             * @example 123.45
+             */
+            total_outstanding: string;
+            /**
+             * Current
+             * Format: decimal
+             * @example 123.45
+             */
+            current: string;
+            /**
+             * Days 30
+             * Format: decimal
+             * @example 123.45
+             */
+            days_30: string;
+            /**
+             * Days 60
+             * Format: decimal
+             * @example 123.45
+             */
+            days_60: string;
+            /**
+             * Days 90 Plus
+             * Format: decimal
+             * @example 123.45
+             */
+            days_90_plus: string;
             /** Oldest Invoice Date */
             oldest_invoice_date?: string | null;
             /** Oldest Invoice Days */
@@ -3372,8 +3424,12 @@ export interface components {
              * Format: date
              */
             report_date: string;
-            /** Total Outstanding */
-            total_outstanding: number;
+            /**
+             * Total Outstanding
+             * Format: decimal
+             * @example 123.45
+             */
+            total_outstanding: string;
             /** Items */
             items: components["schemas"]["AgingReportItemResponse"][];
             summary: components["schemas"]["AgingReportSummaryResponse"];
@@ -3386,14 +3442,30 @@ export interface components {
         AgingReportSummaryResponse: {
             /** Total Clients */
             total_clients: number;
-            /** Total Current */
-            total_current: number;
-            /** Total 30 Days */
-            total_30_days: number;
-            /** Total 60 Days */
-            total_60_days: number;
-            /** Total 90 Plus */
-            total_90_plus: number;
+            /**
+             * Total Current
+             * Format: decimal
+             * @example 123.45
+             */
+            total_current: string;
+            /**
+             * Total 30 Days
+             * Format: decimal
+             * @example 123.45
+             */
+            total_30_days: string;
+            /**
+             * Total 60 Days
+             * Format: decimal
+             * @example 123.45
+             */
+            total_60_days: string;
+            /**
+             * Total 90 Plus
+             * Format: decimal
+             * @example 123.45
+             */
+            total_90_plus: string;
         };
         /** AmendRequest */
         AmendRequest: {
@@ -3630,9 +3702,9 @@ export interface components {
             /** Amendment Reason */
             amendment_reason?: string | null;
             /** Tax Refund Amount */
-            tax_refund_amount?: number | null;
+            tax_refund_amount?: string | null;
             /** Tax Due Amount */
-            tax_due_amount?: number | null;
+            tax_due_amount?: string | null;
             /** Total Income */
             total_income?: string | null;
             /** Total Expenses */
@@ -4192,7 +4264,7 @@ export interface components {
             /** Notes */
             notes?: string | null;
             /** Materials */
-            materials?: components["schemas"]["BinderIntakeMaterialRequest"][];
+            materials: components["schemas"]["BinderIntakeMaterialRequest"][];
         };
         /**
          * BinderReceiveResult
@@ -5103,7 +5175,7 @@ export interface components {
          * DocumentType
          * @enum {string}
          */
-        "DocumentType-Input": "tax_invoice" | "transaction_invoice" | "receipt" | "consolidated" | "self_invoice" | "credit_note";
+        DocumentType: "tax_invoice" | "transaction_invoice" | "receipt" | "consolidated" | "self_invoice" | "credit_note";
         /** DocumentVersionsResponse */
         DocumentVersionsResponse: {
             /** Items */
@@ -5472,8 +5544,7 @@ export interface components {
             priority?: string | null;
             /** Assigned User Id */
             assigned_user_id?: number | null;
-            /** Assigned Role */
-            assigned_role?: string | null;
+            assigned_role?: components["schemas"]["UserRole"] | null;
         };
         /** LoginRequest */
         LoginRequest: {
@@ -5756,7 +5827,7 @@ export interface components {
             /** Client Record Id */
             client_record_id: number;
             /** Missing Documents */
-            missing_documents: components["schemas"]["app__permanent_documents__models__permanent_document__DocumentType"][];
+            missing_documents: components["schemas"]["PermanentDocumentType"][];
         };
         /** PaginatedResponse[AdvancePaymentRow] */
         PaginatedResponse_AdvancePaymentRow_: {
@@ -5928,7 +5999,7 @@ export interface components {
             /** Business Id */
             business_id?: number | null;
             scope: components["schemas"]["DocumentScope"];
-            document_type: components["schemas"]["app__permanent_documents__models__permanent_document__DocumentType"];
+            document_type: components["schemas"]["PermanentDocumentType"];
             /** Storage Key */
             storage_key: string;
             /** Original Filename */
@@ -5967,6 +6038,11 @@ export interface components {
             /** Rejected At */
             rejected_at?: string | null;
         };
+        /**
+         * PermanentDocumentType
+         * @enum {string}
+         */
+        PermanentDocumentType: "id_copy" | "power_of_attorney" | "engagement_agreement" | "tax_form" | "receipt" | "invoice_doc" | "bank_approval" | "withholding_certificate" | "nii_approval" | "other";
         /** PrefillTurnoverResponse */
         PrefillTurnoverResponse: {
             /** Period */
@@ -6122,9 +6198,9 @@ export interface components {
             /** Other Credits */
             other_credits?: string | null;
             /** Tax Refund Amount */
-            tax_refund_amount?: number | null;
+            tax_refund_amount?: string | null;
             /** Tax Due Amount */
-            tax_due_amount?: number | null;
+            tax_due_amount?: string | null;
             /** Client Approved At */
             client_approved_at?: string | null;
             /** Internal Notes */
@@ -6757,12 +6833,13 @@ export interface components {
             national_insurance: components["schemas"]["NationalInsuranceResponse"];
             /** Brackets */
             brackets: components["schemas"]["BracketBreakdownItem"][];
-            /** Total Liability */
-            total_liability?: string | null;
             /**
-             * Total Credit Points
-             * @default 0
+             * Total Liability
+             * Format: decimal
+             * @example 123.45
              */
+            total_liability: string;
+            /** Total Credit Points */
             total_credit_points: number;
         };
         /** TaxCalculationSaveRequest */
@@ -7389,7 +7466,7 @@ export interface components {
             expense_category?: components["schemas"]["ExpenseCategory"] | null;
             /** @default standard */
             rate_type: components["schemas"]["VatRateType"];
-            document_type?: components["schemas"]["DocumentType-Input"] | null;
+            document_type?: components["schemas"]["DocumentType"] | null;
         };
         /** VatInvoiceListResponse */
         VatInvoiceListResponse: {
@@ -7405,7 +7482,7 @@ export interface components {
             /** Business Activity Id */
             business_activity_id?: number | null;
             invoice_type: components["schemas"]["InvoiceType"];
-            document_type?: components["schemas"]["app__vat_reports__models__vat_enums__DocumentType"] | null;
+            document_type?: components["schemas"]["DocumentType"] | null;
             /** Invoice Number */
             invoice_number: string;
             /**
@@ -7476,7 +7553,7 @@ export interface components {
             counterparty_name?: string | null;
             expense_category?: components["schemas"]["ExpenseCategory"] | null;
             rate_type?: components["schemas"]["VatRateType"] | null;
-            document_type?: components["schemas"]["DocumentType-Input"] | null;
+            document_type?: components["schemas"]["DocumentType"] | null;
         };
         /** VatPeriodOptionResponse */
         VatPeriodOptionResponse: {
@@ -7922,16 +7999,6 @@ export interface components {
              */
             severity: "info" | "warning" | "danger";
         };
-        /**
-         * DocumentType
-         * @enum {string}
-         */
-        app__permanent_documents__models__permanent_document__DocumentType: "id_copy" | "power_of_attorney" | "engagement_agreement" | "tax_form" | "receipt" | "invoice_doc" | "bank_approval" | "withholding_certificate" | "nii_approval" | "other";
-        /**
-         * DocumentType
-         * @enum {string}
-         */
-        app__vat_reports__models__vat_enums__DocumentType: "tax_invoice" | "transaction_invoice" | "receipt" | "consolidated" | "self_invoice" | "credit_note";
     };
     responses: never;
     parameters: never;
