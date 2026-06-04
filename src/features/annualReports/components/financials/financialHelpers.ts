@@ -78,7 +78,7 @@ export const buildExpensePayload = (
       category: category as ExpenseCategoryType,
       amount: String(parsedAmount),
       description: toOptionalText(description),
-      recognition_rate: String(rate),
+      recognition_rate: String(rate / 100),
       external_document_reference: toOptionalText(documentReference),
     },
   }
@@ -141,7 +141,3 @@ export const formatPercent = (value: number) => `${(value * 100).toFixed(1)}%`
 
 export const toProgressWidth = (value: number) => `${Math.min(Math.max(value * 100, MIN_PERCENTAGE), MAX_PERCENTAGE)}%`
 
-export const getApiErrorMessage = (error: unknown, fallback: string) =>
-  (error as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ?? fallback
-
-export const getApiStatus = (error: unknown) => (error as { response?: { status?: number } })?.response?.status

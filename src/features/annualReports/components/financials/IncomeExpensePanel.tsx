@@ -11,13 +11,15 @@ import {
   FinancialSection,
   FinancialSummaryCards,
 } from './IncomeExpensePanelParts'
+import type { ExpenseLineResponse, IncomeLineResponse } from '../../api'
 import { LineRow, INCOME_LABELS, EXPENSE_LABELS } from '../../report.constants'
 import { AddExpenseLineForm } from './AddExpenseLineForm'
 import { useIncomeExpenseMutations } from '../../hooks/useIncomeExpenseMutations'
 import { EditIncomeLineForm } from './EditIncomeLineForm'
 import { EditExpenseLineForm } from './EditExpenseLineForm'
 import { FINANCIAL_MESSAGES } from './financialConstants'
-import { getApiErrorMessage, getApiStatus, getFinancialTotals, normalizeExpenseDescription } from './financialHelpers'
+import { getErrorMessage, getHttpStatus } from '../../../../utils/utils'
+import { getFinancialTotals, normalizeExpenseDescription } from './financialHelpers'
 
 interface IncomeExpensePanelProps {
   reportId: number
@@ -51,10 +53,10 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
       toast.success(`נוצרו ${incomeStr} ו-${expenseStr} מנתוני מע"מ`)
     },
     onError: (err: unknown) => {
-      if (getApiStatus(err) === 409) {
+      if (getHttpStatus(err) === 409) {
         setShowForceConfirm(true)
       } else {
-        toast.error(getApiErrorMessage(err, FINANCIAL_MESSAGES.autoPopulateError))
+        toast.error(getErrorMessage(err, FINANCIAL_MESSAGES.autoPopulateError))
       }
     },
   })
@@ -75,27 +77,27 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
     autoPopulateMutation.mutate(force)
   }
 
-  const handleDeleteIncome = (lineId: number) => {
+  const handleDeleteIncome = (line: IncomeLineResponse) => {
     clearAutoPopulateResult()
-    setDeletingIncomeIds((current) => new Set(current).add(lineId))
-    deleteIncome.mutate(lineId, {
+    setDeletingIncomeIds((current) => new Set(current).add(line.id))
+    deleteIncome.mutate(line, {
       onSettled: () =>
         setDeletingIncomeIds((current) => {
           const next = new Set(current)
-          next.delete(lineId)
+          next.delete(line.id)
           return next
         }),
     })
   }
 
-  const handleDeleteExpense = (lineId: number) => {
+  const handleDeleteExpense = (line: ExpenseLineResponse) => {
     clearAutoPopulateResult()
-    setDeletingExpenseIds((current) => new Set(current).add(lineId))
-    deleteExpense.mutate(lineId, {
+    setDeletingExpenseIds((current) => new Set(current).add(line.id))
+    deleteExpense.mutate(line, {
       onSettled: () =>
         setDeletingExpenseIds((current) => {
           const next = new Set(current)
-          next.delete(lineId)
+          next.delete(line.id)
           return next
         }),
     })
@@ -160,7 +162,7 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
                 amount={l.amount}
                 description={l.description}
                 onEdit={() => toggleEdit('income', l.id)}
-                onDelete={() => handleDeleteIncome(l.id)}
+                onDelete={() => handleDeleteIncome(l)}
                 isDeleting={deletingIncomeIds.has(l.id)}
               />
               {editingLine?.type === 'income' && editingLine.id === l.id && (
@@ -209,7 +211,7 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
                 supportingDocumentId={l.supporting_document_id}
                 supportingDocumentFilename={l.supporting_document_filename}
                 onEdit={() => toggleEdit('expense', l.id)}
-                onDelete={() => handleDeleteExpense(l.id)}
+                onDelete={() => handleDeleteExpense(l)}
                 isDeleting={deletingExpenseIds.has(l.id)}
               />
               {editingLine?.type === 'expense' && editingLine.id === l.id && (
