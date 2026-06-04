@@ -3,7 +3,7 @@ import { Button } from '../../../../components/ui/primitives/Button'
 import { Alert } from '../../../../components/ui/overlays/Alert'
 import { cn, formatCurrencyILS as fmt } from '../../../../utils/utils'
 import type { VatAutoPopulateResponse } from '../../api'
-import { CATEGORY_LABELS as VAT_CATEGORY_LABELS } from '../../../vatReports/constants'
+import { CATEGORY_LABELS as VAT_CATEGORY_LABELS } from '../../../vatReports'
 import { EXPENSE_LABELS } from '../../report.constants'
 import { FinancialAddFormShell, FinancialAmountDescriptionFields, FinancialSelectField } from './FinancialLineFormParts'
 import {

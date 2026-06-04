@@ -23,5 +23,6 @@ export {
   VAT_WORK_ITEM_STATUS_LABELS,
   VAT_RATE_TYPE_LABELS,
   DOCUMENT_TYPE_LABELS,
+  CATEGORY_LABELS,
 } from './constants'
 export type { CreateVatWorkItemPayload, VatWorkItemResponse, VatClientSummaryResponse } from './api'
