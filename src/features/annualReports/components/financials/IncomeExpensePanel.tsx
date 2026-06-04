@@ -17,7 +17,7 @@ import { useIncomeExpenseMutations } from '../../hooks/useIncomeExpenseMutations
 import { EditIncomeLineForm } from './EditIncomeLineForm'
 import { EditExpenseLineForm } from './EditExpenseLineForm'
 import { FINANCIAL_MESSAGES } from './financialConstants'
-import { getApiErrorMessage, getApiStatus, getFinancialTotals } from './financialHelpers'
+import { getApiErrorMessage, getApiStatus, getFinancialTotals, normalizeExpenseDescription } from './financialHelpers'
 
 interface IncomeExpensePanelProps {
   reportId: number
@@ -44,9 +44,11 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
       queryClient.invalidateQueries({ queryKey: annualReportsQK.financials(reportId) })
       setShowForceConfirm(false)
       setAutoPopulateResult(result)
-      toast.success(
-        `נוצרו ${result.income_lines_created} שורות הכנסה ו-${result.expense_lines_created} שורות הוצאה מנתוני מע"מ`,
-      )
+      const incomeStr =
+        result.income_lines_created === 1 ? 'שורת הכנסה אחת' : `${result.income_lines_created} שורות הכנסה`
+      const expenseStr =
+        result.expense_lines_created === 1 ? 'שורת הוצאה אחת' : `${result.expense_lines_created} שורות הוצאה`
+      toast.success(`נוצרו ${incomeStr} ו-${expenseStr} מנתוני מע"מ`)
     },
     onError: (err: unknown) => {
       if (getApiStatus(err) === 409) {
@@ -121,7 +123,7 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
       {autoPopulateResult && (
         <AutoPopulateResultPanel result={autoPopulateResult} onDismiss={clearAutoPopulateResult} />
       )}
-      {hasLines && (
+      {hasLines && !autoPopulateResult && (
         <FinancialSummaryCards
           totalIncome={totals.income}
           totalExpenses={totals.expenses}
@@ -201,7 +203,7 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
               <LineRow
                 label={EXPENSE_LABELS[l.category] ?? l.category}
                 amount={l.amount}
-                description={l.description}
+                description={normalizeExpenseDescription(l.description)}
                 recognitionRate={l.recognition_rate}
                 supportingDocumentRef={l.external_document_reference}
                 supportingDocumentId={l.supporting_document_id}

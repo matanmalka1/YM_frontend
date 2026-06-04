@@ -112,23 +112,30 @@ export const AutoPopulateResultPanel: React.FC<AutoPopulateResultPanelProps> = (
   return (
     <div className="space-y-3 rounded-lg border border-info-100 bg-info-50/40 p-4" dir="rtl">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
+        <div className="flex-1">
+          <div className="flex items-center justify-between gap-2">
             <h4 className="text-sm font-semibold text-info-900">מילוי מנתוני מע"מ הושלם</h4>
             {onDismiss && (
-              <Button type="button" variant="ghost" size="sm" onClick={onDismiss}>
+              <Button type="button" variant="ghost" size="sm" onClick={onDismiss} className="md:hidden">
                 הסתר
               </Button>
             )}
           </div>
           <p className="mt-1 text-xs text-gray-600">בקשה תקינה. פריטים לבדיקה אינם כשל בביצוע.</p>
         </div>
-        <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-5">
-          <ResultMetric label="שורות הכנסה" value={result.income_lines_created} />
-          <ResultMetric label="שורות הוצאה" value={result.expense_lines_created} />
-          <ResultMetric label="שורות שנמחקו" value={result.lines_deleted} />
-          <ResultMetric label='סה"כ הכנסה' value={fmt(result.income_total)} />
-          <ResultMetric label='סה"כ הוצאה' value={fmt(result.expense_total)} />
+        <div className="flex items-start gap-2">
+          <div className="grid grid-cols-3 gap-2 text-xs sm:grid-cols-4 md:grid-cols-5">
+            <ResultMetric label="שורות הכנסה" value={result.income_lines_created} />
+            <ResultMetric label="שורות הוצאה" value={result.expense_lines_created} />
+            {result.lines_deleted > 0 && <ResultMetric label="שורות שנמחקו" value={result.lines_deleted} />}
+            <ResultMetric label='סה"כ הכנסה' value={fmt(result.income_total)} />
+            <ResultMetric label='סה"כ הוצאה' value={fmt(result.expense_total)} />
+          </div>
+          {onDismiss && (
+            <Button type="button" variant="ghost" size="sm" onClick={onDismiss} className="hidden shrink-0 md:flex">
+              הסתר
+            </Button>
+          )}
         </div>
       </div>
 

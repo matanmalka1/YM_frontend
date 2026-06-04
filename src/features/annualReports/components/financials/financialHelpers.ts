@@ -1,5 +1,17 @@
 import type { ExpenseCategoryType, FinancialSummaryResponse, IncomeSourceType, TaxCalculationResult } from '../../api'
 import { DEFAULT_RECOGNITION_RATE, FINANCIAL_MESSAGES, MAX_PERCENTAGE, MIN_PERCENTAGE } from './financialConstants'
+import { EXPENSE_LABELS } from '../../report.constants'
+
+const VAT_EXPENSE_DESC_RE = /^הוצאות ([a-z_]+) — יובא ממע"מ$/
+
+export const normalizeExpenseDescription = (description: string | null | undefined): string | null | undefined => {
+  if (!description) return description
+  const match = VAT_EXPENSE_DESC_RE.exec(description)
+  if (!match) return description
+  const key = match[1] as keyof typeof EXPENSE_LABELS
+  const label = EXPENSE_LABELS[key] ?? key
+  return `${label} — יובא ממע"מ`
+}
 
 export interface IncomeFormPayload {
   source_type: IncomeSourceType
