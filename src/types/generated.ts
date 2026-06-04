@@ -1060,7 +1060,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/clients/authority-contacts/{contact_id}": {
+    "/api/v1/clients/{client_record_id}/authority-contacts/{contact_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1069,23 +1069,23 @@ export interface paths {
         };
         /**
          * Get Authority Contact
-         * @description Get a single authority contact by ID.
+         * @description Get a single authority contact by ID, scoped to client.
          */
-        get: operations["get_authority_contact_api_v1_clients_authority_contacts__contact_id__get"];
+        get: operations["get_authority_contact_api_v1_clients__client_record_id__authority_contacts__contact_id__get"];
         put?: never;
         post?: never;
         /**
          * Delete Authority Contact
-         * @description Delete authority contact (ADVISOR only).
+         * @description Delete authority contact (ADVISOR only), scoped to client.
          */
-        delete: operations["delete_authority_contact_api_v1_clients_authority_contacts__contact_id__delete"];
+        delete: operations["delete_authority_contact_api_v1_clients__client_record_id__authority_contacts__contact_id__delete"];
         options?: never;
         head?: never;
         /**
          * Update Authority Contact
-         * @description Update authority contact.
+         * @description Update authority contact, scoped to client.
          */
-        patch: operations["update_authority_contact_api_v1_clients_authority_contacts__contact_id__patch"];
+        patch: operations["update_authority_contact_api_v1_clients__client_record_id__authority_contacts__contact_id__patch"];
         trace?: never;
     };
     "/api/v1/dashboard/tax-submissions": {
@@ -5686,6 +5686,11 @@ export interface components {
             /** Page Size */
             page_size: number;
         };
+        /**
+         * NotificationPageSize
+         * @enum {integer}
+         */
+        NotificationPageSize: 25 | 50;
         /** NotificationPreviewRequest */
         NotificationPreviewRequest: {
             /** Client Record Id */
@@ -10249,11 +10254,12 @@ export interface operations {
             };
         };
     };
-    get_authority_contact_api_v1_clients_authority_contacts__contact_id__get: {
+    get_authority_contact_api_v1_clients__client_record_id__authority_contacts__contact_id__get: {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                client_record_id: number;
                 contact_id: number;
             };
             cookie?: never;
@@ -10280,11 +10286,12 @@ export interface operations {
             };
         };
     };
-    delete_authority_contact_api_v1_clients_authority_contacts__contact_id__delete: {
+    delete_authority_contact_api_v1_clients__client_record_id__authority_contacts__contact_id__delete: {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                client_record_id: number;
                 contact_id: number;
             };
             cookie?: never;
@@ -10309,11 +10316,12 @@ export interface operations {
             };
         };
     };
-    update_authority_contact_api_v1_clients_authority_contacts__contact_id__patch: {
+    update_authority_contact_api_v1_clients__client_record_id__authority_contacts__contact_id__patch: {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                client_record_id: number;
                 contact_id: number;
             };
             cookie?: never;
@@ -12451,7 +12459,7 @@ export interface operations {
                 date_from?: string | null;
                 date_to?: string | null;
                 page?: number;
-                page_size?: number;
+                page_size?: components["schemas"]["NotificationPageSize"];
             };
             header?: never;
             path?: never;
