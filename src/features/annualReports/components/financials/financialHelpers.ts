@@ -140,4 +140,3 @@ export const buildTrendChartRows = (
 export const formatPercent = (value: number) => `${(value * 100).toFixed(1)}%`
 
 export const toProgressWidth = (value: number) => `${Math.min(Math.max(value * 100, MIN_PERCENTAGE), MAX_PERCENTAGE)}%`
-
