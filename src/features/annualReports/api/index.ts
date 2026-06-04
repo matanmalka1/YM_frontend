@@ -47,4 +47,6 @@ export type {
   TaxCalculationSaveRequest,
   TaxCalculationSaveResponse,
   VatAutoPopulateResponse,
+  VatAutoPopulateSkippedItem,
+  VatAutoPopulateExpenseBreakdownItem,
 } from './contracts'

@@ -1,3 +1,5 @@
+import type { VatAutoPopulateSkippedItem } from '../../api'
+
 export const DEFAULT_RECOGNITION_RATE = '100'
 export const MAX_PERCENTAGE = 100
 export const MIN_PERCENTAGE = 0
@@ -48,3 +50,14 @@ export const CHART_LINES = [
   { dataKey: 'רווח', stroke: '#22c55e', strokeWidth: 2 },
   { dataKey: 'מס', stroke: '#f59e0b', strokeWidth: 1.5, strokeDasharray: '4 2' },
 ] as const
+
+export const VAT_AUTO_POPULATE_SKIPPED_REASON_LABELS: Record<VatAutoPopulateSkippedItem['reason'], string> = {
+  zero_total: 'סכום אפס — לא נוצרה שורה',
+  negative_total: 'סכום שלילי — נדרש לבדיקה',
+  negative_source_contribution: 'קטגוריית מקור שלילית בתוך סכום חיובי',
+}
+
+export const VAT_AUTO_POPULATE_ITEM_TYPE_LABELS: Record<VatAutoPopulateSkippedItem['item_type'], string> = {
+  income: 'הכנסה',
+  expense: 'הוצאה',
+}

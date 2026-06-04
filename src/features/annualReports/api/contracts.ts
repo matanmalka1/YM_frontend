@@ -346,4 +346,21 @@ export interface VatAutoPopulateResponse {
   income_total: string
   expense_total: string
   lines_deleted: number
+  skipped_items?: VatAutoPopulateSkippedItem[]
+  warnings?: string[]
+  expense_breakdown?: VatAutoPopulateExpenseBreakdownItem[]
+}
+
+export interface VatAutoPopulateSkippedItem {
+  item_type: 'income' | 'expense'
+  source: string
+  amount: string
+  reason: 'zero_total' | 'negative_total' | 'negative_source_contribution'
+  annual_category?: ExpenseCategoryType | null
+}
+
+export interface VatAutoPopulateExpenseBreakdownItem {
+  annual_category: ExpenseCategoryType
+  amount: string
+  source_vat_categories: Record<string, string>
 }

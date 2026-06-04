@@ -4,7 +4,13 @@ import { ArrowUpCircle, ArrowDownCircle } from 'lucide-react'
 import { annualReportFinancialsApi, annualReportsQK } from '../../api'
 import { toast } from '../../../../utils/toast'
 import { useRole } from '../../../../hooks/useRole'
-import { AddLineForm, AutoPopulateControls, FinancialSection, FinancialSummaryCards } from './IncomeExpensePanelParts'
+import {
+  AddLineForm,
+  AutoPopulateControls,
+  AutoPopulateResultPanel,
+  FinancialSection,
+  FinancialSummaryCards,
+} from './IncomeExpensePanelParts'
 import { LineRow, INCOME_LABELS, EXPENSE_LABELS } from '../../report.constants'
 import { AddExpenseLineForm } from './AddExpenseLineForm'
 import { useIncomeExpenseMutations } from '../../hooks/useIncomeExpenseMutations'
@@ -21,6 +27,11 @@ type EditingLine = { type: 'income' | 'expense'; id: number } | null
 export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId }) => {
   const [editingLine, setEditingLine] = useState<EditingLine>(null)
   const [showForceConfirm, setShowForceConfirm] = useState(false)
+  const [deletingIncomeIds, setDeletingIncomeIds] = useState<Set<number>>(() => new Set())
+  const [deletingExpenseIds, setDeletingExpenseIds] = useState<Set<number>>(() => new Set())
+  const [autoPopulateResult, setAutoPopulateResult] = useState<Awaited<
+    ReturnType<typeof annualReportFinancialsApi.autoPopulate>
+  > | null>(null)
   const { isAdvisor } = useRole()
   const queryClient = useQueryClient()
   const toggleEdit = (type: 'income' | 'expense', id: number) => {
@@ -32,6 +43,7 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: annualReportsQK.financials(reportId) })
       setShowForceConfirm(false)
+      setAutoPopulateResult(result)
       toast.success(
         `נוצרו ${result.income_lines_created} שורות הכנסה ו-${result.expense_lines_created} שורות הוצאה מנתוני מע"מ`,
       )
@@ -48,11 +60,44 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
   const { data, isLoading } = useQuery({
     queryKey: annualReportsQK.financials(reportId),
     queryFn: () => annualReportFinancialsApi.getFinancials(reportId),
-    enabled: !!reportId,
+    enabled: reportId !== undefined && reportId !== null,
   })
 
   const { addIncome, deleteIncome, addExpense, updateIncome, updateExpense, deleteExpense } =
     useIncomeExpenseMutations(reportId)
+
+  const clearAutoPopulateResult = () => setAutoPopulateResult(null)
+
+  const handleAutoPopulate = (force: boolean) => {
+    clearAutoPopulateResult()
+    autoPopulateMutation.mutate(force)
+  }
+
+  const handleDeleteIncome = (lineId: number) => {
+    clearAutoPopulateResult()
+    setDeletingIncomeIds((current) => new Set(current).add(lineId))
+    deleteIncome.mutate(lineId, {
+      onSettled: () =>
+        setDeletingIncomeIds((current) => {
+          const next = new Set(current)
+          next.delete(lineId)
+          return next
+        }),
+    })
+  }
+
+  const handleDeleteExpense = (lineId: number) => {
+    clearAutoPopulateResult()
+    setDeletingExpenseIds((current) => new Set(current).add(lineId))
+    deleteExpense.mutate(lineId, {
+      onSettled: () =>
+        setDeletingExpenseIds((current) => {
+          const next = new Set(current)
+          next.delete(lineId)
+          return next
+        }),
+    })
+  }
 
   if (isLoading) {
     return <p className="py-8 text-center text-sm text-gray-400">{FINANCIAL_MESSAGES.loadingFinancials}</p>
@@ -69,9 +114,12 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
         <AutoPopulateControls
           showForceConfirm={showForceConfirm}
           isPending={autoPopulateMutation.isPending}
-          onPopulate={(force) => autoPopulateMutation.mutate(force)}
+          onPopulate={handleAutoPopulate}
           onCancelForce={() => setShowForceConfirm(false)}
         />
+      )}
+      {autoPopulateResult && (
+        <AutoPopulateResultPanel result={autoPopulateResult} onDismiss={clearAutoPopulateResult} />
       )}
       {hasLines && (
         <FinancialSummaryCards
@@ -94,7 +142,10 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
           footer={
             <AddLineForm
               typeOptions={INCOME_LABELS}
-              onAdd={(key, amt, desc) => addIncome.mutate({ type_key: key, amount: Number(amt), description: desc })}
+              onAdd={(key, amt, desc) => {
+                clearAutoPopulateResult()
+                addIncome.mutate({ type_key: key, amount: Number(amt), description: desc })
+              }}
               isAdding={addIncome.isPending}
               label="הוסף הכנסה"
             />
@@ -107,8 +158,8 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
                 amount={l.amount}
                 description={l.description}
                 onEdit={() => toggleEdit('income', l.id)}
-                onDelete={() => deleteIncome.mutate(l.id)}
-                isDeleting={deleteIncome.isPending}
+                onDelete={() => handleDeleteIncome(l.id)}
+                isDeleting={deletingIncomeIds.has(l.id)}
               />
               {editingLine?.type === 'income' && editingLine.id === l.id && (
                 <EditIncomeLineForm
@@ -116,9 +167,10 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
                   typeOptions={INCOME_LABELS}
                   isSaving={updateIncome.isPending}
                   onCancel={() => setEditingLine(null)}
-                  onSave={(p) =>
+                  onSave={(p) => {
+                    clearAutoPopulateResult()
                     updateIncome.mutate({ lineId: l.id, payload: p }, { onSuccess: () => setEditingLine(null) })
-                  }
+                  }}
                 />
               )}
             </div>
@@ -134,7 +186,15 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
           totalClassName="text-negative-600"
           emptyMessage={FINANCIAL_MESSAGES.noExpenses}
           isEmpty={expenseLines.length === 0}
-          footer={<AddExpenseLineForm onAdd={(p) => addExpense.mutate(p)} isAdding={addExpense.isPending} />}
+          footer={
+            <AddExpenseLineForm
+              onAdd={(p) => {
+                clearAutoPopulateResult()
+                addExpense.mutate(p)
+              }}
+              isAdding={addExpense.isPending}
+            />
+          }
         >
           {expenseLines.map((l) => (
             <div key={l.id}>
@@ -147,17 +207,18 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
                 supportingDocumentId={l.supporting_document_id}
                 supportingDocumentFilename={l.supporting_document_filename}
                 onEdit={() => toggleEdit('expense', l.id)}
-                onDelete={() => deleteExpense.mutate(l.id)}
-                isDeleting={deleteExpense.isPending}
+                onDelete={() => handleDeleteExpense(l.id)}
+                isDeleting={deletingExpenseIds.has(l.id)}
               />
               {editingLine?.type === 'expense' && editingLine.id === l.id && (
                 <EditExpenseLineForm
                   line={l}
                   isSaving={updateExpense.isPending}
                   onCancel={() => setEditingLine(null)}
-                  onSave={(p) =>
+                  onSave={(p) => {
+                    clearAutoPopulateResult()
                     updateExpense.mutate({ lineId: l.id, payload: p }, { onSuccess: () => setEditingLine(null) })
-                  }
+                  }}
                 />
               )}
             </div>

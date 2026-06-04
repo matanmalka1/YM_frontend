@@ -7315,6 +7315,20 @@ export interface components {
             /** Total */
             total: number;
         };
+        /** VatAutoPopulateExpenseBreakdownItem */
+        VatAutoPopulateExpenseBreakdownItem: {
+            annual_category: components["schemas"]["ExpenseCategoryType"];
+            /**
+             * Amount
+             * Format: decimal
+             * @example 123.45
+             */
+            amount: string;
+            /** Source Vat Categories */
+            source_vat_categories: {
+                [key: string]: string;
+            };
+        };
         /** VatAutoPopulateResponse */
         VatAutoPopulateResponse: {
             /** Annual Report Id */
@@ -7340,6 +7354,34 @@ export interface components {
              * @default 0
              */
             lines_deleted: number;
+            /** Skipped Items */
+            skipped_items?: components["schemas"]["VatAutoPopulateSkippedItem"][];
+            /** Warnings */
+            warnings?: string[];
+            /** Expense Breakdown */
+            expense_breakdown?: components["schemas"]["VatAutoPopulateExpenseBreakdownItem"][];
+        };
+        /** VatAutoPopulateSkippedItem */
+        VatAutoPopulateSkippedItem: {
+            /**
+             * Item Type
+             * @enum {string}
+             */
+            item_type: "income" | "expense";
+            /** Source */
+            source: string;
+            /**
+             * Amount
+             * Format: decimal
+             * @example 123.45
+             */
+            amount: string;
+            /**
+             * Reason
+             * @enum {string}
+             */
+            reason: "zero_total" | "negative_total" | "negative_source_contribution";
+            annual_category?: components["schemas"]["ExpenseCategoryType"] | null;
         };
         /** VatClientSummaryResponse */
         VatClientSummaryResponse: {
