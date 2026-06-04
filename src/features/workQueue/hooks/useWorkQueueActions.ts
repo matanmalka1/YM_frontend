@@ -6,7 +6,7 @@ import { tasksApi, tasksQK, type TaskCreateRequest, type TaskUpdateRequest } fro
 import type { TaskSourceContext } from '@/features/tasks'
 import { toast } from '@/utils/toast'
 import { workQueueQK } from '../api'
-import type { WorkQueueAction, WorkQueueItem, WorkQueueListResponse } from '../api'
+import type { WorkQueueAction, WorkQueueItem, WorkQueueListResponse, WorkQueueSourceType } from '../api'
 
 type TaskModalState = {
   mode: 'create' | 'edit' | 'view' | 'link'
@@ -29,7 +29,7 @@ const sourceContext = (item: WorkQueueItem): TaskSourceContext => ({
 const linkedTaskSourceContext = (item: WorkQueueItem): TaskSourceContext | null => {
   if (item.source_type !== 'task' || !item.source_summary) return null
   return {
-    source_domain: item.source_summary.source_type,
+    source_domain: item.source_summary.source_type as WorkQueueSourceType,
     source_id: item.source_summary.source_id,
     title: item.source_summary.label,
     client_name: item.client_name,

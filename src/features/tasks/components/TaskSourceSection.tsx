@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/primitives/Button'
 import { Select } from '@/components/ui/inputs/Select'
 import { Tooltip } from '@/components/ui/primitives/Tooltip'
 import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client/ClientSearchInput'
-import type { WorkQueueItem } from '@/features/workQueue'
+import type { WorkQueueItem, WorkQueueSourceType } from '@/features/workQueue'
 import type { TaskSourceContext } from '../types'
 
 interface TaskSourceSectionProps {
@@ -22,14 +22,14 @@ interface TaskSourceSectionProps {
   isLoadingItems: boolean
   clientSearch: string
   sourceOptions: Array<{ value: string; label: string }>
-  pendingSource: { domain: string; id: number } | null
+  pendingSource: { domain: WorkQueueSourceType; id: number } | null
   onClearSource: () => void
   onOpenPicker: () => void
   onCancelPicker: () => void
   onClientSearchChange: (value: string) => void
   onClientSelect: (id: number, name: string) => void
   onClientClear: () => void
-  onSourceSelect: (domain: string, id: number) => void
+  onSourceSelect: (domain: WorkQueueSourceType, id: number) => void
   onSourceDeselect: () => void
 }
 

@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import type { PaginatedResponse } from '@/types'
+import type { PaginatedResponse, UserRole } from '@/types'
+import type { WorkQueueSourceType } from '@/features/workQueue'
 import { taskStatusValues, taskPriorityValues } from '../constants'
 
 export type TaskStatus = (typeof taskStatusValues)[number]
@@ -13,7 +14,7 @@ export const taskSchema = z.object({
   priority: z.enum(taskPriorityValues),
   due_date: z.string().nullable().optional(),
   assigned_to_user_id: z.number().int().nullable().optional(),
-  assigned_role: z.string().nullable().optional(),
+  assigned_role: z.enum(['advisor', 'secretary']).nullable().optional(),
   source_domain: z.string().nullable().optional(),
   source_id: z.number().int().nullable().optional(),
   action_key: z.string().nullable().optional(),
@@ -44,8 +45,8 @@ export interface TaskCreateRequest {
   priority?: TaskPriority
   due_date?: string
   assigned_to_user_id?: number
-  assigned_role?: string
-  source_domain?: string
+  assigned_role?: UserRole
+  source_domain?: WorkQueueSourceType
   source_id?: number
   action_key?: string
   action_payload?: Record<string, unknown>
@@ -57,8 +58,8 @@ export interface TaskUpdateRequest {
   priority?: TaskPriority
   due_date?: string
   assigned_to_user_id?: number
-  assigned_role?: string
-  source_domain?: string | null
+  assigned_role?: UserRole
+  source_domain?: WorkQueueSourceType | null
   source_id?: number | null
   action_key?: string
   action_payload?: Record<string, unknown>
@@ -68,8 +69,8 @@ export interface TaskListParams {
   status?: TaskStatus
   priority?: TaskPriority
   assigned_to_user_id?: number
-  assigned_role?: string
-  source_domain?: string
+  assigned_role?: UserRole
+  source_domain?: WorkQueueSourceType
   source_id?: number
   due_before?: string
   due_after?: string

@@ -7,6 +7,8 @@ import { Textarea } from '@/components/ui/inputs/Textarea'
 import { workQueueSourceTypeLabels } from '@/features/workQueue'
 import { taskPriorityLabels, taskPriorityValues, taskRoleLabels } from '../constants'
 import type { Task, TaskCreateRequest, TaskPriority, TaskUpdateRequest } from '../api/contracts'
+import type { UserRole } from '@/types'
+import type { WorkQueueSourceType } from '@/features/workQueue'
 import { useTaskSourcePicker } from '../hooks/useTaskSourcePicker'
 import { TaskSourceSection } from './TaskSourceSection'
 import type { TaskSourceContext } from '../types'
@@ -40,9 +42,9 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
   const [description, setDescription] = useState('')
   const [priority, setPriority] = useState<TaskPriority>('normal')
   const [dueDate, setDueDate] = useState('')
-  const [assignedRole, setAssignedRole] = useState('')
+  const [assignedRole, setAssignedRole] = useState<UserRole | ''>('')
   const [clientSearch, setClientSearch] = useState('')
-  const [pendingSource, setPendingSource] = useState<{ domain: string; id: number } | null>(null)
+  const [pendingSource, setPendingSource] = useState<{ domain: WorkQueueSourceType; id: number } | null>(null)
   const [sourceCleared, setSourceCleared] = useState(false)
   const [sourcePickerOpen, setSourcePickerOpen] = useState(false)
 
@@ -178,7 +180,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
       setClientSearch('')
       setPendingSource(null)
     },
-    onSourceSelect: (domain: string, id: number) => {
+    onSourceSelect: (domain: WorkQueueSourceType, id: number) => {
       setSourceCleared(false)
       setPendingSource({ domain, id })
     },
@@ -254,7 +256,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
             <Select
               options={roleOptions}
               value={assignedRole}
-              onChange={(e) => setAssignedRole(e.target.value)}
+              onChange={(e) => setAssignedRole(e.target.value as UserRole | '')}
               label="שיוך לתפקיד"
               disabled={readonly}
             />

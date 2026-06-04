@@ -10438,8 +10438,8 @@ export interface operations {
     import_clients_from_excel_api_v1_clients_import_post: {
         parameters: {
             query?: never;
-            header?: {
-                "X-Idempotency-Key"?: string | null;
+            header: {
+                "X-Idempotency-Key": string;
             };
             path?: never;
             cookie?: never;
@@ -11787,8 +11787,8 @@ export interface operations {
     bulk_charge_action_api_v1_charges_bulk_action_post: {
         parameters: {
             query?: never;
-            header?: {
-                "X-Idempotency-Key"?: string | null;
+            header: {
+                "X-Idempotency-Key": string;
             };
             path?: never;
             cookie?: never;
@@ -14305,8 +14305,8 @@ export interface operations {
                 status?: components["schemas"]["TaskStatus"] | null;
                 priority?: components["schemas"]["TaskPriority"] | null;
                 assigned_to_user_id?: number | null;
-                assigned_role?: string | null;
-                source_domain?: string | null;
+                assigned_role?: components["schemas"]["UserRole"] | null;
+                source_domain?: components["schemas"]["WorkQueueSourceType"] | null;
                 source_id?: number | null;
                 due_before?: string | null;
                 due_after?: string | null;

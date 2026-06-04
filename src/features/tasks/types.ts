@@ -1,5 +1,7 @@
+import type { WorkQueueSourceType } from '@/features/workQueue'
+
 export interface TaskSourceContext {
-  source_domain: string
+  source_domain: WorkQueueSourceType
   source_id: number
   title: string
   type_label?: string | null
