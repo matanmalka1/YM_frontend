@@ -13,6 +13,14 @@ export const DOCUMENT_TYPES = [
   'other',
 ] as const satisfies readonly UploadDocumentPayload['document_type'][]
 
+// Types that always belong to the person — cannot be uploaded with a business_id.
+// Mirrors backend CLIENT_SCOPE_TYPES in permanent_document.py.
+export const CLIENT_SCOPE_TYPES = new Set<UploadDocumentPayload['document_type']>([
+  'id_copy',
+  'power_of_attorney',
+  'engagement_agreement',
+])
+
 export const DOC_TYPE_LABELS: Record<string, string> = {
   id_copy: 'צילום ת.ז.',
   power_of_attorney: 'ייפוי כוח',

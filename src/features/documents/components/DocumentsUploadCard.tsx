@@ -6,7 +6,7 @@ import { Select } from '../../../components/ui/inputs/Select'
 import type { UploadDocumentPayload } from '../api'
 import type { BusinessResponse } from '@/features/clients'
 import { documentsUploadDefaultValues, documentsUploadSchema, type DocumentsUploadFormValues } from '../schemas'
-import { DOCUMENT_FILE_ACCEPT } from '../documents.constants'
+import { CLIENT_SCOPE_TYPES, DOCUMENT_FILE_ACCEPT } from '../documents.constants'
 import { formatFileSize } from '../../../utils/utils'
 import { Button } from '../../../components/ui/primitives/Button'
 import { UPLOAD_DOCUMENT_TYPE_OPTIONS, UPLOAD_TAX_YEAR_OPTIONS } from './DocumentsDataCards.constants'
@@ -102,6 +102,7 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
     }
   })
 
+  const isClientScopedType = CLIENT_SCOPE_TYPES.has(selectedDocType)
   const showBusinessSelect = businesses.length > 1
   const documentTypeField = register('document_type')
   const businessOptions = getBusinessOptions(businesses)
@@ -115,11 +116,13 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
           value={selectedDocType}
           name={documentTypeField.name}
           onBlur={documentTypeField.onBlur}
-          onChange={(e) =>
-            setValue('document_type', e.target.value as UploadDocumentPayload['document_type'], {
-              shouldValidate: true,
-            })
-          }
+          onChange={(e) => {
+            const type = e.target.value as UploadDocumentPayload['document_type']
+            setValue('document_type', type, { shouldValidate: true })
+            if (CLIENT_SCOPE_TYPES.has(type)) {
+              setValue('business_id', null, { shouldValidate: false })
+            }
+          }}
           options={UPLOAD_DOCUMENT_TYPE_OPTIONS}
         />
 
@@ -135,17 +138,22 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
         />
 
         {showBusinessSelect && (
-          <Select
-            label="שיוך עסקי"
-            value={selectedBusinessId ?? ''}
-            onChange={(e) =>
-              setValue('business_id', e.target.value ? Number(e.target.value) : null, {
-                shouldValidate: true,
-              })
-            }
-            disabled={businessesLoading}
-            options={businessOptions}
-          />
+          <div>
+            <Select
+              label="שיוך עסקי"
+              value={isClientScopedType ? '' : (selectedBusinessId ?? '')}
+              onChange={(e) =>
+                setValue('business_id', e.target.value ? Number(e.target.value) : null, {
+                  shouldValidate: true,
+                })
+              }
+              disabled={businessesLoading || isClientScopedType}
+              options={businessOptions}
+            />
+            {isClientScopedType && (
+              <p className="mt-1 text-xs text-gray-400">סוג מסמך זה שייך ללקוח בלבד</p>
+            )}
+          </div>
         )}
       </div>
 

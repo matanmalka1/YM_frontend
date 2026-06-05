@@ -1872,7 +1872,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/documents/{document_id}": {
+    "/api/v1/documents/client/{client_record_id}/{document_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1886,13 +1886,13 @@ export interface paths {
          * Delete Document
          * @description Soft-delete a permanent document (ADVISOR only).
          */
-        delete: operations["delete_document_api_v1_documents__document_id__delete"];
+        delete: operations["delete_document_api_v1_documents_client__client_record_id___document_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/documents/{document_id}/replace": {
+    "/api/v1/documents/client/{client_record_id}/{document_id}/replace": {
         parameters: {
             query?: never;
             header?: never;
@@ -1904,7 +1904,7 @@ export interface paths {
          * Replace Document
          * @description Replace the file for an existing document (ADVISOR only).
          */
-        put: operations["replace_document_api_v1_documents__document_id__replace_put"];
+        put: operations["replace_document_api_v1_documents_client__client_record_id___document_id__replace_put"];
         post?: never;
         delete?: never;
         options?: never;
@@ -4370,8 +4370,8 @@ export interface components {
             /** File */
             file: string;
         };
-        /** Body_replace_document_api_v1_documents__document_id__replace_put */
-        Body_replace_document_api_v1_documents__document_id__replace_put: {
+        /** Body_replace_document_api_v1_documents_client__client_record_id___document_id__replace_put */
+        Body_replace_document_api_v1_documents_client__client_record_id___document_id__replace_put: {
             /** File */
             file: string;
         };
@@ -11955,11 +11955,12 @@ export interface operations {
             };
         };
     };
-    delete_document_api_v1_documents__document_id__delete: {
+    delete_document_api_v1_documents_client__client_record_id___document_id__delete: {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                client_record_id: number;
                 document_id: number;
             };
             cookie?: never;
@@ -11984,18 +11985,19 @@ export interface operations {
             };
         };
     };
-    replace_document_api_v1_documents__document_id__replace_put: {
+    replace_document_api_v1_documents_client__client_record_id___document_id__replace_put: {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                client_record_id: number;
                 document_id: number;
             };
             cookie?: never;
         };
         requestBody: {
             content: {
-                "multipart/form-data": components["schemas"]["Body_replace_document_api_v1_documents__document_id__replace_put"];
+                "multipart/form-data": components["schemas"]["Body_replace_document_api_v1_documents_client__client_record_id___document_id__replace_put"];
             };
         };
         responses: {

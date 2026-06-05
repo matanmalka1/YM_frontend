@@ -29,13 +29,13 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
   }
 
   const handleDelete = async (id: number) => {
-    await documentsApi.deleteDocument(id)
+    await documentsApi.deleteDocument(clientId, id)
     toast.success('מסמך נמחק')
     invalidateDocs()
   }
 
   const handleReplace = async (id: number, file: File) => {
-    await documentsApi.replaceDocument(id, file)
+    await documentsApi.replaceDocument(clientId, id, file)
     toast.success('מסמך הוחלף')
     invalidateDocs()
   }

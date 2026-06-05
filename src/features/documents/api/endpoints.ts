@@ -4,7 +4,7 @@ export const DOCUMENT_ENDPOINTS = {
   documentSignalsByClient: (clientId: number | string) => `/documents/client/${clientId}/signals`,
   documentVersionsByClient: (clientId: number | string) => `/documents/client/${clientId}/versions`,
   documentsByAnnualReport: (reportId: number | string) => `/documents/annual-report/${reportId}`,
-  documentById: (id: number | string) => `/documents/${id}`,
-  documentReplace: (id: number | string) => `/documents/${id}/replace`,
+  documentDelete: (clientId: number | string, id: number | string) => `/documents/client/${clientId}/${id}`,
+  documentReplace: (clientId: number | string, id: number | string) => `/documents/client/${clientId}/${id}/replace`,
   documentDownloadUrl: (id: number | string) => `/documents/${id}/download-url`,
 } as const

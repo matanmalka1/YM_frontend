@@ -71,14 +71,14 @@ export const documentsApi = {
     return response.data
   },
 
-  deleteDocument: async (id: number): Promise<void> => {
-    await api.delete(DOCUMENT_ENDPOINTS.documentById(id))
+  deleteDocument: async (clientId: number, id: number): Promise<void> => {
+    await api.delete(DOCUMENT_ENDPOINTS.documentDelete(clientId, id))
   },
 
-  replaceDocument: async (id: number, file: File): Promise<PermanentDocumentResponse> => {
+  replaceDocument: async (clientId: number, id: number, file: File): Promise<PermanentDocumentResponse> => {
     const formData = new FormData()
     formData.append('file', file)
-    const response = await api.put<PermanentDocumentResponse>(DOCUMENT_ENDPOINTS.documentReplace(id), formData, {
+    const response = await api.put<PermanentDocumentResponse>(DOCUMENT_ENDPOINTS.documentReplace(clientId, id), formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
     return response.data
