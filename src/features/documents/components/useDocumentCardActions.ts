@@ -51,10 +51,10 @@ export const useDocumentCardActions = ({ onDelete, onReplace }: UseDocumentCardA
     }
   }
 
-  const handleDownloadClick = async (id: number) => {
-    setDownloadingId(id)
+  const handleDownloadClick = async (doc: PermanentDocumentResponse) => {
+    setDownloadingId(doc.id)
     try {
-      const { url } = await documentsApi.getDownloadUrl(id)
+      const { url } = await documentsApi.getDownloadUrl(doc.client_record_id, doc.id)
       window.open(url, '_blank')
     } catch {
       toast.error(DOWNLOAD_ERROR_MESSAGE)
@@ -67,7 +67,7 @@ export const useDocumentCardActions = ({ onDelete, onReplace }: UseDocumentCardA
     setPreviewDoc(doc)
     setPreviewUrl(null)
     try {
-      const { url } = await documentsApi.getDownloadUrl(doc.id)
+      const { url } = await documentsApi.getDownloadUrl(doc.client_record_id, doc.id)
       setPreviewUrl(url)
     } catch {
       toast.error(PREVIEW_ERROR_MESSAGE)

@@ -6,5 +6,5 @@ export const DOCUMENT_ENDPOINTS = {
   documentsByAnnualReport: (reportId: number | string) => `/documents/annual-report/${reportId}`,
   documentDelete: (clientId: number | string, id: number | string) => `/documents/client/${clientId}/${id}`,
   documentReplace: (clientId: number | string, id: number | string) => `/documents/client/${clientId}/${id}/replace`,
-  documentDownloadUrl: (id: number | string) => `/documents/${id}/download-url`,
+  documentDownloadUrl: (clientId: number | string, id: number | string) => `/documents/client/${clientId}/${id}/download-url`,
 } as const

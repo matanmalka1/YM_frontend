@@ -24,8 +24,8 @@ export const documentsApi = {
     return response.data
   },
 
-  getDownloadUrl: async (id: number): Promise<{ url: string }> => {
-    const response = await api.get<{ url: string }>(DOCUMENT_ENDPOINTS.documentDownloadUrl(id))
+  getDownloadUrl: async (clientId: number, id: number): Promise<{ url: string }> => {
+    const response = await api.get<{ url: string }>(DOCUMENT_ENDPOINTS.documentDownloadUrl(clientId, id))
     return response.data
   },
 

@@ -181,7 +181,7 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
         url={previewUrl}
         filename={previewDoc?.original_filename ?? null}
         mimeType={previewDoc?.mime_type ?? null}
-        onDownload={() => previewDoc && handleDownloadClick(previewDoc.id)}
+        onDownload={() => previewDoc && handleDownloadClick(previewDoc)}
       />
 
       <ConfirmDialog

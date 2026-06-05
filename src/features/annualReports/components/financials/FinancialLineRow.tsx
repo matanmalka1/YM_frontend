@@ -9,6 +9,7 @@ export interface LineRowProps {
   recognitionRate?: string | number | null
   supportingDocumentRef?: string | null
   supportingDocumentId?: number | null
+  supportingDocumentClientRecordId?: number | null
   supportingDocumentFilename?: string | null
   onEdit?: () => void
   onDelete: () => void
@@ -22,14 +23,15 @@ export const LineRow: React.FC<LineRowProps> = ({
   recognitionRate,
   supportingDocumentRef,
   supportingDocumentId,
+  supportingDocumentClientRecordId,
   supportingDocumentFilename,
   onEdit,
   onDelete,
   isDeleting,
 }) => {
   const handleDownload = async () => {
-    if (!supportingDocumentId) return
-    const { url } = await documentsApi.getDownloadUrl(supportingDocumentId)
+    if (!supportingDocumentId || !supportingDocumentClientRecordId) return
+    const { url } = await documentsApi.getDownloadUrl(supportingDocumentClientRecordId, supportingDocumentId)
     window.open(url, '_blank')
   }
 

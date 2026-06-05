@@ -1852,7 +1852,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/documents/{document_id}/download-url": {
+    "/api/v1/documents/client/{client_record_id}/{document_id}/download-url": {
         parameters: {
             query?: never;
             header?: never;
@@ -1863,7 +1863,7 @@ export interface paths {
          * Get Download Url
          * @description Get a presigned download URL for a document (expires in 1 hour).
          */
-        get: operations["get_download_url_api_v1_documents__document_id__download_url_get"];
+        get: operations["get_download_url_api_v1_documents_client__client_record_id___document_id__download_url_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -11924,11 +11924,12 @@ export interface operations {
             };
         };
     };
-    get_download_url_api_v1_documents__document_id__download_url_get: {
+    get_download_url_api_v1_documents_client__client_record_id___document_id__download_url_get: {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                client_record_id: number;
                 document_id: number;
             };
             cookie?: never;

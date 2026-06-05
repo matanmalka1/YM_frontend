@@ -53,7 +53,7 @@ export const AnnualReportSectionContent = ({
         />
       )
     case 'financials':
-      return <IncomeExpensePanel reportId={reportId} />
+      return <IncomeExpensePanel reportId={reportId} clientRecordId={report.client_record_id} />
     case 'tax':
       return <TaxCalculationPanel reportId={reportId} />
     case 'deductions':

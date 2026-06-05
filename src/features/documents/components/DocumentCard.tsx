@@ -13,7 +13,7 @@ interface DocumentCardProps {
   replacingId: number | null
   deletingId: number | null
   onPreview: (doc: PermanentDocumentResponse) => void
-  onDownload: (id: number) => void
+  onDownload: (doc: PermanentDocumentResponse) => void
   onReplace: (id: number) => void
   onDelete: (id: number) => void
   onToggleVersions: (id: number) => void
@@ -102,7 +102,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
         variant="outline"
         size="sm"
         isLoading={downloadingId === doc.id}
-        onClick={() => onDownload(doc.id)}
+        onClick={() => onDownload(doc)}
         className="flex-1 gap-1.5"
         aria-label="הורדת מסמך"
       >

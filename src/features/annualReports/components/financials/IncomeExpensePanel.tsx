@@ -23,10 +23,11 @@ import { getFinancialTotals, normalizeExpenseDescription } from './financialHelp
 
 interface IncomeExpensePanelProps {
   reportId: number
+  clientRecordId: number
 }
 type EditingLine = { type: 'income' | 'expense'; id: number } | null
 
-export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId }) => {
+export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId, clientRecordId }) => {
   const [editingLine, setEditingLine] = useState<EditingLine>(null)
   const [showForceConfirm, setShowForceConfirm] = useState(false)
   const [deletingIncomeIds, setDeletingIncomeIds] = useState<Set<number>>(() => new Set())
@@ -209,6 +210,7 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
                 recognitionRate={l.recognition_rate}
                 supportingDocumentRef={l.external_document_reference}
                 supportingDocumentId={l.supporting_document_id}
+                supportingDocumentClientRecordId={l.supporting_document_id != null ? clientRecordId : null}
                 supportingDocumentFilename={l.supporting_document_filename}
                 onEdit={() => toggleEdit('expense', l.id)}
                 onDelete={() => handleDeleteExpense(l)}
