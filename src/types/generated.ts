@@ -3379,24 +3379,6 @@ export interface components {
              */
             balance_type: "due" | "refund" | "zero";
         };
-        /** AdvisorTodayItem */
-        AdvisorTodayItem: {
-            /** Id */
-            id: number;
-            /** Label */
-            label: string;
-            /** Sublabel */
-            sublabel?: string | null;
-            /** Description */
-            description?: string | null;
-            /** Href */
-            href?: string | null;
-        };
-        /** AdvisorTodayResponse */
-        AdvisorTodayResponse: {
-            /** Deadline Items */
-            deadline_items?: components["schemas"]["AdvisorTodayItem"][];
-        };
         /** AgingReportItemResponse */
         AgingReportItemResponse: {
             /** Client Record Id */
@@ -4954,17 +4936,6 @@ export interface components {
             /** Accountant Id */
             accountant_id?: number | null;
         };
-        /** ConfirmDetails */
-        ConfirmDetails: {
-            /** Title */
-            title: string;
-            /** Message */
-            message: string;
-            /** Confirm Label */
-            confirm_label: string;
-            /** Cancel Label */
-            cancel_label: string;
-        };
         /**
          * ContactType
          * @enum {string}
@@ -5090,44 +5061,9 @@ export interface components {
             /** Open Charges Amount Ils */
             open_charges_amount_ils?: string | null;
             vat_stats: components["schemas"]["VatDashboardStats"];
-            /** Quick Actions */
-            quick_actions?: components["schemas"]["DashboardQuickAction"][];
             attention?: components["schemas"]["AttentionResponse"];
-            advisor_today?: components["schemas"]["AdvisorTodayResponse"];
             /** Recent Activity */
             recent_activity?: components["schemas"]["RecentActivityItem"][];
-        };
-        /** DashboardQuickAction */
-        DashboardQuickAction: {
-            /** Id */
-            id: string;
-            /** Key */
-            key: string;
-            /** Label */
-            label: string;
-            /** Method */
-            method: string;
-            /** Endpoint */
-            endpoint: string;
-            /** Payload */
-            payload?: {
-                [key: string]: unknown;
-            } | null;
-            confirm?: components["schemas"]["ConfirmDetails"] | null;
-            /** Client Name */
-            client_name?: string | null;
-            /** Binder Number */
-            binder_number?: string | null;
-            /** Category */
-            category?: string | null;
-            /** Due Label */
-            due_label?: string | null;
-            /** Description */
-            description?: string | null;
-            /** Urgency */
-            urgency?: ("overdue" | "upcoming") | null;
-            /** Due Date */
-            due_date?: string | null;
         };
         /** DeadlineRuleResponse */
         DeadlineRuleResponse: {
@@ -7450,8 +7386,6 @@ export interface components {
             year: number;
             /** Period Type */
             period_type: string;
-            /** Reporting Frequency */
-            reporting_frequency: string;
             /** Grouping Key */
             grouping_key: string;
             /** Periods Expected */
@@ -13106,7 +13040,6 @@ export interface operations {
     };
     list_pending_requests_api_v1_signature_requests_pending_get: {
         parameters: {
-                client_record_id: number;
             query?: {
                 page?: number;
                 page_size?: number;
@@ -13173,6 +13106,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                client_record_id: number;
                 request_id: number;
             };
             cookie?: never;
