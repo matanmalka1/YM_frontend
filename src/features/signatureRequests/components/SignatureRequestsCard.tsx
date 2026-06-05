@@ -74,7 +74,7 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
                   signingUrl={signingUrls[req.id]}
                   isCanceling={isCanceling}
                   canManage={canManage}
-                  onCancel={cancel}
+                  onCancel={(id) => cancel(client.id, id)}
                   onAudit={setAuditRequestId}
                   onSendNotification={(requestId, trigger) => setNotificationContext({ requestId, trigger })}
                 />

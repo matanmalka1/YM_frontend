@@ -2403,7 +2403,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/signature-requests/{request_id}/cancel": {
+    "/api/v1/clients/{client_record_id}/signature-requests/{request_id}/cancel": {
         parameters: {
             query?: never;
             header?: never;
@@ -2412,8 +2412,8 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Cancel Signature Request */
-        post: operations["cancel_signature_request_api_v1_signature_requests__request_id__cancel_post"];
+        /** Cancel Client Signature Request */
+        post: operations["cancel_client_signature_request_api_v1_clients__client_record_id__signature_requests__request_id__cancel_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -13106,6 +13106,7 @@ export interface operations {
     };
     list_pending_requests_api_v1_signature_requests_pending_get: {
         parameters: {
+                client_record_id: number;
             query?: {
                 page?: number;
                 page_size?: number;
@@ -13167,7 +13168,7 @@ export interface operations {
             };
         };
     };
-    cancel_signature_request_api_v1_signature_requests__request_id__cancel_post: {
+    cancel_client_signature_request_api_v1_clients__client_record_id__signature_requests__request_id__cancel_post: {
         parameters: {
             query?: never;
             header?: never;

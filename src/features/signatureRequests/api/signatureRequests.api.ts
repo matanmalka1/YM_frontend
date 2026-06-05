@@ -52,9 +52,13 @@ export const signatureRequestsApi = {
     return response.data
   },
 
-  cancel: async (id: number, payload?: CancelSignatureRequestPayload): Promise<SignatureRequestResponse> => {
+  cancel: async (
+    clientRecordId: number,
+    id: number,
+    payload?: CancelSignatureRequestPayload,
+  ): Promise<SignatureRequestResponse> => {
     const response = await api.post<SignatureRequestResponse>(
-      SIGNATURE_REQUEST_ENDPOINTS.signatureRequestCancel(id),
+      SIGNATURE_REQUEST_ENDPOINTS.clientSignatureRequestCancel(clientRecordId, id),
       payload ?? {},
     )
     return response.data

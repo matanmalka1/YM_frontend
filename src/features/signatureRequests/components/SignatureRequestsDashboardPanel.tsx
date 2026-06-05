@@ -96,7 +96,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
             signingUrl={signingUrls[req.id]}
             isCanceling={isCanceling}
             canManage
-            onCancel={async (id) => void cancel(id)}
+            onCancel={(id) => cancel(req.client_record_id, id)}
             onAudit={setAuditRequestId}
             showOpenLink
             separateHistory

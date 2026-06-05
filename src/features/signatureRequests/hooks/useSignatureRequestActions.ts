@@ -35,7 +35,8 @@ export const useSignatureRequestActions = (clientId?: number) => {
   })
 
   const cancelMutation = useMutation({
-    mutationFn: ({ id, reason }: { id: number; reason?: string }) => signatureRequestsApi.cancel(id, { reason }),
+    mutationFn: ({ clientRecordId, id, reason }: { clientRecordId: number; id: number; reason?: string }) =>
+      signatureRequestsApi.cancel(clientRecordId, id, { reason }),
     onSuccess: () => {
       toast.success('בקשת החתימה בוטלה')
       invalidate()
@@ -47,7 +48,8 @@ export const useSignatureRequestActions = (clientId?: number) => {
     create: (payload: CreateSignatureRequestPayload) => createMutation.mutateAsync(payload),
     isCreating: createMutation.isPending,
 
-    cancel: (id: number, reason?: string) => cancelMutation.mutateAsync({ id, reason }),
+    cancel: (clientRecordId: number, id: number, reason?: string) =>
+      cancelMutation.mutateAsync({ clientRecordId, id, reason }),
     isCanceling: cancelMutation.isPending,
   }
 }
