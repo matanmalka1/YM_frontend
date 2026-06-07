@@ -1,3 +1,4 @@
+import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Modal } from '@/components/ui/overlays/Modal'
@@ -78,10 +79,7 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <DashboardSurface>
-      <div className="px-1">
-        <h1 className="text-2xl font-bold text-gray-950">{DASHBOARD_COPY.pageTitle}</h1>
-        <p className="mt-1 text-sm text-gray-500">{DASHBOARD_COPY.pageSubtitle}</p>
-      </div>
+      <PageHeader title={DASHBOARD_COPY.pageTitle} description={DASHBOARD_COPY.pageSubtitle} />
 
       {denied && <Alert variant="warning" message={DASHBOARD_COPY.permissionDenied} />}
       {dashboard.status === 'error' && !denied && <Alert variant="error" message={dashboard.message} />}

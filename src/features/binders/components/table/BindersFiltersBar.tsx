@@ -61,7 +61,7 @@ export const BindersFiltersBar = ({
   ] as const
 
   const pills = (
-    <div className="grid grid-cols-2 gap-3 xl:grid-cols-5">
+    <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
       {statusPills.map((pill) => (
         <StatsCard
           key={pill.key || 'total'}
