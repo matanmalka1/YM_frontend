@@ -26,10 +26,15 @@ export interface PermanentDocumentResponse {
 
 export interface PermanentDocumentListResponse {
   items: PermanentDocumentResponse[]
+  total: number
+  page: number
+  page_size: number
 }
 
 export interface DocumentVersionsResponse {
   items: PermanentDocumentResponse[]
+  limit?: number
+  has_more: boolean
 }
 
 export interface OperationalSignalsResponse {
@@ -58,4 +63,8 @@ export interface UploadDocumentPayload {
 
 export interface ListDocumentsByClientParams {
   tax_year?: number
+  document_type?: string
+  status?: string
+  page?: number
+  page_size?: number
 }

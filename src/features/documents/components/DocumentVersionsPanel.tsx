@@ -17,6 +17,7 @@ export const DocumentVersionsPanel: React.FC<DocumentVersionsPanelProps> = ({ cl
   })
 
   const items = data?.items ?? []
+  const hasMore = data?.has_more ?? false
 
   if (isLoading) {
     return <div className="px-4 py-2 text-xs text-gray-400">טוען גרסאות...</div>
@@ -48,6 +49,9 @@ export const DocumentVersionsPanel: React.FC<DocumentVersionsPanelProps> = ({ cl
           </li>
         ))}
       </ul>
+      {hasMore && (
+        <p className="mt-2 text-xs text-gray-400">מוצגות 10 גרסאות אחרונות בלבד</p>
+      )}
     </div>
   )
 }

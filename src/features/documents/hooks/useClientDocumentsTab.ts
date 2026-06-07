@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { documentsApi, documentsQK, type OperationalSignalsResponse, type PermanentDocumentListResponse } from '../api'
 import { useBusinessesForClient } from '@/hooks/useBusinessesForClient'
@@ -5,14 +6,22 @@ import { getErrorMessage } from '../../../utils/utils'
 import { useDocumentUpload } from './useDocumentUpload'
 import { toast } from '../../../utils/toast'
 
+const PAGE_SIZE = 20
+
 export const useClientDocumentsTab = (clientId: number, taxYear?: number | null) => {
   const queryClient = useQueryClient()
+  const [page, setPage] = useState(1)
   const { businesses, isLoading: businessesLoading } = useBusinessesForClient({ clientId })
 
   const documentsQuery = useQuery<PermanentDocumentListResponse>({
     enabled: clientId > 0,
-    queryKey: [...documentsQK.clientList(clientId), taxYear ?? null],
-    queryFn: () => documentsApi.listByClient(clientId, taxYear ? { tax_year: taxYear } : undefined),
+    queryKey: [...documentsQK.clientList(clientId), taxYear ?? null, page, PAGE_SIZE],
+    queryFn: () =>
+      documentsApi.listByClient(clientId, {
+        ...(taxYear ? { tax_year: taxYear } : {}),
+        page,
+        page_size: PAGE_SIZE,
+      }),
   })
 
   const signalsQuery = useQuery<OperationalSignalsResponse>({
@@ -40,6 +49,8 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
     invalidateDocs()
   }
 
+  const total = documentsQuery.data?.total ?? 0
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
   const errorSource = documentsQuery.error ?? signalsQuery.error
 
   return {
@@ -60,5 +71,9 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
     uploading,
     handleDelete,
     handleReplace,
+    page,
+    setPage,
+    totalPages,
+    total,
   }
 }
