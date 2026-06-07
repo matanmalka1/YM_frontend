@@ -3712,10 +3712,14 @@ export interface components {
             total_income?: string | null;
             /** Total Expenses */
             total_expenses?: string | null;
+            /** Recognized Expenses */
+            recognized_expenses?: string | null;
             /** Taxable Income */
             taxable_income?: string | null;
             /** Profit */
             profit?: string | null;
+            /** Tax After Credits */
+            tax_after_credits?: string | null;
             /** Final Balance */
             final_balance?: string | null;
         };
