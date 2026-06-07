@@ -12,7 +12,7 @@ export const useTaskSourcePicker = () => {
   const workQueueQuery = useQuery({
     queryKey: workQueueQK.list(
       selectedClientId
-        ? { client_record_id: selectedClientId, scope: 'system', linked: 'unlinked', limit: 100 }
+        ? { client_record_id: selectedClientId, scope: 'system', linked: 'unlinked', page: 1, page_size: 100 }
         : undefined,
     ),
     queryFn: () =>
@@ -20,7 +20,8 @@ export const useTaskSourcePicker = () => {
         client_record_id: selectedClientId!,
         scope: 'system',
         linked: 'unlinked',
-        limit: 100,
+        page: 1,
+        page_size: 100,
       }),
     enabled: selectedClientId !== null,
     staleTime: QUERY_STALE_TIME.short,

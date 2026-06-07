@@ -3,6 +3,7 @@ import { Button } from "../../../components/ui/primitives/Button";
 import { PageStateGuard } from "../../../components/ui/layout/PageStateGuard";
 import { PageHeader } from "../../../components/layout/PageHeader";
 import { DatePicker } from "../../../components/ui/inputs/DatePicker";
+import { PaginationCard } from "../../../components/ui/table/PaginationCard";
 import { AgingReportHeader } from "./AgingReportHeader";
 import { AgingReportTable } from "./AgingReportTable";
 import { useAgingReport } from "../hooks/useAgingReport";
@@ -12,7 +13,7 @@ interface AgingReportViewProps {
 }
 
 export const AgingReportView: React.FC<AgingReportViewProps> = ({ embedded = false }) => {
-  const { asOfDate, setAsOfDate, exporting, handleExport, data, isLoading, error } =
+  const { asOfDate, setAsOfDate, page, setPage, totalPages, exporting, handleExport, data, isLoading, error } =
     useAgingReport();
 
   const actions = (
@@ -60,13 +61,17 @@ export const AgingReportView: React.FC<AgingReportViewProps> = ({ embedded = fal
             </div>
             {embedded && actions}
           </div>
-          {data.capped && (
-            <div className="rounded-lg border border-warning-200 bg-warning-50 px-4 py-3 text-sm text-warning-700">
-              הדוח מציג עד {data.cap_limit} חיובים בלבד. ייתכן שחיובים ישנים יותר אינם מוצגים.
-            </div>
-          )}
           <AgingReportHeader data={data} />
           <AgingReportTable items={data.items} />
+          {totalPages > 1 && (
+            <PaginationCard
+              page={page}
+              totalPages={totalPages}
+              total={data.total}
+              label="לקוחות"
+              onPageChange={setPage}
+            />
+          )}
         </>
       )}
     </PageStateGuard>

@@ -1618,10 +1618,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /**
-         * Get Binder History
-         * @description Get audit history for a binder.
-         */
+        /** Get Binder History */
         get: operations["get_binder_history_api_v1_binders__binder_id__history_get"];
         put?: never;
         post?: never;
@@ -1638,10 +1635,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /**
-         * Get Binder Intakes
-         * @description Get all material intakes for a binder.
-         */
+        /** Get Binder Intakes */
         get: operations["get_binder_intakes_api_v1_binders__binder_id__intakes_get"];
         put?: never;
         post?: never;
@@ -3436,10 +3430,12 @@ export interface components {
             /** Items */
             items: components["schemas"]["AgingReportItemResponse"][];
             summary: components["schemas"]["AgingReportSummaryResponse"];
-            /** Capped */
-            capped: boolean;
-            /** Cap Limit */
-            cap_limit: number;
+            /** Total */
+            total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
         };
         /** AgingReportSummaryResponse */
         AgingReportSummaryResponse: {
@@ -4118,6 +4114,12 @@ export interface components {
             binder_id: number;
             /** History */
             history: components["schemas"]["BinderHistoryEntry"][];
+            /** Total */
+            total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
         };
         /** BinderIntakeListResponse */
         BinderIntakeListResponse: {
@@ -4125,6 +4127,12 @@ export interface components {
             binder_id: number;
             /** Intakes */
             intakes: components["schemas"]["BinderIntakeResponse"][];
+            /** Total */
+            total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
         };
         /**
          * BinderIntakeMaterialRequest
@@ -5163,6 +5171,13 @@ export interface components {
         DocumentVersionsResponse: {
             /** Items */
             items: components["schemas"]["PermanentDocumentResponse"][];
+            /** Limit */
+            limit?: number | null;
+            /**
+             * Has More
+             * @default false
+             */
+            has_more: boolean;
         };
         /** DocumentsCard */
         DocumentsCard: {
@@ -5975,6 +5990,12 @@ export interface components {
         PermanentDocumentListResponse: {
             /** Items */
             items: components["schemas"]["PermanentDocumentResponse"][];
+            /** Total */
+            total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
         };
         /** PermanentDocumentResponse */
         PermanentDocumentResponse: {
@@ -7411,6 +7432,12 @@ export interface components {
             year: number;
             /** Total Clients */
             total_clients: number;
+            /** Total */
+            total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
             /** Items */
             items: components["schemas"]["VatComplianceReportItemResponse"][];
             /** Stale Pending */
@@ -7959,6 +7986,10 @@ export interface components {
             items: components["schemas"]["WorkQueueItem"][];
             /** Total */
             total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
             summary: components["schemas"]["WorkQueueSummary"];
         };
         /**
@@ -11281,7 +11312,7 @@ export interface operations {
                 page?: number;
                 page_size?: number;
                 sort_by?: string | null;
-                sort_dir?: string;
+                order?: string;
             };
             header?: never;
             path?: never;
@@ -11371,7 +11402,10 @@ export interface operations {
     };
     get_binder_history_api_v1_binders__binder_id__history_get: {
         parameters: {
-            query?: never;
+            query?: {
+                page?: number;
+                page_size?: number;
+            };
             header?: never;
             path: {
                 binder_id: number;
@@ -11402,7 +11436,10 @@ export interface operations {
     };
     get_binder_intakes_api_v1_binders__binder_id__intakes_get: {
         parameters: {
-            query?: never;
+            query?: {
+                page?: number;
+                page_size?: number;
+            };
             header?: never;
             path: {
                 binder_id: number;
@@ -11802,6 +11839,10 @@ export interface operations {
         parameters: {
             query?: {
                 tax_year?: number | null;
+                document_type?: components["schemas"]["PermanentDocumentType"] | null;
+                status?: components["schemas"]["DocumentStatus"] | null;
+                page?: number;
+                page_size?: number;
             };
             header?: never;
             path: {
@@ -12029,6 +12070,8 @@ export interface operations {
         parameters: {
             query: {
                 year: number;
+                page?: number;
+                page_size?: number;
             };
             header?: never;
             path?: never;
@@ -12123,6 +12166,8 @@ export interface operations {
         parameters: {
             query?: {
                 as_of_date?: string | null;
+                page?: number;
+                page_size?: number;
             };
             header?: never;
             path?: never;
@@ -12538,7 +12583,7 @@ export interface operations {
                 contact_id?: number | null;
                 from_date?: string | null;
                 to_date?: string | null;
-                sort_dir?: "asc" | "desc";
+                order?: "asc" | "desc";
             };
             header?: never;
             path: {
@@ -13877,7 +13922,10 @@ export interface operations {
     };
     get_vat_client_summary_api_v1_vat_clients__client_record_id__summary_get: {
         parameters: {
-            query?: never;
+            query?: {
+                from_year?: number | null;
+                to_year?: number | null;
+            };
             header?: never;
             path: {
                 client_record_id: number;
@@ -14482,8 +14530,8 @@ export interface operations {
     list_work_queue_api_v1_work_queue_get: {
         parameters: {
             query?: {
-                limit?: number;
-                offset?: number;
+                page?: number;
+                page_size?: number;
                 client_record_id?: number | null;
                 business_id?: number | null;
                 exclude_source_types?: components["schemas"]["WorkQueueSourceType"][] | null;

@@ -72,7 +72,7 @@ export interface ListBindersParams {
   page?: number
   page_size?: number
   sort_by?: string
-  sort_dir?: string
+  order?: string
   year?: number
 }
 

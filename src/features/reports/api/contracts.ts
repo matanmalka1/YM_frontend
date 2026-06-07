@@ -23,8 +23,9 @@ export interface AgingReportResponse {
   total_outstanding: string;
   items: AgingReportItem[];
   summary: AgingBucket;
-  capped: boolean;
-  cap_limit: number;
+  total: number;
+  page: number;
+  page_size: number;
 }
 
 export interface AnnualReportClientEntry {

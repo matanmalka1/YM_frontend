@@ -14,9 +14,13 @@ import type {
 export const reportsApi = {
   // ── Queries ──────────────────────────────────────────────────────────────
 
-  getAgingReport: async (asOfDate?: string): Promise<AgingReportResponse> => {
+  getAgingReport: async (
+    asOfDate?: string,
+    page: number = 1,
+    pageSize: number = 50,
+  ): Promise<AgingReportResponse> => {
     const response = await api.get<AgingReportResponse>(REPORT_ENDPOINTS.reportsAging, {
-      params: toQueryParams({ as_of_date: asOfDate }),
+      params: toQueryParams({ as_of_date: asOfDate, page, page_size: pageSize }),
     });
     return response.data;
   },

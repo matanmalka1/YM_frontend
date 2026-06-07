@@ -13,7 +13,7 @@ export const useBindersFilters = () => {
     page: parsePositiveInt(searchParams.get('page'), 1),
     page_size: parsePositiveInt(searchParams.get('page_size'), 20),
     sort_by: searchParams.get('sort_by') ?? 'period_start',
-    sort_dir: searchParams.get('sort_dir') ?? 'desc',
+    order: searchParams.get('order') ?? 'desc',
   }
 
   const handleFilterChange = (name: string, value: string) => setFilter(name, value)
@@ -30,11 +30,11 @@ export const useBindersFilters = () => {
   }
 
   const handleSort = (sortBy: string) => {
-    const currentDir = filters.sort_by === sortBy ? filters.sort_dir : 'desc'
+    const currentDir = filters.sort_by === sortBy ? filters.order : 'desc'
     const nextDir = currentDir === 'desc' ? 'asc' : 'desc'
     const next = new URLSearchParams(searchParams)
     next.set('sort_by', sortBy)
-    next.set('sort_dir', nextDir)
+    next.set('order', nextDir)
     next.set('page', '1')
     setSearchParams(next)
   }

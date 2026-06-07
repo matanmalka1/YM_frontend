@@ -1,5 +1,6 @@
 export const reportsQK = {
-  aging: (asOfDate: string) => ["reports", "aging", asOfDate] as const,
+  aging: (asOfDate: string, page: number, pageSize: number) =>
+    ["reports", "aging", asOfDate, page, pageSize] as const,
   annualReportStatus: (taxYear: number) =>
     ["reports", "annual-report-status", taxYear] as const,
   advancePayments: (year: number, month?: number) =>

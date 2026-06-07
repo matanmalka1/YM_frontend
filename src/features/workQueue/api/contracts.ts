@@ -138,6 +138,6 @@ export interface WorkQueueParams {
   task_status?: (typeof taskStatusValues)[number]
   linked?: 'linked' | 'unlinked'
   scope?: 'system' | 'manual'
-  limit?: number
-  offset?: number
+  page?: number
+  page_size?: number
 }

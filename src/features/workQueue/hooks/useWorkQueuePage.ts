@@ -35,8 +35,8 @@ export const useWorkQueuePage = () => {
       task_status: statusFilter ?? undefined,
       linked: linkedFilter ?? undefined,
       scope: scopeFilter ?? undefined,
-      limit: WORK_QUEUE_PAGE_SIZE,
-      offset: (page - 1) * WORK_QUEUE_PAGE_SIZE,
+      page,
+      page_size: WORK_QUEUE_PAGE_SIZE,
     }),
     [historyMode, linkedFilter, page, scopeFilter, debouncedSearch, statusFilter, typeFilter, urgencyFilter],
   )

@@ -1,4 +1,4 @@
-import { AlertTriangle, Clock, DollarSign } from "lucide-react";
+import { Clock, DollarSign } from "lucide-react";
 import { StatsCard } from "../../../components/ui/layout/StatsCard";
 import type { AgingReportResponse } from "../api";
 import { formatILS, toReportNumber, type ReportMoneyValue } from "../utils";
@@ -41,14 +41,6 @@ export const AgingReportHeader: React.FC<AgingReportHeaderProps> = ({ data }) =>
 
   return (
     <div className="flex flex-col gap-3">
-      {data.capped && (
-        <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-2.5 text-sm text-amber-800">
-          <AlertTriangle className="h-4 w-4 shrink-0" />
-          <span>
-            הדוח מוגבל ל־{data.cap_limit.toLocaleString("he-IL")} חיובים. ייתכן שחובות נוספים אינם מוצגים וסכום הכולל אינו מלא.
-          </span>
-        </div>
-      )}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
         <StatsCard
           title='סה"כ חובות'

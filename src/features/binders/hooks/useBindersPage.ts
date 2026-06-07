@@ -18,7 +18,7 @@ export const useBindersPage = () => {
     page: filters.page,
     page_size: filters.page_size,
     sort_by: filters.sort_by,
-    sort_dir: filters.sort_dir,
+    order: filters.order,
   }
 
   const bindersQuery = useQuery({

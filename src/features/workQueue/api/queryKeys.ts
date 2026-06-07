@@ -10,8 +10,8 @@ const normalizeParams = (params?: WorkQueueParams) => ({
   task_status: params?.task_status ?? null,
   linked: params?.linked ?? null,
   scope: params?.scope ?? null,
-  limit: params?.limit ?? null,
-  offset: params?.offset ?? null,
+  page: params?.page ?? null,
+  page_size: params?.page_size ?? null,
   exclude_source_types: [...(params?.exclude_source_types ?? [])].sort(),
 })
 

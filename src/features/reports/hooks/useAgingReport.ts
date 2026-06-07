@@ -5,16 +5,28 @@ import { reportsApi, reportsQK, type ExportFormat } from "../api";
 import { getErrorMessage, showErrorToast } from "../../../utils/utils";
 import { toast } from "../../../utils/toast";
 
+const PAGE_SIZE = 50;
+
 export const useAgingReport = () => {
-  const [asOfDate, setAsOfDate] = useState<string>(
+  const [asOfDate, setAsOfDateRaw] = useState<string>(
     formatDate(new Date(), "yyyy-MM-dd"),
   );
+  const [page, setPage] = useState(1);
   const [exporting, setExporting] = useState<ExportFormat | null>(null);
 
+  const setAsOfDate = (value: string) => {
+    setAsOfDateRaw(value);
+    setPage(1);
+  };
+
   const reportQuery = useQuery({
-    queryKey: reportsQK.aging(asOfDate),
-    queryFn: () => reportsApi.getAgingReport(asOfDate),
+    queryKey: reportsQK.aging(asOfDate, page, PAGE_SIZE),
+    queryFn: () => reportsApi.getAgingReport(asOfDate, page, PAGE_SIZE),
   });
+
+  const totalPages = reportQuery.data
+    ? Math.max(1, Math.ceil(reportQuery.data.total / PAGE_SIZE))
+    : 1;
 
   const handleExport = async (format: ExportFormat) => {
     setExporting(format);
@@ -31,6 +43,9 @@ export const useAgingReport = () => {
   return {
     asOfDate,
     setAsOfDate,
+    page,
+    setPage,
+    totalPages,
     exporting,
     handleExport,
     data: reportQuery.data,

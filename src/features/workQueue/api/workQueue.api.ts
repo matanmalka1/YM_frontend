@@ -15,8 +15,8 @@ const toSearchParams = (params?: WorkQueueParams): URLSearchParams | undefined =
   if (params.task_status) search.set('task_status', params.task_status)
   if (params.linked) search.set('linked', params.linked)
   if (params.scope) search.set('scope', params.scope)
-  if (params.limit != null) search.set('limit', String(params.limit))
-  if (params.offset != null) search.set('offset', String(params.offset))
+  if (params.page != null) search.set('page', String(params.page))
+  if (params.page_size != null) search.set('page_size', String(params.page_size))
   params.exclude_source_types?.forEach((type) => search.append('exclude_source_types', type))
   return search
 }
