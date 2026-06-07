@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { ChevronDown, ChevronUp, BarChart3 } from 'lucide-react'
-import { EntityAuditTrailSection } from '@/features/audit'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { ReportAlertBanners } from './ReportAlertBanners'
 import { ReportSummaryCards } from './ReportSummaryCards'
@@ -9,9 +7,6 @@ import { ReportMetaGrid } from './ReportMetaGrid'
 import { AnnualReportDetailForm } from '../tax/AnnualReportDetailForm'
 import { ScheduleChecklist } from '../annex/ScheduleChecklist'
 import { AnnualPLSummary } from '../financials/AnnualPLSummary'
-import { ReportHistoryTable } from './ReportHistoryTable'
-import { StatusHistoryTimeline } from '../statusTransition/StatusHistoryTimeline'
-import { annualReportsApi, annualReportsQK } from '../../api'
 import type { AnnualReportDetail } from '../../types'
 import type { AnnualReportFull, AnnualReportScheduleKey, ScheduleEntry } from '../../api'
 
@@ -28,7 +23,6 @@ interface Props {
   isScheduleAdding: boolean
   completingKey?: AnnualReportScheduleKey | null
   clientId: number
-  onSelectReport?: (reportId: number) => void
   onDirtyChange?: (dirty: boolean) => void
   submitRef?: React.RefObject<(() => void) | null>
 }
@@ -46,23 +40,16 @@ export const AnnualReportOverviewSection: React.FC<Props> = ({
   isScheduleAdding,
   completingKey,
   clientId,
-  onSelectReport,
   onDirtyChange,
   submitRef,
 }) => {
   const [plExpanded, setPlExpanded] = useState(false)
 
-  const { data: history } = useQuery({
-    queryKey: annualReportsQK.statusHistory(report.id),
-    queryFn: () => annualReportsApi.getHistory(report.id),
-    enabled: !!report.id,
-  })
-
   return (
     <div className="space-y-6">
       <ReportAlertBanners report={report} advances={advances} />
 
-      <ReportSummaryCards reportId={report.id} />
+      <ReportSummaryCards report={report} />
 
       {/* Meta + detail form */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -117,22 +104,6 @@ export const AnnualReportOverviewSection: React.FC<Props> = ({
         )}
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-        <h3 className="mb-4 text-sm font-semibold text-gray-700">היסטוריית דוחות</h3>
-        <ReportHistoryTable clientId={clientId} currentReportId={report.id} onSelect={onSelectReport} />
-      </div>
-
-      <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-        <h3 className="mb-4 text-sm font-semibold text-gray-700">היסטוריית סטטוסים</h3>
-        <StatusHistoryTimeline history={history?.items ?? []} />
-      </div>
-
-      <EntityAuditTrailSection
-        entityType="annual_report"
-        entityId={report.id}
-        title="יומן שינויים"
-        subtitle="שינויים שבוצעו בדוח השנתי"
-      />
     </div>
   )
 }

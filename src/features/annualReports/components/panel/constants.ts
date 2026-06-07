@@ -50,9 +50,10 @@ export const CLIENT_TYPE_LABELS = {
 } as const
 
 export const SUMMARY_CARD_META = {
-  recognizedExpenses: { title: 'ניכויים מוכרים', icon: Receipt, variant: 'purple' },
+  recognizedExpenses: { title: 'הוצאות', icon: Receipt, variant: 'purple' },
   advancesPaid: { title: 'מקדמות ששולמו', icon: PiggyBank },
-  annualTax: { title: 'חבות מס שנתית', icon: TrendingDown, variant: 'red' },
+  finalBalance: { title: 'יתרה סופית', icon: PiggyBank },
+  annualTax: { title: 'מס שנתי', icon: TrendingDown },
   netProfit: { title: 'רווח נקי', icon: TrendingUp, variant: 'green' },
   grossIncome: { title: 'הכנסות ברוטו', icon: Banknote, variant: 'neutral' },
 } as const

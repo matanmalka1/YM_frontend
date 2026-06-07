@@ -122,8 +122,10 @@ export interface AnnualReportFull extends AnnualReportSummary {
   tax_due_amount?: string | null
   total_income?: string | null
   total_expenses?: string | null
+  recognized_expenses?: string | null
   taxable_income?: string | null
   profit?: string | null
+  tax_after_credits?: string | null
   final_balance?: string | null
 }
 

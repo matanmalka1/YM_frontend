@@ -1,88 +1,58 @@
-import { useQuery } from '@tanstack/react-query'
-import { annualReportFinancialsApi } from '../../api'
-import { annualReportTaxApi, annualReportsQK } from '../../api'
 import { StatsCard } from '../../../../components/ui/layout/StatsCard'
 import { formatCurrencyILS as fmt } from '@/utils/utils'
-import { SKELETON_CARD_COUNT, SUMMARY_CARD_META } from './constants'
-import { getBalanceDescription, getBalanceVariant } from './helpers'
+import { SUMMARY_CARD_META } from './constants'
+import type { AnnualReportFull } from '../../api'
 
 interface Props {
-  reportId: number
+  report: AnnualReportFull
 }
 
-export const ReportSummaryCards: React.FC<Props> = ({ reportId }) => {
-  const financialsQ = useQuery({
-    queryKey: annualReportsQK.financials(reportId),
-    queryFn: () => annualReportFinancialsApi.getFinancials(reportId),
-    enabled: !!reportId,
-  })
-
-  const taxCalcQ = useQuery({
-    queryKey: annualReportsQK.taxCalc(reportId),
-    queryFn: () => annualReportTaxApi.getTaxCalculation(reportId),
-    enabled: !!reportId,
-  })
-
-  const advancesQ = useQuery({
-    queryKey: annualReportsQK.advancesSummary(reportId),
-    queryFn: () => annualReportTaxApi.getAdvancesSummary(reportId),
-    enabled: !!reportId,
-  })
-
-  const isLoading = financialsQ.isLoading || taxCalcQ.isLoading || advancesQ.isLoading
-
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-        {Array.from({ length: SKELETON_CARD_COUNT }).map((_, i) => (
-          <div key={i} className="h-24 rounded-xl border bg-white animate-pulse" />
-        ))}
-      </div>
-    )
-  }
-
-  const fin = financialsQ.data
-  const tax = taxCalcQ.data
-  const adv = advancesQ.data
-
-  if (!fin || !tax || !adv) return null
-
-  const totalIncome = Number(fin.total_income)
-  const recognizedExpenses = Number(fin.recognized_expenses)
-  const grossExpenses = Number(fin.gross_expenses)
-  const netProfit = Number(tax.net_profit)
-  const taxAfterCredits = Number(tax.tax_after_credits)
-  const totalAdvancesPaid = Number(adv.total_advances_paid)
+export const ReportSummaryCards: React.FC<Props> = ({ report }) => {
+  const totalIncome = Number(report.total_income ?? 0)
+  const grossExpenses = Number(report.total_expenses ?? 0)
+  const recognizedExpenses = Number(report.recognized_expenses ?? 0)
+  const netProfit = Number(report.profit ?? 0)
+  const taxAfterCredits = Number(report.tax_after_credits ?? 0)
+  const finalBalance = Number(report.final_balance ?? 0)
   const profitMargin = totalIncome > 0 ? (netProfit / totalIncome) * 100 : 0
-  const expenseRatio = totalIncome > 0 ? (recognizedExpenses / totalIncome) * 100 : 0
+  const expenseRatio = totalIncome > 0 ? (grossExpenses / totalIncome) * 100 : 0
+  const balanceLabel =
+    finalBalance > 0 ? 'לתשלום לאחר מקדמות' : finalBalance < 0 ? 'החזר צפוי לאחר מקדמות' : 'מאוזן'
+  const balanceVariant = finalBalance < 0 ? 'green' : finalBalance > 0 ? 'red' : 'neutral'
+
+  const hasTaxDue = taxAfterCredits > 0
+  const annualTaxTitle = hasTaxDue ? 'מס מחושב' : taxAfterCredits < 0 ? 'החזר מחושב' : 'מס שנתי'
+  const annualTaxVariant = hasTaxDue ? 'red' : taxAfterCredits < 0 ? 'green' : 'neutral'
+  const annualTaxDescription = taxAfterCredits !== 0 ? 'לפני קיזוז מקדמות' : 'לא חושב'
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       <StatsCard
         title={SUMMARY_CARD_META.recognizedExpenses.title}
-        value={fmt(recognizedExpenses)}
-        description={`מתוך ${fmt(grossExpenses)} הוצאות`}
+        value={fmt(grossExpenses)}
+        description={`מוכר למס ${fmt(recognizedExpenses)}`}
         icon={SUMMARY_CARD_META.recognizedExpenses.icon}
         variant={SUMMARY_CARD_META.recognizedExpenses.variant}
         trend={{ value: expenseRatio, label: '% מהכנסות' }}
       />
 
       <StatsCard
-        title={SUMMARY_CARD_META.advancesPaid.title}
-        value={fmt(totalAdvancesPaid)}
-        description={getBalanceDescription(adv)}
-        icon={SUMMARY_CARD_META.advancesPaid.icon}
-        variant={getBalanceVariant(adv.balance_type)}
+        title={SUMMARY_CARD_META.finalBalance.title}
+        value={fmt(finalBalance)}
+        description={balanceLabel}
+        icon={SUMMARY_CARD_META.finalBalance.icon}
+        variant={balanceVariant}
       />
 
       <StatsCard
-        title={SUMMARY_CARD_META.annualTax.title}
-        value={fmt(taxAfterCredits)}
+        title={annualTaxTitle}
+        value={fmt(Math.abs(taxAfterCredits))}
+        description={annualTaxDescription}
         icon={SUMMARY_CARD_META.annualTax.icon}
-        variant={SUMMARY_CARD_META.annualTax.variant}
+        variant={annualTaxVariant}
         trend={{
-          value: -(tax.effective_rate * 100),
-          label: `${(tax.effective_rate * 100).toFixed(2)}% שיעור אפקטיבי`,
+          value: totalIncome > 0 ? -(Math.abs(taxAfterCredits) / totalIncome) * 100 : 0,
+          label: 'מהכנסות',
         }}
       />
 
