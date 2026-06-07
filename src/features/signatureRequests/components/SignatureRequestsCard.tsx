@@ -5,6 +5,7 @@ import { Button } from '../../../components/ui/primitives/Button'
 import { StateCard } from '../../../components/ui/feedback/StateCard'
 import { Alert } from '../../../components/ui/overlays/Alert'
 import { SkeletonBlock } from '../../../components/ui/primitives/SkeletonBlock'
+import { PaginationCard } from '../../../components/ui/table/PaginationCard'
 import { SignatureRequestRow } from './SignatureRequestRow'
 import { SignatureRequestAuditDrawer } from './SignatureRequestAuditDrawer'
 import { CreateSignatureRequestModal } from './CreateSignatureRequestModal'
@@ -13,6 +14,8 @@ import { useClientSignatureRequests } from '../hooks/useClientSignatureRequests'
 import { useSignatureRequestActions } from '../hooks/useSignatureRequestActions'
 import { useSignatureRequestSigningUrls } from '../utils'
 import type { ClientRecordResponse } from '@/features/clients'
+
+const PAGE_SIZE = 10
 
 interface Props {
   client: ClientRecordResponse
@@ -23,14 +26,21 @@ interface Props {
 export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, canManage }) => {
   const [showCreate, setShowCreate] = useState(false)
   const [auditRequestId, setAuditRequestId] = useState<number | null>(null)
+  const [page, setPage] = useState(1)
   const [notificationContext, setNotificationContext] = useState<{
     requestId: number
     trigger: NotificationTrigger
   } | null>(null)
 
-  const { items, total, isLoading, error } = useClientSignatureRequests({ clientId: client.id })
+  const { items, total, isLoading, error } = useClientSignatureRequests({
+    clientId: client.id,
+    page,
+    pageSize: PAGE_SIZE,
+  })
   const { create, isCreating, cancel, isCanceling } = useSignatureRequestActions(client.id)
   const { signingUrls, rememberSigningUrl } = useSignatureRequestSigningUrls()
+
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
 
   return (
     <>
@@ -83,6 +93,16 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
           )}
         </div>
       </Card>
+
+      {totalPages > 1 && (
+        <PaginationCard
+          page={page}
+          totalPages={totalPages}
+          total={total}
+          label="בקשות חתימה"
+          onPageChange={setPage}
+        />
+      )}
 
       <SignatureRequestAuditDrawer requestId={auditRequestId} onClose={() => setAuditRequestId(null)} />
 

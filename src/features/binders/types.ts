@@ -57,6 +57,9 @@ export interface BinderHistoryEntry {
 export interface BinderHistoryResponse {
   binder_id: number
   history: BinderHistoryEntry[]
+  total: number
+  page: number
+  page_size: number
 }
 
 export interface ListBindersParams {
@@ -142,6 +145,9 @@ export interface BinderIntakeResponse {
 export interface BinderIntakeListResponse {
   binder_id: number
   intakes: BinderIntakeResponse[]
+  total: number
+  page: number
+  page_size: number
 }
 
 export interface BinderReceiveResult {
