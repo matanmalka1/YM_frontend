@@ -92,6 +92,9 @@ export interface StalePendingItem {
 export interface VatComplianceReportResponse {
   year: number;
   total_clients: number;
+  total: number;
+  page: number;
+  page_size: number;
   items: VatComplianceItem[];
   stale_pending: StalePendingItem[];
 }

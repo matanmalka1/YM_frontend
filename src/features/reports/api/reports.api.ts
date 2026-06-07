@@ -44,10 +44,14 @@ export const reportsApi = {
     return response.data;
   },
 
-  getVatComplianceReport: async (year: number): Promise<VatComplianceReportResponse> => {
+  getVatComplianceReport: async (
+    year: number,
+    page: number = 1,
+    pageSize: number = 50,
+  ): Promise<VatComplianceReportResponse> => {
     const response = await api.get<VatComplianceReportResponse>(
       REPORT_ENDPOINTS.reportsVatCompliance,
-      { params: toQueryParams({ year }) },
+      { params: toQueryParams({ year, page, page_size: pageSize }) },
     );
     return response.data;
   },

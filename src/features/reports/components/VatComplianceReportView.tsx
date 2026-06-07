@@ -4,6 +4,7 @@ import { PageHeader } from "../../../components/layout/PageHeader";
 import { PageStateGuard } from "../../../components/ui/layout/PageStateGuard";
 import { Badge } from "../../../components/ui/primitives/Badge";
 import { Select } from "../../../components/ui/inputs/Select";
+import { PaginationCard } from "@/components/ui/table/PaginationCard";
 import { getOperationalYearOptions } from "@/constants/periodOptions.constants";
 import { getVatTypeLabel } from "@/features/clients";
 
@@ -102,7 +103,7 @@ const StalePendingTable = ({ items }: { items: StalePendingItem[] }) => {
 };
 
 export const VatComplianceReportView: React.FC = () => {
-  const { year, setYear, data, isLoading, error } = useVatComplianceReport();
+  const { year, setYear, page, setPage, totalPages, data, isLoading, error } = useVatComplianceReport();
 
   const description = data ? `${data.total_clients} לקוחות` : "";
 
@@ -126,6 +127,9 @@ export const VatComplianceReportView: React.FC = () => {
       {data && (
         <div className="space-y-6">
           <ComplianceTable items={data.items} year={data.year} />
+          {totalPages > 1 && (
+            <PaginationCard page={page} totalPages={totalPages} total={data.total} onPageChange={setPage} />
+          )}
           <StalePendingTable items={data.stale_pending} />
         </div>
       )}

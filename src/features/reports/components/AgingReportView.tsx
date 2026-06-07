@@ -60,6 +60,11 @@ export const AgingReportView: React.FC<AgingReportViewProps> = ({ embedded = fal
             </div>
             {embedded && actions}
           </div>
+          {data.capped && (
+            <div className="rounded-lg border border-warning-200 bg-warning-50 px-4 py-3 text-sm text-warning-700">
+              הדוח מציג עד {data.cap_limit} חיובים בלבד. ייתכן שחיובים ישנים יותר אינם מוצגים.
+            </div>
+          )}
           <AgingReportHeader data={data} />
           <AgingReportTable items={data.items} />
         </>
