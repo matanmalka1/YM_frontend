@@ -1786,6 +1786,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/invoices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Attach Invoice */
+        post: operations["attach_invoice_api_v1_invoices_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/invoices/charge/{charge_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Charge Invoice */
+        get: operations["get_charge_invoice_api_v1_invoices_charge__charge_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/documents/upload": {
         parameters: {
             query?: never;
@@ -5523,6 +5557,51 @@ export interface components {
          * @enum {string}
          */
         IncomeSourceType: "business" | "salary" | "interest" | "dividends" | "capital_gains" | "rental" | "foreign" | "pension" | "other";
+        /**
+         * InvoiceAttachRequest
+         * @description צירוף חשבונית חיצונית לחיוב קיים.
+         */
+        InvoiceAttachRequest: {
+            /** Charge Id */
+            charge_id: number;
+            /** Provider */
+            provider: string;
+            /** External Invoice Id */
+            external_invoice_id: string;
+            /**
+             * Issued At
+             * Format: date-time
+             * @example 2026-01-02T03:04:05Z
+             */
+            issued_at: string;
+            /** Document Url */
+            document_url?: string | null;
+        };
+        /** InvoiceResponse */
+        InvoiceResponse: {
+            /** Id */
+            id: number;
+            /** Charge Id */
+            charge_id: number;
+            /** Provider */
+            provider: string;
+            /** External Invoice Id */
+            external_invoice_id: string;
+            /** Document Url */
+            document_url?: string | null;
+            /**
+             * Issued At
+             * Format: date-time
+             * @example 2026-01-02T03:04:05Z
+             */
+            issued_at: string;
+            /**
+             * Created At
+             * Format: date-time
+             * @example 2026-01-02T03:04:05Z
+             */
+            created_at: string;
+        };
         /**
          * InvoiceType
          * @enum {string}
@@ -11789,6 +11868,70 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BulkChargeActionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    attach_invoice_api_v1_invoices_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InvoiceAttachRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvoiceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_charge_invoice_api_v1_invoices_charge__charge_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                charge_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvoiceResponse"];
                 };
             };
             /** @description Validation Error */
