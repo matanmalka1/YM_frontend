@@ -587,7 +587,7 @@ export interface paths {
         };
         /**
          * Get Annual Report
-         * @description Get a single report with its schedule entries and status history.
+         * @description Get a single report with its schedule entries and status audit entries.
          */
         get: operations["get_annual_report_api_v1_annual_reports__report_id__get"];
         put?: never;
@@ -746,15 +746,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/annual-reports/{report_id}/history": {
+    "/api/v1/annual-reports/{report_id}/audit": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Get Status History */
-        get: operations["get_status_history_api_v1_annual_reports__report_id__history_get"];
+        /** Get Report Audit */
+        get: operations["get_report_audit_api_v1_annual_reports__report_id__audit_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1611,15 +1611,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/binders/{binder_id}/history": {
+    "/api/v1/binders/{binder_id}/audit": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Get Binder History */
-        get: operations["get_binder_history_api_v1_binders__binder_id__history_get"];
+        /** Get Binder Audit */
+        get: operations["get_binder_audit_api_v1_binders__binder_id__audit_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3574,6 +3574,25 @@ export interface components {
             /** On Time Count */
             on_time_count: number;
         };
+        /** AnnualReportAuditEntry */
+        AnnualReportAuditEntry: {
+            /** Id */
+            id: number;
+            /** Annual Report Id */
+            annual_report_id: number;
+            from_status?: components["schemas"]["AnnualReportStatus"] | null;
+            to_status: components["schemas"]["AnnualReportStatus"];
+            /** Changed By */
+            changed_by: number;
+            /** Note */
+            note?: string | null;
+            /**
+             * Occurred At
+             * Format: date-time
+             * @example 2026-01-02T03:04:05Z
+             */
+            occurred_at: string;
+        };
         /** AnnualReportCard */
         AnnualReportCard: {
             /** Status */
@@ -3710,10 +3729,10 @@ export interface components {
              */
             schedules: components["schemas"]["ScheduleEntryResponse"][];
             /**
-             * Status History
+             * Status Audit
              * @default []
              */
-            status_history: components["schemas"]["StatusHistoryResponse"][];
+            status_audit: components["schemas"]["AnnualReportAuditEntry"][];
             /** Pension Contribution */
             pension_contribution?: string | null;
             /** Donation Amount */
@@ -4028,6 +4047,40 @@ export interface components {
             /** Notes */
             notes?: string | null;
         };
+        /** BinderAuditEntry */
+        BinderAuditEntry: {
+            /** Field Name */
+            field_name: string;
+            /** Old Value */
+            old_value: string;
+            /** New Value */
+            new_value: string;
+            /** Changed By User Id */
+            changed_by_user_id: number;
+            /** Changed By Name */
+            changed_by_name?: string | null;
+            /**
+             * Changed At
+             * Format: date-time
+             * @example 2026-01-02T03:04:05Z
+             */
+            changed_at: string;
+            /** Notes */
+            notes?: string | null;
+        };
+        /** BinderAuditResponse */
+        BinderAuditResponse: {
+            /** Binder Id */
+            binder_id: number;
+            /** Audit */
+            audit: components["schemas"]["BinderAuditEntry"][];
+            /** Total */
+            total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+        };
         /**
          * BinderCapacityStatus
          * @enum {string}
@@ -4120,40 +4173,6 @@ export interface components {
             handover_recipient_name?: string | null;
             /** Handed Over At */
             handed_over_at?: string | null;
-        };
-        /** BinderHistoryEntry */
-        BinderHistoryEntry: {
-            /** Field Name */
-            field_name: string;
-            /** Old Value */
-            old_value: string;
-            /** New Value */
-            new_value: string;
-            /** Changed By User Id */
-            changed_by_user_id: number;
-            /** Changed By Name */
-            changed_by_name?: string | null;
-            /**
-             * Changed At
-             * Format: date-time
-             * @example 2026-01-02T03:04:05Z
-             */
-            changed_at: string;
-            /** Notes */
-            notes?: string | null;
-        };
-        /** BinderHistoryResponse */
-        BinderHistoryResponse: {
-            /** Binder Id */
-            binder_id: number;
-            /** History */
-            history: components["schemas"]["BinderHistoryEntry"][];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
         };
         /** BinderIntakeListResponse */
         BinderIntakeListResponse: {
@@ -5956,6 +5975,17 @@ export interface components {
             /** Total */
             total: number;
         };
+        /** PaginatedResponse[AnnualReportAuditEntry] */
+        PaginatedResponse_AnnualReportAuditEntry_: {
+            /** Items */
+            items: components["schemas"]["AnnualReportAuditEntry"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
+        };
         /** PaginatedResponse[AnnualReportResponse] */
         PaginatedResponse_AnnualReportResponse_: {
             /** Items */
@@ -6026,17 +6056,6 @@ export interface components {
         PaginatedResponse_SignatureRequestResponse_: {
             /** Items */
             items: components["schemas"]["SignatureRequestResponse"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[StatusHistoryResponse] */
-        PaginatedResponse_StatusHistoryResponse_: {
-            /** Items */
-            items: components["schemas"]["StatusHistoryResponse"][];
             /** Page */
             page: number;
             /** Page Size */
@@ -6735,25 +6754,6 @@ export interface components {
         /** StageTransitionRequest */
         StageTransitionRequest: {
             to_stage: components["schemas"]["ReportStage"];
-        };
-        /** StatusHistoryResponse */
-        StatusHistoryResponse: {
-            /** Id */
-            id: number;
-            /** Annual Report Id */
-            annual_report_id: number;
-            from_status?: components["schemas"]["AnnualReportStatus"] | null;
-            to_status: components["schemas"]["AnnualReportStatus"];
-            /** Changed By */
-            changed_by: number;
-            /** Note */
-            note?: string | null;
-            /**
-             * Occurred At
-             * Format: date-time
-             * @example 2026-01-02T03:04:05Z
-             */
-            occurred_at: string;
         };
         /** StatusTransitionRequest */
         StatusTransitionRequest: {
@@ -8360,9 +8360,7 @@ export interface operations {
             query?: never;
             header?: never;
             path?: never;
-            cookie?: {
-                refresh_token?: string | null;
-            };
+            cookie?: never;
         };
         requestBody?: never;
         responses: {
@@ -8372,15 +8370,6 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
             };
         };
     };
@@ -8575,6 +8564,15 @@ export interface operations {
                     "application/json": components["schemas"]["UserManagementResponse"];
                 };
             };
+            /** @description המשתמש המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -8610,6 +8608,15 @@ export interface operations {
                     "application/json": components["schemas"]["UserManagementResponse"];
                 };
             };
+            /** @description המשתמש המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -8641,6 +8648,15 @@ export interface operations {
                     "application/json": components["schemas"]["UserManagementResponse"];
                 };
             };
+            /** @description המשתמש המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -8670,6 +8686,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserManagementResponse"];
+                };
+            };
+            /** @description המשתמש המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -8707,6 +8732,15 @@ export interface operations {
                     "application/json": components["schemas"]["UserManagementResponse"];
                 };
             };
+            /** @description המשתמש המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -8740,6 +8774,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PaginatedResponse_AnnexDataLineResponse_"];
+                };
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -8778,6 +8821,15 @@ export interface operations {
                     "application/json": components["schemas"]["AnnexDataLineResponse"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -8808,6 +8860,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -8846,6 +8907,15 @@ export interface operations {
                     "application/json": components["schemas"]["AnnexDataLineResponse"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -8875,6 +8945,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReportDetailResponse"];
+                };
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -8910,6 +8989,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReportDetailResponse"];
+                };
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -8976,6 +9064,15 @@ export interface operations {
                     "application/json": components["schemas"]["FinancialSummaryResponse"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -9005,6 +9102,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TaxCalculationResponse"];
+                };
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -9038,6 +9144,15 @@ export interface operations {
                     "application/json": components["schemas"]["AdvancesSummary"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -9067,6 +9182,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReadinessCheckResponse"];
+                };
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -9104,6 +9228,15 @@ export interface operations {
                     "application/json": components["schemas"]["IncomeLineResponse"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -9133,6 +9266,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -9170,6 +9312,15 @@ export interface operations {
                     "application/json": components["schemas"]["IncomeLineResponse"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -9205,6 +9356,15 @@ export interface operations {
                     "application/json": components["schemas"]["ExpenseLineResponse"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -9234,6 +9394,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -9271,6 +9440,15 @@ export interface operations {
                     "application/json": components["schemas"]["ExpenseLineResponse"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -9303,6 +9481,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VatAutoPopulateResponse"];
+                };
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -9439,6 +9626,15 @@ export interface operations {
                     "application/json": components["schemas"]["AnnualReportDetailResponse"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -9467,6 +9663,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -9503,6 +9708,15 @@ export interface operations {
                     "application/json": components["schemas"]["AnnualReportDetailResponse"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -9535,6 +9749,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PaginatedResponse_ScheduleEntryResponse_"];
+                };
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -9572,6 +9795,15 @@ export interface operations {
                     "application/json": components["schemas"]["ScheduleEntryResponse"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -9605,6 +9837,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ScheduleEntryResponse"];
+                };
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -9642,6 +9883,15 @@ export interface operations {
                     "application/json": components["schemas"]["AnnualReportDetailResponse"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -9675,6 +9925,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AnnualReportResponse"];
+                };
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -9712,6 +9971,15 @@ export interface operations {
                     "application/json": components["schemas"]["AnnualReportDetailResponse"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -9747,6 +10015,15 @@ export interface operations {
                     "application/json": components["schemas"]["AnnualReportResponse"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -9758,7 +10035,7 @@ export interface operations {
             };
         };
     };
-    get_status_history_api_v1_annual_reports__report_id__history_get: {
+    get_report_audit_api_v1_annual_reports__report_id__audit_get: {
         parameters: {
             query?: {
                 page?: number;
@@ -9778,7 +10055,16 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_StatusHistoryResponse_"];
+                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportAuditEntry_"];
+                };
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -9813,6 +10099,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PaginatedResponse_AnnualReportResponse_"];
+                };
+            };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -9987,6 +10282,15 @@ export interface operations {
                     "application/json": unknown;
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -10022,6 +10326,15 @@ export interface operations {
                     "application/json": components["schemas"]["TaxCalculationSaveResponse"];
                 };
             };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -10054,6 +10367,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -10129,6 +10451,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TaxCalendarGroupItemsResponse"];
+                };
+            };
+            /** @description הישות המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -10283,6 +10614,15 @@ export interface operations {
                     "application/json": components["schemas"]["PaginatedResponse_AuthorityContactResponse_"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -10318,6 +10658,15 @@ export interface operations {
                     "application/json": components["schemas"]["AuthorityContactResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -10350,6 +10699,15 @@ export interface operations {
                     "application/json": components["schemas"]["AuthorityContactResponse"];
                 };
             };
+            /** @description איש הקשר המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -10379,6 +10737,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description איש הקשר המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -10414,6 +10781,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AuthorityContactResponse"];
+                };
+            };
+            /** @description איש הקשר המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -10715,6 +11091,15 @@ export interface operations {
                     "application/json": components["schemas"]["ClientRecordResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -10743,6 +11128,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -10777,6 +11171,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ClientRecordResponse"];
+                };
+            };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -10841,6 +11244,15 @@ export interface operations {
                     "application/json": components["schemas"]["ClientRecordResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -10873,6 +11285,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ClientBusinessesResponse"];
+                };
+            };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -10910,6 +11331,15 @@ export interface operations {
                     "application/json": components["schemas"]["BusinessResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -10942,6 +11372,15 @@ export interface operations {
                     "application/json": components["schemas"]["BusinessResponse"];
                 };
             };
+            /** @description העסק המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -10971,6 +11410,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description העסק המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -11008,6 +11456,15 @@ export interface operations {
                     "application/json": components["schemas"]["BusinessResponse"];
                 };
             };
+            /** @description העסק המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -11038,6 +11495,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BusinessResponse"];
+                };
+            };
+            /** @description העסק המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -11071,6 +11537,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ClientStatusCardResponse"];
+                };
+            };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -11235,6 +11710,15 @@ export interface operations {
                     "application/json": components["schemas"]["BinderResponse"];
                 };
             };
+            /** @description הקלסר המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -11264,6 +11748,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BinderResponse"];
+                };
+            };
+            /** @description הקלסר המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -11297,6 +11790,15 @@ export interface operations {
                     "application/json": components["schemas"]["BinderResponse"];
                 };
             };
+            /** @description הקלסר המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -11328,6 +11830,15 @@ export interface operations {
                     "application/json": components["schemas"]["BinderReadyForHandoverResponse"];
                 };
             };
+            /** @description הקלסר המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -11357,6 +11868,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BinderResponse"];
+                };
+            };
+            /** @description הקלסר המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -11392,6 +11912,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BinderResponse"];
+                };
+            };
+            /** @description הקלסר המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -11466,6 +11995,15 @@ export interface operations {
                     "application/json": components["schemas"]["BinderResponse"];
                 };
             };
+            /** @description הקלסר המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -11495,6 +12033,15 @@ export interface operations {
                 };
                 content?: never;
             };
+            /** @description הקלסר המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -11506,7 +12053,7 @@ export interface operations {
             };
         };
     };
-    get_binder_history_api_v1_binders__binder_id__history_get: {
+    get_binder_audit_api_v1_binders__binder_id__audit_get: {
         parameters: {
             query?: {
                 page?: number;
@@ -11526,7 +12073,16 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BinderHistoryResponse"];
+                    "application/json": components["schemas"]["BinderAuditResponse"];
+                };
+            };
+            /** @description הקלסר המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -11561,6 +12117,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BinderIntakeListResponse"];
+                };
+            };
+            /** @description הקלסר המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -11599,6 +12164,15 @@ export interface operations {
                     "application/json": components["schemas"]["BinderIntakeResponse"];
                 };
             };
+            /** @description הקלסר המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -11631,6 +12205,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PaginatedResponse_BinderDetailResponse_"];
+                };
+            };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -11736,6 +12319,15 @@ export interface operations {
                     "application/json": components["schemas"]["ChargeResponse"];
                 };
             };
+            /** @description החיוב המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -11765,6 +12357,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ChargeResponse"];
+                };
+            };
+            /** @description החיוב המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -11802,6 +12403,15 @@ export interface operations {
                     "application/json": components["schemas"]["ChargeResponse"];
                 };
             };
+            /** @description החיוב המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -11833,6 +12443,15 @@ export interface operations {
                     "application/json": components["schemas"]["ChargeResponse"];
                 };
             };
+            /** @description החיוב המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -11861,6 +12480,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description החיוב המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -11961,6 +12589,15 @@ export interface operations {
                     "application/json": components["schemas"]["InvoiceResponse"];
                 };
             };
+            /** @description החיוב המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -12031,6 +12668,15 @@ export interface operations {
                     "application/json": components["schemas"]["PermanentDocumentListResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -12060,6 +12706,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OperationalSignalsResponse"];
+                };
+            };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -12094,6 +12749,15 @@ export interface operations {
                     "application/json": components["schemas"]["DocumentDownloadUrlResponse"];
                 };
             };
+            /** @description המסמך המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -12123,6 +12787,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description המסמך המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -12160,6 +12833,15 @@ export interface operations {
                     "application/json": components["schemas"]["PermanentDocumentResponse"];
                 };
             };
+            /** @description המסמך המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -12194,6 +12876,15 @@ export interface operations {
                     "application/json": components["schemas"]["DocumentVersionsResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -12223,6 +12914,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DocumentVersionsResponse"];
+                };
+            };
+            /** @description הדוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -12423,6 +13123,15 @@ export interface operations {
                     "application/json": components["schemas"]["ClientTimelineResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -12561,6 +13270,15 @@ export interface operations {
                     "application/json": components["schemas"]["ReminderResponse"];
                 };
             };
+            /** @description התזכורת המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -12590,6 +13308,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReminderResponse"];
+                };
+            };
+            /** @description התזכורת המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -12772,6 +13499,15 @@ export interface operations {
                     "application/json": components["schemas"]["CorrespondenceListResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -12807,6 +13543,15 @@ export interface operations {
                     "application/json": components["schemas"]["CorrespondenceResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -12839,6 +13584,15 @@ export interface operations {
                     "application/json": components["schemas"]["CorrespondenceResponse"];
                 };
             };
+            /** @description רשומת ההתכתבות המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -12868,6 +13622,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description רשומת ההתכתבות המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -12903,6 +13666,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CorrespondenceResponse"];
+                };
+            };
+            /** @description רשומת ההתכתבות המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -12941,6 +13713,15 @@ export interface operations {
                     "application/json": components["schemas"]["PaginatedResponse_AdvancePaymentRow_"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -12974,6 +13755,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdvancePaymentRow"];
+                };
+            };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -13010,6 +13800,15 @@ export interface operations {
                     "application/json": components["schemas"]["PrefillTurnoverResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -13043,6 +13842,15 @@ export interface operations {
                     "application/json": components["schemas"]["AnnualKPIResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -13072,6 +13880,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description תשלום המקדמה המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -13107,6 +13924,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdvancePaymentRow"];
+                };
+            };
+            /** @description תשלום המקדמה המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -13213,6 +14039,15 @@ export interface operations {
                     "application/json": components["schemas"]["GenerateScheduleResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -13309,6 +14144,15 @@ export interface operations {
                     "application/json": components["schemas"]["SignatureRequestWithAuditResponse"];
                 };
             };
+            /** @description בקשת החתימה המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -13345,6 +14189,15 @@ export interface operations {
                     "application/json": components["schemas"]["SignatureRequestResponse"];
                 };
             };
+            /** @description בקשת החתימה המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -13378,6 +14231,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PaginatedResponse_SignatureRequestResponse_"];
+                };
+            };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -13577,6 +14439,15 @@ export interface operations {
                     "application/json": components["schemas"]["VatWorkItemResponse"];
                 };
             };
+            /** @description פריט עבודה למע"מ לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -13608,6 +14479,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VatInvoiceListResponse"];
+                };
+            };
+            /** @description פריט עבודה למע"מ לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -13645,6 +14525,15 @@ export interface operations {
                     "application/json": components["schemas"]["VatInvoiceResponse"];
                 };
             };
+            /** @description פריט עבודה למע"מ לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -13674,6 +14563,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description החשבונית המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -13711,6 +14609,15 @@ export interface operations {
                     "application/json": components["schemas"]["VatInvoiceResponse"];
                 };
             };
+            /** @description החשבונית המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -13740,6 +14647,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VatWorkItemResponse"];
+                };
+            };
+            /** @description פריט עבודה למע"מ לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -13777,6 +14693,15 @@ export interface operations {
                     "application/json": components["schemas"]["VatWorkItemResponse"];
                 };
             };
+            /** @description פריט עבודה למע"מ לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -13810,6 +14735,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VatWorkItemResponse"];
+                };
+            };
+            /** @description פריט עבודה למע"מ לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -13947,6 +14881,15 @@ export interface operations {
                     "application/json": components["schemas"]["VatPeriodOptionsResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -14011,6 +14954,15 @@ export interface operations {
                     "application/json": components["schemas"]["VatWorkItemResponse"];
                 };
             };
+            /** @description פריט עבודה למע"מ לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -14043,6 +14995,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VatWorkItemListResponse"];
+                };
+            };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -14122,6 +15083,15 @@ export interface operations {
                     "application/json": components["schemas"]["VatClientSummaryResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -14156,6 +15126,15 @@ export interface operations {
                     "application/json": unknown;
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -14188,6 +15167,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PaginatedResponse_EntityNoteResponse_"];
+                };
+            };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -14225,6 +15213,15 @@ export interface operations {
                     "application/json": components["schemas"]["EntityNoteResponse"];
                 };
             };
+            /** @description הלקוח המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -14254,6 +15251,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description ההערה המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -14291,6 +15297,15 @@ export interface operations {
                     "application/json": components["schemas"]["EntityNoteResponse"];
                 };
             };
+            /** @description ההערה המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -14324,6 +15339,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PaginatedResponse_EntityNoteResponse_"];
+                };
+            };
+            /** @description העסק המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -14362,6 +15386,15 @@ export interface operations {
                     "application/json": components["schemas"]["EntityNoteResponse"];
                 };
             };
+            /** @description העסק המבוקש לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -14392,6 +15425,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description ההערה המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -14428,6 +15470,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EntityNoteResponse"];
+                };
+            };
+            /** @description ההערה המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -14578,6 +15629,15 @@ export interface operations {
                     "application/json": components["schemas"]["TaskResponse"];
                 };
             };
+            /** @description המשימה המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -14606,6 +15666,15 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description המשימה המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -14642,6 +15711,15 @@ export interface operations {
                     "application/json": components["schemas"]["TaskResponse"];
                 };
             };
+            /** @description המשימה המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -14673,6 +15751,15 @@ export interface operations {
                     "application/json": components["schemas"]["TaskResponse"];
                 };
             };
+            /** @description המשימה המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -14702,6 +15789,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TaskResponse"];
+                };
+            };
+            /** @description המשימה המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */

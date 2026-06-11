@@ -107,7 +107,7 @@ export interface AnnualReportSummary {
 
 export interface AnnualReportFull extends AnnualReportSummary {
   schedules?: ScheduleEntry[]
-  status_history?: StatusHistoryEntry[]
+  status_audit?: AnnualReportAuditEntry[]
   pension_contribution?: string | null
   donation_amount?: string | null
   other_credits?: string | null
@@ -159,7 +159,7 @@ export interface ScheduleEntry {
   completed_by: number | null
 }
 
-export interface StatusHistoryEntry {
+export interface AnnualReportAuditEntry {
   id: number
   annual_report_id: number
   from_status: AnnualReportStatus | null
@@ -169,7 +169,7 @@ export interface StatusHistoryEntry {
   occurred_at: string
 }
 
-export type StatusHistoryPagedResponse = PaginatedResponse<StatusHistoryEntry>
+export type AnnualReportAuditPagedResponse = PaginatedResponse<AnnualReportAuditEntry>
 
 export interface SeasonSummary {
   tax_year: number

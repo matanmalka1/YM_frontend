@@ -44,7 +44,7 @@ export interface BinderListCounters {
   capacity_full: number
 }
 
-export interface BinderHistoryEntry {
+export interface BinderAuditEntry {
   field_name: 'location_status' | 'capacity_status'
   old_value: string
   new_value: string
@@ -54,9 +54,9 @@ export interface BinderHistoryEntry {
   notes?: string | null
 }
 
-export interface BinderHistoryResponse {
+export interface BinderAuditResponse {
   binder_id: number
-  history: BinderHistoryEntry[]
+  audit: BinderAuditEntry[]
   total: number
   page: number
   page_size: number

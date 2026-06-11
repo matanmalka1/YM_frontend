@@ -3,16 +3,16 @@ import { format, parseISO } from 'date-fns'
 import { he } from 'date-fns/locale'
 import { Card } from '../../../../components/ui/primitives/Card'
 import { Badge } from '../../../../components/ui/primitives/Badge'
-import type { StatusHistoryEntry } from '../../api'
+import type { AnnualReportAuditEntry } from '../../api'
 import { getStatusLabel, getStatusVariant } from '../../api'
 import { staggerDelay } from '../../../../utils/animation'
 
-interface StatusHistoryTimelineProps {
-  history: StatusHistoryEntry[]
+interface StatusAuditTimelineProps {
+  audit: AnnualReportAuditEntry[]
 }
 
-export const StatusHistoryTimeline: React.FC<StatusHistoryTimelineProps> = ({ history }) => {
-  if (history.length === 0) {
+export const StatusAuditTimeline: React.FC<StatusAuditTimelineProps> = ({ audit }) => {
+  if (audit.length === 0) {
     return (
       <Card title="היסטוריית סטטוס">
         <p className="text-sm text-gray-500">אין רשומות היסטוריה</p>
@@ -20,10 +20,10 @@ export const StatusHistoryTimeline: React.FC<StatusHistoryTimelineProps> = ({ hi
     )
   }
 
-  const reversed = [...history].reverse()
+  const reversed = [...audit].reverse()
 
   return (
-    <Card title="היסטוריית סטטוס" subtitle={`${history.length} שינויים`}>
+    <Card title="היסטוריית סטטוס" subtitle={`${audit.length} שינויים`}>
       <div className="relative">
         <div className="absolute right-4 top-2 bottom-2 w-0.5 bg-gray-200" />
         <ul className="space-y-4">

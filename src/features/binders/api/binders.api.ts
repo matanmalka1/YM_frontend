@@ -2,7 +2,7 @@ import { api } from '@/api/client'
 import { BINDER_ENDPOINTS } from './endpoints'
 import { toQueryParams } from '@/api/queryParams'
 import type {
-  BinderHistoryResponse,
+  BinderAuditResponse,
   BinderIntakeListResponse,
   BinderListResponse,
   BinderReceiveResult,
@@ -103,8 +103,8 @@ export const bindersApi = {
     await api.delete(BINDER_ENDPOINTS.binderById(binderId))
   },
 
-  getHistory: async (binderId: number): Promise<BinderHistoryResponse> => {
-    const response = await api.get<BinderHistoryResponse>(BINDER_ENDPOINTS.binderHistory(binderId))
+  getAudit: async (binderId: number): Promise<BinderAuditResponse> => {
+    const response = await api.get<BinderAuditResponse>(BINDER_ENDPOINTS.binderAudit(binderId))
     return response.data
   },
 

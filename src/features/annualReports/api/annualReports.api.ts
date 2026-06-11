@@ -9,7 +9,7 @@ import type {
   CreateAnnualReportPayload,
   ReportDetailResponse,
   ScheduleEntry,
-  StatusHistoryPagedResponse,
+  AnnualReportAuditPagedResponse,
   AnnexDataPagedResponse,
   AnnexDataLine,
   AnnexDataAddPayload,
@@ -59,8 +59,8 @@ export const annualReportsApi = {
     return response.data
   },
 
-  getHistory: async (reportId: number): Promise<StatusHistoryPagedResponse> => {
-    const response = await api.get<StatusHistoryPagedResponse>(ANNUAL_REPORT_ENDPOINTS.history(reportId))
+  getAudit: async (reportId: number): Promise<AnnualReportAuditPagedResponse> => {
+    const response = await api.get<AnnualReportAuditPagedResponse>(ANNUAL_REPORT_ENDPOINTS.audit(reportId))
     return response.data
   },
 

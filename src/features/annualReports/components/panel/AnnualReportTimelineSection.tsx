@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { EntityAuditTrailSection } from '@/features/audit'
 import { FilingTimelineTab } from '../shared/FilingTimelineTab'
-import { StatusHistoryTimeline } from '../statusTransition/StatusHistoryTimeline'
+import { StatusAuditTimeline } from '../statusTransition/StatusAuditTimeline'
 import { annualReportsApi, annualReportsQK } from '../../api'
 import { ReportHistoryTable } from './ReportHistoryTable'
 import type { AnnualReportDetail } from '../../types'
@@ -11,9 +11,9 @@ interface AnnualReportTimelineSectionProps {
 }
 
 export const AnnualReportTimelineSection = ({ report }: AnnualReportTimelineSectionProps) => {
-  const { data: history } = useQuery({
-    queryKey: annualReportsQK.statusHistory(report.id),
-    queryFn: () => annualReportsApi.getHistory(report.id),
+  const { data: audit } = useQuery({
+    queryKey: annualReportsQK.audit(report.id),
+    queryFn: () => annualReportsApi.getAudit(report.id),
     enabled: !!report.id,
   })
 
@@ -28,7 +28,7 @@ export const AnnualReportTimelineSection = ({ report }: AnnualReportTimelineSect
 
       <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
         <h3 className="mb-4 text-sm font-semibold text-gray-700">היסטוריית סטטוסים</h3>
-        <StatusHistoryTimeline history={history?.items ?? []} />
+        <StatusAuditTimeline audit={audit?.items ?? []} />
       </div>
 
       <EntityAuditTrailSection

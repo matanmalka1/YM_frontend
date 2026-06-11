@@ -7,6 +7,6 @@ export const bindersQK = {
   forClient: (clientId: number) => ['binders', 'client', clientId] as const,
   forClientPage: (clientId: number, page: number, pageSize: number) =>
     ['binders', 'client', clientId, { page, page_size: pageSize }] as const,
-  history: (binderId: number) => ['binders', 'history', binderId] as const,
+  audit: (binderId: number) => ['binders', 'audit', binderId] as const,
   intakes: (binderId: number) => ['binders', 'intakes', binderId] as const,
 }

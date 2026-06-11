@@ -16,11 +16,11 @@ import {
 } from '../../constants'
 import { staggerDelay } from '@/utils/animation'
 
-interface BinderHistorySectionProps {
+interface BinderAuditSectionProps {
   binderId: number
 }
 
-const getHistoryBadge = (fieldName: string, value: string) => {
+const getAuditBadge = (fieldName: string, value: string) => {
   if (fieldName === 'capacity_status') {
     return {
       label: getBinderCapacityStatusLabel(value),
@@ -33,25 +33,25 @@ const getHistoryBadge = (fieldName: string, value: string) => {
   }
 }
 
-export const BinderHistorySection: React.FC<BinderHistorySectionProps> = ({ binderId }) => {
+export const BinderAuditSection: React.FC<BinderAuditSectionProps> = ({ binderId }) => {
   const { data, isLoading } = useQuery({
-    queryKey: bindersQK.history(binderId),
-    queryFn: () => bindersApi.getHistory(binderId),
+    queryKey: bindersQK.audit(binderId),
+    queryFn: () => bindersApi.getAudit(binderId),
   })
 
-  const history = data?.history ?? []
+  const audit = data?.audit ?? []
 
   if (isLoading) return null
 
   return (
-    <Card title="היסטוריית שינויים" subtitle={history.length ? `${history.length} שינויים` : undefined}>
-      {history.length === 0 ? (
+    <Card title="היסטוריית שינויים" subtitle={audit.length ? `${audit.length} שינויים` : undefined}>
+      {audit.length === 0 ? (
         <p className="text-sm text-gray-500">אין רשומות היסטוריה</p>
       ) : (
         <Timeline>
-          {[...history].reverse().map((entry, index) => {
-            const oldBadge = entry.old_value ? getHistoryBadge(entry.field_name, entry.old_value) : null
-            const newBadge = getHistoryBadge(entry.field_name, entry.new_value)
+          {[...audit].reverse().map((entry, index) => {
+            const oldBadge = entry.old_value ? getAuditBadge(entry.field_name, entry.old_value) : null
+            const newBadge = getAuditBadge(entry.field_name, entry.new_value)
             return (
               <TimelineEntry key={index} animationDelay={staggerDelay(index, 40)}>
                 <div className="mb-1 flex flex-wrap items-center gap-1.5 text-sm">

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/primitives/Button'
 import type { BinderResponse } from '../../types'
 import { BinderActionsPanel } from './BinderActionsPanel'
 import { BinderDetailsPanel } from './BinderDetailsPanel'
-import { BinderHistorySection } from '../sections/BinderHistorySection'
+import { BinderAuditSection } from '../sections/BinderAuditSection'
 import { BinderIntakesSection } from '../sections/BinderIntakesSection'
 
 interface BinderDetailDrawerProps {
@@ -74,7 +74,7 @@ export const BinderDetailDrawer: React.FC<BinderDetailDrawerProps> = ({
           clientId={binder.client_record_id}
           onNavigateToAnnualReport={onClose}
         />
-        <BinderHistorySection binderId={binder.id} />
+        <BinderAuditSection binderId={binder.id} />
       </>
     )}
   </DetailDrawer>

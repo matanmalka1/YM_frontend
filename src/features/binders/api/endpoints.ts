@@ -10,7 +10,7 @@ export const BINDER_ENDPOINTS = {
   binderMarkReadyForHandoverBulk: '/binders/mark-ready-for-handover-bulk',
   binderHandoverToClientBulk: '/binders/handover-to-client-bulk',
   binderReceive: '/binders/receive',
-  binderHistory: (binderId: number | string) => `/binders/${binderId}/history`,
+  binderAudit: (binderId: number | string) => `/binders/${binderId}/audit`,
   binderIntakes: (binderId: number | string) => `/binders/${binderId}/intakes`,
   bindersOpen: '/binders/open',
   clientBinders: (clientId: number | string) => `/clients/${clientId}/binders`,
