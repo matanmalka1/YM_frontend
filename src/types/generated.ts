@@ -6767,6 +6767,8 @@ export interface components {
              * @example 2026-01-02T03:04:05Z
              */
             created_at: string;
+            /** Updated At */
+            updated_at?: string | null;
             /** Sent At */
             sent_at?: string | null;
             /** Expires At */
@@ -6828,6 +6830,8 @@ export interface components {
              * @example 2026-01-02T03:04:05Z
              */
             created_at: string;
+            /** Updated At */
+            updated_at?: string | null;
             /** Sent At */
             sent_at?: string | null;
             /** Expires At */
@@ -6895,6 +6899,8 @@ export interface components {
              * @example 2026-01-02T03:04:05Z
              */
             created_at: string;
+            /** Updated At */
+            updated_at?: string | null;
             /** Sent At */
             sent_at?: string | null;
             /** Expires At */
