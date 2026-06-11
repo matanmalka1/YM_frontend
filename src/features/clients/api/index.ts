@@ -7,6 +7,7 @@ export type {
   DeletedClientSummary,
   DeletedClientInfo,
   ClientConflictInfo,
+  ClientRecordListItem,
   ClientRecordListResponse,
   ClientRecordListStats,
   ListClientsParams,

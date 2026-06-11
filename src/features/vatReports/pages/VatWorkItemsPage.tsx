@@ -11,7 +11,7 @@ import {
   VatWorkItemsGroupedCards,
 } from '@/features/vatReports'
 import { buildVatEmptyStateTitle, toOptionalVatPeriodTypeFilter } from '@/features/vatReports/filterUtils'
-import type { VatWorkItemResponse } from '@/features/vatReports'
+import type { VatWorkItemListItem } from '@/features/vatReports'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
@@ -67,7 +67,7 @@ export const VatWorkItems: React.FC = () => {
 
   const handleClearFilters = useCallback(() => setSearchParams(new URLSearchParams()), [setSearchParams])
 
-  const handleRowClick = useCallback((item: VatWorkItemResponse) => navigate(`/tax/vat/${item.id}`), [navigate])
+  const handleRowClick = useCallback((item: VatWorkItemListItem) => navigate(`/tax/vat/${item.id}`), [navigate])
 
   const columns = useMemo(
     () =>

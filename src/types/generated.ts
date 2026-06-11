@@ -2185,6 +2185,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/notifications/{notification_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Notification */
+        get: operations["get_notification_api_v1_notifications__notification_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/notifications/preview": {
         parameters: {
             query?: never;
@@ -4574,10 +4591,57 @@ export interface components {
              */
             months_covered: number;
         };
+        /**
+         * ChargeListItem
+         * @description Thin DTO for the charges list/table rows.
+         *
+         *     Contains only fields rendered by the charges table (``ChargeColumns``,
+         *     ``ChargeClientCell``). Detail-only fields (description, audit actors,
+         *     cancellation reason, annual_report_id) stay on ``ChargeResponse`` and are
+         *     served by ``GET /charges/{id}``.
+         */
+        ChargeListItem: {
+            /** Id */
+            id: number;
+            /** Client Record Id */
+            client_record_id: number;
+            /** Client Name */
+            client_name?: string | null;
+            /** Office Client Number */
+            office_client_number?: number | null;
+            /** Business Id */
+            business_id?: number | null;
+            /** Business Name */
+            business_name?: string | null;
+            charge_type: components["schemas"]["ChargeType"];
+            status: components["schemas"]["ChargeStatus"];
+            /**
+             * Amount
+             * Format: decimal
+             * @example 123.45
+             */
+            amount: string;
+            /** Period */
+            period?: string | null;
+            /** Months Covered */
+            months_covered: number;
+            /**
+             * Created At
+             * Format: date-time
+             * @example 2026-01-02T03:04:05Z
+             */
+            created_at: string;
+            /** Issued At */
+            issued_at?: string | null;
+            /** Paid At */
+            paid_at?: string | null;
+            /** Available Actions */
+            available_actions?: components["schemas"]["ActionDescriptor"][];
+        };
         /** ChargeListResponse */
         ChargeListResponse: {
             /** Items */
-            items: components["schemas"]["ChargeResponse"][];
+            items: components["schemas"]["ChargeListItem"][];
             /** Page */
             page: number;
             /** Page Size */
@@ -4826,10 +4890,40 @@ export interface components {
             /** Errors */
             errors: components["schemas"]["ClientImportError"][];
         };
+        /**
+         * ClientRecordListItem
+         * @description Thin DTO for the clients list/table rows.
+         *
+         *     Contains only fields rendered by the clients table (``ClientColumns``).
+         *     Detail/profile fields (tax reporting config, address, contact extras,
+         *     metadata, turnover) stay on ``ClientRecordResponse`` and are served by
+         *     ``GET /clients/{id}``.
+         */
+        ClientRecordListItem: {
+            /** Id */
+            id: number;
+            /** Full Name */
+            full_name: string;
+            /** Id Number */
+            id_number: string;
+            entity_type?: components["schemas"]["EntityType"] | null;
+            /** @default active */
+            status: components["schemas"]["ClientStatus"];
+            /** Office Client Number */
+            office_client_number?: number | null;
+            /** Phone */
+            phone?: string | null;
+            /** Email */
+            email?: string | null;
+            /** Created At */
+            created_at?: string | null;
+            /** Active Binder Number */
+            active_binder_number?: string | null;
+        };
         /** ClientRecordListResponse */
         ClientRecordListResponse: {
             /** Items */
-            items: components["schemas"]["ClientRecordResponse"][];
+            items: components["schemas"]["ClientRecordListItem"][];
             /** Page */
             page: number;
             /** Page Size */
@@ -5751,10 +5845,56 @@ export interface components {
          * @enum {string}
          */
         NotificationChannel: "whatsapp" | "email";
+        /**
+         * NotificationListItem
+         * @description Thin DTO for notification list/table rows.
+         *
+         *     Contains the fields rendered by notification list rows across the
+         *     notifications table, the bell drawer, and the per-client tab — including
+         *     the ``content_snapshot`` preview and ``business_name`` shown inline in the
+         *     compact lists. Routing references and delivery/debug fields
+         *     (entity_*, channel, sent_at/failed_at, error_message, retry_count,
+         *     triggered_by) stay on ``NotificationResponse`` and are served by
+         *     ``GET /notifications/{notification_id}``.
+         */
+        NotificationListItem: {
+            /** Id */
+            id: number;
+            /** Client Record Id */
+            client_record_id: number;
+            /** Client Name */
+            client_name?: string | null;
+            /** Business Name */
+            business_name?: string | null;
+            trigger: components["schemas"]["NotificationTrigger"];
+            /**
+             * Trigger Label
+             * @default
+             */
+            trigger_label: string;
+            /**
+             * Domain Label
+             * @default
+             */
+            domain_label: string;
+            status: components["schemas"]["NotificationStatus"];
+            /** Recipient */
+            recipient?: string | null;
+            /** Content Snapshot */
+            content_snapshot: string;
+            /** Subject Snapshot */
+            subject_snapshot?: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             * @example 2026-01-02T03:04:05Z
+             */
+            created_at: string;
+        };
         /** NotificationListResponse */
         NotificationListResponse: {
             /** Items */
-            items: components["schemas"]["NotificationResponse"][];
+            items: components["schemas"]["NotificationListItem"][];
             /** Total */
             total: number;
             /** Page */
@@ -7854,7 +7994,7 @@ export interface components {
         /** VatWorkItemGroupItemsResponse */
         VatWorkItemGroupItemsResponse: {
             /** Items */
-            items: components["schemas"]["VatWorkItemResponse"][];
+            items: components["schemas"]["VatWorkItemListItem"][];
             /** Total */
             total: number;
             /** Period */
@@ -7890,10 +8030,63 @@ export interface components {
             /** Groups */
             groups: components["schemas"]["VatWorkItemGroupSummary"][];
         };
+        /**
+         * VatWorkItemListItem
+         * @description Thin DTO for VAT work-item list/table rows.
+         *
+         *     Contains only the fields rendered by the VAT list, grouped table, and
+         *     grouped cards. Detail-only fields (raw totals, override justification,
+         *     filing references, statutory deadline, assignee, etc.) live on
+         *     ``VatWorkItemResponse`` and are served by ``GET /vat/work-items/{id}``.
+         */
+        VatWorkItemListItem: {
+            /** Id */
+            id: number;
+            /** Client Record Id */
+            client_record_id: number;
+            /** Office Client Number */
+            office_client_number?: number | null;
+            /** Client Name */
+            client_name?: string | null;
+            /** Client Id Number */
+            client_id_number?: string | null;
+            /** Period */
+            period: string;
+            period_type: components["schemas"]["VatType"];
+            status: components["schemas"]["VatWorkItemStatus"];
+            /**
+             * Net Vat
+             * Format: decimal
+             * @example 123.45
+             */
+            net_vat: string;
+            /** Final Vat Amount */
+            final_vat_amount?: string | null;
+            /** Is Overridden */
+            is_overridden: boolean;
+            /** Filed At */
+            filed_at?: string | null;
+            /**
+             * Updated At
+             * Format: date-time
+             * @example 2026-01-02T03:04:05Z
+             */
+            updated_at: string;
+            /** Submission Deadline */
+            submission_deadline?: string | null;
+            /** Extended Deadline */
+            extended_deadline?: string | null;
+            /** Days Until Deadline */
+            days_until_deadline?: number | null;
+            /** Is Overdue */
+            is_overdue?: boolean | null;
+            /** Available Actions */
+            available_actions?: components["schemas"]["ActionDescriptor"][];
+        };
         /** VatWorkItemListResponse */
         VatWorkItemListResponse: {
             /** Items */
-            items: components["schemas"]["VatWorkItemResponse"][];
+            items: components["schemas"]["VatWorkItemListItem"][];
             /** Total */
             total: number;
         };
@@ -10980,7 +11173,6 @@ export interface operations {
                 status?: components["schemas"]["ClientStatus"] | null;
                 entity_type?: components["schemas"]["EntityType"] | null;
                 accountant_id?: number | null;
-                tax_year?: number | null;
                 sort_by?: string;
                 sort_order?: string;
                 page?: number;
@@ -13472,6 +13664,46 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["NotificationSummaryResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_notification_api_v1_notifications__notification_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                notification_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotificationResponse"];
+                };
+            };
+            /** @description ההודעה המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */

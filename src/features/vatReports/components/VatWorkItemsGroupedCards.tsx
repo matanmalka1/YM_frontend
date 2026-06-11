@@ -9,15 +9,15 @@ import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/tabl
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { useVatGroupItems } from '../hooks/useVatGroupItems'
-import type { VatWorkItemResponse, VatWorkItemGroupSummary, VatWorkItemStatus } from '../api'
+import type { VatWorkItemListItem, VatWorkItemGroupSummary, VatWorkItemStatus } from '../api'
 import { formatVatPeriodTitle } from '../view.helpers'
 
 interface VatWorkItemsGroupedCardsProps {
   groups: VatWorkItemGroupSummary[]
-  columns: Column<VatWorkItemResponse>[]
+  columns: Column<VatWorkItemListItem>[]
   isLoading?: boolean
   error?: string | null
-  onRowClick: (item: VatWorkItemResponse) => void
+  onRowClick: (item: VatWorkItemListItem) => void
   emptyState?: { title?: string; message?: string; action?: { label: string; onClick: () => void } }
   filters?: { status?: VatWorkItemStatus; client_name?: string }
 }
@@ -42,8 +42,8 @@ const GroupContent = memo(
     filters,
   }: {
     group: VatWorkItemGroupSummary
-    columns: Column<VatWorkItemResponse>[]
-    onRowClick: (item: VatWorkItemResponse) => void
+    columns: Column<VatWorkItemListItem>[]
+    onRowClick: (item: VatWorkItemListItem) => void
     filters?: { status?: VatWorkItemStatus; client_name?: string }
   }) => {
     const [page, setPage] = useState(1)

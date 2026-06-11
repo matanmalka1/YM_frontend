@@ -5,6 +5,7 @@ import type {
   VatInvoiceResponse,
   VatWorkItemStatus,
   VatWorkItemResponse,
+  VatWorkItemListItem,
 } from './api'
 import type { VatPeriodTypeFilter } from './constants'
 import type { ExpenseCategoryRow } from './vatBreakdown.utils'
@@ -118,7 +119,7 @@ export interface VatInvoiceTableProps {
 }
 
 export interface VatWorkItemRowActionsProps {
-  item: VatWorkItemResponse
+  item: VatWorkItemListItem
   isLoading: boolean
   isDisabled: boolean
   runAction: (itemId: number, action: VatWorkItemAction) => Promise<void>

@@ -2,12 +2,12 @@ import type { Column } from '@/components/ui/table/DataTable'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { getChargeRowClassName, getChargesEmptyState } from '../helpers'
-import type { BulkChargeActionPayload, ChargeResponse } from '../api'
+import type { BulkChargeActionPayload, ChargeListItem } from '../api'
 import { ChargeBulkToolbar } from './ChargeBulkToolbar'
 
 interface ChargesTableBlockProps {
-  charges: ChargeResponse[]
-  columns: Column<ChargeResponse>[]
+  charges: ChargeListItem[]
+  columns: Column<ChargeListItem>[]
   error: string | null
   isAdvisor: boolean
   loading: boolean

@@ -10,18 +10,18 @@ import type { Column } from '@/components/ui/table'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { cn } from '@/utils/utils'
 import { getVatWorkItemStatusLabel } from '../constants'
-import type { VatWorkItemResponse } from '../api'
+import type { VatWorkItemListItem } from '../api'
 import { formatVatPeriodTitle } from '../view.helpers'
 
 interface VatWorkItemsGroupedTableProps {
-  columns: Column<VatWorkItemResponse>[]
-  data: VatWorkItemResponse[]
+  columns: Column<VatWorkItemListItem>[]
+  data: VatWorkItemListItem[]
   emptyMessage: string
   error?: string | null
   isLoading?: boolean
   label: string
   onPageChange: (page: number) => void
-  onRowClick: (item: VatWorkItemResponse) => void
+  onRowClick: (item: VatWorkItemListItem) => void
   page: number
   pageSize: number
   total: number
@@ -34,11 +34,11 @@ interface VatWorkItemsGroupedTableProps {
 
 interface VatWorkItemGroup {
   period: string
-  periodType: VatWorkItemResponse['period_type']
-  items: VatWorkItemResponse[]
+  periodType: VatWorkItemListItem['period_type']
+  items: VatWorkItemListItem[]
 }
 
-const groupByPeriod = (items: VatWorkItemResponse[]): VatWorkItemGroup[] => {
+const groupByPeriod = (items: VatWorkItemListItem[]): VatWorkItemGroup[] => {
   const groups = new Map<string, VatWorkItemGroup>()
   items.forEach((item) => {
     const existing = groups.get(item.period)
@@ -55,7 +55,7 @@ const groupByPeriod = (items: VatWorkItemResponse[]): VatWorkItemGroup[] => {
   return [...groups.values()].sort((a, b) => b.period.localeCompare(a.period))
 }
 
-const getStatusSummary = (items: VatWorkItemResponse[]) => {
+const getStatusSummary = (items: VatWorkItemListItem[]) => {
   const counts = new Map<string, number>()
   items.forEach((item) => counts.set(item.status, (counts.get(item.status) ?? 0) + 1))
   return [...counts.entries()]
@@ -88,7 +88,7 @@ export const VatWorkItemsGroupedTable: React.FC<VatWorkItemsGroupedTableProps> =
     })
   }
 
-  const handleRowKeyDown = (event: KeyboardEvent<HTMLTableRowElement>, item: VatWorkItemResponse) => {
+  const handleRowKeyDown = (event: KeyboardEvent<HTMLTableRowElement>, item: VatWorkItemListItem) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
       onRowClick(item)

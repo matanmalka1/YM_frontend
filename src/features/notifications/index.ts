@@ -4,7 +4,7 @@ export { NotificationsTab } from './components/NotificationsTab'
 export { NotificationsPage } from './pages/NotificationsPage'
 export { SendNotificationModal } from './components/SendNotificationModal'
 export { useNotificationBell } from './hooks/useNotificationBell'
-export { useNotificationsPaginated } from './hooks/useNotifications'
+export { useNotificationsPaginated, useNotificationDetail } from './hooks/useNotifications'
 export { usePreviewNotification, useSendNotification } from './hooks/useSendNotification'
 export {
   ANNUAL_REPORT_TRIGGERS,
@@ -20,6 +20,7 @@ export type {
   NotificationTrigger,
   NotificationStatus,
   NotificationItem,
+  NotificationDetail,
   NotificationChannel,
   ListNotificationsParams,
   NotificationPreviewRequest,

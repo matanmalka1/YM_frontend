@@ -7,7 +7,7 @@ import {
   textColumn,
   type Column,
 } from '../../../../components/ui/table'
-import type { ClientRecordResponse } from '../../api'
+import type { ClientRecordListItem } from '../../api'
 import { formatClientOfficeId, formatPhoneNumber } from '@/utils/utils'
 import { ClientRowActions } from './ClientRowActions'
 import { CLIENT_STATUS_BADGE_VARIANTS, getEntityTypeLabel, getClientStatusLabel } from '../../constants'
@@ -17,7 +17,7 @@ interface BuildClientColumnsParams {
   onToggleSelect?: (id: number) => void
   onToggleAll?: (ids: number[]) => void
   allIds?: number[]
-  onEditClient?: (client: ClientRecordResponse) => void
+  onEditClient?: (client: ClientRecordListItem) => void
 }
 
 export const buildClientColumns = ({
@@ -26,8 +26,8 @@ export const buildClientColumns = ({
   onToggleAll,
   allIds = [],
   onEditClient,
-}: BuildClientColumnsParams = {}): Column<ClientRecordResponse>[] => {
-  const dataColumns: Column<ClientRecordResponse>[] = [
+}: BuildClientColumnsParams = {}): Column<ClientRecordListItem>[] => {
+  const dataColumns: Column<ClientRecordListItem>[] = [
     monoColumn({
       key: 'office_client_number',
       header: "מס' לקוח",
@@ -93,7 +93,7 @@ export const buildClientColumns = ({
   }
 
   return [
-    buildSelectionColumn<ClientRecordResponse>({
+    buildSelectionColumn<ClientRecordListItem>({
       allIds,
       selectedIds,
       onToggleSelect,

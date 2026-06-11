@@ -12,7 +12,7 @@ import {
   useChargesPage,
 } from '@/features/charges'
 import { SendNotificationModal, type NotificationTrigger } from '@/features/notifications'
-import type { ChargeResponse } from '@/features/charges'
+import type { ChargeListItem } from '@/features/charges'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 
 export const Charges: React.FC = () => {
@@ -20,7 +20,7 @@ export const Charges: React.FC = () => {
   const [selectedChargeId, setSelectedChargeId] = useState<number | null>(null)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [notificationContext, setNotificationContext] = useState<{
-    charge: ChargeResponse
+    charge: ChargeListItem
     trigger: NotificationTrigger
   } | null>(null)
   const {

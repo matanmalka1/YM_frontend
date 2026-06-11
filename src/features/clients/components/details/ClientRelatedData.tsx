@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { Card } from '../../../../components/ui/primitives/Card'
-import type { ChargeResponse } from '@/features/charges'
+import type { ChargeListItem } from '@/features/charges'
 import type { BinderDetailResponse } from '@/features/binders'
 import { getChargeTypeLabel } from '@/features/charges'
 import { getChargeStatusLabel } from '@/features/charges'
@@ -76,7 +76,7 @@ type ClientRelatedDataProps = {
   clientId: number
   binders: BinderDetailResponse[]
   bindersTotal: number
-  charges: ChargeResponse[]
+  charges: ChargeListItem[]
   chargesTotal: number
   canViewCharges: boolean
   canCreateCharge?: boolean

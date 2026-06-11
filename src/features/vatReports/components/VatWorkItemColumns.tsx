@@ -1,6 +1,6 @@
 import { AlertTriangle } from 'lucide-react'
 import { monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
-import type { VatWorkItemResponse } from '../api'
+import type { VatWorkItemListItem } from '../api'
 import { getVatWorkItemStatusLabel } from '../constants'
 import { formatClientOfficeId, formatDate } from '@/utils/utils'
 import { VAT_DEADLINE_WARNING_DAYS, VAT_STATUS_BADGE_VARIANTS } from '../constants'
@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/primitives/Badge'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { formatVatPeriodTitle } from '../view.helpers'
 
-export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemResponse>[] => [
+export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemListItem>[] => [
   monoColumn({
     key: 'office_client_number',
     header: "מס' לקוח",

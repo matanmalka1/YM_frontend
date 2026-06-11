@@ -56,13 +56,28 @@ export interface ClientConflictInfo {
   deleted_clients: DeletedClientSummary[]
 }
 
+// Thin DTO for the clients list/table rows. Mirrors backend ClientRecordListItem.
+// Detail/profile fields live on ClientRecordResponse (GET /clients/{id}).
+export interface ClientRecordListItem {
+  id: number
+  full_name: string
+  id_number: string
+  entity_type: EntityType | null
+  status: ClientStatus
+  office_client_number: number | null
+  phone: string | null
+  email: string | null
+  created_at: string | null
+  active_binder_number: string | null
+}
+
 export interface ClientRecordListStats {
   active: number
   frozen: number
   closed: number
 }
 
-export type ClientRecordListResponse = PaginatedResponse<ClientRecordResponse> & { stats: ClientRecordListStats }
+export type ClientRecordListResponse = PaginatedResponse<ClientRecordListItem> & { stats: ClientRecordListStats }
 
 export interface ClientSidebarResponse {
   id: number
@@ -81,7 +96,6 @@ export interface ListClientsParams {
   status?: ClientStatus
   entity_type?: EntityType
   accountant_id?: number
-  tax_year?: number
   sort_by?: 'full_name' | 'created_at' | 'status' | 'entity_type'
   sort_order?: 'asc' | 'desc'
   page?: number

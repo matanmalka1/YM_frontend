@@ -7,7 +7,7 @@ import {
   textColumn,
   type Column,
 } from '../../../components/ui/table'
-import type { ChargeResponse } from '../api'
+import type { ChargeListItem } from '../api'
 import { getChargeAmountText, getChargePeriodLabel, getChargeTypeLabel } from '../utils'
 import { formatClientOfficeId } from '../../../utils/utils'
 import { getChargeStatusLabel } from '../constants'
@@ -26,7 +26,7 @@ interface BuildChargeColumnsParams {
   onToggleSelect?: (id: number) => void
   onToggleAll?: (ids: number[]) => void
   allIds?: number[]
-  onSendNotification?: (charge: ChargeResponse, trigger: NotificationTrigger) => void
+  onSendNotification?: (charge: ChargeListItem, trigger: NotificationTrigger) => void
 }
 
 export const buildChargeColumns = ({
@@ -39,8 +39,8 @@ export const buildChargeColumns = ({
   onToggleAll,
   allIds = [],
   onSendNotification,
-}: BuildChargeColumnsParams): Column<ChargeResponse>[] => {
-  const dataColumns: Column<ChargeResponse>[] = [
+}: BuildChargeColumnsParams): Column<ChargeListItem>[] => {
+  const dataColumns: Column<ChargeListItem>[] = [
     monoColumn({
       key: 'office_client_number',
       header: "מס' לקוח",
@@ -131,7 +131,7 @@ export const buildChargeColumns = ({
     }),
   ]
 
-  const idColumn: Column<ChargeResponse> = monoColumn({
+  const idColumn: Column<ChargeListItem> = monoColumn({
     key: 'id',
     header: "מס' חיוב",
     headerClassName: 'w-20',
@@ -141,7 +141,7 @@ export const buildChargeColumns = ({
 
   if (isAdvisor && onToggleSelect) {
     return [
-      buildSelectionColumn<ChargeResponse>({
+      buildSelectionColumn<ChargeListItem>({
         allIds,
         selectedIds,
         onToggleSelect,

@@ -50,8 +50,31 @@ export interface VatWorkItemResponse {
   available_actions?: BackendAction[]
 }
 
+// Thin DTO for VAT work-item list/table rows. Mirrors backend VatWorkItemListItem.
+// Detail-only fields live on VatWorkItemResponse (GET /vat/work-items/{id}).
+export interface VatWorkItemListItem {
+  id: number
+  client_record_id: number
+  office_client_number?: number | null
+  client_name: string | null
+  client_id_number?: string | null
+  period: string
+  period_type: VatType
+  status: VatWorkItemStatus
+  net_vat: string
+  final_vat_amount: string | null
+  is_overridden: boolean
+  filed_at: string | null
+  updated_at: string
+  submission_deadline: string | null
+  extended_deadline: string | null
+  days_until_deadline: number | null
+  is_overdue: boolean | null
+  available_actions?: BackendAction[]
+}
+
 export interface VatWorkItemListResponse {
-  items: VatWorkItemResponse[]
+  items: VatWorkItemListItem[]
   total: number
 }
 
@@ -228,7 +251,7 @@ export interface VatWorkItemGroupsParams {
 }
 
 export interface VatWorkItemGroupItemsResponse {
-  items: VatWorkItemResponse[]
+  items: VatWorkItemListItem[]
   total: number
   period: string
 }

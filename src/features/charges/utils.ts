@@ -1,5 +1,5 @@
 import { formatCurrencyILS, MONTH_NAMES } from '../../utils/utils'
-import type { ChargeResponse } from './api'
+import type { ChargeListItem } from './api'
 import { CHARGE_PERIOD_PATTERN } from './constants'
 import type { ChargeAction } from './types'
 import type { BackendAction } from '@/lib/actions/types'
@@ -63,10 +63,10 @@ export const getChargePeriodLabel = (period: string | null, monthsCovered: numbe
   return `${startLabel} ${startYear} - ${endLabel} ${endYear}`
 }
 
-export const getChargeAmountText = (charge: ChargeResponse): string => {
+export const getChargeAmountText = (charge: ChargeListItem): string => {
   if (!charge.amount) return '—'
   return formatCurrencyILS(charge.amount, { compact: true, fractionDigits: 2 })
 }
 
-export const getChargeClientLabel = (charge: ChargeResponse): string =>
+export const getChargeClientLabel = (charge: ChargeListItem): string =>
   charge.client_name ?? `לקוח #${charge.client_record_id}`

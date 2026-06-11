@@ -3,6 +3,7 @@ import { NOTIFICATION_ENDPOINTS } from './endpoints'
 import { toQueryParams } from '@/api/queryParams'
 import type {
   NotificationListResponse,
+  NotificationDetail,
   NotificationSummaryResponse,
   ListNotificationsParams,
   NotificationPreviewRequest,
@@ -17,6 +18,11 @@ export const notificationsApi = {
       NOTIFICATION_ENDPOINTS.notifications,
       params ? { params: toQueryParams(params) } : undefined,
     )
+    return response.data
+  },
+
+  getById: async (notificationId: number): Promise<NotificationDetail> => {
+    const response = await api.get<NotificationDetail>(NOTIFICATION_ENDPOINTS.notificationById(notificationId))
     return response.data
   },
 

@@ -1,6 +1,6 @@
-import type { ChargeResponse } from '../api'
+import type { ChargeListItem } from '../api'
 
-export const ChargeClientCell = ({ charge }: { charge: ChargeResponse }) => {
+export const ChargeClientCell = ({ charge }: { charge: ChargeListItem }) => {
   const clientName = charge.client_name ?? `לקוח #${charge.client_record_id}`
 
   return (

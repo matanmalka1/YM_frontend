@@ -27,6 +27,27 @@ export interface ChargeResponse {
   available_actions?: BackendAction[]
 }
 
+// Thin DTO for the charges list/table rows. Mirrors backend ChargeListItem.
+// Detail-only fields (description, audit actors, cancellation reason,
+// annual_report_id) live on ChargeResponse (GET /charges/{id}).
+export interface ChargeListItem {
+  id: number
+  client_record_id: number
+  client_name: string | null
+  office_client_number?: number | null
+  business_id?: number | null
+  business_name: string | null
+  charge_type: string
+  status: string
+  amount: string
+  period: string | null
+  months_covered: number | null
+  created_at: string
+  issued_at: string | null
+  paid_at: string | null
+  available_actions?: BackendAction[]
+}
+
 export interface ChargeStatusStat {
   count: number
   amount: string
@@ -39,7 +60,7 @@ export interface ChargeListStats {
   canceled: ChargeStatusStat
 }
 
-export type ChargesListResponse = PaginatedResponse<ChargeResponse> & { stats: ChargeListStats }
+export type ChargesListResponse = PaginatedResponse<ChargeListItem> & { stats: ChargeListStats }
 
 export interface ChargesListParams {
   client_record_id?: number

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Bell, Eye, Plus, Send } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { Alert } from '@/components/ui/overlays/Alert'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
@@ -21,6 +22,7 @@ import {
   TRIGGER_LABELS,
   SendNotificationModal,
   useNotificationsPaginated,
+  useNotificationDetail,
   type ListNotificationsParams,
   type NotificationItem,
   type NotificationStatus,
@@ -39,7 +41,8 @@ import {
 
 const ENGLISH_TEXT_PATTERN = /[A-Za-z]/
 
-const getTriggerLabel = (item: NotificationItem) => item.trigger_label || TRIGGER_LABELS[item.trigger] || 'הודעה'
+const getTriggerLabel = (item: Pick<NotificationItem, 'trigger' | 'trigger_label'>) =>
+  item.trigger_label || TRIGGER_LABELS[item.trigger] || 'הודעה'
 
 const getDomainLabel = (domain: string | null | undefined) => {
   if (!domain) return 'כללי'
@@ -73,7 +76,12 @@ export const NotificationsPage: React.FC = () => {
   useEffect(() => {
     if (!selectedClient) setClientQuery(clientName)
   }, [clientName]) // eslint-disable-line react-hooks/exhaustive-deps
-  const [selected, setSelected] = useState<NotificationItem | null>(null)
+  const [selectedId, setSelectedId] = useState<number | null>(null)
+  const {
+    data: selected,
+    isPending: selectedLoading,
+    error: selectedError,
+  } = useNotificationDetail(selectedId)
   const [sendOpen, setSendOpen] = useState(false)
   const [sendClient, setSendClient] = useState<SelectedClientFilter | null>(null)
 
@@ -173,7 +181,7 @@ export const NotificationsPage: React.FC = () => {
         align: 'center',
         render: (item) => (
           <RowActionsMenu ariaLabel="פעולות הודעה">
-            <RowActionItem label="צפייה בפרטים" icon={<Eye className="h-4 w-4" />} onClick={() => setSelected(item)} />
+            <RowActionItem label="צפייה בפרטים" icon={<Eye className="h-4 w-4" />} onClick={() => setSelectedId(item.id)} />
             {isAdvisor && (
               <RowActionItem
                 label="שליחת הודעה ללקוח"
@@ -259,7 +267,7 @@ export const NotificationsPage: React.FC = () => {
         data={items}
         columns={tableColumns}
         getRowKey={(item) => item.id}
-        onRowClick={setSelected}
+        onRowClick={(item) => setSelectedId(item.id)}
         isLoading={isPending}
         error={error ? 'שגיאה בטעינת הודעות' : null}
         page={page}
@@ -277,10 +285,10 @@ export const NotificationsPage: React.FC = () => {
       />
 
       <DetailDrawer
-        open={selected !== null}
+        open={selectedId !== null}
         title={selected?.subject_snapshot || selected?.trigger_label || 'הודעה'}
         subtitle={selected ? formatDateTime(selected.created_at) : undefined}
-        onClose={() => setSelected(null)}
+        onClose={() => setSelectedId(null)}
         footer={
           selected && isAdvisor ? (
             <div className="flex justify-end">
@@ -302,6 +310,8 @@ export const NotificationsPage: React.FC = () => {
           ) : undefined
         }
       >
+        {selectedId !== null && selectedLoading && <Alert variant="info" message="טוען את פרטי ההודעה..." />}
+        {selectedError && <Alert variant="error" message="שגיאה בטעינת פרטי ההודעה" />}
         {selected && (
           <div className="space-y-4">
             <DrawerSection title="פרטים">

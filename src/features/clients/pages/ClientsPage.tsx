@@ -16,8 +16,8 @@ import {
   CreateClientModal,
   DeletedClientDialog,
   useClientsPage,
+  useClientQuery,
 } from '@/features/clients'
-import type { ClientRecordResponse } from '@/features/clients'
 import { CLIENT_ROUTES } from '@/features/clients'
 import { ImportExportModal } from '@/features/importExport'
 
@@ -28,7 +28,7 @@ export const Clients: React.FC = () => {
   const [searchParams] = useSearchParams()
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showImportExport, setShowImportExport] = useState(false)
-  const [editingClient, setEditingClient] = useState<ClientRecordResponse | null>(null)
+  const [editingClientId, setEditingClientId] = useState<number | null>(null)
   const {
     activeActionKey,
     clients,
@@ -58,8 +58,11 @@ export const Clients: React.FC = () => {
   } = useClientsPage()
 
   const columns = buildClientColumns({
-    onEditClient: can.editClients ? (client) => setEditingClient(client) : undefined,
+    onEditClient: can.editClients ? (client) => setEditingClientId(client.id) : undefined,
   })
+
+  const { client: editingClient, isLoading: editingClientLoading, error: editingClientError } =
+    useClientQuery({ clientId: editingClientId })
 
   const hasActiveFilters = Boolean(filters.search || filters.status || filters.accountant_id)
   const isEmptyState = !loading && !error && total === 0 && !hasActiveFilters
@@ -200,32 +203,38 @@ export const Clients: React.FC = () => {
         restoreLoading={restoreLoading}
         forceCreateLoading={false}
       />
-      {editingClient && (
+      {editingClientId !== null && (
         <DetailDrawer
           open
-          onClose={() => setEditingClient(null)}
+          onClose={() => setEditingClientId(null)}
           title="עריכת לקוח"
           footer={
-            <ModalFormActions
-              onCancel={() => setEditingClient(null)}
-              isLoading={updateLoading}
-              submitLabel="שמור שינויים"
-              submitType="submit"
-              submitForm={EDIT_FORM_ID}
-            />
+            editingClient ? (
+              <ModalFormActions
+                onCancel={() => setEditingClientId(null)}
+                isLoading={updateLoading}
+                submitLabel="שמור שינויים"
+                submitType="submit"
+                submitForm={EDIT_FORM_ID}
+              />
+            ) : undefined
           }
         >
-          <ClientEditForm
-            client={editingClient}
-            formId={EDIT_FORM_ID}
-            onSave={async (payload) => {
-              await updateClient(editingClient.id, payload)
-              setEditingClient(null)
-            }}
-            onCancel={() => setEditingClient(null)}
-            isLoading={updateLoading}
-            hideFooter
-          />
+          {editingClientLoading && <Alert variant="info" message="טוען את פרטי הלקוח..." />}
+          {editingClientError && <Alert variant="error" message={editingClientError} />}
+          {editingClient && (
+            <ClientEditForm
+              client={editingClient}
+              formId={EDIT_FORM_ID}
+              onSave={async (payload) => {
+                await updateClient(editingClient.id, payload)
+                setEditingClientId(null)
+              }}
+              onCancel={() => setEditingClientId(null)}
+              isLoading={updateLoading}
+              hideFooter
+            />
+          )}
         </DetailDrawer>
       )}
     </div>

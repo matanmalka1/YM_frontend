@@ -65,7 +65,26 @@ export type NotificationStatus = 'pending' | 'sent' | 'failed' | 'skipped'
 
 // ── Read types ─────────────────────────────────────────────────────────────────
 
+// Thin DTO for notification list/table rows. Mirrors backend NotificationListItem.
+// Preview fields rendered inline by list surfaces stay here.
+// Routing/delivery/debug fields live on NotificationDetail.
 export interface NotificationItem {
+  id: number
+  client_record_id: number
+  client_name?: string | null
+  business_name?: string | null
+  trigger: NotificationTrigger
+  trigger_label: string
+  domain_label: string
+  status: NotificationStatus
+  recipient?: string | null
+  content_snapshot: string
+  subject_snapshot?: string | null
+  created_at: string
+}
+
+// Full DTO for the notification detail drawer. Mirrors backend NotificationResponse.
+export interface NotificationDetail {
   id: number
   client_record_id: number
   client_name?: string | null

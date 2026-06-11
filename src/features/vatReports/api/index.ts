@@ -5,6 +5,7 @@ export type {
   VatType,
   VatWorkItemStatus,
   VatWorkItemResponse,
+  VatWorkItemListItem,
   VatWorkItemListResponse,
   VatWorkItemsListParams,
   VatWorkItemStatusSummaryParams,

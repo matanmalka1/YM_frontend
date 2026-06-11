@@ -5,6 +5,7 @@ export type {
   NotificationStatus,
   NotificationChannel,
   NotificationItem,
+  NotificationDetail,
   NotificationListResponse,
   NotificationSummaryResponse,
   ListNotificationsParams,
