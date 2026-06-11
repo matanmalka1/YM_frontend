@@ -4449,6 +4449,8 @@ export interface components {
              * @example 2026-01-02T03:04:05Z
              */
             created_at: string;
+            /** Updated At */
+            updated_at?: string | null;
             /** Days In Office */
             days_in_office?: number | null;
             /** Available Actions */
