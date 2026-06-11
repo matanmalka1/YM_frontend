@@ -110,7 +110,7 @@ export const vatReportsApi = {
 
   getAuditTrail: async (
     id: number,
-    params: { limit?: number; offset?: number } = {},
+    params: { page?: number; page_size?: number } = {},
   ): Promise<VatAuditTrailResponse> => {
     const response = await api.get<VatAuditTrailResponse>(VAT_ENDPOINTS.vatWorkItemAudit(id), {
       params: toQueryParams(params),

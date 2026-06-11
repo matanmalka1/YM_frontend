@@ -14,13 +14,13 @@ export interface EntityAuditLogEntry {
 }
 
 export interface EntityAuditTrailParams {
-  limit?: number
-  offset?: number
+  page?: number
+  page_size?: number
 }
 
 export interface EntityAuditTrailResponse {
   items: EntityAuditLogEntry[]
   total: number
-  limit: number
-  offset: number
+  page: number
+  page_size: number
 }

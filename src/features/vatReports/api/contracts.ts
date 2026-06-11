@@ -168,6 +168,8 @@ export interface VatAuditLogResponse {
 export interface VatAuditTrailResponse {
   items: VatAuditLogResponse[]
   total: number
+  page: number
+  page_size: number
 }
 
 export interface VatPeriodRow {

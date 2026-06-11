@@ -5253,10 +5253,10 @@ export interface components {
             items: components["schemas"]["EntityAuditLogResponse"][];
             /** Total */
             total: number;
-            /** Limit */
-            limit: number;
-            /** Offset */
-            offset: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
         };
         /** EntityNoteCreateRequest */
         EntityNoteCreateRequest: {
@@ -5302,6 +5302,29 @@ export interface components {
          * @enum {string}
          */
         EntityType: "osek_patur" | "osek_murshe" | "company_ltd" | "employee";
+        /**
+         * ErrorBody
+         * @description Body of the standard application error envelope.
+         */
+        ErrorBody: {
+            /** Code */
+            code: string;
+            /** Message */
+            message: string;
+            /** Details */
+            details?: unknown;
+            /** Request Id */
+            request_id?: string | null;
+        };
+        /**
+         * ErrorEnvelope
+         * @description Standard application error envelope: ``{"error": {...}}``.
+         *
+         *     Used as the ``response_model`` for documented error responses such as 404.
+         */
+        ErrorEnvelope: {
+            error: components["schemas"]["ErrorBody"];
+        };
         /**
          * ExpenseCategory
          * @enum {string}
@@ -7402,6 +7425,10 @@ export interface components {
             items: components["schemas"]["VatAuditLogResponse"][];
             /** Total */
             total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
         };
         /** VatAutoPopulateExpenseBreakdownItem */
         VatAutoPopulateExpenseBreakdownItem: {
@@ -14032,8 +14059,8 @@ export interface operations {
     get_audit_trail_api_v1_vat_work_items__item_id__audit_get: {
         parameters: {
             query?: {
-                limit?: number;
-                offset?: number;
+                page?: number;
+                page_size?: number;
             };
             header?: never;
             path: {
@@ -14050,6 +14077,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VatAuditTrailResponse"];
+                };
+            };
+            /** @description פריט עבודה למע"מ לא נמצא */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
@@ -14408,8 +14444,8 @@ export interface operations {
     get_entity_audit_trail_api_v1_audit__entity_type___entity_id__get: {
         parameters: {
             query?: {
-                limit?: number;
-                offset?: number;
+                page?: number;
+                page_size?: number;
             };
             header?: never;
             path: {
@@ -14427,6 +14463,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EntityAuditTrailResponse"];
+                };
+            };
+            /** @description הישות המבוקשת לא נמצאה */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
             /** @description Validation Error */
