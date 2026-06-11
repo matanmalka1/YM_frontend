@@ -174,7 +174,6 @@ export interface UpdateClientPayload {
   vat_reporting_frequency?: VatType | null
   advance_payment_frequency?: AdvancePaymentFrequency | null
   advance_rate?: string | null
-  advance_rate_updated_at?: string | null
   annual_revenue?: string | null
   accountant_id?: number | null
 }

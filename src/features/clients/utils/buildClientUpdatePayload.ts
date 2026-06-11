@@ -4,15 +4,6 @@ import type { ClientEditFormValues } from '../schemas'
 
 const blankToNull = (value: string | null | undefined): string | null => (value?.trim() ? value.trim() : null)
 
-const getLocalISODate = (): string => {
-  const date = new Date()
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-
-  return `${year}-${month}-${day}`
-}
-
 export const buildClientUpdatePayload = (
   data: ClientEditFormValues,
   dirtyFields: FieldNamesMarkedBoolean<ClientEditFormValues>,
@@ -38,9 +29,8 @@ export const buildClientUpdatePayload = (
     payload.advance_payment_frequency = data.advance_payment_frequency || null
   }
   if (dirtyFields.advance_rate) {
-    const advanceRate = blankToNull(data.advance_rate)
-    payload.advance_rate = advanceRate
-    payload.advance_rate_updated_at = advanceRate ? getLocalISODate() : null
+    payload.advance_rate = blankToNull(data.advance_rate)
+    // advance_rate_updated_at is server-owned; the backend stamps it on change.
   }
   if (dirtyFields.annual_revenue) {
     payload.annual_revenue = blankToNull(data.annual_revenue)
