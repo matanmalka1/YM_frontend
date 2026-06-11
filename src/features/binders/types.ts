@@ -1,3 +1,5 @@
+import type { PaginatedResponse } from '@/types'
+
 export type BinderLocationStatus = 'in_office' | 'ready_for_handover' | 'handed_over'
 export type BinderCapacityStatus = 'open' | 'full'
 export type BinderAction =
@@ -142,13 +144,9 @@ export interface BinderIntakeResponse {
   materials: BinderIntakeMaterialResponse[]
 }
 
-export interface BinderIntakeListResponse {
-  binder_id: number
-  intakes: BinderIntakeResponse[]
-  total: number
-  page: number
-  page_size: number
-}
+// #42: converged to the standard paginated envelope ({ items, page, page_size, total }).
+// binder_id dropped (already in the URL); intakes -> items.
+export type BinderIntakeListResponse = PaginatedResponse<BinderIntakeResponse>
 
 export interface BinderReceiveResult {
   binder: BinderResponse

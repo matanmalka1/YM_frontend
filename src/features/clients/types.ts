@@ -6,13 +6,13 @@ export interface ClientsFilters extends ListClientsParams {
   status?: ClientStatus
   entity_type?: EntityType
   sort_by: ClientSortBy
-  sort_order: ClientSortOrder
+  order: ClientSortOrder
 }
 
 export interface ClientsFiltersBarProps {
   filters: ClientsFilters
   onFilterChange: (
-    name: 'accountant_id' | 'entity_type' | 'page_size' | 'search' | 'status' | 'sort_by' | 'sort_order',
+    name: 'accountant_id' | 'entity_type' | 'page_size' | 'search' | 'status' | 'sort_by' | 'order',
     value: string,
   ) => void
   onReset: () => void

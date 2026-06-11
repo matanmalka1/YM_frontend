@@ -4236,19 +4236,6 @@ export interface components {
             /** Handed Over At */
             handed_over_at?: string | null;
         };
-        /** BinderIntakeListResponse */
-        BinderIntakeListResponse: {
-            /** Binder Id */
-            binder_id: number;
-            /** Intakes */
-            intakes: components["schemas"]["BinderIntakeResponse"][];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-        };
         /**
          * BinderIntakeMaterialRequest
          * @description פריט חומר בודד בתוך אירוע קבלה.
@@ -4586,6 +4573,8 @@ export interface components {
             notes?: string | null;
             /** Created At */
             created_at?: string | null;
+            /** Updated At */
+            updated_at?: string | null;
             /** Available Actions */
             available_actions?: components["schemas"]["ActionDescriptor"][];
         };
@@ -5176,8 +5165,6 @@ export interface components {
             page_size: number;
             /** Total */
             total: number;
-            /** Total Pages */
-            total_pages: number;
         };
         /** CorrespondenceResponse */
         CorrespondenceResponse: {
@@ -6195,6 +6182,17 @@ export interface components {
         PaginatedResponse_BinderDetailResponse_: {
             /** Items */
             items: components["schemas"]["BinderDetailResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
+        };
+        /** PaginatedResponse[BinderIntakeResponse] */
+        PaginatedResponse_BinderIntakeResponse_: {
+            /** Items */
+            items: components["schemas"]["BinderIntakeResponse"][];
             /** Page */
             page: number;
             /** Page Size */
@@ -7823,6 +7821,12 @@ export interface components {
         VatInvoiceListResponse: {
             /** Items */
             items: components["schemas"]["VatInvoiceResponse"][];
+            /** Total */
+            total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
         };
         /** VatInvoiceResponse */
         VatInvoiceResponse: {
@@ -8128,6 +8132,10 @@ export interface components {
             items: components["schemas"]["VatWorkItemListItem"][];
             /** Total */
             total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
         };
         /** VatWorkItemLookupResponse */
         VatWorkItemLookupResponse: {
@@ -11213,7 +11221,7 @@ export interface operations {
                 entity_type?: components["schemas"]["EntityType"] | null;
                 accountant_id?: number | null;
                 sort_by?: string;
-                sort_order?: string;
+                order?: "asc" | "desc";
                 page?: number;
                 page_size?: number;
             };
@@ -11281,7 +11289,7 @@ export interface operations {
             query?: {
                 search?: string | null;
                 sort_by?: string;
-                sort_order?: string;
+                order?: "asc" | "desc";
                 page?: number;
                 page_size?: number;
             };
@@ -12189,7 +12197,7 @@ export interface operations {
                 page?: number;
                 page_size?: number;
                 sort_by?: string | null;
-                order?: string;
+                order?: "asc" | "desc";
             };
             header?: never;
             path?: never;
@@ -12358,7 +12366,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BinderIntakeListResponse"];
+                    "application/json": components["schemas"]["PaginatedResponse_BinderIntakeResponse_"];
                 };
             };
             /** @description הקלסר המבוקש לא נמצא */
