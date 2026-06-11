@@ -16,6 +16,7 @@ export interface ChargeResponse {
   months_covered: number | null
   description: string | null
   created_at: string
+  updated_at: string | null
   created_by: number | null
   issued_at: string | null
   issued_by: number | null

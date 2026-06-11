@@ -72,6 +72,7 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
             {data.signer_email && <DrawerField label='דוא"ל' value={data.signer_email} />}
             {data.signer_phone && <DrawerField label="טלפון" value={formatPhoneNumber(data.signer_phone)} />}
             <DrawerField label="נוצר" value={formatDateTime(data.created_at)} />
+            {data.updated_at && <DrawerField label="עודכן" value={formatDateTime(data.updated_at)} />}
             {data.sent_at && <DrawerField label="נשלח" value={formatDateTime(data.sent_at)} />}
             {data.expires_at && <DrawerField label="תפוגה" value={formatDate(data.expires_at)} />}
             {data.signed_at && <DrawerField label="נחתם" value={formatDateTime(data.signed_at)} />}

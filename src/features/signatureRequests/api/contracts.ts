@@ -28,6 +28,7 @@ export interface SignatureRequestResponse {
   annual_report_id: number | null
   document_id: number | null
   created_at: string
+  updated_at: string | null
   sent_at: string | null
   expires_at: string | null
   signed_at: string | null
