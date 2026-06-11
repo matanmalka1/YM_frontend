@@ -8,12 +8,13 @@ interface Props {
 }
 
 export const ReportSummaryCards: React.FC<Props> = ({ report }) => {
-  const totalIncome = Number(report.total_income ?? 0)
-  const grossExpenses = Number(report.total_expenses ?? 0)
-  const recognizedExpenses = Number(report.recognized_expenses ?? 0)
-  const netProfit = Number(report.profit ?? 0)
-  const taxAfterCredits = Number(report.tax_after_credits ?? 0)
-  const finalBalance = Number(report.final_balance ?? 0)
+  const tc = report.tax_calculation
+  const totalIncome = Number(tc?.total_income ?? 0)
+  const grossExpenses = Number(tc?.total_expenses ?? 0)
+  const recognizedExpenses = Number(tc?.recognized_expenses ?? 0)
+  const netProfit = Number(tc?.profit ?? 0)
+  const taxAfterCredits = Number(tc?.tax_after_credits ?? 0)
+  const finalBalance = Number(tc?.final_balance ?? 0)
   const profitMargin = totalIncome > 0 ? (netProfit / totalIncome) * 100 : 0
   const expenseRatio = totalIncome > 0 ? (grossExpenses / totalIncome) * 100 : 0
   const balanceLabel = finalBalance > 0 ? 'לתשלום לאחר מקדמות' : finalBalance < 0 ? 'החזר צפוי לאחר מקדמות' : 'מאוזן'

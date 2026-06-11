@@ -3756,38 +3756,13 @@ export interface components {
             donation_amount?: string | null;
             /** Other Credits */
             other_credits?: string | null;
-            /** Credit Points */
-            credit_points?: string | null;
-            /** Pension Credit Points */
-            pension_credit_points?: string | null;
-            /** Life Insurance Credit Points */
-            life_insurance_credit_points?: string | null;
-            /** Tuition Credit Points */
-            tuition_credit_points?: string | null;
             /** Client Approved At */
             client_approved_at?: string | null;
             /** Internal Notes */
             internal_notes?: string | null;
             /** Amendment Reason */
             amendment_reason?: string | null;
-            /** Tax Refund Amount */
-            tax_refund_amount?: string | null;
-            /** Tax Due Amount */
-            tax_due_amount?: string | null;
-            /** Total Income */
-            total_income?: string | null;
-            /** Total Expenses */
-            total_expenses?: string | null;
-            /** Recognized Expenses */
-            recognized_expenses?: string | null;
-            /** Taxable Income */
-            taxable_income?: string | null;
-            /** Profit */
-            profit?: string | null;
-            /** Tax After Credits */
-            tax_after_credits?: string | null;
-            /** Final Balance */
-            final_balance?: string | null;
+            tax_calculation?: components["schemas"]["AnnualReportTaxCalculationResponse"] | null;
         };
         /** AnnualReportDetailUpdateRequest */
         AnnualReportDetailUpdateRequest: {
@@ -3803,6 +3778,42 @@ export interface components {
             internal_notes?: string | null;
             /** Amendment Reason */
             amendment_reason?: string | null;
+        };
+        /**
+         * AnnualReportListItem
+         * @description Thin row DTO for annual-report list/card endpoints.
+         *
+         *     Only fields rendered by list/history/comparison UIs. Detail-only,
+         *     calculation, action, and transition fields are intentionally excluded
+         *     (see AnnualReportDetailResponse for the full detail shape).
+         */
+        AnnualReportListItem: {
+            /** Id */
+            id: number;
+            /** Client Record Id */
+            client_record_id: number;
+            /** Office Client Number */
+            office_client_number?: number | null;
+            /** Client Name */
+            client_name?: string | null;
+            /** Client Id Number */
+            client_id_number?: string | null;
+            /** Tax Year */
+            tax_year: number;
+            client_type: components["schemas"]["ClientAnnualFilingType"];
+            form_type: components["schemas"]["PrimaryAnnualReportForm"];
+            status: components["schemas"]["AnnualReportStatus"];
+            deadline_type: components["schemas"]["FilingDeadlineType"];
+            /** Filing Deadline */
+            filing_deadline?: string | null;
+            /** Submitted At */
+            submitted_at?: string | null;
+            /** Assessment Amount */
+            assessment_amount?: string | null;
+            /** Refund Due */
+            refund_due?: string | null;
+            /** Tax Due */
+            tax_due?: string | null;
         };
         /** AnnualReportResponse */
         AnnualReportResponse: {
@@ -3925,6 +3936,40 @@ export interface components {
             total: number;
             /** Statuses */
             statuses: components["schemas"]["AnnualReportStatusGroupResponse"][];
+        };
+        /**
+         * AnnualReportTaxCalculationResponse
+         * @description Computed financial/tax outputs for a report detail view.
+         *
+         *     Every field here is derived/aggregated in the service (financial summary,
+         *     tax engine, credit-point breakdown, advances). User-entered deduction
+         *     inputs (pension_contribution, donation_amount, other_credits) and the
+         *     persisted outcome columns (refund_due, tax_due, assessment_amount) stay
+         *     flat on AnnualReportDetailResponse.
+         */
+        AnnualReportTaxCalculationResponse: {
+            /** Total Income */
+            total_income?: string | null;
+            /** Total Expenses */
+            total_expenses?: string | null;
+            /** Recognized Expenses */
+            recognized_expenses?: string | null;
+            /** Taxable Income */
+            taxable_income?: string | null;
+            /** Profit */
+            profit?: string | null;
+            /** Tax After Credits */
+            tax_after_credits?: string | null;
+            /** Final Balance */
+            final_balance?: string | null;
+            /** Credit Points */
+            credit_points?: string | null;
+            /** Pension Credit Points */
+            pension_credit_points?: string | null;
+            /** Life Insurance Credit Points */
+            life_insurance_credit_points?: string | null;
+            /** Tuition Credit Points */
+            tuition_credit_points?: string | null;
         };
         /** AnnualTurnover */
         AnnualTurnover: {
@@ -6124,10 +6169,10 @@ export interface components {
             /** Total */
             total: number;
         };
-        /** PaginatedResponse[AnnualReportResponse] */
-        PaginatedResponse_AnnualReportResponse_: {
+        /** PaginatedResponse[AnnualReportListItem] */
+        PaginatedResponse_AnnualReportListItem_: {
             /** Items */
-            items: components["schemas"]["AnnualReportResponse"][];
+            items: components["schemas"]["AnnualReportListItem"][];
             /** Page */
             page: number;
             /** Page Size */
@@ -6476,10 +6521,6 @@ export interface components {
             donation_amount?: string | null;
             /** Other Credits */
             other_credits?: string | null;
-            /** Tax Refund Amount */
-            tax_refund_amount?: string | null;
-            /** Tax Due Amount */
-            tax_due_amount?: string | null;
             /** Client Approved At */
             client_approved_at?: string | null;
             /** Internal Notes */
@@ -9728,7 +9769,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportResponse_"];
+                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportListItem_"];
                 };
             };
             /** @description Validation Error */
@@ -9794,7 +9835,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportResponse_"];
+                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportListItem_"];
                 };
             };
             /** @description Validation Error */
@@ -10300,7 +10341,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportResponse_"];
+                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportListItem_"];
                 };
             };
             /** @description הלקוח המבוקש לא נמצא */
@@ -10343,7 +10384,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportResponse_"];
+                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportListItem_"];
                 };
             };
             /** @description Validation Error */
@@ -10419,7 +10460,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportResponse_"];
+                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportListItem_"];
                 };
             };
             /** @description Validation Error */

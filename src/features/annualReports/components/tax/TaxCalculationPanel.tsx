@@ -45,7 +45,6 @@ const SectionCard: React.FC<{ title: string; children: React.ReactNode }> = ({ t
 export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
   const queryClient = useQueryClient()
   const { isAdvisor } = useRole()
-  const [creditPoints, setCreditPoints] = useState('')
   const [pension, setPension] = useState('')
   const [otherCredits, setOtherCredits] = useState('')
 
@@ -88,13 +87,12 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
 
   const handleEditInit = () => {
     const values = toTaxInputValues(detailQ.data)
-    setCreditPoints(values.creditPoints)
     setPension(values.pension)
     setOtherCredits(values.otherCredits)
   }
 
   const handleSave = () => {
-    updateMutation.mutate(toReportDetailsPayload(creditPoints, pension, otherCredits))
+    updateMutation.mutate(toReportDetailsPayload(pension, otherCredits))
   }
 
   const handleSaveTaxResult = () => {
@@ -127,10 +125,8 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
       </div>
 
       <TaxCalculatorInputs
-        creditPoints={creditPoints}
         pension={pension}
         otherCredits={otherCredits}
-        onCreditPointsChange={setCreditPoints}
         onPensionChange={setPension}
         onOtherCreditsChange={setOtherCredits}
         onSave={handleSave}

@@ -74,9 +74,10 @@ export const useCreateReport = (taxYear?: number, onSuccess?: () => void) => {
   const mutation = useMutation({
     mutationFn: (payload: CreateAnnualReportPayload) => annualReportsApi.createReport(payload),
     onSuccess: (data) => {
+      const profit = data.tax_calculation?.profit
       const message =
-        data.profit != null
-          ? `דוח נוצר | רווח ראשוני: ₪${Number(data.profit).toLocaleString('he-IL')}`
+        profit != null
+          ? `דוח נוצר | רווח ראשוני: ₪${Number(profit).toLocaleString('he-IL')}`
           : 'דוח שנתי נוצר בהצלחה'
       toast.success(message)
       queryClient.invalidateQueries({ queryKey: annualReportsQK.all })

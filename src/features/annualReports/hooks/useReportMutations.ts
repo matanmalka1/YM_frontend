@@ -58,8 +58,6 @@ export const useReportMutations = (reportId: number | null, onDeleted?: () => vo
           prev
             ? {
                 ...prev,
-                tax_refund_amount: updated.tax_refund_amount ?? prev.tax_refund_amount,
-                tax_due_amount: updated.tax_due_amount ?? prev.tax_due_amount,
                 client_approved_at: updated.client_approved_at,
                 internal_notes: updated.internal_notes,
               }

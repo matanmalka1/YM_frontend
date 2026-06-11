@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Eye } from 'lucide-react'
-import { annualReportsApi, annualReportsQK, type AnnualReportSummary } from '../../api'
+import { annualReportsApi, annualReportsQK, type AnnualReportListItem } from '../../api'
 import { DataTable } from '../../../../components/ui/table/DataTable'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import { RowActionItem, RowActionsMenu } from '@/components/ui/table'
@@ -27,7 +27,7 @@ export const ReportHistoryTable: React.FC<Props> = ({ clientId, currentReportId,
   const sorted = sortReportsByTaxYearDesc(reports)
 
   return (
-    <DataTable<AnnualReportSummary>
+    <DataTable<AnnualReportListItem>
       data={sorted}
       isLoading={isLoading}
       getRowKey={(r) => r.id}

@@ -1,4 +1,4 @@
-import type { AnnualReportFull, AnnualReportSummary, AdvancesSummary } from '../../api'
+import type { AnnualReportFull, AnnualReportListItem, AdvancesSummary } from '../../api'
 import { formatClientOfficeId, formatCurrencyILS } from '@/utils/utils'
 import { ALERT_WINDOW_DAYS, CLIENT_TYPE_LABELS, LOCALE } from './constants'
 import { formatAnnualReportDate, parseAnnualReportCalendarDate } from '../shared/annualReports.constants'
@@ -33,7 +33,7 @@ export const getClientTypeLabel = (report: AnnualReportFull): string =>
 
 export const clampPercent = (value: number): number => Math.max(0, Math.min(100, value))
 
-export const sortReportsByTaxYearDesc = (reports: AnnualReportSummary[]): AnnualReportSummary[] =>
+export const sortReportsByTaxYearDesc = (reports: AnnualReportListItem[]): AnnualReportListItem[] =>
   [...reports].sort((a, b) => b.tax_year - a.tax_year)
 
 export const getBalanceVariant = (balanceType: AdvancesSummary['balance_type']) => {

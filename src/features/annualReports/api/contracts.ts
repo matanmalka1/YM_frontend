@@ -71,7 +71,51 @@ export type ExpenseCategoryType =
   | 'bank_fees'
   | 'other'
 
-export interface AnnualReportSummary {
+/**
+ * Thin row DTO for annual-report list/card endpoints (GET /annual-reports,
+ * /overdue, season + client lists). Mirrors backend AnnualReportListItem.
+ * Detail-only, calculation, action, and transition fields are intentionally
+ * excluded — use AnnualReportFull for the detail view.
+ */
+export interface AnnualReportListItem {
+  id: number
+  client_record_id: number
+  office_client_number?: number | null
+  client_name?: string | null
+  client_id_number?: string | null
+  tax_year: number
+  client_type: ClientTypeForReport
+  form_type: string
+  status: AnnualReportStatus
+  deadline_type: DeadlineType
+  filing_deadline: string | null
+  submitted_at: string | null
+  assessment_amount: string | null
+  refund_due: string | null
+  tax_due: string | null
+}
+
+/**
+ * Computed financial/tax outputs grouped on the detail response.
+ * Mirrors backend AnnualReportTaxCalculationResponse — every field is
+ * serialized from ApiDecimal, so values arrive as decimal strings (not numbers).
+ */
+export interface AnnualReportTaxCalculation {
+  total_income?: string | null
+  total_expenses?: string | null
+  recognized_expenses?: string | null
+  taxable_income?: string | null
+  profit?: string | null
+  tax_after_credits?: string | null
+  final_balance?: string | null
+  credit_points?: string | null
+  pension_credit_points?: string | null
+  life_insurance_credit_points?: string | null
+  tuition_credit_points?: string | null
+}
+
+/** Full detail DTO (GET /annual-reports/{id}). Mirrors backend AnnualReportDetailResponse. */
+export interface AnnualReportFull {
   id: number
   client_record_id: number
   office_client_number?: number | null
@@ -103,30 +147,17 @@ export interface AnnualReportSummary {
   created_by: number
   available_actions?: BackendAction[]
   available_transitions?: AnnualReportStatus[]
-}
-
-export interface AnnualReportFull extends AnnualReportSummary {
   schedules?: ScheduleEntry[]
   status_audit?: AnnualReportAuditEntry[]
+  // user-entered deduction inputs (stay flat)
   pension_contribution?: string | null
   donation_amount?: string | null
   other_credits?: string | null
-  credit_points?: number | null
-  pension_credit_points?: number | null
-  life_insurance_credit_points?: number | null
-  tuition_credit_points?: number | null
   client_approved_at?: string | null
   internal_notes?: string | null
   amendment_reason?: string | null
-  tax_refund_amount?: string | null
-  tax_due_amount?: string | null
-  total_income?: string | null
-  total_expenses?: string | null
-  recognized_expenses?: string | null
-  taxable_income?: string | null
-  profit?: string | null
-  tax_after_credits?: string | null
-  final_balance?: string | null
+  // computed financial/tax outputs (grouped)
+  tax_calculation?: AnnualReportTaxCalculation | null
 }
 
 export interface ReportDetailResponse {
@@ -134,12 +165,6 @@ export interface ReportDetailResponse {
   pension_contribution: string | null
   donation_amount: string | null
   other_credits: string | null
-  credit_points?: number | null
-  pension_credit_points?: number | null
-  life_insurance_credit_points?: number | null
-  tuition_credit_points?: number | null
-  tax_refund_amount?: string | null
-  tax_due_amount?: string | null
   client_approved_at: string | null
   internal_notes: string | null
   amendment_reason: string | null
@@ -190,7 +215,7 @@ export interface DefaultTaxYearResponse {
   tax_year: number
 }
 
-export type AnnualReportListResponse = PaginatedResponse<AnnualReportSummary>
+export type AnnualReportListResponse = PaginatedResponse<AnnualReportListItem>
 
 export interface CreateAnnualReportPayload {
   client_record_id: number

@@ -4,10 +4,8 @@ import { Input } from '../../../../components/ui/inputs/Input'
 import { Button } from '../../../../components/ui/primitives/Button'
 
 interface TaxCalculatorInputsProps {
-  creditPoints: string
   pension: string
   otherCredits: string
-  onCreditPointsChange: (v: string) => void
   onPensionChange: (v: string) => void
   onOtherCreditsChange: (v: string) => void
   onSave: () => void
@@ -16,10 +14,8 @@ interface TaxCalculatorInputsProps {
 }
 
 export const TaxCalculatorInputs = ({
-  creditPoints,
   pension,
   otherCredits,
-  onCreditPointsChange,
   onPensionChange,
   onOtherCreditsChange,
   onSave,
@@ -81,13 +77,6 @@ export const TaxCalculatorInputs = ({
       </div>
       {editMode && (
         <div className="grid grid-cols-2 gap-3">
-          <Input
-            label="נקודות זיכוי"
-            type="number"
-            step="0.25"
-            value={creditPoints}
-            onChange={(e) => onCreditPointsChange(e.target.value)}
-          />
           <Input
             label={'הפקדות פנסיה/קה"ש (₪)'}
             type="number"

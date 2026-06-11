@@ -1,4 +1,4 @@
-import type { AnnualReportSummary } from '../../api'
+import type { AnnualReportListItem } from '../../api'
 import { STATUS_LABELS } from '../../api'
 import type { TimelineEventStatus } from '../statusTransition/TimelineEvent'
 import {
@@ -16,9 +16,9 @@ export interface AnnualReportTimelineEvent {
   sortTime: number
 }
 
-export const getAnnualReportName = (report: AnnualReportSummary): string => report.client_name ?? `דוח #${report.id}`
+export const getAnnualReportName = (report: AnnualReportListItem): string => report.client_name ?? `דוח #${report.id}`
 
-export const getClientReportName = (report: AnnualReportSummary): string =>
+export const getClientReportName = (report: AnnualReportListItem): string =>
   report.client_name ?? `לקוח #${report.client_record_id}`
 
 export const getDaysOverdue = (deadline: string | null): number | null => {
@@ -28,7 +28,7 @@ export const getDaysOverdue = (deadline: string | null): number | null => {
   return diff > 0 ? diff : null
 }
 
-export const getDeadlineStatus = (report: AnnualReportSummary): TimelineEventStatus => {
+export const getDeadlineStatus = (report: AnnualReportListItem): TimelineEventStatus => {
   const deadline = parseAnnualReportCalendarDate(report.filing_deadline)
   if (!deadline) return 'pending'
   if (report.submitted_at) return 'done'
@@ -40,9 +40,9 @@ export const getDeadlineStatus = (report: AnnualReportSummary): TimelineEventSta
 export const getMissingDocumentTypes = (uploadedTypes: Set<string>, signalTypes: string[] | undefined): string[] =>
   signalTypes?.length ? signalTypes : REQUIRED_DOCUMENT_TYPES.filter((type) => !uploadedTypes.has(type))
 
-const getReportStatusDescription = (report: AnnualReportSummary): string => `סטטוס: ${STATUS_LABELS[report.status]}`
+const getReportStatusDescription = (report: AnnualReportListItem): string => `סטטוס: ${STATUS_LABELS[report.status]}`
 
-export const buildTimelineEvents = (reports: AnnualReportSummary[]): AnnualReportTimelineEvent[] =>
+export const buildTimelineEvents = (reports: AnnualReportListItem[]): AnnualReportTimelineEvent[] =>
   reports
     .flatMap((report) => {
       const name = getAnnualReportName(report)
@@ -76,7 +76,7 @@ export const buildTimelineEvents = (reports: AnnualReportSummary[]): AnnualRepor
     })
     .sort((a, b) => b.sortTime - a.sortTime)
 
-export const getFilingStats = (reports: AnnualReportSummary[]) => {
+export const getFilingStats = (reports: AnnualReportListItem[]) => {
   const total = reports.length
   const pct = (n: number) => (total > 0 ? Math.round((n / total) * 100) : 0)
   const submittedOnTime = reports.filter((report) => {

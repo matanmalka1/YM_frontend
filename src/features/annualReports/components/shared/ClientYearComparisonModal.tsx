@@ -1,15 +1,15 @@
 import { Modal } from '../../../../components/ui/overlays/Modal'
 import { getStatusLabel } from '../../api/utils'
-import type { AnnualReportSummary } from '../../api/contracts'
+import type { AnnualReportListItem } from '../../api/contracts'
 import { formatShekelAmount } from '@/utils/utils'
 
 interface Props {
   open: boolean
   onClose: () => void
-  reports: AnnualReportSummary[]
+  reports: AnnualReportListItem[]
 }
 
-const ROWS: { label: string; render: (r: AnnualReportSummary) => string }[] = [
+const ROWS: { label: string; render: (r: AnnualReportListItem) => string }[] = [
   { label: 'סטטוס', render: (r) => getStatusLabel(r.status) },
   { label: 'חבות מס', render: (r) => formatShekelAmount(r.tax_due) },
   { label: 'החזר מס', render: (r) => formatShekelAmount(r.refund_due) },

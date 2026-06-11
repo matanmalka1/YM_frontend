@@ -4,7 +4,7 @@ import { ANNUAL_REPORT_ENDPOINTS } from './endpoints'
 import type {
   AnnualReportFull,
   AnnualReportListResponse,
-  AnnualReportSummary,
+  AnnualReportListItem,
   AnnualReportScheduleKey,
   CreateAnnualReportPayload,
   ReportDetailResponse,
@@ -39,7 +39,7 @@ export const annualReportsApi = {
     return response.data
   },
 
-  listClientReports: async (clientId: number): Promise<AnnualReportSummary[]> => {
+  listClientReports: async (clientId: number): Promise<AnnualReportListItem[]> => {
     const response = await api.get<AnnualReportListResponse>(ANNUAL_REPORT_ENDPOINTS.clientReports(clientId))
     return response.data.items
   },

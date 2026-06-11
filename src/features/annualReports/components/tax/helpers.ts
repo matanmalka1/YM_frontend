@@ -10,13 +10,13 @@ export interface CreditRow {
 }
 
 export const toTaxInputValues = (detail: AnnualReportFull | undefined) => ({
-  creditPoints: detail?.credit_points != null ? String(detail.credit_points) : '',
   pension: detail?.pension_contribution != null ? String(detail.pension_contribution) : '',
   otherCredits: detail?.other_credits != null ? String(detail.other_credits) : '',
 })
 
-export const toReportDetailsPayload = (creditPoints: string, pension: string, otherCredits: string) => ({
-  credit_points: creditPoints !== '' ? Number(creditPoints) : undefined,
+// Credit points are computed server-side from credit-point rows and are not
+// editable via PATCH /details (AnnualReportDetailUpdateRequest forbids extras).
+export const toReportDetailsPayload = (pension: string, otherCredits: string) => ({
   pension_contribution: pension !== '' ? pension : undefined,
   other_credits: otherCredits !== '' ? otherCredits : undefined,
 })
@@ -50,7 +50,8 @@ export const getRecognitionTone = (recognitionRate: string | number) =>
 
 export const buildCreditRows = (detail: AnnualReportFull, taxYear: number): CreditRow[] => {
   const cpv = getCreditPointValue(taxYear)
-  const creditPoints = detail.credit_points ?? 0
+  const tc = detail.tax_calculation
+  const creditPoints = Number(tc?.credit_points ?? 0)
   const pensionContribution = Number(detail.pension_contribution ?? 0)
   const rows: CreditRow[] = [
     {
@@ -68,7 +69,7 @@ export const buildCreditRows = (detail: AnnualReportFull, taxYear: number): Cred
     })
   }
 
-  const lifeInsuranceCredit = (detail.life_insurance_credit_points ?? 0) * cpv
+  const lifeInsuranceCredit = Number(tc?.life_insurance_credit_points ?? 0) * cpv
   if (lifeInsuranceCredit > 0) {
     rows.push({
       label: 'ביטוח חיים / פנסיה',
@@ -77,7 +78,7 @@ export const buildCreditRows = (detail: AnnualReportFull, taxYear: number): Cred
     })
   }
 
-  const tuitionCredit = (detail.tuition_credit_points ?? 0) * cpv
+  const tuitionCredit = Number(tc?.tuition_credit_points ?? 0) * cpv
   if (tuitionCredit > 0) {
     rows.push({
       label: 'שכר לימוד (ילדים)',
