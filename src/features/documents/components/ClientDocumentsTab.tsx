@@ -52,13 +52,7 @@ export const ClientDocumentsTab: React.FC<ClientDocumentsTabProps> = ({ clientId
         onReplace={handleReplace}
       />
       {totalPages > 1 && (
-        <PaginationCard
-          page={page}
-          totalPages={totalPages}
-          total={total}
-          label="מסמכים"
-          onPageChange={setPage}
-        />
+        <PaginationCard page={page} totalPages={totalPages} total={total} label="מסמכים" onPageChange={setPage} />
       )}
     </>
   )

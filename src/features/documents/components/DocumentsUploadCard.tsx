@@ -150,9 +150,7 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
               disabled={businessesLoading || isClientScopedType}
               options={businessOptions}
             />
-            {isClientScopedType && (
-              <p className="mt-1 text-xs text-gray-400">סוג מסמך זה שייך ללקוח בלבד</p>
-            )}
+            {isClientScopedType && <p className="mt-1 text-xs text-gray-400">סוג מסמך זה שייך ללקוח בלבד</p>}
           </div>
         )}
       </div>

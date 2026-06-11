@@ -16,8 +16,7 @@ export const ReportSummaryCards: React.FC<Props> = ({ report }) => {
   const finalBalance = Number(report.final_balance ?? 0)
   const profitMargin = totalIncome > 0 ? (netProfit / totalIncome) * 100 : 0
   const expenseRatio = totalIncome > 0 ? (grossExpenses / totalIncome) * 100 : 0
-  const balanceLabel =
-    finalBalance > 0 ? 'לתשלום לאחר מקדמות' : finalBalance < 0 ? 'החזר צפוי לאחר מקדמות' : 'מאוזן'
+  const balanceLabel = finalBalance > 0 ? 'לתשלום לאחר מקדמות' : finalBalance < 0 ? 'החזר צפוי לאחר מקדמות' : 'מאוזן'
   const balanceVariant = finalBalance < 0 ? 'green' : finalBalance > 0 ? 'red' : 'neutral'
 
   const hasTaxDue = taxAfterCredits > 0

@@ -150,8 +150,7 @@ export type ApiErrorEnvelope = {
   error: ApiErrorBody
 }
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null
+const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null
 
 const isApiErrorBody = (value: unknown): value is ApiErrorBody => {
   if (!isRecord(value)) return false

@@ -95,13 +95,7 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
       </Card>
 
       {totalPages > 1 && (
-        <PaginationCard
-          page={page}
-          totalPages={totalPages}
-          total={total}
-          label="בקשות חתימה"
-          onPageChange={setPage}
-        />
+        <PaginationCard page={page} totalPages={totalPages} total={total} label="בקשות חתימה" onPageChange={setPage} />
       )}
 
       <SignatureRequestAuditDrawer requestId={auditRequestId} onClose={() => setAuditRequestId(null)} />

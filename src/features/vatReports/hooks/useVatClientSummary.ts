@@ -4,10 +4,7 @@ import { vatReportsQK } from '../api/queryKeys'
 import { useMutationWithToast } from '../../../hooks/useMutationWithToast'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
-export const useVatClientSummary = (
-  clientId: number,
-  yearParams?: { from_year?: number; to_year?: number },
-) => {
+export const useVatClientSummary = (clientId: number, yearParams?: { from_year?: number; to_year?: number }) => {
   const summaryQuery = useQuery({
     queryKey: vatReportsQK.clientSummary(clientId, yearParams),
     queryFn: () => vatReportsApi.getClientSummary(clientId, yearParams),

@@ -49,9 +49,7 @@ export const DocumentVersionsPanel: React.FC<DocumentVersionsPanelProps> = ({ cl
           </li>
         ))}
       </ul>
-      {hasMore && (
-        <p className="mt-2 text-xs text-gray-400">מוצגות 10 גרסאות אחרונות בלבד</p>
-      )}
+      {hasMore && <p className="mt-2 text-xs text-gray-400">מוצגות 10 גרסאות אחרונות בלבד</p>}
     </div>
   )
 }

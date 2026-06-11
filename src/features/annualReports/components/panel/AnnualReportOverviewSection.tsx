@@ -103,7 +103,6 @@ export const AnnualReportOverviewSection: React.FC<Props> = ({
           </div>
         )}
       </div>
-
     </div>
   )
 }

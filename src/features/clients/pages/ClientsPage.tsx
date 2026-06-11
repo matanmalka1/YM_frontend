@@ -61,8 +61,11 @@ export const Clients: React.FC = () => {
     onEditClient: can.editClients ? (client) => setEditingClientId(client.id) : undefined,
   })
 
-  const { client: editingClient, isLoading: editingClientLoading, error: editingClientError } =
-    useClientQuery({ clientId: editingClientId })
+  const {
+    client: editingClient,
+    isLoading: editingClientLoading,
+    error: editingClientError,
+  } = useClientQuery({ clientId: editingClientId })
 
   const hasActiveFilters = Boolean(filters.search || filters.status || filters.accountant_id)
   const isEmptyState = !loading && !error && total === 0 && !hasActiveFilters

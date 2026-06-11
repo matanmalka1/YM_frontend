@@ -78,9 +78,13 @@ export const documentsApi = {
   replaceDocument: async (clientId: number, id: number, file: File): Promise<PermanentDocumentResponse> => {
     const formData = new FormData()
     formData.append('file', file)
-    const response = await api.put<PermanentDocumentResponse>(DOCUMENT_ENDPOINTS.documentReplace(clientId, id), formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
+    const response = await api.put<PermanentDocumentResponse>(
+      DOCUMENT_ENDPOINTS.documentReplace(clientId, id),
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      },
+    )
     return response.data
   },
 }

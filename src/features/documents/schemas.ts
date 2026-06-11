@@ -24,10 +24,10 @@ export const documentsUploadSchema = z
     tax_year: z.number().nullable(),
     annual_report_id: z.number().nullable(),
   })
-  .refine(
-    (data) => !(CLIENT_SCOPE_TYPES.has(data.document_type) && data.business_id !== null),
-    { message: 'סוג מסמך זה שייך ללקוח ולא לעסק ספציפי', path: ['business_id'] },
-  )
+  .refine((data) => !(CLIENT_SCOPE_TYPES.has(data.document_type) && data.business_id !== null), {
+    message: 'סוג מסמך זה שייך ללקוח ולא לעסק ספציפי',
+    path: ['business_id'],
+  })
 
 export const documentsUploadDefaultValues: DocumentsUploadFormValues = {
   document_type: '' as DocumentsUploadFormValues['document_type'],

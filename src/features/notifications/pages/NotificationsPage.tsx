@@ -77,11 +77,7 @@ export const NotificationsPage: React.FC = () => {
     if (!selectedClient) setClientQuery(clientName)
   }, [clientName]) // eslint-disable-line react-hooks/exhaustive-deps
   const [selectedId, setSelectedId] = useState<number | null>(null)
-  const {
-    data: selected,
-    isPending: selectedLoading,
-    error: selectedError,
-  } = useNotificationDetail(selectedId)
+  const { data: selected, isPending: selectedLoading, error: selectedError } = useNotificationDetail(selectedId)
   const [sendOpen, setSendOpen] = useState(false)
   const [sendClient, setSendClient] = useState<SelectedClientFilter | null>(null)
 
@@ -181,7 +177,11 @@ export const NotificationsPage: React.FC = () => {
         align: 'center',
         render: (item) => (
           <RowActionsMenu ariaLabel="פעולות הודעה">
-            <RowActionItem label="צפייה בפרטים" icon={<Eye className="h-4 w-4" />} onClick={() => setSelectedId(item.id)} />
+            <RowActionItem
+              label="צפייה בפרטים"
+              icon={<Eye className="h-4 w-4" />}
+              onClick={() => setSelectedId(item.id)}
+            />
             {isAdvisor && (
               <RowActionItem
                 label="שליחת הודעה ללקוח"
