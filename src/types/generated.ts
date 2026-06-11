@@ -11213,7 +11213,7 @@ export interface operations {
                 entity_type?: components["schemas"]["EntityType"] | null;
                 accountant_id?: number | null;
                 sort_by?: string;
-                sort_order?: string;
+                order?: "asc" | "desc";
                 page?: number;
                 page_size?: number;
             };
@@ -11281,7 +11281,7 @@ export interface operations {
             query?: {
                 search?: string | null;
                 sort_by?: string;
-                sort_order?: string;
+                order?: "asc" | "desc";
                 page?: number;
                 page_size?: number;
             };
@@ -12189,7 +12189,7 @@ export interface operations {
                 page?: number;
                 page_size?: number;
                 sort_by?: string | null;
-                order?: string;
+                order?: "asc" | "desc";
             };
             header?: never;
             path?: never;

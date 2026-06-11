@@ -10,7 +10,7 @@ const BASE_QUERY_PARAMS = {
   page: 1,
   page_size: CLIENT_SIDEBAR_PAGE_SIZE,
   sort_by: 'full_name',
-  sort_order: 'asc',
+  order: 'asc',
 } satisfies ListClientSidebarParams
 
 export interface ClientSidebarItem {

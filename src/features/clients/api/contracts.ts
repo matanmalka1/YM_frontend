@@ -97,7 +97,7 @@ export interface ListClientsParams {
   entity_type?: EntityType
   accountant_id?: number
   sort_by?: 'full_name' | 'created_at' | 'status' | 'entity_type'
-  sort_order?: 'asc' | 'desc'
+  order?: 'asc' | 'desc'
   page?: number
   page_size?: number
 }
@@ -105,7 +105,7 @@ export interface ListClientsParams {
 export interface ListClientSidebarParams {
   search?: string
   sort_by?: 'full_name' | 'office_client_number'
-  sort_order?: 'asc' | 'desc'
+  order?: 'asc' | 'desc'
   page?: number
   page_size?: number
 }

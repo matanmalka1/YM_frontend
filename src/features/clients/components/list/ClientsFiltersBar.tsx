@@ -58,7 +58,7 @@ export const ClientsFiltersBar: React.FC<ClientsFiltersBarProps> = ({
       },
       {
         type: 'select' as const,
-        key: 'sort_order',
+        key: 'order',
         label: 'כיוון מיון',
         options: getClientSortOrderOptions(filters.sort_by),
         defaultValue: DEFAULT_CLIENT_SORT_ORDER,
@@ -86,7 +86,7 @@ export const ClientsFiltersBar: React.FC<ClientsFiltersBarProps> = ({
         entity_type: filters.entity_type ?? '',
         accountant_id: activeAccountantId,
         sort_by: filters.sort_by ?? '',
-        sort_order: filters.sort_order ?? '',
+        order: filters.order ?? '',
       }}
       onChange={(key, value) => onFilterChange(key as Parameters<typeof onFilterChange>[0], value)}
       onReset={onReset}
