@@ -4586,6 +4586,8 @@ export interface components {
             notes?: string | null;
             /** Created At */
             created_at?: string | null;
+            /** Updated At */
+            updated_at?: string | null;
             /** Available Actions */
             available_actions?: components["schemas"]["ActionDescriptor"][];
         };
