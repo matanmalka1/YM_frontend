@@ -139,6 +139,43 @@ export const getHttpStatus = (error: unknown): number | null => {
   return typeof status === 'number' ? status : null
 }
 
+export type ApiErrorBody = {
+  code: string
+  message: string
+  details?: unknown
+  request_id?: string | null
+}
+
+export type ApiErrorEnvelope = {
+  error: ApiErrorBody
+}
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null
+
+const isApiErrorBody = (value: unknown): value is ApiErrorBody => {
+  if (!isRecord(value)) return false
+  return typeof value.code === 'string' && typeof value.message === 'string'
+}
+
+export const getApiErrorBody = (error: unknown): ApiErrorBody | null => {
+  if (!isAxiosError(error)) return null
+
+  const data = error.response?.data
+  if (!isRecord(data)) return null
+
+  return isApiErrorBody(data.error) ? data.error : null
+}
+
+const getLegacyDetailMessage = (error: unknown): string | null => {
+  if (!isAxiosError(error)) return null
+
+  const data = error.response?.data
+  if (!isRecord(data)) return null
+
+  return typeof data.detail === 'string' ? data.detail : null
+}
+
 const containsHebrew = (value: string): boolean => /[֐-׿]/.test(value)
 
 const isSafeBackendMessage = (value: unknown): value is string =>
@@ -165,7 +202,7 @@ const resolveErrorMessage = (error: unknown, fallbackMessage: string): string =>
 
     if (error.response) {
       const status = error.response.status
-      const backendMessage = error.response?.data?.error?.message
+      const backendMessage = getApiErrorBody(error)?.message ?? getLegacyDetailMessage(error)
       if (isSafeBackendMessage(backendMessage) && status !== 422) {
         return backendMessage.trim()
       }

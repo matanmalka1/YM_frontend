@@ -6019,6 +6019,17 @@ export interface components {
             /** Total */
             total: number;
         };
+        /** PaginatedResponse[ChargeResponse] */
+        PaginatedResponse_ChargeResponse_: {
+            /** Items */
+            items: components["schemas"]["ChargeResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
+        };
         /** PaginatedResponse[EntityNoteResponse] */
         PaginatedResponse_EntityNoteResponse_: {
             /** Items */
@@ -10366,7 +10377,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["PaginatedResponse_ChargeResponse_"];
                 };
             };
             /** @description הדוח המבוקש לא נמצא */
@@ -12288,6 +12299,33 @@ export interface operations {
                     "application/json": components["schemas"]["ChargeResponse"];
                 };
             };
+            /** @description נתוני החיוב אינם תקינים */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description נדרש אימות */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description אין הרשאה לביצוע הפעולה */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -12295,6 +12333,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description אירעה שגיאה לא צפויה */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
         };
@@ -12403,8 +12450,44 @@ export interface operations {
                     "application/json": components["schemas"]["ChargeResponse"];
                 };
             };
+            /** @description לא ניתן לבטל חיוב במצב הנוכחי */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description נדרש אימות */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description אין הרשאה לביצוע הפעולה */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description החיוב המבוקש לא נמצא */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description החיוב כבר בוטל */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
