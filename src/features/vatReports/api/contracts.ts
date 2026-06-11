@@ -76,6 +76,8 @@ export interface VatWorkItemListItem {
 export interface VatWorkItemListResponse {
   items: VatWorkItemListItem[]
   total: number
+  page: number
+  page_size: number
 }
 
 export interface VatWorkItemsListParams {
@@ -148,6 +150,9 @@ export interface VatInvoiceResponse {
 
 export interface VatInvoiceListResponse {
   items: VatInvoiceResponse[]
+  total: number
+  page: number
+  page_size: number
 }
 
 export interface CreateVatInvoicePayload {

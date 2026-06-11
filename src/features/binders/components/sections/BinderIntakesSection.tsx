@@ -86,7 +86,7 @@ export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({
     staleTime: QUERY_STALE_TIME.default,
   })
 
-  const intakes = data?.intakes ?? []
+  const intakes = data?.items ?? []
   const businesses = businessesData?.items ?? []
   const annualReports = annualReportsData ?? []
 
