@@ -3,12 +3,8 @@ import { MONTHS_COVERED_OPTIONS } from '@/constants/periodOptions.constants'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 import type { AdvancePaymentMethod, AdvancePaymentStatus } from './types'
 
-export const ADVANCE_PAYMENT_STATUS_VALUES = [
-  'pending',
-  'paid',
-  'partial',
-] as const satisfies readonly AdvancePaymentStatus[]
-export const ADVANCE_PAYMENT_STATUS_LABELS: Record<AdvancePaymentStatus, string> = {
+const ADVANCE_PAYMENT_STATUS_VALUES = ['pending', 'paid', 'partial'] as const satisfies readonly AdvancePaymentStatus[]
+const ADVANCE_PAYMENT_STATUS_LABELS: Record<AdvancePaymentStatus, string> = {
   pending: 'ממתין',
   paid: 'שולם',
   partial: 'חלקי',
@@ -24,7 +20,7 @@ export const ADVANCE_PAYMENT_STATUS_VARIANTS: Record<
   pending: 'neutral',
 }
 
-export const ADVANCE_PAYMENT_METHOD_VALUES = [
+const ADVANCE_PAYMENT_METHOD_VALUES = [
   'bank_transfer',
   'credit_card',
   'check',
@@ -32,7 +28,7 @@ export const ADVANCE_PAYMENT_METHOD_VALUES = [
   'cash',
   'other',
 ] as const satisfies readonly AdvancePaymentMethod[]
-export const ADVANCE_PAYMENT_METHOD_LABELS: Record<AdvancePaymentMethod, string> = {
+const ADVANCE_PAYMENT_METHOD_LABELS: Record<AdvancePaymentMethod, string> = {
   bank_transfer: 'העברה בנקאית',
   credit_card: 'כרטיס אשראי',
   check: "צ'ק",
@@ -40,7 +36,6 @@ export const ADVANCE_PAYMENT_METHOD_LABELS: Record<AdvancePaymentMethod, string>
   cash: 'מזומן',
   other: 'אחר',
 }
-export const getAdvancePaymentMethodLabel = makeLabelGetter(ADVANCE_PAYMENT_METHOD_LABELS)
 
 export const ADVANCE_PAYMENT_STATUS_FILTERS: AdvancePaymentStatus[] = [...ADVANCE_PAYMENT_STATUS_VALUES]
 

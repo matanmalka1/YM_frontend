@@ -1,15 +1,7 @@
 import { makeLabelGetter } from '@/utils/labels'
 import type { SignatureRequestStatus, SignatureRequestType } from './api'
 
-export const SIGNATURE_REQUEST_STATUS_VALUES = [
-  'pending_signature',
-  'signed',
-  'declined',
-  'expired',
-  'canceled',
-] as const satisfies readonly SignatureRequestStatus[]
-
-export const SIGNATURE_REQUEST_STATUS_LABELS: Record<SignatureRequestStatus, string> = {
+const SIGNATURE_REQUEST_STATUS_LABELS: Record<SignatureRequestStatus, string> = {
   pending_signature: 'ממתין לחתימה',
   signed: 'נחתם',
   declined: 'נדחה',
@@ -18,15 +10,7 @@ export const SIGNATURE_REQUEST_STATUS_LABELS: Record<SignatureRequestStatus, str
 }
 export const getSignatureRequestStatusLabel = makeLabelGetter(SIGNATURE_REQUEST_STATUS_LABELS)
 
-export const SIGNATURE_REQUEST_TYPE_VALUES = [
-  'engagement_agreement',
-  'annual_report_approval',
-  'power_of_attorney',
-  'vat_return_approval',
-  'custom',
-] as const satisfies readonly SignatureRequestType[]
-
-export const SIGNATURE_REQUEST_TYPE_LABELS: Record<SignatureRequestType, string> = {
+const SIGNATURE_REQUEST_TYPE_LABELS: Record<SignatureRequestType, string> = {
   engagement_agreement: 'הסכם התקשרות',
   annual_report_approval: 'אישור דוח שנתי',
   power_of_attorney: 'ייפוי כוח',

@@ -1,4 +1,3 @@
-import { CATEGORY_LABELS } from './constants'
 import { EXPENSE_CATEGORIES } from './constants'
 import type { VatInvoiceRowValues } from './schemas/invoice.schema'
 import { semanticMonoToneClasses } from '../../utils/semanticColors'
@@ -55,9 +54,6 @@ export const toDateInputValue = (dateStr: string): string => {
 
 export const getVatInvoiceGrossAmount = (netAmount: string | number, vatAmount: string | number): string =>
   (Number(netAmount) + Number(vatAmount)).toFixed(2)
-
-export const getVatCategoryLabel = (category: string | null): string =>
-  CATEGORY_LABELS[category ?? ''] ?? category ?? 'כללי'
 
 export const getVatInvoiceDefaultValues = (invoiceType: 'income' | 'expense'): VatInvoiceRowValues => ({
   invoice_type: invoiceType,

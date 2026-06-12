@@ -20,7 +20,7 @@ interface StatusRendererProps<TStatus extends string> {
   defaultVariant?: 'success' | 'warning' | 'error' | 'info' | 'neutral'
 }
 
-export const renderEmptyFallback = (emptyValue: ReactNode = EMPTY_VALUE): ReactNode => emptyValue
+const renderEmptyFallback = (emptyValue: ReactNode = EMPTY_VALUE): ReactNode => emptyValue
 
 export const renderMutedText = ({ value, className, emptyValue }: TextRendererProps): ReactNode => (
   <span className={cn('text-sm text-gray-700', className)}>

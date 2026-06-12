@@ -1,8 +1,8 @@
 // INFRASTRUCTURE LAYER: Shared type contracts for the action system.
 // Consumed by: lib/actions/runtime.ts, features/actions/hooks/*.ts
-export type ActionMethod = 'get' | 'post' | 'patch' | 'put' | 'delete'
+type ActionMethod = 'get' | 'post' | 'patch' | 'put' | 'delete'
 
-export interface BackendActionInputField {
+interface BackendActionInputField {
   name: string
   label: string
   type: 'text'
@@ -40,17 +40,14 @@ export interface BackendAction {
   urgency?: 'overdue' | 'upcoming' | null
   due_date?: string | null
 }
-
-export type BackendActionInput = BackendAction
-
-export interface ActionInputField {
+interface ActionInputField {
   name: string
   label: string
   type: 'text'
   required?: boolean
 }
 
-export interface ActionConfirmConfig {
+interface ActionConfirmConfig {
   title: string
   message: string
   confirmLabel: string

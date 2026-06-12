@@ -5,7 +5,7 @@ import { taskStatusValues } from '@/features/tasks'
 
 export type { WorkQueueSourceType, WorkQueueUrgency }
 
-export const workQueueActionSchema = z.object({
+const workQueueActionSchema = z.object({
   key: z.string(),
   label: z.string(),
   type: z.enum(['link', 'mutation', 'modal']),
@@ -22,7 +22,7 @@ export const workQueueActionSchema = z.object({
   disabled_reason: z.string().nullable().optional(),
 })
 
-export const linkedTaskSummarySchema = z.object({
+const linkedTaskSummarySchema = z.object({
   id: z.number().int(),
   title: z.string(),
   status: z.string(),
@@ -32,13 +32,13 @@ export const linkedTaskSummarySchema = z.object({
   assigned_role: z.string().nullable().optional(),
 })
 
-export const workQueueWarningSchema = z.object({
+const workQueueWarningSchema = z.object({
   key: z.string(),
   label: z.string(),
   severity: z.enum(['info', 'warning', 'danger']),
 })
 
-export const sourceSummarySchema = z.object({
+const sourceSummarySchema = z.object({
   source_type: z.string(),
   source_id: z.number().int(),
   label: z.string(),
@@ -67,7 +67,7 @@ const baseWorkQueueItemSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).nullable().optional(),
 })
 
-export const advancePaymentWorkQueueMetadataSchema = z.object({
+const advancePaymentWorkQueueMetadataSchema = z.object({
   period: z.string(),
   period_label: z.string().optional().nullable(),
   period_months_count: z.number().int(),
@@ -82,7 +82,7 @@ export const advancePaymentWorkQueueMetadataSchema = z.object({
   annual_report_id: z.number().int().nullable(),
 })
 
-export const advancePaymentWorkQueueItemSchema = baseWorkQueueItemSchema.extend({
+const advancePaymentWorkQueueItemSchema = baseWorkQueueItemSchema.extend({
   source_type: z.literal('advance_payment'),
   metadata: advancePaymentWorkQueueMetadataSchema,
 })
@@ -93,18 +93,16 @@ const genericWorkQueueItemSchema = baseWorkQueueItemSchema.extend({
   source_type: nonAdvanceSourceTypeSchema,
 })
 
-export const workQueueItemSchema = z.discriminatedUnion('source_type', [
+const workQueueItemSchema = z.discriminatedUnion('source_type', [
   advancePaymentWorkQueueItemSchema,
   genericWorkQueueItemSchema,
 ])
 
 export type WorkQueueItem = z.infer<typeof workQueueItemSchema>
-export type AdvancePaymentWorkQueueItem = z.infer<typeof advancePaymentWorkQueueItemSchema>
 export type WorkQueueAction = z.infer<typeof workQueueActionSchema>
-export type LinkedTaskSummary = z.infer<typeof linkedTaskSummarySchema>
 export type WorkQueueWarning = z.infer<typeof workQueueWarningSchema>
 
-export const workQueueSummarySchema = z.object({
+const workQueueSummarySchema = z.object({
   total: z.number().int(),
   manual_tasks: z.number().int(),
   linked: z.number().int(),

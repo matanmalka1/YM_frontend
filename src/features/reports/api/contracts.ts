@@ -1,4 +1,4 @@
-export interface AgingBucket {
+interface AgingBucket {
   total_clients: number;
   total_current: string;
   total_30_days: string;

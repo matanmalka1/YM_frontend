@@ -13,7 +13,7 @@ export interface UserResponse {
 
 export type UserListResponse = PaginatedResponse<UserResponse>
 
-export interface UserAuditLogResponse {
+interface UserAuditLogResponse {
   id: number
   action: string
   actor_user_id: number | null

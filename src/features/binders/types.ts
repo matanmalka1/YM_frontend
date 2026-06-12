@@ -37,7 +37,7 @@ export interface BinderListResponse {
   counters: BinderListCounters
 }
 
-export interface BinderListCounters {
+interface BinderListCounters {
   total: number
   location_in_office: number
   location_ready_for_handover: number
@@ -46,7 +46,7 @@ export interface BinderListCounters {
   capacity_full: number
 }
 
-export interface BinderAuditEntry {
+interface BinderAuditEntry {
   field_name: 'location_status' | 'capacity_status'
   old_value: string
   new_value: string
@@ -106,7 +106,7 @@ export interface HandoverToClientPayload {
   handed_over_at?: string | null
 }
 
-export type BindersFilters = Omit<ListBindersParams, 'client_name' | 'year'> & {
+type BindersFilters = Omit<ListBindersParams, 'client_name' | 'year'> & {
   binder_number?: string
   year?: string
 }
@@ -133,7 +133,7 @@ export interface BinderIntakeMaterialResponse {
   created_at: string
 }
 
-export interface BinderIntakeResponse {
+interface BinderIntakeResponse {
   id: number
   binder_id: number
   received_at: string

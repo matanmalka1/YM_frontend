@@ -1,8 +1,6 @@
 import { z } from 'zod'
 import { format } from 'date-fns'
-import { ANNUAL_BINDER_TYPES, BINDER_TYPE_VALUES, PERIODIC_BINDER_TYPES, type BinderTypeValue } from './constants'
-
-export type MaterialType = BinderTypeValue
+import { ANNUAL_BINDER_TYPES, BINDER_TYPE_VALUES, PERIODIC_BINDER_TYPES } from './constants'
 
 export const receiveBinderSchema = z
   .object({

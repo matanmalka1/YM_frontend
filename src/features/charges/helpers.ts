@@ -2,12 +2,7 @@ import type { DataTableProps } from '@/components/ui/table'
 import { formatCurrencyILS, parsePositiveInt } from '@/utils/utils'
 import { toOptionalNumber, toOptionalString } from '@/utils/filters'
 import { chargesApi, type ChargeStatusStat, type ChargesListParams } from './api'
-import {
-  CHARGE_PERIOD_OPTIONS,
-  CHARGE_PERIOD_YEAR_SPAN,
-  CHARGE_STATUS_OPTIONS,
-  CHARGE_TYPE_OPTIONS_WITH_ALL,
-} from './constants'
+import { CHARGE_PERIOD_YEAR_SPAN } from './constants'
 import type { ChargeAction, ChargesFilters } from './types'
 import { getChargePeriodLabel } from './utils'
 
@@ -51,30 +46,6 @@ export const buildChargePeriodOptions = (monthsCovered: number) => {
   ]
 }
 
-export const buildChargeFilterBadges = (
-  filters: ChargesFilters,
-  onFilterChange: (key: string, value: string) => void,
-) =>
-  [
-    getFilterBadge('status', filters.status, CHARGE_STATUS_OPTIONS, onFilterChange),
-    getFilterBadge('charge_type', filters.charge_type, CHARGE_TYPE_OPTIONS_WITH_ALL, onFilterChange),
-    getFilterBadge('period', filters.period, CHARGE_PERIOD_OPTIONS, onFilterChange),
-    filters.issued_after
-      ? {
-          key: 'issued_after',
-          label: `הונפק מ-${filters.issued_after}`,
-          onRemove: () => onFilterChange('issued_after', ''),
-        }
-      : null,
-    filters.issued_before
-      ? {
-          key: 'issued_before',
-          label: `הונפק עד ${filters.issued_before}`,
-          onRemove: () => onFilterChange('issued_before', ''),
-        }
-      : null,
-  ].filter((badge): badge is NonNullable<typeof badge> => badge !== null)
-
 export const runChargeActionRequest = (chargeId: number, action: ChargeAction, reason?: string) => {
   if (action === 'issue') return chargesApi.issue(chargeId)
   if (action === 'markPaid') return chargesApi.markPaid(chargeId)
@@ -100,17 +71,3 @@ export const getChargesEmptyState = (
     : 'אין חיובים התואמים את הסינון הנוכחי.',
   action: isAdvisor ? { label: 'חיוב חדש', onClick: onCreate } : undefined,
 })
-
-const getFilterBadge = (
-  key: string,
-  value: string,
-  options: { value: string; label: string }[],
-  onFilterChange: (key: string, value: string) => void,
-) => {
-  if (!value) return null
-  return {
-    key,
-    label: options.find((option) => option.value === value)?.label ?? value,
-    onRemove: () => onFilterChange(key, ''),
-  }
-}

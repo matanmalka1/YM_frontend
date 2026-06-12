@@ -10,7 +10,7 @@ export const staggerDelay = (index: number, stepMs: number = DEFAULT_STEP_MS, of
   return `${offsetMs + index * stepMs}ms`
 }
 
-export const animationDelayVars = (delay: string): AnimationDelayVars => ({
+const animationDelayVars = (delay: string): AnimationDelayVars => ({
   '--enter-delay': delay,
 })
 

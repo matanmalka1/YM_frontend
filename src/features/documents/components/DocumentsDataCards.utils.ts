@@ -1,14 +1,11 @@
 import { DOC_TYPE_LABELS } from '../documents.constants'
-import type { OperationalSignalsResponse, PermanentDocumentResponse } from '../api'
+import type { PermanentDocumentResponse } from '../api'
 import type { BusinessResponse } from '@/features/clients'
 import type { FilterBadge } from '../../../components/ui/table/ActiveFilterBadges'
 import { GENERAL_CLIENT_DOCUMENT_LABEL } from './DocumentsDataCards.constants'
 
-export const getDocumentTypeLabel = (documentType: PermanentDocumentResponse['document_type'] | string) =>
+const getDocumentTypeLabel = (documentType: PermanentDocumentResponse['document_type'] | string) =>
   DOC_TYPE_LABELS[documentType] ?? documentType
-
-export const getMissingDocumentsMessage = (missingDocuments: OperationalSignalsResponse['missing_documents']) =>
-  `מסמכים חסרים: ${missingDocuments.map(getDocumentTypeLabel).join(', ')}`
 
 const matchesDocumentSearch = (doc: PermanentDocumentResponse, searchTerm: string) => {
   if (!searchTerm) return true

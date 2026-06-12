@@ -7,15 +7,6 @@ import { DEFAULT_BIMONTHLY_START_MONTH } from './advancePaymentComponent.constan
 export const getAdvancePaymentMonthLabel = (period: string, periodMonthsCount: 1 | 2 = 1) =>
   getReportingPeriodMonthLabel(period, periodMonthsCount)
 
-type MonoTone = 'neutral' | 'positive' | 'negative'
-
-export const getDeltaTone = (delta: string | null): MonoTone => {
-  const numericDelta = Number(delta)
-  if (numericDelta > 0) return 'negative'
-  if (numericDelta < 0) return 'positive'
-  return 'neutral'
-}
-
 export const getCollectionPercent = (rate: number | null, cap = false) => {
   if (rate === null) return null
   const roundedRate = Math.round(rate)
@@ -52,7 +43,7 @@ export const toEditableAmount = (value: string | null) => (value == null ? '' : 
 
 export const toFrequency = (value: string) => Number(value) as 1 | 2
 
-export const toPeriod = (year: number, month: number) => `${year}-${String(month).padStart(2, '0')}`
+const toPeriod = (year: number, month: number) => `${year}-${String(month).padStart(2, '0')}`
 
 export const buildCreateAdvancePaymentPayload = (
   year: number,

@@ -26,8 +26,7 @@ export const toTaxResultPayload = (liability: number) =>
     ? { tax_due: String(liability), refund_due: null }
     : { tax_due: null, refund_due: String(Math.abs(liability)) }
 
-export const getCreditPointValue = (taxYear: number) =>
-  CREDIT_POINT_VALUE_BY_YEAR[taxYear] ?? DEFAULT_CREDIT_POINT_VALUE
+const getCreditPointValue = (taxYear: number) => CREDIT_POINT_VALUE_BY_YEAR[taxYear] ?? DEFAULT_CREDIT_POINT_VALUE
 
 export const getTotalCredits = (data: {
   credit_points_value: string | number

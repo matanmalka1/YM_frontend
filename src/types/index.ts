@@ -9,7 +9,7 @@ export interface PaginatedResponse<T> {
 }
 
 // Pagination params for API requests (snake_case to match backend)
-export interface PagedQueryParams {
+interface PagedQueryParams {
   page: number
   page_size: number
 }

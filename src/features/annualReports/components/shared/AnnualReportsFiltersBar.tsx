@@ -4,7 +4,7 @@ import type { AnnualReportStatus } from '../../api/contracts'
 import { ALL_STATUSES_OPTION, ALL_YEARS_OPTION } from '@/constants/filterOptions.constants'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 
-export interface AnnualReportsFilters {
+interface AnnualReportsFilters {
   client_id: string
   client_name: string
   status: string

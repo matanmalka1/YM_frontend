@@ -1,33 +1,21 @@
 export { vatReportsApi } from './vatReports.api'
 export { vatReportsQK } from './queryKeys'
-export { VAT_ENDPOINTS } from './endpoints'
+
 export type {
   VatType,
   VatWorkItemStatus,
   VatWorkItemResponse,
   VatWorkItemListItem,
-  VatWorkItemListResponse,
-  VatWorkItemsListParams,
   VatWorkItemStatusSummaryParams,
-  VatWorkItemStatusSummaryResponse,
-  VatWorkItemLookupResponse,
-  VatPeriodOptionResponse,
-  VatPeriodOptionsResponse,
   CreateVatWorkItemPayload,
   VatInvoiceResponse,
-  VatInvoiceListResponse,
   CreateVatInvoicePayload,
   UpdateVatInvoicePayload,
   VatAuditLogResponse,
-  VatAuditTrailResponse,
   VatPeriodRow,
   VatAnnualSummary,
-  VatClientSummaryResponse,
   FileVatReturnPayload,
-  VatGroupPeriod,
   VatWorkItemGroupSummary,
-  VatWorkItemGroupsResponse,
   VatWorkItemGroupsParams,
-  VatWorkItemGroupItemsResponse,
   VatWorkItemGroupItemsParams,
 } from './contracts'

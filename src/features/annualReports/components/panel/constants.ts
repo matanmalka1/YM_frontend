@@ -10,7 +10,6 @@ import {
   TrendingDown,
   TrendingUp,
 } from 'lucide-react'
-import type { DeadlineType } from '../../api'
 import type { SectionKey } from '../../types'
 
 type IconComponent = ComponentType<{ size?: number; className?: string }>
@@ -27,17 +26,6 @@ export const PANEL_TAB_VARIANTS: Record<'active' | 'inactive', string> = {
   active: 'border-b-2 border-info-600 text-info-700 font-semibold bg-info-50/40',
   inactive: 'text-gray-500 hover:text-gray-800 hover:bg-gray-50',
 }
-
-export const SIDEBAR_NAV_VARIANTS: Record<'active' | 'inactive', string> = {
-  active: 'bg-info-50 text-info-700 font-semibold border-r-2 border-info-600',
-  inactive: 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
-}
-
-export const DEADLINE_OPTIONS: { value: DeadlineType; label: string }[] = [
-  { value: 'standard', label: 'סטנדרטי (29.05 ידני / 30.06 מקוון / 31.07 חברה)' },
-  { value: 'extended', label: 'מורחב מייצגים — 31 ינואר' },
-  { value: 'custom', label: 'מותאם אישית' },
-]
 
 export const CLIENT_TYPE_LABELS = {
   individual: 'יחיד (1301)',
@@ -60,4 +48,3 @@ export const SUMMARY_CARD_META = {
 
 export const ALERT_WINDOW_DAYS = 60
 export const LOCALE = 'he-IL'
-export const SKELETON_CARD_COUNT = 5

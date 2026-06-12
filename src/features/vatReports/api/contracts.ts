@@ -103,7 +103,7 @@ export interface VatWorkItemLookupResponse {
   period: string
 }
 
-export interface VatPeriodOptionResponse {
+interface VatPeriodOptionResponse {
   period: string
   label: string
   start_month: number
@@ -219,7 +219,7 @@ export interface VatPeriodRow {
   is_overdue: boolean | null
 }
 
-export interface VatGroupPeriod {
+interface VatGroupPeriod {
   period: string
   period_type: VatType
 }

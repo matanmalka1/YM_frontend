@@ -18,22 +18,3 @@ export const formatRelativeDueLabel = (date: string | null | undefined): string 
   if (days === 1) return 'מחר'
   return `בעוד ${days} ימים`
 }
-
-export const isCurrentReportingPeriod = (period: string | null | undefined, monthsCount = 1): boolean => {
-  if (!period) return false
-
-  const match = /^(\d{4})-(\d{2})$/.exec(period)
-  if (!match) return false
-
-  const year = Number(match[1])
-  const month = Number(match[2])
-  if (month < 1 || month > 12) return false
-
-  const safeMonthsCount = Math.max(Math.floor(monthsCount), 1)
-  const start = new Date(year, month - 1, 1)
-  const end = new Date(year, month - 1 + safeMonthsCount, 1)
-  const now = new Date()
-  const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-
-  return currentMonth >= start && currentMonth < end
-}

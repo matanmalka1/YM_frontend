@@ -39,7 +39,7 @@ export interface SignatureRequestResponse {
   signed_document_key: string | null
 }
 
-export interface AuditEvent {
+interface AuditEvent {
   id: number
   event_type: string
   actor_type: string

@@ -10,15 +10,6 @@ import { ClientPickerFilter } from './ClientPickerFilter'
 import { buildFilterBadges } from './filterBadges'
 import type { FilterFieldDef, SearchFieldHandle } from './types'
 
-export type {
-  SearchFieldDef,
-  SelectFieldDef,
-  DateFieldDef,
-  DateRangeFieldDef,
-  ClientPickerFieldDef,
-  FilterFieldDef,
-} from './types'
-
 export interface FilterPanelProps {
   fields: FilterFieldDef[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

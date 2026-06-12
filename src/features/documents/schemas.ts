@@ -2,8 +2,6 @@ import { z } from 'zod'
 import type { UploadDocumentPayload } from './api'
 import { CLIENT_SCOPE_TYPES, DOCUMENT_TYPES } from './documents.constants'
 
-export type DocumentStatus = 'pending' | 'received' | 'approved' | 'rejected'
-
 export interface DocumentsUploadFormValues {
   document_type: UploadDocumentPayload['document_type']
   business_id: number | null

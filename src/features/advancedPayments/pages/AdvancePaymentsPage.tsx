@@ -28,6 +28,7 @@ import { showErrorToast } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { getOperationalTaxYear, getOperationalYearOptions } from '@/constants/periodOptions.constants'
+import { reportingPeriodIncludesMonth } from '@/utils/reportingPeriod'
 
 const PERIOD_OPTIONS = [
   { value: '', label: 'כל הסוגים' },
@@ -60,11 +61,8 @@ const getBatchStableKey = (batch: AdvancePaymentDueDateGroup): string =>
 
 const safeCount = (value: unknown): number => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
 
-const batchIncludesMonth = (batch: AdvancePaymentDueDateGroup, year: number, month: number): boolean => {
-  const batchStartMonth = batch.month
-  const batchEndMonth = batchStartMonth + batch.period_months_count - 1
-  return batch.year === year && batchStartMonth <= month && batchEndMonth >= month
-}
+const batchIncludesMonth = (batch: AdvancePaymentDueDateGroup, year: number, month: number): boolean =>
+  reportingPeriodIncludesMonth(batch.year, batch.month, batch.period_months_count, year, month)
 
 export const AdvancePayments: React.FC = () => {
   const { searchParams, setSearchParams, setFilter, setFilters, resetFilters } = useSearchParamFilters()

@@ -14,12 +14,12 @@ export interface AttentionBoardItem {
   href: string
 }
 
-export interface AttentionResponse {
+interface AttentionResponse {
   items: AttentionBoardItem[]
   total: number
 }
 
-export interface VatDashboardPeriodStat {
+interface VatDashboardPeriodStat {
   period: string
   period_label: string
   status_label: string
@@ -29,7 +29,7 @@ export interface VatDashboardPeriodStat {
   completion_percent: number
 }
 
-export interface AdvancePaymentDashboardStats {
+interface AdvancePaymentDashboardStats {
   monthly: VatDashboardPeriodStat
   bimonthly: VatDashboardPeriodStat
 }

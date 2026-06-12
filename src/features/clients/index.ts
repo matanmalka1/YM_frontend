@@ -1,15 +1,7 @@
 // Public surface of the clients feature — only import from this barrel externally
 export { clientsApi, clientsQK } from './api'
 export { CLIENT_ENDPOINTS, CLIENT_ROUTES } from './api/endpoints'
-export {
-  ADVANCE_PAYMENT_FREQUENCY_LABELS,
-  CLIENT_STATUS_OPTIONS,
-  CLIENT_STATUS_LABELS,
-  ENTITY_TYPE_LABELS,
-  ENTITY_TYPE_OPTIONS,
-  VAT_TYPE_LABELS,
-  getVatTypeLabel,
-} from './constants'
+export { CLIENT_STATUS_OPTIONS, ENTITY_TYPE_OPTIONS, getVatTypeLabel } from './constants'
 export { ClientEditForm } from './components/edit/ClientEditForm'
 export { buildClientColumns } from './components/list/ClientColumns'
 export { ClientDetailsTabContent } from './components/details/ClientDetailsTabContent'
@@ -19,21 +11,8 @@ export { DeletedClientDialog } from './components/dialogs/DeletedClientDialog'
 export { useClientQuery } from './hooks/useClientQuery'
 export { useClientMutations } from './hooks/useClientMutations'
 export { useClientsPage } from './hooks/useClientsPage'
-export { useFirstBusinessId } from './hooks/useFirstBusinessId'
-export { useClientDetailsActions } from './hooks/useClientDetailsActions'
+
 export { ClientDetails } from './pages/ClientDetailsPage'
 export { Clients } from './pages/ClientsPage'
 export { extractClientErrorCode } from './utils/clientErrors'
-export type {
-  ClientRecordResponse,
-  ClientRecordListItem,
-  ClientSidebarResponse,
-  ClientSidebarListResponse,
-  ListClientSidebarParams,
-  BusinessResponse,
-  BusinessWithClientResponse,
-  BusinessListResponse,
-  BusinessStatus,
-  VatType,
-  ISODateString,
-} from './api'
+export type { ClientRecordResponse, ClientSidebarResponse, BusinessResponse, BusinessStatus } from './api'

@@ -1,6 +1,6 @@
 // ── Enums ──────────────────────────────────────────────────────────────────────
 
-export const NOTIFICATION_TRIGGER_VALUES = [
+const NOTIFICATION_TRIGGER_VALUES = [
   'binder_ready_for_handover',
   'binder_missing_documents',
   'binder_general_reminder',
@@ -27,18 +27,6 @@ export const ENABLED_NOTIFICATION_TRIGGERS: NotificationTrigger[] = [
   'binder_general_reminder',
 ]
 
-// Annual report triggers — only valid when entity_id (annual_report.id) is provided
-export const ANNUAL_REPORT_TRIGGERS: NotificationTrigger[] = [
-  'annual_report_client_reminder',
-  'annual_report_documents_request',
-]
-
-export const CHARGE_TRIGGERS: NotificationTrigger[] = ['invoice_issued', 'payment_reminder']
-
-export const SIGNATURE_TRIGGERS: NotificationTrigger[] = ['signature_request_sent', 'signature_request_reminder']
-
-export const VAT_TRIGGERS: NotificationTrigger[] = ['vat_documents_reminder']
-
 export const MANUAL_NOTIFICATION_TRIGGERS: NotificationTrigger[] = NOTIFICATION_TRIGGER_VALUES.filter(
   (trigger) => trigger !== 'binder_ready_for_handover',
 )
@@ -59,8 +47,8 @@ export const TRIGGER_LABELS: Record<NotificationTrigger, string> = {
   client_general_message: 'הודעה כללית',
 }
 
-export type NotificationChannel = 'email' | 'whatsapp'
-export type NotificationSendChannel = 'email'
+type NotificationChannel = 'email' | 'whatsapp'
+type NotificationSendChannel = 'email'
 export type NotificationStatus = 'pending' | 'sent' | 'failed' | 'skipped'
 
 // ── Read types ─────────────────────────────────────────────────────────────────

@@ -1,3 +1,3 @@
 export { taxProfileApi } from './taxProfile.api'
 export { taxProfileQK } from './queryKeys'
-export type { TaxProfileData, TaxProfileUpdatePayload } from './contracts'
+export type { TaxProfileUpdatePayload } from './contracts'

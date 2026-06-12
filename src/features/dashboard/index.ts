@@ -1,10 +1,7 @@
-export { dashboardApi, dashboardQK } from './api'
-export { DASHBOARD_ENDPOINTS } from './api/endpoints'
 export { AttentionBoard } from './components/AttentionBoard'
 export { DashboardOnboardingEmptyState } from './components/DashboardOnboardingEmptyState'
 export { DashboardStatsGrid } from './components/DashboardStatsGrid'
 export { SeasonSummaryWidget } from './components/SeasonSummaryWidget'
-export { TaxInsightsRow } from './components/TaxInsightsRow'
+
 export { useDashboardPage } from './hooks/useDashboardPage'
 export { DashboardPage } from './pages/DashboardPage'
-export type { DashboardOverviewResponse, AttentionBoardItem, AttentionResponse } from './api'

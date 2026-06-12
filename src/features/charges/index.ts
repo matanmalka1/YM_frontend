@@ -1,6 +1,6 @@
 // Public surface of the charges feature — only import from this barrel externally
 export { chargesApi, chargesQK } from './api'
-export { ChargeBulkToolbar } from './components/ChargeBulkToolbar'
+
 export { buildChargeColumns } from './components/ChargeColumns'
 export { ChargesCreateModal } from './components/ChargesCreateModal'
 export { ClientChargesTab } from './components/ClientChargesTab'
@@ -11,5 +11,5 @@ export { ChargesTableBlock } from './components/ChargesTableBlock'
 export { useChargesPage } from './hooks/useChargesPage'
 export { useChargeCreateMutation } from './hooks/useChargeCreateMutation'
 export { Charges } from './pages/ChargesPage'
-export type { ChargeResponse, ChargeListItem, CreateChargePayload, BulkChargeActionPayload } from './api'
-export { getChargeTypeLabel, getChargeStatusLabel, CHARGE_STATUS_LABELS, CHARGE_TYPE_LABELS } from './constants'
+export type { ChargeListItem, CreateChargePayload } from './api'
+export { getChargeTypeLabel, getChargeStatusLabel } from './constants'

@@ -1,11 +1,10 @@
 import { makeLabelGetter } from '@/utils/labels'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 
-export const BINDER_LOCATION_STATUS_VALUES = ['in_office', 'ready_for_handover', 'handed_over'] as const
+const BINDER_LOCATION_STATUS_VALUES = ['in_office', 'ready_for_handover', 'handed_over'] as const
 export type BinderLocationStatusValue = (typeof BINDER_LOCATION_STATUS_VALUES)[number]
 
-export const BINDER_CAPACITY_STATUS_VALUES = ['open', 'full'] as const
-export type BinderCapacityStatusValue = (typeof BINDER_CAPACITY_STATUS_VALUES)[number]
+export type BinderCapacityStatusValue = 'open' | 'full'
 
 export const BINDER_LOCATION_STATUS_LABELS: Record<BinderLocationStatusValue, string> = {
   in_office: 'במשרד',
@@ -36,7 +35,7 @@ export const BINDER_TYPE_VALUES = [
 ] as const
 export type BinderTypeValue = (typeof BINDER_TYPE_VALUES)[number]
 
-export const BINDER_TYPE_LABELS: Record<BinderTypeValue, string> = {
+const BINDER_TYPE_LABELS: Record<BinderTypeValue, string> = {
   vat: 'מע"מ',
   income_tax: 'מס הכנסה',
   national_insurance: 'ביטוח לאומי',
@@ -80,9 +79,4 @@ export const BINDER_TYPE_OPTIONS: { value: string; label: string; disabled?: tru
 export const BINDER_LOCATION_STATUS_OPTIONS: { value: string; label: string }[] = [
   ALL_STATUSES_OPTION,
   ...BINDER_LOCATION_STATUS_VALUES.map((value) => ({ value, label: BINDER_LOCATION_STATUS_LABELS[value] })),
-]
-
-export const BINDER_CAPACITY_STATUS_OPTIONS: { value: string; label: string }[] = [
-  ALL_STATUSES_OPTION,
-  ...BINDER_CAPACITY_STATUS_VALUES.map((value) => ({ value, label: BINDER_CAPACITY_STATUS_LABELS[value] })),
 ]

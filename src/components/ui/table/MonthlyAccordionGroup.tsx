@@ -15,7 +15,7 @@ interface MonthlyAccordionGroupProps {
   children: React.ReactNode
 }
 
-export const MonthlyAccordionGroup = memo(
+const MonthlyAccordionGroup = memo(
   ({ title, summary, isCurrent = false, badges, defaultOpen, children }: MonthlyAccordionGroupProps) => {
     const [expanded, setExpanded] = useState(() => defaultOpen ?? isCurrent)
 

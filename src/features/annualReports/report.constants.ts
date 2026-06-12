@@ -1,7 +1,6 @@
 import type { IncomeSourceType, ExpenseCategoryType } from './api'
 
 export { LineRow } from './components/financials/FinancialLineRow'
-export type { LineRowProps } from './components/financials/FinancialLineRow'
 
 export const INCOME_LABELS: Record<IncomeSourceType, string> = {
   business: 'הכנסות עסק',

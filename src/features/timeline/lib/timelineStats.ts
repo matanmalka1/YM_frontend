@@ -21,6 +21,3 @@ export const buildTimelineFilterStats = (events: NormalizedTimelineEvent[]): Eve
     count: count ?? 0,
   }))
 }
-
-export const getTimelineFilterCount = (stats: EventTypeStat[], key: TimelineFilterKey): number =>
-  stats.find((s) => s.type === key)?.count ?? 0

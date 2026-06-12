@@ -1,4 +1,3 @@
-import { makeClassGetter, makeLabelGetter } from '@/utils/labels'
 import type { AnnualReportFull, AnnualReportStatus, ClientTypeForReport, AnnualReportScheduleKey } from './contracts'
 
 // ── Status labels ──────────────────────────────────────────────────────────
@@ -81,26 +80,3 @@ export const SEASON_PROGRESS_STAGES = [
   { key: 'submitted' as AnnualReportStatus, label: 'הוגש', color: 'bg-positive-400' },
   { key: 'closed' as AnnualReportStatus, label: 'סגור', color: 'bg-positive-700' },
 ]
-
-// ── Stage labels (from annualReport.utils.ts) ─────────────────────────────
-
-const stageLabels = {
-  material_collection: 'איסוף חומרים',
-  in_progress: 'בטיפול',
-  final_review: 'סקירה סופית',
-  client_signature: 'חתימת לקוח',
-  transmitted: 'הועבר',
-  post_submission: 'לאחר הגשה',
-}
-
-const stageColors = {
-  material_collection: 'bg-gray-100 text-gray-700',
-  in_progress: 'bg-info-100 text-info-700',
-  final_review: 'bg-info-100 text-info-700',
-  client_signature: 'bg-warning-100 text-warning-700',
-  transmitted: 'bg-positive-100 text-positive-700',
-  post_submission: 'bg-warning-100 text-warning-800',
-}
-
-export const getReportStageLabel = makeLabelGetter(stageLabels)
-export const getStageColor = makeClassGetter(stageColors, 'material_collection')

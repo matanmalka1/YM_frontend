@@ -36,27 +36,6 @@ export const clampPercent = (value: number): number => Math.max(0, Math.min(100,
 export const sortReportsByTaxYearDesc = (reports: AnnualReportListItem[]): AnnualReportListItem[] =>
   [...reports].sort((a, b) => b.tax_year - a.tax_year)
 
-export const getBalanceVariant = (balanceType: AdvancesSummary['balance_type']) => {
-  if (balanceType === 'due') return 'red'
-  if (balanceType === 'refund') return 'green'
-  return 'neutral'
-}
-
-export const getBalanceDescription = (advances: AdvancesSummary): string => {
-  const absBalance = Math.abs(Number(advances.final_balance))
-  if (advances.balance_type === 'due') return `יתרה: ₪${absBalance.toLocaleString(LOCALE)} לתשלום`
-  if (advances.balance_type === 'refund') return `יתרה: ₪${absBalance.toLocaleString(LOCALE)} החזר`
-  return 'מאוזן'
-}
-
-export const getFinalBalanceText = (finalBalance: number | string | null | undefined): string => {
-  if (finalBalance == null) return '—'
-  const amount = Number(finalBalance)
-  return amount > 0 ? `${formatCurrencyILS(amount)} לתשלום` : `${formatCurrencyILS(Math.abs(amount))} החזר`
-}
-
-export const formatAbsCurrency = (value: number | string): string => formatCurrencyILS(Math.abs(Number(value)))
-
 export const getAlertBanners = (report: AnnualReportFull, advances?: BalanceAlertInput): AlertBannerData[] => {
   const banners: AlertBannerData[] = []
   const finalBalance = Number(advances?.final_balance ?? 0)

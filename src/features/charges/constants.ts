@@ -2,9 +2,8 @@ import { makeLabelGetter } from '@/utils/labels'
 import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION } from '@/constants/filterOptions.constants'
 import type { ChargeListStats, ChargeStatusStat } from './api'
 
-export const CHARGE_STATUS_VALUES = ['draft', 'issued', 'paid', 'canceled'] as const
+const CHARGE_STATUS_VALUES = ['draft', 'issued', 'paid', 'canceled'] as const
 export type ChargeStatusValue = (typeof CHARGE_STATUS_VALUES)[number]
-export const CHARGE_STATUSES = CHARGE_STATUS_VALUES
 
 export const CHARGE_STATUS_LABELS: Record<ChargeStatusValue, string> = {
   draft: 'טיוטה',
@@ -20,7 +19,6 @@ export const chargeStatusVariants: Record<ChargeStatusValue, 'success' | 'warnin
   paid: 'success',
   canceled: 'error',
 }
-export const CHARGE_STATUS_VARIANTS = chargeStatusVariants
 
 export const CHARGE_TYPE_VALUES = [
   'monthly_retainer',
@@ -47,7 +45,7 @@ export const CHARGE_CANCEL_REASON_PLACEHOLDER = 'סיבת ביטול (אופצי
 export const CHARGE_PERIOD_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/
 export const CHARGE_PERIOD_YEAR_SPAN = 1
 
-export const DEFAULT_CHARGE_STATUS_STAT: ChargeStatusStat = { count: 0, amount: '0' }
+const DEFAULT_CHARGE_STATUS_STAT: ChargeStatusStat = { count: 0, amount: '0' }
 
 export const DEFAULT_CHARGE_LIST_STATS: ChargeListStats = {
   draft: DEFAULT_CHARGE_STATUS_STAT,

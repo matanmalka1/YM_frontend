@@ -14,13 +14,6 @@ export const formatAnnualReportDate = (dateStr: string | null | undefined): stri
   return `${day}/${month}/${year}`
 }
 
-export const formatAnnualReportMonthDate = (dateStr: string): string =>
-  new Date(dateStr).toLocaleDateString('he-IL', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
-
 export const formatWholeNumber = (n: number) =>
   n.toLocaleString('he-IL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
 
@@ -49,8 +42,6 @@ export const EXTENSION_REASON_OPTIONS = [
   { value: 'general', label: 'הארכה כללית של המייצג' },
   { value: 'war_situation', label: 'מצב ביטחוני' },
 ]
-
-export const REQUIRED_DOCUMENT_TYPES = ['id_copy', 'power_of_attorney', 'engagement_agreement'] as const
 
 export const WARNING_DEADLINE_DAYS = 14
 export const OVERDUE_PREVIEW_LIMIT = 3

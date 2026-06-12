@@ -1,4 +1,4 @@
-export type QueryPrimitive = string | number | boolean | null | undefined
+type QueryPrimitive = string | number | boolean | null | undefined
 type QueryValue = QueryPrimitive | QueryPrimitive[]
 
 const shouldSkipValue = (value: QueryValue): boolean => {

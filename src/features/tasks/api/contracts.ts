@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { PaginatedResponse, UserRole } from '@/types'
+import type { UserRole } from '@/types'
 import type { WorkQueueSourceType } from '@/features/workQueue'
 import { taskStatusValues, taskPriorityValues } from '../constants'
 
@@ -77,5 +77,3 @@ export interface TaskListParams {
   page?: number
   page_size?: number
 }
-
-export type TasksListResponse = PaginatedResponse<Task>

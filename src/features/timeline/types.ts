@@ -1,5 +1,3 @@
-export type StatPillColor = 'blue' | 'purple' | 'orange' | 'neutral'
-
 export interface EventColorConfig {
   dotBg: string
   dotBorder: string

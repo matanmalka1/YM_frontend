@@ -146,10 +146,6 @@ export type ApiErrorBody = {
   request_id?: string | null
 }
 
-export type ApiErrorEnvelope = {
-  error: ApiErrorBody
-}
-
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null
 
 const isApiErrorBody = (value: unknown): value is ApiErrorBody => {

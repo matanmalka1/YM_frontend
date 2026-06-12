@@ -3,25 +3,10 @@ export { notificationsQK } from './queryKeys'
 export type {
   NotificationTrigger,
   NotificationStatus,
-  NotificationChannel,
   NotificationItem,
-  NotificationDetail,
-  NotificationListResponse,
-  NotificationSummaryResponse,
   ListNotificationsParams,
   NotificationPreviewRequest,
-  NotificationPreviewResponse,
-  NotificationSendRequest,
   NotificationSendVariables,
   NotificationResult,
 } from './contracts'
-export {
-  ANNUAL_REPORT_TRIGGERS,
-  CHARGE_TRIGGERS,
-  ENABLED_NOTIFICATION_TRIGGERS,
-  MANUAL_NOTIFICATION_TRIGGERS,
-  NOTIFICATION_TRIGGER_VALUES,
-  SIGNATURE_TRIGGERS,
-  TRIGGER_LABELS,
-  VAT_TRIGGERS,
-} from './contracts'
+export { ENABLED_NOTIFICATION_TRIGGERS, MANUAL_NOTIFICATION_TRIGGERS, TRIGGER_LABELS } from './contracts'

@@ -3,7 +3,7 @@ import { ChevronDown, ChevronLeft } from 'lucide-react'
 import { Card } from '@/components/ui/primitives/Card'
 import { cn } from '@/utils/utils'
 
-export type PeriodMetricTone = 'default' | 'success' | 'warning' | 'danger' | 'muted'
+type PeriodMetricTone = 'default' | 'success' | 'warning' | 'danger' | 'muted'
 
 export interface PeriodSummaryMetric {
   label: string

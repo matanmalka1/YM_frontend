@@ -5,7 +5,7 @@ export interface SearchFieldDef {
   placeholder?: string
 }
 
-export interface SelectFieldDef {
+interface SelectFieldDef {
   type: 'select'
   key: string
   label: string
@@ -14,13 +14,13 @@ export interface SelectFieldDef {
   defaultValue?: string
 }
 
-export interface DateFieldDef {
+interface DateFieldDef {
   type: 'date'
   key: string
   label: string
 }
 
-export interface DateRangeFieldDef {
+interface DateRangeFieldDef {
   type: 'date-range'
   fromKey: string
   toKey: string

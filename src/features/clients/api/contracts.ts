@@ -31,7 +31,7 @@ export interface ClientRecordResponse {
   annual_turnover: AnnualTurnover | null
 }
 
-export interface AnnualTurnover {
+interface AnnualTurnover {
   amount: string | null
   source: 'reported' | 'manual' | 'none'
   year: number
@@ -71,7 +71,7 @@ export interface ClientRecordListItem {
   active_binder_number: string | null
 }
 
-export interface ClientRecordListStats {
+interface ClientRecordListStats {
   active: number
   frozen: number
   closed: number
@@ -138,7 +138,7 @@ export interface ClientImpactPreviewPayload {
   advance_rate?: string | null
 }
 
-export interface CreationImpactItem {
+interface CreationImpactItem {
   label: string
   count: number
 }
@@ -156,9 +156,6 @@ export interface CreateClientRecordResponse {
   business: BusinessResponse
   impact: ClientCreationImpactResponse
 }
-
-export type BulkClientActionPayload = never
-export type DeletedClientInfo = DeletedClientSummary
 
 export interface UpdateClientPayload {
   full_name?: string
@@ -196,26 +193,12 @@ export interface BusinessResponse {
   available_actions?: BackendAction[] | null
 }
 
-export interface BusinessWithClientResponse extends BusinessResponse {
-  client_full_name: string
-  client_id_number: string
-}
-
-export type BusinessListResponse = PaginatedResponse<BusinessWithClientResponse>
 export type ClientBusinessesResponse = {
   client_id: number
   items: BusinessResponse[]
   page: number
   page_size: number
   total: number
-}
-
-export interface ListBusinessesParams {
-  status?: BusinessStatus
-  has_signals?: boolean
-  search?: string
-  page?: number
-  page_size?: number
 }
 
 export interface CreateBusinessPayload {
@@ -230,14 +213,14 @@ export interface UpdateBusinessPayload {
   closed_at?: string | null
 }
 
-export interface VatSummaryCard {
+interface VatSummaryCard {
   net_vat_total: string
   periods_filed: number
   periods_total: number
   latest_period: string | null
 }
 
-export interface AnnualReportCard {
+interface AnnualReportCard {
   status: string | null
   form_type: string | null
   filing_deadline: string | null
@@ -245,22 +228,22 @@ export interface AnnualReportCard {
   tax_due: string | null
 }
 
-export interface ChargesCard {
+interface ChargesCard {
   total_outstanding: string
   unpaid_count: number
 }
 
-export interface AdvancePaymentsCard {
+interface AdvancePaymentsCard {
   total_paid: string
   count: number
 }
 
-export interface BindersCard {
+interface BindersCard {
   active_count: number
   in_office_count: number
 }
 
-export interface DocumentsCard {
+interface DocumentsCard {
   total_count: number
   present_count: number
 }
@@ -274,9 +257,4 @@ export interface BusinessStatusCardResponse {
   advance_payments: AdvancePaymentsCard
   binders: BindersCard
   documents: DocumentsCard
-}
-
-export interface ClientScopedSignatureBusinessRef {
-  client_id: number | null
-  business_name: string | null
 }

@@ -1,12 +1,7 @@
 import type { AnnualReportListItem } from '../../api'
 import { STATUS_LABELS } from '../../api'
 import type { TimelineEventStatus } from '../statusTransition/TimelineEvent'
-import {
-  formatAnnualReportDate,
-  parseAnnualReportCalendarDate,
-  REQUIRED_DOCUMENT_TYPES,
-  WARNING_DEADLINE_DAYS,
-} from './annualReports.constants'
+import { formatAnnualReportDate, parseAnnualReportCalendarDate, WARNING_DEADLINE_DAYS } from './annualReports.constants'
 
 export interface AnnualReportTimelineEvent {
   title: string
@@ -36,9 +31,6 @@ export const getDeadlineStatus = (report: AnnualReportListItem): TimelineEventSt
   if (daysUntilDeadline < 0) return 'overdue'
   return daysUntilDeadline < WARNING_DEADLINE_DAYS ? 'warning' : 'pending'
 }
-
-export const getMissingDocumentTypes = (uploadedTypes: Set<string>, signalTypes: string[] | undefined): string[] =>
-  signalTypes?.length ? signalTypes : REQUIRED_DOCUMENT_TYPES.filter((type) => !uploadedTypes.has(type))
 
 const getReportStatusDescription = (report: AnnualReportListItem): string => `סטטוס: ${STATUS_LABELS[report.status]}`
 

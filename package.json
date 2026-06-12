@@ -18,18 +18,20 @@
     "arch:check:strict": "node scripts/arch-check.mjs --strict",
     "test": "vitest run",
     "unused": "knip",
+    "unused:fix": "knip --fix",
     "jscpd": "jscpd --config .jscpd.json src",
     "jscpd:strict": "jscpd --config .jscpd.json --threshold 0 src",
     "jscpd:report": "jscpd --config .jscpd.json --reporters json --output ./reports/jscpd src",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm run arch:check && npm run test && npm run unused",
     "check:strict": "npm run typecheck && npm run lint && npm run format:check && npm run arch:check:strict && npm run test && npm run jscpd:strict && npm run unused",
-    "fix": "npm run lint:fix && npm run format"
+    "fix": "npm run lint:fix && npm run format && npm run unused:fix"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
     "@tailwindcss/vite": "^4.3.0",
     "@tanstack/react-query": "^5.101.0",
     "axios": "^1.17.0",
+    "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "lucide-react": "^1.17.0",
     "react": "^19.2.7",
@@ -65,5 +67,11 @@
     "typescript-eslint": "^8.60.1",
     "vite": "^8.0.16",
     "vitest": "^4.1.8"
+  },
+  "knip": {
+    "ignore": [
+      "src/types/generated.ts",
+      "vitest.shims.d.ts"
+    ]
   }
 }

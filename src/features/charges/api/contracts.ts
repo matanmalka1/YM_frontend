@@ -98,7 +98,7 @@ export interface BulkChargeActionPayload {
   cancellation_reason?: string
 }
 
-export interface BulkChargeFailedItem {
+interface BulkChargeFailedItem {
   id: number
   error: string
 }

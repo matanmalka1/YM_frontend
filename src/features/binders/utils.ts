@@ -4,12 +4,6 @@ import type { BinderAction, BinderResponse } from './types'
 export const hasBinderAction = (binder: BinderResponse, action: BinderAction): boolean =>
   Boolean(binder.available_actions?.includes(action))
 
-export const canMarkReadyForHandover = (locationStatus: string): boolean => locationStatus === 'in_office'
-
-export const canRevertReadyForHandover = (locationStatus: string): boolean => locationStatus === 'ready_for_handover'
-
-export const canHandoverToClient = (locationStatus: string): boolean => locationStatus === 'ready_for_handover'
-
 export const toBinderPeriodValue = (year: number, monthStart: number, monthEnd: number): string => {
   if (monthStart === 1 && monthEnd === 12) return String(year)
   if (monthStart === monthEnd) return `${year}-${String(monthStart).padStart(2, '0')}`

@@ -76,6 +76,3 @@ const getPeriodLabel = (
 
 export const getReportingPeriodMonthLabel = (period: string, periodMonthsCount: 1 | 2 = 1): string =>
   getPeriodLabel(MONTH_NAMES, period, periodMonthsCount)
-
-export const getReportingPeriodShortMonthLabel = (period: string, periodMonthsCount: 1 | 2 = 1): string =>
-  getPeriodLabel(MONTH_SHORT_NAMES, period, periodMonthsCount)

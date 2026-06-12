@@ -16,7 +16,7 @@ interface AddLineTriggerButtonProps {
   onClick: () => void
 }
 
-export const AddLineTriggerButton: React.FC<AddLineTriggerButtonProps> = ({ label, onClick }) => (
+const AddLineTriggerButton: React.FC<AddLineTriggerButtonProps> = ({ label, onClick }) => (
   <Button type="button" variant="ghost" size="sm" onClick={onClick} className="mt-1 gap-1 text-xs">
     <Plus className="h-3.5 w-3.5" />
     {label}
@@ -56,7 +56,7 @@ interface FinancialInputFieldProps {
   step?: string
 }
 
-export const FinancialInputField: React.FC<FinancialInputFieldProps> = ({
+const FinancialInputField: React.FC<FinancialInputFieldProps> = ({
   value,
   onChange,
   placeholder,
@@ -139,7 +139,7 @@ interface FinancialFormActionsProps {
   onCancel: () => void
 }
 
-export const FinancialFormActions: React.FC<FinancialFormActionsProps> = ({ isSubmitting, submitLabel, onCancel }) => (
+const FinancialFormActions: React.FC<FinancialFormActionsProps> = ({ isSubmitting, submitLabel, onCancel }) => (
   <div className="flex gap-2">
     <Button type="submit" size="sm" isLoading={isSubmitting} className="flex-1">
       {submitLabel}
@@ -154,7 +154,7 @@ interface FinancialFormErrorProps {
   error: string | null
 }
 
-export const FinancialFormError: React.FC<FinancialFormErrorProps> = ({ error }) =>
+const FinancialFormError: React.FC<FinancialFormErrorProps> = ({ error }) =>
   error ? <p className="text-xs text-negative-500">{error}</p> : null
 
 interface FinancialAddFormShellProps {

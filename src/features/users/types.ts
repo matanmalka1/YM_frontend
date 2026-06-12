@@ -6,11 +6,3 @@ export interface UsersFilters {
   is_active: string | undefined // "true" | "false" | undefined
   search?: string
 }
-
-export interface AuditLogsFilters {
-  page: number
-  page_size: number
-  action?: string
-  target_user_id?: number
-  actor_user_id?: number
-}

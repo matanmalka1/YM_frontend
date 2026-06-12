@@ -3,24 +3,20 @@ import { CATEGORY_COLOR_TOKENS } from './visualizationTokens'
 import { ALL_STATUSES_OPTION, ALL_CATEGORIES_OPTION } from '@/constants/filterOptions.constants'
 import type { VatWorkItemStatus } from './api'
 
-export const VAT_RATE_TYPE_VALUES = ['standard', 'exempt', 'zero_rate'] as const
-export type VatRateTypeValue = (typeof VAT_RATE_TYPE_VALUES)[number]
+export type VatRateTypeValue = 'standard' | 'exempt' | 'zero_rate'
 export const VAT_RATE_TYPE_LABELS: Record<VatRateTypeValue, string> = {
   standard: 'רגיל',
   exempt: 'פטור',
   zero_rate: 'אפס',
 }
-export const getVatRateTypeLabel = makeLabelGetter(VAT_RATE_TYPE_LABELS)
 
-export const VAT_DOCUMENT_TYPE_VALUES = [
-  'tax_invoice',
-  'transaction_invoice',
-  'receipt',
-  'consolidated',
-  'self_invoice',
-  'credit_note',
-] as const
-export type VatDocumentTypeValue = (typeof VAT_DOCUMENT_TYPE_VALUES)[number]
+export type VatDocumentTypeValue =
+  | 'tax_invoice'
+  | 'transaction_invoice'
+  | 'receipt'
+  | 'consolidated'
+  | 'self_invoice'
+  | 'credit_note'
 export const DOCUMENT_TYPE_LABELS: Record<VatDocumentTypeValue, string> = {
   tax_invoice: 'חשבונית מס',
   transaction_invoice: 'חשבונית עסקה',
@@ -29,17 +25,8 @@ export const DOCUMENT_TYPE_LABELS: Record<VatDocumentTypeValue, string> = {
   self_invoice: 'חשבונית עצמית',
   credit_note: 'הודעת זיכוי',
 }
-export const getVatDocumentTypeLabel = makeLabelGetter(DOCUMENT_TYPE_LABELS)
 
-export const VAT_WORK_ITEM_STATUS_VALUES = [
-  'pending_materials',
-  'material_received',
-  'data_entry_in_progress',
-  'ready_for_review',
-  'filed',
-  'canceled',
-] as const satisfies readonly VatWorkItemStatus[]
-export const VAT_WORK_ITEM_STATUS_LABELS: Record<VatWorkItemStatus, string> = {
+const VAT_WORK_ITEM_STATUS_LABELS: Record<VatWorkItemStatus, string> = {
   pending_materials: 'ממתין לחומרים',
   material_received: 'חומרים התקבלו',
   data_entry_in_progress: 'הקלדה בתהליך',
@@ -49,7 +36,7 @@ export const VAT_WORK_ITEM_STATUS_LABELS: Record<VatWorkItemStatus, string> = {
 }
 export const getVatWorkItemStatusLabel = makeLabelGetter(VAT_WORK_ITEM_STATUS_LABELS)
 
-export const INCOME_KEY = 'income'
+const INCOME_KEY = 'income'
 
 export const VAT_PERIOD_TYPE_OPTIONS = [
   { value: '', label: 'כל סוגי הדיווח' },
@@ -88,8 +75,6 @@ export const EXPENSE_CATEGORIES = [
   'bank_fees',
   'mixed_expense',
 ] as const
-
-export type ExpenseCategoryKey = (typeof EXPENSE_CATEGORIES)[number]
 
 export const CATEGORY_LABELS: Record<string, string> = {
   [INCOME_KEY]: 'הכנסות',
@@ -226,7 +211,7 @@ export const VAT_FILE_MODAL_MESSAGES = {
 export const DEFAULT_RATE_TYPE = 'standard' as const
 
 // Mirrors app/vat_reports/services/constants.py: EXCEPTIONAL_INVOICE_THRESHOLD
-export const VAT_EXCEPTIONAL_INVOICE_THRESHOLD = 25_000
+const VAT_EXCEPTIONAL_INVOICE_THRESHOLD = 25_000
 export const VAT_EXCEPTIONAL_INVOICE_TOOLTIP = `חשבונית מעל ${VAT_EXCEPTIONAL_INVOICE_THRESHOLD.toLocaleString('en-US')} ₪ — נדרש דיווח מיוחד`
 
 // Any field backed by a backend enum MUST use a Zod enum in the frontend schema.
@@ -254,7 +239,6 @@ export const COUNTERPARTY_ID_TYPES = ['il_business', 'il_personal', 'foreign', '
 export type CounterpartyIdType = (typeof COUNTERPARTY_ID_TYPES)[number]
 
 export const INVOICE_TYPES = ['income', 'expense'] as const
-export type InvoiceTypeValue = (typeof INVOICE_TYPES)[number]
 
 export const VAT_DEADLINE_WARNING_DAYS = 3
 

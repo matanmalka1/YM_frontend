@@ -2,28 +2,17 @@ import type { AnnualReportFull } from './api'
 import type { AnnualReportStatus, StatusTransitionPayload } from './api'
 import type { ChangeEvent } from 'react'
 
-export const STAGE_ORDER = [
-  'material_collection',
-  'in_progress',
-  'final_review',
-  'client_signature',
-  'transmitted',
-  'post_submission',
-] as const
-
-export type StageKey = (typeof STAGE_ORDER)[number]
-
-export type ActiveTab = 'season'
-
-export const TAB_LABELS: Record<ActiveTab, string> = {
-  season: 'עונה',
-}
+type StageKey =
+  | 'material_collection'
+  | 'in_progress'
+  | 'final_review'
+  | 'client_signature'
+  | 'transmitted'
+  | 'post_submission'
 
 export const CURRENT_YEAR = new Date().getFullYear()
 
-export const SECTION_KEYS = ['overview', 'financials', 'tax', 'deductions', 'timeline'] as const
-
-export type SectionKey = (typeof SECTION_KEYS)[number]
+export type SectionKey = 'overview' | 'financials' | 'tax' | 'deductions' | 'timeline'
 
 export interface AnnualReportDetail extends AnnualReportFull {
   client_approved_at: string | null

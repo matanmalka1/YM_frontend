@@ -38,14 +38,6 @@ export type AnnualReportScheduleKey =
   | 'form_1348'
   | 'form_858'
 
-export type StageKey =
-  | 'material_collection'
-  | 'in_progress'
-  | 'final_review'
-  | 'client_signature'
-  | 'transmitted'
-  | 'post_submission'
-
 export type IncomeSourceType =
   | 'business'
   | 'salary'
@@ -100,7 +92,7 @@ export interface AnnualReportListItem {
  * Mirrors backend AnnualReportTaxCalculationResponse — every field is
  * serialized from ApiDecimal, so values arrive as decimal strings (not numbers).
  */
-export interface AnnualReportTaxCalculation {
+interface AnnualReportTaxCalculation {
   total_income?: string | null
   total_expenses?: string | null
   recognized_expenses?: string | null
@@ -292,7 +284,7 @@ export interface BracketBreakdownItem {
   tax_in_bracket: string
 }
 
-export interface NationalInsuranceBreakdown {
+interface NationalInsuranceBreakdown {
   base_amount: string
   high_amount: string
   total: string
@@ -386,7 +378,7 @@ export interface VatAutoPopulateSkippedItem {
   annual_category?: ExpenseCategoryType | null
 }
 
-export interface VatAutoPopulateExpenseBreakdownItem {
+interface VatAutoPopulateExpenseBreakdownItem {
   annual_category: ExpenseCategoryType
   amount: string
   source_vat_categories: Record<string, string>

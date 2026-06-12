@@ -104,7 +104,7 @@ const NoteComposer = ({ value, onChange, onSave, onCancel, isLoading, initialTag
   )
 }
 
-export interface NotesHookResult {
+interface NotesHookResult {
   notes: EntityNote[]
   total: number
   isLoading: boolean

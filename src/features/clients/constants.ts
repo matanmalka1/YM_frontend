@@ -48,13 +48,6 @@ export const CLIENT_DETAILS_TAB_LABELS: Record<ActiveClientDetailsTab, string> =
   history: 'יומן שינויים',
 }
 
-export const CLIENT_ID_NUMBER_TYPES = [
-  'individual',
-  'corporation',
-  'passport',
-  'other',
-] as const satisfies readonly ClientIdNumberType[]
-
 export const ENTITY_TYPES = [
   'osek_patur',
   'osek_murshe',
@@ -70,20 +63,6 @@ export const CLIENT_ID_NUMBER_TYPE_LABELS: Record<ClientIdNumberType, string> = 
   corporation: 'חברה / תאגיד',
   passport: 'דרכון',
   other: 'אחר',
-}
-
-export const CLIENT_ID_NUMBER_INPUT_LABELS: Record<ClientIdNumberType, string> = {
-  individual: 'מספר זהות',
-  corporation: 'ח.פ / מספר תאגיד',
-  passport: 'מספר דרכון',
-  other: 'מספר מזהה',
-}
-
-export const CLIENT_ID_NUMBER_PLACEHOLDERS: Record<ClientIdNumberType, string> = {
-  individual: '123456789',
-  corporation: '512345678',
-  passport: '1234567',
-  other: 'הזן מספר מזהה',
 }
 
 export const ENTITY_TYPE_LABELS: Record<EntityType, string> = {
@@ -118,11 +97,6 @@ export const VAT_TYPE_LABELS: Record<VatType, string> = {
   bimonthly: 'דו-חודשי',
   exempt: 'פטור',
 }
-
-export const CLIENT_ID_NUMBER_TYPE_OPTIONS = CLIENT_ID_NUMBER_TYPES.map((type) => ({
-  value: type,
-  label: CLIENT_ID_NUMBER_TYPE_LABELS[type],
-}))
 
 export const CLIENT_STATUS_OPTIONS = CLIENT_STATUSES.map((status) => ({
   value: status,
@@ -161,11 +135,6 @@ export const CLIENT_SORT_BY_OPTIONS: { value: ClientSortBy; label: string }[] = 
   { value: 'entity_type', label: 'סוג יישות' },
 ]
 
-export const CLIENT_SORT_ORDER_OPTIONS: { value: ClientSortOrder; label: string }[] = [
-  { value: 'asc', label: 'סדר עולה' },
-  { value: 'desc', label: 'סדר יורד' },
-]
-
 const SORT_ORDER_LABELS: Record<ClientSortBy, Record<ClientSortOrder, string>> = {
   full_name: { asc: 'שם לקוח: א׳ → ת׳', desc: 'שם לקוח: ת׳ → א׳' },
   created_at: { asc: 'תאריך יצירה: ישן → חדש', desc: 'תאריך יצירה: חדש → ישן' },
@@ -181,17 +150,6 @@ export const getClientSortOrderOptions = (sortBy: ClientSortBy): { value: Client
 export const DEFAULT_CLIENT_SORT_BY: ClientSortBy = 'created_at'
 export const DEFAULT_CLIENT_SORT_ORDER: ClientSortOrder = 'desc'
 
-export const CLIENT_ID_TYPES_REQUIRING_ISRAELI_NUMERIC_ID: readonly ClientIdNumberType[] = [
-  'individual',
-  'corporation',
-] as const
-
-export const CLIENT_ID_TYPES_REQUIRING_ISRAELI_ID_CHECKSUM: readonly ClientIdNumberType[] = [
-  'individual',
-  'corporation',
-] as const
-
-export const DEFAULT_CLIENT_ID_NUMBER_TYPE: ClientIdNumberType = 'individual'
 export const CREATE_CLIENT_DEFAULT_VALUES = {
   full_name: '',
   id_number: '',
@@ -221,12 +179,6 @@ export const CREATE_CLIENT_VALIDATION_MESSAGES = {
   idChecksumIndividual: 'מספר תעודת זהות אינו תקין',
   streetContainsNumber: 'שדה הרחוב צריך להכיל שם בלבד — הזן מספר בניין בשדה הייעודי',
 } as const
-
-export const requiresIsraeliNumericId = (idNumberType: ClientIdNumberType): boolean =>
-  CLIENT_ID_TYPES_REQUIRING_ISRAELI_NUMERIC_ID.includes(idNumberType)
-
-export const requiresIsraeliIdChecksum = (idNumberType: ClientIdNumberType): boolean =>
-  CLIENT_ID_TYPES_REQUIRING_ISRAELI_ID_CHECKSUM.includes(idNumberType)
 
 export const deriveCreateClientIdNumberType = (entityType: CreateEntityType): ClientIdNumberType =>
   entityType === 'company_ltd' ? 'corporation' : 'individual'

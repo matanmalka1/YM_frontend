@@ -6,6 +6,6 @@ export * from './PaginatedDataTable'
 export * from './PaginationCard'
 export * from './RowActions'
 export * from './TableSkeleton'
-export type { StatusVariant } from './columnTypes'
+
 export * from './commonColumns'
 export * from './tableSelection'

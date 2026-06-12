@@ -27,14 +27,14 @@ export interface AddExpensePayload {
   external_document_reference?: string
 }
 
-export const toOptionalText = (value: string): string | undefined => value.trim() || undefined
+const toOptionalText = (value: string): string | undefined => value.trim() || undefined
 
-export const validatePositiveAmount = (amount: string): number | null => {
+const validatePositiveAmount = (amount: string): number | null => {
   const parsed = Number.parseFloat(amount)
   return Number.isNaN(parsed) || parsed <= 0 ? null : parsed
 }
 
-export const validatePercentage = (value: string): number | null => {
+const validatePercentage = (value: string): number | null => {
   const parsed = Number.parseFloat(value)
   return Number.isNaN(parsed) || parsed < MIN_PERCENTAGE || parsed > MAX_PERCENTAGE ? null : parsed
 }
