@@ -8,6 +8,7 @@ import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/tabl
 import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { getTotalPages } from '@/utils/paginationUtils'
+import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
 import { useVatGroupItems } from '../hooks/useVatGroupItems'
 import type { VatWorkItemListItem, VatWorkItemGroupSummary, VatWorkItemStatus } from '../api'
 import { formatVatPeriodTitle } from '../view.helpers'
@@ -114,6 +115,8 @@ export const VatWorkItemsGroupedCards = ({
     >
       {error && <div className="text-sm text-negative-600">{error}</div>}
       {sortedGroups.map((group) => {
+        const periodMonthsCount = group.period_type === 'bimonthly' ? 2 : 1
+        const isCurrentPeriod = isCurrentReportingPeriod(group.period, periodMonthsCount)
         const metrics: PeriodSummaryMetric[] = [
           { label: 'לקוחות', value: group.total_count },
           { label: 'ממתינים', value: group.pending_count, tone: group.pending_count > 0 ? 'warning' : 'muted' },
@@ -129,6 +132,7 @@ export const VatWorkItemsGroupedCards = ({
             primaryLabel={formatDueDateLabel(group.due_date, 'להגשה עד') ?? group.due_date}
             secondaryLabel={getVatGroupSecondaryLabel(group)}
             relativeDueLabel={formatRelativeDueLabel(group.due_date)}
+            isCurrentPeriod={isCurrentPeriod}
             defaultOpen={group.group_key === defaultOpenKey}
             metrics={metrics}
             ctaLabel="פתח לקוחות"

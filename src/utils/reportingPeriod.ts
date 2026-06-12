@@ -7,7 +7,7 @@ const normalizeMonthsCount = (value: number | null | undefined): number => {
   return Math.max(Math.floor(value), 1)
 }
 
-export const toMonthIndex = (year: number, month: number): number => year * 12 + (month - 1)
+const toMonthIndex = (year: number, month: number): number => year * 12 + (month - 1)
 
 export const reportingPeriodIncludesMonth = (
   periodYear: number,

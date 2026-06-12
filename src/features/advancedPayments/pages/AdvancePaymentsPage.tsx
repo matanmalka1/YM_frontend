@@ -61,9 +61,6 @@ const getBatchStableKey = (batch: AdvancePaymentDueDateGroup): string =>
 
 const safeCount = (value: unknown): number => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
 
-const batchIncludesMonth = (batch: AdvancePaymentDueDateGroup, year: number, month: number): boolean =>
-  reportingPeriodIncludesMonth(batch.year, batch.month, batch.period_months_count, year, month)
-
 export const AdvancePayments: React.FC = () => {
   const { searchParams, setSearchParams, setFilter, setFilters, resetFilters } = useSearchParamFilters()
   const navigate = useNavigate()
@@ -201,7 +198,9 @@ export const AdvancePayments: React.FC = () => {
       (stats, batch) => {
         const loadedStats = batch.due_date ? loadedGroupStats[batch.due_date] : undefined
 
-        if (batchIncludesMonth(batch, currentYear, currentMonth)) {
+        if (
+          reportingPeriodIncludesMonth(batch.year, batch.month, batch.period_months_count, currentYear, currentMonth)
+        ) {
           stats.dueThisMonthCount += safeCount(loadedStats?.notPaidCount ?? batch.not_paid_count)
         }
 
@@ -213,6 +212,10 @@ export const AdvancePayments: React.FC = () => {
       { dueThisMonthCount: 0, pendingCount: 0, missingTurnoverCount: 0, overdueCount: 0 },
     )
   }, [displayBatches, loadedGroupStats])
+
+  const currentReportingDate = new Date()
+  const currentReportingYear = currentReportingDate.getFullYear()
+  const currentReportingMonth = currentReportingDate.getMonth() + 1
 
   return (
     <div className="space-y-6">
@@ -260,11 +263,19 @@ export const AdvancePayments: React.FC = () => {
         {displayBatches.map((batch) => {
           const stableKey = getBatchStableKey(batch)
           const isDefaultOpen = stableKey === defaultOpenBatchKey
+          const isCurrentPeriod = reportingPeriodIncludesMonth(
+            batch.year,
+            batch.month,
+            batch.period_months_count,
+            currentReportingYear,
+            currentReportingMonth,
+          )
           return (
             <AdvancePaymentBatchRow
               key={stableKey}
               batch={batch}
-              isCurrent={isDefaultOpen}
+              defaultOpen={isDefaultOpen}
+              isCurrentPeriod={isCurrentPeriod}
               search={filters.client_name}
               statusFilter={statusFilter}
               periodFilter={periodFilter}

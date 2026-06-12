@@ -8,6 +8,7 @@ import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
 import { formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
 import { getTotalPages } from '@/utils/paginationUtils'
+import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
 import { cn, formatDate, formatPlainIdentifier, getErrorMessage } from '@/utils/utils'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { useTaxCalendarGroupItems } from '../hooks/useTaxCalendarGroupItems'
@@ -229,6 +230,7 @@ export const TaxCalendarGroupsTable = ({
     <div className="space-y-2" dir="rtl">
       {groups.map((group) => {
         const isOpen = openEntryId === group.tax_calendar_entry_id
+        const isCurrentPeriod = isCurrentReportingPeriod(group.period, group.period_months_count)
         const effectiveRelativeLabel = formatRelativeDueLabel(group.effective_due_date_min)
         const metrics: PeriodSummaryMetric[] = [
           { label: 'סה״כ מקושרים', value: group.linked_count },
@@ -248,6 +250,7 @@ export const TaxCalendarGroupsTable = ({
                 : `מועד רשמי: ${formatDate(group.regulatory_due_date)}`
             }
             relativeDueLabel={effectiveRelativeLabel}
+            isCurrentPeriod={isCurrentPeriod}
             isOpen={isOpen}
             onToggle={(nextOpen) => setOpenEntryId(nextOpen ? group.tax_calendar_entry_id : null)}
             metrics={metrics}

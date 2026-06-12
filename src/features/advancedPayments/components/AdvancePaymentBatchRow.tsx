@@ -65,7 +65,8 @@ const TABLE_HEADERS = [
 
 interface AdvancePaymentBatchRowProps {
   batch: AdvancePaymentDueDateGroup
-  isCurrent: boolean
+  defaultOpen: boolean
+  isCurrentPeriod: boolean
   search: string
   statusFilter: AdvancePaymentStatus | ''
   periodFilter: 1 | 2 | null
@@ -102,7 +103,7 @@ const BatchContent = ({
   periodFilter,
   onRowClick,
   onStatsLoad,
-}: Omit<AdvancePaymentBatchRowProps, 'isCurrent'>) => {
+}: Omit<AdvancePaymentBatchRowProps, 'defaultOpen' | 'isCurrentPeriod'>) => {
   const [page, setPage] = useState(1)
   const statusParam = statusFilter ? [statusFilter] : undefined
   const sourceBatches = batch.due_date ? [batch] : (batch.source_batches ?? [batch])
@@ -323,7 +324,8 @@ const BatchContent = ({
 
 export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   batch,
-  isCurrent,
+  defaultOpen,
+  isCurrentPeriod,
   search,
   statusFilter,
   periodFilter,
@@ -356,8 +358,8 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
       primaryLabel={formatDueDateLabel(dueDate, 'לתשלום עד') ?? dueDate ?? '—'}
       secondaryLabel={getIncludedPeriodLabel(batch)}
       relativeDueLabel={formatRelativeDueLabel(dueDate)}
-      isCurrentPeriod={false}
-      defaultOpen={isCurrent}
+      isCurrentPeriod={isCurrentPeriod}
+      defaultOpen={defaultOpen}
       metrics={metrics}
       ctaLabel="פתח לקוחות"
     >
