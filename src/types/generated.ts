@@ -8695,6 +8695,24 @@ export interface operations {
           'application/json': components['schemas']['AuthTokenResponse']
         }
       }
+      /** @description פרטי ההתחברות אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description שם משתמש או סיסמה שגויים */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -8726,6 +8744,15 @@ export interface operations {
           'application/json': components['schemas']['RefreshResponse']
         }
       }
+      /** @description אסימון הרענון אינו תקין או שפג תוקפו */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -8755,6 +8782,15 @@ export interface operations {
           'application/json': components['schemas']['UserResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
     }
   }
   logout_api_v1_auth_logout_post: {
@@ -8772,6 +8808,15 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
     }
   }
@@ -8830,6 +8875,15 @@ export interface operations {
           'application/json': components['schemas']['ResetPasswordResponse']
         }
       }
+      /** @description אסימון האיפוס אינו תקין או שהסיסמה החדשה חלשה */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -8868,6 +8922,24 @@ export interface operations {
           'application/json': components['schemas']['PaginatedResponse_UserAuditLogResponse_']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -8900,6 +8972,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PaginatedResponse_UserManagementResponse_']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -8935,6 +9025,42 @@ export interface operations {
           'application/json': components['schemas']['UserManagementResponse']
         }
       }
+      /** @description נתוני המשתמש אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description כבר קיים משתמש עם כתובת דוא"ל זו */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -8964,6 +9090,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['UserManagementResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description המשתמש המבוקש לא נמצא */
@@ -9010,8 +9154,44 @@ export interface operations {
           'application/json': components['schemas']['UserManagementResponse']
         }
       }
+      /** @description נתוני עדכון המשתמש אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description המשתמש המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description כבר קיים משתמש עם כתובת דוא"ל זו */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -9050,8 +9230,35 @@ export interface operations {
           'application/json': components['schemas']['UserManagementResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description המשתמש המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description המשתמש כבר פעיל */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -9090,8 +9297,35 @@ export interface operations {
           'application/json': components['schemas']['UserManagementResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description המשתמש המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description המשתמש כבר מושבת */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -9132,6 +9366,33 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['UserManagementResponse']
+        }
+      }
+      /** @description הסיסמה החדשה אינה תקינה */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description המשתמש המבוקש לא נמצא */
@@ -9176,6 +9437,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PaginatedResponse_AnnexDataLineResponse_']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הדוח המבוקש לא נמצא */
@@ -9223,6 +9502,33 @@ export interface operations {
           'application/json': components['schemas']['AnnexDataLineResponse']
         }
       }
+      /** @description נתוני השורה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -9262,6 +9568,33 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description נתוני השורה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description הדוח המבוקש לא נמצא */
       404: {
@@ -9309,6 +9642,33 @@ export interface operations {
           'application/json': components['schemas']['AnnexDataLineResponse']
         }
       }
+      /** @description נתוני השורה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -9347,6 +9707,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ReportDetailResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הדוח המבוקש לא נמצא */
@@ -9393,6 +9771,33 @@ export interface operations {
           'application/json': components['schemas']['ReportDetailResponse']
         }
       }
+      /** @description נתוני העדכון אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -9435,6 +9840,24 @@ export interface operations {
           'application/json': components['schemas']['TaxPreviewResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -9464,6 +9887,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['FinancialSummaryResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הדוח המבוקש לא נמצא */
@@ -9506,6 +9947,24 @@ export interface operations {
           'application/json': components['schemas']['TaxCalculationResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -9546,6 +10005,24 @@ export interface operations {
           'application/json': components['schemas']['AdvancesSummary']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -9584,6 +10061,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ReadinessCheckResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הדוח המבוקש לא נמצא */
@@ -9630,6 +10125,33 @@ export interface operations {
           'application/json': components['schemas']['IncomeLineResponse']
         }
       }
+      /** @description נתוני השורה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -9668,6 +10190,33 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description נתוני השורה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description הדוח המבוקש לא נמצא */
       404: {
@@ -9714,6 +10263,33 @@ export interface operations {
           'application/json': components['schemas']['IncomeLineResponse']
         }
       }
+      /** @description נתוני השורה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -9758,6 +10334,33 @@ export interface operations {
           'application/json': components['schemas']['ExpenseLineResponse']
         }
       }
+      /** @description נתוני השורה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -9796,6 +10399,33 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description נתוני השורה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description הדוח המבוקש לא נמצא */
       404: {
@@ -9842,6 +10472,33 @@ export interface operations {
           'application/json': components['schemas']['ExpenseLineResponse']
         }
       }
+      /** @description נתוני השורה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -9883,6 +10540,33 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['VatAutoPopulateResponse']
+        }
+      }
+      /** @description נתוני השורה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הדוח המבוקש לא נמצא */
@@ -9931,6 +10615,24 @@ export interface operations {
           'application/json': components['schemas']['PaginatedResponse_AnnualReportListItem_']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -9962,6 +10664,42 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['AnnualReportDetailResponse']
+        }
+      }
+      /** @description נתוני הדוח אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description כבר קיים דוח לשנת המס ולישות אלה */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -9997,6 +10735,24 @@ export interface operations {
           'application/json': components['schemas']['PaginatedResponse_AnnualReportListItem_']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -10026,6 +10782,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['AnnualReportDetailResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הדוח המבוקש לא נמצא */
@@ -10065,6 +10839,24 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description הדוח המבוקש לא נמצא */
       404: {
@@ -10110,8 +10902,44 @@ export interface operations {
           'application/json': components['schemas']['AnnualReportDetailResponse']
         }
       }
+      /** @description נתוני התיקון אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן לפתוח את הדוח לתיקון במצב הנוכחי */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -10151,6 +10979,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PaginatedResponse_ScheduleEntryResponse_']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הדוח המבוקש לא נמצא */
@@ -10197,6 +11043,33 @@ export interface operations {
           'application/json': components['schemas']['ScheduleEntryResponse']
         }
       }
+      /** @description נתוני השורה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -10239,6 +11112,33 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ScheduleEntryResponse']
+        }
+      }
+      /** @description נתוני השורה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הדוח המבוקש לא נמצא */
@@ -10285,8 +11185,44 @@ export interface operations {
           'application/json': components['schemas']['AnnualReportDetailResponse']
         }
       }
+      /** @description המעבר המבוקש אינו חוקי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description מצב הדוח אינו מאפשר את המעבר */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -10329,8 +11265,44 @@ export interface operations {
           'application/json': components['schemas']['AnnualReportResponse']
         }
       }
+      /** @description המעבר המבוקש אינו חוקי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description מצב הדוח אינו מאפשר את המעבר */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -10373,8 +11345,44 @@ export interface operations {
           'application/json': components['schemas']['AnnualReportDetailResponse']
         }
       }
+      /** @description המעבר המבוקש אינו חוקי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description מצב הדוח אינו מאפשר את המעבר */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -10415,6 +11423,33 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['AnnualReportResponse']
+        }
+      }
+      /** @description נתוני העדכון אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הדוח המבוקש לא נמצא */
@@ -10460,6 +11495,24 @@ export interface operations {
           'application/json': components['schemas']['PaginatedResponse_AnnualReportAuditEntry_']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -10501,6 +11554,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PaginatedResponse_AnnualReportListItem_']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -10546,6 +11617,24 @@ export interface operations {
           'application/json': components['schemas']['PaginatedResponse_AnnualReportListItem_']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -10575,6 +11664,24 @@ export interface operations {
           'application/json': components['schemas']['SeasonSummaryResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
     }
   }
   get_default_tax_year_api_v1_tax_year_default_get: {
@@ -10593,6 +11700,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['DefaultTaxYearResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
     }
@@ -10620,6 +11745,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PaginatedResponse_AnnualReportListItem_']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -10653,6 +11796,24 @@ export interface operations {
           'application/json': components['schemas']['SeasonSummaryResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -10682,6 +11843,24 @@ export interface operations {
         }
         content: {
           'application/json': unknown
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הדוח המבוקש לא נמצא */
@@ -10728,6 +11907,33 @@ export interface operations {
           'application/json': components['schemas']['TaxCalculationSaveResponse']
         }
       }
+      /** @description נתוני העדכון אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הדוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -10769,6 +11975,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PaginatedResponse_ChargeResponse_']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הדוח המבוקש לא נמצא */
@@ -10819,6 +12043,24 @@ export interface operations {
           'application/json': components['schemas']['TaxCalendarGroupListResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -10853,6 +12095,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['TaxCalendarGroupItemsResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הישות המבוקשת לא נמצאה */
@@ -10893,6 +12153,24 @@ export interface operations {
           'application/json': components['schemas']['DeadlineRuleResponse'][]
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
     }
   }
   list_tax_calendar_entries_api_v1_settings_tax_calendar_entries_get: {
@@ -10914,6 +12192,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['TaxCalendarEntryResponse'][]
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -10946,6 +12242,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['TaxCalendarSummaryResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -10981,6 +12295,42 @@ export interface operations {
           'application/json': components['schemas']['TaxCalendarBootstrapResponse']
         }
       }
+      /** @description טווח השנים אינו תקין */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description רשומת יומן המס מתנגשת עם חובה קיימת */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -11014,6 +12364,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PaginatedResponse_AuthorityContactResponse_']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -11060,6 +12428,33 @@ export interface operations {
           'application/json': components['schemas']['AuthorityContactResponse']
         }
       }
+      /** @description נתוני איש הקשר אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הלקוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -11101,6 +12496,24 @@ export interface operations {
           'application/json': components['schemas']['AuthorityContactResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description איש הקשר המבוקש לא נמצא */
       404: {
         headers: {
@@ -11139,6 +12552,24 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description איש הקשר המבוקש לא נמצא */
       404: {
@@ -11185,6 +12616,33 @@ export interface operations {
           'application/json': components['schemas']['AuthorityContactResponse']
         }
       }
+      /** @description נתוני עדכון איש הקשר אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description איש הקשר המבוקש לא נמצא */
       404: {
         headers: {
@@ -11225,6 +12683,24 @@ export interface operations {
           'application/json': components['schemas']['TaxSubmissionWidgetResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -11254,6 +12730,24 @@ export interface operations {
           'application/json': components['schemas']['DashboardOverviewResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
     }
   }
   export_clients_api_v1_clients_export_get: {
@@ -11274,6 +12768,24 @@ export interface operations {
           'application/json': unknown
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
     }
   }
   download_client_template_api_v1_clients_template_get: {
@@ -11292,6 +12804,24 @@ export interface operations {
         }
         content: {
           'application/json': unknown
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
     }
@@ -11318,6 +12848,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ClientImportResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -11351,6 +12899,33 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ClientCreationImpactResponse']
+        }
+      }
+      /** @description נתוני הלקוח אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -11391,6 +12966,24 @@ export interface operations {
           'application/json': components['schemas']['ClientRecordListResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -11422,6 +13015,42 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['CreateClientRecordResponse']
+        }
+      }
+      /** @description נתוני הלקוח אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description כבר קיים לקוח עם מזהה זה */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -11459,6 +13088,24 @@ export interface operations {
           'application/json': components['schemas']['ClientSidebarListResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -11490,6 +13137,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ClientRecordResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -11530,8 +13195,35 @@ export interface operations {
         }
         content?: never
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הלקוח המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן לבצע את הפעולה על הלקוח במצב הנוכחי */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -11574,8 +13266,44 @@ export interface operations {
           'application/json': components['schemas']['ClientRecordResponse']
         }
       }
+      /** @description נתוני עדכון הלקוח אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הלקוח המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן לעדכן את הלקוח במצב הנוכחי */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -11614,6 +13342,24 @@ export interface operations {
           'application/json': components['schemas']['ClientConflictInfo']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -11645,8 +13391,35 @@ export interface operations {
           'application/json': components['schemas']['ClientRecordResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הלקוח המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן לבצע את הפעולה על הלקוח במצב הנוכחי */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -11686,6 +13459,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ClientBusinessesResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -11732,8 +13523,44 @@ export interface operations {
           'application/json': components['schemas']['BusinessResponse']
         }
       }
+      /** @description נתוני העסק אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הלקוח המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description כבר קיים עסק תואם ללקוח זה */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -11771,6 +13598,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['BusinessResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description העסק המבוקש לא נמצא */
@@ -11812,8 +13657,35 @@ export interface operations {
         }
         content?: never
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description העסק המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן לבצע את הפעולה על העסק במצב הנוכחי */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -11857,8 +13729,44 @@ export interface operations {
           'application/json': components['schemas']['BusinessResponse']
         }
       }
+      /** @description נתוני עדכון העסק אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description העסק המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן לעדכן את העסק במצב הנוכחי */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -11898,8 +13806,35 @@ export interface operations {
           'application/json': components['schemas']['BusinessResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description העסק המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן לבצע את הפעולה על העסק במצב הנוכחי */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -11938,6 +13873,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ClientStatusCardResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -11981,6 +13934,24 @@ export interface operations {
           'application/json': components['schemas']['PaginatedResponse_BinderDetailResponse_']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -12012,6 +13983,33 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['BinderReceiveResult']
+        }
+      }
+      /** @description נתוני קליטת הקלסר אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -12047,6 +14045,33 @@ export interface operations {
           'application/json': components['schemas']['BinderReadyForHandoverResponse'][]
         }
       }
+      /** @description לא ניתן לסמן מוכן למסירה במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -12080,6 +14105,33 @@ export interface operations {
           'application/json': components['schemas']['BinderHandoverResponse']
         }
       }
+      /** @description נתוני המסירה ללקוח אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -12109,6 +14161,33 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['BinderResponse']
+        }
+      }
+      /** @description לא ניתן לבצע את הפעולה על הקלסר במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הקלסר המבוקש לא נמצא */
@@ -12151,6 +14230,33 @@ export interface operations {
           'application/json': components['schemas']['BinderResponse']
         }
       }
+      /** @description לא ניתן לבצע את הפעולה על הקלסר במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הקלסר המבוקש לא נמצא */
       404: {
         headers: {
@@ -12189,6 +14295,33 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['BinderResponse']
+        }
+      }
+      /** @description לא ניתן לבצע את הפעולה על הקלסר במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הקלסר המבוקש לא נמצא */
@@ -12231,6 +14364,33 @@ export interface operations {
           'application/json': components['schemas']['BinderReadyForHandoverResponse']
         }
       }
+      /** @description לא ניתן לבצע את הפעולה על הקלסר במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הקלסר המבוקש לא נמצא */
       404: {
         headers: {
@@ -12269,6 +14429,33 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['BinderResponse']
+        }
+      }
+      /** @description לא ניתן לבצע את הפעולה על הקלסר במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הקלסר המבוקש לא נמצא */
@@ -12313,6 +14500,33 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['BinderResponse']
+        }
+      }
+      /** @description לא ניתן לבצע את הפעולה על הקלסר במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הקלסר המבוקש לא נמצא */
@@ -12365,6 +14579,24 @@ export interface operations {
           'application/json': components['schemas']['BinderListResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -12394,6 +14626,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['BinderResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הקלסר המבוקש לא נמצא */
@@ -12433,6 +14683,24 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description הקלסר המבוקש לא נמצא */
       404: {
@@ -12477,6 +14745,24 @@ export interface operations {
           'application/json': components['schemas']['BinderAuditResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הקלסר המבוקש לא נמצא */
       404: {
         headers: {
@@ -12518,6 +14804,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PaginatedResponse_BinderIntakeResponse_']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הקלסר המבוקש לא נמצא */
@@ -12565,6 +14869,33 @@ export interface operations {
           'application/json': components['schemas']['BinderIntakeResponse']
         }
       }
+      /** @description נתוני עדכון הקליטה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הקלסר המבוקש לא נמצא */
       404: {
         headers: {
@@ -12606,6 +14937,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PaginatedResponse_BinderDetailResponse_']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -12654,6 +15003,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ChargeListResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -12756,6 +15123,24 @@ export interface operations {
           'application/json': components['schemas']['ChargeResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description החיוב המבוקש לא נמצא */
       404: {
         headers: {
@@ -12794,6 +15179,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ChargeResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description החיוב המבוקש לא נמצא */
@@ -12916,6 +15319,24 @@ export interface operations {
           'application/json': components['schemas']['ChargeResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description החיוב המבוקש לא נמצא */
       404: {
         headers: {
@@ -12953,6 +15374,24 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description החיוב המבוקש לא נמצא */
       404: {
@@ -12998,6 +15437,24 @@ export interface operations {
           'application/json': components['schemas']['BulkChargeActionResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -13031,6 +15488,51 @@ export interface operations {
           'application/json': components['schemas']['InvoiceResponse']
         }
       }
+      /** @description נתוני החשבונית אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description החיוב המבוקש לא נמצא */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description כבר קיימת חשבונית מצורפת לחיוב זה */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -13060,6 +15562,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['InvoiceResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description החיוב המבוקש לא נמצא */
@@ -13104,6 +15624,33 @@ export interface operations {
           'application/json': components['schemas']['PermanentDocumentResponse']
         }
       }
+      /** @description נתוני המסמך אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -13111,6 +15658,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+      /** @description העלאת הקובץ לאחסון נכשלה */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
     }
@@ -13139,6 +15695,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PermanentDocumentListResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -13179,6 +15753,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['OperationalSignalsResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -13222,6 +15814,24 @@ export interface operations {
           'application/json': components['schemas']['DocumentDownloadUrlResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description המסמך המבוקש לא נמצא */
       404: {
         headers: {
@@ -13260,6 +15870,33 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description לא ניתן למחוק את המסמך במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description המסמך המבוקש לא נמצא */
       404: {
@@ -13306,6 +15943,33 @@ export interface operations {
           'application/json': components['schemas']['PermanentDocumentResponse']
         }
       }
+      /** @description נתוני החלפת המסמך אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description המסמך המבוקש לא נמצא */
       404: {
         headers: {
@@ -13322,6 +15986,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+      /** @description העלאת הקובץ לאחסון נכשלה */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
     }
@@ -13347,6 +16020,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['DocumentVersionsResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -13387,6 +16078,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['DocumentVersionsResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הדוח המבוקש לא נמצא */
@@ -13431,6 +16140,24 @@ export interface operations {
           'application/json': components['schemas']['VatComplianceReportResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -13463,6 +16190,24 @@ export interface operations {
           'application/json': components['schemas']['AdvancePaymentCollectionsReportResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -13492,6 +16237,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['AnnualReportStatusReportResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -13527,6 +16290,24 @@ export interface operations {
           'application/json': components['schemas']['AgingReportResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -13557,6 +16338,24 @@ export interface operations {
         }
         content: {
           'application/json': unknown
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -13594,6 +16393,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ClientTimelineResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -13646,6 +16463,24 @@ export interface operations {
           'application/json': components['schemas']['SearchResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -13677,6 +16512,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PaginatedResponse_ReminderResponse_']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -13712,6 +16565,33 @@ export interface operations {
           'application/json': components['schemas']['ReminderResponse']
         }
       }
+      /** @description נתוני התזכורת אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -13741,6 +16621,15 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ReminderResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description התזכורת המבוקשת לא נמצאה */
@@ -13783,8 +16672,26 @@ export interface operations {
           'application/json': components['schemas']['ReminderResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description התזכורת המבוקשת לא נמצאה */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן לבטל תזכורת שכבר נשלחה או בוטלה */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -13832,6 +16739,24 @@ export interface operations {
           'application/json': components['schemas']['NotificationListResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -13864,6 +16789,24 @@ export interface operations {
           'application/json': components['schemas']['NotificationSummaryResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -13893,6 +16836,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['NotificationResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description ההודעה המבוקשת לא נמצאה */
@@ -13937,6 +16898,33 @@ export interface operations {
           'application/json': components['schemas']['NotificationPreviewResponse']
         }
       }
+      /** @description נתוני ההודעה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -13970,6 +16958,33 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['NotificationResult']
+        }
+      }
+      /** @description נדרש מפתח אידמפוטנטיות תקין לשליחת ההודעה */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -14010,6 +17025,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['CorrespondenceListResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -14056,6 +17089,33 @@ export interface operations {
           'application/json': components['schemas']['CorrespondenceResponse']
         }
       }
+      /** @description נתוני ההתכתבות אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הלקוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -14097,6 +17157,24 @@ export interface operations {
           'application/json': components['schemas']['CorrespondenceResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description רשומת ההתכתבות המבוקשת לא נמצאה */
       404: {
         headers: {
@@ -14135,6 +17213,24 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description רשומת ההתכתבות המבוקשת לא נמצאה */
       404: {
@@ -14179,6 +17275,33 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['CorrespondenceResponse']
+        }
+      }
+      /** @description נתוני עדכון ההתכתבות אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description רשומת ההתכתבות המבוקשת לא נמצאה */
@@ -14226,6 +17349,24 @@ export interface operations {
           'application/json': components['schemas']['PaginatedResponse_AdvancePaymentRow_']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הלקוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -14270,8 +17411,44 @@ export interface operations {
           'application/json': components['schemas']['AdvancePaymentRow']
         }
       }
+      /** @description נתוני המקדמה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הלקוח המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description תדירות או תקופת המקדמה אינן נתמכות */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -14311,6 +17488,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PrefillTurnoverResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -14355,6 +17550,24 @@ export interface operations {
           'application/json': components['schemas']['AnnualKPIResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הלקוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -14393,6 +17606,24 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description תשלום המקדמה המבוקש לא נמצא */
       404: {
@@ -14439,8 +17670,44 @@ export interface operations {
           'application/json': components['schemas']['AdvancePaymentRow']
         }
       }
+      /** @description נתוני עדכון המקדמה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description תשלום המקדמה המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן לעדכן את המקדמה במצב הנוכחי */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -14486,6 +17753,24 @@ export interface operations {
           'application/json': components['schemas']['AdvancePaymentOverviewResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -14515,6 +17800,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['MonthBatchSummary'][]
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -14552,8 +17855,44 @@ export interface operations {
           'application/json': components['schemas']['GenerateScheduleResponse']
         }
       }
+      /** @description נתוני יצירת לוח המקדמות אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הלקוח המבוקש לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן ליצור לוח מקדמות במצב הנוכחי */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -14594,6 +17933,42 @@ export interface operations {
           'application/json': components['schemas']['SignatureRequestCreatedResponse']
         }
       }
+      /** @description נתוני בקשת החתימה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description הלקוח או העסק המבוקשים לא נמצאו */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -14626,6 +18001,24 @@ export interface operations {
           'application/json': components['schemas']['PaginatedResponse_SignatureRequestResponse_']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -14655,6 +18048,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['SignatureRequestWithAuditResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description בקשת החתימה המבוקשת לא נמצאה */
@@ -14702,8 +18113,35 @@ export interface operations {
           'application/json': components['schemas']['SignatureRequestResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description בקשת החתימה המבוקשת לא נמצאה */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן לבטל את בקשת החתימה במצב הנוכחי */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -14744,6 +18182,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PaginatedResponse_SignatureRequestResponse_']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -14888,6 +18344,24 @@ export interface operations {
           'application/json': components['schemas']['VatWorkItemListResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -14921,6 +18395,42 @@ export interface operations {
           'application/json': components['schemas']['VatWorkItemResponse']
         }
       }
+      /** @description נתוני פריט העבודה למע"מ אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description כבר קיים פריט עבודה לעסק ולתקופה אלה */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -14952,8 +18462,44 @@ export interface operations {
           'application/json': components['schemas']['VatWorkItemResponse']
         }
       }
+      /** @description לא ניתן לבצע את המעבר במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description פריט עבודה למע"מ לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description מעבר הסטטוס אינו חוקי במצב הנוכחי */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -14992,6 +18538,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['VatInvoiceListResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description פריט עבודה למע"מ לא נמצא */
@@ -15038,8 +18602,44 @@ export interface operations {
           'application/json': components['schemas']['VatInvoiceResponse']
         }
       }
-      /** @description פריט עבודה למע"מ לא נמצא */
+      /** @description נתוני החשבונית אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description החשבונית או פריט העבודה המבוקשים לא נמצאו */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן לעדכן חשבונית לאחר הגשה */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -15076,6 +18676,33 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description לא ניתן למחוק חשבונית במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description החשבונית המבוקשת לא נמצאה */
       404: {
@@ -15122,8 +18749,44 @@ export interface operations {
           'application/json': components['schemas']['VatInvoiceResponse']
         }
       }
-      /** @description החשבונית המבוקשת לא נמצאה */
+      /** @description נתוני החשבונית אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description החשבונית או פריט העבודה המבוקשים לא נמצאו */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן לעדכן חשבונית לאחר הגשה */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -15162,8 +18825,44 @@ export interface operations {
           'application/json': components['schemas']['VatWorkItemResponse']
         }
       }
+      /** @description לא ניתן לבצע את המעבר במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description פריט עבודה למע"מ לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description מעבר הסטטוס אינו חוקי במצב הנוכחי */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -15206,8 +18905,44 @@ export interface operations {
           'application/json': components['schemas']['VatWorkItemResponse']
         }
       }
+      /** @description לא ניתן לבצע את המעבר במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description פריט עבודה למע"מ לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description מעבר הסטטוס אינו חוקי במצב הנוכחי */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -15250,8 +18985,44 @@ export interface operations {
           'application/json': components['schemas']['VatWorkItemResponse']
         }
       }
+      /** @description לא ניתן לבצע את המעבר במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description פריט עבודה למע"מ לא נמצא */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description מעבר הסטטוס אינו חוקי במצב הנוכחי */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -15293,6 +19064,24 @@ export interface operations {
           'application/json': components['schemas']['VatWorkItemGroupsResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -15329,6 +19118,24 @@ export interface operations {
           'application/json': components['schemas']['VatWorkItemGroupItemsResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -15359,6 +19166,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['VatWorkItemLookupResponse'] | null
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
@@ -15392,6 +19217,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['VatPeriodOptionsResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -15436,6 +19279,24 @@ export interface operations {
           'application/json': components['schemas']['VatWorkItemStatusSummaryResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -15465,6 +19326,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['VatWorkItemResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description פריט עבודה למע"מ לא נמצא */
@@ -15510,6 +19389,24 @@ export interface operations {
           'application/json': components['schemas']['VatWorkItemListResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הלקוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -15551,6 +19448,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['VatAuditTrailResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description פריט עבודה למע"מ לא נמצא */
@@ -15596,6 +19511,24 @@ export interface operations {
           'application/json': components['schemas']['VatClientSummaryResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הלקוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -15639,6 +19572,24 @@ export interface operations {
           'application/json': unknown
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הלקוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -15680,6 +19631,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PaginatedResponse_EntityNoteResponse_']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הלקוח המבוקש לא נמצא */
@@ -15726,6 +19695,33 @@ export interface operations {
           'application/json': components['schemas']['EntityNoteResponse']
         }
       }
+      /** @description נתוני ההערה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description הלקוח המבוקש לא נמצא */
       404: {
         headers: {
@@ -15764,6 +19760,24 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description ההערה המבוקשת לא נמצאה */
       404: {
@@ -15810,6 +19824,33 @@ export interface operations {
           'application/json': components['schemas']['EntityNoteResponse']
         }
       }
+      /** @description נתוני עדכון ההערה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description ההערה המבוקשת לא נמצאה */
       404: {
         headers: {
@@ -15852,6 +19893,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['PaginatedResponse_EntityNoteResponse_']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description העסק המבוקש לא נמצא */
@@ -15899,6 +19958,33 @@ export interface operations {
           'application/json': components['schemas']['EntityNoteResponse']
         }
       }
+      /** @description נתוני ההערה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description העסק המבוקש לא נמצא */
       404: {
         headers: {
@@ -15938,6 +20024,24 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description ההערה המבוקשת לא נמצאה */
       404: {
@@ -15985,6 +20089,33 @@ export interface operations {
           'application/json': components['schemas']['EntityNoteResponse']
         }
       }
+      /** @description נתוני עדכון ההערה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description ההערה המבוקשת לא נמצאה */
       404: {
         headers: {
@@ -16027,6 +20158,33 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['EntityAuditTrailResponse']
+        }
+      }
+      /** @description סוג הישות המבוקש אינו נתמך */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description הישות המבוקשת לא נמצאה */
@@ -16078,6 +20236,24 @@ export interface operations {
           'application/json': components['schemas']['PaginatedResponse_TaskResponse_']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -16111,6 +20287,33 @@ export interface operations {
           'application/json': components['schemas']['TaskResponse']
         }
       }
+      /** @description נתוני המשימה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -16140,6 +20343,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['TaskResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description המשימה המבוקשת לא נמצאה */
@@ -16179,6 +20400,24 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description המשימה המבוקשת לא נמצאה */
       404: {
@@ -16224,8 +20463,44 @@ export interface operations {
           'application/json': components['schemas']['TaskResponse']
         }
       }
+      /** @description נתוני עדכון המשימה אינם תקינים */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description המשימה המבוקשת לא נמצאה */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן לערוך משימה שהושלמה או בוטלה */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -16264,8 +20539,35 @@ export interface operations {
           'application/json': components['schemas']['TaskResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description המשימה המבוקשת לא נמצאה */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן להשלים משימה שבוטלה או שכבר הושלמה */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -16304,8 +20606,35 @@ export interface operations {
           'application/json': components['schemas']['TaskResponse']
         }
       }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description המשימה המבוקשת לא נמצאה */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description לא ניתן לבטל משימה שהושלמה או שכבר בוטלה */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -16353,6 +20682,24 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['WorkQueueListResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Validation Error */
