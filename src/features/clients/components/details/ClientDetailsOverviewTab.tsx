@@ -1,4 +1,4 @@
-import { type FC, useState } from 'react'
+import { type FC, useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getErrorMessage } from '@/utils/utils'
 import { type ActiveClientDetailsTab } from '../../constants'
@@ -55,23 +55,38 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
   isEditing,
   onEditClose,
 }) => {
-  const { id: firstBusinessId } = useFirstBusinessId(client.id)
+  const { id: firstBusinessId } = useFirstBusinessId(client.id, activeTab === 'communication')
   const navigate = useNavigate()
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false)
   const [isAddingBusiness, setIsAddingBusiness] = useState(false)
   const [isAddingCharge, setIsAddingCharge] = useState(false)
+  const [shouldLoadRelatedData, setShouldLoadRelatedData] = useState(false)
+
+  useEffect(() => {
+    setShouldLoadRelatedData(false)
+  }, [client.id])
+
+  const requestRelatedDataLoad = useCallback(() => {
+    setShouldLoadRelatedData(true)
+  }, [])
+
+  const openCreateCharge = useCallback(() => {
+    setShouldLoadRelatedData(true)
+    setIsAddingCharge(true)
+  }, [])
 
   const {
     binders,
     bindersTotal,
     charges,
     chargesTotal,
+    isFetchingRelatedData,
     handleCreateBusiness,
     isCreatingBusiness,
     handleCreateCharge,
     isCreatingCharge,
     createChargeError,
-  } = useClientDetailsActions(client.id, activeTab)
+  } = useClientDetailsActions(client.id, activeTab, shouldLoadRelatedData)
 
   return (
     <div className="space-y-6">
@@ -90,10 +105,13 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
             bindersTotal={bindersTotal}
             charges={charges}
             chargesTotal={chargesTotal}
+            hasRequestedData={shouldLoadRelatedData}
+            isFetching={isFetchingRelatedData}
             canViewCharges={true}
             canCreateCharge={canEditClients}
-            onCreateCharge={() => setIsAddingCharge(true)}
+            onCreateCharge={openCreateCharge}
             onCreateBinder={() => navigate(`/binders?client_record_id=${client.id}`)}
+            onRequestLoad={requestRelatedDataLoad}
           />
           <CreateBusinessModal
             open={isAddingBusiness}

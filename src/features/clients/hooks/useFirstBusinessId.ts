@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { clientsApi, clientsQK } from '../api'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
-export const useFirstBusinessId = (clientId: number) => {
+export const useFirstBusinessId = (clientId: number, enabled = true) => {
   const { data, isLoading } = useQuery({
     queryKey: clientsQK.firstBusiness(clientId),
     queryFn: () =>
@@ -10,7 +10,7 @@ export const useFirstBusinessId = (clientId: number) => {
         page: 1,
         page_size: 1,
       }),
-    enabled: clientId > 0,
+    enabled: enabled && clientId > 0,
     staleTime: QUERY_STALE_TIME.long,
   })
 

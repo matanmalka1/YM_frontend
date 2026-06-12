@@ -56,8 +56,3 @@ export const CORRESPONDENCE_LIST_PARAMS = {
   page: 1,
   page_size: PAGE_SIZE_MD,
 } as const
-
-export const CORRESPONDENCE_CONTACTS_PARAMS = {
-  page: 1,
-  pageSize: 100,
-} as const

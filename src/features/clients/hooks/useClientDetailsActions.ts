@@ -10,19 +10,20 @@ import { toast } from '@/utils/toast'
 
 const RELATED_PAGE_SIZE = 5
 
-export const useClientDetailsActions = (clientId: number, activeTab: string) => {
+export const useClientDetailsActions = (clientId: number, activeTab: string, shouldLoadRelatedData: boolean) => {
   const queryClient = useQueryClient()
+  const shouldFetchRelatedData = activeTab === 'details' && shouldLoadRelatedData
 
   const relatedBindersQuery = useQuery({
     queryKey: bindersQK.forClientPage(clientId, 1, RELATED_PAGE_SIZE),
     queryFn: () => bindersApi.listClientBinders(clientId, { page: 1, page_size: RELATED_PAGE_SIZE }),
-    enabled: activeTab === 'details',
+    enabled: shouldFetchRelatedData,
   })
 
   const relatedChargesQuery = useQuery({
     queryKey: chargesQK.forClientPage(clientId, 1, RELATED_PAGE_SIZE),
     queryFn: () => chargesApi.list({ client_record_id: clientId, page: 1, page_size: RELATED_PAGE_SIZE }),
-    enabled: activeTab === 'details',
+    enabled: shouldFetchRelatedData,
   })
 
   const createBusinessMutation = useMutation({
@@ -61,6 +62,7 @@ export const useClientDetailsActions = (clientId: number, activeTab: string) => 
     bindersTotal: relatedBindersQuery.data?.total ?? 0,
     charges: relatedChargesQuery.data?.items ?? [],
     chargesTotal: relatedChargesQuery.data?.total ?? 0,
+    isFetchingRelatedData: relatedBindersQuery.isFetching || relatedChargesQuery.isFetching,
     handleCreateBusiness,
     isCreatingBusiness: createBusinessMutation.isPending,
     handleCreateCharge,

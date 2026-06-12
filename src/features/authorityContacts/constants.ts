@@ -1,5 +1,10 @@
 import type { AuthorityContactFormValues } from './schemas'
 
+export const AUTHORITY_CONTACTS_LIST_PARAMS = {
+  page: 1,
+  page_size: 100,
+} as const
+
 export const AUTHORITY_CONTACT_TEXT = {
   cardTitle: 'אנשי קשר ברשויות',
   defaultSubtitle: 'גורמי קשר ממשלתיים ורגולטוריים',

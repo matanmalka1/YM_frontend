@@ -1,4 +1,4 @@
-import { type FC, type ReactNode } from 'react'
+import { type FC, type ReactNode, useEffect, useRef } from 'react'
 import { ChevronLeft, Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Badge } from '../../../../components/ui/primitives/Badge'
@@ -78,10 +78,13 @@ type ClientRelatedDataProps = {
   bindersTotal: number
   charges: ChargeListItem[]
   chargesTotal: number
+  hasRequestedData: boolean
+  isFetching: boolean
   canViewCharges: boolean
   canCreateCharge?: boolean
   onCreateCharge?: () => void
   onCreateBinder?: () => void
+  onRequestLoad: () => void
 }
 
 export const ClientRelatedData: FC<ClientRelatedDataProps> = ({
@@ -90,11 +93,42 @@ export const ClientRelatedData: FC<ClientRelatedDataProps> = ({
   bindersTotal,
   charges,
   chargesTotal,
+  hasRequestedData,
+  isFetching,
   canViewCharges,
   canCreateCharge,
   onCreateCharge,
   onCreateBinder,
+  onRequestLoad,
 }) => {
+  const loadTriggerRef = useRef<HTMLDivElement | null>(null)
+  const hasAnyRelatedData = bindersTotal > 0 || chargesTotal > 0 || binders.length > 0 || charges.length > 0
+  const showInitialLoading = hasRequestedData && isFetching && !hasAnyRelatedData
+
+  useEffect(() => {
+    if (hasRequestedData) return
+
+    const node = loadTriggerRef.current
+    if (!node) return
+
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      onRequestLoad()
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return
+        onRequestLoad()
+        observer.disconnect()
+      },
+      { rootMargin: '240px 0px' },
+    )
+
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [hasRequestedData, onRequestLoad])
+
   const actions = (
     <div className="flex flex-wrap items-center gap-2">
       <Button variant="ghost" size="sm" onClick={onCreateBinder} className="text-md">
@@ -112,31 +146,50 @@ export const ClientRelatedData: FC<ClientRelatedDataProps> = ({
 
   return (
     <Card title="נתונים קשורים" actions={actions} size="compact" className="shadow-sm">
-      <div className="grid gap-3 md:grid-cols-2">
-        <RelatedItemsSection
-          title="קלסרים אחרונים"
-          total={bindersTotal}
-          allHref={`/binders?client_record_id=${clientId}`}
-          items={binders}
-          emptyText="אין קלסרים להצגה"
-          getKey={(binder) => binder.id}
-          getTitle={(binder) => `קלסר ${formatBinderNumber(binder.binder_number)}`}
-          getSubtitle={(binder) => getBinderLocationStatusLabel(binder.location_status)}
-          getItemHref={(binder) => `/binders?client_record_id=${clientId}&binder_id=${binder.id}`}
-        />
-        {canViewCharges && (
-          <RelatedItemsSection
-            title="חיובים אחרונים"
-            total={chargesTotal}
-            allHref={`/charges?client_record_id=${clientId}`}
-            items={charges}
-            emptyText="אין חיובים להצגה"
-            getKey={(charge) => charge.id}
-            getTitle={(charge) => `חיוב #${charge.id}`}
-            getSubtitle={(charge) => getChargeTypeLabel(charge.charge_type)}
-            getBadge={(charge) => <Badge variant="neutral">{getChargeStatusLabel(charge.status)}</Badge>}
-            getItemHref={() => `/charges?client_record_id=${clientId}`}
-          />
+      <div ref={loadTriggerRef}>
+        {!hasRequestedData ? (
+          <div className="min-h-[132px]" />
+        ) : showInitialLoading ? (
+          <div className="grid gap-3 md:grid-cols-2">
+            {Array.from({ length: canViewCharges ? 2 : 1 }).map((_, index) => (
+              <div key={index} className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
+                <div className="mb-3 h-3 w-24 animate-pulse rounded bg-gray-100" />
+                <div className="space-y-2">
+                  <div className="h-8 animate-pulse rounded bg-gray-100" />
+                  <div className="h-8 animate-pulse rounded bg-gray-100" />
+                  <div className="h-8 animate-pulse rounded bg-gray-100" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-3 md:grid-cols-2">
+            <RelatedItemsSection
+              title="קלסרים אחרונים"
+              total={bindersTotal}
+              allHref={`/binders?client_record_id=${clientId}`}
+              items={binders}
+              emptyText="אין קלסרים להצגה"
+              getKey={(binder) => binder.id}
+              getTitle={(binder) => `קלסר ${formatBinderNumber(binder.binder_number)}`}
+              getSubtitle={(binder) => getBinderLocationStatusLabel(binder.location_status)}
+              getItemHref={(binder) => `/binders?client_record_id=${clientId}&binder_id=${binder.id}`}
+            />
+            {canViewCharges && (
+              <RelatedItemsSection
+                title="חיובים אחרונים"
+                total={chargesTotal}
+                allHref={`/charges?client_record_id=${clientId}`}
+                items={charges}
+                emptyText="אין חיובים להצגה"
+                getKey={(charge) => charge.id}
+                getTitle={(charge) => `חיוב #${charge.id}`}
+                getSubtitle={(charge) => getChargeTypeLabel(charge.charge_type)}
+                getBadge={(charge) => <Badge variant="neutral">{getChargeStatusLabel(charge.status)}</Badge>}
+                getItemHref={() => `/charges?client_record_id=${clientId}`}
+              />
+            )}
+          </div>
         )}
       </div>
     </Card>

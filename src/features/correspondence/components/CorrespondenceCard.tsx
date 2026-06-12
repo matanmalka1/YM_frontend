@@ -33,7 +33,7 @@ export const CorrespondenceCard = ({ businessId, clientId }: CorrespondenceCardP
     deleteEntry,
     deletingId,
     contacts,
-  } = useCorrespondence(businessId, clientId)
+  } = useCorrespondence(businessId, clientId, modalOpen)
 
   const handleSubmit = async (data: CorrespondenceFormValues) => {
     if (editing) {

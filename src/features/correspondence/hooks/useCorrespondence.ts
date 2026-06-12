@@ -1,14 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { correspondenceApi, correspondenceQK } from '../api'
-import { authorityContactsApi, authorityContactsQK } from '@/features/authorityContacts'
+import { authorityContactsApi, authorityContactsQK, AUTHORITY_CONTACTS_LIST_PARAMS } from '@/features/authorityContacts'
 import { getErrorMessage, showErrorToast } from '../../../utils/utils'
 import type { CorrespondenceFormValues } from '../schemas'
 import { toast } from '../../../utils/toast'
-import { CORRESPONDENCE_CONTACTS_PARAMS, CORRESPONDENCE_LIST_PARAMS } from '../constants'
+import { CORRESPONDENCE_LIST_PARAMS } from '../constants'
 import { toCreateCorrespondencePayload, toUpdateCorrespondencePayload } from '../utils'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
-export const useCorrespondence = (businessId: number | undefined, clientId?: number) => {
+export const useCorrespondence = (businessId: number | undefined, clientId?: number, loadContacts = false) => {
   const queryClient = useQueryClient()
   const resolvedClientId = clientId ?? 0
   const listParams = { ...CORRESPONDENCE_LIST_PARAMS, business_id: businessId }
@@ -22,14 +22,14 @@ export const useCorrespondence = (businessId: number | undefined, clientId?: num
   })
 
   const contactsQuery = useQuery({
-    enabled: resolvedClientId > 0,
-    queryKey: [...authorityContactsQK.forClient(resolvedClientId), CORRESPONDENCE_CONTACTS_PARAMS],
+    enabled: loadContacts && resolvedClientId > 0,
+    queryKey: [...authorityContactsQK.forClient(resolvedClientId), AUTHORITY_CONTACTS_LIST_PARAMS],
     queryFn: () =>
       authorityContactsApi.listAuthorityContacts(
         resolvedClientId,
         undefined,
-        CORRESPONDENCE_CONTACTS_PARAMS.page,
-        CORRESPONDENCE_CONTACTS_PARAMS.pageSize,
+        AUTHORITY_CONTACTS_LIST_PARAMS.page,
+        AUTHORITY_CONTACTS_LIST_PARAMS.page_size,
       ),
     staleTime: QUERY_STALE_TIME.medium,
   })
