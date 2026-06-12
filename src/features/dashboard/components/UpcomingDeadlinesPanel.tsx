@@ -93,8 +93,8 @@ const UpcomingDeadlineRow = ({ group }: { group: TaxCalendarGroup }) => {
 export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string }) => {
   const currentYear = new Date().getFullYear()
   const groupsQuery = useTaxCalendarGroups({
-    start_year: currentYear,
-    end_year: currentYear + 1,
+    tax_year_after: currentYear,
+    tax_year_before: currentYear + 1,
     include_empty: false,
   })
 

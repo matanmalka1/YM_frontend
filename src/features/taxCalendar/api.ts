@@ -35,8 +35,8 @@ export interface TaxCalendarGroup {
 }
 
 export interface TaxCalendarGroupsParams {
-  start_year?: number
-  end_year?: number
+  tax_year_after?: number
+  tax_year_before?: number
   obligation_type?: TaxCalendarObligationType
   status?: 'all' | 'open' | 'overdue' | 'done'
   include_empty?: boolean

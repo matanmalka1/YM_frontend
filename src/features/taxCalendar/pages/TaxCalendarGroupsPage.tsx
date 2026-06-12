@@ -15,8 +15,8 @@ const GROUP_PAGE_SIZE = 25
 export const TaxCalendarGroupsPage = () => {
   const { searchParams, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
 
-  const startYear = searchParams.get('start_year') ?? String(currentYear)
-  const endYear = searchParams.get('end_year') ?? String(currentYear)
+  const startYear = searchParams.get('tax_year_after') ?? String(currentYear)
+  const endYear = searchParams.get('tax_year_before') ?? String(currentYear)
   const obligationType = searchParams.get('obligation_type') ?? ''
   const includeEmpty = searchParams.get('include_empty') === 'true'
   const status = (searchParams.get('status') as TaxCalendarGroupStatusFilter) || 'all'
@@ -27,8 +27,8 @@ export const TaxCalendarGroupsPage = () => {
 
   const params = useMemo<TaxCalendarGroupsParams>(
     () => ({
-      start_year: Number(startYear) || currentYear,
-      end_year: Number(endYear) || currentYear,
+      tax_year_after: Number(startYear) || currentYear,
+      tax_year_before: Number(endYear) || currentYear,
       obligation_type: obligationType ? (obligationType as TaxCalendarObligationType) : undefined,
       status,
       include_empty: includeEmpty,
@@ -43,8 +43,8 @@ export const TaxCalendarGroupsPage = () => {
 
   const resetAllFilters = () =>
     resetFilters({
-      start_year: String(currentYear),
-      end_year: String(currentYear),
+      tax_year_after: String(currentYear),
+      tax_year_before: String(currentYear),
     })
 
   const groups = useMemo(() => groupsQuery.data?.items ?? [], [groupsQuery.data])
@@ -59,8 +59,8 @@ export const TaxCalendarGroupsPage = () => {
         endYear={endYear}
         obligationType={obligationType}
         status={status}
-        onStartYearChange={(value) => setFilter('start_year', value)}
-        onEndYearChange={(value) => setFilter('end_year', value)}
+        onStartYearChange={(value) => setFilter('tax_year_after', value)}
+        onEndYearChange={(value) => setFilter('tax_year_before', value)}
         onObligationTypeChange={(value) => setFilter('obligation_type', value)}
         onStatusChange={(value) => setFilter('status', value === 'all' ? '' : value)}
         onReset={resetAllFilters}

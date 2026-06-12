@@ -1,4 +1,9 @@
 export interface TaxCalendarSettingsYearRangeParams {
+  tax_year_after: number
+  tax_year_before: number
+}
+
+export interface TaxCalendarBootstrapPayload {
   start_year: number
   end_year: number
 }
@@ -30,8 +35,6 @@ export interface TaxCalendarSettingsSummary {
   per_year: Record<string, Record<string, number>>
   warnings: string[]
 }
-
-export type TaxCalendarBootstrapPayload = TaxCalendarSettingsYearRangeParams
 
 export interface TaxCalendarBootstrapResult {
   start_year: number

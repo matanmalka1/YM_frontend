@@ -125,7 +125,7 @@ export const vatReportsApi = {
 
   getClientSummary: async (
     clientId: number,
-    params?: { from_year?: number; to_year?: number },
+    params?: { period_year_after?: number; period_year_before?: number },
   ): Promise<VatClientSummaryResponse> => {
     const response = await api.get<VatClientSummaryResponse>(VAT_ENDPOINTS.vatClientSummary(clientId), {
       params: params ? toQueryParams(params) : undefined,

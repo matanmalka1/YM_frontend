@@ -195,8 +195,8 @@ export const TaxCalendarSettingsPage = () => {
   const params = useMemo(() => {
     if (startYearState.value === null || endYearState.value === null || hasInvalidRange) return null
     return {
-      start_year: startYearState.value,
-      end_year: endYearState.value,
+      tax_year_after: startYearState.value,
+      tax_year_before: endYearState.value,
     }
   }, [endYearState.value, hasInvalidRange, startYearState.value])
 
@@ -214,7 +214,10 @@ export const TaxCalendarSettingsPage = () => {
 
   const handleBootstrap = () => {
     if (!params) return
-    bootstrapMutation.mutate(params)
+    bootstrapMutation.mutate({
+      start_year: params.tax_year_after,
+      end_year: params.tax_year_before,
+    })
   }
 
   if (hasForbiddenError) {

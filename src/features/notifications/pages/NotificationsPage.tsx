@@ -63,8 +63,8 @@ export const NotificationsPage: React.FC = () => {
   const pageSize = parsePositiveInt(searchParams.get('page_size'), 25) as 25 | 50
   const trigger = (searchParams.get('trigger') ?? '') as NotificationTrigger | ''
   const status = (searchParams.get('status') ?? '') as NotificationStatus | ''
-  const dateFrom = searchParams.get('date_from') ?? ''
-  const dateTo = searchParams.get('date_to') ?? ''
+  const dateFrom = searchParams.get('created_after') ?? ''
+  const dateTo = searchParams.get('created_before') ?? ''
   const triggeredBy = searchParams.get('triggered_by') ?? ''
   const clientId = searchParams.get('client_id') ?? ''
   const clientName = searchParams.get('client_name') ?? ''
@@ -87,8 +87,8 @@ export const NotificationsPage: React.FC = () => {
     client_record_id: selectedClient?.id,
     trigger,
     status,
-    date_from: dateFrom ? `${dateFrom}T00:00:00` : undefined,
-    date_to: dateTo ? `${dateTo}T23:59:59` : undefined,
+    created_after: dateFrom ? `${dateFrom}T00:00:00` : undefined,
+    created_before: dateTo ? `${dateTo}T23:59:59` : undefined,
     triggered_by: triggeredBy ? Number(triggeredBy) : undefined,
   }
 
@@ -245,8 +245,8 @@ export const NotificationsPage: React.FC = () => {
             options={NOTIFICATION_STATUS_OPTIONS}
             onChange={(event) => setFilter('status', event.target.value)}
           />
-          <DatePicker label="מתאריך" value={dateFrom} onChange={(value) => setFilter('date_from', value)} />
-          <DatePicker label="עד תאריך" value={dateTo} onChange={(value) => setFilter('date_to', value)} />
+          <DatePicker label="מתאריך" value={dateFrom} onChange={(value) => setFilter('created_after', value)} />
+          <DatePicker label="עד תאריך" value={dateTo} onChange={(value) => setFilter('created_before', value)} />
           <Select
             label="נשלח על ידי"
             value={triggeredBy}

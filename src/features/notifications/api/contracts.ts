@@ -123,8 +123,8 @@ export interface ListNotificationsParams {
   trigger?: NotificationTrigger | ''
   channel?: NotificationChannel | ''
   triggered_by?: number
-  date_from?: string
-  date_to?: string
+  created_after?: string
+  created_before?: string
 }
 
 // ── Preview / Send types ───────────────────────────────────────────────────────
