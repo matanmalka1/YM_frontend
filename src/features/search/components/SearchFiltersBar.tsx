@@ -2,6 +2,7 @@ import { RotateCcw, SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-rea
 import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
 import { Button } from '../../../components/ui/primitives/Button'
+import { ClientPickerField, useClientPickerState } from '@/components/shared/client'
 import { CLIENT_STATUS_OPTIONS, ENTITY_TYPE_OPTIONS } from '@/features/clients'
 import { BINDER_LOCATION_STATUS_OPTIONS } from '../../binders'
 import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFiltersBarProps } from '../types'
@@ -19,6 +20,18 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
   onToggle,
 }) => {
   const advancedCount = SEARCH_ADVANCED_FILTER_KEYS.filter((k) => Boolean(filters[k])).length
+  const {
+    clientQuery,
+    selectedClient,
+    handleSelectClient,
+    handleClearClient,
+    handleClientQueryChange,
+  } = useClientPickerState({
+    onSelect: (client) => onFilterChange('client_id', String(client.id)),
+    onClear: () => onFilterChange('client_id', ''),
+  })
+  const activeClient =
+    selectedClient ?? (filters.client_id ? { id: Number(filters.client_id), name: `לקוח #${filters.client_id}` } : null)
 
   return (
     <div>
@@ -36,12 +49,14 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
       {isOpen && (
         <div className="mt-3 space-y-4 border-t border-gray-100 pt-4">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <Input
-              label="שם לקוח"
-              type="text"
-              value={filters.client_name}
-              onChange={(e) => onFilterChange('client_name', e.target.value)}
-              placeholder="שם לקוח"
+            <ClientPickerField
+              selectedClient={activeClient}
+              clientQuery={clientQuery}
+              onQueryChange={handleClientQueryChange}
+              onSelect={handleSelectClient}
+              onClear={handleClearClient}
+              label="לקוח"
+              placeholder="חפש לקוח לפי שם או מזהה"
             />
             <Input
               label="ת.ז / ח.פ"

@@ -2,8 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/inputs/Input'
-import { searchApi } from '@/features/search/api'
-import type { SearchResult } from '@/features/search/api'
+import { clientsApi, type ClientRecordListItem } from '@/features/clients'
 import { formatClientOfficeId } from '@/utils/utils'
 
 // ── Controlled search input (value/onChange) ──────────────────────────────────
@@ -27,7 +26,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
   placeholder = 'חפש לפי שם, ת.ז. / ח.פ...',
   helperText,
 }) => {
-  const [results, setResults] = useState<SearchResult[]>([])
+  const [results, setResults] = useState<ClientRecordListItem[]>([])
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
@@ -87,12 +86,11 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
     debounceRef.current = setTimeout(async () => {
       setLoading(true)
       try {
-        const res = await searchApi.search({ query: query.trim(), page_size: 8 })
-        const clientResults = res.results.filter((r) => r.result_type === 'client')
-        setResults(clientResults)
-        setOpen(clientResults.length > 0)
-        if (clientResults.length > 0) requestAnimationFrame(updateListPosition)
-        setHighlightedIndex(clientResults.length > 0 ? 0 : -1)
+        const res = await clientsApi.list({ search: query.trim(), page_size: 8 })
+        setResults(res.items)
+        setOpen(res.items.length > 0)
+        if (res.items.length > 0) requestAnimationFrame(updateListPosition)
+        setHighlightedIndex(res.items.length > 0 ? 0 : -1)
       } catch {
         setResults([])
         setOpen(false)
@@ -103,12 +101,12 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
     }, 300)
   }
 
-  const handleSelect = (result: SearchResult) => {
+  const handleSelect = (result: ClientRecordListItem) => {
     onSelect({
-      id: result.client_id,
-      name: result.client_name,
-      id_number: '',
-      client_status: result.client_status,
+      id: result.id,
+      name: result.full_name,
+      id_number: result.id_number,
+      client_status: result.status,
     })
     setOpen(false)
     setHighlightedIndex(-1)
@@ -166,7 +164,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
         aria-expanded={open}
         aria-controls="client-search-results"
         aria-activedescendant={
-          highlightedIndex >= 0 ? `client-search-option-${results[highlightedIndex]?.client_id}` : undefined
+          highlightedIndex >= 0 ? `client-search-option-${results[highlightedIndex]?.id}` : undefined
         }
         startIcon={<Search className="h-4 w-4" />}
         endElement={
@@ -204,8 +202,8 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
           >
             {results.map((result, index) => (
               <li
-                id={`client-search-option-${result.client_id}`}
-                key={result.client_id}
+                id={`client-search-option-${result.id}`}
+                key={result.id}
                 role="option"
                 aria-selected={highlightedIndex === index}
                 onMouseDown={() => handleSelect(result)}
@@ -214,7 +212,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
                   highlightedIndex === index ? 'bg-primary-50' : 'hover:bg-primary-50'
                 }`}
               >
-                <span className="font-medium leading-5 text-gray-900">{result.client_name}</span>
+                <span className="font-medium leading-5 text-gray-900">{result.full_name}</span>
                 <span className="text-xs leading-4 text-gray-400">
                   {result.office_client_number != null
                     ? `מס׳ לקוח ${formatClientOfficeId(result.office_client_number)}`

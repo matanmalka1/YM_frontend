@@ -16436,8 +16436,8 @@ export interface operations {
   search_api_v1_search_get: {
     parameters: {
       query?: {
-        query?: string | null
-        client_name?: string | null
+        search?: string | null
+        client_id?: number | null
         id_number?: string | null
         binder_number?: string | null
         client_status?: components['schemas']['ClientStatus'] | null

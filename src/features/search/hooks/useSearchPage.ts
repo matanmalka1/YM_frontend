@@ -10,8 +10,8 @@ export const useSearchPage = () => {
 
   const filters = useMemo<SearchFilters>(
     () => ({
-      query: searchParams.get('query') ?? '',
-      client_name: searchParams.get('client_name') ?? '',
+      search: searchParams.get('search') ?? '',
+      client_id: searchParams.get('client_id') ?? '',
       id_number: searchParams.get('id_number') ?? '',
       binder_number: searchParams.get('binder_number') ?? '',
       client_status: searchParams.get('client_status') ?? '',
@@ -24,14 +24,14 @@ export const useSearchPage = () => {
     [searchParams],
   )
 
-  const hasAnyFilter = Boolean(filters.query) || SEARCH_ADVANCED_FILTER_KEYS.some((k) => Boolean(filters[k]))
+  const hasAnyFilter = Boolean(filters.search) || SEARCH_ADVANCED_FILTER_KEYS.some((k) => Boolean(filters[k]))
 
   const searchQuery = useQuery({
     queryKey: searchQK.results(filters),
     queryFn: () =>
       searchApi.search({
-        query: filters.query || undefined,
-        client_name: filters.client_name || undefined,
+        search: filters.search || undefined,
+        client_id: parsePositiveInt(filters.client_id, 0) || undefined,
         id_number: filters.id_number || undefined,
         binder_number: filters.binder_number || undefined,
         client_status: filters.client_status || undefined,

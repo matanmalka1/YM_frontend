@@ -22,9 +22,9 @@ export const Search: React.FC = () => {
   const { error, filters, hasAnyFilter, handleFilterChange, handleReset, loading, results, documents, total } =
     useSearchPage()
   const inputRef = useRef<HTMLInputElement>(null)
-  const [queryDraft, setQueryDraft] = useSearchDebounce(filters.query, (v) => handleFilterChange('query', v))
+  const [queryDraft, setQueryDraft] = useSearchDebounce(filters.search, (v) => handleFilterChange('search', v))
 
-  const hasAdvancedFilter = Boolean(filters.client_name || filters.id_number || filters.binder_number)
+  const hasAdvancedFilter = Boolean(filters.client_id || filters.id_number || filters.binder_number)
   const [filtersOpen, setFiltersOpen] = useState(hasAdvancedFilter)
 
   const totalPages = Math.max(1, Math.ceil(Math.max(total, 1) / PAGE_SIZE))

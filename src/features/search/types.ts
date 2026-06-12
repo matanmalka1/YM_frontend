@@ -1,6 +1,14 @@
 import type { SearchParams } from './api'
 
-export interface SearchFilters extends Required<SearchParams> {
+export interface SearchFilters {
+  search: string
+  client_id: string
+  id_number: string
+  binder_number: string
+  client_status: string
+  entity_type: string
+  binder_location_status: string
+  filename: string
   page: number
   page_size: number
 }
@@ -14,7 +22,7 @@ export interface SearchFiltersBarProps {
 }
 
 export const SEARCH_ADVANCED_FILTER_KEYS: (keyof SearchFilters)[] = [
-  'client_name',
+  'client_id',
   'id_number',
   'binder_number',
   'client_status',

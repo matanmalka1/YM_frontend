@@ -15,4 +15,10 @@ export { useClientsPage } from './hooks/useClientsPage'
 export { ClientDetails } from './pages/ClientDetailsPage'
 export { Clients } from './pages/ClientsPage'
 export { extractClientErrorCode } from './utils/clientErrors'
-export type { ClientRecordResponse, ClientSidebarResponse, BusinessResponse, BusinessStatus } from './api'
+export type {
+  ClientRecordResponse,
+  ClientRecordListItem,
+  ClientSidebarResponse,
+  BusinessResponse,
+  BusinessStatus,
+} from './api'

@@ -30,8 +30,8 @@ export interface SearchResponse {
 }
 
 export interface SearchParams {
-  query?: string
-  client_name?: string
+  search?: string
+  client_id?: number
   id_number?: string
   binder_number?: string
   client_status?: string
