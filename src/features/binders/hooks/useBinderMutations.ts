@@ -51,9 +51,9 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
         until_period_year: untilPeriodYear,
         until_period_month: untilPeriodMonth,
       }),
-    successMessage: (updatedBinders) =>
-      updatedBinders.length > 0
-        ? `${updatedBinders.length} קלסרים סומנו כמוכנים למסירה`
+    successMessage: (response) =>
+      response.length > 0
+        ? `${response.length} קלסרים סומנו כמוכנים למסירה`
         : 'לא נמצאו קלסרים מתאימים לסימון',
     errorMessage: 'שגיאה בסימון קבוצתי למסירה',
     invalidateKeys: [bindersQK.all],

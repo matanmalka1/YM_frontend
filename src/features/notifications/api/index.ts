@@ -8,5 +8,6 @@ export type {
   NotificationPreviewRequest,
   NotificationSendVariables,
   NotificationResult,
+  NotificationDetail,
 } from './contracts'
 export { ENABLED_NOTIFICATION_TRIGGERS, MANUAL_NOTIFICATION_TRIGGERS, TRIGGER_LABELS } from './contracts'

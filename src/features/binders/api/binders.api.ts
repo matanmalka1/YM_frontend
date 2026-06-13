@@ -19,6 +19,8 @@ import type {
   BinderIntakeUpdatePayload,
   BinderListResponseExtended,
   BinderMarkReadyForHandoverBulkPayload,
+  BinderMarkReadyForHandoverBulkResponse,
+  BinderReadyForHandoverResponse,
 } from './contracts'
 
 export const bindersApi = {
@@ -54,13 +56,18 @@ export const bindersApi = {
     return response.data
   },
 
-  markReadyForHandover: async (binderId: number): Promise<BinderResponse> => {
-    const response = await api.post<BinderResponse>(BINDER_ENDPOINTS.binderMarkReadyForHandover(binderId))
+  markReadyForHandover: async (binderId: number): Promise<BinderReadyForHandoverResponse> => {
+    const response = await api.post<BinderReadyForHandoverResponse>(BINDER_ENDPOINTS.binderMarkReadyForHandover(binderId))
     return response.data
   },
 
-  markReadyForHandoverBulk: async (payload: BinderMarkReadyForHandoverBulkPayload): Promise<BinderResponse[]> => {
-    const response = await api.post<BinderResponse[]>(BINDER_ENDPOINTS.binderMarkReadyForHandoverBulk, payload)
+  markReadyForHandoverBulk: async (
+    payload: BinderMarkReadyForHandoverBulkPayload,
+  ): Promise<BinderMarkReadyForHandoverBulkResponse> => {
+    const response = await api.post<BinderMarkReadyForHandoverBulkResponse>(
+      BINDER_ENDPOINTS.binderMarkReadyForHandoverBulk,
+      payload,
+    )
     return response.data
   },
 

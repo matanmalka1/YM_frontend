@@ -1,4 +1,5 @@
-import type { BinderCapacityStatus, BinderLocationStatus } from '../types'
+import type { BinderCapacityStatus, BinderLocationStatus, BinderResponse } from '../types'
+import type { NotificationDetail } from '@/features/notifications'
 import type { PaginatedResponse } from '@/types'
 
 export interface BinderDetailResponse {
@@ -18,6 +19,13 @@ export interface BinderDetailResponse {
 }
 
 export type BinderListResponseExtended = PaginatedResponse<BinderDetailResponse>
+
+export interface BinderReadyForHandoverResponse {
+  binder: BinderResponse
+  notification: NotificationDetail | null
+}
+
+export type BinderMarkReadyForHandoverBulkResponse = BinderReadyForHandoverResponse[]
 
 export interface BinderMarkReadyForHandoverBulkPayload {
   client_record_id: number
