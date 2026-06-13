@@ -15,6 +15,7 @@ import type {
 import type {
   BinderHandoverToClientBulkPayload,
   BinderHandoverToClientBulkResponse,
+  BinderIntakeUpdatePayload,
   BinderListResponseExtended,
   BinderMarkReadyForHandoverBulkPayload,
 } from './contracts'
@@ -110,6 +111,18 @@ export const bindersApi = {
 
   getIntakes: async (binderId: number): Promise<BinderIntakeListResponse> => {
     const response = await api.get<BinderIntakeListResponse>(BINDER_ENDPOINTS.binderIntakes(binderId))
+    return response.data
+  },
+
+  updateIntake: async (
+    binderId: number,
+    intakeId: number,
+    payload: BinderIntakeUpdatePayload,
+  ): Promise<BinderIntakeListResponse['items'][number]> => {
+    const response = await api.patch<BinderIntakeListResponse['items'][number]>(
+      BINDER_ENDPOINTS.binderIntakeById(binderId, intakeId),
+      payload,
+    )
     return response.data
   },
 }

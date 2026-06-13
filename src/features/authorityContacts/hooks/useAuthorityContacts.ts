@@ -18,7 +18,7 @@ export const useAuthorityContacts = (clientId: number) => {
   })
 
   const deleteMutation = useMutation({
-    mutationFn: (contactId: number) => authorityContactsApi.deleteAuthorityContact(contactId),
+    mutationFn: (contactId: number) => authorityContactsApi.deleteAuthorityContact(clientId, contactId),
     onSuccess: () => {
       toast.success(AUTHORITY_CONTACT_TEXT.deleteSuccess)
       queryClient.invalidateQueries({ queryKey: authorityContactsQK.forClient(clientId) })

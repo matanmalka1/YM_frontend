@@ -1,5 +1,6 @@
 import type { BackendAction } from '@/lib/actions/types'
 import type { PaginatedResponse } from '@/types'
+import type { ChargeResponse } from '@/features/charges'
 
 export type AnnualReportStatus =
   | 'not_started'
@@ -208,6 +209,7 @@ export interface DefaultTaxYearResponse {
 }
 
 export type AnnualReportListResponse = PaginatedResponse<AnnualReportListItem>
+export type AnnualReportChargesResponse = PaginatedResponse<ChargeResponse>
 
 export interface CreateAnnualReportPayload {
   client_record_id: number

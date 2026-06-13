@@ -64,6 +64,12 @@ export const CLIENT_ID_NUMBER_TYPE_LABELS: Record<ClientIdNumberType, string> = 
   passport: 'דרכון',
   other: 'אחר',
 }
+export const CLIENT_ID_NUMBER_TYPES = [
+  'individual',
+  'corporation',
+  'passport',
+  'other',
+] as const satisfies readonly ClientIdNumberType[]
 
 export const ENTITY_TYPE_LABELS: Record<EntityType, string> = {
   osek_patur: 'עוסק פטור',

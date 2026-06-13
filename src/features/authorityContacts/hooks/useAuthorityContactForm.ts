@@ -30,7 +30,7 @@ export const useAuthorityContactForm = (
     mutationFn: (values: AuthorityContactFormValues) => {
       const payload = toAuthorityContactPayload(values)
       return existing
-        ? authorityContactsApi.updateAuthorityContact(existing.id, payload)
+        ? authorityContactsApi.updateAuthorityContact(clientId, existing.id, payload)
         : authorityContactsApi.createAuthorityContact(clientId, payload)
     },
     onSuccess: () => {

@@ -46,25 +46,26 @@ export const authorityContactsApi = {
     return response.data
   },
 
-  getAuthorityContact: async (contactId: number): Promise<AuthorityContactResponse> => {
+  getAuthorityContact: async (clientId: number, contactId: number): Promise<AuthorityContactResponse> => {
     const response = await api.get<AuthorityContactResponse>(
-      AUTHORITY_CONTACT_ENDPOINTS.authorityContactById(contactId),
+      AUTHORITY_CONTACT_ENDPOINTS.authorityContactById(clientId, contactId),
     )
     return response.data
   },
 
   updateAuthorityContact: async (
+    clientId: number,
     contactId: number,
     payload: AuthorityContactUpdatePayload,
   ): Promise<AuthorityContactResponse> => {
     const response = await api.patch<AuthorityContactResponse>(
-      AUTHORITY_CONTACT_ENDPOINTS.authorityContactById(contactId),
+      AUTHORITY_CONTACT_ENDPOINTS.authorityContactById(clientId, contactId),
       payload,
     )
     return response.data
   },
 
-  deleteAuthorityContact: async (contactId: number): Promise<void> => {
-    await api.delete(AUTHORITY_CONTACT_ENDPOINTS.authorityContactById(contactId))
+  deleteAuthorityContact: async (clientId: number, contactId: number): Promise<void> => {
+    await api.delete(AUTHORITY_CONTACT_ENDPOINTS.authorityContactById(clientId, contactId))
   },
 }

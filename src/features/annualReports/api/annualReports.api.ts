@@ -5,6 +5,7 @@ import type {
   AnnualReportFull,
   AnnualReportListResponse,
   AnnualReportListItem,
+  AnnualReportChargesResponse,
   AnnualReportScheduleKey,
   CreateAnnualReportPayload,
   ReportDetailResponse,
@@ -42,6 +43,16 @@ export const annualReportsApi = {
   listClientReports: async (clientId: number): Promise<AnnualReportListItem[]> => {
     const response = await api.get<AnnualReportListResponse>(ANNUAL_REPORT_ENDPOINTS.clientReports(clientId))
     return response.data.items
+  },
+
+  listReportCharges: async (
+    reportId: number,
+    params: { page?: number; page_size?: number } = {},
+  ): Promise<AnnualReportChargesResponse> => {
+    const response = await api.get<AnnualReportChargesResponse>(ANNUAL_REPORT_ENDPOINTS.charges(reportId), {
+      params: toQueryParams(params),
+    })
+    return response.data
   },
 
   addSchedule: async (
