@@ -20,16 +20,11 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
   onToggle,
 }) => {
   const advancedCount = SEARCH_ADVANCED_FILTER_KEYS.filter((k) => Boolean(filters[k])).length
-  const {
-    clientQuery,
-    selectedClient,
-    handleSelectClient,
-    handleClearClient,
-    handleClientQueryChange,
-  } = useClientPickerState({
-    onSelect: (client) => onFilterChange('client_id', String(client.id)),
-    onClear: () => onFilterChange('client_id', ''),
-  })
+  const { clientQuery, selectedClient, handleSelectClient, handleClearClient, handleClientQueryChange } =
+    useClientPickerState({
+      onSelect: (client) => onFilterChange('client_id', String(client.id)),
+      onClear: () => onFilterChange('client_id', ''),
+    })
   const activeClient =
     selectedClient ?? (filters.client_id ? { id: Number(filters.client_id), name: `לקוח #${filters.client_id}` } : null)
 
