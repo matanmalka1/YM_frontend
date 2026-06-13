@@ -7172,17 +7172,17 @@ export interface components {
         };
         /** TaxCalendarBootstrapRequest */
         TaxCalendarBootstrapRequest: {
-            /** Start Year */
-            start_year: number;
-            /** End Year */
-            end_year: number;
+            /** Tax Year After */
+            tax_year_after: number;
+            /** Tax Year Before */
+            tax_year_before: number;
         };
         /** TaxCalendarBootstrapResponse */
         TaxCalendarBootstrapResponse: {
-            /** Start Year */
-            start_year: number;
-            /** End Year */
-            end_year: number;
+            /** Tax Year After */
+            tax_year_after: number;
+            /** Tax Year Before */
+            tax_year_before: number;
             /** Rules Created */
             rules_created: number;
             /** Rules Skipped */
@@ -7344,10 +7344,10 @@ export interface components {
         };
         /** TaxCalendarSummaryResponse */
         TaxCalendarSummaryResponse: {
-            /** Start Year */
-            start_year: number | null;
-            /** End Year */
-            end_year: number | null;
+            /** Tax Year After */
+            tax_year_after: number | null;
+            /** Tax Year Before */
+            tax_year_before: number | null;
             /** Total Entries */
             total_entries: number;
             /** Per Year */
@@ -8760,8 +8760,8 @@ export interface operations {
                 target_user_id?: number | null;
                 actor_user_id?: number | null;
                 email?: string | null;
-                from?: string | null;
-                to?: string | null;
+                created_after?: string | null;
+                created_before?: string | null;
             };
             header?: never;
             path?: never;
