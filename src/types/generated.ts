@@ -3149,7 +3149,10 @@ export interface components {
          *     }
          */
         AdvancePaymentCreateRequest: {
-            /** Period */
+            /**
+             * Period
+             * @example 2026-06
+             */
             period: string;
             /** Period Months Count */
             period_months_count?: number | null;
@@ -5399,11 +5402,11 @@ export interface components {
             /** Action */
             action: string;
             /** Old Value */
-            old_value: string | null;
+            old_value?: string | null;
             /** New Value */
-            new_value: string | null;
+            new_value?: string | null;
             /** Note */
-            note: string | null;
+            note?: string | null;
             /**
              * Performed At
              * Format: date-time
@@ -5491,11 +5494,24 @@ export interface components {
         };
         /**
          * ExpenseCategory
+         * @description VAT invoice source categories used for VAT deduction and data-entry classification.
+         *
+         *     These are granular operational categories captured at invoice-entry time.
+         *     Do not reuse for annual report expense lines — those use ExpenseCategoryType.
+         *     Each value is mapped to an ExpenseCategoryType via _VAT_TO_ANNUAL in
+         *     backend/app/annual_reports/services/vat_import_service.py. Any new value
+         *     added here must also be added to that mapping.
          * @enum {string}
          */
         ExpenseCategory: "inventory" | "office" | "travel" | "professional_services" | "equipment" | "rent" | "salary" | "marketing" | "vehicle" | "fuel" | "vehicle_maintenance" | "vehicle_insurance" | "vehicle_leasing" | "tolls_and_parking" | "entertainment" | "gifts" | "communication" | "insurance" | "maintenance" | "municipal_tax" | "utilities" | "postage_and_shipping" | "bank_fees" | "mixed_expense";
         /**
          * ExpenseCategoryType
+         * @description Annual report expense-line categories used for income-tax / reporting classification.
+         *
+         *     These are higher-level recognition categories for the annual report, not
+         *     the same as VAT's ExpenseCategory. VAT's 24 granular categories are
+         *     consolidated into these 12 via _VAT_TO_ANNUAL in
+         *     backend/app/annual_reports/services/vat_import_service.py.
          * @enum {string}
          */
         ExpenseCategoryType: "office_rent" | "professional_services" | "salaries" | "depreciation" | "vehicle" | "marketing" | "insurance" | "communication" | "travel" | "training" | "bank_fees" | "other";
@@ -7195,9 +7211,9 @@ export interface components {
             /** Annual Report Id */
             annual_report_id: number;
             /** Tax Due */
-            tax_due: string | null;
+            tax_due?: string | null;
             /** Refund Due */
-            refund_due: string | null;
+            refund_due?: string | null;
             /**
              * Saved At
              * Format: date-time
@@ -7380,9 +7396,9 @@ export interface components {
         /** TaxCalendarSummaryResponse */
         TaxCalendarSummaryResponse: {
             /** Tax Year After */
-            tax_year_after: number | null;
+            tax_year_after?: number | null;
             /** Tax Year Before */
-            tax_year_before: number | null;
+            tax_year_before?: number | null;
             /** Total Entries */
             total_entries: number;
             /** Per Year */
@@ -7641,11 +7657,11 @@ export interface components {
             /** Action */
             action: string;
             /** Old Value */
-            old_value: string | null;
+            old_value?: string | null;
             /** New Value */
-            new_value: string | null;
+            new_value?: string | null;
             /** Note */
-            note: string | null;
+            note?: string | null;
             /**
              * Performed At
              * Format: date-time
@@ -8000,7 +8016,7 @@ export interface components {
             /** Period */
             period: string;
             /** Period Type */
-            period_type: string | null;
+            period_type?: string | null;
             status: components["schemas"]["VatWorkItemStatus"];
             /**
              * Total Output Vat
@@ -8035,19 +8051,19 @@ export interface components {
              */
             total_input_net: string;
             /** Final Vat Amount */
-            final_vat_amount: string | null;
+            final_vat_amount?: string | null;
             /** Filed At */
-            filed_at: string | null;
+            filed_at?: string | null;
             /** Submission Deadline */
-            submission_deadline: string | null;
+            submission_deadline?: string | null;
             /** Statutory Deadline */
-            statutory_deadline: string | null;
+            statutory_deadline?: string | null;
             /** Extended Deadline */
-            extended_deadline: string | null;
+            extended_deadline?: string | null;
             /** Days Until Deadline */
-            days_until_deadline: number | null;
+            days_until_deadline?: number | null;
             /** Is Overdue */
-            is_overdue: boolean | null;
+            is_overdue?: boolean | null;
         };
         /**
          * VatRateType
@@ -8079,7 +8095,10 @@ export interface components {
         VatWorkItemCreateRequest: {
             /** Client Record Id */
             client_record_id: number;
-            /** Period */
+            /**
+             * Period
+             * @example 2026-06
+             */
             period: string;
             /** Assigned To */
             assigned_to?: number | null;

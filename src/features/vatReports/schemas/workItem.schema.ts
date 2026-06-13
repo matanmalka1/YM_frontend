@@ -1,7 +1,6 @@
 import { z } from 'zod'
+import { PERIOD_PATTERN } from '@/constants/periodOptions.constants'
 import type { CreateVatWorkItemPayload } from '../api'
-
-const periodPattern = /^\d{4}-(0[1-9]|1[0-2])$/
 
 export const vatWorkItemCreateSchema = z.object({
   client_id: z
@@ -15,7 +14,7 @@ export const vatWorkItemCreateSchema = z.object({
     .string()
     .trim()
     .min(1, 'יש להזין תקופה')
-    .refine((v) => periodPattern.test(v), {
+    .refine((v) => PERIOD_PATTERN.test(v), {
       message: 'פורמט תקופה חייב להיות YYYY-MM',
     }),
   mark_pending: z.boolean(),

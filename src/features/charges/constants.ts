@@ -1,6 +1,9 @@
 import { makeLabelGetter } from '@/utils/labels'
 import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION } from '@/constants/filterOptions.constants'
+import { PERIOD_PATTERN } from '@/constants/periodOptions.constants'
 import type { ChargeListStats, ChargeStatusStat } from './api'
+
+export { PERIOD_PATTERN as CHARGE_PERIOD_PATTERN }
 
 const CHARGE_STATUS_VALUES = ['draft', 'issued', 'paid', 'canceled'] as const
 export type ChargeStatusValue = (typeof CHARGE_STATUS_VALUES)[number]
@@ -42,7 +45,6 @@ export const getChargeTypeLabel = makeLabelGetter(CHARGE_TYPE_LABELS)
 
 export const CHARGE_CREATE_FORM_ID = 'charges-create-form'
 export const CHARGE_CANCEL_REASON_PLACEHOLDER = 'סיבת ביטול (אופציונלי)'
-export const CHARGE_PERIOD_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/
 export const CHARGE_PERIOD_YEAR_SPAN = 1
 
 const DEFAULT_CHARGE_STATUS_STAT: ChargeStatusStat = { count: 0, amount: '0' }

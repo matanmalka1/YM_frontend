@@ -1,3 +1,6 @@
+/** Shared YYYY-MM period regex. Matches backend PeriodStr. */
+export const PERIOD_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/
+
 export const MONTHS_COVERED_OPTIONS = [
   { value: '1', label: 'חודשי' },
   { value: '2', label: 'דו-חודשי' },

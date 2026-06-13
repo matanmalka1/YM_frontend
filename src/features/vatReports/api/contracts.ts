@@ -203,7 +203,7 @@ export interface VatAuditTrailResponse {
 export interface VatPeriodRow {
   work_item_id: number
   period: string
-  period_type: VatType
+  period_type: VatType | null
   status: VatWorkItemStatus
   total_output_vat: string
   total_input_vat: string
