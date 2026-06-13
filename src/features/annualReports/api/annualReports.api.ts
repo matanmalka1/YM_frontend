@@ -33,6 +33,8 @@ export const annualReportsApi = {
     status?: string
     page?: number
     page_size?: number
+    sort_by?: 'tax_year' | 'status' | 'filing_deadline' | 'created_at' | 'client_record_id'
+    order?: 'asc' | 'desc'
   }): Promise<AnnualReportListResponse> => {
     const response = await api.get<AnnualReportListResponse>(ANNUAL_REPORT_ENDPOINTS.list, {
       params: toQueryParams(params),
@@ -40,8 +42,13 @@ export const annualReportsApi = {
     return response.data
   },
 
-  listClientReports: async (clientId: number): Promise<AnnualReportListItem[]> => {
-    const response = await api.get<AnnualReportListResponse>(ANNUAL_REPORT_ENDPOINTS.clientReports(clientId))
+  listClientReports: async (
+    clientId: number,
+    params: { page?: number; page_size?: number } = {},
+  ): Promise<AnnualReportListItem[]> => {
+    const response = await api.get<AnnualReportListResponse>(ANNUAL_REPORT_ENDPOINTS.clientReports(clientId), {
+      params: toQueryParams(params),
+    })
     return response.data.items
   },
 

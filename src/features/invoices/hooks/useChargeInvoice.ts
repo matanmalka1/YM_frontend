@@ -11,7 +11,7 @@ export const useChargeInvoice = (chargeId: number | null | undefined) => {
 
   const invoiceQuery = useQuery({
     enabled: hasChargeId,
-    queryKey: hasChargeId ? invoicesQK.byChargeId(chargeId) : invoicesQK.all,
+    queryKey: invoicesQK.byChargeId(chargeId ?? 0),
     queryFn: async () => {
       try {
         return await invoicesApi.getByChargeId(chargeId as number)

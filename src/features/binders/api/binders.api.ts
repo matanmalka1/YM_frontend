@@ -8,6 +8,7 @@ import type {
   BinderReceiveResult,
   BinderResponse,
   ListBindersParams,
+  ListOpenBindersParams,
   ListOperationalBindersParams,
   ReceiveBinderPayload,
   HandoverToClientPayload,
@@ -83,9 +84,9 @@ export const bindersApi = {
     return response.data
   },
 
-  getOpenBinders: async (params?: { page?: number; page_size?: number }): Promise<BinderListResponseExtended> => {
+  getOpenBinders: async (params: ListOpenBindersParams = {}): Promise<BinderListResponseExtended> => {
     const response = await api.get<BinderListResponseExtended>(BINDER_ENDPOINTS.bindersOpen, {
-      params,
+      params: toQueryParams(params),
     })
     return response.data
   },

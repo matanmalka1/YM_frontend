@@ -1,4 +1,5 @@
 import type { IncomeSourceType, ExpenseCategoryType } from './api'
+import { FIRST_PAGE, PAGE_SIZE_MAX } from '@/constants/pagination.constants'
 
 export { LineRow } from './components/financials/FinancialLineRow'
 
@@ -42,3 +43,14 @@ export const CREATE_REPORT_CLIENT_TYPES = [
 export const REPORT_DEADLINE_TYPES = ['standard', 'extended', 'custom'] as const
 export const REPORT_SUBMISSION_METHODS = ['online', 'manual', 'representative'] as const
 export const REPORT_EXTENSION_REASONS = ['military_service', 'health_reason', 'general', 'war_situation'] as const
+
+export const ANNUAL_REPORTS_COMPLETE_LIST_PARAMS = {
+  page: FIRST_PAGE,
+  page_size: PAGE_SIZE_MAX,
+} as const
+
+export const ANNUAL_REPORTS_TAX_YEAR_DESC_PARAMS = {
+  ...ANNUAL_REPORTS_COMPLETE_LIST_PARAMS,
+  sort_by: 'tax_year',
+  order: 'desc',
+} as const

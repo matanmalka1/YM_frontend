@@ -4,6 +4,7 @@
 // because it carries auth cookies and the wrong base URL.
 import axios from 'axios'
 import { api } from '@/api/client'
+import { toQueryParams } from '@/api/queryParams'
 import { SIGNATURE_REQUEST_ENDPOINTS } from './endpoints'
 import type {
   SignatureRequestListResponse,
@@ -14,6 +15,7 @@ import type {
   CancelSignatureRequestPayload,
   SignerViewResponse,
   SignerDeclinePayload,
+  ListPendingSignatureRequestsParams,
 } from './contracts'
 
 export const signatureRequestsApi = {
@@ -30,9 +32,9 @@ export const signatureRequestsApi = {
     return response.data
   },
 
-  listPending: async (params?: { page?: number; page_size?: number }): Promise<SignatureRequestListResponse> => {
+  listPending: async (params: ListPendingSignatureRequestsParams = {}): Promise<SignatureRequestListResponse> => {
     const response = await api.get<SignatureRequestListResponse>(SIGNATURE_REQUEST_ENDPOINTS.signatureRequestsPending, {
-      params,
+      params: toQueryParams(params),
     })
     return response.data
   },

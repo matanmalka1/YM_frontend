@@ -4,6 +4,7 @@ import { annualReportFinancialsApi, annualReportsApi, annualReportsQK, annualRep
 import { formatCurrencyILS as fmt } from '../../../../utils/utils'
 import { CHART_LINES, CHART_MARGIN, TREND_REPORT_LIMIT } from './financialConstants'
 import { buildTrendChartRows } from './financialHelpers'
+import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../../report.constants'
 
 interface MultiYearPLChartProps {
   clientId: number
@@ -13,7 +14,7 @@ interface MultiYearPLChartProps {
 export const MultiYearPLChart: React.FC<MultiYearPLChartProps> = ({ clientId, currentReportId }) => {
   const reportsQ = useQuery({
     queryKey: annualReportsQK.forClient(clientId),
-    queryFn: () => annualReportsApi.listClientReports(clientId),
+    queryFn: () => annualReportsApi.listClientReports(clientId, ANNUAL_REPORTS_COMPLETE_LIST_PARAMS),
   })
 
   const reports = [...(reportsQ.data ?? [])].sort((a, b) => a.tax_year - b.tax_year).slice(-TREND_REPORT_LIMIT)

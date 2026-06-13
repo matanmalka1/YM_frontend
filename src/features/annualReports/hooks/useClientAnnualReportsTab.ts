@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { annualReportsApi, annualReportsQK } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
 import { CURRENT_YEAR } from '../types'
+import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../report.constants'
 
 const YEAR_LIST = [CURRENT_YEAR, CURRENT_YEAR - 1, CURRENT_YEAR - 2, CURRENT_YEAR - 3]
 
@@ -11,7 +12,7 @@ export const useClientAnnualReportsTab = (clientId: number) => {
 
   const { data, isPending, error } = useQuery({
     queryKey: annualReportsQK.forClient(clientId),
-    queryFn: () => annualReportsApi.listClientReports(clientId),
+    queryFn: () => annualReportsApi.listClientReports(clientId, ANNUAL_REPORTS_COMPLETE_LIST_PARAMS),
   })
 
   const allReports = data ?? []

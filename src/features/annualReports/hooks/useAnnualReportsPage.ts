@@ -6,6 +6,7 @@ import { annualReportSeasonApi, annualReportsApi, annualReportsQK } from '../api
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { useState } from 'react'
+import { ANNUAL_REPORTS_TAX_YEAR_DESC_PARAMS } from '../report.constants'
 
 export const useAnnualReportsPage = () => {
   const { searchParams, setFilter, setFilters, resetFilters } = useSearchParamFilters()
@@ -43,7 +44,11 @@ export const useAnnualReportsPage = () => {
   const allReportsQuery = useQuery({
     enabled: allYearsMode && !defaultTaxYearPending && !defaultTaxYearQuery.error,
     queryKey: [...annualReportsQK.all, 'all-years', apiFilters] as const,
-    queryFn: () => annualReportsApi.listReports({ page: 1, page_size: 200, ...apiFilters }),
+    queryFn: () =>
+      annualReportsApi.listReports({
+        ...ANNUAL_REPORTS_TAX_YEAR_DESC_PARAMS,
+        ...apiFilters,
+      }),
     staleTime: QUERY_STALE_TIME.default,
   })
 

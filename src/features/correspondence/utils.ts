@@ -31,8 +31,19 @@ export const toCreateCorrespondencePayload = (
   occurred_at: values.occurred_at,
 })
 
-export const toUpdateCorrespondencePayload = (values: CorrespondenceFormValues): UpdateCorrespondencePayload => ({
-  ...values,
-  notes: values.notes || null,
-  contact_id: values.contact_id ?? null,
-})
+export const toUpdateCorrespondencePayload = (
+  values: CorrespondenceFormValues,
+  businessId?: number,
+): UpdateCorrespondencePayload => {
+  const payload: UpdateCorrespondencePayload = {
+    ...values,
+    notes: values.notes || null,
+    contact_id: values.contact_id ?? null,
+  }
+
+  if (businessId !== undefined) {
+    payload.business_id = businessId
+  }
+
+  return payload
+}

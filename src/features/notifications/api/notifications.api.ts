@@ -12,6 +12,11 @@ import type {
   NotificationResult,
 } from './contracts'
 
+type NotificationSummaryParams = {
+  client_record_id?: number | null
+  business_id?: number | null
+}
+
 export const notificationsApi = {
   listPaginated: async (params: ListNotificationsParams = {}): Promise<NotificationListResponse> => {
     const response = await api.get<NotificationListResponse>(
@@ -26,11 +31,10 @@ export const notificationsApi = {
     return response.data
   },
 
-  getSummary: async (clientId?: number): Promise<NotificationSummaryResponse> => {
-    const response = await api.get<NotificationSummaryResponse>(
-      NOTIFICATION_ENDPOINTS.notificationsSummary,
-      clientId != null ? { params: toQueryParams({ client_record_id: clientId }) } : undefined,
-    )
+  getSummary: async (params: NotificationSummaryParams = {}): Promise<NotificationSummaryResponse> => {
+    const response = await api.get<NotificationSummaryResponse>(NOTIFICATION_ENDPOINTS.notificationsSummary, {
+      params: toQueryParams(params),
+    })
     return response.data
   },
 

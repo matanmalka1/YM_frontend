@@ -7,7 +7,12 @@ import { Card } from '@/components/ui/primitives/Card'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Timeline, TimelineEntry } from '@/components/ui/feedback/Timeline'
 import { bindersApi, bindersQK } from '../../api'
-import { annualReportsApi, annualReportsQK, getStatusLabel } from '@/features/annualReports'
+import {
+  ANNUAL_REPORTS_COMPLETE_LIST_PARAMS,
+  annualReportsApi,
+  annualReportsQK,
+  getStatusLabel,
+} from '@/features/annualReports'
 import { clientsApi, clientsQK } from '@/features/clients'
 import { vatReportsApi, vatReportsQK } from '@/features/vatReports'
 import { VAT_STATUS_BADGE_VARIANTS } from '@/features/vatReports'
@@ -81,7 +86,7 @@ export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({
   })
   const { data: annualReportsData } = useQuery({
     queryKey: annualReportsQK.forClient(clientId),
-    queryFn: () => annualReportsApi.listClientReports(clientId),
+    queryFn: () => annualReportsApi.listClientReports(clientId, ANNUAL_REPORTS_COMPLETE_LIST_PARAMS),
     enabled: clientId > 0,
     staleTime: QUERY_STALE_TIME.default,
   })

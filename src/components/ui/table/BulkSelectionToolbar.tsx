@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Loader2 } from 'lucide-react'
+import { Loader2, X } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 
 interface BulkSelectionToolbarProps {
@@ -19,22 +19,40 @@ export const BulkSelectionToolbar: React.FC<BulkSelectionToolbarProps> = ({
   onClear,
   selectedCount,
 }) => (
-  <div className="flex flex-col gap-2 rounded-lg border border-primary-200 bg-primary-50 px-4 py-2.5">
+  <div
+    dir="rtl"
+    className="animate-fade-in rounded-xl border border-primary-200 bg-primary-50/60 px-4 py-3 flex flex-col gap-3"
+  >
     <div className="flex flex-wrap items-center gap-3">
-      <span className="text-sm font-medium text-primary-700">{selectedCount} נבחרו</span>
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-100 border border-primary-200 px-3 py-1 text-xs font-semibold text-primary-700 tabular-nums">
+        <span className="h-1.5 w-1.5 rounded-full bg-primary-500" />
+        {selectedCount} נבחרו
+      </span>
+
       <div className="h-4 w-px bg-primary-200" />
-      <div className="flex flex-wrap items-center gap-2">{children}</div>
-      <div className="h-4 w-px bg-primary-200" />
-      <button
-        type="button"
-        onClick={onClear}
-        disabled={loading}
-        className="text-xs text-gray-500 hover:text-gray-700 disabled:opacity-50"
-      >
-        {clearLabel}
-      </button>
+
+      <div className="flex flex-wrap items-center gap-2">
+        {children}
+      </div>
+
+      <div className="mr-auto">
+        <button
+          type="button"
+          onClick={onClear}
+          disabled={loading}
+          className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors duration-150 disabled:opacity-40"
+        >
+          <X className="h-3 w-3" />
+          {clearLabel}
+        </button>
+      </div>
     </div>
-    {extra}
+
+    {extra && (
+      <div className="border-t border-primary-200/70 pt-3">
+        {extra}
+      </div>
+    )}
   </div>
 )
 
@@ -58,10 +76,10 @@ export const BulkSelectionActionButton: React.FC<BulkSelectionActionButtonProps>
     onClick={onClick}
     disabled={disabled}
     className={cn(
-      'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50',
+      'inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed',
       variant === 'danger'
-        ? 'border border-negative-200 bg-white text-negative-600 hover:bg-negative-50'
-        : 'border border-primary-300 bg-white text-primary-700 hover:bg-primary-100',
+        ? 'border-negative-200 bg-white text-negative-600 hover:bg-negative-50 hover:border-negative-300 active:bg-negative-100'
+        : 'border-primary-200 bg-white text-primary-700 hover:bg-primary-50 hover:border-primary-300 active:bg-primary-100',
     )}
   >
     {loading && <Loader2 className="h-3 w-3 animate-spin" />}

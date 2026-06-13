@@ -5,7 +5,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { useForm, type UseFormReturn } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { bindersApi, bindersQK } from '../api'
-import { annualReportsApi, annualReportsQK, type AnnualReportListItem } from '@/features/annualReports'
+import {
+  ANNUAL_REPORTS_COMPLETE_LIST_PARAMS,
+  annualReportsApi,
+  annualReportsQK,
+  type AnnualReportListItem,
+} from '@/features/annualReports'
 import { clientsApi, clientsQK } from '@/features/clients'
 import { vatReportsApi } from '@/features/vatReports'
 import { useAuthStore } from '../../../store/auth.store'
@@ -126,7 +131,7 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
 
   const { data: annualReportsData } = useQuery({
     queryKey: annualReportsQK.forClient(typeof clientRecordId === 'number' ? clientRecordId : 0),
-    queryFn: () => annualReportsApi.listClientReports(clientRecordId as number),
+    queryFn: () => annualReportsApi.listClientReports(clientRecordId as number, ANNUAL_REPORTS_COMPLETE_LIST_PARAMS),
     enabled: hasAnnualReportMaterial && typeof clientRecordId === 'number' && clientRecordId > 0,
     staleTime: QUERY_STALE_TIME.default,
     retry: 1,

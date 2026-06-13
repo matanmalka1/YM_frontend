@@ -78,6 +78,17 @@ export interface CancelSignatureRequestPayload {
   reason?: string
 }
 
+export interface ListPendingSignatureRequestsParams {
+  page?: number
+  page_size?: number
+  client_record_id?: number | null
+  request_type?: SignatureRequestType | null
+  signer_email?: string | null
+  created_after?: string | null
+  created_before?: string | null
+  expires_before?: string | null
+}
+
 export interface SignerViewResponse {
   request_id: number
   title: string

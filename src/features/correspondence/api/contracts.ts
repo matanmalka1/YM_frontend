@@ -24,6 +24,7 @@ export interface CreateCorrespondencePayload {
 }
 
 export interface UpdateCorrespondencePayload {
+  business_id?: number | null
   contact_id?: number | null
   correspondence_type?: CorrespondenceEntry['correspondence_type']
   subject?: string

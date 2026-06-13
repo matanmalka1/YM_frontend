@@ -9,6 +9,7 @@ import { formatCurrencyILS as fmt, formatDate } from '../../../../utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { sortReportsByTaxYearDesc } from './helpers'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../../report.constants'
 
 interface Props {
   clientId: number
@@ -19,7 +20,7 @@ interface Props {
 export const ReportHistoryTable: React.FC<Props> = ({ clientId, currentReportId, onSelect }) => {
   const { data: reports = [], isLoading } = useQuery({
     queryKey: annualReportsQK.forClient(clientId),
-    queryFn: () => annualReportsApi.listClientReports(clientId),
+    queryFn: () => annualReportsApi.listClientReports(clientId, ANNUAL_REPORTS_COMPLETE_LIST_PARAMS),
     staleTime: QUERY_STALE_TIME.default,
     enabled: !!clientId,
   })

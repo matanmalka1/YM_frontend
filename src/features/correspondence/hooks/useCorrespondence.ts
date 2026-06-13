@@ -46,7 +46,7 @@ export const useCorrespondence = (businessId: number | undefined, clientId?: num
 
   const updateMutation = useMutation({
     mutationFn: ({ id, values }: { id: number; values: CorrespondenceFormValues }) =>
-      correspondenceApi.update(resolvedClientId, id, toUpdateCorrespondencePayload(values)),
+      correspondenceApi.update(resolvedClientId, id, toUpdateCorrespondencePayload(values, businessId)),
     onSuccess: () => {
       toast.success('רשומת התכתבות עודכנה בהצלחה')
       void queryClient.invalidateQueries({ queryKey })

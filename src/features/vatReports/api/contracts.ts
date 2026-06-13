@@ -89,6 +89,17 @@ export interface VatWorkItemsListParams {
   client_name?: string
 }
 
+export interface VatClientWorkItemsParams {
+  page?: number
+  page_size?: number
+  year?: number | null
+  period?: string | null
+  status?: VatWorkItemStatus | null
+  assigned_to?: number | null
+  due_after?: string | null
+  due_before?: string | null
+}
+
 export interface VatWorkItemStatusSummaryParams {
   year?: number
   period_type?: VatPeriodTypeFilter
