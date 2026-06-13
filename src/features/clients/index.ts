@@ -19,6 +19,7 @@ export type {
   ClientRecordResponse,
   ClientRecordListItem,
   ClientSidebarResponse,
+  UpdateClientPayload,
   BusinessResponse,
   BusinessStatus,
 } from './api'

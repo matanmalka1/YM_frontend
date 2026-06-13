@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom'
 import { bindersApi, bindersQK } from '../api'
 import { annualReportsApi, annualReportsQK, type AnnualReportListItem } from '@/features/annualReports'
 import { clientsApi, clientsQK } from '@/features/clients'
-import { taxProfileApi, taxProfileQK } from '@/features/taxProfile'
 import { vatReportsApi } from '@/features/vatReports'
 import { useAuthStore } from '../../../store/auth.store'
 import { toast } from '../../../utils/toast'
@@ -116,9 +115,9 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
 
   const hasActiveBinder = (clientBindersData?.items ?? []).some((b) => b.location_status === 'in_office')
 
-  const { data: taxProfile } = useQuery({
-    queryKey: taxProfileQK.forClient(clientRecordId!),
-    queryFn: () => taxProfileApi.get(clientRecordId!),
+  const { data: clientProfile } = useQuery({
+    queryKey: clientsQK.detail(clientRecordId!),
+    queryFn: () => clientsApi.getById(clientRecordId!),
     enabled: typeof clientRecordId === 'number' && clientRecordId > 0,
     staleTime: QUERY_STALE_TIME.default,
     retry: 1,
@@ -134,7 +133,7 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
     refetchOnWindowFocus: false,
   })
 
-  const vatType: 'monthly' | 'bimonthly' | 'exempt' | null = taxProfile?.vat_reporting_frequency ?? null
+  const vatType: 'monthly' | 'bimonthly' | 'exempt' | null = clientProfile?.vat_reporting_frequency ?? null
 
   useEffect(() => {
     if (binderTypes.length === 0) return

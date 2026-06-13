@@ -1,21 +1,21 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { taxProfileApi, taxProfileQK, type TaxProfileUpdatePayload } from '../api'
+import { clientsApi, clientsQK, type ClientRecordResponse, type UpdateClientPayload } from '@/features/clients'
 import { toast } from '../../../utils/toast'
 import { getErrorMessage, showErrorToast } from '../../../utils/utils'
 
 export const useTaxProfile = (clientId: number) => {
   const queryClient = useQueryClient()
-  const qk = taxProfileQK.forClient(clientId)
+  const qk = clientsQK.detail(clientId)
 
   const profileQuery = useQuery({
     enabled: clientId > 0,
     queryKey: qk,
-    queryFn: () => taxProfileApi.get(clientId),
+    queryFn: () => clientsApi.getById(clientId),
     retry: false,
   })
 
   const updateMutation = useMutation({
-    mutationFn: (data: TaxProfileUpdatePayload) => taxProfileApi.update(clientId, data),
+    mutationFn: (data: UpdateClientPayload) => clientsApi.update(clientId, data),
     onSuccess: (updated) => {
       toast.success('פרטי מס עודכנו בהצלחה')
       queryClient.setQueryData(qk, updated)
@@ -26,10 +26,10 @@ export const useTaxProfile = (clientId: number) => {
   })
 
   return {
-    profile: profileQuery.data ?? null,
+    profile: (profileQuery.data ?? null) as ClientRecordResponse | null,
     isLoading: profileQuery.isPending,
     error: profileQuery.error ? getErrorMessage(profileQuery.error, 'שגיאה בטעינת פרטי מס') : null,
-    updateProfile: (data: TaxProfileUpdatePayload) => updateMutation.mutate(data),
+    updateProfile: (data: UpdateClientPayload) => updateMutation.mutate(data),
     isUpdating: updateMutation.isPending,
   }
 }
