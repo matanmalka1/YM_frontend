@@ -1,3 +1,3 @@
 export { searchApi } from './search.api'
 export { searchQK } from './queryKeys'
-export type { SearchResult, DocumentSearchResult,  } from './contracts'
+export type { SearchResult, DocumentSearchResult } from './contracts'
