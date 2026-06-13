@@ -21,6 +21,7 @@ import { ChargeActionButtons } from './ChargeActionButtons'
 import { useChargeDetailsPage } from '../hooks/useChargeDetailsPage'
 import { CHARGE_CANCEL_REASON_PLACEHOLDER, chargeStatusVariants } from '../constants'
 import { SendNotificationModal, type NotificationTrigger } from '@/features/notifications'
+import { ChargeInvoiceSection } from '@/features/invoices'
 
 const FIELD_VALUE_LABELS: FieldValueLabels = {
   status: CHARGE_STATUS_LABELS,
@@ -197,6 +198,8 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
               <DrawerField label="בוטל" value={formatDateTime(charge.canceled_at)} />
               {charge.cancellation_reason && <DrawerField label="סיבת ביטול" value={charge.cancellation_reason} />}
             </DrawerSection>
+
+            <ChargeInvoiceSection chargeId={charge.id} chargeStatus={charge.status} canAttach={isAdvisor} />
 
             <EntityAuditTrailSection
               entityType="charge"
