@@ -4,8 +4,8 @@ export interface TaxCalendarSettingsYearRangeParams {
 }
 
 export interface TaxCalendarBootstrapPayload {
-  start_year: number
-  end_year: number
+  tax_year_after: number
+  tax_year_before: number
 }
 
 export interface TaxCalendarDeadlineRule {
@@ -29,16 +29,16 @@ export interface TaxCalendarSettingsEntry {
 }
 
 export interface TaxCalendarSettingsSummary {
-  start_year: number | null
-  end_year: number | null
+  tax_year_after: number | null
+  tax_year_before: number | null
   total_entries: number
   per_year: Record<string, Record<string, number>>
   warnings: string[]
 }
 
 export interface TaxCalendarBootstrapResult {
-  start_year: number
-  end_year: number
+  tax_year_after: number
+  tax_year_before: number
   rules_created: number
   rules_skipped: number
   rules_by_type: Record<string, string>

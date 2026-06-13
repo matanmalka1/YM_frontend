@@ -215,8 +215,8 @@ export const TaxCalendarSettingsPage = () => {
   const handleBootstrap = () => {
     if (!params) return
     bootstrapMutation.mutate({
-      start_year: params.tax_year_after,
-      end_year: params.tax_year_before,
+      tax_year_after: params.tax_year_after,
+      tax_year_before: params.tax_year_before,
     })
   }
 

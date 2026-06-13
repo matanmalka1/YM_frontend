@@ -33,8 +33,8 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
   const params: ListAuditLogsParams = {
     page,
     page_size: PAGE_SIZE,
-    from: fromDate ? `${fromDate}T00:00:00` : undefined,
-    to: toDate ? `${toDate}T23:59:59` : undefined,
+    created_after: fromDate ? `${fromDate}T00:00:00` : undefined,
+    created_before: toDate ? `${toDate}T23:59:59` : undefined,
   }
 
   const { data, isPending, isError } = useQuery({
