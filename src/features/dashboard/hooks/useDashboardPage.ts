@@ -73,7 +73,7 @@ export const useDashboardPage = () => {
 
   const attentionItems = dashboardQuery.data?.attention.items ?? []
   const isAdvisorView = dashboard.status === 'ok' && isAdvisor
-  const quickActions = isAdvisorView ? (dashboard.data?.quick_actions ?? []) : undefined
+  const quickActions = isAdvisorView ? [] : undefined
   const emptyState = dashboard.data ? { is_empty: dashboard.data.is_empty } : undefined
   const vatStats = dashboard.data?.vat_stats
   const recentActivity = dashboard.data?.recent_activity ?? []

@@ -1,5 +1,3 @@
-import type { BackendAction } from '@/lib/actions/types'
-
 export interface AttentionBoardItem {
   id: string
   source_type: string
@@ -55,7 +53,6 @@ export interface DashboardOverviewResponse {
   open_charges_count: number
   open_charges_amount_ils: string | null
   vat_stats: VatDashboardStats
-  quick_actions: BackendAction[]
   attention: AttentionResponse
   recent_activity: RecentActivityItem[]
 }
