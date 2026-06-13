@@ -13774,6 +13774,12 @@ export interface operations {
             query?: {
                 page?: number;
                 page_size?: number;
+                client_record_id?: number | null;
+                binder_number?: string | null;
+                location_status?: components["schemas"]["BinderLocationStatus"] | null;
+                capacity_status?: components["schemas"]["BinderCapacityStatus"] | null;
+                created_after?: string | null;
+                created_before?: string | null;
             };
             header?: never;
             path?: never;
@@ -17841,6 +17847,12 @@ export interface operations {
             query?: {
                 page?: number;
                 page_size?: number;
+                client_record_id?: number | null;
+                request_type?: components["schemas"]["SignatureRequestType"] | null;
+                signer_email?: string | null;
+                created_after?: string | null;
+                created_before?: string | null;
+                expires_before?: string | null;
             };
             header?: never;
             path?: never;
@@ -19227,6 +19239,12 @@ export interface operations {
             query?: {
                 page?: number;
                 page_size?: number;
+                year?: number | null;
+                period?: string | null;
+                status?: components["schemas"]["VatWorkItemStatus"] | null;
+                assigned_to?: number | null;
+                due_after?: string | null;
+                due_before?: string | null;
             };
             header?: never;
             path: {
@@ -19997,6 +20015,10 @@ export interface operations {
             query?: {
                 page?: number;
                 page_size?: number;
+                action?: string | null;
+                user_id?: number | null;
+                created_after?: string | null;
+                created_before?: string | null;
             };
             header?: never;
             path: {
