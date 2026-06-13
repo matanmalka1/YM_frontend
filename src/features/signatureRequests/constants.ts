@@ -8,13 +8,6 @@ const SIGNATURE_REQUEST_STATUS_LABELS: Record<SignatureRequestStatus, string> = 
   expired: 'פג תוקף',
   canceled: 'בוטל',
 }
-export const SIGNATURE_REQUEST_STATUS_VALUES = [
-  'pending_signature',
-  'signed',
-  'declined',
-  'expired',
-  'canceled',
-] as const satisfies readonly SignatureRequestStatus[]
 export const getSignatureRequestStatusLabel = makeLabelGetter(SIGNATURE_REQUEST_STATUS_LABELS)
 
 const SIGNATURE_REQUEST_TYPE_LABELS: Record<SignatureRequestType, string> = {
@@ -24,13 +17,6 @@ const SIGNATURE_REQUEST_TYPE_LABELS: Record<SignatureRequestType, string> = {
   vat_return_approval: 'אישור דוח מע"מ',
   custom: 'מותאם אישית',
 }
-export const SIGNATURE_REQUEST_TYPE_VALUES = [
-  'engagement_agreement',
-  'annual_report_approval',
-  'power_of_attorney',
-  'vat_return_approval',
-  'custom',
-] as const satisfies readonly SignatureRequestType[]
 export const getSignatureRequestTypeLabel = makeLabelGetter(SIGNATURE_REQUEST_TYPE_LABELS)
 
 export const SIGNATURE_REQUEST_STATUS_VARIANTS: Record<

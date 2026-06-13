@@ -34,14 +34,6 @@ const VAT_WORK_ITEM_STATUS_LABELS: Record<VatWorkItemStatus, string> = {
   filed: 'הוגש',
   canceled: 'בוטל',
 }
-export const VAT_WORK_ITEM_STATUS_VALUES = [
-  'pending_materials',
-  'material_received',
-  'data_entry_in_progress',
-  'ready_for_review',
-  'filed',
-  'canceled',
-] as const satisfies readonly VatWorkItemStatus[]
 export const getVatWorkItemStatusLabel = makeLabelGetter(VAT_WORK_ITEM_STATUS_LABELS)
 
 const INCOME_KEY = 'income'

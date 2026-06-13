@@ -1,6 +1,6 @@
 // ── Enums ──────────────────────────────────────────────────────────────────────
 
-export const NOTIFICATION_TRIGGER_VALUES = [
+const NOTIFICATION_TRIGGER_VALUES = [
   'binder_ready_for_handover',
   'binder_missing_documents',
   'binder_general_reminder',
