@@ -7,9 +7,11 @@ import { DEFAULT_BIMONTHLY_START_MONTH } from './advancePaymentComponent.constan
 export const getAdvancePaymentMonthLabel = (period: string, periodMonthsCount: 1 | 2 = 1) =>
   getReportingPeriodMonthLabel(period, periodMonthsCount)
 
-export const getCollectionPercent = (rate: number | null, cap = false) => {
+export const getCollectionPercent = (rate: string | number | null, cap = false) => {
   if (rate === null) return null
-  const roundedRate = Math.round(rate)
+  const numericRate = Number(rate)
+  if (!Number.isFinite(numericRate)) return null
+  const roundedRate = Math.round(numericRate)
   return cap ? Math.min(roundedRate, 100) : roundedRate
 }
 

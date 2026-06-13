@@ -8,9 +8,10 @@ import { PaginationCard } from "@/components/ui/table/PaginationCard";
 import { getOperationalYearOptions } from "@/constants/periodOptions.constants";
 import { getVatTypeLabel } from "@/features/clients";
 
-const complianceBadgeVariant = (rate: number) => {
-  if (rate >= 80) return "success" as const;
-  if (rate >= 50) return "warning" as const;
+const complianceBadgeVariant = (rate: string) => {
+  const numericRate = Number(rate);
+  if (numericRate >= 80) return "success" as const;
+  if (numericRate >= 50) return "warning" as const;
   return "error" as const;
 };
 
@@ -57,7 +58,7 @@ const ComplianceTable = ({ items, year }: { items: VatComplianceItem[]; year?: n
                 <td className="px-4 py-3 text-gray-700 tabular-nums">{item.late_count}</td>
                 <td className="px-4 py-3">
                   <Badge variant={complianceBadgeVariant(item.compliance_rate)}>
-                    {item.compliance_rate.toFixed(1)}%
+                    {Number(item.compliance_rate).toFixed(1)}%
                   </Badge>
                 </td>
               </tr>

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { CheckCircle2, ShieldAlert } from 'lucide-react'
-import { cn, formatDate } from '@/utils/utils'
+import { cn, formatCurrencyILS, formatDate } from '@/utils/utils'
 import type { AttentionBoardItem } from '../api/contracts'
 import { DashboardPanel, DashboardSectionHeader } from './DashboardPrimitives'
 
@@ -51,7 +51,9 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
           {item.client_name && <span className="truncate text-xs text-gray-500">{item.client_name}</span>}
           {item.reason && !item.client_name && <span className="truncate text-xs text-gray-500">{item.reason}</span>}
           {item.amount && (
-            <span className="shrink-0 text-xs font-semibold tabular-nums text-gray-700">{item.amount}</span>
+            <span className="shrink-0 text-xs font-semibold tabular-nums text-gray-700">
+              {formatCurrencyILS(item.amount, { maximumFractionDigits: 2 })}
+            </span>
           )}
         </div>
       </div>

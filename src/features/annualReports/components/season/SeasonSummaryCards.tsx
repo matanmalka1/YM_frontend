@@ -9,6 +9,7 @@ interface SeasonSummaryCardsProps {
 export const SeasonSummaryCards: React.FC<SeasonSummaryCardsProps> = ({ summary }) => {
   const done = summary.submitted + summary.closed
   const total = Math.max(0, summary.total)
+  const completionRate = Number(summary.completion_rate)
 
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -25,7 +26,7 @@ export const SeasonSummaryCards: React.FC<SeasonSummaryCardsProps> = ({ summary 
         description={`${summary.completion_rate}% מכלל הדוחות`}
         icon={CheckCircle2}
         variant="green"
-        trend={{ value: summary.completion_rate, label: 'אחוז הגשה' }}
+        trend={{ value: completionRate, label: 'אחוז הגשה' }}
       />
       <StatsCard
         title="באיחור"

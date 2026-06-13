@@ -3124,8 +3124,12 @@ export interface components {
              * @example 123.45
              */
             total_paid: string;
-            /** Collection Rate */
-            collection_rate: number;
+            /**
+             * Collection Rate
+             * Format: decimal
+             * @example 123.45
+             */
+            collection_rate: string;
             /**
              * Total Gap
              * Format: decimal
@@ -3189,7 +3193,7 @@ export interface components {
             /** Total Paid */
             total_paid?: string | null;
             /** Collection Rate */
-            collection_rate?: number | null;
+            collection_rate?: string | null;
         };
         /** AdvancePaymentOverviewRow */
         AdvancePaymentOverviewRow: {
@@ -3584,8 +3588,12 @@ export interface components {
              * @example 123.45
              */
             total_paid: string;
-            /** Collection Rate */
-            collection_rate: number;
+            /**
+             * Collection Rate
+             * Format: decimal
+             * @example 123.45
+             */
+            collection_rate: string;
             /** Overdue Count */
             overdue_count: number;
             /** On Time Count */
@@ -3998,7 +4006,10 @@ export interface components {
         };
         /** AttentionBoardItem */
         AttentionBoardItem: {
-            /** Id */
+            /**
+             * Id
+             * @description Stable composite attention key in the form '{source_type}:{source_id}', for example 'charge:123'.
+             */
             id: string;
             /** Source Type */
             source_type: string;
@@ -4490,8 +4501,12 @@ export interface components {
         };
         /** BracketBreakdownItem */
         BracketBreakdownItem: {
-            /** Rate */
-            rate: number;
+            /**
+             * Rate
+             * Format: decimal
+             * @example 123.45
+             */
+            rate: string;
             /**
              * From Amount
              * Format: decimal
@@ -4542,7 +4557,7 @@ export interface components {
         /**
          * BusinessCreateRequest
          * @description יצירת עסק חדש תחת לקוח קיים.
-         *     client_id מועבר ב-URL: POST /clients/{client_id}/businesses
+         *     client_record_id מועבר ב-URL: POST /clients/{client_record_id}/businesses
          */
         BusinessCreateRequest: {
             /** Opened At */
@@ -5851,9 +5866,11 @@ export interface components {
             total_paid?: string | null;
             /**
              * Collection Rate
-             * @default 0
+             * Format: decimal
+             * @default 0.00
+             * @example 123.45
              */
-            collection_rate: number;
+            collection_rate: string;
         };
         /** NationalInsuranceResponse */
         NationalInsuranceResponse: {
@@ -6430,7 +6447,7 @@ export interface components {
          * ReminderActionType
          * @enum {string}
          */
-        ReminderActionType: "CREATE_TASK" | "SEND_NOTIFICATION" | "CREATE_TASK_AND_NOTIFY";
+        ReminderActionType: "create_task" | "send_notification" | "create_task_and_notify";
         /** ReminderCreateRequest */
         ReminderCreateRequest: {
             /**
@@ -6659,8 +6676,12 @@ export interface components {
              * @default 0
              */
             canceled: number;
-            /** Completion Rate */
-            completion_rate: number;
+            /**
+             * Completion Rate
+             * Format: decimal
+             * @example 123.45
+             */
+            completion_rate: string;
             /** Overdue Count */
             overdue_count: number;
         };
@@ -6946,6 +6967,12 @@ export interface components {
             /** Is Expired */
             readonly is_expired: boolean;
         };
+        /**
+         * SortOrder
+         * @description Shared sort-direction enum for list endpoints.
+         * @enum {string}
+         */
+        SortOrder: "asc" | "desc";
         /** StageTransitionRequest */
         StageTransitionRequest: {
             to_stage: components["schemas"]["ReportStage"];
@@ -7134,8 +7161,12 @@ export interface components {
              * @example 123.45
              */
             net_profit: string;
-            /** Effective Rate */
-            effective_rate: number;
+            /**
+             * Effective Rate
+             * Format: decimal
+             * @example 123.45
+             */
+            effective_rate: string;
             national_insurance: components["schemas"]["NationalInsuranceResponse"];
             /** Brackets */
             brackets: components["schemas"]["BracketBreakdownItem"][];
@@ -7145,8 +7176,12 @@ export interface components {
              * @example 123.45
              */
             total_liability: string;
-            /** Total Credit Points */
-            total_credit_points: number;
+            /**
+             * Total Credit Points
+             * Format: decimal
+             * @example 123.45
+             */
+            total_credit_points: string;
         };
         /** TaxCalculationSaveRequest */
         TaxCalculationSaveRequest: {
@@ -7381,8 +7416,12 @@ export interface components {
              * @example 123.45
              */
             advances_paid: string;
-            /** Credit Points */
-            credit_points: number;
+            /**
+             * Credit Points
+             * Format: decimal
+             * @example 123.45
+             */
+            credit_points: string;
         };
         /** TaxPreviewResponse */
         TaxPreviewResponse: {
@@ -7724,8 +7763,12 @@ export interface components {
             on_time_count: number;
             /** Late Count */
             late_count: number;
-            /** Compliance Rate */
-            compliance_rate: number;
+            /**
+             * Compliance Rate
+             * Format: decimal
+             * @example 123.45
+             */
+            compliance_rate: string;
         };
         /** VatComplianceReportResponse */
         VatComplianceReportResponse: {
@@ -7801,7 +7844,10 @@ export interface components {
         };
         /** VatInvoiceCreateRequest */
         VatInvoiceCreateRequest: {
-            /** Counterparty Id */
+            /**
+             * Counterparty Id
+             * @description External VAT counterparty identifier such as Israeli business ID, personal ID, passport, or foreign ID. Not an internal database FK.
+             */
             counterparty_id?: string | null;
             counterparty_id_type?: components["schemas"]["CounterpartyIdType"] | null;
             invoice_type: components["schemas"]["InvoiceType"];
@@ -7854,7 +7900,10 @@ export interface components {
             invoice_date: string;
             /** Counterparty Name */
             counterparty_name: string;
-            /** Counterparty Id */
+            /**
+             * Counterparty Id
+             * @description External VAT counterparty identifier such as Israeli business ID, personal ID, passport, or foreign ID. Not an internal database FK.
+             */
             counterparty_id?: string | null;
             counterparty_id_type?: components["schemas"]["CounterpartyIdType"] | null;
             /**
@@ -7883,7 +7932,8 @@ export interface components {
             created_by: number;
             /**
              * Created At
-             * Format: date
+             * Format: date-time
+             * @example 2026-01-02T03:04:05Z
              */
             created_at: string;
             /**
@@ -16870,7 +16920,7 @@ export interface operations {
                 contact_id?: number | null;
                 occurred_after?: string | null;
                 occurred_before?: string | null;
-                order?: "asc" | "desc";
+                order?: components["schemas"]["SortOrder"];
             };
             header?: never;
             path: {

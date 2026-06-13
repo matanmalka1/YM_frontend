@@ -143,7 +143,7 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
           {Number(data.donation_credit) > 0 && (
             <Row label="זיכוי תרומות (סע׳ 46)" value={formatCurrencyILS(data.donation_credit)} muted />
           )}
-          <Row label="שיעור אפקטיבי" value={`${(data.effective_rate * 100).toFixed(2)}%`} muted />
+          <Row label="שיעור אפקטיבי" value={`${(Number(data.effective_rate) * 100).toFixed(2)}%`} muted />
           <Row
             label="מס לתשלום"
             value={formatCurrencyILS(data.tax_after_credits)}

@@ -63,7 +63,7 @@ export interface AdvancePaymentReportResponse {
   month: number | null;
   total_expected: string;
   total_paid: string;
-  collection_rate: number;
+  collection_rate: string;
   total_gap: string;
   items: AdvancePaymentReportItem[];
 }
@@ -80,7 +80,7 @@ export interface VatComplianceItem {
   periods_open: number;
   on_time_count: number;
   late_count: number;
-  compliance_rate: number;
+  compliance_rate: string;
 }
 
 export interface StalePendingItem {

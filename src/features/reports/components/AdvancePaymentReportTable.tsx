@@ -73,7 +73,7 @@ export const AdvancePaymentReportTable: React.FC<Props> = ({ data }) => (
           פער: {formatILS(data.total_gap)}
         </span>
         <span className="mr-auto text-blue-700">
-          אחוז גבייה: {data.collection_rate.toFixed(1)}%
+          אחוז גבייה: {Number(data.collection_rate).toFixed(1)}%
         </span>
       </div>
     )}

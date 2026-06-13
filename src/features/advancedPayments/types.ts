@@ -109,7 +109,7 @@ export interface AdvancePaymentOverviewResponse {
   total: number
   total_expected: string | null
   total_paid: string | null
-  collection_rate: number | null
+  collection_rate: string | null
 }
 
 export interface MonthBatchSummary {
@@ -126,7 +126,7 @@ export interface MonthBatchSummary {
   not_paid_count: number
   total_expected: string | null
   total_paid: string | null
-  collection_rate: number
+  collection_rate: string
 }
 
 export type AdvancePaymentDueDateGroup = MonthBatchSummary
@@ -136,7 +136,7 @@ export interface AnnualKPIResponse {
   year: number
   total_expected: string
   total_paid: string
-  collection_rate: number
+  collection_rate: string
   overdue_count: number
   on_time_count: number
 }

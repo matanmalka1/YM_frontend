@@ -109,12 +109,12 @@ export const annualReportsApi = {
 
   taxPreview: async (payload: {
     tax_year: number
-    gross_income: number
-    expenses: number
-    advances_paid: number
-    credit_points: number
-  }): Promise<{ net_profit: number; estimated_tax: number; balance: number }> => {
-    const response = await api.post<{ net_profit: number; estimated_tax: number; balance: number }>(
+    gross_income: string
+    expenses: string
+    advances_paid: string
+    credit_points: string
+  }): Promise<{ net_profit: string; estimated_tax: string; balance: string }> => {
+    const response = await api.post<{ net_profit: string; estimated_tax: string; balance: string }>(
       ANNUAL_REPORT_ENDPOINTS.taxPreview,
       payload,
     )

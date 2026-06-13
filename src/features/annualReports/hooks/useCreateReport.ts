@@ -43,17 +43,13 @@ export const useCreateReport = (taxYear?: number, onSuccess?: () => void) => {
   })
 
   const previewParams = useMemo(() => {
-    const income = parseFloat(grossIncome ?? '') || 0
-    const exp = parseFloat(expenses ?? '') || 0
-    const advances = parseFloat(advancesPaid ?? '') || 0
-    const credits = parseFloat(creditPoints ?? '') || 0
     const year = parseInt(taxYearStr ?? '') || taxYear || 0
     return {
       tax_year: year,
-      gross_income: income,
-      expenses: exp,
-      advances_paid: advances,
-      credit_points: credits,
+      gross_income: grossIncome?.trim() || '0',
+      expenses: expenses?.trim() || '0',
+      advances_paid: advancesPaid?.trim() || '0',
+      credit_points: creditPoints?.trim() || '0',
     }
   }, [grossIncome, expenses, advancesPaid, creditPoints, taxYearStr, taxYear])
 
@@ -66,9 +62,9 @@ export const useCreateReport = (taxYear?: number, onSuccess?: () => void) => {
   })
 
   const preview = {
-    netProfit: previewData?.net_profit ?? 0,
-    estimatedTax: previewData?.estimated_tax ?? 0,
-    balance: previewData?.balance ?? 0,
+    netProfit: Number(previewData?.net_profit ?? 0),
+    estimatedTax: Number(previewData?.estimated_tax ?? 0),
+    balance: Number(previewData?.balance ?? 0),
   }
 
   const mutation = useMutation({

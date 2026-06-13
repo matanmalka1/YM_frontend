@@ -199,7 +199,7 @@ export interface SeasonSummary {
   submitted: number
   closed: number
   canceled: number
-  completion_rate: number
+  completion_rate: string
   overdue_count: number
 }
 
@@ -277,7 +277,7 @@ export interface ReadinessCheckResponse {
 }
 
 export interface BracketBreakdownItem {
-  rate: number
+  rate: string
   from_amount: string
   to_amount: string | null
   taxable_in_bracket: string
@@ -299,11 +299,11 @@ export interface TaxCalculationResult {
   other_credits: string
   tax_after_credits: string
   net_profit: string
-  effective_rate: number
+  effective_rate: string
   national_insurance: NationalInsuranceBreakdown
   brackets: BracketBreakdownItem[]
   total_liability: string | null
-  total_credit_points: number
+  total_credit_points: string
 }
 
 export interface AnnexDataLine {
