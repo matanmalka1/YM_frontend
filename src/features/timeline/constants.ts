@@ -4,71 +4,59 @@ import type { EventColorConfig } from './types'
 // Instead of copy-pasting 10 fields × 14 event types, we derive every config
 // from a single color token per event type.
 
-type TailwindColor =
-  | 'primary'
-  | 'emerald'
-  | 'sky'
-  | 'violet'
-  | 'amber'
-  | 'orange'
-  | 'green'
-  | 'rose'
-  | 'teal'
-  | 'indigo'
-  | 'slate'
-  | 'gray'
+type SemanticTone = 'primary' | 'positive' | 'warning' | 'negative' | 'info' | 'slate'
 
-const makeColor = (color: TailwindColor): EventColorConfig => {
-  if (color === 'gray') {
+const makeColor = (tone: SemanticTone): EventColorConfig => {
+  if (tone === 'slate') {
     return {
-      dotBg: 'bg-gray-400',
-      dotBorder: 'border-gray-300',
-      cardBorder: 'border-r-gray-300',
-      cardTint: 'from-gray-50/40',
-      badgeBg: 'bg-gray-100',
-      badgeText: 'text-gray-600',
-      chipActiveBg: 'bg-gray-100',
-      chipActiveText: 'text-gray-700',
-      chipActiveBorder: 'border-gray-300',
-      iconColor: 'text-gray-500',
+      dotBg: 'bg-slate-400',
+      dotBorder: 'border-slate-200',
+      cardBorder: 'border-r-slate-300',
+      cardTint: 'from-slate-50/60',
+      badgeBg: 'bg-slate-100',
+      badgeText: 'text-slate-600',
+      chipActiveBg: 'bg-slate-100',
+      chipActiveText: 'text-slate-700',
+      chipActiveBorder: 'border-slate-300',
+      iconColor: 'text-slate-500',
     }
   }
 
   return {
-    dotBg: `bg-${color}-500`,
-    dotBorder: `border-${color}-300`,
-    cardBorder: `border-r-${color}-400`,
-    cardTint: `from-${color}-50/60`,
-    badgeBg: `bg-${color}-100`,
-    badgeText: `text-${color}-700`,
-    chipActiveBg: `bg-${color}-100`,
-    chipActiveText: `text-${color}-800`,
-    chipActiveBorder: `border-${color}-300`,
-    iconColor: `text-${color}-600`,
+    dotBg: `bg-${tone}-500`,
+    dotBorder: `border-${tone}-200`,
+    cardBorder: `border-r-${tone}-400`,
+    cardTint: `from-${tone}-50/60`,
+    badgeBg: `bg-${tone}-100`,
+    badgeText: `text-${tone}-700`,
+    chipActiveBg: `bg-${tone}-100`,
+    chipActiveText: `text-${tone}-800`,
+    chipActiveBorder: `border-${tone}-300`,
+    iconColor: `text-${tone}-600`,
   }
 }
 
 // ── Event color map ───────────────────────────────────────────────────────────
 
-const EVENT_COLOR_MAP: Record<string, TailwindColor> = {
+const EVENT_COLOR_MAP: Record<string, SemanticTone> = {
   binder_received: 'primary',
-  binder_handed_over: 'emerald',
-  binder_lifecycle_change: 'sky',
-  invoice_attached: 'violet',
-  charge_created: 'amber',
-  charge_issued: 'orange',
-  charge_paid: 'green',
-  annual_report_status_changed: 'indigo',
+  binder_handed_over: 'positive',
+  binder_lifecycle_change: 'info',
+  invoice_attached: 'info',
+  charge_created: 'warning',
+  charge_issued: 'warning',
+  charge_paid: 'positive',
+  annual_report_status_changed: 'primary',
   client_created: 'primary',
-  document_uploaded: 'emerald',
-  signature_request_sent: 'violet',
-  signature_request_signed: 'emerald',
-  signature_request_declined: 'rose',
+  document_uploaded: 'positive',
+  signature_request_sent: 'info',
+  signature_request_signed: 'positive',
+  signature_request_declined: 'negative',
   signature_request_canceled: 'slate',
-  signature_request_expired: 'amber',
+  signature_request_expired: 'warning',
 }
 
-const DEFAULT_EVENT_COLOR: EventColorConfig = makeColor('gray')
+const DEFAULT_EVENT_COLOR: EventColorConfig = makeColor('slate')
 
 // Lazily computed cache so we build each config only once
 const colorCache = new Map<string, EventColorConfig>()

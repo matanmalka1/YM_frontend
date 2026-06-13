@@ -28,9 +28,9 @@ import { useDashboardCreateModals } from '../hooks/useDashboardCreateModals'
 const StatsSkeleton = () => (
   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
     {Array.from({ length: DASHBOARD_LOADING_CARD_COUNT }, (_, i) => (
-      <div key={i} className="h-32 rounded-xl overflow-hidden" style={{ animationDelay: `${i * 80}ms` }}>
+      <div key={i} className="h-40 rounded-3xl overflow-hidden" style={{ animationDelay: `${i * 80}ms` }}>
         <div
-          className="h-full w-full animate-shimmer bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100"
+          className="h-full w-full animate-shimmer bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100"
           style={{ backgroundSize: '1000px 100%', animationDelay: `${i * 80}ms` }}
         />
       </div>
@@ -97,8 +97,8 @@ export const DashboardPage: React.FC = () => {
       )}
 
       {isAdvisorView && !emptyState?.is_empty ? (
-        <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
-          <aside className="grid gap-5 lg:col-start-2 lg:row-start-1">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+          <aside className="flex flex-col gap-5 lg:col-start-2 lg:row-start-1">
             <QuickActionsPanel
               actions={quickActions ?? []}
               activeActionKey={activeQuickAction}
@@ -106,11 +106,11 @@ export const DashboardPage: React.FC = () => {
               onOpenModal={setActiveCreateModal}
             />
             <UpcomingDeadlinesPanel />
-            <RecentActivityPanel items={recentActivity} />
+            <RecentActivityPanel items={recentActivity} className="flex-1" />
           </aside>
           <div className="space-y-5 lg:col-start-1 lg:row-start-1">
             {dashboard.status === 'loading' ? (
-              <div className="h-80 animate-pulse rounded-2xl bg-gray-100" />
+              <div className="h-80 animate-pulse rounded-3xl bg-slate-100" />
             ) : (
               <AttentionBoard items={attentionItems} />
             )}
@@ -118,7 +118,7 @@ export const DashboardPage: React.FC = () => {
           </div>
         </div>
       ) : dashboard.status === 'loading' ? (
-        <div className="h-80 animate-pulse rounded-2xl bg-gray-100" />
+        <div className="h-80 animate-pulse rounded-3xl bg-slate-100" />
       ) : (
         <AttentionBoard items={attentionItems} />
       )}

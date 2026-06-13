@@ -63,28 +63,28 @@ const UpcomingDeadlineRow = ({ group }: { group: TaxCalendarGroup }) => {
   const countLabel = group.obligation_type === 'advance_payment' ? 'תשלומים' : 'דוחות'
   const iconClassName =
     group.obligation_type !== 'vat'
-      ? 'bg-emerald-50 text-emerald-700'
+      ? 'bg-positive-50 text-positive-600'
       : group.period_months_count === 2
-        ? 'bg-purple-50 text-purple-700'
-        : 'bg-blue-50 text-blue-700'
+        ? 'bg-violet-50 text-violet-500'
+        : 'bg-primary-50 text-primary-600'
 
   return (
-    <li className="relative grid min-h-[126px] grid-cols-[48px_minmax(0,1fr)] border-b border-gray-100 last:border-b-0">
+    <li className="relative grid min-h-[126px] grid-cols-[48px_minmax(0,1fr)] border-b border-slate-100 last:border-b-0">
       <div className="relative flex justify-center pt-4">
-        <span className="absolute bottom-0 top-0 left-1/2 w-px -translate-x-1/2 bg-gray-200" />
-        <span className={`relative z-10 flex h-11 w-11 items-center justify-center rounded-full ${iconClassName}`}>
+        <span className="absolute bottom-0 top-0 left-1/2 w-px -translate-x-1/2 bg-slate-100" />
+        <span className={`relative z-10 flex h-11 w-11 items-center justify-center rounded-2xl ${iconClassName}`}>
           <Icon className="h-5 w-5" />
         </span>
       </div>
 
       <div className="min-w-0 py-4 text-center">
-        <p className="text-base font-bold tabular-nums text-gray-950">
+        <p className="text-base font-bold tabular-nums text-slate-900">
           {dueDate ? dateFormatter.format(dueDate).replaceAll('/', '.') : group.effective_due_date_min}
         </p>
-        {dueDate && <p className="mt-1 text-xs font-semibold text-gray-500">({weekdayFormatter.format(dueDate)})</p>}
-        <p className="mt-2 truncate text-sm font-bold text-gray-950">{formatObligationTitle(group)}</p>
-        <p className="mt-1 truncate text-sm text-gray-500">{formatPeriod(group)}</p>
-        <p className="mt-1 truncate text-sm text-gray-500">{`${group.open_count} ${countLabel}`}</p>
+        {dueDate && <p className="mt-1 text-xs font-semibold text-slate-400">({weekdayFormatter.format(dueDate)})</p>}
+        <p className="mt-2 truncate text-sm font-bold text-slate-900">{formatObligationTitle(group)}</p>
+        <p className="mt-1 truncate text-sm text-slate-400">{formatPeriod(group)}</p>
+        <p className="mt-1 truncate text-sm text-slate-400">{`${group.open_count} ${countLabel}`}</p>
       </div>
     </li>
   )
@@ -111,16 +111,18 @@ export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string 
 
   return (
     <DashboardPanel className={`flex flex-col ${className}`}>
-      <div className="flex items-center justify-between px-4 py-4">
-        <h2 className="text-lg font-bold text-gray-950">מועדי מס קרובים</h2>
-        <CalendarDays className="h-5 w-5 text-gray-900" />
+      <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
+        <h2 className="text-sm font-bold text-slate-900">מועדי מס קרובים</h2>
+        <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-100 text-slate-500">
+          <CalendarDays className="h-4 w-4" />
+        </span>
       </div>
 
-      <div className="mx-3 mb-3 flex-1 overflow-hidden rounded-xl border border-gray-100">
+      <div className="mx-3 mt-3 mb-3 flex-1 overflow-hidden rounded-2xl border border-slate-100">
         {groupsQuery.isPending ? (
           <div className="space-y-3 p-4">
             {Array.from({ length: UPCOMING_DEADLINES_LIMIT }, (_, index) => (
-              <div key={index} className="h-24 animate-pulse rounded-xl bg-gray-100" />
+              <div key={index} className="h-24 animate-pulse rounded-2xl bg-slate-100" />
             ))}
           </div>
         ) : groups.length > 0 ? (
@@ -134,10 +136,10 @@ export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string 
         )}
       </div>
 
-      <div className="border-t border-gray-100 px-4 py-3 text-center">
+      <div className="border-t border-slate-100 px-4 py-3 text-center">
         <Link
           to="/tax/calendar"
-          className="inline-flex items-center justify-center gap-1 text-sm font-bold text-primary-700 hover:text-primary-900 hover:underline"
+          className="inline-flex items-center justify-center gap-1 text-sm font-bold text-primary-600 hover:text-primary-700 hover:underline"
         >
           <ChevronLeft className="h-4 w-4" />
           צפה בכל מועדי המס

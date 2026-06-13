@@ -16,46 +16,46 @@ const toneClasses: Record<
   }
 > = {
   neutral: {
-    icon: 'bg-slate-100 text-slate-600',
-    badge: 'bg-slate-100 text-slate-700',
+    icon: 'bg-slate-100 text-slate-500',
+    badge: 'bg-slate-100 text-slate-600',
     border: 'border-slate-200',
-    bar: 'bg-slate-500',
-    value: 'text-slate-800',
+    bar: 'bg-slate-400',
+    value: 'text-slate-900',
   },
   blue: {
-    icon: 'bg-blue-50 text-blue-600',
-    badge: 'bg-blue-50 text-blue-700',
-    border: 'border-blue-200',
-    bar: 'bg-blue-500',
-    value: 'text-blue-700',
+    icon: 'bg-primary-50 text-primary-600',
+    badge: 'bg-primary-50 text-primary-700',
+    border: 'border-primary-100',
+    bar: 'bg-primary-500',
+    value: 'text-slate-900',
   },
   green: {
-    icon: 'bg-green-50 text-green-600',
-    badge: 'bg-green-50 text-green-700',
-    border: 'border-green-200',
-    bar: 'bg-green-500',
-    value: 'text-green-700',
+    icon: 'bg-positive-50 text-positive-600',
+    badge: 'bg-positive-50 text-positive-700',
+    border: 'border-positive-100',
+    bar: 'bg-positive-500',
+    value: 'text-slate-900',
   },
   amber: {
-    icon: 'bg-amber-50 text-amber-600',
-    badge: 'bg-amber-50 text-amber-700',
-    border: 'border-amber-200',
-    bar: 'bg-amber-500',
-    value: 'text-amber-700',
+    icon: 'bg-warning-50 text-warning-600',
+    badge: 'bg-warning-50 text-warning-700',
+    border: 'border-warning-100',
+    bar: 'bg-warning-400',
+    value: 'text-slate-900',
   },
   red: {
-    icon: 'bg-red-50 text-red-600',
-    badge: 'bg-red-50 text-red-700',
-    border: 'border-red-200',
-    bar: 'bg-red-500',
-    value: 'text-red-700',
+    icon: 'bg-negative-50 text-negative-500',
+    badge: 'bg-negative-50 text-negative-600',
+    border: 'border-negative-100',
+    bar: 'bg-negative-400',
+    value: 'text-slate-900',
   },
   purple: {
-    icon: 'bg-violet-50 text-violet-600',
-    badge: 'bg-violet-50 text-violet-700',
-    border: 'border-violet-200',
-    bar: 'bg-violet-500',
-    value: 'text-violet-700',
+    icon: 'bg-violet-50 text-violet-500',
+    badge: 'bg-violet-50 text-violet-600',
+    border: 'border-violet-100',
+    bar: 'bg-violet-400',
+    value: 'text-slate-900',
   },
 }
 
@@ -92,13 +92,13 @@ export const DashboardSectionHeader = ({
   <div className={cn('flex items-center justify-between gap-4', className)}>
     <div className="flex min-w-0 items-center gap-3">
       {Icon && (
-        <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-xl', toneClasses[tone].icon)}>
+        <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl', toneClasses[tone].icon)}>
           <Icon className="h-4 w-4" />
         </span>
       )}
       <div className="min-w-0">
-        <h2 className="truncate text-sm font-bold text-gray-900">{title}</h2>
-        {subtitle && <p className="mt-0.5 truncate text-xs text-gray-500">{subtitle}</p>}
+        <h2 className="truncate text-sm font-bold text-slate-900">{title}</h2>
+        {subtitle && <p className="mt-0.5 truncate text-xs text-slate-400">{subtitle}</p>}
       </div>
     </div>
     <div className="flex shrink-0 items-center gap-2">
@@ -123,7 +123,7 @@ interface DashboardPanelProps {
 }
 
 export const DashboardPanel = ({ children, className }: DashboardPanelProps) => (
-  <section className={cn('overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm', className)}>
+  <section className={cn('overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-elevation-1', className)}>
     {children}
   </section>
 )
@@ -157,35 +157,37 @@ export const DashboardMetricCard = ({
   return (
     <div
       className={cn(
-        'relative flex h-40 flex-col justify-between overflow-hidden rounded-xl border bg-white p-4 text-right shadow-sm transition-all duration-200',
-        'hover:shadow-md',
-        urgent ? 'border-red-200 bg-red-50/30' : 'border-slate-200',
+        'relative flex h-40 flex-col justify-between overflow-hidden rounded-3xl border bg-white p-5 text-right shadow-elevation-1 transition-all duration-200',
+        'hover:shadow-elevation-2',
+        'border-slate-100',
         className,
       )}
     >
-      {/* Left accent bar */}
-      <div className={cn('absolute bottom-0 left-0 top-0 w-1 rounded-l-xl', toneClasses[activeTone].bar)} />
-
-      {Icon && (
-        <div
-          className={cn(
-            'absolute left-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg',
-            toneClasses[activeTone].icon,
-          )}
-        >
-          <Icon className="h-4 w-4" />
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          {eyebrow && <p className="mb-0.5 truncate text-[10px] font-semibold text-slate-400">{eyebrow}</p>}
+          <h3 className="truncate text-sm font-medium text-slate-500">{title}</h3>
         </div>
-      )}
+        {Icon && (
+          <div
+            className={cn(
+              'flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl',
+              toneClasses[activeTone].icon,
+            )}
+          >
+            <Icon className="h-4 w-4" />
+          </div>
+        )}
+      </div>
 
       <div>
-        {eyebrow && <p className="mb-0.5 truncate text-[10px] font-semibold text-gray-400">{eyebrow}</p>}
-        <h3 className="mb-2 truncate text-sm font-medium text-slate-500">{title}</h3>
         <p className={cn('text-2xl font-bold tabular-nums', toneClasses[activeTone].value)}>{value}</p>
-        <p className="mt-1 line-clamp-2 text-xs text-slate-500">{description}</p>
+        <p className="mt-1 line-clamp-2 text-xs text-slate-400">{description}</p>
       </div>
+
       <div className="space-y-1.5">
         {progress !== undefined && (
-          <div className="h-1 overflow-hidden rounded-full bg-gray-100">
+          <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
             <div
               className={cn('h-full rounded-full', toneClasses[activeTone].bar)}
               style={{ width: `${Math.max(0, Math.min(100, progress))}%` }}
@@ -196,7 +198,7 @@ export const DashboardMetricCard = ({
           <span
             className={cn(
               'inline-flex items-center gap-1 text-xs font-bold hover:underline',
-              urgent ? 'text-red-700' : 'text-primary-600',
+              urgent ? 'text-negative-600' : 'text-primary-600',
             )}
           >
             {actionLabel}

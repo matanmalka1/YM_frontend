@@ -1,6 +1,6 @@
-import { useCallback, useRef, useState, type KeyboardEvent } from 'react'
+import { useCallback, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
 import { ChevronDown, Search } from 'lucide-react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { NotificationBell } from '../NotificationBell'
 import { useAuthStore } from '@/store/auth.store'
 import type { UserRole } from '@/types'
@@ -63,6 +63,8 @@ const isMenuItem = (item: HTMLAnchorElement | null): item is HTMLAnchorElement =
 
 export const Navbar: React.FC = () => {
   const [moreOpen, setMoreOpen] = useState(false)
+  const [searchValue, setSearchValue] = useState('')
+  const navigate = useNavigate()
   const moreButtonRef = useRef<HTMLButtonElement>(null)
   const moreMenuRef = useRef<HTMLDivElement>(null)
   const moreMenuItemRefs = useRef<Array<HTMLAnchorElement | null>>([])
@@ -92,6 +94,12 @@ export const Navbar: React.FC = () => {
     moreMenuItemRefs.current[0] = node
     node?.focus()
   }, [])
+
+  const handleSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const trimmed = searchValue.trim()
+    navigate(trimmed ? `/search?search=${encodeURIComponent(trimmed)}` : '/search')
+  }
 
   const closeMoreMenu = () => {
     setMoreOpen(false)
@@ -149,9 +157,9 @@ export const Navbar: React.FC = () => {
                     end={item.end}
                     className={({ isActive }) =>
                       cn(
-                        'inline-flex h-8 items-center whitespace-nowrap rounded-md px-2.5 text-sm font-medium transition',
+                        'inline-flex h-8 items-center whitespace-nowrap rounded-full px-3 text-sm font-medium transition',
                         isActive
-                          ? 'bg-primary-400 text-white shadow-sm'
+                          ? 'bg-primary-600 text-white shadow-sm'
                           : 'text-gray-600 hover:bg-gray-100 hover:text-gray-950',
                       )
                     }
@@ -170,7 +178,7 @@ export const Navbar: React.FC = () => {
               type="button"
               onClick={() => setMoreOpen((open) => !open)}
               className={cn(
-                'inline-flex h-8 items-center gap-1 whitespace-nowrap rounded-md px-2.5 text-sm font-medium transition',
+                'inline-flex h-8 items-center gap-1 whitespace-nowrap rounded-full px-3 text-sm font-medium transition',
                 hasActiveMoreItem
                   ? 'bg-primary-600 text-white shadow-sm'
                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-950',
@@ -242,13 +250,19 @@ export const Navbar: React.FC = () => {
         </span>
       </div>
       <div className="flex shrink-0 items-center gap-1.5 border-r border-gray-200 pr-2">
-        <Link
-          to="/search"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-md text-gray-500 transition hover:bg-gray-50 hover:text-gray-900"
-          aria-label="חיפוש"
-        >
-          <Search className="h-5 w-5" />
-        </Link>
+        <form onSubmit={handleSearchSubmit} role="search" className="hidden md:block">
+          <div className="relative">
+            <Search className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <input
+              type="search"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="חיפוש..."
+              aria-label="חיפוש"
+              className="h-9 w-44 rounded-md border border-gray-200 bg-gray-50 pr-8 pl-3 text-sm text-gray-700 outline-none transition placeholder:text-gray-400 focus:w-56 focus:border-primary-400 focus:bg-white focus:ring-2 focus:ring-primary-100"
+            />
+          </div>
+        </form>
         <NotificationBell />
       </div>
     </header>

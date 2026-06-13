@@ -9,7 +9,7 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   subtitle?: string
   actions?: React.ReactNode
   footer?: React.ReactNode
-  variant?: 'default' | 'elevated'
+  variant?: 'default' | 'elevated' | 'outlined'
   interactive?: boolean
   size?: 'default' | 'compact'
   style?: React.CSSProperties
@@ -29,18 +29,19 @@ export const Card: React.FC<CardProps> = ({
   ...rest
 }) => {
   const variants = {
-    default: 'bg-white border border-gray-200/80',
-    elevated: 'bg-white border-0 shadow-elevation-2',
+    default: 'bg-white shadow-elevation-1',
+    elevated: 'bg-white shadow-elevation-2',
+    outlined: 'bg-white border border-gray-200/70',
   }
 
-  const headerPadding = size === 'compact' ? 'px-4 py-2.5' : 'px-6 py-4'
-  const bodyPadding = size === 'compact' ? 'p-4' : 'p-6'
-  const footerPadding = size === 'compact' ? 'px-4 py-2.5' : 'px-6 py-4'
+  const headerPadding = size === 'compact' ? 'px-5 py-3' : 'px-7 py-5'
+  const bodyPadding = size === 'compact' ? 'p-5' : 'p-7'
+  const footerPadding = size === 'compact' ? 'px-5 py-3' : 'px-7 py-5'
 
   return (
     <div
       className={cn(
-        'rounded-xl overflow-hidden transition-all duration-200',
+        'rounded-3xl overflow-hidden transition-all duration-200',
         variants[variant],
         interactive && 'hover:shadow-elevation-3 hover:-translate-y-0.5 cursor-pointer',
         'animate-fade-in',
@@ -50,16 +51,14 @@ export const Card: React.FC<CardProps> = ({
       {...rest}
     >
       {(title || subtitle || actions) && (
-        <div
-          className={cn(headerPadding, 'border-b border-gray-100/80 bg-gradient-to-r from-gray-50/50 to-transparent')}
-        >
+        <div className={cn(headerPadding, 'border-b border-gray-100')}>
           <SectionHeader title={title!} subtitle={subtitle} actions={actions} size="sm" />
         </div>
       )}
 
       <div className={bodyPadding}>{children}</div>
 
-      {footer && <div className={cn(footerPadding, 'border-t border-gray-100/80 bg-gray-50/50')}>{footer}</div>}
+      {footer && <div className={cn(footerPadding, 'border-t border-gray-100 bg-gray-50/60')}>{footer}</div>}
     </div>
   )
 }

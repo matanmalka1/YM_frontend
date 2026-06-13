@@ -38,7 +38,7 @@ export const Button: React.FC<ButtonProps> = ({
   const btn = (
     <button
       className={cn(
-        'rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2',
+        'rounded-full font-medium disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2',
         'focus-ring',
         'transition-all duration-200',
         variants[variant],

@@ -14,7 +14,7 @@ interface EmptyTimelineProps {
 }
 
 const EmptyTimeline: React.FC<EmptyTimelineProps> = ({ hasActiveFilters, onClearFilters }) => (
-  <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 py-16 text-center animate-fade-in">
+  <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-gray-200 bg-gray-50/50 py-16 text-center animate-fade-in">
     <div className="rounded-full bg-gray-100 p-4">
       <InboxIcon className="h-7 w-7 text-gray-400" />
     </div>
@@ -98,12 +98,13 @@ export const TimelineCard: React.FC<TimelineCardProps> = ({
             />
 
             {expanded && (
-              <ul id={controlsId} className="space-y-1 pt-1">
+              <ul id={controlsId} className="pt-1">
                 {group.items.map((event, index) => (
                   <TimelineEventItem
                     key={`${event.timestamp}-${event.event_type}-${index}`}
                     timelineEvent={event}
                     index={index + groupIndex * 1000}
+                    isLast={index === group.items.length - 1}
                   />
                 ))}
               </ul>

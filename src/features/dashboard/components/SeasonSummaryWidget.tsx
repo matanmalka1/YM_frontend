@@ -13,7 +13,7 @@ export const SeasonSummaryWidget: React.FC<SeasonSummaryWidgetProps> = ({ sideCo
   const { stats, isPending } = useSeasonSummary()
 
   if (isPending) {
-    return <div className="h-28 animate-pulse rounded-2xl bg-gray-100" />
+    return <div className="h-28 animate-pulse rounded-2xl bg-slate-100" />
   }
 
   if (!stats || stats.total === 0) {
@@ -25,26 +25,26 @@ export const SeasonSummaryWidget: React.FC<SeasonSummaryWidgetProps> = ({ sideCo
           <Link to="/tax/reports" className="group grid content-start">
             <div className="flex items-start justify-between gap-4">
               <div className="flex min-w-0 gap-3">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-50 text-primary-600">
                   <FilePlus className="h-5 w-5" />
                 </span>
                 <div className="min-w-0">
-                  <p className="truncate text-xs font-semibold text-gray-400">עונת הגשה {filingSeasonYear}</p>
-                  <h3 className="mt-1 text-xl font-bold text-gray-950">עדיין אין דוחות שנתיים לשנת המס {taxYear}</h3>
-                  <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-500">
+                  <p className="truncate text-xs font-semibold text-slate-400">עונת הגשה {filingSeasonYear}</p>
+                  <h3 className="mt-1 text-xl font-bold text-slate-900">עדיין אין דוחות שנתיים לשנת המס {taxYear}</h3>
+                  <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
                     לאחר יצירת הדוח הראשון יוצגו כאן התקדמות ההגשה, איחורים וסטטוסי עבודה.
                   </p>
                 </div>
               </div>
 
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700 transition-colors group-hover:bg-blue-100">
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary-50 px-3 py-1.5 text-xs font-bold text-primary-700 transition-colors group-hover:bg-primary-100">
                 דוח שנתי {taxYear}
                 <ArrowLeft className="h-3.5 w-3.5" />
               </span>
             </div>
 
-            <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-gray-100">
-              <div className="h-2 w-0 rounded-full bg-blue-500" />
+            <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-slate-100">
+              <div className="h-2 w-0 rounded-full bg-primary-500" />
             </div>
 
             <div className="mt-4 grid grid-cols-2 gap-3">
@@ -68,15 +68,15 @@ export const SeasonSummaryWidget: React.FC<SeasonSummaryWidgetProps> = ({ sideCo
         <Link to="/tax/reports" className="group grid content-start">
           <div className="mb-4 flex items-start justify-between gap-4">
             <div className="min-w-0">
-              <p className="truncate text-xs font-semibold text-gray-400">עונת הגשה {stats.filingSeasonYear}</p>
-              <h3 className="mt-1 text-xl font-bold text-gray-950">דוחות שנתיים לשנת המס {stats.taxYear}</h3>
-              <p className="mt-1 text-sm font-semibold text-gray-700">
+              <p className="truncate text-xs font-semibold text-slate-400">עונת הגשה {stats.filingSeasonYear}</p>
+              <h3 className="mt-1 text-xl font-bold text-slate-900">דוחות שנתיים לשנת המס {stats.taxYear}</h3>
+              <p className="mt-1 text-sm font-semibold text-slate-700">
                 {stats.done} / {stats.total} דוחות הוגשו
               </p>
             </div>
 
             <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
-              <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700 transition-colors group-hover:bg-blue-100">
+              <span className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-3 py-1.5 text-xs font-bold text-primary-700 transition-colors group-hover:bg-primary-100">
                 דוח שנתי {stats.taxYear}
                 <ArrowLeft className="h-3.5 w-3.5" />
               </span>
@@ -102,7 +102,7 @@ export const SeasonSummaryWidget: React.FC<SeasonSummaryWidgetProps> = ({ sideCo
             </div>
           </div>
 
-          <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
             <div
               className={cn('h-2 rounded-full transition-all duration-700', stats.progressColor)}
               style={{ width: `${stats.completionPct}%` }}
@@ -155,7 +155,7 @@ const SeasonStatusTile = ({
   const toneClasses = seasonStatusTileToneClasses[tone]
 
   return (
-    <div className={cn('relative min-w-0 overflow-hidden rounded-xl border px-4 py-3 shadow-sm', toneClasses.surface)}>
+    <div className={cn('relative min-w-0 overflow-hidden rounded-2xl border px-4 py-3 shadow-sm', toneClasses.surface)}>
       <div className={cn('absolute inset-y-3 right-0 w-1 rounded-l-full', toneClasses.accent)} />
       <div className="relative flex items-start justify-between gap-3">
         <div className="min-w-0">

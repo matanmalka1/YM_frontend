@@ -107,19 +107,17 @@ const QuickActionItem = ({
   const isLoading = action.command ? activeActionKey === action.command.uiKey : false
   const isDisabled = action.command ? activeActionKey !== null && !isLoading : false
   const content = (
-    <>
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-bold text-slate-950">{action.label}</p>
-        <p className="mt-1 truncate text-xs font-medium text-slate-500">{action.description}</p>
-      </div>
-      {isLoading && (
-        <span className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
+    <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
+      {isLoading ? (
+        <span className="h-5 w-5 animate-spin rounded-full border-2 border-primary-400 border-t-transparent" />
+      ) : (
+        <ChevronLeft className="h-5 w-5 text-primary-500" aria-hidden="true" />
       )}
-      {!isLoading && <ChevronLeft className="h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />}
-    </>
+      <p className="truncate text-sm font-bold text-slate-900">{action.label}</p>
+    </div>
   )
   const className = cn(
-    'flex w-full items-center gap-3 border-b border-slate-100 px-5 py-3 text-right transition-colors last:border-b-0 hover:bg-slate-50',
+    'flex aspect-square w-full items-center justify-center rounded-2xl border border-slate-100 bg-slate-50/60 p-4 transition-all hover:border-primary-100 hover:bg-primary-50/50',
     isDisabled && 'cursor-not-allowed opacity-50',
   )
 
@@ -130,6 +128,7 @@ const QuickActionItem = ({
         disabled={isDisabled || isLoading}
         onClick={() => onAction(action.command!)}
         className={className}
+        title={action.description}
       >
         {content}
       </button>
@@ -138,14 +137,14 @@ const QuickActionItem = ({
 
   if (action.modal) {
     return (
-      <button type="button" onClick={() => onOpenModal(action.modal!)} className={className}>
+      <button type="button" onClick={() => onOpenModal(action.modal!)} className={className} title={action.description}>
         {content}
       </button>
     )
   }
 
   return (
-    <Link to={action.href ?? '/'} className={className}>
+    <Link to={action.href ?? '/'} className={className} title={action.description}>
       {content}
     </Link>
   )
@@ -161,10 +160,10 @@ export const QuickActionsPanel = ({
 
   return (
     <DashboardPanel className="w-full">
-      <div className="border-b border-slate-100 px-5 py-3">
-        <DashboardSectionHeader title="פעולות מהירות" count={quickActions.length} tone="neutral" />
+      <div className="border-b border-slate-100 px-5 py-4">
+        <DashboardSectionHeader title="פעולות מהירות" tone="neutral" />
       </div>
-      <div>
+      <div className="grid grid-cols-2 gap-3 p-5">
         {quickActions.map((action) => (
           <QuickActionItem
             key={action.id}

@@ -71,7 +71,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
   const lastUpdated = lastEventTimestamp ? format(parseISO(lastEventTimestamp), 'd MMM HH:mm', { locale: he }) : null
 
   return (
-    <div className="rounded-2xl border border-gray-200/60 bg-white/95 shadow-sm backdrop-blur-sm overflow-hidden">
+    <div className="rounded-xl border border-gray-200/80 bg-white overflow-hidden">
       {/* ── Top row: search + controls ── */}
       <div className="flex flex-col gap-3 px-4 py-3 md:flex-row md:items-center border-b border-gray-100">
         {/* Search */}

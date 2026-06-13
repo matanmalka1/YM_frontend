@@ -36,11 +36,11 @@ const IconLabel: React.FC<{ icon: React.ReactNode; label: string; className?: st
 // ── Status transition ─────────────────────────────────────────────────────────
 
 const StatusTransition: React.FC<{ oldStatus: string; newStatus: string }> = ({ oldStatus, newStatus }) => (
-  <MetaRow className="bg-info-50 border-info-100 flex items-center gap-2">
-    <span className="px-1.5 py-0.5 rounded bg-info-100 text-info-700 font-medium text-[10px]">
+  <MetaRow className="bg-slate-50 border-slate-100 flex items-center gap-2">
+    <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-medium text-[10px]">
       {getTimelineStatusLabel(oldStatus)}
     </span>
-    <span className="text-info-400">←</span>
+    <span className="text-slate-400">←</span>
     <span className="px-1.5 py-0.5 rounded bg-positive-100 text-positive-700 font-medium text-[10px]">
       {getTimelineStatusLabel(newStatus)}
     </span>
@@ -81,20 +81,20 @@ const EventMetadata: React.FC<{ metadata: TimelineEventMetadata; eventType: stri
       )}
 
       {amount != null && (
-        <MetaRow className="bg-emerald-50 border-emerald-100">
+        <MetaRow className="bg-positive-50 border-positive-100">
           <MetaField label="סכום" value={`₪${Number(amount).toFixed(2)}`} />
         </MetaRow>
       )}
 
       {external_invoice_id != null && (
-        <MetaRow className="bg-orange-50 border-orange-100">
+        <MetaRow className="bg-warning-50 border-warning-100">
           <MetaField label="ספק" value={String(provider ?? 'לא ידוע')} />
           <MetaField label="ID חשבונית" value={String(external_invoice_id)} />
         </MetaRow>
       )}
 
       {eventType === 'annual_report_status_changed' && (from_status || to_status || tax_year || form_type || note) && (
-        <MetaRow className="bg-indigo-50 border-indigo-100">
+        <MetaRow className="bg-primary-50 border-primary-100">
           {tax_year != null && <MetaField label="שנת מס" value={String(tax_year)} />}
           {form_type && <MetaField label="טופס" value={form_type} />}
           {from_status && to_status && (
@@ -108,7 +108,7 @@ const EventMetadata: React.FC<{ metadata: TimelineEventMetadata; eventType: stri
       )}
 
       {SIGNATURE_EVENT_TYPES.has(eventType) && (signer_name || reason || notes) && (
-        <MetaRow className="bg-violet-50 border-violet-100">
+        <MetaRow className="bg-info-50 border-info-100">
           {signer_name && <MetaField label="חותם" value={signer_name} />}
           {reason && <MetaField label="סיבת דחייה" value={reason} />}
           {notes && <MetaField label="הערות" value={notes} />}
@@ -158,53 +158,55 @@ const RelatedIds: React.FC<{
 interface TimelineEventItemProps {
   timelineEvent: NormalizedTimelineEvent
   index: number
+  isLast: boolean
 }
 
-export const TimelineEventItem: React.FC<TimelineEventItemProps> = ({ timelineEvent: ev }) => {
+export const TimelineEventItem: React.FC<TimelineEventItemProps> = ({ timelineEvent: ev, isLast }) => {
   const colors = getEventColor(ev.event_type)
   const displayDate = ev.isDateOnly ? formatTimelineDate(ev.displayTimestamp) : formatTimestamp(ev.displayTimestamp)
   const isQuiet = ev.importance === 'quiet'
 
   return (
-    <li className="animate-fade-in">
+    <li className="relative flex gap-3 animate-fade-in">
+      {/* Connector rail */}
+      <div className="relative flex w-7 flex-shrink-0 flex-col items-center">
+        <span
+          className={cn(
+            'z-10 mt-1 flex h-7 w-7 items-center justify-center rounded-full border-2 bg-white',
+            isQuiet ? 'border-gray-200 text-gray-400' : cn(colors.dotBorder, colors.iconColor),
+          )}
+        >
+          {getEventIcon(ev.event_type)}
+        </span>
+        {!isLast && <span className="mt-1 w-px flex-1 bg-gray-200" />}
+      </div>
+
+      {/* Content */}
       <div
         className={cn(
-          'rounded-md border border-gray-100 bg-white/95 overflow-hidden',
-          'border-r-2',
-          colors.cardBorder,
-          'transition-colors duration-150 hover:border-gray-200 hover:shadow-sm',
+          'mb-3 flex-1 rounded-xl border border-gray-200/80 bg-white px-3 py-2.5 space-y-1.5',
+          'transition-shadow duration-150 hover:shadow-elevation-1',
           isQuiet && 'bg-gray-50/60',
         )}
       >
-        <div className="px-3 py-2 space-y-1.5">
-          {/* Header: type badge + timestamp */}
-          <div className="flex items-center justify-between gap-2">
-            <span
-              className={cn(
-                'inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-semibold',
-                isQuiet ? 'bg-gray-100 text-gray-600' : cn(colors.badgeBg, colors.badgeText),
-              )}
-            >
-              <span className={isQuiet ? 'text-gray-500' : colors.iconColor}>{getEventIcon(ev.event_type)}</span>
-              {ev.title}
-            </span>
+        <div className="flex items-center justify-between gap-2">
+          <span className={cn('text-sm font-semibold', isQuiet ? 'text-gray-500' : 'text-gray-900')}>{ev.title}</span>
 
-            <time
-              dateTime={ev.displayTimestamp}
-              className="text-[11px] text-gray-400 font-mono tabular-nums flex-shrink-0"
-            >
-              {displayDate}
-            </time>
-          </div>
-
-          {ev.secondary && (
-            <p className={cn('text-xs leading-snug', isQuiet ? 'text-gray-400' : 'text-gray-600')}>{ev.secondary}</p>
-          )}
-
-          <RelatedIds binderId={ev.binder_id} chargeId={ev.charge_id} relatedEntity={ev.relatedEntity} />
-
-          {ev.metadata && <EventMetadata metadata={ev.metadata} eventType={ev.event_type} />}
+          <time
+            dateTime={ev.displayTimestamp}
+            className="text-[11px] text-gray-400 tabular-nums flex-shrink-0"
+          >
+            {displayDate}
+          </time>
         </div>
+
+        {ev.secondary && (
+          <p className={cn('text-xs leading-snug', isQuiet ? 'text-gray-400' : 'text-gray-600')}>{ev.secondary}</p>
+        )}
+
+        <RelatedIds binderId={ev.binder_id} chargeId={ev.charge_id} relatedEntity={ev.relatedEntity} />
+
+        {ev.metadata && <EventMetadata metadata={ev.metadata} eventType={ev.event_type} />}
       </div>
     </li>
   )
