@@ -1249,7 +1249,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/clients/{client_id}": {
+    "/api/v1/clients/{client_record_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1258,23 +1258,23 @@ export interface paths {
         };
         /**
          * Get Client
-         * @description Get client by ID (client_id = ClientRecord.id).
+         * @description Get client by ID (client_record_id = ClientRecord.id).
          */
-        get: operations["get_client_api_v1_clients__client_id__get"];
+        get: operations["get_client_api_v1_clients__client_record_id__get"];
         put?: never;
         post?: never;
         /**
          * Delete Client
          * @description Soft-delete a client (ADVISOR only).
          */
-        delete: operations["delete_client_api_v1_clients__client_id__delete"];
+        delete: operations["delete_client_api_v1_clients__client_record_id__delete"];
         options?: never;
         head?: never;
         /**
          * Update Client
          * @description Update client identity fields by ClientRecord.id.
          */
-        patch: operations["update_client_api_v1_clients__client_id__patch"];
+        patch: operations["update_client_api_v1_clients__client_record_id__patch"];
         trace?: never;
     };
     "/api/v1/clients/conflict/{id_number}": {
@@ -1297,7 +1297,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/clients/{client_id}/restore": {
+    "/api/v1/clients/{client_record_id}/restore": {
         parameters: {
             query?: never;
             header?: never;
@@ -1310,14 +1310,14 @@ export interface paths {
          * Restore Client
          * @description Restore a soft-deleted client (ADVISOR only).
          */
-        post: operations["restore_client_api_v1_clients__client_id__restore_post"];
+        post: operations["restore_client_api_v1_clients__client_record_id__restore_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/clients/{client_id}/businesses": {
+    "/api/v1/clients/{client_record_id}/businesses": {
         parameters: {
             query?: never;
             header?: never;
@@ -1325,20 +1325,20 @@ export interface paths {
             cookie?: never;
         };
         /** List Client Businesses */
-        get: operations["list_client_businesses_api_v1_clients__client_id__businesses_get"];
+        get: operations["list_client_businesses_api_v1_clients__client_record_id__businesses_get"];
         put?: never;
         /**
          * Create Business
          * @description יצירת עסק חדש תחת לקוח קיים (ADVISOR only).
          */
-        post: operations["create_business_api_v1_clients__client_id__businesses_post"];
+        post: operations["create_business_api_v1_clients__client_record_id__businesses_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/clients/{client_id}/businesses/{business_id}": {
+    "/api/v1/clients/{client_record_id}/businesses/{business_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1346,18 +1346,18 @@ export interface paths {
             cookie?: never;
         };
         /** Get Business */
-        get: operations["get_business_api_v1_clients__client_id__businesses__business_id__get"];
+        get: operations["get_business_api_v1_clients__client_record_id__businesses__business_id__get"];
         put?: never;
         post?: never;
         /** Delete Business */
-        delete: operations["delete_business_api_v1_clients__client_id__businesses__business_id__delete"];
+        delete: operations["delete_business_api_v1_clients__client_record_id__businesses__business_id__delete"];
         options?: never;
         head?: never;
         /** Update Business */
-        patch: operations["update_business_api_v1_clients__client_id__businesses__business_id__patch"];
+        patch: operations["update_business_api_v1_clients__client_record_id__businesses__business_id__patch"];
         trace?: never;
     };
-    "/api/v1/clients/{client_id}/businesses/{business_id}/restore": {
+    "/api/v1/clients/{client_record_id}/businesses/{business_id}/restore": {
         parameters: {
             query?: never;
             header?: never;
@@ -1367,14 +1367,14 @@ export interface paths {
         get?: never;
         put?: never;
         /** Restore Business */
-        post: operations["restore_business_api_v1_clients__client_id__businesses__business_id__restore_post"];
+        post: operations["restore_business_api_v1_clients__client_record_id__businesses__business_id__restore_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/clients/{client_id}/status-card": {
+    "/api/v1/clients/{client_record_id}/status-card": {
         parameters: {
             query?: never;
             header?: never;
@@ -1385,7 +1385,7 @@ export interface paths {
          * Get Client Status Card
          * @description Comprehensive status card for a client — VAT, annual report, charges, advances, binders, documents.
          */
-        get: operations["get_client_status_card_api_v1_clients__client_id__status_card_get"];
+        get: operations["get_client_status_card_api_v1_clients__client_record_id__status_card_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2865,7 +2865,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/clients/{client_id}/notes": {
+    "/api/v1/clients/{client_record_id}/notes": {
         parameters: {
             query?: never;
             header?: never;
@@ -2873,17 +2873,17 @@ export interface paths {
             cookie?: never;
         };
         /** List Notes */
-        get: operations["list_notes_api_v1_clients__client_id__notes_get"];
+        get: operations["list_notes_api_v1_clients__client_record_id__notes_get"];
         put?: never;
         /** Add Note */
-        post: operations["add_note_api_v1_clients__client_id__notes_post"];
+        post: operations["add_note_api_v1_clients__client_record_id__notes_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/clients/{client_id}/notes/{note_id}": {
+    "/api/v1/clients/{client_record_id}/notes/{note_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2894,14 +2894,14 @@ export interface paths {
         put?: never;
         post?: never;
         /** Delete Note */
-        delete: operations["delete_note_api_v1_clients__client_id__notes__note_id__delete"];
+        delete: operations["delete_note_api_v1_clients__client_record_id__notes__note_id__delete"];
         options?: never;
         head?: never;
         /** Update Note */
-        patch: operations["update_note_api_v1_clients__client_id__notes__note_id__patch"];
+        patch: operations["update_note_api_v1_clients__client_record_id__notes__note_id__patch"];
         trace?: never;
     };
-    "/api/v1/clients/{client_id}/businesses/{business_id}/notes": {
+    "/api/v1/clients/{client_record_id}/businesses/{business_id}/notes": {
         parameters: {
             query?: never;
             header?: never;
@@ -2909,17 +2909,17 @@ export interface paths {
             cookie?: never;
         };
         /** List Notes */
-        get: operations["list_notes_api_v1_clients__client_id__businesses__business_id__notes_get"];
+        get: operations["list_notes_api_v1_clients__client_record_id__businesses__business_id__notes_get"];
         put?: never;
         /** Add Note */
-        post: operations["add_note_api_v1_clients__client_id__businesses__business_id__notes_post"];
+        post: operations["add_note_api_v1_clients__client_record_id__businesses__business_id__notes_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/clients/{client_id}/businesses/{business_id}/notes/{note_id}": {
+    "/api/v1/clients/{client_record_id}/businesses/{business_id}/notes/{note_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2930,11 +2930,11 @@ export interface paths {
         put?: never;
         post?: never;
         /** Delete Note */
-        delete: operations["delete_note_api_v1_clients__client_id__businesses__business_id__notes__note_id__delete"];
+        delete: operations["delete_note_api_v1_clients__client_record_id__businesses__business_id__notes__note_id__delete"];
         options?: never;
         head?: never;
         /** Update Note */
-        patch: operations["update_note_api_v1_clients__client_id__businesses__business_id__notes__note_id__patch"];
+        patch: operations["update_note_api_v1_clients__client_record_id__businesses__business_id__notes__note_id__patch"];
         trace?: never;
     };
     "/api/v1/audit/{entity_type}/{entity_id}": {
@@ -12973,14 +12973,14 @@ export interface operations {
             };
         };
     };
-    get_client_api_v1_clients__client_id__get: {
+    get_client_api_v1_clients__client_record_id__get: {
         parameters: {
             query?: {
                 tax_year?: number | null;
             };
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
             };
             cookie?: never;
         };
@@ -13033,12 +13033,12 @@ export interface operations {
             };
         };
     };
-    delete_client_api_v1_clients__client_id__delete: {
+    delete_client_api_v1_clients__client_record_id__delete: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
             };
             cookie?: never;
         };
@@ -13098,12 +13098,12 @@ export interface operations {
             };
         };
     };
-    update_client_api_v1_clients__client_id__patch: {
+    update_client_api_v1_clients__client_record_id__patch: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
             };
             cookie?: never;
         };
@@ -13227,12 +13227,12 @@ export interface operations {
             };
         };
     };
-    restore_client_api_v1_clients__client_id__restore_post: {
+    restore_client_api_v1_clients__client_record_id__restore_post: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
             };
             cookie?: never;
         };
@@ -13294,7 +13294,7 @@ export interface operations {
             };
         };
     };
-    list_client_businesses_api_v1_clients__client_id__businesses_get: {
+    list_client_businesses_api_v1_clients__client_record_id__businesses_get: {
         parameters: {
             query?: {
                 page?: number;
@@ -13302,7 +13302,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
             };
             cookie?: never;
         };
@@ -13355,12 +13355,12 @@ export interface operations {
             };
         };
     };
-    create_business_api_v1_clients__client_id__businesses_post: {
+    create_business_api_v1_clients__client_record_id__businesses_post: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
             };
             cookie?: never;
         };
@@ -13435,12 +13435,12 @@ export interface operations {
             };
         };
     };
-    get_business_api_v1_clients__client_id__businesses__business_id__get: {
+    get_business_api_v1_clients__client_record_id__businesses__business_id__get: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
                 business_id: number;
             };
             cookie?: never;
@@ -13494,12 +13494,12 @@ export interface operations {
             };
         };
     };
-    delete_business_api_v1_clients__client_id__businesses__business_id__delete: {
+    delete_business_api_v1_clients__client_record_id__businesses__business_id__delete: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
                 business_id: number;
             };
             cookie?: never;
@@ -13560,12 +13560,12 @@ export interface operations {
             };
         };
     };
-    update_business_api_v1_clients__client_id__businesses__business_id__patch: {
+    update_business_api_v1_clients__client_record_id__businesses__business_id__patch: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
                 business_id: number;
             };
             cookie?: never;
@@ -13641,12 +13641,12 @@ export interface operations {
             };
         };
     };
-    restore_business_api_v1_clients__client_id__businesses__business_id__restore_post: {
+    restore_business_api_v1_clients__client_record_id__businesses__business_id__restore_post: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
                 business_id: number;
             };
             cookie?: never;
@@ -13709,14 +13709,14 @@ export interface operations {
             };
         };
     };
-    get_client_status_card_api_v1_clients__client_id__status_card_get: {
+    get_client_status_card_api_v1_clients__client_record_id__status_card_get: {
         parameters: {
             query?: {
                 year?: number | null;
             };
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
             };
             cookie?: never;
         };
@@ -19484,7 +19484,7 @@ export interface operations {
             };
         };
     };
-    list_notes_api_v1_clients__client_id__notes_get: {
+    list_notes_api_v1_clients__client_record_id__notes_get: {
         parameters: {
             query?: {
                 page?: number;
@@ -19492,7 +19492,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
             };
             cookie?: never;
         };
@@ -19545,12 +19545,12 @@ export interface operations {
             };
         };
     };
-    add_note_api_v1_clients__client_id__notes_post: {
+    add_note_api_v1_clients__client_record_id__notes_post: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
             };
             cookie?: never;
         };
@@ -19616,12 +19616,12 @@ export interface operations {
             };
         };
     };
-    delete_note_api_v1_clients__client_id__notes__note_id__delete: {
+    delete_note_api_v1_clients__client_record_id__notes__note_id__delete: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
                 note_id: number;
             };
             cookie?: never;
@@ -19673,12 +19673,12 @@ export interface operations {
             };
         };
     };
-    update_note_api_v1_clients__client_id__notes__note_id__patch: {
+    update_note_api_v1_clients__client_record_id__notes__note_id__patch: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
                 note_id: number;
             };
             cookie?: never;
@@ -19745,7 +19745,7 @@ export interface operations {
             };
         };
     };
-    list_notes_api_v1_clients__client_id__businesses__business_id__notes_get: {
+    list_notes_api_v1_clients__client_record_id__businesses__business_id__notes_get: {
         parameters: {
             query?: {
                 page?: number;
@@ -19753,7 +19753,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
                 business_id: number;
             };
             cookie?: never;
@@ -19807,12 +19807,12 @@ export interface operations {
             };
         };
     };
-    add_note_api_v1_clients__client_id__businesses__business_id__notes_post: {
+    add_note_api_v1_clients__client_record_id__businesses__business_id__notes_post: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
                 business_id: number;
             };
             cookie?: never;
@@ -19879,12 +19879,12 @@ export interface operations {
             };
         };
     };
-    delete_note_api_v1_clients__client_id__businesses__business_id__notes__note_id__delete: {
+    delete_note_api_v1_clients__client_record_id__businesses__business_id__notes__note_id__delete: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
                 business_id: number;
                 note_id: number;
             };
@@ -19937,12 +19937,12 @@ export interface operations {
             };
         };
     };
-    update_note_api_v1_clients__client_id__businesses__business_id__notes__note_id__patch: {
+    update_note_api_v1_clients__client_record_id__businesses__business_id__notes__note_id__patch: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                client_id: number;
+                client_record_id: number;
                 business_id: number;
                 note_id: number;
             };
