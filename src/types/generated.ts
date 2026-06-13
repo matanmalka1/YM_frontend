@@ -2581,6 +2581,25 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/vat/work-items/{item_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get Work Item */
+    get: operations['get_work_item_api_v1_vat_work_items__item_id__get']
+    put?: never
+    post?: never
+    /** Delete Work Item */
+    delete: operations['delete_work_item_api_v1_vat_work_items__item_id__delete']
+    options?: never
+    head?: never
+    /** Update Work Item Metadata */
+    patch: operations['update_work_item_metadata_api_v1_vat_work_items__item_id__patch']
+    trace?: never
+  }
   '/api/v1/vat/work-items/{item_id}/invoices': {
     parameters: {
       query?: never
@@ -2772,23 +2791,6 @@ export interface paths {
     }
     /** Get Status Summary */
     get: operations['get_status_summary_api_v1_vat_work_items_status_summary_get']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/v1/vat/work-items/{item_id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Get Work Item */
-    get: operations['get_work_item_api_v1_vat_work_items__item_id__get']
     put?: never
     post?: never
     delete?: never
@@ -8500,6 +8502,13 @@ export interface components {
        * @default 0
        */
       canceled: number
+    }
+    /** VatWorkItemUpdateRequest */
+    VatWorkItemUpdateRequest: {
+      /** Assigned To */
+      assigned_to?: number | null
+      /** Pending Materials Note */
+      pending_materials_note?: string | null
     }
     /** WorkQueueItem */
     WorkQueueItem: {
@@ -18594,6 +18603,200 @@ export interface operations {
       }
     }
   }
+  get_work_item_api_v1_vat_work_items__item_id__get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        item_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VatWorkItemResponse']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description פריט עבודה למע"מ לא נמצא */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  delete_work_item_api_v1_vat_work_items__item_id__delete: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        item_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description לא ניתן לעדכן או למחוק פריט עבודה למע"מ במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description פריט עבודה למע"מ לא נמצא */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  update_work_item_metadata_api_v1_vat_work_items__item_id__patch: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        item_id: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['VatWorkItemUpdateRequest']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VatWorkItemResponse']
+        }
+      }
+      /** @description לא ניתן לעדכן או למחוק פריט עבודה למע"מ במצב הנוכחי */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description נדרש אימות */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description אין הרשאה לביצוע הפעולה */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description פריט עבודה למע"מ לא נמצא */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
   list_invoices_api_v1_vat_work_items__item_id__invoices_get: {
     parameters: {
       query?: {
@@ -19366,64 +19569,6 @@ export interface operations {
       }
       /** @description אין הרשאה לביצוע הפעולה */
       403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HTTPValidationError']
-        }
-      }
-    }
-  }
-  get_work_item_api_v1_vat_work_items__item_id__get: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        item_id: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['VatWorkItemResponse']
-        }
-      }
-      /** @description נדרש אימות */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description אין הרשאה לביצוע הפעולה */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description פריט עבודה למע"מ לא נמצא */
-      404: {
         headers: {
           [name: string]: unknown
         }

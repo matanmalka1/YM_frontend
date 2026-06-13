@@ -1,19 +1,18 @@
 import { api } from '@/api/client'
+import { toQueryParams } from '@/api/queryParams'
 import { CORRESPONDENCE_ENDPOINTS } from './endpoints'
 import type {
   CorrespondenceEntry,
   CorrespondenceListResponse,
   CreateCorrespondencePayload,
+  ListCorrespondenceParams,
   UpdateCorrespondencePayload,
 } from './contracts'
 
 export const correspondenceApi = {
-  list: async (
-    clientId: number,
-    params?: { page?: number; page_size?: number; business_id?: number },
-  ): Promise<CorrespondenceListResponse> => {
+  list: async (clientId: number, params?: ListCorrespondenceParams): Promise<CorrespondenceListResponse> => {
     const response = await api.get<CorrespondenceListResponse>(CORRESPONDENCE_ENDPOINTS.correspondenceList(clientId), {
-      params,
+      params: params ? toQueryParams(params) : undefined,
     })
     return response.data
   },

@@ -57,7 +57,9 @@ export const bindersApi = {
   },
 
   markReadyForHandover: async (binderId: number): Promise<BinderReadyForHandoverResponse> => {
-    const response = await api.post<BinderReadyForHandoverResponse>(BINDER_ENDPOINTS.binderMarkReadyForHandover(binderId))
+    const response = await api.post<BinderReadyForHandoverResponse>(
+      BINDER_ENDPOINTS.binderMarkReadyForHandover(binderId),
+    )
     return response.data
   },
 

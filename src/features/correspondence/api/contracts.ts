@@ -12,6 +12,7 @@ export interface CorrespondenceEntry {
   occurred_at: string
   created_by: number
   created_at: string
+  updated_at: string | null
 }
 
 export interface CreateCorrespondencePayload {
@@ -33,3 +34,14 @@ export interface UpdateCorrespondencePayload {
 }
 
 export type CorrespondenceListResponse = PaginatedResponse<CorrespondenceEntry>
+
+export interface ListCorrespondenceParams {
+  page?: number
+  page_size?: number
+  business_id?: number | null
+  correspondence_type?: CorrespondenceType | null
+  contact_id?: number | null
+  occurred_after?: string | null
+  occurred_before?: string | null
+  order?: 'asc' | 'desc'
+}

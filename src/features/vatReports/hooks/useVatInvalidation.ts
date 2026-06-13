@@ -17,7 +17,7 @@ const getCachedClientRecordId = (queryClient: QueryClient, workItemId: number | 
 const invalidateVatLists = (queryClient: QueryClient) =>
   Promise.all([
     queryClient.invalidateQueries({ queryKey: vatReportsQK.lists() }),
-    queryClient.invalidateQueries({ queryKey: vatReportsQK.groups() }),
+    queryClient.invalidateQueries({ queryKey: vatReportsQK.groupsRoot() }),
   ])
 
 export const invalidateVatWorkItem = async (
@@ -33,11 +33,16 @@ export const invalidateVatWorkItem = async (
       ? queryClient.invalidateQueries({ queryKey: vatReportsQK.invoices(workItemId) })
       : Promise.resolve(),
     workItemId && includeAudit
-      ? queryClient.invalidateQueries({ queryKey: vatReportsQK.audit(workItemId) })
+      ? queryClient.invalidateQueries({ queryKey: vatReportsQK.auditRoot(workItemId) })
       : Promise.resolve(),
     resolvedClientRecordId
       ? queryClient.invalidateQueries({
-          queryKey: vatReportsQK.clientSummary(resolvedClientRecordId),
+          queryKey: vatReportsQK.clientSummaryRoot(resolvedClientRecordId),
+        })
+      : Promise.resolve(),
+    resolvedClientRecordId
+      ? queryClient.invalidateQueries({
+          queryKey: vatReportsQK.forClient(resolvedClientRecordId),
         })
       : Promise.resolve(),
   ])

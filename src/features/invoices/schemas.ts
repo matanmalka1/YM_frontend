@@ -36,10 +36,7 @@ export const getInvoiceAttachDefaultValues = (): InvoiceAttachFormValues => {
   }
 }
 
-export const toInvoiceAttachPayload = (
-  chargeId: number,
-  values: InvoiceAttachFormValues,
-): InvoiceAttachRequest => ({
+export const toInvoiceAttachPayload = (chargeId: number, values: InvoiceAttachFormValues): InvoiceAttachRequest => ({
   charge_id: chargeId,
   provider: values.provider.trim(),
   external_invoice_id: values.external_invoice_id.trim(),

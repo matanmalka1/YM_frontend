@@ -137,6 +137,10 @@ export interface CreateVatWorkItemPayload {
   pending_materials_note?: string | null
 }
 
+export type UpdateVatWorkItemPayload =
+  | { assigned_to: number | null; pending_materials_note?: string | null }
+  | { assigned_to?: number | null; pending_materials_note: string | null }
+
 export interface VatInvoiceResponse {
   id: number
   work_item_id: number

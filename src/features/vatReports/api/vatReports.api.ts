@@ -15,6 +15,7 @@ import type {
   VatWorkItemStatusSummaryResponse,
   VatClientWorkItemsParams,
   CreateVatWorkItemPayload,
+  UpdateVatWorkItemPayload,
   VatPeriodOptionsResponse,
   VatInvoiceResponse,
   VatInvoiceListResponse,
@@ -55,6 +56,15 @@ export const vatReportsApi = {
   create: async (payload: CreateVatWorkItemPayload): Promise<VatWorkItemResponse> => {
     const response = await api.post<VatWorkItemResponse>(VAT_ENDPOINTS.vatWorkItems, payload)
     return response.data
+  },
+
+  updateWorkItem: async (id: number, payload: UpdateVatWorkItemPayload): Promise<VatWorkItemResponse> => {
+    const response = await api.patch<VatWorkItemResponse>(VAT_ENDPOINTS.vatWorkItemById(id), payload)
+    return response.data
+  },
+
+  deleteWorkItem: async (id: number): Promise<void> => {
+    await api.delete(VAT_ENDPOINTS.vatWorkItemById(id))
   },
 
   getPeriodOptions: async (clientId: number, year?: number): Promise<VatPeriodOptionsResponse> => {

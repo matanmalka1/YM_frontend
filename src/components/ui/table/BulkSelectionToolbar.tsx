@@ -31,9 +31,7 @@ export const BulkSelectionToolbar: React.FC<BulkSelectionToolbarProps> = ({
 
       <div className="h-4 w-px bg-primary-200" />
 
-      <div className="flex flex-wrap items-center gap-2">
-        {children}
-      </div>
+      <div className="flex flex-wrap items-center gap-2">{children}</div>
 
       <div className="mr-auto">
         <button
@@ -48,11 +46,7 @@ export const BulkSelectionToolbar: React.FC<BulkSelectionToolbarProps> = ({
       </div>
     </div>
 
-    {extra && (
-      <div className="border-t border-primary-200/70 pt-3">
-        {extra}
-      </div>
-    )}
+    {extra && <div className="border-t border-primary-200/70 pt-3">{extra}</div>}
   </div>
 )
 

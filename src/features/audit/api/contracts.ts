@@ -16,6 +16,10 @@ export interface EntityAuditLogEntry {
 export interface EntityAuditTrailParams {
   page?: number
   page_size?: number
+  action?: string | null
+  user_id?: number | null
+  created_after?: string | null
+  created_before?: string | null
 }
 
 export interface EntityAuditTrailResponse {

@@ -1,4 +1,3 @@
-import type { Dispatch, SetStateAction } from 'react'
 import { Button } from '@/components/ui/primitives/Button'
 import { formatDateTime } from '@/utils/utils'
 
@@ -18,7 +17,7 @@ type AuditTrailTableProps<TEntry extends AuditTrailTableEntry> = {
   maxPage: number
   safePage: number
   isFetching: boolean
-  setPage: Dispatch<SetStateAction<number>>
+  setPage: (page: number) => void
   detailsClassName?: string
 }
 
@@ -75,7 +74,7 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
           type="button"
           variant="ghost"
           size="sm"
-          onClick={() => setPage((currentPage) => Math.max(0, currentPage - 1))}
+          onClick={() => setPage(Math.max(0, safePage - 1))}
           disabled={safePage === 0 || isFetching}
         >
           הקודם
@@ -85,7 +84,7 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
           type="button"
           variant="ghost"
           size="sm"
-          onClick={() => setPage((currentPage) => Math.min(maxPage, currentPage + 1))}
+          onClick={() => setPage(Math.min(maxPage, safePage + 1))}
           disabled={safePage >= maxPage || isFetching}
         >
           הבא

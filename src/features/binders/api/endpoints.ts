@@ -12,7 +12,8 @@ export const BINDER_ENDPOINTS = {
   binderReceive: '/binders/receive',
   binderAudit: (binderId: number | string) => `/binders/${binderId}/audit`,
   binderIntakes: (binderId: number | string) => `/binders/${binderId}/intakes`,
-  binderIntakeById: (binderId: number | string, intakeId: number | string) => `/binders/${binderId}/intakes/${intakeId}`,
+  binderIntakeById: (binderId: number | string, intakeId: number | string) =>
+    `/binders/${binderId}/intakes/${intakeId}`,
   bindersOpen: '/binders/open',
   clientBinders: (clientId: number | string) => `/clients/${clientId}/binders`,
 } as const
