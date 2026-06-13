@@ -60,7 +60,7 @@ export const NotificationsPage: React.FC = () => {
   const { searchParams, setFilter, setFilters, setPage: setUrlPage } = useSearchParamFilters()
 
   const page = parsePositiveInt(searchParams.get('page'), 1)
-  const pageSize = parsePositiveInt(searchParams.get('page_size'), 25) as 25 | 50
+  const pageSize = parsePositiveInt(searchParams.get('page_size'), 25)
   const trigger = (searchParams.get('trigger') ?? '') as NotificationTrigger | ''
   const status = (searchParams.get('status') ?? '') as NotificationStatus | ''
   const dateFrom = searchParams.get('created_after') ?? ''

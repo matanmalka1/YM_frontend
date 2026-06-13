@@ -118,7 +118,7 @@ export interface ListNotificationsParams {
   client_record_id?: number
   business_id?: number
   page?: number
-  page_size?: 25 | 50
+  page_size?: number
   status?: NotificationStatus | ''
   trigger?: NotificationTrigger | ''
   channel?: NotificationChannel | ''

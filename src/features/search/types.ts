@@ -1,5 +1,3 @@
-import type { SearchParams } from './api'
-
 export interface SearchFilters {
   search: string
   client_id: string
