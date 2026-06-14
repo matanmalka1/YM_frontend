@@ -8,12 +8,13 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
   workItem,
   isAdvisor,
   isLoading,
+  disabled = false,
   onMaterialsComplete,
   onReadyForReview,
   onFile,
   onSendBack,
 }) => {
-  const closed = isClientClosed(workItem.client_status)
+  const actionsDisabled = isClientClosed(workItem.client_status) || disabled
   const actions = workItem.available_actions
   const showMaterialsComplete = canMarkMaterialsComplete(actions)
   const showReadyForReview = canMarkReadyForReview(actions)
@@ -25,19 +26,25 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
   return (
     <div className="flex flex-wrap items-center gap-2" dir="rtl">
       {showMaterialsComplete && (
-        <Button variant="primary" size="sm" isLoading={isLoading} disabled={closed} onClick={onMaterialsComplete}>
+        <Button
+          variant="primary"
+          size="sm"
+          isLoading={isLoading}
+          disabled={actionsDisabled}
+          onClick={onMaterialsComplete}
+        >
           <PackageCheck className="h-4 w-4" />
           אישור קבלת חומרים
         </Button>
       )}
       {showReadyForReview && (
-        <Button variant="primary" size="sm" isLoading={isLoading} disabled={closed} onClick={onReadyForReview}>
+        <Button variant="primary" size="sm" isLoading={isLoading} disabled={actionsDisabled} onClick={onReadyForReview}>
           <Send className="h-4 w-4" />
           שלח לבדיקה
         </Button>
       )}
       {showFile && (
-        <Button variant="primary" size="sm" isLoading={isLoading} disabled={closed} onClick={onFile}>
+        <Button variant="primary" size="sm" isLoading={isLoading} disabled={actionsDisabled} onClick={onFile}>
           <Send className="h-4 w-4" />
           הגש מע&quot;מ
         </Button>
@@ -47,7 +54,7 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
           variant="outline"
           size="sm"
           isLoading={isLoading}
-          disabled={closed}
+          disabled={actionsDisabled}
           onClick={onSendBack}
           className="border-warning-200 bg-warning-50 text-warning-700 hover:bg-warning-100"
         >

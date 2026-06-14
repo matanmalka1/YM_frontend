@@ -23,13 +23,17 @@ export const VatInvoiceTab: React.FC<VatInvoiceTabProps> = ({
   const [categoryFilter, setCategoryFilter] = useState('')
 
   const isExpense = invoiceType === 'expense'
-  const filtered = invoices
-    .filter((i) => i.invoice_type === invoiceType)
-    .filter((i) => !isExpense || !categoryFilter || i.expense_category === categoryFilter)
+  const byType = invoices.filter((i) => i.invoice_type === invoiceType)
+  const filtered = byType.filter((i) => !isExpense || !categoryFilter || i.expense_category === categoryFilter)
 
   const title = isExpense ? 'תשומות (מע"מ תשומות)' : 'עסקאות (מע"מ עסקאות)'
   const borderColor = isExpense ? 'border-r-warning-400' : 'border-r-positive-400'
-  const emptyMessage = isExpense ? 'עדיין לא הוספו חשבוניות תשומות' : 'עדיין לא הוספו חשבוניות עסקאות'
+  const noResultsForFilter = byType.length > 0 && filtered.length === 0
+  const emptyMessage = noResultsForFilter
+    ? 'אין חשבוניות בקטגוריה זו'
+    : isExpense
+      ? 'עדיין לא הוספו חשבוניות תשומות'
+      : 'עדיין לא הוספו חשבוניות עסקאות'
 
   return (
     <div dir="rtl">
@@ -52,6 +56,7 @@ export const VatInvoiceTab: React.FC<VatInvoiceTabProps> = ({
           workItemId={workItemId}
           sectionType={invoiceType}
           emptyMessage={emptyMessage}
+          emptyHint={noResultsForFilter ? undefined : "לחץ על 'הוסף חשבונית' כדי להוסיף"}
         />
         {canEdit && (
           <div className="mt-3">

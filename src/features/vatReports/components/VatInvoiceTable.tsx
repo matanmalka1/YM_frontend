@@ -14,6 +14,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
   workItemId,
   sectionType,
   emptyMessage,
+  emptyHint,
 }) => {
   const { deleteInvoice, isDeleting } = useDeleteInvoice(workItemId)
   const { updateInvoice, isUpdating } = useUpdateInvoice(workItemId)
@@ -37,7 +38,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
       <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed border-gray-200 bg-gray-50/50 py-10 text-center">
         <Receipt className="h-8 w-8 text-gray-300" />
         <p className="text-sm font-medium text-gray-400">{emptyMessage ?? 'אין חשבוניות עדיין'}</p>
-        <p className="text-xs text-gray-300">לחץ על &apos;הוסף חשבונית&apos; כדי להוסיף</p>
+        {emptyHint && <p className="text-xs text-gray-300">{emptyHint}</p>}
       </div>
     )
   }

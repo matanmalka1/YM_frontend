@@ -52,9 +52,8 @@ const AlertBanner: React.FC<{
 
 export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ workItem, onFilingPendingChange }) => {
   const { isAdvisor } = useRole()
-  const { handleMaterialsComplete, handleReadyForReview, handleSendBack, isLoading } = useVatWorkItemActions(
-    workItem.id,
-  )
+  const { handleMaterialsComplete, handleReadyForReview, handleSendBack, isLoading, isCoolingDown } =
+    useVatWorkItemActions(workItem.id)
   const [showSendBack, setShowSendBack] = useState(false)
   const [showFileModal, setShowFileModal] = useState(false)
   const [showNotificationModal, setShowNotificationModal] = useState(false)
@@ -165,6 +164,7 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
               workItem={workItem}
               isAdvisor={isAdvisor}
               isLoading={isLoading}
+              disabled={isCoolingDown}
               onMaterialsComplete={handleMaterialsComplete}
               onReadyForReview={handleReadyForReview}
               onFile={() => setShowFileModal(true)}

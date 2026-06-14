@@ -73,6 +73,7 @@ export interface VatActionButtonsProps {
   workItem: VatWorkItemResponse
   isAdvisor: boolean
   isLoading: boolean
+  disabled?: boolean
   onMaterialsComplete: () => void
   onReadyForReview: () => void
   onFile: () => void
@@ -116,6 +117,7 @@ export interface VatInvoiceTableProps {
   workItemId: number
   sectionType: 'income' | 'expense'
   emptyMessage?: string
+  emptyHint?: string
 }
 
 export interface VatWorkItemRowActionsProps {

@@ -86,5 +86,11 @@ export const formatVatHistoryDetails = (entry: VatAuditLogResponse): string => {
   const overrideDetails = formatVatOverride(entry.old_value, entry.new_value)
   if (entry.action === 'vat_override' && overrideDetails) return overrideDetails
 
+  if ((entry.action === 'filed' || entry.action === 'vat_calculated') && entry.new_value !== null) {
+    const rawValue = entry.new_value.trim()
+    const numeric = Number(rawValue)
+    if (rawValue !== '' && Number.isFinite(numeric)) return `מע"מ נטו: ${formatVatAmount(numeric)}`
+  }
+
   return firstDetailText(entry.new_value, entry.old_value) ?? '—'
 }

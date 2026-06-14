@@ -87,7 +87,9 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
   const resolvedClientRecordId = clientRecordId ?? selectedClient?.id
 
   const handleTriggerChange = (value: string) => {
-    if (isNotificationTrigger(value)) setTrigger(value)
+    if (!isNotificationTrigger(value)) return
+    setTrigger(value)
+    setBlockedReason(undefined)
   }
 
   const handlePreview = async (overrideClientId?: number) => {
@@ -191,7 +193,12 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
             ביטול
           </Button>
           {step === 'compose' ? (
-            <Button type="button" isLoading={isPreviewing} disabled={isPreviewing} onClick={() => void handlePreview()}>
+            <Button
+              type="button"
+              isLoading={isPreviewing}
+              disabled={isPreviewing || !!blockedReason}
+              onClick={() => void handlePreview()}
+            >
               תצוגה מקדימה
             </Button>
           ) : (
