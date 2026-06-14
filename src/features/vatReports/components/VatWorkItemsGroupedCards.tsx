@@ -23,7 +23,7 @@ interface VatWorkItemsGroupedCardsProps {
   filters?: { status?: VatWorkItemStatus; client_record_id?: number }
 }
 
-const PAGE_SIZE = 50
+const PAGE_SIZE = 20
 
 const getVatGroupSecondaryLabel = (group: VatWorkItemGroupSummary): string | null => {
   const seen = new Set<string>()

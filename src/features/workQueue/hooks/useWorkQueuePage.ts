@@ -8,7 +8,7 @@ import { useWorkQueue } from './useWorkQueue'
 import type { WorkQueueParams, WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
 import type { TaskStatus } from '@/features/tasks'
 
-const WORK_QUEUE_PAGE_SIZE = 50
+const WORK_QUEUE_PAGE_SIZE = 20
 
 export const useWorkQueuePage = () => {
   const { searchParams, setFilter, setFilters, setPage: setUrlPage, resetFilters } = useSearchParamFilters()

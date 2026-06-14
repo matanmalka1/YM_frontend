@@ -1,7 +1,7 @@
 import { AlertTriangle, ExternalLink, Edit } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useQueries } from '@tanstack/react-query'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
@@ -17,7 +17,7 @@ import { RowActionsMenu, RowActionItem } from '../../../components/ui/table/RowA
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 const COL_COUNT = 11
-const PAGE_SIZE = 50
+const PAGE_SIZE = 20
 
 const TABLE_HEADERS = [
   {
@@ -71,17 +71,6 @@ interface AdvancePaymentBatchRowProps {
   statusFilter: AdvancePaymentStatus | ''
   periodFilter: 1 | 2 | null
   onRowClick: (row: AdvancePaymentOverviewRow) => void
-  onStatsLoad?: (dueDate: string, stats: AdvancePaymentGroupStats) => void
-  statsOverride?: AdvancePaymentGroupStats
-}
-
-export interface AdvancePaymentGroupStats {
-  clientCount: number
-  pendingCount: number
-  missingTurnoverCount: number
-  overdueCount: number
-  paidCount: number
-  notPaidCount: number
 }
 
 const formatAdvancePaymentPeriod = (batch: AdvancePaymentDueDateGroup): string => {
@@ -102,7 +91,6 @@ const BatchContent = ({
   statusFilter,
   periodFilter,
   onRowClick,
-  onStatsLoad,
 }: Omit<AdvancePaymentBatchRowProps, 'defaultOpen' | 'isCurrentPeriod'>) => {
   const [page, setPage] = useState(1)
   const statusParam = statusFilter ? [statusFilter] : undefined
@@ -159,36 +147,6 @@ const BatchContent = ({
 
   const filtered = Array.from(rowsById.values())
   const total = queries.reduce((sum, query) => sum + (query.data?.total ?? 0), 0)
-
-  const stats = useMemo(() => {
-    const clients = new Set<number>()
-    const pendingClients = new Set<number>()
-    const missingTurnoverClients = new Set<number>()
-    const overdueClients = new Set<number>()
-    const paidClients = new Set<number>()
-
-    filtered.forEach((row) => {
-      clients.add(row.client_record_id)
-      if (row.status === 'pending') pendingClients.add(row.client_record_id)
-      if (row.missing_turnover) missingTurnoverClients.add(row.client_record_id)
-      if (row.timing_status === 'overdue') overdueClients.add(row.client_record_id)
-      if (row.status === 'paid') paidClients.add(row.client_record_id)
-    })
-
-    return {
-      clientCount: clients.size,
-      pendingCount: pendingClients.size,
-      missingTurnoverCount: missingTurnoverClients.size,
-      overdueCount: overdueClients.size,
-      paidCount: paidClients.size,
-      notPaidCount: clients.size - paidClients.size,
-    }
-  }, [filtered])
-
-  useEffect(() => {
-    if (isLoading) return
-    if (batch.due_date) onStatsLoad?.(batch.due_date, stats)
-  }, [batch, isLoading, onStatsLoad, stats])
 
   if (isLoading) return <TableSkeleton rows={3} columns={COL_COUNT} />
 
@@ -330,16 +288,14 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   statusFilter,
   periodFilter,
   onRowClick,
-  onStatsLoad,
-  statsOverride,
 }) => {
   const dueDate = batch.due_date ?? null
-  const clientCount = statsOverride?.clientCount ?? batch.client_count
-  const pendingCount = statsOverride?.pendingCount ?? batch.pending_count
-  const overdueCount = statsOverride?.overdueCount ?? batch.overdue_count
-  const missingTurnoverCount = statsOverride?.missingTurnoverCount ?? batch.missing_turnover_count
-  const paidCount = statsOverride?.paidCount ?? batch.paid_count
-  const notPaidCount = statsOverride?.notPaidCount ?? batch.not_paid_count
+  const clientCount = batch.client_count
+  const pendingCount = batch.pending_count
+  const overdueCount = batch.overdue_count
+  const missingTurnoverCount = batch.missing_turnover_count
+  const paidCount = batch.paid_count
+  const notPaidCount = batch.not_paid_count
   const metrics: PeriodSummaryMetric[] = [
     { label: 'לקוחות', value: clientCount },
     { label: 'ממתינים', value: pendingCount, tone: pendingCount > 0 ? 'warning' : 'muted' },
@@ -369,7 +325,6 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
         statusFilter={statusFilter}
         periodFilter={periodFilter}
         onRowClick={onRowClick}
-        onStatsLoad={onStatsLoad}
       />
     </GroupedPeriodRow>
   )

@@ -10,7 +10,7 @@ import { MonthlyAccordionList } from '@/components/ui/table/MonthlyAccordionGrou
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { useAdvancePaymentBatches } from '../hooks/useAdvancePaymentBatches'
 import { OverviewKPICards } from '../components/OverviewKPICards'
-import { AdvancePaymentBatchRow, type AdvancePaymentGroupStats } from '../components/AdvancePaymentBatchRow'
+import { AdvancePaymentBatchRow } from '../components/AdvancePaymentBatchRow'
 import { AdvancePaymentDrawer } from '../components/AdvancePaymentDrawer'
 import { CreateAdvancePaymentFlow } from '../components/CreateAdvancePaymentFlow'
 import { GenerateScheduleModal } from '../components/GenerateScheduleModal'
@@ -82,7 +82,6 @@ export const AdvancePayments: React.FC = () => {
     status: searchParams.get('status') ?? '',
     period: rawPeriod === '1' || rawPeriod === '2' ? rawPeriod : '',
   }
-  const [loadedGroupStats, setLoadedGroupStats] = useState<Record<string, AdvancePaymentGroupStats>>({})
 
   const clientRecordId = filters.client_record_id ? Number(filters.client_record_id) : undefined
   const { batches, isLoading } = useAdvancePaymentBatches(year, clientRecordId)
@@ -127,24 +126,6 @@ export const AdvancePayments: React.FC = () => {
       navigate(`/clients/${row.client_record_id}/advance-payments`)
     }
   }
-
-  const handleGroupStatsLoad = useCallback((dueDate: string, stats: AdvancePaymentGroupStats) => {
-    setLoadedGroupStats((prev) => {
-      const current = prev[dueDate]
-      if (
-        current &&
-        current.clientCount === stats.clientCount &&
-        current.pendingCount === stats.pendingCount &&
-        current.missingTurnoverCount === stats.missingTurnoverCount &&
-        current.overdueCount === stats.overdueCount &&
-        current.paidCount === stats.paidCount &&
-        current.notPaidCount === stats.notPaidCount
-      ) {
-        return prev
-      }
-      return { ...prev, [dueDate]: stats }
-    })
-  }, [])
 
   const periodFilter = filters.period === '' ? null : (Number(filters.period) as 1 | 2)
   const statusFilter = filters.status as AdvancePaymentStatus | ''
@@ -197,22 +178,20 @@ export const AdvancePayments: React.FC = () => {
 
     return displayBatches.reduce(
       (stats, batch) => {
-        const loadedStats = batch.due_date ? loadedGroupStats[batch.due_date] : undefined
-
         if (
           reportingPeriodIncludesMonth(batch.year, batch.month, batch.period_months_count, currentYear, currentMonth)
         ) {
-          stats.dueThisMonthCount += safeCount(loadedStats?.notPaidCount ?? batch.not_paid_count)
+          stats.dueThisMonthCount += safeCount(batch.not_paid_count)
         }
 
-        stats.pendingCount += safeCount(loadedStats?.pendingCount ?? batch.pending_count)
-        stats.missingTurnoverCount += safeCount(loadedStats?.missingTurnoverCount ?? batch.missing_turnover_count)
-        stats.overdueCount += safeCount(loadedStats?.overdueCount ?? batch.overdue_count)
+        stats.pendingCount += safeCount(batch.pending_count)
+        stats.missingTurnoverCount += safeCount(batch.missing_turnover_count)
+        stats.overdueCount += safeCount(batch.overdue_count)
         return stats
       },
       { dueThisMonthCount: 0, pendingCount: 0, missingTurnoverCount: 0, overdueCount: 0 },
     )
-  }, [displayBatches, loadedGroupStats])
+  }, [displayBatches])
 
   const currentReportingDate = new Date()
   const currentReportingYear = currentReportingDate.getFullYear()
@@ -281,8 +260,6 @@ export const AdvancePayments: React.FC = () => {
               statusFilter={statusFilter}
               periodFilter={periodFilter}
               onRowClick={handleRowClick}
-              onStatsLoad={handleGroupStatsLoad}
-              statsOverride={batch.due_date ? loadedGroupStats[batch.due_date] : undefined}
             />
           )
         })}
