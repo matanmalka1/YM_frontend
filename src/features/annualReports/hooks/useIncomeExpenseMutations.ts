@@ -1,12 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { annualReportFinancialsApi, annualReportsQK } from '../api'
-import type {
-  ExpenseLinePayload,
-  ExpenseLineResponse,
-  IncomeLinePayload,
-  IncomeLineResponse,
-  IncomeSourceType,
-} from '../api'
+import type { ExpenseLinePayload, ExpenseLineResponse, IncomeLinePayload, IncomeLineResponse } from '../api'
 import { EXPENSE_LABELS, INCOME_LABELS } from '../report.constants'
 import { toast } from '../../../utils/toast'
 import { formatCurrencyILS, showErrorToast } from '../../../utils/utils'
@@ -36,12 +30,7 @@ export const useIncomeExpenseMutations = (reportId: number) => {
   }
 
   const addIncome = useMutation({
-    mutationFn: ({ type_key, amount, description }: { type_key: string; amount: number; description?: string }) =>
-      annualReportFinancialsApi.addIncomeLine(reportId, {
-        source_type: type_key as IncomeSourceType,
-        amount: String(amount),
-        description,
-      }),
+    mutationFn: (payload: IncomeLinePayload) => annualReportFinancialsApi.addIncomeLine(reportId, payload),
     onSuccess: (line) => {
       incomeToast('הכנסה נוספה', line)
       invalidate()

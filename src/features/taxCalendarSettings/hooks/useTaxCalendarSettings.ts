@@ -11,12 +11,12 @@ import {
 export const useTaxCalendarSettings = (params: TaxCalendarSettingsYearRangeParams | null, enabled = true) => {
   const queryClient = useQueryClient()
   const rulesQuery = useQuery({
-    queryKey: [...taxCalendarSettingsQK.all, 'rules'] as const,
+    queryKey: taxCalendarSettingsQK.rules(),
     queryFn: taxCalendarSettingsApi.listRules,
   })
 
   const entriesQuery = useQuery({
-    queryKey: [...taxCalendarSettingsQK.all, 'entries', params] as const,
+    queryKey: taxCalendarSettingsQK.entries(params),
     queryFn: () => {
       if (!params) throw new Error('Missing tax calendar year range params')
       return taxCalendarSettingsApi.listEntries(params)
@@ -25,7 +25,7 @@ export const useTaxCalendarSettings = (params: TaxCalendarSettingsYearRangeParam
   })
 
   const summaryQuery = useQuery({
-    queryKey: [...taxCalendarSettingsQK.all, 'summary', params] as const,
+    queryKey: taxCalendarSettingsQK.summary(params),
     queryFn: () => {
       if (!params) throw new Error('Missing tax calendar year range params')
       return taxCalendarSettingsApi.getSummary(params)

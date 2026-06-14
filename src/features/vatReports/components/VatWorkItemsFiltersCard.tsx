@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
+import { ALL_YEARS_URL_OPTION } from '@/constants/filterOptions.constants'
+import { getOperationalTaxYear, getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { VAT_PERIOD_TYPE_SELECT_OPTIONS, VAT_WORK_ITEMS_STATUS_OPTIONS } from '../constants'
 import type { VatWorkItemsFiltersCardProps } from '../types'
-import { getOperationalTaxYear, getOperationalYearOptions } from '@/constants/periodOptions.constants'
 
 export const VatWorkItemsFiltersCard = ({
   filters,
@@ -11,7 +12,7 @@ export const VatWorkItemsFiltersCard = ({
   onMultiFilterChange,
 }: VatWorkItemsFiltersCardProps) => {
   const fields = useMemo(() => {
-    const yearOptions = [{ value: 'all', label: 'כל השנים' }, ...getOperationalYearOptions()]
+    const yearOptions = [ALL_YEARS_URL_OPTION, ...getOperationalYearOptions()]
     const defaultYear = String(getOperationalTaxYear())
     return [
       { type: 'client-picker' as const, idKey: 'client_record_id', nameKey: 'client_name' },

@@ -1,21 +1,9 @@
-import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button } from '../../../../components/ui/primitives/Button'
-import { annualReportTaxApi } from '../../api'
-import { annualReportsApi, annualReportsQK } from '../../api'
 import { cn, formatCurrencyILS } from '../../../../utils/utils'
-import { toast } from '../../../../utils/toast'
-import { showErrorToast } from '../../../../utils/utils'
-import { useRole } from '../../../../hooks/useRole'
+import { useTaxCalculationPanel } from '../../hooks/useTaxCalculationPanel'
 import { TaxBracketsTable } from './TaxBracketsTable'
 import { TaxCalculatorInputs } from './TaxCalculatorInputs'
-import {
-  getLiabilityTone,
-  getTotalCredits,
-  toReportDetailsPayload,
-  toTaxInputValues,
-  toTaxResultPayload,
-} from './helpers'
+import { getLiabilityTone, getTotalCredits } from './helpers'
 
 interface Props {
   reportId: number
@@ -43,66 +31,11 @@ const SectionCard: React.FC<{ title: string; children: React.ReactNode }> = ({ t
 )
 
 export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
-  const queryClient = useQueryClient()
-  const { isAdvisor } = useRole()
-  const [pension, setPension] = useState('')
-  const [otherCredits, setOtherCredits] = useState('')
+  const panel = useTaxCalculationPanel(reportId)
+  const { data } = panel
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: annualReportsQK.taxCalc(reportId),
-    queryFn: () => annualReportTaxApi.getTaxCalculation(reportId),
-    enabled: !!reportId,
-  })
-
-  const detailQ = useQuery({
-    queryKey: annualReportsQK.detail(reportId),
-    queryFn: () => annualReportsApi.getReport(reportId),
-    enabled: !!reportId,
-  })
-
-  const updateMutation = useMutation({
-    mutationFn: (payload: Parameters<typeof annualReportsApi.patchReportDetails>[1]) =>
-      annualReportsApi.patchReportDetails(reportId, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: annualReportsQK.taxCalc(reportId) })
-      queryClient.invalidateQueries({ queryKey: annualReportsQK.detail(reportId) })
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה בשמירת נתוני דוח'),
-  })
-
-  const saveTaxMutation = useMutation({
-    mutationFn: (payload: { tax_due?: string | null; refund_due?: string | null }) =>
-      annualReportTaxApi.saveTaxCalculation(reportId, payload),
-    onSuccess: () => {
-      toast.success('חישוב המס נשמר בהצלחה')
-      queryClient.invalidateQueries({ queryKey: annualReportsQK.readiness(reportId) })
-    },
-    onError: (err: unknown) => {
-      const msg =
-        (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error?.message ??
-        'שגיאה בשמירת חישוב המס'
-      toast.error(msg)
-    },
-  })
-
-  const handleEditInit = () => {
-    const values = toTaxInputValues(detailQ.data)
-    setPension(values.pension)
-    setOtherCredits(values.otherCredits)
-  }
-
-  const handleSave = () => {
-    updateMutation.mutate(toReportDetailsPayload(pension, otherCredits))
-  }
-
-  const handleSaveTaxResult = () => {
-    if (!data?.total_liability) return
-    const liability = Number(data.total_liability)
-    saveTaxMutation.mutate(toTaxResultPayload(liability))
-  }
-
-  if (isLoading || detailQ.isLoading) return <p className="py-8 text-center text-sm text-gray-400">מחשב מס...</p>
-  if (isError || !data) return <p className="py-8 text-center text-sm text-negative-500">שגיאה בטעינת חישוב מס</p>
+  if (panel.isLoading) return <p className="py-8 text-center text-sm text-gray-400">מחשב מס...</p>
+  if (panel.isError || !data) return <p className="py-8 text-center text-sm text-negative-500">שגיאה בטעינת חישוב מס</p>
 
   const totalLiability = data.total_liability == null ? null : Number(data.total_liability)
   const totalCredits = getTotalCredits(data)
@@ -125,13 +58,13 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
       </div>
 
       <TaxCalculatorInputs
-        pension={pension}
-        otherCredits={otherCredits}
-        onPensionChange={setPension}
-        onOtherCreditsChange={setOtherCredits}
-        onSave={handleSave}
-        onEditInit={handleEditInit}
-        isSaving={updateMutation.isPending}
+        pension={panel.pension}
+        otherCredits={panel.otherCredits}
+        onPensionChange={panel.setPension}
+        onOtherCreditsChange={panel.setOtherCredits}
+        onSave={panel.saveInputs}
+        onEditInit={panel.initializeInputs}
+        isSaving={panel.isSavingInputs}
       />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -175,14 +108,14 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
         </dl>
       </div>
 
-      {isAdvisor && data.total_liability != null && (
+      {panel.isAdvisor && data.total_liability != null && (
         <div className="flex justify-end">
           <Button
             type="button"
             variant="ghost"
             size="sm"
-            onClick={handleSaveTaxResult}
-            isLoading={saveTaxMutation.isPending}
+            onClick={panel.saveTaxResult}
+            isLoading={panel.isSavingTaxResult}
           >
             שמור חישוב מס
           </Button>

@@ -2,7 +2,7 @@ import { useState, type ReactNode } from 'react'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { Alert } from '../../../../components/ui/overlays/Alert'
 import { cn, formatCurrencyILS as fmt } from '../../../../utils/utils'
-import type { VatAutoPopulateResponse } from '../../api'
+import type { IncomeSourceType, VatAutoPopulateResponse } from '../../api'
 import { CATEGORY_LABELS as VAT_CATEGORY_LABELS } from '../../../vatReports'
 import { EXPENSE_LABELS } from '../../report.constants'
 import { FinancialAddFormShell, FinancialAmountDescriptionFields, FinancialSelectField } from './FinancialLineFormParts'
@@ -12,10 +12,11 @@ import {
   VAT_AUTO_POPULATE_SKIPPED_REASON_LABELS,
 } from './financialConstants'
 import { useIncomeLineForm } from './useFinancialLineForm'
+import type { IncomeFormPayload } from './financialHelpers'
 
 export interface AddLineFormProps {
-  typeOptions: Record<string, string>
-  onAdd: (typeKey: string, amount: string, description?: string) => void
+  typeOptions: Record<IncomeSourceType, string>
+  onAdd: (payload: IncomeFormPayload) => void
   isAdding: boolean
   label: string
 }
@@ -23,7 +24,7 @@ export interface AddLineFormProps {
 export const AddLineForm: React.FC<AddLineFormProps> = ({ typeOptions, onAdd, isAdding, label }) => {
   const [open, setOpen] = useState(false)
   const form = useIncomeLineForm(undefined, (payload) => {
-    onAdd(payload.source_type, payload.amount, payload.description)
+    onAdd(payload)
     form.reset()
     setOpen(false)
   })

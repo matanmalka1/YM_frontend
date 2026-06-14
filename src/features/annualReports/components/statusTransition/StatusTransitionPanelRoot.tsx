@@ -1,70 +1,19 @@
-import { useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ShieldCheck } from 'lucide-react'
-import { annualReportsApi } from '../../api'
-import { getAllowedTransitions, annualReportsQK, getStatusLabel, getStatusVariant } from '../../api'
+import { getStatusLabel, getStatusVariant } from '../../api'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { Card } from '../../../../components/ui/primitives/Card'
-import { toast } from '../../../../utils/toast'
-import { showErrorToast } from '../../../../utils/utils'
-import type { StatusTransitionPanelProps, TransitionForm } from '../../types'
+import type { StatusTransitionPanelProps } from '../../types'
 import { AmendReportModal } from './AmendReportModal'
 import { TransitionDetailsForm } from './TransitionDetailsForm'
 import { TransitionTargetSelector } from './TransitionTargetSelector'
 import { ReadinessCheckPanel } from '../panel/ReadinessCheckPanel'
-import { buildTransitionPayload, getEmptyTransitionForm, isValidAmendReason } from './helpers'
+import { useStatusTransitionPanel } from '../../hooks/useStatusTransitionPanel'
 
 export const StatusTransitionPanel = ({ report, onTransition, isLoading }: StatusTransitionPanelProps) => {
-  const queryClient = useQueryClient()
-  const allowed = getAllowedTransitions(report)
-  const [selected, setSelected] = useState<(typeof allowed)[number] | null>(null)
-  const [form, setForm] = useState<TransitionForm>(getEmptyTransitionForm)
-  const [amendOpen, setAmendOpen] = useState(false)
-  const [amendReason, setAmendReason] = useState('')
+  const panel = useStatusTransitionPanel(report, onTransition)
 
-  const closeAmendModal = () => {
-    setAmendOpen(false)
-    setAmendReason('')
-  }
-
-  const amendMutation = useMutation({
-    mutationFn: (reason: string) => annualReportsApi.amend(report.id, reason),
-    onSuccess: () => {
-      toast.success('דוח נשלח לתיקון')
-      queryClient.invalidateQueries({ queryKey: annualReportsQK.detail(report.id) })
-      queryClient.invalidateQueries({ queryKey: annualReportsQK.all })
-      closeAmendModal()
-    },
-    onError: (error) => showErrorToast(error, 'שגיאה בשליחת תיקון'),
-  })
-
-  const [readinessOpen, setReadinessOpen] = useState(false)
-
-  const setField =
-    (field: keyof TransitionForm) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      setForm((prev) => ({ ...prev, [field]: event.target.value }))
-    }
-
-  const handleSelect = (status: (typeof allowed)[number]) => {
-    setSelected((prev) => (prev === status ? null : status))
-    setForm(getEmptyTransitionForm())
-  }
-
-  const handleAmendSubmit = () => {
-    const trimmedReason = amendReason.trim()
-    if (!isValidAmendReason(trimmedReason)) return
-    amendMutation.mutate(trimmedReason)
-  }
-
-  const handleSubmit = () => {
-    if (!selected) return
-    onTransition(buildTransitionPayload(selected, form))
-    setSelected(null)
-    setForm(getEmptyTransitionForm())
-  }
-
-  if (allowed.length === 0) {
+  if (panel.allowed.length === 0) {
     return (
       <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-center text-sm text-gray-500">
         אין מעברי סטטוס זמינים (הדוח {getStatusLabel(report.status)})
@@ -75,12 +24,12 @@ export const StatusTransitionPanel = ({ report, onTransition, isLoading }: Statu
   return (
     <>
       <AmendReportModal
-        open={amendOpen}
-        reason={amendReason}
-        isPending={amendMutation.isPending}
-        onReasonChange={setAmendReason}
-        onClose={closeAmendModal}
-        onSubmit={handleAmendSubmit}
+        open={panel.amendOpen}
+        reason={panel.amendReason}
+        isPending={panel.isAmending}
+        onReasonChange={panel.setAmendReason}
+        onClose={panel.closeAmendModal}
+        onSubmit={panel.submitAmend}
       />
 
       <Card
@@ -90,7 +39,7 @@ export const StatusTransitionPanel = ({ report, onTransition, isLoading }: Statu
             type="button"
             variant="ghost"
             size="sm"
-            onClick={() => setReadinessOpen((p) => !p)}
+            onClick={panel.toggleReadiness}
             className="text-xs text-gray-500 hover:text-gray-700 px-1.5"
           >
             <ShieldCheck className="h-3.5 w-3.5" />
@@ -99,7 +48,7 @@ export const StatusTransitionPanel = ({ report, onTransition, isLoading }: Statu
         }
       >
         <div className="space-y-4">
-          {readinessOpen && (
+          {panel.readinessOpen && (
             <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
               <ReadinessCheckPanel reportId={report.id} />
             </div>
@@ -111,25 +60,22 @@ export const StatusTransitionPanel = ({ report, onTransition, isLoading }: Statu
               <Badge variant={getStatusVariant(report.status)}>{getStatusLabel(report.status)}</Badge>
             </div>
             {report.status === 'submitted' && (
-              <Button type="button" variant="outline" size="sm" onClick={() => setAmendOpen(true)}>
+              <Button type="button" variant="outline" size="sm" onClick={panel.openAmendModal}>
                 תיקון דוח
               </Button>
             )}
           </div>
 
-          <TransitionTargetSelector allowed={allowed} selected={selected} onSelect={handleSelect} />
+          <TransitionTargetSelector allowed={panel.allowed} selected={panel.selected} onSelect={panel.select} />
 
-          {selected && (
+          {panel.selected && (
             <TransitionDetailsForm
-              selected={selected}
-              form={form}
+              selected={panel.selected}
+              form={panel.form}
               isLoading={isLoading}
-              onFieldChange={setField}
-              onCancel={() => {
-                setSelected(null)
-                setForm(getEmptyTransitionForm())
-              }}
-              onSubmit={handleSubmit}
+              onFieldChange={panel.setField}
+              onCancel={panel.cancelTransition}
+              onSubmit={panel.submitTransition}
             />
           )}
         </div>

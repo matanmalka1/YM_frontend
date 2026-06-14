@@ -4,6 +4,8 @@ import { DEFAULT_RECOGNITION_RATE } from './financialConstants'
 import {
   buildExpensePayload,
   buildIncomePayload,
+  isExpenseCategoryType,
+  isIncomeSourceType,
   type AddExpensePayload,
   type IncomeFormPayload,
 } from './financialHelpers'
@@ -31,7 +33,7 @@ export const useIncomeLineForm = (initial?: IncomeLineResponse, onSubmit?: (payl
 
   return {
     typeKey,
-    setTypeKey: (value: string) => setTypeKey(value as IncomeSourceType),
+    setTypeKey: (value: string) => setTypeKey(isIncomeSourceType(value) ? value : ''),
     amount,
     setAmount,
     description,
@@ -71,7 +73,7 @@ export const useExpenseLineForm = (initial?: ExpenseLineResponse, onSubmit?: (pa
 
   return {
     category,
-    setCategory: (value: string) => setCategory(value as ExpenseCategoryType),
+    setCategory: (value: string) => setCategory(isExpenseCategoryType(value) ? value : ''),
     amount,
     setAmount,
     description,

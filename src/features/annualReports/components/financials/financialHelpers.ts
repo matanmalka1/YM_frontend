@@ -1,6 +1,6 @@
 import type { ExpenseCategoryType, FinancialSummaryResponse, IncomeSourceType, TaxCalculationResult } from '../../api'
 import { DEFAULT_RECOGNITION_RATE, FINANCIAL_MESSAGES, MAX_PERCENTAGE, MIN_PERCENTAGE } from './financialConstants'
-import { EXPENSE_LABELS } from '../../report.constants'
+import { EXPENSE_LABELS, INCOME_LABELS } from '../../report.constants'
 
 const VAT_EXPENSE_DESC_RE = /^הוצאות ([a-z_]+) — יובא ממע"מ$/
 
@@ -39,19 +39,25 @@ const validatePercentage = (value: string): number | null => {
   return Number.isNaN(parsed) || parsed < MIN_PERCENTAGE || parsed > MAX_PERCENTAGE ? null : parsed
 }
 
+export const isIncomeSourceType = (value: string): value is IncomeSourceType =>
+  Object.prototype.hasOwnProperty.call(INCOME_LABELS, value)
+
+export const isExpenseCategoryType = (value: string): value is ExpenseCategoryType =>
+  Object.prototype.hasOwnProperty.call(EXPENSE_LABELS, value)
+
 export const buildIncomePayload = (
   sourceType: string,
   amount: string,
   description: string,
 ): { payload?: IncomeFormPayload; error?: string } => {
-  if (!sourceType) return { error: FINANCIAL_MESSAGES.chooseType }
+  if (!isIncomeSourceType(sourceType)) return { error: FINANCIAL_MESSAGES.chooseType }
 
   const parsedAmount = validatePositiveAmount(amount)
   if (parsedAmount == null) return { error: FINANCIAL_MESSAGES.positiveAmount }
 
   return {
     payload: {
-      source_type: sourceType as IncomeSourceType,
+      source_type: sourceType,
       amount: String(parsedAmount),
       description: toOptionalText(description),
     },
@@ -65,7 +71,7 @@ export const buildExpensePayload = (
   recognitionRate = DEFAULT_RECOGNITION_RATE,
   documentReference = '',
 ): { payload?: AddExpensePayload; error?: string } => {
-  if (!category) return { error: FINANCIAL_MESSAGES.chooseCategory }
+  if (!isExpenseCategoryType(category)) return { error: FINANCIAL_MESSAGES.chooseCategory }
 
   const parsedAmount = validatePositiveAmount(amount)
   if (parsedAmount == null) return { error: FINANCIAL_MESSAGES.positiveAmount }
@@ -75,7 +81,7 @@ export const buildExpensePayload = (
 
   return {
     payload: {
-      category: category as ExpenseCategoryType,
+      category,
       amount: String(parsedAmount),
       description: toOptionalText(description),
       recognition_rate: String(rate / 100),

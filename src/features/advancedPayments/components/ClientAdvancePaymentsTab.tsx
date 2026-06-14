@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { AdvancePaymentRow, AdvancePaymentStatus, UpdateAdvancePaymentPayload } from '../types'
+import { isAdvancePaymentStatus } from '../constants'
 import { useAdvancePayments } from '../hooks/useAdvancePayments'
 import { useAdvanceRateInsights } from '../hooks/useAdvanceRateInsights'
 import { useRole } from '../../../hooks/useRole'
@@ -39,9 +40,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
   const year = parsePositiveInt(searchParams.get('year'), getOperationalTaxYear())
   const page = parsePositiveInt(searchParams.get('page'), 1)
   const rawStatusFilter = searchParams.get('status_filter') ?? ''
-  const statusFilter: AdvancePaymentStatus[] = rawStatusFilter
-    ? (rawStatusFilter.split(',') as AdvancePaymentStatus[])
-    : []
+  const statusFilter = rawStatusFilter ? rawStatusFilter.split(',').filter(isAdvancePaymentStatus) : []
 
   const queryClient = useQueryClient()
   const { rows, isLoading, total, create, isCreating, deleteRow } = useAdvancePayments(
