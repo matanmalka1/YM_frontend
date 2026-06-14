@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
-import { cn } from '../../../utils/utils'
+import { useEffect, useRef, useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
+import { cn } from '../../../utils/utils'
 import { semanticStatToneClasses } from '@/utils/semanticColors'
+
+type StatVariant = 'blue' | 'green' | 'red' | 'orange' | 'purple' | 'neutral'
 
 export interface StatsCardProps {
   title: string
@@ -9,18 +11,74 @@ export interface StatsCardProps {
   description?: string
   eyebrow?: string
   icon?: LucideIcon
-  variant?: 'blue' | 'green' | 'red' | 'orange' | 'purple' | 'neutral'
+  variant?: StatVariant
   trend?: {
     value: number
     label: string
   }
-  /** When provided, renders a progress bar below the value (0–100). */
   progress?: number
   selected?: boolean
   onClick?: () => void
   className?: string
   actionLabel?: string
   compact?: boolean
+}
+
+const STAT_VARIANTS: Record<
+  StatVariant,
+  {
+    accent: string
+    border: string
+    iconBg: string
+    value: string
+    strip: string
+    progress: string
+    progressTrack: string
+  }
+> = {
+  blue: {
+    ...semanticStatToneClasses.info,
+    progress: 'bg-info-500',
+    progressTrack: 'bg-info-50',
+  },
+  green: {
+    ...semanticStatToneClasses.positive,
+    progress: 'bg-positive-500',
+    progressTrack: 'bg-positive-50',
+  },
+  red: {
+    ...semanticStatToneClasses.negative,
+    progress: 'bg-negative-500',
+    progressTrack: 'bg-negative-50',
+  },
+  orange: {
+    ...semanticStatToneClasses.warning,
+    progress: 'bg-warning-500',
+    progressTrack: 'bg-warning-50',
+  },
+  purple: {
+    accent: 'bg-violet-500',
+    border: 'border-r-2 border-r-violet-500',
+    iconBg: 'bg-violet-50 text-violet-500',
+    value: 'text-violet-700',
+    strip: 'from-violet-500/10 to-transparent',
+    progress: 'bg-violet-500',
+    progressTrack: 'bg-violet-50',
+  },
+  neutral: {
+    ...semanticStatToneClasses.neutral,
+    progress: 'bg-gray-500',
+    progressTrack: 'bg-gray-100',
+  },
+}
+
+const clampProgress = (value: number) => Math.min(Math.max(value, 0), 100)
+
+const formatTrend = (value: number) => {
+  if (value > 0) return { icon: '↑', className: 'bg-positive-100 text-positive-700' }
+  if (value < 0) return { icon: '↓', className: 'bg-negative-100 text-negative-700' }
+
+  return { icon: '→', className: 'bg-gray-100 text-gray-700' }
 }
 
 export const StatsCard: React.FC<StatsCardProps> = ({
@@ -32,86 +90,58 @@ export const StatsCard: React.FC<StatsCardProps> = ({
   variant = 'neutral',
   trend,
   progress,
-  selected,
+  selected = false,
   onClick,
   className,
   actionLabel,
   compact = false,
 }) => {
-  const [displayValue, setDisplayValue] = useState(0)
+  const [displayValue, setDisplayValue] = useState(() => (typeof value === 'number' ? 0 : null))
+  const frameRef = useRef<number | null>(null)
 
-  // Animated counter effect (handles negative values)
   useEffect(() => {
     if (typeof value !== 'number' || Number.isNaN(value)) {
+      setDisplayValue(null)
       return
     }
 
-    const duration = 900
-    const from = 0
-    const to = value
-    const start = performance.now()
+    const durationMs = 900
+    const startValue = 0
+    const endValue = value
+    const startedAt = performance.now()
 
     const animate = (now: number) => {
-      const progress = Math.min((now - start) / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3) // easeOutCubic
-      const current = Math.round(from + (to - from) * eased)
-      setDisplayValue(current)
+      const elapsedRatio = Math.min((now - startedAt) / durationMs, 1)
+      const easedRatio = 1 - Math.pow(1 - elapsedRatio, 3)
+      const nextValue = Math.round(startValue + (endValue - startValue) * easedRatio)
 
-      if (progress < 1) {
-        requestAnimationFrame(animate)
+      setDisplayValue(nextValue)
+
+      if (elapsedRatio < 1) {
+        frameRef.current = requestAnimationFrame(animate)
       }
     }
 
-    const frame = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(frame)
+    frameRef.current = requestAnimationFrame(animate)
+
+    return () => {
+      if (frameRef.current !== null) {
+        cancelAnimationFrame(frameRef.current)
+        frameRef.current = null
+      }
+    }
   }, [value])
 
-  const variants = {
-    blue: {
-      ...semanticStatToneClasses.info,
-      progress: 'bg-info-500',
-      progressTrack: 'bg-info-50',
-    },
-    green: {
-      ...semanticStatToneClasses.positive,
-      progress: 'bg-positive-500',
-      progressTrack: 'bg-positive-50',
-    },
-    red: {
-      ...semanticStatToneClasses.negative,
-      progress: 'bg-negative-500',
-      progressTrack: 'bg-negative-50',
-    },
-    orange: {
-      ...semanticStatToneClasses.warning,
-      progress: 'bg-warning-500',
-      progressTrack: 'bg-warning-50',
-    },
-    purple: {
-      accent: 'bg-violet-500',
-      border: 'border-r-2 border-r-violet-500',
-      iconBg: 'bg-violet-50 text-violet-500',
-      value: 'text-violet-700',
-      strip: 'from-violet-500/10 to-transparent',
-      progress: 'bg-violet-500',
-      progressTrack: 'bg-violet-50',
-    },
-    neutral: {
-      ...semanticStatToneClasses.neutral,
-      progress: 'bg-gray-500',
-      progressTrack: 'bg-gray-100',
-    },
-  }
-
-  const config = variants[variant]
-  const isInteractive = !!onClick
+  const config = STAT_VARIANTS[variant]
+  const isInteractive = Boolean(onClick)
+  const trendConfig = trend ? formatTrend(trend.value) : null
 
   const card = (
     <div
       className={cn(
-        'relative overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-all duration-200 h-full',
+        'relative h-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-all duration-200',
         compact ? 'min-h-[150px] px-4 py-3' : 'px-5 py-4',
-        'hover:shadow-md',
+        isInteractive && 'hover:shadow-md',
         selected && 'ring-2 ring-primary-400 ring-offset-0',
         isInteractive && !selected && 'ring-1 ring-transparent',
         config.border,
@@ -140,10 +170,12 @@ export const StatsCard: React.FC<StatsCardProps> = ({
 
         <div className={cn('min-w-0 flex-1 text-right', compact && 'flex flex-col justify-between')}>
           <p className={cn('text-xs text-gray-500', compact ? 'mb-2 pl-9' : 'mb-0.5')}>{title}</p>
+
           {eyebrow && <p className="mb-1 text-xs font-medium text-gray-500">{eyebrow}</p>}
+
           <div>
             <div className={cn('font-bold leading-tight tabular-nums', compact ? 'text-xl' : 'text-lg', config.value)}>
-              {typeof value === 'number' ? displayValue.toLocaleString('he-IL') : value}
+              {typeof value === 'number' ? (displayValue ?? value).toLocaleString('he-IL') : value}
             </div>
 
             {description && (
@@ -157,20 +189,20 @@ export const StatsCard: React.FC<StatsCardProps> = ({
             <div className={cn('mt-3 h-2 w-full rounded-full', config.progressTrack)}>
               <div
                 className={cn('h-2 rounded-full transition-all duration-700', config.progress)}
-                style={{ width: `${Math.min(Math.max(progress, 0), 100)}%` }}
+                style={{ width: `${clampProgress(progress)}%` }}
               />
             </div>
           )}
 
-          {trend && (
+          {trend && trendConfig && (
             <div className="mt-3 flex flex-row-reverse items-center gap-2 text-sm">
               <span
                 className={cn(
                   'inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-medium',
-                  trend.value > 0 ? 'bg-positive-100 text-positive-700' : 'bg-negative-100 text-negative-700',
+                  trendConfig.className,
                 )}
               >
-                {trend.value > 0 ? '↑' : '↓'} {Math.abs(trend.value).toFixed(1)}%
+                {trendConfig.icon} {Math.abs(trend.value).toFixed(1)}%
               </span>
               <span className="text-gray-500">{trend.label}</span>
             </div>
@@ -184,11 +216,18 @@ export const StatsCard: React.FC<StatsCardProps> = ({
     </div>
   )
 
-  return isInteractive ? (
-    <button type="button" onClick={onClick} className="w-full text-right transition-transform hover:scale-[1.01]">
+  if (!isInteractive) {
+    return card
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={selected}
+      className="w-full text-right transition-transform hover:scale-[1.01]"
+    >
       {card}
     </button>
-  ) : (
-    card
   )
 }
