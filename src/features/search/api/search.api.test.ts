@@ -26,12 +26,12 @@ describe('searchApi', () => {
     expect(params.has('client_search')).toBe(false)
   })
 
-  it('sends selected client scope as client_id', async () => {
-    await searchApi.search({ search: 'audit_report', client_id: 42 })
+  it('sends selected client scope as client_record_id', async () => {
+    await searchApi.search({ search: 'audit_report', client_record_id: 42 })
 
     const params = mockedGet.mock.calls[0]?.[1]?.params as URLSearchParams
     expect(params.get('search')).toBe('audit_report')
-    expect(params.get('client_id')).toBe('42')
+    expect(params.get('client_record_id')).toBe('42')
     expect(params.has('client_name')).toBe(false)
   })
 })

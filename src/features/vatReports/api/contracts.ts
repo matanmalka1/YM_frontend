@@ -87,6 +87,7 @@ export interface VatWorkItemsListParams {
   page_size?: number
   period?: string
   period_type?: VatPeriodTypeFilter
+  client_record_id?: number
   client_name?: string
 }
 
@@ -104,6 +105,7 @@ export interface VatClientWorkItemsParams {
 export interface VatWorkItemStatusSummaryParams {
   year?: number
   period_type?: VatPeriodTypeFilter
+  client_record_id?: number
   client_name?: string
 }
 
@@ -261,11 +263,13 @@ export interface VatWorkItemGroupItemsParams {
   page?: number
   page_size?: number
   status?: VatWorkItemStatus
+  client_record_id?: number
   client_name?: string
 }
 
 export interface VatWorkItemGroupsParams {
   status?: VatWorkItemStatus
+  client_record_id?: number
   client_name?: string
   period_type?: VatPeriodTypeFilter
   year?: number

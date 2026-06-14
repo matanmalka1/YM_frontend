@@ -58,9 +58,12 @@ export const advancePaymentsApi = {
     return response.data
   },
 
-  getBatches: async (year: number | null): Promise<MonthBatchSummary[]> => {
+  getBatches: async (year: number | null, clientRecordId?: number): Promise<MonthBatchSummary[]> => {
     const response = await api.get<MonthBatchSummary[]>(ADVANCE_PAYMENT_ENDPOINTS.advancePaymentsBatches, {
-      params: toQueryParams(year !== null ? { year } : {}),
+      params: toQueryParams({
+        ...(year !== null ? { year } : {}),
+        ...(clientRecordId ? { client_record_id: clientRecordId } : {}),
+      }),
     })
     return response.data
   },

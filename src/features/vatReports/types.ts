@@ -14,8 +14,8 @@ export interface VatWorkItemsFilters {
   status: VatWorkItemStatus | ''
   year: string
   period_type: VatPeriodTypeFilter | ''
-  clientSearch: string
-  clientSearchName: string
+  client_record_id: string
+  client_name: string
 }
 
 export type VatWorkItemAction = 'materialsComplete' | 'readyForReview' | 'sendBack'
@@ -136,7 +136,7 @@ export interface VatWorkItemsCreateModalProps {
 }
 
 export interface VatWorkItemsFiltersCardProps {
-  filters: Pick<VatWorkItemsFilters, 'status' | 'year' | 'period_type' | 'clientSearch' | 'clientSearchName'>
+  filters: Pick<VatWorkItemsFilters, 'status' | 'year' | 'period_type' | 'client_record_id' | 'client_name'>
   onClear: () => void
   onFilterChange: (key: string, value: string) => void
   onMultiFilterChange?: (updates: Record<string, string>) => void

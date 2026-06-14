@@ -5,7 +5,6 @@ import { vatReportsApi } from '../api'
 import type { CreateVatWorkItemPayload, VatWorkItemStatus, VatWorkItemStatusSummaryParams } from '../api'
 import { getErrorMessage, showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
-import { toOptionalString } from '../../../utils/filters'
 import { useRole } from '../../../hooks/useRole'
 import { vatReportsQK } from '../api/queryKeys'
 import { invalidateVatWorkItem } from './useVatInvalidation'
@@ -33,18 +32,18 @@ export const useVatWorkItemsPage = () => {
   const { isAdvisor } = useRole()
 
   const rawYear = searchParams.get('year') ?? String(getOperationalTaxYear())
-  const filters: Pick<VatWorkItemsFilters, 'status' | 'year' | 'period_type' | 'clientSearch' | 'clientSearchName'> = {
+  const filters: Pick<VatWorkItemsFilters, 'status' | 'year' | 'period_type' | 'client_record_id' | 'client_name'> = {
     status: toOptionalVatStatus(searchParams.get('status') ?? '') ?? '',
     year: rawYear === 'all' ? '' : rawYear,
     period_type: toVatPeriodTypeFilter(searchParams.get('period_type')),
-    clientSearch: searchParams.get('clientSearch') ?? '',
-    clientSearchName: searchParams.get('clientSearchName') ?? '',
+    client_record_id: searchParams.get('client_record_id') ?? '',
+    client_name: searchParams.get('client_name') ?? '',
   }
 
   const summaryParams: VatWorkItemStatusSummaryParams = {
     year: filters.year ? Number(filters.year) : undefined,
     period_type: toOptionalVatPeriodTypeFilter(filters.period_type),
-    client_name: toOptionalString(filters.clientSearchName),
+    client_record_id: filters.client_record_id ? Number(filters.client_record_id) : undefined,
   }
 
   const statusSummaryQuery = useQuery({

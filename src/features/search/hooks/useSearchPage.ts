@@ -11,7 +11,7 @@ export const useSearchPage = () => {
   const filters = useMemo<SearchFilters>(
     () => ({
       search: searchParams.get('search') ?? '',
-      client_id: searchParams.get('client_id') ?? '',
+      client_record_id: searchParams.get('client_record_id') ?? '',
       id_number: searchParams.get('id_number') ?? '',
       binder_number: searchParams.get('binder_number') ?? '',
       client_status: searchParams.get('client_status') ?? '',
@@ -31,7 +31,7 @@ export const useSearchPage = () => {
     queryFn: () =>
       searchApi.search({
         search: filters.search || undefined,
-        client_id: parsePositiveInt(filters.client_id, 0) || undefined,
+        client_record_id: parsePositiveInt(filters.client_record_id, 0) || undefined,
         id_number: filters.id_number || undefined,
         binder_number: filters.binder_number || undefined,
         client_status: filters.client_status || undefined,

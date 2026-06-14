@@ -28,7 +28,7 @@ Project-doc note: `frontend/AGENTS.md` was requested by the frontend review skil
 
 ## Executive Summary
 
-The filters-toolbar issue is real, but it is not isolated. The same drift pattern appears in row actions, overlays/drawers, empty states, KPI/stat cards, client/entity picker usage, and some list-page URL-state/pagination handling.
+The filters-toolbar issue is real, but it is not isolated. The same drift pattern appears in row actions, overlays/drawers, empty states, KPI/stat cards, and client/entity picker usage.
 
 Highest-confidence drift:
 
@@ -74,7 +74,6 @@ Exact evidence files audited for clusters:
 - `src/features/taxCalendar/components/TaxCalendarFiltersBar.tsx`
 - `src/features/workQueue/components/WorkQueueFiltersBar.tsx`
 - `src/features/annualReports/components/shared/AnnualReportsFiltersBar.tsx`
-- `src/features/notifications/pages/NotificationsPage.tsx`
 - `src/components/ui/table/RowActions.tsx`
 - `src/features/clients/components/list/ClientRowActions.tsx`
 - `src/features/users/components/UserRowActions.tsx`
@@ -137,14 +136,12 @@ Files involved:
 - `src/features/search/components/SearchFiltersBar.tsx`
 - `src/features/taxCalendar/components/TaxCalendarFiltersBar.tsx`
 - `src/features/workQueue/components/WorkQueueFiltersBar.tsx`
-- `src/features/notifications/pages/NotificationsPage.tsx`
 
 Why this looks like drift:
 
 - `FilterPanel` already centralizes search/select/date/client-picker layout plus badges/reset, but `TaxCalendarFiltersBar` and `WorkQueueFiltersBar` still hand-own the grid/flex layout.
 - `SearchFiltersBar` owns an advanced-filter disclosure and uses `ClientPickerField`/`useClientPickerState` directly instead of the `FilterPanel` `client-picker` field model.
 - `ChargesFiltersCard` uses `FilterPanel` but adds feature-local client-name resolution via React Query because the generic `ClientPickerFilter` cannot hydrate a URL-only client id.
-- `NotificationsPage` has inline toolbar/filter logic with `ToolbarContainer`, `ClientSearchInput`, selected-client display, page-size select, and URL param state all in the page.
 - Naming varies between `FiltersBar`, `FiltersCard`, `CommandBar`, and inline toolbar sections for comparable responsibilities.
 
 Confidence:
@@ -173,8 +170,7 @@ Suggested migration order:
 1. Stabilize `FilterPanel` naming and field contract, including client id/name hydration.
 2. Move the existing `ChargesFiltersCard` URL-client-name workaround into the shared client-picker filter path.
 3. Convert `TaxCalendarFiltersBar` and `WorkQueueFiltersBar` only if their behavior can be represented without losing feature-specific combined filters.
-4. Move inline `NotificationsPage` toolbar logic into a feature-local `NotificationsFiltersBar`, then decide whether it can use shared filter primitives.
-5. Rename `FiltersCard`/`FiltersBar` only as part of a real migration, not as a cosmetic pass.
+4. Rename `FiltersCard`/`FiltersBar` only as part of a real migration, not as a cosmetic pass.
 
 Fix type:
 

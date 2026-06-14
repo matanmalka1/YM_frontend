@@ -20,7 +20,7 @@ interface VatWorkItemsGroupedCardsProps {
   error?: string | null
   onRowClick: (item: VatWorkItemListItem) => void
   emptyState?: { title?: string; message?: string; action?: { label: string; onClick: () => void } }
-  filters?: { status?: VatWorkItemStatus; client_name?: string }
+  filters?: { status?: VatWorkItemStatus; client_record_id?: number }
 }
 
 const PAGE_SIZE = 50
@@ -45,19 +45,19 @@ const GroupContent = memo(
     group: VatWorkItemGroupSummary
     columns: Column<VatWorkItemListItem>[]
     onRowClick: (item: VatWorkItemListItem) => void
-    filters?: { status?: VatWorkItemStatus; client_name?: string }
+    filters?: { status?: VatWorkItemStatus; client_record_id?: number }
   }) => {
     const [page, setPage] = useState(1)
 
     useEffect(() => {
       setPage(1)
-    }, [filters?.status, filters?.client_name])
+    }, [filters?.status, filters?.client_record_id])
 
     const { data, isLoading } = useVatGroupItems(group.group_key, {
       page,
       page_size: PAGE_SIZE,
       status: filters?.status,
-      client_name: filters?.client_name,
+      client_record_id: filters?.client_record_id,
     })
 
     if (isLoading) return <TableSkeleton rows={3} columns={columns.length} />

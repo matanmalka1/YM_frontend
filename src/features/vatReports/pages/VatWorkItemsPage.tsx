@@ -44,7 +44,7 @@ export const VatWorkItems: React.FC = () => {
   } = useVatWorkItemGroups({
     period_type: toOptionalVatPeriodTypeFilter(filters.period_type),
     status: filters.status || undefined,
-    client_name: filters.clientSearchName || undefined,
+    client_record_id: filters.client_record_id ? Number(filters.client_record_id) : undefined,
     year: filters.year ? Number(filters.year) : undefined,
   })
 
@@ -120,7 +120,10 @@ export const VatWorkItems: React.FC = () => {
         isLoading={groupsLoading}
         error={groupsError}
         onRowClick={handleRowClick}
-        filters={{ status: filters.status || undefined, client_name: filters.clientSearchName || undefined }}
+        filters={{
+          status: filters.status || undefined,
+          client_record_id: filters.client_record_id ? Number(filters.client_record_id) : undefined,
+        }}
         emptyState={{
           title: buildVatEmptyStateTitle(filters),
           message: isAdvisor ? 'נסה לשנות את הסינון או לפתוח תיק חדש' : 'נסה לשנות את הסינון',

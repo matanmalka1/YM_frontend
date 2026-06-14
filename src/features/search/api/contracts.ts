@@ -1,6 +1,6 @@
 export interface SearchResult {
   result_type: string
-  client_id: number
+  client_record_id: number
   office_client_number?: number | null
   client_name: string
   id_number?: string | null
@@ -31,7 +31,7 @@ export interface SearchResponse {
 
 export interface SearchParams {
   search?: string
-  client_id?: number
+  client_record_id?: number
   id_number?: string
   binder_number?: string
   client_status?: string

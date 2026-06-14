@@ -4,9 +4,9 @@ import type { SearchResult } from '../api'
 import { toQueryParams } from '../../../api/queryParams'
 
 const buildDetailUrl = (result: SearchResult): string | null => {
-  if (result.result_type === 'client') return `/clients/${result.client_id}`
+  if (result.result_type === 'client') return `/clients/${result.client_record_id}`
   if (result.result_type === 'binder' && result.binder_id) {
-    const params = toQueryParams({ binder_id: result.binder_id, client_id: result.client_id })
+    const params = toQueryParams({ binder_id: result.binder_id, client_record_id: result.client_record_id })
     return `/binders?${params.toString()}`
   }
   return null

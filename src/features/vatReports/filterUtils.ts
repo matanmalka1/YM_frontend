@@ -10,7 +10,7 @@ export const toOptionalVatPeriodTypeFilter = (value: VatPeriodTypeFilter | ''): 
 interface VatEmptyStateFilters {
   status?: string
   year?: string
-  clientSearchName?: string
+  client_name?: string
   period_type?: VatPeriodTypeFilter | ''
 }
 
@@ -19,7 +19,7 @@ export const buildVatEmptyStateTitle = (filters: VatEmptyStateFilters): string =
 
   if (filters.year) parts.push(`לשנת ${filters.year}`)
 
-  if (filters.clientSearchName?.trim()) parts.push(`עבור "${filters.clientSearchName.trim()}"`)
+  if (filters.client_name?.trim()) parts.push(`עבור "${filters.client_name.trim()}"`)
 
   if (filters.status) {
     const label = getVatWorkItemStatusLabel(filters.status)

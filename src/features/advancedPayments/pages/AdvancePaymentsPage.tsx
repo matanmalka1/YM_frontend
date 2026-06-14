@@ -39,7 +39,7 @@ const PERIOD_OPTIONS = [
 const YEAR_OPTIONS = [{ value: 'all', label: 'כל השנים' }, ...getOperationalYearOptions()]
 
 const FILTER_FIELDS = [
-  { type: 'client-picker' as const, idKey: 'client_id', nameKey: 'client_name', label: 'לקוח' },
+  { type: 'client-picker' as const, idKey: 'client_record_id', nameKey: 'client_name', label: 'לקוח' },
   {
     type: 'select' as const,
     key: 'year',
@@ -77,14 +77,15 @@ export const AdvancePayments: React.FC = () => {
 
   const rawPeriod = searchParams.get('period') ?? ''
   const filters = {
-    client_id: searchParams.get('client_id') ?? '',
+    client_record_id: searchParams.get('client_record_id') ?? '',
     client_name: searchParams.get('client_name') ?? '',
     status: searchParams.get('status') ?? '',
     period: rawPeriod === '1' || rawPeriod === '2' ? rawPeriod : '',
   }
   const [loadedGroupStats, setLoadedGroupStats] = useState<Record<string, AdvancePaymentGroupStats>>({})
 
-  const { batches, isLoading } = useAdvancePaymentBatches(year)
+  const clientRecordId = filters.client_record_id ? Number(filters.client_record_id) : undefined
+  const { batches, isLoading } = useAdvancePaymentBatches(year, clientRecordId)
 
   const handleFilterChange = (key: string, value: string) => {
     if (key === 'year') {
@@ -276,7 +277,7 @@ export const AdvancePayments: React.FC = () => {
               batch={batch}
               defaultOpen={isDefaultOpen}
               isCurrentPeriod={isCurrentPeriod}
-              search={filters.client_name}
+              clientRecordId={clientRecordId}
               statusFilter={statusFilter}
               periodFilter={periodFilter}
               onRowClick={handleRowClick}

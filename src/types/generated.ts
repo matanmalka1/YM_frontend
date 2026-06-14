@@ -6782,8 +6782,8 @@ export interface components {
     SearchResult: {
       /** Result Type */
       result_type: string
-      /** Client Id */
-      client_id: number
+      /** Client Record Id */
+      client_record_id: number
       /** Office Client Number */
       office_client_number?: number | null
       /** Client Name */
@@ -16516,7 +16516,7 @@ export interface operations {
     parameters: {
       query?: {
         search?: string | null
-        client_id?: number | null
+        client_record_id?: number | null
         id_number?: string | null
         binder_number?: string | null
         client_status?: components['schemas']['ClientStatus'] | null
@@ -17812,6 +17812,7 @@ export interface operations {
         month?: number | null
         due_date?: string | null
         period_months_count?: number | null
+        client_record_id?: number | null
         client_search?: string | null
         status?: components['schemas']['AdvancePaymentStatus'][] | null
         page?: number
@@ -17865,6 +17866,7 @@ export interface operations {
     parameters: {
       query?: {
         year?: number | null
+        client_record_id?: number | null
       }
       header?: never
       path?: never
@@ -18412,6 +18414,7 @@ export interface operations {
         page_size?: number
         period?: string | null
         period_type?: components['schemas']['VatType'] | null
+        client_record_id?: number | null
         client_name?: string | null
       }
       header?: never
@@ -19325,6 +19328,7 @@ export interface operations {
       query?: {
         period_type?: components['schemas']['VatType'] | null
         status?: components['schemas']['VatWorkItemStatus'] | null
+        client_record_id?: number | null
         client_name?: string | null
         year?: number | null
       }
@@ -19378,6 +19382,7 @@ export interface operations {
         page?: number
         page_size?: number
         status?: components['schemas']['VatWorkItemStatus'] | null
+        client_record_id?: number | null
         client_name?: string | null
       }
       header?: never
@@ -19541,6 +19546,7 @@ export interface operations {
       query?: {
         year?: number | null
         period_type?: components['schemas']['VatType'] | null
+        client_record_id?: number | null
         client_name?: string | null
       }
       header?: never

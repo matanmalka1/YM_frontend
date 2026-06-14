@@ -1,6 +1,6 @@
 export interface SearchFilters {
   search: string
-  client_id: string
+  client_record_id: string
   id_number: string
   binder_number: string
   client_status: string
@@ -20,7 +20,7 @@ export interface SearchFiltersBarProps {
 }
 
 export const SEARCH_ADVANCED_FILTER_KEYS: (keyof SearchFilters)[] = [
-  'client_id',
+  'client_record_id',
   'id_number',
   'binder_number',
   'client_status',

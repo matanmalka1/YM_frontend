@@ -2,10 +2,10 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import type { MonthBatchSummary } from '../types'
 
-export const useAdvancePaymentBatches = (year: number | null) => {
+export const useAdvancePaymentBatches = (year: number | null, clientRecordId?: number) => {
   const { data, isLoading, error } = useQuery({
-    queryKey: advancedPaymentsQK.batches(year),
-    queryFn: () => advancePaymentsApi.getBatches(year),
+    queryKey: advancedPaymentsQK.batches(year, clientRecordId),
+    queryFn: () => advancePaymentsApi.getBatches(year, clientRecordId),
     placeholderData: keepPreviousData,
   })
 

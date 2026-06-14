@@ -24,7 +24,7 @@ export const Search: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [queryDraft, setQueryDraft] = useSearchDebounce(filters.search, (v) => handleFilterChange('search', v))
 
-  const hasAdvancedFilter = Boolean(filters.client_id || filters.id_number || filters.binder_number)
+  const hasAdvancedFilter = Boolean(filters.client_record_id || filters.id_number || filters.binder_number)
   const [filtersOpen, setFiltersOpen] = useState(hasAdvancedFilter)
 
   const totalPages = Math.max(1, Math.ceil(Math.max(total, 1) / PAGE_SIZE))
@@ -92,7 +92,7 @@ export const Search: React.FC = () => {
           <DataTable<SearchResult>
             data={results}
             columns={searchColumns}
-            getRowKey={(r) => `${r.result_type}-${r.client_id}-${r.binder_id ?? 'none'}`}
+            getRowKey={(r) => `${r.result_type}-${r.client_record_id}-${r.binder_id ?? 'none'}`}
             isLoading={loading}
             emptyMessage="אין תוצאות"
           />

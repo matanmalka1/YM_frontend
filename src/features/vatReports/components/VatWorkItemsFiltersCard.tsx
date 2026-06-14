@@ -14,7 +14,7 @@ export const VatWorkItemsFiltersCard = ({
     const yearOptions = [{ value: 'all', label: 'כל השנים' }, ...getOperationalYearOptions()]
     const defaultYear = String(getOperationalTaxYear())
     return [
-      { type: 'client-picker' as const, idKey: 'clientSearch', nameKey: 'clientSearchName' },
+      { type: 'client-picker' as const, idKey: 'client_record_id', nameKey: 'client_name' },
       {
         type: 'select' as const,
         key: 'year',
@@ -41,8 +41,8 @@ export const VatWorkItemsFiltersCard = ({
     <FilterPanel
       fields={fields}
       values={{
-        clientSearch: filters.clientSearch ?? '',
-        clientSearchName: filters.clientSearchName ?? '',
+        client_record_id: filters.client_record_id ?? '',
+        client_name: filters.client_name ?? '',
         year: filters.year || 'all',
         status: filters.status ?? '',
         period_type: filters.period_type ?? '',

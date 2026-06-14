@@ -67,7 +67,7 @@ interface AdvancePaymentBatchRowProps {
   batch: AdvancePaymentDueDateGroup
   defaultOpen: boolean
   isCurrentPeriod: boolean
-  search: string
+  clientRecordId?: number
   statusFilter: AdvancePaymentStatus | ''
   periodFilter: 1 | 2 | null
   onRowClick: (row: AdvancePaymentOverviewRow) => void
@@ -98,7 +98,7 @@ const getIncludedPeriodLabel = (batch: AdvancePaymentDueDateGroup): string | nul
 
 const BatchContent = ({
   batch,
-  search,
+  clientRecordId,
   statusFilter,
   periodFilter,
   onRowClick,
@@ -110,7 +110,7 @@ const BatchContent = ({
 
   useEffect(() => {
     setPage(1)
-  }, [batch.due_date, batch.month, batch.period_months_count, periodFilter, search, statusFilter])
+  }, [batch.due_date, batch.month, batch.period_months_count, clientRecordId, periodFilter, statusFilter])
 
   const queries = useQueries({
     queries: sourceBatches.map((sourceBatch) => ({
@@ -119,7 +119,7 @@ const BatchContent = ({
         month: batch.due_date ? undefined : sourceBatch.month,
         due_date: batch.due_date,
         period_months_count: periodFilter ?? undefined,
-        client_search: search || undefined,
+        client_record_id: clientRecordId,
         page,
         page_size: PAGE_SIZE,
         status: statusParam,
@@ -130,7 +130,7 @@ const BatchContent = ({
           month: batch.due_date ? undefined : sourceBatch.month,
           due_date: batch.due_date,
           period_months_count: periodFilter ?? undefined,
-          client_search: search || undefined,
+          client_record_id: clientRecordId,
           page,
           page_size: PAGE_SIZE,
           status: statusParam,
@@ -326,7 +326,7 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   batch,
   defaultOpen,
   isCurrentPeriod,
-  search,
+  clientRecordId,
   statusFilter,
   periodFilter,
   onRowClick,
@@ -365,7 +365,7 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
     >
       <BatchContent
         batch={batch}
-        search={search}
+        clientRecordId={clientRecordId}
         statusFilter={statusFilter}
         periodFilter={periodFilter}
         onRowClick={onRowClick}
