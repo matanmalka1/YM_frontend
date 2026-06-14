@@ -18,6 +18,7 @@ interface TaskSourceSectionProps {
   taskTitle?: string | null
   selectedClientId: number | null
   selectedClientName: string | null
+  selectedClientOfficeNumber: number | null
   workQueueItems: WorkQueueItem[]
   isLoadingItems: boolean
   clientSearch: string
@@ -27,7 +28,7 @@ interface TaskSourceSectionProps {
   onOpenPicker: () => void
   onCancelPicker: () => void
   onClientSearchChange: (value: string) => void
-  onClientSelect: (id: number, name: string) => void
+  onClientSelect: (id: number, name: string, officeClientNumber?: number | null) => void
   onClientClear: () => void
   onSourceSelect: (domain: WorkQueueSourceType, id: number) => void
   onSourceDeselect: () => void
@@ -45,6 +46,7 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
   taskTitle,
   selectedClientId,
   selectedClientName,
+  selectedClientOfficeNumber,
   workQueueItems,
   isLoadingItems,
   clientSearch,
@@ -133,12 +135,17 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
       </div>
 
       {selectedClientId && selectedClientName ? (
-        <SelectedClientDisplay name={selectedClientName} id={selectedClientId} onClear={onClientClear} label="לקוח" />
+        <SelectedClientDisplay
+          name={selectedClientName}
+          officeClientNumber={selectedClientOfficeNumber}
+          onClear={onClientClear}
+          label="לקוח"
+        />
       ) : (
         <ClientSearchInput
           value={clientSearch}
           onChange={onClientSearchChange}
-          onSelect={(c) => onClientSelect(c.id, c.name)}
+          onSelect={(c) => onClientSelect(c.id, c.name, c.office_client_number)}
           label="לקוח"
           helperText="הקלד לפחות 2 תווים כדי לחפש לקוח"
         />

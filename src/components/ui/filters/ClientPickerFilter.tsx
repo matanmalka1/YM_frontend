@@ -23,7 +23,6 @@ export const ClientPickerFilter: React.FC<Props> = ({ field, values, onMultiChan
       {selectedClient ? (
         <SelectedClientDisplay
           name={selectedClient.name}
-          id={selectedClient.id}
           label={field.label}
           onClear={() => {
             const updates: Record<string, string> = { [field.idKey]: '' }

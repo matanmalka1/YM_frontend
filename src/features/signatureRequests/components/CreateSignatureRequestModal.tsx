@@ -39,9 +39,11 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
   onClose,
   onCreate,
 }) => {
-  const [selectedClient, setSelectedClient] = useState<{ id: number; name: string } | null>(
-    initialClientId != null ? { id: initialClientId, name: initialSignerName } : null,
-  )
+  const [selectedClient, setSelectedClient] = useState<{
+    id: number
+    name: string
+    office_client_number?: number | null
+  } | null>(initialClientId != null ? { id: initialClientId, name: initialSignerName } : null)
   const [clientQuery, setClientQuery] = useState('')
   const [requestType, setRequestType] = useState<SignatureRequestType>('engagement_agreement')
   const [title, setTitle] = useState('')
@@ -101,7 +103,7 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
           (selectedClient ? (
             <SelectedClientDisplay
               name={selectedClient.name}
-              id={selectedClient.id}
+              officeClientNumber={selectedClient.office_client_number}
               onClear={() => {
                 setSelectedClient(null)
                 setClientQuery('')
@@ -113,7 +115,7 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
               value={clientQuery}
               onChange={setClientQuery}
               onSelect={(c) => {
-                setSelectedClient({ id: c.id, name: c.name })
+                setSelectedClient({ id: c.id, name: c.name, office_client_number: c.office_client_number })
                 setOverrideName(c.name)
                 setClientQuery(c.name)
               }}

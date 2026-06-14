@@ -3,6 +3,7 @@ import { ClientSearchInput, SelectedClientDisplay } from './ClientSearchInput'
 interface ClientPickerSelectedClient {
   id: number
   name: string
+  office_client_number?: number | null
 }
 
 export interface ClientPickerSearchResult {
@@ -10,6 +11,7 @@ export interface ClientPickerSearchResult {
   name: string
   id_number: string
   client_status?: string | null
+  office_client_number?: number | null
 }
 
 interface ClientPickerFieldProps {
@@ -34,7 +36,14 @@ export const ClientPickerField = ({
   placeholder = 'חפש לפי שם, ת"ז / ח.פ...',
 }: ClientPickerFieldProps) => {
   if (selectedClient) {
-    return <SelectedClientDisplay name={selectedClient.name} id={selectedClient.id} onClear={onClear} label={label} />
+    return (
+      <SelectedClientDisplay
+        name={selectedClient.name}
+        officeClientNumber={selectedClient.office_client_number}
+        onClear={onClear}
+        label={label}
+      />
+    )
   }
 
   return (

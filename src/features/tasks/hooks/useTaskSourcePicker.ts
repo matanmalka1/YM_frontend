@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { workQueueApi, workQueueQK, workQueueSourceTypeLabels } from '@/features/workQueue'
 import type { WorkQueueItem } from '@/features/workQueue'
@@ -8,6 +8,7 @@ import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 export const useTaskSourcePicker = () => {
   const [selectedClientId, setSelectedClientId] = useState<number | null>(null)
   const [selectedClientName, setSelectedClientName] = useState<string | null>(null)
+  const [selectedClientOfficeNumber, setSelectedClientOfficeNumber] = useState<number | null>(null)
 
   const workQueueQuery = useQuery({
     queryKey: workQueueQK.list(
@@ -27,14 +28,16 @@ export const useTaskSourcePicker = () => {
     staleTime: QUERY_STALE_TIME.short,
   })
 
-  const selectClient = useCallback((id: number, name: string) => {
+  const selectClient = useCallback((id: number, name: string, officeClientNumber?: number | null) => {
     setSelectedClientId(id)
     setSelectedClientName(name)
+    setSelectedClientOfficeNumber(officeClientNumber ?? null)
   }, [])
 
   const clearClient = useCallback(() => {
     setSelectedClientId(null)
     setSelectedClientName(null)
+    setSelectedClientOfficeNumber(null)
   }, [])
 
   const sourceLabel = useCallback((item: WorkQueueItem): string => {
@@ -43,12 +46,18 @@ export const useTaskSourcePicker = () => {
     return `${typeLabel} · ${item.title}${dueDate}`
   }, [])
 
+  const workQueueItems = useMemo(
+    () => (workQueueQuery.data?.items ?? []).filter((item) => item.source_type !== 'task'),
+    [workQueueQuery.data?.items],
+  )
+
   return {
     selectedClientId,
     selectedClientName,
+    selectedClientOfficeNumber,
     selectClient,
     clearClient,
-    workQueueItems: (workQueueQuery.data?.items ?? []).filter((item) => item.source_type !== 'task'),
+    workQueueItems,
     isLoadingItems: workQueueQuery.isFetching,
     sourceLabel,
   }

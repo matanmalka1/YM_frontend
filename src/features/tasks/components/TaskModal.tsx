@@ -51,6 +51,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
   const {
     selectedClientId,
     selectedClientName,
+    selectedClientOfficeNumber,
     selectClient,
     clearClient,
     workQueueItems,
@@ -159,6 +160,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
     taskTitle: task?.title,
     selectedClientId,
     selectedClientName,
+    selectedClientOfficeNumber,
     workQueueItems,
     isLoadingItems,
     clientSearch,
@@ -172,8 +174,8 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
     onOpenPicker: () => setSourcePickerOpen(true),
     onCancelPicker: resetSourcePicker,
     onClientSearchChange: setClientSearch,
-    onClientSelect: (id: number, name: string) => {
-      selectClient(id, name)
+    onClientSelect: (id: number, name: string, officeClientNumber?: number | null) => {
+      selectClient(id, name, officeClientNumber)
     },
     onClientClear: () => {
       clearClient()

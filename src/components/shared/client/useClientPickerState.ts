@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react'
 export interface ClientPickerValue {
   id: number
   name: string
+  office_client_number?: number | null
 }
 
 interface ClientPickerFieldOptions {

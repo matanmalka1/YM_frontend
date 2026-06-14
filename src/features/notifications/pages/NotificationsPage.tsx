@@ -219,12 +219,7 @@ export const NotificationsPage: React.FC = () => {
       <ToolbarContainer>
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-7">
           {selectedClient ? (
-            <SelectedClientDisplay
-              label="לקוח"
-              id={selectedClient.id}
-              name={selectedClient.name}
-              onClear={clearClientFilter}
-            />
+            <SelectedClientDisplay label="לקוח" name={selectedClient.name} onClear={clearClientFilter} />
           ) : (
             <ClientSearchInput
               label="לקוח"
