@@ -1,6 +1,11 @@
+import type { ListNotificationsParams, NotificationSummaryParams } from './contracts'
+
 export const notificationsQK = {
   all: ['notifications'] as const,
-  list: (params?: object) => ['notifications', 'list', params ?? {}] as const,
-  detail: (notificationId: number) => ['notifications', 'detail', notificationId] as const,
-  summary: (clientId?: number) => ['notifications', 'summary', clientId ?? 'global'] as const,
+  lists: () => [...notificationsQK.all, 'list'] as const,
+  list: (params: ListNotificationsParams = {}) => [...notificationsQK.lists(), params] as const,
+  details: () => [...notificationsQK.all, 'detail'] as const,
+  detail: (notificationId: number) => [...notificationsQK.details(), notificationId] as const,
+  summaries: () => [...notificationsQK.all, 'summary'] as const,
+  summary: (params: NotificationSummaryParams = {}) => [...notificationsQK.summaries(), params] as const,
 } as const

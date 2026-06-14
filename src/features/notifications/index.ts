@@ -6,11 +6,20 @@ export { useNotificationBell } from './hooks/useNotificationBell'
 export { useNotifications } from './hooks/useNotifications'
 export { useNotificationDetail } from './hooks/useNotificationDetail'
 
-export { ENABLED_NOTIFICATION_TRIGGERS, TRIGGER_LABELS } from './api'
+export {
+  CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS,
+  TRIGGER_LABELS,
+  isNotificationChannel,
+  isNotificationStatus,
+  isNotificationTrigger,
+} from './api'
 export type {
   NotificationTrigger,
   NotificationStatus,
+  NotificationChannel,
+  NotificationSendChannel,
   NotificationItem,
   ListNotificationsParams,
+  NotificationSummaryParams,
   NotificationDetail,
 } from './api'

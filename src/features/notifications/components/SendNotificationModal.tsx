@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Modal } from '../../../components/ui/overlays/Modal'
 import { Button } from '../../../components/ui/primitives/Button'
 import { Select } from '../../../components/ui/inputs/Select'
@@ -6,7 +6,7 @@ import { Input } from '../../../components/ui/inputs/Input'
 import { Textarea } from '../../../components/ui/inputs/Textarea'
 import { ClientPickerField, useClientPickerState } from '../../../components/shared/client'
 import { usePreviewNotification, useSendNotification } from '../hooks/useSendNotification'
-import { MANUAL_NOTIFICATION_TRIGGERS, TRIGGER_LABELS } from '../api'
+import { CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS, TRIGGER_LABELS, isNotificationTrigger } from '../api'
 import type { NotificationTrigger } from '../api'
 
 const DOMAIN_LABELS: Partial<Record<NotificationTrigger, string>> = {
@@ -24,7 +24,7 @@ const DOMAIN_LABELS: Partial<Record<NotificationTrigger, string>> = {
   client_general_message: 'לקוח',
 }
 
-const buildTriggerOptions = (triggers: NotificationTrigger[]) =>
+const buildTriggerOptions = (triggers: readonly NotificationTrigger[]) =>
   triggers.map((trigger) => ({
     value: trigger,
     label: `${DOMAIN_LABELS[trigger] ?? 'כללי'} — ${TRIGGER_LABELS[trigger]}`,
@@ -37,7 +37,7 @@ export interface SendNotificationModalProps {
   initialTrigger?: NotificationTrigger
   entityId?: number
   disableTriggerChange?: boolean
-  allowedTriggers?: NotificationTrigger[]
+  allowedTriggers?: readonly NotificationTrigger[]
 }
 
 type Step = 'compose' | 'preview'
@@ -49,15 +49,24 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
   initialTrigger,
   entityId,
   disableTriggerChange = false,
-  allowedTriggers = MANUAL_NOTIFICATION_TRIGGERS,
+  allowedTriggers,
 }) => {
   const { previewAsync, isPreviewing } = usePreviewNotification()
   const { sendAsync, isSending } = useSendNotification()
 
-  const triggerOptions = buildTriggerOptions(allowedTriggers)
+  const availableTriggers = useMemo<readonly NotificationTrigger[]>(() => {
+    const base =
+      allowedTriggers && allowedTriggers.length > 0 ? allowedTriggers : CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS
+    if (initialTrigger && !base.includes(initialTrigger)) {
+      return [initialTrigger, ...base]
+    }
+    return base
+  }, [allowedTriggers, initialTrigger])
+  const defaultTrigger = initialTrigger ?? availableTriggers[0]
+  const triggerOptions = buildTriggerOptions(availableTriggers)
 
   const [step, setStep] = useState<Step>('compose')
-  const [trigger, setTrigger] = useState<NotificationTrigger>(initialTrigger ?? allowedTriggers[0])
+  const [trigger, setTrigger] = useState<NotificationTrigger>(defaultTrigger)
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
   const [subjectError, setSubjectError] = useState<string | undefined>()
@@ -76,6 +85,10 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
   } = useClientPickerState()
 
   const resolvedClientRecordId = clientRecordId ?? selectedClient?.id
+
+  const handleTriggerChange = (value: string) => {
+    if (isNotificationTrigger(value)) setTrigger(value)
+  }
 
   const handlePreview = async (overrideClientId?: number) => {
     const cid = overrideClientId ?? resolvedClientRecordId
@@ -104,21 +117,18 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
 
   // Reset state on open
   useEffect(() => {
-    if (open) {
-      setStep('compose')
-      setTrigger(initialTrigger ?? allowedTriggers[0])
-      setSubject('')
-      setBody('')
-      setSubjectError(undefined)
-      setBodyError(undefined)
-      setClientError(undefined)
-      setBlockedReason(undefined)
-      setWarnings([])
-      resetClientPicker()
-    }
-    // allowedTriggers is a stable reference per caller — intentionally excluded
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialTrigger, open, resetClientPicker])
+    if (!open) return
+    setStep('compose')
+    setTrigger(defaultTrigger)
+    setSubject('')
+    setBody('')
+    setSubjectError(undefined)
+    setBodyError(undefined)
+    setClientError(undefined)
+    setBlockedReason(undefined)
+    setWarnings([])
+    resetClientPicker()
+  }, [defaultTrigger, open, resetClientPicker])
 
   // Auto-preview when context is fully known on open
   useEffect(() => {
@@ -210,7 +220,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
               label="סוג הודעה"
               options={triggerOptions}
               value={trigger}
-              onChange={(e) => setTrigger(e.target.value as NotificationTrigger)}
+              onChange={(event) => handleTriggerChange(event.target.value)}
               disabled={disableTriggerChange}
             />
             {blockedReason && <p className="text-sm text-red-600 font-medium">{blockedReason}</p>}

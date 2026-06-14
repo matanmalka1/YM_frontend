@@ -9,7 +9,7 @@ import { useEscapeToClose } from '../../../components/ui/overlays/useEscapeToClo
 import { useRole } from '../../../hooks/useRole'
 import { DrawerNotificationListItem } from './NotificationListItem'
 import { SendNotificationModal } from './SendNotificationModal'
-import { ENABLED_NOTIFICATION_TRIGGERS } from '../api'
+import { CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS } from '../api'
 import type { NotificationDrawerProps } from '../types'
 
 export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, onClose, clientRecordId }) => {
@@ -109,7 +109,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
           open={sendOpen}
           onClose={() => setSendOpen(false)}
           clientRecordId={clientRecordId}
-          allowedTriggers={ENABLED_NOTIFICATION_TRIGGERS}
+          allowedTriggers={CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS}
         />
       )}
     </>,

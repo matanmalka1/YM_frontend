@@ -1,6 +1,11 @@
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { FIRST_PAGE } from '@/constants/pagination.constants'
-import { MANUAL_NOTIFICATION_TRIGGERS, TRIGGER_LABELS, type NotificationStatus } from '@/features/notifications/api'
+import {
+  NOTIFICATION_STATUS_VALUES,
+  NOTIFICATION_TRIGGER_VALUES,
+  TRIGGER_LABELS,
+  type NotificationStatus,
+} from '@/features/notifications/api'
 
 export const NOTIFICATIONS_PAGE_SIZE_OPTIONS = [
   { value: '25', label: '25' },
@@ -28,7 +33,7 @@ export const NOTIFICATION_STATUS_VARIANTS: Record<NotificationStatus, BadgeVaria
 
 export const NOTIFICATION_TRIGGER_OPTIONS = [
   { value: '', label: 'כל הסוגים' },
-  ...MANUAL_NOTIFICATION_TRIGGERS.map((trigger) => ({
+  ...NOTIFICATION_TRIGGER_VALUES.map((trigger) => ({
     value: trigger,
     label: TRIGGER_LABELS[trigger],
   })),
@@ -36,7 +41,7 @@ export const NOTIFICATION_TRIGGER_OPTIONS = [
 
 export const NOTIFICATION_STATUS_OPTIONS = [
   { value: '', label: 'כל הסטטוסים' },
-  ...Object.entries(NOTIFICATION_STATUS_LABELS).map(([value, label]) => ({ value, label })),
+  ...NOTIFICATION_STATUS_VALUES.map((value) => ({ value, label: NOTIFICATION_STATUS_LABELS[value] })),
 ]
 
 export const NOTIFICATION_DOMAIN_LABELS: Record<string, string> = {

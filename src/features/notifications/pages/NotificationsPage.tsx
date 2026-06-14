@@ -19,15 +19,15 @@ import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { parsePositiveInt } from '@/utils/utils'
 import { formatDateTime } from '@/utils/utils'
 import {
-  ENABLED_NOTIFICATION_TRIGGERS,
+  CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS,
   TRIGGER_LABELS,
   SendNotificationModal,
+  isNotificationStatus,
+  isNotificationTrigger,
   useNotifications,
   useNotificationDetail,
   type ListNotificationsParams,
   type NotificationItem,
-  type NotificationStatus,
-  type NotificationTrigger,
 } from '@/features/notifications'
 import { usersApi, usersQK } from '@/features/users'
 import {
@@ -62,8 +62,10 @@ export const NotificationsPage: React.FC = () => {
 
   const page = parsePositiveInt(searchParams.get('page'), FIRST_PAGE)
   const pageSize = parsePositiveInt(searchParams.get('page_size'), 25)
-  const trigger = (searchParams.get('trigger') ?? '') as NotificationTrigger | ''
-  const status = (searchParams.get('status') ?? '') as NotificationStatus | ''
+  const triggerParam = searchParams.get('trigger')
+  const statusParam = searchParams.get('status')
+  const trigger = isNotificationTrigger(triggerParam) ? triggerParam : undefined
+  const status = isNotificationStatus(statusParam) ? statusParam : undefined
   const dateFrom = searchParams.get('created_after') ?? ''
   const dateTo = searchParams.get('created_before') ?? ''
   const triggeredBy = searchParams.get('triggered_by') ?? ''
@@ -236,13 +238,13 @@ export const NotificationsPage: React.FC = () => {
           )}
           <Select
             label="סוג הודעה"
-            value={trigger}
+            value={trigger ?? ''}
             options={NOTIFICATION_TRIGGER_OPTIONS}
             onChange={(event) => setFilter('trigger', event.target.value)}
           />
           <Select
             label="סטטוס"
-            value={status}
+            value={status ?? ''}
             options={NOTIFICATION_STATUS_OPTIONS}
             onChange={(event) => setFilter('status', event.target.value)}
           />
@@ -336,7 +338,7 @@ export const NotificationsPage: React.FC = () => {
           open={sendOpen}
           onClose={closeSendModal}
           clientRecordId={sendClient?.id}
-          allowedTriggers={ENABLED_NOTIFICATION_TRIGGERS}
+          allowedTriggers={CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS}
         />
       )}
     </div>

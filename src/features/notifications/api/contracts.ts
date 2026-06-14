@@ -1,6 +1,6 @@
 // ── Enums ──────────────────────────────────────────────────────────────────────
 
-const NOTIFICATION_TRIGGER_VALUES = [
+export const NOTIFICATION_TRIGGER_VALUES = [
   'binder_ready_for_handover',
   'binder_missing_documents',
   'binder_general_reminder',
@@ -18,18 +18,13 @@ const NOTIFICATION_TRIGGER_VALUES = [
 
 export type NotificationTrigger = (typeof NOTIFICATION_TRIGGER_VALUES)[number]
 
-// Triggers for the generic modal (no entity_id required)
-export const ENABLED_NOTIFICATION_TRIGGERS: NotificationTrigger[] = [
+export const CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS = [
   'client_missing_information',
   'client_documents_request',
   'client_general_message',
   'binder_missing_documents',
   'binder_general_reminder',
-]
-
-export const MANUAL_NOTIFICATION_TRIGGERS: NotificationTrigger[] = NOTIFICATION_TRIGGER_VALUES.filter(
-  (trigger) => trigger !== 'binder_ready_for_handover',
-)
+] as const satisfies readonly NotificationTrigger[]
 
 export const TRIGGER_LABELS: Record<NotificationTrigger, string> = {
   binder_ready_for_handover: 'קלסר מוכן למסירה',
@@ -47,9 +42,22 @@ export const TRIGGER_LABELS: Record<NotificationTrigger, string> = {
   client_general_message: 'הודעה כללית',
 }
 
-type NotificationChannel = 'email' | 'whatsapp'
-type NotificationSendChannel = 'email'
-export type NotificationStatus = 'pending' | 'sent' | 'failed' | 'skipped'
+export const NOTIFICATION_CHANNEL_VALUES = ['email', 'whatsapp'] as const
+export const NOTIFICATION_STATUS_VALUES = ['pending', 'sent', 'failed', 'skipped'] as const
+
+export type NotificationChannel = (typeof NOTIFICATION_CHANNEL_VALUES)[number]
+// Backend currently supports sending manual notifications by email only.
+export type NotificationSendChannel = 'email'
+export type NotificationStatus = (typeof NOTIFICATION_STATUS_VALUES)[number]
+
+export const isNotificationTrigger = (value: string | null): value is NotificationTrigger =>
+  value != null && NOTIFICATION_TRIGGER_VALUES.some((trigger) => trigger === value)
+
+export const isNotificationStatus = (value: string | null): value is NotificationStatus =>
+  value != null && NOTIFICATION_STATUS_VALUES.some((status) => status === value)
+
+export const isNotificationChannel = (value: string | null): value is NotificationChannel =>
+  value != null && NOTIFICATION_CHANNEL_VALUES.some((channel) => channel === value)
 
 // ── Read types ─────────────────────────────────────────────────────────────────
 
@@ -94,7 +102,7 @@ export interface NotificationDetail {
   sent_at?: string | null
   failed_at?: string | null
   error_message?: string | null
-  retry_count?: number
+  retry_count: number
   triggered_by?: number | null
   created_at: string
 }
@@ -114,14 +122,19 @@ export interface NotificationSummaryResponse {
   total: number
 }
 
+export interface NotificationSummaryParams {
+  client_record_id?: number
+  business_id?: number
+}
+
 export interface ListNotificationsParams {
   client_record_id?: number
   business_id?: number
   page?: number
   page_size?: number
-  status?: NotificationStatus | ''
-  trigger?: NotificationTrigger | ''
-  channel?: NotificationChannel | ''
+  status?: NotificationStatus
+  trigger?: NotificationTrigger
+  channel?: NotificationChannel
   triggered_by?: number
   created_after?: string
   created_before?: string

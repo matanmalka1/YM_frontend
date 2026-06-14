@@ -10,19 +10,14 @@ import type {
   NotificationPreviewResponse,
   NotificationSendRequest,
   NotificationResult,
+  NotificationSummaryParams,
 } from './contracts'
-
-type NotificationSummaryParams = {
-  client_record_id?: number | null
-  business_id?: number | null
-}
 
 export const notificationsApi = {
   listPaginated: async (params: ListNotificationsParams = {}): Promise<NotificationListResponse> => {
-    const response = await api.get<NotificationListResponse>(
-      NOTIFICATION_ENDPOINTS.notifications,
-      params ? { params: toQueryParams(params) } : undefined,
-    )
+    const response = await api.get<NotificationListResponse>(NOTIFICATION_ENDPOINTS.notifications, {
+      params: toQueryParams(params),
+    })
     return response.data
   },
 
