@@ -127,5 +127,3 @@ export const BindersFiltersBar = ({
     />
   )
 }
-
-BindersFiltersBar.displayName = 'BindersFiltersBar'
