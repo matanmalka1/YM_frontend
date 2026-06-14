@@ -3183,6 +3183,17 @@ export interface components {
          * @enum {string}
          */
         AdvancePaymentFrequency: "monthly" | "bimonthly";
+        /** AdvancePaymentListResponse */
+        AdvancePaymentListResponse: {
+            /** Items */
+            items: components["schemas"]["AdvancePaymentRow"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
+        };
         /** AdvancePaymentOverviewResponse */
         AdvancePaymentOverviewResponse: {
             /** Items */
@@ -3540,6 +3551,17 @@ export interface components {
             /** Notes */
             notes?: string | null;
         };
+        /** AnnexDataLineListResponse */
+        AnnexDataLineListResponse: {
+            /** Items */
+            items: components["schemas"]["AnnexDataLineResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
+        };
         /** AnnexDataLineResponse */
         AnnexDataLineResponse: {
             /** Id */
@@ -3622,6 +3644,17 @@ export interface components {
              * @example 2026-01-02T03:04:05Z
              */
             occurred_at: string;
+        };
+        /** AnnualReportAuditListResponse */
+        AnnualReportAuditListResponse: {
+            /** Items */
+            items: components["schemas"]["AnnualReportAuditEntry"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
         };
         /** AnnualReportCard */
         AnnualReportCard: {
@@ -3828,6 +3861,17 @@ export interface components {
             /** Tax Due */
             tax_due?: string | null;
         };
+        /** AnnualReportListResponse */
+        AnnualReportListResponse: {
+            /** Items */
+            items: components["schemas"]["AnnualReportListItem"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
+        };
         /** AnnualReportResponse */
         AnnualReportResponse: {
             /** Id */
@@ -3916,6 +3960,17 @@ export interface components {
          * @enum {string}
          */
         AnnualReportSchedule: "schedule_a" | "schedule_b" | "schedule_gimmel" | "schedule_dalet" | "form_150" | "form_1504" | "form_6111" | "form_1344" | "form_1399" | "form_1350" | "form_1327" | "form_1342" | "form_1343" | "form_1348" | "form_858";
+        /** AnnualReportScheduleListResponse */
+        AnnualReportScheduleListResponse: {
+            /** Items */
+            items: components["schemas"]["ScheduleEntryResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
+        };
         /**
          * AnnualReportStatus
          * @enum {string}
@@ -4085,6 +4140,17 @@ export interface components {
             /** Notes */
             notes?: string | null;
         };
+        /** AuthorityContactListResponse */
+        AuthorityContactListResponse: {
+            /** Items */
+            items: components["schemas"]["AuthorityContactResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
+        };
         /** AuthorityContactResponse */
         AuthorityContactResponse: {
             /** Id */
@@ -4252,6 +4318,17 @@ export interface components {
             /** Handed Over At */
             handed_over_at?: string | null;
         };
+        /** BinderIntakeListResponse */
+        BinderIntakeListResponse: {
+            /** Items */
+            items: components["schemas"]["BinderIntakeResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
+        };
         /**
          * BinderIntakeMaterialRequest
          * @description פריט חומר בודד בתוך אירוע קבלה.
@@ -4375,6 +4452,17 @@ export interface components {
             /** Total */
             total: number;
             counters: components["schemas"]["BinderListCounters"];
+        };
+        /** BinderListResponseExtended */
+        BinderListResponseExtended: {
+            /** Items */
+            items: components["schemas"]["BinderDetailResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
         };
         /**
          * BinderLocationStatus
@@ -4793,6 +4881,17 @@ export interface components {
             cancellation_reason?: string | null;
             /** Available Actions */
             available_actions?: components["schemas"]["ActionDescriptor"][];
+        };
+        /** ChargeResponseListResponse */
+        ChargeResponseListResponse: {
+            /** Items */
+            items: components["schemas"]["ChargeResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
         };
         /**
          * ChargeStatus
@@ -5431,6 +5530,17 @@ export interface components {
         EntityNoteCreateRequest: {
             /** Note */
             note: string;
+        };
+        /** EntityNoteListResponse */
+        EntityNoteListResponse: {
+            /** Items */
+            items: components["schemas"]["EntityNoteResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
         };
         /** EntityNoteResponse */
         EntityNoteResponse: {
@@ -6159,171 +6269,6 @@ export interface components {
             /** Missing Documents */
             missing_documents: components["schemas"]["PermanentDocumentType"][];
         };
-        /** PaginatedResponse[AdvancePaymentRow] */
-        PaginatedResponse_AdvancePaymentRow_: {
-            /** Items */
-            items: components["schemas"]["AdvancePaymentRow"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[AnnexDataLineResponse] */
-        PaginatedResponse_AnnexDataLineResponse_: {
-            /** Items */
-            items: components["schemas"]["AnnexDataLineResponse"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[AnnualReportAuditEntry] */
-        PaginatedResponse_AnnualReportAuditEntry_: {
-            /** Items */
-            items: components["schemas"]["AnnualReportAuditEntry"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[AnnualReportListItem] */
-        PaginatedResponse_AnnualReportListItem_: {
-            /** Items */
-            items: components["schemas"]["AnnualReportListItem"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[AuthorityContactResponse] */
-        PaginatedResponse_AuthorityContactResponse_: {
-            /** Items */
-            items: components["schemas"]["AuthorityContactResponse"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[BinderDetailResponse] */
-        PaginatedResponse_BinderDetailResponse_: {
-            /** Items */
-            items: components["schemas"]["BinderDetailResponse"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[BinderIntakeResponse] */
-        PaginatedResponse_BinderIntakeResponse_: {
-            /** Items */
-            items: components["schemas"]["BinderIntakeResponse"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[ChargeResponse] */
-        PaginatedResponse_ChargeResponse_: {
-            /** Items */
-            items: components["schemas"]["ChargeResponse"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[EntityNoteResponse] */
-        PaginatedResponse_EntityNoteResponse_: {
-            /** Items */
-            items: components["schemas"]["EntityNoteResponse"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[ReminderResponse] */
-        PaginatedResponse_ReminderResponse_: {
-            /** Items */
-            items: components["schemas"]["ReminderResponse"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[ScheduleEntryResponse] */
-        PaginatedResponse_ScheduleEntryResponse_: {
-            /** Items */
-            items: components["schemas"]["ScheduleEntryResponse"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[SignatureRequestResponse] */
-        PaginatedResponse_SignatureRequestResponse_: {
-            /** Items */
-            items: components["schemas"]["SignatureRequestResponse"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[TaskResponse] */
-        PaginatedResponse_TaskResponse_: {
-            /** Items */
-            items: components["schemas"]["TaskResponse"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[UserAuditLogResponse] */
-        PaginatedResponse_UserAuditLogResponse_: {
-            /** Items */
-            items: components["schemas"]["UserAuditLogResponse"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
-        /** PaginatedResponse[UserManagementResponse] */
-        PaginatedResponse_UserManagementResponse_: {
-            /** Items */
-            items: components["schemas"]["UserManagementResponse"][];
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
-            /** Total */
-            total: number;
-        };
         /** PasswordResetRequest */
         PasswordResetRequest: {
             /** New Password */
@@ -6487,6 +6432,17 @@ export interface components {
             payload?: {
                 [key: string]: unknown;
             } | null;
+        };
+        /** ReminderListResponse */
+        ReminderListResponse: {
+            /** Items */
+            items: components["schemas"]["ReminderResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
         };
         /** ReminderResponse */
         ReminderResponse: {
@@ -6826,6 +6782,17 @@ export interface components {
             /** Signing Url Hint */
             signing_url_hint: string;
         };
+        /** SignatureRequestListResponse */
+        SignatureRequestListResponse: {
+            /** Items */
+            items: components["schemas"]["SignatureRequestResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
+        };
         /** SignatureRequestResponse */
         SignatureRequestResponse: {
             /** Id */
@@ -7047,6 +7014,17 @@ export interface components {
             action_payload?: {
                 [key: string]: unknown;
             } | null;
+        };
+        /** TaskListResponse */
+        TaskListResponse: {
+            /** Items */
+            items: components["schemas"]["TaskResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
         };
         /**
          * TaskPriority
@@ -7513,6 +7491,17 @@ export interface components {
                 [key: string]: unknown;
             };
         };
+        /** UserAuditLogListResponse */
+        UserAuditLogListResponse: {
+            /** Items */
+            items: components["schemas"]["UserAuditLogResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
+        };
         /** UserAuditLogResponse */
         UserAuditLogResponse: {
             /** Id */
@@ -7552,6 +7541,17 @@ export interface components {
             role: components["schemas"]["UserRole"];
             /** Password */
             password: string;
+        };
+        /** UserManagementListResponse */
+        UserManagementListResponse: {
+            /** Items */
+            items: components["schemas"]["UserManagementResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
         };
         /** UserManagementResponse */
         UserManagementResponse: {
@@ -8853,7 +8853,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_UserAuditLogResponse_"];
+                    "application/json": components["schemas"]["UserAuditLogListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -8905,7 +8905,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_UserManagementResponse_"];
+                    "application/json": components["schemas"]["UserManagementListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -9370,7 +9370,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_AnnexDataLineResponse_"];
+                    "application/json": components["schemas"]["AnnexDataLineListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -10528,7 +10528,7 @@ export interface operations {
             query?: {
                 tax_year?: number | null;
                 client_record_id?: number | null;
-                status?: string | null;
+                status?: components["schemas"]["AnnualReportStatus"] | null;
                 page?: number;
                 page_size?: number;
                 sort_by?: string;
@@ -10546,7 +10546,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportListItem_"];
+                    "application/json": components["schemas"]["AnnualReportListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -10666,7 +10666,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportListItem_"];
+                    "application/json": components["schemas"]["AnnualReportListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -10912,7 +10912,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_ScheduleEntryResponse_"];
+                    "application/json": components["schemas"]["AnnualReportScheduleListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -11426,7 +11426,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportAuditEntry_"];
+                    "application/json": components["schemas"]["AnnualReportAuditListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -11487,7 +11487,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportListItem_"];
+                    "application/json": components["schemas"]["AnnualReportListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -11532,7 +11532,7 @@ export interface operations {
         parameters: {
             query?: {
                 client_record_id?: number | null;
-                status?: string | null;
+                status?: components["schemas"]["AnnualReportStatus"] | null;
                 page?: number;
                 page_size?: number;
             };
@@ -11548,7 +11548,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportListItem_"];
+                    "application/json": components["schemas"]["AnnualReportListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -11660,7 +11660,7 @@ export interface operations {
         parameters: {
             query?: {
                 client_record_id?: number | null;
-                status?: string | null;
+                status?: components["schemas"]["AnnualReportStatus"] | null;
                 page?: number;
                 page_size?: number;
             };
@@ -11678,7 +11678,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_AnnualReportListItem_"];
+                    "application/json": components["schemas"]["AnnualReportListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -11908,7 +11908,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_ChargeResponse_"];
+                    "application/json": components["schemas"]["ChargeResponseListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -12297,7 +12297,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_AuthorityContactResponse_"];
+                    "application/json": components["schemas"]["AuthorityContactListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -13871,7 +13871,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_BinderDetailResponse_"];
+                    "application/json": components["schemas"]["BinderListResponseExtended"];
                 };
             };
             /** @description נדרש אימות */
@@ -14427,9 +14427,9 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: {
+        requestBody: {
             content: {
-                "application/json": components["schemas"]["BinderHandoverToClientRequest"] | null;
+                "application/json": components["schemas"]["BinderHandoverToClientRequest"];
             };
         };
         responses: {
@@ -14743,7 +14743,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_BinderIntakeResponse_"];
+                    "application/json": components["schemas"]["BinderIntakeListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -14876,7 +14876,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_BinderDetailResponse_"];
+                    "application/json": components["schemas"]["BinderListResponseExtended"];
                 };
             };
             /** @description נדרש אימות */
@@ -14922,7 +14922,7 @@ export interface operations {
             query?: {
                 business_id?: number | null;
                 client_record_id?: number | null;
-                status?: string | null;
+                status?: components["schemas"]["ChargeStatus"] | null;
                 charge_type?: string | null;
                 period?: string | null;
                 issued_after?: string | null;
@@ -16437,7 +16437,7 @@ export interface operations {
             query?: {
                 page?: number;
                 page_size?: number;
-                status?: string | null;
+                status?: components["schemas"]["ReminderStatus"] | null;
             };
             header?: never;
             path?: never;
@@ -16451,7 +16451,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_ReminderResponse_"];
+                    "application/json": components["schemas"]["ReminderListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -16572,6 +16572,15 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorEnvelope"];
                 };
             };
+            /** @description אין הרשאה לצפייה בתזכורת */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
             /** @description התזכורת המבוקשת לא נמצאה */
             404: {
                 headers: {
@@ -16614,6 +16623,15 @@ export interface operations {
             };
             /** @description נדרש אימות */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorEnvelope"];
+                };
+            };
+            /** @description אין הרשאה לביצוע הפעולה */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -17286,7 +17304,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_AdvancePaymentRow_"];
+                    "application/json": components["schemas"]["AdvancePaymentListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -17946,7 +17964,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_SignatureRequestResponse_"];
+                    "application/json": components["schemas"]["SignatureRequestListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -18111,7 +18129,7 @@ export interface operations {
     list_client_signature_requests_api_v1_clients__client_record_id__signature_requests_get: {
         parameters: {
             query?: {
-                status?: string | null;
+                status?: components["schemas"]["SignatureRequestStatus"] | null;
                 page?: number;
                 page_size?: number;
             };
@@ -18129,7 +18147,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_SignatureRequestResponse_"];
+                    "application/json": components["schemas"]["SignatureRequestListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -19724,7 +19742,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_EntityNoteResponse_"];
+                    "application/json": components["schemas"]["EntityNoteListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -19986,7 +20004,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_EntityNoteResponse_"];
+                    "application/json": components["schemas"]["EntityNoteListResponse"];
                 };
             };
             /** @description נדרש אימות */
@@ -20331,7 +20349,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_TaskResponse_"];
+                    "application/json": components["schemas"]["TaskListResponse"];
                 };
             };
             /** @description נדרש אימות */
