@@ -1,7 +1,8 @@
 import type { BackendAction } from '@/lib/actions/types'
+import type { VatType } from '@/features/clients/api'
 import type { VatPeriodTypeFilter } from '../constants'
 
-export type VatType = 'monthly' | 'bimonthly' | 'exempt'
+export type { VatType }
 
 export type VatWorkItemStatus =
   | 'pending_materials'

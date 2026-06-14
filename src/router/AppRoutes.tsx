@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react'
-import { Routes, Route, Navigate, Outlet, useNavigate } from 'react-router-dom'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { Routes, Route, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { AUTH_EXPIRED_EVENT } from '../api/client'
 import { useAuthStore } from '../store/auth.store'
 import { selectIsAuthenticated } from '../store/auth.selectors'
@@ -74,11 +74,25 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ requiredRole }) => {
 }
 
 const AuthenticatedLayout: React.FC = () => {
+  const [mobileClientSidebarOpen, setMobileClientSidebarOpen] = useState(false)
+  const mobileClientSidebarTriggerRef = useRef<HTMLButtonElement>(null)
+  const location = useLocation()
+  const openMobileClientSidebar = useCallback(() => setMobileClientSidebarOpen(true), [])
+  const closeMobileClientSidebar = useCallback(() => setMobileClientSidebarOpen(false), [])
+
+  useEffect(() => {
+    setMobileClientSidebarOpen(false)
+  }, [location.pathname, location.search])
+
   return (
-    <div className="flex flex-1 overflow-hidden h-screen">
-      <ClientSidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Navbar />
+    <div className="flex h-screen flex-1 flex-col overflow-hidden">
+      <Navbar onOpenClientSidebar={openMobileClientSidebar} clientSidebarTriggerRef={mobileClientSidebarTriggerRef} />
+      <div className="flex min-h-0 flex-1 overflow-hidden">
+        <ClientSidebar
+          mobileOpen={mobileClientSidebarOpen}
+          onMobileClose={closeMobileClientSidebar}
+          mobileTriggerRef={mobileClientSidebarTriggerRef}
+        />
         <PageLayout>
           <Outlet />
         </PageLayout>

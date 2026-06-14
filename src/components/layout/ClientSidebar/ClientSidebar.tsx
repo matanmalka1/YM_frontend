@@ -1,7 +1,19 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import { useDebounce } from 'use-debounce'
 import { Link, NavLink } from 'react-router-dom'
-import { LogOut, Plus, Search, User as UserIcon } from 'lucide-react'
+import {
+  Building2,
+  LogOut,
+  Mail,
+  Phone,
+  Plus,
+  ReceiptText,
+  RefreshCw,
+  Search,
+  User as UserIcon,
+  Users,
+  X,
+} from 'lucide-react'
 import { useAuthStore } from '@/store/auth.store'
 import { CLIENT_ROUTES } from '@/features/clients'
 import { ENTITY_TYPE_LABELS, VAT_TYPE_LABELS } from '@/features/clients/constants'
@@ -19,20 +31,23 @@ interface ClientGroup {
 }
 
 const GROUP_MODES: Array<{ value: GroupMode; label: string }> = [
-  { value: 'entity', label: 'סוג' },
-  { value: 'vat', label: 'מע״מ' },
+  { value: 'entity', label: 'סוג התאגדות' },
+  { value: 'vat', label: 'דיווח מע״מ' },
 ]
+
+const getEntityLabel = (client: ClientSidebarItem): string =>
+  client.entityType ? ENTITY_TYPE_LABELS[client.entityType] : 'ללא סוג'
+
+const getVatLabel = (client: ClientSidebarItem): string =>
+  client.vatReportingFrequency ? VAT_TYPE_LABELS[client.vatReportingFrequency] : 'ללא תדירות'
 
 const getGroupInfo = (client: ClientSidebarItem, groupMode: GroupMode): { key: string; label: string } => {
   if (groupMode === 'entity') {
     const key = client.entityType ?? 'unknown'
-    return { key, label: client.entityType ? ENTITY_TYPE_LABELS[client.entityType] : 'ללא סוג' }
+    return { key, label: getEntityLabel(client) }
   }
   const key = client.vatReportingFrequency ?? 'unknown'
-  return {
-    key,
-    label: client.vatReportingFrequency ? VAT_TYPE_LABELS[client.vatReportingFrequency] : 'ללא מע״מ',
-  }
+  return { key, label: getVatLabel(client) }
 }
 
 const groupClients = (clients: ClientSidebarItem[], groupMode: GroupMode): ClientGroup[] => {
@@ -55,166 +70,328 @@ const groupClients = (clients: ClientSidebarItem[], groupMode: GroupMode): Clien
   )
 }
 
-export const ClientSidebar: React.FC = () => {
+interface ClientSidebarProps {
+  mobileOpen: boolean
+  onMobileClose: () => void
+  mobileTriggerRef: RefObject<HTMLButtonElement | null>
+}
+
+export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobileClose, mobileTriggerRef }) => {
   const [searchValue, setSearchValue] = useState('')
   const [debouncedSearch] = useDebounce(searchValue, 350)
   const [groupMode, setGroupMode] = useState<GroupMode>('entity')
-  const { clients, total, hasSearch, isLoading, isError } = useClientSidebarClients(debouncedSearch)
+  const sidebarRef = useRef<HTMLElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
+  const { clients, total, hasSearch, isLoading, isError, refetch } = useClientSidebarClients(debouncedSearch)
   const { user, logout } = useAuthStore()
   const { can } = useRole()
   const clientGroups = useMemo(() => groupClients(clients, groupMode), [clients, groupMode])
   const isTruncated = !hasSearch && total > clients.length && clients.length >= CLIENT_SIDEBAR_PAGE_SIZE
 
+  useEffect(() => {
+    if (!mobileOpen) return
+
+    const mobileTrigger = mobileTriggerRef.current
+    document.body.style.overflow = 'hidden'
+    const frame = requestAnimationFrame(() => searchInputRef.current?.focus())
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        onMobileClose()
+        return
+      }
+
+      if (event.key !== 'Tab' || !sidebarRef.current) return
+
+      const focusable = Array.from(
+        sidebarRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      )
+      if (focusable.length === 0) return
+
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      cancelAnimationFrame(frame)
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = ''
+      mobileTrigger?.focus()
+    }
+  }, [mobileOpen, mobileTriggerRef, onMobileClose])
+
   return (
-    <aside className="hidden h-screen w-[220px] shrink-0 flex-col border-l border-gray-200 bg-white text-gray-900 md:flex 2xl:w-[230px]">
-      {/* Logo */}
-      <div className="flex h-14 shrink-0 items-center border-b border-gray-200 px-3.5">
-        <Link to="/" className="min-w-0 text-right" aria-label="לוח בקרה">
-          <p className="font-[family-name:var(--font-display)] truncate text-base font-bold leading-tight text-gray-950">
-            YM Tax CRM
-          </p>
-        </Link>
-      </div>
-
-      {/* Search + controls — not scrollable */}
-      <div className="shrink-0 space-y-2 border-b border-gray-100 p-2.5">
-        <label className="relative block">
-          <Search className="pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-          <input
-            type="search"
-            value={searchValue}
-            onChange={(event) => setSearchValue(event.target.value)}
-            placeholder="חיפוש לקוח"
-            className="h-8 w-full rounded-md border border-gray-200 bg-gray-50 pr-8 pl-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-primary-400 focus:bg-white focus:ring-2 focus:ring-primary-100"
-          />
-        </label>
-
-        <div className="flex items-center justify-between px-0.5">
-          <div className="flex items-center gap-1">
-            <span className="text-xs font-semibold text-gray-600">לקוחות</span>
-            <span className="min-w-[18px] rounded-full bg-gray-100 px-1.5 text-center text-[11px] font-semibold tabular-nums text-gray-500">
-              {(hasSearch ? clients.length : total).toLocaleString('he-IL')}
-            </span>
-          </div>
-          {can.createClients && (
+    <>
+      <button
+        type="button"
+        onClick={onMobileClose}
+        className={cn(
+          'fixed inset-x-0 bottom-0 top-16 z-40 bg-black/20 transition-opacity md:hidden',
+          mobileOpen ? 'visible opacity-100' : 'invisible pointer-events-none opacity-0',
+        )}
+        aria-label="סגירת רשימת לקוחות"
+        tabIndex={mobileOpen ? 0 : -1}
+      />
+      <aside
+        ref={sidebarRef}
+        dir="rtl"
+        className={cn(
+          'fixed bottom-0 right-0 top-16 z-50 flex w-[min(320px,calc(100vw-2rem))] shrink-0 flex-col border-l border-gray-200/80 bg-white text-gray-900 shadow-2xl transition-transform duration-300',
+          mobileOpen ? 'visible translate-x-0' : 'invisible pointer-events-none translate-x-full',
+          'md:visible md:static md:z-auto md:h-full md:w-[300px] md:translate-x-0 md:pointer-events-auto md:shadow-none 2xl:w-[320px]',
+        )}
+        role={mobileOpen ? 'dialog' : undefined}
+        aria-modal={mobileOpen ? 'true' : undefined}
+        aria-label={mobileOpen ? 'רשימת לקוחות' : undefined}
+      >
+        <div className="shrink-0 px-4 pb-3 pt-4">
+          <div className="flex items-start justify-between gap-3">
             <Link
-              to={`${CLIENT_ROUTES.list}?create=1`}
-              className="flex h-6 w-6 items-center justify-center rounded-md text-gray-400 transition hover:bg-primary-50 hover:text-primary-600"
-              aria-label="לקוח חדש"
+              to="/"
+              onClick={onMobileClose}
+              className="focus-ring flex min-w-0 items-center gap-3 rounded-2xl px-1 py-1"
+              aria-label="מעבר ללוח הבקרה"
             >
-              <Plus className="h-3.5 w-3.5" />
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] border border-gray-200 bg-gray-100 text-sm font-bold tracking-tight text-gray-900">
+                YM
+              </span>
+              <span className="min-w-0 text-right">
+                <span
+                  dir="ltr"
+                  className="block truncate text-left font-[family-name:var(--font-display)] text-[15px] font-bold leading-tight text-gray-950"
+                >
+                  YM tax CRM
+                </span>
+                <span className="mt-1 block truncate text-xs leading-none text-gray-500">
+                  מערכת ניהול למשרד רואי חשבון
+                </span>
+              </span>
             </Link>
-          )}
-        </div>
-
-        <div className="grid grid-cols-2 gap-1 rounded-md bg-gray-100 p-1" aria-label="קיבוץ לקוחות">
-          {GROUP_MODES.map((mode) => (
             <button
-              key={mode.value}
               type="button"
-              onClick={() => setGroupMode(mode.value)}
-              className={cn(
-                'h-6 rounded text-xs font-medium transition',
-                groupMode === mode.value
-                  ? 'bg-white text-primary-700 shadow-sm'
-                  : 'text-gray-500 hover:bg-white/60 hover:text-gray-800',
-              )}
+              onClick={onMobileClose}
+              className="focus-ring mt-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-gray-500 hover:bg-gray-100 md:hidden"
+              aria-label="סגירה"
             >
-              {mode.label}
+              <X className="h-4 w-4" />
             </button>
-          ))}
+          </div>
         </div>
-      </div>
 
-      {/* Client list — only this scrolls */}
-      <nav className="min-h-0 flex-1 overflow-y-auto px-1.5 py-1.5" aria-label="לקוחות">
-        {/* TODO: Add client alerts once alert counts are exposed for this navigation surface. */}
-        {isLoading ? (
-          <p className="px-3 py-2 text-sm text-gray-500">טוען לקוחות...</p>
-        ) : isError ? (
-          <p className="px-3 py-2 text-sm text-negative-600">שגיאה בטעינת לקוחות</p>
-        ) : clients.length === 0 ? (
-          <p className="px-3 py-2 text-sm text-gray-500">לא נמצאו לקוחות</p>
-        ) : (
-          <div className="space-y-4">
-            {isTruncated ? (
-              <p className="rounded-md bg-warning-50 px-2 py-1.5 text-[11px] font-medium text-warning-700">
-                מוצגים {CLIENT_SIDEBAR_PAGE_SIZE.toLocaleString('he-IL')} מתוך {total.toLocaleString('he-IL')}
-              </p>
+        <div className="shrink-0 space-y-3 border-b border-gray-100 px-4 pb-4">
+          <label className="relative block">
+            <span className="sr-only">חיפוש לקוח</span>
+            <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <input
+              ref={searchInputRef}
+              type="search"
+              value={searchValue}
+              onChange={(event) => setSearchValue(event.target.value)}
+              placeholder="חיפוש לפי שם, מספר או פרטי קשר"
+              className="h-10 w-full rounded-xl border border-gray-200 bg-gray-50/80 pr-9 pl-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-primary-300 focus:bg-white focus:ring-4 focus:ring-primary-50"
+            />
+          </label>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gray-100 text-gray-600">
+                <Users className="h-4 w-4" />
+              </span>
+              <div>
+                <p className="text-sm font-semibold leading-tight text-gray-900">לקוחות</p>
+                <p className="mt-0.5 text-[11px] leading-tight text-gray-500">
+                  <span className="tabular-nums">{(hasSearch ? clients.length : total).toLocaleString('he-IL')}</span>{' '}
+                  {hasSearch ? 'תוצאות' : 'ברשימה'}
+                </p>
+              </div>
+            </div>
+            {can.createClients ? (
+              <Link
+                to={`${CLIENT_ROUTES.list}?create=1`}
+                onClick={onMobileClose}
+                className="focus-ring flex h-9 items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 text-xs font-semibold text-gray-700 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 hover:text-gray-950"
+                aria-label="הוספת לקוח חדש"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                לקוח חדש
+              </Link>
             ) : null}
-            {clientGroups.map((group) => (
-              <section key={group.key} aria-label={group.label}>
-                {/* Group header */}
-                <div className="mb-1 flex items-center gap-1 px-2 py-0.5">
-                  <span className="flex-1 truncate text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-                    {group.label}
-                  </span>
-                  <span className="shrink-0 text-[11px] font-semibold tabular-nums text-gray-400">
-                    {group.clients.length}
-                  </span>
-                </div>
+          </div>
 
-                <ul>
-                  {group.clients.map((client) => (
-                    <li key={client.id}>
-                      <NavLink
-                        to={CLIENT_ROUTES.detail(client.id)}
-                        className={({ isActive }) =>
-                          cn(
-                            'block rounded-md border-r-[3px] px-2 py-1.5 text-right transition',
-                            isActive
-                              ? 'border-primary-400 bg-primary-100 font-semibold text-primary-900'
-                              : 'border-transparent text-gray-700 hover:bg-gray-50 hover:text-gray-950',
-                          )
-                        }
-                      >
-                        <span className="block truncate text-[14px]">{client.displayName}</span>
-                        <div className="flex items-end justify-between gap-2">
-                          <span className="shrink-0 text-[12px] leading-5 text-gray-400">
-                            {formatClientOfficeId(client.officeClientNumber)}
-                          </span>
-                          {client.phone ? (
-                            <span
-                              dir="ltr"
-                              className="block shrink-0 truncate text-left text-[12px] leading-4 text-gray-400"
-                            >
-                              {formatPhoneNumber(client.phone)}
-                            </span>
-                          ) : null}
-                        </div>
-                      </NavLink>
-                    </li>
-                  ))}
-                </ul>
-              </section>
+          <div className="grid grid-cols-2 gap-1 rounded-xl bg-gray-100 p-1" aria-label="קיבוץ לקוחות">
+            {GROUP_MODES.map((mode) => (
+              <button
+                key={mode.value}
+                type="button"
+                onClick={() => setGroupMode(mode.value)}
+                className={cn(
+                  'focus-ring h-8 rounded-[10px] text-xs font-medium transition',
+                  groupMode === mode.value
+                    ? 'bg-white text-gray-950 shadow-sm'
+                    : 'text-gray-500 hover:bg-white/70 hover:text-gray-800',
+                )}
+                aria-pressed={groupMode === mode.value}
+              >
+                {mode.label}
+              </button>
             ))}
           </div>
-        )}
-      </nav>
-
-      {/* User footer */}
-      <div className="shrink-0 border-t border-gray-200 px-2 py-2">
-        <div className="flex items-center justify-between gap-2 rounded-md px-2 py-1.5">
-          <div className="flex min-w-0 items-center gap-2">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gray-100">
-              <UserIcon className="h-3.5 w-3.5 text-gray-500" />
-            </div>
-            <div className="min-w-0 text-right">
-              <p className="truncate text-xs font-medium leading-tight text-gray-900">{user?.full_name || 'אורח'}</p>
-              {user?.role && (
-                <p className="truncate text-[11px] leading-tight text-gray-400">{getRoleLabel(user.role)}</p>
-              )}
-            </div>
-          </div>
-          <button
-            onClick={() => void logout()}
-            className="shrink-0 rounded-md p-1 text-gray-400 transition-colors hover:bg-negative-50 hover:text-negative-600"
-            aria-label="התנתקות"
-          >
-            <LogOut className="h-3.5 w-3.5" />
-          </button>
         </div>
-      </div>
-    </aside>
+
+        <nav className="min-h-0 flex-1 overflow-y-auto px-3 py-3" aria-label="רשימת לקוחות">
+          {isLoading ? (
+            <div className="space-y-2" aria-label="טוען לקוחות">
+              {Array.from({ length: 4 }, (_, index) => (
+                <div key={index} className="h-32 animate-pulse rounded-2xl border border-gray-100 bg-gray-50" />
+              ))}
+            </div>
+          ) : isError ? (
+            <div className="rounded-2xl border border-negative-100 bg-negative-50 p-4 text-center">
+              <p className="text-sm font-semibold text-negative-800">לא הצלחנו לטעון את הלקוחות</p>
+              <button
+                type="button"
+                onClick={() => void refetch()}
+                className="focus-ring mx-auto mt-3 flex h-8 items-center gap-1.5 rounded-xl bg-white px-3 text-xs font-semibold text-negative-700 shadow-sm"
+              >
+                <RefreshCw className="h-3.5 w-3.5" />
+                ניסיון נוסף
+              </button>
+            </div>
+          ) : clients.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/70 px-4 py-8 text-center">
+              <Users className="mx-auto h-5 w-5 text-gray-400" />
+              <p className="mt-2 text-sm font-medium text-gray-700">
+                {hasSearch ? 'לא נמצאו לקוחות מתאימים' : 'עדיין אין לקוחות'}
+              </p>
+              {hasSearch ? <p className="mt-1 text-xs text-gray-500">נסו לחפש בשם או במספר אחר</p> : null}
+            </div>
+          ) : (
+            <div className="space-y-5">
+              {isTruncated ? (
+                <p className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-600">
+                  מוצגים {CLIENT_SIDEBAR_PAGE_SIZE.toLocaleString('he-IL')} מתוך {total.toLocaleString('he-IL')}
+                </p>
+              ) : null}
+              {clientGroups.map((group) => (
+                <section key={group.key} aria-label={group.label}>
+                  <div className="mb-2 flex items-center gap-2 px-1">
+                    <span className="flex-1 truncate text-xs font-semibold text-gray-600">{group.label}</span>
+                    <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-semibold tabular-nums text-gray-500">
+                      {group.clients.length}
+                    </span>
+                  </div>
+
+                  <ul className="space-y-2">
+                    {group.clients.map((client) => (
+                      <li key={client.id}>
+                        <NavLink
+                          to={CLIENT_ROUTES.detail(client.id)}
+                          onClick={onMobileClose}
+                          className={({ isActive }) =>
+                            cn(
+                              'focus-ring group block rounded-2xl border p-3 text-right transition',
+                              isActive
+                                ? 'border-primary-200 bg-primary-50/80 shadow-sm'
+                                : 'border-gray-200/80 bg-white hover:border-gray-300 hover:bg-gray-50/70 hover:shadow-sm',
+                            )
+                          }
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="min-w-0">
+                              <span
+                                className="block truncate text-sm font-semibold text-gray-950"
+                                title={client.displayName}
+                              >
+                                {client.displayName}
+                              </span>
+                            </div>
+                            <span className="shrink-0 rounded-full bg-gray-100 px-2 py-1 text-[11px] font-semibold tabular-nums text-gray-600">
+                              {client.officeClientNumber == null
+                                ? 'ללא מספר משרד'
+                                : `מס׳ ${formatClientOfficeId(client.officeClientNumber)}`}
+                            </span>
+                          </div>
+
+                          <div className="mt-3 flex flex-wrap gap-1.5">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-[11px] font-medium text-gray-600">
+                              <Building2 className="h-3 w-3" />
+                              {getEntityLabel(client)}
+                            </span>
+                            <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-[11px] font-medium text-gray-600">
+                              <ReceiptText className="h-3 w-3" />
+                              מע״מ {getVatLabel(client)}
+                            </span>
+                          </div>
+
+                          <div className="mt-3 space-y-1.5 border-t border-gray-100 pt-2.5 text-xs">
+                            <span className="flex min-w-0 items-center gap-2 text-gray-500">
+                              <Phone className="h-3.5 w-3.5 shrink-0" />
+                              {client.phone ? (
+                                <bdi dir="ltr" className="truncate text-gray-700">
+                                  {formatPhoneNumber(client.phone)}
+                                </bdi>
+                              ) : (
+                                <span className="text-gray-400">לא הוזן טלפון</span>
+                              )}
+                            </span>
+                            <span className="flex min-w-0 items-center gap-2 text-gray-500">
+                              <Mail className="h-3.5 w-3.5 shrink-0" />
+                              {client.email ? (
+                                <bdi dir="ltr" className="truncate text-left text-gray-700" title={client.email}>
+                                  {client.email}
+                                </bdi>
+                              ) : (
+                                <span className="text-gray-400">לא הוזן דוא״ל</span>
+                              )}
+                            </span>
+                          </div>
+                        </NavLink>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </div>
+          )}
+        </nav>
+
+        <div className="shrink-0 border-t border-gray-100 p-3">
+          <div className="flex items-center justify-between gap-2 rounded-2xl bg-gray-50 px-3 py-2.5">
+            <div className="flex min-w-0 items-center gap-2">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm">
+                <UserIcon className="h-4 w-4 text-gray-500" />
+              </div>
+              <div className="min-w-0 text-right">
+                <p className="truncate text-xs font-semibold leading-tight text-gray-900">
+                  {user?.full_name || 'אורח'}
+                </p>
+                {user?.role && (
+                  <p className="mt-0.5 truncate text-[11px] leading-tight text-gray-500">{getRoleLabel(user.role)}</p>
+                )}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => void logout()}
+              className="focus-ring shrink-0 rounded-xl p-2 text-gray-400 transition-colors hover:bg-white hover:text-negative-600 hover:shadow-sm"
+              aria-label="התנתקות"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </aside>
+    </>
   )
 }

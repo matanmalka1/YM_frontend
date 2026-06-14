@@ -1,5 +1,3 @@
-export type UserRole = 'advisor' | 'secretary'
-
 export interface UsersFilters {
   page: number
   page_size: number
