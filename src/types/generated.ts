@@ -4567,31 +4567,6 @@ export interface components {
             /** In Office Count */
             in_office_count: number;
         };
-        /** Body_import_clients_from_excel_api_v1_clients_import_post */
-        Body_import_clients_from_excel_api_v1_clients_import_post: {
-            /** File */
-            file: string;
-        };
-        /** Body_replace_document_api_v1_documents_client__client_record_id___document_id__replace_put */
-        Body_replace_document_api_v1_documents_client__client_record_id___document_id__replace_put: {
-            /** File */
-            file: string;
-        };
-        /** Body_upload_permanent_document_api_v1_documents_upload_post */
-        Body_upload_permanent_document_api_v1_documents_upload_post: {
-            /** Client Record Id */
-            client_record_id: number;
-            /** Document Type */
-            document_type: string;
-            /** File */
-            file: string;
-            /** Business Id */
-            business_id?: number | null;
-            /** Tax Year */
-            tax_year?: number | null;
-            /** Annual Report Id */
-            annual_report_id?: number | null;
-        };
         /** BracketBreakdownItem */
         BracketBreakdownItem: {
             /**
@@ -8499,6 +8474,31 @@ export interface components {
              * @enum {string}
              */
             severity: "info" | "warning" | "danger";
+        };
+        /** ClientImportRequestBody */
+        ClientImportRequestBody: {
+            /** File */
+            file: string;
+        };
+        /** DocumentReplaceRequestBody */
+        DocumentReplaceRequestBody: {
+            /** File */
+            file: string;
+        };
+        /** PermanentDocumentUploadRequestBody */
+        PermanentDocumentUploadRequestBody: {
+            /** Client Record Id */
+            client_record_id: number;
+            /** Document Type */
+            document_type: string;
+            /** File */
+            file: string;
+            /** Business Id */
+            business_id?: number | null;
+            /** Tax Year */
+            tax_year?: number | null;
+            /** Annual Report Id */
+            annual_report_id?: number | null;
         };
     };
     responses: never;
@@ -12771,7 +12771,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "multipart/form-data": components["schemas"]["Body_import_clients_from_excel_api_v1_clients_import_post"];
+                "multipart/form-data": components["schemas"]["ClientImportRequestBody"];
             };
         };
         responses: {
@@ -15551,7 +15551,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "multipart/form-data": components["schemas"]["Body_upload_permanent_document_api_v1_documents_upload_post"];
+                "multipart/form-data": components["schemas"]["PermanentDocumentUploadRequestBody"];
             };
         };
         responses: {
@@ -15870,7 +15870,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "multipart/form-data": components["schemas"]["Body_replace_document_api_v1_documents_client__client_record_id___document_id__replace_put"];
+                "multipart/form-data": components["schemas"]["DocumentReplaceRequestBody"];
             };
         };
         responses: {
