@@ -4,8 +4,8 @@ import { PageHeader } from '@/components/layout/PageHeader'
 import { TaxCalendarFiltersBar } from '../components/TaxCalendarFiltersBar'
 import { TaxCalendarGroupsContent } from '../components/TaxCalendarGroupsContent'
 import { useTaxCalendarGroups } from '../hooks/useTaxCalendarGroups'
-import { type TaxCalendarGroupStatusFilter } from '../utils'
-import { type TaxCalendarGroupsParams, type TaxCalendarObligationType } from '../api'
+import { parseTaxCalendarGroupStatusFilter, parseTaxCalendarObligationType } from '../utils'
+import { type TaxCalendarGroupsParams } from '../api'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { parsePositiveInt } from '@/utils/utils'
 
@@ -17,9 +17,9 @@ export const TaxCalendarGroupsPage = () => {
 
   const startYear = searchParams.get('tax_year_after') ?? String(currentYear)
   const endYear = searchParams.get('tax_year_before') ?? String(currentYear)
-  const obligationType = searchParams.get('obligation_type') ?? ''
+  const obligationType = parseTaxCalendarObligationType(searchParams.get('obligation_type'))
   const includeEmpty = searchParams.get('include_empty') === 'true'
-  const status = (searchParams.get('status') as TaxCalendarGroupStatusFilter) || 'all'
+  const status = parseTaxCalendarGroupStatusFilter(searchParams.get('status'))
   const clientSearchText = searchParams.get('client_search') ?? ''
   const page = parsePositiveInt(searchParams.get('page'), 1)
 
@@ -29,7 +29,7 @@ export const TaxCalendarGroupsPage = () => {
     () => ({
       tax_year_after: Number(startYear) || currentYear,
       tax_year_before: Number(endYear) || currentYear,
-      obligation_type: obligationType ? (obligationType as TaxCalendarObligationType) : undefined,
+      obligation_type: obligationType,
       status,
       include_empty: includeEmpty,
       client_search: debouncedClientSearch.trim() || undefined,
@@ -57,7 +57,7 @@ export const TaxCalendarGroupsPage = () => {
       <TaxCalendarFiltersBar
         startYear={startYear}
         endYear={endYear}
-        obligationType={obligationType}
+        obligationType={obligationType ?? ''}
         status={status}
         onStartYearChange={(value) => setFilter('tax_year_after', value)}
         onEndYearChange={(value) => setFilter('tax_year_before', value)}

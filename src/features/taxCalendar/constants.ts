@@ -1,15 +1,31 @@
-import { TAX_CALENDAR_OBLIGATION_LABELS } from './api'
+import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarObligationType } from './api'
+
+export const TAX_CALENDAR_OBLIGATION_TYPES = [
+  'vat',
+  'advance_payment',
+  'annual_report',
+] as const satisfies readonly TaxCalendarObligationType[]
+
+export const TAX_CALENDAR_GROUP_STATUSES = ['all', 'open', 'overdue', 'done'] as const
+
+export type TaxCalendarGroupStatusFilter = (typeof TAX_CALENDAR_GROUP_STATUSES)[number]
 
 export const TAX_CALENDAR_OBLIGATION_TYPE_OPTIONS = [
   { value: '', label: 'כל סוגי החובות' },
-  { value: 'vat', label: TAX_CALENDAR_OBLIGATION_LABELS.vat },
-  { value: 'advance_payment', label: TAX_CALENDAR_OBLIGATION_LABELS.advance_payment },
-  { value: 'annual_report', label: TAX_CALENDAR_OBLIGATION_LABELS.annual_report },
+  ...TAX_CALENDAR_OBLIGATION_TYPES.map((value) => ({
+    value,
+    label: TAX_CALENDAR_OBLIGATION_LABELS[value],
+  })),
 ]
 
-export const TAX_CALENDAR_STATUS_OPTIONS = [
-  { value: 'all', label: 'כל המצבים' },
-  { value: 'open', label: 'פתוחים' },
-  { value: 'overdue', label: 'באיחור' },
-  { value: 'done', label: 'הושלמו' },
-]
+const TAX_CALENDAR_STATUS_LABELS: Record<TaxCalendarGroupStatusFilter, string> = {
+  all: 'כל המצבים',
+  open: 'פתוחים',
+  overdue: 'באיחור',
+  done: 'הושלמו',
+}
+
+export const TAX_CALENDAR_STATUS_OPTIONS = TAX_CALENDAR_GROUP_STATUSES.map((value) => ({
+  value,
+  label: TAX_CALENDAR_STATUS_LABELS[value],
+}))

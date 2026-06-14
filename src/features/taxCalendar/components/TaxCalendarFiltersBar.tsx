@@ -4,8 +4,11 @@ import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
 import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
-import { TAX_CALENDAR_OBLIGATION_TYPE_OPTIONS, TAX_CALENDAR_STATUS_OPTIONS } from '../constants'
-import type { TaxCalendarGroupStatusFilter } from '../utils'
+import {
+  TAX_CALENDAR_OBLIGATION_TYPE_OPTIONS,
+  TAX_CALENDAR_STATUS_OPTIONS,
+  type TaxCalendarGroupStatusFilter,
+} from '../constants'
 
 interface TaxCalendarFiltersBarProps {
   startYear: string

@@ -1,7 +1,7 @@
 import { type FC, useMemo } from 'react'
 import { useTaxCalendarGroups } from '../hooks/useTaxCalendarGroups'
-import { type TaxCalendarGroupStatusFilter } from '../utils'
-import { type TaxCalendarGroupsParams, type TaxCalendarObligationType } from '../api'
+import { parseTaxCalendarGroupStatusFilter, parseTaxCalendarObligationType } from '../utils'
+import { type TaxCalendarGroupsParams } from '../api'
 import { TaxCalendarFiltersBar } from './TaxCalendarFiltersBar'
 import { TaxCalendarGroupsContent } from './TaxCalendarGroupsContent'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
@@ -19,15 +19,15 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
 
   const startYear = searchParams.get('tax_year_after') ?? String(currentYear)
   const endYear = searchParams.get('tax_year_before') ?? String(currentYear)
-  const obligationType = searchParams.get('obligation_type') ?? ''
-  const status = (searchParams.get('status') as TaxCalendarGroupStatusFilter) || 'all'
+  const obligationType = parseTaxCalendarObligationType(searchParams.get('obligation_type'))
+  const status = parseTaxCalendarGroupStatusFilter(searchParams.get('status'))
   const page = parsePositiveInt(searchParams.get('page'), 1)
 
   const params = useMemo<TaxCalendarGroupsParams>(
     () => ({
       tax_year_after: Number(startYear) || currentYear,
       tax_year_before: Number(endYear) || currentYear,
-      obligation_type: obligationType ? (obligationType as TaxCalendarObligationType) : undefined,
+      obligation_type: obligationType,
       status,
       client_record_id: clientId,
       page,
@@ -51,7 +51,7 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
       <TaxCalendarFiltersBar
         startYear={startYear}
         endYear={endYear}
-        obligationType={obligationType}
+        obligationType={obligationType ?? ''}
         status={status}
         onStartYearChange={(value) => setFilter('tax_year_after', value, true)}
         onEndYearChange={(value) => setFilter('tax_year_before', value, true)}
