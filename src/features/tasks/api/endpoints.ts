@@ -6,4 +6,7 @@ export const TASKS_ENDPOINTS = {
   delete: (id: number) => `/tasks/${id}`,
   complete: (id: number) => `/tasks/${id}/complete`,
   cancel: (id: number) => `/tasks/${id}/cancel`,
+  bulkComplete: '/tasks/bulk-complete',
+  bulkAssign: '/tasks/bulk-assign',
+  clientTasks: (clientRecordId: number) => `/clients/${clientRecordId}/tasks`,
 } as const

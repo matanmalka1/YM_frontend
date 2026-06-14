@@ -14,6 +14,7 @@ export type ActiveClientDetailsTab =
   | 'notifications'
   | 'notes'
   | 'history'
+  | 'tasks'
 export type ClientIdNumberType = Exclude<ClientRecordResponse['id_number_type'], null>
 export type ClientSortBy = 'full_name' | 'created_at' | 'status' | 'entity_type'
 export type ClientSortOrder = 'asc' | 'desc'
@@ -39,6 +40,7 @@ export const CLIENT_DETAILS_TABS: ActiveClientDetailsTab[] = [
   'notifications',
   'notes',
   'history',
+  'tasks',
 ]
 
 export const CLIENT_DETAILS_TAB_LABELS: Record<ActiveClientDetailsTab, string> = {
@@ -54,6 +56,7 @@ export const CLIENT_DETAILS_TAB_LABELS: Record<ActiveClientDetailsTab, string> =
   notifications: 'התראות',
   notes: 'הערות',
   history: 'יומן שינויים',
+  tasks: 'משימות',
 }
 
 export const ENTITY_TYPES = [

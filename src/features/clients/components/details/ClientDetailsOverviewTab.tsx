@@ -25,6 +25,7 @@ import { NotificationsTab } from '@/features/notifications'
 import { ClientTaxCalendarTab } from '@/features/taxCalendar'
 import { VatClientSummaryPanel } from '@/features/vatReports'
 import { ClientAuditTrailSection } from './ClientAuditTrailSection'
+import { ClientTasksTab } from '@/features/tasks'
 import type { UpdateClientPayload, ClientRecordResponse } from '../../api'
 import { useFirstBusinessId } from '../../hooks/useFirstBusinessId'
 import { useClientDetailsActions } from '../../hooks/useClientDetailsActions'
@@ -155,6 +156,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
       {activeTab === 'notifications' && <NotificationsTab clientRecordId={client.id} />}
       {activeTab === 'notes' && <ClientNotesCard clientId={client.id} canEdit={canEditClients} />}
       {activeTab === 'history' && <ClientAuditTrailSection clientId={client.id} />}
+      {activeTab === 'tasks' && <ClientTasksTab clientRecordId={client.id} />}
 
       <DeleteClientModal
         open={isConfirmingDelete}

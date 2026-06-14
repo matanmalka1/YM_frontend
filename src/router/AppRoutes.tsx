@@ -22,6 +22,7 @@ import { SigningPage } from '../features/signing'
 import { TaxCalendarGroupsPage } from '../features/taxCalendar'
 import { TaxCalendarSettingsPage } from '../features/taxCalendarSettings'
 import { TaxDashboardPage } from '../features/taxDashboard'
+import { TasksPage } from '../features/tasks'
 import { Users } from '../features/users'
 import { VatWorkItemDetail, VatWorkItems } from '../features/vatReports'
 import {
@@ -136,6 +137,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="clients/:clientId/notifications" element={<ClientDetails initialTab="notifications" />} />
             <Route path="clients/:clientId/notes" element={<ClientDetails initialTab="notes" />} />
             <Route path="clients/:clientId/history" element={<ClientDetails initialTab="history" />} />
+            <Route path="clients/:clientId/tasks" element={<ClientDetails initialTab="tasks" />} />
             <Route path="clients/:clientId/businesses/:businessId" element={<BusinessDetails />} />
             <Route path="search" element={<Search />} />
             <Route path="charges" element={<Charges />} />
@@ -154,6 +156,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="reports/annual-status" element={<AnnualReportStatusView />} />
             <Route path="reports/advance-payments" element={<AdvancePaymentReportView />} />
             <Route path="work-queue" element={<WorkQueuePage />} />
+            <Route path="tasks" element={<TasksPage />} />
           </Route>
         </Route>
 

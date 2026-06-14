@@ -17,6 +17,7 @@ export const taskSchema = z.object({
   assigned_role: z.enum(['advisor', 'secretary']).nullable().optional(),
   source_domain: z.string().nullable().optional(),
   source_id: z.number().int().nullable().optional(),
+  client_record_id: z.number().int().nullable().optional(),
   action_key: z.string().nullable().optional(),
   action_payload: z.record(z.string(), z.unknown()).nullable().optional(),
   created_by_user_id: z.number().int().nullable().optional(),
@@ -63,6 +64,38 @@ export interface TaskUpdateRequest {
   source_id?: number | null
   action_key?: string
   action_payload?: Record<string, unknown>
+}
+
+export const taskBulkFailureSchema = z.object({
+  task_id: z.number().int(),
+  code: z.string(),
+  message: z.string(),
+})
+export type TaskBulkFailure = z.infer<typeof taskBulkFailureSchema>
+
+export const taskBulkActionResponseSchema = z.object({
+  succeeded: z.array(z.number().int()),
+  failed: z.array(taskBulkFailureSchema),
+})
+export type TaskBulkActionResponse = z.infer<typeof taskBulkActionResponseSchema>
+
+export interface TaskBulkCompleteRequest {
+  task_ids: number[]
+}
+
+export interface TaskBulkAssignRequest {
+  task_ids: number[]
+  assignee_user_id: number | null
+}
+
+export interface ClientTaskListParams {
+  status?: TaskStatus
+  assigned_to_user_id?: number
+  source_domain?: string
+  due_before?: string
+  due_after?: string
+  page?: number
+  page_size?: number
 }
 
 export interface TaskListParams {
