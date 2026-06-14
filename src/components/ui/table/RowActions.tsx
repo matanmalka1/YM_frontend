@@ -28,6 +28,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
   const [pos, setPos] = useState<DropdownPos | null>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const portalRef = useRef<HTMLDivElement>(null)
+  const focusTrigger = () => triggerRef.current?.focus({ preventScroll: true })
 
   useDismissibleLayer({
     open,
@@ -35,7 +36,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
     layerRef: portalRef,
     onDismiss: () => {
       setOpen(false)
-      triggerRef.current?.focus()
+      focusTrigger()
     },
     closeOnEscape: true,
     closeOnScroll: true,
@@ -67,6 +68,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
   }
 
   const toggle = (event: React.MouseEvent) => {
+    event.preventDefault()
     event.stopPropagation()
     if (open) {
       setOpen(false)
@@ -110,7 +112,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
     if (event.key === 'Escape') {
       event.preventDefault()
       setOpen(false)
-      triggerRef.current?.focus()
+      focusTrigger()
     }
   }
 

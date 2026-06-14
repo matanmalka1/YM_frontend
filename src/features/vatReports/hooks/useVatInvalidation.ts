@@ -18,6 +18,7 @@ const invalidateVatLists = (queryClient: QueryClient) =>
   Promise.all([
     queryClient.invalidateQueries({ queryKey: vatReportsQK.lists() }),
     queryClient.invalidateQueries({ queryKey: vatReportsQK.groupsRoot() }),
+    queryClient.invalidateQueries({ queryKey: vatReportsQK.statusSummaryRoot() }),
   ])
 
 export const invalidateVatWorkItem = async (

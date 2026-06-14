@@ -17,6 +17,7 @@ import {
   getVatDeductionRateClass,
   getVatDeductionRateLabel,
   getVatInvoiceGrossAmount,
+  isGeneratedVatInvoiceNumber,
   toDateInputValue,
 } from '../utils'
 import type { VatInvoiceEditRowProps } from '../types'
@@ -40,7 +41,7 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
     defaultValues: {
       gross_amount: getVatInvoiceGrossAmount(invoice.net_amount, invoice.vat_amount),
       expense_category: invoice.expense_category ?? undefined,
-      invoice_number: invoice.invoice_number,
+      invoice_number: isGeneratedVatInvoiceNumber(invoice) ? '' : invoice.invoice_number,
       invoice_date: toDateInputValue(invoice.invoice_date),
       counterparty_name: invoice.counterparty_name,
       counterparty_id: invoice.counterparty_id ?? undefined,

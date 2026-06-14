@@ -1,7 +1,13 @@
 import { Pencil, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { RowActionItem, RowActionSeparator, RowActionsMenu } from '@/components/ui/table'
-import { formatVatAmount, getVatDeductionRateClass, getVatDeductionRateLabel } from '../utils'
+import {
+  formatVatAmount,
+  getVatDeductionRateClass,
+  getVatDeductionRateLabel,
+  getVatInvoiceActionLabel,
+  getVatInvoiceDisplayNumber,
+} from '../utils'
 import {
   CATEGORY_COLORS,
   CATEGORY_LABELS,
@@ -30,11 +36,13 @@ export const VatInvoiceRow: React.FC<VatInvoiceRowProps> = ({
 }) => {
   const isExpense = sectionType === 'expense'
   const catColor = inv.expense_category ? CATEGORY_COLORS[inv.expense_category] : ''
+  const invoiceDisplayNumber = getVatInvoiceDisplayNumber(inv)
+  const invoiceActionLabel = getVatInvoiceActionLabel(inv)
 
   return (
     <tr className="group transition-colors hover:bg-gray-50/60">
       <td className={`border-r-2 ${accentBorder} px-4 py-2.5 font-mono text-xs text-gray-500`}>
-        {inv.invoice_number}
+        {invoiceDisplayNumber}
         {inv.is_exceptional && (
           <span
             title={VAT_EXCEPTIONAL_INVOICE_TOOLTIP}
@@ -91,7 +99,7 @@ export const VatInvoiceRow: React.FC<VatInvoiceRowProps> = ({
       <TD className="whitespace-nowrap text-xs tabular-nums text-gray-400">{formatDateTime(inv.created_at)}</TD>
       {canEdit && (
         <td className="px-2 py-2">
-          <RowActionsMenu ariaLabel={`פעולות לחשבונית ${inv.id}`}>
+          <RowActionsMenu ariaLabel={`פעולות עבור ${invoiceActionLabel}`}>
             <RowActionItem label="עריכה" onClick={onEdit} disabled={editingAny} icon={<Pencil className="h-4 w-4" />} />
             <RowActionSeparator />
             <RowActionItem

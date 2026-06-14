@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Card } from '@/components/ui/primitives/Card'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Select } from '@/components/ui/inputs/Select'
-import { canAddInvoice } from '../utils'
+import { canMutateVatInvoices } from '../utils'
 import { isClientClosed } from '@/utils/clientStatus'
 import { useAddInvoice } from '../hooks/useVatInvoiceMutations'
 import { VAT_EXPENSE_CATEGORY_FILTER_OPTIONS } from '../constants'
@@ -18,7 +18,7 @@ export const VatInvoiceTab: React.FC<VatInvoiceTabProps> = ({
   isFilingPending,
 }) => {
   const canEdit =
-    canAddInvoice(workItem.available_actions) && !isClientClosed(workItem.client_status) && !isFilingPending
+    canMutateVatInvoices(workItem.available_actions) && !isClientClosed(workItem.client_status) && !isFilingPending
   const { addInvoice, isAdding } = useAddInvoice(workItemId)
   const [categoryFilter, setCategoryFilter] = useState('')
 

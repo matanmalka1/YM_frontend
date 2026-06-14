@@ -2,7 +2,7 @@ import { EXPENSE_CATEGORIES } from './constants'
 import type { VatInvoiceRowValues } from './schemas/invoice.schema'
 import { semanticMonoToneClasses } from '../../utils/semanticColors'
 import type { BackendAction } from '@/lib/actions/types'
-import type { VatWorkItemStatus } from './api'
+import type { VatInvoiceResponse, VatWorkItemStatus } from './api'
 
 const hasVatAction = (actions: BackendAction[] | null | undefined, key: string): boolean =>
   actions?.some((action) => action.key === key) ?? false
@@ -13,6 +13,8 @@ export const canMarkMaterialsComplete = (actions: BackendAction[] | null | undef
 export const canAddInvoice = (actions: BackendAction[] | null | undefined): boolean =>
   hasVatAction(actions, 'add_invoice')
 
+export const canMutateVatInvoices = (actions: BackendAction[] | null | undefined): boolean => canAddInvoice(actions)
+
 export const canMarkReadyForReview = (actions: BackendAction[] | null | undefined): boolean =>
   hasVatAction(actions, 'ready_for_review')
 
@@ -22,6 +24,26 @@ export const canFile = (actions: BackendAction[] | null | undefined): boolean =>
   hasVatAction(actions, 'file_vat_return')
 
 export const isFiled = (status: VatWorkItemStatus): boolean => status === 'filed'
+
+const MISSING_INVOICE_NUMBER_LABEL = 'לא צוין'
+const GENERATED_INVOICE_NUMBER_PATTERN =
+  /^(?:\d{4}-\d{2}-(?:income|expense)|(?:income|expense)-\d{4}-\d{2})-[a-f0-9]{8}$/i
+
+export const isGeneratedVatInvoiceNumber = (invoice: Pick<VatInvoiceResponse, 'invoice_number'>): boolean =>
+  GENERATED_INVOICE_NUMBER_PATTERN.test(invoice.invoice_number.trim())
+
+export const getVatInvoiceDisplayNumber = (invoice: Pick<VatInvoiceResponse, 'invoice_number'>): string => {
+  const value = invoice.invoice_number.trim()
+  if (!value || isGeneratedVatInvoiceNumber({ invoice_number: value })) return MISSING_INVOICE_NUMBER_LABEL
+  return value
+}
+
+export const getVatInvoiceActionLabel = (invoice: Pick<VatInvoiceResponse, 'id' | 'invoice_number'>): string => {
+  const displayNumber = getVatInvoiceDisplayNumber(invoice)
+  return displayNumber === MISSING_INVOICE_NUMBER_LABEL
+    ? `חשבונית ללא מספר (#${invoice.id})`
+    : `חשבונית ${displayNumber}`
+}
 
 export const formatVatAmount = (amount: string | number | null | undefined): string => {
   if (amount === null || amount === undefined || isNaN(Number(amount))) return '—'
