@@ -1,5 +1,5 @@
-import { useCallback, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
-import { ChevronDown, Search } from 'lucide-react'
+import { useRef, useState, type FormEvent, type KeyboardEvent, type RefObject } from 'react'
+import { ChevronDown, Search, Users } from 'lucide-react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { NotificationBell } from '../NotificationBell'
 import { useAuthStore } from '@/store/auth.store'
@@ -8,73 +8,53 @@ import { cn, formatHebrewDate } from '@/utils/utils'
 import { NAV_GROUPS, type NavItem } from './Navbar.constants'
 import { useDismissibleLayer } from '../../ui/overlays/useDismissibleLayer'
 
-type TopNavItem = Pick<NavItem, 'to' | 'label' | 'end' | 'roles'>
-
-const NAV_ITEMS_BY_ROUTE = new Map(NAV_GROUPS.flatMap((group) => group.items.map((item) => [item.to, item] as const)))
-
-const getNavItem = (to: string): NavItem => {
-  const item = NAV_ITEMS_BY_ROUTE.get(to)
-  if (!item) {
-    throw new Error(`Navbar configuration references "${to}", but NAV_GROUPS does not define that route.`)
-  }
-  return item
-}
-
-const TOP_NAV_ITEMS: TopNavItem[] = [
-  getNavItem('/'),
-  getNavItem('/clients'),
-  getNavItem('/binders'),
-  getNavItem('/work-queue'),
-  getNavItem('/notifications'),
-  { ...getNavItem('/tax/vat'), label: 'מע״מ' },
-  getNavItem('/tax/advance-payments'),
-  getNavItem('/tax/calendar'),
-  getNavItem('/tax/reports'),
-  getNavItem('/charges'),
-]
-
 interface MoreNavGroup {
   label: string
-  items: Array<NavItem & { menuLabel?: string }>
+  items: NavItem[]
 }
 
-const MORE_NAV_GROUPS: MoreNavGroup[] = [
-  {
-    label: 'מס',
-    items: [getNavItem('/reports/advance-payments'), getNavItem('/reports/annual-status')],
-  },
-  {
-    label: 'ניהול',
-    items: [getNavItem('/reports/aging'), { ...getNavItem('/reports/vat-compliance'), menuLabel: 'דוחות ניתוח' }],
-  },
-  {
-    label: 'הגדרות',
-    items: [{ ...getNavItem('/settings/users'), label: 'משתמשים' }, getNavItem('/settings/tax-calendar')],
-  },
-]
+const buildMoreGroups = (items: NavItem[]): MoreNavGroup[] => {
+  const groups = new Map<string, NavItem[]>()
+  for (const item of items) {
+    if (item.placement !== 'more') continue
+    const label = item.moreGroup ?? 'עוד'
+    const groupItems = groups.get(label) ?? []
+    groupItems.push(item)
+    groups.set(label, groupItems)
+  }
+  return Array.from(groups.entries()).map(([label, groupItems]) => ({
+    label,
+    items: groupItems,
+  }))
+}
 
-const canShowItem = (item: Pick<NavItem, 'roles'>, role?: UserRole) =>
-  !item.roles || item.roles.some((allowedRole) => allowedRole === role)
+const ALL_NAV_ITEMS = NAV_GROUPS.flatMap((group) => group.items)
+
+const canShowItem = (item: Pick<NavItem, 'roles'>, role?: UserRole): boolean => {
+  if (!item.roles) return true
+  if (!role) return false
+  return item.roles.includes(role)
+}
 
 const isRouteActive = (pathname: string, item: Pick<NavItem, 'to' | 'end'>) =>
   item.end ? pathname === item.to : pathname === item.to || pathname.startsWith(`${item.to}/`)
 
-const isMenuItem = (item: HTMLAnchorElement | null): item is HTMLAnchorElement => item !== null
+interface NavbarProps {
+  onOpenClientSidebar: () => void
+  clientSidebarTriggerRef: RefObject<HTMLButtonElement | null>
+}
 
-export const Navbar: React.FC = () => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenClientSidebar, clientSidebarTriggerRef }) => {
   const [moreOpen, setMoreOpen] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const navigate = useNavigate()
   const moreButtonRef = useRef<HTMLButtonElement>(null)
   const moreMenuRef = useRef<HTMLDivElement>(null)
-  const moreMenuItemRefs = useRef<Array<HTMLAnchorElement | null>>([])
   const user = useAuthStore((s) => s.user)
   const location = useLocation()
-  const visibleNavItems = TOP_NAV_ITEMS.filter((item) => canShowItem(item, user?.role))
-  const moreGroups = MORE_NAV_GROUPS.map((group) => ({
-    ...group,
-    items: group.items.filter((item) => canShowItem(item, user?.role)),
-  })).filter((group) => group.items.length > 0)
+  const visibleItems = ALL_NAV_ITEMS.filter((item) => canShowItem(item, user?.role))
+  const visibleNavItems = visibleItems.filter((item) => item.placement === 'top')
+  const moreGroups = buildMoreGroups(visibleItems)
   const hasActiveMoreItem = moreGroups.some((group) =>
     group.items.some((item) => isRouteActive(location.pathname, item)),
   )
@@ -90,15 +70,18 @@ export const Navbar: React.FC = () => {
     closeOnEscape: true,
   })
 
-  const firstMenuItemRef = useCallback((node: HTMLAnchorElement | null) => {
-    moreMenuItemRefs.current[0] = node
-    node?.focus()
-  }, [])
+  const getMoreMenuItems = () =>
+    Array.from(moreMenuRef.current?.querySelectorAll<HTMLAnchorElement>('[role="menuitem"]') ?? [])
 
   const handleSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const trimmed = searchValue.trim()
-    navigate(trimmed ? `/search?search=${encodeURIComponent(trimmed)}` : '/search')
+    if (!trimmed) {
+      navigate('/search')
+      return
+    }
+    const params = new URLSearchParams({ search: trimmed })
+    navigate({ pathname: '/search', search: params.toString() })
   }
 
   const closeMoreMenu = () => {
@@ -107,7 +90,7 @@ export const Navbar: React.FC = () => {
   }
 
   const handleMoreMenuKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    const items = moreMenuItemRefs.current.filter(isMenuItem)
+    const items = getMoreMenuItems()
     if (items.length === 0) return
 
     const currentIndex = items.findIndex((item) => item === document.activeElement)
@@ -134,6 +117,7 @@ export const Navbar: React.FC = () => {
 
     if (event.key === 'Escape') {
       event.preventDefault()
+      event.stopPropagation()
       closeMoreMenu()
     }
   }
@@ -141,14 +125,15 @@ export const Navbar: React.FC = () => {
   return (
     <header
       role="banner"
-      className="z-10 flex h-14 shrink-0 items-center gap-3 border-b border-gray-200 bg-white px-3 md:px-5"
+      dir="rtl"
+      className="z-10 flex h-16 shrink-0 items-center gap-3 border-b border-gray-200/80 bg-white px-3 md:px-4"
     >
       <div className="flex min-w-0 flex-1 items-center">
         <nav
           className="min-w-0 flex-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           aria-label="ניווט ראשי"
         >
-          <ul className="flex min-w-max items-center gap-0.5">
+          <ul className="flex min-w-max items-center gap-1 rounded-xl bg-gray-50 p-1">
             {visibleNavItems.map((item) => {
               return (
                 <li key={item.to}>
@@ -157,10 +142,10 @@ export const Navbar: React.FC = () => {
                     end={item.end}
                     className={({ isActive }) =>
                       cn(
-                        'inline-flex h-8 items-center whitespace-nowrap rounded-full px-3 text-sm font-medium transition',
+                        'focus-ring inline-flex h-9 items-center whitespace-nowrap rounded-[10px] border px-3 text-sm font-medium transition',
                         isActive
-                          ? 'bg-primary-600 text-white shadow-sm'
-                          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-950',
+                          ? 'border-gray-200 bg-white font-semibold text-gray-950 shadow-sm'
+                          : 'border-transparent text-gray-600 hover:bg-white/80 hover:text-gray-950',
                       )
                     }
                   >
@@ -172,16 +157,30 @@ export const Navbar: React.FC = () => {
           </ul>
         </nav>
         {moreGroups.length > 0 ? (
-          <div className="relative mr-1 shrink-0">
+          <div className="relative mr-1 shrink-0 rounded-xl bg-gray-50 p-1">
             <button
               ref={moreButtonRef}
               type="button"
               onClick={() => setMoreOpen((open) => !open)}
+              onKeyDown={(event) => {
+                if (event.key === 'ArrowDown') {
+                  event.preventDefault()
+                  setMoreOpen(true)
+                  requestAnimationFrame(() => getMoreMenuItems()[0]?.focus())
+                } else if (event.key === 'ArrowUp') {
+                  event.preventDefault()
+                  setMoreOpen(true)
+                  requestAnimationFrame(() => {
+                    const items = getMoreMenuItems()
+                    items[items.length - 1]?.focus()
+                  })
+                }
+              }}
               className={cn(
-                'inline-flex h-8 items-center gap-1 whitespace-nowrap rounded-full px-3 text-sm font-medium transition',
+                'focus-ring inline-flex h-9 items-center gap-1 whitespace-nowrap rounded-[10px] border px-3 text-sm font-medium transition',
                 hasActiveMoreItem
-                  ? 'bg-primary-600 text-white shadow-sm'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-950',
+                  ? 'border-gray-200 bg-white font-semibold text-gray-950 shadow-sm'
+                  : 'border-transparent text-gray-600 hover:bg-white/80 hover:text-gray-950',
               )}
               aria-haspopup="menu"
               aria-expanded={moreOpen}
@@ -192,46 +191,39 @@ export const Navbar: React.FC = () => {
             {moreOpen ? (
               <div
                 ref={moreMenuRef}
-                className="absolute right-0 top-full z-50 mt-2 max-h-[calc(100vh-5rem)] w-64 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 text-right shadow-lg"
+                className="fixed left-3 right-3 top-14 z-50 max-h-[calc(100vh-5rem)] overflow-y-auto rounded-2xl border border-gray-200 bg-white p-2 text-right shadow-elevation-3 md:absolute md:left-auto md:right-0 md:top-full md:mt-2 md:w-64"
                 role="menu"
                 tabIndex={-1}
                 onKeyDown={handleMoreMenuKeyDown}
               >
                 {moreGroups.map((group, groupIndex) => {
-                  const previousItemCount = moreGroups
-                    .slice(0, groupIndex)
-                    .reduce((count, previousGroup) => count + previousGroup.items.length, 0)
-
                   return (
-                    <div key={group.label} className={cn('py-1', groupIndex > 0 && 'border-t border-gray-100')}>
-                      <p className="px-3 pb-1 text-xs font-semibold text-gray-400">{group.label}</p>
-                      {group.items.map((item, itemIndex) => {
+                    <div
+                      key={group.label}
+                      className={cn('py-1', groupIndex > 0 && 'mt-1 border-t border-gray-100 pt-2')}
+                    >
+                      <p className="px-2 pb-1.5 text-xs font-semibold text-gray-500">{group.label}</p>
+                      {group.items.map((item) => {
                         const Icon = item.icon
                         const active = isRouteActive(location.pathname, item)
-                        const menuItemIndex = previousItemCount + itemIndex
 
                         return (
                           <NavLink
-                            ref={
-                              menuItemIndex === 0
-                                ? firstMenuItemRef
-                                : (node) => {
-                                    moreMenuItemRefs.current[menuItemIndex] = node
-                                  }
-                            }
                             key={`${group.label}-${item.to}`}
                             to={item.to}
                             end={item.end}
                             onClick={() => setMoreOpen(false)}
                             className={cn(
-                              'flex items-center justify-between gap-3 px-3 py-2 text-sm transition',
+                              'focus-ring flex items-center justify-between gap-3 rounded-xl px-2.5 py-2 text-sm transition',
                               active
-                                ? 'bg-primary-50 text-primary-700'
+                                ? 'bg-gray-100 font-semibold text-gray-950'
                                 : 'text-gray-700 hover:bg-gray-50 hover:text-gray-950',
                             )}
                             role="menuitem"
                           >
-                            <Icon className="h-4 w-4 shrink-0 text-gray-400" />
+                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
+                              <Icon className="h-3.5 w-3.5" />
+                            </span>
                             <span className="min-w-0 flex-1 truncate">{item.menuLabel ?? item.label}</span>
                           </NavLink>
                         )
@@ -244,22 +236,34 @@ export const Navbar: React.FC = () => {
           </div>
         ) : null}
       </div>
-      <div className="hidden shrink-0 items-center border-r border-gray-200 pr-3 md:flex">
-        <span className="text-xs text-gray-400 tabular-nums" suppressHydrationWarning>
+      <div className="hidden shrink-0 items-center border-r border-gray-100 pr-3 md:flex">
+        <span
+          className="rounded-full bg-gray-50 px-3 py-1.5 text-xs tabular-nums text-gray-500"
+          suppressHydrationWarning
+        >
           {formatHebrewDate(new Date())}
         </span>
       </div>
-      <div className="flex shrink-0 items-center gap-1.5 border-r border-gray-200 pr-2">
+      <div className="flex shrink-0 items-center gap-1.5 border-r border-gray-100 pr-3">
+        <button
+          ref={clientSidebarTriggerRef}
+          type="button"
+          onClick={onOpenClientSidebar}
+          className="focus-ring inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 md:hidden"
+          aria-label="רשימת לקוחות"
+        >
+          <Users className="h-[18px] w-[18px]" />
+        </button>
         <form onSubmit={handleSearchSubmit} role="search" className="hidden md:block">
           <div className="relative">
-            <Search className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <input
               type="search"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               placeholder="חיפוש..."
               aria-label="חיפוש"
-              className="h-9 w-44 rounded-md border border-gray-200 bg-gray-50 pr-8 pl-3 text-sm text-gray-700 outline-none transition placeholder:text-gray-400 focus:w-56 focus:border-primary-400 focus:bg-white focus:ring-2 focus:ring-primary-100"
+              className="h-10 w-44 rounded-xl border border-gray-200 bg-gray-50/80 pr-9 pl-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:w-56 focus:border-primary-300 focus:bg-white focus:ring-4 focus:ring-primary-50"
             />
           </div>
         </form>

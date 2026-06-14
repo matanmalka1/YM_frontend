@@ -1,4 +1,5 @@
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
+import { FIRST_PAGE } from '@/constants/pagination.constants'
 import { MANUAL_NOTIFICATION_TRIGGERS, TRIGGER_LABELS, type NotificationStatus } from '@/features/notifications/api'
 
 export const NOTIFICATIONS_PAGE_SIZE_OPTIONS = [
@@ -7,7 +8,7 @@ export const NOTIFICATIONS_PAGE_SIZE_OPTIONS = [
 ]
 
 export const NOTIFICATIONS_USER_FILTER_PARAMS = {
-  page: 1,
+  page: FIRST_PAGE,
   page_size: 100,
 }
 

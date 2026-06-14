@@ -3,7 +3,7 @@ import { Bell } from 'lucide-react'
 import { NotificationDrawer, useNotificationBell } from '../../features/notifications'
 
 export const NotificationBell: React.FC = () => {
-  const { drawerOpen, badgeCount, handleOpen, handleClose } = useNotificationBell()
+  const { drawerOpen, openDrawer, closeDrawer } = useNotificationBell()
   const clientMatch = useMatch('/clients/:clientId/*')
   const clientRecordId = clientMatch?.params.clientId ? Number(clientMatch.params.clientId) : undefined
 
@@ -11,23 +11,13 @@ export const NotificationBell: React.FC = () => {
     <>
       <button
         type="button"
-        onClick={handleOpen}
-        className="relative inline-flex h-9 w-9 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+        onClick={openDrawer}
+        className="focus-ring relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900"
         aria-label="התראות"
       >
-        <Bell className="w-5 h-5" />
-        {badgeCount > 0 && (
-          <span
-            role="status"
-            aria-live="polite"
-            aria-label={`${badgeCount > 99 ? '99+' : badgeCount} התראות חדשות`}
-            className="absolute -top-1 -right-1 flex min-w-[18px] h-[18px] px-1 items-center justify-center rounded-full bg-negative-500 text-[10px] font-bold text-white leading-none"
-          >
-            <span aria-hidden="true">{badgeCount > 99 ? '99+' : badgeCount}</span>
-          </span>
-        )}
+        <Bell className="h-[18px] w-[18px]" />
       </button>
-      <NotificationDrawer open={drawerOpen} onClose={handleClose} clientRecordId={clientRecordId} />
+      <NotificationDrawer open={drawerOpen} onClose={closeDrawer} clientRecordId={clientRecordId} />
     </>
   )
 }

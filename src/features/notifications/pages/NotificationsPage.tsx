@@ -13,6 +13,7 @@ import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
 import type { Column } from '@/components/ui/table'
 import { DetailDrawer, DrawerField, DrawerSection } from '@/components/ui/overlays/DetailDrawer'
 import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client'
+import { FIRST_PAGE } from '@/constants/pagination.constants'
 import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { parsePositiveInt } from '@/utils/utils'
@@ -21,7 +22,7 @@ import {
   ENABLED_NOTIFICATION_TRIGGERS,
   TRIGGER_LABELS,
   SendNotificationModal,
-  useNotificationsPaginated,
+  useNotifications,
   useNotificationDetail,
   type ListNotificationsParams,
   type NotificationItem,
@@ -59,7 +60,7 @@ export const NotificationsPage: React.FC = () => {
   const { isAdvisor } = useRole()
   const { searchParams, setFilter, setFilters, setPage: setUrlPage } = useSearchParamFilters()
 
-  const page = parsePositiveInt(searchParams.get('page'), 1)
+  const page = parsePositiveInt(searchParams.get('page'), FIRST_PAGE)
   const pageSize = parsePositiveInt(searchParams.get('page_size'), 25)
   const trigger = (searchParams.get('trigger') ?? '') as NotificationTrigger | ''
   const status = (searchParams.get('status') ?? '') as NotificationStatus | ''
@@ -92,7 +93,7 @@ export const NotificationsPage: React.FC = () => {
     triggered_by: triggeredBy ? Number(triggeredBy) : undefined,
   }
 
-  const { data, isPending, error } = useNotificationsPaginated(params)
+  const { data, isPending, error } = useNotifications(params)
   const usersQuery = useQuery({
     queryKey: usersQK.list(NOTIFICATIONS_USER_FILTER_PARAMS),
     queryFn: () => usersApi.list(NOTIFICATIONS_USER_FILTER_PARAMS),

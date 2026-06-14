@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Send } from 'lucide-react'
+import { FIRST_PAGE, PAGE_SIZE_MD } from '@/constants/pagination.constants'
 import { useNotifications } from '../hooks/useNotifications'
 import { useRole } from '../../../hooks/useRole'
 import { CompactNotificationListItem } from './NotificationListItem'
@@ -9,10 +10,14 @@ import { Button } from '../../../components/ui/primitives/Button'
 import type { NotificationsTabProps } from '../types'
 
 export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecordId }) => {
-  const { notifications, isLoading } = useNotifications(clientRecordId)
+  const { data, isLoading } = useNotifications({
+    client_record_id: clientRecordId,
+    page: FIRST_PAGE,
+    page_size: PAGE_SIZE_MD,
+  })
   const { isAdvisor } = useRole()
   const [sendOpen, setSendOpen] = useState(false)
-  const limited = notifications.slice(0, 50)
+  const notifications = data?.items ?? []
 
   if (isLoading) {
     return <p className="text-sm text-gray-400 py-8 text-center">טוען התראות...</p>
@@ -30,11 +35,11 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
         )}
       </div>
 
-      {limited.length === 0 ? (
+      {notifications.length === 0 ? (
         <p className="text-sm text-gray-400 py-8 text-center">אין התראות ללקוח זה</p>
       ) : (
         <ul className="divide-y divide-gray-100 rounded-lg border border-gray-200 overflow-hidden">
-          {limited.map((item) => (
+          {notifications.map((item) => (
             <CompactNotificationListItem key={item.id} item={item} />
           ))}
         </ul>
