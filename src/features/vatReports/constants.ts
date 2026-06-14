@@ -3,6 +3,15 @@ import { CATEGORY_COLOR_TOKENS } from './visualizationTokens'
 import { ALL_STATUSES_OPTION, ALL_CATEGORIES_OPTION } from '@/constants/filterOptions.constants'
 import type { VatWorkItemStatus } from './api'
 
+export const VAT_WORK_ITEM_STATUS_VALUES = [
+  'pending_materials',
+  'material_received',
+  'data_entry_in_progress',
+  'ready_for_review',
+  'filed',
+  'canceled',
+] as const satisfies readonly VatWorkItemStatus[]
+
 export type VatRateTypeValue = 'standard' | 'exempt' | 'zero_rate'
 export const VAT_RATE_TYPE_LABELS: Record<VatRateTypeValue, string> = {
   standard: 'רגיל',

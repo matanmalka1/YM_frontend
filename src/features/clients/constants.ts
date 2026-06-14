@@ -18,6 +18,13 @@ export type ClientIdNumberType = Exclude<ClientRecordResponse['id_number_type'],
 export type ClientSortBy = 'full_name' | 'created_at' | 'status' | 'entity_type'
 export type ClientSortOrder = 'asc' | 'desc'
 
+export const CLIENT_ID_NUMBER_TYPES = [
+  'individual',
+  'corporation',
+  'passport',
+  'other',
+] as const satisfies readonly ClientIdNumberType[]
+
 export const CLIENT_DETAILS_TABS: ActiveClientDetailsTab[] = [
   'details',
   'documents',
