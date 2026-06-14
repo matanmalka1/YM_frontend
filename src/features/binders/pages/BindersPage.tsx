@@ -6,6 +6,7 @@ import {
   BinderDetailDrawer,
   buildBindersColumns,
   BindersFiltersBar,
+  BindersStatsSection,
   ReceiveBinderDrawer,
   useBindersPage,
   useReceiveBinderDrawer,
@@ -110,10 +111,15 @@ export const Binders: React.FC = () => {
         }
       />
 
-      <BindersFiltersBar
-        filters={filters}
+      <BindersStatsSection
         counters={counters}
         countersLoading={loading && total === 0}
+        locationStatus={filters.location_status}
+        onFilterChange={handleFilterChange}
+      />
+
+      <BindersFiltersBar
+        filters={filters}
         onFilterChange={handleFilterChange}
         onMultiFilterChange={handleMultiFilterChange}
         onReset={handleReset}

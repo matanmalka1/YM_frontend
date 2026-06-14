@@ -5,7 +5,7 @@ import { ALL_STATUSES_OPTION, ALL_YEARS_OPTION } from '@/constants/filterOptions
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 
 interface AnnualReportsFilters {
-  client_id: string
+  client_record_id: string
   client_name: string
   status: string
   year: string
@@ -33,7 +33,7 @@ const getYearOptions = (defaultYear?: number) => {
 }
 
 const getFields = (defaultYear?: number) => [
-  { type: 'client-picker' as const, idKey: 'client_id', nameKey: 'client_name' },
+  { type: 'client-picker' as const, idKey: 'client_record_id', nameKey: 'client_name' },
   { type: 'select' as const, key: 'status', label: 'סטטוס', options: STATUS_OPTIONS },
   {
     type: 'select' as const,
@@ -52,7 +52,12 @@ export const AnnualReportsFiltersBar: React.FC<AnnualReportsFiltersBarProps> = (
 }) => (
   <FilterPanel
     fields={getFields(defaultYear)}
-    values={filters}
+    values={{
+      client_record_id: filters.client_record_id,
+      client_name: filters.client_name,
+      status: filters.status,
+      year: filters.year,
+    }}
     onChange={(key, value) => onFilterChange(key as keyof AnnualReportsFilters, value)}
     onReset={onReset}
   />

@@ -40,25 +40,24 @@ export const Search: React.FC = () => {
       <PageHeader title="חיפוש" description="חיפוש גלובלי על פני לקוחות, קלסרים ומסמכים" />
 
       <ToolbarContainer>
-        <Input
-          ref={inputRef}
-          type="text"
-          value={queryDraft}
-          onChange={(e) => setQueryDraft(e.target.value)}
-          placeholder="חיפוש חופשי — שם לקוח, מספר קלסר, שם קובץ..."
-          startIcon={<SearchIcon className="h-4 w-4" />}
-          autoFocus
-        />
-      </ToolbarContainer>
-
-      <ToolbarContainer>
-        <SearchFiltersBar
-          filters={filters}
-          onFilterChange={handleFilterChange}
-          onReset={handleResetAll}
-          isOpen={filtersOpen}
-          onToggle={() => setFiltersOpen((o) => !o)}
-        />
+        <div className="space-y-3">
+          <Input
+            ref={inputRef}
+            type="text"
+            value={queryDraft}
+            onChange={(e) => setQueryDraft(e.target.value)}
+            placeholder="חיפוש חופשי — שם לקוח, מספר קלסר, שם קובץ..."
+            startIcon={<SearchIcon className="h-4 w-4" />}
+            autoFocus
+          />
+          <SearchFiltersBar
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            onReset={handleResetAll}
+            isOpen={filtersOpen}
+            onToggle={() => setFiltersOpen((o) => !o)}
+          />
+        </div>
       </ToolbarContainer>
 
       {error && <Alert variant="error" message={error} />}

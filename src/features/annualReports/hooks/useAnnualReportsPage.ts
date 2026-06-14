@@ -13,7 +13,7 @@ export const useAnnualReportsPage = () => {
   const [showCreate, setShowCreate] = useState(false)
   const navigate = useNavigate()
 
-  const clientId = searchParams.get('client_id') ?? ''
+  const clientRecordId = searchParams.get('client_record_id') ?? ''
   const clientName = searchParams.get('client_name') ?? ''
   const status = searchParams.get('status') ?? ''
   const year = searchParams.get('year') ?? ''
@@ -35,7 +35,7 @@ export const useAnnualReportsPage = () => {
   const allYearsMode = !year
 
   const apiFilters = {
-    client_record_id: clientId ? Number(clientId) : undefined,
+    client_record_id: clientRecordId ? Number(clientRecordId) : undefined,
     status: status || undefined,
   }
 
@@ -57,7 +57,7 @@ export const useAnnualReportsPage = () => {
 
   const openReport = (id: number) => navigate(`/tax/reports/${id}`, { state: { from: '/tax/reports' } })
 
-  const filters = { client_id: clientId, client_name: clientName, status, year }
+  const filters = { client_record_id: clientRecordId, client_name: clientName, status, year }
 
   const handleFilterChange = (key: string, value: string) => setFilter(key, value)
 

@@ -12,15 +12,12 @@ import type { FilterFieldDef, SearchFieldHandle } from './types'
 
 export interface FilterPanelProps {
   fields: FilterFieldDef[]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  values: Record<string, any>
+  values: Readonly<Record<string, string | undefined>>
   onChange: (key: string, value: string) => void
   onMultiChange?: (updates: Record<string, string>) => void
   onReset: () => void
   /** Tailwind grid class. Default: 'grid-cols-1 sm:grid-cols-3' */
   gridClass?: string
-  /** Extra content rendered above ToolbarContainer (e.g. StatsCard pills) */
-  above?: React.ReactNode
   /** Extra badge(s) appended to the auto-generated badge list */
   extraBadges?: FilterBadge[]
 }
@@ -32,7 +29,6 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   onMultiChange,
   onReset,
   gridClass = 'grid-cols-1 sm:grid-cols-3',
-  above,
   extraBadges,
 }) => {
   const searchRefs = useRef<Record<string, SearchFieldHandle | null>>({})
@@ -53,7 +49,6 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
   return (
     <div className="space-y-3">
-      {above}
       <ToolbarContainer>
         <div className="space-y-3">
           <div className={cn('grid gap-3', gridClass)}>
@@ -81,6 +76,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                     value={v}
                     onChange={(e) => onChange(field.key, e.target.value)}
                     options={field.options}
+                    disabled={field.disabled}
                     className={cn(isActive && 'border-primary-400 ring-1 ring-primary-200')}
                   />
                 )

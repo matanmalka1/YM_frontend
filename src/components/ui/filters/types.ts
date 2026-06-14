@@ -12,6 +12,7 @@ interface SelectFieldDef {
   options: { value: string; label: string }[]
   /** Treated as "no active filter" for badge purposes. Default: '' */
   defaultValue?: string
+  disabled?: boolean
 }
 
 interface DateFieldDef {

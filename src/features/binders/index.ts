@@ -5,6 +5,7 @@ export { ReceiveBinderDrawer } from './components/drawer/ReceiveBinderDrawer'
 
 export { buildBindersColumns } from './components/table/BindersColumns'
 export { BindersFiltersBar } from './components/table/BindersFiltersBar'
+export { BindersStatsSection } from './components/table/BindersStatsSection'
 export { useBindersPage } from './hooks/useBindersPage'
 export { useReceiveBinderDrawer } from './hooks/useReceiveBinderDrawer'
 export { Binders } from './pages/BindersPage'

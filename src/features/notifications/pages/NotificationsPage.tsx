@@ -1,18 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Bell, Eye, Plus, Send } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
-import { DatePicker } from '@/components/ui/inputs/DatePicker'
-import { Select } from '@/components/ui/inputs/Select'
-import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
+import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
 import type { Column } from '@/components/ui/table'
 import { DetailDrawer, DrawerField, DrawerSection } from '@/components/ui/overlays/DetailDrawer'
-import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client'
 import { FIRST_PAGE } from '@/constants/pagination.constants'
 import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
@@ -69,16 +66,9 @@ export const NotificationsPage: React.FC = () => {
   const dateFrom = searchParams.get('created_after') ?? ''
   const dateTo = searchParams.get('created_before') ?? ''
   const triggeredBy = searchParams.get('triggered_by') ?? ''
-  const clientId = searchParams.get('client_id') ?? ''
+  const clientRecordId = searchParams.get('client_record_id') ?? ''
   const clientName = searchParams.get('client_name') ?? ''
 
-  const selectedClient: SelectedClientFilter | null = clientId ? { id: Number(clientId), name: clientName } : null
-
-  // UI-only state (no API effect)
-  const [clientQuery, setClientQuery] = useState(clientName)
-  useEffect(() => {
-    if (!selectedClient) setClientQuery(clientName)
-  }, [clientName]) // eslint-disable-line react-hooks/exhaustive-deps
   const [selectedId, setSelectedId] = useState<number | null>(null)
   const { data: selected, isPending: selectedLoading, error: selectedError } = useNotificationDetail(selectedId)
   const [sendOpen, setSendOpen] = useState(false)
@@ -87,7 +77,7 @@ export const NotificationsPage: React.FC = () => {
   const params: ListNotificationsParams = {
     page,
     page_size: pageSize,
-    client_record_id: selectedClient?.id,
+    client_record_id: clientRecordId ? Number(clientRecordId) : undefined,
     trigger,
     status,
     created_after: dateFrom ? `${dateFrom}T00:00:00` : undefined,
@@ -166,10 +156,60 @@ export const NotificationsPage: React.FC = () => {
     setSendClient(null)
   }, [])
 
-  const clearClientFilter = useCallback(() => {
-    setClientQuery('')
-    setFilters({ client_id: '', client_name: '' })
-  }, [setFilters])
+  const filterFields = useMemo(
+    () => [
+      { type: 'client-picker' as const, idKey: 'client_record_id', nameKey: 'client_name', label: 'לקוח' },
+      { type: 'select' as const, key: 'trigger', label: 'סוג הודעה', options: NOTIFICATION_TRIGGER_OPTIONS },
+      { type: 'select' as const, key: 'status', label: 'סטטוס', options: NOTIFICATION_STATUS_OPTIONS },
+      {
+        type: 'date-range' as const,
+        fromKey: 'created_after',
+        toKey: 'created_before',
+        fromLabel: 'מתאריך',
+        toLabel: 'עד תאריך',
+      },
+      {
+        type: 'select' as const,
+        key: 'triggered_by',
+        label: 'נשלח על ידי',
+        options: userOptions,
+        disabled: usersQuery.isPending,
+      },
+      {
+        type: 'select' as const,
+        key: 'page_size',
+        label: 'כמות בעמוד',
+        options: NOTIFICATIONS_PAGE_SIZE_OPTIONS,
+        defaultValue: '25',
+      },
+    ],
+    [userOptions, usersQuery.isPending],
+  )
+
+  const filterValues = {
+    client_record_id: clientRecordId,
+    client_name: clientName,
+    trigger: trigger ?? '',
+    status: status ?? '',
+    created_after: dateFrom,
+    created_before: dateTo,
+    triggered_by: triggeredBy,
+    page_size: String(pageSize),
+  }
+
+  const handleFilterChange = (key: string, value: string) => setFilter(key, value)
+  const handleFilterMultiChange = (updates: Record<string, string>) => setFilters(updates)
+  const handleFilterReset = () =>
+    setFilters({
+      client_record_id: '',
+      client_name: '',
+      trigger: '',
+      status: '',
+      created_after: '',
+      created_before: '',
+      triggered_by: '',
+      page_size: '',
+    })
 
   const tableColumns = useMemo<Column<NotificationItem>[]>(
     () => [
@@ -216,50 +256,14 @@ export const NotificationsPage: React.FC = () => {
         }
       />
 
-      <ToolbarContainer>
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-7">
-          {selectedClient ? (
-            <SelectedClientDisplay label="לקוח" name={selectedClient.name} onClear={clearClientFilter} />
-          ) : (
-            <ClientSearchInput
-              label="לקוח"
-              value={clientQuery}
-              onChange={setClientQuery}
-              onSelect={(client) => {
-                setClientQuery(client.name)
-                setFilters({ client_id: String(client.id), client_name: client.name })
-              }}
-            />
-          )}
-          <Select
-            label="סוג הודעה"
-            value={trigger ?? ''}
-            options={NOTIFICATION_TRIGGER_OPTIONS}
-            onChange={(event) => setFilter('trigger', event.target.value)}
-          />
-          <Select
-            label="סטטוס"
-            value={status ?? ''}
-            options={NOTIFICATION_STATUS_OPTIONS}
-            onChange={(event) => setFilter('status', event.target.value)}
-          />
-          <DatePicker label="מתאריך" value={dateFrom} onChange={(value) => setFilter('created_after', value)} />
-          <DatePicker label="עד תאריך" value={dateTo} onChange={(value) => setFilter('created_before', value)} />
-          <Select
-            label="נשלח על ידי"
-            value={triggeredBy}
-            disabled={usersQuery.isPending}
-            options={userOptions}
-            onChange={(event) => setFilter('triggered_by', event.target.value)}
-          />
-          <Select
-            label="כמות בעמוד"
-            value={String(pageSize)}
-            options={NOTIFICATIONS_PAGE_SIZE_OPTIONS}
-            onChange={(event) => setFilter('page_size', event.target.value)}
-          />
-        </div>
-      </ToolbarContainer>
+      <FilterPanel
+        fields={filterFields}
+        values={filterValues}
+        onChange={handleFilterChange}
+        onMultiChange={handleFilterMultiChange}
+        onReset={handleFilterReset}
+        gridClass="grid-cols-1 md:grid-cols-2 xl:grid-cols-7"
+      />
 
       <PaginatedDataTable
         data={items}

@@ -38,7 +38,7 @@ export interface BinderListResponse {
   counters: BinderListCounters
 }
 
-interface BinderListCounters {
+export interface BinderListCounters {
   total: number
   location_in_office: number
   location_ready_for_handover: number
@@ -143,8 +143,6 @@ export type BindersFilterUpdates = Partial<{
 
 export interface BindersFiltersBarProps {
   filters: BindersUrlFilters
-  counters: BinderListCounters
-  countersLoading?: boolean
   onFilterChange: (name: string, value: string) => void
   onMultiFilterChange: (updates: BindersFilterUpdates) => void
   onReset: () => void

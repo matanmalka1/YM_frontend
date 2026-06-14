@@ -4,7 +4,7 @@ import type { ClientPickerFieldDef } from './types'
 
 interface Props {
   field: ClientPickerFieldDef
-  values: Record<string, string>
+  values: Readonly<Record<string, string | undefined>>
   onMultiChange: (updates: Record<string, string>) => void
 }
 
