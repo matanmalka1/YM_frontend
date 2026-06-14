@@ -1,22 +1,23 @@
 import { useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
-import { documentsApi } from '../api'
-import type { PermanentDocumentResponse } from '../api'
-import { toast } from '../../../utils/toast'
-import { DOWNLOAD_ERROR_MESSAGE, PREVIEW_ERROR_MESSAGE } from './DocumentsDataCards.constants'
+import type { PermanentDocumentResponse, UpdateDocumentPayload } from '../api'
+import { getErrorMessage } from '../../../utils/utils'
+import { useDocumentPreviewDownload } from './useDocumentPreviewDownload'
 
 interface UseDocumentCardActionsParams {
   onDelete: (id: number) => Promise<void>
   onReplace: (id: number, file: File) => Promise<void>
+  onUpdate: (id: number, payload: UpdateDocumentPayload) => Promise<void>
 }
 
-export const useDocumentCardActions = ({ onDelete, onReplace }: UseDocumentCardActionsParams) => {
+export const useDocumentCardActions = ({ onDelete, onReplace, onUpdate }: UseDocumentCardActionsParams) => {
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null)
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [replacingId, setReplacingId] = useState<number | null>(null)
-  const [downloadingId, setDownloadingId] = useState<number | null>(null)
-  const [previewDoc, setPreviewDoc] = useState<PermanentDocumentResponse | null>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const previewDownload = useDocumentPreviewDownload()
+  const [editDoc, setEditDoc] = useState<PermanentDocumentResponse | null>(null)
+  const [editError, setEditError] = useState<string | null>(null)
+  const [updatingId, setUpdatingId] = useState<number | null>(null)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const pendingReplaceId = useRef<number | null>(null)
@@ -51,49 +52,45 @@ export const useDocumentCardActions = ({ onDelete, onReplace }: UseDocumentCardA
     }
   }
 
-  const handleDownloadClick = async (doc: PermanentDocumentResponse) => {
-    setDownloadingId(doc.id)
+  const handleEditClick = (doc: PermanentDocumentResponse) => {
+    setEditError(null)
+    setEditDoc(doc)
+  }
+
+  const closeEdit = () => {
+    setEditDoc(null)
+    setEditError(null)
+  }
+
+  const handleEditSubmit = async (payload: UpdateDocumentPayload) => {
+    if (!editDoc) return
+    setUpdatingId(editDoc.id)
+    setEditError(null)
     try {
-      const { url } = await documentsApi.getDownloadUrl(doc.client_record_id, doc.id)
-      window.open(url, '_blank')
-    } catch {
-      toast.error(DOWNLOAD_ERROR_MESSAGE)
+      await onUpdate(editDoc.id, payload)
+      closeEdit()
+    } catch (err) {
+      setEditError(getErrorMessage(err, 'שגיאה בעדכון פרטי המסמך'))
     } finally {
-      setDownloadingId(null)
+      setUpdatingId(null)
     }
-  }
-
-  const handlePreviewClick = async (doc: PermanentDocumentResponse) => {
-    setPreviewDoc(doc)
-    setPreviewUrl(null)
-    try {
-      const { url } = await documentsApi.getDownloadUrl(doc.client_record_id, doc.id)
-      setPreviewUrl(url)
-    } catch {
-      toast.error(PREVIEW_ERROR_MESSAGE)
-      setPreviewDoc(null)
-    }
-  }
-
-  const closePreview = () => {
-    setPreviewDoc(null)
-    setPreviewUrl(null)
   }
 
   return {
     confirmDeleteId,
     deletingId,
     replacingId,
-    downloadingId,
-    previewDoc,
-    previewUrl,
+    ...previewDownload,
+    editDoc,
+    editError,
+    updatingId,
     fileInputRef,
     setConfirmDeleteId,
     handleConfirmDelete,
     handleReplaceClick,
     handleFileChange,
-    handleDownloadClick,
-    handlePreviewClick,
-    closePreview,
+    handleEditClick,
+    closeEdit,
+    handleEditSubmit,
   }
 }

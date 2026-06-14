@@ -5,4 +5,5 @@ export type {
   PermanentDocumentListResponse,
   OperationalSignalsResponse,
   UploadDocumentPayload,
+  UpdateDocumentPayload,
 } from './contracts'

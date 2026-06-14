@@ -6,8 +6,10 @@ import type {
   DocumentVersionsResponse,
   OperationalSignalsResponse,
   ListDocumentsByClientParams,
+  ListDocumentsByBinderParams,
   PermanentDocumentResponse,
   UploadDocumentPayload,
+  UpdateDocumentPayload,
 } from './contracts'
 
 export const documentsApi = {
@@ -49,6 +51,22 @@ export const documentsApi = {
     return response.data
   },
 
+  listByBinder: async (
+    binderId: number,
+    params?: ListDocumentsByBinderParams,
+  ): Promise<PermanentDocumentListResponse> => {
+    const response = await api.get<PermanentDocumentListResponse>(
+      DOCUMENT_ENDPOINTS.documentsByBinder(binderId),
+      params ? { params: toQueryParams(params) } : undefined,
+    )
+    return response.data
+  },
+
+  getDocument: async (clientId: number, id: number): Promise<PermanentDocumentResponse> => {
+    const response = await api.get<PermanentDocumentResponse>(DOCUMENT_ENDPOINTS.documentDetail(clientId, id))
+    return response.data
+  },
+
   // ── Mutations ────────────────────────────────────────────────────────────
 
   upload: async (payload: UploadDocumentPayload): Promise<PermanentDocumentResponse> => {
@@ -73,6 +91,18 @@ export const documentsApi = {
 
   deleteDocument: async (clientId: number, id: number): Promise<void> => {
     await api.delete(DOCUMENT_ENDPOINTS.documentDelete(clientId, id))
+  },
+
+  updateDocument: async (
+    clientId: number,
+    id: number,
+    payload: UpdateDocumentPayload,
+  ): Promise<PermanentDocumentResponse> => {
+    const response = await api.patch<PermanentDocumentResponse>(
+      DOCUMENT_ENDPOINTS.documentDetail(clientId, id),
+      payload,
+    )
+    return response.data
   },
 
   replaceDocument: async (clientId: number, id: number, file: File): Promise<PermanentDocumentResponse> => {

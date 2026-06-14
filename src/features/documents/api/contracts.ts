@@ -1,3 +1,5 @@
+import type { DocumentType } from '../documents.constants'
+
 export interface PermanentDocumentResponse {
   id: number
   client_record_id: number
@@ -14,6 +16,7 @@ export interface PermanentDocumentResponse {
   superseded_by: number | null
   status: string
   annual_report_id: number | null
+  binder_id: number | null
   original_filename: string | null
   file_size_bytes: number | null
   mime_type: string | null
@@ -67,4 +70,15 @@ export interface ListDocumentsByClientParams {
   status?: string
   page?: number
   page_size?: number
+}
+
+export interface ListDocumentsByBinderParams {
+  page?: number
+  page_size?: number
+}
+
+export interface UpdateDocumentPayload {
+  document_type?: DocumentType
+  original_filename?: string
+  tax_year?: number | null
 }

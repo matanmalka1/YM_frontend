@@ -1,4 +1,4 @@
-import { Calendar, Download, Eye, FileText, History, RefreshCw, Trash2 } from 'lucide-react'
+import { Calendar, Download, Eye, FileText, History, Pencil, RefreshCw, Trash2 } from 'lucide-react'
 import { Badge } from '../../../components/ui/primitives/Badge'
 import { Button } from '../../../components/ui/primitives/Button'
 import { RowActionsMenu, RowActionItem, RowActionSeparator } from '@/components/ui/table'
@@ -9,6 +9,7 @@ import type { PermanentDocumentResponse } from '../api'
 interface DocumentCardProps {
   doc: PermanentDocumentResponse
   isAdvisor: boolean
+  canEditReplace: boolean
   downloadingId: number | null
   replacingId: number | null
   deletingId: number | null
@@ -17,11 +18,13 @@ interface DocumentCardProps {
   onReplace: (id: number) => void
   onDelete: (id: number) => void
   onToggleVersions: (id: number) => void
+  onEdit: (doc: PermanentDocumentResponse) => void
 }
 
 export const DocumentCard: React.FC<DocumentCardProps> = ({
   doc,
   isAdvisor,
+  canEditReplace,
   downloadingId,
   replacingId,
   deletingId,
@@ -30,6 +33,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
   onReplace,
   onDelete,
   onToggleVersions,
+  onEdit,
 }) => (
   <div className="flex flex-col gap-3 rounded-xl border border-gray-200/80 bg-white p-4 transition-all duration-200 hover:shadow-md animate-fade-in">
     <div className="flex items-start justify-between gap-2">
@@ -42,23 +46,26 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
           onClick={() => onToggleVersions(doc.id)}
           icon={<History className="h-4 w-4" />}
         />
-        {isAdvisor && (
+        {(canEditReplace || isAdvisor) && <RowActionSeparator />}
+        {canEditReplace && (
           <>
-            <RowActionSeparator />
+            <RowActionItem label="עריכת פרטים" onClick={() => onEdit(doc)} icon={<Pencil className="h-4 w-4" />} />
             <RowActionItem
               label={replacingId === doc.id ? 'מחליף...' : 'החלף קובץ'}
               onClick={() => onReplace(doc.id)}
               icon={<RefreshCw className="h-4 w-4" />}
               disabled={replacingId === doc.id}
             />
-            <RowActionItem
-              label={deletingId === doc.id ? 'מוחק...' : 'מחק'}
-              onClick={() => onDelete(doc.id)}
-              icon={<Trash2 className="h-4 w-4" />}
-              danger
-              disabled={deletingId === doc.id}
-            />
           </>
+        )}
+        {isAdvisor && (
+          <RowActionItem
+            label={deletingId === doc.id ? 'מוחק...' : 'מחק'}
+            onClick={() => onDelete(doc.id)}
+            icon={<Trash2 className="h-4 w-4" />}
+            danger
+            disabled={deletingId === doc.id}
+          />
         )}
       </RowActionsMenu>
     </div>

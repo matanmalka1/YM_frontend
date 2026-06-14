@@ -13,6 +13,8 @@ export const DOCUMENT_TYPES = [
   'other',
 ] as const satisfies readonly UploadDocumentPayload['document_type'][]
 
+export type DocumentType = (typeof DOCUMENT_TYPES)[number]
+
 // Types that always belong to the person — cannot be uploaded with a business_id.
 // Mirrors backend CLIENT_SCOPE_TYPES in permanent_document.py.
 export const CLIENT_SCOPE_TYPES = new Set<UploadDocumentPayload['document_type']>([

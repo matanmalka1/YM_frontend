@@ -6,6 +6,7 @@ import { BinderActionsPanel } from './BinderActionsPanel'
 import { BinderDetailsPanel } from './BinderDetailsPanel'
 import { BinderAuditSection } from '../sections/BinderAuditSection'
 import { BinderIntakesSection } from '../sections/BinderIntakesSection'
+import { BinderDocumentsSection } from '../sections/BinderDocumentsSection'
 
 interface BinderDetailDrawerProps {
   open: boolean
@@ -74,6 +75,7 @@ export const BinderDetailDrawer: React.FC<BinderDetailDrawerProps> = ({
           clientId={binder.client_record_id}
           onNavigateToAnnualReport={onClose}
         />
+        <BinderDocumentsSection binderId={binder.id} />
         <BinderAuditSection binderId={binder.id} />
       </>
     )}

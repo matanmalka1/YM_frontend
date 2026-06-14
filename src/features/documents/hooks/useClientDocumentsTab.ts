@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { documentsApi, documentsQK, type OperationalSignalsResponse, type PermanentDocumentListResponse } from '../api'
+import {
+  documentsApi,
+  documentsQK,
+  type OperationalSignalsResponse,
+  type PermanentDocumentListResponse,
+  type UpdateDocumentPayload,
+} from '../api'
 import { useBusinessesForClient } from '@/hooks/useBusinessesForClient'
 import { getErrorMessage } from '../../../utils/utils'
 import { useDocumentUpload } from './useDocumentUpload'
@@ -35,6 +41,7 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
   const invalidateDocs = () => {
     void queryClient.invalidateQueries({ queryKey: documentsQK.clientList(clientId) })
     void queryClient.invalidateQueries({ queryKey: documentsQK.clientSignals(clientId) })
+    void queryClient.invalidateQueries({ queryKey: ['documents', 'binder'] })
   }
 
   const handleDelete = async (id: number) => {
@@ -46,6 +53,12 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
   const handleReplace = async (id: number, file: File) => {
     await documentsApi.replaceDocument(clientId, id, file)
     toast.success('מסמך הוחלף')
+    invalidateDocs()
+  }
+
+  const handleUpdate = async (id: number, payload: UpdateDocumentPayload) => {
+    await documentsApi.updateDocument(clientId, id, payload)
+    toast.success('פרטי המסמך עודכנו')
     invalidateDocs()
   }
 
@@ -71,6 +84,7 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
     uploading,
     handleDelete,
     handleReplace,
+    handleUpdate,
     page,
     setPage,
     totalPages,

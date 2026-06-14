@@ -7,7 +7,8 @@ import { DocumentsUploadCard, type DocumentUploadSubmitPayload } from './Documen
 import { DocumentVersionsPanel } from './DocumentVersionsPanel'
 import { DocumentPreviewModal } from './DocumentPreviewModal'
 import { ConfirmDialog } from '../../../components/ui/overlays/ConfirmDialog'
-import type { OperationalSignalsResponse, PermanentDocumentResponse } from '../api'
+import type { OperationalSignalsResponse, PermanentDocumentResponse, UpdateDocumentPayload } from '../api'
+import { DocumentEditCard, EDIT_FORM_ID } from './DocumentEditCard'
 import { useAuthStore } from '../../../store/auth.store'
 import type { BusinessResponse } from '@/features/clients'
 import { UPLOAD_FORM_ID } from './DocumentsDataCards.constants'
@@ -28,6 +29,7 @@ interface DocumentsDataCardsProps {
   uploading: boolean
   onDelete: (id: number) => Promise<void>
   onReplace: (id: number, file: File) => Promise<void>
+  onUpdate: (id: number, payload: UpdateDocumentPayload) => Promise<void>
 }
 
 export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
@@ -41,9 +43,11 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
   uploading,
   onDelete,
   onReplace,
+  onUpdate,
 }) => {
   const role = useAuthStore((s) => s.user?.role)
   const isAdvisor = role === 'advisor'
+  const canEditReplace = role === 'advisor' || role === 'secretary'
 
   const [uploadOpen, setUploadOpen] = useState(false)
   const [uploadCanSubmit, setUploadCanSubmit] = useState(false)
@@ -58,6 +62,9 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
     downloadingId,
     previewDoc,
     previewUrl,
+    editDoc,
+    editError,
+    updatingId,
     fileInputRef,
     setConfirmDeleteId,
     handleConfirmDelete,
@@ -66,7 +73,10 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
     handleDownloadClick,
     handlePreviewClick,
     closePreview,
-  } = useDocumentCardActions({ onDelete, onReplace })
+    handleEditClick,
+    closeEdit,
+    handleEditSubmit,
+  } = useDocumentCardActions({ onDelete, onReplace, onUpdate })
 
   const closeUploadModal = () => {
     setUploadOpen(false)
@@ -117,6 +127,7 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
               key={doc.id}
               doc={doc}
               isAdvisor={isAdvisor}
+              canEditReplace={canEditReplace}
               downloadingId={downloadingId}
               replacingId={replacingId}
               deletingId={deletingId}
@@ -125,6 +136,7 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
               onReplace={handleReplaceClick}
               onDelete={(id) => setConfirmDeleteId(id)}
               onToggleVersions={handleToggleVersions}
+              onEdit={handleEditClick}
             />
           ))}
         </div>
@@ -183,6 +195,32 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
         mimeType={previewDoc?.mime_type ?? null}
         onDownload={() => previewDoc && handleDownloadClick(previewDoc)}
       />
+
+      <Modal
+        open={editDoc !== null}
+        title="עריכת פרטי מסמך"
+        onClose={closeEdit}
+        footer={
+          <div className="flex items-center justify-end gap-2">
+            <Button variant="outline" onClick={closeEdit} disabled={updatingId !== null}>
+              ביטול
+            </Button>
+            <Button
+              type="submit"
+              form={EDIT_FORM_ID}
+              isLoading={editDoc ? updatingId === editDoc.id : false}
+              loadingLabel="שומר..."
+              className="gap-2 shrink-0"
+            >
+              שמירה
+            </Button>
+          </div>
+        }
+      >
+        {editDoc && (
+          <DocumentEditCard doc={editDoc} formId={EDIT_FORM_ID} editError={editError} onSubmit={handleEditSubmit} />
+        )}
+      </Modal>
 
       <ConfirmDialog
         open={confirmDeleteId !== null}

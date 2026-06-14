@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { UploadDocumentPayload } from './api'
-import { CLIENT_SCOPE_TYPES, DOCUMENT_TYPES } from './documents.constants'
+import { CLIENT_SCOPE_TYPES, DOCUMENT_TYPES, type DocumentType } from './documents.constants'
 
 export interface DocumentsUploadFormValues {
   document_type: UploadDocumentPayload['document_type']
@@ -34,3 +34,20 @@ export const documentsUploadDefaultValues: DocumentsUploadFormValues = {
   tax_year: null,
   annual_report_id: null,
 }
+
+export interface DocumentEditFormValues {
+  document_type: DocumentType
+  original_filename: string
+  tax_year: number | null
+}
+
+export const documentEditSchema = z.object({
+  document_type: z.enum(DOCUMENT_TYPES, { message: 'יש לבחור סוג מסמך' }),
+  original_filename: z.string().trim().min(1, 'יש להזין שם קובץ'),
+  tax_year: z
+    .number()
+    .int('שנת מס לא תקינה')
+    .min(2000, 'שנת מס לא תקינה')
+    .max(2100, 'שנת מס לא תקינה')
+    .nullable(),
+})

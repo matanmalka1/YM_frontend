@@ -24,6 +24,7 @@ export const ClientDocumentsTab: React.FC<ClientDocumentsTabProps> = ({ clientId
     uploading,
     handleDelete,
     handleReplace,
+    handleUpdate,
     page,
     setPage,
     totalPages,
@@ -50,6 +51,7 @@ export const ClientDocumentsTab: React.FC<ClientDocumentsTabProps> = ({ clientId
         uploading={uploading}
         onDelete={handleDelete}
         onReplace={handleReplace}
+        onUpdate={handleUpdate}
       />
       {totalPages > 1 && (
         <PaginationCard page={page} totalPages={totalPages} total={total} label="מסמכים" onPageChange={setPage} />
