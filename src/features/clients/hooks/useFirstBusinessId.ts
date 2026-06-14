@@ -4,14 +4,12 @@ import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 export const useFirstBusinessId = (clientId: number, enabled = true) => {
   const { data, isLoading } = useQuery({
-    queryKey: clientsQK.firstBusiness(clientId),
-    queryFn: () =>
-      clientsApi.listBusinessesForClient(clientId, {
-        page: 1,
-        page_size: 1,
-      }),
+    queryKey: clientsQK.businessesAll(clientId),
+    queryFn: () => clientsApi.listAllBusinessesForClient(clientId),
     enabled: enabled && clientId > 0,
-    staleTime: QUERY_STALE_TIME.long,
+    staleTime: QUERY_STALE_TIME.default,
+    retry: 1,
+    refetchOnWindowFocus: false,
   })
 
   const first = data?.items?.[0] ?? null
