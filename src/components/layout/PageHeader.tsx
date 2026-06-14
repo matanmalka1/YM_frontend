@@ -17,13 +17,7 @@ export interface PageHeaderProps {
   size?: 'md' | 'lg'
 }
 
-export const PageHeader = ({
-  title,
-  description,
-  breadcrumbs,
-  actions,
-  size = 'lg',
-}: PageHeaderProps) => (
+export const PageHeader = ({ title, description, breadcrumbs, actions, size = 'lg' }: PageHeaderProps) => (
   <header className="space-y-4 animate-fade-in">
     {breadcrumbs?.length ? (
       <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm animate-slide-in">

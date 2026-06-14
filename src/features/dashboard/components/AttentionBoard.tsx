@@ -49,9 +49,7 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
         <p className="truncate text-sm font-semibold text-slate-900">{item.title}</p>
         <div className="mt-0.5 flex items-center gap-2 truncate">
           {item.client_name && <span className="truncate text-xs text-slate-400">{item.client_name}</span>}
-          {item.reason && !item.client_name && (
-            <span className="truncate text-xs text-slate-400">{item.reason}</span>
-          )}
+          {item.reason && !item.client_name && <span className="truncate text-xs text-slate-400">{item.reason}</span>}
           {item.amount && (
             <span className="shrink-0 text-xs font-semibold tabular-nums text-slate-700">
               {formatCurrencyILS(item.amount, { maximumFractionDigits: 2 })}

@@ -192,10 +192,7 @@ export const TimelineEventItem: React.FC<TimelineEventItemProps> = ({ timelineEv
         <div className="flex items-center justify-between gap-2">
           <span className={cn('text-sm font-semibold', isQuiet ? 'text-gray-500' : 'text-gray-900')}>{ev.title}</span>
 
-          <time
-            dateTime={ev.displayTimestamp}
-            className="text-[11px] text-gray-400 tabular-nums flex-shrink-0"
-          >
+          <time dateTime={ev.displayTimestamp} className="text-[11px] text-gray-400 tabular-nums flex-shrink-0">
             {displayDate}
           </time>
         </div>
