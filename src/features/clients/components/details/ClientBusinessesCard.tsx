@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { Pencil, Plus, Snowflake, Trash2, Undo2 } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
@@ -11,12 +10,12 @@ import { Modal } from '../../../../components/ui/overlays/Modal'
 import { ModalFormActions } from '../../../../components/ui/overlays/ModalFormActions'
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
-import { clientsApi, clientsQK } from '../../api'
 import type { BusinessResponse, UpdateBusinessPayload } from '../../api'
 import { BUSINESS_STATUS_LABELS } from '@/features/businesses'
 import { CLIENT_ROUTES } from '../../api/endpoints'
 import { formatDate } from '@/utils/utils'
 import { useBusinessActions } from '../../hooks/useBusinessActions'
+import { useBusinessesForClient } from '@/hooks/useBusinessesForClient'
 
 const BUSINESS_STATUS_VARIANTS: Record<BusinessResponse['status'], 'success' | 'warning' | 'neutral'> = {
   active: 'success',
@@ -44,9 +43,8 @@ interface EditState {
 }
 
 export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAddBusiness }) => {
-  const { data, isLoading } = useQuery({
-    queryKey: clientsQK.businessesAll(clientId),
-    queryFn: () => clientsApi.listAllBusinessesForClient(clientId),
+  const { businesses, isLoading } = useBusinessesForClient({
+    clientId,
     enabled: clientId > 0,
   })
 
@@ -54,8 +52,6 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
 
   const [editState, setEditState] = useState<EditState | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<BusinessResponse | null>(null)
-
-  const businesses = data?.items ?? []
 
   const openEdit = (biz: BusinessResponse) =>
     setEditState({
