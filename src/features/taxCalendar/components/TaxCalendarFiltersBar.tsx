@@ -50,7 +50,7 @@ export const TaxCalendarFiltersBar = ({
 
   return (
     <ToolbarContainer>
-      <div className={`grid grid-cols-1 gap-3 sm:grid-cols-2 ${gridColumns}`}>
+      <div className={`grid grid-cols-1 items-stretch gap-3 sm:grid-cols-2 ${gridColumns}`}>
         <Select
           label="משנת מס"
           value={startYear}
@@ -84,18 +84,16 @@ export const TaxCalendarFiltersBar = ({
           />
         ) : null}
         {showIncludeEmpty ? (
-          <div className="flex items-end">
-            <Checkbox
-              checked={includeEmpty}
-              onChange={(event) => onIncludeEmptyChange(event.target.checked)}
-              label="כולל ריקים"
-              description="הצג חובות ללא תיקים מקושרים"
-              containerClassName="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2"
-            />
-          </div>
+          <Checkbox
+            checked={includeEmpty}
+            onChange={(event) => onIncludeEmptyChange(event.target.checked)}
+            label="כולל ריקים"
+            description="הצג חובות ללא תיקים מקושרים"
+            containerClassName="h-full items-center rounded-lg border border-gray-200 bg-gray-50 px-3"
+          />
         ) : null}
-        <div className="flex items-end">
-          <Button type="button" variant="outline" size="sm" onClick={onReset}>
+        <div className="flex h-full items-center">
+          <Button type="button" variant="outline" size="sm" onClick={onReset} className="w-full">
             איפוס סינון
           </Button>
         </div>
