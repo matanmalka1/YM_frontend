@@ -14,4 +14,5 @@ export const clientsQK = {
   firstBusiness: (clientId: number) => ['clients', 'businesses', 'first', clientId] as const,
   creationImpact: (entityType?: string | null, vatFrequency?: string | null) =>
     ['clients', 'creation-impact', entityType ?? null, vatFrequency ?? null] as const,
+  conflict: (idNumber: string) => ['clients', 'conflict', idNumber] as const,
 }

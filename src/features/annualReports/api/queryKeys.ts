@@ -1,4 +1,5 @@
 import { createQueryKeys } from '@/lib/queryKeys'
+import type { TaxPreviewParams } from './contracts'
 
 export const annualReportsQK = {
   ...createQueryKeys(['tax', 'annual-reports'] as const),
@@ -18,4 +19,5 @@ export const annualReportsQK = {
   taxCalc: (id: number) => ['tax', 'annual-reports', id, 'tax-calc'] as const,
   advancesSummary: (id: number) => ['tax', 'annual-reports', id, 'advances-summary'] as const,
   annex: (id: number, schedule: string) => ['tax', 'annual-reports', id, 'annex', schedule] as const,
+  taxPreview: (params: TaxPreviewParams) => ['tax', 'annual-reports', 'tax-preview', params] as const,
 }

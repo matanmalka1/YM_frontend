@@ -54,7 +54,7 @@ export const useCreateReport = (taxYear?: number, onSuccess?: () => void) => {
   }, [grossIncome, expenses, advancesPaid, creditPoints, taxYearStr, taxYear])
 
   const { data: previewData } = useQuery({
-    queryKey: ['annualReport', 'taxPreview', previewParams],
+    queryKey: annualReportsQK.taxPreview(previewParams),
     queryFn: () => annualReportsApi.taxPreview(previewParams),
     enabled: previewParams.tax_year > 0,
     staleTime: QUERY_STALE_TIME.default,

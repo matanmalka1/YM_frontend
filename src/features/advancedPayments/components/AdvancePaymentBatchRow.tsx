@@ -205,7 +205,7 @@ const BatchContent = ({
                       {getAdvancePaymentMonthLabel(row.period, row.period_months_count)} {row.period.substring(0, 4)}
                     </td>
                     <td
-                      className={`px-3 py-1.5 text-sm tabular-nums whitespace-nowrap align-middle ${isOverdue ? 'text-red-500 font-medium' : 'text-gray-500'}`}
+                      className={`px-3 py-1.5 text-sm tabular-nums whitespace-nowrap align-middle ${isOverdue ? 'text-negative-600 font-medium' : 'text-gray-500'}`}
                     >
                       {formatDate(row.due_date)}
                     </td>
@@ -231,7 +231,7 @@ const BatchContent = ({
                       {row.delta == null ? (
                         <span className="text-gray-500">—</span>
                       ) : Number(row.delta) > 0 ? (
-                        <span className="font-semibold text-red-500">{formatShekelAmount(row.delta)}</span>
+                        <span className="font-semibold text-negative-600">{formatShekelAmount(row.delta)}</span>
                       ) : (
                         <span className="text-gray-500">{formatShekelAmount(row.delta)}</span>
                       )}

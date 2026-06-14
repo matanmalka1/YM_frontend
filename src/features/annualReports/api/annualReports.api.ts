@@ -14,6 +14,7 @@ import type {
   AnnexDataPagedResponse,
   AnnexDataLine,
   AnnexDataAddPayload,
+  TaxPreviewParams,
 } from './contracts'
 
 export const annualReportsApi = {
@@ -125,13 +126,9 @@ export const annualReportsApi = {
     await api.delete(ANNUAL_REPORT_ENDPOINTS.annexLine(reportId, schedule, lineId))
   },
 
-  taxPreview: async (payload: {
-    tax_year: number
-    gross_income: string
-    expenses: string
-    advances_paid: string
-    credit_points: string
-  }): Promise<{ net_profit: string; estimated_tax: string; balance: string }> => {
+  taxPreview: async (
+    payload: TaxPreviewParams,
+  ): Promise<{ net_profit: string; estimated_tax: string; balance: string }> => {
     const response = await api.post<{ net_profit: string; estimated_tax: string; balance: string }>(
       ANNUAL_REPORT_ENDPOINTS.taxPreview,
       payload,

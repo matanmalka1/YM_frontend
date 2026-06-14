@@ -11,6 +11,14 @@ export type AnnualReportStatus =
   | 'closed'
   | 'canceled'
 
+export interface TaxPreviewParams {
+  tax_year: number
+  gross_income: string
+  expenses: string
+  advances_paid: string
+  credit_points: string
+}
+
 export type ClientTypeForReport =
   | 'individual'
   | 'self_employed'
