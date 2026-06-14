@@ -54,6 +54,20 @@ export const useDeleteInvoice = (workItemId: number) => {
   return { deleteInvoice, isDeleting: mutation.isPending }
 }
 
+export const useDeleteWorkItem = () => {
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation({
+    mutationFn: (workItemId: number) => vatReportsApi.deleteWorkItem(workItemId),
+    onSuccess: async (_, workItemId) => invalidateVatWorkItem(queryClient, { workItemId }),
+  })
+
+  const deleteWorkItem = async (workItemId: number): Promise<boolean> =>
+    runMutationWithFeedback(() => mutation.mutateAsync(workItemId), 'התיק נמחק בהצלחה', 'שגיאה במחיקת התיק')
+
+  return { deleteWorkItem, isDeleting: mutation.isPending }
+}
+
 export const useUpdateInvoice = (workItemId: number) => {
   const queryClient = useQueryClient()
 
