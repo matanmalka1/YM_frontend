@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { Bell, Eye, Plus, Send } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
@@ -26,7 +25,7 @@ import {
   type ListNotificationsParams,
   type NotificationItem,
 } from '@/features/notifications'
-import { usersApi, usersQK } from '@/features/users'
+import { useActiveUserOptions } from '@/features/users'
 import {
   NOTIFICATION_DOMAIN_LABELS,
   NOTIFICATION_STATUS_LABELS,
@@ -34,7 +33,6 @@ import {
   NOTIFICATION_STATUS_VARIANTS,
   NOTIFICATION_TRIGGER_OPTIONS,
   NOTIFICATIONS_PAGE_SIZE_OPTIONS,
-  NOTIFICATIONS_USER_FILTER_PARAMS,
 } from './NotificationsPage.constants'
 
 const ENGLISH_TEXT_PATTERN = /[A-Za-z]/
@@ -86,11 +84,7 @@ export const NotificationsPage: React.FC = () => {
   }
 
   const { data, isPending, error } = useNotifications(params)
-  const usersQuery = useQuery({
-    queryKey: usersQK.list(NOTIFICATIONS_USER_FILTER_PARAMS),
-    queryFn: () => usersApi.list(NOTIFICATIONS_USER_FILTER_PARAMS),
-    retry: false,
-  })
+  const usersQuery = useActiveUserOptions()
   const items = data?.items ?? []
   const total = data?.total ?? 0
   const userOptions = useMemo(

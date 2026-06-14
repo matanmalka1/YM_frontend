@@ -1,5 +1,4 @@
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
-import { FIRST_PAGE } from '@/constants/pagination.constants'
 import {
   NOTIFICATION_STATUS_VALUES,
   NOTIFICATION_TRIGGER_VALUES,
@@ -11,11 +10,6 @@ export const NOTIFICATIONS_PAGE_SIZE_OPTIONS = [
   { value: '25', label: '25' },
   { value: '50', label: '50' },
 ]
-
-export const NOTIFICATIONS_USER_FILTER_PARAMS = {
-  page: FIRST_PAGE,
-  page_size: 100,
-}
 
 export const NOTIFICATION_STATUS_LABELS: Record<NotificationStatus, string> = {
   pending: 'ממתינה',
