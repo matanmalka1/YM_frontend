@@ -16898,8 +16898,8 @@ export interface operations {
     send_notification_api_v1_notifications_send_post: {
         parameters: {
             query?: never;
-            header: {
-                "X-Idempotency-Key": string;
+            header?: {
+                "X-Idempotency-Key"?: string | null;
             };
             path?: never;
             cookie?: never;
