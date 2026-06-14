@@ -28,6 +28,7 @@ export const Binders: React.FC = () => {
     deepLinkBinderId,
     selectedBinder,
     handleFilterChange,
+    handleMultiFilterChange,
     handleReset,
     setPage,
     handleSelectBinder,
@@ -100,7 +101,7 @@ export const Binders: React.FC = () => {
     <div className="space-y-6">
       <PageHeader
         title="קלסרים"
-        description="רשימת הקלסרים במשרד — סינון לפי סטטוס, תקופה וחיפוש חופשי"
+        description="רשימת הקלסרים במשרד — סינון לפי לקוח, מספר קלסר, סטטוס ותקופה"
         actions={
           <Button variant="ghost" size="sm" onClick={() => setReceiveOpen(true)}>
             קליטת חומר
@@ -114,6 +115,7 @@ export const Binders: React.FC = () => {
         counters={counters}
         countersLoading={loading && total === 0}
         onFilterChange={handleFilterChange}
+        onMultiFilterChange={handleMultiFilterChange}
         onReset={handleReset}
       />
 

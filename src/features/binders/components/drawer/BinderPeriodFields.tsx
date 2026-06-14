@@ -6,11 +6,11 @@ import {
   getOperationalYearOptions,
 } from '@/constants/periodOptions.constants'
 import type { ReceiveBinderFormValues } from '../../schemas'
-import { PERIODIC_BINDER_TYPES } from '../../constants'
+import { PERIODIC_BINDER_TYPES, type BinderTypeValue } from '../../constants'
 
 interface BinderPeriodFieldsProps {
   form: UseFormReturn<ReceiveBinderFormValues>
-  materialType: string
+  materialType?: BinderTypeValue
   vatType: 'monthly' | 'bimonthly' | 'exempt' | null
 }
 
@@ -20,7 +20,7 @@ export const BinderPeriodFields: React.FC<BinderPeriodFieldsProps> = ({ form, ma
     formState: { errors },
   } = form
 
-  const periodicMode = PERIODIC_BINDER_TYPES.has(materialType)
+  const periodicMode = materialType ? PERIODIC_BINDER_TYPES.has(materialType) : false
   const bimonthlyVatMode = materialType === 'vat' && vatType === 'bimonthly'
   const monthOptions = bimonthlyVatMode
     ? MONTH_OPTIONS.filter((option) => BIMONTHLY_START_MONTH_VALUES.has(option.value))

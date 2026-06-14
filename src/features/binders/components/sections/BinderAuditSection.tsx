@@ -11,8 +11,8 @@ import {
   BINDER_LOCATION_STATUS_VARIANTS,
   getBinderCapacityStatusLabel,
   getBinderLocationStatusLabel,
-  type BinderCapacityStatusValue,
-  type BinderLocationStatusValue,
+  isBinderCapacityStatus,
+  isBinderLocationStatus,
 } from '../../constants'
 import { staggerDelay } from '@/utils/animation'
 
@@ -24,12 +24,12 @@ const getAuditBadge = (fieldName: string, value: string) => {
   if (fieldName === 'capacity_status') {
     return {
       label: getBinderCapacityStatusLabel(value),
-      variant: BINDER_CAPACITY_STATUS_VARIANTS[value as BinderCapacityStatusValue] ?? 'neutral',
+      variant: isBinderCapacityStatus(value) ? BINDER_CAPACITY_STATUS_VARIANTS[value] : 'neutral',
     }
   }
   return {
     label: getBinderLocationStatusLabel(value),
-    variant: BINDER_LOCATION_STATUS_VARIANTS[value as BinderLocationStatusValue] ?? 'neutral',
+    variant: isBinderLocationStatus(value) ? BINDER_LOCATION_STATUS_VARIANTS[value] : 'neutral',
   }
 }
 

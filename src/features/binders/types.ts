@@ -1,7 +1,8 @@
 import type { PaginatedResponse } from '@/types'
+import type { BinderCapacityStatus, BinderLocationStatus, BinderSortBy, BinderSortOrder } from './constants'
 
-export type BinderLocationStatus = 'in_office' | 'ready_for_handover' | 'handed_over'
-export type BinderCapacityStatus = 'open' | 'full'
+export type { BinderCapacityStatus, BinderLocationStatus, BinderSortBy, BinderSortOrder } from './constants'
+
 export type BinderAction =
   | 'receive_material'
   | 'mark_full'
@@ -65,16 +66,16 @@ export interface BinderAuditResponse {
 }
 
 export interface ListBindersParams {
-  location_status?: string
-  capacity_status?: string
+  location_status?: BinderLocationStatus
+  capacity_status?: BinderCapacityStatus
   client_record_id?: number
   query?: string
   client_name?: string
   binder_number?: string
   page?: number
   page_size?: number
-  sort_by?: string
-  order?: string
+  sort_by?: BinderSortBy
+  order?: BinderSortOrder
   year?: number
 }
 
@@ -117,16 +118,35 @@ export interface HandoverToClientPayload {
   handed_over_at?: string | null
 }
 
-type BindersFilters = Omit<ListBindersParams, 'client_name' | 'year'> & {
-  binder_number?: string
-  year?: string
+export interface BindersUrlFilters {
+  location_status: BinderLocationStatus | ''
+  capacity_status: BinderCapacityStatus | ''
+  client_record_id?: number
+  client_name: string
+  binder_number: string
+  year: string
+  page: number
+  page_size: number
+  sort_by: BinderSortBy
+  order: BinderSortOrder
 }
 
+export type BindersFilterUpdates = Partial<{
+  location_status: string
+  capacity_status: string
+  client_record_id: string
+  client_name: string
+  binder_number: string
+  year: string
+  page: string
+}>
+
 export interface BindersFiltersBarProps {
-  filters: BindersFilters
+  filters: BindersUrlFilters
   counters: BinderListCounters
   countersLoading?: boolean
   onFilterChange: (name: string, value: string) => void
+  onMultiFilterChange: (updates: BindersFilterUpdates) => void
   onReset: () => void
 }
 
@@ -155,8 +175,7 @@ interface BinderIntakeResponse {
   materials: BinderIntakeMaterialResponse[]
 }
 
-// #42: converged to the standard paginated envelope ({ items, page, page_size, total }).
-// binder_id dropped (already in the URL); intakes -> items.
+// converged to the standard paginated envelope ({ items, page, page_size, total }).
 export type BinderIntakeListResponse = PaginatedResponse<BinderIntakeResponse>
 
 export interface BinderReceiveResult {

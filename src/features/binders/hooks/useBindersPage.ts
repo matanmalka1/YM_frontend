@@ -1,25 +1,39 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { bindersApi, bindersQK } from '../api'
+import type { ListBindersParams } from '../types'
 import { getErrorMessage } from '../../../utils/utils'
 import { useBindersFilters } from './useBindersFilters'
 import { useBinderSelection } from './useBinderSelection'
 import { useBinderMutations } from './useBinderMutations'
 
 export const useBindersPage = () => {
-  const { filters, setPage, handleFilterChange, handleReset, handleSort } = useBindersFilters()
+  const { filters, setPage, handleFilterChange, handleMultiFilterChange, handleReset, handleSort } = useBindersFilters()
 
-  const listParams = {
-    location_status: filters.location_status || undefined,
-    client_record_id: filters.client_record_id || undefined,
-    query: filters.query || undefined,
-    binder_number: filters.binder_number || undefined,
-    year: filters.year ? Number(filters.year) : undefined,
-    page: filters.page,
-    page_size: filters.page_size,
-    sort_by: filters.sort_by,
-    order: filters.order,
-  }
+  const listParams = useMemo<ListBindersParams>(
+    () => ({
+      location_status: filters.location_status || undefined,
+      capacity_status: filters.capacity_status || undefined,
+      client_record_id: filters.client_record_id,
+      binder_number: filters.binder_number || undefined,
+      year: filters.year ? Number(filters.year) : undefined,
+      page: filters.page,
+      page_size: filters.page_size,
+      sort_by: filters.sort_by,
+      order: filters.order,
+    }),
+    [
+      filters.binder_number,
+      filters.capacity_status,
+      filters.client_record_id,
+      filters.location_status,
+      filters.order,
+      filters.page,
+      filters.page_size,
+      filters.sort_by,
+      filters.year,
+    ],
+  )
 
   const bindersQuery = useQuery({
     queryKey: bindersQK.list(listParams),
@@ -57,6 +71,7 @@ export const useBindersPage = () => {
     error: bindersQuery.error ? getErrorMessage(bindersQuery.error, 'שגיאה בטעינת רשימת קלסרים') : null,
     filters,
     handleFilterChange,
+    handleMultiFilterChange,
     handleReset,
     handleSort,
     setPage,
