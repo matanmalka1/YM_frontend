@@ -116,11 +116,19 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
   }
 
   if (isError) {
-    return <div dir="rtl" className="text-sm text-negative-600">שגיאה בטעינת משימות</div>
+    return (
+      <div dir="rtl" className="text-sm text-negative-600">
+        שגיאה בטעינת משימות
+      </div>
+    )
   }
 
   if (tasks.length === 0) {
-    return <div dir="rtl" className="text-sm text-neutral-500">אין משימות ללקוח זה</div>
+    return (
+      <div dir="rtl" className="text-sm text-neutral-500">
+        אין משימות ללקוח זה
+      </div>
+    )
   }
 
   return (
@@ -138,11 +146,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
       )}
 
       {selectedIds.size > 0 && (
-        <BulkSelectionToolbar
-          selectedCount={selectedIds.size}
-          loading={isBulkLoading}
-          onClear={clearSelection}
-        >
+        <BulkSelectionToolbar selectedCount={selectedIds.size} loading={isBulkLoading} onClear={clearSelection}>
           <BulkSelectionActionButton
             label="סמן כהושלם"
             onClick={handleBulkComplete}
@@ -153,10 +157,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
             <Select
               size="xs"
               value={assigneeId}
-              options={[
-                { value: '', label: 'בחר משתמש לשיוך' },
-                ...userOptions,
-              ]}
+              options={[{ value: '', label: 'בחר משתמש לשיוך' }, ...userOptions]}
               onChange={(e) => setAssigneeId(e.target.value)}
               disabled={isBulkLoading}
             />
@@ -178,10 +179,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
 
       <div className="space-y-1">
         <div className="flex items-center gap-3 px-3 py-2 text-xs text-neutral-500">
-          <Checkbox
-            checked={tasks.length > 0 && selectedIds.size === tasks.length}
-            onChange={toggleAll}
-          />
+          <Checkbox checked={tasks.length > 0 && selectedIds.size === tasks.length} onChange={toggleAll} />
           <span className="flex-1">כותרת</span>
           <span className="w-20 text-center">סטטוס</span>
           <span className="w-20 text-center">עדיפות</span>
@@ -193,10 +191,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
             key={task.id}
             className="flex items-center gap-3 rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm hover:bg-neutral-50 transition-colors"
           >
-            <Checkbox
-              checked={selectedIds.has(task.id)}
-              onChange={() => toggleOne(task.id)}
-            />
+            <Checkbox checked={selectedIds.has(task.id)} onChange={() => toggleOne(task.id)} />
             <span className="flex-1 text-neutral-800 truncate">{task.title}</span>
             <span className="w-20 text-center text-xs text-neutral-600">
               {taskStatusLabels[task.status] ?? task.status}
@@ -204,9 +199,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
             <span className="w-20 text-center text-xs text-neutral-600">
               {taskPriorityLabels[task.priority] ?? task.priority}
             </span>
-            <span className="w-28 text-center text-xs text-neutral-500">
-              {task.due_date ?? '—'}
-            </span>
+            <span className="w-28 text-center text-xs text-neutral-500">{task.due_date ?? '—'}</span>
           </div>
         ))}
       </div>

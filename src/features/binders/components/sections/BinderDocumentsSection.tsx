@@ -5,7 +5,13 @@ import { Card } from '@/components/ui/primitives/Card'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
-import { documentsApi, documentsQK, DOC_TYPE_LABELS, DocumentPreviewModal, useDocumentPreviewDownload } from '@/features/documents'
+import {
+  documentsApi,
+  documentsQK,
+  DOC_TYPE_LABELS,
+  DocumentPreviewModal,
+  useDocumentPreviewDownload,
+} from '@/features/documents'
 import { formatDate, getErrorMessage } from '@/utils/utils'
 
 const PAGE_SIZE = 20

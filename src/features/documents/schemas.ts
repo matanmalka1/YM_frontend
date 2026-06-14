@@ -44,10 +44,5 @@ export interface DocumentEditFormValues {
 export const documentEditSchema = z.object({
   document_type: z.enum(DOCUMENT_TYPES, { message: 'יש לבחור סוג מסמך' }),
   original_filename: z.string().trim().min(1, 'יש להזין שם קובץ'),
-  tax_year: z
-    .number()
-    .int('שנת מס לא תקינה')
-    .min(2000, 'שנת מס לא תקינה')
-    .max(2100, 'שנת מס לא תקינה')
-    .nullable(),
+  tax_year: z.number().int('שנת מס לא תקינה').min(2000, 'שנת מס לא תקינה').max(2100, 'שנת מס לא תקינה').nullable(),
 })

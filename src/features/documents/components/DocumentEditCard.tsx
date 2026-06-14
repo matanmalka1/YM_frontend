@@ -81,9 +81,7 @@ export const DocumentEditCard: React.FC<DocumentEditCardProps> = ({
       <Select
         label="שנת מס"
         value={taxYear ?? ''}
-        onChange={(e) =>
-          setValue('tax_year', e.target.value ? Number(e.target.value) : null, { shouldValidate: true })
-        }
+        onChange={(e) => setValue('tax_year', e.target.value ? Number(e.target.value) : null, { shouldValidate: true })}
         options={UPLOAD_TAX_YEAR_OPTIONS}
       />
 

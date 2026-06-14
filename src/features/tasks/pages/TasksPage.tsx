@@ -5,7 +5,13 @@ import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { Button } from '@/components/ui/primitives/Button'
 import { DatePicker, Select } from '@/components/ui/inputs'
 import { TaskModal } from '../components/TaskModal'
-import { taskStatusValues, taskStatusLabels, taskPriorityValues, taskPriorityLabels, taskRoleLabels } from '../constants'
+import {
+  taskStatusValues,
+  taskStatusLabels,
+  taskPriorityValues,
+  taskPriorityLabels,
+  taskRoleLabels,
+} from '../constants'
 import { useTasks } from '../hooks/useTasks'
 import { tasksApi } from '../api/tasks.api'
 import { tasksQK } from '../api/queryKeys'
@@ -13,16 +19,20 @@ import { useActiveUserOptions } from '@/features/users'
 import { workQueueSourceTypeLabels, workQueueSourceTypeValues } from '@/features/workQueue'
 import { getErrorMessage } from '@/utils/utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { Task, TaskCreateRequest, TaskUpdateRequest, TaskListParams, TaskStatus, TaskPriority } from '../api/contracts'
+import type {
+  Task,
+  TaskCreateRequest,
+  TaskUpdateRequest,
+  TaskListParams,
+  TaskStatus,
+  TaskPriority,
+} from '../api/contracts'
 import type { UserRole } from '@/types'
 import type { WorkQueueSourceType } from '@/features/workQueue'
 
 const PAGE_SIZE = 20
 
-type ModalState =
-  | { mode: 'create' }
-  | { mode: 'edit' | 'view'; taskId: number }
-  | null
+type ModalState = { mode: 'create' } | { mode: 'edit' | 'view'; taskId: number } | null
 
 export const TasksPage: React.FC = () => {
   const [page, setPage] = useState(1)
@@ -61,31 +71,48 @@ export const TasksPage: React.FC = () => {
 
   const createMutation = useMutation({
     mutationFn: (d: TaskCreateRequest) => tasksApi.create(d),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: tasksQK.all }); setModal(null); setActionError(null) },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: tasksQK.all })
+      setModal(null)
+      setActionError(null)
+    },
     onError: (error) => setActionError(getErrorMessage(error, 'שגיאה ביצירת משימה')),
   })
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data: d }: { id: number; data: TaskUpdateRequest }) => tasksApi.update(id, d),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: tasksQK.all }); setModal(null); setActionError(null) },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: tasksQK.all })
+      setModal(null)
+      setActionError(null)
+    },
     onError: (error) => setActionError(getErrorMessage(error, 'שגיאה בעדכון משימה')),
   })
 
   const completeMutation = useMutation({
     mutationFn: (id: number) => tasksApi.complete(id),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: tasksQK.all }); setActionError(null) },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: tasksQK.all })
+      setActionError(null)
+    },
     onError: (error) => setActionError(getErrorMessage(error, 'שגיאה בסימון המשימה כהושלמה')),
   })
 
   const cancelMutation = useMutation({
     mutationFn: (id: number) => tasksApi.cancel(id),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: tasksQK.all }); setActionError(null) },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: tasksQK.all })
+      setActionError(null)
+    },
     onError: (error) => setActionError(getErrorMessage(error, 'שגיאה בביטול המשימה')),
   })
 
   const deleteMutation = useMutation({
     mutationFn: (id: number) => tasksApi.delete(id),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: tasksQK.all }); setActionError(null) },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: tasksQK.all })
+      setActionError(null)
+    },
     onError: (error) => setActionError(getErrorMessage(error, 'שגיאה במחיקת המשימה')),
   })
 
@@ -167,40 +194,61 @@ export const TasksPage: React.FC = () => {
           size="sm"
           value={statusFilter}
           options={statusOptions}
-          onChange={(e) => { setStatusFilter(e.target.value as TaskStatus | ''); setPage(1) }}
+          onChange={(e) => {
+            setStatusFilter(e.target.value as TaskStatus | '')
+            setPage(1)
+          }}
         />
         <Select
           size="sm"
           value={priorityFilter}
           options={priorityOptions}
-          onChange={(e) => { setPriorityFilter(e.target.value as TaskPriority | ''); setPage(1) }}
+          onChange={(e) => {
+            setPriorityFilter(e.target.value as TaskPriority | '')
+            setPage(1)
+          }}
         />
         <Select
           size="sm"
           value={assignedRoleFilter}
           options={roleOptions}
-          onChange={(e) => { setAssignedRoleFilter(e.target.value as UserRole | ''); setPage(1) }}
+          onChange={(e) => {
+            setAssignedRoleFilter(e.target.value as UserRole | '')
+            setPage(1)
+          }}
         />
         <Select
           size="sm"
           value={assignedUserFilter}
           options={userOptions}
-          onChange={(e) => { setAssignedUserFilter(e.target.value); setPage(1) }}
+          onChange={(e) => {
+            setAssignedUserFilter(e.target.value)
+            setPage(1)
+          }}
         />
         <Select
           size="sm"
           value={sourceDomainFilter}
           options={sourceOptions}
-          onChange={(e) => { setSourceDomainFilter(e.target.value as WorkQueueSourceType | ''); setPage(1) }}
+          onChange={(e) => {
+            setSourceDomainFilter(e.target.value as WorkQueueSourceType | '')
+            setPage(1)
+          }}
         />
         <DatePicker
           value={dueAfterFilter}
-          onChange={(value) => { setDueAfterFilter(value); setPage(1) }}
+          onChange={(value) => {
+            setDueAfterFilter(value)
+            setPage(1)
+          }}
           compact
         />
         <DatePicker
           value={dueBeforeFilter}
-          onChange={(value) => { setDueBeforeFilter(value); setPage(1) }}
+          onChange={(value) => {
+            setDueBeforeFilter(value)
+            setPage(1)
+          }}
           compact
         />
         {hasFilters && (
@@ -225,13 +273,9 @@ export const TasksPage: React.FC = () => {
         </div>
       )}
 
-      {isError && (
-        <div className="text-sm text-negative-600">שגיאה בטעינת משימות</div>
-      )}
+      {isError && <div className="text-sm text-negative-600">שגיאה בטעינת משימות</div>}
 
-      {!isLoading && !isError && tasks.length === 0 && (
-        <div className="text-sm text-neutral-500">אין משימות</div>
-      )}
+      {!isLoading && !isError && tasks.length === 0 && <div className="text-sm text-neutral-500">אין משימות</div>}
 
       {!isLoading && !isError && tasks.length > 0 && (
         <>
@@ -260,9 +304,7 @@ export const TasksPage: React.FC = () => {
                 <span className="w-20 text-center text-xs text-neutral-600">
                   {taskPriorityLabels[task.priority] ?? task.priority}
                 </span>
-                <span className="w-28 text-center text-xs text-neutral-500">
-                  {task.due_date ?? '—'}
-                </span>
+                <span className="w-28 text-center text-xs text-neutral-500">{task.due_date ?? '—'}</span>
                 <div className="w-32 flex items-center justify-center gap-1">
                   {!isTerminal(task) && (
                     <>
@@ -310,13 +352,7 @@ export const TasksPage: React.FC = () => {
           </div>
 
           {totalPages > 1 && (
-            <PaginationCard
-              page={page}
-              totalPages={totalPages}
-              total={total}
-              label="משימות"
-              onPageChange={setPage}
-            />
+            <PaginationCard page={page} totalPages={totalPages} total={total} label="משימות" onPageChange={setPage} />
           )}
         </>
       )}
@@ -326,9 +362,7 @@ export const TasksPage: React.FC = () => {
           mode={modal.mode}
           task={modal.mode !== 'create' ? (editTaskQuery.data ?? null) : null}
           isLoading={
-            createMutation.isPending ||
-            updateMutation.isPending ||
-            (modal.mode !== 'create' && editTaskQuery.isLoading)
+            createMutation.isPending || updateMutation.isPending || (modal.mode !== 'create' && editTaskQuery.isLoading)
           }
           onSubmit={handleModalSubmit}
           onClose={() => setModal(null)}
