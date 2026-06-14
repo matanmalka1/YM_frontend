@@ -1,26 +1,15 @@
-import { useEffect, useMemo, useRef, useState, type RefObject } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import { useDebounce } from 'use-debounce'
-import { Link, NavLink } from 'react-router-dom'
-import {
-  Building2,
-  LogOut,
-  Mail,
-  Phone,
-  Plus,
-  ReceiptText,
-  RefreshCw,
-  Search,
-  User as UserIcon,
-  Users,
-  X,
-} from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { LogOut, Plus, RefreshCw, Search, User as UserIcon, Users, X } from 'lucide-react'
 import { useAuthStore } from '@/store/auth.store'
 import { CLIENT_ROUTES } from '@/features/clients'
-import { ENTITY_TYPE_LABELS, VAT_TYPE_LABELS } from '@/features/clients/constants'
 import { useRole } from '@/hooks/useRole'
 import { getRoleLabel } from '@/features/users'
-import { cn, formatClientOfficeId, formatPhoneNumber } from '@/utils/utils'
+import { cn } from '@/utils/utils'
 import { CLIENT_SIDEBAR_PAGE_SIZE, useClientSidebarClients, type ClientSidebarItem } from './useClientSidebarClients'
+import { ClientSidebarClientCard } from './ClientSidebarClientCard'
+import { getEntityLabel, getVatLabel } from './ClientSidebar.labels'
 
 type GroupMode = 'entity' | 'vat'
 
@@ -34,12 +23,6 @@ const GROUP_MODES: Array<{ value: GroupMode; label: string }> = [
   { value: 'entity', label: 'סוג התאגדות' },
   { value: 'vat', label: 'דיווח מע״מ' },
 ]
-
-const getEntityLabel = (client: ClientSidebarItem): string =>
-  client.entityType ? ENTITY_TYPE_LABELS[client.entityType] : 'ללא סוג'
-
-const getVatLabel = (client: ClientSidebarItem): string =>
-  client.vatReportingFrequency ? VAT_TYPE_LABELS[client.vatReportingFrequency] : 'ללא תדירות'
 
 const getGroupInfo = (client: ClientSidebarItem, groupMode: GroupMode): { key: string; label: string } => {
   if (groupMode === 'entity') {
@@ -86,12 +69,17 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobi
   const { user, logout } = useAuthStore()
   const { can } = useRole()
   const clientGroups = useMemo(() => groupClients(clients, groupMode), [clients, groupMode])
-  const isTruncated = !hasSearch && total > clients.length && clients.length >= CLIENT_SIDEBAR_PAGE_SIZE
+  const isTruncated = !hasSearch && total > clients.length
+
+  const closeMobileIfOpen = useCallback(() => {
+    if (mobileOpen) onMobileClose()
+  }, [mobileOpen, onMobileClose])
 
   useEffect(() => {
     if (!mobileOpen) return
 
     const mobileTrigger = mobileTriggerRef.current
+    const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     const frame = requestAnimationFrame(() => searchInputRef.current?.focus())
 
@@ -126,7 +114,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobi
     return () => {
       cancelAnimationFrame(frame)
       document.removeEventListener('keydown', handleKeyDown)
-      document.body.style.overflow = ''
+      document.body.style.overflow = previousOverflow
       mobileTrigger?.focus()
     }
   }, [mobileOpen, mobileTriggerRef, onMobileClose])
@@ -159,7 +147,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobi
           <div className="flex items-start justify-between gap-3">
             <Link
               to="/"
-              onClick={onMobileClose}
+              onClick={closeMobileIfOpen}
               className="focus-ring flex min-w-0 items-center gap-3 rounded-2xl px-1 py-1"
               aria-label="מעבר ללוח הבקרה"
             >
@@ -219,7 +207,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobi
             {can.createClients ? (
               <Link
                 to={`${CLIENT_ROUTES.list}?create=1`}
-                onClick={onMobileClose}
+                onClick={closeMobileIfOpen}
                 className="focus-ring flex h-9 items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 text-xs font-semibold text-gray-700 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 hover:text-gray-950"
                 aria-label="הוספת לקוח חדש"
               >
@@ -295,68 +283,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobi
                   <ul className="space-y-2">
                     {group.clients.map((client) => (
                       <li key={client.id}>
-                        <NavLink
-                          to={CLIENT_ROUTES.detail(client.id)}
-                          onClick={onMobileClose}
-                          className={({ isActive }) =>
-                            cn(
-                              'focus-ring group block rounded-2xl border p-3 text-right transition',
-                              isActive
-                                ? 'border-primary-200 bg-primary-50/80 shadow-sm'
-                                : 'border-gray-200/80 bg-white hover:border-gray-300 hover:bg-gray-50/70 hover:shadow-sm',
-                            )
-                          }
-                        >
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="min-w-0">
-                              <span
-                                className="block truncate text-sm font-semibold text-gray-950"
-                                title={client.displayName}
-                              >
-                                {client.displayName}
-                              </span>
-                            </div>
-                            <span className="shrink-0 rounded-full bg-gray-100 px-2 py-1 text-[11px] font-semibold tabular-nums text-gray-600">
-                              {client.officeClientNumber == null
-                                ? 'ללא מספר משרד'
-                                : `מס׳ ${formatClientOfficeId(client.officeClientNumber)}`}
-                            </span>
-                          </div>
-
-                          <div className="mt-3 flex flex-wrap gap-1.5">
-                            <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-[11px] font-medium text-gray-600">
-                              <Building2 className="h-3 w-3" />
-                              {getEntityLabel(client)}
-                            </span>
-                            <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-[11px] font-medium text-gray-600">
-                              <ReceiptText className="h-3 w-3" />
-                              מע״מ {getVatLabel(client)}
-                            </span>
-                          </div>
-
-                          <div className="mt-3 space-y-1.5 border-t border-gray-100 pt-2.5 text-xs">
-                            <span className="flex min-w-0 items-center gap-2 text-gray-500">
-                              <Phone className="h-3.5 w-3.5 shrink-0" />
-                              {client.phone ? (
-                                <bdi dir="ltr" className="truncate text-gray-700">
-                                  {formatPhoneNumber(client.phone)}
-                                </bdi>
-                              ) : (
-                                <span className="text-gray-400">לא הוזן טלפון</span>
-                              )}
-                            </span>
-                            <span className="flex min-w-0 items-center gap-2 text-gray-500">
-                              <Mail className="h-3.5 w-3.5 shrink-0" />
-                              {client.email ? (
-                                <bdi dir="ltr" className="truncate text-left text-gray-700" title={client.email}>
-                                  {client.email}
-                                </bdi>
-                              ) : (
-                                <span className="text-gray-400">לא הוזן דוא״ל</span>
-                              )}
-                            </span>
-                          </div>
-                        </NavLink>
+                        <ClientSidebarClientCard client={client} onNavigate={closeMobileIfOpen} />
                       </li>
                     ))}
                   </ul>
