@@ -22,6 +22,7 @@ export const BinderDocumentsSection: React.FC<BinderDocumentsSectionProps> = ({ 
   }, [binderId])
 
   const { data, isLoading, error } = useQuery({
+    enabled: Number.isFinite(binderId) && binderId > 0,
     queryKey: documentsQK.byBinder(binderId, { page, page_size: PAGE_SIZE }),
     queryFn: () => documentsApi.listByBinder(binderId, { page, page_size: PAGE_SIZE }),
   })
