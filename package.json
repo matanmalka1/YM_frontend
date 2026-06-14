@@ -72,6 +72,9 @@
     "ignore": [
       "src/types/generated.ts",
       "vitest.shims.d.ts"
+    ],
+    "tags": [
+      "-auditContract"
     ]
   }
 }

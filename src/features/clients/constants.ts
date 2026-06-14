@@ -18,6 +18,7 @@ export type ClientIdNumberType = Exclude<ClientRecordResponse['id_number_type'],
 export type ClientSortBy = 'full_name' | 'created_at' | 'status' | 'entity_type'
 export type ClientSortOrder = 'asc' | 'desc'
 
+/** @auditContract Read by the backend enum-sync audit. */
 export const CLIENT_ID_NUMBER_TYPES = [
   'individual',
   'corporation',

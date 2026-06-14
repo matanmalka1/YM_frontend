@@ -5,6 +5,7 @@ import type { ChargeListStats, ChargeStatusStat } from './api'
 
 export { PERIOD_PATTERN as CHARGE_PERIOD_PATTERN }
 
+/** @auditContract Read by the backend enum-sync audit. */
 export const CHARGE_STATUS_VALUES = ['draft', 'issued', 'paid', 'canceled'] as const
 export type ChargeStatusValue = (typeof CHARGE_STATUS_VALUES)[number]
 

@@ -1,6 +1,7 @@
 import { makeLabelGetter } from '@/utils/labels'
 import type { SignatureRequestStatus, SignatureRequestType } from './api'
 
+/** @auditContract Read by the backend enum-sync audit. */
 export const SIGNATURE_REQUEST_STATUS_VALUES = [
   'pending_signature',
   'signed',
@@ -18,6 +19,7 @@ const SIGNATURE_REQUEST_STATUS_LABELS: Record<SignatureRequestStatus, string> = 
 }
 export const getSignatureRequestStatusLabel = makeLabelGetter(SIGNATURE_REQUEST_STATUS_LABELS)
 
+/** @auditContract Read by the backend enum-sync audit. */
 export const SIGNATURE_REQUEST_TYPE_VALUES = [
   'engagement_agreement',
   'annual_report_approval',
