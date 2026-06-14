@@ -1,11 +1,9 @@
+import type { ReactNode } from 'react'
+
 interface PageLayoutProps {
-  children: React.ReactNode
+  children: ReactNode
 }
 
-export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
-  return (
-    <main className="flex-1 overflow-y-auto p-6 md:p-8" dir="rtl">
-      {children}
-    </main>
-  )
+export const PageLayout = ({ children }: PageLayoutProps) => {
+  return <main className="flex-1 overflow-y-auto p-6 md:p-8">{children}</main>
 }
