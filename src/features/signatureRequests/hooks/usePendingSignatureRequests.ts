@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { signatureRequestsApi, signatureRequestsQK } from '../api'
 import type { SignatureRequestResponse } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
@@ -17,6 +18,7 @@ export const usePendingSignatureRequests = ({ page = 1, pageSize = 50 }: Params 
   const listQuery = useQuery({
     queryKey: signatureRequestsQK.pending({ page, page_size: pageSize }),
     queryFn: () => signatureRequestsApi.listPending({ page, page_size: pageSize }),
+    staleTime: QUERY_STALE_TIME.short,
   })
 
   const items = listQuery.data?.items ?? []

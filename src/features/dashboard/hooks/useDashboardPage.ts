@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { dashboardApi, dashboardQK } from '../api'
 import type { DashboardOverviewResponse } from '../api'
 import { getErrorMessage, getHttpStatus } from '../../../utils/utils'
@@ -28,6 +29,7 @@ export const useDashboardPage = () => {
     enabled: hasRole,
     queryKey: dashboardQK.overview,
     queryFn: dashboardApi.getOverview,
+    staleTime: QUERY_STALE_TIME.short,
   })
 
   const {

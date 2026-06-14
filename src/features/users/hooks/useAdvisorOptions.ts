@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { usersApi, usersQK } from '../api'
 
 const ADVISOR_LIST_PARAMS = {
@@ -13,6 +14,7 @@ export const useAdvisorOptions = (enabled = true) => {
     enabled,
     queryKey: usersQK.list(ADVISOR_LIST_PARAMS),
     queryFn: () => usersApi.list(ADVISOR_LIST_PARAMS),
+    staleTime: QUERY_STALE_TIME.long,
   })
 
   const advisors = useMemo(
