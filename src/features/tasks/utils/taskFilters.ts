@@ -1,21 +1,11 @@
 import { parsePositiveInt } from '@/utils/utils'
-import { taskPriorityValues, taskStatusValues } from '../constants'
 import { EMPTY_TASK_FILTERS, TASK_FILTER_PARAM_KEYS, TASKS_PAGE_SIZE } from '../taskPage.constants'
-import type { TaskListParams, TaskPriority, TaskStatus } from '../api/contracts'
+import { isTaskPriority, isTaskStatus, type TaskListParams } from '../api/contracts'
 import type { TasksFilterValues } from '../types'
 import type { UserRole } from '@/types'
-import { workQueueSourceTypeValues, type WorkQueueSourceType } from '@/features/workQueue'
-
-const isTaskStatus = (value: string | null): value is TaskStatus =>
-  value !== null && taskStatusValues.includes(value as TaskStatus)
-
-const isTaskPriority = (value: string | null): value is TaskPriority =>
-  value !== null && taskPriorityValues.includes(value as TaskPriority)
+import { isWorkQueueSourceType } from '@/features/workQueue'
 
 const isTaskRole = (value: string | null): value is UserRole => value === 'advisor' || value === 'secretary'
-
-const isWorkQueueSourceType = (value: string | null): value is WorkQueueSourceType =>
-  value !== null && workQueueSourceTypeValues.includes(value as WorkQueueSourceType)
 
 export const getTaskFiltersFromSearchParams = (searchParams: URLSearchParams): TasksFilterValues => {
   const status = searchParams.get(TASK_FILTER_PARAM_KEYS.status)

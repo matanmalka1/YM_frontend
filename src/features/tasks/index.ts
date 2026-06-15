@@ -1,6 +1,8 @@
 export { tasksApi, tasksQK } from './api'
+export { isTaskPriority, isTaskStatus, parseTaskPriority, parseTaskStatus } from './api'
 export type {
   TaskStatus,
+  TaskPriority,
   TaskCreateRequest,
   TaskUpdateRequest,
   TaskBulkActionResponse,

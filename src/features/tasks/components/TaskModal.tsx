@@ -6,7 +6,13 @@ import { Select } from '@/components/ui/inputs/Select'
 import { Textarea } from '@/components/ui/inputs/Textarea'
 import { workQueueSourceTypeLabels } from '@/features/workQueue'
 import { taskPriorityLabels, taskPriorityValues, taskRoleLabels } from '../constants'
-import type { Task, TaskCreateRequest, TaskPriority, TaskUpdateRequest } from '../api/contracts'
+import {
+  parseTaskPriority,
+  type Task,
+  type TaskCreateRequest,
+  type TaskPriority,
+  type TaskUpdateRequest,
+} from '../api/contracts'
 import type { UserRole } from '@/types'
 import type { WorkQueueSourceType } from '@/features/workQueue'
 import { useTaskSourcePicker } from '../hooks/useTaskSourcePicker'
@@ -31,6 +37,8 @@ const roleOptions = [
 ]
 
 const toDateInput = (value?: string | null) => value?.slice(0, 10) ?? ''
+
+const parseAssignedRole = (value: string): UserRole | '' => (value === 'advisor' || value === 'secretary' ? value : '')
 
 const sourceTypeLabel = (sourceDomain?: string | null) =>
   sourceDomain && sourceDomain in workQueueSourceTypeLabels
@@ -249,7 +257,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
               <Select
                 options={priorityOptions}
                 value={priority}
-                onChange={(e) => setPriority(e.target.value as TaskPriority)}
+                onChange={(e) => setPriority(parseTaskPriority(e.target.value) ?? priority)}
                 label="עדיפות"
                 disabled={readonly}
               />
@@ -258,7 +266,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
             <Select
               options={roleOptions}
               value={assignedRole}
-              onChange={(e) => setAssignedRole(e.target.value as UserRole | '')}
+              onChange={(e) => setAssignedRole(parseAssignedRole(e.target.value))}
               label="שיוך לתפקיד"
               disabled={readonly}
             />

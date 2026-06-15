@@ -6,6 +6,16 @@ import { taskStatusValues, taskPriorityValues } from '../constants'
 export type TaskStatus = (typeof taskStatusValues)[number]
 export type TaskPriority = (typeof taskPriorityValues)[number]
 
+export const isTaskStatus = (value: string | null): value is TaskStatus =>
+  value !== null && taskStatusValues.includes(value as TaskStatus)
+
+export const parseTaskStatus = (value: string | null): TaskStatus | null => (isTaskStatus(value) ? value : null)
+
+export const isTaskPriority = (value: string | null): value is TaskPriority =>
+  value !== null && taskPriorityValues.includes(value as TaskPriority)
+
+export const parseTaskPriority = (value: string | null): TaskPriority | null => (isTaskPriority(value) ? value : null)
+
 export const taskSchema = z.object({
   id: z.number().int(),
   title: z.string(),

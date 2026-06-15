@@ -18,6 +18,18 @@ export type WorkQueueSourceType = (typeof workQueueSourceTypeValues)[number]
 
 export type WorkQueueUrgency = (typeof workQueueUrgencyValues)[number]
 
+export const isWorkQueueSourceType = (value: string | null): value is WorkQueueSourceType =>
+  value !== null && workQueueSourceTypeValues.includes(value as WorkQueueSourceType)
+
+export const parseWorkQueueSourceType = (value: string | null): WorkQueueSourceType | null =>
+  isWorkQueueSourceType(value) ? value : null
+
+export const isWorkQueueUrgency = (value: string | null): value is WorkQueueUrgency =>
+  value !== null && workQueueUrgencyValues.includes(value as WorkQueueUrgency)
+
+export const parseWorkQueueUrgency = (value: string | null): WorkQueueUrgency | null =>
+  isWorkQueueUrgency(value) ? value : null
+
 export const workQueueSourceTypeLabels: Record<WorkQueueSourceType, string> = {
   vat_work_item: 'דוח מע"מ',
   annual_report: 'דוח שנתי',

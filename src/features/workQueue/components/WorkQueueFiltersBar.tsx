@@ -1,13 +1,19 @@
-import { z } from 'zod'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
 import { Button } from '@/components/ui/primitives/Button'
 import { cn } from '@/utils/utils'
-import { workQueueSourceTypeLabels, workQueueSourceTypeValues, workQueueUrgencyLabels } from '../constants'
-import { taskStatusLabels, taskStatusValues } from '@/features/tasks'
+import {
+  parseWorkQueueSourceType,
+  workQueueSourceTypeLabels,
+  workQueueSourceTypeValues,
+  workQueueUrgencyLabels,
+} from '../constants'
+// eslint-disable-next-line no-restricted-imports -- avoid the tasks feature barrel here; it imports workQueue-backed components.
+import { parseTaskStatus, type TaskStatus } from '@/features/tasks/api/contracts'
+// eslint-disable-next-line no-restricted-imports -- avoid the tasks feature barrel here; it imports workQueue-backed components.
+import { taskStatusLabels, taskStatusValues } from '@/features/tasks/constants'
 import type { WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
-import type { TaskStatus } from '@/features/tasks'
 
 interface WorkQueueFiltersBarProps {
   search: string
@@ -47,16 +53,6 @@ const taskRelationOptions: { value: TaskRelationFilter; label: string }[] = [
   { value: 'unlinked', label: 'פריטים ללא משימה קשורה' },
   { value: 'system', label: 'פריטי עבודה שאינם משימה' },
 ]
-
-const parseSourceType = (value: string): WorkQueueSourceType | null => {
-  const result = z.enum(workQueueSourceTypeValues).safeParse(value)
-  return result.success ? result.data : null
-}
-
-const parseTaskStatus = (value: string): TaskStatus | null => {
-  const result = z.enum(taskStatusValues).safeParse(value)
-  return result.success ? result.data : null
-}
 
 const taskRelationValue = (
   scopeFilter: 'system' | 'manual' | null,
@@ -123,7 +119,7 @@ export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
         <Select
           options={typeOptions}
           value={typeFilter ?? ''}
-          onChange={(e) => onTypeChange(parseSourceType(e.target.value))}
+          onChange={(e) => onTypeChange(parseWorkQueueSourceType(e.target.value))}
           className={cn(typeFilter && 'border-primary-400 bg-primary-50/40 ring-1 ring-primary-200')}
         />
       </div>

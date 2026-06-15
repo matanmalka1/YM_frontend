@@ -1,10 +1,10 @@
 import { Filter, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { DatePicker, Select } from '@/components/ui/inputs'
-import type { TaskPriority, TaskStatus } from '../api/contracts'
+import { parseTaskPriority, parseTaskStatus, type TaskPriority, type TaskStatus } from '../api/contracts'
 import type { TasksFilterValues, TasksSelectOption } from '../types'
 import type { UserRole } from '@/types'
-import type { WorkQueueSourceType } from '@/features/workQueue'
+import { parseWorkQueueSourceType, type WorkQueueSourceType } from '@/features/workQueue'
 
 interface TasksFiltersPanelProps {
   filters: TasksFilterValues
@@ -23,6 +23,14 @@ interface TasksFiltersPanelProps {
   onDueBeforeChange: (value: string) => void
   onReset: () => void
 }
+
+const parseTaskFilterStatus = (value: string): TaskStatus | '' => parseTaskStatus(value) ?? ''
+
+const parseTaskFilterPriority = (value: string): TaskPriority | '' => parseTaskPriority(value) ?? ''
+
+const parseAssignedRole = (value: string): UserRole | '' => (value === 'advisor' || value === 'secretary' ? value : '')
+
+const parseSourceDomain = (value: string): WorkQueueSourceType | '' => parseWorkQueueSourceType(value) ?? ''
 
 export const TasksFiltersPanel: React.FC<TasksFiltersPanelProps> = ({
   filters,
@@ -69,7 +77,7 @@ export const TasksFiltersPanel: React.FC<TasksFiltersPanelProps> = ({
         options={statusOptions}
         fieldClassName="min-w-0"
         className="rounded-xl bg-gray-50/80"
-        onChange={(event) => onStatusChange(event.target.value as TaskStatus | '')}
+        onChange={(event) => onStatusChange(parseTaskFilterStatus(event.target.value))}
       />
       <Select
         label="עדיפות"
@@ -78,7 +86,7 @@ export const TasksFiltersPanel: React.FC<TasksFiltersPanelProps> = ({
         options={priorityOptions}
         fieldClassName="min-w-0"
         className="rounded-xl bg-gray-50/80"
-        onChange={(event) => onPriorityChange(event.target.value as TaskPriority | '')}
+        onChange={(event) => onPriorityChange(parseTaskFilterPriority(event.target.value))}
       />
       <Select
         label="תפקיד"
@@ -87,7 +95,7 @@ export const TasksFiltersPanel: React.FC<TasksFiltersPanelProps> = ({
         options={roleOptions}
         fieldClassName="min-w-0"
         className="rounded-xl bg-gray-50/80"
-        onChange={(event) => onAssignedRoleChange(event.target.value as UserRole | '')}
+        onChange={(event) => onAssignedRoleChange(parseAssignedRole(event.target.value))}
       />
       <Select
         label="משתמש"
@@ -105,7 +113,7 @@ export const TasksFiltersPanel: React.FC<TasksFiltersPanelProps> = ({
         options={sourceOptions}
         fieldClassName="min-w-0"
         className="rounded-xl bg-gray-50/80"
-        onChange={(event) => onSourceDomainChange(event.target.value as WorkQueueSourceType | '')}
+        onChange={(event) => onSourceDomainChange(parseSourceDomain(event.target.value))}
       />
       <DatePicker label="מתאריך" value={filters.dueAfter} onChange={onDueAfterChange} compact />
       <DatePicker label="עד תאריך" value={filters.dueBefore} onChange={onDueBeforeChange} compact />

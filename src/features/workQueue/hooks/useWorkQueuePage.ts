@@ -3,24 +3,32 @@ import { useDebounce } from 'use-debounce'
 import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { getErrorMessage } from '@/utils/utils'
+// eslint-disable-next-line no-restricted-imports -- avoid the tasks feature barrel here; it imports workQueue-backed components.
+import { parseTaskStatus, type TaskStatus } from '@/features/tasks/api/contracts'
+import { parseWorkQueueSourceType, parseWorkQueueUrgency } from '../constants'
 import { useWorkQueue } from './useWorkQueue'
 import type { WorkQueueParams, WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
-import type { TaskStatus } from '@/features/tasks'
 
 const WORK_QUEUE_PAGE_SIZE = 20
 
+const parseLinkedFilter = (value: string | null): 'linked' | 'unlinked' | null =>
+  value === 'linked' || value === 'unlinked' ? value : null
+
+const parseScopeFilter = (value: string | null): 'system' | 'manual' | null =>
+  value === 'system' || value === 'manual' ? value : null
+
 export const useWorkQueuePage = () => {
-  const { searchParams, getParam, getPage, setFilter, setFilters, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
+  const { getParam, getPage, setFilter, setFilters, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
   const { role } = useRole()
   const hasRole = role != null
 
   const search = getParam('search')
-  const urgencyFilter = (searchParams.get('urgency') as WorkQueueUrgency) || null
-  const typeFilter = (searchParams.get('source_type') as WorkQueueSourceType) || null
-  const statusFilter = (searchParams.get('task_status') as TaskStatus) || null
-  const linkedFilter = (searchParams.get('linked') as 'linked' | 'unlinked') || null
-  const scopeFilter = (searchParams.get('scope') as 'system' | 'manual') || null
-  const historyMode = searchParams.get('history') === 'true'
+  const urgencyFilter = parseWorkQueueUrgency(getParam('urgency'))
+  const typeFilter = parseWorkQueueSourceType(getParam('source_type'))
+  const statusFilter = parseTaskStatus(getParam('task_status'))
+  const linkedFilter = parseLinkedFilter(getParam('linked'))
+  const scopeFilter = parseScopeFilter(getParam('scope'))
+  const historyMode = getParam('history') === 'true'
   const page = getPage()
 
   const [debouncedSearch] = useDebounce(search, 350)
