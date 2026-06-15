@@ -32,14 +32,14 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
   clientIdNumber,
   officeClientNumber,
 }) => {
-  const { searchParams, setFilter, setPage: setUrlPage } = useSearchParamFilters()
+  const { searchParams, getParam, getPage, setFilter, setPage: setUrlPage } = useSearchParamFilters()
   const [modalOpen, setModalOpen] = useState(false)
   const [drawerRow, setDrawerRow] = useState<AdvancePaymentRow | null>(null)
   const { isAdvisor } = useRole()
 
   const year = parsePositiveInt(searchParams.get('year'), getOperationalTaxYear())
-  const page = parsePositiveInt(searchParams.get('page'), 1)
-  const rawStatusFilter = searchParams.get('status_filter') ?? ''
+  const page = getPage()
+  const rawStatusFilter = getParam('status_filter')
   const statusFilter = rawStatusFilter ? rawStatusFilter.split(',').filter(isAdvancePaymentStatus) : []
 
   const queryClient = useQueryClient()
