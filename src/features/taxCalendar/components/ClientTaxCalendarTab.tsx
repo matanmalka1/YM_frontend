@@ -5,7 +5,6 @@ import { type TaxCalendarGroupsParams } from '../api'
 import { TaxCalendarFiltersBar } from './TaxCalendarFiltersBar'
 import { TaxCalendarGroupsContent } from './TaxCalendarGroupsContent'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
-import { parsePositiveInt } from '@/utils/utils'
 
 interface ClientTaxCalendarTabProps {
   clientId: number
@@ -15,13 +14,13 @@ const currentYear = new Date().getFullYear()
 const GROUP_PAGE_SIZE = 25
 
 export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }) => {
-  const { searchParams, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
+  const { searchParams, getParam, getPage, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
 
-  const startYear = searchParams.get('tax_year_after') ?? String(currentYear)
-  const endYear = searchParams.get('tax_year_before') ?? String(currentYear)
+  const startYear = getParam('tax_year_after') || String(currentYear)
+  const endYear = getParam('tax_year_before') || String(currentYear)
   const obligationType = parseTaxCalendarObligationType(searchParams.get('obligation_type'))
   const status = parseTaxCalendarGroupStatusFilter(searchParams.get('status'))
-  const page = parsePositiveInt(searchParams.get('page'), 1)
+  const page = getPage()
 
   const params = useMemo<TaxCalendarGroupsParams>(
     () => ({

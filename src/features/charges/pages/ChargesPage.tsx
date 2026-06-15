@@ -80,9 +80,7 @@ export const Charges: React.FC = () => {
 
   const closeChargeDetail = () => {
     setSelectedChargeId(null)
-    const next = new URLSearchParams(searchParams)
-    next.delete('charge_id')
-    setSearchParams(next)
+    setFilter('charge_id', '', false)
   }
 
   return (

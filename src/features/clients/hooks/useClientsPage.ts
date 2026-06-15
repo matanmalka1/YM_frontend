@@ -23,7 +23,7 @@ import { extractClientErrorCode } from '../utils/clientErrors'
 
 export const useClientsPage = () => {
   const queryClient = useQueryClient()
-  const { searchParams, setFilter, setPage, resetFilters } = useSearchParamFilters()
+  const { searchParams, getParam, getPage, setFilter, setPage, resetFilters } = useSearchParamFilters()
   const { isAdvisor, can } = useRole()
 
   const [deletedClientInfo, setDeletedClientInfo] = useState<{
@@ -34,13 +34,13 @@ export const useClientsPage = () => {
   } | null>(null)
 
   const filters = {
-    search: searchParams.get('search') ?? '',
+    search: getParam('search'),
     status: (searchParams.get('status') as ListClientsParams['status']) ?? undefined,
     entity_type: (searchParams.get('entity_type') as ListClientsParams['entity_type']) ?? undefined,
     accountant_id: can.editClients ? parsePositiveInt(searchParams.get('accountant_id'), 0) || undefined : undefined,
     sort_by: (searchParams.get('sort_by') as ClientSortBy) || DEFAULT_CLIENT_SORT_BY,
     order: (searchParams.get('order') as ClientSortOrder) || DEFAULT_CLIENT_SORT_ORDER,
-    page: parsePositiveInt(searchParams.get('page'), 1),
+    page: getPage(),
     page_size: parsePositiveInt(searchParams.get('page_size'), 20),
   }
 

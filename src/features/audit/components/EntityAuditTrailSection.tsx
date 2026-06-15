@@ -227,7 +227,7 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
   fieldValueLabels = EMPTY_FIELD_VALUE_LABELS,
 }) => {
   const formatAuditDetails = useMemo(() => makeAuditFormatter(fieldValueLabels), [fieldValueLabels])
-  const { searchParams, setFilter, setSearchParams } = useSearchParamFilters()
+  const { searchParams, getParam, setFilter, setFilters, setSearchParams } = useSearchParamFilters()
 
   const keyPrefix = `${entityType}_${entityId}_audit_`
   const actionKey = `${keyPrefix}action`
@@ -236,32 +236,20 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
   const createdBeforeKey = `${keyPrefix}created_before`
   const pageKey = `${keyPrefix}page`
 
-  const action = searchParams.get(actionKey) ?? ''
-  const userId = searchParams.get(userIdKey) ?? ''
+  const action = getParam(actionKey)
+  const userId = getParam(userIdKey)
   const userIdValue = parsePositiveInt(userId, 0)
   const selectedUserId = userIdValue ? String(userIdValue) : ''
-  const createdAfter = searchParams.get(createdAfterKey) ?? ''
-  const createdBefore = searchParams.get(createdBeforeKey) ?? ''
+  const createdAfter = getParam(createdAfterKey)
+  const createdBefore = getParam(createdBeforeKey)
   const page = parsePositiveInt(searchParams.get(pageKey), 1) - 1
   const searchParamsString = searchParams.toString()
 
-  const handleFilterChange = (key: string, value: string) => {
-    const next = new URLSearchParams(searchParams)
-    if (value) next.set(key, value)
-    else next.delete(key)
-    next.delete(pageKey)
-    setSearchParams(next)
-  }
+  const handleFilterChange = (key: string, value: string) =>
+    setFilters({ [key]: value, [pageKey]: '' }, false)
 
-  const handleFilterReset = () => {
-    const next = new URLSearchParams(searchParams)
-    next.delete(actionKey)
-    next.delete(userIdKey)
-    next.delete(createdAfterKey)
-    next.delete(createdBeforeKey)
-    next.delete(pageKey)
-    setSearchParams(next)
-  }
+  const handleFilterReset = () =>
+    setFilters({ [actionKey]: '', [userIdKey]: '', [createdAfterKey]: '', [createdBeforeKey]: '', [pageKey]: '' }, false)
 
   const handlePageChange = (nextPage: number) => setFilter(pageKey, String(nextPage + 1), false)
 

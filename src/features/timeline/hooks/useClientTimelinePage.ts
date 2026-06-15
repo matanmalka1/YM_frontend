@@ -26,11 +26,11 @@ const FILTER_GROUP_TO_EVENT_TYPES: Record<string, string[]> = {
 // ── Hook ──────────────────────────────────────────────────────────────────────
 
 export const useClientTimelinePage = (clientId: string | undefined) => {
-  const { searchParams, setSearchParams } = useSearchParamFilters()
+  const { searchParams, getParam, getPage, setFilter, setFilters, setPage: setPageParam } = useSearchParamFilters()
 
-  const page = parsePositiveInt(searchParams.get('page'), 1)
+  const page = getPage()
   const pageSize = parsePositiveInt(searchParams.get('page_size'), 50)
-  const searchTerm = searchParams.get('search') ?? ''
+  const searchTerm = getParam('search')
   const importantOnly = searchParams.get('important_only') === 'true'
   const rawTypeFilters = searchParams.get('type_filters')
   const typeFilters: TimelineFilterKey[] = rawTypeFilters ? (rawTypeFilters.split(',') as TimelineFilterKey[]) : ['all']
@@ -85,86 +85,34 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
 
   // ── Navigation helpers ─────────────────────────────────────────────────────
 
-  const setPage = (nextPage: number) => {
-    setSearchParams((prev) => {
-      const next = new URLSearchParams(prev)
-      next.set('page', String(nextPage))
-      return next
-    })
-  }
+  const setPage = (nextPage: number) => setPageParam(nextPage)
 
-  const setPageSize = (value: string) => {
-    setSearchParams((prev) => {
-      const next = new URLSearchParams(prev)
-      next.set('page_size', value)
-      next.set('page', '1')
-      return next
-    })
-  }
+  const setPageSize = (value: string) => setFilters({ page_size: value })
 
   // ── Filter helpers ─────────────────────────────────────────────────────────
 
-  const setSearchTerm = (value: string) => {
-    setSearchParams((prev) => {
-      const next = new URLSearchParams(prev)
-      if (value) {
-        next.set('search', value)
-      } else {
-        next.delete('search')
-      }
-      next.set('page', '1')
-      return next
-    })
-  }
+  const setSearchTerm = (value: string) => setFilter('search', value)
 
-  const setImportantOnly = (value: boolean) => {
-    setSearchParams((prev) => {
-      const next = new URLSearchParams(prev)
-      if (value) {
-        next.set('important_only', 'true')
-      } else {
-        next.delete('important_only')
-      }
-      next.set('page', '1')
-      return next
-    })
-  }
+  const setImportantOnly = (value: boolean) => setFilter('important_only', value ? 'true' : '')
 
   const toggleTypeFilter = (type: TimelineFilterKey) => {
-    setSearchParams((prev) => {
-      const next = new URLSearchParams(prev)
-      const current = prev.get('type_filters')
-      const currentFilters: TimelineFilterKey[] = current ? (current.split(',') as TimelineFilterKey[]) : ['all']
+    const current = searchParams.get('type_filters')
+    const currentFilters: TimelineFilterKey[] = current ? (current.split(',') as TimelineFilterKey[]) : ['all']
 
-      let updated: TimelineFilterKey[]
-      if (type === 'all') {
-        updated = ['all']
-      } else {
-        const withoutAll = currentFilters.filter((item) => item !== 'all')
-        updated = withoutAll.includes(type) ? withoutAll.filter((item) => item !== type) : [...withoutAll, type]
-        if (updated.length === 0) updated = ['all']
-      }
+    let updated: TimelineFilterKey[]
+    if (type === 'all') {
+      updated = ['all']
+    } else {
+      const withoutAll = currentFilters.filter((item) => item !== 'all')
+      updated = withoutAll.includes(type) ? withoutAll.filter((item) => item !== type) : [...withoutAll, type]
+      if (updated.length === 0) updated = ['all']
+    }
 
-      if (updated.length === 1 && updated[0] === 'all') {
-        next.delete('type_filters')
-      } else {
-        next.set('type_filters', updated.join(','))
-      }
-      next.set('page', '1')
-      return next
-    })
+    const nextValue = updated.length === 1 && updated[0] === 'all' ? '' : updated.join(',')
+    setFilter('type_filters', nextValue)
   }
 
-  const clearFilters = () => {
-    setSearchParams((prev) => {
-      const next = new URLSearchParams(prev)
-      next.delete('search')
-      next.delete('important_only')
-      next.delete('type_filters')
-      next.set('page', '1')
-      return next
-    })
-  }
+  const clearFilters = () => setFilters({ search: '', important_only: '', type_filters: '' })
 
   // ── Error ──────────────────────────────────────────────────────────────────
 

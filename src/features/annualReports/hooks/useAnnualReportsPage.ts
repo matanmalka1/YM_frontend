@@ -9,14 +9,14 @@ import { useState } from 'react'
 import { ANNUAL_REPORTS_TAX_YEAR_DESC_PARAMS } from '../report.constants'
 
 export const useAnnualReportsPage = () => {
-  const { searchParams, setFilter, setFilters, resetFilters } = useSearchParamFilters()
+  const { getParam, setFilter, setFilters, resetFilters } = useSearchParamFilters()
   const [showCreate, setShowCreate] = useState(false)
   const navigate = useNavigate()
 
-  const clientRecordId = searchParams.get('client_record_id') ?? ''
-  const clientName = searchParams.get('client_name') ?? ''
-  const status = searchParams.get('status') ?? ''
-  const year = searchParams.get('year') ?? ''
+  const clientRecordId = getParam('client_record_id')
+  const clientName = getParam('client_name')
+  const status = getParam('status')
+  const year = getParam('year')
 
   const defaultTaxYearQuery = useQuery({
     queryKey: annualReportsQK.defaultTaxYear,

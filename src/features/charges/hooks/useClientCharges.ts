@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useRole } from '@/hooks/useRole'
 import { useBusinessesForClient } from '@/hooks/useBusinessesForClient'
 import { useTableSelection } from '@/hooks/useTableSelection'
-import { getErrorMessage, parsePositiveInt, showErrorToast } from '@/utils/utils'
+import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { chargesApi, chargesQK, type CreateChargePayload } from '../api'
@@ -15,10 +15,10 @@ const PAGE_SIZE = 20
 
 export const useClientCharges = (clientId: number) => {
   const { isAdvisor, isSecretary } = useRole()
-  const { searchParams, setFilter, setPage: setUrlPage } = useSearchParamFilters()
+  const { searchParams, getParam, getPage, setFilter, setPage: setUrlPage } = useSearchParamFilters()
 
-  const page = parsePositiveInt(searchParams.get('page'), 1)
-  const status = searchParams.get('status') ?? ''
+  const page = getPage()
+  const status = getParam('status')
   const rawBusinessId = searchParams.get('business_id')
   const selectedBusinessId = rawBusinessId ? Number(rawBusinessId) : null
 

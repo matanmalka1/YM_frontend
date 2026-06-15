@@ -7,21 +7,20 @@ import { useTaxCalendarGroups } from '../hooks/useTaxCalendarGroups'
 import { parseTaxCalendarGroupStatusFilter, parseTaxCalendarObligationType } from '../utils'
 import { type TaxCalendarGroupsParams } from '../api'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
-import { parsePositiveInt } from '@/utils/utils'
 
 const currentYear = new Date().getFullYear()
 const GROUP_PAGE_SIZE = 25
 
 export const TaxCalendarGroupsPage = () => {
-  const { searchParams, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
+  const { searchParams, getParam, getPage, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
 
-  const startYear = searchParams.get('tax_year_after') ?? String(currentYear)
-  const endYear = searchParams.get('tax_year_before') ?? String(currentYear)
+  const startYear = getParam('tax_year_after') || String(currentYear)
+  const endYear = getParam('tax_year_before') || String(currentYear)
   const obligationType = parseTaxCalendarObligationType(searchParams.get('obligation_type'))
   const includeEmpty = searchParams.get('include_empty') === 'true'
   const status = parseTaxCalendarGroupStatusFilter(searchParams.get('status'))
-  const clientSearchText = searchParams.get('client_search') ?? ''
-  const page = parsePositiveInt(searchParams.get('page'), 1)
+  const clientSearchText = getParam('client_search')
+  const page = getPage()
 
   const [debouncedClientSearch] = useDebounce(clientSearchText, 350)
 

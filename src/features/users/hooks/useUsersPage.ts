@@ -15,12 +15,12 @@ const invalidateUsers = (queryClient: ReturnType<typeof useQueryClient>) =>
 export const useUsersPage = () => {
   const queryClient = useQueryClient()
   const { isAdvisor } = useRole()
-  const { searchParams, setFilter, setPage } = useSearchParamFilters()
+  const { searchParams, getParam, getPage, setFilter, setPage } = useSearchParamFilters()
 
-  const page = parsePositiveInt(searchParams.get('page'), 1)
+  const page = getPage()
   const page_size = parsePositiveInt(searchParams.get('page_size'), PAGE_SIZE)
   const isActiveParam = searchParams.get('is_active')
-  const search = searchParams.get('search') ?? ''
+  const search = getParam('search')
   const is_active = (isActiveParam === 'true' || isActiveParam === 'false' ? isActiveParam : undefined) as
     | 'true'
     | 'false'

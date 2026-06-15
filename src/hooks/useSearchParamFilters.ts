@@ -1,9 +1,14 @@
 import { useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import type { SetURLSearchParams } from 'react-router-dom'
+import { parsePositiveInt } from '@/utils/utils'
 
 interface SearchParamFilters {
   searchParams: URLSearchParams
+  /** Get a string param; returns '' when absent. */
+  getParam: (key: string) => string
+  /** Get the global `page` param as a 1-based integer. Do not use for namespaced page params. */
+  getPage: (defaultPage?: number) => number
   setFilter: (key: string, value: string, resetPage?: boolean) => void
   setFilters: (updates: Record<string, string>, resetPage?: boolean) => void
   setPage: (page: number) => void
@@ -54,5 +59,13 @@ export const useSearchParamFilters = (): SearchParamFilters => {
     setStableSearchParams(next)
   }
 
-  return { searchParams, setFilter, setFilters, setPage, resetFilters, setSearchParams: setStableSearchParams }
+  const getParam = useCallback((key: string): string => searchParams.get(key) ?? '', [searchParams])
+
+  /** Reads the global `page` param only. Do not use for namespaced page params (e.g. audit trail). */
+  const getPage = useCallback(
+    (defaultPage = 1): number => parsePositiveInt(searchParams.get('page'), defaultPage),
+    [searchParams],
+  )
+
+  return { searchParams, getParam, getPage, setFilter, setFilters, setPage, resetFilters, setSearchParams: setStableSearchParams }
 }

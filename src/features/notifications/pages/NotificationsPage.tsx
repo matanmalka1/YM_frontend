@@ -53,19 +53,19 @@ type SelectedClientFilter = {
 
 export const NotificationsPage: React.FC = () => {
   const { isAdvisor } = useRole()
-  const { searchParams, setFilter, setFilters, setPage: setUrlPage } = useSearchParamFilters()
+  const { searchParams, getParam, getPage, setFilter, setFilters, setPage: setUrlPage } = useSearchParamFilters()
 
-  const page = parsePositiveInt(searchParams.get('page'), FIRST_PAGE)
+  const page = getPage(FIRST_PAGE)
   const pageSize = parsePositiveInt(searchParams.get('page_size'), 25)
   const triggerParam = searchParams.get('trigger')
   const statusParam = searchParams.get('status')
   const trigger = isNotificationTrigger(triggerParam) ? triggerParam : undefined
   const status = isNotificationStatus(statusParam) ? statusParam : undefined
-  const dateFrom = searchParams.get('created_after') ?? ''
-  const dateTo = searchParams.get('created_before') ?? ''
-  const triggeredBy = searchParams.get('triggered_by') ?? ''
-  const clientRecordId = searchParams.get('client_record_id') ?? ''
-  const clientName = searchParams.get('client_name') ?? ''
+  const dateFrom = getParam('created_after')
+  const dateTo = getParam('created_before')
+  const triggeredBy = getParam('triggered_by')
+  const clientRecordId = getParam('client_record_id')
+  const clientName = getParam('client_name')
 
   const [selectedId, setSelectedId] = useState<number | null>(null)
   const { data: selected, isPending: selectedLoading, error: selectedError } = useNotificationDetail(selectedId)

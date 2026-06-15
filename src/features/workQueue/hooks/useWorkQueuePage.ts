@@ -2,7 +2,6 @@ import { useCallback, useMemo } from 'react'
 import { useDebounce } from 'use-debounce'
 import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
-import { parsePositiveInt } from '@/utils/utils'
 import { getErrorMessage } from '@/utils/utils'
 import { useWorkQueue } from './useWorkQueue'
 import type { WorkQueueParams, WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
@@ -11,18 +10,18 @@ import type { TaskStatus } from '@/features/tasks'
 const WORK_QUEUE_PAGE_SIZE = 20
 
 export const useWorkQueuePage = () => {
-  const { searchParams, setFilter, setFilters, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
+  const { searchParams, getParam, getPage, setFilter, setFilters, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
   const { role } = useRole()
   const hasRole = role != null
 
-  const search = searchParams.get('search') ?? ''
+  const search = getParam('search')
   const urgencyFilter = (searchParams.get('urgency') as WorkQueueUrgency) || null
   const typeFilter = (searchParams.get('source_type') as WorkQueueSourceType) || null
   const statusFilter = (searchParams.get('task_status') as TaskStatus) || null
   const linkedFilter = (searchParams.get('linked') as 'linked' | 'unlinked') || null
   const scopeFilter = (searchParams.get('scope') as 'system' | 'manual') || null
   const historyMode = searchParams.get('history') === 'true'
-  const page = parsePositiveInt(searchParams.get('page'), 1)
+  const page = getPage()
 
   const [debouncedSearch] = useDebounce(search, 350)
 

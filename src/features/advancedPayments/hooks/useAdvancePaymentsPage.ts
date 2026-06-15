@@ -19,7 +19,7 @@ import {
 } from '../advancedPaymentsPage.utils'
 
 export const useAdvancePaymentsPage = () => {
-  const { searchParams, setSearchParams, setFilter, setFilters, resetFilters } = useSearchParamFilters()
+  const { searchParams, getParam, setFilter, setFilters, resetFilters } = useSearchParamFilters()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { isAdvisor } = useRole()
@@ -29,12 +29,12 @@ export const useAdvancePaymentsPage = () => {
   const currentReportingMonth = today.getMonth() + 1
   const rawYear = searchParams.get('year') ?? String(getOperationalTaxYear())
   const year = rawYear === 'all' ? null : parsePositiveInt(rawYear, todayYear)
-  const rawPeriod = searchParams.get('period') ?? ''
-  const rawStatus = searchParams.get('status') ?? ''
+  const rawPeriod = getParam('period')
+  const rawStatus = getParam('status')
   const normalizedStatus: AdvancePaymentStatus | '' = isAdvancePaymentStatus(rawStatus) ? rawStatus : ''
   const filters = {
-    client_record_id: searchParams.get('client_record_id') ?? '',
-    client_name: searchParams.get('client_name') ?? '',
+    client_record_id: getParam('client_record_id'),
+    client_name: getParam('client_name'),
     status: normalizedStatus,
     period: rawPeriod === '1' || rawPeriod === '2' ? rawPeriod : '',
   }
@@ -76,13 +76,7 @@ export const useAdvancePaymentsPage = () => {
   })
 
   const changeFilter = (key: string, value: string) => {
-    if (key !== 'year') {
-      setFilter(key, value)
-      return
-    }
-    const next = new URLSearchParams(searchParams)
-    next.set('year', value)
-    setSearchParams(next)
+    setFilter(key, value, key !== 'year')
   }
 
   const openRow = (row: AdvancePaymentOverviewRow) => {

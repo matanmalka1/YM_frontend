@@ -17,8 +17,6 @@ const isTaskRole = (value: string | null): value is UserRole => value === 'advis
 const isWorkQueueSourceType = (value: string | null): value is WorkQueueSourceType =>
   value !== null && workQueueSourceTypeValues.includes(value as WorkQueueSourceType)
 
-const getOptional = (searchParams: URLSearchParams, key: string): string => searchParams.get(key) ?? ''
-
 export const getTaskFiltersFromSearchParams = (searchParams: URLSearchParams): TasksFilterValues => {
   const status = searchParams.get(TASK_FILTER_PARAM_KEYS.status)
   const priority = searchParams.get(TASK_FILTER_PARAM_KEYS.priority)
@@ -33,8 +31,8 @@ export const getTaskFiltersFromSearchParams = (searchParams: URLSearchParams): T
     assignedRole: isTaskRole(assignedRole) ? assignedRole : '',
     assignedUser: assignedUserId > 0 ? String(assignedUserId) : '',
     sourceDomain: isWorkQueueSourceType(sourceDomain) ? sourceDomain : '',
-    dueAfter: getOptional(searchParams, TASK_FILTER_PARAM_KEYS.dueAfter),
-    dueBefore: getOptional(searchParams, TASK_FILTER_PARAM_KEYS.dueBefore),
+    dueAfter: searchParams.get(TASK_FILTER_PARAM_KEYS.dueAfter) ?? '',
+    dueBefore: searchParams.get(TASK_FILTER_PARAM_KEYS.dueBefore) ?? '',
   }
 }
 

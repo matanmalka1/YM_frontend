@@ -28,16 +28,16 @@ const toOptionalVatStatus = (status: string): VatWorkItemStatus | undefined =>
 
 export const useVatWorkItemsPage = () => {
   const queryClient = useQueryClient()
-  const { searchParams, setFilter, setFilters, setSearchParams } = useSearchParamFilters()
+  const { searchParams, getParam, setFilter, setFilters, setSearchParams } = useSearchParamFilters()
   const { isAdvisor } = useRole()
 
   const rawYear = searchParams.get('year') ?? String(getOperationalTaxYear())
   const filters: Pick<VatWorkItemsFilters, 'status' | 'year' | 'period_type' | 'client_record_id' | 'client_name'> = {
-    status: toOptionalVatStatus(searchParams.get('status') ?? '') ?? '',
+    status: toOptionalVatStatus(getParam('status')) ?? '',
     year: rawYear === 'all' ? '' : rawYear,
     period_type: toVatPeriodTypeFilter(searchParams.get('period_type')),
-    client_record_id: searchParams.get('client_record_id') ?? '',
-    client_name: searchParams.get('client_name') ?? '',
+    client_record_id: getParam('client_record_id'),
+    client_name: getParam('client_name'),
   }
 
   const summaryParams: VatWorkItemStatusSummaryParams = {

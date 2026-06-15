@@ -3,7 +3,6 @@ import { TASK_FILTER_PARAM_KEYS } from '../taskPage.constants'
 import {
   buildTaskListParams,
   getTaskFiltersFromSearchParams,
-  getTasksPageFromSearchParams,
   hasTaskFilters,
 } from '../utils/taskFilters'
 import type { TaskPriority, TaskStatus } from '../api/contracts'
@@ -11,8 +10,8 @@ import type { UserRole } from '@/types'
 import type { WorkQueueSourceType } from '@/features/workQueue'
 
 export const useTaskFilters = () => {
-  const { searchParams, setFilter, setPage, setSearchParams } = useSearchParamFilters()
-  const page = getTasksPageFromSearchParams(searchParams)
+  const { searchParams, getPage, setFilter, setFilters, setPage } = useSearchParamFilters()
+  const page = getPage()
   const filters = getTaskFiltersFromSearchParams(searchParams)
 
   const setTaskFilter = (key: string, value: string) => {
@@ -20,10 +19,7 @@ export const useTaskFilters = () => {
   }
 
   const resetTaskFilters = () => {
-    const next = new URLSearchParams(searchParams)
-    Object.values(TASK_FILTER_PARAM_KEYS).forEach((key) => next.delete(key))
-    next.set('page', '1')
-    setSearchParams(next)
+    setFilters(Object.fromEntries(Object.values(TASK_FILTER_PARAM_KEYS).map((k) => [k, ''])))
   }
 
   return {

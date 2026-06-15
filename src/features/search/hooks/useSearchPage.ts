@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { searchApi, searchQK } from '../api'
 import { getErrorMessage, parsePositiveInt } from '../../../utils/utils'
@@ -6,23 +6,20 @@ import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFilters } from '../types'
 
 export const useSearchPage = () => {
-  const { searchParams, setSearchParams } = useSearchParamFilters()
+  const { searchParams, getParam, getPage, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
 
-  const filters = useMemo<SearchFilters>(
-    () => ({
-      search: searchParams.get('search') ?? '',
-      client_record_id: searchParams.get('client_record_id') ?? '',
-      id_number: searchParams.get('id_number') ?? '',
-      binder_number: searchParams.get('binder_number') ?? '',
-      client_status: searchParams.get('client_status') ?? '',
-      entity_type: searchParams.get('entity_type') ?? '',
-      binder_location_status: searchParams.get('binder_location_status') ?? '',
-      filename: searchParams.get('filename') ?? '',
-      page: parsePositiveInt(searchParams.get('page'), 1),
-      page_size: parsePositiveInt(searchParams.get('page_size'), 20),
-    }),
-    [searchParams],
-  )
+  const filters: SearchFilters = {
+    search: getParam('search'),
+    client_record_id: getParam('client_record_id'),
+    id_number: getParam('id_number'),
+    binder_number: getParam('binder_number'),
+    client_status: getParam('client_status'),
+    entity_type: getParam('entity_type'),
+    binder_location_status: getParam('binder_location_status'),
+    filename: getParam('filename'),
+    page: getPage(),
+    page_size: parsePositiveInt(searchParams.get('page_size'), 20),
+  }
 
   const hasAnyFilter = Boolean(filters.search) || SEARCH_ADVANCED_FILTER_KEYS.some((k) => Boolean(filters[k]))
 
@@ -47,22 +44,15 @@ export const useSearchPage = () => {
 
   const handleFilterChange = useCallback(
     (name: keyof SearchFilters, value: string) => {
-      const next = new URLSearchParams(searchParams)
-      if (name === 'page') {
-        next.set('page', String(value))
-      } else {
-        if (String(value)) next.set(name, String(value))
-        else next.delete(name)
-        next.set('page', '1')
-      }
-      setSearchParams(next)
+      if (name === 'page') setUrlPage(Number(value))
+      else setFilter(name, String(value))
     },
-    [searchParams, setSearchParams],
+    [setFilter, setUrlPage],
   )
 
   const handleReset = useCallback(() => {
-    setSearchParams(new URLSearchParams())
-  }, [setSearchParams])
+    resetFilters()
+  }, [resetFilters])
 
   return {
     error: searchQuery.error ? getErrorMessage(searchQuery.error, 'שגיאה בטעינת תוצאות חיפוש') : null,

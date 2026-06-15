@@ -4,7 +4,7 @@ import { isBinderCapacityStatus, isBinderLocationStatus, isBinderSortBy, isBinde
 import type { BinderSortBy, BindersFilterUpdates, BindersUrlFilters } from '../types'
 
 export const useBindersFilters = () => {
-  const { searchParams, setFilter, setFilters, setPage, setSearchParams } = useSearchParamFilters()
+  const { searchParams, getParam, getPage, setFilter, setFilters, setPage } = useSearchParamFilters()
   const rawYear = searchParams.get('year')
   const parsedYear = parsePositiveInt(rawYear, 0)
   const rawLocationStatus = searchParams.get('location_status')
@@ -16,10 +16,10 @@ export const useBindersFilters = () => {
     location_status: isBinderLocationStatus(rawLocationStatus) ? rawLocationStatus : '',
     capacity_status: isBinderCapacityStatus(rawCapacityStatus) ? rawCapacityStatus : '',
     client_record_id: parsePositiveInt(searchParams.get('client_record_id'), 0) || undefined,
-    client_name: searchParams.get('client_name') ?? '',
-    binder_number: searchParams.get('binder_number') ?? '',
+    client_name: getParam('client_name'),
+    binder_number: getParam('binder_number'),
     year: parsedYear ? String(parsedYear) : '',
-    page: parsePositiveInt(searchParams.get('page'), 1),
+    page: getPage(),
     page_size: parsePositiveInt(searchParams.get('page_size'), 20),
     sort_by: isBinderSortBy(rawSortBy) ? rawSortBy : 'period_start',
     order: isBinderSortOrder(rawOrder) ? rawOrder : 'desc',
@@ -36,26 +36,21 @@ export const useBindersFilters = () => {
   }
 
   const handleReset = () => {
-    const next = new URLSearchParams(searchParams)
-    next.delete('location_status')
-    next.delete('capacity_status')
-    next.delete('query')
-    next.delete('binder_number')
-    next.delete('client_record_id')
-    next.delete('client_name')
-    next.delete('year')
-    next.set('page', '1')
-    setSearchParams(next)
+    setFilters({
+      location_status: '',
+      capacity_status: '',
+      query: '',
+      binder_number: '',
+      client_record_id: '',
+      client_name: '',
+      year: '',
+    })
   }
 
   const handleSort = (sortBy: BinderSortBy) => {
     const currentDir = filters.sort_by === sortBy ? filters.order : 'desc'
     const nextDir = currentDir === 'desc' ? 'asc' : 'desc'
-    const next = new URLSearchParams(searchParams)
-    next.set('sort_by', sortBy)
-    next.set('order', nextDir)
-    next.set('page', '1')
-    setSearchParams(next)
+    setFilters({ sort_by: sortBy, order: nextDir })
   }
 
   return { filters, setPage, handleFilterChange, handleMultiFilterChange, handleReset, handleSort }
