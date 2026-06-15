@@ -2,8 +2,9 @@ import { z } from 'zod'
 import type { UserRole } from '@/types'
 import type { WorkQueueSourceType } from '@/features/workQueue'
 import { taskStatusValues, taskPriorityValues } from '../constants'
+import type { TaskStatus } from '../constants'
 
-export type TaskStatus = (typeof taskStatusValues)[number]
+export type { TaskStatus } from '../constants'
 export type TaskPriority = (typeof taskPriorityValues)[number]
 
 export const isTaskStatus = (value: string | null): value is TaskStatus =>

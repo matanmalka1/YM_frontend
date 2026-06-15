@@ -1,7 +1,8 @@
 export const taskStatusValues = ['open', 'done', 'canceled'] as const
+export type TaskStatus = (typeof taskStatusValues)[number]
 export const taskPriorityValues = ['low', 'normal', 'high', 'urgent'] as const
 
-export const taskStatusLabels: Record<string, string> = {
+export const taskStatusLabels: Record<TaskStatus, string> = {
   open: 'פתוחה',
   done: 'הושלמה',
   canceled: 'בוטלה',
