@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { tasksApi } from '../api/tasks.api'
 import { tasksQK } from '../api/queryKeys'
 
-export function useBulkAssignTasks() {
+export const useBulkAssignTasks = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({

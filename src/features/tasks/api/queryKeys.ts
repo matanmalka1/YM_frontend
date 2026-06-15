@@ -25,6 +25,7 @@ const normalizeClientParams = (params?: ClientTaskListParams) => ({
 
 export const tasksQK = {
   all: ['tasks'] as const,
+  lists: ['tasks', 'list'] as const,
   list: (params?: TaskListParams) => ['tasks', 'list', normalizeParams(params)] as const,
   detail: (id: number) => ['tasks', 'detail', id] as const,
   clientList: (clientRecordId: number, params?: ClientTaskListParams) =>
