@@ -11,8 +11,8 @@ import { formatPlainIdentifier } from '@/utils/utils'
 import { DOC_TYPE_LABELS, documentsApi, documentsQK } from '@/features/documents'
 import { CLIENT_ROUTES } from '../api/endpoints'
 import {
-  CLIENT_STATUS_BADGE_VARIANTS,
   CLIENT_DETAILS_TAB_LABELS,
+  getClientStatusBadgeVariant,
   getClientIdNumberTypeLabel,
   getClientStatusLabel,
   getEntityTypeLabel,
@@ -47,7 +47,7 @@ const buildClientHeader = (client: ClientRecordResponse) => ({
     <span className="flex min-w-0 flex-col gap-3">
       <span className="flex min-w-0 flex-wrap items-center gap-2">
         <span className="truncate">{client.full_name}</span>
-        <Badge variant={CLIENT_STATUS_BADGE_VARIANTS[client.status]} size="md">
+        <Badge variant={getClientStatusBadgeVariant(client.status)} size="md">
           {getClientStatusLabel(client.status)}
         </Badge>
       </span>

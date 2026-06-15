@@ -7,9 +7,9 @@ import { Badge } from '@/components/ui/primitives/Badge'
 import { Timeline, TimelineEntry } from '@/components/ui/feedback/Timeline'
 import { bindersApi, bindersQK } from '../../api'
 import {
-  BINDER_CAPACITY_STATUS_VARIANTS,
-  BINDER_LOCATION_STATUS_VARIANTS,
+  getBinderCapacityStatusVariant,
   getBinderCapacityStatusLabel,
+  getBinderLocationStatusVariant,
   getBinderLocationStatusLabel,
   isBinderCapacityStatus,
   isBinderLocationStatus,
@@ -24,12 +24,12 @@ const getAuditBadge = (fieldName: string, value: string) => {
   if (fieldName === 'capacity_status') {
     return {
       label: getBinderCapacityStatusLabel(value),
-      variant: isBinderCapacityStatus(value) ? BINDER_CAPACITY_STATUS_VARIANTS[value] : 'neutral',
+      variant: isBinderCapacityStatus(value) ? getBinderCapacityStatusVariant(value) : 'neutral',
     }
   }
   return {
     label: getBinderLocationStatusLabel(value),
-    variant: isBinderLocationStatus(value) ? BINDER_LOCATION_STATUS_VARIANTS[value] : 'neutral',
+    variant: isBinderLocationStatus(value) ? getBinderLocationStatusVariant(value) : 'neutral',
   }
 }
 

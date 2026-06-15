@@ -30,9 +30,9 @@ import {
   NOTIFICATION_DOMAIN_LABELS,
   NOTIFICATION_STATUS_LABELS,
   NOTIFICATION_STATUS_OPTIONS,
-  NOTIFICATION_STATUS_VARIANTS,
   NOTIFICATION_TRIGGER_OPTIONS,
   NOTIFICATIONS_PAGE_SIZE_OPTIONS,
+  getNotificationStatusVariant,
 } from './NotificationsPage.constants'
 
 const ENGLISH_TEXT_PATTERN = /[A-Za-z]/
@@ -126,7 +126,7 @@ export const NotificationsPage: React.FC = () => {
         key: 'status',
         header: 'סטטוס',
         render: (item) => (
-          <Badge variant={NOTIFICATION_STATUS_VARIANTS[item.status]} size="sm">
+          <Badge variant={getNotificationStatusVariant(item.status)} size="sm">
             {NOTIFICATION_STATUS_LABELS[item.status]}
           </Badge>
         ),

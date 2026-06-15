@@ -7,7 +7,7 @@ import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
 import { formatDate } from '@/utils/utils'
 import { taskPriorityLabels, taskRoleLabels } from '@/features/tasks'
 import type { WorkQueueAction, WorkQueueItem, WorkQueueSourceType, WorkQueueWarning } from '../api/contracts'
-import { workQueueSourceTypeLabels, workQueueUrgencyLabels, workQueueUrgencyVariant } from '../constants'
+import { getWorkQueueUrgencyVariant, workQueueSourceTypeLabels, workQueueUrgencyLabels } from '../constants'
 
 const typeLabel = (sourceType: WorkQueueSourceType): string => workQueueSourceTypeLabels[sourceType] ?? sourceType
 
@@ -137,7 +137,7 @@ export const buildWorkQueueColumns = ({
       headerClassName: 'w-28',
       className: 'w-28',
       render: (item: WorkQueueItem) => (
-        <Badge variant={workQueueUrgencyVariant[item.urgency]}>{workQueueUrgencyLabels[item.urgency]}</Badge>
+        <Badge variant={getWorkQueueUrgencyVariant(item.urgency)}>{workQueueUrgencyLabels[item.urgency]}</Badge>
       ),
     },
     {

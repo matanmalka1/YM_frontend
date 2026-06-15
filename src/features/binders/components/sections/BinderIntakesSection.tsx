@@ -15,7 +15,7 @@ import {
 } from '@/features/annualReports'
 import { clientsApi, clientsQK } from '@/features/clients'
 import { vatReportsApi, vatReportsQK } from '@/features/vatReports'
-import { VAT_STATUS_BADGE_VARIANTS } from '@/features/vatReports'
+import { getVatWorkItemStatusVariant } from '@/features/vatReports'
 import { staggerDelay } from '@/utils/animation'
 import { getBinderTypeLabel } from '../../constants'
 import { getVatWorkItemStatusLabel } from '@/features/vatReports'
@@ -44,7 +44,7 @@ const VatStatusBadge: React.FC<{ material: BinderIntakeMaterialResponse; clientI
 
   return (
     <Badge
-      variant={VAT_STATUS_BADGE_VARIANTS[lookup.status] ?? 'neutral'}
+      variant={getVatWorkItemStatusVariant(lookup.status)}
       className="cursor-pointer mr-1"
       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()

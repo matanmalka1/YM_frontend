@@ -1,4 +1,5 @@
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
+import { makeVariantGetter } from '@/utils/labels'
 
 export const APPROACHING_DAYS = 7
 export const IMPORTANT_DAYS = 21
@@ -52,3 +53,4 @@ export const workQueueUrgencyVariant: Record<WorkQueueUrgency, BadgeVariant> = {
   important: 'warning',
   upcoming: 'info',
 }
+export const getWorkQueueUrgencyVariant = makeVariantGetter(workQueueUrgencyVariant)

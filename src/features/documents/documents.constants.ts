@@ -1,3 +1,5 @@
+import type { BadgeVariant } from '@/components/ui/primitives/Badge'
+import { makeVariantGetter } from '@/utils/labels'
 import type { UploadDocumentPayload } from './api'
 
 export const DOCUMENT_TYPES = [
@@ -43,12 +45,13 @@ export const STATUS_LABELS: Record<string, string> = {
   rejected: 'נדחה',
 }
 
-export const STATUS_BADGE_VARIANT: Record<string, 'neutral' | 'info' | 'success' | 'error'> = {
+export const STATUS_BADGE_VARIANT: Record<string, BadgeVariant> = {
   pending: 'neutral',
   received: 'info',
   approved: 'success',
   rejected: 'error',
 }
+export const getDocumentStatusVariant = makeVariantGetter(STATUS_BADGE_VARIANT)
 
 export const DOCUMENT_ACCEPTED_MIME_TYPES: readonly string[] = [
   'application/pdf',

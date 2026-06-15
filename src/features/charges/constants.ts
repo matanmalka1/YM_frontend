@@ -1,6 +1,7 @@
-import { makeLabelGetter } from '@/utils/labels'
+import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
 import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION } from '@/constants/filterOptions.constants'
 import { PERIOD_PATTERN } from '@/constants/periodOptions.constants'
+import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import type { ChargeListStats, ChargeStatusStat } from './api'
 
 export { PERIOD_PATTERN as CHARGE_PERIOD_PATTERN }
@@ -17,12 +18,13 @@ export const CHARGE_STATUS_LABELS: Record<ChargeStatusValue, string> = {
 }
 export const getChargeStatusLabel = makeLabelGetter(CHARGE_STATUS_LABELS)
 
-export const chargeStatusVariants: Record<ChargeStatusValue, 'success' | 'warning' | 'error' | 'info' | 'neutral'> = {
+export const chargeStatusVariants: Record<ChargeStatusValue, BadgeVariant> = {
   draft: 'neutral',
   issued: 'info',
   paid: 'success',
   canceled: 'error',
 }
+export const getChargeStatusVariant = makeVariantGetter(chargeStatusVariants)
 
 export const CHARGE_TYPE_VALUES = [
   'monthly_retainer',

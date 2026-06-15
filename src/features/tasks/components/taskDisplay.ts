@@ -1,4 +1,5 @@
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
+import { makeVariantGetter } from '@/utils/labels'
 import type { TaskPriority, TaskStatus } from '../api/contracts'
 
 export const taskStatusBadgeVariant: Record<TaskStatus, BadgeVariant> = {
@@ -6,6 +7,7 @@ export const taskStatusBadgeVariant: Record<TaskStatus, BadgeVariant> = {
   done: 'success',
   canceled: 'neutral',
 }
+export const getTaskStatusBadgeVariant = makeVariantGetter(taskStatusBadgeVariant)
 
 export const taskStatusDotClass: Record<TaskStatus, string> = {
   open: 'bg-primary-500',

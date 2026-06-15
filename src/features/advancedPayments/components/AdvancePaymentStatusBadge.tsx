@@ -1,14 +1,13 @@
 import { Badge } from '../../../components/ui/primitives/Badge'
-import { getAdvancePaymentStatusLabel } from '../constants'
+import { getAdvancePaymentStatusLabel, getAdvancePaymentStatusVariant } from '../constants'
 import type { AdvancePaymentStatus } from '../types'
-import { ADVANCE_PAYMENT_STATUS_VARIANTS as STATUS_VARIANT } from '../constants'
 
 interface AdvancePaymentStatusBadgeProps {
   status: AdvancePaymentStatus
 }
 
 export const AdvancePaymentStatusBadge: React.FC<AdvancePaymentStatusBadgeProps> = ({ status }) => (
-  <Badge variant={STATUS_VARIANT[status] ?? 'neutral'}>{getAdvancePaymentStatusLabel(status)}</Badge>
+  <Badge variant={getAdvancePaymentStatusVariant(status)}>{getAdvancePaymentStatusLabel(status)}</Badge>
 )
 
 AdvancePaymentStatusBadge.displayName = 'AdvancePaymentStatusBadge'

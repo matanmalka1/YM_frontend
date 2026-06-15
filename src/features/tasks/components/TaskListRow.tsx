@@ -8,7 +8,7 @@ import { formatTaskDueDate, isTaskTerminal } from '../utils/taskFormatters'
 import {
   taskPriorityBadgeClasses,
   taskPriorityRailClasses,
-  taskStatusBadgeVariant,
+  getTaskStatusBadgeVariant,
   taskStatusDotClass,
 } from './taskDisplay'
 import type { Task } from '../api/contracts'
@@ -60,7 +60,7 @@ export const TaskListRow: React.FC<TaskListRowProps> = ({
 
       <TaskMobileField label="סטטוס">
         <Badge
-          variant={taskStatusBadgeVariant[task.status]}
+          variant={getTaskStatusBadgeVariant(task.status)}
           size="sm"
           dot={taskStatusDotClass[task.status]}
           ring

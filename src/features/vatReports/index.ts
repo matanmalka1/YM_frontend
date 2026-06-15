@@ -17,5 +17,10 @@ export { VatWorkItemDetail } from './pages/VatWorkItemDetailPage'
 export { VatWorkItems } from './pages/VatWorkItemsPage'
 export { VatClientSummaryPanel } from './components/VatClientSummaryPanel'
 export { isFiled } from './utils'
-export { VAT_STATUS_BADGE_VARIANTS, getVatWorkItemStatusLabel, CATEGORY_LABELS } from './constants'
+export {
+  VAT_STATUS_BADGE_VARIANTS,
+  getVatWorkItemStatusLabel,
+  getVatWorkItemStatusVariant,
+  CATEGORY_LABELS,
+} from './constants'
 export type { CreateVatWorkItemPayload, VatWorkItemListItem } from './api'

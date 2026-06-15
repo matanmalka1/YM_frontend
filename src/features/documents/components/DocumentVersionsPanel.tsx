@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { documentsApi, documentsQK } from '../api'
 import { Badge } from '../../../components/ui/primitives/Badge'
-import { STATUS_LABELS, STATUS_BADGE_VARIANT } from '../documents.constants'
+import { STATUS_LABELS, getDocumentStatusVariant } from '../documents.constants'
 import { formatDate, formatFileSize } from '../../../utils/utils'
 
 interface DocumentVersionsPanelProps {
@@ -37,7 +37,7 @@ export const DocumentVersionsPanel: React.FC<DocumentVersionsPanelProps> = ({ cl
               v{v.version}
             </span>
             <span className="tabular-nums text-gray-400 shrink-0">{formatDate(v.uploaded_at)}</span>
-            <Badge variant={STATUS_BADGE_VARIANT[v.status] ?? 'neutral'}>{STATUS_LABELS[v.status] ?? v.status}</Badge>
+            <Badge variant={getDocumentStatusVariant(v.status)}>{STATUS_LABELS[v.status] ?? v.status}</Badge>
             {v.original_filename && (
               <span className="truncate max-w-[180px] text-gray-600" title={v.original_filename}>
                 {v.original_filename}

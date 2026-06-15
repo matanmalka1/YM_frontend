@@ -1,4 +1,5 @@
-import { makeLabelGetter } from '@/utils/labels'
+import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
+import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import type { SignatureRequestStatus, SignatureRequestType } from './api'
 
 /** @auditContract Read by the backend enum-sync audit. */
@@ -37,13 +38,11 @@ const SIGNATURE_REQUEST_TYPE_LABELS: Record<SignatureRequestType, string> = {
 }
 export const getSignatureRequestTypeLabel = makeLabelGetter(SIGNATURE_REQUEST_TYPE_LABELS)
 
-export const SIGNATURE_REQUEST_STATUS_VARIANTS: Record<
-  SignatureRequestStatus,
-  'neutral' | 'info' | 'warning' | 'success' | 'error'
-> = {
+export const SIGNATURE_REQUEST_STATUS_VARIANTS: Record<SignatureRequestStatus, BadgeVariant> = {
   pending_signature: 'info',
   signed: 'success',
   declined: 'error',
   expired: 'warning',
   canceled: 'neutral',
 }
+export const getSignatureRequestStatusVariant = makeVariantGetter(SIGNATURE_REQUEST_STATUS_VARIANTS)

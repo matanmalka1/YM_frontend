@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/primitives/Card'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { cn } from '@/utils/utils'
 import type { VatPeriodRow } from '../api'
-import { VAT_CLIENT_SUMMARY_STATUS_VARIANTS } from '../constants'
+import { getVatClientSummaryStatusVariant } from '../constants'
 import { getVatWorkItemStatusLabel } from '../constants'
 import { formatVatAmount } from '../utils'
 import { formatVatPeriodLabel, getNetVatTone } from '../view.helpers'
@@ -51,7 +51,7 @@ interface VatPeriodCardProps {
 export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCardProps) => {
   const isBimonthly = row.period_type === 'bimonthly'
   const periodLabel = formatVatPeriodLabel(row.period, isBimonthly)
-  const statusVariant = VAT_CLIENT_SUMMARY_STATUS_VARIANTS[row.status] ?? 'neutral'
+  const statusVariant = getVatClientSummaryStatusVariant(row.status)
   const statusLabel = getVatWorkItemStatusLabel(row.status)
 
   const isFiled = row.status === 'filed'

@@ -1,4 +1,5 @@
-import { makeLabelGetter } from '@/utils/labels'
+import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
+import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 
 export const BINDER_LOCATION_STATUS_VALUES = ['in_office', 'ready_for_handover', 'handed_over'] as const
@@ -82,22 +83,18 @@ export const getBinderTypeLabel = makeLabelGetter(BINDER_TYPE_LABELS)
 export const ANNUAL_BINDER_TYPES = new Set<BinderTypeValue>(['annual_report', 'capital_declaration'])
 export const PERIODIC_BINDER_TYPES = new Set<BinderTypeValue>(['vat', 'salary'])
 
-export const BINDER_LOCATION_STATUS_VARIANTS: Record<
-  BinderLocationStatus,
-  'success' | 'warning' | 'error' | 'info' | 'neutral'
-> = {
+export const BINDER_LOCATION_STATUS_VARIANTS: Record<BinderLocationStatus, BadgeVariant> = {
   in_office: 'info',
   ready_for_handover: 'success',
   handed_over: 'neutral',
 }
+export const getBinderLocationStatusVariant = makeVariantGetter(BINDER_LOCATION_STATUS_VARIANTS)
 
-export const BINDER_CAPACITY_STATUS_VARIANTS: Record<
-  BinderCapacityStatus,
-  'success' | 'warning' | 'error' | 'info' | 'neutral'
-> = {
+export const BINDER_CAPACITY_STATUS_VARIANTS: Record<BinderCapacityStatus, BadgeVariant> = {
   open: 'success',
   full: 'warning',
 }
+export const getBinderCapacityStatusVariant = makeVariantGetter(BINDER_CAPACITY_STATUS_VARIANTS)
 
 export const BINDER_TYPE_OPTIONS: { value: string; label: string; disabled?: true }[] = [
   { value: '', label: 'בחר סוג חומר...', disabled: true },

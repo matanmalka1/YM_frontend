@@ -1,4 +1,5 @@
-import { makeLabelGetter } from '@/utils/labels'
+import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
+import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { CATEGORY_COLOR_TOKENS } from './visualizationTokens'
 import { ALL_STATUSES_OPTION, ALL_CATEGORIES_OPTION } from '@/constants/filterOptions.constants'
 import type { VatWorkItemStatus } from './api'
@@ -150,9 +151,7 @@ export const CATEGORY_TABLE_LABELS: Record<string, string> = {
   travel: 'רכב',
 }
 
-type VatStatusBadgeVariant = 'success' | 'warning' | 'error' | 'info' | 'neutral'
-
-export const VAT_STATUS_BADGE_VARIANTS: Record<VatWorkItemStatus, VatStatusBadgeVariant> = {
+export const VAT_STATUS_BADGE_VARIANTS: Record<VatWorkItemStatus, BadgeVariant> = {
   pending_materials: 'warning',
   material_received: 'info',
   data_entry_in_progress: 'info',
@@ -160,8 +159,9 @@ export const VAT_STATUS_BADGE_VARIANTS: Record<VatWorkItemStatus, VatStatusBadge
   filed: 'success',
   canceled: 'neutral',
 }
+export const getVatWorkItemStatusVariant = makeVariantGetter(VAT_STATUS_BADGE_VARIANTS)
 
-export const VAT_CLIENT_SUMMARY_STATUS_VARIANTS: Record<VatWorkItemStatus, VatStatusBadgeVariant> = {
+export const VAT_CLIENT_SUMMARY_STATUS_VARIANTS: Record<VatWorkItemStatus, BadgeVariant> = {
   filed: 'success',
   canceled: 'neutral',
   ready_for_review: 'warning',
@@ -169,6 +169,7 @@ export const VAT_CLIENT_SUMMARY_STATUS_VARIANTS: Record<VatWorkItemStatus, VatSt
   material_received: 'info',
   pending_materials: 'warning',
 }
+export const getVatClientSummaryStatusVariant = makeVariantGetter(VAT_CLIENT_SUMMARY_STATUS_VARIANTS)
 
 export const VAT_WORKFLOW_STEPS = [
   'pending_materials',

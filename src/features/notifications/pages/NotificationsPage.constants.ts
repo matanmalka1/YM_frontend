@@ -1,4 +1,5 @@
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
+import { makeVariantGetter } from '@/utils/labels'
 import {
   NOTIFICATION_STATUS_VALUES,
   NOTIFICATION_TRIGGER_VALUES,
@@ -24,6 +25,7 @@ export const NOTIFICATION_STATUS_VARIANTS: Record<NotificationStatus, BadgeVaria
   failed: 'error',
   skipped: 'warning',
 }
+export const getNotificationStatusVariant = makeVariantGetter(NOTIFICATION_STATUS_VARIANTS)
 
 export const NOTIFICATION_TRIGGER_OPTIONS = [
   { value: '', label: 'כל הסוגים' },

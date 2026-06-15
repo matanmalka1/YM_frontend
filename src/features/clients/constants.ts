@@ -1,4 +1,4 @@
-import { makeLabelGetter } from '../../utils/labels'
+import { makeLabelGetter, makeVariantGetter } from '../../utils/labels'
 import type { AdvancePaymentFrequency, ClientRecordResponse, ClientStatus, EntityType, VatType } from './api'
 
 export type ActiveClientDetailsTab =
@@ -99,6 +99,7 @@ export const CLIENT_STATUS_BADGE_VARIANTS = {
   frozen: 'warning',
   closed: 'neutral',
 } as const satisfies Record<ClientStatus, 'success' | 'warning' | 'neutral'>
+export const getClientStatusBadgeVariant = makeVariantGetter(CLIENT_STATUS_BADGE_VARIANTS)
 
 export const VAT_TYPES = ['monthly', 'bimonthly', 'exempt'] as const satisfies readonly VatType[]
 

@@ -1,3 +1,5 @@
+import type { BadgeVariant } from '@/components/ui/primitives/Badge'
+import { makeVariantGetter } from '@/utils/labels'
 import type { AnnualReportFull, AnnualReportStatus, ClientTypeForReport, AnnualReportScheduleKey } from './contracts'
 
 // ── Status labels ──────────────────────────────────────────────────────────
@@ -16,8 +18,6 @@ export const getStatusLabel = (status: string): string => (STATUS_LABELS as Reco
 
 // ── Status badge variants ──────────────────────────────────────────────────
 
-type BadgeVariant = 'neutral' | 'info' | 'warning' | 'success' | 'error'
-
 const statusVariants: Record<AnnualReportStatus, BadgeVariant> = {
   not_started: 'neutral',
   collecting_docs: 'info',
@@ -28,8 +28,7 @@ const statusVariants: Record<AnnualReportStatus, BadgeVariant> = {
   canceled: 'neutral',
 }
 
-export const getStatusVariant = (status: string): BadgeVariant =>
-  (statusVariants as Record<string, BadgeVariant>)[status] ?? 'neutral'
+export const getStatusVariant = makeVariantGetter(statusVariants)
 
 export const getAllowedTransitions = (report: Pick<AnnualReportFull, 'available_transitions'>): AnnualReportStatus[] =>
   report.available_transitions ?? []

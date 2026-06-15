@@ -1,7 +1,10 @@
 import { useCallback, useState } from 'react'
 import type { CreateSignatureRequestResponse } from './api'
 
-export { SIGNATURE_REQUEST_STATUS_VARIANTS as signatureRequestStatusVariants } from './constants'
+export {
+  SIGNATURE_REQUEST_STATUS_VARIANTS as signatureRequestStatusVariants,
+  getSignatureRequestStatusVariant,
+} from './constants'
 
 const buildSigningUrl = (hint: string): string => {
   // hint may be: a full path like "/sign/<token>", a relative "sign/<token>", or a bare "<token>"
