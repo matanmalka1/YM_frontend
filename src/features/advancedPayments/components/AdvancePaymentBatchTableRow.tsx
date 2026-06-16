@@ -18,6 +18,7 @@ export const AdvancePaymentBatchTableRow = ({
   onNavigateToClient,
 }: AdvancePaymentBatchTableRowProps) => {
   const isOverdue = row.timing_status === 'overdue'
+  const dueDate = row.due_date_effective ?? row.due_date
 
   return (
     <tr
@@ -52,7 +53,7 @@ export const AdvancePaymentBatchTableRow = ({
           isOverdue ? 'font-medium text-negative-600' : 'text-gray-500'
         }`}
       >
-        {formatDate(row.due_date)}
+        {formatDate(dueDate)}
       </td>
       <td dir="ltr" className="px-3 py-1.5 text-center align-middle text-sm tabular-nums">
         {row.turnover_amount ? (

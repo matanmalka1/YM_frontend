@@ -12,13 +12,14 @@ import type {
   AnnualKPIResponse,
   MonthBatchSummary,
   PrefillTurnoverResponse,
-} from '../types'
+  GenerateScheduleResponse,
+} from './contracts'
 
 export const advancePaymentsApi = {
   list: async (params: ListAdvancePaymentsParams): Promise<PaginatedResponse<AdvancePaymentRow>> => {
-    const { client_id, ...queryParams } = params
+    const { client_record_id, ...queryParams } = params
     const response = await api.get<PaginatedResponse<AdvancePaymentRow>>(
-      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePayments(client_id),
+      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePayments(client_record_id),
       { params: toQueryParams(queryParams) },
     )
     return response.data
@@ -85,13 +86,13 @@ export const advancePaymentsApi = {
     year: number,
     periodMonthsCount?: 1 | 2,
     referenceDate?: string,
-  ): Promise<{ created: number; skipped: number }> => {
+  ): Promise<GenerateScheduleResponse> => {
     const payload = {
       year,
       ...(periodMonthsCount == null ? {} : { period_months_count: periodMonthsCount }),
       ...(referenceDate == null ? {} : { reference_date: referenceDate }),
     }
-    const response = await api.post<{ created: number; skipped: number }>(
+    const response = await api.post<GenerateScheduleResponse>(
       ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentsGenerate(clientId),
       payload,
     )
