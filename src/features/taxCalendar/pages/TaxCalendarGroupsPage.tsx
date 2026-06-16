@@ -5,47 +5,40 @@ import { TaxCalendarFiltersBar } from '../components/TaxCalendarFiltersBar'
 import { TaxCalendarGroupsContent } from '../components/TaxCalendarGroupsContent'
 import { TaxCalendarStatsSection } from '../components/TaxCalendarStatsSection'
 import { useTaxCalendarGroups } from '../hooks/useTaxCalendarGroups'
-import { parseTaxCalendarGroupStatusFilter, parseTaxCalendarObligationType } from '../utils'
+import {
+  TAX_CALENDAR_GROUP_PAGE_SIZE,
+  readTaxCalendarCommonFilters,
+  taxCalendarYearResetDefaults,
+  toTaxCalendarCommonParams,
+} from '../utils'
 import { type TaxCalendarGroupsParams } from '../api'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
-
-const currentYear = new Date().getFullYear()
-const GROUP_PAGE_SIZE = 25
 
 export const TaxCalendarGroupsPage = () => {
   const { searchParams, getParam, getPage, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
 
-  const startYear = getParam('tax_year_after') || String(currentYear)
-  const endYear = getParam('tax_year_before') || String(currentYear)
-  const obligationType = parseTaxCalendarObligationType(searchParams.get('obligation_type'))
+  const { startYear, endYear, obligationType, status, page } = readTaxCalendarCommonFilters(
+    searchParams,
+    getParam,
+    getPage,
+  )
   const includeEmpty = searchParams.get('include_empty') === 'true'
-  const status = parseTaxCalendarGroupStatusFilter(searchParams.get('status'))
   const clientSearchText = getParam('client_search')
-  const page = getPage()
 
   const [debouncedClientSearch] = useDebounce(clientSearchText, 350)
 
   const params = useMemo<TaxCalendarGroupsParams>(
     () => ({
-      tax_year_after: Number(startYear) || currentYear,
-      tax_year_before: Number(endYear) || currentYear,
-      obligation_type: obligationType,
-      status,
+      ...toTaxCalendarCommonParams({ startYear, endYear, obligationType, status, page }),
       include_empty: includeEmpty,
       client_search: debouncedClientSearch.trim() || undefined,
-      page,
-      page_size: GROUP_PAGE_SIZE,
     }),
     [debouncedClientSearch, endYear, includeEmpty, obligationType, page, startYear, status],
   )
 
   const groupsQuery = useTaxCalendarGroups(params)
 
-  const resetAllFilters = () =>
-    resetFilters({
-      tax_year_after: String(currentYear),
-      tax_year_before: String(currentYear),
-    })
+  const resetAllFilters = () => resetFilters(taxCalendarYearResetDefaults())
 
   const groups = useMemo(() => groupsQuery.data?.items ?? [], [groupsQuery.data])
   const groupsSummary = groupsQuery.data?.summary
@@ -83,7 +76,7 @@ export const TaxCalendarGroupsPage = () => {
         errorFallback="שגיאה בטעינת יומן המס"
         clientSearchText={clientSearchText}
         page={page}
-        pageSize={GROUP_PAGE_SIZE}
+        pageSize={TAX_CALENDAR_GROUP_PAGE_SIZE}
         total={groupsQuery.data?.total ?? 0}
         onPageChange={setUrlPage}
       />
