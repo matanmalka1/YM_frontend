@@ -2,11 +2,13 @@ import { useState } from 'react'
 import { Send } from 'lucide-react'
 import { FIRST_PAGE, PAGE_SIZE_MD } from '@/constants/pagination.constants'
 import { useNotifications } from '../hooks/useNotifications'
+import { useNotificationsSummary } from '../hooks/useNotificationsSummary'
 import { useRole } from '../../../hooks/useRole'
 import { CompactNotificationListItem } from './NotificationListItem'
 import { SendNotificationModal } from './SendNotificationModal'
 import { CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS } from '../api'
 import { Button } from '../../../components/ui/primitives/Button'
+import { Badge } from '../../../components/ui/primitives/Badge'
 import type { NotificationsTabProps } from '../types'
 
 export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecordId }) => {
@@ -15,6 +17,10 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
     page: FIRST_PAGE,
     page_size: PAGE_SIZE_MD,
   })
+  const { data: summary } = useNotificationsSummary(
+    { client_record_id: clientRecordId },
+    clientRecordId != null,
+  )
   const { isAdvisor } = useRole()
   const [sendOpen, setSendOpen] = useState(false)
   const notifications = data?.items ?? []
@@ -34,6 +40,14 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
           </Button>
         )}
       </div>
+
+      {summary && summary.total > 0 && (
+        <div className="flex items-center gap-2">
+          <Badge variant="success" size="sm">נשלחו: {summary.sent}</Badge>
+          <Badge variant="warning" size="sm">בהמתנה: {summary.pending}</Badge>
+          <Badge variant="error" size="sm">נכשלו: {summary.failed}</Badge>
+        </div>
+      )}
 
       {notifications.length === 0 ? (
         <p className="text-sm text-gray-400 py-8 text-center">אין התראות ללקוח זה</p>

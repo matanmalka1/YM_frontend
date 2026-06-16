@@ -62,11 +62,6 @@ export const documentsApi = {
     return response.data
   },
 
-  getDocument: async (clientId: number, id: number): Promise<PermanentDocumentResponse> => {
-    const response = await api.get<PermanentDocumentResponse>(DOCUMENT_ENDPOINTS.documentDetail(clientId, id))
-    return response.data
-  },
-
   // ── Mutations ────────────────────────────────────────────────────────────
 
   upload: async (payload: UploadDocumentPayload): Promise<PermanentDocumentResponse> => {
