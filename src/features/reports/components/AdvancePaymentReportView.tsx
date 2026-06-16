@@ -2,7 +2,7 @@ import { PageHeader } from "../../../components/layout/PageHeader";
 import { PageStateGuard } from "../../../components/ui/layout/PageStateGuard";
 import { AdvancePaymentReportTable } from "./AdvancePaymentReportTable";
 import { useAdvancePaymentReport } from "../hooks/useAdvancePaymentReport";
-import { MONTH_OPTIONS as BASE_MONTH_OPTIONS } from "../../../utils/utils";
+import { MONTH_OPTIONS as BASE_MONTH_OPTIONS, formatPercent } from "../../../utils/utils";
 import { getOperationalYearOptions } from "@/constants/periodOptions.constants";
 import { Select } from "../../../components/ui/inputs/Select";
 import { ALL_MONTHS_OPTION } from "@/constants/filterOptions.constants";
@@ -33,7 +33,7 @@ export const AdvancePaymentReportView: React.FC = () => {
   );
 
   const description = data
-    ? `${data.items.length} לקוחות · אחוז גבייה: ${Number(data.collection_rate).toFixed(1)}%`
+    ? `${data.items.length} לקוחות · אחוז גבייה: ${formatPercent(data.collection_rate)}`
     : "";
 
   const header = (

@@ -92,6 +92,31 @@ export const formatShekelAmount = (value: string | number | null | undefined, fa
   return formatCurrencyILS(value, { fallback, maximumFractionDigits: 0 })
 }
 
+type PercentFormatOptions = {
+  fallback?: string
+  fractionDigits?: number
+  // Set when value is a 0–1 ratio that must be scaled to 0–100 before display.
+  isRatio?: boolean
+}
+
+export const formatPercent = (
+  value: string | number | null | undefined,
+  options: PercentFormatOptions = {},
+): string => {
+  const numeric = toNumberOrNull(value)
+  if (numeric === null) return options.fallback ?? EMPTY_VALUE
+
+  const percent = options.isRatio ? numeric * 100 : numeric
+  const fractionDigits = options.fractionDigits ?? 1
+
+  const formatted = new Intl.NumberFormat('he-IL', {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  }).format(percent)
+
+  return `${formatted}%`
+}
+
 export const formatBinderNumber = (binderNumber: string | null | undefined): string => {
   if (!binderNumber) return EMPTY_VALUE
   return binderNumber

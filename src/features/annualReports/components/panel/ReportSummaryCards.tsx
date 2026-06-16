@@ -1,5 +1,5 @@
 import { StatsCard } from '../../../../components/ui/layout/StatsCard'
-import { formatCurrencyILS as fmt } from '@/utils/utils'
+import { formatCurrencyILS as fmt, formatPercent } from '@/utils/utils'
 import { SUMMARY_CARD_META } from './constants'
 import type { AnnualReportFull } from '../../api'
 
@@ -61,7 +61,7 @@ export const ReportSummaryCards: React.FC<Props> = ({ report }) => {
         value={fmt(netProfit)}
         icon={SUMMARY_CARD_META.netProfit.icon}
         variant={SUMMARY_CARD_META.netProfit.variant}
-        trend={{ value: profitMargin, label: `${profitMargin.toFixed(1)}% שיעור רווח` }}
+        trend={{ value: profitMargin, label: `${formatPercent(profitMargin)} שיעור רווח` }}
       />
 
       <StatsCard

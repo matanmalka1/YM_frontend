@@ -4,9 +4,9 @@ import { annualReportTaxApi } from '../../api'
 import { annualReportsQK } from '../../api'
 import { DrawerSection } from '../../../../components/ui/overlays/DetailDrawer'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
-import { formatCurrencyILS as fmt } from '@/utils/utils'
+import { formatCurrencyILS as fmt, formatPercent } from '@/utils/utils'
 import { FINANCIAL_MESSAGES } from './financialConstants'
-import { formatPercent, getProfitSummary, toProgressWidth } from './financialHelpers'
+import { getProfitSummary, toProgressWidth } from './financialHelpers'
 import { MultiYearPLChart } from './MultiYearPLChart'
 
 interface Props {
@@ -74,7 +74,7 @@ export const AnnualPLSummary: React.FC<Props> = ({ reportId, clientId }) => {
         <div>
           <div className="mb-1 flex items-center justify-between text-xs text-gray-500">
             <span>שיעור רווח גולמי</span>
-            <span className="font-semibold text-gray-700">{formatPercent(summary.grossMargin)}</span>
+            <span className="font-semibold text-gray-700">{formatPercent(summary.grossMargin, { isRatio: true })}</span>
           </div>
           <div className="h-2 w-full rounded-full bg-gray-200">
             <div

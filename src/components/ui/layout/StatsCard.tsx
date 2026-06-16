@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
-import { cn } from '../../../utils/utils'
+import { cn, formatPercent } from '../../../utils/utils'
 import { semanticStatToneClasses } from '@/utils/semanticColors'
 
 type StatVariant = 'blue' | 'green' | 'red' | 'orange' | 'purple' | 'neutral'
@@ -213,7 +213,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
                   trendConfig.className,
                 )}
               >
-                {trendConfig.icon} {Math.abs(trend.value).toFixed(1)}%
+                {trendConfig.icon} {formatPercent(Math.abs(trend.value))}
               </span>
               <span className="text-gray-500">{trend.label}</span>
             </div>

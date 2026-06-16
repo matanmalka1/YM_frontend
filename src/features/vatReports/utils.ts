@@ -1,5 +1,6 @@
 import { EXPENSE_CATEGORIES } from './constants'
 import type { VatInvoiceRowValues } from './schemas/invoice.schema'
+import { formatCurrencyILS, formatPercent } from '../../utils/utils'
 import { semanticMonoToneClasses } from '../../utils/semanticColors'
 import type { BackendAction } from '@/lib/actions/types'
 import type { VatInvoiceResponse, VatWorkItemStatus } from './api'
@@ -45,18 +46,14 @@ export const getVatInvoiceActionLabel = (invoice: Pick<VatInvoiceResponse, 'id' 
     : `חשבונית ${displayNumber}`
 }
 
-export const formatVatAmount = (amount: string | number | null | undefined): string => {
-  if (amount === null || amount === undefined || isNaN(Number(amount))) return '—'
-  const n = Number(amount)
-  const abs = `₪${Math.abs(n).toFixed(2)}`
-  return n < 0 ? `-${abs}` : abs
-}
+export const formatVatAmount = (amount: string | number | null | undefined): string =>
+  formatCurrencyILS(amount, { fractionDigits: 2 })
 
 export const getVatDeductionRateLabel = (rate: string | number): string => {
   const numeric = Number(rate)
   if (numeric === 1) return '100%'
   if (numeric === 0) return '0%'
-  return `${(numeric * 100).toFixed(2)}%`
+  return formatPercent(numeric, { isRatio: true, fractionDigits: 2 })
 }
 
 export const getVatDeductionRateClass = (rate: string | number): string => {

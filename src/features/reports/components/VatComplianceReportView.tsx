@@ -8,6 +8,7 @@ import { DataTable, type Column } from "@/components/ui/table/DataTable";
 import { PaginationCard } from "@/components/ui/table/PaginationCard";
 import { getOperationalYearOptions } from "@/constants/periodOptions.constants";
 import { getVatTypeLabel } from "@/features/clients";
+import { formatPercent } from "@/utils/utils";
 
 const complianceBadgeVariant = (rate: string) => {
   const numericRate = Number(rate);
@@ -54,7 +55,7 @@ const buildComplianceColumns = (year?: number): Column<VatComplianceItem>[] => [
     align: "right",
     render: (item) => (
       <Badge variant={complianceBadgeVariant(item.compliance_rate)}>
-        {Number(item.compliance_rate).toFixed(1)}%
+        {formatPercent(item.compliance_rate)}
       </Badge>
     ),
   },

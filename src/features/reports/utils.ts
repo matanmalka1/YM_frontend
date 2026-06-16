@@ -1,3 +1,5 @@
+import { formatCurrencyILS } from "@/utils/utils";
+
 export type ReportMoneyValue = string | number | null | undefined;
 
 export const toReportNumber = (value: ReportMoneyValue): number => {
@@ -6,7 +8,4 @@ export const toReportNumber = (value: ReportMoneyValue): number => {
 };
 
 export const formatILS = (value: ReportMoneyValue) =>
-  `₪${toReportNumber(value).toLocaleString("he-IL", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
+  formatCurrencyILS(toReportNumber(value), { fractionDigits: 2 });

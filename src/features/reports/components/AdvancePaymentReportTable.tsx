@@ -1,5 +1,5 @@
 import { DataTable, type Column } from "../../../components/ui/table/DataTable";
-import { formatClientOfficeId } from "../../../utils/utils";
+import { formatClientOfficeId, formatPercent } from "../../../utils/utils";
 import type { AdvancePaymentReportItem, AdvancePaymentReportResponse } from "../api";
 import { formatILS, toReportNumber } from "../utils";
 
@@ -73,7 +73,7 @@ export const AdvancePaymentReportTable: React.FC<Props> = ({ data }) => (
           פער: {formatILS(data.total_gap)}
         </span>
         <span className="mr-auto text-blue-700">
-          אחוז גבייה: {Number(data.collection_rate).toFixed(1)}%
+          אחוז גבייה: {formatPercent(data.collection_rate)}
         </span>
       </div>
     )}

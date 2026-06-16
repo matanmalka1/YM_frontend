@@ -1,5 +1,6 @@
 import { Paperclip, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
+import { formatCurrencyILS } from '@/utils/utils'
 import { documentsApi } from '@/features/documents'
 
 export interface LineRowProps {
@@ -65,7 +66,7 @@ export const LineRow: React.FC<LineRowProps> = ({
         ) : null}
       </div>
       <div className="flex items-center gap-2 mr-2">
-        <span className="text-gray-700 font-mono">₪{Number(amount).toLocaleString('he-IL')}</span>
+        <span className="text-gray-700 font-mono">{formatCurrencyILS(amount)}</span>
         {onEdit ? (
           <Button
             type="button"

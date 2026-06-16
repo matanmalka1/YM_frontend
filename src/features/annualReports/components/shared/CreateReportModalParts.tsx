@@ -1,7 +1,7 @@
 import { Input, Select } from '@/components/ui/inputs'
 import { FLAG_FIELDS } from '../../utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
-import { formatWholeNumber } from './annualReports.constants'
+import { formatCurrencyILS } from '@/utils/utils'
 
 const currencySuffix = <span className="text-sm text-gray-400">₪</span>
 
@@ -51,7 +51,7 @@ export const TaxPreview = ({ preview }: PreviewProps) => (
         <span
           className={`font-mono ${preview.balance < 0 ? semanticMonoToneClasses.positive : semanticMonoToneClasses.negative}`}
         >
-          ₪{formatWholeNumber(Math.abs(preview.balance))}
+          {formatCurrencyILS(Math.abs(preview.balance))}
           {preview.balance < 0 ? ' (החזר)' : ''}
         </span>
       </div>
@@ -62,7 +62,7 @@ export const TaxPreview = ({ preview }: PreviewProps) => (
 const PreviewValue = ({ label, value }: { label: string; value: number }) => (
   <div>
     <span className="block text-xs text-info-500">{label}</span>
-    <span className="font-mono">₪{formatWholeNumber(value)}</span>
+    <span className="font-mono">{formatCurrencyILS(value)}</span>
   </div>
 )
 

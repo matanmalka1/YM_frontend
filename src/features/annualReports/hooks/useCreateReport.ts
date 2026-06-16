@@ -4,7 +4,7 @@ import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { annualReportsApi, annualReportsQK, type CreateAnnualReportPayload } from '../api'
-import { showErrorToast } from '../../../utils/utils'
+import { formatCurrencyILS, showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
 import { createReportSchema, type CreateReportFormValues } from '../schemas'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
@@ -72,7 +72,7 @@ export const useCreateReport = (taxYear?: number, onSuccess?: () => void) => {
     onSuccess: (data) => {
       const profit = data.tax_calculation?.profit
       const message =
-        profit != null ? `דוח נוצר | רווח ראשוני: ₪${Number(profit).toLocaleString('he-IL')}` : 'דוח שנתי נוצר בהצלחה'
+        profit != null ? `דוח נוצר | רווח ראשוני: ${formatCurrencyILS(profit)}` : 'דוח שנתי נוצר בהצלחה'
       toast.success(message)
       queryClient.invalidateQueries({ queryKey: annualReportsQK.all })
       form.reset(buildDefaultValues(taxYear))

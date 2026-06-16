@@ -1,7 +1,7 @@
 import { CreditCard, FileText } from 'lucide-react'
 import type { TimelineEventMetadata } from '../api'
 import type { NormalizedTimelineEvent } from '../normalize'
-import { cn } from '@/utils/utils'
+import { cn, formatCurrencyILS } from '@/utils/utils'
 import { getEventColor } from '../constants'
 import { getAnnualReportStatusLabel, getTimelineStatusLabel } from '../labels'
 import { formatTimelineDate, formatTimestamp, getEventIcon } from '../utils'
@@ -82,7 +82,7 @@ const EventMetadata: React.FC<{ metadata: TimelineEventMetadata; eventType: stri
 
       {amount != null && (
         <MetaRow className="bg-positive-50 border-positive-100">
-          <MetaField label="סכום" value={`₪${Number(amount).toFixed(2)}`} />
+          <MetaField label="סכום" value={formatCurrencyILS(Number(amount), { fractionDigits: 2 })} />
         </MetaRow>
       )}
 

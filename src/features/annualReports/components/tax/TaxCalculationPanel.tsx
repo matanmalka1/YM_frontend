@@ -1,5 +1,5 @@
 import { Button } from '../../../../components/ui/primitives/Button'
-import { cn, formatCurrencyILS } from '../../../../utils/utils'
+import { cn, formatCurrencyILS, formatPercent } from '../../../../utils/utils'
 import { useTaxCalculationPanel } from '../../hooks/useTaxCalculationPanel'
 import { TaxBracketsTable } from './TaxBracketsTable'
 import { TaxCalculatorInputs } from './TaxCalculatorInputs'
@@ -76,7 +76,7 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
           {Number(data.donation_credit) > 0 && (
             <Row label="זיכוי תרומות (סע׳ 46)" value={formatCurrencyILS(data.donation_credit)} muted />
           )}
-          <Row label="שיעור אפקטיבי" value={`${(Number(data.effective_rate) * 100).toFixed(2)}%`} muted />
+          <Row label="שיעור אפקטיבי" value={formatPercent(data.effective_rate, { isRatio: true, fractionDigits: 2 })} muted />
           <Row
             label="מס לתשלום"
             value={formatCurrencyILS(data.tax_after_credits)}

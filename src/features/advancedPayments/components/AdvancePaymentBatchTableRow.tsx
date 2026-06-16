@@ -1,7 +1,7 @@
 import { AlertTriangle, Edit, ExternalLink } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
-import { formatClientOfficeId, formatDate, formatShekelAmount } from '@/utils/utils'
+import { formatClientOfficeId, formatDate, formatPercent, formatShekelAmount } from '@/utils/utils'
 import type { AdvancePaymentOverviewRow } from '../api/contracts'
 import { AdvancePaymentStatusBadge } from './AdvancePaymentStatusBadge'
 import { getAdvancePaymentMonthLabel } from './advancePaymentComponent.utils'
@@ -81,7 +81,7 @@ export const AdvancePaymentBatchTableRow = ({
       </td>
       <td dir="ltr" className="px-3 py-1.5 text-center align-middle text-sm tabular-nums text-gray-600">
         {row.advance_rate != null ? (
-          `${Number(row.advance_rate).toFixed(2)}%`
+          formatPercent(row.advance_rate, { fractionDigits: 2 })
         ) : (
           <span className="text-gray-500">—</span>
         )}

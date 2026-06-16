@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { CheckCircle2, XCircle } from 'lucide-react'
 import { annualReportTaxApi, annualReportsQK } from '../../api'
-import { cn } from '../../../../utils/utils'
+import { cn, formatPercent } from '../../../../utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { clampPercent } from './helpers'
 
@@ -45,7 +45,7 @@ export const ReadinessCheckPanel: React.FC<ReadinessCheckPanelProps> = ({ report
       <div className="space-y-1">
         <div className="flex items-center justify-between text-xs text-gray-600">
           <span>אחוז השלמת מוכנות</span>
-          <span>{completion.toFixed(1)}%</span>
+          <span>{formatPercent(completion)}</span>
         </div>
         <div className="h-2 rounded-full bg-gray-200">
           <div

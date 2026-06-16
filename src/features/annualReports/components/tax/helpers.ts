@@ -1,4 +1,4 @@
-import { formatCurrencyILS as fmt } from '@/utils/utils'
+import { formatCurrencyILS as fmt, formatPercent } from '@/utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { CREDIT_POINT_VALUE_BY_YEAR, DEFAULT_CREDIT_POINT_VALUE, PENSION_DEDUCTION_RATE } from './constants'
 import type { AnnualReportFull } from '../../api'
@@ -39,7 +39,7 @@ export const getLiabilityTone = (liability: number | null) => {
   return liability > 0 ? 'text-negative-600' : 'text-positive-600'
 }
 
-export const fmtRate = (rate: string | number) => `${(Number(rate) * 100).toFixed(0)}%`
+export const fmtRate = (rate: string | number) => formatPercent(rate, { isRatio: true, fractionDigits: 0 })
 
 export const fmtRange = (from: string | number, to: string | number | null) =>
   to === null ? `מעל ${fmt(from)}` : `${fmt(from)} – ${fmt(to)}`

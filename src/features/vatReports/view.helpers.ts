@@ -1,5 +1,5 @@
 import type { KeyboardEvent } from 'react'
-import { formatClientOfficeId, getReportingPeriodMonthLabel } from '@/utils/utils'
+import { formatClientOfficeId, formatPercent, getReportingPeriodMonthLabel } from '@/utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { DEDUCTION_RATES, VAT_NUMERIC_KEYS } from './constants'
 import type { VatPeriodRow, VatType } from './api'
@@ -39,7 +39,7 @@ export const getDeductionRateHint = (category: string | undefined): { label: str
   const rate = DEDUCTION_RATES[category]
   if (rate === undefined || rate === 1) return null
   return {
-    label: rate === 0 ? 'ניכוי אסור' : `ניכוי ${(rate * 100).toFixed(0)}%`,
+    label: rate === 0 ? 'ניכוי אסור' : `ניכוי ${formatPercent(rate, { isRatio: true, fractionDigits: 0 })}`,
     className: rate === 0 ? 'text-negative-600' : 'text-warning-600',
   }
 }
