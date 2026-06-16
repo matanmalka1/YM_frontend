@@ -9,6 +9,7 @@ import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { Checkbox } from '@/components/ui/primitives/Checkbox'
 import { Select } from '@/components/ui/inputs'
 import { randomUUID } from '@/utils/random'
+import { getErrorMessage } from '@/utils/utils'
 import type { Task } from '../api/contracts'
 
 interface ClientTasksTabProps {
@@ -76,8 +77,8 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
             : `הושלמו ${result.succeeded.length} משימות, ${result.failed.length} נכשלו`,
         hasFailures: result.failed.length > 0,
       })
-    } catch {
-      setFeedback({ message: 'פעולת הסימון נכשלה', hasFailures: true })
+    } catch (error) {
+      setFeedback({ message: getErrorMessage(error, 'פעולת הסימון נכשלה'), hasFailures: true })
     }
   }
 
@@ -98,8 +99,8 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
             : `שויכו ${result.succeeded.length} משימות, ${result.failed.length} נכשלו`,
         hasFailures: result.failed.length > 0,
       })
-    } catch {
-      setFeedback({ message: 'פעולת השיוך נכשלה', hasFailures: true })
+    } catch (error) {
+      setFeedback({ message: getErrorMessage(error, 'פעולת השיוך נכשלה'), hasFailures: true })
     }
   }
 
