@@ -2,18 +2,12 @@ import { CalendarDays, Clock, FileText, TrendingDown, TrendingUp, Wallet } from 
 import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
 import { Badge } from '@/components/ui/primitives/Badge'
-import { cn } from '@/utils/utils'
+import { cn, formatDate } from '@/utils/utils'
 import type { VatPeriodRow } from '../api'
 import { getVatClientSummaryStatusVariant } from '../constants'
 import { getVatWorkItemStatusLabel } from '../constants'
 import { formatVatAmount } from '../utils'
 import { formatVatPeriodLabel, getNetVatTone } from '../view.helpers'
-
-const formatDeadlineDate = (iso: string | null): string => {
-  if (!iso) return '—'
-  const d = new Date(iso)
-  return d.toLocaleDateString('he-IL', { day: '2-digit', month: '2-digit', year: 'numeric' })
-}
 
 const getDaysToDueLabel = (days: number | null): { label: string; overdue: boolean } | null => {
   if (days === null) return null
@@ -57,7 +51,7 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
   const isFiled = row.status === 'filed'
 
   const dueDateLabel =
-    isFiled && row.filed_at ? formatDeadlineDate(row.filed_at) : formatDeadlineDate(row.submission_deadline)
+    isFiled && row.filed_at ? formatDate(row.filed_at) : formatDate(row.submission_deadline)
 
   const dueDateRowLabel = isFiled && row.filed_at ? 'תאריך הגשה' : 'מועד הגשה'
 

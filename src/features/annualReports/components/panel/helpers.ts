@@ -1,7 +1,7 @@
 import type { AnnualReportFull, AnnualReportListItem, AdvancesSummary } from '../../api'
-import { formatClientOfficeId, formatCurrencyILS } from '@/utils/utils'
-import { ALERT_WINDOW_DAYS, CLIENT_TYPE_LABELS, LOCALE } from './constants'
-import { formatAnnualReportDate, parseAnnualReportCalendarDate } from '../shared/annualReports.constants'
+import { formatClientOfficeId, formatCurrencyILS, formatDate } from '@/utils/utils'
+import { ALERT_WINDOW_DAYS, CLIENT_TYPE_LABELS } from './constants'
+import { parseAnnualReportCalendarDate } from '../shared/annualReports.constants'
 
 export type AlertVariant = 'error' | 'warning' | 'info' | 'success'
 export type AlertIcon = 'alert' | 'check' | 'info' | 'x'
@@ -16,11 +16,6 @@ export interface AlertBannerData {
 type BalanceAlertInput = {
   balance_type: AdvancesSummary['balance_type']
   final_balance: number | string
-}
-
-export const formatPanelDate = (value: string | null): string => {
-  if (!value) return '—'
-  return new Date(value).toLocaleDateString(LOCALE)
 }
 
 export const getClientLabel = (report: AnnualReportFull): string => {
@@ -58,7 +53,7 @@ export const getAlertBanners = (report: AnnualReportFull, advances?: BalanceAler
       banners.push({
         variant: 'warning',
         icon: 'alert',
-        message: `מועד הגשת הדוח לשנת מס ${report.tax_year} הוא ${formatAnnualReportDate(report.filing_deadline)} — נותרו ${daysLeft} ימים.`,
+        message: `מועד הגשת הדוח לשנת מס ${report.tax_year} הוא ${formatDate(report.filing_deadline)} — נותרו ${daysLeft} ימים.`,
       })
     }
 
@@ -75,7 +70,7 @@ export const getAlertBanners = (report: AnnualReportFull, advances?: BalanceAler
     banners.push({
       variant: 'info',
       icon: 'info',
-      message: `הדוח הוגש ב-${formatPanelDate(report.submitted_at)} ממתין לאישור רשות המסים.`,
+      message: `הדוח הוגש ב-${formatDate(report.submitted_at)} ממתין לאישור רשות המסים.`,
     })
   }
 

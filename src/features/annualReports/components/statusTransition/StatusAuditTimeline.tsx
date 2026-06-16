@@ -1,6 +1,5 @@
 import { Clock, ArrowLeft } from 'lucide-react'
-import { format, parseISO } from 'date-fns'
-import { he } from 'date-fns/locale'
+import { formatAuditTimestamp } from '../../../../utils/utils'
 import { Card } from '../../../../components/ui/primitives/Card'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import type { AnnualReportAuditEntry } from '../../api'
@@ -49,7 +48,7 @@ export const StatusAuditTimeline: React.FC<StatusAuditTimelineProps> = ({ audit 
                   <span className="font-medium text-gray-700">משתמש #{entry.changed_by}</span>
                   <div className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    {format(parseISO(entry.occurred_at), 'd MMM yyyy HH:mm', { locale: he })}
+                    {formatAuditTimestamp(entry.occurred_at)}
                   </div>
                 </div>
 

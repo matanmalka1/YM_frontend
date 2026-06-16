@@ -1,7 +1,8 @@
 import type { AnnualReportListItem } from '../../api'
 import { STATUS_LABELS } from '../../api'
 import type { TimelineEventStatus } from '../statusTransition/TimelineEvent'
-import { formatAnnualReportDate, parseAnnualReportCalendarDate, WARNING_DEADLINE_DAYS } from './annualReports.constants'
+import { parseAnnualReportCalendarDate, WARNING_DEADLINE_DAYS } from './annualReports.constants'
+import { formatDate } from '@/utils/utils'
 
 export interface AnnualReportTimelineEvent {
   title: string
@@ -47,7 +48,7 @@ export const buildTimelineEvents = (reports: AnnualReportListItem[]): AnnualRepo
         events.push({
           title: `הוגש — ${name} (${report.tax_year})`,
           description: getReportStatusDescription(report),
-          date: formatAnnualReportDate(report.submitted_at),
+          date: formatDate(report.submitted_at),
           status: onTime ? 'done' : 'warning',
           sortTime: submittedTime,
         })
@@ -58,7 +59,7 @@ export const buildTimelineEvents = (reports: AnnualReportListItem[]): AnnualRepo
         events.push({
           title: `מועד הגשה — ${name} (${report.tax_year})`,
           description: getReportStatusDescription(report),
-          date: formatAnnualReportDate(report.filing_deadline),
+          date: formatDate(report.filing_deadline),
           status: deadlineTime < Date.now() ? 'overdue' : 'pending',
           sortTime: deadlineTime,
         })

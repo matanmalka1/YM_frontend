@@ -55,7 +55,7 @@ export const buildCreditRows = (detail: AnnualReportFull, taxYear: number): Cred
   const rows: CreditRow[] = [
     {
       label: 'נקודות זיכוי בסיסיות',
-      description: `${creditPoints} נקודות × ₪${cpv.toLocaleString('he-IL')}`,
+      description: `${creditPoints} נקודות × ${fmt(cpv)}`,
       amount: creditPoints * cpv,
     },
   ]
@@ -81,7 +81,7 @@ export const buildCreditRows = (detail: AnnualReportFull, taxYear: number): Cred
   if (tuitionCredit > 0) {
     rows.push({
       label: 'שכר לימוד (ילדים)',
-      description: `₪${cpv.toLocaleString('he-IL')}/שנה`,
+      description: `${fmt(cpv)}/שנה`,
       amount: tuitionCredit,
     })
   }

@@ -1,11 +1,11 @@
-import { differenceInCalendarDays, format, isValid, parseISO } from 'date-fns'
-import { he } from 'date-fns/locale'
+import { differenceInCalendarDays, isValid, parseISO } from 'date-fns'
+import { formatDate } from '@/utils/utils'
 
 export const formatDueDateLabel = (date: string | null | undefined, prefix = 'לתשלום עד'): string | null => {
   if (!date) return null
   const parsed = parseISO(date)
   if (!isValid(parsed)) return null
-  return `${prefix} ${format(parsed, 'dd/MM/yyyy', { locale: he })}`
+  return `${prefix} ${formatDate(date)}`
 }
 
 export const formatRelativeDueLabel = (date: string | null | undefined): string | null => {

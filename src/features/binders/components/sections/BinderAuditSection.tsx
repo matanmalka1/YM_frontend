@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Clock, ArrowRight } from 'lucide-react'
-import { format, parseISO } from 'date-fns'
-import { he } from 'date-fns/locale'
+import { formatAuditTimestamp } from '@/utils/utils'
 import { Card } from '@/components/ui/primitives/Card'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Timeline, TimelineEntry } from '@/components/ui/feedback/Timeline'
@@ -68,7 +67,7 @@ export const BinderAuditSection: React.FC<BinderAuditSectionProps> = ({ binderId
                   {entry.changed_by_name && <span className="text-gray-600">{entry.changed_by_name}</span>}
                   {entry.changed_by_name && <span>·</span>}
                   <Clock className="h-3 w-3" />
-                  {format(parseISO(entry.changed_at), 'd MMM yyyy HH:mm', { locale: he })}
+                  {formatAuditTimestamp(entry.changed_at)}
                 </div>
 
                 {entry.notes && (

@@ -47,4 +47,3 @@ export const SUMMARY_CARD_META = {
 } as const
 
 export const ALERT_WINDOW_DAYS = 60
-export const LOCALE = 'he-IL'

@@ -11,7 +11,6 @@ import { semanticSignalBadgeClasses } from '@/utils/semanticColors'
 import { ClientYearComparisonModal } from './ClientYearComparisonModal'
 import { CreateReportModal } from './CreateReportModal'
 import { AnnualReportFullPanel } from '../panel/AnnualReportFullPanel'
-import { formatAnnualReportDate } from './annualReports.constants'
 
 interface ClientAnnualReportsTabProps {
   clientId: number
@@ -47,7 +46,7 @@ const AnnualReportStatusBanner: React.FC<{
           <p className="mt-1 text-sm font-medium text-gray-500">
             {submitted
               ? `תאריך הגשה: ${formatDate(report?.submitted_at ?? null)}`
-              : `מועד הגשה: ${formatAnnualReportDate(report?.filing_deadline ?? null)}`}
+              : `מועד הגשה: ${formatDate(report?.filing_deadline ?? null)}`}
           </p>
           <p className="mt-1 text-xs font-semibold text-gray-500">סטטוס: {statusLabel}</p>
         </div>

@@ -3,9 +3,6 @@ import { clsx, type ClassValue } from 'clsx'
 import { format, isValid, parseISO } from 'date-fns'
 import { he } from 'date-fns/locale'
 import { twMerge } from 'tailwind-merge'
-
-export const formatHebrewDate = (d: Date): string => format(d, 'EEEE, d בMMMM', { locale: he })
-
 import { toast } from './toast'
 
 export { getReportingPeriodMonthLabel, MONTH_NAMES, MONTH_OPTIONS } from '@/constants/periodOptions.constants'
@@ -120,6 +117,12 @@ export const formatMonthYear = (value: string | null | undefined): string => {
 export const formatDateTime = (value: string | null | undefined): string => {
   return formatSafeDate(value, 'dd/MM/yyyy HH:mm')
 }
+
+export const formatAuditTimestamp = (value: string | null | undefined): string => {
+  return formatSafeDate(value, 'd MMM yyyy HH:mm')
+}
+
+export const formatHebrewDate = (d: Date): string => format(d, 'EEEE, d בMMMM', { locale: he })
 
 export const formatFileSize = (bytes: number | null | undefined): string => {
   if (bytes == null || !Number.isFinite(bytes)) return EMPTY_VALUE

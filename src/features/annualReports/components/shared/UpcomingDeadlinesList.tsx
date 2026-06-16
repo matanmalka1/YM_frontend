@@ -2,9 +2,9 @@ import React from 'react'
 import { CalendarClock, CalendarCheck, AlertCircle, Clock } from 'lucide-react'
 import type { AnnualReportListItem } from '../../api'
 import type { TimelineEventStatus } from '../statusTransition/TimelineEvent'
-import { cn } from '../../../../utils/utils'
+import { cn, formatDate } from '../../../../utils/utils'
 import { STATUS_LABELS } from '../../api'
-import { formatAnnualReportDate, parseAnnualReportCalendarDate } from './annualReports.constants'
+import { parseAnnualReportCalendarDate } from './annualReports.constants'
 import { getAnnualReportName, getDeadlineStatus } from './annualReports.helpers'
 
 interface Props {
@@ -57,7 +57,7 @@ export const UpcomingDeadlinesList: React.FC<Props> = ({ reports }) => {
                     <p className="text-xs text-gray-500">{STATUS_LABELS[r.status]}</p>
                   </div>
                   <span className="shrink-0 text-xs font-semibold text-gray-600">
-                    {formatAnnualReportDate(r.filing_deadline)}
+                    {formatDate(r.filing_deadline)}
                   </span>
                 </li>
               )

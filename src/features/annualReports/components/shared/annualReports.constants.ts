@@ -6,17 +6,6 @@ export const parseAnnualReportCalendarDate = (dateStr: string | null | undefined
   return new Date(Number(year), Number(month) - 1, Number(day))
 }
 
-export const formatAnnualReportDate = (dateStr: string | null | undefined): string => {
-  if (!dateStr) return '—'
-  const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/)
-  if (!match) return new Date(dateStr).toLocaleDateString('he-IL')
-  const [, year, month, day] = match
-  return `${day}/${month}/${year}`
-}
-
-export const formatWholeNumber = (n: number) =>
-  n.toLocaleString('he-IL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
-
 export const TAX_YEAR_LIMITS = { min: 2015, max: 2099 }
 
 export const CLIENT_TYPE_OPTIONS = [
