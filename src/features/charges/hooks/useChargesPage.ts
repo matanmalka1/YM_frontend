@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { chargesApi, chargesQK, type CreateChargePayload } from '../api'
-import { getErrorMessage, showErrorToast } from '../../../utils/utils'
+import { getErrorMessage } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
 import { toast } from '../../../utils/toast'
 import { useTableSelection } from '../../../hooks/useTableSelection'
@@ -50,8 +50,7 @@ export const useChargesPage = () => {
     try {
       await createMutation.mutateAsync(payload)
       return true
-    } catch (requestError: unknown) {
-      showErrorToast(requestError, 'שגיאה ביצירת חיוב')
+    } catch {
       return false
     }
   }

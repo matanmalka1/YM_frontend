@@ -2,6 +2,7 @@ import { Filter, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { DatePicker, Select } from '@/components/ui/inputs'
 import { parseTaskPriority, parseTaskStatus, type TaskPriority, type TaskStatus } from '../api/contracts'
+import { TASK_FILTER_PARAM_KEYS, type TaskFilterParamKey } from '../taskPage.constants'
 import type { TasksFilterValues, TasksSelectOption } from '../types'
 import type { UserRole } from '@/types'
 import { parseWorkQueueSourceType, type WorkQueueSourceType } from '@/features/workQueue'
@@ -14,13 +15,7 @@ interface TasksFiltersPanelProps {
   roleOptions: Array<TasksSelectOption<UserRole | ''>>
   userOptions: TasksSelectOption[]
   sourceOptions: Array<TasksSelectOption<WorkQueueSourceType | ''>>
-  onStatusChange: (value: TaskStatus | '') => void
-  onPriorityChange: (value: TaskPriority | '') => void
-  onAssignedRoleChange: (value: UserRole | '') => void
-  onAssignedUserChange: (value: string) => void
-  onSourceDomainChange: (value: WorkQueueSourceType | '') => void
-  onDueAfterChange: (value: string) => void
-  onDueBeforeChange: (value: string) => void
+  onFilterChange: (key: TaskFilterParamKey, value: string) => void
   onReset: () => void
 }
 
@@ -40,13 +35,7 @@ export const TasksFiltersPanel: React.FC<TasksFiltersPanelProps> = ({
   roleOptions,
   userOptions,
   sourceOptions,
-  onStatusChange,
-  onPriorityChange,
-  onAssignedRoleChange,
-  onAssignedUserChange,
-  onSourceDomainChange,
-  onDueAfterChange,
-  onDueBeforeChange,
+  onFilterChange,
   onReset,
 }) => (
   <section className="rounded-2xl border border-gray-200/80 bg-white p-4 shadow-sm">
@@ -77,7 +66,7 @@ export const TasksFiltersPanel: React.FC<TasksFiltersPanelProps> = ({
         options={statusOptions}
         fieldClassName="min-w-0"
         className="rounded-xl bg-gray-50/80"
-        onChange={(event) => onStatusChange(parseTaskFilterStatus(event.target.value))}
+        onChange={(event) => onFilterChange(TASK_FILTER_PARAM_KEYS.status, parseTaskFilterStatus(event.target.value))}
       />
       <Select
         label="עדיפות"
@@ -86,7 +75,9 @@ export const TasksFiltersPanel: React.FC<TasksFiltersPanelProps> = ({
         options={priorityOptions}
         fieldClassName="min-w-0"
         className="rounded-xl bg-gray-50/80"
-        onChange={(event) => onPriorityChange(parseTaskFilterPriority(event.target.value))}
+        onChange={(event) =>
+          onFilterChange(TASK_FILTER_PARAM_KEYS.priority, parseTaskFilterPriority(event.target.value))
+        }
       />
       <Select
         label="תפקיד"
@@ -95,7 +86,7 @@ export const TasksFiltersPanel: React.FC<TasksFiltersPanelProps> = ({
         options={roleOptions}
         fieldClassName="min-w-0"
         className="rounded-xl bg-gray-50/80"
-        onChange={(event) => onAssignedRoleChange(parseAssignedRole(event.target.value))}
+        onChange={(event) => onFilterChange(TASK_FILTER_PARAM_KEYS.assignedRole, parseAssignedRole(event.target.value))}
       />
       <Select
         label="משתמש"
@@ -104,7 +95,7 @@ export const TasksFiltersPanel: React.FC<TasksFiltersPanelProps> = ({
         options={userOptions}
         fieldClassName="min-w-0"
         className="rounded-xl bg-gray-50/80"
-        onChange={(event) => onAssignedUserChange(event.target.value)}
+        onChange={(event) => onFilterChange(TASK_FILTER_PARAM_KEYS.assignedUser, event.target.value)}
       />
       <Select
         label="מקור"
@@ -113,10 +104,20 @@ export const TasksFiltersPanel: React.FC<TasksFiltersPanelProps> = ({
         options={sourceOptions}
         fieldClassName="min-w-0"
         className="rounded-xl bg-gray-50/80"
-        onChange={(event) => onSourceDomainChange(parseSourceDomain(event.target.value))}
+        onChange={(event) => onFilterChange(TASK_FILTER_PARAM_KEYS.sourceDomain, parseSourceDomain(event.target.value))}
       />
-      <DatePicker label="מתאריך" value={filters.dueAfter} onChange={onDueAfterChange} compact />
-      <DatePicker label="עד תאריך" value={filters.dueBefore} onChange={onDueBeforeChange} compact />
+      <DatePicker
+        label="מתאריך"
+        value={filters.dueAfter}
+        onChange={(value) => onFilterChange(TASK_FILTER_PARAM_KEYS.dueAfter, value)}
+        compact
+      />
+      <DatePicker
+        label="עד תאריך"
+        value={filters.dueBefore}
+        onChange={(value) => onFilterChange(TASK_FILTER_PARAM_KEYS.dueBefore, value)}
+        compact
+      />
     </div>
   </section>
 )

@@ -24,13 +24,7 @@ export const TasksPage: React.FC = () => {
         roleOptions={page.roleOptions}
         userOptions={page.userOptions}
         sourceOptions={page.sourceOptions}
-        onStatusChange={page.setStatusFilter}
-        onPriorityChange={page.setPriorityFilter}
-        onAssignedRoleChange={page.setAssignedRoleFilter}
-        onAssignedUserChange={page.setAssignedUserFilter}
-        onSourceDomainChange={page.setSourceDomainFilter}
-        onDueAfterChange={page.setDueAfterFilter}
-        onDueBeforeChange={page.setDueBeforeFilter}
+        onFilterChange={page.handleFilterChange}
         onReset={page.resetFilters}
       />
       <TasksListPanel

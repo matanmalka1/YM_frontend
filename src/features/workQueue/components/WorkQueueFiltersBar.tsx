@@ -4,10 +4,12 @@ import { Select } from '@/components/ui/inputs/Select'
 import { Button } from '@/components/ui/primitives/Button'
 import { cn } from '@/utils/utils'
 import {
+  WORK_QUEUE_FILTER_PARAM_KEYS,
   parseWorkQueueSourceType,
   workQueueSourceTypeLabels,
   workQueueSourceTypeValues,
   workQueueUrgencyLabels,
+  type WorkQueueFilterParamKey,
 } from '../constants'
 // eslint-disable-next-line no-restricted-imports -- avoid the tasks feature barrel here; it imports workQueue-backed components.
 import { parseTaskStatus, type TaskStatus } from '@/features/tasks/api/contracts'
@@ -17,20 +19,15 @@ import type { WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
 
 interface WorkQueueFiltersBarProps {
   search: string
-  onSearchChange: (value: string) => void
   urgencyFilter: WorkQueueUrgency | null
-  onUrgencyChange: (value: WorkQueueUrgency | null) => void
   typeFilter: WorkQueueSourceType | null
-  onTypeChange: (value: WorkQueueSourceType | null) => void
   statusFilter: TaskStatus | null
-  onStatusChange: (value: TaskStatus | null) => void
   linkedFilter: 'linked' | 'unlinked' | null
-  onLinkedChange: (value: 'linked' | 'unlinked' | null) => void
   scopeFilter: 'system' | 'manual' | null
-  onScopeChange: (value: 'system' | 'manual' | null) => void
   historyMode: boolean
-  onHistoryModeChange: (value: boolean) => void
   hasFilters: boolean
+  onFilterChange: (key: WorkQueueFilterParamKey, value: string) => void
+  onMultiFilterChange: (updates: Partial<Record<WorkQueueFilterParamKey, string>>) => void
   onClear: () => void
 }
 
@@ -67,41 +64,44 @@ const taskRelationValue = (
 
 export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
   search,
-  onSearchChange,
   urgencyFilter,
-  onUrgencyChange,
   typeFilter,
-  onTypeChange,
   statusFilter,
-  onStatusChange,
   linkedFilter,
-  onLinkedChange,
   scopeFilter,
-  onScopeChange,
   historyMode,
-  onHistoryModeChange,
   hasFilters,
+  onFilterChange,
+  onMultiFilterChange,
   onClear,
 }) => {
   const selectedTaskRelation = taskRelationValue(scopeFilter, linkedFilter)
   const onTaskRelationChange = (value: string) => {
     if (value === 'manual') {
-      onScopeChange('manual')
-      onLinkedChange(null)
+      onMultiFilterChange({
+        [WORK_QUEUE_FILTER_PARAM_KEYS.scope]: 'manual',
+        [WORK_QUEUE_FILTER_PARAM_KEYS.linked]: '',
+      })
       return
     }
     if (value === 'system') {
-      onScopeChange('system')
-      onLinkedChange(null)
+      onMultiFilterChange({
+        [WORK_QUEUE_FILTER_PARAM_KEYS.scope]: 'system',
+        [WORK_QUEUE_FILTER_PARAM_KEYS.linked]: '',
+      })
       return
     }
     if (value === 'linked' || value === 'unlinked') {
-      onScopeChange(null)
-      onLinkedChange(value)
+      onMultiFilterChange({
+        [WORK_QUEUE_FILTER_PARAM_KEYS.scope]: '',
+        [WORK_QUEUE_FILTER_PARAM_KEYS.linked]: value,
+      })
       return
     }
-    onScopeChange(null)
-    onLinkedChange(null)
+    onMultiFilterChange({
+      [WORK_QUEUE_FILTER_PARAM_KEYS.scope]: '',
+      [WORK_QUEUE_FILTER_PARAM_KEYS.linked]: '',
+    })
   }
 
   return (
@@ -109,7 +109,7 @@ export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
       <div className="min-w-[220px] flex-1">
         <Input
           value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
+          onChange={(e) => onFilterChange(WORK_QUEUE_FILTER_PARAM_KEYS.search, e.target.value)}
           placeholder="חיפוש לפי לקוח, מספר, כותרת או משימה"
           startIcon={<Search className="h-4 w-4" />}
           className={cn(search.trim() && 'border-primary-400 bg-primary-50/40 ring-1 ring-primary-200')}
@@ -119,7 +119,9 @@ export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
         <Select
           options={typeOptions}
           value={typeFilter ?? ''}
-          onChange={(e) => onTypeChange(parseWorkQueueSourceType(e.target.value))}
+          onChange={(e) =>
+            onFilterChange(WORK_QUEUE_FILTER_PARAM_KEYS.sourceType, parseWorkQueueSourceType(e.target.value) ?? '')
+          }
           className={cn(typeFilter && 'border-primary-400 bg-primary-50/40 ring-1 ring-primary-200')}
         />
       </div>
@@ -127,7 +129,9 @@ export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
         <Select
           options={statusOptions}
           value={statusFilter ?? ''}
-          onChange={(e) => onStatusChange(parseTaskStatus(e.target.value))}
+          onChange={(e) =>
+            onFilterChange(WORK_QUEUE_FILTER_PARAM_KEYS.taskStatus, parseTaskStatus(e.target.value) ?? '')
+          }
           className={cn(statusFilter && 'border-primary-400 bg-primary-50/40 ring-1 ring-primary-200')}
         />
       </div>
@@ -144,12 +148,17 @@ export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
         size="sm"
         aria-pressed={historyMode}
         className={cn(historyMode && 'ring-2 ring-primary-300 ring-offset-1')}
-        onClick={() => onHistoryModeChange(!historyMode)}
+        onClick={() => onFilterChange(WORK_QUEUE_FILTER_PARAM_KEYS.history, historyMode ? '' : 'true')}
       >
         היסטוריה
       </Button>
       {urgencyFilter && (
-        <Button variant="secondary" size="sm" aria-pressed onClick={() => onUrgencyChange(null)}>
+        <Button
+          variant="secondary"
+          size="sm"
+          aria-pressed
+          onClick={() => onFilterChange(WORK_QUEUE_FILTER_PARAM_KEYS.urgency, '')}
+        >
           {`דחיפות: ${workQueueUrgencyLabels[urgencyFilter]}`}
         </Button>
       )}

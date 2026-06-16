@@ -5,10 +5,15 @@ import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { getErrorMessage } from '@/utils/utils'
 import { getTotalPages } from '@/utils/paginationUtils'
 // eslint-disable-next-line no-restricted-imports -- avoid the tasks feature barrel here; it imports workQueue-backed components.
-import { parseTaskStatus, type TaskStatus } from '@/features/tasks/api/contracts'
-import { parseWorkQueueSourceType, parseWorkQueueUrgency } from '../constants'
+import { parseTaskStatus } from '@/features/tasks/api/contracts'
+import {
+  WORK_QUEUE_FILTER_PARAM_KEYS,
+  parseWorkQueueSourceType,
+  parseWorkQueueUrgency,
+  type WorkQueueFilterParamKey,
+} from '../constants'
 import { useWorkQueue } from './useWorkQueue'
-import type { WorkQueueParams, WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
+import type { WorkQueueParams } from '../api/contracts'
 
 const WORK_QUEUE_PAGE_SIZE = 20
 
@@ -23,13 +28,13 @@ export const useWorkQueuePage = () => {
   const { role } = useRole()
   const hasRole = role != null
 
-  const search = getParam('search')
-  const urgencyFilter = parseWorkQueueUrgency(getParam('urgency'))
-  const typeFilter = parseWorkQueueSourceType(getParam('source_type'))
-  const statusFilter = parseTaskStatus(getParam('task_status'))
-  const linkedFilter = parseLinkedFilter(getParam('linked'))
-  const scopeFilter = parseScopeFilter(getParam('scope'))
-  const historyMode = getParam('history') === 'true'
+  const search = getParam(WORK_QUEUE_FILTER_PARAM_KEYS.search)
+  const urgencyFilter = parseWorkQueueUrgency(getParam(WORK_QUEUE_FILTER_PARAM_KEYS.urgency))
+  const typeFilter = parseWorkQueueSourceType(getParam(WORK_QUEUE_FILTER_PARAM_KEYS.sourceType))
+  const statusFilter = parseTaskStatus(getParam(WORK_QUEUE_FILTER_PARAM_KEYS.taskStatus))
+  const linkedFilter = parseLinkedFilter(getParam(WORK_QUEUE_FILTER_PARAM_KEYS.linked))
+  const scopeFilter = parseScopeFilter(getParam(WORK_QUEUE_FILTER_PARAM_KEYS.scope))
+  const historyMode = getParam(WORK_QUEUE_FILTER_PARAM_KEYS.history) === 'true'
   const page = getPage()
 
   const [debouncedSearch] = useDebounce(search, 350)
@@ -71,13 +76,9 @@ export const useWorkQueuePage = () => {
       ? getErrorMessage(error, 'שגיאה בטעינת המשימות')
       : null
 
-  const setSearch = (value: string) => setFilter('search', value)
-  const setUrgencyFilter = (value: WorkQueueUrgency | null) => setFilter('urgency', value ?? '')
-  const setTypeFilter = (value: WorkQueueSourceType | null) => setFilter('source_type', value ?? '')
-  const setStatusFilter = (value: TaskStatus | null) => setFilter('task_status', value ?? '')
-  const setLinkedFilter = (value: 'linked' | 'unlinked' | null) => setFilter('linked', value ?? '')
-  const setScopeFilter = (value: 'system' | 'manual' | null) => setFilter('scope', value ?? '')
-  const setHistoryMode = (value: boolean) => setFilter('history', value ? 'true' : '')
+  const handleFilterChange = (key: WorkQueueFilterParamKey, value: string) => setFilter(key, value, true)
+  const handleMultiFilterChange = (updates: Partial<Record<WorkQueueFilterParamKey, string>>) =>
+    setFilters(updates, true)
   const setPage = (nextPage: number) => setUrlPage(nextPage)
 
   const clearFilters = useCallback(() => {
@@ -91,19 +92,14 @@ export const useWorkQueuePage = () => {
     isLoading,
     error: requestError,
     search,
-    setSearch,
     urgencyFilter,
-    setUrgencyFilter,
     typeFilter,
-    setTypeFilter,
     statusFilter,
-    setStatusFilter,
     linkedFilter,
-    setLinkedFilter,
     scopeFilter,
-    setScopeFilter,
     historyMode,
-    setHistoryMode,
+    handleFilterChange,
+    handleMultiFilterChange,
     hasContentFilters,
     hasFilters,
     clearFilters,
@@ -111,6 +107,5 @@ export const useWorkQueuePage = () => {
     total,
     totalPages,
     setPage,
-    setFilters,
   }
 }

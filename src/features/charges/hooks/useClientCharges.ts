@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useRole } from '@/hooks/useRole'
 import { useBusinessesForClient } from '@/hooks/useBusinessesForClient'
 import { useTableSelection } from '@/hooks/useTableSelection'
-import { getErrorMessage, showErrorToast } from '@/utils/utils'
+import { getErrorMessage } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { chargesApi, chargesQK, type CreateChargePayload } from '../api'
@@ -75,8 +75,7 @@ export const useClientCharges = (clientId: number) => {
           client_record_id: clientId,
         })
         return true
-      } catch (err: unknown) {
-        showErrorToast(err, 'שגיאה ביצירת חיוב')
+      } catch {
         return false
       }
     },

@@ -12,6 +12,7 @@ import { useWorkQueueActions } from '../hooks/useWorkQueueActions'
 import { WorkQueueSummaryCards } from '../components/WorkQueueSummaryCards'
 import { WorkQueueFiltersBar } from '../components/WorkQueueFiltersBar'
 import { WorkQueueTable } from '../components/WorkQueueTable'
+import { WORK_QUEUE_FILTER_PARAM_KEYS } from '../constants'
 import { toast } from '@/utils/toast'
 
 export const WorkQueuePage: React.FC = () => {
@@ -22,19 +23,14 @@ export const WorkQueuePage: React.FC = () => {
     isFetching,
     error,
     search,
-    setSearch,
     urgencyFilter,
-    setUrgencyFilter,
     typeFilter,
-    setTypeFilter,
     statusFilter,
-    setStatusFilter,
     linkedFilter,
-    setLinkedFilter,
     scopeFilter,
-    setScopeFilter,
     historyMode,
-    setHistoryMode,
+    handleFilterChange,
+    handleMultiFilterChange,
     hasContentFilters,
     hasFilters,
     clearFilters,
@@ -106,25 +102,20 @@ export const WorkQueuePage: React.FC = () => {
         isLoading={isFetching}
         summaryError={error}
         urgencyFilter={urgencyFilter}
-        onFilter={setUrgencyFilter}
+        onFilter={(urgency) => handleFilterChange(WORK_QUEUE_FILTER_PARAM_KEYS.urgency, urgency ?? '')}
       />
 
       <WorkQueueFiltersBar
         search={search}
-        onSearchChange={setSearch}
         urgencyFilter={urgencyFilter}
-        onUrgencyChange={setUrgencyFilter}
         typeFilter={typeFilter}
-        onTypeChange={setTypeFilter}
         statusFilter={statusFilter}
-        onStatusChange={setStatusFilter}
         linkedFilter={linkedFilter}
-        onLinkedChange={setLinkedFilter}
         scopeFilter={scopeFilter}
-        onScopeChange={setScopeFilter}
         historyMode={historyMode}
-        onHistoryModeChange={setHistoryMode}
         hasFilters={hasFilters}
+        onFilterChange={handleFilterChange}
+        onMultiFilterChange={handleMultiFilterChange}
         onClear={clearFilters}
       />
 
