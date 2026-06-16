@@ -4,6 +4,7 @@ import { PageHeader } from "../../../components/layout/PageHeader";
 import { PageStateGuard } from "../../../components/ui/layout/PageStateGuard";
 import { Badge } from "../../../components/ui/primitives/Badge";
 import { Select } from "../../../components/ui/inputs/Select";
+import { DataTable, type Column } from "@/components/ui/table/DataTable";
 import { PaginationCard } from "@/components/ui/table/PaginationCard";
 import { getOperationalYearOptions } from "@/constants/periodOptions.constants";
 import { getVatTypeLabel } from "@/features/clients";
@@ -25,50 +26,73 @@ const getComplianceDisambiguation = (item: VatComplianceItem, reportYear?: numbe
   return `${year}: ${frequencyLabel}`;
 };
 
+const numericCell = (value: number) => <span className="text-gray-700 tabular-nums">{value}</span>;
+
+const buildComplianceColumns = (year?: number): Column<VatComplianceItem>[] => [
+  {
+    key: "client",
+    header: "לקוח",
+    align: "right",
+    render: (item) => {
+      const disambiguation = getComplianceDisambiguation(item, year);
+      return (
+        <>
+          <span className="block font-semibold text-gray-900">{item.client_name}</span>
+          {disambiguation && <span className="block text-xs font-medium text-gray-500">{disambiguation}</span>}
+        </>
+      );
+    },
+  },
+  { key: "expected", header: "תקופות צפויות", align: "right", render: (item) => numericCell(item.periods_expected) },
+  { key: "filed", header: "הוגשו", align: "right", render: (item) => numericCell(item.periods_filed) },
+  { key: "open", header: "פתוחות", align: "right", render: (item) => numericCell(item.periods_open) },
+  { key: "onTime", header: "בזמן", align: "right", render: (item) => numericCell(item.on_time_count) },
+  { key: "late", header: "באיחור", align: "right", render: (item) => numericCell(item.late_count) },
+  {
+    key: "rate",
+    header: "ציות",
+    align: "right",
+    render: (item) => (
+      <Badge variant={complianceBadgeVariant(item.compliance_rate)}>
+        {Number(item.compliance_rate).toFixed(1)}%
+      </Badge>
+    ),
+  },
+];
+
 const ComplianceTable = ({ items, year }: { items: VatComplianceItem[]; year?: number }) => {
   if (items.length === 0) return <p className="text-sm text-gray-500">אין נתונים לשנה זו.</p>;
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-200 w-full">
-      <table className="w-full divide-gray-200 text-sm">
-        <thead className="bg-gray-50 text-right">
-          <tr>
-            {["לקוח", "תקופות צפויות", "הוגשו", "פתוחות", "בזמן", "באיחור", "ציות"].map((h) => (
-              <th key={h} className="px-4 py-3 font-medium text-gray-500 whitespace-nowrap">{h}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-100 bg-white">
-          {items.map((item) => {
-            const disambiguation = getComplianceDisambiguation(item, year);
-            return (
-              <tr
-                key={item.grouping_key ?? `${item.client_record_id}-${disambiguation ?? "summary"}`}
-                className="hover:bg-gray-50"
-              >
-                <td className="px-4 py-3 whitespace-nowrap">
-                  <span className="block font-semibold text-gray-900">{item.client_name}</span>
-                  {disambiguation && (
-                    <span className="block text-xs font-medium text-gray-500">{disambiguation}</span>
-                  )}
-                </td>
-                <td className="px-4 py-3 text-gray-700 tabular-nums">{item.periods_expected}</td>
-                <td className="px-4 py-3 text-gray-700 tabular-nums">{item.periods_filed}</td>
-                <td className="px-4 py-3 text-gray-700 tabular-nums">{item.periods_open}</td>
-                <td className="px-4 py-3 text-gray-700 tabular-nums">{item.on_time_count}</td>
-                <td className="px-4 py-3 text-gray-700 tabular-nums">{item.late_count}</td>
-                <td className="px-4 py-3">
-                  <Badge variant={complianceBadgeVariant(item.compliance_rate)}>
-                    {Number(item.compliance_rate).toFixed(1)}%
-                  </Badge>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+    <DataTable
+      data={items}
+      columns={buildComplianceColumns(year)}
+      getRowKey={(item) =>
+        item.grouping_key ?? `${item.client_record_id}-${getComplianceDisambiguation(item, year) ?? "summary"}`
+      }
+    />
   );
 };
+
+const STALE_PENDING_COLUMNS: Column<StalePendingItem>[] = [
+  {
+    key: "client",
+    header: "לקוח",
+    align: "right",
+    render: (item) => <span className="font-semibold text-gray-900">{item.client_name}</span>,
+  },
+  {
+    key: "period",
+    header: "תקופה",
+    align: "right",
+    render: (item) => <span className="text-gray-700 tabular-nums">{item.period}</span>,
+  },
+  {
+    key: "days",
+    header: "ימים ממתין",
+    align: "right",
+    render: (item) => <Badge variant="error">{item.days_pending} ימים</Badge>,
+  },
+];
 
 const StalePendingTable = ({ items }: { items: StalePendingItem[] }) => {
   if (items.length === 0) return null;
@@ -77,28 +101,11 @@ const StalePendingTable = ({ items }: { items: StalePendingItem[] }) => {
       <h3 className="text-sm font-semibold text-negative-700">
         ממתין לחומרים מעל 30 יום ({items.length})
       </h3>
-      <div className="overflow-x-auto rounded-lg border border-negative-200">
-        <table className="min-w-full divide-y divide-negative-100 text-sm">
-          <thead className="bg-negative-50 text-right">
-            <tr>
-              {["לקוח", "תקופה", "ימים ממתין"].map((h) => (
-                <th key={h} className="px-4 py-3 font-medium text-negative-600 whitespace-nowrap">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-negative-50 bg-white">
-            {items.map((item) => (
-              <tr key={`${item.client_record_id}-${item.period}`} className="hover:bg-negative-50">
-                <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap">{item.client_name}</td>
-                <td className="px-4 py-3 text-gray-700 tabular-nums">{item.period}</td>
-                <td className="px-4 py-3">
-                  <Badge variant="error">{item.days_pending} ימים</Badge>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        data={items}
+        columns={STALE_PENDING_COLUMNS}
+        getRowKey={(item) => `${item.client_record_id}-${item.period}`}
+      />
     </div>
   );
 };

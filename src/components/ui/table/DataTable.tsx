@@ -7,6 +7,14 @@ import type { LucideIcon } from 'lucide-react'
 import { Inbox } from 'lucide-react'
 import { TableSkeleton } from './TableSkeleton'
 
+type ColumnAlign = 'left' | 'center' | 'right'
+
+const ALIGN_CLASS: Record<ColumnAlign, string> = {
+  left: 'text-left',
+  center: 'text-center',
+  right: 'text-right',
+}
+
 export interface Column<T> {
   key: string
   header: string
@@ -15,6 +23,8 @@ export interface Column<T> {
   className?: string
   headerClassName?: string
   dir?: 'ltr' | 'rtl'
+  align?: ColumnAlign
+  headerAlign?: ColumnAlign
 }
 
 export interface DataTableProps<T> {
@@ -93,7 +103,8 @@ export const DataTable = <T,>({
                 <th
                   key={column.key}
                   className={cn(
-                    'px-3 py-2 text-center text-xs font-semibold uppercase tracking-wide text-gray-500',
+                    'px-3 py-2 text-xs font-semibold uppercase tracking-wide text-gray-500',
+                    ALIGN_CLASS[column.headerAlign ?? column.align ?? 'center'],
                     column.headerClassName,
                   )}
                 >
@@ -121,7 +132,11 @@ export const DataTable = <T,>({
                   <td
                     key={column.key}
                     dir={column.dir}
-                    className={cn('px-3 py-3 align-middle text-center whitespace-nowrap', column.className)}
+                    className={cn(
+                      'px-3 py-3 align-middle whitespace-nowrap',
+                      ALIGN_CLASS[column.align ?? 'center'],
+                      column.className,
+                    )}
                   >
                     {column.render(item, index)}
                   </td>

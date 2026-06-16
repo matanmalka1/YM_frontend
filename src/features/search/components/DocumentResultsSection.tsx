@@ -1,12 +1,71 @@
 import { FileText, ExternalLink } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Input } from '../../../components/ui/inputs/Input'
+import { DataTable, type Column } from '@/components/ui/table/DataTable'
 import { DOC_TYPE_LABELS } from '@/features/documents'
 import type { DocumentSearchResult } from '../api'
 import type { SearchFilters } from '../types'
 import { cn, formatClientOfficeId } from '../../../utils/utils'
 
 const DOCUMENT_SEARCH_LIMIT = 50
+
+const DOCUMENT_COLUMNS: Column<DocumentSearchResult>[] = [
+  {
+    key: 'office',
+    header: "מס' לקוח",
+    align: 'right',
+    render: (doc) => (
+      <span className="font-mono text-sm text-gray-500 tabular-nums">
+        {formatClientOfficeId(doc.office_client_number)}
+      </span>
+    ),
+  },
+  { key: 'client', header: 'לקוח', align: 'right', render: (doc) => <span className="text-gray-700">{doc.client_name}</span> },
+  {
+    key: 'type',
+    header: 'סוג מסמך',
+    align: 'right',
+    render: (doc) => (
+      <span className="font-medium text-gray-800">{DOC_TYPE_LABELS[doc.document_type] ?? 'סוג מסמך לא ידוע'}</span>
+    ),
+  },
+  {
+    key: 'filename',
+    header: 'שם קובץ',
+    align: 'right',
+    className: 'max-w-xs truncate',
+    render: (doc) => (
+      <span className="font-mono text-xs text-gray-600">
+        {doc.original_filename ?? <span className="text-gray-300">—</span>}
+      </span>
+    ),
+  },
+  {
+    key: 'taxYear',
+    header: 'שנת מס',
+    align: 'right',
+    render: (doc) => <span className="text-gray-600">{doc.tax_year ?? <span className="text-gray-300">—</span>}</span>,
+  },
+  {
+    key: 'action',
+    header: '',
+    align: 'right',
+    render: (doc) => (
+      <Link
+        to={`/clients/${doc.client_record_id}/documents`}
+        className={cn(
+          'inline-flex items-center gap-1.5 rounded-lg',
+          'border border-gray-200 bg-white px-2.5 py-1.5 text-xs font-medium',
+          'text-gray-600 shadow-sm transition-all duration-200',
+          'hover:border-purple-400 hover:bg-purple-50 hover:text-purple-800 hover:shadow-md',
+        )}
+      >
+        <ExternalLink className="h-3 w-3" />
+        פירוט
+      </Link>
+    ),
+  },
+]
 
 interface DocumentResultsSectionProps {
   documents: DocumentSearchResult[]
@@ -44,51 +103,12 @@ export const DocumentResultsSection: React.FC<DocumentResultsSectionProps> = ({
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-gray-100 bg-gray-50 text-right text-xs font-medium text-gray-500">
-              <th className="px-4 py-2.5">מס' לקוח</th>
-              <th className="px-4 py-2.5">לקוח</th>
-              <th className="px-4 py-2.5">סוג מסמך</th>
-              <th className="px-4 py-2.5">שם קובץ</th>
-              <th className="px-4 py-2.5">שנת מס</th>
-              <th className="px-4 py-2.5" />
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {documents.map((doc) => (
-              <tr key={doc.id} className="hover:bg-gray-50 transition-colors">
-                <td className="px-4 py-3 font-mono text-sm text-gray-500 tabular-nums">
-                  {formatClientOfficeId(doc.office_client_number)}
-                </td>
-                <td className="px-4 py-3 text-gray-700">{doc.client_name}</td>
-                <td className="px-4 py-3 font-medium text-gray-800">
-                  {DOC_TYPE_LABELS[doc.document_type] ?? 'סוג מסמך לא ידוע'}
-                </td>
-                <td className="px-4 py-3 font-mono text-xs text-gray-600 max-w-xs truncate">
-                  {doc.original_filename ?? <span className="text-gray-300">—</span>}
-                </td>
-                <td className="px-4 py-3 text-gray-600">{doc.tax_year ?? <span className="text-gray-300">—</span>}</td>
-                <td className="px-4 py-3">
-                  <Link
-                    to={`/clients/${doc.client_record_id}/documents`}
-                    className={cn(
-                      'inline-flex items-center gap-1.5 rounded-lg',
-                      'border border-gray-200 bg-white px-2.5 py-1.5 text-xs font-medium',
-                      'text-gray-600 shadow-sm transition-all duration-200',
-                      'hover:border-purple-400 hover:bg-purple-50 hover:text-purple-800 hover:shadow-md',
-                    )}
-                  >
-                    <ExternalLink className="h-3 w-3" />
-                    פירוט
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        data={documents}
+        columns={DOCUMENT_COLUMNS}
+        getRowKey={(doc) => doc.id}
+        emptyMessage="לא נמצאו מסמכים"
+      />
     </div>
   )
 }
