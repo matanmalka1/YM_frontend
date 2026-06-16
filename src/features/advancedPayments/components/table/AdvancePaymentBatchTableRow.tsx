@@ -2,9 +2,9 @@ import { AlertTriangle, Edit, ExternalLink } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
 import { formatClientOfficeId, formatDate, formatPercent, formatShekelAmount } from '@/utils/utils'
-import type { AdvancePaymentOverviewRow } from '../api/contracts'
-import { AdvancePaymentStatusBadge } from './AdvancePaymentStatusBadge'
-import { getAdvancePaymentMonthLabel } from './advancePaymentComponent.utils'
+import type { AdvancePaymentOverviewRow } from '../../api/contracts'
+import { AdvancePaymentStatusBadge } from '../badges/AdvancePaymentStatusBadge'
+import { getAdvancePaymentMonthLabel } from '../advancePaymentComponent.utils'
 
 interface AdvancePaymentBatchTableRowProps {
   row: AdvancePaymentOverviewRow

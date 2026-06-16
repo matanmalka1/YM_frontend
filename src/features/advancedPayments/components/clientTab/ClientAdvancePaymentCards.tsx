@@ -1,9 +1,9 @@
-import type { AdvancePaymentRow } from '../api/contracts'
+import type { AdvancePaymentRow } from '../../api/contracts'
 import { formatShekelAmount } from '@/utils/utils'
-import { getAdvancePaymentMonthLabel } from './advancePaymentComponent.utils'
-import { formatDate, cn } from '../../../utils/utils'
-import { AdvancePaymentStatusBadge } from './AdvancePaymentStatusBadge'
-import { AdvancePaymentTimingBadge } from './AdvancePaymentTimingBadge'
+import { getAdvancePaymentMonthLabel } from '../advancePaymentComponent.utils'
+import { formatDate, cn } from '../../../../utils/utils'
+import { AdvancePaymentStatusBadge } from '../badges/AdvancePaymentStatusBadge'
+import { AdvancePaymentTimingBadge } from '../badges/AdvancePaymentTimingBadge'
 
 interface Props {
   rows: AdvancePaymentRow[]

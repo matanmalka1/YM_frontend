@@ -1,5 +1,5 @@
 import { AlertTriangle, CalendarClock, Clock, ListChecks } from 'lucide-react'
-import { StatsCard } from '../../../components/ui/layout/StatsCard'
+import { StatsCard } from '../../../../components/ui/layout/StatsCard'
 
 interface OverviewKPICardsProps {
   dueThisMonthCount: number

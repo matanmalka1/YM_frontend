@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import { advancePaymentsApi, advancedPaymentsQK } from '../api'
+import { advancePaymentsApi, advancedPaymentsQK } from '../../api'
 import { formatShekelAmount } from '@/utils/utils'
-import { getCollectionPercent } from './advancePaymentComponent.utils'
+import { getCollectionPercent } from '../advancePaymentComponent.utils'
 
 interface AdvancePaymentsKPICardsProps {
   clientRecordId: number

@@ -1,26 +1,26 @@
 import { useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Modal } from '../../../components/ui/overlays/Modal'
-import { Input } from '../../../components/ui/inputs/Input'
-import { Button } from '../../../components/ui/primitives/Button'
-import { Select } from '../../../components/ui/inputs/Select'
+import { Modal } from '../../../../components/ui/overlays/Modal'
+import { Input } from '../../../../components/ui/inputs/Input'
+import { Button } from '../../../../components/ui/primitives/Button'
+import { Select } from '../../../../components/ui/inputs/Select'
 import {
   createAdvancePaymentSchema,
   CREATE_ADVANCE_PAYMENT_DEFAULTS,
   type CreateAdvancePaymentFormValues,
-} from '../schemas'
-import { ADVANCE_PAYMENT_FREQUENCY_OPTIONS } from '../constants'
-import type { CreateAdvancePaymentPayload } from '../api/contracts'
+} from '../../schemas'
+import { ADVANCE_PAYMENT_FREQUENCY_OPTIONS } from '../../constants'
+import type { CreateAdvancePaymentPayload } from '../../api/contracts'
 import {
   buildCreateAdvancePaymentPayload,
   getAdvancePaymentMonthOptions,
   getValidBimonthlyMonth,
   toFrequency,
   toNumberOrNull,
-} from './advancePaymentComponent.utils'
+} from '../advancePaymentComponent.utils'
 import { formatShekelAmount } from '@/utils/utils'
-import { NOTES_TEXTAREA_CLASS } from './advancePaymentComponent.constants'
+import { NOTES_TEXTAREA_CLASS } from '../advancePaymentComponent.constants'
 
 interface CreateAdvancePaymentModalProps {
   open: boolean

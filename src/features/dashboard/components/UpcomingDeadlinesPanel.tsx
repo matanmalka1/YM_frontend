@@ -3,6 +3,7 @@ import { CalendarDays, ChevronLeft, Landmark } from 'lucide-react'
 import { DashboardPanel } from './DashboardPrimitives'
 import { InlineEmptyState } from '@/components/ui/feedback/InlineEmptyState'
 import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarGroup, useTaxCalendarGroups } from '@/features/taxCalendar'
+import { formatDate } from '@/utils/utils'
 
 const UPCOMING_DEADLINES_LIMIT = 4
 
@@ -18,11 +19,6 @@ const toDate = (value: string): Date | null => {
 
 const toTime = (value: string): number => toDate(value)?.getTime() ?? Number.POSITIVE_INFINITY
 
-const dateFormatter = new Intl.DateTimeFormat('he-IL', {
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric',
-})
 const weekdayFormatter = new Intl.DateTimeFormat('he-IL', { weekday: 'long' })
 const monthFormatter = new Intl.DateTimeFormat('he-IL', { month: 'long' })
 
@@ -79,7 +75,7 @@ const UpcomingDeadlineRow = ({ group }: { group: TaxCalendarGroup }) => {
 
       <div className="min-w-0 py-4 text-center">
         <p className="text-base font-bold tabular-nums text-slate-900">
-          {dueDate ? dateFormatter.format(dueDate).replaceAll('/', '.') : group.effective_due_date_min}
+          {dueDate ? formatDate(group.effective_due_date_min) : group.effective_due_date_min}
         </p>
         {dueDate && <p className="mt-1 text-xs font-semibold text-slate-400">({weekdayFormatter.format(dueDate)})</p>}
         <p className="mt-2 truncate text-sm font-bold text-slate-900">{formatObligationTitle(group)}</p>

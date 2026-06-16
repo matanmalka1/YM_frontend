@@ -1,4 +1,4 @@
-import type { AdvancePaymentTimingStatus } from '../api/contracts'
+import type { AdvancePaymentTimingStatus } from '../../api/contracts'
 
 interface Props {
   timingStatus: AdvancePaymentTimingStatus

@@ -1,8 +1,8 @@
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
 import { getTotalPages } from '@/utils/paginationUtils'
-import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../api/contracts'
-import { ADVANCE_PAYMENT_BATCH_PAGE_SIZE, useAdvancePaymentBatchRows } from '../hooks/useAdvancePaymentBatchRows'
+import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
+import { ADVANCE_PAYMENT_BATCH_PAGE_SIZE, useAdvancePaymentBatchRows } from '../../hooks/useAdvancePaymentBatchRows'
 import { AdvancePaymentBatchTableRow } from './AdvancePaymentBatchTableRow'
 import {
   ADVANCE_PAYMENT_BATCH_COLUMN_COUNT,

@@ -1,7 +1,7 @@
 import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
 import { ClientPickerField } from '@/components/shared/client/ClientPickerField'
-import { useGenerateSchedule } from '../hooks/useGenerateSchedule'
+import { useGenerateSchedule } from '../../hooks/useGenerateSchedule'
 
 interface Props {
   open: boolean
