@@ -12997,7 +12997,7 @@ export interface operations {
                 entity_type?: components["schemas"]["EntityType"] | null;
                 accountant_id?: number | null;
                 sort_by?: string;
-                order?: "asc" | "desc";
+                order?: components["schemas"]["SortOrder"];
                 page?: number;
                 page_size?: number;
             };
@@ -13119,7 +13119,7 @@ export interface operations {
             query?: {
                 search?: string | null;
                 sort_by?: string;
-                order?: "asc" | "desc";
+                order?: components["schemas"]["SortOrder"];
                 page?: number;
                 page_size?: number;
             };
