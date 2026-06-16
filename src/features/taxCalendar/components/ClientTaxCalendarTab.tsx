@@ -4,6 +4,7 @@ import { parseTaxCalendarGroupStatusFilter, parseTaxCalendarObligationType } fro
 import { type TaxCalendarGroupsParams } from '../api'
 import { TaxCalendarFiltersBar } from './TaxCalendarFiltersBar'
 import { TaxCalendarGroupsContent } from './TaxCalendarGroupsContent'
+import { TaxCalendarStatsSection } from './TaxCalendarStatsSection'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 
 interface ClientTaxCalendarTabProps {
@@ -47,6 +48,11 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
 
   return (
     <div className="space-y-4" dir="rtl">
+      <TaxCalendarStatsSection
+        summary={groupsSummary ?? { groups: 0, linked: 0, open: 0, overdue: 0, done: 0 }}
+        linkedLabel="מועדים"
+      />
+
       <TaxCalendarFiltersBar
         startYear={startYear}
         endYear={endYear}
@@ -61,11 +67,9 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
 
       <TaxCalendarGroupsContent
         groups={groups}
-        summary={groupsSummary}
         isLoading={groupsQuery.isPending}
         error={groupsQuery.error}
         errorFallback="שגיאה בטעינת מועדי המס"
-        linkedLabel="מועדים"
         clientRecordId={clientId}
         page={page}
         pageSize={GROUP_PAGE_SIZE}

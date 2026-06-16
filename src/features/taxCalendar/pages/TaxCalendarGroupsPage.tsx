@@ -3,6 +3,7 @@ import { useDebounce } from 'use-debounce'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { TaxCalendarFiltersBar } from '../components/TaxCalendarFiltersBar'
 import { TaxCalendarGroupsContent } from '../components/TaxCalendarGroupsContent'
+import { TaxCalendarStatsSection } from '../components/TaxCalendarStatsSection'
 import { useTaxCalendarGroups } from '../hooks/useTaxCalendarGroups'
 import { parseTaxCalendarGroupStatusFilter, parseTaxCalendarObligationType } from '../utils'
 import { type TaxCalendarGroupsParams } from '../api'
@@ -53,6 +54,12 @@ export const TaxCalendarGroupsPage = () => {
     <div className="space-y-4" dir="rtl">
       <PageHeader title="יומן מס" size="lg" />
 
+      <TaxCalendarStatsSection
+        summary={groupsSummary ?? { groups: 0, linked: 0, open: 0, overdue: 0, done: 0 }}
+        linkedLabel="לקוחות מקושרים"
+        showGroupsCount
+      />
+
       <TaxCalendarFiltersBar
         startYear={startYear}
         endYear={endYear}
@@ -71,12 +78,9 @@ export const TaxCalendarGroupsPage = () => {
 
       <TaxCalendarGroupsContent
         groups={groups}
-        summary={groupsSummary}
         isLoading={groupsQuery.isPending}
         error={groupsQuery.error}
         errorFallback="שגיאה בטעינת יומן המס"
-        linkedLabel="לקוחות מקושרים"
-        showGroupsCount
         clientSearchText={clientSearchText}
         page={page}
         pageSize={GROUP_PAGE_SIZE}

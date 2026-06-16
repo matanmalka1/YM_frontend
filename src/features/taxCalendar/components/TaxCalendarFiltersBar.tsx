@@ -1,8 +1,6 @@
-import { Button } from '@/components/ui/primitives/Button'
+import { useMemo } from 'react'
 import { Checkbox } from '@/components/ui/primitives/Checkbox'
-import { Input } from '@/components/ui/inputs/Input'
-import { Select } from '@/components/ui/inputs/Select'
-import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
+import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import {
   TAX_CALENDAR_OBLIGATION_TYPE_OPTIONS,
@@ -44,64 +42,59 @@ export const TaxCalendarFiltersBar = ({
   const yearOptions = getOperationalYearOptions()
   const showClientSearch = clientSearchText != null && onClientSearchTextChange
   const showIncludeEmpty = includeEmpty != null && onIncludeEmptyChange
-  const gridColumns =
-    showClientSearch && showIncludeEmpty
-      ? 'lg:grid-cols-7'
-      : showClientSearch || showIncludeEmpty
-        ? 'lg:grid-cols-6'
-        : 'lg:grid-cols-5'
+
+  const fields = useMemo(
+    () => [
+      { type: 'select' as const, key: 'startYear', label: 'משנת מס', options: yearOptions },
+      { type: 'select' as const, key: 'endYear', label: 'עד שנת מס', options: yearOptions },
+      {
+        type: 'select' as const,
+        key: 'obligationType',
+        label: 'סוג חובה',
+        options: TAX_CALENDAR_OBLIGATION_TYPE_OPTIONS,
+      },
+      { type: 'select' as const, key: 'status', label: 'מצב', options: TAX_CALENDAR_STATUS_OPTIONS },
+      ...(showClientSearch
+        ? [{ type: 'search' as const, key: 'clientSearchText', label: 'חיפוש לקוח', placeholder: 'שם או מספר לקוח' }]
+        : []),
+    ],
+    [yearOptions, showClientSearch],
+  )
+
+  const values = {
+    startYear,
+    endYear,
+    obligationType,
+    status,
+    clientSearchText: clientSearchText ?? '',
+  }
+
+  const handleChange = (key: string, value: string) => {
+    if (key === 'startYear') return onStartYearChange(value)
+    if (key === 'endYear') return onEndYearChange(value)
+    if (key === 'obligationType') return onObligationTypeChange(value)
+    if (key === 'status') return onStatusChange(value as TaxCalendarGroupStatusFilter)
+    if (key === 'clientSearchText') return onClientSearchTextChange?.(value)
+  }
 
   return (
-    <ToolbarContainer>
-      <div className={`grid grid-cols-1 items-stretch gap-3 sm:grid-cols-2 ${gridColumns}`}>
-        <Select
-          label="משנת מס"
-          value={startYear}
-          options={yearOptions}
-          onChange={(event) => onStartYearChange(event.target.value)}
+    <div className="space-y-3">
+      <FilterPanel
+        fields={fields}
+        values={values}
+        onChange={handleChange}
+        onReset={onReset}
+        gridClass="grid-cols-1 sm:grid-cols-2 lg:grid-cols-5"
+      />
+      {showIncludeEmpty ? (
+        <Checkbox
+          checked={includeEmpty}
+          onChange={(event) => onIncludeEmptyChange(event.target.checked)}
+          label="כולל ריקים"
+          description="הצג חובות ללא תיקים מקושרים"
         />
-        <Select
-          label="עד שנת מס"
-          value={endYear}
-          options={yearOptions}
-          onChange={(event) => onEndYearChange(event.target.value)}
-        />
-        <Select
-          label="סוג חובה"
-          value={obligationType}
-          onChange={(event) => onObligationTypeChange(event.target.value)}
-          options={TAX_CALENDAR_OBLIGATION_TYPE_OPTIONS}
-        />
-        <Select
-          label="מצב"
-          value={status}
-          onChange={(event) => onStatusChange(event.target.value as TaxCalendarGroupStatusFilter)}
-          options={TAX_CALENDAR_STATUS_OPTIONS}
-        />
-        {showClientSearch ? (
-          <Input
-            label="חיפוש לקוח"
-            value={clientSearchText}
-            onChange={(event) => onClientSearchTextChange(event.target.value)}
-            placeholder="שם או מספר לקוח"
-          />
-        ) : null}
-        {showIncludeEmpty ? (
-          <Checkbox
-            checked={includeEmpty}
-            onChange={(event) => onIncludeEmptyChange(event.target.checked)}
-            label="כולל ריקים"
-            description="הצג חובות ללא תיקים מקושרים"
-            containerClassName="h-full items-center rounded-lg border border-gray-200 bg-gray-50 px-3"
-          />
-        ) : null}
-        <div className="flex h-full items-center">
-          <Button type="button" variant="outline" size="sm" onClick={onReset} className="w-full">
-            איפוס סינון
-          </Button>
-        </div>
-      </div>
-    </ToolbarContainer>
+      ) : null}
+    </div>
   )
 }
 
