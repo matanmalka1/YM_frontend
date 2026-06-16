@@ -54,7 +54,6 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
               onSelect={handleSelectClient}
               onClear={handleClearClient}
               label="לקוח"
-              placeholder="חפש לקוח לפי שם או מזהה"
             />
             <Input
               label="ת.ז / ח.פ"

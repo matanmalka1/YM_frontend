@@ -1,4 +1,5 @@
 import { DOC_TYPE_LABELS, DOCUMENT_TAX_YEAR_RANGE } from '../documents.constants'
+import { DOCUMENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 
 const CURRENT_YEAR = new Date().getFullYear()
 const TAX_YEARS = Array.from({ length: DOCUMENT_TAX_YEAR_RANGE }, (_, i) => CURRENT_YEAR - i)
@@ -7,7 +8,7 @@ const ALL_DOCUMENT_TYPES_OPTION = { value: '', label: 'כל הסוגים' }
 const ALL_TAX_YEARS_OPTION = { value: '', label: 'כל השנים' }
 
 export const UPLOAD_FORM_ID = 'documents-upload-form'
-export const SEARCH_PLACEHOLDER = 'חיפוש לפי שם קובץ או סוג מסמך'
+export const SEARCH_PLACEHOLDER = DOCUMENT_SEARCH_PLACEHOLDER
 export const DOWNLOAD_ERROR_MESSAGE = 'שגיאה בהורדת המסמך'
 export const PREVIEW_ERROR_MESSAGE = 'שגיאה בטעינת המסמך'
 const DOCUMENT_TYPE_PLACEHOLDER = 'בחר סוג מסמך'

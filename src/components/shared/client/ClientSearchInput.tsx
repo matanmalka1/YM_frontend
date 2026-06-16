@@ -4,6 +4,7 @@ import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/inputs/Input'
 import { clientsApi, type ClientRecordListItem } from '@/features/clients'
 import { formatClientOfficeId } from '@/utils/utils'
+import { CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 
 // ── Controlled search input (value/onChange) ──────────────────────────────────
 
@@ -31,7 +32,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
   onSelect,
   error,
   label = 'לקוח',
-  placeholder = 'חפש לפי שם, ת.ז. / ח.פ...',
+  placeholder = CLIENT_SEARCH_PLACEHOLDER,
   helperText,
 }) => {
   const [results, setResults] = useState<ClientRecordListItem[]>([])

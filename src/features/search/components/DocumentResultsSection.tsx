@@ -6,6 +6,7 @@ import { DOC_TYPE_LABELS } from '@/features/documents'
 import type { DocumentSearchResult } from '../api'
 import type { SearchFilters } from '../types'
 import { cn, formatClientOfficeId } from '../../../utils/utils'
+import { DOCUMENT_FILENAME_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 
 const DOCUMENT_SEARCH_LIMIT = 50
 
@@ -98,7 +99,7 @@ export const DocumentResultsSection: React.FC<DocumentResultsSectionProps> = ({
             type="text"
             value={filenameFilter}
             onChange={(e) => onFilenameChange('filename', e.target.value)}
-            placeholder="חיפוש לפי שם קובץ..."
+            placeholder={DOCUMENT_FILENAME_SEARCH_PLACEHOLDER}
           />
         </div>
       </div>

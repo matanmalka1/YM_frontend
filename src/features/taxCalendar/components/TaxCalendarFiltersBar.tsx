@@ -8,6 +8,7 @@ import {
   type TaxCalendarGroupStatusFilter,
 } from '../constants'
 import { taxCalendarCurrentYear } from '../utils'
+import { CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 
 interface TaxCalendarFiltersBarProps {
   startYear: string
@@ -40,7 +41,7 @@ export const TaxCalendarFiltersBar = ({
   onClientSearchTextChange,
   onIncludeEmptyChange,
 }: TaxCalendarFiltersBarProps) => {
-  const yearOptions = getOperationalYearOptions()
+  const yearOptions = useMemo(() => getOperationalYearOptions(), [])
   const defaultYear = String(taxCalendarCurrentYear())
   const showClientSearch = clientSearchText != null && onClientSearchTextChange
   const showIncludeEmpty = includeEmpty != null && onIncludeEmptyChange
@@ -63,7 +64,14 @@ export const TaxCalendarFiltersBar = ({
         defaultValue: 'all',
       },
       ...(showClientSearch
-        ? [{ type: 'search' as const, key: 'clientSearchText', label: 'חיפוש לקוח', placeholder: 'שם או מספר לקוח' }]
+        ? [
+            {
+              type: 'search' as const,
+              key: 'clientSearchText',
+              label: 'חיפוש לקוח',
+              placeholder: CLIENT_SEARCH_PLACEHOLDER,
+            },
+          ]
         : []),
     ],
     [yearOptions, defaultYear, showClientSearch],

@@ -10,6 +10,7 @@ import { cn } from '@/utils/utils'
 import { CLIENT_SIDEBAR_PAGE_SIZE, useClientSidebarClients, type ClientSidebarItem } from './useClientSidebarClients'
 import { ClientSidebarClientCard } from './ClientSidebarClientCard'
 import { getEntityLabel, getVatLabel } from './ClientSidebar.labels'
+import { CLIENT_SEARCH_WITH_CONTACT_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 
 type GroupMode = 'entity' | 'vat'
 
@@ -186,7 +187,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobi
               type="search"
               value={searchValue}
               onChange={(event) => setSearchValue(event.target.value)}
-              placeholder="חיפוש לפי שם, מספר או פרטי קשר"
+              placeholder={CLIENT_SEARCH_WITH_CONTACT_PLACEHOLDER}
               className="h-10 w-full rounded-xl border border-gray-200 bg-gray-50/80 pr-9 pl-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-primary-300 focus:bg-white focus:ring-4 focus:ring-primary-50"
             />
           </label>

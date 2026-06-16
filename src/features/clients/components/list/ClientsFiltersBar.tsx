@@ -11,6 +11,7 @@ import {
 import type { ClientsFiltersBarProps } from '../../types'
 import { useAdvisorOptions } from '@/features/users'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
+import { CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 import type { FilterBadge } from '@/components/ui/table/ActiveFilterBadges'
 
 const STATUS_OPTIONS = [ALL_STATUSES_OPTION, ...CLIENT_STATUS_OPTIONS]
@@ -30,7 +31,7 @@ export const ClientsFiltersBar: React.FC<ClientsFiltersBarProps> = ({
         type: 'search' as const,
         key: 'search',
         label: 'חיפוש לקוח',
-        placeholder: 'שם, ת.ז. / ח.פ.',
+        placeholder: CLIENT_SEARCH_PLACEHOLDER,
       },
       { type: 'select' as const, key: 'status', label: 'סטטוס', options: STATUS_OPTIONS },
       {

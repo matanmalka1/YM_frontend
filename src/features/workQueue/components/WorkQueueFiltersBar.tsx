@@ -13,6 +13,7 @@ import {
 } from '../constants'
 // eslint-disable-next-line no-restricted-imports -- avoid the tasks feature barrel here; it imports workQueue-backed components.
 import { parseTaskStatus, type TaskStatus } from '@/features/tasks/api/contracts'
+import { WORK_QUEUE_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 // eslint-disable-next-line no-restricted-imports -- avoid the tasks feature barrel here; it imports workQueue-backed components.
 import { taskStatusLabels, taskStatusValues } from '@/features/tasks/constants'
 import type { WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
@@ -110,7 +111,7 @@ export const WorkQueueFiltersBar: React.FC<WorkQueueFiltersBarProps> = ({
         <Input
           value={search}
           onChange={(e) => onFilterChange(WORK_QUEUE_FILTER_PARAM_KEYS.search, e.target.value)}
-          placeholder="חיפוש לפי לקוח, מספר, כותרת או משימה"
+          placeholder={WORK_QUEUE_SEARCH_PLACEHOLDER}
           startIcon={<Search className="h-4 w-4" />}
           className={cn(search.trim() && 'border-primary-400 bg-primary-50/40 ring-1 ring-primary-200')}
         />

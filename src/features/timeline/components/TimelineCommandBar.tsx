@@ -8,6 +8,7 @@ import { cn } from '../../../utils/utils'
 import { useSearchDebounce } from '../../../hooks/useSearchDebounce'
 import type { EventTypeStat } from '../lib/timelineStats'
 import type { TimelineFilterKey } from '../normalize'
+import { TIMELINE_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -79,7 +80,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
           <Input
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
-            placeholder="חיפוש לפי תיאור, קלסר, חיוב או מסמך..."
+            placeholder={TIMELINE_SEARCH_PLACEHOLDER}
             startIcon={<Search className="h-4 w-4" />}
             className="py-2 text-sm bg-gray-50 focus:bg-white"
           />

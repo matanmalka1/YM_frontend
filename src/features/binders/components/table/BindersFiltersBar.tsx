@@ -3,6 +3,10 @@ import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { BINDER_CAPACITY_STATUS_OPTIONS, BINDER_LOCATION_STATUS_OPTIONS } from '../../constants'
 import type { BindersFiltersBarProps } from '../../types'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
+import {
+  BINDER_NUMBER_SEARCH_PLACEHOLDER,
+  CLIENT_SEARCH_PLACEHOLDER,
+} from '@/constants/searchPlaceholders.constants'
 
 const getFields = () => [
   {
@@ -10,13 +14,13 @@ const getFields = () => [
     idKey: 'client_record_id',
     nameKey: 'client_name',
     label: 'לקוח',
-    placeholder: 'חיפוש לקוח...',
+    placeholder: CLIENT_SEARCH_PLACEHOLDER,
   },
   {
     type: 'search' as const,
     key: 'binder_number',
     label: 'מספר קלסר',
-    placeholder: 'חיפוש לפי מספר קלסר...',
+    placeholder: BINDER_NUMBER_SEARCH_PLACEHOLDER,
   },
   { type: 'select' as const, key: 'location_status', label: 'מיקום', options: BINDER_LOCATION_STATUS_OPTIONS },
   { type: 'select' as const, key: 'capacity_status', label: 'קיבולת', options: BINDER_CAPACITY_STATUS_OPTIONS },

@@ -1,4 +1,5 @@
 import { ClientSearchInput, SelectedClientDisplay } from './ClientSearchInput'
+import { CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 
 interface ClientPickerSelectedClient {
   id: number
@@ -33,7 +34,7 @@ export const ClientPickerField = ({
   onClear,
   error,
   label = 'לקוח',
-  placeholder = 'חפש לפי שם, ת"ז / ח.פ...',
+  placeholder = CLIENT_SEARCH_PLACEHOLDER,
 }: ClientPickerFieldProps) => {
   if (selectedClient) {
     return (

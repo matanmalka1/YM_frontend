@@ -8,6 +8,7 @@ import { DataTable } from '@/components/ui/table/DataTable'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { StateCard } from '@/components/ui/feedback/StateCard'
+import { GLOBAL_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 import {
   DocumentResultsSection,
   searchColumns,
@@ -46,7 +47,7 @@ export const Search: React.FC = () => {
             type="text"
             value={queryDraft}
             onChange={(e) => setQueryDraft(e.target.value)}
-            placeholder="חיפוש חופשי — שם לקוח, מספר קלסר, שם קובץ..."
+            placeholder={GLOBAL_SEARCH_PLACEHOLDER}
             startIcon={<SearchIcon className="h-4 w-4" />}
             autoFocus
           />
