@@ -3567,6 +3567,14 @@ export interface components {
         };
         /** AgingReportResponse */
         AgingReportResponse: {
+            /** Items */
+            items: components["schemas"]["AgingReportItemResponse"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
             /**
              * Report Date
              * Format: date
@@ -3578,15 +3586,7 @@ export interface components {
              * @example 123.45
              */
             total_outstanding: string;
-            /** Items */
-            items: components["schemas"]["AgingReportItemResponse"][];
             summary: components["schemas"]["AgingReportSummaryResponse"];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Page Size */
-            page_size: number;
         };
         /** AgingReportSummaryResponse */
         AgingReportSummaryResponse: {
@@ -5006,8 +5006,6 @@ export interface components {
          * @description רשימת עסקים של לקוח ספציפי.
          */
         ClientBusinessesResponse: {
-            /** Client Id */
-            client_id: number;
             /** Items */
             items: components["schemas"]["BusinessResponse"][];
             /** Page */
@@ -5016,6 +5014,8 @@ export interface components {
             page_size: number;
             /** Total */
             total: number;
+            /** Client Id */
+            client_id: number;
         };
         /** ClientConflictInfo */
         ClientConflictInfo: {
@@ -5568,12 +5568,12 @@ export interface components {
         EntityAuditTrailResponse: {
             /** Items */
             items: components["schemas"]["EntityAuditLogResponse"][];
-            /** Total */
-            total: number;
             /** Page */
             page: number;
             /** Page Size */
             page_size: number;
+            /** Total */
+            total: number;
         };
         /** EntityNoteCreateRequest */
         EntityNoteCreateRequest: {
@@ -6125,12 +6125,12 @@ export interface components {
         NotificationListResponse: {
             /** Items */
             items: components["schemas"]["NotificationListItem"][];
-            /** Total */
-            total: number;
             /** Page */
             page: number;
             /** Page Size */
             page_size: number;
+            /** Total */
+            total: number;
         };
         /** NotificationPreviewRequest */
         NotificationPreviewRequest: {
@@ -6333,12 +6333,12 @@ export interface components {
         PermanentDocumentListResponse: {
             /** Items */
             items: components["schemas"]["PermanentDocumentResponse"][];
-            /** Total */
-            total: number;
             /** Page */
             page: number;
             /** Page Size */
             page_size: number;
+            /** Total */
+            total: number;
         };
         /** PermanentDocumentResponse */
         PermanentDocumentResponse: {
@@ -7381,27 +7381,18 @@ export interface components {
         };
         /** TaxCalendarGroupItemsResponse */
         TaxCalendarGroupItemsResponse: {
+            /** Items */
+            items: components["schemas"]["TaxCalendarGroupItem"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Total */
+            total: number;
             /** Tax Calendar Entry Id */
             tax_calendar_entry_id: number;
             /** Obligation Type */
             obligation_type: string;
-            /** Items */
-            items: components["schemas"]["TaxCalendarGroupItem"][];
-            /**
-             * Page
-             * @default 1
-             */
-            page: number;
-            /**
-             * Page Size
-             * @default 50
-             */
-            page_size: number;
-            /**
-             * Total
-             * @default 0
-             */
-            total: number;
         };
         /** TaxCalendarGroupListResponse */
         TaxCalendarGroupListResponse: {
@@ -7766,12 +7757,12 @@ export interface components {
         VatAuditTrailResponse: {
             /** Items */
             items: components["schemas"]["VatAuditLogResponse"][];
-            /** Total */
-            total: number;
             /** Page */
             page: number;
             /** Page Size */
             page_size: number;
+            /** Total */
+            total: number;
         };
         /** VatAutoPopulateExpenseBreakdownItem */
         VatAutoPopulateExpenseBreakdownItem: {
@@ -7881,18 +7872,18 @@ export interface components {
         };
         /** VatComplianceReportResponse */
         VatComplianceReportResponse: {
-            /** Year */
-            year: number;
-            /** Total Clients */
-            total_clients: number;
-            /** Total */
-            total: number;
+            /** Items */
+            items: components["schemas"]["VatComplianceReportItemResponse"][];
             /** Page */
             page: number;
             /** Page Size */
             page_size: number;
-            /** Items */
-            items: components["schemas"]["VatComplianceReportItemResponse"][];
+            /** Total */
+            total: number;
+            /** Year */
+            year: number;
+            /** Total Clients */
+            total_clients: number;
             /** Stale Pending */
             stale_pending: components["schemas"]["VatComplianceStalePendingResponse"][];
         };
@@ -7983,12 +7974,12 @@ export interface components {
         VatInvoiceListResponse: {
             /** Items */
             items: components["schemas"]["VatInvoiceResponse"][];
-            /** Total */
-            total: number;
             /** Page */
             page: number;
             /** Page Size */
             page_size: number;
+            /** Total */
+            total: number;
         };
         /** VatInvoiceResponse */
         VatInvoiceResponse: {
@@ -8299,12 +8290,12 @@ export interface components {
         VatWorkItemListResponse: {
             /** Items */
             items: components["schemas"]["VatWorkItemListItem"][];
-            /** Total */
-            total: number;
             /** Page */
             page: number;
             /** Page Size */
             page_size: number;
+            /** Total */
+            total: number;
         };
         /** VatWorkItemLookupResponse */
         VatWorkItemLookupResponse: {
@@ -8517,12 +8508,12 @@ export interface components {
         WorkQueueListResponse: {
             /** Items */
             items: components["schemas"]["WorkQueueItem"][];
-            /** Total */
-            total: number;
             /** Page */
             page: number;
             /** Page Size */
             page_size: number;
+            /** Total */
+            total: number;
             summary: components["schemas"]["WorkQueueSummary"];
         };
         /**
