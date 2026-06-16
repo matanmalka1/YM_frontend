@@ -6,6 +6,7 @@ import { usersApi, usersQK } from '@/features/users'
 import { useRole } from '../../../hooks/useRole'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { parsePositiveInt } from '../../../utils/utils'
+import { getTotalPages } from '../../../utils/paginationUtils'
 import type { EntityAuditLogEntry, EntityAuditType } from '../api'
 import { useEntityAuditTrail } from '../hooks/useEntityAuditTrail'
 import { AuditTrailTable } from './AuditTrailTable'
@@ -287,7 +288,7 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
     PAGE_SIZE,
     filters,
   )
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  const totalPages = getTotalPages(total, PAGE_SIZE)
   const maxPage = totalPages - 1
   const safePage = Math.min(page, maxPage)
   const cardClassName = compact ? 'shadow-none rounded-lg' : 'shadow-sm'

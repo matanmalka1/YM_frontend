@@ -15,8 +15,6 @@ export const getCollectionPercent = (rate: string | number | null, cap = false) 
   return cap ? Math.min(roundedRate, 100) : roundedRate
 }
 
-export const getTotalPages = (total: number, pageSize: number) => Math.max(1, Math.ceil(total / pageSize))
-
 export const toggleAdvancePaymentStatusFilter = (
   currentStatuses: AdvancePaymentStatus[],
   status: AdvancePaymentStatus,

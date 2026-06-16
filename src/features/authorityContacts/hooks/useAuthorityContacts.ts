@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { authorityContactsApi, authorityContactsQK } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
+import { getTotalPages } from '@/utils/paginationUtils'
 import { useMutationWithToast } from '@/hooks/useMutationWithToast'
 import { AUTHORITY_CONTACTS_LIST_PARAMS, AUTHORITY_CONTACT_TEXT } from '../constants'
 
@@ -24,7 +25,7 @@ export const useAuthorityContacts = (clientId: number) => {
   })
 
   const total = listQuery.data?.total ?? 0
-  const totalPages = Math.max(1, Math.ceil(total / pageSize))
+  const totalPages = getTotalPages(total, pageSize)
 
   return {
     contacts: listQuery.data?.items ?? [],

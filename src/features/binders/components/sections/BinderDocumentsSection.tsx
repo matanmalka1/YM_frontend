@@ -13,6 +13,7 @@ import {
   useDocumentPreviewDownload,
 } from '@/features/documents'
 import { formatDate, getErrorMessage } from '@/utils/utils'
+import { getTotalPages } from '@/utils/paginationUtils'
 
 const PAGE_SIZE = 20
 
@@ -38,7 +39,7 @@ export const BinderDocumentsSection: React.FC<BinderDocumentsSectionProps> = ({ 
 
   const documents = data?.items ?? []
   const total = data?.total ?? 0
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  const totalPages = getTotalPages(total, PAGE_SIZE)
 
   return (
     <Card title="מסמכים בקלסר" subtitle={total ? `${total} מסמכים` : undefined}>

@@ -6,6 +6,7 @@ import { StateCard } from '../../../components/ui/feedback/StateCard'
 import { Alert } from '../../../components/ui/overlays/Alert'
 import { SkeletonBlock } from '../../../components/ui/primitives/SkeletonBlock'
 import { PaginationCard } from '../../../components/ui/table/PaginationCard'
+import { getTotalPages } from '../../../utils/paginationUtils'
 import { SignatureRequestRow } from './SignatureRequestRow'
 import { SignatureRequestAuditDrawer } from './SignatureRequestAuditDrawer'
 import { CreateSignatureRequestModal } from './CreateSignatureRequestModal'
@@ -40,7 +41,7 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
   const { create, isCreating, cancel, isCanceling } = useSignatureRequestActions(client.id)
   const { signingUrls, rememberSigningUrl } = useSignatureRequestSigningUrls()
 
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  const totalPages = getTotalPages(total, PAGE_SIZE)
 
   return (
     <>

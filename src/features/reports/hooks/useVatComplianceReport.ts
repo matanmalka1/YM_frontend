@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { reportsApi, reportsQK } from "../api";
+import { getTotalPages } from "@/utils/paginationUtils";
 
 const PAGE_SIZE = 50;
 
@@ -13,7 +14,7 @@ export const useVatComplianceReport = () => {
     queryFn: () => reportsApi.getVatComplianceReport(year, page, PAGE_SIZE),
   });
 
-  const totalPages = data ? Math.max(1, Math.ceil(data.total / PAGE_SIZE)) : 1;
+  const totalPages = data ? getTotalPages(data.total, PAGE_SIZE) : 1;
 
   const handleYearChange = (newYear: number) => {
     setYear(newYear);

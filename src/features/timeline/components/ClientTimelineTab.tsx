@@ -4,6 +4,7 @@ import { TimelineCommandBar } from './TimelineCommandBar'
 import { TimelineCard } from './TimelineCard'
 import { groupTimelineEventsByDate, getDefaultOpenTimelineGroups } from '../lib/timelineGroups'
 import { PaginationCard } from '../../../components/ui/table/PaginationCard'
+import { getTotalPages } from '../../../utils/paginationUtils'
 import { PageLoading } from '../../../components/ui/layout/PageLoading'
 import { Alert } from '../../../components/ui/overlays/Alert'
 
@@ -42,7 +43,7 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
   if (loading) return <PageLoading message="טוען ציר זמן..." />
   if (error) return <Alert variant="error" message={error} />
 
-  const totalPages = Math.max(1, Math.ceil(total / pageSize))
+  const totalPages = getTotalPages(total, pageSize)
 
   const toggleDate = (date: string) =>
     setExpandedDateKeys((current) => {

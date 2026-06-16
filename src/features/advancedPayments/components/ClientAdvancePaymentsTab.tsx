@@ -17,7 +17,8 @@ import { AdvancePaymentDrawer } from './AdvancePaymentDrawer'
 import { CreateAdvancePaymentModal } from './CreateAdvancePaymentModal'
 import { PaginationCard } from '../../../components/ui/table/PaginationCard'
 import { CLIENT_ADVANCE_PAYMENT_PAGE_SIZE } from './advancePaymentComponent.constants'
-import { getTotalPages, toggleAdvancePaymentStatusFilter } from './advancePaymentComponent.utils'
+import { toggleAdvancePaymentStatusFilter } from './advancePaymentComponent.utils'
+import { getTotalPages } from '@/utils/paginationUtils'
 
 interface ClientAdvancePaymentsTabProps {
   clientRecordId: number

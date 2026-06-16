@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { getTotalPages } from '@/utils/paginationUtils'
 import { useActiveUserOptions } from '@/features/users'
 import { tasksApi } from '../api/tasks.api'
 import { tasksQK } from '../api/queryKeys'
@@ -30,7 +31,7 @@ export const useTasksPage = () => {
 
   const tasks = tasksQuery.data?.items ?? []
   const total = tasksQuery.data?.total ?? 0
-  const totalPages = Math.max(1, Math.ceil(total / TASKS_PAGE_SIZE))
+  const totalPages = getTotalPages(total, TASKS_PAGE_SIZE)
 
   const userOptions = useMemo(
     () => [

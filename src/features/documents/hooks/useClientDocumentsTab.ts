@@ -9,6 +9,7 @@ import {
 } from '../api'
 import { useBusinessesForClient } from '@/hooks/useBusinessesForClient'
 import { getErrorMessage } from '../../../utils/utils'
+import { getTotalPages } from '@/utils/paginationUtils'
 import { useDocumentUpload } from './useDocumentUpload'
 import { toast } from '../../../utils/toast'
 
@@ -63,7 +64,7 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
   }
 
   const total = documentsQuery.data?.total ?? 0
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  const totalPages = getTotalPages(total, PAGE_SIZE)
   const errorSource = documentsQuery.error ?? signalsQuery.error
 
   return {

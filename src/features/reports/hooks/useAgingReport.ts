@@ -3,6 +3,7 @@ import { format as formatDate } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 import { reportsApi, reportsQK, type ExportFormat } from "../api";
 import { getErrorMessage, showErrorToast } from "../../../utils/utils";
+import { getTotalPages } from "@/utils/paginationUtils";
 import { toast } from "../../../utils/toast";
 
 const PAGE_SIZE = 50;
@@ -24,9 +25,7 @@ export const useAgingReport = () => {
     queryFn: () => reportsApi.getAgingReport(asOfDate, page, PAGE_SIZE),
   });
 
-  const totalPages = reportQuery.data
-    ? Math.max(1, Math.ceil(reportQuery.data.total / PAGE_SIZE))
-    : 1;
+  const totalPages = reportQuery.data ? getTotalPages(reportQuery.data.total, PAGE_SIZE) : 1;
 
   const handleExport = async (format: ExportFormat) => {
     setExporting(format);
