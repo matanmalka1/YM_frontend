@@ -14,6 +14,7 @@ import { ADVANCE_PAYMENT_FREQUENCY_OPTIONS } from '../../constants'
 import type { CreateAdvancePaymentPayload } from '../../api/contracts'
 import {
   buildCreateAdvancePaymentPayload,
+  calcAdvanceAmount,
   getAdvancePaymentMonthOptions,
   getValidBimonthlyMonth,
   toFrequency,
@@ -60,7 +61,7 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
 
   const liveCalculated =
     turnoverAmount != null && advanceRate != null && turnoverAmount >= 0 && advanceRate >= 0
-      ? ((turnoverAmount * advanceRate) / 100).toFixed(2)
+      ? calcAdvanceAmount(turnoverAmount, advanceRate)
       : null
 
   useEffect(() => {

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
-import type { UpdateAdvancePaymentPayload } from '../../api/contracts'
+import type { PrefillTurnoverResponse, UpdateAdvancePaymentPayload } from '../../api/contracts'
 import { advancePaymentsApi } from '../../api'
 import { toast } from '../../../../utils/toast'
 import { showErrorToast } from '../../../../utils/utils'
-import { toEditableAmount, toStringOrNull } from '../advancePaymentComponent.utils'
+import { calcAdvanceAmount, toEditableAmount, toStringOrNull } from '../advancePaymentComponent.utils'
 import type { AdvancePaymentDrawerModel } from './advancePaymentDrawer.model'
 
-type PrefillSource = null | 'vat_filed' | 'vat_pending' | 'none'
+// `null` = idle (no prefill attempted yet); the rest mirror the API contract.
+type PrefillSource = PrefillTurnoverResponse['source'] | null
 
 interface UseAdvancePaymentDrawerFormArgs {
   model: AdvancePaymentDrawerModel | null
@@ -90,7 +91,7 @@ export const useAdvancePaymentDrawerForm = ({
   const numR = Number(model?.advanceRate)
   const liveCalculated =
     turnoverAmount !== '' && model?.advanceRate != null && Number.isFinite(numT) && Number.isFinite(numR)
-      ? ((numT * numR) / 100).toFixed(2)
+      ? calcAdvanceAmount(numT, numR)
       : null
   const liveExpected = overrideAmount !== '' ? overrideAmount : liveCalculated
 

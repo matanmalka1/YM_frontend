@@ -41,6 +41,10 @@ export const toStringOrNull = (value: string | number | null | undefined) =>
 
 export const toEditableAmount = (value: string | null) => (value == null ? '' : String(value))
 
+/** Advance amount = turnover × rate%, as a 2-decimal string. Callers guard inputs. */
+export const calcAdvanceAmount = (turnover: number, ratePercent: number) =>
+  ((turnover * ratePercent) / 100).toFixed(2)
+
 export const toFrequency = (value: string) => Number(value) as 1 | 2
 
 const toPeriod = (year: number, month: number) => `${year}-${String(month).padStart(2, '0')}`
