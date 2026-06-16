@@ -245,11 +245,13 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
   const page = parsePositiveInt(searchParams.get(pageKey), 1) - 1
   const searchParamsString = searchParams.toString()
 
-  const handleFilterChange = (key: string, value: string) =>
-    setFilters({ [key]: value, [pageKey]: '' }, false)
+  const handleFilterChange = (key: string, value: string) => setFilters({ [key]: value, [pageKey]: '' }, false)
 
   const handleFilterReset = () =>
-    setFilters({ [actionKey]: '', [userIdKey]: '', [createdAfterKey]: '', [createdBeforeKey]: '', [pageKey]: '' }, false)
+    setFilters(
+      { [actionKey]: '', [userIdKey]: '', [createdAfterKey]: '', [createdBeforeKey]: '', [pageKey]: '' },
+      false,
+    )
 
   const handlePageChange = (nextPage: number) => setFilter(pageKey, String(nextPage + 1), false)
 
