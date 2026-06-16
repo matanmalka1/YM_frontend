@@ -3859,8 +3859,6 @@ export interface components {
             assigned_to?: number | null;
             /** Created By */
             created_by: number;
-            /** Available Actions */
-            available_actions?: components["schemas"]["ActionDescriptor"][];
             /**
              * Available Transitions
              * @default []
@@ -4026,8 +4024,6 @@ export interface components {
             assigned_to?: number | null;
             /** Created By */
             created_by: number;
-            /** Available Actions */
-            available_actions?: components["schemas"]["ActionDescriptor"][];
             /**
              * Available Transitions
              * @default []

@@ -1,4 +1,3 @@
-import type { BackendAction } from '@/lib/actions/types'
 import type { PaginatedResponse } from '@/types'
 import type { ChargeResponse } from '@/features/charges'
 
@@ -146,7 +145,6 @@ export interface AnnualReportFull {
   updated_at: string
   assigned_to: number | null
   created_by: number
-  available_actions?: BackendAction[]
   available_transitions?: AnnualReportStatus[]
   schedules?: ScheduleEntry[]
   status_audit?: AnnualReportAuditEntry[]
