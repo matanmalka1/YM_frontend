@@ -156,8 +156,7 @@ export const useVatWorkItemsPage = () => {
     }
   }
 
-  const canDeleteWorkItem = (item: VatWorkItemListItem): boolean =>
-    (isAdvisor || isSecretary) && !isFiled(item.status)
+  const canDeleteWorkItem = (item: VatWorkItemListItem): boolean => (isAdvisor || isSecretary) && !isFiled(item.status)
 
   const requestDelete = useCallback((item: VatWorkItemListItem) => {
     setDeleteTarget(item)

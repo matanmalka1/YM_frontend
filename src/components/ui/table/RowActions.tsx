@@ -47,9 +47,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
     const container = portalRef.current
     if (!container) return
     const items = Array.from(
-      container.querySelectorAll<HTMLElement>(
-        '[role="menuitem"]:not(:disabled):not([aria-disabled="true"])',
-      ),
+      container.querySelectorAll<HTMLElement>('[role="menuitem"]:not(:disabled):not([aria-disabled="true"])'),
     )
     if (items.length === 0) return
 
@@ -272,8 +270,7 @@ interface RowActionsMenuProps {
 export const RowActionsMenu: React.FC<RowActionsMenuProps> = ({ ariaLabel, children, title, menuClassName }) => {
   const allChildren = Children.toArray(children)
   const groups = allChildren.filter(
-    (child): child is React.ReactElement<RowActionGroupProps> =>
-      isValidElement(child) && child.type === RowActionGroup,
+    (child): child is React.ReactElement<RowActionGroupProps> => isValidElement(child) && child.type === RowActionGroup,
   )
   // Grouped separator rendering assumes every child is a RowActionGroup. All current callers
   // wrap every child in a group, so non-group children are only rendered when no group is used
