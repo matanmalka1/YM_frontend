@@ -1,34 +1,23 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { clientsApi, clientsQK } from '../api'
 import type { UpdateBusinessPayload } from '../api'
-import { showErrorToast } from '@/utils/utils'
-import { toast } from '@/utils/toast'
+import { useMutationWithToast } from '@/hooks/useMutationWithToast'
 
 export const useBusinessActions = (clientId: number) => {
-  const queryClient = useQueryClient()
+  const invalidateKeys = [clientsQK.businessesAll(clientId), clientsQK.businesses(clientId)]
 
-  const invalidate = () => {
-    void queryClient.invalidateQueries({ queryKey: clientsQK.businessesAll(clientId) })
-    void queryClient.invalidateQueries({ queryKey: clientsQK.businesses(clientId) })
-  }
-
-  const updateMutation = useMutation({
+  const updateMutation = useMutationWithToast({
     mutationFn: ({ businessId, payload }: { businessId: number; payload: UpdateBusinessPayload }) =>
       clientsApi.updateBusiness(clientId, businessId, payload),
-    onSuccess: () => {
-      toast.success('העסק עודכן בהצלחה')
-      invalidate()
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה בעדכון עסק'),
+    successMessage: 'העסק עודכן בהצלחה',
+    errorMessage: 'שגיאה בעדכון עסק',
+    invalidateKeys,
   })
 
-  const deleteMutation = useMutation({
+  const deleteMutation = useMutationWithToast({
     mutationFn: (businessId: number) => clientsApi.deleteBusiness(clientId, businessId),
-    onSuccess: () => {
-      toast.success('העסק נמחק בהצלחה')
-      invalidate()
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה במחיקת עסק'),
+    successMessage: 'העסק נמחק בהצלחה',
+    errorMessage: 'שגיאה במחיקת עסק',
+    invalidateKeys,
   })
 
   return {

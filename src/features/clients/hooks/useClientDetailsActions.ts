@@ -1,17 +1,15 @@
 import { useCallback } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { clientsApi, clientsQK } from '../api'
 import type { CreateBusinessPayload } from '../api'
 import { chargesApi, chargesQK, useChargeCreateMutation } from '@/features/charges'
 import type { CreateChargePayload } from '@/features/charges'
 import { bindersApi, bindersQK } from '@/features/binders'
-import { showErrorToast } from '@/utils/utils'
-import { toast } from '@/utils/toast'
+import { useMutationWithToast } from '@/hooks/useMutationWithToast'
 
 const RELATED_PAGE_SIZE = 5
 
 export const useClientDetailsActions = (clientId: number, activeTab: string, shouldLoadRelatedData: boolean) => {
-  const queryClient = useQueryClient()
   const shouldFetchRelatedData = activeTab === 'details' && shouldLoadRelatedData
 
   const relatedBindersQuery = useQuery({
@@ -26,14 +24,11 @@ export const useClientDetailsActions = (clientId: number, activeTab: string, sho
     enabled: shouldFetchRelatedData,
   })
 
-  const createBusinessMutation = useMutation({
+  const createBusinessMutation = useMutationWithToast({
     mutationFn: (payload: CreateBusinessPayload) => clientsApi.createBusiness(clientId, payload),
-    onSuccess: () => {
-      toast.success('העסק נוצר בהצלחה')
-      void queryClient.invalidateQueries({ queryKey: clientsQK.businessesAll(clientId) })
-      void queryClient.invalidateQueries({ queryKey: clientsQK.businesses(clientId) })
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה ביצירת עסק'),
+    successMessage: 'העסק נוצר בהצלחה',
+    errorMessage: 'שגיאה ביצירת עסק',
+    invalidateKeys: [clientsQK.businessesAll(clientId), clientsQK.businesses(clientId)],
   })
 
   const createChargeMutation = useChargeCreateMutation([chargesQK.forClientPage(clientId, 1, RELATED_PAGE_SIZE)])

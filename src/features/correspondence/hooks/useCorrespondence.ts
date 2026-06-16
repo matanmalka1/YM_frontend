@@ -1,15 +1,14 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { correspondenceApi, correspondenceQK } from '../api'
 import { authorityContactsApi, authorityContactsQK, AUTHORITY_CONTACTS_LIST_PARAMS } from '@/features/authorityContacts'
-import { getErrorMessage, showErrorToast } from '../../../utils/utils'
+import { getErrorMessage } from '../../../utils/utils'
+import { useMutationWithToast } from '@/hooks/useMutationWithToast'
 import type { CorrespondenceFormValues } from '../schemas'
-import { toast } from '../../../utils/toast'
 import { CORRESPONDENCE_LIST_PARAMS } from '../constants'
 import { toCreateCorrespondencePayload, toUpdateCorrespondencePayload } from '../utils'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 export const useCorrespondence = (businessId: number | undefined, clientId?: number, loadContacts = false) => {
-  const queryClient = useQueryClient()
   const resolvedClientId = clientId ?? 0
   const listParams = { ...CORRESPONDENCE_LIST_PARAMS, business_id: businessId }
   const queryKey = [...correspondenceQK.forClient(resolvedClientId), listParams]
@@ -34,33 +33,27 @@ export const useCorrespondence = (businessId: number | undefined, clientId?: num
     staleTime: QUERY_STALE_TIME.medium,
   })
 
-  const createMutation = useMutation({
+  const createMutation = useMutationWithToast({
     mutationFn: (values: CorrespondenceFormValues) =>
       correspondenceApi.create(resolvedClientId, toCreateCorrespondencePayload(values, businessId)),
-    onSuccess: () => {
-      toast.success('רשומת התכתבות נוספה בהצלחה')
-      void queryClient.invalidateQueries({ queryKey })
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה בהוספת רשומה'),
+    successMessage: 'רשומת התכתבות נוספה בהצלחה',
+    errorMessage: 'שגיאה בהוספת רשומה',
+    invalidateKeys: [queryKey],
   })
 
-  const updateMutation = useMutation({
+  const updateMutation = useMutationWithToast({
     mutationFn: ({ id, values }: { id: number; values: CorrespondenceFormValues }) =>
       correspondenceApi.update(resolvedClientId, id, toUpdateCorrespondencePayload(values, businessId)),
-    onSuccess: () => {
-      toast.success('רשומת התכתבות עודכנה בהצלחה')
-      void queryClient.invalidateQueries({ queryKey })
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה בעדכון רשומה'),
+    successMessage: 'רשומת התכתבות עודכנה בהצלחה',
+    errorMessage: 'שגיאה בעדכון רשומה',
+    invalidateKeys: [queryKey],
   })
 
-  const deleteMutation = useMutation({
+  const deleteMutation = useMutationWithToast({
     mutationFn: (id: number) => correspondenceApi.delete(resolvedClientId, id),
-    onSuccess: () => {
-      toast.success('רשומת התכתבות נמחקה בהצלחה')
-      void queryClient.invalidateQueries({ queryKey })
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה במחיקת רשומה'),
+    successMessage: 'רשומת התכתבות נמחקה בהצלחה',
+    errorMessage: 'שגיאה במחיקת רשומה',
+    invalidateKeys: [queryKey],
   })
 
   const deletingId = deleteMutation.isPending ? (deleteMutation.variables ?? null) : null

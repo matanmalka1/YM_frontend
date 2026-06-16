@@ -1,6 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { getErrorMessage, showErrorToast } from '@/utils/utils'
-import { toast } from '@/utils/toast'
+import { useQuery } from '@tanstack/react-query'
+import { getErrorMessage } from '@/utils/utils'
+import { useMutationWithToast } from '@/hooks/useMutationWithToast'
 import { PAGE_SIZE_MD } from '@/constants/pagination.constants'
 
 const PAGE_PARAMS = { page: 1, page_size: PAGE_SIZE_MD }
@@ -24,8 +24,6 @@ export const useNotesResource = <TNote>({
   update,
   remove,
 }: UseNotesResourceOptions<TNote>) => {
-  const queryClient = useQueryClient()
-
   const listQuery = useQuery({
     enabled,
     queryKey,
@@ -33,31 +31,25 @@ export const useNotesResource = <TNote>({
     retry: false,
   })
 
-  const createMutation = useMutation({
+  const createMutation = useMutationWithToast({
     mutationFn: create,
-    onSuccess: () => {
-      toast.success('הערה נוספה בהצלחה')
-      void queryClient.invalidateQueries({ queryKey })
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה בהוספת הערה'),
+    successMessage: 'הערה נוספה בהצלחה',
+    errorMessage: 'שגיאה בהוספת הערה',
+    invalidateKeys: [queryKey],
   })
 
-  const updateMutation = useMutation({
+  const updateMutation = useMutationWithToast({
     mutationFn: ({ noteId, note }: { noteId: number; note: string }) => update(noteId, note),
-    onSuccess: () => {
-      toast.success('הערה עודכנה בהצלחה')
-      void queryClient.invalidateQueries({ queryKey })
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה בעדכון הערה'),
+    successMessage: 'הערה עודכנה בהצלחה',
+    errorMessage: 'שגיאה בעדכון הערה',
+    invalidateKeys: [queryKey],
   })
 
-  const deleteMutation = useMutation({
+  const deleteMutation = useMutationWithToast({
     mutationFn: remove,
-    onSuccess: () => {
-      toast.success('הערה נמחקה בהצלחה')
-      void queryClient.invalidateQueries({ queryKey })
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה במחיקת הערה'),
+    successMessage: 'הערה נמחקה בהצלחה',
+    errorMessage: 'שגיאה במחיקת הערה',
+    invalidateKeys: [queryKey],
   })
 
   return {

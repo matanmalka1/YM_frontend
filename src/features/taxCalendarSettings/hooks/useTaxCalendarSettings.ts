@@ -1,6 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { toast } from '@/utils/toast'
-import { showErrorToast } from '@/utils/utils'
+import { useQuery } from '@tanstack/react-query'
+import { useMutationWithToast } from '@/hooks/useMutationWithToast'
 import {
   taxCalendarSettingsApi,
   taxCalendarSettingsQK,
@@ -9,7 +8,6 @@ import {
 } from '../api'
 
 export const useTaxCalendarSettings = (params: TaxCalendarSettingsYearRangeParams | null, enabled = true) => {
-  const queryClient = useQueryClient()
   const rulesQuery = useQuery({
     queryKey: taxCalendarSettingsQK.rules(),
     queryFn: taxCalendarSettingsApi.listRules,
@@ -33,13 +31,12 @@ export const useTaxCalendarSettings = (params: TaxCalendarSettingsYearRangeParam
     enabled: enabled && params !== null,
   })
 
-  const bootstrapMutation = useMutation({
+  const bootstrapMutation = useMutationWithToast({
     mutationFn: (payload: TaxCalendarBootstrapPayload) => taxCalendarSettingsApi.bootstrap(payload),
-    onSuccess: async (result) => {
-      toast.success(`יומן המס אותחל: ${result.entries_created} רשומות נוצרו, ${result.entries_skipped} רשומות דולגו.`)
-      await queryClient.invalidateQueries({ queryKey: taxCalendarSettingsQK.all })
-    },
-    onError: (error) => showErrorToast(error, 'שגיאה באתחול יומן המס'),
+    successMessage: (result) =>
+      `יומן המס אותחל: ${result.entries_created} רשומות נוצרו, ${result.entries_skipped} רשומות דולגו.`,
+    errorMessage: 'שגיאה באתחול יומן המס',
+    invalidateKeys: [taxCalendarSettingsQK.all],
   })
 
   return {
