@@ -1,4 +1,3 @@
-import type { BackendAction } from '@/lib/actions/types'
 import type { ISODateString, PaginatedResponse } from '@/types'
 
 export interface ClientRecordResponse {
@@ -190,7 +189,6 @@ export interface BusinessResponse {
   closed_at: string | null
   notes: string | null
   created_at: string | null
-  available_actions?: BackendAction[] | null
 }
 
 export type ClientBusinessesResponse = {
