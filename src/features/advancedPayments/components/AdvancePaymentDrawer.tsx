@@ -290,7 +290,7 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
         )}
 
         <DrawerSection title="פרטי תקופה">
-          <DrawerField label="תאריך יעד" value={formatDate(row.due_date)} />
+          <DrawerField label="תאריך יעד" value={formatDate(row.due_date_effective ?? row.due_date)} />
           <DrawerField
             label="מחזור לתקופה"
             value={turnoverLabel ?? <span className="text-gray-400 text-xs">דוח מע״מ טרם הוגש</span>}

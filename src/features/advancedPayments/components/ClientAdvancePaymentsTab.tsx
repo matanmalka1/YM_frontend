@@ -62,7 +62,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
       const msg = data.created > 0 ? `נוצרו ${data.created} מקדמות` : 'הכול קיים'
       toast.success(msg)
       void queryClient.invalidateQueries({
-        queryKey: advancedPaymentsQK.forClientYear(clientId, year),
+        queryKey: advancedPaymentsQK.clientYear(clientId, year),
       })
     },
     onError: (err) => showErrorToast(err, 'שגיאה ביצירת לוח מקדמות'),
@@ -73,7 +73,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
     onSuccess: () => {
       toast.success('מקדמה נמחקה בהצלחה')
       void queryClient.invalidateQueries({
-        queryKey: advancedPaymentsQK.forClientYear(clientId, year),
+        queryKey: advancedPaymentsQK.clientYear(clientId, year),
       })
       setDrawerRow(null)
     },
@@ -86,7 +86,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
     onSuccess: () => {
       toast.success('מקדמה עודכנה בהצלחה')
       void queryClient.invalidateQueries({
-        queryKey: advancedPaymentsQK.forClientYear(clientId, year),
+        queryKey: advancedPaymentsQK.clientYear(clientId, year),
       })
       setDrawerRow(null)
     },

@@ -11,20 +11,20 @@ interface UpdatePayload {
 
 export const useAdvancePayments = (clientId: number, year: number, statusFilter?: AdvancePaymentStatus[], page = 1) => {
   const queryClient = useQueryClient()
-  const qk = advancedPaymentsQK.forClientYear(clientId, year)
+  const qk = advancedPaymentsQK.clientYear(clientId, year)
   const enabled = clientId > 0
+  const listParams = {
+    client_record_id: clientId,
+    year,
+    page,
+    page_size: 20,
+    ...(statusFilter?.length ? { status: statusFilter } : {}),
+  }
 
   const listQuery = useQuery({
     enabled,
-    queryKey: statusFilter?.length ? [...qk, { status: statusFilter, page }] : [...qk, page],
-    queryFn: () =>
-      advancePaymentsApi.list({
-        client_id: clientId,
-        year,
-        page,
-        page_size: 20,
-        ...(statusFilter?.length ? { status: statusFilter } : {}),
-      }),
+    queryKey: advancedPaymentsQK.list(listParams),
+    queryFn: () => advancePaymentsApi.list(listParams),
     retry: false,
   })
 

@@ -80,7 +80,7 @@ export const ClientAdvancePaymentCards: React.FC<Props> = ({ rows, isLoading, on
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs text-gray-600">
               <div className="rounded-lg bg-slate-50 px-3 py-2">
                 <div className="text-xs text-gray-400">לתשלום עד</div>
-                <div className="font-bold text-gray-900">{formatDate(row.due_date)}</div>
+                <div className="font-bold text-gray-900">{formatDate(row.due_date_effective ?? row.due_date)}</div>
               </div>
               {row.paid_at && (
                 <div>
