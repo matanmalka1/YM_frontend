@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { tasksApi, tasksQK, type TaskCreateRequest, type TaskUpdateRequest } from '@/features/tasks'
 import type { TaskSourceContext } from '@/features/tasks'
 import { toast } from '@/utils/toast'
+import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { workQueueQK } from '../api'
 import type { WorkQueueAction, WorkQueueItem, WorkQueueListResponse, WorkQueueSourceType } from '../api'
 
@@ -126,7 +127,7 @@ export const useWorkQueueActions = () => {
         qc.setQueryData(queryKey, data)
       })
       toast.error('הפעולה נכשלה', {
-        description: err instanceof Error ? err.message : undefined,
+        description: getErrorMessage(err, err instanceof Error ? err.message : 'הפעולה נכשלה'),
       })
       void qc.invalidateQueries({ queryKey: workQueueQK.all })
     },
@@ -147,13 +148,13 @@ export const useWorkQueueActions = () => {
   const createTaskMutation = useMutation({
     mutationFn: (data: TaskCreateRequest) => tasksApi.create(data),
     onSuccess: () => handleTaskMutationSuccess('המשימה נוצרה בהצלחה'),
-    onError: (err) => toast.error(err instanceof Error ? err.message : 'יצירת המשימה נכשלה'),
+    onError: (err) => showErrorToast(err, 'יצירת המשימה נכשלה'),
   })
 
   const updateTaskMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: TaskUpdateRequest }) => tasksApi.update(id, data),
     onSuccess: () => handleTaskMutationSuccess('המשימה עודכנה בהצלחה'),
-    onError: (err) => toast.error(err instanceof Error ? err.message : 'עדכון המשימה נכשל'),
+    onError: (err) => showErrorToast(err, 'עדכון המשימה נכשל'),
   })
 
   const rememberFocus = (target?: HTMLElement | null) => {
