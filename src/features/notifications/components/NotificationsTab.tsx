@@ -17,10 +17,7 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
     page: FIRST_PAGE,
     page_size: PAGE_SIZE_MD,
   })
-  const { data: summary } = useNotificationsSummary(
-    { client_record_id: clientRecordId },
-    clientRecordId != null,
-  )
+  const { data: summary } = useNotificationsSummary({ client_record_id: clientRecordId }, clientRecordId != null)
   const { isAdvisor } = useRole()
   const [sendOpen, setSendOpen] = useState(false)
   const notifications = data?.items ?? []
@@ -43,9 +40,15 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
 
       {summary && summary.total > 0 && (
         <div className="flex items-center gap-2">
-          <Badge variant="success" size="sm">נשלחו: {summary.sent}</Badge>
-          <Badge variant="warning" size="sm">בהמתנה: {summary.pending}</Badge>
-          <Badge variant="error" size="sm">נכשלו: {summary.failed}</Badge>
+          <Badge variant="success" size="sm">
+            נשלחו: {summary.sent}
+          </Badge>
+          <Badge variant="warning" size="sm">
+            בהמתנה: {summary.pending}
+          </Badge>
+          <Badge variant="error" size="sm">
+            נכשלו: {summary.failed}
+          </Badge>
         </div>
       )}
 

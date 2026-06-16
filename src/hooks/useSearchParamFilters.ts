@@ -67,5 +67,14 @@ export const useSearchParamFilters = (): SearchParamFilters => {
     [searchParams],
   )
 
-  return { searchParams, getParam, getPage, setFilter, setFilters, setPage, resetFilters, setSearchParams: setStableSearchParams }
+  return {
+    searchParams,
+    getParam,
+    getPage,
+    setFilter,
+    setFilters,
+    setPage,
+    resetFilters,
+    setSearchParams: setStableSearchParams,
+  }
 }

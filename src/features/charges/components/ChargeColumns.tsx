@@ -116,9 +116,9 @@ export const buildChargeColumns = ({
           actions={charge.available_actions}
           disabled={actionLoadingId !== null}
           onOpenDetail={() => onOpenDetail(charge.id)}
-          onIssue={() => void runAction(charge.id, 'issue')}
-          onMarkPaid={() => void runAction(charge.id, 'markPaid')}
-          onCancel={() => void runAction(charge.id, 'cancel')}
+          onIssue={() => void runAction(charge.id, 'issue_charge')}
+          onMarkPaid={() => void runAction(charge.id, 'mark_paid')}
+          onCancel={() => void runAction(charge.id, 'cancel_charge')}
           showActions={isAdvisor}
           onSendInvoiceNotification={
             isAdvisor && onSendNotification ? () => onSendNotification(charge, 'invoice_issued') : undefined

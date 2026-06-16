@@ -1,6 +1,6 @@
 import type { PagedFilters } from '@/types'
 
-export type ChargeAction = 'issue' | 'markPaid' | 'cancel'
+export type ChargeAction = 'issue_charge' | 'mark_paid' | 'cancel_charge'
 
 export type ChargesFilters = PagedFilters<{
   client_record_id: string

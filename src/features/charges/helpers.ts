@@ -47,8 +47,8 @@ export const buildChargePeriodOptions = (monthsCovered: number) => {
 }
 
 export const runChargeActionRequest = (chargeId: number, action: ChargeAction, reason?: string) => {
-  if (action === 'issue') return chargesApi.issue(chargeId)
-  if (action === 'markPaid') return chargesApi.markPaid(chargeId)
+  if (action === 'issue_charge') return chargesApi.issue(chargeId)
+  if (action === 'mark_paid') return chargesApi.markPaid(chargeId)
   return chargesApi.cancel(chargeId, reason)
 }
 

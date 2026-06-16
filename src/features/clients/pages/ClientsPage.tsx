@@ -5,7 +5,6 @@ import { PageHeader } from '@/components/layout/PageHeader'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
-import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { DetailDrawer } from '@/components/ui/overlays/DetailDrawer'
 import { ModalFormActions } from '@/components/ui/overlays/ModalFormActions'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
@@ -30,7 +29,6 @@ export const Clients: React.FC = () => {
   const [showImportExport, setShowImportExport] = useState(false)
   const [editingClientId, setEditingClientId] = useState<number | null>(null)
   const {
-    activeActionKey,
     clients,
     error,
     filters,
@@ -38,9 +36,6 @@ export const Clients: React.FC = () => {
     handleReset,
     isAdvisor,
     loading,
-    pendingAction,
-    cancelPendingAction,
-    confirmPendingAction,
     setPage,
     stats,
     total,
@@ -183,16 +178,6 @@ export const Clients: React.FC = () => {
         restoreLoading={restoreLoading}
       />
       <ImportExportModal open={showImportExport} onClose={() => setShowImportExport(false)} />
-      <ConfirmDialog
-        open={Boolean(pendingAction)}
-        title={pendingAction?.confirm?.title ?? 'אישור פעולה'}
-        message={pendingAction?.confirm?.message ?? 'האם להמשיך?'}
-        confirmLabel={pendingAction?.confirm?.confirmLabel ?? 'אישור'}
-        cancelLabel={pendingAction?.confirm?.cancelLabel ?? 'ביטול'}
-        isLoading={activeActionKey === pendingAction?.uiKey}
-        onConfirm={confirmPendingAction}
-        onCancel={cancelPendingAction}
-      />
       <DeletedClientDialog
         open={deletedClientDialogOpen}
         deletedClient={deletedClientInfo}

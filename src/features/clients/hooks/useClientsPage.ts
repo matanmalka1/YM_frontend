@@ -16,7 +16,6 @@ import {
   type ClientSortBy,
   type ClientSortOrder,
 } from '../constants'
-import { useActionRunner } from '@/features/actions'
 import { useRole } from '../../../hooks/useRole'
 import { toast } from '../../../utils/toast'
 import { extractClientErrorCode } from '../utils/clientErrors'
@@ -129,17 +128,6 @@ export const useClientsPage = () => {
     setDeletedClientInfo(null)
   }, [])
 
-  const {
-    activeActionKey,
-    cancelPendingAction,
-    confirmPendingAction,
-    handleAction: onAction,
-    pendingAction,
-  } = useActionRunner({
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: clientsQK.all }),
-    errorFallback: 'שגיאה בביצוע פעולת לקוח',
-  })
-
   const handleFilterChange = (
     name: 'accountant_id' | 'entity_type' | 'page_size' | 'search' | 'status' | 'sort_by' | 'order',
     value: string,
@@ -152,20 +140,15 @@ export const useClientsPage = () => {
     })
 
   return {
-    activeActionKey,
     clients: clientItems,
     error,
     filters,
-    onAction,
     handleFilterChange,
     handleReset,
     loading,
-    pendingAction,
     setPage,
     stats,
     total,
-    cancelPendingAction,
-    confirmPendingAction,
     createClient: async (payload: CreateClientPayload): Promise<void> => {
       await createMutation.mutateAsync(payload)
     },

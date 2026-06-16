@@ -1,10 +1,6 @@
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { TASK_FILTER_PARAM_KEYS } from '../taskPage.constants'
-import {
-  buildTaskListParams,
-  getTaskFiltersFromSearchParams,
-  hasTaskFilters,
-} from '../utils/taskFilters'
+import { buildTaskListParams, getTaskFiltersFromSearchParams, hasTaskFilters } from '../utils/taskFilters'
 import type { TaskPriority, TaskStatus } from '../api/contracts'
 import type { UserRole } from '@/types'
 import type { WorkQueueSourceType } from '@/features/workQueue'

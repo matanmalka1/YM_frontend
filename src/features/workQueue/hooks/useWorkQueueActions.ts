@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import { api } from '@/api/client'
 import { tasksApi, tasksQK, type TaskCreateRequest, type TaskUpdateRequest } from '@/features/tasks'
 import type { TaskSourceContext } from '@/features/tasks'
 import { toast } from '@/utils/toast'
@@ -14,7 +13,16 @@ type TaskModalState = {
   source?: TaskSourceContext | null
 }
 
+type TaskActionKeyBase = 'cancel_task' | 'complete_task' | 'continue_task' | 'delete_task' | 'edit_task'
+
 const actionKey = (item: WorkQueueItem, action: WorkQueueAction) => `${item.id}:${action.key}`
+
+const isTaskActionKey = (key: string, base: TaskActionKeyBase) => {
+  if (key === base) return true
+  const suffixPrefix = `${base}_`
+  if (!key.startsWith(suffixPrefix)) return false
+  return /^\d+$/.test(key.slice(suffixPrefix.length))
+}
 
 const sourceContext = (item: WorkQueueItem): TaskSourceContext => ({
   source_domain: item.source_type,
@@ -83,17 +91,21 @@ export const useWorkQueueActions = () => {
   })
 
   const actionMutation = useMutation({
-    mutationFn: async ({ action }: { item: WorkQueueItem; action: WorkQueueAction }) => {
-      if (!action.endpoint || !action.method) throw new Error('פעולה לא תקינה')
-      return api.request({ url: action.endpoint, method: action.method })
+    mutationFn: async ({ item, action }: { item: WorkQueueItem; action: WorkQueueAction }) => {
+      const taskId = action.task_id ?? (item.source_type === 'task' ? item.source_id : undefined)
+      if (taskId == null) throw new Error('פעולה לא תקינה')
+      if (isTaskActionKey(action.key, 'complete_task')) return tasksApi.complete(taskId)
+      if (isTaskActionKey(action.key, 'cancel_task')) return tasksApi.cancel(taskId)
+      if (isTaskActionKey(action.key, 'delete_task')) return tasksApi.delete(taskId)
+      throw new Error('פעולה לא נתמכת')
     },
     onMutate: async ({ item, action }) => {
       const taskId = action.task_id ?? (item.source_type === 'task' ? item.source_id : undefined)
       const removesTask =
         taskId != null &&
-        (action.key.startsWith('complete_task') ||
-          action.key.startsWith('cancel_task') ||
-          action.key.startsWith('delete_task'))
+        (isTaskActionKey(action.key, 'complete_task') ||
+          isTaskActionKey(action.key, 'cancel_task') ||
+          isTaskActionKey(action.key, 'delete_task'))
       if (!removesTask) return {}
       await qc.cancelQueries({ queryKey: workQueueQK.all })
       const previousLists = qc.getQueriesData<WorkQueueListResponse>({ queryKey: workQueueQK.lists })
@@ -200,7 +212,8 @@ export const useWorkQueueActions = () => {
         return
       }
       setTaskModal({
-        mode: action.key.startsWith('continue_task') || action.key.startsWith('edit_task') ? 'edit' : 'view',
+        mode:
+          isTaskActionKey(action.key, 'continue_task') || isTaskActionKey(action.key, 'edit_task') ? 'edit' : 'view',
         taskId,
         source: linkedTaskSourceContext(item),
       })

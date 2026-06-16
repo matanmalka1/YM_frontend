@@ -5,15 +5,16 @@ import { taskStatusValues } from '@/features/tasks'
 
 export type { WorkQueueSourceType, WorkQueueUrgency }
 
+// Availability metadata only — describes which action is available and how to
+// present it. Not an executable command: the frontend never executes a
+// descriptor endpoint/method/payload. Known actions are dispatched to typed API
+// clients/hooks by `key` (see useWorkQueueActions).
 const workQueueActionSchema = z.object({
   key: z.string(),
   label: z.string(),
   type: z.enum(['link', 'mutation', 'modal']),
   route: z.string().nullable().optional(),
-  endpoint: z.string().nullable().optional(),
-  method: z.enum(['get', 'post', 'patch', 'put', 'delete']).nullable().optional(),
   task_id: z.number().int().nullable().optional(),
-  payload_schema: z.enum(['none', 'simple', 'requires_input']).optional(),
   confirm: z.boolean().optional(),
   confirm_title: z.string().nullable().optional(),
   confirm_message: z.string().nullable().optional(),

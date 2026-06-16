@@ -1317,6 +1317,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/clients/{client_record_id}/tasks': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Client Tasks */
+    get: operations['list_client_tasks_api_v1_clients__client_record_id__tasks_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/clients/{client_record_id}/businesses': {
     parameters: {
       query?: never
@@ -1820,6 +1837,40 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/documents/client/{client_record_id}/versions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get Document Versions */
+    get: operations['get_document_versions_api_v1_documents_client__client_record_id__versions_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/documents/annual-report/{report_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List By Annual Report */
+    get: operations['list_by_annual_report_api_v1_documents_annual_report__report_id__get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/documents/upload': {
     parameters: {
       query?: never
@@ -1852,6 +1903,26 @@ export interface paths {
      * @description List permanent documents for a client.
      */
     get: operations['list_client_documents_api_v1_documents_client__client_record_id__get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/documents/binder/{binder_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Binder Documents
+     * @description List permanent documents linked to a binder.
+     */
+    get: operations['list_binder_documents_api_v1_documents_binder__binder_id__get']
     put?: never
     post?: never
     delete?: never
@@ -1907,7 +1978,11 @@ export interface paths {
       path?: never
       cookie?: never
     }
-    get?: never
+    /**
+     * Get Document
+     * @description Get a single permanent document's metadata.
+     */
+    get: operations['get_document_api_v1_documents_client__client_record_id___document_id__get']
     put?: never
     post?: never
     /**
@@ -1917,7 +1992,11 @@ export interface paths {
     delete: operations['delete_document_api_v1_documents_client__client_record_id___document_id__delete']
     options?: never
     head?: never
-    patch?: never
+    /**
+     * Update Document
+     * @description Update document metadata (type, filename, tax year) without touching the file.
+     */
+    patch: operations['update_document_api_v1_documents_client__client_record_id___document_id__patch']
     trace?: never
   }
   '/api/v1/documents/client/{client_record_id}/{document_id}/replace': {
@@ -1930,43 +2009,9 @@ export interface paths {
     get?: never
     /**
      * Replace Document
-     * @description Replace the file for an existing document (ADVISOR only).
+     * @description Replace the file for an existing document (ADVISOR and SECRETARY).
      */
     put: operations['replace_document_api_v1_documents_client__client_record_id___document_id__replace_put']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/v1/documents/client/{client_record_id}/versions': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Get Document Versions */
-    get: operations['get_document_versions_api_v1_documents_client__client_record_id__versions_get']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/v1/documents/annual-report/{report_id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** List By Annual Report */
-    get: operations['list_by_annual_report_api_v1_documents_annual_report__report_id__get']
-    put?: never
     post?: never
     delete?: never
     options?: never
@@ -2977,6 +3022,40 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/tasks/bulk-complete': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Bulk Complete Tasks */
+    post: operations['bulk_complete_tasks_api_v1_tasks_bulk_complete_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/tasks/bulk-assign': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Bulk Assign Tasks */
+    post: operations['bulk_assign_tasks_api_v1_tasks_bulk_assign_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/tasks/{task_id}': {
     parameters: {
       query?: never
@@ -3051,7 +3130,18 @@ export interface paths {
 export type webhooks = Record<string, never>
 export interface components {
   schemas: {
-    /** ActionDescriptor */
+    /**
+     * ActionDescriptor
+     * @description Availability metadata: which action a resource currently exposes.
+     *
+     *     Descriptors are NOT executable commands. The frontend reads ``key`` to know
+     *     an action is available and routes it to a typed API client/hook; it never
+     *     executes a descriptor-supplied endpoint/method/payload. The remaining fields
+     *     are presentation/UX metadata consumed by the work-queue UI (label, type,
+     *     route for link actions, confirm dialog text, variant, disabled state).
+     *     Target endpoints/services remain the source of truth for authorization and
+     *     business validation.
+     */
     ActionDescriptor: {
       /** Key */
       key: string
@@ -3064,18 +3154,8 @@ export interface components {
       type: 'link' | 'mutation' | 'modal'
       /** Route */
       route?: string | null
-      /** Endpoint */
-      endpoint?: string | null
-      /** Method */
-      method?: ('get' | 'post' | 'patch' | 'put' | 'delete') | null
       /** Task Id */
       task_id?: number | null
-      /**
-       * Payload Schema
-       * @default none
-       * @enum {string}
-       */
-      payload_schema: 'none' | 'simple' | 'requires_input'
       /**
        * Confirm
        * @default false
@@ -6411,6 +6491,8 @@ export interface components {
       superseded_by?: number | null
       /** Annual Report Id */
       annual_report_id?: number | null
+      /** Binder Id */
+      binder_id?: number | null
       /** Uploaded By */
       uploaded_by: number
       /**
@@ -6443,6 +6525,14 @@ export interface components {
       | 'withholding_certificate'
       | 'nii_approval'
       | 'other'
+    /** PermanentDocumentUpdateRequest */
+    PermanentDocumentUpdateRequest: {
+      document_type?: components['schemas']['PermanentDocumentType'] | null
+      /** Original Filename */
+      original_filename?: string | null
+      /** Tax Year */
+      tax_year?: number | null
+    }
     /** PrefillTurnoverResponse */
     PrefillTurnoverResponse: {
       /** Period */
@@ -7099,6 +7189,34 @@ export interface components {
       /** Note */
       note?: string | null
     }
+    /** TaskBulkActionResponse */
+    TaskBulkActionResponse: {
+      /** Succeeded */
+      succeeded: number[]
+      /** Failed */
+      failed: components['schemas']['TaskBulkFailure'][]
+    }
+    /** TaskBulkAssignRequest */
+    TaskBulkAssignRequest: {
+      /** Task Ids */
+      task_ids: number[]
+      /** Assignee User Id */
+      assignee_user_id?: number | null
+    }
+    /** TaskBulkCompleteRequest */
+    TaskBulkCompleteRequest: {
+      /** Task Ids */
+      task_ids: number[]
+    }
+    /** TaskBulkFailure */
+    TaskBulkFailure: {
+      /** Task Id */
+      task_id: number
+      /** Code */
+      code: string
+      /** Message */
+      message: string
+    }
     /** TaskCreateRequest */
     TaskCreateRequest: {
       /** Title */
@@ -7116,6 +7234,8 @@ export interface components {
       source_domain?: string | null
       /** Source Id */
       source_id?: number | null
+      /** Client Record Id */
+      client_record_id?: number | null
       /** Action Key */
       action_key?: string | null
       /** Action Payload */
@@ -7158,6 +7278,8 @@ export interface components {
       source_domain?: string | null
       /** Source Id */
       source_id?: number | null
+      /** Client Record Id */
+      client_record_id?: number | null
       /** Action Key */
       action_key?: string | null
       /** Action Payload */
@@ -13511,6 +13633,72 @@ export interface operations {
       }
     }
   }
+  list_client_tasks_api_v1_clients__client_record_id__tasks_get: {
+    parameters: {
+      query?: {
+        status?: components['schemas']['TaskStatus'] | null
+        assigned_to_user_id?: number | null
+        source_domain?: components['schemas']['WorkQueueSourceType'] | null
+        due_before?: string | null
+        due_after?: string | null
+        page?: number
+        page_size?: number
+      }
+      header?: never
+      path: {
+        client_record_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TaskListResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
   list_client_businesses_api_v1_clients__client_record_id__businesses_get: {
     parameters: {
       query?: {
@@ -15681,6 +15869,125 @@ export interface operations {
       }
     }
   }
+  get_document_versions_api_v1_documents_client__client_record_id__versions_get: {
+    parameters: {
+      query: {
+        document_type: string
+        tax_year?: number | null
+      }
+      header?: never
+      path: {
+        client_record_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DocumentVersionsResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  list_by_annual_report_api_v1_documents_annual_report__report_id__get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        report_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DocumentVersionsResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
   upload_permanent_document_api_v1_documents_upload_post: {
     parameters: {
       query?: never
@@ -15762,6 +16069,67 @@ export interface operations {
       header?: never
       path: {
         client_record_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PermanentDocumentListResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  list_binder_documents_api_v1_documents_binder__binder_id__get: {
+    parameters: {
+      query?: {
+        page?: number
+        page_size?: number
+      }
+      header?: never
+      path: {
+        binder_id: number
       }
       cookie?: never
     }
@@ -15931,6 +16299,65 @@ export interface operations {
       }
     }
   }
+  get_document_api_v1_documents_client__client_record_id___document_id__get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        client_record_id: number
+        document_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PermanentDocumentResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
   delete_document_api_v1_documents_client__client_record_id___document_id__delete: {
     parameters: {
       query?: never
@@ -15957,6 +16384,69 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  update_document_api_v1_documents_client__client_record_id___document_id__patch: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        client_record_id: number
+        document_id: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PermanentDocumentUpdateRequest']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PermanentDocumentResponse']
         }
       }
       /** @description Authentication required */
@@ -16074,125 +16564,6 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-    }
-  }
-  get_document_versions_api_v1_documents_client__client_record_id__versions_get: {
-    parameters: {
-      query: {
-        document_type: string
-        tax_year?: number | null
-      }
-      header?: never
-      path: {
-        client_record_id: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DocumentVersionsResponse']
-        }
-      }
-      /** @description Authentication required */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Resource not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HTTPValidationError']
-        }
-      }
-    }
-  }
-  list_by_annual_report_api_v1_documents_annual_report__report_id__get: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        report_id: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DocumentVersionsResponse']
-        }
-      }
-      /** @description Authentication required */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Resource not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HTTPValidationError']
         }
       }
     }
@@ -20564,6 +20935,157 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  bulk_complete_tasks_api_v1_tasks_bulk_complete_post: {
+    parameters: {
+      query?: never
+      header: {
+        'X-Idempotency-Key': string
+      }
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TaskBulkCompleteRequest']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TaskBulkActionResponse']
+        }
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  bulk_assign_tasks_api_v1_tasks_bulk_assign_post: {
+    parameters: {
+      query?: never
+      header: {
+        'X-Idempotency-Key': string
+      }
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TaskBulkAssignRequest']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TaskBulkActionResponse']
+        }
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Conflict */
+      409: {
         headers: {
           [name: string]: unknown
         }

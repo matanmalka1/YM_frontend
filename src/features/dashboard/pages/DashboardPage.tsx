@@ -1,6 +1,5 @@
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
-import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
 import { ClientPickerField } from '@/components/shared/client/ClientPickerField'
@@ -39,22 +38,8 @@ const StatsSkeleton = () => (
 )
 
 export const DashboardPage: React.FC = () => {
-  const {
-    activeQuickAction,
-    attentionItems,
-    dashboard,
-    denied,
-    handleQuickAction,
-    isAdvisorView,
-    confirmPendingAction,
-    cancelPendingAction,
-    pendingQuickAction,
-    quickActions,
-    emptyState,
-    stats,
-    vatStats,
-    recentActivity,
-  } = useDashboardPage()
+  const { attentionItems, dashboard, denied, isAdvisorView, emptyState, stats, vatStats, recentActivity } =
+    useDashboardPage()
 
   const {
     activeCreateModal,
@@ -99,12 +84,7 @@ export const DashboardPage: React.FC = () => {
       {isAdvisorView && !emptyState?.is_empty ? (
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
           <aside className="flex flex-col gap-5 lg:col-start-2 lg:row-start-1">
-            <QuickActionsPanel
-              actions={quickActions ?? []}
-              activeActionKey={activeQuickAction}
-              onAction={handleQuickAction}
-              onOpenModal={setActiveCreateModal}
-            />
+            <QuickActionsPanel onOpenModal={setActiveCreateModal} />
             <UpcomingDeadlinesPanel />
             <RecentActivityPanel items={recentActivity} className="flex-1" />
           </aside>
@@ -125,16 +105,6 @@ export const DashboardPage: React.FC = () => {
 
       {vatStats && !emptyState?.is_empty && !isAdvisorView && <TaxInsightsRow vatStats={vatStats} />}
 
-      <ConfirmDialog
-        open={Boolean(pendingQuickAction)}
-        title={pendingQuickAction?.confirm?.title || DASHBOARD_COPY.confirmTitle}
-        message={pendingQuickAction?.confirm?.message || DASHBOARD_COPY.confirmMessage}
-        confirmLabel={pendingQuickAction?.confirm?.confirmLabel || DASHBOARD_COPY.confirmLabel}
-        cancelLabel={pendingQuickAction?.confirm?.cancelLabel || DASHBOARD_COPY.cancelLabel}
-        isLoading={activeQuickAction === pendingQuickAction?.uiKey}
-        onConfirm={confirmPendingAction}
-        onCancel={cancelPendingAction}
-      />
       <ChargesCreateModal
         open={activeCreateModal === 'charge'}
         createError={chargeCreateError}

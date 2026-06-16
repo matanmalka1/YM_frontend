@@ -55,8 +55,8 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
           actions={charge.available_actions}
           disabled={actionLoading}
           size="sm"
-          onIssue={() => void runAction('issue')}
-          onMarkPaid={() => void runAction('markPaid')}
+          onIssue={() => void runAction('issue_charge')}
+          onMarkPaid={() => void runAction('mark_paid')}
           onCancel={() => setIsConfirmingCancel(true)}
         />
         <div className="flex flex-wrap items-center gap-2">
@@ -110,7 +110,7 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
         cancelLabel="חזור"
         isLoading={actionLoading}
         onConfirm={async () => {
-          await runAction('cancel', cancelReason || undefined)
+          await runAction('cancel_charge', cancelReason || undefined)
           closeCancelDialog()
         }}
         onCancel={closeCancelDialog}

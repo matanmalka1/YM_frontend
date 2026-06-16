@@ -10,9 +10,6 @@ import type { VatInvoiceResponse } from './api'
 
 const addInvoiceAction: BackendAction = {
   key: 'add_invoice',
-  label: 'הוספת חשבונית',
-  method: 'post',
-  endpoint: '/vat/work-items/1/invoices',
 }
 
 const invoice = (invoiceNumber: string): Pick<VatInvoiceResponse, 'id' | 'invoice_number'> => ({
