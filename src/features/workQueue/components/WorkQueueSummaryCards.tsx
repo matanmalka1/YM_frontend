@@ -20,39 +20,39 @@ export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
   urgencyFilter,
   onFilter,
 }) => {
-  const emptyValue = isLoading && !summary ? '—' : 0
+  const isInitialLoading = Boolean(isLoading) && !summary
   const stats = useMemo(
     () => [
       {
         icon: AlertTriangle,
         variant: 'red' as const,
-        count: summary?.overdue ?? emptyValue,
+        count: summary?.overdue ?? 0,
         label: 'באיחור',
         value: 'overdue' as WorkQueueUrgency,
       },
       {
         icon: Clock,
         variant: 'orange' as const,
-        count: summary?.approaching ?? emptyValue,
+        count: summary?.approaching ?? 0,
         label: `דחוף (עד ${APPROACHING_DAYS} ימים)`,
         value: 'approaching' as WorkQueueUrgency,
       },
       {
         icon: Clock,
         variant: 'orange' as const,
-        count: summary?.important ?? emptyValue,
+        count: summary?.important ?? 0,
         label: `חשוב (${APPROACHING_DAYS + 1}–${IMPORTANT_DAYS} ימים)`,
         value: 'important' as WorkQueueUrgency,
       },
       {
         icon: Calendar,
         variant: 'blue' as const,
-        count: summary?.upcoming ?? emptyValue,
+        count: summary?.upcoming ?? 0,
         label: `קרוב (${IMPORTANT_DAYS + 1}+ ימים)`,
         value: 'upcoming' as WorkQueueUrgency,
       },
     ],
-    [summary, emptyValue],
+    [summary],
   )
 
   if (summaryError) {
@@ -74,6 +74,7 @@ export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
           key={value}
           title={label}
           value={count}
+          loading={isInitialLoading}
           icon={icon}
           variant={variant}
           selected={urgencyFilter === value}

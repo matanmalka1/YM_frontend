@@ -52,7 +52,8 @@ export const BindersStatsSection = ({
         <StatsCard
           key={pill.key || 'total'}
           title={pill.label}
-          value={countersLoading ? '...' : pill.count}
+          value={pill.count}
+          loading={countersLoading}
           icon={pill.icon}
           variant={pill.variant}
           onClick={() => onFilterChange('location_status', pill.key)}

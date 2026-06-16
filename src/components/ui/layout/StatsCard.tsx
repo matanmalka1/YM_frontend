@@ -22,6 +22,8 @@ export interface StatsCardProps {
   className?: string
   actionLabel?: string
   compact?: boolean
+  /** Show a placeholder instead of value while the backing query is loading. */
+  loading?: boolean
 }
 
 const STAT_VARIANTS: Record<
@@ -95,11 +97,16 @@ export const StatsCard: React.FC<StatsCardProps> = ({
   className,
   actionLabel,
   compact = false,
+  loading = false,
 }) => {
   const [displayValue, setDisplayValue] = useState(() => (typeof value === 'number' ? 0 : null))
   const frameRef = useRef<number | null>(null)
 
   useEffect(() => {
+    if (loading) {
+      return
+    }
+
     if (typeof value !== 'number' || Number.isNaN(value)) {
       setDisplayValue(null)
       return
@@ -130,7 +137,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
         frameRef.current = null
       }
     }
-  }, [value])
+  }, [value, loading])
 
   const config = STAT_VARIANTS[variant]
   const isInteractive = Boolean(onClick)
@@ -175,7 +182,11 @@ export const StatsCard: React.FC<StatsCardProps> = ({
 
           <div>
             <div className={cn('font-bold leading-tight tabular-nums', compact ? 'text-xl' : 'text-lg', config.value)}>
-              {typeof value === 'number' ? (displayValue ?? value).toLocaleString('he-IL') : value}
+              {loading
+                ? '—'
+                : typeof value === 'number'
+                  ? (displayValue ?? value).toLocaleString('he-IL')
+                  : value}
             </div>
 
             {description && (
