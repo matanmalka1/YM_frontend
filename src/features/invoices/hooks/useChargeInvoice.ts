@@ -3,7 +3,7 @@ import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { invoicesApi, type InvoiceAttachRequest } from '../api'
 import { invoicesQK } from '../api/queryKeys'
 import { toast } from '@/utils/toast'
-import { getHttpStatus, showErrorToast } from '@/utils/utils'
+import { getErrorMessage, getHttpStatus, showErrorToast } from '@/utils/utils'
 
 export const useChargeInvoice = (chargeId: number | null | undefined) => {
   const queryClient = useQueryClient()
@@ -44,7 +44,7 @@ export const useChargeInvoice = (chargeId: number | null | undefined) => {
   return {
     attachInvoice,
     invoice: invoiceQuery.data ?? null,
-    invoiceError: invoiceQuery.isError ? 'שגיאה בטעינת פרטי חשבונית' : null,
+    invoiceError: invoiceQuery.error ? getErrorMessage(invoiceQuery.error, 'שגיאה בטעינת פרטי חשבונית') : null,
     isAttaching: attachMutation.isPending,
     isLoadingInvoice: invoiceQuery.isLoading,
   }

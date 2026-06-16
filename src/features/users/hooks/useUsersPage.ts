@@ -3,7 +3,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 import { usersApi, usersQK } from '../api'
 import type { CreateUserPayload, UpdateUserPayload, UserResponse } from '../api'
 import { toast } from '../../../utils/toast'
-import { showErrorToast } from '../../../utils/utils'
+import { getErrorMessage, showErrorToast } from '../../../utils/utils'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { parsePositiveInt } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
@@ -104,7 +104,7 @@ export const useUsersPage = () => {
     users: listQuery.data?.items ?? [],
     total: listQuery.data?.total ?? 0,
     loading: listQuery.isPending,
-    error: listQuery.isError ? 'שגיאה בטעינת המשתמשים' : null,
+    error: listQuery.error ? getErrorMessage(listQuery.error, 'שגיאה בטעינת המשתמשים') : null,
     filters,
     handleFilterChange: (key: string, value: string) => setFilter(key, value),
     setPage,
