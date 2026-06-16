@@ -1,5 +1,5 @@
 import type { AnchorHTMLAttributes } from 'react'
-import { createContext, useContext, useLayoutEffect, useRef, useState } from 'react'
+import { Children, Fragment, createContext, isValidElement, useContext, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { MoreHorizontal } from 'lucide-react'
 import { cn } from '../../../utils/utils'
@@ -46,7 +46,11 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
   const focusMenuItem = (direction: 1 | -1, target?: HTMLElement) => {
     const container = portalRef.current
     if (!container) return
-    const items = Array.from(container.querySelectorAll<HTMLElement>('button:not(:disabled)'))
+    const items = Array.from(
+      container.querySelectorAll<HTMLElement>(
+        '[role="menuitem"]:not(:disabled):not([aria-disabled="true"])',
+      ),
+    )
     if (items.length === 0) return
 
     const activeIndex = target ? items.indexOf(target) : -1
@@ -80,6 +84,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
   const handleTriggerKeyDown: React.KeyboardEventHandler<HTMLButtonElement> = (event) => {
     if (event.key !== 'ArrowDown' && event.key !== 'Enter' && event.key !== ' ') return
     event.preventDefault()
+    event.stopPropagation()
     if (!open) {
       openMenu()
       requestAnimationFrame(() => focusMenuItem(1))
@@ -91,28 +96,37 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
   const handleMenuKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (event) => {
     if (event.key === 'ArrowDown') {
       event.preventDefault()
+      event.stopPropagation()
       focusMenuItem(1, event.target as HTMLElement)
       return
     }
     if (event.key === 'ArrowUp') {
       event.preventDefault()
+      event.stopPropagation()
       focusMenuItem(-1, event.target as HTMLElement)
       return
     }
     if (event.key === 'Home') {
       event.preventDefault()
+      event.stopPropagation()
       focusMenuItem(1)
       return
     }
     if (event.key === 'End') {
       event.preventDefault()
+      event.stopPropagation()
       focusMenuItem(-1)
       return
     }
     if (event.key === 'Escape') {
       event.preventDefault()
+      event.stopPropagation()
       setOpen(false)
       focusTrigger()
+      return
+    }
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.stopPropagation()
     }
   }
 
@@ -206,11 +220,15 @@ const DropdownMenuItem = ({
     <button
       role="menuitem"
       type="button"
+      tabIndex={-1}
       disabled={disabled}
       onClick={(event) => {
         event.stopPropagation()
         onClick(event)
         close?.()
+      }}
+      onKeyDown={(event) => {
+        event.stopPropagation()
       }}
       className={cn(
         'w-full px-3 py-2 text-right text-sm transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40',
@@ -228,6 +246,22 @@ const DropdownMenuItem = ({
 
 DropdownMenuItem.displayName = 'DropdownMenuItem'
 
+const hasRenderableContent = (node: React.ReactNode): boolean =>
+  Children.toArray(node).some((child) => {
+    if (isValidElement(child) && child.type === Fragment) {
+      return hasRenderableContent((child.props as { children?: React.ReactNode }).children)
+    }
+    return true
+  })
+
+interface RowActionGroupProps {
+  children: React.ReactNode
+}
+
+export const RowActionGroup: React.FC<RowActionGroupProps> = ({ children }) => <>{children}</>
+
+RowActionGroup.displayName = 'RowActionGroup'
+
 interface RowActionsMenuProps {
   ariaLabel?: string
   children: React.ReactNode
@@ -235,13 +269,33 @@ interface RowActionsMenuProps {
   menuClassName?: string
 }
 
-export const RowActionsMenu: React.FC<RowActionsMenuProps> = ({ ariaLabel, children, title, menuClassName }) => (
-  <div className="flex justify-center">
-    <DropdownMenu ariaLabel={ariaLabel ?? 'פעולות'} title={title} menuClassName={menuClassName}>
-      {children}
-    </DropdownMenu>
-  </div>
-)
+export const RowActionsMenu: React.FC<RowActionsMenuProps> = ({ ariaLabel, children, title, menuClassName }) => {
+  const allChildren = Children.toArray(children)
+  const groups = allChildren.filter(
+    (child): child is React.ReactElement<RowActionGroupProps> =>
+      isValidElement(child) && child.type === RowActionGroup,
+  )
+  // Grouped separator rendering assumes every child is a RowActionGroup. All current callers
+  // wrap every child in a group, so non-group children are only rendered when no group is used
+  // at all (plain children passthrough, e.g. ClientRowActions/BinderRowActions/ChargeRowActions).
+  const isGrouped = groups.length > 0 && groups.length === allChildren.length
+  const visibleGroups = isGrouped ? groups.filter((group) => hasRenderableContent(group.props.children)) : []
+
+  return (
+    <div className="flex justify-center">
+      <DropdownMenu ariaLabel={ariaLabel ?? 'פעולות'} title={title} menuClassName={menuClassName}>
+        {isGrouped
+          ? visibleGroups.map((group, index) => (
+              <Fragment key={group.key ?? index}>
+                {index > 0 && <RowActionSeparator />}
+                {group.props.children}
+              </Fragment>
+            ))
+          : children}
+      </DropdownMenu>
+    </div>
+  )
+}
 
 RowActionsMenu.displayName = 'RowActionsMenu'
 
@@ -260,6 +314,8 @@ interface RowActionLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 export const RowActionLink: React.FC<RowActionLinkProps> = ({ href, label, icon, className, onClick, ...props }) => (
   <a
     href={href}
+    role="menuitem"
+    tabIndex={-1}
     className={
       className ?? 'block w-full px-3 py-2 text-right text-sm text-gray-700 transition-colors hover:bg-gray-50'
     }
@@ -267,7 +323,9 @@ export const RowActionLink: React.FC<RowActionLinkProps> = ({ href, label, icon,
       event.stopPropagation()
       onClick?.(event)
     }}
-    onKeyDown={(event) => event.stopPropagation()}
+    onKeyDown={(event) => {
+      event.stopPropagation()
+    }}
     {...props}
   >
     <span className="grid w-full grid-cols-[minmax(0,1fr)_1rem] items-center gap-2">
@@ -278,3 +336,48 @@ export const RowActionLink: React.FC<RowActionLinkProps> = ({ href, label, icon,
 )
 
 RowActionLink.displayName = 'RowActionLink'
+
+interface RowActionButtonProps {
+  label: string
+  icon: React.ReactNode
+  onClick: () => void
+  disabled?: boolean
+  danger?: boolean
+  className?: string
+}
+
+export const RowActionButton: React.FC<RowActionButtonProps> = ({
+  label,
+  icon,
+  onClick,
+  disabled = false,
+  danger = false,
+  className,
+}) => {
+  const button = (
+    <button
+      type="button"
+      aria-label={label}
+      disabled={disabled}
+      onClick={(event) => {
+        event.stopPropagation()
+        onClick()
+      }}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.stopPropagation()
+        }
+      }}
+      className={cn(
+        'focus-ring inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 disabled:cursor-not-allowed disabled:opacity-40',
+        danger && 'text-negative-600 hover:bg-negative-50 hover:text-negative-700',
+        className,
+      )}
+    >
+      {icon}
+    </button>
+  )
+  return <Tooltip text={label}>{button}</Tooltip>
+}
+
+RowActionButton.displayName = 'RowActionButton'

@@ -2,12 +2,19 @@ import { useCallback, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { vatReportsApi } from '../api'
-import type { CreateVatWorkItemPayload, VatWorkItemStatus, VatWorkItemStatusSummaryParams } from '../api'
+import type {
+  CreateVatWorkItemPayload,
+  VatWorkItemListItem,
+  VatWorkItemStatus,
+  VatWorkItemStatusSummaryParams,
+} from '../api'
 import { getErrorMessage, showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
 import { useRole } from '../../../hooks/useRole'
 import { vatReportsQK } from '../api/queryKeys'
 import { invalidateVatWorkItem } from './useVatInvalidation'
+import { useDeleteWorkItem } from './useVatInvoiceMutations'
+import { isFiled } from '../utils'
 import type { VatWorkItemAction, VatWorkItemsFilters } from '../types'
 import { VAT_WORK_ITEMS_STATS_STATUS_GROUPS } from '../constants'
 import { toOptionalVatPeriodTypeFilter, toVatPeriodTypeFilter } from '../filterUtils'
@@ -29,7 +36,9 @@ const toOptionalVatStatus = (status: string): VatWorkItemStatus | undefined =>
 export const useVatWorkItemsPage = () => {
   const queryClient = useQueryClient()
   const { searchParams, getParam, setFilter, setFilters, setSearchParams } = useSearchParamFilters()
-  const { isAdvisor } = useRole()
+  const { isAdvisor, isSecretary } = useRole()
+  const { deleteWorkItem, isDeleting } = useDeleteWorkItem()
+  const [deleteTarget, setDeleteTarget] = useState<VatWorkItemListItem | null>(null)
 
   const rawYear = searchParams.get('year') ?? String(getOperationalTaxYear())
   const filters: Pick<VatWorkItemsFilters, 'status' | 'year' | 'period_type' | 'client_record_id' | 'client_name'> = {
@@ -147,13 +156,36 @@ export const useVatWorkItemsPage = () => {
     }
   }
 
+  const canDeleteWorkItem = (item: VatWorkItemListItem): boolean =>
+    (isAdvisor || isSecretary) && !isFiled(item.status)
+
+  const requestDelete = useCallback((item: VatWorkItemListItem) => {
+    setDeleteTarget(item)
+  }, [])
+
+  const cancelDelete = useCallback(() => {
+    setDeleteTarget(null)
+  }, [])
+
+  const confirmDelete = useCallback(async () => {
+    if (!deleteTarget) return
+    const ok = await deleteWorkItem(deleteTarget.id)
+    if (ok) setDeleteTarget(null)
+  }, [deleteTarget, deleteWorkItem])
+
   return {
     actionLoadingId,
+    canDeleteWorkItem,
+    cancelDelete,
+    confirmDelete,
     createError: createMutation.error ? getErrorMessage(createMutation.error, 'שגיאה ביצירת תיק מע"מ') : null,
     createLoading: createMutation.isPending,
+    deleteTarget,
     filters,
     isAdvisor,
+    isDeleting,
     loading: statusSummaryQuery.isLoading,
+    requestDelete,
     runAction,
     sendBackWithNote,
     setFilter,

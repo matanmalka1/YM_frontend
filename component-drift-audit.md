@@ -4,15 +4,9 @@
 
 `git -C frontend status --short` before writing this report:
 
-```text
-M  src/features/vatReports/components/VatWorkItemRowActions.tsx
-M  src/features/vatReports/hooks/useVatInvoiceMutations.ts
-?? frontendStagedChanges.diff
-```
-
 This audit is read-only for application code. The only file added by this task is `frontend/component-drift-audit.md`.
 
-Project-doc note: `frontend/AGENTS.md` was requested by the frontend review skill but is not present in this checkout. The applicable instructions read were:
+The applicable instructions read were:
 
 - `docs/AGENTS.md`
 - `docs/agent/entry-point.md`

@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom'
 import { AlertCircle, FileSignature, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
+import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { DataTable } from '@/components/ui/table/DataTable'
 import { getSignatureRequestStatusLabel, getSignatureRequestTypeLabel } from '@/features/signatureRequests'
-import { cn, formatClientOfficeId, formatDate } from '@/utils/utils'
+import { cn, formatClientOfficeId, formatDate, showErrorToast } from '@/utils/utils'
 import type { SignatureRequestResponse } from '../api'
 import { usePendingSignatureRequests } from '../hooks/usePendingSignatureRequests'
 import { useSignatureRequestActions } from '../hooks/useSignatureRequestActions'
@@ -23,9 +24,20 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
   const { create, isCreating, cancel, isCanceling } = useSignatureRequestActions()
   const [auditRequestId, setAuditRequestId] = useState<number | null>(null)
   const [showCreate, setShowCreate] = useState(false)
+  const [cancelTarget, setCancelTarget] = useState<SignatureRequestResponse | null>(null)
   const { signingUrls, rememberSigningUrl } = useSignatureRequestSigningUrls()
 
   const tableItems = compact ? items.slice(0, 3) : items
+
+  const handleConfirmCancel = async () => {
+    if (!cancelTarget) return
+    try {
+      await cancel(cancelTarget.client_record_id, cancelTarget.id)
+      setCancelTarget(null)
+    } catch (err) {
+      showErrorToast(err, 'שגיאה בביטול בקשת חתימה')
+    }
+  }
 
   const columns = useMemo(
     () => [
@@ -96,16 +108,15 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
             signingUrl={signingUrls[req.id]}
             isCanceling={isCanceling}
             canManage
-            onCancel={(id) => cancel(req.client_record_id, id)}
+            onCancelRequest={() => setCancelTarget(req)}
             onAudit={setAuditRequestId}
             showOpenLink
-            separateHistory
             copySuccessMessage={null}
           />
         ),
       },
     ],
-    [businessLookup, cancel, isCanceling, signingUrls],
+    [businessLookup, isCanceling, signingUrls],
   )
 
   return (
@@ -202,6 +213,17 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
           const result = await create(payload)
           rememberSigningUrl(result)
         }}
+      />
+
+      <ConfirmDialog
+        open={cancelTarget !== null}
+        title="ביטול בקשת חתימה"
+        message="האם לבטל את בקשת החתימה? פעולה זו אינה הפיכה."
+        confirmLabel="בטל בקשה"
+        cancelLabel="חזור"
+        isLoading={isCanceling}
+        onConfirm={handleConfirmCancel}
+        onCancel={() => setCancelTarget(null)}
       />
     </section>
   )

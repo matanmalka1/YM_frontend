@@ -1,23 +1,18 @@
 import { useState } from 'react'
 import { Bell, Link2, Copy, Check, X, History } from 'lucide-react'
-import { RowActionItem, RowActionLink, RowActionSeparator, RowActionsMenu } from '@/components/ui/table'
-import { ConfirmDialog } from '../../../components/ui/overlays/ConfirmDialog'
+import { RowActionGroup, RowActionItem, RowActionLink, RowActionsMenu } from '@/components/ui/table'
 import { toast } from '../../../utils/toast'
 import type { SignatureRequestResponse } from '../api'
 
-export interface SignatureRequestActionProps {
+interface SignatureRequestRowActionsProps {
   request: SignatureRequestResponse
   signingUrl?: string
   isCanceling: boolean
   canManage: boolean
-  onCancel: (id: number) => Promise<unknown>
+  onCancelRequest: () => void
   onAudit: (id: number) => void
   onSendNotification?: (id: number, trigger: 'signature_request_sent' | 'signature_request_reminder') => void
-}
-
-interface SignatureRequestRowActionsProps extends SignatureRequestActionProps {
   showOpenLink?: boolean
-  separateHistory?: boolean
   copySuccessMessage?: string | null
 }
 
@@ -26,17 +21,18 @@ export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProp
   signingUrl,
   isCanceling,
   canManage,
-  onCancel,
+  onCancelRequest,
   onAudit,
   onSendNotification,
   showOpenLink = false,
-  separateHistory = false,
   copySuccessMessage = 'הקישור הועתק',
 }) => {
   const [copied, setCopied] = useState(false)
-  const [confirmCancel, setConfirmCancel] = useState(false)
 
   const isPending = request.status === 'pending_signature'
+  const hasLinkActions = isPending && Boolean(signingUrl)
+  const hasNotificationActions = canManage && isPending && Boolean(onSendNotification)
+  const hasCancelAction = canManage && isPending
 
   const handleCopy = async () => {
     if (!signingUrl) return
@@ -53,13 +49,13 @@ export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProp
   }
 
   return (
-    <>
-      <RowActionsMenu ariaLabel={`פעולות לבקשת חתימה ${request.id}`}>
-        {isPending && signingUrl && (
+    <RowActionsMenu ariaLabel={`פעולות לבקשת חתימה ${request.id}`}>
+      <RowActionGroup>
+        {hasLinkActions && (
           <>
             {showOpenLink && (
               <RowActionLink
-                href={signingUrl}
+                href={signingUrl!}
                 target="_blank"
                 rel="noopener noreferrer"
                 label="פתח קישור"
@@ -73,57 +69,44 @@ export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProp
             />
           </>
         )}
-        {separateHistory && <RowActionSeparator />}
-        {canManage && isPending && onSendNotification && (
+      </RowActionGroup>
+      <RowActionGroup>
+        {hasNotificationActions && (
           <>
-            <RowActionSeparator />
             <RowActionItem
               label="שלח בקשת חתימה"
-              onClick={() => onSendNotification(request.id, 'signature_request_sent')}
+              onClick={() => onSendNotification!(request.id, 'signature_request_sent')}
               icon={<Bell className="h-4 w-4" />}
               disabled={isCanceling}
             />
             <RowActionItem
               label="שלח תזכורת לחתימה"
-              onClick={() => onSendNotification(request.id, 'signature_request_reminder')}
+              onClick={() => onSendNotification!(request.id, 'signature_request_reminder')}
               icon={<Bell className="h-4 w-4" />}
               disabled={isCanceling}
             />
           </>
         )}
+      </RowActionGroup>
+      <RowActionGroup>
         <RowActionItem
           label="היסטוריית פעילות"
           onClick={() => onAudit(request.id)}
           icon={<History className="h-4 w-4" />}
         />
-        {canManage && isPending && (
-          <>
-            <RowActionSeparator />
-            <RowActionItem
-              label="בטל בקשה"
-              onClick={() => setConfirmCancel(true)}
-              icon={<X className="h-4 w-4" />}
-              danger
-              disabled={isCanceling}
-            />
-          </>
+      </RowActionGroup>
+      <RowActionGroup>
+        {hasCancelAction && (
+          <RowActionItem
+            label="בטל בקשה"
+            onClick={onCancelRequest}
+            icon={<X className="h-4 w-4" />}
+            danger
+            disabled={isCanceling}
+          />
         )}
-      </RowActionsMenu>
-
-      <ConfirmDialog
-        open={confirmCancel}
-        title="ביטול בקשת חתימה"
-        message="האם לבטל את בקשת החתימה? פעולה זו אינה הפיכה."
-        confirmLabel="בטל בקשה"
-        cancelLabel="חזור"
-        isLoading={isCanceling}
-        onConfirm={() => {
-          setConfirmCancel(false)
-          onCancel(request.id).catch(() => {})
-        }}
-        onCancel={() => setConfirmCancel(false)}
-      />
-    </>
+      </RowActionGroup>
+    </RowActionsMenu>
   )
 }
 

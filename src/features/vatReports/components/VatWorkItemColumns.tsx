@@ -121,6 +121,9 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
         isLoading={opts.isLoading}
         isDisabled={opts.isDisabled}
         runAction={opts.runAction}
+        canDelete={opts.canDeleteWorkItem(item)}
+        isDeleting={opts.isDeleting}
+        onDeleteRequest={opts.onDeleteRequest}
       />
     ),
   },

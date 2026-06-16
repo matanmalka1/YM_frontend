@@ -2,10 +2,22 @@ import { useState } from 'react'
 import { ChevronDown, ChevronUp, Link2 } from 'lucide-react'
 import { Button } from '../../../components/ui/primitives/Button'
 import { StatusBadge } from '../../../components/ui/primitives/StatusBadge'
+import { ConfirmDialog } from '../../../components/ui/overlays/ConfirmDialog'
 import { getSignatureRequestTypeLabel, getSignatureRequestStatusLabel } from '../constants'
-import { formatDate, formatDateTime } from '../../../utils/utils'
+import { formatDate, formatDateTime, showErrorToast } from '../../../utils/utils'
 import { signatureRequestStatusVariants } from '../utils'
-import { SignatureRequestRowActions, type SignatureRequestActionProps } from './SignatureRequestRowActions'
+import { SignatureRequestRowActions } from './SignatureRequestRowActions'
+import type { SignatureRequestResponse } from '../api'
+
+export interface SignatureRequestRowProps {
+  request: SignatureRequestResponse
+  signingUrl?: string
+  isCanceling: boolean
+  canManage: boolean
+  onCancel: (id: number) => Promise<unknown>
+  onAudit: (id: number) => void
+  onSendNotification?: (id: number, trigger: 'signature_request_sent' | 'signature_request_reminder') => void
+}
 
 // ── Shared field row for expanded details ─────────────────────────────────────
 
@@ -18,9 +30,7 @@ const FieldRow = ({ label, value }: { label: string; value: React.ReactNode }) =
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-type Props = SignatureRequestActionProps
-
-export const SignatureRequestRow: React.FC<Props> = ({
+export const SignatureRequestRow: React.FC<SignatureRequestRowProps> = ({
   request,
   signingUrl,
   isCanceling,
@@ -30,7 +40,17 @@ export const SignatureRequestRow: React.FC<Props> = ({
   onSendNotification,
 }) => {
   const [expanded, setExpanded] = useState(false)
+  const [confirmCancel, setConfirmCancel] = useState(false)
   const isPending = request.status === 'pending_signature'
+
+  const handleConfirmCancel = async () => {
+    try {
+      await onCancel(request.id)
+      setConfirmCancel(false)
+    } catch (err) {
+      showErrorToast(err, 'שגיאה בביטול בקשת חתימה')
+    }
+  }
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white transition-shadow hover:shadow-sm">
@@ -57,7 +77,7 @@ export const SignatureRequestRow: React.FC<Props> = ({
             signingUrl={signingUrl}
             isCanceling={isCanceling}
             canManage={canManage}
-            onCancel={onCancel}
+            onCancelRequest={() => setConfirmCancel(true)}
             onAudit={onAudit}
             onSendNotification={onSendNotification}
           />
@@ -94,6 +114,17 @@ export const SignatureRequestRow: React.FC<Props> = ({
           )}
         </div>
       )}
+
+      <ConfirmDialog
+        open={confirmCancel}
+        title="ביטול בקשת חתימה"
+        message="האם לבטל את בקשת החתימה? פעולה זו אינה הפיכה."
+        confirmLabel="בטל בקשה"
+        cancelLabel="חזור"
+        isLoading={isCanceling}
+        onConfirm={handleConfirmCancel}
+        onCancel={() => setConfirmCancel(false)}
+      />
     </div>
   )
 }

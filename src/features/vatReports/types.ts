@@ -125,6 +125,9 @@ export interface VatWorkItemRowActionsProps {
   isLoading: boolean
   isDisabled: boolean
   runAction: (itemId: number, action: VatWorkItemAction) => Promise<void>
+  canDelete: boolean
+  isDeleting: boolean
+  onDeleteRequest: (item: VatWorkItemListItem) => void
 }
 
 export interface VatWorkItemsCreateModalProps {
@@ -154,4 +157,7 @@ export interface ColumnOpts {
   isDisabled: boolean
   duplicateClientIds?: Set<number>
   runAction: (itemId: number, action: VatWorkItemAction) => Promise<void>
+  canDeleteWorkItem: (item: VatWorkItemListItem) => boolean
+  isDeleting: boolean
+  onDeleteRequest: (item: VatWorkItemListItem) => void
 }

@@ -15,17 +15,24 @@ import type { VatWorkItemListItem } from '@/features/vatReports'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
+import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 
 export const VatWorkItems: React.FC = () => {
   const [urlParams] = useSearchParams()
 
   const {
     actionLoadingId,
+    canDeleteWorkItem,
+    cancelDelete,
+    confirmDelete,
     createError,
     createLoading,
+    deleteTarget,
     filters,
     isAdvisor,
+    isDeleting,
     loading: statsLoading,
+    requestDelete,
     runAction,
     setFilter,
     setFilters,
@@ -75,8 +82,11 @@ export const VatWorkItems: React.FC = () => {
         isLoading: false,
         isDisabled: actionLoadingId !== null,
         runAction,
+        canDeleteWorkItem,
+        isDeleting,
+        onDeleteRequest: requestDelete,
       }),
-    [actionLoadingId, runAction],
+    [actionLoadingId, canDeleteWorkItem, isDeleting, requestDelete, runAction],
   )
 
   return (
@@ -139,6 +149,18 @@ export const VatWorkItems: React.FC = () => {
         onSubmit={submitCreate}
         initialClientId={createClientId ? Number(createClientId) : undefined}
         initialPeriod={createPeriod ?? undefined}
+      />
+
+      <ConfirmDialog
+        open={deleteTarget !== null}
+        title='מחיקת תיק מע"מ'
+        message="האם למחוק את התיק? פעולה זו אינה הפיכה."
+        confirmLabel="מחק"
+        cancelLabel="ביטול"
+        confirmVariant="danger"
+        isLoading={isDeleting}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
       />
     </div>
   )

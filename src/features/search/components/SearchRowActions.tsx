@@ -2,6 +2,7 @@ import { ExternalLink } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import type { SearchResult } from '../api'
 import { toQueryParams } from '../../../api/queryParams'
+import { RowActionButton } from '@/components/ui/table'
 
 const buildDetailUrl = (result: SearchResult): string | null => {
   if (result.result_type === 'client') return `/clients/${result.client_record_id}`
@@ -22,20 +23,7 @@ export const SearchRowActions: React.FC<SearchRowActionsProps> = ({ result }) =>
 
   if (!url) return <span className="text-sm text-gray-300">—</span>
 
-  return (
-    <button
-      type="button"
-      title="פירוט"
-      aria-label="פירוט"
-      onClick={(e) => {
-        e.stopPropagation()
-        navigate(url)
-      }}
-      className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
-    >
-      <ExternalLink className="h-4 w-4" />
-    </button>
-  )
+  return <RowActionButton label="פירוט" icon={<ExternalLink className="h-4 w-4" />} onClick={() => navigate(url)} />
 }
 
 SearchRowActions.displayName = 'SearchRowActions'

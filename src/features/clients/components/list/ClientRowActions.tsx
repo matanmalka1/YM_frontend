@@ -2,7 +2,7 @@ import { Clock, Pencil, UserCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { CLIENT_ROUTES } from '../../api/endpoints'
 import { formatClientOfficeId } from '@/utils/utils'
-import { Button } from '@/components/ui/primitives/Button'
+import { RowActionItem, RowActionsMenu } from '@/components/ui/table'
 
 interface ClientRowActionsProps {
   clientId: number
@@ -15,49 +15,21 @@ export const ClientRowActions: React.FC<ClientRowActionsProps> = ({ clientId, of
   const clientOfficeId = formatClientOfficeId(officeClientNumber)
 
   return (
-    <div aria-label={`פעולות ללקוח ${clientOfficeId}`} className="flex items-center justify-center gap-0.5">
-      <Button
-        variant="ghost"
-        size="sm"
-        tooltip="פתח פרופיל"
-        aria-label="פתח פרופיל"
-        className="p-1.5 text-gray-400 hover:text-gray-700"
-        onClick={(e) => {
-          e.stopPropagation()
-          navigate(CLIENT_ROUTES.detail(clientId))
-        }}
-      >
-        <UserCircle className="h-4 w-4" />
-      </Button>
+    <RowActionsMenu ariaLabel={`פעולות ללקוח ${clientOfficeId}`}>
+      <RowActionItem
+        label="פתח פרופיל"
+        onClick={() => navigate(CLIENT_ROUTES.detail(clientId))}
+        icon={<UserCircle className="h-4 w-4" />}
+      />
       {onEditClient && (
-        <Button
-          variant="ghost"
-          size="sm"
-          tooltip="עריכת לקוח"
-          aria-label="עריכת לקוח"
-          className="p-1.5 text-gray-400 hover:text-gray-700"
-          onClick={(e) => {
-            e.stopPropagation()
-            onEditClient()
-          }}
-        >
-          <Pencil className="h-4 w-4" />
-        </Button>
+        <RowActionItem label="עריכת לקוח" onClick={onEditClient} icon={<Pencil className="h-4 w-4" />} />
       )}
-      <Button
-        variant="ghost"
-        size="sm"
-        tooltip="ציר זמן"
-        aria-label="ציר זמן"
-        className="p-1.5 text-gray-400 hover:text-gray-700"
-        onClick={(e) => {
-          e.stopPropagation()
-          navigate(CLIENT_ROUTES.timeline(clientId))
-        }}
-      >
-        <Clock className="h-4 w-4" />
-      </Button>
-    </div>
+      <RowActionItem
+        label="ציר זמן"
+        onClick={() => navigate(CLIENT_ROUTES.timeline(clientId))}
+        icon={<Clock className="h-4 w-4" />}
+      />
+    </RowActionsMenu>
   )
 }
 
