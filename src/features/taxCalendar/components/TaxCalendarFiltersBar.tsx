@@ -7,6 +7,7 @@ import {
   TAX_CALENDAR_STATUS_OPTIONS,
   type TaxCalendarGroupStatusFilter,
 } from '../constants'
+import { taxCalendarCurrentYear } from '../utils'
 
 interface TaxCalendarFiltersBarProps {
   startYear: string
@@ -40,25 +41,32 @@ export const TaxCalendarFiltersBar = ({
   onIncludeEmptyChange,
 }: TaxCalendarFiltersBarProps) => {
   const yearOptions = getOperationalYearOptions()
+  const defaultYear = String(taxCalendarCurrentYear())
   const showClientSearch = clientSearchText != null && onClientSearchTextChange
   const showIncludeEmpty = includeEmpty != null && onIncludeEmptyChange
 
   const fields = useMemo(
     () => [
-      { type: 'select' as const, key: 'startYear', label: 'משנת מס', options: yearOptions },
-      { type: 'select' as const, key: 'endYear', label: 'עד שנת מס', options: yearOptions },
+      { type: 'select' as const, key: 'startYear', label: 'משנת מס', options: yearOptions, defaultValue: defaultYear },
+      { type: 'select' as const, key: 'endYear', label: 'עד שנת מס', options: yearOptions, defaultValue: defaultYear },
       {
         type: 'select' as const,
         key: 'obligationType',
         label: 'סוג חובה',
         options: TAX_CALENDAR_OBLIGATION_TYPE_OPTIONS,
       },
-      { type: 'select' as const, key: 'status', label: 'מצב', options: TAX_CALENDAR_STATUS_OPTIONS },
+      {
+        type: 'select' as const,
+        key: 'status',
+        label: 'מצב',
+        options: TAX_CALENDAR_STATUS_OPTIONS,
+        defaultValue: 'all',
+      },
       ...(showClientSearch
         ? [{ type: 'search' as const, key: 'clientSearchText', label: 'חיפוש לקוח', placeholder: 'שם או מספר לקוח' }]
         : []),
     ],
-    [yearOptions, showClientSearch],
+    [yearOptions, defaultYear, showClientSearch],
   )
 
   const values = {
