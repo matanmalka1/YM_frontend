@@ -139,12 +139,25 @@ export const ADVANCE_PAYMENT_FREQUENCY_OPTIONS = ADVANCE_PAYMENT_FREQUENCY_VALUE
   label: ADVANCE_PAYMENT_FREQUENCY_LABELS[v],
 }))
 
-export const CLIENT_SORT_BY_OPTIONS: { value: ClientSortBy; label: string }[] = [
-  { value: 'full_name', label: 'שם לקוח' },
-  { value: 'created_at', label: 'תאריך יצירה' },
-  { value: 'status', label: 'סטטוס' },
-  { value: 'entity_type', label: 'סוג יישות' },
-]
+export const CLIENT_SORT_BY_VALUES = [
+  'full_name',
+  'created_at',
+  'status',
+  'entity_type',
+] as const satisfies readonly ClientSortBy[]
+
+export const CLIENT_SORT_ORDER_VALUES = ['asc', 'desc'] as const satisfies readonly ClientSortOrder[]
+
+const CLIENT_SORT_BY_LABELS: Record<ClientSortBy, string> = {
+  full_name: 'שם לקוח',
+  created_at: 'תאריך יצירה',
+  status: 'סטטוס',
+  entity_type: 'סוג יישות',
+}
+
+export const CLIENT_SORT_BY_OPTIONS: { value: ClientSortBy; label: string }[] = CLIENT_SORT_BY_VALUES.map(
+  (value) => ({ value, label: CLIENT_SORT_BY_LABELS[value] }),
+)
 
 const SORT_ORDER_LABELS: Record<ClientSortBy, Record<ClientSortOrder, string>> = {
   full_name: { asc: 'שם לקוח: א׳ → ת׳', desc: 'שם לקוח: ת׳ → א׳' },
@@ -160,6 +173,25 @@ export const getClientSortOrderOptions = (sortBy: ClientSortBy): { value: Client
 
 export const DEFAULT_CLIENT_SORT_BY: ClientSortBy = 'created_at'
 export const DEFAULT_CLIENT_SORT_ORDER: ClientSortOrder = 'desc'
+
+const isOneOf = <T extends string>(values: readonly T[], value: string | null): value is T =>
+  value !== null && (values as readonly string[]).includes(value)
+
+/** Parse an untrusted URL value into ClientStatus, or undefined when absent/invalid. */
+export const parseClientStatus = (value: string | null): ClientStatus | undefined =>
+  isOneOf(CLIENT_STATUSES, value) ? value : undefined
+
+/** Parse an untrusted URL value into EntityType, or undefined when absent/invalid. */
+export const parseEntityType = (value: string | null): EntityType | undefined =>
+  isOneOf(ENTITY_TYPES, value) ? value : undefined
+
+/** Parse an untrusted URL value into ClientSortBy, falling back to the default. */
+export const parseClientSortBy = (value: string | null): ClientSortBy =>
+  isOneOf(CLIENT_SORT_BY_VALUES, value) ? value : DEFAULT_CLIENT_SORT_BY
+
+/** Parse an untrusted URL value into ClientSortOrder, falling back to the default. */
+export const parseClientSortOrder = (value: string | null): ClientSortOrder =>
+  isOneOf(CLIENT_SORT_ORDER_VALUES, value) ? value : DEFAULT_CLIENT_SORT_ORDER
 
 export const CREATE_CLIENT_DEFAULT_VALUES = {
   full_name: '',

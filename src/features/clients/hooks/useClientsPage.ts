@@ -13,8 +13,10 @@ import {
 import {
   DEFAULT_CLIENT_SORT_BY,
   DEFAULT_CLIENT_SORT_ORDER,
-  type ClientSortBy,
-  type ClientSortOrder,
+  parseClientSortBy,
+  parseClientSortOrder,
+  parseClientStatus,
+  parseEntityType,
 } from '../constants'
 import { useRole } from '../../../hooks/useRole'
 import { toast } from '../../../utils/toast'
@@ -34,11 +36,11 @@ export const useClientsPage = () => {
 
   const filters = {
     search: getParam('search'),
-    status: (searchParams.get('status') as ListClientsParams['status']) ?? undefined,
-    entity_type: (searchParams.get('entity_type') as ListClientsParams['entity_type']) ?? undefined,
+    status: parseClientStatus(searchParams.get('status')),
+    entity_type: parseEntityType(searchParams.get('entity_type')),
     accountant_id: can.editClients ? parsePositiveInt(searchParams.get('accountant_id'), 0) || undefined : undefined,
-    sort_by: (searchParams.get('sort_by') as ClientSortBy) || DEFAULT_CLIENT_SORT_BY,
-    order: (searchParams.get('order') as ClientSortOrder) || DEFAULT_CLIENT_SORT_ORDER,
+    sort_by: parseClientSortBy(searchParams.get('sort_by')),
+    order: parseClientSortOrder(searchParams.get('order')),
     page: getPage(),
     page_size: parsePositiveInt(searchParams.get('page_size'), 20),
   }
