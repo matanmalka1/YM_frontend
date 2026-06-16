@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
+import { DetailTabPanel } from '@/components/ui/layout'
 import { Select } from '@/components/ui/inputs'
 import { useClientCharges } from '../hooks/useClientCharges'
 import { buildChargeColumns } from './ChargeColumns'
@@ -75,12 +76,10 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
     selectedBusinessId != null ? (businesses.find((b) => b.id === selectedBusinessId) ?? null) : null
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900">חיובים</h2>
-          <p className="text-sm text-gray-500">חיובים המקושרים ללקוח זה</p>
-        </div>
+    <DetailTabPanel
+      title="חיובים"
+      subtitle="חיובים המקושרים ללקוח זה"
+      actions={
         <div className="flex items-center gap-2">
           {businesses.length > 1 && (
             <Select
@@ -97,15 +96,16 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
             </Button>
           )}
         </div>
-      </div>
-
-      <ChargesSummaryBar
-        stats={stats}
-        isAdvisor={isAdvisor}
-        currentStatus={currentStatus}
-        onStatusClick={handleStatusChange}
-      />
-
+      }
+      summary={
+        <ChargesSummaryBar
+          stats={stats}
+          isAdvisor={isAdvisor}
+          currentStatus={currentStatus}
+          onStatusClick={handleStatusChange}
+        />
+      }
+    >
       <ChargesTableBlock
         charges={charges}
         columns={columns}
@@ -139,6 +139,6 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
         }
         businesses={businesses}
       />
-    </div>
+    </DetailTabPanel>
   )
 }

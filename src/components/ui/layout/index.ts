@@ -1,4 +1,5 @@
 export * from './DefinitionList'
+export * from './DetailTabPanel'
 export * from './OverlayContainer'
 export * from './PageLoading'
 export * from './PageStateGuard'

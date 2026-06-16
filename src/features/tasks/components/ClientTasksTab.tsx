@@ -6,6 +6,10 @@ import { useActiveUserOptions } from '@/features/users'
 import { taskStatusLabels, taskPriorityLabels } from '../constants'
 import { BulkSelectionToolbar, BulkSelectionActionButton } from '@/components/ui/table/BulkSelectionToolbar'
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
+import { TableSkeleton } from '@/components/ui/table'
+import { DetailTabPanel } from '@/components/ui/layout'
+import { InlineEmptyState } from '@/components/ui/feedback'
+import { Alert } from '@/components/ui/overlays/Alert'
 import { Checkbox } from '@/components/ui/primitives/Checkbox'
 import { Select } from '@/components/ui/inputs'
 import { randomUUID } from '@/utils/random'
@@ -108,32 +112,30 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
 
   if (isLoading) {
     return (
-      <div dir="rtl" className="space-y-2 animate-pulse">
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-12 rounded-lg bg-neutral-100" />
-        ))}
-      </div>
+      <DetailTabPanel title="משימות" subtitle="משימות פתוחות והיסטוריות המקושרות ללקוח">
+        <TableSkeleton rows={4} columns={5} />
+      </DetailTabPanel>
     )
   }
 
   if (isError) {
     return (
-      <div dir="rtl" className="text-sm text-negative-600">
-        שגיאה בטעינת משימות
-      </div>
+      <DetailTabPanel title="משימות" subtitle="משימות פתוחות והיסטוריות המקושרות ללקוח">
+        <Alert variant="error" message="שגיאה בטעינת משימות" />
+      </DetailTabPanel>
     )
   }
 
   if (tasks.length === 0) {
     return (
-      <div dir="rtl" className="text-sm text-neutral-500">
-        אין משימות ללקוח זה
-      </div>
+      <DetailTabPanel title="משימות" subtitle="משימות פתוחות והיסטוריות המקושרות ללקוח">
+        <InlineEmptyState title="אין משימות ללקוח זה" />
+      </DetailTabPanel>
     )
   }
 
   return (
-    <div dir="rtl" className="space-y-4">
+    <DetailTabPanel title="משימות" subtitle="משימות פתוחות והיסטוריות המקושרות ללקוח">
       {feedback && (
         <div
           className={
@@ -214,6 +216,6 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
           onPageChange={handlePageChange}
         />
       )}
-    </div>
+    </DetailTabPanel>
   )
 }

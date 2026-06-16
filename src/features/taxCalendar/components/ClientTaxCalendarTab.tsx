@@ -11,6 +11,7 @@ import { TaxCalendarFiltersBar } from './TaxCalendarFiltersBar'
 import { TaxCalendarGroupsContent } from './TaxCalendarGroupsContent'
 import { TaxCalendarStatsSection } from './TaxCalendarStatsSection'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
+import { DetailTabPanel } from '@/components/ui/layout'
 
 interface ClientTaxCalendarTabProps {
   clientId: number
@@ -40,24 +41,29 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
   const resetAllFilters = () => resetFilters(taxCalendarYearResetDefaults())
 
   return (
-    <div className="space-y-4" dir="rtl">
-      <TaxCalendarStatsSection
-        summary={groupsSummary ?? { groups: 0, linked: 0, open: 0, overdue: 0, done: 0 }}
-        linkedLabel="מועדים"
-      />
-
-      <TaxCalendarFiltersBar
-        startYear={startYear}
-        endYear={endYear}
-        obligationType={obligationType ?? ''}
-        status={status}
-        onStartYearChange={(value) => setFilter('tax_year_after', value)}
-        onEndYearChange={(value) => setFilter('tax_year_before', value)}
-        onObligationTypeChange={(value) => setFilter('obligation_type', value)}
-        onStatusChange={(value) => setFilter('status', value === 'all' ? '' : value)}
-        onReset={resetAllFilters}
-      />
-
+    <DetailTabPanel
+      title="מועדי מס"
+      subtitle="חובות ומועדים המקושרים ללקוח זה"
+      summary={
+        <TaxCalendarStatsSection
+          summary={groupsSummary ?? { groups: 0, linked: 0, open: 0, overdue: 0, done: 0 }}
+          linkedLabel="מועדים"
+        />
+      }
+      filters={
+        <TaxCalendarFiltersBar
+          startYear={startYear}
+          endYear={endYear}
+          obligationType={obligationType ?? ''}
+          status={status}
+          onStartYearChange={(value) => setFilter('tax_year_after', value)}
+          onEndYearChange={(value) => setFilter('tax_year_before', value)}
+          onObligationTypeChange={(value) => setFilter('obligation_type', value)}
+          onStatusChange={(value) => setFilter('status', value === 'all' ? '' : value)}
+          onReset={resetAllFilters}
+        />
+      }
+    >
       <TaxCalendarGroupsContent
         groups={groups}
         isLoading={groupsQuery.isPending}
@@ -69,7 +75,7 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
         total={groupsQuery.data?.total ?? 0}
         onPageChange={setUrlPage}
       />
-    </div>
+    </DetailTabPanel>
   )
 }
 
