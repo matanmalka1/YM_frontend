@@ -29,8 +29,7 @@ export type WorkQueueSourceType = (typeof workQueueSourceTypeValues)[number]
 
 export type WorkQueueUrgency = (typeof workQueueUrgencyValues)[number]
 
-export type WorkQueueFilterParamKey =
-  (typeof WORK_QUEUE_FILTER_PARAM_KEYS)[keyof typeof WORK_QUEUE_FILTER_PARAM_KEYS]
+export type WorkQueueFilterParamKey = (typeof WORK_QUEUE_FILTER_PARAM_KEYS)[keyof typeof WORK_QUEUE_FILTER_PARAM_KEYS]
 
 export const isWorkQueueSourceType = (value: string | null): value is WorkQueueSourceType =>
   value !== null && workQueueSourceTypeValues.includes(value as WorkQueueSourceType)
