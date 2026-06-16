@@ -1,6 +1,6 @@
 import { BIMONTHLY_START_MONTH_VALUES, getReportingPeriodMonthLabel } from '@/constants/periodOptions.constants'
 import type { CreateAdvancePaymentFormValues } from '../schemas'
-import type { AdvancePaymentStatus, CreateAdvancePaymentPayload } from '../types'
+import type { AdvancePaymentStatus, CreateAdvancePaymentPayload } from '../api/contracts'
 import { MONTH_OPTIONS } from '@/utils/utils'
 import { DEFAULT_BIMONTHLY_START_MONTH } from './advancePaymentComponent.constants'
 

@@ -40,7 +40,7 @@ export interface ListAdvancePaymentsParams {
 
 export interface CreateAdvancePaymentPayload {
   period: string
-  period_months_count?: 1 | 2
+  period_months_count?: 1 | 2 | null
   turnover_amount?: string | null
   advance_rate?: string | null
   override_amount?: string | null
@@ -51,11 +51,11 @@ export interface CreateAdvancePaymentPayload {
 }
 
 export interface UpdateAdvancePaymentPayload {
-  paid_amount?: string
-  expected_amount?: string
+  paid_amount?: string | null
+  expected_amount?: string | null
   turnover_amount?: string | null
   override_amount?: string | null
-  status?: AdvancePaymentStatus
+  status?: AdvancePaymentStatus | null
   paid_at?: string | null
   payment_method?: AdvancePaymentMethod | null
   notes?: string | null
@@ -118,7 +118,7 @@ export interface AdvancePaymentOverviewResponse {
 export interface MonthBatchSummary {
   year: number
   month: number
-  due_date?: string
+  due_date?: string | null
   source_batches?: MonthBatchSummary[]
   period_months_count: 1 | 2
   client_count: number

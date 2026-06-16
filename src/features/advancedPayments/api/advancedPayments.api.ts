@@ -25,17 +25,21 @@ export const advancePaymentsApi = {
     return response.data
   },
 
-  create: async (clientId: number, payload: CreateAdvancePaymentPayload): Promise<AdvancePaymentRow> => {
+  create: async (clientRecordId: number, payload: CreateAdvancePaymentPayload): Promise<AdvancePaymentRow> => {
     const response = await api.post<AdvancePaymentRow>(
-      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePayments(clientId),
+      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePayments(clientRecordId),
       payload,
     )
     return response.data
   },
 
-  update: async (clientId: number, id: number, payload: UpdateAdvancePaymentPayload): Promise<AdvancePaymentRow> => {
+  update: async (
+    clientRecordId: number,
+    id: number,
+    payload: UpdateAdvancePaymentPayload,
+  ): Promise<AdvancePaymentRow> => {
     const response = await api.patch<AdvancePaymentRow>(
-      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientId, id),
+      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientRecordId, id),
       payload,
     )
     return response.data
@@ -48,14 +52,17 @@ export const advancePaymentsApi = {
     return response.data
   },
 
-  delete: async (clientId: number, id: number): Promise<void> => {
-    await api.delete(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientId, id))
+  delete: async (clientRecordId: number, id: number): Promise<void> => {
+    await api.delete(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientRecordId, id))
   },
 
-  getAnnualKPIs: async (clientId: number, year: number): Promise<AnnualKPIResponse> => {
-    const response = await api.get<AnnualKPIResponse>(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentsKPI(clientId), {
-      params: toQueryParams({ year }),
-    })
+  getAnnualKPIs: async (clientRecordId: number, year: number): Promise<AnnualKPIResponse> => {
+    const response = await api.get<AnnualKPIResponse>(
+      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentsKPI(clientRecordId),
+      {
+        params: toQueryParams({ year }),
+      },
+    )
     return response.data
   },
 
@@ -70,19 +77,19 @@ export const advancePaymentsApi = {
   },
 
   getPrefillTurnover: async (
-    clientId: number,
+    clientRecordId: number,
     period: string,
     periodMonthsCount: 1 | 2,
   ): Promise<PrefillTurnoverResponse> => {
     const response = await api.get<PrefillTurnoverResponse>(
-      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentPrefillTurnover(clientId),
+      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentPrefillTurnover(clientRecordId),
       { params: toQueryParams({ period, period_months_count: periodMonthsCount }) },
     )
     return response.data
   },
 
   generateSchedule: async (
-    clientId: number,
+    clientRecordId: number,
     year: number,
     periodMonthsCount?: 1 | 2,
     referenceDate?: string,
@@ -93,7 +100,7 @@ export const advancePaymentsApi = {
       ...(referenceDate == null ? {} : { reference_date: referenceDate }),
     }
     const response = await api.post<GenerateScheduleResponse>(
-      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentsGenerate(clientId),
+      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentsGenerate(clientRecordId),
       payload,
     )
     return response.data

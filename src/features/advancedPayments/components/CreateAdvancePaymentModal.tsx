@@ -11,7 +11,7 @@ import {
   type CreateAdvancePaymentFormValues,
 } from '../schemas'
 import { ADVANCE_PAYMENT_FREQUENCY_OPTIONS } from '../constants'
-import type { CreateAdvancePaymentPayload } from '../types'
+import type { CreateAdvancePaymentPayload } from '../api/contracts'
 import {
   buildCreateAdvancePaymentPayload,
   getAdvancePaymentMonthOptions,
@@ -24,7 +24,7 @@ import { NOTES_TEXTAREA_CLASS } from './advancePaymentComponent.constants'
 
 interface CreateAdvancePaymentModalProps {
   open: boolean
-  clientId: number
+  clientRecordId: number
   year: number
   defaultPeriodMonthsCount?: 1 | 2
   isCreating: boolean

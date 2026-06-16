@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type { AdvancePaymentRow, AdvancePaymentStatus, UpdateAdvancePaymentPayload } from '../types'
+import type { AdvancePaymentRow, AdvancePaymentStatus, UpdateAdvancePaymentPayload } from '../api/contracts'
 import { isAdvancePaymentStatus } from '../constants'
 import { useAdvancePayments } from '../hooks/useAdvancePayments'
 import { useAdvanceRateInsights } from '../hooks/useAdvanceRateInsights'
@@ -20,14 +20,14 @@ import { CLIENT_ADVANCE_PAYMENT_PAGE_SIZE } from './advancePaymentComponent.cons
 import { getTotalPages, toggleAdvancePaymentStatusFilter } from './advancePaymentComponent.utils'
 
 interface ClientAdvancePaymentsTabProps {
-  clientId: number
+  clientRecordId: number
   clientName?: string | null
   clientIdNumber?: string | null
   officeClientNumber?: number | null
 }
 
 export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> = ({
-  clientId,
+  clientRecordId,
   clientName,
   clientIdNumber,
   officeClientNumber,
@@ -44,12 +44,12 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
 
   const queryClient = useQueryClient()
   const { rows, isLoading, total, create, isCreating, deleteRow } = useAdvancePayments(
-    clientId,
+    clientRecordId,
     year,
     statusFilter,
     page,
   )
-  const { advancePaymentFrequency, advanceRate } = useAdvanceRateInsights(clientId)
+  const { advancePaymentFrequency, advanceRate } = useAdvanceRateInsights(clientRecordId)
 
   const generationFrequency: 1 | 2 | null =
     advancePaymentFrequency === 'bimonthly' ? 2 : advancePaymentFrequency === 'monthly' ? 1 : null
@@ -57,12 +57,13 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
   const displayFrequency: 1 | 2 | null = rows.length > 0 ? rows[0].period_months_count : generationFrequency
 
   const generateMutation = useMutation({
-    mutationFn: (periodMonthsCount: 1 | 2) => advancePaymentsApi.generateSchedule(clientId, year, periodMonthsCount),
+    mutationFn: (periodMonthsCount: 1 | 2) =>
+      advancePaymentsApi.generateSchedule(clientRecordId, year, periodMonthsCount),
     onSuccess: (data) => {
       const msg = data.created > 0 ? `נוצרו ${data.created} מקדמות` : 'הכול קיים'
       toast.success(msg)
       void queryClient.invalidateQueries({
-        queryKey: advancedPaymentsQK.clientYear(clientId, year),
+        queryKey: advancedPaymentsQK.clientYear(clientRecordId, year),
       })
     },
     onError: (err) => showErrorToast(err, 'שגיאה ביצירת לוח מקדמות'),
@@ -73,7 +74,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
     onSuccess: () => {
       toast.success('מקדמה נמחקה בהצלחה')
       void queryClient.invalidateQueries({
-        queryKey: advancedPaymentsQK.clientYear(clientId, year),
+        queryKey: advancedPaymentsQK.clientYear(clientRecordId, year),
       })
       setDrawerRow(null)
     },
@@ -82,11 +83,11 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
 
   const updateMutation = useMutation({
     mutationFn: ({ id, payload }: { id: number; payload: UpdateAdvancePaymentPayload }) =>
-      advancePaymentsApi.update(clientId, id, payload),
+      advancePaymentsApi.update(clientRecordId, id, payload),
     onSuccess: () => {
       toast.success('מקדמה עודכנה בהצלחה')
       void queryClient.invalidateQueries({
-        queryKey: advancedPaymentsQK.clientYear(clientId, year),
+        queryKey: advancedPaymentsQK.clientYear(clientRecordId, year),
       })
       setDrawerRow(null)
     },
@@ -143,7 +144,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
         advanceRate={advanceRate}
       />
 
-      <AdvancePaymentsKPICards clientId={clientId} year={year} />
+      <AdvancePaymentsKPICards clientRecordId={clientRecordId} year={year} />
 
       <ClientAdvancePaymentCards rows={rows} isLoading={isLoading} onRowClick={(row) => setDrawerRow(row)} />
 
@@ -168,7 +169,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
       {isAdvisor && (
         <CreateAdvancePaymentModal
           open={modalOpen}
-          clientId={clientId}
+          clientRecordId={clientRecordId}
           year={year}
           defaultPeriodMonthsCount={generationFrequency ?? displayFrequency ?? 1}
           isCreating={isCreating}

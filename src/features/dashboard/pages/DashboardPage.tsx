@@ -141,7 +141,7 @@ export const DashboardPage: React.FC = () => {
       {activeCreateModal === 'advancePayment' && advancePaymentClientId !== null && (
         <CreateAdvancePaymentModal
           open={true}
-          clientId={advancePaymentClientId}
+          clientRecordId={advancePaymentClientId}
           year={getOperationalTaxYear()}
           isCreating={advancePaymentCreateMutation.isPending}
           onClose={closeCreateModal}

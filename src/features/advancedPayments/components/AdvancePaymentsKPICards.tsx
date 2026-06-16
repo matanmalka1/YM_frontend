@@ -4,15 +4,15 @@ import { formatShekelAmount } from '@/utils/utils'
 import { getCollectionPercent } from './advancePaymentComponent.utils'
 
 interface AdvancePaymentsKPICardsProps {
-  clientId: number
+  clientRecordId: number
   year: number
 }
 
-export const AdvancePaymentsKPICards: React.FC<AdvancePaymentsKPICardsProps> = ({ clientId, year }) => {
+export const AdvancePaymentsKPICards: React.FC<AdvancePaymentsKPICardsProps> = ({ clientRecordId, year }) => {
   const { data, isLoading } = useQuery({
-    queryKey: advancedPaymentsQK.kpi(clientId, year),
-    queryFn: () => advancePaymentsApi.getAnnualKPIs(clientId, year),
-    enabled: clientId > 0 && year > 0,
+    queryKey: advancedPaymentsQK.kpi(clientRecordId, year),
+    queryFn: () => advancePaymentsApi.getAnnualKPIs(clientRecordId, year),
+    enabled: clientRecordId > 0 && year > 0,
   })
 
   if (isLoading || !data) return null

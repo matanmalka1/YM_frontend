@@ -1,8 +1,6 @@
 import type { ListAdvancePaymentsOverviewParams, ListAdvancePaymentsParams } from './contracts'
 
 const normalizeListParams = (params: ListAdvancePaymentsParams) => ({
-  client_record_id: params.client_record_id,
-  year: params.year,
   status: params.status ?? null,
   page: params.page ?? 1,
   page_size: params.page_size ?? 20,
@@ -23,9 +21,10 @@ const normalizeOverviewParams = (params: ListAdvancePaymentsOverviewParams) => (
 export const advancedPaymentsQK = {
   all: ['tax', 'advance-payments'] as const,
   lists: () => [...advancedPaymentsQK.all, 'list'] as const,
-  list: (params: ListAdvancePaymentsParams) => [...advancedPaymentsQK.lists(), normalizeListParams(params)] as const,
   clientYear: (clientRecordId: number, year: number) =>
-    [...advancedPaymentsQK.lists(), 'client', clientRecordId, year] as const,
+    [...advancedPaymentsQK.lists(), 'client', clientRecordId, 'year', year] as const,
+  list: (params: ListAdvancePaymentsParams) =>
+    [...advancedPaymentsQK.clientYear(params.client_record_id, params.year), normalizeListParams(params)] as const,
   overviews: () => [...advancedPaymentsQK.all, 'overview'] as const,
   overview: (params: ListAdvancePaymentsOverviewParams) =>
     [...advancedPaymentsQK.overviews(), normalizeOverviewParams(params)] as const,

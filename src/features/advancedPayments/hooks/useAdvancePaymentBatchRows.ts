@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
-import type { AdvancePaymentDueDateGroup, AdvancePaymentStatus, ListAdvancePaymentsOverviewParams } from '../types'
+import type {
+  AdvancePaymentDueDateGroup,
+  AdvancePaymentStatus,
+  ListAdvancePaymentsOverviewParams,
+} from '../api/contracts'
 
 export const ADVANCE_PAYMENT_BATCH_PAGE_SIZE = 20
 
@@ -29,7 +33,7 @@ export const useAdvancePaymentBatchRows = ({
   const params: ListAdvancePaymentsOverviewParams = {
     year: batch.year,
     month: batch.due_date ? undefined : batch.month,
-    due_date: batch.due_date,
+    due_date: batch.due_date ?? undefined,
     period_months_count: periodFilter ?? (batch.due_date ? undefined : batch.period_months_count),
     client_record_id: clientRecordId,
     page,

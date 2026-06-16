@@ -2,7 +2,7 @@ import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { MONTHS_COVERED_OPTIONS } from '@/constants/periodOptions.constants'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
-import type { AdvancePaymentMethod, AdvancePaymentStatus } from './types'
+import type { AdvancePaymentMethod, AdvancePaymentStatus } from './api/contracts'
 
 const ADVANCE_PAYMENT_STATUS_VALUES = ['pending', 'paid', 'partial'] as const satisfies readonly AdvancePaymentStatus[]
 const ADVANCE_PAYMENT_STATUS_VALUE_SET = new Set<string>(ADVANCE_PAYMENT_STATUS_VALUES)

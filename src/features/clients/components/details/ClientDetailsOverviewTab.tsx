@@ -146,7 +146,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
       {activeTab === 'tax-calendar' && <ClientTaxCalendarTab clientId={client.id} />}
       {activeTab === 'advance-payments' && (
         <ClientAdvancePaymentsTab
-          clientId={client.id}
+          clientRecordId={client.id}
           clientName={client.full_name}
           clientIdNumber={client.id_number}
           officeClientNumber={client.office_client_number}

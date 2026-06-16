@@ -1,4 +1,4 @@
-import type { AdvancePaymentRow } from '../types'
+import type { AdvancePaymentRow } from '../api/contracts'
 import { formatShekelAmount } from '@/utils/utils'
 import { getAdvancePaymentMonthLabel } from './advancePaymentComponent.utils'
 import { formatDate, cn } from '../../../utils/utils'

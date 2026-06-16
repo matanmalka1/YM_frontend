@@ -13,14 +13,28 @@ describe('advancedPaymentsQK', () => {
       'tax',
       'advance-payments',
       'list',
+      'client',
+      12,
+      'year',
+      2026,
       {
-        client_record_id: 12,
-        year: 2026,
         status: ['pending'],
         page: 1,
         page_size: 20,
       },
     ])
+  })
+
+  it('makes clientYear a prefix of client list keys for targeted invalidation', () => {
+    const clientYearKey = advancedPaymentsQK.clientYear(12, 2026)
+    const listKey = advancedPaymentsQK.list({
+      client_record_id: 12,
+      year: 2026,
+      page: 1,
+      page_size: 20,
+    })
+
+    expect(listKey.slice(0, clientYearKey.length)).toEqual(clientYearKey)
   })
 
   it('normalizes overview params with every response-changing input', () => {

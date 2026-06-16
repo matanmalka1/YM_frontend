@@ -11,18 +11,18 @@ interface Props {
 }
 
 export const CreateAdvancePaymentFlow: React.FC<Props> = ({ open, year, onClose }) => {
-  const { picker, clientId, frequency, isPending, reset, onCreate } = useCreateAdvancePayment()
+  const { picker, clientRecordId, frequency, isPending, reset, onCreate } = useCreateAdvancePayment()
 
   const handleClose = () => {
     reset()
     onClose()
   }
 
-  if (clientId !== null) {
+  if (clientRecordId !== null) {
     return (
       <CreateAdvancePaymentModal
         open={true}
-        clientId={clientId}
+        clientRecordId={clientRecordId}
         year={year}
         defaultPeriodMonthsCount={frequency ?? undefined}
         isCreating={isPending}

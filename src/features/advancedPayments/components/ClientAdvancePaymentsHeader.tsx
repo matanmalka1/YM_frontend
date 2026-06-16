@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { PlusCircle, Calendar, SlidersHorizontal } from 'lucide-react'
-import type { AdvancePaymentStatus } from '../types'
+import type { AdvancePaymentStatus } from '../api/contracts'
 import { Select } from '../../../components/ui/inputs/Select'
 import { ConfirmDialog } from '../../../components/ui/overlays/ConfirmDialog'
 import { getAdvancePaymentStatusLabel } from '../constants'

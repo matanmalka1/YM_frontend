@@ -8,13 +8,13 @@ import { showErrorToast } from '@/utils/utils'
 export const useGenerateSchedule = (year: number) => {
   const queryClient = useQueryClient()
   const picker = useClientPickerState()
-  const clientId = picker.selectedClient?.id ?? 0
+  const clientRecordId = picker.selectedClient?.id ?? 0
 
-  const { profile, isLoading: isProfileLoading, error: profileError } = useTaxProfile(clientId)
-  const isProfileError = profileError !== null && clientId > 0
+  const { profile, isLoading: isProfileLoading, error: profileError } = useTaxProfile(clientRecordId)
+  const isProfileError = profileError !== null && clientRecordId > 0
 
   const frequency: 1 | 2 | null =
-    clientId === 0
+    clientRecordId === 0
       ? null
       : profile?.advance_payment_frequency === 'bimonthly'
         ? 2
@@ -23,7 +23,8 @@ export const useGenerateSchedule = (year: number) => {
           : null
 
   const mutation = useMutation({
-    mutationFn: (periodMonthsCount: 1 | 2) => advancePaymentsApi.generateSchedule(clientId, year, periodMonthsCount),
+    mutationFn: (periodMonthsCount: 1 | 2) =>
+      advancePaymentsApi.generateSchedule(clientRecordId, year, periodMonthsCount),
     onSuccess: (data) => {
       toast.success(data.created > 0 ? `נוצרו ${data.created} מקדמות, דולגו ${data.skipped}` : 'לא נוצרו מקדמות חדשות')
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
@@ -32,7 +33,7 @@ export const useGenerateSchedule = (year: number) => {
   })
 
   const handleGenerate = () => {
-    if (clientId === 0) {
+    if (clientRecordId === 0) {
       toast.error('לא נבחר לקוח תקין')
       return
     }
@@ -53,7 +54,7 @@ export const useGenerateSchedule = (year: number) => {
 
   return {
     picker,
-    clientId,
+    clientRecordId,
     isProfileLoading,
     isProfileError,
     frequency,

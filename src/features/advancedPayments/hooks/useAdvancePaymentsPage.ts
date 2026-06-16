@@ -9,7 +9,7 @@ import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import { parsePositiveInt, showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
-import type { AdvancePaymentOverviewRow, AdvancePaymentStatus, UpdateAdvancePaymentPayload } from '../types'
+import type { AdvancePaymentOverviewRow, AdvancePaymentStatus, UpdateAdvancePaymentPayload } from '../api/contracts'
 import { isAdvancePaymentStatus } from '../constants'
 import { useAdvancePaymentBatches } from './useAdvancePaymentBatches'
 import {

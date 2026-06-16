@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
-import type { AdvancePaymentStatus, CreateAdvancePaymentPayload } from '../types'
+import type { AdvancePaymentStatus, CreateAdvancePaymentPayload } from '../api/contracts'
 import { getErrorMessage, showErrorToast } from '../../../utils/utils'
 
 interface UpdatePayload {
@@ -9,12 +9,17 @@ interface UpdatePayload {
   status?: AdvancePaymentStatus
 }
 
-export const useAdvancePayments = (clientId: number, year: number, statusFilter?: AdvancePaymentStatus[], page = 1) => {
+export const useAdvancePayments = (
+  clientRecordId: number,
+  year: number,
+  statusFilter?: AdvancePaymentStatus[],
+  page = 1,
+) => {
   const queryClient = useQueryClient()
-  const qk = advancedPaymentsQK.clientYear(clientId, year)
-  const enabled = clientId > 0
+  const qk = advancedPaymentsQK.clientYear(clientRecordId, year)
+  const enabled = clientRecordId > 0
   const listParams = {
-    client_record_id: clientId,
+    client_record_id: clientRecordId,
     year,
     page,
     page_size: 20,
@@ -29,7 +34,7 @@ export const useAdvancePayments = (clientId: number, year: number, statusFilter?
   })
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, ...payload }: UpdatePayload) => advancePaymentsApi.update(clientId, id, payload),
+    mutationFn: ({ id, ...payload }: UpdatePayload) => advancePaymentsApi.update(clientRecordId, id, payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: qk })
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
@@ -38,7 +43,7 @@ export const useAdvancePayments = (clientId: number, year: number, statusFilter?
   })
 
   const createMutation = useMutation({
-    mutationFn: (payload: CreateAdvancePaymentPayload) => advancePaymentsApi.create(clientId, payload),
+    mutationFn: (payload: CreateAdvancePaymentPayload) => advancePaymentsApi.create(clientRecordId, payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: qk })
     },
@@ -46,7 +51,7 @@ export const useAdvancePayments = (clientId: number, year: number, statusFilter?
   })
 
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => advancePaymentsApi.delete(clientId, id),
+    mutationFn: (id: number) => advancePaymentsApi.delete(clientRecordId, id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: qk })
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })

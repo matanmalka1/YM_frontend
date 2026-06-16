@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { AdvancePaymentDueDateGroup } from './types'
+import type { AdvancePaymentDueDateGroup } from './api/contracts'
 import {
   getAdvancePaymentBatchKey,
   getAdvancePaymentWorkflowStats,
