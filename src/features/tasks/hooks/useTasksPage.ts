@@ -60,26 +60,15 @@ export const useTasksPage = () => {
     modalTask: actions.modal?.mode !== 'create' ? (editTaskQuery.data ?? null) : null,
     isModalLoading:
       actions.isModalSaving || (actions.modal !== null && actions.modal.mode !== 'create' && editTaskQuery.isLoading),
-    confirmDialog:
-      actions.pendingConfirm && confirmCopy
-        ? {
-            open: true,
-            title: confirmCopy.title,
-            message: confirmCopy.message,
-            confirmLabel: confirmCopy.confirmLabel,
-            isLoading: actions.isConfirming,
-            onConfirm: actions.confirmPendingAction,
-            onCancel: actions.closeConfirm,
-          }
-        : {
-            open: false,
-            title: '',
-            message: '',
-            confirmLabel: '',
-            isLoading: false,
-            onConfirm: actions.confirmPendingAction,
-            onCancel: actions.closeConfirm,
-          },
+    confirmDialog: {
+      open: Boolean(actions.pendingConfirm && confirmCopy),
+      title: confirmCopy?.title ?? '',
+      message: confirmCopy?.message ?? '',
+      confirmLabel: confirmCopy?.confirmLabel ?? '',
+      isLoading: actions.isConfirming,
+      onConfirm: actions.confirmPendingAction,
+      onCancel: actions.closeConfirm,
+    },
     statusOptions: taskStatusOptions,
     priorityOptions: taskPriorityOptions,
     roleOptions: taskRoleOptions,
