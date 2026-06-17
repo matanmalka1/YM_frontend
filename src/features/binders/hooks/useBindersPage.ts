@@ -1,20 +1,17 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { bindersApi, bindersQK } from '../api'
 import type { ListBindersParams } from '../types'
 import { getErrorMessage } from '../../../utils/utils'
+import { getBinderNumberLabel } from '../utils'
 import { useBindersFilters } from './useBindersFilters'
 import { useBinderSelection } from './useBinderSelection'
 import { useBinderMutations } from './useBinderMutations'
 import { useBindersPageDialogs } from './useBindersPageDialogs'
+import { useReceiveBinderDrawer } from './useReceiveBinderDrawer'
 import { buildBindersColumns } from '../components/table/BindersColumns'
 
-interface UseBindersPageParams {
-  /** Opens the receive-material drawer; the drawer's open state stays page-owned in Wave 0A. */
-  onOpenReceive: () => void
-}
-
-export const useBindersPage = ({ onOpenReceive }: UseBindersPageParams) => {
+export const useBindersPage = () => {
   const { filters, setPage, handleFilterChange, handleMultiFilterChange, handleReset, handleSort } = useBindersFilters()
 
   const listParams = useMemo<ListBindersParams>(
@@ -80,6 +77,15 @@ export const useBindersPage = ({ onOpenReceive }: UseBindersPageParams) => {
     handoverToClientBulk: mutations.handoverToClientBulk,
     deleteBinder: mutations.deleteBinder,
   })
+
+  // Receive-material drawer ownership (moved into the hook in Wave 0B).
+  const [receiveOpen, setReceiveOpen] = useState(false)
+  const openReceive = () => setReceiveOpen(true)
+  const receiveDrawer = useReceiveBinderDrawer({ onSuccess: () => setReceiveOpen(false) })
+  const closeReceive = () => {
+    receiveDrawer.handleReset()
+    setReceiveOpen(false)
+  }
 
   const columns = useMemo(
     () =>
@@ -149,6 +155,7 @@ export const useBindersPage = ({ onOpenReceive }: UseBindersPageParams) => {
     },
     table: {
       data: pageItems,
+      onRowClick: handleSelectBinder,
       columns,
       pagination: {
         page: filters.page,
@@ -162,29 +169,80 @@ export const useBindersPage = ({ onOpenReceive }: UseBindersPageParams) => {
         emptyMessage: 'אין קלסרים התואמים לסינון הנוכחי',
         title: 'לא נמצאו קלסרים',
         message: 'נסה לאפס את הסינון, או קלוט חומר חדש.',
-        action: { label: 'קליטת חומר', onClick: onOpenReceive },
+        action: { label: 'קליטת חומר', onClick: openReceive },
       },
     },
-    // Wave 0A: dialog/drawer STATE ownership stays in its hooks; grouped here for
-    // the page to compose JSX from. Heavier orchestration cleanup is Wave 0B.
+    // Dialog/drawer STATE stays owned by useBindersPageDialogs / useBinderSelection /
+    // useReceiveBinderDrawer; the hook only pre-wires ready-to-spread prop objects so
+    // the page is pure slot composition (Wave 0B).
     modals: {
-      dialogs,
-      isHandingOverToClient: mutations.isHandingOverToClient,
-      isDeleting: mutations.isDeleting,
-      isMarkingReadyForHandover: mutations.isMarkingReadyForHandover,
-      isMarkingReadyForHandoverBulk: mutations.isMarkingReadyForHandoverBulk,
-      isHandingOverToClientBulk: mutations.isHandingOverToClientBulk,
+      dialogsProps: {
+        confirmHandoverForId: dialogs.confirmHandoverForId,
+        confirmDeleteForId: dialogs.confirmDeleteForId,
+        confirmReadyForHandoverForId: dialogs.confirmReadyForHandoverForId,
+        handoverRecipientName: dialogs.handoverRecipientName,
+        setHandoverRecipientName: dialogs.setHandoverRecipientName,
+        isHandingOverToClient: mutations.isHandingOverToClient,
+        isDeleting: mutations.isDeleting,
+        isMarkingReadyForHandover: mutations.isMarkingReadyForHandover,
+        onConfirmHandoverToClient: () => void dialogs.confirmHandoverToClient(),
+        onCancelHandoverToClient: dialogs.closeHandoverToClientDialog,
+        onConfirmDelete: () => void dialogs.confirmDelete(),
+        onCancelDelete: dialogs.closeDeleteDialog,
+        onConfirmReadyForHandover: () => void dialogs.confirmReadyForHandover(),
+        onCancelReadyForHandover: dialogs.closeReadyForHandoverDialog,
+        getBinderNumberLabel: (id: number | null) => getBinderNumberLabel(id, pageItems, selectedBinder),
+        bulkReadyForHandoverOpen: dialogs.bulkReadyForHandoverOpen,
+        onCloseBulkReadyForHandover: dialogs.closeBulkReadyForHandoverDialog,
+        onConfirmBulkReadyForHandover: () => void dialogs.confirmBulkReadyForHandover(),
+        bulkReadyForHandoverYear: dialogs.bulkReadyForHandoverYear,
+        bulkReadyForHandoverMonth: dialogs.bulkReadyForHandoverMonth,
+        setBulkReadyForHandoverYear: dialogs.setBulkReadyForHandoverYear,
+        setBulkReadyForHandoverMonth: dialogs.setBulkReadyForHandoverMonth,
+        isMarkingReadyForHandoverBulk: mutations.isMarkingReadyForHandoverBulk,
+        dialogBinder: dialogs.dialogBinder,
+        handoverToClientBulkOpen: dialogs.handoverToClientBulkOpen,
+        onCloseHandoverToClientBulk: dialogs.closeHandoverToClientBulkDialog,
+        onSubmitHandoverToClientBulk: dialogs.submitHandoverToClientBulk,
+        isHandingOverToClientBulk: mutations.isHandingOverToClientBulk,
+      },
     },
     drawers: {
-      detailOpen: deepLinkBinderId !== undefined,
-      selectedBinder,
-      onSelect: handleSelectBinder,
-      onCloseDetail: handleCloseDrawer,
-      actionLoadingId: mutations.actionLoadingId,
-      receiveMaterial: mutations.receiveMaterial,
-      markFull: mutations.markFull,
-      reopenCapacity: mutations.reopenCapacity,
-      revertReadyForHandover: mutations.revertReadyForHandover,
+      openReceive,
+      detail: {
+        open: deepLinkBinderId !== undefined,
+        binder: selectedBinder,
+        onClose: handleCloseDrawer,
+        actionLoading: selectedBinder ? actionLoadingId === selectedBinder.id : false,
+        onReceiveMaterial: selectedBinder ? () => void receiveMaterial(selectedBinder.id) : undefined,
+        onMarkFull: selectedBinder ? () => void markFull(selectedBinder.id) : undefined,
+        onReopenCapacity: selectedBinder ? () => void reopenCapacity(selectedBinder.id) : undefined,
+        onMarkReadyForHandover: selectedBinder ? () => dialogs.openReadyForHandoverDialog(selectedBinder.id) : undefined,
+        onMarkReadyForHandoverBulk: selectedBinder
+          ? () => dialogs.openBulkReadyForHandoverDialog(selectedBinder)
+          : undefined,
+        onRevertReadyForHandover: selectedBinder ? () => void revertReadyForHandover(selectedBinder.id) : undefined,
+        onHandoverToClient: selectedBinder ? () => dialogs.openHandoverToClientDialog(selectedBinder.id) : undefined,
+        onHandoverToClientBulk: selectedBinder
+          ? () => dialogs.openHandoverToClientBulkDialog(selectedBinder)
+          : undefined,
+        onDelete: selectedBinder ? () => dialogs.openDeleteDialog(selectedBinder.id) : undefined,
+      },
+      receive: {
+        open: receiveOpen,
+        onClose: closeReceive,
+        form: receiveDrawer.form,
+        clientQuery: receiveDrawer.clientQuery,
+        selectedClient: receiveDrawer.selectedClient,
+        businesses: receiveDrawer.businesses,
+        annualReports: receiveDrawer.annualReports,
+        hasActiveBinder: receiveDrawer.hasActiveBinder,
+        vatType: receiveDrawer.vatType,
+        onClientSelect: receiveDrawer.handleClientSelect,
+        onClientQueryChange: receiveDrawer.handleClientQueryChange,
+        onSubmit: receiveDrawer.handleSubmit,
+        isSubmitting: receiveDrawer.isSubmitting,
+      },
     },
   }
 }
