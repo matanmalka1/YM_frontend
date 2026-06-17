@@ -5,7 +5,7 @@ import type {
   AuthorityContactResponse,
   AuthorityContactCreatePayload,
   AuthorityContactUpdatePayload,
-  ContactType,
+  AuthorityContactsListParams,
 } from './contracts'
 
 export const authorityContactsApi = {
@@ -22,9 +22,7 @@ export const authorityContactsApi = {
 
   listAuthorityContacts: async (
     clientId: number,
-    contactType?: ContactType,
-    page: number = 1,
-    page_size: number = 20,
+    params: AuthorityContactsListParams,
   ): Promise<{
     items: AuthorityContactResponse[]
     page: number
@@ -38,9 +36,9 @@ export const authorityContactsApi = {
       total: number
     }>(AUTHORITY_CONTACT_ENDPOINTS.clientAuthorityContacts(clientId), {
       params: toQueryParams({
-        ...(contactType ? { contact_type: contactType } : {}),
-        page,
-        page_size,
+        contact_type: params.contact_type,
+        page: params.page,
+        page_size: params.page_size,
       }),
     })
     return response.data

@@ -27,6 +27,12 @@ export interface AuthorityContactResponse {
   updated_at: string | null
 }
 
+export interface AuthorityContactsListParams {
+  contact_type?: ContactType
+  page: number
+  page_size: number
+}
+
 export interface AuthorityContactCreatePayload {
   contact_type: ContactType
   name: string

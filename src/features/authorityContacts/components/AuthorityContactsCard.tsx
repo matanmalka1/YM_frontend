@@ -11,7 +11,7 @@ interface AuthorityContactsCardProps {
 }
 
 export const AuthorityContactsCard: React.FC<AuthorityContactsCardProps> = ({ clientId }) => {
-  const { contacts, total, page, setPage, totalPages, isLoading, error, deleteContact, deletingId } =
+  const { contacts, total, page, setPage, totalPages, isLoading, error, retry, deleteContact, deletingId } =
     useAuthorityContacts(clientId)
   const { editing, isModalOpen, confirmDeleteId, openCreate, openEdit, closeModal, requestDelete, clearDeleteRequest } =
     useAuthorityContactsCardState()
@@ -24,6 +24,7 @@ export const AuthorityContactsCard: React.FC<AuthorityContactsCardProps> = ({ cl
         isLoading={isLoading}
         error={error}
         deletingId={deletingId}
+        onRetry={retry}
         onCreate={openCreate}
         onEdit={openEdit}
         onDelete={requestDelete}

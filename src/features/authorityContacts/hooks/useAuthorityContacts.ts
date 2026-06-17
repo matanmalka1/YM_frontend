@@ -9,12 +9,13 @@ import { AUTHORITY_CONTACTS_LIST_PARAMS, AUTHORITY_CONTACT_TEXT } from '../const
 export const useAuthorityContacts = (clientId: number) => {
   const [page, setPage] = useState<number>(AUTHORITY_CONTACTS_LIST_PARAMS.page)
   const pageSize = AUTHORITY_CONTACTS_LIST_PARAMS.page_size
-  const qk = [...authorityContactsQK.forClient(clientId), { page, page_size: pageSize }]
+  const listParams = { page, page_size: pageSize }
+  const qk = authorityContactsQK.list(clientId, listParams)
 
   const listQuery = useQuery({
     enabled: clientId > 0,
     queryKey: qk,
-    queryFn: () => authorityContactsApi.listAuthorityContacts(clientId, undefined, page, pageSize),
+    queryFn: () => authorityContactsApi.listAuthorityContacts(clientId, listParams),
   })
 
   const deleteMutation = useMutationWithToast({
@@ -35,7 +36,10 @@ export const useAuthorityContacts = (clientId: number) => {
     totalPages,
     isLoading: listQuery.isLoading,
     error: listQuery.error ? getErrorMessage(listQuery.error, AUTHORITY_CONTACT_TEXT.loadError) : null,
-    deleteContact: (id: number) => deleteMutation.mutate(id),
+    retry: () => {
+      void listQuery.refetch()
+    },
+    deleteContact: (id: number) => deleteMutation.mutateAsync(id),
     deletingId: deleteMutation.isPending ? (deleteMutation.variables ?? null) : null,
   }
 }

@@ -12,9 +12,10 @@ const normalizeBranchCity = (city: string | null | undefined): string | null => 
 }
 
 export const useClientAuthorityContacts = (clientId: number, addressCity?: string | null) => {
+  const listParams = { page: PAGE, page_size: PAGE_SIZE }
   const { data } = useQuery({
-    queryKey: [...authorityContactsQK.forClient(clientId), { page: PAGE, page_size: PAGE_SIZE }],
-    queryFn: () => authorityContactsApi.listAuthorityContacts(clientId, undefined, PAGE, PAGE_SIZE),
+    queryKey: authorityContactsQK.list(clientId, listParams),
+    queryFn: () => authorityContactsApi.listAuthorityContacts(clientId, listParams),
     enabled: clientId > 0,
     staleTime: QUERY_STALE_TIME.long,
   })

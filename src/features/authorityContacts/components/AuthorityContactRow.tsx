@@ -44,7 +44,14 @@ export const AuthorityContactRow: React.FC<AuthorityContactRowProps> = ({ contac
     </div>
 
     <div className="flex shrink-0 gap-1">
-      <Button type="button" variant="ghost" size="sm" onClick={() => onEdit(contact)}>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        tooltip="עריכת איש קשר"
+        aria-label="עריכת איש קשר"
+        onClick={() => onEdit(contact)}
+      >
         <Edit2 className="h-4 w-4" />
       </Button>
       <Button
@@ -52,6 +59,8 @@ export const AuthorityContactRow: React.FC<AuthorityContactRowProps> = ({ contac
         variant="ghost"
         size="sm"
         isLoading={isDeleting}
+        tooltip="מחיקת איש קשר"
+        aria-label="מחיקת איש קשר"
         onClick={() => onDelete(contact.id)}
         className="text-negative-600 hover:bg-negative-50"
       >

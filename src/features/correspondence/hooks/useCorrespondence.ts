@@ -22,14 +22,8 @@ export const useCorrespondence = (businessId: number | undefined, clientId?: num
 
   const contactsQuery = useQuery({
     enabled: loadContacts && resolvedClientId > 0,
-    queryKey: [...authorityContactsQK.forClient(resolvedClientId), AUTHORITY_CONTACTS_LIST_PARAMS],
-    queryFn: () =>
-      authorityContactsApi.listAuthorityContacts(
-        resolvedClientId,
-        undefined,
-        AUTHORITY_CONTACTS_LIST_PARAMS.page,
-        AUTHORITY_CONTACTS_LIST_PARAMS.page_size,
-      ),
+    queryKey: authorityContactsQK.list(resolvedClientId, AUTHORITY_CONTACTS_LIST_PARAMS),
+    queryFn: () => authorityContactsApi.listAuthorityContacts(resolvedClientId, AUTHORITY_CONTACTS_LIST_PARAMS),
     staleTime: QUERY_STALE_TIME.medium,
   })
 

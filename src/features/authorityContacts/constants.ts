@@ -17,6 +17,7 @@ export const AUTHORITY_CONTACT_TEXT = {
   editTitle: 'עריכת איש קשר',
   createSubmit: 'הוסף',
   editSubmit: 'עדכן',
+  saving: 'שומר...',
   cancel: 'ביטול',
   deleteTitle: 'מחיקת איש קשר',
   deleteMessage: 'האם למחוק את איש הקשר? פעולה זו אינה הפיכה.',

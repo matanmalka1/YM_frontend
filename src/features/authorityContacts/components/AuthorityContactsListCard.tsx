@@ -13,6 +13,7 @@ interface AuthorityContactsListCardProps {
   isLoading: boolean
   error: string | null
   deletingId: number | null
+  onRetry: () => void
   onCreate: () => void
   onEdit: (contact: AuthorityContactResponse) => void
   onDelete: (id: number) => void
@@ -24,6 +25,7 @@ export const AuthorityContactsListCard: React.FC<AuthorityContactsListCardProps>
   isLoading,
   error,
   deletingId,
+  onRetry,
   onCreate,
   onEdit,
   onDelete,
@@ -38,7 +40,7 @@ export const AuthorityContactsListCard: React.FC<AuthorityContactsListCardProps>
       </Button>
     }
   >
-    {error && <Alert variant="error" message={error} />}
+    {error && <Alert variant="error" message={error} onRetry={onRetry} />}
     {!error && (
       <AuthorityContactsListContent
         contacts={contacts}

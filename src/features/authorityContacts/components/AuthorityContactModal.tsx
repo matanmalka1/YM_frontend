@@ -14,24 +14,26 @@ interface AuthorityContactModalProps {
 
 export const AuthorityContactModal: React.FC<AuthorityContactModalProps> = ({ open, clientId, existing, onClose }) => {
   const { form, onSubmit, isSaving } = useAuthorityContactForm(clientId, onClose, existing)
+  const formId = 'authority-contact-form'
 
   return (
     <Modal
       open={open}
       title={existing ? AUTHORITY_CONTACT_TEXT.editTitle : AUTHORITY_CONTACT_TEXT.createTitle}
       onClose={onClose}
+      isDirty={form.formState.isDirty}
       footer={
         <div className="flex items-center justify-end gap-2">
           <Button type="button" variant="outline" disabled={isSaving} onClick={onClose}>
             {AUTHORITY_CONTACT_TEXT.cancel}
           </Button>
-          <Button type="button" isLoading={isSaving} onClick={onSubmit}>
+          <Button type="submit" form={formId} isLoading={isSaving} loadingLabel={AUTHORITY_CONTACT_TEXT.saving}>
             {existing ? AUTHORITY_CONTACT_TEXT.editSubmit : AUTHORITY_CONTACT_TEXT.createSubmit}
           </Button>
         </div>
       }
     >
-      <form onSubmit={onSubmit} className="space-y-4">
+      <form id={formId} onSubmit={onSubmit} className="space-y-4">
         <AuthorityContactFormFields form={form} />
       </form>
     </Modal>

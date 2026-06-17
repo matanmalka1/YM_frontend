@@ -5,7 +5,7 @@ interface AuthorityContactDeleteDialogProps {
   confirmDeleteId: number | null
   deletingId: number | null
   onCancel: () => void
-  onConfirm: (id: number) => void
+  onConfirm: (id: number) => Promise<unknown>
 }
 
 export const AuthorityContactDeleteDialog: React.FC<AuthorityContactDeleteDialogProps> = ({
@@ -16,12 +16,16 @@ export const AuthorityContactDeleteDialog: React.FC<AuthorityContactDeleteDialog
 }) => {
   const isOpen = confirmDeleteId !== null
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (confirmDeleteId === null) {
       return
     }
-    onConfirm(confirmDeleteId)
-    onCancel()
+    try {
+      await onConfirm(confirmDeleteId)
+      onCancel()
+    } catch {
+      // Error toast is handled by the mutation hook; keep the dialog open for retry.
+    }
   }
 
   return (
