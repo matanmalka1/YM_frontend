@@ -9,8 +9,8 @@ import {
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
 import { Button } from '../../../../components/ui/primitives/Button'
-import { formatDate } from '../../../../utils/utils'
-import { CREATE_CLIENT_ENTITY_OPTIONS } from '../../constants'
+import { formatDate } from '@/utils/utils'
+import { CREATE_CLIENT_ENTITY_OPTIONS, getCreateClientEntityLabels } from '../../constants'
 import type { ActiveClientSummary, DeletedClientSummary } from '../../api/contracts'
 import type { CreateClientFormValues } from '../../schemas'
 import { stripNonDigits } from './createClientFormUtils'
@@ -43,9 +43,7 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
   onRestoreDeletedClient,
   register,
 }) => {
-  const nameLabel = isCompany ? 'שם חברה' : 'שם מלא'
-  const idNumberLabel = isCompany ? 'ח.פ' : 'ת.ז'
-  const idNumberPlaceholder = isCompany ? '512345678' : '123456789'
+  const { name: nameLabel, idNumber: idNumberLabel, idNumberPlaceholder } = getCreateClientEntityLabels(isCompany)
 
   const entityTypeValue = useWatch({ control, name: 'entity_type' })
 
@@ -128,7 +126,7 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
       )}
       {activeConflicts.length > 0 && (
         <div className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700" dir="rtl">
-          <p className="font-medium mb-1">{isCompany ? 'ח.פ' : 'ת.ז'} זה כבר קיים במערכת — לא ניתן לפתוח לקוח כפול.</p>
+          <p className="font-medium mb-1">{idNumberLabel} זה כבר קיים במערכת — לא ניתן לפתוח לקוח כפול.</p>
           <ul className="space-y-1">
             {activeConflicts.map((c) => (
               <li key={c.id}>

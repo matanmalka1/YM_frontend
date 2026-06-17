@@ -1,9 +1,9 @@
-import { CreditCard, FileText, FolderOpen, ReceiptText } from 'lucide-react'
-
 import type { ClientCreationImpactResponse } from '../../api/contracts'
 import type { CreateClientFormValues } from '../../schemas'
-import { ADVANCE_PAYMENT_FREQUENCY_LABELS, ENTITY_TYPE_LABELS, VAT_TYPE_LABELS } from '../../constants'
 import { formatDate } from '@/utils/utils'
+import { getCreateClientEntityLabels } from '../../constants'
+import { buildCreateClientReviewModel } from './createClientFormUtils'
+import { ImpactIcon } from './createClientImpactIcons'
 
 interface Props {
   values: CreateClientFormValues
@@ -30,20 +30,6 @@ interface SectionProps {
   children: React.ReactNode
 }
 
-const impactIconClasses = 'h-4 w-4'
-
-const impactIconByLabel = {
-  'קלסר פעיל': FolderOpen,
-  'דוחות מע"מ': ReceiptText,
-  'תשלומי מקדמות': CreditCard,
-  'דוח שנתי': FileText,
-} as const
-
-const ImpactIcon: React.FC<{ label: string }> = ({ label }) => {
-  const Icon = impactIconByLabel[label as keyof typeof impactIconByLabel] ?? FileText
-  return <Icon className={impactIconClasses} aria-hidden="true" />
-}
-
 const ReviewSection: React.FC<SectionProps> = ({ title, children }) => (
   <div className="rounded-lg border border-gray-200 overflow-hidden">
     <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
@@ -60,38 +46,18 @@ export const CreateClientReviewStep: React.FC<Props> = ({
   impactLoading,
   impactError,
 }) => {
-  const entityLabel = values.entity_type ? ENTITY_TYPE_LABELS[values.entity_type] : null
-  const isExempt = values.entity_type === 'osek_patur'
-  const isCompany = values.entity_type === 'company_ltd'
-
-  const vatLabel = isExempt
-    ? 'פטור'
-    : values.vat_reporting_frequency
-      ? VAT_TYPE_LABELS[values.vat_reporting_frequency]
-      : null
-
-  const advanceLabel = values.advance_payment_frequency
-    ? ADVANCE_PAYMENT_FREQUENCY_LABELS[values.advance_payment_frequency]
-    : null
-
-  const advisorLabel = advisorOptions.find((o) => o.value === values.accountant_id)?.label
-
-  const businessDisplayName = isCompany
-    ? values.full_name?.trim()
-    : values.business_name?.trim() || values.full_name?.trim()
-
-  const impactTotal = impactData?.items.reduce((sum, item) => sum + item.count, 0) ?? 0
-
-  const addressParts = [
-    values.address_street,
-    values.address_building_number,
-    values.address_apartment,
-    values.address_city,
-    values.address_zip_code,
-  ]
-    .map((p) => p?.trim())
-    .filter(Boolean)
-    .join(' ')
+  const {
+    isCompany,
+    isExempt,
+    entityLabel,
+    vatLabel,
+    advanceLabel,
+    advisorLabel,
+    businessDisplayName,
+    addressLine,
+    impactTotal,
+  } = buildCreateClientReviewModel(values, advisorOptions, impactData)
+  const entityLabels = getCreateClientEntityLabels(isCompany)
 
   return (
     <div className="space-y-4" dir="rtl">
@@ -99,26 +65,26 @@ export const CreateClientReviewStep: React.FC<Props> = ({
 
       <ReviewSection title="זיהוי">
         <ReviewRow label="סוג ישות" value={entityLabel} />
-        <ReviewRow label={isCompany ? 'שם חברה' : 'שם מלא'} value={values.full_name} />
-        <ReviewRow label={isCompany ? 'ח.פ' : 'ת.ז'} value={values.id_number} />
+        <ReviewRow label={entityLabels.name} value={values.full_name} />
+        <ReviewRow label={entityLabels.idNumber} value={values.id_number} />
       </ReviewSection>
 
-      <ReviewSection title={isCompany ? 'חברה ופרטי קשר' : 'עסק ופרטי קשר'}>
-        <ReviewRow label={isCompany ? 'שם חברה' : 'שם עסק'} value={businessDisplayName} />
+      <ReviewSection title={entityLabels.contactSection}>
+        <ReviewRow label={entityLabels.businessName} value={businessDisplayName} />
         <ReviewRow
-          label={isCompany ? 'תאריך התאגדות' : 'תאריך פתיחת תיק'}
+          label={entityLabels.businessOpenedAt}
           value={formatDate(values.business_opened_at ?? null)}
         />
         <ReviewRow label="טלפון" value={values.phone} />
         <ReviewRow label="אימייל" value={values.email} />
-        <ReviewRow label="כתובת" value={addressParts || null} />
+        <ReviewRow label="כתובת" value={addressLine} />
       </ReviewSection>
 
       <ReviewSection title="מס ומע״מ">
         {!isExempt && <ReviewRow label="תדירות דיווח מע״מ" value={vatLabel} />}
         <ReviewRow label="תדירות מקדמות" value={advanceLabel} />
         <ReviewRow label="שיעור מקדמות" value={values.advance_rate ? `${values.advance_rate}%` : null} />
-        <ReviewRow label="רואה חשבון" value={advisorLabel ?? null} />
+        <ReviewRow label="רואה חשבון" value={advisorLabel} />
       </ReviewSection>
 
       <div className="rounded-lg border border-blue-200 bg-blue-50/70 p-4" dir="rtl">

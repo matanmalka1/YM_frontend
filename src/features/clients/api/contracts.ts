@@ -182,13 +182,14 @@ export type AdvancePaymentFrequency = 'monthly' | 'bimonthly'
 
 export interface BusinessResponse {
   id: number
-  client_id: number
+  client_id: number | null
   business_name: string | null
   status: BusinessStatus
   opened_at: ISODateString
   closed_at: string | null
   notes: string | null
   created_at: string | null
+  updated_at: string | null
 }
 
 export type ClientBusinessesResponse = {
@@ -197,6 +198,11 @@ export type ClientBusinessesResponse = {
   page: number
   page_size: number
   total: number
+}
+
+export interface ListClientBusinessesParams {
+  page?: number
+  page_size?: number
 }
 
 export interface CreateBusinessPayload {

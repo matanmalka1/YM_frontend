@@ -226,6 +226,19 @@ export const CREATE_CLIENT_VALIDATION_MESSAGES = {
 export const deriveCreateClientIdNumberType = (entityType: CreateEntityType): ClientIdNumberType =>
   entityType === 'company_ltd' ? 'corporation' : 'individual'
 
+/**
+ * Entity-type-driven field labels used across the create-client form steps and review.
+ * Centralized so the company/non-company copy does not drift between steps.
+ */
+export const getCreateClientEntityLabels = (isCompany: boolean) => ({
+  name: isCompany ? 'שם חברה' : 'שם מלא',
+  idNumber: isCompany ? 'ח.פ' : 'ת.ז',
+  idNumberPlaceholder: isCompany ? '512345678' : '123456789',
+  businessName: isCompany ? 'שם חברה' : 'שם עסק',
+  businessOpenedAt: isCompany ? 'תאריך התאגדות' : 'תאריך פתיחת תיק',
+  contactSection: isCompany ? 'חברה ופרטי קשר' : 'עסק ופרטי קשר',
+})
+
 export const getClientIdNumberTypeLabel = makeLabelGetter(CLIENT_ID_NUMBER_TYPE_LABELS)
 
 export const getEntityTypeLabel = makeLabelGetter(ENTITY_TYPE_LABELS)

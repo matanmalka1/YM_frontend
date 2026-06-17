@@ -26,11 +26,7 @@ export const useClientCreationImpact = (
   )
 
   return useQuery({
-    queryKey: [
-      ...clientsQK.creationImpact(params?.entity_type, params?.vat_reporting_frequency),
-      params?.advance_payment_frequency ?? null,
-      params?.advance_rate ?? null,
-    ],
+    queryKey: clientsQK.creationImpact(params),
     queryFn: () =>
       clientsApi.previewImpact(
         buildImpactPreviewPayload({

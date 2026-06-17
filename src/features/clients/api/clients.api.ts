@@ -19,6 +19,7 @@ import type {
   CreateBusinessPayload,
   UpdateBusinessPayload,
   ClientCreationImpactResponse,
+  ListClientBusinessesParams,
 } from './contracts'
 
 const CLIENT_BUSINESSES_PAGE_SIZE = 100
@@ -59,7 +60,7 @@ export const clientsApi = {
 
   listBusinessesForClient: async (
     clientId: number,
-    params?: { page?: number; page_size?: number },
+    params?: ListClientBusinessesParams,
   ): Promise<ClientBusinessesResponse> => {
     const response = await api.get<ClientBusinessesResponse>(
       BUSINESS_ENDPOINTS.clientBusinesses(clientId),
