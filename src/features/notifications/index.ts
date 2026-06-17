@@ -1,8 +1,10 @@
 export { NotificationDrawer } from './components/NotificationDrawer'
+export { NotificationDetailDrawer } from './components/NotificationDetailDrawer'
 export { NotificationsTab } from './components/NotificationsTab'
 export { NotificationsPage } from './pages/NotificationsPage'
 export { SendNotificationModal } from './components/SendNotificationModal'
 export { useNotificationBell } from './hooks/useNotificationBell'
+export { useNotificationsPage } from './hooks/useNotificationsPage'
 export { useNotifications } from './hooks/useNotifications'
 export { useNotificationDetail } from './hooks/useNotificationDetail'
 
