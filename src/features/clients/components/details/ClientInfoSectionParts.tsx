@@ -2,7 +2,7 @@ import { type ReactNode } from 'react'
 import { Card } from '../../../../components/ui/primitives/Card'
 import { DefinitionList } from '../../../../components/ui/layout/DefinitionList'
 
-const EMPTY_VALUE = '—'
+export const EMPTY_VALUE = '—'
 
 type DefinitionItem = {
   label: string

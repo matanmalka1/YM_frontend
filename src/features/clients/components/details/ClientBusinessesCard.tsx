@@ -11,23 +11,17 @@ import { ModalFormActions } from '../../../../components/ui/overlays/ModalFormAc
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
 import type { BusinessResponse, UpdateBusinessPayload } from '../../api'
-import { BUSINESS_STATUS_LABELS } from '@/features/businesses'
+import {
+  BUSINESS_STATUS_BADGE_VARIANTS,
+  BUSINESS_STATUS_OPTIONS,
+  getBusinessStatusLabel,
+} from '@/features/businesses'
 import { CLIENT_ROUTES } from '../../api/endpoints'
 import { formatDate } from '@/utils/utils'
 import { useBusinessActions } from '../../hooks/useBusinessActions'
 import { useBusinessesForClient } from '@/hooks/useBusinessesForClient'
 
-const BUSINESS_STATUS_VARIANTS: Record<BusinessResponse['status'], 'success' | 'warning' | 'neutral'> = {
-  active: 'success',
-  frozen: 'warning',
-  closed: 'neutral',
-}
-
-const BUSINESS_STATUS_OPTIONS = [
-  { value: 'active', label: BUSINESS_STATUS_LABELS.active },
-  { value: 'frozen', label: BUSINESS_STATUS_LABELS.frozen },
-  { value: 'closed', label: BUSINESS_STATUS_LABELS.closed },
-]
+const todayIsoDate = () => new Date().toISOString().slice(0, 10)
 
 interface Props {
   clientId: number
@@ -75,7 +69,7 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
   const updateBusinessStatus = (businessId: number, status: BusinessResponse['status'], closedAt?: string) =>
     updateBusiness(businessId, {
       status,
-      closed_at: status === 'closed' ? (closedAt ?? new Date().toISOString().slice(0, 10)) : null,
+      closed_at: status === 'closed' ? (closedAt ?? todayIsoDate()) : null,
     })
 
   return (
@@ -112,8 +106,8 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
                     </div>
                     <StatusBadge
                       status={biz.status}
-                      getLabel={(s) => BUSINESS_STATUS_LABELS[s as keyof typeof BUSINESS_STATUS_LABELS] ?? s}
-                      variantMap={BUSINESS_STATUS_VARIANTS}
+                      getLabel={getBusinessStatusLabel}
+                      variantMap={BUSINESS_STATUS_BADGE_VARIANTS}
                     />
                   </Link>
                 </div>
@@ -187,8 +181,7 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
                     ? {
                         ...s,
                         status: e.target.value as BusinessResponse['status'],
-                        closedAt:
-                          e.target.value === 'closed' ? s.closedAt || new Date().toISOString().slice(0, 10) : '',
+                        closedAt: e.target.value === 'closed' ? s.closedAt || todayIsoDate() : '',
                       }
                     : s,
                 )

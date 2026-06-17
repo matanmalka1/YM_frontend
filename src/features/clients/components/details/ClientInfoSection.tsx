@@ -4,7 +4,7 @@ import type { ClientRecordResponse } from '../../api'
 import { ADVANCE_PAYMENT_FREQUENCY_LABELS, getClientStatusLabel, getClientVatReportingLabel } from '../../constants'
 import { useClientAuthorityContacts } from '../../hooks/useClientAuthorityContacts'
 import { useAdvisorOptions } from '@/features/users'
-import { DefinitionSectionCard } from './ClientInfoSectionParts'
+import { DefinitionSectionCard, EMPTY_VALUE } from './ClientInfoSectionParts'
 
 const TURNOVER_SOURCE_LABELS: Record<string, string> = {
   reported: 'מחושב מדיווחים',
@@ -15,8 +15,6 @@ const TURNOVER_SOURCE_LABELS: Record<string, string> = {
 type ClientInfoSectionProps = {
   client: ClientRecordResponse
 }
-
-const EMPTY_VALUE = '—'
 
 export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client }) => {
   const { nameById } = useAdvisorOptions()
