@@ -16,12 +16,7 @@ export const WorkQueuePage: React.FC = () => {
     <PageHeader
       {...headerProps}
       actions={
-        <Button
-          size="sm"
-          variant="ghost"
-          data-work-queue-focus-fallback="true"
-          onClick={modals.openCreateTask}
-        >
+        <Button size="sm" variant="ghost" data-work-queue-focus-fallback="true" onClick={modals.openCreateTask}>
           משימה חדשה
           <Plus className="h-3.5 w-3.5" />
         </Button>

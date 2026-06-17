@@ -1,7 +1,12 @@
 import { api } from '@/api/client'
 import { toQueryParams } from '@/api/queryParams'
 import { AUDIT_ENDPOINTS } from './endpoints'
-import type { EntityAuditTrailParams, EntityAuditTrailResponse, EntityAuditType } from './contracts'
+import {
+  entityAuditTrailResponseSchema,
+  type EntityAuditTrailParams,
+  type EntityAuditTrailResponse,
+  type EntityAuditType,
+} from './contracts'
 
 export const auditApi = {
   getEntityAuditTrail: async (
@@ -12,6 +17,6 @@ export const auditApi = {
     const response = await api.get<EntityAuditTrailResponse>(AUDIT_ENDPOINTS.entityTrail(entityType, entityId), {
       params: toQueryParams(params),
     })
-    return response.data
+    return entityAuditTrailResponseSchema.parse(response.data)
   },
 }

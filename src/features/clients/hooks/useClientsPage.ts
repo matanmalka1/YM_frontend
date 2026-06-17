@@ -178,9 +178,7 @@ export const useClientsPage = () => {
   const columns = useMemo(
     () =>
       buildClientColumns({
-        onEditClient: can.editClients
-          ? (client: ClientRecordListItem) => setEditingClientId(client.id)
-          : undefined,
+        onEditClient: can.editClients ? (client: ClientRecordListItem) => setEditingClientId(client.id) : undefined,
       }),
     [can.editClients],
   )
@@ -238,8 +236,7 @@ export const useClientsPage = () => {
           isEmptyState && can.createClients
             ? 'צור לקוח ראשון או ייבא רשימת לקוחות קיימת. יצירת לקוח תפתח אוטומטית קלסר ראשוני, מועדי מס רלוונטיים ותיק דוח שנתי לפי סוג הלקוח.'
             : 'לא נמצאו לקוחות התואמים את החיפוש או הסינון הנוכחי.',
-        action:
-          isEmptyState && can.createClients ? { label: 'לקוח חדש', onClick: openCreate } : undefined,
+        action: isEmptyState && can.createClients ? { label: 'לקוח חדש', onClick: openCreate } : undefined,
         secondaryAction:
           isEmptyState && can.createClients ? { label: 'ייבוא לקוחות', onClick: openImportExport } : undefined,
       },

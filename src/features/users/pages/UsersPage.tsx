@@ -50,7 +50,11 @@ export const Users: React.FC = () => {
       header={header}
       loadingMessage={status.loadingMessage}
     >
-      <UsersFiltersBar filters={filters.values} onFilterChange={filters.onFilterChange} onReset={filters.resetFilters} />
+      <UsersFiltersBar
+        filters={filters.values}
+        onFilterChange={filters.onFilterChange}
+        onReset={filters.resetFilters}
+      />
       <PaginatedDataTable
         data={table.data}
         columns={table.columns}

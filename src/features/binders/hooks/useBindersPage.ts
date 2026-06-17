@@ -217,7 +217,9 @@ export const useBindersPage = () => {
         onReceiveMaterial: selectedBinder ? () => void receiveMaterial(selectedBinder.id) : undefined,
         onMarkFull: selectedBinder ? () => void markFull(selectedBinder.id) : undefined,
         onReopenCapacity: selectedBinder ? () => void reopenCapacity(selectedBinder.id) : undefined,
-        onMarkReadyForHandover: selectedBinder ? () => dialogs.openReadyForHandoverDialog(selectedBinder.id) : undefined,
+        onMarkReadyForHandover: selectedBinder
+          ? () => dialogs.openReadyForHandoverDialog(selectedBinder.id)
+          : undefined,
         onMarkReadyForHandoverBulk: selectedBinder
           ? () => dialogs.openBulkReadyForHandoverDialog(selectedBinder)
           : undefined,
