@@ -8,7 +8,7 @@ import { Select } from '@/components/ui/inputs/Select'
 import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
 import { DataTable, type Column } from '@/components/ui/table/DataTable'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
-import { cn, formatDate, getErrorMessage, getHttpStatus } from '@/utils/utils'
+import { cn, formatCount, formatDate, getErrorMessage, getHttpStatus } from '@/utils/utils'
 import { useTaxCalendarSettings } from '../hooks/useTaxCalendarSettings'
 import type { TaxCalendarDeadlineRule, TaxCalendarSettingsEntry } from '../api'
 
@@ -36,11 +36,6 @@ const SUMMARY_LABELS: Record<string, string> = {
   advance_payment_1m: 'מקדמות חודשיות',
   advance_payment_2m: 'מקדמות דו־חודשיות',
   annual_report_annual: 'דוח שנתי',
-}
-
-const formatNumber = (value: number | null | undefined): string => {
-  if (value == null) return '—'
-  return value.toLocaleString('he-IL')
 }
 
 const formatYear = (value: number | null | undefined): string => {
@@ -146,12 +141,12 @@ const rulesColumns: Column<TaxCalendarDeadlineRule>[] = [
   {
     key: 'due_day_of_month',
     header: 'יום בחודש',
-    render: (rule) => <span className="font-mono tabular-nums">{formatNumber(rule.due_day_of_month)}</span>,
+    render: (rule) => <span className="font-mono tabular-nums">{formatCount(rule.due_day_of_month)}</span>,
   },
   {
     key: 'offset_months',
     header: 'היסט חודשים',
-    render: (rule) => <span className="font-mono tabular-nums">{formatNumber(rule.offset_months)}</span>,
+    render: (rule) => <span className="font-mono tabular-nums">{formatCount(rule.offset_months)}</span>,
   },
   {
     key: 'effective_from',
@@ -174,7 +169,7 @@ const groupedEntriesColumns: Column<TaxCalendarSettingsEntry>[] = [
   {
     key: 'period_months_count',
     header: 'מספר חודשים',
-    render: (entry) => <span className="font-mono tabular-nums">{formatNumber(entry.period_months_count)}</span>,
+    render: (entry) => <span className="font-mono tabular-nums">{formatCount(entry.period_months_count)}</span>,
   },
   {
     key: 'due_date',
@@ -299,7 +294,7 @@ export const TaxCalendarSettingsPage = () => {
             <div>
               <p className="text-xs font-medium text-gray-500">רשומות</p>
               <p className="font-mono text-lg font-semibold tabular-nums text-gray-900">
-                {summaryQuery.isPending ? '...' : formatNumber(summary?.total_entries ?? 0)}
+                {summaryQuery.isPending ? '...' : formatCount(summary?.total_entries ?? 0)}
               </p>
             </div>
           </div>
@@ -315,7 +310,7 @@ export const TaxCalendarSettingsPage = () => {
             <div>
               <p className="text-xs font-medium text-gray-500">אזהרות</p>
               <p className="font-mono text-lg font-semibold tabular-nums text-gray-900">
-                {summaryQuery.isPending ? '...' : formatNumber(warnings.length)}
+                {summaryQuery.isPending ? '...' : formatCount(warnings.length)}
               </p>
             </div>
           </div>
@@ -333,9 +328,9 @@ export const TaxCalendarSettingsPage = () => {
       {bootstrapMutation.data ? (
         <Alert
           variant={bootstrapMutation.data.warnings.length > 0 ? 'warning' : 'success'}
-          message={`אתחול הושלם: ${formatNumber(bootstrapMutation.data.entries_created)} רשומות נוצרו, ${formatNumber(
+          message={`אתחול הושלם: ${formatCount(bootstrapMutation.data.entries_created)} רשומות נוצרו, ${formatCount(
             bootstrapMutation.data.entries_skipped,
-          )} רשומות דולגו, ${formatNumber(bootstrapMutation.data.total_entries_for_range)} רשומות קיימות בטווח.`}
+          )} רשומות דולגו, ${formatCount(bootstrapMutation.data.total_entries_for_range)} רשומות קיימות בטווח.`}
         />
       ) : null}
 
@@ -387,7 +382,7 @@ export const TaxCalendarSettingsPage = () => {
                           {getObligationLabel(group.obligationType)}
                         </h4>
                         <span className="text-xs font-medium text-gray-500">
-                          {formatNumber(group.entries.length)} רשומות
+                          {formatCount(group.entries.length)} רשומות
                         </span>
                       </div>
                       <DataTable data={group.entries} columns={groupedEntriesColumns} getRowKey={(entry) => entry.id} />

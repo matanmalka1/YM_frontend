@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { StateCard } from "../../../components/ui/feedback/StateCard";
 import { Inbox } from "lucide-react";
 import type { AgingReportItem } from "../api";
-import { formatDate } from "../../../utils/utils";
+import { formatCount, formatDate } from "../../../utils/utils";
 import { Badge } from "../../../components/ui/primitives/Badge";
 import { formatILS, toReportNumber, type ReportMoneyValue } from "../utils";
 
@@ -86,7 +86,7 @@ export const AgingReportTable: React.FC<AgingReportTableProps> = ({ items }) => 
               <span>חוב מאז {formatDate(item.oldest_invoice_date)}</span>
               {item.oldest_invoice_days != null && (
                 <span className="font-medium text-gray-700 tabular-nums">
-                  {item.oldest_invoice_days.toLocaleString("he-IL")} ימים
+                  {formatCount(item.oldest_invoice_days)} ימים
                 </span>
               )}
             </div>

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft, UserPlus } from 'lucide-react'
+import { DASHBOARD_ONBOARDING_COPY } from '../dashboardConstants'
 import { DashboardPanel } from './DashboardPrimitives'
 
 export const DashboardOnboardingEmptyState = () => {
@@ -11,17 +12,15 @@ export const DashboardOnboardingEmptyState = () => {
             <UserPlus className="h-5 w-5" />
           </span>
           <div className="min-w-0">
-            <h2 className="text-xl font-bold text-slate-900">עדיין אין נתונים במערכת</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
-              כדי להתחיל: צור לקוח ראשון. המערכת תפתח קלסר ותייצר מועדים רלוונטיים אוטומטית.
-            </p>
+            <h2 className="text-xl font-bold text-slate-900">{DASHBOARD_ONBOARDING_COPY.title}</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">{DASHBOARD_ONBOARDING_COPY.description}</p>
           </div>
         </div>
         <Link
           to="/clients?create=1"
           className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-primary-600 px-4 py-2 text-sm font-semibold text-white shadow-elevation-1 transition-colors hover:bg-primary-700"
         >
-          צור לקוח ראשון
+          {DASHBOARD_ONBOARDING_COPY.cta}
           <ArrowLeft className="h-4 w-4" />
         </Link>
       </div>

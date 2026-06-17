@@ -2,6 +2,7 @@ import { ArrowLeft, AlertTriangle, CheckCircle, FilePlus, TrendingUp } from 'luc
 import { Link } from 'react-router-dom'
 import { cn } from '@/utils/utils'
 import { semanticMonoToneClasses, type SemanticTone } from '@/utils/semanticColors'
+import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { useSeasonSummary } from '../hooks/useSeasonSummary'
 import { DashboardBadge, DashboardPanel } from './DashboardPrimitives'
 
@@ -13,7 +14,7 @@ export const SeasonSummaryWidget: React.FC<SeasonSummaryWidgetProps> = ({ sideCo
   const { stats, isPending } = useSeasonSummary()
 
   if (isPending) {
-    return <div className="h-28 animate-pulse rounded-2xl bg-slate-100" />
+    return <SkeletonBlock height="h-28" width="w-full" rounded="xl" className="rounded-2xl" />
   }
 
   if (!stats || stats.total === 0) {

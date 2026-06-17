@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Card } from '../primitives/Card'
-import { cn } from '../../../utils/utils'
+import { cn, formatCount } from '../../../utils/utils'
 
 interface PaginationCardProps {
   page: number
@@ -43,7 +43,7 @@ export const PaginationCard: React.FC<PaginationCardProps> = ({
     <Card className="mt-4">
       <div className="flex flex-col gap-4 text-sm md:flex-row md:items-center md:justify-between">
         <p className="text-gray-600">
-          <span className="font-semibold text-gray-900">{total.toLocaleString('he-IL')}</span> {label}
+          <span className="font-semibold text-gray-900">{formatCount(total)}</span> {label}
           <span className="mx-2 text-gray-300">|</span>
           עמוד {page} מתוך {totalPages}
         </p>

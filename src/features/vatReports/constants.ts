@@ -1,4 +1,5 @@
 import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
+import { formatCount } from '@/utils/utils'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { CATEGORY_COLOR_TOKENS } from './visualizationTokens'
 import { ALL_STATUSES_OPTION, ALL_CATEGORIES_OPTION } from '@/constants/filterOptions.constants'
@@ -223,7 +224,7 @@ export const DEFAULT_RATE_TYPE = 'standard' as const
 
 // Mirrors app/vat_reports/services/constants.py: EXCEPTIONAL_INVOICE_THRESHOLD
 const VAT_EXCEPTIONAL_INVOICE_THRESHOLD = 25_000
-export const VAT_EXCEPTIONAL_INVOICE_TOOLTIP = `חשבונית מעל ${VAT_EXCEPTIONAL_INVOICE_THRESHOLD.toLocaleString('en-US')} ₪ — נדרש דיווח מיוחד`
+export const VAT_EXCEPTIONAL_INVOICE_TOOLTIP = `חשבונית מעל ${formatCount(VAT_EXCEPTIONAL_INVOICE_THRESHOLD)} ₪ — נדרש דיווח מיוחד`
 
 // Any field backed by a backend enum MUST use a Zod enum in the frontend schema.
 export const VAT_RATE_TYPES = ['standard', 'exempt', 'zero_rate'] as const

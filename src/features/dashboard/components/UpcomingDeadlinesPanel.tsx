@@ -2,46 +2,20 @@ import { Link } from 'react-router-dom'
 import { CalendarDays, ChevronLeft, Landmark } from 'lucide-react'
 import { DashboardPanel } from './DashboardPrimitives'
 import { InlineEmptyState } from '@/components/ui/feedback/InlineEmptyState'
+import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarGroup, useTaxCalendarGroups } from '@/features/taxCalendar'
-import { formatDate } from '@/utils/utils'
+import { formatDate, formatWeekday, getReportingPeriodLabelWithYear } from '@/utils/utils'
 
 const UPCOMING_DEADLINES_LIMIT = 4
 
-const toDate = (value: string): Date | null => {
+/**
+ * Local-midnight epoch for a `YYYY-MM-DD` due date. Parsed in local time (not `new Date(str)`,
+ * which is UTC) so it compares correctly against a local start-of-day boundary.
+ */
+const toLocalDueTime = (value: string): number => {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value)
-  if (match) {
-    return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
-  }
-
-  const date = new Date(value)
-  return Number.isNaN(date.getTime()) ? null : date
-}
-
-const toTime = (value: string): number => toDate(value)?.getTime() ?? Number.POSITIVE_INFINITY
-
-const weekdayFormatter = new Intl.DateTimeFormat('he-IL', { weekday: 'long' })
-const monthFormatter = new Intl.DateTimeFormat('he-IL', { month: 'long' })
-
-const formatPeriod = (group: TaxCalendarGroup): string => {
-  if (!group.period) return String(group.tax_year)
-
-  const match = /^(\d{4})-(\d{2})$/.exec(group.period)
-  if (!match) return group.period
-
-  const year = Number(match[1])
-  const month = Number(match[2])
-  const monthLabel = monthFormatter.format(new Date(year, month - 1, 1))
-
-  if (group.period_months_count === 2) {
-    const startDate = new Date(year, month - 2, 1)
-    const startYear = startDate.getFullYear()
-    const startMonthLabel = monthFormatter.format(startDate)
-    return startYear !== year
-      ? `${startMonthLabel} ${startYear}-${monthLabel} ${year}`
-      : `${startMonthLabel}-${monthLabel} ${year}`
-  }
-
-  return `${monthLabel} ${year}`
+  if (!match) return Number.POSITIVE_INFINITY
+  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])).getTime()
 }
 
 const formatObligationTitle = (group: TaxCalendarGroup): string => {
@@ -54,7 +28,7 @@ const formatObligationTitle = (group: TaxCalendarGroup): string => {
 }
 
 const UpcomingDeadlineRow = ({ group }: { group: TaxCalendarGroup }) => {
-  const dueDate = toDate(group.effective_due_date_min)
+  const weekday = formatWeekday(group.effective_due_date_min)
   const Icon = group.obligation_type === 'vat' ? CalendarDays : Landmark
   const countLabel = group.obligation_type === 'advance_payment' ? 'תשלומים' : 'דוחות'
   const iconClassName =
@@ -74,12 +48,12 @@ const UpcomingDeadlineRow = ({ group }: { group: TaxCalendarGroup }) => {
       </div>
 
       <div className="min-w-0 py-4 text-center">
-        <p className="text-base font-bold tabular-nums text-slate-900">
-          {dueDate ? formatDate(group.effective_due_date_min) : group.effective_due_date_min}
-        </p>
-        {dueDate && <p className="mt-1 text-xs font-semibold text-slate-400">({weekdayFormatter.format(dueDate)})</p>}
+        <p className="text-base font-bold tabular-nums text-slate-900">{formatDate(group.effective_due_date_min)}</p>
+        <p className="mt-1 text-xs font-semibold text-slate-400">({weekday})</p>
         <p className="mt-2 truncate text-sm font-bold text-slate-900">{formatObligationTitle(group)}</p>
-        <p className="mt-1 truncate text-sm text-slate-400">{formatPeriod(group)}</p>
+        <p className="mt-1 truncate text-sm text-slate-400">
+          {getReportingPeriodLabelWithYear(group.period, group.period_months_count, group.tax_year)}
+        </p>
         <p className="mt-1 truncate text-sm text-slate-400">{`${group.open_count} ${countLabel}`}</p>
       </div>
     </li>
@@ -94,15 +68,13 @@ export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string 
     include_empty: false,
   })
 
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  const startOfToday = new Date()
+  startOfToday.setHours(0, 0, 0, 0)
+  const startOfTodayTime = startOfToday.getTime()
 
   const groups = (groupsQuery.data?.items ?? [])
-    .filter((group) => {
-      const dueDate = toDate(group.effective_due_date_min)
-      return group.open_count > 0 && dueDate !== null && dueDate >= today
-    })
-    .sort((a, b) => toTime(a.effective_due_date_min) - toTime(b.effective_due_date_min))
+    .filter((group) => group.open_count > 0 && toLocalDueTime(group.effective_due_date_min) >= startOfTodayTime)
+    .sort((a, b) => toLocalDueTime(a.effective_due_date_min) - toLocalDueTime(b.effective_due_date_min))
     .slice(0, UPCOMING_DEADLINES_LIMIT)
 
   return (
@@ -118,7 +90,7 @@ export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string 
         {groupsQuery.isPending ? (
           <div className="space-y-3 p-4">
             {Array.from({ length: UPCOMING_DEADLINES_LIMIT }, (_, index) => (
-              <div key={index} className="h-24 animate-pulse rounded-2xl bg-slate-100" />
+              <SkeletonBlock key={index} height="h-24" width="w-full" rounded="xl" className="rounded-2xl" />
             ))}
           </div>
         ) : groups.length > 0 ? (

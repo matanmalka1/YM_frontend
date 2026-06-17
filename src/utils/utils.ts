@@ -5,7 +5,12 @@ import { he } from 'date-fns/locale'
 import { twMerge } from 'tailwind-merge'
 import { toast } from './toast'
 
-export { getReportingPeriodMonthLabel, MONTH_NAMES, MONTH_OPTIONS } from '@/constants/periodOptions.constants'
+export {
+  getReportingPeriodLabelWithYear,
+  getReportingPeriodMonthLabel,
+  MONTH_NAMES,
+  MONTH_OPTIONS,
+} from '@/constants/periodOptions.constants'
 
 const EMPTY_VALUE = '—'
 
@@ -92,6 +97,13 @@ export const formatShekelAmount = (value: string | number | null | undefined, fa
   return formatCurrencyILS(value, { fallback, maximumFractionDigits: 0 })
 }
 
+/** Locale-grouped integer count (e.g. `1,234`). For currency use formatCurrencyILS, for ratios formatPercent. */
+export const formatCount = (value: string | number | null | undefined, fallback = EMPTY_VALUE): string => {
+  const numeric = toNumberOrNull(value)
+  if (numeric === null) return fallback
+  return new Intl.NumberFormat('he-IL', { maximumFractionDigits: 0 }).format(numeric)
+}
+
 type PercentFormatOptions = {
   fallback?: string
   fractionDigits?: number
@@ -148,6 +160,10 @@ export const formatAuditTimestamp = (value: string | null | undefined): string =
 }
 
 export const formatHebrewDate = (d: Date): string => format(d, 'EEEE, d בMMMM', { locale: he })
+
+export const formatWeekday = (value: string | null | undefined): string => {
+  return formatSafeDate(value, 'EEEE')
+}
 
 export const formatFileSize = (bytes: number | null | undefined): string => {
   if (bytes == null || !Number.isFinite(bytes)) return EMPTY_VALUE

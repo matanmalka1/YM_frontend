@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { useSearchDebounce } from '@/hooks/useSearchDebounce'
+import { formatCount } from '@/utils/utils'
 import { Search as SearchIcon, FileSearch } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
@@ -85,7 +86,7 @@ export const Search: React.FC = () => {
         <>
           {!loading && (
             <p className="px-1 text-sm text-gray-500">
-              נמצאו <strong className="text-gray-900">{(total + documents.length).toLocaleString('he-IL')}</strong>{' '}
+              נמצאו <strong className="text-gray-900">{formatCount(total + documents.length)}</strong>{' '}
               תוצאות
             </p>
           )}

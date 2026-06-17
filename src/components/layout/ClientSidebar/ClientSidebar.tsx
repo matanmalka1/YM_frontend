@@ -6,7 +6,7 @@ import { useAuthStore } from '@/store/auth.store'
 import { CLIENT_ROUTES } from '@/features/clients'
 import { useRole } from '@/hooks/useRole'
 import { getRoleLabel } from '@/features/users'
-import { cn } from '@/utils/utils'
+import { cn, formatCount } from '@/utils/utils'
 import { CLIENT_SIDEBAR_PAGE_SIZE, useClientSidebarClients, type ClientSidebarItem } from './useClientSidebarClients'
 import { ClientSidebarClientCard } from './ClientSidebarClientCard'
 import { getEntityLabel, getVatLabel } from './ClientSidebar.labels'
@@ -200,7 +200,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobi
               <div>
                 <p className="text-sm font-semibold leading-tight text-gray-900">לקוחות</p>
                 <p className="mt-0.5 text-[11px] leading-tight text-gray-500">
-                  <span className="tabular-nums">{(hasSearch ? clients.length : total).toLocaleString('he-IL')}</span>{' '}
+                  <span className="tabular-nums">{formatCount(hasSearch ? clients.length : total)}</span>{' '}
                   {hasSearch ? 'תוצאות' : 'ברשימה'}
                 </p>
               </div>
@@ -269,7 +269,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobi
             <div className="space-y-5">
               {isTruncated ? (
                 <p className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-600">
-                  מוצגים {CLIENT_SIDEBAR_PAGE_SIZE.toLocaleString('he-IL')} מתוך {total.toLocaleString('he-IL')}
+                  מוצגים {formatCount(CLIENT_SIDEBAR_PAGE_SIZE)} מתוך {formatCount(total)}
                 </p>
               ) : null}
               {clientGroups.map((group) => (

@@ -79,3 +79,20 @@ const getPeriodLabel = (
 
 export const getReportingPeriodMonthLabel = (period: string, periodMonthsCount: 1 | 2 = 1): string =>
   getPeriodLabel(MONTH_NAMES, period, periodMonthsCount)
+
+/**
+ * Full period label including the year, e.g. `ינואר 2026` or `ינואר-פברואר 2026`.
+ * Falls back to the bare tax year (or a placeholder) when there is no monthly period.
+ */
+export const getReportingPeriodLabelWithYear = (
+  period: string | null,
+  periodMonthsCount: number | null,
+  taxYear: number | null,
+): string => {
+  if (!period) return taxYear != null ? String(taxYear) : 'ללא תקופה'
+  if (!PERIOD_PATTERN.test(period)) return period
+
+  const year = period.slice(0, 4)
+  const monthsCount = periodMonthsCount === 2 ? 2 : 1
+  return `${getReportingPeriodMonthLabel(period, monthsCount)} ${year}`
+}

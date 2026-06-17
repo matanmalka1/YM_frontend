@@ -9,6 +9,7 @@ import { CreateClientModal, DeletedClientDialog, type ClientRecordResponse } fro
 import { SignatureRequestsDashboardPanel } from '@/features/signatureRequests'
 import { VatWorkItemsCreateModal } from '@/features/vatReports'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
+import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import {
   AttentionBoard,
   DashboardOnboardingEmptyState,
@@ -16,26 +17,16 @@ import {
   SeasonSummaryWidget,
   useDashboardPage,
 } from '@/features/dashboard'
-import { DASHBOARD_COPY, DASHBOARD_LOADING_CARD_COUNT } from '../dashboardConstants'
+import { DASHBOARD_COPY } from '../dashboardConstants'
 import { DashboardSurface } from '../components/DashboardPrimitives'
+import { DashboardStatsSkeleton } from '../components/DashboardStatsSkeleton'
 import { RecentActivityPanel } from '../components/RecentActivityPanel'
 import { QuickActionsPanel } from '../components/QuickActionsPanel'
 import { TaxInsightsRow } from '../components/TaxInsightsRow'
 import { UpcomingDeadlinesPanel } from '../components/UpcomingDeadlinesPanel'
 import { useDashboardCreateModals } from '../hooks/useDashboardCreateModals'
 
-const StatsSkeleton = () => (
-  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
-    {Array.from({ length: DASHBOARD_LOADING_CARD_COUNT }, (_, i) => (
-      <div key={i} className="h-40 rounded-3xl overflow-hidden" style={{ animationDelay: `${i * 80}ms` }}>
-        <div
-          className="h-full w-full animate-shimmer bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100"
-          style={{ backgroundSize: '1000px 100%', animationDelay: `${i * 80}ms` }}
-        />
-      </div>
-    ))}
-  </div>
-)
+const AttentionSkeleton = () => <SkeletonBlock height="h-80" width="w-full" className="rounded-3xl" />
 
 export const DashboardPage: React.FC = () => {
   const { attentionItems, dashboard, denied, isAdvisorView, emptyState, stats, vatStats, recentActivity } =
@@ -70,7 +61,7 @@ export const DashboardPage: React.FC = () => {
       {dashboard.status === 'error' && !denied && <Alert variant="error" message={dashboard.message} />}
 
       {dashboard.status === 'loading' ? (
-        <StatsSkeleton />
+        <DashboardStatsSkeleton />
       ) : emptyState?.is_empty ? (
         <DashboardOnboardingEmptyState />
       ) : dashboard.status === 'ok' ? (
@@ -89,16 +80,12 @@ export const DashboardPage: React.FC = () => {
             <RecentActivityPanel items={recentActivity} className="flex-1" />
           </aside>
           <div className="space-y-5 lg:col-start-1 lg:row-start-1">
-            {dashboard.status === 'loading' ? (
-              <div className="h-80 animate-pulse rounded-3xl bg-slate-100" />
-            ) : (
-              <AttentionBoard items={attentionItems} />
-            )}
+            {dashboard.status === 'loading' ? <AttentionSkeleton /> : <AttentionBoard items={attentionItems} />}
             <SignatureRequestsDashboardPanel />
           </div>
         </div>
       ) : dashboard.status === 'loading' ? (
-        <div className="h-80 animate-pulse rounded-3xl bg-slate-100" />
+        <AttentionSkeleton />
       ) : (
         <AttentionBoard items={attentionItems} />
       )}

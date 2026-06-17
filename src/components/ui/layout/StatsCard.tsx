@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
-import { cn, formatPercent } from '../../../utils/utils'
+import { cn, formatCount, formatPercent } from '../../../utils/utils'
 import { semanticStatToneClasses } from '@/utils/semanticColors'
 
 type StatVariant = 'blue' | 'green' | 'red' | 'orange' | 'purple' | 'neutral'
@@ -185,7 +185,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
               {loading
                 ? '—'
                 : typeof value === 'number'
-                  ? (displayValue ?? value).toLocaleString('he-IL')
+                  ? formatCount(displayValue ?? value)
                   : value}
             </div>
 

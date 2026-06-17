@@ -1,4 +1,5 @@
 import { CreditCard, FileText } from 'lucide-react'
+import { formatCount, formatCurrencyILS } from '@/utils/utils'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import type { DashboardOverviewResponse } from './api'
 import type { StatItem } from './components/DashboardStatsGrid'
@@ -29,7 +30,7 @@ const buildVatStat = (
 ): StatItem => ({
   key,
   title,
-  value: `${stat.pending.toLocaleString('he-IL')} דוחות ממתינים`,
+  value: `${formatCount(stat.pending)} דוחות ממתינים`,
   description: `${stat.period_label} · ${stat.status_label}`,
   icon: FileText,
   variant: vatVariant(stat.pending),
@@ -47,7 +48,7 @@ const buildAdvanceStat = (
 ): StatItem => ({
   key,
   title,
-  value: `${stat.pending.toLocaleString('he-IL')} מקדמות לתשלום`,
+  value: `${formatCount(stat.pending)} מקדמות לתשלום`,
   description: `${stat.period_label} · ממתינות לתשלום`,
   icon: CreditCard,
   variant: vatVariant(stat.pending),
@@ -69,8 +70,10 @@ export const buildDashboardStats = (data: DashboardStatsData, isAdvisor: boolean
     stats.push({
       key: 'open_charges',
       title: 'חיובים פתוחים',
-      value: `${data.open_charges_count.toLocaleString('he-IL')} חיובים פתוחים`,
-      description: data.open_charges_amount_ils ? `${data.open_charges_amount_ils} לגבייה` : 'ללא חיובים פתוחים',
+      value: `${formatCount(data.open_charges_count)} חיובים פתוחים`,
+      description: data.open_charges_amount_ils
+        ? `${formatCurrencyILS(data.open_charges_amount_ils)} לגבייה`
+        : 'ללא חיובים פתוחים',
       icon: CreditCard,
       variant: data.open_charges_count > 0 ? 'red' : 'green',
       urgent: data.open_charges_count > 0,

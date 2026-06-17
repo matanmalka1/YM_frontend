@@ -9,7 +9,7 @@ import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/tabl
 import { formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
-import { cn, formatDate, formatPlainIdentifier, getErrorMessage } from '@/utils/utils'
+import { cn, formatDate, formatPlainIdentifier, getErrorMessage, getReportingPeriodLabelWithYear } from '@/utils/utils'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { useTaxCalendarGroupItems } from '../hooks/useTaxCalendarGroupItems'
 import {
@@ -26,40 +26,9 @@ interface TaxCalendarGroupsTableProps {
   clientRecordId?: number
 }
 
-const MONTH_LABELS = [
-  'ינואר',
-  'פברואר',
-  'מרץ',
-  'אפריל',
-  'מאי',
-  'יוני',
-  'יולי',
-  'אוגוסט',
-  'ספטמבר',
-  'אוקטובר',
-  'נובמבר',
-  'דצמבר',
-]
-
-const formatPeriodValue = (period: string | null, monthsCount: number | null, taxYear: number | null): string => {
-  if (!period) return taxYear != null ? `${taxYear}` : 'ללא תקופה'
-
-  const match = /^(\d{4})-(\d{2})$/.exec(period)
-  if (!match) return monthsCount ? `${period} (${monthsCount} חודשים)` : period
-
-  const year = Number(match[1])
-  const month = Number(match[2])
-  const monthLabel = MONTH_LABELS[month - 1] ?? period
-  if (monthsCount === 2) {
-    const nextMonthLabel = MONTH_LABELS[month] ?? MONTH_LABELS[month - 1] ?? period
-    return `${monthLabel}–${nextMonthLabel} ${year}`
-  }
-  return `${monthLabel} ${year}`
-}
-
 const formatGroupTitle = (group: TaxCalendarGroup): string => {
   const obligationLabel = TAX_CALENDAR_OBLIGATION_LABELS[group.obligation_type]
-  const periodLabel = formatPeriodValue(group.period, group.period_months_count, group.tax_year)
+  const periodLabel = getReportingPeriodLabelWithYear(group.period, group.period_months_count, group.tax_year)
   return `${obligationLabel} · ${periodLabel}`
 }
 

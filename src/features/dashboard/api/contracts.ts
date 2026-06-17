@@ -1,3 +1,5 @@
+export type AttentionUrgency = 'overdue' | 'approaching' | 'important' | 'upcoming'
+
 export interface AttentionBoardItem {
   id: string
   source_type: string
@@ -8,7 +10,7 @@ export interface AttentionBoardItem {
   days_delta: number
   reason: string | null
   amount: string | null
-  urgency: 'overdue' | 'approaching' | 'important' | 'upcoming'
+  urgency: AttentionUrgency
   href: string
 }
 

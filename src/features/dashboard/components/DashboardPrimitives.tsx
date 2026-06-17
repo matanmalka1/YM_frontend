@@ -12,7 +12,6 @@ const toneClasses: Record<
     badge: string
     border: string
     bar: string
-    value: string
   }
 > = {
   neutral: {
@@ -20,42 +19,36 @@ const toneClasses: Record<
     badge: 'bg-slate-100 text-slate-600',
     border: 'border-slate-200',
     bar: 'bg-slate-400',
-    value: 'text-slate-900',
   },
   blue: {
     icon: 'bg-primary-50 text-primary-600',
     badge: 'bg-primary-50 text-primary-700',
     border: 'border-primary-100',
     bar: 'bg-primary-500',
-    value: 'text-slate-900',
   },
   green: {
     icon: 'bg-positive-50 text-positive-600',
     badge: 'bg-positive-50 text-positive-700',
     border: 'border-positive-100',
     bar: 'bg-positive-500',
-    value: 'text-slate-900',
   },
   amber: {
     icon: 'bg-warning-50 text-warning-600',
     badge: 'bg-warning-50 text-warning-700',
     border: 'border-warning-100',
     bar: 'bg-warning-400',
-    value: 'text-slate-900',
   },
   red: {
     icon: 'bg-negative-50 text-negative-500',
     badge: 'bg-negative-50 text-negative-600',
     border: 'border-negative-100',
     bar: 'bg-negative-400',
-    value: 'text-slate-900',
   },
   purple: {
     icon: 'bg-violet-50 text-violet-500',
     badge: 'bg-violet-50 text-violet-600',
     border: 'border-violet-100',
     bar: 'bg-violet-400',
-    value: 'text-slate-900',
   },
 }
 
@@ -181,7 +174,7 @@ export const DashboardMetricCard = ({
       </div>
 
       <div>
-        <p className={cn('text-2xl font-bold tabular-nums', toneClasses[activeTone].value)}>{value}</p>
+        <p className="text-2xl font-bold tabular-nums text-slate-900">{value}</p>
         <p className="mt-1 line-clamp-2 text-xs text-slate-400">{description}</p>
       </div>
 

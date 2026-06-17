@@ -4,7 +4,7 @@ import { ChevronDown, Filter, RefreshCw, Search, Star, X } from 'lucide-react'
 import { Button } from '../../../components/ui/primitives/Button'
 import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
-import { cn } from '../../../utils/utils'
+import { cn, formatCount } from '../../../utils/utils'
 import { useSearchDebounce } from '../../../hooks/useSearchDebounce'
 import type { EventTypeStat } from '../lib/timelineStats'
 import type { TimelineFilterKey } from '../normalize'
@@ -103,7 +103,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
         {/* Right controls */}
         <div className="flex items-center gap-3 shrink-0">
           <span className="hidden sm:block text-xs text-gray-400 whitespace-nowrap">
-            {total.toLocaleString('he-IL')} אירועים
+            {formatCount(total)} אירועים
           </span>
 
           {lastUpdated && (
