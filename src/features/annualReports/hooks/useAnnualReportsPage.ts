@@ -1,15 +1,17 @@
 import { useEffect, useMemo } from 'react'
+import { FileText } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useSeasonDashboard } from './useSeasonDashboard'
 import { annualReportSeasonApi, annualReportsApi, annualReportsQK } from '../api'
+import type { AnnualReportListItem } from '../api'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { useState } from 'react'
 import { ANNUAL_REPORTS_TAX_YEAR_DESC_PARAMS } from '../report.constants'
 
 export const useAnnualReportsPage = () => {
-  const { getParam, setFilter, setFilters, resetFilters } = useSearchParamFilters()
+  const { getParam, setFilter, resetFilters } = useSearchParamFilters()
   const [showCreate, setShowCreate] = useState(false)
   const navigate = useNavigate()
 
@@ -61,8 +63,6 @@ export const useAnnualReportsPage = () => {
 
   const handleFilterChange = (key: string, value: string) => setFilter(key, value)
 
-  const handleMultiFilterChange = (updates: Record<string, string>) => setFilters(updates)
-
   const handleResetFilters = () => resetFilters(defaultTaxYear != null ? { year: String(defaultTaxYear) } : {})
 
   const filteredReports = useMemo(
@@ -79,19 +79,42 @@ export const useAnnualReportsPage = () => {
         : null
       : season.error
 
+  const openCreate = () => setShowCreate(true)
+  const closeCreate = () => setShowCreate(false)
+
+  const taxYearLabel = taxYear ? String(taxYear) : '...'
+
   return {
-    taxYear,
-    filingSeasonYear,
-    defaultTaxYear,
-    showCreate,
-    openCreate: () => setShowCreate(true),
-    closeCreate: () => setShowCreate(false),
-    openReport,
-    filters,
-    handleFilterChange,
-    handleMultiFilterChange,
-    handleResetFilters,
-    filteredReports,
-    season: { ...season, isLoading, error },
+    status: { isLoading, error },
+    headerProps: {
+      title: `דוחות שנתיים לשנת המס ${taxYearLabel}`,
+      description: filingSeasonYear ? `עונת הגשה ${filingSeasonYear}` : 'ניהול ומעקב אחר דוחות שנתיים',
+      taxYear,
+    },
+    stats: { summary: season.summary },
+    filters: {
+      values: filters,
+      defaultYear: defaultTaxYear,
+      onFilterChange: handleFilterChange,
+      resetFilters: handleResetFilters,
+    },
+    table: {
+      reports: filteredReports,
+      isLoading,
+      taxYear,
+      onSelect: (report: AnnualReportListItem) => openReport(report.id),
+      emptyState: {
+        icon: FileText,
+        variant: 'illustration' as const,
+        title: `עדיין אין דוחות שנתיים לשנת המס ${taxYearLabel}`,
+        message: taxYear ? `לחץ על "דוח שנתי ${taxYear}" כדי להתחיל` : 'בחר שנת מס כדי להתחיל',
+        action: taxYear ? { label: `דוח שנתי ${taxYear}`, onClick: openCreate } : undefined,
+      },
+    },
+    banner: { overdue: season.overdue, onSelect: openReport },
+    modals: {
+      openCreate,
+      createProps: { open: showCreate, onClose: closeCreate, taxYear },
+    },
   }
 }

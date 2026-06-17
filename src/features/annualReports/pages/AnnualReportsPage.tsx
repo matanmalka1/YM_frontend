@@ -1,4 +1,4 @@
-import { Plus, FileText } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageLoading } from '@/components/ui/layout/PageLoading'
 import { Alert } from '@/components/ui/overlays/Alert'
@@ -15,74 +15,60 @@ import {
 } from '@/features/annualReports'
 
 export const AnnualReportsPage: React.FC = () => {
-  const {
-    taxYear,
-    filingSeasonYear,
-    defaultTaxYear,
-    showCreate,
-    openCreate,
-    closeCreate,
-    openReport,
-    filters,
-    handleFilterChange,
-    handleResetFilters,
-    filteredReports,
-    season,
-  } = useAnnualReportsPage()
-  const taxYearLabel = taxYear ? String(taxYear) : '...'
+  const { status, headerProps, stats, filters, table, banner, modals } = useAnnualReportsPage()
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title={`דוחות שנתיים לשנת המס ${taxYearLabel}`}
-        description={filingSeasonYear ? `עונת הגשה ${filingSeasonYear}` : 'ניהול ומעקב אחר דוחות שנתיים'}
+        title={headerProps.title}
+        description={headerProps.description}
         actions={
-          <Button variant="ghost" size="sm" onClick={openCreate} disabled={!taxYear} className="gap-2">
-            {taxYear ? `דוח שנתי ${taxYear}` : 'דוח שנתי'}
+          <Button variant="ghost" size="sm" onClick={modals.openCreate} disabled={!headerProps.taxYear} className="gap-2">
+            {headerProps.taxYear ? `דוח שנתי ${headerProps.taxYear}` : 'דוח שנתי'}
             <Plus className="h-4 w-4" />
           </Button>
         }
       />
 
-      {season.overdue.length > 0 && <OverdueBanner overdue={season.overdue} onSelect={openReport} />}
+      {banner.overdue.length > 0 && <OverdueBanner overdue={banner.overdue} onSelect={banner.onSelect} />}
 
       <AnnualReportsFiltersBar
-        filters={filters}
-        defaultYear={defaultTaxYear}
-        onFilterChange={handleFilterChange}
-        onReset={handleResetFilters}
+        filters={filters.values}
+        defaultYear={filters.defaultYear}
+        onFilterChange={filters.onFilterChange}
+        onReset={filters.resetFilters}
       />
 
-      {season.isLoading && <PageLoading message="טוען נתוני עונה..." />}
-      {season.error && <Alert variant="error" message={season.error} />}
+      {status.isLoading && <PageLoading message="טוען נתוני עונה..." />}
+      {status.error && <Alert variant="error" message={status.error} />}
 
-      {!season.isLoading && !season.error && season.summary && (
+      {!status.isLoading && !status.error && stats.summary && (
         <>
-          <SeasonSummaryCards summary={season.summary} />
-          <SeasonProgressBar summary={season.summary} />
+          <SeasonSummaryCards summary={stats.summary} />
+          <SeasonProgressBar summary={stats.summary} />
           <div>
-            <h2 className="mb-3 text-lg font-semibold text-gray-900">כל הדוחות — שנת מס {taxYear}</h2>
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">כל הדוחות — שנת מס {table.taxYear}</h2>
             <SeasonReportsTable
-              reports={filteredReports}
-              isLoading={season.isLoading}
-              taxYear={taxYear}
-              onSelect={(report) => openReport(report.id)}
+              reports={table.reports}
+              isLoading={table.isLoading}
+              taxYear={table.taxYear}
+              onSelect={table.onSelect}
             />
           </div>
         </>
       )}
 
-      {!season.isLoading && !season.error && !season.summary && (
+      {!status.isLoading && !status.error && !stats.summary && (
         <StateCard
-          icon={FileText}
-          variant="illustration"
-          title={`עדיין אין דוחות שנתיים לשנת המס ${taxYearLabel}`}
-          message={taxYear ? `לחץ על "דוח שנתי ${taxYear}" כדי להתחיל` : 'בחר שנת מס כדי להתחיל'}
-          action={taxYear ? { label: `דוח שנתי ${taxYear}`, onClick: openCreate } : undefined}
+          icon={table.emptyState.icon}
+          variant={table.emptyState.variant}
+          title={table.emptyState.title}
+          message={table.emptyState.message}
+          action={table.emptyState.action}
         />
       )}
 
-      <CreateReportModal open={showCreate} onClose={closeCreate} taxYear={taxYear} />
+      <CreateReportModal {...modals.createProps} />
     </div>
   )
 }

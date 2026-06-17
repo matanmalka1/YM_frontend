@@ -1,102 +1,26 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useSearchParams, useNavigate } from 'react-router-dom'
 import { Clock, FileText, Hourglass, CheckCircle2, Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import {
-  buildVatWorkItemColumns,
   useVatWorkItemsPage,
-  useVatWorkItemGroups,
   VatWorkItemsCreateModal,
   VatWorkItemsFiltersCard,
   VatWorkItemsGroupedCards,
 } from '@/features/vatReports'
-import { buildVatEmptyStateTitle, toOptionalVatPeriodTypeFilter } from '@/features/vatReports/filterUtils'
-import type { VatWorkItemListItem } from '@/features/vatReports'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 
 export const VatWorkItems: React.FC = () => {
-  const [urlParams] = useSearchParams()
-
-  const {
-    actionLoadingId,
-    canDeleteWorkItem,
-    cancelDelete,
-    confirmDelete,
-    createError,
-    createLoading,
-    deleteTarget,
-    filters,
-    isAdvisor,
-    isDeleting,
-    loading: statsLoading,
-    requestDelete,
-    runAction,
-    setFilter,
-    setFilters,
-    setSearchParams,
-    statsFiled,
-    statsPending,
-    statsReview,
-    statsTyping,
-    submitCreate,
-  } = useVatWorkItemsPage()
-
-  const {
-    groups,
-    isLoading: groupsLoading,
-    error: groupsError,
-  } = useVatWorkItemGroups({
-    period_type: toOptionalVatPeriodTypeFilter(filters.period_type),
-    status: filters.status || undefined,
-    client_record_id: filters.client_record_id ? Number(filters.client_record_id) : undefined,
-    year: filters.year ? Number(filters.year) : undefined,
-  })
-
-  const navigate = useNavigate()
-  const [showCreateModal, setShowCreateModal] = useState(false)
-  const createClientId = urlParams.get('client_id')
-  const createPeriod = urlParams.get('period')
-
-  useEffect(() => {
-    if (urlParams.get('create') !== '1') return
-    setShowCreateModal(true)
-    const nextParams = new URLSearchParams(urlParams)
-    nextParams.delete('create')
-    navigate({ search: nextParams.toString() }, { replace: true, preventScrollReset: true })
-  }, [urlParams, navigate])
-
-  const closeCreateModal = () => {
-    setShowCreateModal(false)
-  }
-
-  const handleClearFilters = useCallback(() => setSearchParams(new URLSearchParams()), [setSearchParams])
-
-  const handleRowClick = useCallback((item: VatWorkItemListItem) => navigate(`/tax/vat/${item.id}`), [navigate])
-
-  const columns = useMemo(
-    () =>
-      buildVatWorkItemColumns({
-        isLoading: false,
-        isDisabled: actionLoadingId !== null,
-        runAction,
-        canDeleteWorkItem,
-        isDeleting,
-        onDeleteRequest: requestDelete,
-      }),
-    [actionLoadingId, canDeleteWorkItem, isDeleting, requestDelete, runAction],
-  )
+  const { headerProps, stats, filters, table, modals, permissions } = useVatWorkItemsPage()
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title='דוחות מע"מ (לקוח)'
-        description='ניהול תיקי מע"מ חודשיים ברמת לקוח — הקלדה, בדיקה והגשה'
+        {...headerProps}
         actions={
-          isAdvisor ? (
-            <Button variant="ghost" size="sm" onClick={() => setShowCreateModal(true)}>
+          permissions.isAdvisor ? (
+            <Button variant="ghost" size="sm" onClick={modals.openCreate}>
               דוח מע״מ חדש
               <Plus className="h-4 w-4" />
             </Button>
@@ -104,64 +28,39 @@ export const VatWorkItems: React.FC = () => {
         }
       />
 
-      {!isAdvisor && (
+      {!permissions.isAdvisor && (
         <Alert variant="info" message='צפייה בלבד. פתיחת תיקי מע"מ זמינה ליועץ. ניתן לבצע הקלדת נתונים בתוך כל תיק.' />
       )}
 
-      {!statsLoading && groups.length > 0 && (
+      {stats.visible && (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <StatsCard title="ממתין לחומרים" value={statsPending ?? 0} icon={Hourglass} variant="orange" />
-          <StatsCard title="בהקלדה" value={statsTyping ?? 0} icon={Clock} variant="blue" />
-          <StatsCard title="ממתין לבדיקה" value={statsReview ?? 0} icon={FileText} variant="orange" />
-          <StatsCard title="הוגש" value={statsFiled ?? 0} icon={CheckCircle2} variant="green" />
+          <StatsCard title="ממתין לחומרים" value={stats.pending ?? 0} icon={Hourglass} variant="orange" />
+          <StatsCard title="בהקלדה" value={stats.typing ?? 0} icon={Clock} variant="blue" />
+          <StatsCard title="ממתין לבדיקה" value={stats.review ?? 0} icon={FileText} variant="orange" />
+          <StatsCard title="הוגש" value={stats.filed ?? 0} icon={CheckCircle2} variant="green" />
         </div>
       )}
 
       <VatWorkItemsFiltersCard
-        filters={filters}
-        onFilterChange={setFilter}
-        onMultiFilterChange={setFilters}
-        onClear={handleClearFilters}
+        filters={filters.values}
+        onFilterChange={filters.onFilterChange}
+        onMultiFilterChange={filters.onMultiFilterChange}
+        onClear={filters.resetFilters}
       />
 
       <VatWorkItemsGroupedCards
-        groups={groups}
-        columns={columns}
-        isLoading={groupsLoading}
-        error={groupsError}
-        onRowClick={handleRowClick}
-        filters={{
-          status: filters.status || undefined,
-          client_record_id: filters.client_record_id ? Number(filters.client_record_id) : undefined,
-        }}
-        emptyState={{
-          title: buildVatEmptyStateTitle(filters),
-          message: isAdvisor ? 'נסה לשנות את הסינון או לפתוח תיק חדש' : 'נסה לשנות את הסינון',
-          action: isAdvisor ? { label: 'תיק חדש', onClick: () => setShowCreateModal(true) } : undefined,
-        }}
+        groups={table.groups}
+        columns={table.columns}
+        isLoading={table.isLoading}
+        error={table.error}
+        onRowClick={table.onRowClick}
+        filters={table.groupFilters}
+        emptyState={table.emptyState}
       />
 
-      <VatWorkItemsCreateModal
-        open={showCreateModal}
-        createError={createError}
-        createLoading={createLoading}
-        onClose={closeCreateModal}
-        onSubmit={submitCreate}
-        initialClientId={createClientId ? Number(createClientId) : undefined}
-        initialPeriod={createPeriod ?? undefined}
-      />
+      <VatWorkItemsCreateModal {...modals.createProps} />
 
-      <ConfirmDialog
-        open={deleteTarget !== null}
-        title='מחיקת תיק מע"מ'
-        message="האם למחוק את התיק? פעולה זו אינה הפיכה."
-        confirmLabel="מחק"
-        cancelLabel="ביטול"
-        confirmVariant="danger"
-        isLoading={isDeleting}
-        onConfirm={confirmDelete}
-        onCancel={cancelDelete}
-      />
+      <ConfirmDialog {...modals.deleteConfirmProps} />
     </div>
   )
 }
