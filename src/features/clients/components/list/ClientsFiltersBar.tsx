@@ -91,7 +91,7 @@ export const ClientsFiltersBar: React.FC<ClientsFiltersBarProps> = ({
       }}
       onChange={(key, value) => onFilterChange(key as Parameters<typeof onFilterChange>[0], value)}
       onReset={onReset}
-      gridClass="grid-cols-1 sm:grid-cols-2 lg:grid-cols-6"
+      gridClass="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
       extraBadges={extraBadges}
     />
   )
