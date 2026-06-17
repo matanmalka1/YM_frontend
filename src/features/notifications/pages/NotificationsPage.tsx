@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Bell, Eye, Plus, Send } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
@@ -235,21 +236,28 @@ export const NotificationsPage: React.FC = () => {
     [columns, isAdvisor, openSendModal],
   )
 
-  return (
-    <div className="space-y-6" dir="rtl">
-      <PageHeader
-        title="הודעות"
-        description="מרכז הודעות שנשלחו ונרשמו במערכת"
-        actions={
-          isAdvisor ? (
-            <Button variant="ghost" size="sm" onClick={() => openSendModal()}>
-              שליחת הודעה
-              <Plus className="h-3.5 w-3.5" />
-            </Button>
-          ) : undefined
-        }
-      />
+  const header = (
+    <PageHeader
+      title="הודעות"
+      description="מרכז הודעות שנשלחו ונרשמו במערכת"
+      actions={
+        isAdvisor ? (
+          <Button variant="ghost" size="sm" onClick={() => openSendModal()}>
+            שליחת הודעה
+            <Plus className="h-3.5 w-3.5" />
+          </Button>
+        ) : undefined
+      }
+    />
+  )
 
+  return (
+    <PageStateGuard
+      isLoading={isPending}
+      error={error ? 'שגיאה בטעינת הודעות' : null}
+      header={header}
+      loadingMessage="טוען הודעות..."
+    >
       <FilterPanel
         fields={filterFields}
         values={filterValues}
@@ -264,8 +272,6 @@ export const NotificationsPage: React.FC = () => {
         columns={tableColumns}
         getRowKey={(item) => item.id}
         onRowClick={(item) => setSelectedId(item.id)}
-        isLoading={isPending}
-        error={error ? 'שגיאה בטעינת הודעות' : null}
         page={page}
         pageSize={pageSize}
         total={total}
@@ -275,8 +281,7 @@ export const NotificationsPage: React.FC = () => {
         emptyMessage="אין הודעות להצגה"
         emptyState={{
           icon: Bell,
-          message: error ? 'שגיאה בטעינת הודעות' : 'אין הודעות להצגה',
-          variant: error ? 'error' : 'default',
+          message: 'אין הודעות להצגה',
         }}
       />
 
@@ -334,7 +339,7 @@ export const NotificationsPage: React.FC = () => {
           allowedTriggers={CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS}
         />
       )}
-    </div>
+    </PageStateGuard>
   )
 }
 

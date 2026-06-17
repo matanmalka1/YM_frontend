@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/primitives/Button'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import {
   BinderDetailDrawer,
   buildBindersColumns,
@@ -98,22 +99,24 @@ export const Binders: React.FC = () => {
     ],
   )
 
-  return (
-    <div className="space-y-6">
-      <PageHeader
-        title="קלסרים"
-        description="רשימת הקלסרים במשרד — סינון לפי לקוח, מספר קלסר, סטטוס ותקופה"
-        actions={
-          <Button variant="ghost" size="sm" onClick={() => setReceiveOpen(true)}>
-            קליטת חומר
-            <Plus className="h-3.5 w-3.5" />
-          </Button>
-        }
-      />
+  const header = (
+    <PageHeader
+      title="קלסרים"
+      description="רשימת הקלסרים במשרד — סינון לפי לקוח, מספר קלסר, סטטוס ותקופה"
+      actions={
+        <Button variant="ghost" size="sm" onClick={() => setReceiveOpen(true)}>
+          קליטת חומר
+          <Plus className="h-3.5 w-3.5" />
+        </Button>
+      }
+    />
+  )
 
+  return (
+    <PageStateGuard isLoading={loading} error={error} header={header} loadingMessage="טוען קלסרים...">
       <BindersStatsSection
         counters={counters}
-        countersLoading={loading && total === 0}
+        countersLoading={false}
         locationStatus={filters.location_status}
         onFilterChange={handleFilterChange}
       />
@@ -129,8 +132,6 @@ export const Binders: React.FC = () => {
         data={binders}
         columns={columns}
         getRowKey={(binder) => binder.id}
-        isLoading={loading}
-        error={error}
         onRowClick={(binder) => handleSelectBinder(binder)}
         page={filters.page}
         pageSize={filters.page_size}
@@ -209,6 +210,6 @@ export const Binders: React.FC = () => {
         onSubmit={receive.handleSubmit}
         isSubmitting={receive.isSubmitting}
       />
-    </div>
+    </PageStateGuard>
   )
 }

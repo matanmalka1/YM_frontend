@@ -8,9 +8,7 @@ import { ChargeBulkToolbar } from './ChargeBulkToolbar'
 interface ChargesTableBlockProps {
   charges: ChargeListItem[]
   columns: Column<ChargeListItem>[]
-  error: string | null
   isAdvisor: boolean
-  loading: boolean
   page: number
   pageSize: number
   selectedCount: number
@@ -27,9 +25,7 @@ interface ChargesTableBlockProps {
 export const ChargesTableBlock = ({
   charges,
   columns,
-  error,
   isAdvisor,
-  loading,
   page,
   pageSize,
   selectedCount,
@@ -59,8 +55,6 @@ export const ChargesTableBlock = ({
       columns={columns}
       getRowKey={(charge) => charge.id}
       onRowClick={(charge) => onOpenCharge(charge.id)}
-      isLoading={loading}
-      error={error}
       page={page}
       pageSize={pageSize}
       total={total}

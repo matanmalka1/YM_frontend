@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
@@ -66,30 +67,31 @@ export const Users: React.FC = () => {
     )
   }
 
+  const header = (
+    <PageHeader
+      title="ניהול משתמשים"
+      description="ניהול חשבונות משתמשים, תפקידים והרשאות"
+      actions={
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" onClick={() => setShowAuditLogs(true)}>
+            לוג ביקורת
+          </Button>
+          <Button variant="ghost" size="sm" onClick={() => setShowCreateModal(true)}>
+            משתמש חדש
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
+      }
+    />
+  )
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="ניהול משתמשים"
-        description="ניהול חשבונות משתמשים, תפקידים והרשאות"
-        actions={
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => setShowAuditLogs(true)}>
-              לוג ביקורת
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => setShowCreateModal(true)}>
-              משתמש חדש
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
-        }
-      />
+    <PageStateGuard isLoading={loading} error={error} header={header} loadingMessage="טוען משתמשים...">
       <UsersFiltersBar filters={filters} onFilterChange={handleFilterChange} />
       <PaginatedDataTable
         data={users}
         columns={columns}
         getRowKey={(user) => user.id}
-        isLoading={loading}
-        error={error}
         page={filters.page}
         pageSize={filters.page_size}
         total={total}
@@ -141,6 +143,6 @@ export const Users: React.FC = () => {
         }}
         onCancel={() => setPendingToggle(null)}
       />
-    </div>
+    </PageStateGuard>
   )
 }

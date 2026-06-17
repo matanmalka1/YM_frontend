@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Plus, Users } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
@@ -84,27 +85,30 @@ export const Clients: React.FC = () => {
     setShowCreateModal(false)
   }
 
-  return (
-    <div className="space-y-6">
-      <PageHeader
-        title="לקוחות"
-        description={isEmptyState ? undefined : 'רשימת כל הלקוחות במערכת'}
-        actions={
-          isEmptyState ? undefined : (
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" onClick={() => setShowImportExport(true)}>
-                ייבוא / ייצוא
+  const header = (
+    <PageHeader
+      title="לקוחות"
+      description={isEmptyState ? undefined : 'רשימת כל הלקוחות במערכת'}
+      actions={
+        isEmptyState ? undefined : (
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={() => setShowImportExport(true)}>
+              ייבוא / ייצוא
+            </Button>
+            {can.createClients && (
+              <Button variant="ghost" size="sm" onClick={() => setShowCreateModal(true)}>
+                לקוח חדש
+                <Plus className="h-3.5 w-3.5" />
               </Button>
-              {can.createClients && (
-                <Button variant="ghost" size="sm" onClick={() => setShowCreateModal(true)}>
-                  לקוח חדש
-                  <Plus className="h-3.5 w-3.5" />
-                </Button>
-              )}
-            </div>
-          )
-        }
-      />
+            )}
+          </div>
+        )
+      }
+    />
+  )
+
+  return (
+    <PageStateGuard isLoading={loading} error={error} header={header} loadingMessage="טוען לקוחות...">
       {!can.editClients && <Alert variant="info" message="צפייה בלבד. יצירה ועריכה של לקוחות זמינה ליועצים בלבד." />}
       {!isEmptyState && (
         <>
@@ -144,8 +148,6 @@ export const Clients: React.FC = () => {
         columns={columns}
         getRowKey={(client) => client.id}
         onRowClick={(client) => navigate(CLIENT_ROUTES.detail(client.id))}
-        isLoading={loading}
-        error={error}
         page={filters.page}
         pageSize={filters.page_size}
         total={total}
@@ -225,6 +227,6 @@ export const Clients: React.FC = () => {
           )}
         </DetailDrawer>
       )}
-    </div>
+    </PageStateGuard>
   )
 }

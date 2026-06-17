@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { Button } from '@/components/ui/primitives/Button'
 import {
   buildChargeColumns,
@@ -83,23 +84,25 @@ export const Charges: React.FC = () => {
     setFilter('charge_id', '', false)
   }
 
-  return (
-    <div className="space-y-6">
-      <PageHeader
-        title="חיובים"
-        description="רשימת חיובים ופעולות חיוב נתמכות"
-        actions={
-          <div className="flex items-center gap-2">
-            {isAdvisor && (
-              <Button variant="ghost" size="sm" onClick={() => setShowCreateModal(true)}>
-                חיוב חדש
-                <Plus className="h-3.5 w-3.5" />
-              </Button>
-            )}
-          </div>
-        }
-      />
+  const header = (
+    <PageHeader
+      title="חיובים"
+      description="רשימת חיובים ופעולות חיוב נתמכות"
+      actions={
+        <div className="flex items-center gap-2">
+          {isAdvisor && (
+            <Button variant="ghost" size="sm" onClick={() => setShowCreateModal(true)}>
+              חיוב חדש
+              <Plus className="h-3.5 w-3.5" />
+            </Button>
+          )}
+        </div>
+      }
+    />
+  )
 
+  return (
+    <PageStateGuard isLoading={loading} error={error} header={header} loadingMessage="טוען חיובים...">
       <ChargesSummaryBar
         stats={stats}
         isAdvisor={isAdvisor}
@@ -116,9 +119,7 @@ export const Charges: React.FC = () => {
       <ChargesTableBlock
         charges={charges}
         columns={columns}
-        error={error}
         isAdvisor={isAdvisor}
-        loading={loading}
         page={filters.page}
         pageSize={filters.page_size}
         total={total}
@@ -150,6 +151,6 @@ export const Charges: React.FC = () => {
         onClose={() => setShowCreateModal(false)}
         onSubmit={submitCreate}
       />
-    </div>
+    </PageStateGuard>
   )
 }
