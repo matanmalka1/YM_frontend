@@ -1,9 +1,10 @@
 import { AlertTriangle, Edit, ExternalLink } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
 import { formatClientOfficeId, formatDate, formatPercent, formatShekelAmount } from '@/utils/utils'
 import type { AdvancePaymentOverviewRow } from '../../api/contracts'
-import { AdvancePaymentStatusBadge } from '../badges/AdvancePaymentStatusBadge'
+import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
 import { getAdvancePaymentMonthLabel } from '../advancePaymentComponent.utils'
 
 interface AdvancePaymentBatchTableRowProps {
@@ -87,7 +88,11 @@ export const AdvancePaymentBatchTableRow = ({
         )}
       </td>
       <td className="px-3 py-1.5 text-center align-middle">
-        <AdvancePaymentStatusBadge status={row.status} />
+        <StatusBadge
+          status={row.status}
+          getLabel={getAdvancePaymentStatusLabel}
+          variantMap={ADVANCE_PAYMENT_STATUS_VARIANTS}
+        />
       </td>
       <td className="px-3 py-1.5 align-middle" onClick={(event) => event.stopPropagation()}>
         <RowActionsMenu ariaLabel={`פעולות למקדמה ${row.id}`}>

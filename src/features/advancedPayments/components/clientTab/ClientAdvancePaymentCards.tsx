@@ -1,9 +1,10 @@
+import { Badge } from '@/components/ui/primitives/Badge'
+import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import type { AdvancePaymentRow } from '../../api/contracts'
 import { formatShekelAmount } from '@/utils/utils'
 import { getAdvancePaymentMonthLabel } from '../advancePaymentComponent.utils'
 import { formatDate, cn } from '../../../../utils/utils'
-import { AdvancePaymentStatusBadge } from '../badges/AdvancePaymentStatusBadge'
-import { AdvancePaymentTimingBadge } from '../badges/AdvancePaymentTimingBadge'
+import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
 
 interface Props {
   rows: AdvancePaymentRow[]
@@ -67,8 +68,16 @@ export const ClientAdvancePaymentCards: React.FC<Props> = ({ rows, isLoading, on
                 {getAdvancePaymentMonthLabel(row.period, row.period_months_count)}
               </span>
               <div className="flex items-center gap-1 flex-wrap justify-end">
-                <AdvancePaymentStatusBadge status={row.status} />
-                <AdvancePaymentTimingBadge timingStatus={row.timing_status} paidLate={row.paid_late} />
+                <StatusBadge
+                  status={row.status}
+                  getLabel={getAdvancePaymentStatusLabel}
+                  variantMap={ADVANCE_PAYMENT_STATUS_VARIANTS}
+                />
+                {row.paid_late ? (
+                  <Badge variant="warning">שולם באיחור</Badge>
+                ) : row.timing_status === 'overdue' ? (
+                  <Badge variant="error">באיחור</Badge>
+                ) : null}
               </div>
             </div>
 
