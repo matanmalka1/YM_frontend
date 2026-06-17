@@ -1,6 +1,6 @@
 import { PageHeader } from "../../../components/layout/PageHeader";
 import { PageStateGuard } from "../../../components/ui/layout/PageStateGuard";
-import { AnnualReportStatusTable } from "./AnnualReportStatusTable";
+import { AnnualReportStatusTable } from "../components/AnnualReportStatusTable";
 import { useAnnualReportStatusReport } from "../hooks/useAnnualReportStatusReport";
 
 interface AnnualReportStatusViewProps {

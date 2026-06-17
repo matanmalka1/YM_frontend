@@ -10,16 +10,16 @@ import {
   CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS,
   isNotificationStatus,
   isNotificationTrigger,
-  useNotifications,
-  useNotificationDetail,
   type ListNotificationsParams,
-} from '@/features/notifications'
+} from '../api'
+import { useNotifications } from './useNotifications'
+import { useNotificationDetail } from './useNotificationDetail'
 import { buildNotificationColumns } from '../components/table/NotificationsColumns'
 import {
   NOTIFICATION_STATUS_OPTIONS,
   NOTIFICATION_TRIGGER_OPTIONS,
   NOTIFICATIONS_PAGE_SIZE_OPTIONS,
-} from '../pages/NotificationsPage.constants'
+} from '../constants'
 
 const DEFAULT_PAGE_SIZE = 25
 

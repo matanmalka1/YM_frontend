@@ -1,7 +1,7 @@
 // Public surface of the reports feature
 ;
-export { AdvancePaymentReportView } from "./components/AdvancePaymentReportView";
-export { AgingReportView } from "./components/AgingReportView";
-export { AnnualReportStatusView } from "./components/AnnualReportStatusView";
-export { VatComplianceReportView } from "./components/VatComplianceReportView";
+export { AdvancePaymentReportView } from "./pages/AdvancePaymentReportView";
+export { AgingReportView } from "./pages/AgingReportView";
+export { AnnualReportStatusView } from "./pages/AnnualReportStatusView";
+export { VatComplianceReportView } from "./pages/VatComplianceReportView";
 ;

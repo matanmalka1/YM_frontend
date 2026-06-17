@@ -4,7 +4,7 @@ import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { Button } from '@/components/ui/primitives/Button'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
-import { SendNotificationModal } from '@/features/notifications'
+import { SendNotificationModal } from '../components/SendNotificationModal'
 import { NotificationDetailDrawer } from '../components/NotificationDetailDrawer'
 import { useNotificationsPage } from '../hooks/useNotificationsPage'
 

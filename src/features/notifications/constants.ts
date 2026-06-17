@@ -5,7 +5,7 @@ import {
   NOTIFICATION_TRIGGER_VALUES,
   TRIGGER_LABELS,
   type NotificationStatus,
-} from '@/features/notifications/api'
+} from './api'
 
 export const NOTIFICATIONS_PAGE_SIZE_OPTIONS = [
   { value: '25', label: '25' },

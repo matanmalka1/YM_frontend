@@ -4,8 +4,8 @@ import { PageStateGuard } from "../../../components/ui/layout/PageStateGuard";
 import { PageHeader } from "../../../components/layout/PageHeader";
 import { DatePicker } from "../../../components/ui/inputs/DatePicker";
 import { PaginationCard } from "../../../components/ui/table/PaginationCard";
-import { AgingReportHeader } from "./AgingReportHeader";
-import { AgingReportTable } from "./AgingReportTable";
+import { AgingReportHeader } from "../components/AgingReportHeader";
+import { AgingReportTable } from "../components/AgingReportTable";
 import { useAgingReport } from "../hooks/useAgingReport";
 
 interface AgingReportViewProps {
