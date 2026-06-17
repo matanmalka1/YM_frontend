@@ -50,9 +50,7 @@ export const buildNotificationColumns = ({
   {
     key: 'client',
     header: 'לקוח',
-    render: (item) => (
-      <span className="text-sm text-gray-700">{item.client_name ?? `#${item.client_record_id}`}</span>
-    ),
+    render: (item) => <span className="text-sm text-gray-700">{item.client_name ?? `#${item.client_record_id}`}</span>,
   },
   {
     key: 'status',
