@@ -1,17 +1,20 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
-import { chargesApi, chargesQK, type CreateChargePayload } from '../api'
+import { chargesApi, chargesQK, type CreateChargePayload, type ChargeListItem } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
 import { toast } from '../../../utils/toast'
 import { useTableSelection } from '../../../hooks/useTableSelection'
 import { DEFAULT_CHARGE_LIST_STATS } from '../constants'
 import { getChargesFilters, toChargesListParams } from '../helpers'
+import { buildChargeColumns } from '../components/ChargeColumns'
+import type { NotificationTrigger } from '@/features/notifications'
 import { useChargeActions } from './useChargeActions'
 import { useChargeCreateMutation } from './useChargeCreateMutation'
 
 export const useChargesPage = () => {
-  const { searchParams, setFilter, setPage, setSearchParams } = useSearchParamFilters()
+  const { searchParams, setFilter, setPage, resetFilters, setSearchParams } = useSearchParamFilters()
 
   const filters = getChargesFilters(searchParams)
   const apiParams = toChargesListParams(filters)
@@ -19,6 +22,7 @@ export const useChargesPage = () => {
   const {
     data: listData,
     isPending: loading,
+    isFetching,
     error: listError,
   } = useQuery({
     queryKey: chargesQK.list(apiParams),
@@ -26,10 +30,11 @@ export const useChargesPage = () => {
     placeholderData: keepPreviousData,
   })
 
-  const chargeItems = listData?.items ?? []
+  const chargeItems = useMemo(() => listData?.items ?? [], [listData?.items])
   const total = listData?.total ?? 0
   const stats = listData?.stats ?? DEFAULT_CHARGE_LIST_STATS
   const error = listError ? getErrorMessage(listError, 'שגיאה בטעינת רשימת חיובים') : null
+
   const { isAdvisor, isSecretary } = useRole()
   const createMutation = useChargeCreateMutation()
   const { clearSelection, selectedIds, toggleSelect, toggleSelectAll } = useTableSelection<number>()
@@ -39,7 +44,60 @@ export const useChargesPage = () => {
     selectedIds,
   })
 
-  // setFilter provided by useSearchParamFilters
+  const [selectedChargeId, setSelectedChargeId] = useState<number | null>(null)
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [notificationContext, setNotificationContext] = useState<{
+    charge: ChargeListItem
+    trigger: NotificationTrigger
+  } | null>(null)
+
+  const openCreate = useCallback(() => setShowCreateModal(true), [])
+  const closeCreate = useCallback(() => setShowCreateModal(false), [])
+  const closeNotification = useCallback(() => setNotificationContext(null), [])
+  const openNotification = useCallback(
+    (charge: ChargeListItem, trigger: NotificationTrigger) => setNotificationContext({ charge, trigger }),
+    [],
+  )
+
+  const closeChargeDetail = useCallback(() => {
+    setSelectedChargeId(null)
+    setFilter('charge_id', '', false)
+  }, [setFilter])
+
+  // Deep-link: ?charge_id=<positive int> opens the detail drawer.
+  const chargeIdParam = searchParams.get('charge_id')
+  useEffect(() => {
+    const chargeId = Number(chargeIdParam)
+    if (Number.isInteger(chargeId) && chargeId > 0) {
+      setSelectedChargeId(chargeId)
+    }
+  }, [chargeIdParam])
+
+  // Deep-link: ?create=1 auto-opens the create modal (advisor only) then strips the param.
+  useEffect(() => {
+    if (searchParams.get('create') !== '1' || !isAdvisor) return
+    setShowCreateModal(true)
+    const next = new URLSearchParams(searchParams)
+    next.delete('create')
+    setSearchParams(next, { replace: true })
+  }, [isAdvisor, searchParams, setSearchParams])
+
+  const allIds = useMemo(() => chargeItems.map((charge) => charge.id), [chargeItems])
+  const columns = useMemo(
+    () =>
+      buildChargeColumns({
+        isAdvisor,
+        actionLoadingId,
+        runAction,
+        onOpenDetail: setSelectedChargeId,
+        selectedIds,
+        onToggleSelect: toggleSelect,
+        onToggleAll: toggleSelectAll,
+        allIds,
+        onSendNotification: openNotification,
+      }),
+    [isAdvisor, actionLoadingId, runAction, selectedIds, toggleSelect, toggleSelectAll, allIds, openNotification],
+  )
 
   const submitCreate = async (payload: CreateChargePayload): Promise<boolean> => {
     if (!isAdvisor) {
@@ -56,26 +114,73 @@ export const useChargesPage = () => {
   }
 
   return {
-    actionLoadingId,
-    bulkLoading,
-    charges: chargeItems,
-    createError: createMutation.error ? getErrorMessage(createMutation.error, 'שגיאה ביצירת חיוב') : null,
-    createLoading: createMutation.isPending,
-    error,
-    filters,
-    isAdvisor,
-    loading,
-    runAction,
-    runBulkAction,
-    selectedIds,
-    toggleSelect,
-    toggleSelectAll,
-    clearSelection,
-    setFilter,
-    setPage,
-    setSearchParams,
-    stats,
-    submitCreate,
-    total,
+    status: {
+      isLoading: loading,
+      isFetching,
+      error,
+      loadingMessage: 'טוען חיובים...',
+    },
+    headerProps: {
+      title: 'חיובים',
+      description: 'רשימת חיובים ופעולות חיוב נתמכות',
+    },
+    stats: {
+      stats,
+      isAdvisor,
+      currentStatus: filters.status,
+      onStatusClick: (status: string) => setFilter('status', status),
+    },
+    filters: {
+      values: filters,
+      onFilterChange: setFilter,
+      resetFilters,
+    },
+    table: {
+      data: chargeItems,
+      columns,
+      pagination: {
+        page: filters.page,
+        pageSize: filters.page_size,
+        total,
+        onPageChange: setPage,
+        onPageSizeChange: (pageSize: number) => setFilter('page_size', String(pageSize)),
+      },
+      selection: {
+        selectedCount: selectedIds.size,
+        bulkLoading,
+        onBulkAction: runBulkAction,
+        onClearSelection: clearSelection,
+      },
+      onOpenCharge: setSelectedChargeId,
+      onCreateCharge: openCreate,
+    },
+    drawers: {
+      detail: {
+        chargeId: selectedChargeId,
+        onClose: closeChargeDetail,
+      },
+    },
+    modals: {
+      createProps: {
+        open: showCreateModal,
+        createError: createMutation.error ? getErrorMessage(createMutation.error, 'שגיאה ביצירת חיוב') : null,
+        createLoading: createMutation.isPending,
+        onClose: closeCreate,
+        onSubmit: submitCreate,
+      },
+      notificationProps: notificationContext
+        ? {
+            open: true,
+            onClose: closeNotification,
+            clientRecordId: notificationContext.charge.client_record_id,
+            initialTrigger: notificationContext.trigger,
+            entityId: notificationContext.charge.id,
+            disableTriggerChange: true,
+          }
+        : null,
+    },
+    permissions: {
+      isAdvisor,
+    },
   }
 }
