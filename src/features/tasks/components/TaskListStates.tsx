@@ -1,9 +1,10 @@
 import { ListChecks } from 'lucide-react'
+import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 
 export const TasksLoadingState = () => (
   <div className="space-y-2 rounded-2xl border border-gray-200/80 bg-white p-3 shadow-sm" aria-label="טוען משימות">
     {Array.from({ length: 6 }, (_, index) => (
-      <div key={index} className="h-16 animate-pulse rounded-2xl bg-gray-50" />
+      <SkeletonBlock key={index} height="h-16" width="w-full" className="rounded-2xl bg-gray-50" />
     ))}
   </div>
 )

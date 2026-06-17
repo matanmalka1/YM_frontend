@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback, useId } from 'react'
 import { createPortal } from 'react-dom'
 import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/inputs/Input'
+import { Spinner } from '@/components/ui/primitives/Spinner'
 import { clientsApi, type ClientRecordListItem } from '@/features/clients'
 import { formatClientOfficeId } from '@/utils/utils'
 import { CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
@@ -213,7 +214,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
         startIcon={<Search className="h-4 w-4" />}
         endElement={
           loading ? (
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
+            <Spinner size="sm" label="מחפש..." />
           ) : value ? (
             <button type="button" onClick={handleClear} className="p-1 text-gray-400 hover:text-gray-600">
               <X className="h-3.5 w-3.5" />

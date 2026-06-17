@@ -1,5 +1,8 @@
+import { Wallet } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
+import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
+import { StateCard } from '@/components/ui/feedback'
 import type { AdvancePaymentRow } from '../../api/contracts'
 import { formatShekelAmount } from '@/utils/utils'
 import { getAdvancePaymentMonthLabel } from '../advancePaymentComponent.utils'
@@ -13,12 +16,12 @@ interface Props {
 }
 
 const SkeletonCard = () => (
-  <div className="rounded-xl border border-gray-200 bg-white p-4 space-y-4 animate-pulse">
-    <div className="h-4 bg-gray-200 rounded w-1/3" />
-    <div className="h-8 bg-gray-200 rounded w-1/2 mt-1" />
+  <div className="rounded-xl border border-gray-200 bg-white p-4 space-y-4">
+    <SkeletonBlock height="h-4" width="w-1/3" />
+    <SkeletonBlock height="h-8" width="w-1/2" className="mt-1" />
     <div className="grid grid-cols-2 gap-2 mt-2">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="h-3 bg-gray-100 rounded" />
+        <SkeletonBlock key={i} height="h-3" width="w-full" />
       ))}
     </div>
   </div>
@@ -36,7 +39,7 @@ export const ClientAdvancePaymentCards: React.FC<Props> = ({ rows, isLoading, on
   }
 
   if (rows.length === 0) {
-    return <div className="flex items-center justify-center py-16 text-gray-400 text-sm">אין מקדמות להצגה</div>
+    return <StateCard icon={Wallet} message="אין מקדמות להצגה" size="compact" />
   }
 
   return (

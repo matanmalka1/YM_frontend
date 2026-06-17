@@ -2,7 +2,7 @@ import { getYear } from 'date-fns'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Link, Navigate } from 'react-router-dom'
-import { Mail, Lock, ArrowLeft, LoaderCircle } from 'lucide-react'
+import { Mail, Lock, ArrowLeft, Loader2 } from 'lucide-react'
 
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Input } from '@/components/ui/inputs/Input'
@@ -100,7 +100,7 @@ export const Login: React.FC = () => {
                   className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm"
                   role="status"
                 >
-                  <LoaderCircle className="h-4 w-4 animate-spin text-slate-500" />
+                  <Loader2 className="h-4 w-4 animate-spin text-slate-500" />
                   <span>בודקים את פרטי ההתחברות...</span>
                 </div>
               ) : error ? (

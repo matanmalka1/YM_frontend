@@ -1,5 +1,6 @@
 import { type FC, type ReactNode, useEffect, useRef } from 'react'
 import { ChevronLeft, Plus } from 'lucide-react'
+import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { Link } from 'react-router-dom'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import { Button } from '../../../../components/ui/primitives/Button'
@@ -153,11 +154,11 @@ export const ClientRelatedData: FC<ClientRelatedDataProps> = ({
           <div className="grid gap-3 md:grid-cols-2">
             {Array.from({ length: canViewCharges ? 2 : 1 }).map((_, index) => (
               <div key={index} className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
-                <div className="mb-3 h-3 w-24 animate-pulse rounded bg-gray-100" />
+                <SkeletonBlock height="h-3" width="w-24" className="mb-3" />
                 <div className="space-y-2">
-                  <div className="h-8 animate-pulse rounded bg-gray-100" />
-                  <div className="h-8 animate-pulse rounded bg-gray-100" />
-                  <div className="h-8 animate-pulse rounded bg-gray-100" />
+                  <SkeletonBlock height="h-8" width="w-full" />
+                  <SkeletonBlock height="h-8" width="w-full" />
+                  <SkeletonBlock height="h-8" width="w-full" />
                 </div>
               </div>
             ))}

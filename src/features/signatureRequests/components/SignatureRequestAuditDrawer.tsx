@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { signatureRequestsApi, signatureRequestsQK } from '../api'
 import { DetailDrawer, DrawerField, DrawerSection } from '../../../components/ui/overlays/DetailDrawer'
+import { SkeletonBlock } from '../../../components/ui/primitives/SkeletonBlock'
 import { StatusBadge } from '../../../components/ui/primitives/StatusBadge'
 import { formatDate, formatDateTime, formatPhoneNumber } from '../../../utils/utils'
 import { getSignatureRequestTypeLabel, getSignatureRequestStatusLabel } from '../constants'
@@ -50,7 +51,7 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
       {isLoading && (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-8 rounded bg-gray-100 animate-pulse" />
+            <SkeletonBlock key={i} height="h-8" width="w-full" />
           ))}
         </div>
       )}

@@ -7,6 +7,7 @@ import { Toaster } from 'sonner'
 import { AppRoutes } from './router/AppRoutes'
 import { queryClient } from './lib/queryClient'
 import { AppErrorBoundary } from './components/errors/AppErrorBoundary'
+import { Spinner } from './components/ui/primitives/Spinner'
 
 const rootElement = document.getElementById('root')
 if (!rootElement) {
@@ -22,7 +23,7 @@ root.render(
           <Suspense
             fallback={
               <div className="flex h-screen items-center justify-center bg-gray-50">
-                <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-200 border-t-primary-600" />
+                <Spinner size="lg" label="טוען..." />
               </div>
             }
           >

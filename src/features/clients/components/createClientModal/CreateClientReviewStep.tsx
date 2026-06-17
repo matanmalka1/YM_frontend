@@ -1,6 +1,7 @@
 import type { ClientCreationImpactResponse } from '../../api/contracts'
 import type { CreateClientFormValues } from '../../schemas'
 import { formatDate } from '@/utils/utils'
+import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { getCreateClientEntityLabels } from '../../constants'
 import { buildCreateClientReviewModel } from './createClientFormUtils'
 import { ImpactIcon } from './createClientImpactIcons'
@@ -99,7 +100,7 @@ export const CreateClientReviewStep: React.FC<Props> = ({
         {impactLoading ? (
           <div className="space-y-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-4 animate-pulse rounded bg-blue-100" />
+              <SkeletonBlock key={i} height="h-4" width="w-full" className="bg-blue-100" />
             ))}
           </div>
         ) : impactError ? (

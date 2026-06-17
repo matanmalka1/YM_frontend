@@ -1,4 +1,5 @@
 import { AlertTriangle, CheckCircle2, XCircle } from 'lucide-react'
+import { Spinner } from '@/components/ui/primitives/Spinner'
 import type { SignatureRequestStatus } from '@/features/signatureRequests'
 import type { SigningTerminalState } from '../types'
 
@@ -28,7 +29,7 @@ export const SigningStatus: React.FC<SigningStatusProps> = ({ state, status, tit
   if (state === 'loading') {
     return (
       <div className="flex flex-col items-center gap-3 py-8">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-500 border-t-transparent" />
+        <Spinner size="lg" />
         <p className="text-sm text-gray-500">טוען מסמך...</p>
       </div>
     )
