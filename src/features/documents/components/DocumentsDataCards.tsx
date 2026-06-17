@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Plus } from 'lucide-react'
+import { FileText, Plus } from 'lucide-react'
 import { Modal } from '../../../components/ui/overlays/Modal'
 import { Button } from '../../../components/ui/primitives/Button'
 import { DocumentCard } from './DocumentCard'
@@ -15,7 +15,7 @@ import { UPLOAD_FORM_ID } from './DocumentsDataCards.constants'
 import { filterDocuments, getCountLabel } from './DocumentsDataCards.utils'
 import { useDocumentCardActions } from './useDocumentCardActions'
 import { DocumentsDataCardsToolbar } from './DocumentsDataCardsToolbar'
-import { DocumentsEmptyState } from './DocumentsEmptyState'
+import { StateCard } from '../../../components/ui/feedback/StateCard'
 
 interface DocumentsDataCardsProps {
   documents: PermanentDocumentResponse[]
@@ -119,7 +119,15 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
       />
 
       {filteredDocuments.length === 0 ? (
-        <DocumentsEmptyState hasDocuments={documents.length > 0} onUploadClick={() => setUploadOpen(true)} />
+        documents.length > 0 ? (
+          <StateCard icon={FileText} message="לא נמצאו מסמכים מתאימים לחיפוש" />
+        ) : (
+          <StateCard
+            icon={FileText}
+            message="עדיין לא הועלו מסמכים ללקוח זה"
+            action={{ label: 'העלאת מסמך ראשון', onClick: () => setUploadOpen(true) }}
+          />
+        )
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {filteredDocuments.map((doc) => (

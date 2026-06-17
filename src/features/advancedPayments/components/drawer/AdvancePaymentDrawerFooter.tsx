@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
+import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
 
 interface AdvancePaymentDrawerFooterProps {
   rowId: number
@@ -23,44 +24,19 @@ export const AdvancePaymentDrawerFooter: React.FC<AdvancePaymentDrawerFooterProp
 
   return (
     <div className="flex w-full items-center justify-between gap-2">
-      {onDelete &&
-        (confirmDelete ? (
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-error-600">למחוק?</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-error-600 hover:bg-error-50"
-              isLoading={isDeleting}
-              onClick={async () => {
-                await onDelete(rowId)
-              }}
-              disabled={isUpdating || isDeleting}
-            >
-              כן, מחק
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setConfirmDelete(false)}
-              disabled={isUpdating || isDeleting}
-            >
-              ביטול
-            </Button>
-          </div>
-        ) : (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-gray-400 hover:text-error-600 hover:bg-error-50"
-            onClick={() => setConfirmDelete(true)}
-            disabled={isUpdating || isDeleting}
-            aria-label="מחק מקדמה"
-            title="מחק מקדמה"
-          >
-            <Trash2 size={14} />
-          </Button>
-        ))}
+      {onDelete && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-gray-400 hover:text-error-600 hover:bg-error-50"
+          onClick={() => setConfirmDelete(true)}
+          disabled={isUpdating || isDeleting}
+          aria-label="מחק מקדמה"
+          title="מחק מקדמה"
+        >
+          <Trash2 size={14} />
+        </Button>
+      )}
       <div className="flex gap-2 ms-auto">
         <Button variant="outline" onClick={onClose} disabled={isUpdating || isDeleting}>
           ביטול
@@ -69,6 +45,21 @@ export const AdvancePaymentDrawerFooter: React.FC<AdvancePaymentDrawerFooterProp
           שמור
         </Button>
       </div>
+
+      {onDelete && (
+        <ConfirmDialog
+          open={confirmDelete}
+          title="מחיקת מקדמה"
+          message="האם למחוק מקדמה זו?"
+          confirmLabel="כן, מחק"
+          confirmVariant="danger"
+          isLoading={isDeleting}
+          onConfirm={async () => {
+            await onDelete(rowId)
+          }}
+          onCancel={() => setConfirmDelete(false)}
+        />
+      )}
     </div>
   )
 }

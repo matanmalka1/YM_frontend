@@ -1,7 +1,7 @@
 import { cn } from '@/utils/utils'
 import { Download, Trash2, Save } from 'lucide-react'
 import { useAnnualReportDetailPage } from '../../hooks/useAnnualReportDetailPage'
-import { DeleteReportConfirmDialog } from './DeleteReportConfirmDialog'
+import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
 import { AnnualReportSidebarStatus } from './AnnualReportSidebarStatus'
 import { AnnualReportSectionContent } from './AnnualReportSectionContent'
 import { PageHeader } from '../../../../components/layout/PageHeader'
@@ -137,13 +137,17 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
         </div>
       </div>
 
-      {showDeleteConfirm && (
-        <DeleteReportConfirmDialog
-          isDeleting={isDeleting}
-          onCancel={() => setShowDeleteConfirm(false)}
-          onConfirm={handleDeleteConfirm}
-        />
-      )}
+      <ConfirmDialog
+        open={showDeleteConfirm}
+        title="מחיקת דוח"
+        message="האם למחוק את הדוח? פעולה זו אינה הפיכה."
+        confirmLabel="מחק"
+        confirmVariant="danger"
+        closeOnBackdrop={false}
+        isLoading={isDeleting}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
     </>
   )
 }

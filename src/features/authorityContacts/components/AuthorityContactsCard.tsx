@@ -1,7 +1,7 @@
+import { ConfirmDialog } from '../../../components/ui/overlays/ConfirmDialog'
 import { PaginationCard } from '../../../components/ui/table/PaginationCard'
 import { useAuthorityContacts } from '../hooks/useAuthorityContacts'
 import { useAuthorityContactsCardState } from '../hooks/useAuthorityContactsCardState'
-import { AuthorityContactDeleteDialog } from './AuthorityContactDeleteDialog'
 import { AuthorityContactModal } from './AuthorityContactModal'
 import { AuthorityContactsListCard } from './AuthorityContactsListCard'
 import { AUTHORITY_CONTACT_TEXT } from '../constants'
@@ -15,6 +15,18 @@ export const AuthorityContactsCard: React.FC<AuthorityContactsCardProps> = ({ cl
     useAuthorityContacts(clientId)
   const { editing, isModalOpen, confirmDeleteId, openCreate, openEdit, closeModal, requestDelete, clearDeleteRequest } =
     useAuthorityContactsCardState()
+
+  const handleConfirmDelete = async () => {
+    if (confirmDeleteId === null) {
+      return
+    }
+    try {
+      await deleteContact(confirmDeleteId)
+      clearDeleteRequest()
+    } catch {
+      // Error toast is handled by the mutation hook; keep the dialog open for retry.
+    }
+  }
 
   return (
     <div className="space-y-4">
@@ -42,10 +54,15 @@ export const AuthorityContactsCard: React.FC<AuthorityContactsCardProps> = ({ cl
 
       <AuthorityContactModal open={isModalOpen} clientId={clientId} existing={editing} onClose={closeModal} />
 
-      <AuthorityContactDeleteDialog
-        confirmDeleteId={confirmDeleteId}
-        deletingId={deletingId}
-        onConfirm={deleteContact}
+      <ConfirmDialog
+        open={confirmDeleteId !== null}
+        title={AUTHORITY_CONTACT_TEXT.deleteTitle}
+        message={AUTHORITY_CONTACT_TEXT.deleteMessage}
+        confirmLabel={AUTHORITY_CONTACT_TEXT.deleteConfirm}
+        cancelLabel={AUTHORITY_CONTACT_TEXT.cancel}
+        confirmVariant="danger"
+        isLoading={deletingId === confirmDeleteId}
+        onConfirm={handleConfirmDelete}
         onCancel={clearDeleteRequest}
       />
     </div>

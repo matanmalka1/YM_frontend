@@ -1,7 +1,13 @@
 import { type FC, useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getErrorMessage } from '@/utils/utils'
-import { type ActiveClientDetailsTab } from '../../constants'
+import {
+  ADVANCE_PAYMENT_FREQUENCY_LABELS,
+  CLIENT_STATUS_LABELS,
+  ENTITY_TYPE_LABELS,
+  type ActiveClientDetailsTab,
+  VAT_TYPE_LABELS,
+} from '../../constants'
 import { Trash2 } from 'lucide-react'
 import { DetailDrawer } from '../../../../components/ui/overlays/DetailDrawer'
 import { Button } from '../../../../components/ui/primitives/Button'
@@ -20,17 +26,25 @@ import { ClientTimelineTab } from '@/features/timeline'
 import { ClientAnnualReportsTab } from '@/features/annualReports'
 import { ClientAdvancePaymentsTab } from '@/features/advancedPayments'
 import { ClientDocumentsTab } from '@/features/documents'
-import { ClientNotesCard } from '@/features/notes'
+import { EntityAuditTrailSection, type FieldValueLabels } from '@/features/audit'
+import { NotesCard } from '@/features/notes'
 import { NotificationsTab } from '@/features/notifications'
 import { ClientTaxCalendarTab } from '@/features/taxCalendar'
 import { VatClientSummaryPanel } from '@/features/vatReports'
-import { ClientAuditTrailSection } from './ClientAuditTrailSection'
 import { ClientTasksTab } from '@/features/tasks'
 import type { UpdateClientPayload, ClientRecordResponse } from '../../api'
 import { useFirstBusinessId } from '../../hooks/useFirstBusinessId'
 import { useClientDetailsActions } from '../../hooks/useClientDetailsActions'
 
 const EDIT_FORM_ID = 'client-edit-form'
+
+const AUDIT_FIELD_VALUE_LABELS: FieldValueLabels = {
+  entity_type: ENTITY_TYPE_LABELS,
+  client_type: ENTITY_TYPE_LABELS,
+  status: CLIENT_STATUS_LABELS,
+  vat_reporting_frequency: VAT_TYPE_LABELS,
+  advance_payment_frequency: ADVANCE_PAYMENT_FREQUENCY_LABELS,
+}
 
 export type ClientDetailsOverviewTabProps = {
   client: ClientRecordResponse
@@ -154,8 +168,16 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
       )}
       {activeTab === 'annual-reports' && <ClientAnnualReportsTab clientId={client.id} />}
       {activeTab === 'notifications' && <NotificationsTab clientRecordId={client.id} />}
-      {activeTab === 'notes' && <ClientNotesCard clientId={client.id} canEdit={canEditClients} />}
-      {activeTab === 'history' && <ClientAuditTrailSection clientId={client.id} />}
+      {activeTab === 'notes' && <NotesCard scope="client" clientId={client.id} canEdit={canEditClients} />}
+      {activeTab === 'history' && (
+        <EntityAuditTrailSection
+          entityType="client"
+          entityId={client.id}
+          title="יומן שינויים"
+          subtitle="פעולות שבוצעו על הלקוח"
+          fieldValueLabels={AUDIT_FIELD_VALUE_LABELS}
+        />
+      )}
       {activeTab === 'tasks' && <ClientTasksTab clientRecordId={client.id} />}
 
       <DeleteClientModal

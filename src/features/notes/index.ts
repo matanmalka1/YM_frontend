@@ -1,2 +1,1 @@
-export { ClientNotesCard } from './components/ClientNotesCard'
-export { BusinessNotesCard } from './components/BusinessNotesCard'
+export { NotesCard } from './components/NotesCard'

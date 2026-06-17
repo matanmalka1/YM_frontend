@@ -2,7 +2,7 @@ import { Card } from '@/components/ui/primitives/Card'
 import { DefinitionList } from '@/components/ui/layout/DefinitionList'
 import { EntityAuditTrailSection, type FieldValueLabels } from '@/features/audit'
 import type { BusinessResponse, ClientRecordResponse } from '@/features/clients'
-import { BusinessNotesCard } from '@/features/notes'
+import { NotesCard } from '@/features/notes'
 import { BUSINESS_DETAILS_COPY, BUSINESS_STATUS_LABELS } from '../constants'
 import { buildBusinessSummaryItems } from '../utils'
 
@@ -31,7 +31,7 @@ export const BusinessDetailsCard = ({ business, client, canEdit = false }: Busin
         fieldValueLabels={FIELD_VALUE_LABELS}
       />
 
-      {client && <BusinessNotesCard clientId={client.id} businessId={business.id} canEdit={canEdit} />}
+      {client && <NotesCard scope="business" clientId={client.id} businessId={business.id} canEdit={canEdit} />}
     </div>
   )
 }

@@ -7,6 +7,7 @@ import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Textarea } from '@/components/ui/inputs/Textarea'
 import { cn, formatDateTime } from '@/utils/utils'
 import type { EntityNote } from '../api'
+import { useEntityNotes, type NotesTarget } from '../hooks/useEntityNotes'
 
 const NOTE_TAGS = [
   { key: 'תזכורת', label: 'תזכורת', color: 'text-orange-600 bg-orange-50 border-orange-200' },
@@ -104,19 +105,6 @@ const NoteComposer = ({ value, onChange, onSave, onCancel, isLoading, initialTag
   )
 }
 
-interface NotesHookResult {
-  notes: EntityNote[]
-  total: number
-  isLoading: boolean
-  error: string | null
-  addNote: (note: string) => Promise<EntityNote>
-  isAdding: boolean
-  updateNote: (noteId: number, note: string) => Promise<EntityNote>
-  isUpdating: boolean
-  deleteNote: (noteId: number) => void
-  deletingId: number | null
-}
-
 interface NoteRowProps {
   note: EntityNote
   isDeleting: boolean
@@ -174,13 +162,11 @@ const NoteRow = ({ note, isDeleting, onEdit, onDelete }: NoteRowProps) => {
   )
 }
 
-interface NotesCardProps {
-  hook: NotesHookResult
-  canEdit: boolean
-}
+type NotesCardProps = NotesTarget & { canEdit: boolean }
 
-export const NotesCard = ({ hook, canEdit }: NotesCardProps) => {
-  const { notes, total, isLoading, error, addNote, isAdding, updateNote, isUpdating, deleteNote, deletingId } = hook
+export const NotesCard = ({ canEdit, ...target }: NotesCardProps) => {
+  const { notes, total, isLoading, error, addNote, isAdding, updateNote, isUpdating, deleteNote, deletingId } =
+    useEntityNotes(target)
 
   const [addText, setAddText] = useState('')
   const [editing, setEditing] = useState<EntityNote | null>(null)
