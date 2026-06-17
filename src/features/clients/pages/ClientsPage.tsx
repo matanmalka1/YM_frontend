@@ -1,102 +1,33 @@
-import { useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Plus, Users } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
-import { StatsCard } from '@/components/ui/layout/StatsCard'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
-import { DetailDrawer } from '@/components/ui/overlays/DetailDrawer'
-import { ModalFormActions } from '@/components/ui/overlays/ModalFormActions'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import {
-  buildClientColumns,
-  ClientEditForm,
+  ClientEditDrawer,
   ClientsFiltersBar,
+  ClientsStatsSection,
   CreateClientModal,
   DeletedClientDialog,
   useClientsPage,
-  useClientQuery,
 } from '@/features/clients'
-import { CLIENT_ROUTES } from '@/features/clients'
 import { ImportExportModal } from '@/features/importExport'
 
-const EDIT_FORM_ID = 'client-edit-form-list'
-
 export const Clients: React.FC = () => {
-  const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const [showCreateModal, setShowCreateModal] = useState(false)
-  const [showImportExport, setShowImportExport] = useState(false)
-  const [editingClientId, setEditingClientId] = useState<number | null>(null)
-  const {
-    clients,
-    error,
-    filters,
-    handleFilterChange,
-    handleReset,
-    isAdvisor,
-    loading,
-    setPage,
-    stats,
-    total,
-    createClient,
-    createLoading,
-    deletedClientInfo,
-    deletedClientDialogOpen,
-    handleRestoreClient,
-    restoreDeletedClient,
-    handleDismissDeletedDialog,
-    restoreLoading,
-    updateClient,
-    updateLoading,
-    can,
-  } = useClientsPage()
-
-  const columns = buildClientColumns({
-    onEditClient: can.editClients ? (client) => setEditingClientId(client.id) : undefined,
-  })
-
-  const {
-    client: editingClient,
-    isLoading: editingClientLoading,
-    error: editingClientError,
-  } = useClientQuery({ clientId: editingClientId })
-
-  const hasActiveFilters = Boolean(filters.search || filters.status || filters.accountant_id)
-  const isEmptyState = !loading && !error && total === 0 && !hasActiveFilters
-  const emptyStateTitle = isEmptyState ? 'אין לקוחות במערכת עדיין' : 'לא נמצאו לקוחות'
-  const emptyStateMessage =
-    isEmptyState && can.createClients
-      ? 'צור לקוח ראשון או ייבא רשימת לקוחות קיימת. יצירת לקוח תפתח אוטומטית קלסר ראשוני, מועדי מס רלוונטיים ותיק דוח שנתי לפי סוג הלקוח.'
-      : 'לא נמצאו לקוחות התואמים את החיפוש או הסינון הנוכחי.'
-  const emptyStateAction =
-    isEmptyState && can.createClients ? { label: 'לקוח חדש', onClick: () => setShowCreateModal(true) } : undefined
-
-  useEffect(() => {
-    if (searchParams.get('create') !== '1' || !can.createClients) return
-    setShowCreateModal(true)
-    const nextParams = new URLSearchParams(searchParams)
-    nextParams.delete('create')
-    navigate({ search: nextParams.toString() }, { replace: true, preventScrollReset: true })
-  }, [can.createClients, searchParams, navigate])
-
-  const closeCreateModal = () => {
-    setShowCreateModal(false)
-  }
+  const { status, isEmptyState, headerProps, stats, filters, table, drawers, modals, permissions } = useClientsPage()
 
   const header = (
     <PageHeader
-      title="לקוחות"
-      description={isEmptyState ? undefined : 'רשימת כל הלקוחות במערכת'}
+      {...headerProps}
       actions={
         isEmptyState ? undefined : (
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => setShowImportExport(true)}>
+            <Button variant="ghost" size="sm" onClick={modals.openImportExport}>
               ייבוא / ייצוא
             </Button>
-            {can.createClients && (
-              <Button variant="ghost" size="sm" onClick={() => setShowCreateModal(true)}>
+            {permissions.can.createClients && (
+              <Button variant="ghost" size="sm" onClick={modals.openCreate}>
                 לקוח חדש
                 <Plus className="h-3.5 w-3.5" />
               </Button>
@@ -108,125 +39,49 @@ export const Clients: React.FC = () => {
   )
 
   return (
-    <PageStateGuard isLoading={loading} error={error} header={header} loadingMessage="טוען לקוחות...">
-      {!can.editClients && <Alert variant="info" message="צפייה בלבד. יצירה ועריכה של לקוחות זמינה ליועצים בלבד." />}
+    <PageStateGuard
+      isLoading={status.isLoading}
+      error={status.error}
+      header={header}
+      loadingMessage={status.loadingMessage}
+    >
+      {!permissions.can.editClients && (
+        <Alert variant="info" message="צפייה בלבד. יצירה ועריכה של לקוחות זמינה ליועצים בלבד." />
+      )}
       {!isEmptyState && (
         <>
-          <div className="grid grid-cols-3 gap-4">
-            <StatsCard
-              title="פעילים"
-              value={stats.active}
-              variant="green"
-              selected={filters.status === 'active'}
-              onClick={() => handleFilterChange('status', filters.status === 'active' ? '' : 'active')}
-            />
-            <StatsCard
-              title="מוקפאים"
-              value={stats.frozen}
-              variant="orange"
-              selected={filters.status === 'frozen'}
-              onClick={() => handleFilterChange('status', filters.status === 'frozen' ? '' : 'frozen')}
-            />
-            <StatsCard
-              title="סגורים"
-              value={stats.closed}
-              variant="neutral"
-              selected={filters.status === 'closed'}
-              onClick={() => handleFilterChange('status', filters.status === 'closed' ? '' : 'closed')}
-            />
-          </div>
+          <ClientsStatsSection stats={stats.values} selectedStatus={stats.selected} onStatusClick={stats.onStatusClick} />
           <ClientsFiltersBar
-            filters={filters}
-            onFilterChange={handleFilterChange}
-            onReset={handleReset}
-            showAccountantFilter={can.editClients}
+            filters={filters.values}
+            onFilterChange={filters.onFilterChange}
+            onReset={filters.resetFilters}
+            showAccountantFilter={filters.showAccountantFilter}
           />
         </>
       )}
       <PaginatedDataTable
-        data={clients}
-        columns={columns}
+        data={table.data}
+        columns={table.columns}
         getRowKey={(client) => client.id}
-        onRowClick={(client) => navigate(CLIENT_ROUTES.detail(client.id))}
-        page={filters.page}
-        pageSize={filters.page_size}
-        total={total}
-        onPageChange={setPage}
-        onPageSizeChange={(size) => handleFilterChange('page_size', String(size))}
+        onRowClick={table.onRowClick}
+        page={table.pagination.page}
+        pageSize={table.pagination.pageSize}
+        total={table.pagination.total}
+        onPageChange={table.pagination.onPageChange}
+        onPageSizeChange={table.pagination.onPageSizeChange}
         emptyState={{
-          icon: Users,
-          variant: isEmptyState && can.createClients ? 'illustration' : 'default',
-          title: emptyStateTitle,
-          message: emptyStateMessage,
-          action: emptyStateAction,
-          secondaryAction:
-            isEmptyState && can.createClients
-              ? { label: 'ייבוא לקוחות', onClick: () => setShowImportExport(true) }
-              : undefined,
+          icon: table.emptyState.icon,
+          variant: table.emptyState.variant,
+          title: table.emptyState.title,
+          message: table.emptyState.message,
+          action: table.emptyState.action,
+          secondaryAction: table.emptyState.secondaryAction,
         }}
       />
-      <CreateClientModal
-        open={showCreateModal && !deletedClientDialogOpen}
-        onClose={closeCreateModal}
-        onSubmit={createClient}
-        onRestoreDeletedClient={async (clientId) => {
-          const restored = await restoreDeletedClient(clientId)
-          setShowCreateModal(false)
-          navigate(CLIENT_ROUTES.detail(restored.id))
-          return restored
-        }}
-        isAdvisor={isAdvisor}
-        isLoading={createLoading}
-        restoreLoading={restoreLoading}
-      />
-      <ImportExportModal open={showImportExport} onClose={() => setShowImportExport(false)} />
-      <DeletedClientDialog
-        open={deletedClientDialogOpen}
-        deletedClient={deletedClientInfo}
-        isAdvisor={isAdvisor}
-        onRestore={handleRestoreClient}
-        onForceCreate={handleDismissDeletedDialog}
-        onDismiss={() => {
-          handleDismissDeletedDialog()
-          setShowCreateModal(true)
-        }}
-        restoreLoading={restoreLoading}
-        forceCreateLoading={false}
-      />
-      {editingClientId !== null && (
-        <DetailDrawer
-          open
-          onClose={() => setEditingClientId(null)}
-          title="עריכת לקוח"
-          footer={
-            editingClient ? (
-              <ModalFormActions
-                onCancel={() => setEditingClientId(null)}
-                isLoading={updateLoading}
-                submitLabel="שמור שינויים"
-                submitType="submit"
-                submitForm={EDIT_FORM_ID}
-              />
-            ) : undefined
-          }
-        >
-          {editingClientLoading && <Alert variant="info" message="טוען את פרטי הלקוח..." />}
-          {editingClientError && <Alert variant="error" message={editingClientError} />}
-          {editingClient && (
-            <ClientEditForm
-              client={editingClient}
-              formId={EDIT_FORM_ID}
-              onSave={async (payload) => {
-                await updateClient(editingClient.id, payload)
-                setEditingClientId(null)
-              }}
-              onCancel={() => setEditingClientId(null)}
-              isLoading={updateLoading}
-              hideFooter
-            />
-          )}
-        </DetailDrawer>
-      )}
+      <CreateClientModal {...modals.createProps} />
+      <ImportExportModal {...modals.importExportProps} />
+      <DeletedClientDialog {...modals.deletedClientProps} />
+      <ClientEditDrawer {...drawers.edit} />
     </PageStateGuard>
   )
 }

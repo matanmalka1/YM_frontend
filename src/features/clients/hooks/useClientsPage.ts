@@ -1,4 +1,6 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Users } from 'lucide-react'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMutationWithToast } from '../../../hooks/useMutationWithToast'
 import { getErrorMessage, parsePositiveInt, showErrorToast } from '../../../utils/utils'
@@ -9,7 +11,9 @@ import {
   type CreateClientPayload,
   type UpdateClientPayload,
   type ListClientsParams,
+  type ClientRecordListItem,
 } from '../api'
+import { CLIENT_ROUTES } from '../api/endpoints'
 import {
   DEFAULT_CLIENT_SORT_BY,
   DEFAULT_CLIENT_SORT_ORDER,
@@ -21,11 +25,20 @@ import {
 import { useRole } from '../../../hooks/useRole'
 import { toast } from '../../../utils/toast'
 import { extractClientErrorCode } from '../utils/clientErrors'
+import { buildClientColumns } from '../components/list/ClientColumns'
+import { useClientQuery } from './useClientQuery'
+
+const EDIT_FORM_ID = 'client-edit-form-list'
 
 export const useClientsPage = () => {
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { searchParams, getParam, getPage, setFilter, setPage, resetFilters } = useSearchParamFilters()
   const { isAdvisor, can } = useRole()
+
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [showImportExport, setShowImportExport] = useState(false)
+  const [editingClientId, setEditingClientId] = useState<number | null>(null)
 
   const [deletedClientInfo, setDeletedClientInfo] = useState<{
     id: number
@@ -59,6 +72,7 @@ export const useClientsPage = () => {
   const {
     data: listData,
     isPending: loading,
+    isFetching,
     error: listError,
   } = useQuery({
     queryKey: clientsQK.list(apiParams),
@@ -141,29 +155,149 @@ export const useClientsPage = () => {
       order: DEFAULT_CLIENT_SORT_ORDER,
     })
 
+  const createClient = async (payload: CreateClientPayload): Promise<void> => {
+    await createMutation.mutateAsync(payload)
+  }
+  const updateClient = (clientId: number, payload: UpdateClientPayload) =>
+    updateMutation.mutateAsync({ clientId, payload })
+
+  const deletedClientDialogOpen = deletedClientInfo !== null
+  const openCreate = useCallback(() => setShowCreateModal(true), [])
+  const openImportExport = useCallback(() => setShowImportExport(true), [])
+  const closeCreateModal = useCallback(() => setShowCreateModal(false), [])
+
+  // Deep-link: ?create=1 opens the create modal (advisor-only) then strips the param.
+  useEffect(() => {
+    if (searchParams.get('create') !== '1' || !can.createClients) return
+    setShowCreateModal(true)
+    const nextParams = new URLSearchParams(searchParams)
+    nextParams.delete('create')
+    navigate({ search: nextParams.toString() }, { replace: true, preventScrollReset: true })
+  }, [can.createClients, searchParams, navigate])
+
+  const columns = useMemo(
+    () =>
+      buildClientColumns({
+        onEditClient: can.editClients
+          ? (client: ClientRecordListItem) => setEditingClientId(client.id)
+          : undefined,
+      }),
+    [can.editClients],
+  )
+
+  const {
+    client: editingClient,
+    isLoading: editingClientLoading,
+    error: editingClientError,
+  } = useClientQuery({ clientId: editingClientId })
+
+  const hasActiveFilters = Boolean(filters.search || filters.status || filters.accountant_id)
+  const isEmptyState = !loading && !error && total === 0 && !hasActiveFilters
+
   return {
-    clients: clientItems,
-    error,
-    filters,
-    handleFilterChange,
-    handleReset,
-    loading,
-    setPage,
-    stats,
-    total,
-    createClient: async (payload: CreateClientPayload): Promise<void> => {
-      await createMutation.mutateAsync(payload)
+    status: {
+      isLoading: loading,
+      isFetching,
+      error,
+      loadingMessage: 'טוען לקוחות...',
     },
-    createLoading: createMutation.isPending,
-    deletedClientInfo,
-    deletedClientDialogOpen: deletedClientInfo !== null,
-    handleRestoreClient,
-    restoreDeletedClient,
-    handleDismissDeletedDialog,
-    restoreLoading: restoreMutation.isPending,
-    updateClient: (clientId: number, payload: UpdateClientPayload) => updateMutation.mutateAsync({ clientId, payload }),
-    updateLoading: updateMutation.isPending,
-    isAdvisor,
-    can,
+    isEmptyState,
+    headerProps: {
+      title: 'לקוחות',
+      description: isEmptyState ? undefined : 'רשימת כל הלקוחות במערכת',
+    },
+    stats: {
+      values: stats,
+      selected: filters.status,
+      onStatusClick: (status: string) => handleFilterChange('status', filters.status === status ? '' : status),
+    },
+    filters: {
+      values: filters,
+      onFilterChange: handleFilterChange,
+      resetFilters: handleReset,
+      showAccountantFilter: can.editClients,
+    },
+    table: {
+      data: clientItems,
+      columns,
+      onRowClick: (client: ClientRecordListItem) => navigate(CLIENT_ROUTES.detail(client.id)),
+      pagination: {
+        page: filters.page,
+        pageSize: filters.page_size,
+        total,
+        onPageChange: setPage,
+        onPageSizeChange: (size: number) => handleFilterChange('page_size', String(size)),
+      },
+      emptyState: {
+        isEmpty: clientItems.length === 0,
+        isFiltered: hasActiveFilters,
+        icon: Users,
+        variant: (isEmptyState && can.createClients ? 'illustration' : 'default') as 'illustration' | 'default',
+        title: isEmptyState ? 'אין לקוחות במערכת עדיין' : 'לא נמצאו לקוחות',
+        message:
+          isEmptyState && can.createClients
+            ? 'צור לקוח ראשון או ייבא רשימת לקוחות קיימת. יצירת לקוח תפתח אוטומטית קלסר ראשוני, מועדי מס רלוונטיים ותיק דוח שנתי לפי סוג הלקוח.'
+            : 'לא נמצאו לקוחות התואמים את החיפוש או הסינון הנוכחי.',
+        action:
+          isEmptyState && can.createClients ? { label: 'לקוח חדש', onClick: openCreate } : undefined,
+        secondaryAction:
+          isEmptyState && can.createClients ? { label: 'ייבוא לקוחות', onClick: openImportExport } : undefined,
+      },
+    },
+    drawers: {
+      edit: {
+        open: editingClientId !== null,
+        onClose: () => setEditingClientId(null),
+        client: editingClient,
+        isLoading: editingClientLoading,
+        error: editingClientError,
+        onSave: async (payload: UpdateClientPayload) => {
+          if (editingClientId === null) return
+          await updateClient(editingClientId, payload)
+          setEditingClientId(null)
+        },
+        updateLoading: updateMutation.isPending,
+        formId: EDIT_FORM_ID,
+      },
+    },
+    modals: {
+      openCreate,
+      openImportExport,
+      createProps: {
+        open: showCreateModal && !deletedClientDialogOpen,
+        onClose: closeCreateModal,
+        onSubmit: createClient,
+        onRestoreDeletedClient: async (clientId: number) => {
+          const restored = await restoreDeletedClient(clientId)
+          setShowCreateModal(false)
+          navigate(CLIENT_ROUTES.detail(restored.id))
+          return restored
+        },
+        isAdvisor,
+        isLoading: createMutation.isPending,
+        restoreLoading: restoreMutation.isPending,
+      },
+      importExportProps: {
+        open: showImportExport,
+        onClose: () => setShowImportExport(false),
+      },
+      deletedClientProps: {
+        open: deletedClientDialogOpen,
+        deletedClient: deletedClientInfo,
+        isAdvisor,
+        onRestore: handleRestoreClient,
+        onForceCreate: handleDismissDeletedDialog,
+        onDismiss: () => {
+          handleDismissDeletedDialog()
+          setShowCreateModal(true)
+        },
+        restoreLoading: restoreMutation.isPending,
+        forceCreateLoading: false,
+      },
+    },
+    permissions: {
+      can,
+      isAdvisor,
+    },
   }
 }
