@@ -1,7 +1,6 @@
 // Public surface of the binders feature — only import from this barrel externally
 export { bindersApi, bindersQK } from './api'
 export { BinderDetailDrawer } from './components/drawer/BinderDetailDrawer'
-export { ReceiveBinderDrawer } from './components/drawer/ReceiveBinderDrawer'
 
 export { buildBindersColumns } from './components/table/BindersColumns'
 export { BindersFiltersBar } from './components/table/BindersFiltersBar'
