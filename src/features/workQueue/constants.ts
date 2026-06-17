@@ -3,6 +3,7 @@ import { makeVariantGetter } from '@/utils/labels'
 
 export const APPROACHING_DAYS = 7
 export const IMPORTANT_DAYS = 21
+export const WORK_QUEUE_PAGE_SIZE = 20
 
 export const workQueueSourceTypeValues = [
   'vat_work_item',

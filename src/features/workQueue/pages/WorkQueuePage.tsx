@@ -1,18 +1,18 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { CheckSquare, Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Button } from '@/components/ui/primitives/Button'
-import { PaginationCard } from '@/components/ui/table/PaginationCard'
+import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import { TaskModal } from '@/features/tasks'
 import { useWorkQueuePage } from '../hooks/useWorkQueuePage'
 import { useWorkQueueActions } from '../hooks/useWorkQueueActions'
 import { WorkQueueSummaryCards } from '../components/WorkQueueSummaryCards'
 import { WorkQueueFiltersBar } from '../components/WorkQueueFiltersBar'
-import { WorkQueueTable } from '../components/WorkQueueTable'
-import { WORK_QUEUE_FILTER_PARAM_KEYS } from '../constants'
+import { buildWorkQueueColumns } from '../components/workQueueColumns'
+import { WORK_QUEUE_FILTER_PARAM_KEYS, WORK_QUEUE_PAGE_SIZE } from '../constants'
 import { toast } from '@/utils/toast'
 
 export const WorkQueuePage: React.FC = () => {
@@ -36,7 +36,6 @@ export const WorkQueuePage: React.FC = () => {
     clearFilters,
     page,
     total,
-    totalPages,
     setPage,
   } = useWorkQueuePage()
 
@@ -73,27 +72,33 @@ export const WorkQueuePage: React.FC = () => {
     if (error) toast.error('טעינת העבודה לטיפול נכשלה', { description: error })
   }, [error])
 
-  const renderBody = () => {
-    if (!isLoading && !isFetching && items.length === 0) {
-      if (hasContentFilters) {
-        return <StateCard icon={CheckSquare} title="אין תוצאות" message="אין תוצאות שתואמות לסינון" />
-      }
-      return (
-        <StateCard
-          icon={CheckSquare}
-          variant="illustration"
-          title={historyMode ? 'אין היסטוריה' : 'אין עבודה לטיפול'}
-          message={
-            historyMode
-              ? 'אין משימות היסטוריות להצגה.'
-              : 'אין כרגע עבודה לטיפול. כל הדוחות, התשלומים והמשימות הפעילות מסודרים.'
-          }
-        />
-      )
-    }
+  const { showLinkedTasks, showWarnings } = useMemo(
+    () => ({
+      showLinkedTasks: items.some((item) => item.linked_tasks_count > 0),
+      showWarnings: items.some((item) => item.warnings.length > 0),
+    }),
+    [items],
+  )
+  const columns = useMemo(
+    () => buildWorkQueueColumns({ activeActionKey, onAction: runAction, showLinkedTasks, showWarnings }),
+    [activeActionKey, runAction, showLinkedTasks, showWarnings],
+  )
 
-    return <WorkQueueTable items={items} activeActionKey={activeActionKey} onAction={runAction} />
-  }
+  const renderEmpty = () =>
+    hasContentFilters ? (
+      <StateCard icon={CheckSquare} title="אין תוצאות" message="אין תוצאות שתואמות לסינון" />
+    ) : (
+      <StateCard
+        icon={CheckSquare}
+        variant="illustration"
+        title={historyMode ? 'אין היסטוריה' : 'אין עבודה לטיפול'}
+        message={
+          historyMode
+            ? 'אין משימות היסטוריות להצגה.'
+            : 'אין כרגע עבודה לטיפול. כל הדוחות, התשלומים והמשימות הפעילות מסודרים.'
+        }
+      />
+    )
 
   return (
     <PageStateGuard isLoading={isLoading} error={error} header={header} loadingMessage="טוען משימות...">
@@ -119,11 +124,21 @@ export const WorkQueuePage: React.FC = () => {
         onClear={clearFilters}
       />
 
-      {renderBody()}
-
-      {!isLoading && total > 0 && (
-        <PaginationCard page={page} totalPages={totalPages} total={total} label="משימות" onPageChange={setPage} />
-      )}
+      <PaginatedDataTable
+        data={items}
+        columns={columns}
+        getRowKey={(item) => item.id}
+        isLoading={isLoading}
+        isFetching={isFetching}
+        page={page}
+        pageSize={WORK_QUEUE_PAGE_SIZE}
+        total={total}
+        label="משימות"
+        onPageChange={setPage}
+        renderEmpty={renderEmpty}
+        showPagination={total > 0}
+        stickyHeader
+      />
 
       <ConfirmDialog
         open={Boolean(pendingConfirm)}

@@ -3,19 +3,17 @@ import { useDebounce } from 'use-debounce'
 import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { getErrorMessage } from '@/utils/utils'
-import { getTotalPages } from '@/utils/paginationUtils'
 // eslint-disable-next-line no-restricted-imports -- avoid the tasks feature barrel here; it imports workQueue-backed components.
 import { parseTaskStatus } from '@/features/tasks/api/contracts'
 import {
   WORK_QUEUE_FILTER_PARAM_KEYS,
+  WORK_QUEUE_PAGE_SIZE,
   parseWorkQueueSourceType,
   parseWorkQueueUrgency,
   type WorkQueueFilterParamKey,
 } from '../constants'
 import { useWorkQueue } from './useWorkQueue'
 import type { WorkQueueParams } from '../api/contracts'
-
-const WORK_QUEUE_PAGE_SIZE = 20
 
 const parseLinkedFilter = (value: string | null): 'linked' | 'unlinked' | null =>
   value === 'linked' || value === 'unlinked' ? value : null
@@ -59,7 +57,6 @@ export const useWorkQueuePage = () => {
   const items = data?.items ?? []
   const total = data?.total ?? 0
   const summary = data?.summary
-  const totalPages = getTotalPages(total, WORK_QUEUE_PAGE_SIZE)
 
   const hasContentFilters =
     search.trim() !== '' ||
@@ -105,7 +102,6 @@ export const useWorkQueuePage = () => {
     clearFilters,
     page,
     total,
-    totalPages,
     setPage,
   }
 }
