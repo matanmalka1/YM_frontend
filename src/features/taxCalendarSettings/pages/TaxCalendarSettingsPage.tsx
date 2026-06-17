@@ -336,13 +336,12 @@ export const TaxCalendarSettingsPage = () => {
         {entriesQuery.isError ? (
           <Alert variant="error" message={getErrorMessage(entriesQuery.error, 'שגיאה בטעינת רשומות יומן המס')} />
         ) : null}
-        {entriesQuery.isPending ? (
-          <DataTable data={[]} columns={groupedEntriesColumns} getRowKey={(entry) => entry.id} isLoading />
-        ) : entryGroups.length === 0 ? (
+        {entriesQuery.isPending || entryGroups.length === 0 ? (
           <DataTable
             data={[]}
             columns={groupedEntriesColumns}
             getRowKey={(entry) => entry.id}
+            isLoading={entriesQuery.isPending}
             emptyState={{
               title: 'אין רשומות להצגה',
               message: 'לא נמצאו רשומות יומן מס בטווח השנים שנבחר.',
