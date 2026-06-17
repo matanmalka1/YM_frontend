@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { Alert } from '../../../../components/ui/overlays/Alert'
+import { StatsCard } from '../../../../components/ui/layout/StatsCard'
 import { cn, formatCurrencyILS as fmt } from '../../../../utils/utils'
 import type { IncomeSourceType, VatAutoPopulateResponse } from '../../api'
 import { CATEGORY_LABELS as VAT_CATEGORY_LABELS } from '../../../vatReports'
@@ -223,26 +224,10 @@ export const FinancialSummaryCards: React.FC<FinancialSummaryCardsProps> = ({
   totalExpenses,
   taxableIncome,
 }) => (
-  <div className="grid grid-cols-3 gap-3">
-    <div className="rounded-xl border border-positive-100 bg-positive-50 p-4 text-center">
-      <p className="text-xs text-gray-500 mb-1">סה"כ הכנסות</p>
-      <p className="text-lg font-bold text-positive-700">{fmt(totalIncome)}</p>
-    </div>
-    <div className="rounded-xl border border-negative-100 bg-negative-50 p-4 text-center">
-      <p className="text-xs text-gray-500 mb-1">סה"כ הוצאות</p>
-      <p className="text-lg font-bold text-negative-600">{fmt(totalExpenses)}</p>
-    </div>
-    <div
-      className={cn(
-        'rounded-xl border p-4 text-center',
-        taxableIncome >= 0 ? 'border-info-100 bg-info-50' : 'border-negative-100 bg-negative-50',
-      )}
-    >
-      <p className="text-xs text-gray-500 mb-1">הכנסה חייבת</p>
-      <p className={cn('text-lg font-bold', taxableIncome >= 0 ? 'text-info-700' : 'text-negative-600')}>
-        {fmt(taxableIncome)}
-      </p>
-    </div>
+  <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+    <StatsCard title='סה"כ הכנסות' value={fmt(totalIncome)} variant="green" />
+    <StatsCard title='סה"כ הוצאות' value={fmt(totalExpenses)} variant="red" />
+    <StatsCard title="הכנסה חייבת" value={fmt(taxableIncome)} variant={taxableIncome >= 0 ? 'blue' : 'red'} />
   </div>
 )
 

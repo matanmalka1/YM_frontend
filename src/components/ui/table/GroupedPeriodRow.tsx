@@ -69,7 +69,7 @@ export const GroupedPeriodRow = memo(
           aria-expanded={open}
           onClick={toggle}
           className={cn(
-            'grid min-h-[88px] w-full grid-cols-[minmax(180px,1.1fr)_minmax(160px,0.8fr)_minmax(280px,1.4fr)_auto] items-center gap-4 px-4 py-3 text-right',
+            'grid min-h-[88px] w-full grid-cols-[minmax(180px,1fr)_minmax(120px,0.5fr)_minmax(420px,1.8fr)_auto] items-center gap-4 px-4 py-3 text-right',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset',
             isCurrentPeriod ? 'bg-primary-50/60 hover:bg-primary-50' : 'hover:bg-gray-50/60',
             'max-lg:grid-cols-1 max-lg:items-start max-lg:gap-3',
@@ -92,9 +92,9 @@ export const GroupedPeriodRow = memo(
             {relativeDueLabel && <span className="text-xs text-gray-500">{relativeDueLabel}</span>}
           </span>
 
-          <span className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1.5">
+          <span className="flex min-w-0 items-center gap-x-4 overflow-hidden max-lg:flex-wrap max-lg:gap-y-1.5">
             {metrics.map((metric) => (
-              <span key={`${metric.label}-${metric.value}`} className="inline-flex items-baseline gap-1 text-sm">
+              <span key={`${metric.label}-${metric.value}`} className="inline-flex shrink-0 items-baseline gap-1 text-sm">
                 <span className={cn('font-semibold tabular-nums', metricToneClass[metric.tone ?? 'default'])}>
                   {metric.value}
                 </span>

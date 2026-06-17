@@ -3,12 +3,12 @@ import { AlertTriangle, CalendarDays, ListChecks, Play } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
-import { Card } from '@/components/ui/primitives/Card'
 import { Select } from '@/components/ui/inputs/Select'
+import { StatsCard } from '@/components/ui/layout/StatsCard'
 import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
 import { DataTable, type Column } from '@/components/ui/table/DataTable'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
-import { cn, formatCount, formatDate, getErrorMessage, getHttpStatus } from '@/utils/utils'
+import { formatCount, formatDate, getErrorMessage, getHttpStatus } from '@/utils/utils'
 import { useTaxCalendarSettings } from '../hooks/useTaxCalendarSettings'
 import type { TaxCalendarDeadlineRule, TaxCalendarSettingsEntry } from '../api'
 
@@ -274,48 +274,28 @@ export const TaxCalendarSettingsPage = () => {
         <Alert variant="error" message={getErrorMessage(summaryQuery.error, 'שגיאה בטעינת תקציר יומן המס')} />
       ) : null}
 
-      <Card className="border-r-4 border-r-primary-500">
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-primary-50 p-2 text-primary-700">
-              <CalendarDays className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-xs font-medium text-gray-500">טווח שנים</p>
-              <p className="font-mono text-lg font-semibold tabular-nums text-gray-900">
-                {formatYear(startYearState.value)}–{formatYear(endYearState.value)}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-gray-100 p-2 text-gray-700">
-              <ListChecks className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-xs font-medium text-gray-500">רשומות</p>
-              <p className="font-mono text-lg font-semibold tabular-nums text-gray-900">
-                {summaryQuery.isPending ? '...' : formatCount(summary?.total_entries ?? 0)}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div
-              className={cn(
-                'rounded-lg p-2',
-                warnings.length > 0 ? 'bg-warning-100 text-warning-700' : 'bg-positive-50 text-positive-700',
-              )}
-            >
-              <AlertTriangle className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-xs font-medium text-gray-500">אזהרות</p>
-              <p className="font-mono text-lg font-semibold tabular-nums text-gray-900">
-                {summaryQuery.isPending ? '...' : formatCount(warnings.length)}
-              </p>
-            </div>
-          </div>
-        </div>
-      </Card>
+      <div className="grid gap-4 sm:grid-cols-3">
+        <StatsCard
+          title="טווח שנים"
+          value={`${formatYear(startYearState.value)}–${formatYear(endYearState.value)}`}
+          icon={CalendarDays}
+          variant="blue"
+        />
+        <StatsCard
+          title="רשומות"
+          value={summary?.total_entries ?? 0}
+          icon={ListChecks}
+          variant="neutral"
+          loading={summaryQuery.isPending}
+        />
+        <StatsCard
+          title="אזהרות"
+          value={warnings.length}
+          icon={AlertTriangle}
+          variant={warnings.length > 0 ? 'orange' : 'green'}
+          loading={summaryQuery.isPending}
+        />
+      </div>
 
       {warnings.length > 0 ? (
         <div className="space-y-2">
