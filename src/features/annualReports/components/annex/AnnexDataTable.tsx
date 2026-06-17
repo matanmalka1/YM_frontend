@@ -1,11 +1,11 @@
 import { Check, Pencil, Trash2, X } from 'lucide-react'
 import type { FieldErrors, UseFormRegister } from 'react-hook-form'
-import { Input } from '../../../../components/ui/inputs/Input'
 import { Button } from '../../../../components/ui/primitives/Button'
 import type { AnnexDataLine } from '../../api'
 import type { FieldDef } from '../../annex.constants'
-import { ANNEX_TEXT, FIELD_INPUT_CLASS, TABLE_ICON_CLASS } from './annex.constants'
-import { getInputType, getLineFieldValue } from './annex.helpers'
+import { ANNEX_TEXT, TABLE_ICON_CLASS } from './annex.constants'
+import { getLineFieldValue } from './annex.helpers'
+import { AnnexFieldInput } from './AnnexFieldInput'
 import type { AnnexFormValues } from './annexSchema'
 
 interface AnnexDataTableProps {
@@ -55,13 +55,7 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
               {fields.map((field) => (
                 <td key={field.key} className="py-1 px-2 text-gray-700 align-top">
                   {isEditing ? (
-                    <Input
-                      type={getInputType(field.type)}
-                      step={field.type === 'number' ? 'any' : undefined}
-                      className={FIELD_INPUT_CLASS}
-                      error={errors[field.key]?.message as string | undefined}
-                      {...register(field.key)}
-                    />
+                    <AnnexFieldInput field={field} register={register} errors={errors} />
                   ) : (
                     getLineFieldValue(line, field.key)
                   )}
@@ -123,4 +117,3 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
   </div>
 )
 
-AnnexDataTable.displayName = 'AnnexDataTable'

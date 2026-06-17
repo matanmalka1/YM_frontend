@@ -186,7 +186,6 @@ export const useWorkQueuePage = () => {
       },
       label: 'משימות',
       showPagination: total > 0,
-      stickyHeader: true,
       emptyState,
     },
     modals: {

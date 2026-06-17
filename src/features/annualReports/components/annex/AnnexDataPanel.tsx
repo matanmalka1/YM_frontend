@@ -1,10 +1,9 @@
 import { Check, Plus, X } from 'lucide-react'
 import type { AnnualReportScheduleKey } from '../../api'
 import { Button } from '../../../../components/ui/primitives/Button'
-import { Input } from '../../../../components/ui/inputs/Input'
 import { AnnexDataTable } from './AnnexDataTable'
-import { ANNEX_TEXT, FIELD_INPUT_CLASS, TABLE_ICON_CLASS } from './annex.constants'
-import { getInputType } from './annex.helpers'
+import { AnnexFieldInput } from './AnnexFieldInput'
+import { ANNEX_TEXT, TABLE_ICON_CLASS } from './annex.constants'
 import { useAnnexDataPanel } from '../../hooks/useAnnexDataPanel'
 
 interface Props {
@@ -45,13 +44,7 @@ export const AnnexDataPanel: React.FC<Props> = ({ reportId, schedule, scheduleLa
             {panel.fields.map((f) => (
               <div key={f.key}>
                 <label className="text-xs text-gray-500 block mb-0.5">{f.label}</label>
-                <Input
-                  type={getInputType(f.type)}
-                  step={f.type === 'number' ? 'any' : undefined}
-                  className={FIELD_INPUT_CLASS}
-                  error={panel.errors[f.key]?.message as string | undefined}
-                  {...panel.register(f.key)}
-                />
+                <AnnexFieldInput field={f} register={panel.register} errors={panel.errors} />
               </div>
             ))}
           </div>
