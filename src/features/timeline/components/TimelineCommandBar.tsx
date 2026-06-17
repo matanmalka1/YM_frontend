@@ -102,9 +102,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
 
         {/* Right controls */}
         <div className="flex items-center gap-3 shrink-0">
-          <span className="hidden sm:block text-xs text-gray-400 whitespace-nowrap">
-            {formatCount(total)} אירועים
-          </span>
+          <span className="hidden sm:block text-xs text-gray-400 whitespace-nowrap">{formatCount(total)} אירועים</span>
 
           {lastUpdated && (
             <span className="hidden md:block text-xs text-gray-400 whitespace-nowrap">

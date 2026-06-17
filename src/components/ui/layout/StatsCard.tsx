@@ -182,11 +182,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
 
           <div>
             <div className={cn('font-bold leading-tight tabular-nums', compact ? 'text-xl' : 'text-lg', config.value)}>
-              {loading
-                ? '—'
-                : typeof value === 'number'
-                  ? formatCount(displayValue ?? value)
-                  : value}
+              {loading ? '—' : typeof value === 'number' ? formatCount(displayValue ?? value) : value}
             </div>
 
             {description && (

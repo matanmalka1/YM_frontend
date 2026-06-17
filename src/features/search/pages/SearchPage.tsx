@@ -86,8 +86,7 @@ export const Search: React.FC = () => {
         <>
           {!loading && (
             <p className="px-1 text-sm text-gray-500">
-              נמצאו <strong className="text-gray-900">{formatCount(total + documents.length)}</strong>{' '}
-              תוצאות
+              נמצאו <strong className="text-gray-900">{formatCount(total + documents.length)}</strong> תוצאות
             </p>
           )}
 

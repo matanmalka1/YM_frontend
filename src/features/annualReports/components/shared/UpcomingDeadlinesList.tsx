@@ -56,9 +56,7 @@ export const UpcomingDeadlinesList: React.FC<Props> = ({ reports }) => {
                     </p>
                     <p className="text-xs text-gray-500">{STATUS_LABELS[r.status]}</p>
                   </div>
-                  <span className="shrink-0 text-xs font-semibold text-gray-600">
-                    {formatDate(r.filing_deadline)}
-                  </span>
+                  <span className="shrink-0 text-xs font-semibold text-gray-600">{formatDate(r.filing_deadline)}</span>
                 </li>
               )
             })}

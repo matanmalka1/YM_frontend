@@ -50,8 +50,7 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
 
   const isFiled = row.status === 'filed'
 
-  const dueDateLabel =
-    isFiled && row.filed_at ? formatDate(row.filed_at) : formatDate(row.submission_deadline)
+  const dueDateLabel = isFiled && row.filed_at ? formatDate(row.filed_at) : formatDate(row.submission_deadline)
 
   const dueDateRowLabel = isFiled && row.filed_at ? 'תאריך הגשה' : 'מועד הגשה'
 

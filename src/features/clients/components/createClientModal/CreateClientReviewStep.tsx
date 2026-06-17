@@ -71,10 +71,7 @@ export const CreateClientReviewStep: React.FC<Props> = ({
 
       <ReviewSection title={entityLabels.contactSection}>
         <ReviewRow label={entityLabels.businessName} value={businessDisplayName} />
-        <ReviewRow
-          label={entityLabels.businessOpenedAt}
-          value={formatDate(values.business_opened_at ?? null)}
-        />
+        <ReviewRow label={entityLabels.businessOpenedAt} value={formatDate(values.business_opened_at ?? null)} />
         <ReviewRow label="טלפון" value={values.phone} />
         <ReviewRow label="אימייל" value={values.email} />
         <ReviewRow label="כתובת" value={addressLine} />

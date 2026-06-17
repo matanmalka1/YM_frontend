@@ -11,11 +11,7 @@ import { ModalFormActions } from '../../../../components/ui/overlays/ModalFormAc
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
 import type { BusinessResponse, UpdateBusinessPayload } from '../../api'
-import {
-  BUSINESS_STATUS_BADGE_VARIANTS,
-  BUSINESS_STATUS_OPTIONS,
-  getBusinessStatusLabel,
-} from '@/features/businesses'
+import { BUSINESS_STATUS_BADGE_VARIANTS, BUSINESS_STATUS_OPTIONS, getBusinessStatusLabel } from '@/features/businesses'
 import { CLIENT_ROUTES } from '../../api/endpoints'
 import { formatDate } from '@/utils/utils'
 import { useBusinessActions } from '../../hooks/useBusinessActions'

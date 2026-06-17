@@ -39,7 +39,12 @@ export const AdvancePaymentDrawerFooter: React.FC<AdvancePaymentDrawerFooterProp
             >
               כן, מחק
             </Button>
-            <Button variant="ghost" size="sm" onClick={() => setConfirmDelete(false)} disabled={isUpdating || isDeleting}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setConfirmDelete(false)}
+              disabled={isUpdating || isDeleting}
+            >
               ביטול
             </Button>
           </div>

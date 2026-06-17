@@ -21,7 +21,12 @@ const DOCUMENT_COLUMNS: Column<DocumentSearchResult>[] = [
       </span>
     ),
   },
-  { key: 'client', header: 'לקוח', align: 'right', render: (doc) => <span className="text-gray-700">{doc.client_name}</span> },
+  {
+    key: 'client',
+    header: 'לקוח',
+    align: 'right',
+    render: (doc) => <span className="text-gray-700">{doc.client_name}</span>,
+  },
   {
     key: 'type',
     header: 'סוג מסמך',

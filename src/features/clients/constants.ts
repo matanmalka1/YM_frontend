@@ -155,9 +155,10 @@ const CLIENT_SORT_BY_LABELS: Record<ClientSortBy, string> = {
   entity_type: 'סוג יישות',
 }
 
-export const CLIENT_SORT_BY_OPTIONS: { value: ClientSortBy; label: string }[] = CLIENT_SORT_BY_VALUES.map(
-  (value) => ({ value, label: CLIENT_SORT_BY_LABELS[value] }),
-)
+export const CLIENT_SORT_BY_OPTIONS: { value: ClientSortBy; label: string }[] = CLIENT_SORT_BY_VALUES.map((value) => ({
+  value,
+  label: CLIENT_SORT_BY_LABELS[value],
+}))
 
 const SORT_ORDER_LABELS: Record<ClientSortBy, Record<ClientSortOrder, string>> = {
   full_name: { asc: 'שם לקוח: א׳ → ת׳', desc: 'שם לקוח: ת׳ → א׳' },

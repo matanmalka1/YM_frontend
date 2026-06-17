@@ -83,56 +83,55 @@ export const Tooltip: React.FC<TooltipProps> = ({ text, children, className }) =
   const isElement = isValidElement<TooltipTriggerProps>(children)
   // Disabled/loading controls don't fire pointer events, so cloning onto them
   // swallows the tooltip. Wrap such triggers in a hover-able span instead.
-  const childDisabled =
-    isElement && (children.props.disabled === true || children.props['aria-disabled'] === true)
+  const childDisabled = isElement && (children.props.disabled === true || children.props['aria-disabled'] === true)
 
   const trigger =
     isElement && !childDisabled ? (
-    cloneElement(children, {
-      'aria-describedby': open ? tooltipId : undefined,
-      className: cn(children.props.className, className),
-      onBlur: (event) => {
-        children.props.onBlur?.(event)
-        hideTooltip()
-      },
-      onFocus: (event) => {
-        children.props.onFocus?.(event)
-        showTooltip(event)
-      },
-      onKeyDown: (event) => {
-        children.props.onKeyDown?.(event)
-        if (event.key === 'Escape') hideTooltip()
-      },
-      onPointerEnter: (event) => {
-        children.props.onPointerEnter?.(event)
-        showTooltip(event)
-      },
-      onPointerLeave: (event) => {
-        children.props.onPointerLeave?.(event)
-        hideTooltip()
-      },
-    })
-  ) : (
-    <span
-      role={childDisabled ? undefined : 'button'}
-      tabIndex={childDisabled ? undefined : 0}
-      className={cn('inline-flex', className)}
-      aria-describedby={open ? tooltipId : undefined}
-      onPointerEnter={showTooltip}
-      onPointerLeave={hideTooltip}
-      onFocus={showTooltip}
-      onBlur={hideTooltip}
-      onKeyDown={(event) => {
-        if (event.key === 'Escape') hideTooltip()
-      }}
-    >
-      {childDisabled && isElement
-        ? cloneElement(children, {
-            className: cn(children.props.className, 'pointer-events-none'),
-          })
-        : children}
-    </span>
-  )
+      cloneElement(children, {
+        'aria-describedby': open ? tooltipId : undefined,
+        className: cn(children.props.className, className),
+        onBlur: (event) => {
+          children.props.onBlur?.(event)
+          hideTooltip()
+        },
+        onFocus: (event) => {
+          children.props.onFocus?.(event)
+          showTooltip(event)
+        },
+        onKeyDown: (event) => {
+          children.props.onKeyDown?.(event)
+          if (event.key === 'Escape') hideTooltip()
+        },
+        onPointerEnter: (event) => {
+          children.props.onPointerEnter?.(event)
+          showTooltip(event)
+        },
+        onPointerLeave: (event) => {
+          children.props.onPointerLeave?.(event)
+          hideTooltip()
+        },
+      })
+    ) : (
+      <span
+        role={childDisabled ? undefined : 'button'}
+        tabIndex={childDisabled ? undefined : 0}
+        className={cn('inline-flex', className)}
+        aria-describedby={open ? tooltipId : undefined}
+        onPointerEnter={showTooltip}
+        onPointerLeave={hideTooltip}
+        onFocus={showTooltip}
+        onBlur={hideTooltip}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') hideTooltip()
+        }}
+      >
+        {childDisabled && isElement
+          ? cloneElement(children, {
+              className: cn(children.props.className, 'pointer-events-none'),
+            })
+          : children}
+      </span>
+    )
 
   return (
     <>
