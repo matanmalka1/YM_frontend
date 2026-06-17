@@ -108,14 +108,15 @@ export const DataTable = <T,>({
     <Card disablePadding className={cn('overflow-hidden', className)}>
       <div className={cn('overflow-x-auto', stickyHeader && cn('overflow-y-auto', heightClass))}>
         <table className="w-full border-collapse">
-          <thead className={cn(stickyHeader && 'sticky top-0 z-20 shadow-sm')}>
-            <tr className="border-b border-gray-200 bg-gray-50 text-right">
+          <thead className={cn(stickyHeader && 'sticky top-0 z-20')}>
+            <tr className="border-b border-gray-200 bg-gray-50/80 text-right">
               {columns.map((column) => (
                 <th
                   key={column.key}
                   className={cn(
-                    'px-3 py-2 text-xs font-semibold uppercase tracking-wide text-gray-500',
-                    stickyHeader && 'bg-gray-50',
+                    'px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-gray-500',
+                    'first:ps-5 last:pe-5',
+                    stickyHeader && 'border-b border-gray-200 bg-gray-50/90 backdrop-blur-sm',
                     ALIGN_CLASS[column.headerAlign ?? column.align ?? 'center'],
                     column.headerClassName,
                   )}
@@ -130,9 +131,9 @@ export const DataTable = <T,>({
               <tr
                 key={getRowKey(item)}
                 className={cn(
-                  'transition-colors duration-100',
+                  'transition-colors duration-150',
                   onRowClick &&
-                    'cursor-pointer hover:bg-primary-50/60 active:bg-primary-50/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset',
+                    'cursor-pointer hover:bg-primary-50/60 active:bg-primary-50/80 hover:shadow-[inset_-3px_0_0_0_var(--color-primary-400)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset',
                   !onRowClick && 'hover:bg-gray-50/80',
                   rowClassName?.(item, index),
                 )}
@@ -145,7 +146,7 @@ export const DataTable = <T,>({
                     key={column.key}
                     dir={column.dir}
                     className={cn(
-                      'px-3 py-3 align-middle',
+                      'px-3 py-2 align-middle text-sm text-gray-700 first:ps-5 last:pe-5',
                       column.wrap ? 'whitespace-normal' : 'whitespace-nowrap',
                       ALIGN_CLASS[column.align ?? 'center'],
                       column.className,
