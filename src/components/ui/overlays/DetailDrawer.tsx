@@ -13,6 +13,8 @@ interface DetailDrawerProps {
   footer?: React.ReactNode
   /** When true, closing shows a confirmation prompt before discarding */
   isDirty?: boolean
+  /** Width / layout override forwarded to the drawer panel. */
+  className?: string
 }
 
 export const DetailDrawer: React.FC<DetailDrawerProps> = ({
@@ -23,6 +25,7 @@ export const DetailDrawer: React.FC<DetailDrawerProps> = ({
   children,
   footer,
   isDirty = false,
+  className,
 }) => {
   const { showGuard, handleClose, handleContinue, handleDiscard } = useUnsavedChangesGuard({
     isDirty,
@@ -38,6 +41,7 @@ export const DetailDrawer: React.FC<DetailDrawerProps> = ({
         subtitle={subtitle}
         footer={footer}
         onClose={handleClose}
+        className={className}
       >
         {children}
       </OverlayContainer>
