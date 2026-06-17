@@ -5,6 +5,7 @@ import type { UsersFilters } from '../types'
 interface UsersFiltersBarProps {
   filters: UsersFilters
   onFilterChange: (key: string, value: string) => void
+  onReset: () => void
 }
 
 const FIELDS = [
@@ -26,15 +27,12 @@ const FIELDS = [
   },
 ]
 
-export const UsersFiltersBar: React.FC<UsersFiltersBarProps> = ({ filters, onFilterChange }) => (
+export const UsersFiltersBar: React.FC<UsersFiltersBarProps> = ({ filters, onFilterChange, onReset }) => (
   <FilterPanel
     fields={FIELDS}
     values={{ search: filters.search ?? '', is_active: filters.is_active ?? '' }}
     onChange={onFilterChange}
-    onReset={() => {
-      onFilterChange('search', '')
-      onFilterChange('is_active', '')
-    }}
+    onReset={onReset}
     gridClass="grid-cols-1 sm:grid-cols-2"
   />
 )

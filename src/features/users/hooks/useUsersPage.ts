@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { usersApi, usersQK } from '../api'
 import type { CreateUserPayload, UpdateUserPayload, UserResponse } from '../api'
@@ -7,6 +7,8 @@ import { getErrorMessage, showErrorToast } from '../../../utils/utils'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { parsePositiveInt } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
+import { useAuthStore } from '@/store/auth.store'
+import { buildUserColumns } from '../components/UsersColumns'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 
 const invalidateUsers = (queryClient: ReturnType<typeof useQueryClient>) =>
@@ -15,7 +17,8 @@ const invalidateUsers = (queryClient: ReturnType<typeof useQueryClient>) =>
 export const useUsersPage = () => {
   const queryClient = useQueryClient()
   const { isAdvisor } = useRole()
-  const { searchParams, getParam, getPage, setFilter, setPage } = useSearchParamFilters()
+  const currentUserId = useAuthStore((s) => s.user?.id)
+  const { searchParams, getParam, getPage, setFilter, setFilters, setPage } = useSearchParamFilters()
 
   const page = getPage()
   const page_size = parsePositiveInt(searchParams.get('page_size'), PAGE_SIZE)
@@ -39,6 +42,7 @@ export const useUsersPage = () => {
   const [resetUser, setResetUser] = useState<UserResponse | null>(null)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showAuditLogs, setShowAuditLogs] = useState(false)
+  const [pendingToggle, setPendingToggle] = useState<UserResponse | null>(null)
 
   // ── Mutations ────────────────────────────────────────────────────────────────
 
@@ -99,40 +103,109 @@ export const useUsersPage = () => {
     setResetUser(null)
   }
 
+  const confirmToggleActive = () => {
+    if (pendingToggle) {
+      toggleActive(pendingToggle)
+      setPendingToggle(null)
+    }
+  }
+
+  // ── Derived ──────────────────────────────────────────────────────────────────
+
+  const handleFilterChange = (key: string, value: string) => setFilter(key, value)
+  const resetFilters = () => setFilters({ search: '', is_active: '' })
+
+  const users = listQuery.data?.items ?? []
+  const total = listQuery.data?.total ?? 0
+  const isFiltered = Boolean(search || is_active)
+
+  const columns = useMemo(
+    () =>
+      buildUserColumns({
+        onEdit: setEditUser,
+        onToggleActive: setPendingToggle,
+        onResetPassword: setResetUser,
+        currentUserId,
+      }),
+    [currentUserId],
+  )
+
   return {
-    // Data
-    users: listQuery.data?.items ?? [],
-    total: listQuery.data?.total ?? 0,
-    loading: listQuery.isPending,
-    error: listQuery.error ? getErrorMessage(listQuery.error, 'שגיאה בטעינת המשתמשים') : null,
-    filters,
-    handleFilterChange: (key: string, value: string) => setFilter(key, value),
-    setPage,
-
-    // Modal state
-    editUser,
-    setEditUser,
-    resetUser,
-    setResetUser,
-    showCreateModal,
-    setShowCreateModal,
-    showAuditLogs,
-    setShowAuditLogs,
-
-    // Actions
-    createUser,
-    createLoading: createMutation.isPending,
-
-    updateUser,
-    updateLoading: updateMutation.isPending,
-
-    toggleActive,
-    toggleActiveLoading: toggleActiveMutation.isPending,
-
-    resetPassword,
-    resetPasswordLoading: resetPasswordMutation.isPending,
-
-    // Permissions
-    isAdvisor,
+    status: {
+      isLoading: listQuery.isPending,
+      isFetching: listQuery.isFetching,
+      error: listQuery.error ? getErrorMessage(listQuery.error, 'שגיאה בטעינת המשתמשים') : null,
+      loadingMessage: 'טוען משתמשים...',
+    },
+    headerProps: {
+      title: 'ניהול משתמשים',
+      description: 'ניהול חשבונות משתמשים, תפקידים והרשאות',
+    },
+    filters: {
+      values: filters,
+      onFilterChange: handleFilterChange,
+      resetFilters,
+    },
+    table: {
+      data: users,
+      columns,
+      pagination: {
+        page: filters.page,
+        pageSize: filters.page_size,
+        total,
+        onPageChange: setPage,
+        onPageSizeChange: (size: number) => handleFilterChange('page_size', String(size)),
+      },
+      emptyState: {
+        isEmpty: users.length === 0,
+        isFiltered,
+        title: 'אין משתמשים להצגה',
+        message: 'לא נמצאו משתמשים. הוסף משתמש חדש למערכת.',
+        action: { label: 'משתמש חדש', onClick: () => setShowCreateModal(true) },
+      },
+    },
+    modals: {
+      openCreate: () => setShowCreateModal(true),
+      openAuditLogs: () => setShowAuditLogs(true),
+      createProps: {
+        open: showCreateModal,
+        onClose: () => setShowCreateModal(false),
+        onSubmit: createUser,
+        isLoading: createMutation.isPending,
+      },
+      editProps: {
+        open: Boolean(editUser),
+        user: editUser,
+        onClose: () => setEditUser(null),
+        onSubmit: updateUser,
+        isLoading: updateMutation.isPending,
+      },
+      resetPasswordProps: {
+        open: Boolean(resetUser),
+        user: resetUser,
+        onClose: () => setResetUser(null),
+        onSubmit: resetPassword,
+        isLoading: resetPasswordMutation.isPending,
+      },
+      auditLogsProps: {
+        open: showAuditLogs,
+        onClose: () => setShowAuditLogs(false),
+      },
+      toggleActiveProps: {
+        open: Boolean(pendingToggle),
+        title: pendingToggle?.is_active ? 'השבתת משתמש' : 'הפעלת משתמש',
+        message: pendingToggle?.is_active
+          ? `האם להשבית את המשתמש ${pendingToggle?.full_name}? המשתמש לא יוכל להתחבר למערכת.`
+          : `האם להפעיל את המשתמש ${pendingToggle?.full_name}?`,
+        confirmLabel: pendingToggle?.is_active ? 'השבת' : 'הפעל',
+        cancelLabel: 'ביטול',
+        isLoading: toggleActiveMutation.isPending,
+        onConfirm: confirmToggleActive,
+        onCancel: () => setPendingToggle(null),
+      },
+    },
+    permissions: {
+      isAdvisor,
+    },
   }
 }
