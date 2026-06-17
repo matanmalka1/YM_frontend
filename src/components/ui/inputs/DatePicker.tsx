@@ -1,11 +1,23 @@
 import { useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { format, parse, isValid } from 'date-fns'
+import { format, parse, parseISO, isValid } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { FormField } from './FormField'
 import { DatePickerCalendar } from './DatePickerCalendar'
 import { useDismissibleLayer } from '../overlays/useDismissibleLayer'
+
+/** Approx. rendered calendar size; used only before the calendar mounts (real size is measured after). */
+const ESTIMATED_CALENDAR_HEIGHT = 340
+const ESTIMATED_CALENDAR_WIDTH = 300
+
+/** Tolerant parse: accept date-only (yyyy-MM-dd) and fall back to full ISO so a datetime value still displays. */
+const parseValue = (raw: string): Date | undefined => {
+  const d = parse(raw, 'yyyy-MM-dd', new Date())
+  if (isValid(d)) return d
+  const iso = parseISO(raw)
+  return isValid(iso) ? iso : undefined
+}
 
 export interface DatePickerProps {
   label?: string
@@ -41,12 +53,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   const containerRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
 
-  const selected = value
-    ? (() => {
-        const d = parse(value, 'yyyy-MM-dd', new Date())
-        return isValid(d) ? d : undefined
-      })()
-    : undefined
+  const selected = value ? parseValue(value) : undefined
 
   useEffect(() => {
     if (selected) setMonthState(selected)
@@ -55,11 +62,36 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
   const displayValue = selected ? format(selected, 'dd/MM/yyyy') : ''
 
+  const computeDropdownPos = () => {
+    if (!triggerRef.current) return null
+    const rect = triggerRef.current.getBoundingClientRect()
+    // Prefer the real mounted size; fall back to estimates before the first paint.
+    const calHeight = containerRef.current?.offsetHeight || ESTIMATED_CALENDAR_HEIGHT
+    const calWidth = containerRef.current?.offsetWidth || ESTIMATED_CALENDAR_WIDTH
+    // Flip above the trigger when there isn't room for the calendar below it
+    // (e.g. a date field near the bottom of a drawer/viewport).
+    const spaceBelow = window.innerHeight - rect.bottom
+    const openUp = spaceBelow < calHeight + 8
+    const top = openUp ? Math.max(rect.top - calHeight - 4, 8) : rect.bottom + 4
+    // The calendar is right-aligned to the trigger (translateX(-100%)), so it spans
+    // [left - calWidth, left]. Clamp horizontally so it stays inside the viewport.
+    const left = Math.min(Math.max(rect.right, calWidth + 8), window.innerWidth - 8)
+    return { top, left }
+  }
+
   const handleOpen = () => {
     if (disabled) return
-    if (!open && usePortal && triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect()
-      setDropdownPos({ top: rect.bottom + 4, left: rect.right })
+    if (!open) {
+      // Reopening with no value: default the visible month to today (capped at maxDate),
+      // not a stale month captured at mount.
+      if (!selected) {
+        const today = new Date()
+        setMonthState(maxDate && today > maxDate ? maxDate : today)
+      }
+      if (usePortal) {
+        const pos = computeDropdownPos()
+        if (pos) setDropdownPos(pos)
+      }
     }
     setOpen((o) => !o)
   }
@@ -81,16 +113,25 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     },
   })
 
+  // Close if the field is disabled while the calendar is open.
+  useEffect(() => {
+    if (disabled && open) setOpen(false)
+  }, [disabled, open])
+
   useEffect(() => {
     if (!open || !usePortal) return
     const updatePos = () => {
-      if (triggerRef.current) {
-        const rect = triggerRef.current.getBoundingClientRect()
-        setDropdownPos({ top: rect.bottom + 4, left: rect.right })
-      }
+      const pos = computeDropdownPos()
+      if (pos) setDropdownPos(pos)
     }
+    // Recompute once the calendar has mounted so we use its measured size, then track scroll/resize.
+    updatePos()
     window.addEventListener('scroll', updatePos, true)
-    return () => window.removeEventListener('scroll', updatePos, true)
+    window.addEventListener('resize', updatePos)
+    return () => {
+      window.removeEventListener('scroll', updatePos, true)
+      window.removeEventListener('resize', updatePos)
+    }
   }, [open, usePortal])
 
   const calendar = (
@@ -116,16 +157,10 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         ref={triggerRef}
         type="button"
         disabled={disabled}
+        aria-haspopup="dialog"
+        aria-expanded={open}
         onClick={handleOpen}
-        onKeyDown={(event) => {
-          if (open && event.key === 'Escape') {
-            event.preventDefault()
-            setOpen(false)
-            onBlur?.()
-            return
-          }
-          onKeyDown?.(event)
-        }}
+        onKeyDown={onKeyDown}
         className={cn(
           'w-full flex items-center justify-between rounded-lg border shadow-sm text-sm transition-all bg-white text-right',
           compact ? 'px-2 py-1 h-7 text-xs' : 'h-9 px-3 py-2',

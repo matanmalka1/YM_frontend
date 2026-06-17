@@ -35,7 +35,7 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
       values={auditTrail.filterValues}
       onChange={auditTrail.handleFilterChange}
       onReset={auditTrail.handleFilterReset}
-      gridClass="grid-cols-1 sm:grid-cols-4"
+      gridClass="grid-cols-1 sm:grid-cols-2"
     />
   )
 

@@ -3,7 +3,6 @@ import { Bell } from 'lucide-react'
 import { FIRST_PAGE } from '@/constants/pagination.constants'
 import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
-import { parsePositiveInt } from '@/utils/utils'
 import { useActiveUserOptions } from '@/features/users'
 
 import {
@@ -15,11 +14,7 @@ import {
 import { useNotifications } from './useNotifications'
 import { useNotificationDetail } from './useNotificationDetail'
 import { buildNotificationColumns } from '../components/table/NotificationsColumns'
-import {
-  NOTIFICATION_STATUS_OPTIONS,
-  NOTIFICATION_TRIGGER_OPTIONS,
-  NOTIFICATIONS_PAGE_SIZE_OPTIONS,
-} from '../constants'
+import { NOTIFICATION_STATUS_OPTIONS, NOTIFICATION_TRIGGER_OPTIONS } from '../constants'
 
 const DEFAULT_PAGE_SIZE = 25
 
@@ -33,7 +28,7 @@ export const useNotificationsPage = () => {
   const { searchParams, getParam, getPage, setFilter, setFilters, setPage: setUrlPage } = useSearchParamFilters()
 
   const page = getPage(FIRST_PAGE)
-  const pageSize = parsePositiveInt(searchParams.get('page_size'), DEFAULT_PAGE_SIZE)
+  const pageSize = DEFAULT_PAGE_SIZE
   const triggerParam = searchParams.get('trigger')
   const statusParam = searchParams.get('status')
   const trigger = isNotificationTrigger(triggerParam) ? triggerParam : undefined
@@ -110,13 +105,6 @@ export const useNotificationsPage = () => {
         options: userOptions,
         disabled: usersQuery.isPending,
       },
-      {
-        type: 'select' as const,
-        key: 'page_size',
-        label: 'כמות בעמוד',
-        options: NOTIFICATIONS_PAGE_SIZE_OPTIONS,
-        defaultValue: String(DEFAULT_PAGE_SIZE),
-      },
     ],
     [userOptions, usersQuery.isPending],
   )
@@ -129,7 +117,6 @@ export const useNotificationsPage = () => {
     created_after: dateFrom,
     created_before: dateTo,
     triggered_by: triggeredBy,
-    page_size: String(pageSize),
   }
 
   const resetFilters = () =>
@@ -141,7 +128,6 @@ export const useNotificationsPage = () => {
       created_after: '',
       created_before: '',
       triggered_by: '',
-      page_size: '',
     })
 
   return {
@@ -162,7 +148,7 @@ export const useNotificationsPage = () => {
       onChange: (key: string, value: string) => setFilter(key, value),
       onMultiChange: (updates: Record<string, string>) => setFilters(updates),
       onReset: resetFilters,
-      gridClass: 'grid-cols-1 md:grid-cols-2 xl:grid-cols-7',
+      gridClass: 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3',
     },
     table: {
       data: items,
