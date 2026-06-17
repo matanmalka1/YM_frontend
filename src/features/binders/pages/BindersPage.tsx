@@ -1,11 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/primitives/Button'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import {
   BinderDetailDrawer,
-  buildBindersColumns,
   BindersFiltersBar,
   BindersStatsSection,
   ReceiveBinderDrawer,
@@ -13,96 +12,23 @@ import {
   useReceiveBinderDrawer,
 } from '@/features/binders'
 import { BindersPageDialogs } from '../components/dialogs/BindersPageDialogs'
-import { useBindersPageDialogs } from '../hooks/useBindersPageDialogs'
 import { getBinderNumberLabel } from '../utils'
 import { Plus } from 'lucide-react'
 
 export const Binders: React.FC = () => {
   const [receiveOpen, setReceiveOpen] = useState(false)
 
-  const {
-    actionLoadingId,
-    binders,
-    total,
-    counters,
-    error,
-    filters,
-    deepLinkBinderId,
-    selectedBinder,
-    handleFilterChange,
-    handleMultiFilterChange,
-    handleReset,
-    setPage,
-    handleSelectBinder,
-    handleCloseDrawer,
-    loading,
-    deleteBinder,
-    isDeleting,
-    receiveMaterial,
-    markFull,
-    reopenCapacity,
-    markReadyForHandover,
-    markReadyForHandoverBulk,
-    isMarkingReadyForHandoverBulk,
-    revertReadyForHandover,
-    handoverToClient,
-    isHandingOverToClient,
-    handoverToClientBulk,
-    isHandingOverToClientBulk,
-  } = useBindersPage()
-
-  const dialogs = useBindersPageDialogs({
-    getSelectedBinder: () => selectedBinder,
-    markReadyForHandoverBulk,
-    handoverToClient,
-    handoverToClientBulk,
-    deleteBinder,
-  })
+  const page = useBindersPage({ onOpenReceive: () => setReceiveOpen(true) })
+  const { status, stats, filters, table, modals, drawers } = page
+  const { dialogs } = modals
 
   const receive = useReceiveBinderDrawer({
     onSuccess: () => setReceiveOpen(false),
   })
 
-  const detailOpen = deepLinkBinderId !== undefined
-
-  const columns = useMemo(
-    () =>
-      buildBindersColumns({
-        actionLoadingId,
-        onReceiveMaterial: (id) => void receiveMaterial(id),
-        onMarkFull: (id) => void markFull(id),
-        onReopenCapacity: (id) => void reopenCapacity(id),
-        onMarkReadyForHandover: (id) => void markReadyForHandover(id),
-        onMarkReadyForHandoverBulk: (id) => {
-          const binder = binders.find((item) => item.id === id) ?? null
-          dialogs.openBulkReadyForHandoverDialog(binder ?? undefined)
-        },
-        onRevertReadyForHandover: (id) => void revertReadyForHandover(id),
-        onHandoverToClient: dialogs.openHandoverToClientDialog,
-        onHandoverToClientBulk: (id) => {
-          const binder = binders.find((item) => item.id === id) ?? null
-          dialogs.openHandoverToClientBulkDialog(binder ?? undefined)
-        },
-        onOpenDetail: (id) => handleSelectBinder({ id }),
-        onDelete: dialogs.openDeleteDialog,
-      }),
-    [
-      actionLoadingId,
-      binders,
-      dialogs,
-      receiveMaterial,
-      markFull,
-      reopenCapacity,
-      markReadyForHandover,
-      revertReadyForHandover,
-      handleSelectBinder,
-    ],
-  )
-
   const header = (
     <PageHeader
-      title="קלסרים"
-      description="רשימת הקלסרים במשרד — סינון לפי לקוח, מספר קלסר, סטטוס ותקופה"
+      {...page.headerProps}
       actions={
         <Button variant="ghost" size="sm" onClick={() => setReceiveOpen(true)}>
           קליטת חומר
@@ -113,50 +39,59 @@ export const Binders: React.FC = () => {
   )
 
   return (
-    <PageStateGuard isLoading={loading} error={error} header={header} loadingMessage="טוען קלסרים...">
+    <PageStateGuard
+      isLoading={status.isLoading}
+      error={status.error}
+      header={header}
+      loadingMessage={status.loadingMessage}
+    >
       <BindersStatsSection
-        counters={counters}
-        countersLoading={false}
-        locationStatus={filters.location_status}
-        onFilterChange={handleFilterChange}
+        counters={stats.counters}
+        countersLoading={stats.countersLoading}
+        locationStatus={stats.locationStatus}
+        onFilterChange={stats.onFilterChange}
       />
 
       <BindersFiltersBar
-        filters={filters}
-        onFilterChange={handleFilterChange}
-        onMultiFilterChange={handleMultiFilterChange}
-        onReset={handleReset}
+        filters={filters.values}
+        onFilterChange={filters.onFilterChange}
+        onMultiFilterChange={filters.onMultiFilterChange}
+        onReset={filters.resetFilters}
       />
 
       <PaginatedDataTable
-        data={binders}
-        columns={columns}
+        data={table.data}
+        columns={table.columns}
         getRowKey={(binder) => binder.id}
-        onRowClick={(binder) => handleSelectBinder(binder)}
-        page={filters.page}
-        pageSize={filters.page_size}
-        total={total}
-        onPageChange={setPage}
-        emptyMessage="אין קלסרים התואמים לסינון הנוכחי"
+        onRowClick={(binder) => drawers.onSelect(binder)}
+        page={table.pagination.page}
+        pageSize={table.pagination.pageSize}
+        total={table.pagination.total}
+        onPageChange={table.pagination.onPageChange}
+        emptyMessage={table.emptyState.emptyMessage}
         emptyState={{
-          title: 'לא נמצאו קלסרים',
-          message: 'נסה לאפס את הסינון, או קלוט חומר חדש.',
-          action: { label: 'קליטת חומר', onClick: () => setReceiveOpen(true) },
+          title: table.emptyState.title,
+          message: table.emptyState.message,
+          action: table.emptyState.action,
         }}
       />
 
       <BindersPageDialogs
         confirmHandoverForId={dialogs.confirmHandoverForId}
         confirmDeleteForId={dialogs.confirmDeleteForId}
+        confirmReadyForHandoverForId={dialogs.confirmReadyForHandoverForId}
         handoverRecipientName={dialogs.handoverRecipientName}
         setHandoverRecipientName={dialogs.setHandoverRecipientName}
-        isHandingOverToClient={isHandingOverToClient}
-        isDeleting={isDeleting}
+        isHandingOverToClient={modals.isHandingOverToClient}
+        isDeleting={modals.isDeleting}
+        isMarkingReadyForHandover={modals.isMarkingReadyForHandover}
         onConfirmHandoverToClient={() => void dialogs.confirmHandoverToClient()}
         onCancelHandoverToClient={dialogs.closeHandoverToClientDialog}
         onConfirmDelete={() => void dialogs.confirmDelete()}
         onCancelDelete={dialogs.closeDeleteDialog}
-        getBinderNumberLabel={(id) => getBinderNumberLabel(id, binders, selectedBinder)}
+        onConfirmReadyForHandover={() => void dialogs.confirmReadyForHandover()}
+        onCancelReadyForHandover={dialogs.closeReadyForHandoverDialog}
+        getBinderNumberLabel={(id) => getBinderNumberLabel(id, table.data, drawers.selectedBinder)}
         bulkReadyForHandoverOpen={dialogs.bulkReadyForHandoverOpen}
         onCloseBulkReadyForHandover={dialogs.closeBulkReadyForHandoverDialog}
         onConfirmBulkReadyForHandover={() => void dialogs.confirmBulkReadyForHandover()}
@@ -164,32 +99,42 @@ export const Binders: React.FC = () => {
         bulkReadyForHandoverMonth={dialogs.bulkReadyForHandoverMonth}
         setBulkReadyForHandoverYear={dialogs.setBulkReadyForHandoverYear}
         setBulkReadyForHandoverMonth={dialogs.setBulkReadyForHandoverMonth}
-        isMarkingReadyForHandoverBulk={isMarkingReadyForHandoverBulk}
+        isMarkingReadyForHandoverBulk={modals.isMarkingReadyForHandoverBulk}
         dialogBinder={dialogs.dialogBinder}
         handoverToClientBulkOpen={dialogs.handoverToClientBulkOpen}
         onCloseHandoverToClientBulk={dialogs.closeHandoverToClientBulkDialog}
         onSubmitHandoverToClientBulk={dialogs.submitHandoverToClientBulk}
-        isHandingOverToClientBulk={isHandingOverToClientBulk}
+        isHandingOverToClientBulk={modals.isHandingOverToClientBulk}
       />
 
       <BinderDetailDrawer
-        open={detailOpen}
-        binder={selectedBinder}
-        onClose={handleCloseDrawer}
-        onReceiveMaterial={selectedBinder ? () => void receiveMaterial(selectedBinder.id) : undefined}
-        onMarkFull={selectedBinder ? () => void markFull(selectedBinder.id) : undefined}
-        onReopenCapacity={selectedBinder ? () => void reopenCapacity(selectedBinder.id) : undefined}
-        onMarkReadyForHandover={selectedBinder ? () => void markReadyForHandover(selectedBinder.id) : undefined}
+        open={drawers.detailOpen}
+        binder={drawers.selectedBinder}
+        onClose={drawers.onCloseDetail}
+        onReceiveMaterial={
+          drawers.selectedBinder ? () => void drawers.receiveMaterial(drawers.selectedBinder!.id) : undefined
+        }
+        onMarkFull={drawers.selectedBinder ? () => void drawers.markFull(drawers.selectedBinder!.id) : undefined}
+        onReopenCapacity={
+          drawers.selectedBinder ? () => void drawers.reopenCapacity(drawers.selectedBinder!.id) : undefined
+        }
+        onMarkReadyForHandover={
+          drawers.selectedBinder ? () => dialogs.openReadyForHandoverDialog(drawers.selectedBinder!.id) : undefined
+        }
         onMarkReadyForHandoverBulk={
-          selectedBinder ? () => dialogs.openBulkReadyForHandoverDialog(selectedBinder) : undefined
+          drawers.selectedBinder ? () => dialogs.openBulkReadyForHandoverDialog(drawers.selectedBinder!) : undefined
         }
-        onRevertReadyForHandover={selectedBinder ? () => void revertReadyForHandover(selectedBinder.id) : undefined}
-        onHandoverToClient={selectedBinder ? () => dialogs.openHandoverToClientDialog(selectedBinder.id) : undefined}
+        onRevertReadyForHandover={
+          drawers.selectedBinder ? () => void drawers.revertReadyForHandover(drawers.selectedBinder!.id) : undefined
+        }
+        onHandoverToClient={
+          drawers.selectedBinder ? () => dialogs.openHandoverToClientDialog(drawers.selectedBinder!.id) : undefined
+        }
         onHandoverToClientBulk={
-          selectedBinder ? () => dialogs.openHandoverToClientBulkDialog(selectedBinder) : undefined
+          drawers.selectedBinder ? () => dialogs.openHandoverToClientBulkDialog(drawers.selectedBinder!) : undefined
         }
-        onDelete={selectedBinder ? () => dialogs.openDeleteDialog(selectedBinder.id) : undefined}
-        actionLoading={selectedBinder ? actionLoadingId === selectedBinder.id : false}
+        onDelete={drawers.selectedBinder ? () => dialogs.openDeleteDialog(drawers.selectedBinder!.id) : undefined}
+        actionLoading={drawers.selectedBinder ? drawers.actionLoadingId === drawers.selectedBinder.id : false}
       />
 
       <ReceiveBinderDrawer

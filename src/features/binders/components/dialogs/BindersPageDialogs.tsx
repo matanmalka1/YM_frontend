@@ -10,14 +10,18 @@ import { BinderHandoverPanel } from '../sections/BinderHandoverPanel'
 interface BindersPageDialogsProps {
   confirmHandoverForId: number | null
   confirmDeleteForId: number | null
+  confirmReadyForHandoverForId: number | null
   handoverRecipientName: string
   setHandoverRecipientName: (value: string) => void
   isHandingOverToClient: boolean
   isDeleting: boolean
+  isMarkingReadyForHandover: boolean
   onConfirmHandoverToClient: () => void
   onCancelHandoverToClient: () => void
   onConfirmDelete: () => void
   onCancelDelete: () => void
+  onConfirmReadyForHandover: () => void
+  onCancelReadyForHandover: () => void
   getBinderNumberLabel: (binderId: number | null) => string | null
   bulkReadyForHandoverOpen: boolean
   onCloseBulkReadyForHandover: () => void
@@ -47,6 +51,7 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
   bulkReadyForHandoverYear,
   confirmDeleteForId,
   confirmHandoverForId,
+  confirmReadyForHandoverForId,
   dialogBinder,
   getBinderNumberLabel,
   handoverRecipientName,
@@ -54,14 +59,17 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
   isDeleting,
   isHandingOverToClient,
   isHandingOverToClientBulk,
+  isMarkingReadyForHandover,
   isMarkingReadyForHandoverBulk,
   onCancelDelete,
   onCancelHandoverToClient,
+  onCancelReadyForHandover,
   onCloseBulkReadyForHandover,
   onCloseHandoverToClientBulk,
   onConfirmBulkReadyForHandover,
   onConfirmDelete,
   onConfirmHandoverToClient,
+  onConfirmReadyForHandover,
   onSubmitHandoverToClientBulk,
   setBulkReadyForHandoverMonth,
   setBulkReadyForHandoverYear,
@@ -93,6 +101,17 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
         required
       />
     </ConfirmDialog>
+
+    <ConfirmDialog
+      open={confirmReadyForHandoverForId !== null}
+      title="סימון כמוכן למסירה"
+      message={`האם לסמן את קלסר ${getBinderNumberLabel(confirmReadyForHandoverForId)} כמוכן למסירה?`}
+      confirmLabel="סמן כמוכן למסירה"
+      cancelLabel="ביטול"
+      isLoading={isMarkingReadyForHandover}
+      onConfirm={onConfirmReadyForHandover}
+      onCancel={onCancelReadyForHandover}
+    />
 
     <ConfirmDialog
       open={confirmDeleteForId !== null}

@@ -127,6 +127,7 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
     markFull: (binderId: number) => markFullMutation.mutateAsync(binderId),
     reopenCapacity: (binderId: number) => reopenCapacityMutation.mutateAsync(binderId),
     markReadyForHandover: (binderId: number) => markReadyForHandoverMutation.mutateAsync(binderId),
+    isMarkingReadyForHandover: markReadyForHandoverMutation.isPending,
     markReadyForHandoverBulk: (clientId: number, untilPeriodYear: number, untilPeriodMonth: number) =>
       markReadyForHandoverBulkMutation.mutateAsync({ clientId, untilPeriodYear, untilPeriodMonth }),
     isMarkingReadyForHandoverBulk: markReadyForHandoverBulkMutation.isPending,
