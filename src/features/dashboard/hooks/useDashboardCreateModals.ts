@@ -45,7 +45,8 @@ export const useDashboardCreateModals = () => {
   })
 
   const advancePaymentCreateMutation = useMutation({
-    mutationFn: (payload: CreateAdvancePaymentPayload) => advancePaymentsApi.create(advancePaymentClientId!, payload),
+    mutationFn: ({ clientId, payload }: { clientId: number; payload: CreateAdvancePaymentPayload }) =>
+      advancePaymentsApi.create(clientId, payload),
     onSuccess: async () => {
       toast.success('מקדמה נוצרה בהצלחה')
       setAdvancePaymentClientId(null)
@@ -95,6 +96,7 @@ export const useDashboardCreateModals = () => {
 
   const closeCreateModal = () => {
     setActiveCreateModal(null)
+    setDeletedClientInfo(null)
     setAdvancePaymentClientId(null)
     advancePaymentClientPicker.resetClientPicker()
   }
@@ -123,7 +125,8 @@ export const useDashboardCreateModals = () => {
   }
 
   const submitAdvancePaymentCreate = async (payload: CreateAdvancePaymentPayload): Promise<void> => {
-    await advancePaymentCreateMutation.mutateAsync(payload)
+    if (advancePaymentClientId == null) return
+    await advancePaymentCreateMutation.mutateAsync({ clientId: advancePaymentClientId, payload })
   }
 
   return {
