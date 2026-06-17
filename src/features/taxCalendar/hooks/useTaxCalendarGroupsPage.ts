@@ -71,9 +71,6 @@ export const useTaxCalendarGroupsPage = () => {
     },
     table: {
       groups,
-      isLoading: groupsQuery.isPending,
-      error: groupsQuery.error,
-      errorFallback: 'שגיאה בטעינת יומן המס',
       clientSearchText,
       page,
       pageSize: TAX_CALENDAR_GROUP_PAGE_SIZE,

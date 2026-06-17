@@ -5,7 +5,7 @@ import { TaxCalendarStatsSection } from '../components/TaxCalendarStatsSection'
 import { useTaxCalendarGroupsPage } from '../hooks/useTaxCalendarGroupsPage'
 
 export const TaxCalendarGroupsPage = () => {
-  const { headerProps, stats, filters, table } = useTaxCalendarGroupsPage()
+  const { status, headerProps, stats, filters, table } = useTaxCalendarGroupsPage()
 
   return (
     <div className="space-y-4" dir="rtl">
@@ -35,9 +35,9 @@ export const TaxCalendarGroupsPage = () => {
 
       <TaxCalendarGroupsContent
         groups={table.groups}
-        isLoading={table.isLoading}
-        error={table.error}
-        errorFallback={table.errorFallback}
+        isLoading={status.isLoading}
+        error={status.error}
+        errorFallback={status.errorFallback}
         clientSearchText={table.clientSearchText}
         page={table.page}
         pageSize={table.pageSize}
