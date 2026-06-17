@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { PlusCircle, Calendar, SlidersHorizontal } from 'lucide-react'
 import type { AdvancePaymentStatus } from '../../api/contracts'
 import { Select } from '../../../../components/ui/inputs/Select'
+import { Button } from '../../../../components/ui/primitives/Button'
 import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
 import { getAdvancePaymentStatusLabel } from '../../constants'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
@@ -26,7 +27,7 @@ const FREQUENCY_LABEL: Record<1 | 2, string> = {
   2: 'דו-חודשי',
 }
 
-const STATUS_ACTIVE = 'bg-blue-600 text-white border-blue-600'
+const STATUS_ACTIVE = 'bg-primary-600 text-white border-primary-600'
 const STATUS_INACTIVE = 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'
 
 export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderProps> = ({
@@ -50,14 +51,10 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
       <div className="flex flex-wrap items-center gap-3">
         {isAdvisor && (
           <>
-            <button
-              type="button"
-              onClick={onOpenCreate}
-              className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 active:scale-[0.98] transition-all shadow-sm"
-            >
+            <Button type="button" onClick={onOpenCreate}>
               <PlusCircle className="h-4 w-4" />
               הוסף מקדמה
-            </button>
+            </Button>
             <div className="h-8 w-px bg-gray-200 hidden sm:block" />
             <div className="flex items-center bg-gray-100 rounded-xl p-1">
               <span className="px-3 py-1.5 text-sm text-gray-500">
@@ -70,16 +67,20 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
                   <span className="text-gray-400">תדירות מקדמות לא הוגדרה</span>
                 )}
               </span>
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={() => setConfirmGenerate(true)}
-                disabled={isGenerating || generationFrequency == null}
-                title={generationFrequency == null ? 'לא ניתן ליצור לוח בלי תדירות מקדמות בפרופיל הלקוח' : undefined}
-                className="flex items-center gap-1.5 px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-white hover:shadow-sm rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={generationFrequency == null}
+                isLoading={isGenerating}
+                loadingLabel="יוצר..."
+                tooltip={generationFrequency == null ? 'לא ניתן ליצור לוח בלי תדירות מקדמות בפרופיל הלקוח' : undefined}
+                className="rounded-lg text-gray-700 hover:bg-white hover:shadow-sm"
               >
                 <Calendar className="h-3.5 w-3.5" />
-                {isGenerating ? 'יוצר...' : 'צור לוח שנתי'}
-              </button>
+                צור לוח שנתי
+              </Button>
             </div>
             {generationFrequency != null && (
               <ConfirmDialog
@@ -103,7 +104,7 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
       <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-gray-700">
-            <SlidersHorizontal className="h-4 w-4 text-blue-600" />
+            <SlidersHorizontal className="h-4 w-4 text-primary-600" />
             <span className="font-semibold text-sm">סינון</span>
           </div>
           {advanceRate != null && (

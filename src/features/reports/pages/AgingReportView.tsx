@@ -5,7 +5,7 @@ import { PageHeader } from "../../../components/layout/PageHeader";
 import { DatePicker } from "../../../components/ui/inputs/DatePicker";
 import { PaginationCard } from "../../../components/ui/table/PaginationCard";
 import { AgingReportHeader } from "../components/AgingReportHeader";
-import { AgingReportTable } from "../components/AgingReportTable";
+import { AgingReportCards } from "../components/AgingReportCards";
 import { useAgingReport } from "../hooks/useAgingReport";
 
 interface AgingReportViewProps {
@@ -62,7 +62,7 @@ export const AgingReportView: React.FC<AgingReportViewProps> = ({ embedded = fal
             {embedded && actions}
           </div>
           <AgingReportHeader data={data} />
-          <AgingReportTable items={data.items} />
+          <AgingReportCards items={data.items} />
           {totalPages > 1 && (
             <PaginationCard
               page={page}

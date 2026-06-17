@@ -6,7 +6,7 @@ import { formatCount, formatDate } from "../../../utils/utils";
 import { Badge } from "../../../components/ui/primitives/Badge";
 import { formatILS, toReportNumber, type ReportMoneyValue } from "../utils";
 
-interface AgingReportTableProps {
+interface AgingReportCardsProps {
   items: AgingReportItem[];
 }
 
@@ -25,7 +25,7 @@ const getBucketPercent = (amount: ReportMoneyValue, total: ReportMoneyValue) => 
     : 0;
 };
 
-export const AgingReportTable: React.FC<AgingReportTableProps> = ({ items }) => {
+export const AgingReportCards: React.FC<AgingReportCardsProps> = ({ items }) => {
   const navigate = useNavigate();
 
   if (items.length === 0) {
@@ -97,4 +97,4 @@ export const AgingReportTable: React.FC<AgingReportTableProps> = ({ items }) => 
   );
 };
 
-AgingReportTable.displayName = "AgingReportTable";
+AgingReportCards.displayName = "AgingReportCards";
