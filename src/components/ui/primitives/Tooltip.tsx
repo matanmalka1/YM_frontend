@@ -22,7 +22,10 @@ interface TooltipPosition {
   left: number
 }
 
-type TooltipTriggerProps = React.HTMLAttributes<HTMLElement>
+type TooltipTriggerProps = React.HTMLAttributes<HTMLElement> & {
+  disabled?: boolean
+  'aria-disabled'?: boolean | 'true' | 'false'
+}
 
 const VIEWPORT_GAP = 8
 const TRIGGER_GAP = 8
@@ -77,7 +80,14 @@ export const Tooltip: React.FC<TooltipProps> = ({ text, children, className }) =
     }
   }, [open, updatePosition])
 
-  const trigger = isValidElement<TooltipTriggerProps>(children) ? (
+  const isElement = isValidElement<TooltipTriggerProps>(children)
+  // Disabled/loading controls don't fire pointer events, so cloning onto them
+  // swallows the tooltip. Wrap such triggers in a hover-able span instead.
+  const childDisabled =
+    isElement && (children.props.disabled === true || children.props['aria-disabled'] === true)
+
+  const trigger =
+    isElement && !childDisabled ? (
     cloneElement(children, {
       'aria-describedby': open ? tooltipId : undefined,
       className: cn(children.props.className, className),
@@ -104,8 +114,8 @@ export const Tooltip: React.FC<TooltipProps> = ({ text, children, className }) =
     })
   ) : (
     <span
-      role="button"
-      tabIndex={0}
+      role={childDisabled ? undefined : 'button'}
+      tabIndex={childDisabled ? undefined : 0}
       className={cn('inline-flex', className)}
       aria-describedby={open ? tooltipId : undefined}
       onPointerEnter={showTooltip}
@@ -116,7 +126,11 @@ export const Tooltip: React.FC<TooltipProps> = ({ text, children, className }) =
         if (event.key === 'Escape') hideTooltip()
       }}
     >
-      {children}
+      {childDisabled && isElement
+        ? cloneElement(children, {
+            className: cn(children.props.className, 'pointer-events-none'),
+          })
+        : children}
     </span>
   )
 

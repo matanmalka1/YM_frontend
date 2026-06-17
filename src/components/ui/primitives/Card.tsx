@@ -12,6 +12,10 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'elevated' | 'outlined'
   interactive?: boolean
   size?: 'default' | 'compact'
+  /** Remove body padding for full-bleed content (e.g. tables). */
+  disablePadding?: boolean
+  /** Override body wrapper classes; combined with the default padding. */
+  bodyClassName?: string
   style?: React.CSSProperties
 }
 
@@ -25,6 +29,8 @@ export const Card: React.FC<CardProps> = ({
   variant = 'default',
   interactive = false,
   size = 'default',
+  disablePadding = false,
+  bodyClassName,
   style,
   ...rest
 }) => {
@@ -52,11 +58,11 @@ export const Card: React.FC<CardProps> = ({
     >
       {(title || subtitle || actions) && (
         <div className={cn(headerPadding, 'border-b border-gray-100')}>
-          <SectionHeader title={title!} subtitle={subtitle} actions={actions} size="sm" />
+          <SectionHeader title={title} subtitle={subtitle} actions={actions} size="sm" />
         </div>
       )}
 
-      <div className={bodyPadding}>{children}</div>
+      <div className={cn(!disablePadding && bodyPadding, bodyClassName)}>{children}</div>
 
       {footer && <div className={cn(footerPadding, 'border-t border-gray-100 bg-gray-50/60')}>{footer}</div>}
     </div>

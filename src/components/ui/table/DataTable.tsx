@@ -25,6 +25,8 @@ export interface Column<T> {
   dir?: 'ltr' | 'rtl'
   align?: ColumnAlign
   headerAlign?: ColumnAlign
+  /** Allow long content to wrap instead of forcing horizontal scroll. */
+  wrap?: boolean
 }
 
 export interface DataTableProps<T> {
@@ -37,6 +39,12 @@ export interface DataTableProps<T> {
   isLoading?: boolean
   rowClassName?: (item: T, index: number) => string
   stickyHeader?: boolean
+  /**
+   * Max height of the scroll area. Required for stickyHeader to work — the
+   * thead sticks against this bounded scroll container. Tailwind class or CSS value.
+   * @default 'max-h-[70vh]' when stickyHeader is set
+   */
+  maxHeight?: string
   emptyState?: Omit<EmptyStateProps, 'icon' | 'message'> & {
     icon?: LucideIcon
     message?: string
@@ -53,6 +61,7 @@ export const DataTable = <T,>({
   isLoading = false,
   rowClassName,
   stickyHeader = false,
+  maxHeight,
   emptyState,
 }: DataTableProps<T>) => {
   const handleRowKeyDown = (event: KeyboardEvent<HTMLTableRowElement>, item: T) => {
@@ -93,9 +102,11 @@ export const DataTable = <T,>({
     )
   }
 
+  const heightClass = stickyHeader ? (maxHeight ?? 'max-h-[70vh]') : undefined
+
   return (
-    <Card className={cn(stickyHeader ? 'overflow-visible p-0' : 'overflow-hidden p-0', className)}>
-      <div className="overflow-x-auto">
+    <Card disablePadding className={cn('overflow-hidden', className)}>
+      <div className={cn('overflow-x-auto', stickyHeader && cn('overflow-y-auto', heightClass))}>
         <table className="w-full border-collapse">
           <thead className={cn(stickyHeader && 'sticky top-0 z-20 shadow-sm')}>
             <tr className="border-b border-gray-200 bg-gray-50 text-right">
@@ -104,6 +115,7 @@ export const DataTable = <T,>({
                   key={column.key}
                   className={cn(
                     'px-3 py-2 text-xs font-semibold uppercase tracking-wide text-gray-500',
+                    stickyHeader && 'bg-gray-50',
                     ALIGN_CLASS[column.headerAlign ?? column.align ?? 'center'],
                     column.headerClassName,
                   )}
@@ -133,7 +145,8 @@ export const DataTable = <T,>({
                     key={column.key}
                     dir={column.dir}
                     className={cn(
-                      'px-3 py-3 align-middle whitespace-nowrap',
+                      'px-3 py-3 align-middle',
+                      column.wrap ? 'whitespace-normal' : 'whitespace-nowrap',
                       ALIGN_CLASS[column.align ?? 'center'],
                       column.className,
                     )}

@@ -1,7 +1,7 @@
 import { cn } from '../../../utils/utils'
 
 interface SectionHeaderProps {
-  title: React.ReactNode
+  title?: React.ReactNode
   subtitle?: React.ReactNode
   actions?: React.ReactNode
   /**
@@ -31,17 +31,18 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
     )}
   >
     <div>
-      {size === 'lg' ? (
-        <h1 className="font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-black md:text-3xl">
-          {title}
-        </h1>
-      ) : size === 'md' ? (
-        <h2 className="text-xl font-bold tracking-tight text-gray-900">{title}</h2>
-      ) : size === 'xs' ? (
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">{title}</p>
-      ) : (
-        <h3 className="text-lg font-semibold text-gray-900 tracking-tight">{title}</h3>
-      )}
+      {title != null &&
+        (size === 'lg' ? (
+          <h1 className="font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-black md:text-3xl">
+            {title}
+          </h1>
+        ) : size === 'md' ? (
+          <h2 className="text-xl font-bold tracking-tight text-gray-900">{title}</h2>
+        ) : size === 'xs' ? (
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">{title}</p>
+        ) : (
+          <h3 className="text-lg font-semibold text-gray-900 tracking-tight">{title}</h3>
+        ))}
       {subtitle && (
         <div
           className={cn(
