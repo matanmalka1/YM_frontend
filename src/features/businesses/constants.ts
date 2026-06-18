@@ -1,4 +1,4 @@
-import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
+import { makeLabelGetter } from '@/utils/labels'
 import type { BusinessStatus } from '@/features/clients'
 
 export const BUSINESS_STATUS_LABELS: Record<BusinessStatus, string> = {
@@ -15,7 +15,6 @@ export const BUSINESS_STATUS_BADGE_VARIANTS = {
   closed: 'neutral',
 } as const satisfies Record<BusinessStatus, 'success' | 'warning' | 'neutral'>
 
-export const getBusinessStatusBadgeVariant = makeVariantGetter(BUSINESS_STATUS_BADGE_VARIANTS)
 
 export const BUSINESS_STATUS_OPTIONS = (Object.keys(BUSINESS_STATUS_LABELS) as BusinessStatus[]).map((status) => ({
   value: status,

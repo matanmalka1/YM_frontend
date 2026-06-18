@@ -26,9 +26,6 @@ export const getTaskFiltersFromSearchParams = (searchParams: URLSearchParams): T
   }
 }
 
-export const getTasksPageFromSearchParams = (searchParams: URLSearchParams): number =>
-  parsePositiveInt(searchParams.get('page'), 1)
-
 export const hasTaskFilters = (filters: TasksFilterValues): boolean => Object.values(filters).some(Boolean)
 
 export const buildTaskListParams = (page: number, filters: TasksFilterValues): TaskListParams => ({

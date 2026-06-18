@@ -42,12 +42,12 @@ export const TRIGGER_LABELS: Record<NotificationTrigger, string> = {
   client_general_message: 'הודעה כללית',
 }
 
-export const NOTIFICATION_CHANNEL_VALUES = ['email', 'whatsapp'] as const
+const NOTIFICATION_CHANNEL_VALUES = ['email', 'whatsapp'] as const
 export const NOTIFICATION_STATUS_VALUES = ['pending', 'sent', 'failed', 'skipped'] as const
 
 export type NotificationChannel = (typeof NOTIFICATION_CHANNEL_VALUES)[number]
 // Backend currently supports sending manual notifications by email only.
-export type NotificationSendChannel = 'email'
+type NotificationSendChannel = 'email'
 export type NotificationStatus = (typeof NOTIFICATION_STATUS_VALUES)[number]
 
 export const isNotificationTrigger = (value: string | null): value is NotificationTrigger =>

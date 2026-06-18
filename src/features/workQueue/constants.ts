@@ -38,7 +38,7 @@ export const isWorkQueueSourceType = (value: string | null): value is WorkQueueS
 export const parseWorkQueueSourceType = (value: string | null): WorkQueueSourceType | null =>
   isWorkQueueSourceType(value) ? value : null
 
-export const isWorkQueueUrgency = (value: string | null): value is WorkQueueUrgency =>
+const isWorkQueueUrgency = (value: string | null): value is WorkQueueUrgency =>
   value !== null && workQueueUrgencyValues.includes(value as WorkQueueUrgency)
 
 export const parseWorkQueueUrgency = (value: string | null): WorkQueueUrgency | null =>
@@ -60,7 +60,7 @@ export const workQueueUrgencyLabels: Record<WorkQueueUrgency, string> = {
   upcoming: 'קרוב',
 }
 
-export const workQueueUrgencyVariant: Record<WorkQueueUrgency, BadgeVariant> = {
+const workQueueUrgencyVariant: Record<WorkQueueUrgency, BadgeVariant> = {
   overdue: 'error',
   approaching: 'warning',
   important: 'warning',

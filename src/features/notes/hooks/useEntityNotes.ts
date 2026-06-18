@@ -30,5 +30,3 @@ export const useEntityNotes = (target: NotesTarget) => {
 
   return useNotesResource(options)
 }
-
-export type NotesHookResult = ReturnType<typeof useEntityNotes>

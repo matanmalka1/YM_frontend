@@ -1,10 +1,8 @@
 import { z } from 'zod'
 
-export const entityAuditTypeSchema = z.enum(['client', 'business', 'charge', 'annual_report'])
+export type EntityAuditType = 'client' | 'business' | 'charge' | 'annual_report'
 
-export type EntityAuditType = z.infer<typeof entityAuditTypeSchema>
-
-export const entityAuditLogEntrySchema = z.object({
+const entityAuditLogEntrySchema = z.object({
   id: z.number(),
   entity_type: z.string(),
   entity_id: z.number(),

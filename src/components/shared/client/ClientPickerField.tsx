@@ -7,7 +7,7 @@ interface ClientPickerSelectedClient {
   office_client_number?: number | null
 }
 
-export interface ClientPickerSearchResult {
+interface ClientPickerSearchResult {
   id: number
   name: string
   id_number: string

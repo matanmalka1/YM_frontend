@@ -1,7 +1,7 @@
 // Public surface of the charges feature — only import from this barrel externally
 export { chargesApi, chargesQK } from './api'
 
-export { buildChargeColumns } from './components/ChargeColumns'
+
 export { ChargesCreateModal } from './components/ChargesCreateModal'
 export { ClientChargesTab } from './components/ClientChargesTab'
 export { ChargeDetailDrawer } from './components/ChargeDetailDrawer'

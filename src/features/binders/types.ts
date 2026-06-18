@@ -1,7 +1,7 @@
 import type { PaginatedResponse } from '@/types'
 import type { BinderCapacityStatus, BinderLocationStatus, BinderSortBy, BinderSortOrder } from './constants'
 
-export type { BinderCapacityStatus, BinderLocationStatus, BinderSortBy, BinderSortOrder } from './constants'
+export type { BinderCapacityStatus, BinderLocationStatus, BinderSortBy,  } from './constants'
 
 export type BinderAction =
   | 'receive_material'

@@ -1,4 +1,4 @@
-import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
+import { makeLabelGetter } from '@/utils/labels'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import type { SignatureRequestStatus, SignatureRequestType } from './api'
 
@@ -45,4 +45,3 @@ export const SIGNATURE_REQUEST_STATUS_VARIANTS: Record<SignatureRequestStatus, B
   expired: 'warning',
   canceled: 'neutral',
 }
-export const getSignatureRequestStatusVariant = makeVariantGetter(SIGNATURE_REQUEST_STATUS_VARIANTS)

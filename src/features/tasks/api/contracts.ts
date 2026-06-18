@@ -77,27 +77,17 @@ export interface TaskUpdateRequest {
   action_payload?: Record<string, unknown>
 }
 
-export const taskBulkFailureSchema = z.object({
-  task_id: z.number().int(),
-  code: z.string(),
-  message: z.string(),
-})
-export type TaskBulkFailure = z.infer<typeof taskBulkFailureSchema>
-
 export const taskBulkActionResponseSchema = z.object({
   succeeded: z.array(z.number().int()),
-  failed: z.array(taskBulkFailureSchema),
+  failed: z.array(
+    z.object({
+      task_id: z.number().int(),
+      code: z.string(),
+      message: z.string(),
+    }),
+  ),
 })
 export type TaskBulkActionResponse = z.infer<typeof taskBulkActionResponseSchema>
-
-export interface TaskBulkCompleteRequest {
-  task_ids: number[]
-}
-
-export interface TaskBulkAssignRequest {
-  task_ids: number[]
-  assignee_user_id: number | null
-}
 
 export interface ClientTaskListParams {
   status?: TaskStatus

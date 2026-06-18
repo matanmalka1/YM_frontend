@@ -139,14 +139,14 @@ export const ADVANCE_PAYMENT_FREQUENCY_OPTIONS = ADVANCE_PAYMENT_FREQUENCY_VALUE
   label: ADVANCE_PAYMENT_FREQUENCY_LABELS[v],
 }))
 
-export const CLIENT_SORT_BY_VALUES = [
+const CLIENT_SORT_BY_VALUES = [
   'full_name',
   'created_at',
   'status',
   'entity_type',
 ] as const satisfies readonly ClientSortBy[]
 
-export const CLIENT_SORT_ORDER_VALUES = ['asc', 'desc'] as const satisfies readonly ClientSortOrder[]
+const CLIENT_SORT_ORDER_VALUES = ['asc', 'desc'] as const satisfies readonly ClientSortOrder[]
 
 const CLIENT_SORT_BY_LABELS: Record<ClientSortBy, string> = {
   full_name: 'שם לקוח',

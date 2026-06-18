@@ -1,4 +1,4 @@
-import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
+import { makeLabelGetter } from '@/utils/labels'
 import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION } from '@/constants/filterOptions.constants'
 import { PERIOD_PATTERN } from '@/constants/periodOptions.constants'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
@@ -24,7 +24,6 @@ export const chargeStatusVariants: Record<ChargeStatusValue, BadgeVariant> = {
   paid: 'success',
   canceled: 'error',
 }
-export const getChargeStatusVariant = makeVariantGetter(chargeStatusVariants)
 
 export const CHARGE_TYPE_VALUES = [
   'monthly_retainer',

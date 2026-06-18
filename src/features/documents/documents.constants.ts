@@ -45,7 +45,7 @@ export const STATUS_LABELS: Record<string, string> = {
   rejected: 'נדחה',
 }
 
-export const STATUS_BADGE_VARIANT: Record<string, BadgeVariant> = {
+const STATUS_BADGE_VARIANT: Record<string, BadgeVariant> = {
   pending: 'neutral',
   received: 'info',
   approved: 'success',

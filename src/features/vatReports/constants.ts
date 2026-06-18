@@ -162,7 +162,7 @@ export const VAT_STATUS_BADGE_VARIANTS: Record<VatWorkItemStatus, BadgeVariant> 
 }
 export const getVatWorkItemStatusVariant = makeVariantGetter(VAT_STATUS_BADGE_VARIANTS)
 
-export const VAT_CLIENT_SUMMARY_STATUS_VARIANTS: Record<VatWorkItemStatus, BadgeVariant> = {
+const VAT_CLIENT_SUMMARY_STATUS_VARIANTS: Record<VatWorkItemStatus, BadgeVariant> = {
   filed: 'success',
   canceled: 'neutral',
   ready_for_review: 'warning',

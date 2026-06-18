@@ -3,7 +3,7 @@ import type { CreateSignatureRequestResponse } from './api'
 
 export {
   SIGNATURE_REQUEST_STATUS_VARIANTS as signatureRequestStatusVariants,
-  getSignatureRequestStatusVariant,
+  
 } from './constants'
 
 const buildSigningUrl = (hint: string): string => {

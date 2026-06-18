@@ -2,7 +2,7 @@ import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { makeVariantGetter } from '@/utils/labels'
 import type { TaskPriority, TaskStatus } from '../api/contracts'
 
-export const taskStatusBadgeVariant: Record<TaskStatus, BadgeVariant> = {
+const taskStatusBadgeVariant: Record<TaskStatus, BadgeVariant> = {
   open: 'info',
   done: 'success',
   canceled: 'neutral',

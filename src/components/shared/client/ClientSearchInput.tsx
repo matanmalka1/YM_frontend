@@ -9,7 +9,7 @@ import { CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.consta
 
 // ── Controlled search input (value/onChange) ──────────────────────────────────
 
-export interface ClientSearchSelection {
+interface ClientSearchSelection {
   id: number
   name: string
   id_number: string

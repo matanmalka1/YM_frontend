@@ -1,4 +1,4 @@
-import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
+import { makeLabelGetter } from '@/utils/labels'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { MONTHS_COVERED_OPTIONS } from '@/constants/periodOptions.constants'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
@@ -18,7 +18,6 @@ export const ADVANCE_PAYMENT_STATUS_VARIANTS: Record<AdvancePaymentStatus, Badge
   partial: 'warning',
   pending: 'neutral',
 }
-export const getAdvancePaymentStatusVariant = makeVariantGetter(ADVANCE_PAYMENT_STATUS_VARIANTS)
 
 const ADVANCE_PAYMENT_METHOD_VALUES = [
   'bank_transfer',
