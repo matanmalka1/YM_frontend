@@ -63,9 +63,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
         }
       >
         <div className="-mx-6 -my-5 divide-y divide-gray-100">
-          {notifications.length === 0 && (
-            <p className="px-5 py-8 text-center text-sm text-gray-400">אין התראות</p>
-          )}
+          {notifications.length === 0 && <p className="px-5 py-8 text-center text-sm text-gray-400">אין התראות</p>}
           {notifications.map((item) => (
             <DrawerNotificationListItem key={item.id} item={item} />
           ))}

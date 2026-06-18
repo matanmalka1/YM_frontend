@@ -94,7 +94,10 @@ export const GroupedPeriodRow = memo(
 
           <span className="flex min-w-0 items-center gap-x-4 overflow-hidden max-lg:flex-wrap max-lg:gap-y-1.5">
             {metrics.map((metric) => (
-              <span key={`${metric.label}-${metric.value}`} className="inline-flex shrink-0 items-baseline gap-1 text-sm">
+              <span
+                key={`${metric.label}-${metric.value}`}
+                className="inline-flex shrink-0 items-baseline gap-1 text-sm"
+              >
                 <span className={cn('font-semibold tabular-nums', metricToneClass[metric.tone ?? 'default'])}>
                   {metric.value}
                 </span>

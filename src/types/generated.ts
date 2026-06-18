@@ -975,7 +975,12 @@ export interface paths {
       path?: never
       cookie?: never
     }
-    /** List Deadline Rules */
+    /**
+     * List Deadline Rules
+     * @description Unpaginated by design. Returns all deadline-rule config rows.
+     *
+     *     No cap: bounded by the (small, admin-managed) number of configured rules.
+     */
     get: operations['list_deadline_rules_api_v1_settings_tax_calendar_rules_get']
     put?: never
     post?: never
@@ -2415,7 +2420,13 @@ export interface paths {
       path?: never
       cookie?: never
     }
-    /** List Advance Payment Batches */
+    /**
+     * List Advance Payment Batches
+     * @description Unpaginated by design. Returns one summary per (year, month) with a batch.
+     *
+     *     Bounded by data, not a fixed cap: <= 12 rows when ``year`` is given,
+     *     otherwise grows with the number of distinct months across history (small).
+     */
     get: operations['list_advance_payment_batches_api_v1_advance_payments_overview_batches_get']
     put?: never
     post?: never

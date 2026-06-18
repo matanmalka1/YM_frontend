@@ -3,12 +3,7 @@ import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { DetailDrawer } from '@/components/ui/overlays/DetailDrawer'
-import {
-  BinderDetailDrawer,
-  BindersFiltersBar,
-  BindersStatsSection,
-  useBindersPage,
-} from '@/features/binders'
+import { BinderDetailDrawer, BindersFiltersBar, BindersStatsSection, useBindersPage } from '@/features/binders'
 import { BinderReceivePanel } from '../components/drawer/BinderReceivePanel'
 import { BindersPageDialogs } from '../components/dialogs/BindersPageDialogs'
 import { Plus } from 'lucide-react'

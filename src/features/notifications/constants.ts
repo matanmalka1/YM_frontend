@@ -1,11 +1,6 @@
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { makeVariantGetter } from '@/utils/labels'
-import {
-  NOTIFICATION_STATUS_VALUES,
-  NOTIFICATION_TRIGGER_VALUES,
-  TRIGGER_LABELS,
-  type NotificationStatus,
-} from './api'
+import { NOTIFICATION_STATUS_VALUES, NOTIFICATION_TRIGGER_VALUES, TRIGGER_LABELS, type NotificationStatus } from './api'
 
 export const NOTIFICATIONS_PAGE_SIZE_OPTIONS = [
   { value: '25', label: '25' },

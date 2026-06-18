@@ -4,11 +4,7 @@ import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
 import type { Column } from '@/components/ui/table'
 import { formatDateTime } from '@/utils/utils'
 import { TRIGGER_LABELS, type NotificationItem } from '../../api'
-import {
-  NOTIFICATION_DOMAIN_LABELS,
-  NOTIFICATION_STATUS_LABELS,
-  getNotificationStatusVariant,
-} from '../../constants'
+import { NOTIFICATION_DOMAIN_LABELS, NOTIFICATION_STATUS_LABELS, getNotificationStatusVariant } from '../../constants'
 
 const ENGLISH_TEXT_PATTERN = /[A-Za-z]/
 

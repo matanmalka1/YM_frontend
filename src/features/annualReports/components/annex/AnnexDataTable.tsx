@@ -116,4 +116,3 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
     </table>
   </div>
 )
-

@@ -243,7 +243,12 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobi
           {isLoading ? (
             <div className="space-y-2" aria-label="טוען לקוחות">
               {Array.from({ length: 4 }, (_, index) => (
-                <SkeletonBlock key={index} height="h-32" width="w-full" className="rounded-2xl border border-gray-100 bg-gray-50" />
+                <SkeletonBlock
+                  key={index}
+                  height="h-32"
+                  width="w-full"
+                  className="rounded-2xl border border-gray-100 bg-gray-50"
+                />
               ))}
             </div>
           ) : isError ? (
