@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { LucideIcon } from 'lucide-react'
 import { staggerAnimationDelayVars } from '@/utils/animation'
-import { DashboardMetricCard } from './DashboardPrimitives'
+import { MetricCard } from '@/components/ui/layout/MetricCard'
 
 export interface StatItem {
   key: string
@@ -31,7 +31,7 @@ interface StatCardProps {
 
 const StatCard = ({ stat, index }: StatCardProps) => {
   const card = (
-    <DashboardMetricCard
+    <MetricCard
       title={stat.title}
       value={stat.value}
       description={stat.description}

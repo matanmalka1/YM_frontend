@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
 import { cn } from '@/utils/utils'
 import type { VatDashboardStats } from '../api'
+import { DASHBOARD_HREFS } from '../dashboardConstants'
 import { useSeasonSummary } from '../hooks/useSeasonSummary'
-import { DashboardPanel } from './DashboardPrimitives'
+import { DashboardPanel } from './DashboardLayout'
 
 interface Props {
   vatStats: VatDashboardStats
@@ -40,9 +41,6 @@ const ProgressBar = ({ label, percent, href }: ProgressBarProps) => {
 export const TaxInsightsRow: React.FC<Props> = ({ vatStats, embedded = false }) => {
   const { stats: seasonStats } = useSeasonSummary()
   const { monthly, bimonthly, advance_payments: advancePayments } = vatStats
-  const vatHref = (period: string, type: string) => `/tax/vat?period=${period}&period_type=${type}`
-  const advanceHref = (year: string, periodMonthsCount: 1 | 2) =>
-    `/tax/advance-payments?year=${year}&period=${periodMonthsCount}`
 
   const content = (
     <div className={embedded ? '' : 'p-5'}>
@@ -51,22 +49,22 @@ export const TaxInsightsRow: React.FC<Props> = ({ vatStats, embedded = false }) 
         <ProgressBar
           label={`מע״מ חודשי · ${monthly.period_label}`}
           percent={monthly.completion_percent}
-          href={vatHref(monthly.period, 'monthly')}
+          href={DASHBOARD_HREFS.vat(monthly.period, 'monthly')}
         />
         <ProgressBar
           label={`מע״מ דו-חודשי · ${bimonthly.period_label}`}
           percent={bimonthly.completion_percent}
-          href={vatHref(bimonthly.period, 'bimonthly')}
+          href={DASHBOARD_HREFS.vat(bimonthly.period, 'bimonthly')}
         />
         <ProgressBar
           label={`מקדמות חודשי · ${advancePayments.monthly.period_label}`}
           percent={advancePayments.monthly.completion_percent}
-          href={advanceHref(advancePayments.monthly.period.slice(0, 4), 1)}
+          href={DASHBOARD_HREFS.advancePayments(advancePayments.monthly.period.slice(0, 4), 1)}
         />
         <ProgressBar
           label={`מקדמות דו-חודשי · ${advancePayments.bimonthly.period_label}`}
           percent={advancePayments.bimonthly.completion_percent}
-          href={advanceHref(advancePayments.bimonthly.period.slice(0, 4), 2)}
+          href={DASHBOARD_HREFS.advancePayments(advancePayments.bimonthly.period.slice(0, 4), 2)}
         />
         {seasonStats && seasonStats.total > 0 && (
           <ProgressBar

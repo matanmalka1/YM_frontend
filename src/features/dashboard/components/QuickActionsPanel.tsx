@@ -1,6 +1,6 @@
 import { ChevronLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { DashboardPanel, DashboardSectionHeader } from './DashboardPrimitives'
+import { DashboardPanel, DashboardSectionHeader } from './DashboardLayout'
 import { QUICK_ACTIONS, type QuickActionDef } from '../dashboardConstants'
 import type { DashboardCreateModal } from '../hooks/useDashboardCreateModals'
 

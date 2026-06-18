@@ -18,7 +18,7 @@ import {
   useDashboardPage,
 } from '@/features/dashboard'
 import { DASHBOARD_COPY } from '../dashboardConstants'
-import { DashboardSurface } from '../components/DashboardPrimitives'
+import { DashboardSurface } from '../components/DashboardLayout'
 import { DashboardStatsSkeleton } from '../components/DashboardStatsSkeleton'
 import { RecentActivityPanel } from '../components/RecentActivityPanel'
 import { QuickActionsPanel } from '../components/QuickActionsPanel'

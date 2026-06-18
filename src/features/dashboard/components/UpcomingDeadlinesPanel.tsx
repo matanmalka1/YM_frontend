@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { CalendarDays, ChevronLeft, Landmark } from 'lucide-react'
-import { DashboardPanel } from './DashboardPrimitives'
+import { DashboardPanel, DashboardSectionHeader } from './DashboardLayout'
 import { InlineEmptyState } from '@/components/ui/feedback/InlineEmptyState'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarGroup, useTaxCalendarGroups } from '@/features/taxCalendar'
@@ -79,11 +79,8 @@ export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string 
 
   return (
     <DashboardPanel className={`flex flex-col ${className}`}>
-      <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-        <h2 className="text-sm font-bold text-slate-900">מועדי מס קרובים</h2>
-        <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-100 text-slate-500">
-          <CalendarDays className="h-4 w-4" />
-        </span>
+      <div className="border-b border-slate-100 px-5 py-4">
+        <DashboardSectionHeader title="מועדי מס קרובים" icon={CalendarDays} />
       </div>
 
       <div className="mx-3 mt-3 mb-3 flex-1 overflow-hidden rounded-2xl border border-slate-100">

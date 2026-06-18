@@ -2,6 +2,18 @@ import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import type { AttentionUrgency } from './api/contracts'
 import type { DashboardCreateModal } from './hooks/useDashboardCreateModals'
 
+const withParams = (base: string, params: Record<string, string>) => `${base}?${new URLSearchParams(params).toString()}`
+
+export type VatPeriodType = 'monthly' | 'bimonthly'
+
+export const DASHBOARD_HREFS = {
+  vat: (period: string, periodType: VatPeriodType) =>
+    withParams('/tax/vat', { period, period_type: periodType }),
+  advancePayments: (year: string | number, periodMonthsCount: 1 | 2) =>
+    withParams('/tax/advance-payments', { year: String(year), period: String(periodMonthsCount) }),
+  openCharges: withParams('/charges', { status: 'issued' }),
+}
+
 export const DASHBOARD_COPY = {
   pageTitle: 'לוח בקרה',
   pageSubtitle: 'תמונת מצב תפעולית להיום',

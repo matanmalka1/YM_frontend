@@ -4,7 +4,7 @@ import { cn } from '@/utils/utils'
 import { semanticMonoToneClasses, type SemanticTone } from '@/utils/semanticColors'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { useSeasonSummary } from '../hooks/useSeasonSummary'
-import { DashboardBadge, DashboardPanel } from './DashboardPrimitives'
+import { DashboardBadge, DashboardPanel } from './DashboardLayout'
 
 interface SeasonSummaryWidgetProps {
   sideContent?: React.ReactNode

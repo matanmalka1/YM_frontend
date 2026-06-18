@@ -3,22 +3,12 @@ import { formatCount, formatCurrencyILS } from '@/utils/utils'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import type { DashboardOverviewResponse } from './api'
 import type { StatItem } from './components/DashboardStatsGrid'
+import { DASHBOARD_HREFS, type VatPeriodType } from './dashboardConstants'
 
 type DashboardStatsData = Pick<
   DashboardOverviewResponse,
   'vat_stats' | 'open_charges_count' | 'open_charges_amount_ils'
 >
-
-type VatPeriodType = 'monthly' | 'bimonthly'
-
-const withParams = (base: string, params: Record<string, string>) => `${base}?${new URLSearchParams(params).toString()}`
-
-const HREFS = {
-  vat: (period: string, periodType: VatPeriodType) => withParams('/tax/vat', { period, period_type: periodType }),
-  advancePayments: (period: '1' | '2', year: number) =>
-    withParams('/tax/advance-payments', { year: String(year), period }),
-  openCharges: withParams('/charges', { status: 'issued' }),
-}
 
 const vatVariant = (pending: number): StatItem['variant'] => (pending > 0 ? 'red' : 'green')
 
@@ -35,7 +25,7 @@ const buildVatStat = (
   icon: FileText,
   variant: vatVariant(stat.pending),
   urgent: stat.pending > 0,
-  href: HREFS.vat(stat.period, periodType),
+  href: DASHBOARD_HREFS.vat(stat.period, periodType),
   progress: stat.completion_percent,
   actionLabel: stat.required > 0 ? 'פתח דוחות מע״מ' : 'צור דוח מע״מ ראשון',
 })
@@ -44,7 +34,7 @@ const buildAdvanceStat = (
   key: string,
   title: string,
   stat: DashboardStatsData['vat_stats']['monthly'],
-  period: '1' | '2',
+  period: 1 | 2,
 ): StatItem => ({
   key,
   title,
@@ -53,7 +43,7 @@ const buildAdvanceStat = (
   icon: CreditCard,
   variant: vatVariant(stat.pending),
   urgent: stat.pending > 0,
-  href: HREFS.advancePayments(period, getOperationalTaxYear()),
+  href: DASHBOARD_HREFS.advancePayments(getOperationalTaxYear(), period),
   progress: stat.completion_percent,
   actionLabel: 'פתח מקדמות מס הכנסה',
 })
@@ -62,8 +52,8 @@ export const buildDashboardStats = (data: DashboardStatsData, isAdvisor: boolean
   const stats: StatItem[] = [
     buildVatStat('monthly_vat', 'מע״מ חודשי', data.vat_stats.monthly, 'monthly'),
     buildVatStat('bimonthly_vat', 'מע״מ דו־חודשי', data.vat_stats.bimonthly, 'bimonthly'),
-    buildAdvanceStat('monthly_advance', 'מקדמות חודשיות', data.vat_stats.advance_payments.monthly, '1'),
-    buildAdvanceStat('bimonthly_advance', 'מקדמות דו־חודשיות', data.vat_stats.advance_payments.bimonthly, '2'),
+    buildAdvanceStat('monthly_advance', 'מקדמות חודשיות', data.vat_stats.advance_payments.monthly, 1),
+    buildAdvanceStat('bimonthly_advance', 'מקדמות דו־חודשיות', data.vat_stats.advance_payments.bimonthly, 2),
   ]
 
   if (isAdvisor) {
@@ -77,7 +67,7 @@ export const buildDashboardStats = (data: DashboardStatsData, isAdvisor: boolean
       icon: CreditCard,
       variant: data.open_charges_count > 0 ? 'red' : 'green',
       urgent: data.open_charges_count > 0,
-      href: HREFS.openCharges,
+      href: DASHBOARD_HREFS.openCharges,
       actionLabel: data.open_charges_count > 0 ? 'פתח חיובים' : 'כל החיובים שולמו',
     })
   }

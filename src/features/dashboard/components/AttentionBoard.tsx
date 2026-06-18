@@ -6,7 +6,7 @@ import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import type { AttentionBoardItem } from '../api/contracts'
 import { ATTENTION_BOARD_COPY, ATTENTION_URGENCY_LABELS, ATTENTION_URGENCY_VARIANTS } from '../dashboardConstants'
 import { dueDateLabel } from '../dashboard.utils'
-import { DashboardPanel, DashboardSectionHeader } from './DashboardPrimitives'
+import { DashboardPanel, DashboardSectionHeader } from './DashboardLayout'
 
 const getAttentionUrgencyLabel = makeLabelGetter(ATTENTION_URGENCY_LABELS)
 

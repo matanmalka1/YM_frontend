@@ -1,17 +1,14 @@
 import { Clock3 } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { DashboardPanel } from './DashboardPrimitives'
+import { DashboardPanel, DashboardSectionHeader } from './DashboardLayout'
 import { InlineEmptyState } from '@/components/ui/feedback/InlineEmptyState'
 import { cn } from '@/utils/utils'
 import type { RecentActivityItem } from '../api'
 
 export const RecentActivityPanel = ({ items, className }: { items: RecentActivityItem[]; className?: string }) => (
   <DashboardPanel className={cn('flex flex-col', className)}>
-    <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-      <h2 className="text-sm font-bold text-slate-900">פעילות אחרונה</h2>
-      <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-100 text-slate-500">
-        <Clock3 className="h-4 w-4" />
-      </span>
+    <div className="border-b border-slate-100 px-5 py-4">
+      <DashboardSectionHeader title="פעילות אחרונה" icon={Clock3} />
     </div>
 
     {items.length > 0 ? (
