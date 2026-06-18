@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { PlusCircle, Calendar } from 'lucide-react'
 import type { AdvancePaymentStatus } from '../../api/contracts'
-import { Select } from '../../../../components/ui/inputs/Select'
-import { Button } from '../../../../components/ui/primitives/Button'
-import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
+import { Select } from '@/components/ui/inputs/Select'
+import { Button } from '@/components/ui/primitives/Button'
+import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
 import {
   getAdvancePaymentStatusLabel,

@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import type { AdvancePaymentStatus, CreateAdvancePaymentPayload } from '../api/contracts'
-import { getErrorMessage, showErrorToast } from '../../../utils/utils'
+import { getErrorMessage, showErrorToast } from '@/utils/utils'
 
 interface UpdatePayload {
   id: number

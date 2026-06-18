@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { getYear } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
@@ -24,8 +23,7 @@ export const useAdvancePaymentsPage = () => {
   const queryClient = useQueryClient()
   const { isAdvisor } = useRole()
   const today = new Date()
-  const todayYear = getYear(today)
-  const currentReportingYear = today.getFullYear()
+  const todayYear = today.getFullYear()
   const currentReportingMonth = today.getMonth() + 1
   const rawYear = searchParams.get('year') ?? String(getOperationalTaxYear())
   const year = rawYear === 'all' ? null : parsePositiveInt(rawYear, todayYear)
@@ -53,8 +51,8 @@ export const useAdvancePaymentsPage = () => {
     (batch) => batch.due_date ?? null,
   )
   const workflowStats = useMemo(
-    () => getAdvancePaymentWorkflowStats(displayBatches, currentReportingYear, currentReportingMonth),
-    [currentReportingMonth, currentReportingYear, displayBatches],
+    () => getAdvancePaymentWorkflowStats(displayBatches, todayYear, currentReportingMonth),
+    [currentReportingMonth, todayYear, displayBatches],
   )
 
   const updateMutation = useMutation({
@@ -110,7 +108,7 @@ export const useAdvancePaymentsPage = () => {
     isLoading,
     defaultOpenBatchKey,
     workflowStats,
-    currentReportingYear,
+    currentReportingYear: todayYear,
     currentReportingMonth,
     drawerRow,
     createOpen,

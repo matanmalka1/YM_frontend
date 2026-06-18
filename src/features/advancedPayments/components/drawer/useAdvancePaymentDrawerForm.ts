@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import type { PrefillTurnoverResponse, UpdateAdvancePaymentPayload } from '../../api/contracts'
 import { advancePaymentsApi } from '../../api'
-import { toast } from '../../../../utils/toast'
-import { showErrorToast } from '../../../../utils/utils'
+import { toast } from '@/utils/toast'
+import { showErrorToast } from '@/utils/utils'
 import { calcAdvanceAmount, toEditableAmount, toStringOrNull } from '../advancePaymentComponent.utils'
 import type { AdvancePaymentDrawerModel } from './advancePaymentDrawer.model'
 

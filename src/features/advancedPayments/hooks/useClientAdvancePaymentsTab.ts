@@ -11,7 +11,6 @@ import type { AdvancePaymentRow, AdvancePaymentStatus, UpdateAdvancePaymentPaylo
 import { isAdvancePaymentStatus } from '../constants'
 import { useAdvancePayments } from './useAdvancePayments'
 import { useAdvanceRateInsights } from './useAdvanceRateInsights'
-import { CLIENT_ADVANCE_PAYMENT_PAGE_SIZE } from '../components/advancePaymentComponent.constants'
 import { toggleAdvancePaymentStatusFilter } from '../components/advancePaymentComponent.utils'
 
 interface UseClientAdvancePaymentsTabArgs {
@@ -135,7 +134,7 @@ export const useClientAdvancePaymentsTab = ({
     },
     pagination: {
       page,
-      totalPages: getTotalPages(total, CLIENT_ADVANCE_PAYMENT_PAGE_SIZE),
+      totalPages: getTotalPages(total, 20),
       total,
       onPageChange: setPage,
     },

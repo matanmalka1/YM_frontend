@@ -4,7 +4,7 @@ import { ClientAdvancePaymentCards } from './ClientAdvancePaymentCards'
 import { ClientAdvancePaymentStatsCards } from './ClientAdvancePaymentStatsCards'
 import { AdvancePaymentDrawer } from '../../components/drawer/AdvancePaymentDrawer'
 import { CreateAdvancePaymentModal } from '../../components/create/CreateAdvancePaymentModal'
-import { PaginationCard } from '../../../../components/ui/table/PaginationCard'
+import { PaginationCard } from '@/components/ui/table/PaginationCard'
 
 interface ClientAdvancePaymentsTabProps {
   clientRecordId: number

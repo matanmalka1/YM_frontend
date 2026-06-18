@@ -2,7 +2,6 @@ import { BIMONTHLY_START_MONTH_VALUES, getReportingPeriodMonthLabel } from '@/co
 import type { CreateAdvancePaymentFormValues } from '../schemas'
 import type { AdvancePaymentStatus, CreateAdvancePaymentPayload } from '../api/contracts'
 import { MONTH_OPTIONS } from '@/utils/utils'
-import { DEFAULT_BIMONTHLY_START_MONTH } from './advancePaymentComponent.constants'
 
 export const getAdvancePaymentMonthLabel = (period: string, periodMonthsCount: 1 | 2 = 1) =>
   getReportingPeriodMonthLabel(period, periodMonthsCount)
@@ -32,7 +31,7 @@ export const getAdvancePaymentMonthOptions = (periodMonthsCount: 1 | 2) =>
     : MONTH_OPTIONS
 
 export const getValidBimonthlyMonth = (month: number) =>
-  BIMONTHLY_START_MONTH_VALUES.has(String(month)) ? month : DEFAULT_BIMONTHLY_START_MONTH
+  BIMONTHLY_START_MONTH_VALUES.has(String(month)) ? month : 1
 
 export const toNumberOrNull = (value: string) => (value === '' ? null : Number(value))
 
@@ -43,6 +42,20 @@ export const toEditableAmount = (value: string | null) => (value == null ? '' : 
 
 /** Advance amount = turnover × rate%, as a 2-decimal string. Callers guard inputs. */
 export const calcAdvanceAmount = (turnover: number, ratePercent: number) => ((turnover * ratePercent) / 100).toFixed(2)
+
+const formatAdvancePaymentPeriod = (year: number, month: number, periodMonthsCount: 1 | 2 = 1): string => {
+  const period = `${year}-${String(month).padStart(2, '0')}`
+  return `${getAdvancePaymentMonthLabel(period, periodMonthsCount)} ${year}`.replace('-', '–')
+}
+
+export const getIncludedPeriodLabel = (
+  sourceBatches: { year: number; month: number; period_months_count: 1 | 2 }[],
+): string | null => {
+  const labels = sourceBatches
+    .map((b) => formatAdvancePaymentPeriod(b.year, b.month, b.period_months_count))
+    .filter((label, index, all) => all.indexOf(label) === index)
+  return labels.length > 0 ? `כולל תקופות: ${labels.join(' · ')}` : null
+}
 
 export const toFrequency = (value: string) => Number(value) as 1 | 2
 

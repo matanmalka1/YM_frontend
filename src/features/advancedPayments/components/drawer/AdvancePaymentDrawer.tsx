@@ -1,10 +1,9 @@
 import { useMemo } from 'react'
 import { AlertTriangle } from 'lucide-react'
-import { DetailDrawer, DrawerField, DrawerSection } from '../../../../components/ui/overlays/DetailDrawer'
+import { DetailDrawer, DrawerField, DrawerSection } from '@/components/ui/overlays/DetailDrawer'
 import type { UpdateAdvancePaymentPayload } from '../../api/contracts'
-import { formatShekelAmount } from '@/utils/utils'
+import { formatShekelAmount, formatDate } from '@/utils/utils'
 import { getAdvancePaymentMonthLabel } from '../advancePaymentComponent.utils'
-import { formatDate } from '../../../../utils/utils'
 import {
   formatAdvanceRate,
   toAdvancePaymentDrawerModel,

@@ -1,6 +1,6 @@
 import { TrendingUp, Wallet, BarChart2, AlertCircle } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
-import { StatsCard } from '../../../../components/ui/layout/StatsCard'
+import { StatsCard } from '@/components/ui/layout/StatsCard'
 import { advancePaymentsApi, advancedPaymentsQK } from '../../api'
 import { formatShekelAmount } from '@/utils/utils'
 import { getCollectionPercent } from '../../components/advancePaymentComponent.utils'

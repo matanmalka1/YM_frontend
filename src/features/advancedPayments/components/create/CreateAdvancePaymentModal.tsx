@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Modal } from '../../../../components/ui/overlays/Modal'
-import { Input } from '../../../../components/ui/inputs/Input'
-import { Button } from '../../../../components/ui/primitives/Button'
-import { Select } from '../../../../components/ui/inputs/Select'
+import { Modal } from '@/components/ui/overlays/Modal'
+import { Input } from '@/components/ui/inputs/Input'
+import { Button } from '@/components/ui/primitives/Button'
+import { Select } from '@/components/ui/inputs/Select'
 import {
   createAdvancePaymentSchema,
   CREATE_ADVANCE_PAYMENT_DEFAULTS,
@@ -21,7 +21,6 @@ import {
   toNumberOrNull,
 } from '../advancePaymentComponent.utils'
 import { formatShekelAmount } from '@/utils/utils'
-import { NOTES_TEXTAREA_CLASS } from '../advancePaymentComponent.constants'
 
 interface CreateAdvancePaymentModalProps {
   open: boolean
@@ -188,7 +187,7 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
             {...register('notes')}
             id="create-advance-payment-notes"
             rows={2}
-            className={NOTES_TEXTAREA_CLASS}
+            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             placeholder="הערות..."
           />
         </div>

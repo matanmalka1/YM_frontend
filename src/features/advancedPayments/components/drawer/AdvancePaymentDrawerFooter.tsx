@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
-import { Button } from '../../../../components/ui/primitives/Button'
-import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
+import { Button } from '@/components/ui/primitives/Button'
+import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 
 interface AdvancePaymentDrawerFooterProps {
   rowId: number
