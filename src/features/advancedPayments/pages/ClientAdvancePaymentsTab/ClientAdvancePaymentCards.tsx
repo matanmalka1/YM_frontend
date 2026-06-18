@@ -5,7 +5,7 @@ import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { StateCard } from '@/components/ui/feedback'
 import type { AdvancePaymentRow } from '../../api/contracts'
 import { formatShekelAmount } from '@/utils/utils'
-import { getAdvancePaymentMonthLabel } from '../advancePaymentComponent.utils'
+import { getAdvancePaymentMonthLabel } from '../../components/advancePaymentComponent.utils'
 import { formatDate, cn } from '../../../../utils/utils'
 import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
 
@@ -128,4 +128,3 @@ export const ClientAdvancePaymentCards: React.FC<Props> = ({ rows, isLoading, on
   )
 }
 
-ClientAdvancePaymentCards.displayName = 'ClientAdvancePaymentCards'

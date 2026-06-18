@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent, type KeyboardEvent, type RefObject } from 'react'
+import { useRef, useState, useEffect, type KeyboardEvent, type RefObject } from 'react'
 import { ChevronDown, Search, Users } from 'lucide-react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { NotificationBell } from '../NotificationBell'
@@ -47,14 +47,52 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenClientSidebar, clientSidebarTriggerRef }) => {
   const [moreOpen, setMoreOpen] = useState(false)
   const [searchValue, setSearchValue] = useState('')
+  const [hiddenCount, setHiddenCount] = useState(0)
   const navigate = useNavigate()
   const moreButtonRef = useRef<HTMLButtonElement>(null)
   const moreMenuRef = useRef<HTMLDivElement>(null)
+  const navRef = useRef<HTMLElement>(null)
+  const itemRefs = useRef<(HTMLLIElement | null)[]>([])
+  const cachedWidths = useRef<number[]>([])
   const user = useAuthStore((s) => s.user)
   const location = useLocation()
   const visibleItems = ALL_NAV_ITEMS.filter((item) => canShowItem(item, user?.role))
   const visibleNavItems = visibleItems.filter((item) => item.placement === 'top')
-  const moreGroups = buildMoreGroups(visibleItems)
+  const staticMoreGroups = buildMoreGroups(visibleItems)
+  const alwaysShowMore = staticMoreGroups.length > 0
+
+  useEffect(() => {
+    const nav = navRef.current
+    if (!nav) return
+    const measure = () => {
+      const items = itemRefs.current.slice(0, visibleNavItems.length)
+      if (items.some((el) => !el)) return
+      items.forEach((el, i) => {
+        if (el && !el.classList.contains('hidden')) cachedWidths.current[i] = el.getBoundingClientRect().width
+      })
+      let usedWidth = 8 // p-1 padding both sides
+      let firstHidden = visibleNavItems.length
+      for (let i = 0; i < visibleNavItems.length; i++) {
+        const itemWidth = (cachedWidths.current[i] ?? 80) + 4 // gap-1
+        const reserveMore = alwaysShowMore || i < visibleNavItems.length - 1 ? 88 : 0
+        if (usedWidth + itemWidth + reserveMore > nav.clientWidth) { firstHidden = i; break }
+        usedWidth += itemWidth
+      }
+      setHiddenCount(visibleNavItems.length - firstHidden)
+    }
+    const ro = new ResizeObserver(measure)
+    ro.observe(nav)
+    measure()
+    return () => ro.disconnect()
+  }, [visibleNavItems.length, alwaysShowMore])
+
+  const overflowItems = hiddenCount > 0 ? visibleNavItems.slice(visibleNavItems.length - hiddenCount) : []
+  const overflowGroup: MoreNavGroup | null =
+    overflowItems.length > 0 ? { label: 'ניווט', items: overflowItems } : null
+  const moreGroups: MoreNavGroup[] = overflowGroup
+    ? [overflowGroup, ...staticMoreGroups]
+    : staticMoreGroups
+
   const hasActiveMoreItem = moreGroups.some((group) =>
     group.items.some((item) => isRouteActive(location.pathname, item)),
   )
@@ -73,7 +111,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenClientSidebar, clientSideb
   const getMoreMenuItems = () =>
     Array.from(moreMenuRef.current?.querySelectorAll<HTMLAnchorElement>('[role="menuitem"]') ?? [])
 
-  const handleSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const trimmed = searchValue.trim()
     if (!trimmed) {
@@ -130,13 +168,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenClientSidebar, clientSideb
     >
       <div className="flex min-w-0 flex-1 items-center">
         <nav
-          className="min-w-0 flex-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          ref={navRef}
+          className="min-w-0 flex-1 overflow-hidden"
           aria-label="ניווט ראשי"
         >
-          <ul className="flex min-w-max items-center gap-1 rounded-xl bg-gray-50 p-1">
-            {visibleNavItems.map((item) => {
+          <ul className="flex items-center gap-1 rounded-xl bg-gray-50 p-1">
+            {visibleNavItems.map((item, index) => {
+              const hidden = hiddenCount > 0 && index >= visibleNavItems.length - hiddenCount
               return (
-                <li key={item.to}>
+                <li key={item.to} ref={(el) => { itemRefs.current[index] = el }} className={hidden ? 'priority-nav-hidden hidden' : undefined}>
                   <NavLink
                     to={item.to}
                     end={item.end}

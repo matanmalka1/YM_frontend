@@ -135,5 +135,3 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
     </div>
   )
 }
-
-ClientAdvancePaymentsHeader.displayName = 'ClientAdvancePaymentsHeader'

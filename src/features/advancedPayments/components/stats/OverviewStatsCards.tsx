@@ -1,14 +1,14 @@
 import { AlertTriangle, CalendarClock, Clock, ListChecks } from 'lucide-react'
 import { StatsCard } from '../../../../components/ui/layout/StatsCard'
 
-interface OverviewKPICardsProps {
+interface OverviewStatsCardsProps {
   dueThisMonthCount: number
   pendingCount: number
   missingTurnoverCount: number
   overdueCount: number
 }
 
-export const OverviewKPICards: React.FC<OverviewKPICardsProps> = ({
+export const OverviewStatsCards: React.FC<OverviewStatsCardsProps> = ({
   dueThisMonthCount,
   pendingCount,
   missingTurnoverCount,
@@ -42,4 +42,3 @@ export const OverviewKPICards: React.FC<OverviewKPICardsProps> = ({
   )
 }
 
-OverviewKPICards.displayName = 'OverviewKPICards'

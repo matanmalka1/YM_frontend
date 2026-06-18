@@ -1,5 +1,5 @@
 // Public surface of the advancedPayments feature — only import from this barrel externally
-export { ClientAdvancePaymentsTab } from './components/clientTab/ClientAdvancePaymentsTab'
+export { ClientAdvancePaymentsTab } from './pages/ClientAdvancePaymentsTab/ClientAdvancePaymentsTab'
 export { CreateAdvancePaymentModal } from './components/create/CreateAdvancePaymentModal'
 export { AdvancePayments } from './pages/AdvancePaymentsPage'
 export { advancePaymentsApi, advancedPaymentsQK } from './api'

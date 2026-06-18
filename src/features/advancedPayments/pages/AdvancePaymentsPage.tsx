@@ -3,7 +3,7 @@ import { PageHeader } from '@/components/layout/PageHeader'
 import { Button } from '@/components/ui/primitives/Button'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { MonthlyAccordionList } from '@/components/ui/table/MonthlyAccordionGroup'
-import { OverviewKPICards } from '../components/kpi/OverviewKPICards'
+import { OverviewStatsCards } from '../components/stats/OverviewStatsCards'
 import { AdvancePaymentBatchRow } from '../components/table/AdvancePaymentBatchRow'
 import { AdvancePaymentDrawer } from '../components/drawer/AdvancePaymentDrawer'
 import { CreateAdvancePaymentFlow } from '../components/create/CreateAdvancePaymentFlow'
@@ -37,7 +37,7 @@ export const AdvancePayments: React.FC = () => {
         }
       />
 
-      <OverviewKPICards
+      <OverviewStatsCards
         dueThisMonthCount={page.workflowStats.dueThisMonthCount}
         pendingCount={page.workflowStats.pendingCount}
         missingTurnoverCount={page.workflowStats.missingTurnoverCount}
