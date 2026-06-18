@@ -2,7 +2,7 @@ import { Trash2 } from 'lucide-react'
 import { DetailDrawer } from '@/components/ui/overlays/DetailDrawer'
 import { Button } from '@/components/ui/primitives/Button'
 import type { BinderResponse } from '../../types'
-import { BinderActionsPanel } from './BinderActionsPanel'
+import { BinderActionButtons } from './BinderActionButtons'
 import { BinderDetailsPanel } from './BinderDetailsPanel'
 import { BinderAuditSection } from '../sections/BinderAuditSection'
 import { BinderIntakesSection } from '../sections/BinderIntakesSection'
@@ -58,18 +58,21 @@ export const BinderDetailDrawer: React.FC<BinderDetailDrawerProps> = ({
     {binder && (
       <>
         <BinderDetailsPanel binder={binder} />
-        <BinderActionsPanel
-          binder={binder}
-          disabled={actionLoading}
-          onReceiveMaterial={onReceiveMaterial}
-          onMarkFull={onMarkFull}
-          onReopenCapacity={onReopenCapacity}
-          onMarkReadyForHandover={onMarkReadyForHandover ?? (() => undefined)}
-          onMarkReadyForHandoverBulk={onMarkReadyForHandoverBulk}
-          onRevertReadyForHandover={onRevertReadyForHandover}
-          onHandoverToClient={onHandoverToClient}
-          onHandoverToClientBulk={onHandoverToClientBulk}
-        />
+        <div className="flex items-center gap-2 pt-2">
+          <BinderActionButtons
+            binder={binder}
+            disabled={actionLoading}
+            onReceiveMaterial={onReceiveMaterial}
+            onMarkFull={onMarkFull}
+            onReopenCapacity={onReopenCapacity}
+            onMarkReadyForHandover={onMarkReadyForHandover ?? (() => undefined)}
+            onMarkReadyForHandoverBulk={onMarkReadyForHandoverBulk}
+            onRevertReadyForHandover={onRevertReadyForHandover}
+            onHandoverToClient={onHandoverToClient}
+            onHandoverToClientBulk={onHandoverToClientBulk}
+            size="sm"
+          />
+        </div>
         <BinderIntakesSection
           binderId={binder.id}
           clientId={binder.client_record_id}

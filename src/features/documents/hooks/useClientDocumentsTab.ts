@@ -42,7 +42,7 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
   const invalidateDocs = () => {
     void queryClient.invalidateQueries({ queryKey: documentsQK.clientList(clientId) })
     void queryClient.invalidateQueries({ queryKey: documentsQK.clientSignals(clientId) })
-    void queryClient.invalidateQueries({ queryKey: ['documents', 'binder'] })
+    void queryClient.invalidateQueries({ queryKey: documentsQK.binderRoot })
   }
 
   const handleDelete = async (id: number) => {

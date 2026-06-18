@@ -2,7 +2,7 @@ import type { LucideIcon } from 'lucide-react'
 import { ChevronLeft } from 'lucide-react'
 import { cn } from '@/utils/utils'
 
-export type MetricCardTone = 'neutral' | 'blue' | 'green' | 'amber' | 'red' | 'purple'
+type MetricCardTone = 'neutral' | 'blue' | 'green' | 'amber' | 'red' | 'purple'
 
 const toneClasses: Record<MetricCardTone, { icon: string; bar: string }> = {
   neutral: { icon: 'bg-slate-100 text-slate-500', bar: 'bg-slate-400' },
