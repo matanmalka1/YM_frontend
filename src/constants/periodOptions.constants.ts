@@ -6,6 +6,10 @@ export const MONTHS_COVERED_OPTIONS = [
   { value: '2', label: 'דו-חודשי' },
 ]
 
+/** Hebrew label for a months-covered count (1 = monthly, 2 = bimonthly). undefined when unset. */
+export const getMonthsCoveredLabel = (months: 1 | 2 | null | undefined): string | undefined =>
+  MONTHS_COVERED_OPTIONS.find((option) => option.value === String(months))?.label
+
 export const BIMONTHLY_START_MONTH_VALUES = new Set(['1', '3', '5', '7', '9', '11'])
 
 export const MONTH_NAMES = [

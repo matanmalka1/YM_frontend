@@ -1,12 +1,17 @@
 import { useState } from 'react'
-import { PlusCircle, Calendar, SlidersHorizontal } from 'lucide-react'
+import { PlusCircle, Calendar } from 'lucide-react'
 import type { AdvancePaymentStatus } from '../../api/contracts'
 import { Select } from '../../../../components/ui/inputs/Select'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
-import { getAdvancePaymentStatusLabel } from '../../constants'
-import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
-import { ADVANCE_PAYMENT_STATUS_FILTERS } from '../../constants'
+import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
+import {
+  getAdvancePaymentStatusLabel,
+  ADVANCE_PAYMENT_STATUS_FILTERS,
+  ADVANCE_PAYMENT_FREQUENCY_PREFIX,
+  ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT,
+} from '../../constants'
+import { getOperationalYearOptions, getMonthsCoveredLabel } from '@/constants/periodOptions.constants'
 
 interface ClientAdvancePaymentsHeaderProps {
   isAdvisor: boolean
@@ -21,14 +26,6 @@ interface ClientAdvancePaymentsHeaderProps {
   isGenerating?: boolean
   advanceRate?: number | null
 }
-
-const FREQUENCY_LABEL: Record<1 | 2, string> = {
-  1: 'חודשי',
-  2: 'דו-חודשי',
-}
-
-const STATUS_ACTIVE = 'bg-primary-600 text-white border-primary-600'
-const STATUS_INACTIVE = 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'
 
 export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderProps> = ({
   isAdvisor,
@@ -60,11 +57,11 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
               <span className="px-3 py-1.5 text-sm text-gray-500">
                 {displayFrequency != null ? (
                   <>
-                    תדירות מקדמות:{' '}
-                    <span className="font-semibold text-gray-800">{FREQUENCY_LABEL[displayFrequency]}</span>
+                    {ADVANCE_PAYMENT_FREQUENCY_PREFIX}{' '}
+                    <span className="font-semibold text-gray-800">{getMonthsCoveredLabel(displayFrequency)}</span>
                   </>
                 ) : (
-                  <span className="text-gray-400">תדירות מקדמות לא הוגדרה</span>
+                  <span className="text-gray-400">{ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT}</span>
                 )}
               </span>
               <Button
@@ -86,7 +83,7 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
               <ConfirmDialog
                 open={confirmGenerate}
                 title="יצירת לוח מקדמות"
-                message={`ליצור מקדמות ${FREQUENCY_LABEL[generationFrequency]} לשנת ${year}? ייווצרו רק מקדמות שתאריך היעד שלהן מהיום והלאה. מקדמות קיימות לא יושפעו.`}
+                message={`ליצור מקדמות ${getMonthsCoveredLabel(generationFrequency)} לשנת ${year}? ייווצרו רק מקדמות שתאריך היעד שלהן מהיום והלאה. מקדמות קיימות לא יושפעו.`}
                 confirmLabel="צור"
                 cancelLabel="ביטול"
                 onConfirm={() => {
@@ -101,45 +98,40 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
       </div>
 
       {/* Filter bar */}
-      <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-gray-700">
-            <SlidersHorizontal className="h-4 w-4 text-primary-600" />
-            <span className="font-semibold text-sm">סינון</span>
-          </div>
-          {advanceRate != null && (
-            <span className="text-sm text-gray-500">
-              אחוז מקדמות: <span className="font-semibold text-gray-800">{advanceRate}%</span>
-            </span>
-          )}
-        </div>
-        <div className="flex flex-wrap items-center gap-2 mt-3">
-          <div className="flex flex-wrap gap-1.5">
-            {ADVANCE_PAYMENT_STATUS_FILTERS.map((status) => {
-              const active = statusFilter.includes(status)
-              return (
-                <button
-                  key={status}
-                  type="button"
-                  onClick={() => onToggleStatus(status)}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors ${
-                    active ? STATUS_ACTIVE : STATUS_INACTIVE
-                  }`}
-                >
-                  {getAdvancePaymentStatusLabel(status)}
-                </button>
-              )
-            })}
-          </div>
-          <div className="mr-auto w-28">
+      <ToolbarContainer>
+        <div className="space-y-3">
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
+            <div className="space-y-1">
+              <span className="block text-sm font-medium text-gray-700">סטטוס</span>
+              <div className="flex flex-wrap gap-1.5">
+                {ADVANCE_PAYMENT_STATUS_FILTERS.map((status) => (
+                  <Button
+                    key={status}
+                    type="button"
+                    size="sm"
+                    variant={statusFilter.includes(status) ? 'primary' : 'outline'}
+                    onClick={() => onToggleStatus(status)}
+                  >
+                    {getAdvancePaymentStatusLabel(status)}
+                  </Button>
+                ))}
+              </div>
+            </div>
             <Select
+              label="שנה"
               value={String(year)}
               onChange={(e) => onYearChange(Number(e.target.value))}
               options={getOperationalYearOptions()}
+              fieldClassName="sm:max-w-xs"
             />
           </div>
+          {advanceRate != null && (
+            <p className="text-sm text-gray-500">
+              אחוז מקדמות: <span className="font-semibold text-gray-800">{advanceRate}%</span>
+            </p>
+          )}
         </div>
-      </div>
+      </ToolbarContainer>
     </div>
   )
 }

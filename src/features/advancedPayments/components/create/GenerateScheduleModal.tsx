@@ -2,6 +2,8 @@ import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
 import { ClientPickerField } from '@/components/shared/client/ClientPickerField'
 import { useGenerateSchedule } from '../../hooks/useGenerateSchedule'
+import { ADVANCE_PAYMENT_FREQUENCY_PREFIX, ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT } from '../../constants'
+import { getMonthsCoveredLabel } from '@/constants/periodOptions.constants'
 
 interface Props {
   open: boolean
@@ -59,11 +61,9 @@ export const GenerateScheduleModal: React.FC<Props> = ({ open, year, onClose }) 
               ? 'טוען פרופיל לקוח...'
               : isProfileError
                 ? 'שגיאה בטעינת פרופיל הלקוח'
-                : frequency === 1
-                  ? 'תדירות מקדמות: חודשי'
-                  : frequency === 2
-                    ? 'תדירות מקדמות: דו-חודשי'
-                    : 'תדירות מקדמות לא הוגדרה'}
+                : frequency != null
+                  ? `${ADVANCE_PAYMENT_FREQUENCY_PREFIX} ${getMonthsCoveredLabel(frequency)}`
+                  : ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT}
           </p>
         )}
         <p className="text-sm text-gray-500">ייווצרו רק מקדמות שתאריך היעד שלהן מהיום והלאה</p>

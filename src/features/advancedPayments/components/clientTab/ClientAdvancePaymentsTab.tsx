@@ -1,24 +1,10 @@
-import { useState } from 'react'
-import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type { AdvancePaymentRow, AdvancePaymentStatus, UpdateAdvancePaymentPayload } from '../../api/contracts'
-import { isAdvancePaymentStatus } from '../../constants'
-import { useAdvancePayments } from '../../hooks/useAdvancePayments'
-import { useAdvanceRateInsights } from '../../hooks/useAdvanceRateInsights'
-import { useRole } from '../../../../hooks/useRole'
-import { advancePaymentsApi, advancedPaymentsQK } from '../../api'
-import { toast } from '../../../../utils/toast'
-import { getHttpStatus, showErrorToast, parsePositiveInt } from '../../../../utils/utils'
-import { useSearchParamFilters } from '../../../../hooks/useSearchParamFilters'
+import { useClientAdvancePaymentsTab } from '../../hooks/useClientAdvancePaymentsTab'
 import { ClientAdvancePaymentsHeader } from './ClientAdvancePaymentsHeader'
 import { ClientAdvancePaymentCards } from './ClientAdvancePaymentCards'
 import { AdvancePaymentsKPICards } from '../kpi/AdvancePaymentsKPICards'
 import { AdvancePaymentDrawer } from '../drawer/AdvancePaymentDrawer'
 import { CreateAdvancePaymentModal } from '../create/CreateAdvancePaymentModal'
 import { PaginationCard } from '../../../../components/ui/table/PaginationCard'
-import { CLIENT_ADVANCE_PAYMENT_PAGE_SIZE } from '../advancePaymentComponent.constants'
-import { toggleAdvancePaymentStatusFilter } from '../advancePaymentComponent.utils'
-import { getTotalPages } from '@/utils/paginationUtils'
 
 interface ClientAdvancePaymentsTabProps {
   clientRecordId: number
@@ -27,157 +13,30 @@ interface ClientAdvancePaymentsTabProps {
   officeClientNumber?: number | null
 }
 
-export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> = ({
-  clientRecordId,
-  clientName,
-  clientIdNumber,
-  officeClientNumber,
-}) => {
-  const { searchParams, getParam, getPage, setFilter, setPage: setUrlPage } = useSearchParamFilters()
-  const [modalOpen, setModalOpen] = useState(false)
-  const [drawerRow, setDrawerRow] = useState<AdvancePaymentRow | null>(null)
-  const { isAdvisor } = useRole()
-
-  const year = parsePositiveInt(searchParams.get('year'), getOperationalTaxYear())
-  const page = getPage()
-  const rawStatusFilter = getParam('status_filter')
-  const statusFilter = rawStatusFilter ? rawStatusFilter.split(',').filter(isAdvancePaymentStatus) : []
-
-  const queryClient = useQueryClient()
-  const { rows, isLoading, total, create, isCreating, deleteRow } = useAdvancePayments(
-    clientRecordId,
-    year,
-    statusFilter,
-    page,
-  )
-  const { advancePaymentFrequency, advanceRate } = useAdvanceRateInsights(clientRecordId)
-
-  const generationFrequency: 1 | 2 | null =
-    advancePaymentFrequency === 'bimonthly' ? 2 : advancePaymentFrequency === 'monthly' ? 1 : null
-
-  const displayFrequency: 1 | 2 | null = rows.length > 0 ? rows[0].period_months_count : generationFrequency
-
-  const generateMutation = useMutation({
-    mutationFn: (periodMonthsCount: 1 | 2) =>
-      advancePaymentsApi.generateSchedule(clientRecordId, year, periodMonthsCount),
-    onSuccess: (data) => {
-      const msg = data.created > 0 ? `נוצרו ${data.created} מקדמות` : 'הכול קיים'
-      toast.success(msg)
-      void queryClient.invalidateQueries({
-        queryKey: advancedPaymentsQK.clientYear(clientRecordId, year),
-      })
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה ביצירת לוח מקדמות'),
-  })
-
-  const deleteMutation = useMutation({
-    mutationFn: (id: number) => deleteRow(id),
-    onSuccess: () => {
-      toast.success('מקדמה נמחקה בהצלחה')
-      void queryClient.invalidateQueries({
-        queryKey: advancedPaymentsQK.clientYear(clientRecordId, year),
-      })
-      setDrawerRow(null)
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה במחיקת מקדמה'),
-  })
-
-  const updateMutation = useMutation({
-    mutationFn: ({ id, payload }: { id: number; payload: UpdateAdvancePaymentPayload }) =>
-      advancePaymentsApi.update(clientRecordId, id, payload),
-    onSuccess: () => {
-      toast.success('מקדמה עודכנה בהצלחה')
-      void queryClient.invalidateQueries({
-        queryKey: advancedPaymentsQK.clientYear(clientRecordId, year),
-      })
-      setDrawerRow(null)
-    },
-    onError: (err) => showErrorToast(err, 'שגיאה בעדכון מקדמה'),
-  })
-
-  const totalPages = getTotalPages(total, CLIENT_ADVANCE_PAYMENT_PAGE_SIZE)
-
-  const handleGenerateSchedule = () => {
-    if (generationFrequency == null) {
-      toast.error('לא ניתן ליצור לוח בלי תדירות מקדמות בפרופיל הלקוח')
-      return
-    }
-    generateMutation.mutate(generationFrequency)
-  }
-
-  const handleStatusToggle = (status: AdvancePaymentStatus) => {
-    const next = toggleAdvancePaymentStatusFilter(statusFilter, status)
-    setFilter('status_filter', next.join(','), true)
-  }
-
-  const handleSave = async (id: number, payload: UpdateAdvancePaymentPayload) => {
-    await updateMutation.mutateAsync({ id, payload })
-  }
-
-  const handleCreate = async (...args: Parameters<typeof create>) => {
-    try {
-      const result = await create(...args)
-      toast.success('מקדמה נוצרה בהצלחה')
-      return result
-    } catch (err) {
-      if (getHttpStatus(err) === 409) {
-        toast.error('מקדמה לחודש זה כבר קיימת')
-      } else {
-        showErrorToast(err, 'שגיאה ביצירת מקדמה')
-      }
-      throw err
-    }
-  }
+export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> = (props) => {
+  const { permissions, header, kpi, table, pagination, drawer, createModal } = useClientAdvancePaymentsTab(props)
 
   return (
     <div className="space-y-6">
-      <ClientAdvancePaymentsHeader
-        isAdvisor={isAdvisor}
-        statusFilter={statusFilter}
-        onToggleStatus={handleStatusToggle}
-        year={year}
-        onYearChange={(nextYear) => setFilter('year', String(nextYear), true)}
-        onOpenCreate={() => setModalOpen(true)}
-        onGenerateSchedule={handleGenerateSchedule}
-        displayFrequency={displayFrequency}
-        generationFrequency={generationFrequency}
-        isGenerating={generateMutation.isPending}
-        advanceRate={advanceRate}
-      />
+      <ClientAdvancePaymentsHeader {...header} />
 
-      <AdvancePaymentsKPICards clientRecordId={clientRecordId} year={year} />
+      <AdvancePaymentsKPICards {...kpi} />
 
-      <ClientAdvancePaymentCards rows={rows} isLoading={isLoading} onRowClick={(row) => setDrawerRow(row)} />
+      <ClientAdvancePaymentCards {...table} />
 
-      {totalPages > 1 && (
-        <PaginationCard page={page} totalPages={totalPages} total={total} label="מקדמות" onPageChange={setUrlPage} />
-      )}
-
-      <AdvancePaymentDrawer
-        row={drawerRow}
-        open={drawerRow !== null}
-        isUpdating={updateMutation.isPending}
-        isDeleting={deleteMutation.isPending}
-        canEdit={isAdvisor}
-        onClose={() => setDrawerRow(null)}
-        onSave={handleSave}
-        onDelete={isAdvisor ? (id) => deleteMutation.mutateAsync(id) : undefined}
-        clientName={clientName}
-        clientIdNumber={clientIdNumber}
-        officeClientNumber={officeClientNumber}
-      />
-
-      {isAdvisor && (
-        <CreateAdvancePaymentModal
-          open={modalOpen}
-          clientRecordId={clientRecordId}
-          year={year}
-          defaultPeriodMonthsCount={generationFrequency ?? displayFrequency ?? 1}
-          isCreating={isCreating}
-          onClose={() => setModalOpen(false)}
-          onCreate={handleCreate}
+      {pagination.totalPages > 1 && (
+        <PaginationCard
+          page={pagination.page}
+          totalPages={pagination.totalPages}
+          total={pagination.total}
+          label="מקדמות"
+          onPageChange={pagination.onPageChange}
         />
       )}
+
+      <AdvancePaymentDrawer {...drawer} />
+
+      {permissions.isAdvisor && <CreateAdvancePaymentModal {...createModal} />}
     </div>
   )
 }

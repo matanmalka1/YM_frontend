@@ -54,3 +54,6 @@ export const ADVANCE_PAYMENT_METHOD_OPTIONS: { value: AdvancePaymentMethod; labe
   ADVANCE_PAYMENT_METHOD_VALUES.map((method) => ({ value: method, label: ADVANCE_PAYMENT_METHOD_LABELS[method] }))
 
 export const ADVANCE_PAYMENT_FREQUENCY_OPTIONS = MONTHS_COVERED_OPTIONS
+
+export const ADVANCE_PAYMENT_FREQUENCY_PREFIX = 'תדירות מקדמות:'
+export const ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT = 'תדירות מקדמות לא הוגדרה'
