@@ -1,7 +1,7 @@
 import { useClientAdvancePaymentsTab } from '../../hooks/useClientAdvancePaymentsTab'
 import { ClientAdvancePaymentsHeader } from './ClientAdvancePaymentsHeader'
 import { ClientAdvancePaymentCards } from './ClientAdvancePaymentCards'
-import { AdvancePaymentsStatsCards } from '../../components/stats/AdvancePaymentsStatsCards'
+import { ClientAdvancePaymentStatsCards } from './ClientAdvancePaymentStatsCards'
 import { AdvancePaymentDrawer } from '../../components/drawer/AdvancePaymentDrawer'
 import { CreateAdvancePaymentModal } from '../../components/create/CreateAdvancePaymentModal'
 import { PaginationCard } from '../../../../components/ui/table/PaginationCard'
@@ -20,7 +20,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
     <div className="space-y-6">
       <ClientAdvancePaymentsHeader {...header} />
 
-      <AdvancePaymentsStatsCards {...kpi} />
+      <ClientAdvancePaymentStatsCards {...kpi} />
 
       <ClientAdvancePaymentCards {...table} />
 
