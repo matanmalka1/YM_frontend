@@ -15,7 +15,6 @@ export const BUSINESS_STATUS_BADGE_VARIANTS = {
   closed: 'neutral',
 } as const satisfies Record<BusinessStatus, 'success' | 'warning' | 'neutral'>
 
-
 export const BUSINESS_STATUS_OPTIONS = (Object.keys(BUSINESS_STATUS_LABELS) as BusinessStatus[]).map((status) => ({
   value: status,
   label: BUSINESS_STATUS_LABELS[status],

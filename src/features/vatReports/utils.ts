@@ -11,8 +11,7 @@ const hasVatAction = (actions: BackendAction[] | null | undefined, key: string):
 export const canMarkMaterialsComplete = (actions: BackendAction[] | null | undefined): boolean =>
   hasVatAction(actions, 'materials_complete')
 
-const canAddInvoice = (actions: BackendAction[] | null | undefined): boolean =>
-  hasVatAction(actions, 'add_invoice')
+const canAddInvoice = (actions: BackendAction[] | null | undefined): boolean => hasVatAction(actions, 'add_invoice')
 
 export const canMutateVatInvoices = (actions: BackendAction[] | null | undefined): boolean => canAddInvoice(actions)
 

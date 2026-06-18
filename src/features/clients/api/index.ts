@@ -8,7 +8,6 @@ export type {
   ListClientsParams,
   ClientSidebarResponse,
   ListClientSidebarParams,
-  
   CreateClientPayload,
   UpdateClientPayload,
   ClientStatus,

@@ -37,5 +37,4 @@ export type {
   ExpenseLinePayload,
   VatAutoPopulateResponse,
   VatAutoPopulateSkippedItem,
-  
 } from './contracts'

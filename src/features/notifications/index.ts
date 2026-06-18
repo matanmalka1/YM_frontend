@@ -5,17 +5,4 @@ export { NotificationsPage } from './pages/NotificationsPage'
 export { SendNotificationModal } from './components/SendNotificationModal'
 export { useNotificationBell } from './hooks/useNotificationBell'
 
-
-
-
-
-export type {
-  NotificationTrigger,
-  
-  
-  
-  
-  
-  
-  NotificationDetail,
-} from './api'
+export type { NotificationTrigger, NotificationDetail } from './api'
