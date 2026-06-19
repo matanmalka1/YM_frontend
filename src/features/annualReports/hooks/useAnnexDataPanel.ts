@@ -4,13 +4,13 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { showErrorToast } from '@/utils/utils'
 import { annualReportsApi, annualReportsQK, type AnnualReportScheduleKey } from '../api'
-import { SCHEDULE_FIELDS } from '../annex.constants'
+import { SCHEDULE_FIELDS } from '../constants/annexConstants'
 import {
   buildAnnexSchema,
   buildEmptyFormValues,
   mapLineToFormValues,
   type AnnexFormValues,
-} from '../components/annex/annexSchema'
+} from '../constants/annexSchema'
 
 export const useAnnexDataPanel = (reportId: number, schedule: AnnualReportScheduleKey) => {
   const queryClient = useQueryClient()

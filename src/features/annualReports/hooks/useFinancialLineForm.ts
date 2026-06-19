@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
-import type { ExpenseCategoryType, ExpenseLineResponse, IncomeLineResponse, IncomeSourceType } from '../../api'
-import { DEFAULT_RECOGNITION_RATE } from './financialConstants'
+import type { ExpenseCategoryType, ExpenseLineResponse, IncomeLineResponse, IncomeSourceType } from '../api'
+import { DEFAULT_RECOGNITION_RATE } from '../constants/financialConstants'
 import {
   buildExpensePayload,
   buildIncomePayload,
@@ -8,7 +8,7 @@ import {
   isIncomeSourceType,
   type AddExpensePayload,
   type IncomeFormPayload,
-} from './financialHelpers'
+} from '../utils/financialHelpers'
 
 export const useIncomeLineForm = (initial?: IncomeLineResponse, onSubmit?: (payload: IncomeFormPayload) => void) => {
   const [typeKey, setTypeKey] = useState<IncomeSourceType | ''>(initial?.source_type ?? '')

@@ -3,7 +3,7 @@ import type { AnnualReportScheduleKey } from '../../api'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { AnnexDataTable } from './AnnexDataTable'
 import { AnnexFieldInput } from './AnnexFieldInput'
-import { ANNEX_TEXT, TABLE_ICON_CLASS } from './annex.constants'
+import { ANNEX_TEXT, TABLE_ICON_CLASS } from '../../constants/annexTextConstants'
 import { useAnnexDataPanel } from '../../hooks/useAnnexDataPanel'
 
 interface Props {

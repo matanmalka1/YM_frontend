@@ -1,4 +1,4 @@
-import type { VatAutoPopulateSkippedItem } from '../../api'
+import type { VatAutoPopulateSkippedItem } from '../api'
 
 export const DEFAULT_RECOGNITION_RATE = '100'
 export const MAX_PERCENTAGE = 100

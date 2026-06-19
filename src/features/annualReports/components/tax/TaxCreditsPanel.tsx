@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { annualReportsApi, annualReportsQK } from '../../api'
 import { formatCurrencyILS as fmt } from '@/utils/utils'
-import { buildCreditRows, sumCreditRows } from './helpers'
+import { buildCreditRows, sumCreditRows } from '../../utils/taxHelpers'
 
 interface Props {
   reportId: number

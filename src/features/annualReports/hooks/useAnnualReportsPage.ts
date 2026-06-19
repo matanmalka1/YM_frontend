@@ -8,7 +8,7 @@ import type { AnnualReportListItem } from '../api'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { useState } from 'react'
-import { ANNUAL_REPORTS_TAX_YEAR_DESC_PARAMS } from '../report.constants'
+import { ANNUAL_REPORTS_TAX_YEAR_DESC_PARAMS } from '../constants/reportConstants'
 
 export const useAnnualReportsPage = () => {
   const { getParam, setFilter, resetFilters } = useSearchParamFilters()

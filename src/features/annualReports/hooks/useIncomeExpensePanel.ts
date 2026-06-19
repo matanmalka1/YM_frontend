@@ -11,8 +11,8 @@ import {
   type IncomeLinePayload,
   type IncomeLineResponse,
 } from '../api'
-import { FINANCIAL_MESSAGES } from '../components/financials/financialConstants'
-import { getFinancialTotals, type IncomeFormPayload } from '../components/financials/financialHelpers'
+import { FINANCIAL_MESSAGES } from '../constants/financialConstants'
+import { getFinancialTotals, type IncomeFormPayload } from '../utils/financialHelpers'
 import { useIncomeExpenseMutations } from './useIncomeExpenseMutations'
 
 type EditingLine = { type: 'income' | 'expense'; id: number } | null

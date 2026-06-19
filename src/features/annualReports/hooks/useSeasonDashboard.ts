@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { annualReportSeasonApi, annualReportsQK } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
-import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../report.constants'
+import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../constants/reportConstants'
 
 interface SeasonFilters {
   client_record_id?: number

@@ -3,7 +3,7 @@ import { cn, formatCurrencyILS, formatPercent } from '../../../../utils/utils'
 import { useTaxCalculationPanel } from '../../hooks/useTaxCalculationPanel'
 import { TaxBracketsTable } from './TaxBracketsTable'
 import { TaxCalculatorInputs } from './TaxCalculatorInputs'
-import { getLiabilityTone, getTotalCredits } from './helpers'
+import { getLiabilityTone, getTotalCredits } from '../../utils/taxHelpers'
 
 interface Props {
   reportId: number

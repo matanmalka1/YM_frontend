@@ -2,11 +2,11 @@ import { useQuery } from '@tanstack/react-query'
 import { MoreHorizontal, Scissors } from 'lucide-react'
 import { annualReportFinancialsApi, annualReportsQK } from '../../api'
 import { TaxCreditsPanel } from './TaxCreditsPanel'
-import { EXPENSE_LABELS } from '../../report.constants'
+import { EXPENSE_LABELS } from '../../constants/reportConstants'
 import { cn, formatCurrencyILS as fmt } from '../../../../utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
-import { CATEGORY_ICONS } from './constants'
-import { getRecognitionTone } from './helpers'
+import { CATEGORY_ICONS } from '../../constants/taxConstants'
+import { getRecognitionTone } from '../../utils/taxHelpers'
 
 interface Props {
   reportId: number

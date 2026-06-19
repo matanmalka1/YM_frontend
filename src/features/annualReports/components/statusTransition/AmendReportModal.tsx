@@ -2,8 +2,8 @@ import { Button } from '../../../../components/ui/primitives/Button'
 import { Modal } from '../../../../components/ui/overlays/Modal'
 import { Textarea } from '../../../../components/ui/inputs/Textarea'
 import type { AmendReportModalProps } from '../../types'
-import { AMEND_REASON_MIN_LENGTH } from './constants'
-import { isValidAmendReason } from './helpers'
+import { AMEND_REASON_MIN_LENGTH } from '../../constants/statusTransitionConstants'
+import { isValidAmendReason } from '../../utils/statusTransitionHelpers'
 
 export const AmendReportModal = ({
   open,

@@ -1,7 +1,7 @@
-import type { AnnualReportListItem } from '../../api'
-import { STATUS_LABELS } from '../../api'
-import type { TimelineEventStatus } from '../statusTransition/TimelineEvent'
-import { parseAnnualReportCalendarDate, WARNING_DEADLINE_DAYS } from './annualReports.constants'
+import type { AnnualReportListItem } from '../api'
+import { STATUS_LABELS } from '../api'
+import type { TimelineEventStatus } from '../components/statusTransition/TimelineEvent'
+import { parseAnnualReportCalendarDate, WARNING_DEADLINE_DAYS } from '../constants/sharedConstants'
 import { formatDate } from '@/utils/utils'
 
 export interface AnnualReportTimelineEvent {

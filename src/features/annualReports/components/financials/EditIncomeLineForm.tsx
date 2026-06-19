@@ -4,8 +4,8 @@ import {
   FinancialEditFormShell,
   FinancialSelectField,
 } from './FinancialLineFormParts'
-import type { IncomeFormPayload } from './financialHelpers'
-import { useIncomeLineForm } from './useFinancialLineForm'
+import type { IncomeFormPayload } from '../../utils/financialHelpers'
+import { useIncomeLineForm } from '../../hooks/useFinancialLineForm'
 
 interface EditIncomeLineFormProps {
   line: IncomeLineResponse

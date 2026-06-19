@@ -7,7 +7,7 @@ export { ClientAnnualReportsTab } from './components/shared/ClientAnnualReportsT
 export { CreateReportModal } from './components/shared/CreateReportModal'
 export { OverdueBanner } from './components/shared/OverdueBanner'
 export { AnnualReportsFiltersBar } from './components/shared/AnnualReportsFiltersBar'
-export { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from './report.constants'
+export { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from './constants/reportConstants'
 
 export { useAnnualReportsPage } from './hooks/useAnnualReportsPage'
 export { AnnualReportDetail } from './pages/AnnualReportDetailPage'

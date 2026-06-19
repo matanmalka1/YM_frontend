@@ -4,7 +4,7 @@ import type { AnnualReportListItem } from '../../api'
 import { TimelineEvent } from '../statusTransition/TimelineEvent'
 import { cn } from '../../../../utils/utils'
 import { UpcomingDeadlinesList } from './UpcomingDeadlinesList'
-import { buildTimelineEvents, getFilingStats } from './annualReports.helpers'
+import { buildTimelineEvents, getFilingStats } from '../../utils/sharedHelpers'
 
 interface Props {
   reports: AnnualReportListItem[]

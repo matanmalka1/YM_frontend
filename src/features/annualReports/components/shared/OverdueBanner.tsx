@@ -3,8 +3,8 @@ import { AlertTriangle, ChevronDown, ChevronUp } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
 import type { AnnualReportListItem } from '../../api'
 import { cn, formatDate } from '../../../../utils/utils'
-import { getClientReportName, getDaysOverdue } from './annualReports.helpers'
-import { OVERDUE_PREVIEW_LIMIT } from './annualReports.constants'
+import { getClientReportName, getDaysOverdue } from '../../utils/sharedHelpers'
+import { OVERDUE_PREVIEW_LIMIT } from '../../constants/sharedConstants'
 
 interface OverdueBannerProps {
   overdue: AnnualReportListItem[]

@@ -3,7 +3,7 @@ import { CheckCircle2, XCircle } from 'lucide-react'
 import { annualReportTaxApi, annualReportsQK } from '../../api'
 import { cn, formatPercent } from '../../../../utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
-import { clampPercent } from './helpers'
+import { clampPercent } from '../../utils/panelHelpers'
 
 interface ReadinessCheckPanelProps {
   reportId: number

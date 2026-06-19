@@ -1,14 +1,14 @@
 import { useState } from 'react'
-import { EXPENSE_LABELS } from '../../report.constants'
-import { FIELD_PLACEHOLDERS } from './financialConstants'
+import { EXPENSE_LABELS } from '../../constants/reportConstants'
+import { FIELD_PLACEHOLDERS } from '../../constants/financialConstants'
 import {
   ExpenseSupplementaryFields,
   FinancialAddFormShell,
   FinancialAmountDescriptionFields,
   FinancialSelectField,
 } from './FinancialLineFormParts'
-import type { AddExpensePayload } from './financialHelpers'
-import { useExpenseLineForm } from './useFinancialLineForm'
+import type { AddExpensePayload } from '../../utils/financialHelpers'
+import { useExpenseLineForm } from '../../hooks/useFinancialLineForm'
 
 interface AddExpenseLineFormProps {
   onAdd: (payload: AddExpensePayload) => void

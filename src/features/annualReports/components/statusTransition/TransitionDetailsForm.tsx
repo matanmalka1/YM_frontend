@@ -3,7 +3,7 @@ import { Button } from '../../../../components/ui/primitives/Button'
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
 import type { TransitionDetailsFormProps } from '../../types'
-import { SUBMISSION_METHOD_OPTIONS } from '../shared/submissionMethodOptions'
+import { SUBMISSION_METHOD_OPTIONS } from '../../constants/submissionMethodOptions'
 
 export const TransitionDetailsForm = ({
   selected,

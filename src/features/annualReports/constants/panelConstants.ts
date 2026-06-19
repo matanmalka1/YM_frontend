@@ -10,7 +10,7 @@ import {
   TrendingDown,
   TrendingUp,
 } from 'lucide-react'
-import type { SectionKey } from '../../types'
+import type { SectionKey } from '../types'
 
 type IconComponent = ComponentType<{ size?: number; className?: string }>
 

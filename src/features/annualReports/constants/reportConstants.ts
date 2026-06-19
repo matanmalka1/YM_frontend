@@ -1,7 +1,7 @@
-import type { IncomeSourceType, ExpenseCategoryType } from './api'
+import type { IncomeSourceType, ExpenseCategoryType } from '../api'
 import { FIRST_PAGE, PAGE_SIZE_MAX } from '@/constants/pagination.constants'
 
-export { LineRow } from './components/financials/FinancialLineRow'
+export { LineRow } from '../components/financials/FinancialLineRow'
 
 export const INCOME_LABELS: Record<IncomeSourceType, string> = {
   business: 'הכנסות עסק',

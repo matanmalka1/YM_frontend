@@ -1,6 +1,6 @@
-import type { AnnualReportScheduleKey, AnnexDataLine, ScheduleEntry } from '../../api'
-import { getScheduleLabel } from '../../api'
-import { ALL_SCHEDULES, type FieldDef } from '../../annex.constants'
+import type { AnnualReportScheduleKey, AnnexDataLine, ScheduleEntry } from '../api'
+import { getScheduleLabel } from '../api'
+import { ALL_SCHEDULES, type FieldDef } from '../constants/annexConstants'
 
 export const getInputType = (type: FieldDef['type']) => {
   if (type === 'date') return 'date'

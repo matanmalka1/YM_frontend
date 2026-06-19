@@ -3,13 +3,13 @@ import { ClientPickerField, createClientIdPickerHandlers, useClientPickerState }
 import { Input, Textarea } from '@/components/ui/inputs'
 import { Modal, ModalFormActions } from '@/components/ui/overlays'
 import { useCreateReport } from '../../hooks/useCreateReport'
-import { SUBMISSION_METHOD_OPTIONS } from './submissionMethodOptions'
+import { SUBMISSION_METHOD_OPTIONS } from '../../constants/submissionMethodOptions'
 import {
   CLIENT_TYPE_OPTIONS,
   DEADLINE_TYPE_OPTIONS,
   EXTENSION_REASON_OPTIONS,
   TAX_YEAR_LIMITS,
-} from './annualReports.constants'
+} from '../../constants/sharedConstants'
 import { FinancialFields, RequiredAppendices, SelectOptions, TaxPreview } from './CreateReportModalParts'
 
 interface CreateReportModalProps {

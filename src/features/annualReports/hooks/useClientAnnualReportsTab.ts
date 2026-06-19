@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { annualReportsApi, annualReportsQK } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
 import { CURRENT_YEAR } from '../types'
-import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../report.constants'
+import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../constants/reportConstants'
 
 const YEAR_LIST = [CURRENT_YEAR, CURRENT_YEAR - 1, CURRENT_YEAR - 2, CURRENT_YEAR - 3]
 

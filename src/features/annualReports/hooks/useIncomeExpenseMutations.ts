@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { annualReportFinancialsApi, annualReportsQK } from '../api'
 import type { ExpenseLinePayload, ExpenseLineResponse, IncomeLinePayload, IncomeLineResponse } from '../api'
-import { EXPENSE_LABELS, INCOME_LABELS } from '../report.constants'
+import { EXPENSE_LABELS, INCOME_LABELS } from '../constants/reportConstants'
 import { toast } from '../../../utils/toast'
 import { formatCurrencyILS, showErrorToast } from '../../../utils/utils'
 

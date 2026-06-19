@@ -3,8 +3,8 @@ import type { AnnualReportScheduleKey, ScheduleEntry } from '../../api'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
-import { ANNEX_TEXT } from './annex.constants'
-import { buildScheduleOptions, getAvailableSchedules, normalizeNotes } from './annex.helpers'
+import { ANNEX_TEXT } from '../../constants/annexTextConstants'
+import { buildScheduleOptions, getAvailableSchedules, normalizeNotes } from '../../utils/annexHelpers'
 
 interface ScheduleAddFormProps {
   schedules: ScheduleEntry[]

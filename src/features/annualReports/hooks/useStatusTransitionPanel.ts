@@ -8,7 +8,7 @@ import {
   buildTransitionPayload,
   getEmptyTransitionForm,
   isValidAmendReason,
-} from '../components/statusTransition/helpers'
+} from '../utils/statusTransitionHelpers'
 
 export const useStatusTransitionPanel = (
   report: StatusTransitionPanelProps['report'],

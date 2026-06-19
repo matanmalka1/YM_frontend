@@ -6,8 +6,8 @@ import { AnnualReportSidebarStatus } from './AnnualReportSidebarStatus'
 import { AnnualReportSectionContent } from './AnnualReportSectionContent'
 import { PageHeader } from '../../../../components/layout/PageHeader'
 import { Button } from '../../../../components/ui/primitives/Button'
-import { PANEL_NAV_ITEMS, PANEL_TAB_VARIANTS } from './constants'
-import { getClientLabel } from './helpers'
+import { PANEL_NAV_ITEMS, PANEL_TAB_VARIANTS } from '../../constants/panelConstants'
+import { getClientLabel } from '../../utils/panelHelpers'
 
 interface AnnualReportFullPanelProps {
   reportId: number

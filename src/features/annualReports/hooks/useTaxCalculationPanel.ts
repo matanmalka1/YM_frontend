@@ -4,7 +4,7 @@ import { useRole } from '@/hooks/useRole'
 import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { annualReportsApi, annualReportsQK, annualReportTaxApi } from '../api'
-import { toReportDetailsPayload, toTaxInputValues, toTaxResultPayload } from '../components/tax/helpers'
+import { toReportDetailsPayload, toTaxInputValues, toTaxResultPayload } from '../utils/taxHelpers'
 
 export const useTaxCalculationPanel = (reportId: number) => {
   const queryClient = useQueryClient()

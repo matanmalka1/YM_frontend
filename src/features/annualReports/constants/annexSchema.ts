@@ -1,6 +1,6 @@
 import { z, type ZodTypeAny } from 'zod'
-import { SCHEDULE_FIELDS, type FieldDef } from '../../annex.constants'
-import type { AnnualReportScheduleKey } from '../../api'
+import { SCHEDULE_FIELDS, type FieldDef } from './annexConstants'
+import type { AnnualReportScheduleKey } from '../api'
 
 const REQUIRED_MSG = 'שדה חובה'
 const NUMBER_MSG = 'יש להזין מספר תקין'

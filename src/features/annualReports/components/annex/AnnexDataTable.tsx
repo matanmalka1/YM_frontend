@@ -2,11 +2,11 @@ import { Check, Pencil, Trash2, X } from 'lucide-react'
 import type { FieldErrors, UseFormRegister } from 'react-hook-form'
 import { Button } from '../../../../components/ui/primitives/Button'
 import type { AnnexDataLine } from '../../api'
-import type { FieldDef } from '../../annex.constants'
-import { ANNEX_TEXT, TABLE_ICON_CLASS } from './annex.constants'
-import { getLineFieldValue } from './annex.helpers'
+import type { FieldDef } from '../../constants/annexConstants'
+import { ANNEX_TEXT, TABLE_ICON_CLASS } from '../../constants/annexTextConstants'
+import { getLineFieldValue } from '../../utils/annexHelpers'
 import { AnnexFieldInput } from './AnnexFieldInput'
-import type { AnnexFormValues } from './annexSchema'
+import type { AnnexFormValues } from '../../constants/annexSchema'
 
 interface AnnexDataTableProps {
   lines: AnnexDataLine[]

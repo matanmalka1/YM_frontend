@@ -8,8 +8,8 @@ import { cn, formatDate } from '../../../../utils/utils'
 import { AnnexDataPanel } from './AnnexDataPanel'
 import { ScheduleAddForm } from './ScheduleAddForm'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
-import { ANNEX_TEXT } from './annex.constants'
-import { getCompletedCount, toggleExpandedSchedule } from './annex.helpers'
+import { ANNEX_TEXT } from '../../constants/annexTextConstants'
+import { getCompletedCount, toggleExpandedSchedule } from '../../utils/annexHelpers'
 
 interface ScheduleChecklistProps {
   reportId: number

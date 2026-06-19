@@ -14,7 +14,7 @@ const getDeadlineTypeLabel = (type: string | null | undefined): string =>
 import { formatClientOfficeId, formatDate } from '../../../../utils/utils'
 import { AlertTriangle, Clock } from 'lucide-react'
 import { cn } from '../../../../utils/utils'
-import { TERMINAL_STATUSES, daysUntil } from '../../utils'
+import { TERMINAL_STATUSES, daysUntil } from '../../utils/annualReportsUtils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 
 interface SeasonReportsTableProps {

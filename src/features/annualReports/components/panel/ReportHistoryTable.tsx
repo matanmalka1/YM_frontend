@@ -7,9 +7,9 @@ import { RowActionItem, RowActionsMenu } from '@/components/ui/table'
 import { getStatusLabel, getStatusVariant } from '../../api'
 import { formatCurrencyILS as fmt, formatDate } from '../../../../utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
-import { sortReportsByTaxYearDesc } from './helpers'
+import { sortReportsByTaxYearDesc } from '../../utils/panelHelpers'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
-import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../../report.constants'
+import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../../constants/reportConstants'
 
 interface Props {
   clientId: number

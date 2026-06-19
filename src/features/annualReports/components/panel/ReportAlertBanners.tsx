@@ -2,7 +2,7 @@ import { AlertTriangle, CheckCircle, Info, XCircle, Send } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { cn } from '../../../../utils/utils'
 import type { AnnualReportFull } from '../../api'
-import { getAlertBanners, type AlertIcon, type AlertVariant } from './helpers'
+import { getAlertBanners, type AlertIcon, type AlertVariant } from '../../utils/panelHelpers'
 
 interface Props {
   report: AnnualReportFull

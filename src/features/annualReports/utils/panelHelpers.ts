@@ -1,7 +1,7 @@
-import type { AnnualReportFull, AnnualReportListItem, AdvancesSummary } from '../../api'
+import type { AnnualReportFull, AnnualReportListItem, AdvancesSummary } from '../api'
 import { formatClientOfficeId, formatCurrencyILS, formatDate } from '@/utils/utils'
-import { ALERT_WINDOW_DAYS, CLIENT_TYPE_LABELS } from './constants'
-import { parseAnnualReportCalendarDate } from '../shared/annualReports.constants'
+import { ALERT_WINDOW_DAYS, CLIENT_TYPE_LABELS } from '../constants/panelConstants'
+import { parseAnnualReportCalendarDate } from '../constants/sharedConstants'
 
 export type AlertVariant = 'error' | 'warning' | 'info' | 'success'
 export type AlertIcon = 'alert' | 'check' | 'info' | 'x'

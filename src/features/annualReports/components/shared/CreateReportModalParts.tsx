@@ -1,5 +1,5 @@
 import { Input, Select } from '@/components/ui/inputs'
-import { FLAG_FIELDS } from '../../utils'
+import { FLAG_FIELDS } from '../../utils/annualReportsUtils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { formatCurrencyILS } from '@/utils/utils'
 

@@ -1,6 +1,6 @@
 import type { AnnualReportFull } from '../../api'
 import { DefinitionList } from '../../../../components/ui/layout/DefinitionList'
-import { getClientTypeLabel } from './helpers'
+import { getClientTypeLabel } from '../../utils/panelHelpers'
 import { formatDate } from '@/utils/utils'
 
 interface ReportMetaGridProps {

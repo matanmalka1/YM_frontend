@@ -5,15 +5,15 @@ import { StatsCard } from '../../../../components/ui/layout/StatsCard'
 import { cn, formatCurrencyILS as fmt } from '../../../../utils/utils'
 import type { IncomeSourceType, VatAutoPopulateResponse } from '../../api'
 import { CATEGORY_LABELS as VAT_CATEGORY_LABELS } from '../../../vatReports'
-import { EXPENSE_LABELS } from '../../report.constants'
+import { EXPENSE_LABELS } from '../../constants/reportConstants'
 import { FinancialAddFormShell, FinancialAmountDescriptionFields, FinancialSelectField } from './FinancialLineFormParts'
 import {
   FIELD_PLACEHOLDERS,
   VAT_AUTO_POPULATE_ITEM_TYPE_LABELS,
   VAT_AUTO_POPULATE_SKIPPED_REASON_LABELS,
-} from './financialConstants'
-import { useIncomeLineForm } from './useFinancialLineForm'
-import type { IncomeFormPayload } from './financialHelpers'
+} from '../../constants/financialConstants'
+import { useIncomeLineForm } from '../../hooks/useFinancialLineForm'
+import type { IncomeFormPayload } from '../../utils/financialHelpers'
 
 export interface AddLineFormProps {
   typeOptions: Record<IncomeSourceType, string>

@@ -1,6 +1,6 @@
 import { StatsCard } from '../../../../components/ui/layout/StatsCard'
 import { formatCurrencyILS as fmt, formatPercent } from '@/utils/utils'
-import { SUMMARY_CARD_META } from './constants'
+import { SUMMARY_CARD_META } from '../../constants/panelConstants'
 import type { AnnualReportFull } from '../../api'
 
 interface Props {

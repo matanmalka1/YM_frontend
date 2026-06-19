@@ -1,6 +1,6 @@
 import type { BracketBreakdownItem } from '../../api'
 import { formatCurrencyILS as fmt } from '@/utils/utils'
-import { fmtRange, fmtRate } from './helpers'
+import { fmtRange, fmtRate } from '../../utils/taxHelpers'
 
 interface Props {
   brackets: BracketBreakdownItem[]

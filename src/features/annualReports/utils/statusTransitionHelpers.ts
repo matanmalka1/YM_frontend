@@ -1,7 +1,7 @@
-import { EMPTY_FORM } from '../../utils'
-import type { TransitionForm } from '../../types'
-import type { AnnualReportStatus, StatusTransitionPayload } from '../../api'
-import { AMEND_REASON_MIN_LENGTH } from './constants'
+import { EMPTY_FORM } from './annualReportsUtils'
+import type { TransitionForm } from '../types'
+import type { AnnualReportStatus, StatusTransitionPayload } from '../api'
+import { AMEND_REASON_MIN_LENGTH } from '../constants/statusTransitionConstants'
 
 export const getEmptyTransitionForm = (): TransitionForm => ({ ...EMPTY_FORM })
 

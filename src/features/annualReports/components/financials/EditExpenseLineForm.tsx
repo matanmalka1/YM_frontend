@@ -1,12 +1,12 @@
 import type { ExpenseLineResponse, ExpenseCategoryType } from '../../api'
-import { EXPENSE_LABELS } from '../../report.constants'
+import { EXPENSE_LABELS } from '../../constants/reportConstants'
 import {
   ExpenseSupplementaryFields,
   FinancialAmountDescriptionFields,
   FinancialEditFormShell,
   FinancialSelectField,
 } from './FinancialLineFormParts'
-import { useExpenseLineForm } from './useFinancialLineForm'
+import { useExpenseLineForm } from '../../hooks/useFinancialLineForm'
 
 interface EditExpenseLineFormProps {
   line: ExpenseLineResponse

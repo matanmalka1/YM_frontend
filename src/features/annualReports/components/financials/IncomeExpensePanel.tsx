@@ -6,13 +6,13 @@ import {
   FinancialSection,
   FinancialSummaryCards,
 } from './IncomeExpensePanelParts'
-import { LineRow, INCOME_LABELS, EXPENSE_LABELS } from '../../report.constants'
+import { LineRow, INCOME_LABELS, EXPENSE_LABELS } from '../../constants/reportConstants'
 import { AddExpenseLineForm } from './AddExpenseLineForm'
 import { useIncomeExpensePanel } from '../../hooks/useIncomeExpensePanel'
 import { EditIncomeLineForm } from './EditIncomeLineForm'
 import { EditExpenseLineForm } from './EditExpenseLineForm'
-import { FINANCIAL_MESSAGES } from './financialConstants'
-import { normalizeExpenseDescription } from './financialHelpers'
+import { FINANCIAL_MESSAGES } from '../../constants/financialConstants'
+import { normalizeExpenseDescription } from '../../utils/financialHelpers'
 
 interface IncomeExpensePanelProps {
   reportId: number

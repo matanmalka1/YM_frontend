@@ -1,6 +1,6 @@
 import { differenceInCalendarDays } from 'date-fns'
-import type { TransitionForm } from './types'
-import { parseAnnualReportCalendarDate } from './components/shared/annualReports.constants'
+import type { TransitionForm } from '../types'
+import { parseAnnualReportCalendarDate } from '../constants/sharedConstants'
 
 export const TERMINAL_STATUSES = new Set(['submitted', 'closed', 'canceled'])
 

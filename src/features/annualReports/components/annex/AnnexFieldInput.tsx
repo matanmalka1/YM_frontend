@@ -1,9 +1,9 @@
 import type { FieldErrors, UseFormRegister } from 'react-hook-form'
 import { Input } from '../../../../components/ui/inputs/Input'
-import type { FieldDef } from '../../annex.constants'
-import { FIELD_INPUT_CLASS } from './annex.constants'
-import { getInputType } from './annex.helpers'
-import type { AnnexFormValues } from './annexSchema'
+import type { FieldDef } from '../../constants/annexConstants'
+import { FIELD_INPUT_CLASS } from '../../constants/annexTextConstants'
+import { getInputType } from '../../utils/annexHelpers'
+import type { AnnexFormValues } from '../../constants/annexSchema'
 
 interface AnnexFieldInputProps {
   field: FieldDef

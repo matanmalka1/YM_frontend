@@ -9,7 +9,7 @@ import {
   INLINE_EDIT_FORM_CLASS,
   MONEY_INPUT_PROPS,
   PERCENTAGE_INPUT_PROPS,
-} from './financialConstants'
+} from '../../constants/financialConstants'
 
 interface AddLineTriggerButtonProps {
   label: string

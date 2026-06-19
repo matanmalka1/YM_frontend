@@ -5,8 +5,8 @@ import { annualReportsQK } from '../../api'
 import { DrawerSection } from '../../../../components/ui/overlays/DetailDrawer'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { formatCurrencyILS as fmt, formatPercent } from '@/utils/utils'
-import { FINANCIAL_MESSAGES } from './financialConstants'
-import { getProfitSummary, toProgressWidth } from './financialHelpers'
+import { FINANCIAL_MESSAGES } from '../../constants/financialConstants'
+import { getProfitSummary, toProgressWidth } from '../../utils/financialHelpers'
 import { MultiYearPLChart } from './MultiYearPLChart'
 
 interface Props {

@@ -2,9 +2,9 @@ import { useQueries, useQuery } from '@tanstack/react-query'
 import { Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { annualReportFinancialsApi, annualReportsApi, annualReportsQK, annualReportTaxApi } from '../../api'
 import { formatCurrencyILS as fmt } from '../../../../utils/utils'
-import { CHART_LINES, CHART_MARGIN, TREND_REPORT_LIMIT } from './financialConstants'
-import { buildTrendChartRows } from './financialHelpers'
-import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../../report.constants'
+import { CHART_LINES, CHART_MARGIN, TREND_REPORT_LIMIT } from '../../constants/financialConstants'
+import { buildTrendChartRows } from '../../utils/financialHelpers'
+import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../../constants/reportConstants'
 
 interface MultiYearPLChartProps {
   clientId: number
