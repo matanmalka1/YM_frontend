@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { cn } from '@/utils/utils'
+import { cn, formatCount } from '@/utils/utils'
 import type { VatDashboardPeriodStat } from '../../api/contracts'
 
 type StatTone = 'green' | 'amber' | 'red'
@@ -64,7 +64,7 @@ export const VatStatCard = ({ title, unit, icon: Icon, stat, href, className }: 
 
       <div className="flex items-baseline gap-1.5">
         <span className="font-bold tabular-nums text-4xl leading-none text-slate-900">
-          {stat.pending.toLocaleString('he-IL')}
+          {formatCount(stat.pending)}
         </span>
         <span className="text-xs font-medium text-slate-400">{unit}</span>
       </div>
@@ -85,7 +85,7 @@ export const VatStatCard = ({ title, unit, icon: Icon, stat, href, className }: 
 
       <div className="flex items-center justify-between text-[11px] font-medium text-slate-500">
         <span className="tabular-nums">
-          {stat.submitted.toLocaleString('he-IL')} / {stat.required.toLocaleString('he-IL')} הושלמו
+          {formatCount(stat.submitted)} / {formatCount(stat.required)} הושלמו
         </span>
         <span className={cn('font-bold tabular-nums', pctClass)}>{stat.completion_percent}%</span>
       </div>

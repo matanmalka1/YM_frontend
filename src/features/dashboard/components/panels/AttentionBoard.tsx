@@ -3,7 +3,6 @@ import {
   Briefcase,
   CheckCircle2,
   ClipboardList,
-  Edit2,
   ReceiptText,
   ShieldAlert,
   Table2,
@@ -11,7 +10,7 @@ import {
   Wallet,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { cn, formatDate } from '@/utils/utils'
+import { cn, formatCurrencyILS, formatDate } from '@/utils/utils'
 import type { AttentionBoardItem, AttentionUrgency } from '../../api/contracts'
 import { ATTENTION_BOARD_COPY } from '../../dashboardConstants'
 import { dueDateLabel } from '../../dashboard.utils'
@@ -59,12 +58,12 @@ interface SourceConfig {
 }
 
 const SOURCE_CONFIG: Record<string, SourceConfig> = {
-  vat:             { icon: ClipboardList, label: 'מע״מ' },
+  vat_work_item:   { icon: ClipboardList, label: 'מע״מ' },
   charge:          { icon: ReceiptText,   label: 'חיוב' },
   advance_payment: { icon: Wallet,        label: 'מקדמה' },
-  signature:       { icon: Edit2,         label: 'חתימה' },
   annual_report:   { icon: Table2,        label: 'דוח שנתי' },
   binder:          { icon: Briefcase,     label: 'קלסר' },
+  task:            { icon: ClipboardList, label: 'משימה' },
 }
 
 const DEFAULT_SOURCE: SourceConfig = { icon: TriangleAlert, label: 'כללי' }
@@ -113,7 +112,9 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
 
       <div className="flex shrink-0 flex-col items-end gap-0.5 text-end">
         {item.amount && (
-          <span className="text-sm font-bold tabular-nums text-primary-700">{item.amount}</span>
+          <span className="text-sm font-bold tabular-nums text-primary-700">
+            {formatCurrencyILS(item.amount, { maximumFractionDigits: 2 })}
+          </span>
         )}
         {item.due_date && (
           <span className="text-xs font-medium tabular-nums text-slate-500">{formatDate(item.due_date)}</span>
