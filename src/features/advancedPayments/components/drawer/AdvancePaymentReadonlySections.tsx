@@ -1,7 +1,7 @@
 import { DrawerSection, DrawerField } from '@/components/ui/overlays/DetailDrawer'
 import { formatShekelAmount, formatDate } from '@/utils/utils'
-import { formatAdvanceRate } from './advancePaymentDrawer.model'
-import type { AdvancePaymentDrawerModel } from './advancePaymentDrawer.model'
+import { formatAdvanceRate } from '../../utils/advancePaymentDrawerModel'
+import type { AdvancePaymentDrawerModel } from '../../utils/advancePaymentDrawerModel'
 
 interface AdvancePaymentReadonlySectionsProps {
   model: AdvancePaymentDrawerModel

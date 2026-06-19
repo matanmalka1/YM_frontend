@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { clientsApi, clientsQK } from '../../api'
-import type { ClientConflictInfo } from '../../api/contracts'
+import { clientsApi, clientsQK } from '../api'
+import type { ClientConflictInfo } from '../api/contracts'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 export const useIdNumberConflict = (

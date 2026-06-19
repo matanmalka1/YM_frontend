@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { documentsApi } from '../api'
 import type { PermanentDocumentResponse } from '../api'
 import { toast } from '../../../utils/toast'
-import { DOWNLOAD_ERROR_MESSAGE, PREVIEW_ERROR_MESSAGE } from './DocumentsDataCards.constants'
+import { DOWNLOAD_ERROR_MESSAGE, PREVIEW_ERROR_MESSAGE } from '../constants'
 
 export const useDocumentPreviewDownload = () => {
   const [downloadingId, setDownloadingId] = useState<number | null>(null)

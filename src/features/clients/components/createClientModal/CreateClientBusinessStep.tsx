@@ -2,7 +2,7 @@ import type { ControllerRenderProps, FieldErrors, UseFormRegister } from 'react-
 import { DatePicker } from '../../../../components/ui/inputs/DatePicker'
 import { Input } from '../../../../components/ui/inputs/Input'
 import type { CreateClientFormValues } from '../../schemas'
-import { stripNonDigits, stripNonPhone } from './createClientFormUtils'
+import { stripNonDigits, stripNonPhone } from '../../utils/createClientFormUtils'
 
 interface Props {
   businessOpenedAtField: ControllerRenderProps<CreateClientFormValues, 'business_opened_at'>

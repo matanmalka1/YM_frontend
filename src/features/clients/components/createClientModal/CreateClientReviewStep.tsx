@@ -3,7 +3,7 @@ import type { CreateClientFormValues } from '../../schemas'
 import { formatDate } from '@/utils/utils'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { getCreateClientEntityLabels } from '../../constants'
-import { buildCreateClientReviewModel } from './createClientFormUtils'
+import { buildCreateClientReviewModel } from '../../utils/createClientFormUtils'
 import { ImpactIcon } from './createClientImpactIcons'
 
 interface Props {

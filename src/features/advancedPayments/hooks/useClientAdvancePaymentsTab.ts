@@ -11,7 +11,7 @@ import type { AdvancePaymentRow, AdvancePaymentStatus, UpdateAdvancePaymentPaylo
 import { isAdvancePaymentStatus } from '../constants'
 import { useAdvancePayments } from './useAdvancePayments'
 import { useAdvanceRateInsights } from './useAdvanceRateInsights'
-import { toggleAdvancePaymentStatusFilter } from '../components/advancePaymentComponent.utils'
+import { toggleAdvancePaymentStatusFilter } from '../utils/advancePaymentComponentUtils'
 
 interface UseClientAdvancePaymentsTabArgs {
   clientRecordId: number

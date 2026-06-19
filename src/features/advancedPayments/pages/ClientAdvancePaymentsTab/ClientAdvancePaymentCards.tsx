@@ -5,7 +5,7 @@ import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { StateCard } from '@/components/ui/feedback'
 import type { AdvancePaymentRow } from '../../api/contracts'
 import { formatShekelAmount, formatDate, cn } from '@/utils/utils'
-import { getAdvancePaymentMonthLabel } from '../../components/advancePaymentComponent.utils'
+import { getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
 import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
 
 interface Props {

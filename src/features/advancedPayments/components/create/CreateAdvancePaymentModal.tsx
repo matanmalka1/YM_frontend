@@ -19,7 +19,7 @@ import {
   getValidBimonthlyMonth,
   toFrequency,
   toNumberOrNull,
-} from '../advancePaymentComponent.utils'
+} from '../../utils/advancePaymentComponentUtils'
 import { formatShekelAmount } from '@/utils/utils'
 
 interface CreateAdvancePaymentModalProps {

@@ -5,7 +5,7 @@ import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
 import { formatClientOfficeId, formatDate, formatPercent, formatShekelAmount } from '@/utils/utils'
 import type { AdvancePaymentOverviewRow } from '../../api/contracts'
 import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
-import { getAdvancePaymentMonthLabel } from '../advancePaymentComponent.utils'
+import { getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
 
 interface AdvancePaymentBatchTableRowProps {
   row: AdvancePaymentOverviewRow

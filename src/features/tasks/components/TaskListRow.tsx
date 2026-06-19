@@ -10,7 +10,7 @@ import {
   taskPriorityRailClasses,
   getTaskStatusBadgeVariant,
   taskStatusDotClass,
-} from './taskDisplay'
+} from '../utils/taskDisplay'
 import type { Task } from '../api/contracts'
 import type { WorkQueueSourceType } from '@/features/workQueue'
 

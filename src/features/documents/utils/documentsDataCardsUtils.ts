@@ -2,7 +2,7 @@ import { DOC_TYPE_LABELS } from '../constants'
 import type { PermanentDocumentResponse } from '../api'
 import type { BusinessResponse } from '@/features/clients'
 import type { FilterBadge } from '../../../components/ui/table/ActiveFilterBadges'
-import { GENERAL_CLIENT_DOCUMENT_LABEL } from './DocumentsDataCards.constants'
+import { GENERAL_CLIENT_DOCUMENT_LABEL } from '../constants'
 
 const getDocumentTypeLabel = (documentType: PermanentDocumentResponse['document_type'] | string) =>
   DOC_TYPE_LABELS[documentType] ?? documentType

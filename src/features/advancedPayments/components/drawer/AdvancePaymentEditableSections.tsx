@@ -6,7 +6,7 @@ import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { Button } from '@/components/ui/primitives/Button'
 import { ADVANCE_PAYMENT_STATUS_OPTIONS, ADVANCE_PAYMENT_METHOD_OPTIONS } from '../../constants'
 import { formatShekelAmount } from '@/utils/utils'
-import type { AdvancePaymentDrawerForm } from './useAdvancePaymentDrawerForm'
+import type { AdvancePaymentDrawerForm } from '../../hooks/useAdvancePaymentDrawerForm'
 
 interface AdvancePaymentEditableSectionsProps {
   form: AdvancePaymentDrawerForm

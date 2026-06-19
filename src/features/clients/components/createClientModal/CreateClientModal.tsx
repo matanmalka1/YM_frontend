@@ -10,9 +10,9 @@ import { createClientSchema, type CreateClientFormValues } from '../../schemas'
 import { CreateClientModalFooter } from './CreateClientModalFooter'
 import { CreateClientStepContent } from './CreateClientStepContent'
 import { CreateClientStepIndicator } from './CreateClientStepIndicator'
-import { buildCreateClientPayload } from './createClientFormUtils'
-import { CREATE_CLIENT_STEPS } from './createClientSteps'
-import { useIdNumberConflict } from './useIdNumberConflict'
+import { buildCreateClientPayload } from '../../utils/createClientFormUtils'
+import { CREATE_CLIENT_STEPS } from '../../utils/createClientSteps'
+import { useIdNumberConflict } from '../../hooks/useIdNumberConflict'
 
 interface Props {
   open: boolean

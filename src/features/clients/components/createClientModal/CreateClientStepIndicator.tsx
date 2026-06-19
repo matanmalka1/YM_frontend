@@ -1,4 +1,4 @@
-import { CREATE_CLIENT_STEPS } from './createClientSteps'
+import { CREATE_CLIENT_STEPS } from '../../utils/createClientSteps'
 
 interface Props {
   stepIndex: number

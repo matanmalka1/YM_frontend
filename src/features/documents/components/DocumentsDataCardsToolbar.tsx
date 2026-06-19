@@ -2,8 +2,8 @@ import { Search } from 'lucide-react'
 import { ActiveFilterBadges } from '../../../components/ui/table/ActiveFilterBadges'
 import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
-import { DOCUMENT_TYPE_OPTIONS, SEARCH_PLACEHOLDER, TAX_YEAR_OPTIONS } from './DocumentsDataCards.constants'
-import { getDocumentFilterBadges } from './DocumentsDataCards.utils'
+import { DOCUMENT_TYPE_OPTIONS, SEARCH_PLACEHOLDER, TAX_YEAR_OPTIONS } from '../constants'
+import { getDocumentFilterBadges } from '../utils/documentsDataCardsUtils'
 
 interface DocumentsDataCardsToolbarProps {
   search: string

@@ -1,12 +1,12 @@
-import type { CreateClientPayload, ISODateString } from '../../api'
-import type { ClientCreationImpactResponse } from '../../api/contracts'
+import type { CreateClientPayload, ISODateString } from '../api'
+import type { ClientCreationImpactResponse } from '../api/contracts'
 import {
   ADVANCE_PAYMENT_FREQUENCY_LABELS,
   ENTITY_TYPE_LABELS,
   VAT_TYPE_LABELS,
   deriveCreateClientIdNumberType,
-} from '../../constants'
-import type { CreateClientFormValues } from '../../schemas'
+} from '../constants'
+import type { CreateClientFormValues } from '../schemas'
 
 export const stripNonDigits = (e: React.FormEvent<HTMLInputElement>) => {
   const input = e.currentTarget

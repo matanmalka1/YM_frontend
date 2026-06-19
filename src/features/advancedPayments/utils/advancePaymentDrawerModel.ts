@@ -4,7 +4,7 @@ import type {
   AdvancePaymentRow,
   AdvancePaymentStatus,
   AdvancePaymentTimingStatus,
-} from '../../api/contracts'
+} from '../api/contracts'
 import { formatPercent } from '@/utils/utils'
 
 export type AdvancePaymentDrawerRow = AdvancePaymentRow | AdvancePaymentOverviewRow

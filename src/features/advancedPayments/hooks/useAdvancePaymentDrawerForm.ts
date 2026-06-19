@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import type { PrefillTurnoverResponse, UpdateAdvancePaymentPayload } from '../../api/contracts'
-import { advancePaymentsApi } from '../../api'
+import type { PrefillTurnoverResponse, UpdateAdvancePaymentPayload } from '../api/contracts'
+import { advancePaymentsApi } from '../api'
 import { toast } from '@/utils/toast'
 import { showErrorToast } from '@/utils/utils'
-import { calcAdvanceAmount, toEditableAmount, toStringOrNull } from '../advancePaymentComponent.utils'
-import type { AdvancePaymentDrawerModel } from './advancePaymentDrawer.model'
+import { calcAdvanceAmount, toEditableAmount, toStringOrNull } from '../utils/advancePaymentComponentUtils'
+import type { AdvancePaymentDrawerModel } from '../utils/advancePaymentDrawerModel'
 
 // `null` = idle (no prefill attempted yet); the rest mirror the API contract.
 type PrefillSource = PrefillTurnoverResponse['source'] | null

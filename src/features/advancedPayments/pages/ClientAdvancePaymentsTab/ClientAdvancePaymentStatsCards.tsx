@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
 import { advancePaymentsApi, advancedPaymentsQK } from '../../api'
 import { formatShekelAmount } from '@/utils/utils'
-import { getCollectionPercent } from '../../components/advancePaymentComponent.utils'
+import { getCollectionPercent } from '../../utils/advancePaymentComponentUtils'
 
 interface ClientAdvancePaymentStatsCardsProps {
   clientRecordId: number

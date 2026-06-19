@@ -5,7 +5,7 @@ import { Select } from '../../../components/ui/inputs/Select'
 import { Input } from '../../../components/ui/inputs/Input'
 import type { PermanentDocumentResponse, UpdateDocumentPayload } from '../api'
 import { documentEditSchema, type DocumentEditFormValues } from '../schemas'
-import { UPLOAD_DOCUMENT_TYPE_OPTIONS, UPLOAD_TAX_YEAR_OPTIONS } from './DocumentsDataCards.constants'
+import { UPLOAD_DOCUMENT_TYPE_OPTIONS, UPLOAD_TAX_YEAR_OPTIONS } from '../constants'
 
 export const EDIT_FORM_ID = 'documents-edit-form'
 

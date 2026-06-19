@@ -1,4 +1,4 @@
-import type { CreateClientFormValues } from '../../schemas'
+import type { CreateClientFormValues } from '../schemas'
 
 export const CREATE_CLIENT_STEPS = [
   { key: 'identity', label: 'זיהוי', fields: ['entity_type', 'full_name', 'id_number'] },

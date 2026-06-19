@@ -7,7 +7,7 @@ import { AdvancePaymentBatchTableRow } from './AdvancePaymentBatchTableRow'
 import {
   ADVANCE_PAYMENT_BATCH_COLUMN_COUNT,
   ADVANCE_PAYMENT_BATCH_TABLE_HEADERS,
-} from './advancePaymentBatchTable.constants'
+} from '../../constants'
 
 interface AdvancePaymentBatchContentProps {
   batch: AdvancePaymentDueDateGroup

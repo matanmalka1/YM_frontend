@@ -3,13 +3,13 @@ import { AlertTriangle } from 'lucide-react'
 import { DetailDrawer, DrawerField, DrawerSection } from '@/components/ui/overlays/DetailDrawer'
 import type { UpdateAdvancePaymentPayload } from '../../api/contracts'
 import { formatShekelAmount, formatDate } from '@/utils/utils'
-import { getAdvancePaymentMonthLabel } from '../advancePaymentComponent.utils'
+import { getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
 import {
   formatAdvanceRate,
   toAdvancePaymentDrawerModel,
   type AdvancePaymentDrawerRow,
-} from './advancePaymentDrawer.model'
-import { useAdvancePaymentDrawerForm } from './useAdvancePaymentDrawerForm'
+} from '../../utils/advancePaymentDrawerModel'
+import { useAdvancePaymentDrawerForm } from '../../hooks/useAdvancePaymentDrawerForm'
 import { AdvancePaymentDrawerFooter } from './AdvancePaymentDrawerFooter'
 import { AdvancePaymentEditableSections } from './AdvancePaymentEditableSections'
 import { AdvancePaymentReadonlySections } from './AdvancePaymentReadonlySections'

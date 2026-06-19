@@ -9,9 +9,9 @@ import { documentsUploadDefaultValues, documentsUploadSchema, type DocumentsUplo
 import { CLIENT_SCOPE_TYPES, DOCUMENT_FILE_ACCEPT } from '../constants'
 import { formatFileSize } from '../../../utils/utils'
 import { Button } from '../../../components/ui/primitives/Button'
-import { UPLOAD_DOCUMENT_TYPE_OPTIONS, UPLOAD_TAX_YEAR_OPTIONS } from './DocumentsDataCards.constants'
-import { getBusinessOptions } from './DocumentsDataCards.utils'
-import { validateDocumentFile } from './DocumentsUploadCard.helpers'
+import { UPLOAD_DOCUMENT_TYPE_OPTIONS, UPLOAD_TAX_YEAR_OPTIONS } from '../constants'
+import { getBusinessOptions } from '../utils/documentsDataCardsUtils'
+import { validateDocumentFile } from '../utils/documentsUploadCardHelpers'
 
 export type DocumentUploadSubmitPayload = {
   document_type: UploadDocumentPayload['document_type']

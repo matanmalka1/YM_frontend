@@ -13,7 +13,7 @@ import { formatDate } from '@/utils/utils'
 import { CREATE_CLIENT_ENTITY_OPTIONS, getCreateClientEntityLabels } from '../../constants'
 import type { ActiveClientSummary, DeletedClientSummary } from '../../api/contracts'
 import type { CreateClientFormValues } from '../../schemas'
-import { stripNonDigits } from './createClientFormUtils'
+import { stripNonDigits } from '../../utils/createClientFormUtils'
 import { CLIENT_ROUTES } from '../../api/endpoints'
 
 interface Props {

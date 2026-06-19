@@ -11,9 +11,9 @@ import type { OperationalSignalsResponse, PermanentDocumentResponse, UpdateDocum
 import { DocumentEditCard, EDIT_FORM_ID } from './DocumentEditCard'
 import { useAuthStore } from '../../../store/auth.store'
 import type { BusinessResponse } from '@/features/clients'
-import { UPLOAD_FORM_ID } from './DocumentsDataCards.constants'
-import { filterDocuments, getCountLabel } from './DocumentsDataCards.utils'
-import { useDocumentCardActions } from './useDocumentCardActions'
+import { UPLOAD_FORM_ID } from '../constants'
+import { filterDocuments, getCountLabel } from '../utils/documentsDataCardsUtils'
+import { useDocumentCardActions } from '../hooks/useDocumentCardActions'
 import { DocumentsDataCardsToolbar } from './DocumentsDataCardsToolbar'
 import { StateCard } from '../../../components/ui/feedback/StateCard'
 

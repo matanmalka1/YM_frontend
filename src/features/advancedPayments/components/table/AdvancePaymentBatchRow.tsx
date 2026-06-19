@@ -1,7 +1,7 @@
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
 import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
-import { getIncludedPeriodLabel } from '../advancePaymentComponent.utils'
+import { getIncludedPeriodLabel } from '../../utils/advancePaymentComponentUtils'
 import { AdvancePaymentBatchContent } from './AdvancePaymentBatchContent'
 
 interface AdvancePaymentBatchRowProps {

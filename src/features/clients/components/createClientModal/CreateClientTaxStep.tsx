@@ -5,7 +5,7 @@ import { ADVANCE_PAYMENT_FREQUENCY_OPTIONS, CREATE_CLIENT_VAT_OPTIONS } from '..
 import type { ClientCreationImpactResponse } from '../../api/contracts'
 import type { CreateClientFormValues } from '../../schemas'
 import { formatShekelAmount } from '@/utils/utils'
-import { stripNonDecimal } from './createClientFormUtils'
+import { stripNonDecimal } from '../../utils/createClientFormUtils'
 
 interface Props {
   advisorOptions: Array<{ value: string; label: string }>
