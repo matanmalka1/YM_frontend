@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -29,12 +29,6 @@ export const useAnnexDataPanel = (reportId: number, schedule: AnnualReportSchedu
     resolver: zodResolver(schema),
     defaultValues: emptyDefaults,
   })
-
-  useEffect(() => {
-    reset(emptyDefaults)
-    setShowForm(false)
-    setEditingLineId(null)
-  }, [emptyDefaults, reset])
 
   const queryKey = annualReportsQK.annex(reportId, schedule)
   const { data: annexData, isLoading: annexIsLoading } = useQuery({
