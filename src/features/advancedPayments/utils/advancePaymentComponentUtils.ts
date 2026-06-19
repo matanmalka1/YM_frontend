@@ -30,8 +30,7 @@ export const getAdvancePaymentMonthOptions = (periodMonthsCount: 1 | 2) =>
       }))
     : MONTH_OPTIONS
 
-export const getValidBimonthlyMonth = (month: number) =>
-  BIMONTHLY_START_MONTH_VALUES.has(String(month)) ? month : 1
+export const getValidBimonthlyMonth = (month: number) => (BIMONTHLY_START_MONTH_VALUES.has(String(month)) ? month : 1)
 
 export const toNumberOrNull = (value: string) => (value === '' ? null : Number(value))
 

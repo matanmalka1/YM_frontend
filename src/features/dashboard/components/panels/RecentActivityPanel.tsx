@@ -1,11 +1,4 @@
-import {
-  CheckCircle2,
-  Edit2,
-  FileText,
-  ReceiptText,
-  Table2,
-  UserPlus,
-} from 'lucide-react'
+import { CheckCircle2, Edit2, FileText, ReceiptText, Table2, UserPlus } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from '@/utils/utils'

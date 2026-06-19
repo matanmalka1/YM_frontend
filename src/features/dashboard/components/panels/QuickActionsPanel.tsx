@@ -29,7 +29,12 @@ const QuickActionItem = ({
 
   if (action.modal) {
     return (
-      <button type="button" onClick={() => onOpenModal(action.modal!)} className={cn(TILE_CLASS)} title={action.description}>
+      <button
+        type="button"
+        onClick={() => onOpenModal(action.modal!)}
+        className={cn(TILE_CLASS)}
+        title={action.description}
+      >
         {inner}
       </button>
     )

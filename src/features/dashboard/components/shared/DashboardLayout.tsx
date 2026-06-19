@@ -6,10 +6,26 @@ type Tone = 'neutral' | 'blue' | 'green' | 'amber' | 'red' | 'purple'
 
 const toneClasses: Record<Tone, { icon: string; badge: string; border: string }> = {
   neutral: { icon: 'bg-slate-100 text-slate-500', badge: 'bg-slate-100 text-slate-600', border: 'border-slate-200' },
-  blue: { icon: 'bg-primary-50 text-primary-600', badge: 'bg-primary-50 text-primary-700', border: 'border-primary-100' },
-  green: { icon: 'bg-positive-50 text-positive-600', badge: 'bg-positive-50 text-positive-700', border: 'border-positive-100' },
-  amber: { icon: 'bg-warning-50 text-warning-600', badge: 'bg-warning-50 text-warning-700', border: 'border-warning-100' },
-  red: { icon: 'bg-negative-50 text-negative-500', badge: 'bg-negative-50 text-negative-600', border: 'border-negative-100' },
+  blue: {
+    icon: 'bg-primary-50 text-primary-600',
+    badge: 'bg-primary-50 text-primary-700',
+    border: 'border-primary-100',
+  },
+  green: {
+    icon: 'bg-positive-50 text-positive-600',
+    badge: 'bg-positive-50 text-positive-700',
+    border: 'border-positive-100',
+  },
+  amber: {
+    icon: 'bg-warning-50 text-warning-600',
+    badge: 'bg-warning-50 text-warning-700',
+    border: 'border-warning-100',
+  },
+  red: {
+    icon: 'bg-negative-50 text-negative-500',
+    badge: 'bg-negative-50 text-negative-600',
+    border: 'border-negative-100',
+  },
   purple: { icon: 'bg-violet-50 text-violet-500', badge: 'bg-violet-50 text-violet-600', border: 'border-violet-100' },
 }
 

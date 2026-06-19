@@ -25,31 +25,31 @@ interface UrgencyConfig {
 }
 
 const URGENCY_CONFIG: Record<AttentionUrgency, UrgencyConfig> = {
-  overdue:     { tone: 'neg',  label: 'באיחור', dot: 'bg-negative-500' },
-  approaching: { tone: 'warn', label: 'מתקרב',  dot: 'bg-warning-400' },
-  important:   { tone: 'info', label: 'חשוב',   dot: 'bg-primary-500' },
-  upcoming:    { tone: 'mut',  label: 'קרוב',   dot: 'bg-slate-300' },
+  overdue: { tone: 'neg', label: 'באיחור', dot: 'bg-negative-500' },
+  approaching: { tone: 'warn', label: 'מתקרב', dot: 'bg-warning-400' },
+  important: { tone: 'info', label: 'חשוב', dot: 'bg-primary-500' },
+  upcoming: { tone: 'mut', label: 'קרוב', dot: 'bg-slate-300' },
 }
 
 const TONE_ICON_CLASSES: Record<AttentionTone, string> = {
-  neg:  'bg-negative-50 text-negative-500',
+  neg: 'bg-negative-50 text-negative-500',
   warn: 'bg-warning-50 text-warning-600',
   info: 'bg-primary-50 text-primary-600',
-  mut:  'bg-slate-100 text-slate-500',
+  mut: 'bg-slate-100 text-slate-500',
 }
 
 const TONE_BADGE_CLASSES: Record<AttentionTone, string> = {
-  neg:  'bg-negative-50 text-negative-700',
+  neg: 'bg-negative-50 text-negative-700',
   warn: 'bg-warning-50 text-warning-700',
   info: 'bg-primary-50 text-primary-700',
-  mut:  'bg-slate-100 text-slate-600',
+  mut: 'bg-slate-100 text-slate-600',
 }
 
 const TONE_DELTA_CLASSES: Record<AttentionTone, string> = {
-  neg:  'text-negative-600',
+  neg: 'text-negative-600',
   warn: 'text-warning-600',
   info: 'text-primary-600',
-  mut:  'text-slate-500',
+  mut: 'text-slate-500',
 }
 
 interface SourceConfig {
@@ -58,12 +58,12 @@ interface SourceConfig {
 }
 
 const SOURCE_CONFIG: Record<string, SourceConfig> = {
-  vat_work_item:   { icon: ClipboardList, label: 'מע״מ' },
-  charge:          { icon: ReceiptText,   label: 'חיוב' },
-  advance_payment: { icon: Wallet,        label: 'מקדמה' },
-  annual_report:   { icon: Table2,        label: 'דוח שנתי' },
-  binder:          { icon: Briefcase,     label: 'קלסר' },
-  task:            { icon: ClipboardList, label: 'משימה' },
+  vat_work_item: { icon: ClipboardList, label: 'מע״מ' },
+  charge: { icon: ReceiptText, label: 'חיוב' },
+  advance_payment: { icon: Wallet, label: 'מקדמה' },
+  annual_report: { icon: Table2, label: 'דוח שנתי' },
+  binder: { icon: Briefcase, label: 'קלסר' },
+  task: { icon: ClipboardList, label: 'משימה' },
 }
 
 const DEFAULT_SOURCE: SourceConfig = { icon: TriangleAlert, label: 'כללי' }
@@ -81,10 +81,7 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
   const toneDelta = TONE_DELTA_CLASSES[urgency.tone]
 
   return (
-    <Link
-      to={item.href}
-      className="flex items-center gap-3 rounded-2xl px-3 py-3 transition-colors hover:bg-slate-50"
-    >
+    <Link to={item.href} className="flex items-center gap-3 rounded-2xl px-3 py-3 transition-colors hover:bg-slate-50">
       <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-xl', toneIcon)}>
         <SourceIcon className="h-4 w-4" />
       </span>
@@ -92,13 +89,20 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <span className="truncate text-sm font-semibold text-slate-900">{item.title}</span>
-          <span className={cn('inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold', toneBadge)}>
+          <span
+            className={cn(
+              'inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold',
+              toneBadge,
+            )}
+          >
             <span className={cn('h-1.5 w-1.5 rounded-full', urgency.dot)} />
             {urgency.label}
           </span>
         </div>
         <div className="mt-0.5 flex items-center gap-1.5 text-xs text-slate-400">
-          {item.client_name && <span className="font-medium text-slate-500 truncate max-w-[120px]">{item.client_name}</span>}
+          {item.client_name && (
+            <span className="font-medium text-slate-500 truncate max-w-[120px]">{item.client_name}</span>
+          )}
           {item.client_name && <span>·</span>}
           <span>{source.label}</span>
           {item.reason && (
@@ -119,9 +123,7 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
         {item.due_date && (
           <span className="text-xs font-medium tabular-nums text-slate-500">{formatDate(item.due_date)}</span>
         )}
-        <span className={cn('text-[11px] font-semibold tabular-nums', toneDelta)}>
-          {dueDateLabel(item.days_delta)}
-        </span>
+        <span className={cn('text-[11px] font-semibold tabular-nums', toneDelta)}>{dueDateLabel(item.days_delta)}</span>
       </div>
     </Link>
   )

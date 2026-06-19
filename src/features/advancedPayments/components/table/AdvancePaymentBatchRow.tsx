@@ -15,7 +15,6 @@ interface AdvancePaymentBatchRowProps {
   onNavigateToClient: (clientRecordId: number) => void
 }
 
-
 const getBatchSummary = (batch: AdvancePaymentDueDateGroup): PeriodSummaryMetric[] => {
   const summary: PeriodSummaryMetric[] = [
     { label: 'לקוחות', value: batch.client_count },

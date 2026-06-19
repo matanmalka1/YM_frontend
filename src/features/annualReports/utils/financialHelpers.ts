@@ -1,5 +1,10 @@
 import type { ExpenseCategoryType, FinancialSummaryResponse, IncomeSourceType, TaxCalculationResult } from '../api'
-import { DEFAULT_RECOGNITION_RATE, FINANCIAL_MESSAGES, MAX_PERCENTAGE, MIN_PERCENTAGE } from '../constants/financialConstants'
+import {
+  DEFAULT_RECOGNITION_RATE,
+  FINANCIAL_MESSAGES,
+  MAX_PERCENTAGE,
+  MIN_PERCENTAGE,
+} from '../constants/financialConstants'
 import { EXPENSE_LABELS, INCOME_LABELS } from '../constants/reportConstants'
 
 const VAT_EXPENSE_DESC_RE = /^הוצאות ([a-z_]+) — יובא ממע"מ$/

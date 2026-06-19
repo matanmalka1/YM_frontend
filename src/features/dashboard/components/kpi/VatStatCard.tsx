@@ -5,10 +5,7 @@ import type { VatDashboardPeriodStat } from '../../api/contracts'
 
 type StatTone = 'green' | 'amber' | 'red'
 
-const toneClasses: Record<
-  StatTone,
-  { icon: string; chip: string; bar: string; pct: string }
-> = {
+const toneClasses: Record<StatTone, { icon: string; chip: string; bar: string; pct: string }> = {
   green: {
     icon: 'bg-positive-50 text-positive-600',
     chip: 'bg-positive-50 text-positive-700',
@@ -63,9 +60,7 @@ export const VatStatCard = ({ title, unit, icon: Icon, stat, href, className }: 
       </div>
 
       <div className="flex items-baseline gap-1.5">
-        <span className="font-bold tabular-nums text-4xl leading-none text-slate-900">
-          {formatCount(stat.pending)}
-        </span>
+        <span className="font-bold tabular-nums text-4xl leading-none text-slate-900">{formatCount(stat.pending)}</span>
         <span className="text-xs font-medium text-slate-400">{unit}</span>
       </div>
 

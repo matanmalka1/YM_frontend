@@ -1,6 +1,10 @@
 import { formatCurrencyILS as fmt, formatPercent } from '@/utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
-import { CREDIT_POINT_VALUE_BY_YEAR, DEFAULT_CREDIT_POINT_VALUE, PENSION_DEDUCTION_RATE } from '../constants/taxConstants'
+import {
+  CREDIT_POINT_VALUE_BY_YEAR,
+  DEFAULT_CREDIT_POINT_VALUE,
+  PENSION_DEDUCTION_RATE,
+} from '../constants/taxConstants'
 import type { AnnualReportFull } from '../api'
 
 export interface CreditRow {

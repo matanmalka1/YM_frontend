@@ -126,4 +126,3 @@ export const ClientAdvancePaymentCards: React.FC<Props> = ({ rows, isLoading, on
     </div>
   )
 }
-

@@ -4,10 +4,7 @@ import { getTotalPages } from '@/utils/paginationUtils'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
 import { ADVANCE_PAYMENT_BATCH_PAGE_SIZE, useAdvancePaymentBatchRows } from '../../hooks/useAdvancePaymentBatchRows'
 import { AdvancePaymentBatchTableRow } from './AdvancePaymentBatchTableRow'
-import {
-  ADVANCE_PAYMENT_BATCH_COLUMN_COUNT,
-  ADVANCE_PAYMENT_BATCH_TABLE_HEADERS,
-} from '../../constants'
+import { ADVANCE_PAYMENT_BATCH_COLUMN_COUNT, ADVANCE_PAYMENT_BATCH_TABLE_HEADERS } from '../../constants'
 
 interface AdvancePaymentBatchContentProps {
   batch: AdvancePaymentDueDateGroup

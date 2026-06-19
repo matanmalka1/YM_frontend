@@ -91,7 +91,11 @@ const AuthenticatedLayout: React.FC = () => {
   const toggleDesktopSidebar = useCallback(() => {
     setDesktopSidebarOpen((open) => {
       const next = !open
-      try { localStorage.setItem('sidebar-open', String(next)) } catch { /* ignore */ }
+      try {
+        localStorage.setItem('sidebar-open', String(next))
+      } catch {
+        /* ignore */
+      }
       return next
     })
   }, [])

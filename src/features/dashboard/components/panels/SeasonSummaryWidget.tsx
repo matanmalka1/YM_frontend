@@ -89,7 +89,10 @@ const CompactSeasonSummary = ({
   ]
 
   return (
-    <Link to="/tax/reports" className="block rounded-3xl border border-slate-100 bg-white p-5 shadow-elevation-1 transition-all hover:shadow-elevation-2">
+    <Link
+      to="/tax/reports"
+      className="block rounded-3xl border border-slate-100 bg-white p-5 shadow-elevation-1 transition-all hover:shadow-elevation-2"
+    >
       <div className="mb-3">
         <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">דוחות שנתיים</span>
         <p className="mt-0.5 text-xs text-slate-500 tabular-nums">
@@ -102,10 +105,7 @@ const CompactSeasonSummary = ({
         <ul className="flex flex-1 flex-col gap-2">
           {legend.map((item) => (
             <li key={item.label} className="flex items-center gap-2">
-              <span
-                className="h-2 w-2 shrink-0 rounded-[3px]"
-                style={{ background: item.color }}
-              />
+              <span className="h-2 w-2 shrink-0 rounded-[3px]" style={{ background: item.color }} />
               <span className="flex-1 text-xs font-medium text-slate-500">{item.label}</span>
               <span className="text-xs font-bold tabular-nums text-slate-800">
                 {item.value.toLocaleString('he-IL')}

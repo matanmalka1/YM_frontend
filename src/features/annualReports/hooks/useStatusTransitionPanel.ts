@@ -4,11 +4,7 @@ import { showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { annualReportsApi, annualReportsQK, getAllowedTransitions } from '../api'
 import type { StatusTransitionPanelProps, TransitionForm } from '../types'
-import {
-  buildTransitionPayload,
-  getEmptyTransitionForm,
-  isValidAmendReason,
-} from '../utils/statusTransitionHelpers'
+import { buildTransitionPayload, getEmptyTransitionForm, isValidAmendReason } from '../utils/statusTransitionHelpers'
 
 export const useStatusTransitionPanel = (
   report: StatusTransitionPanelProps['report'],

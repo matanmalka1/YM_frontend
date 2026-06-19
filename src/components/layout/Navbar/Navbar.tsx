@@ -46,7 +46,12 @@ interface NavbarProps {
   onToggleSidebar: () => void
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenClientSidebar, clientSidebarTriggerRef, sidebarOpen, onToggleSidebar }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  onOpenClientSidebar,
+  clientSidebarTriggerRef,
+  sidebarOpen,
+  onToggleSidebar,
+}) => {
   const [moreOpen, setMoreOpen] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [hiddenCount, setHiddenCount] = useState(0)
@@ -77,7 +82,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenClientSidebar, clientSideb
       for (let i = 0; i < visibleNavItems.length; i++) {
         const itemWidth = (cachedWidths.current[i] ?? 80) + 4 // gap-1
         const reserveMore = alwaysShowMore || i < visibleNavItems.length - 1 ? 88 : 0
-        if (usedWidth + itemWidth + reserveMore > nav.clientWidth) { firstHidden = i; break }
+        if (usedWidth + itemWidth + reserveMore > nav.clientWidth) {
+          firstHidden = i
+          break
+        }
         usedWidth += itemWidth
       }
       setHiddenCount(visibleNavItems.length - firstHidden)
@@ -89,11 +97,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenClientSidebar, clientSideb
   }, [visibleNavItems.length, alwaysShowMore])
 
   const overflowItems = hiddenCount > 0 ? visibleNavItems.slice(visibleNavItems.length - hiddenCount) : []
-  const overflowGroup: MoreNavGroup | null =
-    overflowItems.length > 0 ? { label: 'ניווט', items: overflowItems } : null
-  const moreGroups: MoreNavGroup[] = overflowGroup
-    ? [overflowGroup, ...staticMoreGroups]
-    : staticMoreGroups
+  const overflowGroup: MoreNavGroup | null = overflowItems.length > 0 ? { label: 'ניווט', items: overflowItems } : null
+  const moreGroups: MoreNavGroup[] = overflowGroup ? [overflowGroup, ...staticMoreGroups] : staticMoreGroups
 
   const hasActiveMoreItem = moreGroups.some((group) =>
     group.items.some((item) => isRouteActive(location.pathname, item)),
@@ -169,16 +174,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenClientSidebar, clientSideb
       className="z-10 flex h-16 shrink-0 items-center gap-3 border-b border-gray-200/80 bg-white px-3 md:px-4"
     >
       <div className="flex min-w-0 flex-1 items-center">
-        <nav
-          ref={navRef}
-          className="min-w-0 flex-1 overflow-hidden"
-          aria-label="ניווט ראשי"
-        >
+        <nav ref={navRef} className="min-w-0 flex-1 overflow-hidden" aria-label="ניווט ראשי">
           <ul className="flex items-center gap-1 rounded-xl bg-gray-50 p-1">
             {visibleNavItems.map((item, index) => {
               const hidden = hiddenCount > 0 && index >= visibleNavItems.length - hiddenCount
               return (
-                <li key={item.to} ref={(el) => { itemRefs.current[index] = el }} className={hidden ? 'priority-nav-hidden hidden' : undefined}>
+                <li
+                  key={item.to}
+                  ref={(el) => {
+                    itemRefs.current[index] = el
+                  }}
+                  className={hidden ? 'priority-nav-hidden hidden' : undefined}
+                >
                   <NavLink
                     to={item.to}
                     end={item.end}

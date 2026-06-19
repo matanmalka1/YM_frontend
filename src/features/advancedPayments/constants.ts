@@ -5,11 +5,7 @@ import {
   getOperationalYearOptions,
   MONTHS_COVERED_OPTIONS,
 } from '@/constants/periodOptions.constants'
-import {
-  ALL_STATUSES_OPTION,
-  ALL_TYPES_OPTION,
-  ALL_YEARS_URL_OPTION,
-} from '@/constants/filterOptions.constants'
+import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION, ALL_YEARS_URL_OPTION } from '@/constants/filterOptions.constants'
 import type { AdvancePaymentMethod, AdvancePaymentStatus } from './api/contracts'
 
 const ADVANCE_PAYMENT_STATUS_VALUES = ['pending', 'paid', 'partial'] as const satisfies readonly AdvancePaymentStatus[]

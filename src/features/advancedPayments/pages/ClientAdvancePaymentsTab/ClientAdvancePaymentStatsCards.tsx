@@ -10,7 +10,10 @@ interface ClientAdvancePaymentStatsCardsProps {
   year: number
 }
 
-export const ClientAdvancePaymentStatsCards: React.FC<ClientAdvancePaymentStatsCardsProps> = ({ clientRecordId, year }) => {
+export const ClientAdvancePaymentStatsCards: React.FC<ClientAdvancePaymentStatsCardsProps> = ({
+  clientRecordId,
+  year,
+}) => {
   const { data, isLoading } = useQuery({
     queryKey: advancedPaymentsQK.kpi(clientRecordId, year),
     queryFn: () => advancePaymentsApi.getAnnualKPIs(clientRecordId, year),
