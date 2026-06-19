@@ -4,7 +4,8 @@ import { Select } from '../../../components/ui/inputs/Select'
 import { Button } from '../../../components/ui/primitives/Button'
 import { ClientPickerField, useClientPickerState } from '@/components/shared/client'
 import { CLIENT_STATUS_OPTIONS, ENTITY_TYPE_OPTIONS } from '@/features/clients'
-import { BINDER_LOCATION_STATUS_OPTIONS } from '../../binders'
+import { DOCUMENT_FILENAME_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
+import { BINDER_CAPACITY_STATUS_OPTIONS, BINDER_LOCATION_STATUS_OPTIONS } from '../../binders'
 import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFiltersBarProps } from '../types'
 
 const withEmptyOption = (label: string, options: { value: string; label: string }[]) => [
@@ -86,6 +87,19 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
               value={filters.binder_location_status}
               onChange={(e) => onFilterChange('binder_location_status', e.target.value)}
               options={withEmptyOption('כל הסטטוסים', BINDER_LOCATION_STATUS_OPTIONS)}
+            />
+            <Select
+              label="קיבולת קלסר"
+              value={filters.binder_capacity_status}
+              onChange={(e) => onFilterChange('binder_capacity_status', e.target.value)}
+              options={BINDER_CAPACITY_STATUS_OPTIONS}
+            />
+            <Input
+              label="שם קובץ"
+              type="text"
+              value={filters.filename}
+              onChange={(e) => onFilterChange('filename', e.target.value)}
+              placeholder={DOCUMENT_FILENAME_SEARCH_PLACEHOLDER}
             />
           </div>
 

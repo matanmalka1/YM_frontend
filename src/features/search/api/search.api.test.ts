@@ -34,4 +34,11 @@ describe('searchApi', () => {
     expect(params.get('client_record_id')).toBe('42')
     expect(params.has('client_name')).toBe(false)
   })
+
+  it('sends binder capacity status filter', async () => {
+    await searchApi.search({ binder_capacity_status: 'full', page: 1, page_size: 20 })
+
+    const params = mockedGet.mock.calls[0]?.[1]?.params as URLSearchParams
+    expect(params.get('binder_capacity_status')).toBe('full')
+  })
 })

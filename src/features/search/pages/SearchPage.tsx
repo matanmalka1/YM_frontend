@@ -10,13 +10,12 @@ import { Alert } from '@/components/ui/overlays/Alert'
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { GLOBAL_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
-import {
-  DocumentResultsSection,
-  searchColumns,
-  SearchFiltersBar,
-  useSearchPage,
-  type SearchResult,
-} from '@/features/search'
+import { DocumentResultsSection } from '../components/DocumentResultsSection'
+import { searchColumns } from '../components/SearchColumns'
+import { SearchFiltersBar } from '../components/SearchFiltersBar'
+import { useSearchPage } from '../hooks/useSearchPage'
+import { SEARCH_ADVANCED_FILTER_KEYS } from '../types'
+import type { SearchResult } from '../api'
 
 const PAGE_SIZE = 20
 
@@ -26,7 +25,7 @@ export const Search: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [queryDraft, setQueryDraft] = useSearchDebounce(filters.search, (v) => handleFilterChange('search', v))
 
-  const hasAdvancedFilter = Boolean(filters.client_record_id || filters.id_number || filters.binder_number)
+  const hasAdvancedFilter = SEARCH_ADVANCED_FILTER_KEYS.some((key) => Boolean(filters[key]))
   const [filtersOpen, setFiltersOpen] = useState(hasAdvancedFilter)
 
   const totalPages = Math.max(1, Math.ceil(Math.max(total, 1) / PAGE_SIZE))

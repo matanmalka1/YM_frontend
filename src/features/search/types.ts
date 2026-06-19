@@ -6,6 +6,7 @@ export interface SearchFilters {
   client_status: string
   entity_type: string
   binder_location_status: string
+  binder_capacity_status: string
   filename: string
   page: number
   page_size: number
@@ -26,5 +27,6 @@ export const SEARCH_ADVANCED_FILTER_KEYS: (keyof SearchFilters)[] = [
   'client_status',
   'entity_type',
   'binder_location_status',
+  'binder_capacity_status',
   'filename',
 ]

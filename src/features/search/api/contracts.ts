@@ -37,6 +37,7 @@ export interface SearchParams {
   client_status?: string
   entity_type?: string
   binder_location_status?: string
+  binder_capacity_status?: string
   filename?: string
   page?: number
   page_size?: number
