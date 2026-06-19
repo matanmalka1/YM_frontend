@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, type KeyboardEvent, type RefObject } from 'react'
-import { ChevronDown, Search, Users } from 'lucide-react'
+import { ChevronDown, PanelRight, Search, Users } from 'lucide-react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { NotificationBell } from '../NotificationBell'
 import { useAuthStore } from '@/store/auth.store'
@@ -42,9 +42,11 @@ const isRouteActive = (pathname: string, item: Pick<NavItem, 'to' | 'end'>) =>
 interface NavbarProps {
   onOpenClientSidebar: () => void
   clientSidebarTriggerRef: RefObject<HTMLButtonElement | null>
+  sidebarOpen: boolean
+  onToggleSidebar: () => void
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenClientSidebar, clientSidebarTriggerRef }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenClientSidebar, clientSidebarTriggerRef, sidebarOpen, onToggleSidebar }) => {
   const [moreOpen, setMoreOpen] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [hiddenCount, setHiddenCount] = useState(0)
@@ -293,6 +295,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenClientSidebar, clientSideb
           aria-label="רשימת לקוחות"
         >
           <Users className="h-[18px] w-[18px]" />
+        </button>
+        <button
+          type="button"
+          onClick={onToggleSidebar}
+          className={cn(
+            'focus-ring hidden h-10 w-10 items-center justify-center rounded-xl border transition md:inline-flex',
+            sidebarOpen
+              ? 'border-gray-200 bg-white text-gray-500 shadow-sm hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900'
+              : 'border-primary-200 bg-primary-50 text-primary-600 shadow-sm hover:border-primary-300 hover:bg-primary-100',
+          )}
+          aria-label={sidebarOpen ? 'סגירת רשימת לקוחות' : 'פתיחת רשימת לקוחות'}
+          aria-pressed={sidebarOpen}
+        >
+          <PanelRight className="h-[18px] w-[18px]" />
         </button>
         <form onSubmit={handleSearchSubmit} role="search" className="hidden md:block">
           <div className="relative">

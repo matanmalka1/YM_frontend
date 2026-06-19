@@ -59,9 +59,10 @@ interface ClientSidebarProps {
   mobileOpen: boolean
   onMobileClose: () => void
   mobileTriggerRef: RefObject<HTMLButtonElement | null>
+  desktopOpen: boolean
 }
 
-export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobileClose, mobileTriggerRef }) => {
+export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobileClose, mobileTriggerRef, desktopOpen }) => {
   const [searchValue, setSearchValue] = useState('')
   const [debouncedSearch] = useDebounce(searchValue, 350)
   const [groupMode, setGroupMode] = useState<GroupMode>('entity')
@@ -133,6 +134,13 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobi
         aria-label="סגירת רשימת לקוחות"
         tabIndex={mobileOpen ? 0 : -1}
       />
+      <div
+        className={cn(
+          'hidden shrink-0 overflow-hidden transition-[width] duration-300 md:block',
+          desktopOpen ? 'md:w-[300px] 2xl:w-[320px]' : 'md:w-0',
+        )}
+        aria-hidden={!desktopOpen}
+      >
       <aside
         ref={sidebarRef}
         dir="rtl"
@@ -140,6 +148,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobi
           'fixed bottom-0 right-0 top-16 z-50 flex w-[min(320px,calc(100vw-2rem))] shrink-0 flex-col border-l border-gray-200/80 bg-white text-gray-900 shadow-2xl transition-transform duration-300',
           mobileOpen ? 'visible translate-x-0' : 'invisible pointer-events-none translate-x-full',
           'md:visible md:static md:z-auto md:h-full md:w-[300px] md:translate-x-0 md:pointer-events-auto md:shadow-none 2xl:w-[320px]',
+          !desktopOpen && 'md:invisible md:pointer-events-none',
         )}
         role={mobileOpen ? 'dialog' : undefined}
         aria-modal={mobileOpen ? 'true' : undefined}
@@ -326,6 +335,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobi
           </div>
         </div>
       </aside>
+      </div>
     </>
   )
 }

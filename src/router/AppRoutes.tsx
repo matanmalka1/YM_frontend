@@ -76,10 +76,25 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ requiredRole }) => {
 
 const AuthenticatedLayout: React.FC = () => {
   const [mobileClientSidebarOpen, setMobileClientSidebarOpen] = useState(false)
+  const [desktopSidebarOpen, setDesktopSidebarOpen] = useState(() => {
+    try {
+      const stored = localStorage.getItem('sidebar-open')
+      return stored === null ? true : stored === 'true'
+    } catch {
+      return true
+    }
+  })
   const mobileClientSidebarTriggerRef = useRef<HTMLButtonElement>(null)
   const location = useLocation()
   const openMobileClientSidebar = useCallback(() => setMobileClientSidebarOpen(true), [])
   const closeMobileClientSidebar = useCallback(() => setMobileClientSidebarOpen(false), [])
+  const toggleDesktopSidebar = useCallback(() => {
+    setDesktopSidebarOpen((open) => {
+      const next = !open
+      try { localStorage.setItem('sidebar-open', String(next)) } catch { /* ignore */ }
+      return next
+    })
+  }, [])
 
   useEffect(() => {
     setMobileClientSidebarOpen(false)
@@ -87,12 +102,18 @@ const AuthenticatedLayout: React.FC = () => {
 
   return (
     <div className="flex h-screen flex-1 flex-col overflow-hidden">
-      <Navbar onOpenClientSidebar={openMobileClientSidebar} clientSidebarTriggerRef={mobileClientSidebarTriggerRef} />
+      <Navbar
+        onOpenClientSidebar={openMobileClientSidebar}
+        clientSidebarTriggerRef={mobileClientSidebarTriggerRef}
+        sidebarOpen={desktopSidebarOpen}
+        onToggleSidebar={toggleDesktopSidebar}
+      />
       <div className="flex min-h-0 flex-1 overflow-hidden">
         <ClientSidebar
           mobileOpen={mobileClientSidebarOpen}
           onMobileClose={closeMobileClientSidebar}
           mobileTriggerRef={mobileClientSidebarTriggerRef}
+          desktopOpen={desktopSidebarOpen}
         />
         <PageLayout>
           <Outlet />

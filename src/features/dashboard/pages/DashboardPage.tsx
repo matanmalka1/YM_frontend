@@ -7,6 +7,7 @@ import { ClientPickerField } from '@/components/shared/client/ClientPickerField'
 import { CreateAdvancePaymentModal } from '@/features/advancedPayments'
 import { ChargesCreateModal } from '@/features/charges'
 import { CreateClientModal, DeletedClientDialog, type ClientRecordResponse } from '@/features/clients'
+import { SignatureRequestsDashboardPanel } from '@/features/signatureRequests'
 import { VatWorkItemsCreateModal } from '@/features/vatReports'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
@@ -19,6 +20,7 @@ import { QuickActionsPanel } from '../components/panels/QuickActionsPanel'
 import { VatStatCard } from '../components/kpi/VatStatCard'
 import { OpenChargesCard } from '../components/panels/OpenChargesCard'
 import { SeasonInsightsCarousel } from '../components/panels/SeasonInsightsCarousel'
+import { UpcomingDeadlinesPanel } from '../components/panels/UpcomingDeadlinesPanel'
 import { useDashboardCreateModals } from '../hooks/useDashboardCreateModals'
 
 const AttentionSkeleton = () => <SkeletonBlock height="h-80" width="w-full" className="rounded-3xl" />
@@ -100,6 +102,7 @@ export const DashboardPage: React.FC = () => {
             ) : (
               <AttentionBoard items={attentionItems} total={dashboard.data?.attention.total} />
             )}
+            <SignatureRequestsDashboardPanel />
             <RecentActivityPanel items={recentActivity} className="flex-1" />
           </div>
 
@@ -113,6 +116,7 @@ export const DashboardPage: React.FC = () => {
             )}
             {vatStats && <SeasonInsightsCarousel vatStats={vatStats} />}
             <QuickActionsPanel onOpenModal={setActiveCreateModal} />
+            <UpcomingDeadlinesPanel />
           </div>
         </div>
       )}
