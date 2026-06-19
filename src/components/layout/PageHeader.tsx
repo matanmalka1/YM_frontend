@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { staggerDelay } from '../../utils/animation'
+import { cn } from '../../utils/utils'
 import { SectionHeader } from '../ui/layout/SectionHeader'
 
 export interface Breadcrumb {
@@ -15,10 +16,18 @@ export interface PageHeaderProps {
   breadcrumbs?: Breadcrumb[]
   actions?: ReactNode
   size?: 'md' | 'lg'
+  density?: 'compact' | 'comfortable'
 }
 
-export const PageHeader = ({ title, description, breadcrumbs, actions, size = 'lg' }: PageHeaderProps) => (
-  <header className="space-y-4 animate-fade-in">
+export const PageHeader = ({
+  title,
+  description,
+  breadcrumbs,
+  actions,
+  size,
+  density = 'compact',
+}: PageHeaderProps) => (
+  <header className={cn('animate-fade-in', density === 'compact' ? 'space-y-2' : 'space-y-4')}>
     {breadcrumbs?.length ? (
       <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm animate-slide-in">
         {breadcrumbs.map((crumb, index) => {
@@ -49,7 +58,7 @@ export const PageHeader = ({ title, description, breadcrumbs, actions, size = 'l
     <SectionHeader
       title={title}
       subtitle={description}
-      size={size}
+      size={size ?? (density === 'compact' ? 'md' : 'lg')}
       actions={
         actions ? (
           <div className="flex items-center gap-2 animate-slide-in" style={{ animationDelay: staggerDelay(1, 100) }}>

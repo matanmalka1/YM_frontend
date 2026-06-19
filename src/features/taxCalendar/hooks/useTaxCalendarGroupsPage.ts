@@ -47,7 +47,7 @@ export const useTaxCalendarGroupsPage = () => {
     },
     headerProps: {
       title: 'יומן מס',
-      size: 'lg' as const,
+      description: 'מעקב אחר מועדי מס, סטטוסי טיפול וקישור ללקוחות',
     },
     stats: {
       summary: groupsQuery.data?.summary ?? EMPTY_SUMMARY,
