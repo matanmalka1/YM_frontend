@@ -1,5 +1,5 @@
-import type { NotificationItem } from '../api'
-import { formatDateTime } from '../../../utils/utils'
+import type { NotificationItem } from '../../api'
+import { formatDateTime } from '../../../../utils/utils'
 
 interface NotificationListItemBaseProps {
   item: NotificationItem

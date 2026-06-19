@@ -1,7 +1,7 @@
 import { PageHeader } from '@/components/layout/PageHeader'
-import { TaxCalendarFiltersBar } from '../components/TaxCalendarFiltersBar'
-import { TaxCalendarGroupsContent } from '../components/TaxCalendarGroupsContent'
-import { TaxCalendarStatsSection } from '../components/TaxCalendarStatsSection'
+import { TaxCalendarFiltersBar } from '../components/list/TaxCalendarFiltersBar'
+import { TaxCalendarGroupsContent } from '../components/list/TaxCalendarGroupsContent'
+import { TaxCalendarStatsSection } from '../components/list/TaxCalendarStatsSection'
 import { useTaxCalendarGroupsPage } from '../hooks/useTaxCalendarGroupsPage'
 
 export const TaxCalendarGroupsPage = () => {

@@ -1,15 +1,15 @@
 import { type FC, useMemo } from 'react'
-import { useTaxCalendarGroups } from '../hooks/useTaxCalendarGroups'
+import { useTaxCalendarGroups } from '../../hooks/useTaxCalendarGroups'
 import {
   TAX_CALENDAR_GROUP_PAGE_SIZE,
   readTaxCalendarCommonFilters,
   taxCalendarYearResetDefaults,
   toTaxCalendarCommonParams,
-} from '../utils'
-import { type TaxCalendarGroupsParams } from '../api'
-import { TaxCalendarFiltersBar } from './TaxCalendarFiltersBar'
-import { TaxCalendarGroupsContent } from './TaxCalendarGroupsContent'
-import { TaxCalendarStatsSection } from './TaxCalendarStatsSection'
+} from '../../utils'
+import { type TaxCalendarGroupsParams } from '../../api'
+import { TaxCalendarFiltersBar } from '../list/TaxCalendarFiltersBar'
+import { TaxCalendarGroupsContent } from '../list/TaxCalendarGroupsContent'
+import { TaxCalendarStatsSection } from '../list/TaxCalendarStatsSection'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { DetailTabPanel } from '@/components/ui/layout'
 

@@ -1,6 +1,6 @@
 import { CalendarDays, CheckCircle2, Clock, AlertTriangle } from 'lucide-react'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
-import type { TaxCalendarGroupsSummary } from '../api'
+import type { TaxCalendarGroupsSummary } from '../../api'
 
 interface TaxCalendarStatsSectionProps {
   summary: TaxCalendarGroupsSummary

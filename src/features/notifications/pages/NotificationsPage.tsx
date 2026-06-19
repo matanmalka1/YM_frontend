@@ -4,8 +4,8 @@ import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { Button } from '@/components/ui/primitives/Button'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
-import { SendNotificationModal } from '../components/SendNotificationModal'
-import { NotificationDetailDrawer } from '../components/NotificationDetailDrawer'
+import { SendNotificationModal } from '../components/form/SendNotificationModal'
+import { NotificationDetailDrawer } from '../components/detail/NotificationDetailDrawer'
 import { useNotificationsPage } from '../hooks/useNotificationsPage'
 
 export const NotificationsPage: React.FC = () => {

@@ -13,7 +13,7 @@ import {
 } from '../api'
 import { useNotifications } from './useNotifications'
 import { useNotificationDetail } from './useNotificationDetail'
-import { buildNotificationColumns } from '../components/table/NotificationsColumns'
+import { buildNotificationColumns } from '../components/list/NotificationsColumns'
 import { NOTIFICATION_STATUS_OPTIONS, NOTIFICATION_TRIGGER_OPTIONS } from '../constants'
 
 const DEFAULT_PAGE_SIZE = 25

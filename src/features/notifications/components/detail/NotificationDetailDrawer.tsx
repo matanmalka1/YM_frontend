@@ -3,9 +3,9 @@ import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { DetailDrawer, DrawerField, DrawerSection } from '@/components/ui/overlays/DetailDrawer'
 import { formatDateTime } from '@/utils/utils'
-import type { NotificationDetail } from '../api'
-import { NOTIFICATION_STATUS_LABELS } from '../constants'
-import { getDomainLabel, getTriggerLabel } from './table/NotificationsColumns'
+import type { NotificationDetail } from '../../api'
+import { NOTIFICATION_STATUS_LABELS } from '../../constants'
+import { getDomainLabel, getTriggerLabel } from '../list/NotificationsColumns'
 
 interface NotificationDetailDrawerProps {
   open: boolean

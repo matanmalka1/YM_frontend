@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Modal } from '../../../components/ui/overlays/Modal'
-import { Button } from '../../../components/ui/primitives/Button'
-import { Select } from '../../../components/ui/inputs/Select'
-import { Input } from '../../../components/ui/inputs/Input'
-import { Textarea } from '../../../components/ui/inputs/Textarea'
-import { ClientPickerField, useClientPickerState } from '../../../components/shared/client'
-import { usePreviewNotification, useSendNotification } from '../hooks/useSendNotification'
-import { CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS, TRIGGER_LABELS, isNotificationTrigger } from '../api'
-import type { NotificationTrigger } from '../api'
+import { Modal } from '../../../../components/ui/overlays/Modal'
+import { Button } from '../../../../components/ui/primitives/Button'
+import { Select } from '../../../../components/ui/inputs/Select'
+import { Input } from '../../../../components/ui/inputs/Input'
+import { Textarea } from '../../../../components/ui/inputs/Textarea'
+import { ClientPickerField, useClientPickerState } from '../../../../components/shared/client'
+import { usePreviewNotification, useSendNotification } from '../../hooks/useSendNotification'
+import { CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS, TRIGGER_LABELS, isNotificationTrigger } from '../../api'
+import type { NotificationTrigger } from '../../api'
 
 const DOMAIN_LABELS: Partial<Record<NotificationTrigger, string>> = {
   binder_missing_documents: 'קלסר',

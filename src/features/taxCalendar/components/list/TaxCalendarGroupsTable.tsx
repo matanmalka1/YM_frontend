@@ -11,13 +11,13 @@ import { getTotalPages } from '@/utils/paginationUtils'
 import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
 import { cn, formatDate, formatPlainIdentifier, getErrorMessage, getReportingPeriodLabelWithYear } from '@/utils/utils'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
-import { useTaxCalendarGroupItems } from '../hooks/useTaxCalendarGroupItems'
+import { useTaxCalendarGroupItems } from '../../hooks/useTaxCalendarGroupItems'
 import {
   TAX_CALENDAR_OBLIGATION_LABELS,
   type TaxCalendarGroup,
   type TaxCalendarGroupItem,
   type TaxCalendarGroupItemSourceType,
-} from '../api'
+} from '../../api'
 
 interface TaxCalendarGroupsTableProps {
   groups: TaxCalendarGroup[]

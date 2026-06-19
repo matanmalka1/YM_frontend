@@ -6,8 +6,8 @@ import {
   TAX_CALENDAR_OBLIGATION_TYPE_OPTIONS,
   TAX_CALENDAR_STATUS_OPTIONS,
   type TaxCalendarGroupStatusFilter,
-} from '../constants'
-import { taxCalendarCurrentYear } from '../utils'
+} from '../../constants'
+import { taxCalendarCurrentYear } from '../../utils'
 import { CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 
 interface TaxCalendarFiltersBarProps {

@@ -1,14 +1,14 @@
 import { useCallback, useState } from 'react'
 import { Send } from 'lucide-react'
 import { FIRST_PAGE, PAGE_SIZE_SM } from '@/constants/pagination.constants'
-import { Button } from '../../../components/ui/primitives/Button'
-import { DetailDrawer } from '../../../components/ui/overlays/DetailDrawer'
-import { useNotifications } from '../hooks/useNotifications'
-import { useRole } from '../../../hooks/useRole'
-import { DrawerNotificationListItem } from './NotificationListItem'
-import { SendNotificationModal } from './SendNotificationModal'
-import { CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS } from '../api'
-import type { NotificationDrawerProps } from '../types'
+import { Button } from '../../../../components/ui/primitives/Button'
+import { DetailDrawer } from '../../../../components/ui/overlays/DetailDrawer'
+import { useNotifications } from '../../hooks/useNotifications'
+import { useRole } from '../../../../hooks/useRole'
+import { DrawerNotificationListItem } from '../list/NotificationListItem'
+import { SendNotificationModal } from '../form/SendNotificationModal'
+import { CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS } from '../../api'
+import type { NotificationDrawerProps } from '../../types'
 
 export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, onClose, clientRecordId }) => {
   const { data } = useNotifications(

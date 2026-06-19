@@ -2,7 +2,7 @@ import { Alert } from '@/components/ui/overlays/Alert'
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { getErrorMessage } from '@/utils/utils'
-import type { TaxCalendarGroup } from '../api'
+import type { TaxCalendarGroup } from '../../api'
 import { TaxCalendarGroupsTable } from './TaxCalendarGroupsTable'
 
 interface TaxCalendarGroupsContentProps {
