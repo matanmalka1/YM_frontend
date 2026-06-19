@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Bell } from 'lucide-react'
-import { FIRST_PAGE } from '@/constants/pagination.constants'
+import { FIRST_PAGE, PAGE_SIZE_25 } from '@/constants/pagination.constants'
 import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { useActiveUserOptions } from '@/features/users'
@@ -16,7 +16,7 @@ import { useNotificationDetail } from './useNotificationDetail'
 import { buildNotificationColumns } from '../components/list/NotificationsColumns'
 import { NOTIFICATION_STATUS_OPTIONS, NOTIFICATION_TRIGGER_OPTIONS } from '../constants'
 
-const DEFAULT_PAGE_SIZE = 25
+const DEFAULT_PAGE_SIZE = PAGE_SIZE_25
 
 type SelectedClientFilter = {
   id: number

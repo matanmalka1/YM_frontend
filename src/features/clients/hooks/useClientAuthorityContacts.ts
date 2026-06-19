@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { authorityContactsApi, authorityContactsQK, type ContactType } from '@/features/authorityContacts'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 
 const PAGE = 1
-const PAGE_SIZE = 20
 const DEFAULT_BRANCH_CONTACT_TYPES = new Set<ContactType>(['assessing_officer', 'vat_branch', 'national_insurance'])
 
 const normalizeBranchCity = (city: string | null | undefined): string | null => {

@@ -1,13 +1,17 @@
-// TODO(structure): consolidate into tasks/constants/ (deferred from A2). Merging into
-// constants.ts conflicts on `TaskStatus` (declared in constants.ts vs imported from
-// ./api/contracts here); resolving needs confirming the two are identical.
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
-import { taskPriorityLabels, taskPriorityValues, taskRoleLabels, taskStatusLabels, taskStatusValues } from './constants'
 import { workQueueSourceTypeLabels, workQueueSourceTypeValues } from '@/features/workQueue'
-import type { TaskPriority, TaskStatus } from './api/contracts'
-import type { TasksFilterValues, TasksSelectOption } from './types'
+import type { TaskPriority } from '../api/contracts'
+import type { TasksFilterValues, TasksSelectOption } from '../types'
 import type { UserRole } from '@/types'
 import type { WorkQueueSourceType } from '@/features/workQueue'
+import {
+  taskStatusValues,
+  taskStatusLabels,
+  taskPriorityValues,
+  taskPriorityLabels,
+  taskRoleLabels,
+  type TaskStatus,
+} from './labels'
 
 export const TASKS_PAGE_SIZE = PAGE_SIZE_SM
 

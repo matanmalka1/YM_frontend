@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { ALL_YEARS_URL_OPTION } from '@/constants/filterOptions.constants'
 import { getOperationalTaxYear, getOperationalYearOptions } from '@/constants/periodOptions.constants'
-import { VAT_PERIOD_TYPE_SELECT_OPTIONS, VAT_WORK_ITEMS_STATUS_OPTIONS } from '../../constants'
+import { VAT_PERIOD_TYPE_SELECT_OPTIONS, VAT_WORK_ITEMS_STATUS_OPTIONS } from '../../constants/vatConstants'
 import type { VatWorkItemsFiltersCardProps } from '../../types'
 
 export const VatWorkItemsFiltersCard = ({

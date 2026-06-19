@@ -3,8 +3,9 @@ import { useQuery } from '@tanstack/react-query'
 import { clientsApi, clientsQK, type ClientSidebarResponse } from '@/features/clients'
 import type { ListClientSidebarParams } from '@/features/clients/api'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+import { PAGE_SIZE_LG } from '@/constants/pagination.constants'
 
-export const CLIENT_SIDEBAR_PAGE_SIZE = 100
+export const CLIENT_SIDEBAR_PAGE_SIZE = PAGE_SIZE_LG
 
 const BASE_QUERY_PARAMS = {
   page: 1,

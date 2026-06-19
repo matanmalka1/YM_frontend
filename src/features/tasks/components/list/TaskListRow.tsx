@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/primitives/Badge'
 import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
 import { cn } from '@/utils/utils'
 import { workQueueSourceTypeLabels } from '@/features/workQueue'
-import { taskPriorityLabels, taskStatusLabels } from '../../constants'
+import { taskPriorityLabels, taskStatusLabels } from '../../constants/labels'
 import { formatTaskDueDate, isTaskTerminal } from '../../utils/taskFormatters'
 import {
   taskPriorityBadgeClasses,

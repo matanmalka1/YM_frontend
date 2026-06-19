@@ -1,7 +1,7 @@
 import { ListChecks, Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Button } from '@/components/ui/primitives/Button'
-import { taskPriorityLabels, taskStatusLabels } from '../../constants'
+import { taskPriorityLabels, taskStatusLabels } from '../../constants/labels'
 import { formatTaskDueDate } from '../../utils/taskFormatters'
 import type { Task } from '../../api/contracts'
 

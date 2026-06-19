@@ -2,11 +2,12 @@ import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { usersApi, usersQK } from '../api'
+import { PAGE_SIZE_LG } from '@/constants/pagination.constants'
 
 const ADVISOR_LIST_PARAMS = {
   is_active: 'true' as const,
   page: 1,
-  page_size: 100,
+  page_size: PAGE_SIZE_LG,
 }
 
 export const useAdvisorOptions = (enabled = true) => {

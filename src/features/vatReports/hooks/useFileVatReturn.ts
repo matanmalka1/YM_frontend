@@ -5,7 +5,7 @@ import { vatReportsQK } from '../api/queryKeys'
 import { toast } from '@/utils/toast'
 import { showErrorToast } from '@/utils/utils'
 import { invalidateVatWorkItem } from './useVatInvalidation'
-import { VAT_FILE_MODAL_MESSAGES } from '../constants'
+import { VAT_FILE_MODAL_MESSAGES } from '../constants/vatConstants'
 import type { FileVatReturnPayload } from '../api'
 
 export const useFileVatReturn = (workItemId: number) => {

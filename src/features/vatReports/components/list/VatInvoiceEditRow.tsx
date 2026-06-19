@@ -11,7 +11,7 @@ import {
   toInvoiceEditPayload,
   type VatInvoiceEditValues,
 } from '../../schemas/invoice.schema'
-import { EXPENSE_CATEGORIES, CATEGORY_COLORS, VAT_EXPENSE_CATEGORY_OPTIONS } from '../../constants'
+import { EXPENSE_CATEGORIES, CATEGORY_COLORS, VAT_EXPENSE_CATEGORY_OPTIONS } from '../../constants/vatConstants'
 import {
   formatVatAmount,
   getVatDeductionRateClass,

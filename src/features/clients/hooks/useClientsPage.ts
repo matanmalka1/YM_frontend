@@ -4,6 +4,7 @@ import { Users } from 'lucide-react'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMutationWithToast } from '../../../hooks/useMutationWithToast'
 import { getErrorMessage, parsePositiveInt, showErrorToast } from '../../../utils/utils'
+import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import {
   clientsApi,
@@ -55,7 +56,7 @@ export const useClientsPage = () => {
     sort_by: parseClientSortBy(searchParams.get('sort_by')),
     order: parseClientSortOrder(searchParams.get('order')),
     page: getPage(),
-    page_size: parsePositiveInt(searchParams.get('page_size'), 20),
+    page_size: parsePositiveInt(searchParams.get('page_size'), PAGE_SIZE_SM),
   }
 
   const apiParams: ListClientsParams = {

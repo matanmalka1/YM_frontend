@@ -1,8 +1,9 @@
 import type { AuthorityContactFormValues } from './schemas'
+import { PAGE_SIZE_LG } from '@/constants/pagination.constants'
 
 export const AUTHORITY_CONTACTS_LIST_PARAMS = {
   page: 1,
-  page_size: 100,
+  page_size: PAGE_SIZE_LG,
 } as const
 
 export const AUTHORITY_CONTACT_TEXT = {

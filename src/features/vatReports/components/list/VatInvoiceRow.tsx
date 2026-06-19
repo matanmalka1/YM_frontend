@@ -16,7 +16,7 @@ import {
   VAT_RATE_TYPE_LABELS,
   type VatDocumentTypeValue,
   type VatRateTypeValue,
-} from '../../constants'
+} from '../../constants/vatConstants'
 import { formatDate, formatDateTime } from '@/utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import type { VatInvoiceRowProps } from '../../types'

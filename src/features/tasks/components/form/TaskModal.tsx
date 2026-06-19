@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
 import { Textarea } from '@/components/ui/inputs/Textarea'
 import { workQueueSourceTypeLabels } from '@/features/workQueue'
-import { taskPriorityLabels, taskPriorityValues, taskRoleLabels } from '../../constants'
+import { taskPriorityLabels, taskPriorityValues, taskRoleLabels } from '../../constants/labels'
 import {
   parseTaskPriority,
   type Task,

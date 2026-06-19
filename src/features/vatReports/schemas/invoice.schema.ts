@@ -6,7 +6,7 @@ import {
   COUNTERPARTY_ID_TYPES,
   INVOICE_TYPES,
   type CounterpartyIdType,
-} from '../constants'
+} from '../constants/vatConstants'
 
 const grossAmountSchema = z
   .string()

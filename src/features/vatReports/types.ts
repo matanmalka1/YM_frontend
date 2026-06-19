@@ -7,7 +7,7 @@ import type {
   VatWorkItemResponse,
   VatWorkItemListItem,
 } from './api'
-import type { VatPeriodTypeFilter } from './constants'
+import type { VatPeriodTypeFilter } from './constants/vatConstants'
 import type { ExpenseCategoryRow } from './utils/vatBreakdown'
 
 export interface VatWorkItemsFilters {

@@ -14,8 +14,7 @@ import {
 } from '@/features/documents'
 import { formatDate, getErrorMessage } from '@/utils/utils'
 import { getTotalPages } from '@/utils/paginationUtils'
-
-const PAGE_SIZE = 20
+import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 
 interface BinderDocumentsSectionProps {
   binderId: number

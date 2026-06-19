@@ -15,7 +15,7 @@ import {
 import { parseTaskStatus, type TaskStatus } from '@/features/tasks/api/contracts'
 import { WORK_QUEUE_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 // eslint-disable-next-line no-restricted-imports -- avoid the tasks feature barrel here; it imports workQueue-backed components.
-import { taskStatusLabels, taskStatusValues } from '@/features/tasks/constants'
+import { taskStatusLabels, taskStatusValues } from '@/features/tasks/constants/labels'
 import type { WorkQueueSourceType, WorkQueueUrgency } from '../api/contracts'
 
 interface WorkQueueFiltersBarProps {

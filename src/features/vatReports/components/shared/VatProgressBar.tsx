@@ -1,5 +1,5 @@
 import { cn } from '@/utils/utils'
-import { VAT_WORKFLOW_STEPS } from '../../constants'
+import { VAT_WORKFLOW_STEPS } from '../../constants/vatConstants'
 import type { VatProgressBarProps } from '../../types'
 
 export const VatProgressBar: React.FC<VatProgressBarProps> = ({ currentStatus }) => {

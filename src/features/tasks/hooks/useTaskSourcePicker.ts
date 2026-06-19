@@ -4,6 +4,7 @@ import { workQueueApi, workQueueQK, workQueueSourceTypeLabels } from '@/features
 import type { WorkQueueItem } from '@/features/workQueue'
 import { formatDate } from '@/utils/utils'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+import { PAGE_SIZE_LG } from '@/constants/pagination.constants'
 
 export const useTaskSourcePicker = () => {
   const [selectedClientId, setSelectedClientId] = useState<number | null>(null)
@@ -13,7 +14,7 @@ export const useTaskSourcePicker = () => {
   const workQueueQuery = useQuery({
     queryKey: workQueueQK.list(
       selectedClientId
-        ? { client_record_id: selectedClientId, scope: 'system', linked: 'unlinked', page: 1, page_size: 100 }
+        ? { client_record_id: selectedClientId, scope: 'system', linked: 'unlinked', page: 1, page_size: PAGE_SIZE_LG }
         : undefined,
     ),
     queryFn: () =>
@@ -22,7 +23,7 @@ export const useTaskSourcePicker = () => {
         scope: 'system',
         linked: 'unlinked',
         page: 1,
-        page_size: 100,
+        page_size: PAGE_SIZE_LG,
       }),
     enabled: selectedClientId !== null,
     staleTime: QUERY_STALE_TIME.short,

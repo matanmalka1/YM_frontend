@@ -10,8 +10,7 @@ import { chargesApi, chargesQK, type CreateChargePayload } from '../api'
 import { DEFAULT_CHARGE_LIST_STATS } from '../constants'
 import { useChargeActions } from './useChargeActions'
 import { useChargeCreateMutation } from './useChargeCreateMutation'
-
-const PAGE_SIZE = 20
+import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 
 export const useClientCharges = (clientId: number) => {
   const { isAdvisor, isSecretary } = useRole()

@@ -1,5 +1,5 @@
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
-import { TASK_FILTER_PARAM_KEYS, type TaskFilterParamKey } from '../taskPage.constants'
+import { TASK_FILTER_PARAM_KEYS, type TaskFilterParamKey } from '../constants/pageConstants'
 import { buildTaskListParams, getTaskFiltersFromSearchParams, hasTaskFilters } from '../utils/taskFilters'
 
 export const useTaskFilters = () => {

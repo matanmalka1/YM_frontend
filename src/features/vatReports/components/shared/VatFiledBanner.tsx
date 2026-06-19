@@ -1,6 +1,6 @@
 import { CheckCircle2 } from 'lucide-react'
 import { formatDateTime } from '@/utils/utils'
-import { VAT_FILING_METHOD_LABELS } from '../../constants'
+import { VAT_FILING_METHOD_LABELS } from '../../constants/vatConstants'
 import type { VatFiledBannerProps } from '../../types'
 
 export const VatFiledBanner: React.FC<VatFiledBannerProps> = ({

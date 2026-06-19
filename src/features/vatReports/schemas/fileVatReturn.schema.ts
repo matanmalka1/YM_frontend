@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { FileVatReturnPayload } from '../api'
-import { DEFAULT_VAT_FILING_METHOD, VAT_FILING_METHODS } from '../constants'
+import { DEFAULT_VAT_FILING_METHOD, VAT_FILING_METHODS } from '../constants/vatConstants'
 
 export const vatFileModalSchema = z
   .object({

@@ -1,5 +1,6 @@
 import type { DataTableProps } from '@/components/ui/table'
 import { formatCurrencyILS, parsePositiveInt } from '@/utils/utils'
+import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 import { toOptionalNumber, toOptionalString } from '@/utils/filters'
 import { chargesApi, type ChargeStatusStat, type ChargesListParams } from '../api'
 import { CHARGE_PERIOD_YEAR_SPAN } from '../constants'
@@ -14,7 +15,7 @@ export const getChargesFilters = (searchParams: URLSearchParams): ChargesFilters
   issued_after: searchParams.get('issued_after') ?? '',
   issued_before: searchParams.get('issued_before') ?? '',
   page: parsePositiveInt(searchParams.get('page'), 1),
-  page_size: parsePositiveInt(searchParams.get('page_size'), 20),
+  page_size: parsePositiveInt(searchParams.get('page_size'), PAGE_SIZE_SM),
 })
 
 export const toChargesListParams = (filters: ChargesFilters): ChargesListParams => ({

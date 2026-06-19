@@ -11,7 +11,7 @@ import {
   taskRoleOptions,
   taskSourceOptions,
   taskStatusOptions,
-} from '../taskPage.constants'
+} from '../constants/pageConstants'
 import { useTaskActions } from './useTaskActions'
 import { useTaskFilters } from './useTaskFilters'
 import { useTasks } from './useTasks'

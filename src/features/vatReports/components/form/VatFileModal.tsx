@@ -5,7 +5,7 @@ import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
-import { VAT_FILING_METHOD_LABELS, VAT_FILING_METHODS } from '../../constants'
+import { VAT_FILING_METHOD_LABELS, VAT_FILING_METHODS } from '../../constants/vatConstants'
 import { useFileVatReturn } from '../../hooks/useFileVatReturn'
 import {
   toFileVatReturnPayload,

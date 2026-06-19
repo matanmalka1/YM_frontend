@@ -12,6 +12,7 @@ import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
 import { useVatGroupItems } from '../../hooks/useVatGroupItems'
 import type { VatWorkItemListItem, VatWorkItemGroupSummary, VatWorkItemStatus } from '../../api'
 import { formatVatPeriodTitle } from '../../utils/viewHelpers'
+import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 
 interface VatWorkItemsGroupedCardsProps {
   groups: VatWorkItemGroupSummary[]
@@ -22,8 +23,6 @@ interface VatWorkItemsGroupedCardsProps {
   emptyState?: { title?: string; message?: string; action?: { label: string; onClick: () => void } }
   filters?: { status?: VatWorkItemStatus; client_record_id?: number }
 }
-
-const PAGE_SIZE = 20
 
 const getVatGroupSecondaryLabel = (group: VatWorkItemGroupSummary): string | null => {
   const seen = new Set<string>()

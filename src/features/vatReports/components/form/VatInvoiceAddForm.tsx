@@ -12,7 +12,7 @@ import {
   DOCUMENT_TYPE_OPTIONS,
   VAT_EXPENSE_CATEGORY_OPTIONS,
   VAT_RATE_TYPE_OPTIONS,
-} from '../../constants'
+} from '../../constants/vatConstants'
 import { getVatInvoiceDefaultValues } from '../../utils/vatHelpers'
 import type { VatInvoiceAddFormProps } from '../../types'
 import { blockNonNumericKey, getDeductionRateHint, shouldRequireCounterpartyId } from '../../utils/viewHelpers'

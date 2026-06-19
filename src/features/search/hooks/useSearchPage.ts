@@ -4,6 +4,7 @@ import { searchApi, searchQK } from '../api'
 import { getErrorMessage, parsePositiveInt } from '../../../utils/utils'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFilters } from '../types'
+import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 
 export const useSearchPage = () => {
   const { searchParams, getParam, getPage, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
@@ -19,7 +20,7 @@ export const useSearchPage = () => {
     binder_capacity_status: getParam('binder_capacity_status'),
     filename: getParam('filename'),
     page: getPage(),
-    page_size: parsePositiveInt(searchParams.get('page_size'), 20),
+    page_size: parsePositiveInt(searchParams.get('page_size'), PAGE_SIZE_SM),
   }
 
   const hasAnyFilter = Boolean(filters.search) || SEARCH_ADVANCED_FILTER_KEYS.some((k) => Boolean(filters[k]))

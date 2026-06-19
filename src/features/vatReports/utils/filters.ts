@@ -3,7 +3,7 @@ import {
   VAT_PERIOD_TYPE_OPTIONS,
   getVatWorkItemStatusLabel,
   type VatPeriodTypeFilter,
-} from '../constants'
+} from '../constants/vatConstants'
 
 export const toVatPeriodTypeFilter = (value: string | null): VatPeriodTypeFilter | '' =>
   VAT_PERIOD_TYPES.includes(value as VatPeriodTypeFilter) ? (value as VatPeriodTypeFilter) : ''

@@ -11,6 +11,7 @@ import { bindersApi, bindersQK } from '../../api'
 import { formatMonthYear } from '@/utils/utils'
 import { NUMERIC_MONTH_OPTIONS, getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+import { PAGE_SIZE_LG } from '@/constants/pagination.constants'
 
 interface BinderHandoverPanelProps {
   clientId: number
@@ -43,10 +44,10 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
     queryKey: bindersQK.list({
       client_record_id: clientId,
       location_status: 'ready_for_handover',
-      page_size: 100,
+      page_size: PAGE_SIZE_LG,
     }),
     queryFn: () =>
-      bindersApi.list({ client_record_id: clientId, location_status: 'ready_for_handover', page_size: 100 }),
+      bindersApi.list({ client_record_id: clientId, location_status: 'ready_for_handover', page_size: PAGE_SIZE_LG }),
     enabled: clientId > 0,
     staleTime: QUERY_STALE_TIME.default,
   })

@@ -2,7 +2,7 @@ import { FileSpreadsheet, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { useVatExport } from '../../hooks/useVatExport'
 import type { VatExportButtonsProps } from '../../types'
-import { FILE_FORMAT_COLORS } from '../../visualizationTokens'
+import { FILE_FORMAT_COLORS } from '../../constants/visualizationTokens'
 
 export const VatExportButtons: React.FC<VatExportButtonsProps> = ({ clientId, period, year }) => {
   const exportYear = year ?? Number(period?.split('-')[0] ?? new Date().getFullYear())

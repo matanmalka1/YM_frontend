@@ -1,5 +1,6 @@
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { parsePositiveInt } from '../../../utils/utils'
+import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 import { isBinderCapacityStatus, isBinderLocationStatus, isBinderSortBy, isBinderSortOrder } from '../constants'
 import type { BinderSortBy, BindersFilterUpdates, BindersUrlFilters } from '../types'
 
@@ -20,7 +21,7 @@ export const useBindersFilters = () => {
     binder_number: getParam('binder_number'),
     year: parsedYear ? String(parsedYear) : '',
     page: getPage(),
-    page_size: parsePositiveInt(searchParams.get('page_size'), 20),
+    page_size: parsePositiveInt(searchParams.get('page_size'), PAGE_SIZE_SM),
     sort_by: isBinderSortBy(rawSortBy) ? rawSortBy : 'period_start',
     order: isBinderSortOrder(rawOrder) ? rawOrder : 'desc',
   }

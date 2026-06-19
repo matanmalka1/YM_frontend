@@ -18,6 +18,7 @@ import { toast } from '../../../utils/toast'
 import { getHttpStatus, showErrorToast } from '../../../utils/utils'
 import { receiveBinderSchema, type ReceiveBinderFormValues } from '../schemas'
 import { toBinderPeriodValue } from '../utils'
+import { PAGE_SIZE_XS } from '@/constants/pagination.constants'
 import { ANNUAL_BINDER_TYPES, PERIODIC_BINDER_TYPES } from '../constants'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
@@ -110,8 +111,8 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
   }, [businessId, form])
 
   const { data: clientBindersData } = useQuery({
-    queryKey: bindersQK.list({ client_record_id: clientRecordId, page_size: 10 }),
-    queryFn: () => bindersApi.list({ client_record_id: clientRecordId, page_size: 10 }),
+    queryKey: bindersQK.list({ client_record_id: clientRecordId, page_size: PAGE_SIZE_XS }),
+    queryFn: () => bindersApi.list({ client_record_id: clientRecordId, page_size: PAGE_SIZE_XS }),
     enabled: !!clientRecordId,
     staleTime: QUERY_STALE_TIME.default,
     retry: 1,

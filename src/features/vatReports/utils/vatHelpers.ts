@@ -1,4 +1,4 @@
-import { EXPENSE_CATEGORIES } from '../constants'
+import { EXPENSE_CATEGORIES } from '../constants/vatConstants'
 import type { VatInvoiceRowValues } from '../schemas/invoice.schema'
 import { formatCurrencyILS, formatPercent } from '../../../utils/utils'
 import { semanticMonoToneClasses } from '../../../utils/semanticColors'

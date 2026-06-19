@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { AuditTrailTable } from '@/features/audit'
 import { getTotalPages } from '@/utils/paginationUtils'
-import { ACTION_LABELS, PAGE_SIZE } from '../../history.constants'
+import { ACTION_LABELS, PAGE_SIZE } from '../../constants/historyConstants'
 import { formatVatHistoryDetails } from '../../utils/history'
 import { useVatHistory } from '../../hooks/useVatHistory'
 import type { VatHistoryTabProps } from '../../types'

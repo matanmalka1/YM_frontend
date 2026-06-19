@@ -2,6 +2,7 @@ import { api } from '@/api/client'
 import { BUSINESS_ENDPOINTS } from '@/features/businesses'
 import { toQueryParams } from '@/api/queryParams'
 import { CLIENT_ENDPOINTS } from './endpoints'
+import { PAGE_SIZE_LG } from '@/constants/pagination.constants'
 import type {
   ClientRecordResponse,
   ClientRecordListResponse,
@@ -22,7 +23,7 @@ import type {
   ListClientBusinessesParams,
 } from './contracts'
 
-const CLIENT_BUSINESSES_PAGE_SIZE = 100
+const CLIENT_BUSINESSES_PAGE_SIZE = PAGE_SIZE_LG
 
 export const clientsApi = {
   // ── Queries ──────────────────────────────────────────────────────────────

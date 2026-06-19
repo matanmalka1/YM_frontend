@@ -15,8 +15,7 @@ import { useClientSignatureRequests } from '../../hooks/useClientSignatureReques
 import { useSignatureRequestActions } from '../../hooks/useSignatureRequestActions'
 import { useSignatureRequestSigningUrls } from '../../utils'
 import type { ClientRecordResponse } from '@/features/clients'
-
-const PAGE_SIZE = 10
+import { PAGE_SIZE_XS as PAGE_SIZE } from '@/constants/pagination.constants'
 
 interface Props {
   client: ClientRecordResponse

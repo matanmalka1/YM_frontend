@@ -3,7 +3,7 @@ import { formatCount } from '@/utils/utils'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { CATEGORY_COLOR_TOKENS } from './visualizationTokens'
 import { ALL_STATUSES_OPTION, ALL_CATEGORIES_OPTION } from '@/constants/filterOptions.constants'
-import type { VatWorkItemStatus } from './api'
+import type { VatWorkItemStatus } from '../api'
 
 /** @auditContract Read by the backend enum-sync audit. */
 export const VAT_WORK_ITEM_STATUS_VALUES = [

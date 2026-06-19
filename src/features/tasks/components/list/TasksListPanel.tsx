@@ -1,5 +1,5 @@
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
-import { TASK_TABLE_COLUMNS } from '../../taskPage.constants'
+import { TASK_TABLE_COLUMNS } from '../../constants/pageConstants'
 import { TaskListRow } from './TaskListRow'
 import { TasksEmptyState, TasksErrorState, TasksLoadingState } from './TaskListStates'
 import type { Task } from '../../api/contracts'

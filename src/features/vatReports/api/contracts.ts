@@ -1,6 +1,6 @@
 import type { BackendAction } from '@/lib/actions/types'
 import type { VatType } from '@/features/clients/api'
-import type { VatPeriodTypeFilter } from '../constants'
+import type { VatPeriodTypeFilter } from '../constants/vatConstants'
 
 export type { VatType }
 

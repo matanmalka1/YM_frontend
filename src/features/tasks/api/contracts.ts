@@ -1,10 +1,10 @@
 import { z } from 'zod'
 import type { UserRole } from '@/types'
 import type { WorkQueueSourceType } from '@/features/workQueue'
-import { taskStatusValues, taskPriorityValues } from '../constants'
-import type { TaskStatus } from '../constants'
+import { taskStatusValues, taskPriorityValues } from '../constants/labels'
+import type { TaskStatus } from '../constants/labels'
 
-export type { TaskStatus } from '../constants'
+export type { TaskStatus } from '../constants/labels'
 export type TaskPriority = (typeof taskPriorityValues)[number]
 
 export const isTaskStatus = (value: string | null): value is TaskStatus =>

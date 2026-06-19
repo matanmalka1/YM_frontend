@@ -16,8 +16,7 @@ import { SearchFiltersBar } from '../components/SearchFiltersBar'
 import { useSearchPage } from '../hooks/useSearchPage'
 import { SEARCH_ADVANCED_FILTER_KEYS } from '../types'
 import type { SearchResult } from '../api'
-
-const PAGE_SIZE = 20
+import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 
 export const Search: React.FC = () => {
   const { error, filters, hasAnyFilter, handleFilterChange, handleReset, loading, results, documents, total } =

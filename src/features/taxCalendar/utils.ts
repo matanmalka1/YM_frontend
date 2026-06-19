@@ -1,3 +1,4 @@
+import { PAGE_SIZE_25 } from '@/constants/pagination.constants'
 import type { TaxCalendarGroupsParams, TaxCalendarObligationType } from './api'
 import {
   TAX_CALENDAR_GROUP_STATUSES,
@@ -11,7 +12,7 @@ export const parseTaxCalendarGroupStatusFilter = (value: string | null): TaxCale
 export const parseTaxCalendarObligationType = (value: string | null): TaxCalendarObligationType | undefined =>
   TAX_CALENDAR_OBLIGATION_TYPES.find((obligationType) => obligationType === value)
 
-export const TAX_CALENDAR_GROUP_PAGE_SIZE = 25
+export const TAX_CALENDAR_GROUP_PAGE_SIZE = PAGE_SIZE_25
 
 export const taxCalendarCurrentYear = () => new Date().getFullYear()
 

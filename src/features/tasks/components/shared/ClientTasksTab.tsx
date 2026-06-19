@@ -3,7 +3,7 @@ import { useClientTasks } from '../../hooks/useClientTasks'
 import { useBulkCompleteTasks } from '../../hooks/useBulkCompleteTasks'
 import { useBulkAssignTasks } from '../../hooks/useBulkAssignTasks'
 import { useActiveUserOptions } from '@/features/users'
-import { taskStatusLabels, taskPriorityLabels } from '../../constants'
+import { taskStatusLabels, taskPriorityLabels } from '../../constants/labels'
 import { BulkSelectionToolbar, BulkSelectionActionButton } from '@/components/ui/table/BulkSelectionToolbar'
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { TableSkeleton } from '@/components/ui/table'
@@ -15,12 +15,11 @@ import { Select } from '@/components/ui/inputs'
 import { randomUUID } from '@/utils/random'
 import { getErrorMessage } from '@/utils/utils'
 import type { Task } from '../../api/contracts'
+import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 
 interface ClientTasksTabProps {
   clientRecordId: number
 }
-
-const PAGE_SIZE = 20
 
 interface Feedback {
   message: string

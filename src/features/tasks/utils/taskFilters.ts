@@ -1,5 +1,5 @@
 import { parsePositiveInt } from '@/utils/utils'
-import { EMPTY_TASK_FILTERS, TASK_FILTER_PARAM_KEYS, TASKS_PAGE_SIZE } from '../taskPage.constants'
+import { EMPTY_TASK_FILTERS, TASK_FILTER_PARAM_KEYS, TASKS_PAGE_SIZE } from '../constants/pageConstants'
 import { isTaskPriority, isTaskStatus, type TaskListParams } from '../api/contracts'
 import type { TasksFilterValues } from '../types'
 import type { UserRole } from '@/types'
