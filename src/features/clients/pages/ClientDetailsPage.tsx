@@ -1,4 +1,4 @@
-import { type FC, useEffect, useState } from 'react'
+import { type FC, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { BriefcaseBusiness, Edit2, Fingerprint, IdCard } from 'lucide-react'
@@ -113,13 +113,12 @@ const ClientHeaderMissingDocuments: FC<{ clientId: number; active: boolean }> = 
 export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }) => {
   const { clientId } = useParams<{ clientId: string }>()
   const clientIdNum = clientId ? Number(clientId) : null
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditingRequested, setIsEditingRequested] = useState(false)
+  // Editing is only meaningful on the details tab; derive it so switching tabs clears it
+  // automatically instead of resetting state in an effect.
+  const isEditing = isEditingRequested && initialTab === 'details'
   const { client, isValidId, isLoading, error, can } = useClientQuery({ clientId: clientIdNum })
   const { updateClient, isUpdating, deleteClient, isDeleting } = useClientMutations(Number(clientIdNum))
-
-  useEffect(() => {
-    if (initialTab !== 'details') setIsEditing(false)
-  }, [initialTab])
 
   if (!isValidId)
     return (
@@ -160,7 +159,7 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
             }
             actions={
               can.editClients && initialTab === 'details' ? (
-                <Button variant="ghost" size="sm" onClick={() => setIsEditing(true)} className="gap-2">
+                <Button variant="ghost" size="sm" onClick={() => setIsEditingRequested(true)} className="gap-2">
                   <Edit2 className="h-4 w-4" />
                   ערוך פרטים
                 </Button>
@@ -184,7 +183,7 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
             deleteClient,
             isDeleting,
             isEditing,
-            onEditClose: () => setIsEditing(false),
+            onEditClose: () => setIsEditingRequested(false),
           }}
         />
       ) : null}

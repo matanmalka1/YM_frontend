@@ -48,6 +48,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   usePortal = true,
 }) => {
   const [open, setOpen] = useState(false)
+  // Derive the visible-open state instead of force-closing in an effect when `disabled` flips.
+  const isOpen = open && !disabled
   const [month, setMonthState] = useState<Date>(new Date())
   const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -103,7 +105,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   }
 
   useDismissibleLayer({
-    open,
+    open: isOpen,
     triggerRef,
     layerRef: containerRef,
     closeOnEscape: true,
@@ -113,13 +115,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     },
   })
 
-  // Close if the field is disabled while the calendar is open.
   useEffect(() => {
-    if (disabled && open) setOpen(false)
-  }, [disabled, open])
-
-  useEffect(() => {
-    if (!open || !usePortal) return
+    if (!isOpen || !usePortal) return
     const updatePos = () => {
       const pos = computeDropdownPos()
       if (pos) setDropdownPos(pos)
@@ -132,7 +129,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       window.removeEventListener('scroll', updatePos, true)
       window.removeEventListener('resize', updatePos)
     }
-  }, [open, usePortal])
+  }, [isOpen, usePortal])
 
   const calendar = (
     <DatePickerCalendar
@@ -158,14 +155,14 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         type="button"
         disabled={disabled}
         aria-haspopup="dialog"
-        aria-expanded={open}
+        aria-expanded={isOpen}
         onClick={handleOpen}
         onKeyDown={onKeyDown}
         className={cn(
           'w-full flex items-center justify-between rounded-lg border shadow-sm text-sm transition-all bg-white text-right',
           compact ? 'px-2 py-1 h-7 text-xs' : 'h-9 px-3 py-2',
           error ? 'border-negative-500' : 'border-gray-300',
-          open && 'border-primary-500 ring-2 ring-primary-500',
+          isOpen && 'border-primary-500 ring-2 ring-primary-500',
           disabled && 'bg-gray-50 cursor-not-allowed text-gray-400',
           !disabled && 'hover:border-gray-400',
         )}
@@ -174,7 +171,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         <CalendarIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
       </button>
 
-      {open && (usePortal ? createPortal(calendar, document.body) : calendar)}
+      {isOpen && (usePortal ? createPortal(calendar, document.body) : calendar)}
     </div>
   )
 

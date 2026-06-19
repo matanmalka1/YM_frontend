@@ -1,4 +1,4 @@
-import { type FC, useCallback, useEffect, useState } from 'react'
+import { type FC, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getErrorMessage } from '@/utils/utils'
 import {
@@ -75,20 +75,19 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false)
   const [isAddingBusiness, setIsAddingBusiness] = useState(false)
   const [isAddingCharge, setIsAddingCharge] = useState(false)
-  const [shouldLoadRelatedData, setShouldLoadRelatedData] = useState(false)
-
-  useEffect(() => {
-    setShouldLoadRelatedData(false)
-  }, [client.id])
+  // Store which client the related data was requested for and derive the flag, so it
+  // resets itself when the client changes — no prop-sync effect needed.
+  const [relatedDataLoadedForId, setRelatedDataLoadedForId] = useState<number | null>(null)
+  const shouldLoadRelatedData = relatedDataLoadedForId === client.id
 
   const requestRelatedDataLoad = useCallback(() => {
-    setShouldLoadRelatedData(true)
-  }, [])
+    setRelatedDataLoadedForId(client.id)
+  }, [client.id])
 
   const openCreateCharge = useCallback(() => {
-    setShouldLoadRelatedData(true)
+    setRelatedDataLoadedForId(client.id)
     setIsAddingCharge(true)
-  }, [])
+  }, [client.id])
 
   const {
     binders,
