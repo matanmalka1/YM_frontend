@@ -1,5 +1,5 @@
 import type { EntityAuditLogEntry } from '../api'
-import { AUDIT_FIELD_LABELS } from '../audit.constants'
+import { AUDIT_FIELD_LABELS } from '../constants'
 
 export type FieldValueLabels = Partial<Record<string, Record<string, string>>>
 

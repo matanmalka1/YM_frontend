@@ -1,6 +1,6 @@
 import { getErrorMessage } from '@/utils/utils'
 import type { DashboardOverviewResponse } from './api'
-import { DASHBOARD_COPY } from './dashboardConstants'
+import { DASHBOARD_COPY } from './constants'
 
 export const dueDateLabel = (daysDelta: number): string => {
   if (daysDelta < 0) return `באיחור ${Math.abs(daysDelta)} ימים`

@@ -4,4 +4,4 @@ export { ClientDocumentsTab } from './components/ClientDocumentsTab'
 export { DocumentPreviewModal } from './components/DocumentPreviewModal'
 export { useDocumentPreviewDownload } from './components/useDocumentPreviewDownload'
 
-export { DOC_TYPE_LABELS } from './documents.constants'
+export { DOC_TYPE_LABELS } from './constants'

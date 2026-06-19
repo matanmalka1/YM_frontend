@@ -3,7 +3,7 @@ import { Badge } from '../../../components/ui/primitives/Badge'
 import { Button } from '../../../components/ui/primitives/Button'
 import { RowActionsMenu, RowActionItem, RowActionSeparator } from '@/components/ui/table'
 import { formatDate } from '../../../utils/utils'
-import { DOC_TYPE_LABELS } from '../documents.constants'
+import { DOC_TYPE_LABELS } from '../constants'
 import type { PermanentDocumentResponse } from '../api'
 
 interface DocumentCardProps {

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { cn } from '@/utils/utils'
 import type { VatDashboardStats } from '../../api'
-import { DASHBOARD_HREFS } from '../../dashboardConstants'
+import { DASHBOARD_HREFS } from '../../constants'
 import { useSeasonSummary } from '../../hooks/useSeasonSummary'
 import { DashboardPanel } from '../shared/DashboardLayout'
 

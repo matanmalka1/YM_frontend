@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { documentsApi, documentsQK } from '../api'
 import { Badge } from '../../../components/ui/primitives/Badge'
-import { STATUS_LABELS, getDocumentStatusVariant } from '../documents.constants'
+import { STATUS_LABELS, getDocumentStatusVariant } from '../constants'
 import { formatDate, formatFileSize } from '../../../utils/utils'
 
 interface DocumentVersionsPanelProps {

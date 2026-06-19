@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { UploadDocumentPayload } from './api'
-import { CLIENT_SCOPE_TYPES, DOCUMENT_TYPES, type DocumentType } from './documents.constants'
+import { CLIENT_SCOPE_TYPES, DOCUMENT_TYPES, type DocumentType } from './constants'
 
 export interface DocumentsUploadFormValues {
   document_type: UploadDocumentPayload['document_type']

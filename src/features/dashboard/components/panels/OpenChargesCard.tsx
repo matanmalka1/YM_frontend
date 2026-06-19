@@ -1,7 +1,7 @@
 import { ArrowLeft, ReceiptText } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from '@/utils/utils'
-import { DASHBOARD_HREFS } from '../../dashboardConstants'
+import { DASHBOARD_HREFS } from '../../constants'
 
 interface OpenChargesCardProps {
   count: number

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { cn } from '@/utils/utils'
-import { QUICK_ACTIONS, type QuickActionDef } from '../../dashboardConstants'
+import { QUICK_ACTIONS, type QuickActionDef } from '../../constants'
 import type { DashboardCreateModal } from '../../hooks/useDashboardCreateModals'
 
 interface QuickActionsPanelProps {

@@ -1,5 +1,5 @@
 import { formatFileSize } from '../../../utils/utils'
-import { DOCUMENT_ACCEPTED_MIME_TYPES, DOCUMENT_MAX_SIZE_BYTES, DOCUMENT_MAX_SIZE_MB } from '../documents.constants'
+import { DOCUMENT_ACCEPTED_MIME_TYPES, DOCUMENT_MAX_SIZE_BYTES, DOCUMENT_MAX_SIZE_MB } from '../constants'
 
 export const validateDocumentFile = (file: File): string | null => {
   if (file.size > DOCUMENT_MAX_SIZE_BYTES) {

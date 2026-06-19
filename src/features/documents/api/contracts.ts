@@ -1,4 +1,4 @@
-import type { DocumentType } from '../documents.constants'
+import type { DocumentType } from '../constants'
 
 export interface PermanentDocumentResponse {
   id: number

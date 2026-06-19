@@ -1,4 +1,4 @@
-import { DOC_TYPE_LABELS } from '../documents.constants'
+import { DOC_TYPE_LABELS } from '../constants'
 import type { PermanentDocumentResponse } from '../api'
 import type { BusinessResponse } from '@/features/clients'
 import type { FilterBadge } from '../../../components/ui/table/ActiveFilterBadges'

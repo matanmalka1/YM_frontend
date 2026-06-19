@@ -12,7 +12,7 @@ import {
 import { Link } from 'react-router-dom'
 import { cn, formatCurrencyILS, formatDate } from '@/utils/utils'
 import type { AttentionBoardItem, AttentionUrgency } from '../../api/contracts'
-import { ATTENTION_BOARD_COPY } from '../../dashboardConstants'
+import { ATTENTION_BOARD_COPY } from '../../constants'
 import { dueDateLabel } from '../../dashboard.utils'
 import { DashboardPanel, DashboardSectionHeader } from '../shared/DashboardLayout'
 

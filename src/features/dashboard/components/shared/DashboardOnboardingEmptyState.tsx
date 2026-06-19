@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft, UserPlus } from 'lucide-react'
-import { DASHBOARD_ONBOARDING_COPY } from '../../dashboardConstants'
+import { DASHBOARD_ONBOARDING_COPY } from '../../constants'
 import { DashboardPanel } from './DashboardLayout'
 
 export const DashboardOnboardingEmptyState = () => {

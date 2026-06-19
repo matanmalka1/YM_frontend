@@ -6,7 +6,7 @@ import { formatCount } from '@/utils/utils'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { useSeasonSummary } from '../../hooks/useSeasonSummary'
 import type { VatDashboardStats, VatDashboardPeriodStat } from '../../api/contracts'
-import { DASHBOARD_HREFS, VAT_STAT_LABELS } from '../../dashboardConstants'
+import { DASHBOARD_HREFS, VAT_STAT_LABELS } from '../../constants'
 import { DashboardPanel } from '../shared/DashboardLayout'
 
 /* ── shared ring + legend primitives ──────────────────────────────── */

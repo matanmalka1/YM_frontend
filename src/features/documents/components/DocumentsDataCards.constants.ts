@@ -1,4 +1,4 @@
-import { DOC_TYPE_LABELS, DOCUMENT_TAX_YEAR_RANGE } from '../documents.constants'
+import { DOC_TYPE_LABELS, DOCUMENT_TAX_YEAR_RANGE } from '../constants'
 import { DOCUMENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 
 const CURRENT_YEAR = new Date().getFullYear()

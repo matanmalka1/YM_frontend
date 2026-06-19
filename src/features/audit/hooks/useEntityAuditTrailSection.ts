@@ -11,7 +11,7 @@ import {
   AUDIT_ACTIONS_BY_ENTITY_TYPE,
   AUDIT_PAGE_SIZE,
   AUDIT_USERS_LIST_PARAMS,
-} from '../audit.constants'
+} from '../constants'
 import type { EntityAuditTrailParams, EntityAuditType } from '../api'
 import { useEntityAuditTrail } from './useEntityAuditTrail'
 
