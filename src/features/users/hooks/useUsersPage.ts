@@ -8,7 +8,7 @@ import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { parsePositiveInt } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
 import { useAuthStore } from '@/store/auth.store'
-import { buildUserColumns } from '../components/UsersColumns'
+import { buildUserColumns } from '../components/list/UsersColumns'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 
 const invalidateUsers = (queryClient: ReturnType<typeof useQueryClient>) =>
