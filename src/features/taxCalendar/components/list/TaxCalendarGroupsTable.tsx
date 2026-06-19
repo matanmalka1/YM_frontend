@@ -12,6 +12,7 @@ import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
 import { cn, formatDate, formatPlainIdentifier, getErrorMessage, getReportingPeriodLabelWithYear } from '@/utils/utils'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { useTaxCalendarGroupItems } from '../../hooks/useTaxCalendarGroupItems'
+import { PAGE_SIZE_MD as ITEM_PAGE_SIZE } from '@/constants/pagination.constants'
 import {
   TAX_CALENDAR_OBLIGATION_LABELS,
   type TaxCalendarGroup,
@@ -69,8 +70,6 @@ const getStateVariant = (item: TaxCalendarGroupItem): 'success' | 'warning' | 'e
 
 const getDueDatePrefix = (group: TaxCalendarGroup): string =>
   group.obligation_type === 'advance_payment' ? 'מועד תשלום' : 'מועד דיווח'
-
-const ITEM_PAGE_SIZE = 50
 
 const GroupItemsRows = ({
   group,

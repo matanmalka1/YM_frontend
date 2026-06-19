@@ -1,8 +1,9 @@
 import type { EntityAuditType } from './api'
+import { PAGE_SIZE_MD, PAGE_SIZE_MAX } from '@/constants/pagination.constants'
 
-export const AUDIT_PAGE_SIZE = 50
+export const AUDIT_PAGE_SIZE = PAGE_SIZE_MD
 
-export const AUDIT_USERS_LIST_PARAMS = { page: 1, page_size: 200 } as const
+export const AUDIT_USERS_LIST_PARAMS = { page: 1, page_size: PAGE_SIZE_MAX } as const
 
 export const AUDIT_ACTION_LABELS: Record<string, string> = {
   created: 'נוצר',

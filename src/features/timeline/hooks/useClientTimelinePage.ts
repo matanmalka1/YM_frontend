@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { timelineApi, timelineQK } from '../api'
 import { getErrorMessage, isPositiveInt, parsePositiveInt } from '../../../utils/utils'
+import { PAGE_SIZE_MD } from '@/constants/pagination.constants'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import type { TimelineEvent } from '../api'
 import { normalizeTimelineEvents, type NormalizedTimelineEvent, type TimelineFilterKey } from '../normalize'
@@ -29,7 +30,7 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
   const { searchParams, getParam, getPage, setFilter, setFilters, setPage: setPageParam } = useSearchParamFilters()
 
   const page = getPage()
-  const pageSize = parsePositiveInt(searchParams.get('page_size'), 50)
+  const pageSize = parsePositiveInt(searchParams.get('page_size'), PAGE_SIZE_MD)
   const searchTerm = getParam('search')
   const importantOnly = searchParams.get('important_only') === 'true'
   const rawTypeFilters = searchParams.get('type_filters')

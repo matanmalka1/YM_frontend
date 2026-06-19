@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { reportsApi, reportsQK } from "../api";
 import { getTotalPages } from "@/utils/paginationUtils";
-
-const PAGE_SIZE = 50;
+import { PAGE_SIZE_MD as PAGE_SIZE } from "@/constants/pagination.constants";
 
 export const useVatComplianceReport = () => {
   const [year, setYear] = useState(new Date().getFullYear());

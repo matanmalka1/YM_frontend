@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import type { AdvancePaymentStatus, CreateAdvancePaymentPayload } from '../api/contracts'
 import { getErrorMessage, showErrorToast } from '@/utils/utils'
+import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 
 interface UpdatePayload {
   id: number
@@ -22,7 +23,7 @@ export const useAdvancePayments = (
     client_record_id: clientRecordId,
     year,
     page,
-    page_size: 20,
+    page_size: PAGE_SIZE_SM,
     ...(statusFilter?.length ? { status: statusFilter } : {}),
   }
 

@@ -7,8 +7,9 @@ import type {
   AdvancePaymentStatus,
   ListAdvancePaymentsOverviewParams,
 } from '../api/contracts'
+import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 
-export const ADVANCE_PAYMENT_BATCH_PAGE_SIZE = 20
+export const ADVANCE_PAYMENT_BATCH_PAGE_SIZE = PAGE_SIZE_SM
 
 interface UseAdvancePaymentBatchRowsParams {
   batch: AdvancePaymentDueDateGroup

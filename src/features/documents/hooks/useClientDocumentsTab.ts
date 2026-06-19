@@ -12,8 +12,7 @@ import { getErrorMessage } from '../../../utils/utils'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { useDocumentUpload } from './useDocumentUpload'
 import { toast } from '../../../utils/toast'
-
-const PAGE_SIZE = 20
+import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 
 export const useClientDocumentsTab = (clientId: number, taxYear?: number | null) => {
   const queryClient = useQueryClient()

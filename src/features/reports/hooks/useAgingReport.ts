@@ -5,8 +5,7 @@ import { reportsApi, reportsQK, type ExportFormat } from "../api";
 import { getErrorMessage, showErrorToast } from "../../../utils/utils";
 import { getTotalPages } from "@/utils/paginationUtils";
 import { toast } from "../../../utils/toast";
-
-const PAGE_SIZE = 50;
+import { PAGE_SIZE_MD as PAGE_SIZE } from "@/constants/pagination.constants";
 
 export const useAgingReport = () => {
   const [asOfDate, setAsOfDateRaw] = useState<string>(
