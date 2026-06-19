@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import type { AdvancePaymentDueDateGroup } from './api/contracts'
+import type { AdvancePaymentDueDateGroup } from '../api/contracts'
 import {
   getAdvancePaymentBatchKey,
   getAdvancePaymentWorkflowStats,
   mergeAdvancePaymentBatches,
-} from './advancedPaymentsPage.utils'
+} from './advancePaymentUtils'
 
 const createBatch = (overrides: Partial<AdvancePaymentDueDateGroup> = {}): AdvancePaymentDueDateGroup => ({
   year: 2026,
@@ -23,7 +23,7 @@ const createBatch = (overrides: Partial<AdvancePaymentDueDateGroup> = {}): Advan
   ...overrides,
 })
 
-describe('advancedPaymentsPage.utils', () => {
+describe('advancePaymentUtils', () => {
   it('merges batches with the same due date and sums workflow totals', () => {
     const batches = [
       createBatch(),

@@ -8,7 +8,7 @@ import {
   type Column,
 } from '../../../components/ui/table'
 import type { ChargeListItem } from '../api'
-import { getChargeAmountText, getChargePeriodLabel, getChargeTypeLabel } from '../utils'
+import { getChargeAmountText, getChargePeriodLabel, getChargeTypeLabel } from '../utils/chargeUtils'
 import { formatClientOfficeId } from '../../../utils/utils'
 import { getChargeStatusLabel } from '../constants'
 import { ChargeRowActions } from './ChargeRowActions'

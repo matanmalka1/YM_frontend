@@ -4,7 +4,7 @@ import { getHttpStatus } from '@/utils/utils'
 import { useRole } from '@/hooks/useRole'
 import { dashboardApi, dashboardQK } from '../api'
 import type { DashboardOverviewResponse } from '../api'
-import { deriveDashboardState } from '../dashboard.utils'
+import { deriveDashboardState } from '../utils/dashboardUtils'
 
 export const useDashboardPage = () => {
   const { role, isAdvisor } = useRole()

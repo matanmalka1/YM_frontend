@@ -1,4 +1,4 @@
-import type { AdvancePaymentDueDateGroup } from './api/contracts'
+import type { AdvancePaymentDueDateGroup } from '../api/contracts'
 import { reportingPeriodIncludesMonth } from '@/utils/reportingPeriod'
 
 export const getAdvancePaymentBatchKey = (batch: AdvancePaymentDueDateGroup): string =>

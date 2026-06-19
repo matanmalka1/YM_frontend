@@ -1,6 +1,6 @@
 import { Bell, CheckCircle2, Eye, FileText, Trash2 } from 'lucide-react'
 import { RowActionItem, RowActionSeparator, RowActionsMenu } from '@/components/ui/table'
-import { canCancel, canIssue, canMarkPaid } from '../utils'
+import { canCancel, canIssue, canMarkPaid } from '../utils/chargeUtils'
 import type { BackendAction } from '@/lib/actions/types'
 
 interface ChargeRowActionsProps {

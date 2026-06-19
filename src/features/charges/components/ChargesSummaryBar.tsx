@@ -1,7 +1,7 @@
 import { Clock, CheckCircle2, FileText, XCircle } from 'lucide-react'
 import type { ChargeListStats } from '../api'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
-import { getChargeStatusStatDisplay } from '../helpers'
+import { getChargeStatusStatDisplay } from '../utils/chargeHelpers'
 
 interface ChargesSummaryBarProps {
   stats: ChargeListStats

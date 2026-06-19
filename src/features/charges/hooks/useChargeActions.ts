@@ -4,7 +4,7 @@ import { showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { workQueueQK } from '@/features/workQueue/api'
 import { chargesApi, chargesQK, type BulkChargeActionPayload } from '../api'
-import { runChargeActionRequest } from '../helpers'
+import { runChargeActionRequest } from '../utils/chargeHelpers'
 import type { ChargeAction } from '../types'
 
 type UseChargeActionsOptions = {

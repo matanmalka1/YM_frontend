@@ -3,7 +3,7 @@ import type { Breadcrumb } from '@/components/layout/PageHeader'
 import type { DefinitionItem } from '@/components/ui/layout/DefinitionList'
 import { CLIENT_ROUTES, type BusinessResponse, type ClientRecordResponse } from '@/features/clients'
 import { formatClientOfficeId, formatDate } from '@/utils/utils'
-import { BUSINESS_DETAILS_COPY, getBusinessStatusLabel } from './constants'
+import { BUSINESS_DETAILS_COPY, getBusinessStatusLabel } from '../constants'
 
 type BusinessRouteParams = {
   clientId: string

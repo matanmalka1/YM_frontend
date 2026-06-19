@@ -1,5 +1,5 @@
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
-import { ADVANCE_PAYMENTS_FILTER_FIELDS } from '../../advancedPaymentsPage.constants'
+import { ADVANCE_PAYMENTS_FILTER_FIELDS } from '../../constants'
 
 interface AdvancePaymentsFiltersBarProps {
   values: Readonly<Record<string, string | undefined>>

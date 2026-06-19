@@ -5,7 +5,7 @@ import { chargesApi, chargesQK } from '../api'
 import { toast } from '../../../utils/toast'
 import { getHttpStatus, isPositiveInt, showErrorToast } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
-import { runChargeActionRequest } from '../helpers'
+import { runChargeActionRequest } from '../utils/chargeHelpers'
 import type { ChargeAction } from '../types'
 
 export const useChargeDetailsPage = (chargeId: string | undefined) => {

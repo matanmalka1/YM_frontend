@@ -1,7 +1,7 @@
 import { MonthlyAccordionList } from '@/components/ui/table/MonthlyAccordionGroup'
 import { reportingPeriodIncludesMonth } from '@/utils/reportingPeriod'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
-import { getAdvancePaymentBatchKey } from '../../advancedPaymentsPage.utils'
+import { getAdvancePaymentBatchKey } from '../../utils/advancePaymentUtils'
 import { AdvancePaymentBatchRow } from './AdvancePaymentBatchRow'
 
 interface AdvancePaymentsBatchesListProps {

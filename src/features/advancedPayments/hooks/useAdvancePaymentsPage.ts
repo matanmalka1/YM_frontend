@@ -15,7 +15,7 @@ import {
   getAdvancePaymentBatchKey,
   getAdvancePaymentWorkflowStats,
   mergeAdvancePaymentBatches,
-} from '../advancedPaymentsPage.utils'
+} from '../utils/advancePaymentUtils'
 
 export const useAdvancePaymentsPage = () => {
   const { searchParams, getParam, setFilter, setFilters, resetFilters } = useSearchParamFilters()

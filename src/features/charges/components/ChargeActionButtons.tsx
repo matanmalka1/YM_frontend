@@ -1,6 +1,6 @@
 import { CheckCircle2 } from 'lucide-react'
 import { Button } from '../../../components/ui/primitives/Button'
-import { canCancel, canIssue, canMarkPaid } from '../utils'
+import { canCancel, canIssue, canMarkPaid } from '../utils/chargeUtils'
 import type { BackendAction } from '@/lib/actions/types'
 
 interface ChargeActionButtonsProps {

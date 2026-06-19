@@ -14,7 +14,7 @@ import {
   toCreateChargePayload,
   type ChargeCreateFormValues,
 } from '../schemas'
-import { buildChargePeriodOptions } from '../helpers'
+import { buildChargePeriodOptions } from '../utils/chargeHelpers'
 
 interface ChargesCreateModalProps {
   open: boolean

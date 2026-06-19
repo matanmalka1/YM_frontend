@@ -7,7 +7,7 @@ import { useRole } from '@/hooks/useRole'
 import { useBusinessDetails } from '../hooks/useBusinessDetails'
 import { BusinessDetailsCard } from '../components/BusinessDetailsCard'
 import { BUSINESS_DETAILS_COPY } from '../constants'
-import { buildBusinessBreadcrumbs, formatBusinessDisplayName, getBusinessRouteParams } from '../utils'
+import { buildBusinessBreadcrumbs, formatBusinessDisplayName, getBusinessRouteParams } from '../utils/businessUtils'
 
 export const BusinessDetails: FC = () => {
   const { clientId, businessId } = useParams<{

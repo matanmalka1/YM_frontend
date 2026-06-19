@@ -4,7 +4,7 @@ import { EntityAuditTrailSection, type FieldValueLabels } from '@/features/audit
 import type { BusinessResponse, ClientRecordResponse } from '@/features/clients'
 import { NotesCard } from '@/features/notes'
 import { BUSINESS_DETAILS_COPY, BUSINESS_STATUS_LABELS } from '../constants'
-import { buildBusinessSummaryItems } from '../utils'
+import { buildBusinessSummaryItems } from '../utils/businessUtils'
 
 const FIELD_VALUE_LABELS: FieldValueLabels = {
   status: BUSINESS_STATUS_LABELS,

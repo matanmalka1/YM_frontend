@@ -1,7 +1,7 @@
 import type { Column } from '@/components/ui/table/DataTable'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import { Alert } from '@/components/ui/overlays/Alert'
-import { getChargeRowClassName, getChargesEmptyState } from '../helpers'
+import { getChargeRowClassName, getChargesEmptyState } from '../utils/chargeHelpers'
 import type { BulkChargeActionPayload, ChargeListItem } from '../api'
 import { ChargeBulkToolbar } from './ChargeBulkToolbar'
 

@@ -1,10 +1,10 @@
 import type { DataTableProps } from '@/components/ui/table'
 import { formatCurrencyILS, parsePositiveInt } from '@/utils/utils'
 import { toOptionalNumber, toOptionalString } from '@/utils/filters'
-import { chargesApi, type ChargeStatusStat, type ChargesListParams } from './api'
-import { CHARGE_PERIOD_YEAR_SPAN } from './constants'
-import type { ChargeAction, ChargesFilters } from './types'
-import { getChargePeriodLabel } from './utils'
+import { chargesApi, type ChargeStatusStat, type ChargesListParams } from '../api'
+import { CHARGE_PERIOD_YEAR_SPAN } from '../constants'
+import type { ChargeAction, ChargesFilters } from '../types'
+import { getChargePeriodLabel } from './chargeUtils'
 
 export const getChargesFilters = (searchParams: URLSearchParams): ChargesFilters => ({
   client_record_id: searchParams.get('client_record_id') ?? '',
