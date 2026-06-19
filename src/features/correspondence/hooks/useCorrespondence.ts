@@ -13,14 +13,18 @@ export const useCorrespondence = (businessId: number | undefined, clientId?: num
   const listParams = { ...CORRESPONDENCE_LIST_PARAMS, business_id: businessId }
   const queryKey = [...correspondenceQK.forClient(resolvedClientId), listParams]
 
-  const listQuery = useQuery({
+  const {
+    data: listData,
+    isLoading: listLoading,
+    error: listError,
+  } = useQuery({
     enabled: resolvedClientId > 0,
     queryKey,
     queryFn: () => correspondenceApi.list(resolvedClientId, listParams),
     retry: false,
   })
 
-  const contactsQuery = useQuery({
+  const { data: contactsData } = useQuery({
     enabled: loadContacts && resolvedClientId > 0,
     queryKey: authorityContactsQK.list(resolvedClientId, AUTHORITY_CONTACTS_LIST_PARAMS),
     queryFn: () => authorityContactsApi.listAuthorityContacts(resolvedClientId, AUTHORITY_CONTACTS_LIST_PARAMS),
@@ -53,11 +57,11 @@ export const useCorrespondence = (businessId: number | undefined, clientId?: num
   const deletingId = deleteMutation.isPending ? (deleteMutation.variables ?? null) : null
 
   return {
-    entries: listQuery.data?.items ?? [],
-    total: listQuery.data?.total ?? 0,
-    isLoading: listQuery.isLoading,
-    error: listQuery.error ? getErrorMessage(listQuery.error, 'שגיאה בטעינת התכתבויות') : null,
-    contacts: contactsQuery.data?.items ?? [],
+    entries: listData?.items ?? [],
+    total: listData?.total ?? 0,
+    isLoading: listLoading,
+    error: listError ? getErrorMessage(listError, 'שגיאה בטעינת התכתבויות') : null,
+    contacts: contactsData?.items ?? [],
     createEntry: (values: CorrespondenceFormValues) => createMutation.mutateAsync(values),
     isCreating: createMutation.isPending,
     updateEntry: (id: number, values: CorrespondenceFormValues) => updateMutation.mutateAsync({ id, values }),

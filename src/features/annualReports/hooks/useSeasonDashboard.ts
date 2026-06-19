@@ -9,14 +9,22 @@ interface SeasonFilters {
 }
 
 export const useSeasonDashboard = (taxYear?: number, enabled = true, filters?: SeasonFilters) => {
-  const summaryQuery = useQuery({
+  const {
+    data: summaryData,
+    isPending: summaryPending,
+    error: summaryError,
+  } = useQuery({
     enabled,
     queryKey: taxYear ? annualReportsQK.seasonSummary(taxYear) : annualReportsQK.activeSeasonSummary,
     queryFn: () =>
       taxYear ? annualReportSeasonApi.getSeasonSummary(taxYear) : annualReportSeasonApi.getActiveSeasonSummary(),
   })
 
-  const reportsQuery = useQuery({
+  const {
+    data: reportsData,
+    isPending: reportsPending,
+    error: reportsError,
+  } = useQuery({
     enabled,
     queryKey: taxYear
       ? [...annualReportsQK.seasonList(taxYear), filters]
@@ -27,21 +35,21 @@ export const useSeasonDashboard = (taxYear?: number, enabled = true, filters?: S
         : annualReportSeasonApi.listActiveSeasonReports({ ...ANNUAL_REPORTS_COMPLETE_LIST_PARAMS, ...filters }),
   })
 
-  const overdueQuery = useQuery({
-    enabled: enabled && Boolean(summaryQuery.data?.tax_year),
-    queryKey: annualReportsQK.overdue(summaryQuery.data?.tax_year ?? 0),
-    queryFn: () => annualReportSeasonApi.getOverdue(summaryQuery.data?.tax_year),
+  const { data: overdueData } = useQuery({
+    enabled: enabled && Boolean(summaryData?.tax_year),
+    queryKey: annualReportsQK.overdue(summaryData?.tax_year ?? 0),
+    queryFn: () => annualReportSeasonApi.getOverdue(summaryData?.tax_year),
   })
 
   return {
-    summary: summaryQuery.data ?? null,
-    reports: reportsQuery.data?.items ?? [],
-    overdue: overdueQuery.data ?? [],
-    isLoading: summaryQuery.isPending || reportsQuery.isPending,
-    error: summaryQuery.error
-      ? getErrorMessage(summaryQuery.error, 'שגיאה בטעינת סיכום עונה')
-      : reportsQuery.error
-        ? getErrorMessage(reportsQuery.error, 'שגיאה בטעינת דוחות')
+    summary: summaryData ?? null,
+    reports: reportsData?.items ?? [],
+    overdue: overdueData ?? [],
+    isLoading: summaryPending || reportsPending,
+    error: summaryError
+      ? getErrorMessage(summaryError, 'שגיאה בטעינת סיכום עונה')
+      : reportsError
+        ? getErrorMessage(reportsError, 'שגיאה בטעינת דוחות')
         : null,
   }
 }

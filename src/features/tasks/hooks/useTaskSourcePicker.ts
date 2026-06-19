@@ -11,7 +11,7 @@ export const useTaskSourcePicker = () => {
   const [selectedClientName, setSelectedClientName] = useState<string | null>(null)
   const [selectedClientOfficeNumber, setSelectedClientOfficeNumber] = useState<number | null>(null)
 
-  const workQueueQuery = useQuery({
+  const { data: workQueueData, isFetching: workQueueFetching } = useQuery({
     queryKey: workQueueQK.list(
       selectedClientId
         ? { client_record_id: selectedClientId, scope: 'system', linked: 'unlinked', page: 1, page_size: PAGE_SIZE_LG }
@@ -48,8 +48,8 @@ export const useTaskSourcePicker = () => {
   }, [])
 
   const workQueueItems = useMemo(
-    () => (workQueueQuery.data?.items ?? []).filter((item) => item.source_type !== 'task'),
-    [workQueueQuery.data?.items],
+    () => (workQueueData?.items ?? []).filter((item) => item.source_type !== 'task'),
+    [workQueueData?.items],
   )
 
   return {
@@ -59,7 +59,7 @@ export const useTaskSourcePicker = () => {
     selectClient,
     clearClient,
     workQueueItems,
-    isLoadingItems: workQueueQuery.isFetching,
+    isLoadingItems: workQueueFetching,
     sourceLabel,
   }
 }

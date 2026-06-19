@@ -78,20 +78,20 @@ export const useVatWorkItemsPage = () => {
     client_record_id: filters.client_record_id ? Number(filters.client_record_id) : undefined,
   }
 
-  const statusSummaryQuery = useQuery({
+  const { data: statusSummaryData, isLoading: statusSummaryLoading } = useQuery({
     queryKey: vatReportsQK.statusSummary(summaryParams),
     queryFn: () => vatReportsApi.getStatusSummary(summaryParams),
     staleTime: QUERY_STALE_TIME.default,
   })
 
   const getStatsTotal = (statuses: readonly VatWorkItemStatus[]) =>
-    statuses.reduce((sum, status) => sum + (statusSummaryQuery.data?.[status] ?? 0), 0)
+    statuses.reduce((sum, status) => sum + (statusSummaryData?.[status] ?? 0), 0)
 
   const statsPending = getStatsTotal(VAT_WORK_ITEMS_STATS_STATUS_GROUPS.pending)
   const statsTyping = getStatsTotal(VAT_WORK_ITEMS_STATS_STATUS_GROUPS.typing)
   const statsReview = getStatsTotal(VAT_WORK_ITEMS_STATS_STATUS_GROUPS.review)
   const statsFiled = getStatsTotal(VAT_WORK_ITEMS_STATS_STATUS_GROUPS.filed)
-  const statsLoading = statusSummaryQuery.isLoading
+  const statsLoading = statusSummaryLoading
 
   const groupStatus = filters.status || undefined
   const groupClientRecordId = filters.client_record_id ? Number(filters.client_record_id) : undefined

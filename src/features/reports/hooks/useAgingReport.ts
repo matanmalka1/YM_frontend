@@ -19,12 +19,12 @@ export const useAgingReport = () => {
     setPage(1);
   };
 
-  const reportQuery = useQuery({
+  const { data, isPending, error } = useQuery({
     queryKey: reportsQK.aging(asOfDate, page, PAGE_SIZE),
     queryFn: () => reportsApi.getAgingReport(asOfDate, page, PAGE_SIZE),
   });
 
-  const totalPages = reportQuery.data ? getTotalPages(reportQuery.data.total, PAGE_SIZE) : 1;
+  const totalPages = data ? getTotalPages(data.total, PAGE_SIZE) : 1;
 
   const handleExport = async (format: ExportFormat) => {
     setExporting(format);
@@ -46,10 +46,10 @@ export const useAgingReport = () => {
     totalPages,
     exporting,
     handleExport,
-    data: reportQuery.data,
-    isLoading: reportQuery.isPending,
-    error: reportQuery.error
-      ? getErrorMessage(reportQuery.error, "שגיאה בטעינת הדוח")
+    data,
+    isLoading: isPending,
+    error: error
+      ? getErrorMessage(error, "שגיאה בטעינת הדוח")
       : null,
   };
 };

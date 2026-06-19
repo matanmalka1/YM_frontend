@@ -39,14 +39,19 @@ export const useBindersPage = () => {
     ],
   )
 
-  const bindersQuery = useQuery({
+  const {
+    data: bindersData,
+    isPending: bindersPending,
+    isFetching: bindersFetching,
+    error: bindersError,
+  } = useQuery({
     queryKey: bindersQK.list(listParams),
     queryFn: () => bindersApi.list(listParams),
     placeholderData: keepPreviousData,
   })
 
-  const pageItems = useMemo(() => bindersQuery.data?.items ?? [], [bindersQuery.data?.items])
-  const total = bindersQuery.data?.total ?? 0
+  const pageItems = useMemo(() => bindersData?.items ?? [], [bindersData?.items])
+  const total = bindersData?.total ?? 0
   const lastCountersRef = useRef({
     total: 0,
     location_in_office: 0,
@@ -57,12 +62,12 @@ export const useBindersPage = () => {
   })
 
   useEffect(() => {
-    if (bindersQuery.data?.counters) {
-      lastCountersRef.current = bindersQuery.data.counters
+    if (bindersData?.counters) {
+      lastCountersRef.current = bindersData.counters
     }
-  }, [bindersQuery.data?.counters])
+  }, [bindersData?.counters])
 
-  const counters = bindersQuery.data?.counters ?? lastCountersRef.current
+  const counters = bindersData?.counters ?? lastCountersRef.current
 
   const { deepLinkBinderId, selectedBinder, handleSelectBinder, handleCloseDrawer } = useBinderSelection(pageItems)
 
@@ -131,9 +136,9 @@ export const useBindersPage = () => {
 
   return {
     status: {
-      isLoading: bindersQuery.isPending,
-      isFetching: bindersQuery.isFetching,
-      error: bindersQuery.error ? getErrorMessage(bindersQuery.error, 'שגיאה בטעינת רשימת קלסרים') : null,
+      isLoading: bindersPending,
+      isFetching: bindersFetching,
+      error: bindersError ? getErrorMessage(bindersError, 'שגיאה בטעינת רשימת קלסרים') : null,
       loadingMessage: 'טוען קלסרים...',
     },
     headerProps: {

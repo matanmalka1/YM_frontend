@@ -28,7 +28,7 @@ export const useIncomeExpensePanel = (reportId: number) => {
     ReturnType<typeof annualReportFinancialsApi.autoPopulate>
   > | null>(null)
 
-  const financialsQuery = useQuery({
+  const { data: financialsData, isLoading: financialsLoading } = useQuery({
     queryKey: annualReportsQK.financials(reportId),
     queryFn: () => annualReportFinancialsApi.getFinancials(reportId),
     enabled: reportId > 0,
@@ -114,15 +114,15 @@ export const useIncomeExpensePanel = (reportId: number) => {
     mutations.updateExpense.mutate({ lineId, payload }, { onSuccess: () => setEditingLine(null) })
   }
 
-  const incomeLines = financialsQuery.data?.income_lines ?? []
-  const expenseLines = financialsQuery.data?.expense_lines ?? []
+  const incomeLines = financialsData?.income_lines ?? []
+  const expenseLines = financialsData?.expense_lines ?? []
 
   return {
     isAdvisor,
-    isLoading: financialsQuery.isLoading,
+    isLoading: financialsLoading,
     incomeLines,
     expenseLines,
-    totals: getFinancialTotals(financialsQuery.data),
+    totals: getFinancialTotals(financialsData),
     hasLines: incomeLines.length > 0 || expenseLines.length > 0,
     editingLine,
     showForceConfirm,

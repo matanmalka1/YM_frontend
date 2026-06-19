@@ -7,7 +7,11 @@ export const useTaxProfile = (clientId: number) => {
   const queryClient = useQueryClient()
   const qk = clientsQK.detail(clientId)
 
-  const profileQuery = useQuery({
+  const {
+    data: profileData,
+    isPending: profilePending,
+    error: profileError,
+  } = useQuery({
     enabled: clientId > 0,
     queryKey: qk,
     queryFn: () => clientsApi.getById(clientId),
@@ -26,9 +30,9 @@ export const useTaxProfile = (clientId: number) => {
   })
 
   return {
-    profile: (profileQuery.data ?? null) as ClientRecordResponse | null,
-    isLoading: profileQuery.isPending,
-    error: profileQuery.error ? getErrorMessage(profileQuery.error, 'שגיאה בטעינת פרטי מס') : null,
+    profile: (profileData ?? null) as ClientRecordResponse | null,
+    isLoading: profilePending,
+    error: profileError ? getErrorMessage(profileError, 'שגיאה בטעינת פרטי מס') : null,
     updateProfile: (data: UpdateClientPayload) => updateMutation.mutate(data),
     isUpdating: updateMutation.isPending,
   }

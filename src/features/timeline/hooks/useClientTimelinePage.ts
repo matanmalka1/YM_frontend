@@ -60,13 +60,19 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
     [page, pageSize, searchTerm, importantOnly, JSON.stringify(eventTypeParam)],
   )
 
-  const timelineQuery = useQuery({
+  const {
+    data: timelineData,
+    error: timelineError,
+    isPending: timelinePending,
+    isRefetching: timelineRefetching,
+    refetch: timelineRefetch,
+  } = useQuery({
     enabled: hasValidClient,
     queryKey: timelineQK.clientEvents(clientIdNumber, timelineParams),
     queryFn: () => timelineApi.getClientTimeline(clientIdNumber, timelineParams),
   })
 
-  const events = useMemo<TimelineEvent[]>(() => timelineQuery.data?.events ?? [], [timelineQuery.data?.events])
+  const events = useMemo<TimelineEvent[]>(() => timelineData?.events ?? [], [timelineData?.events])
 
   // ── Derived timeline model ─────────────────────────────────────────────────
 
@@ -119,21 +125,21 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
 
   const error = !hasValidClient
     ? 'מזהה לקוח חסר'
-    : timelineQuery.error
-      ? getErrorMessage(timelineQuery.error, 'שגיאה בטעינת ציר זמן')
+    : timelineError
+      ? getErrorMessage(timelineError, 'שגיאה בטעינת ציר זמן')
       : null
 
   // ── Public API ─────────────────────────────────────────────────────────────
 
   return {
-    loading: timelineQuery.isPending,
-    refreshing: timelineQuery.isRefetching,
-    refresh: () => timelineQuery.refetch(),
+    loading: timelinePending,
+    refreshing: timelineRefetching,
+    refresh: () => timelineRefetch(),
     error,
 
     page,
     pageSize,
-    total: timelineQuery.data?.total ?? 0,
+    total: timelineData?.total ?? 0,
     setPage,
     setPageSize,
 

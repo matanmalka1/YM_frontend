@@ -27,7 +27,11 @@ export const useAdvancePayments = (
     ...(statusFilter?.length ? { status: statusFilter } : {}),
   }
 
-  const listQuery = useQuery({
+  const {
+    data: listData,
+    error: listError,
+    isPending: listPending,
+  } = useQuery({
     enabled,
     queryKey: advancedPaymentsQK.list(listParams),
     queryFn: () => advancePaymentsApi.list(listParams),
@@ -60,7 +64,7 @@ export const useAdvancePayments = (
     onError: (err) => showErrorToast(err, 'שגיאה במחיקת מקדמה'),
   })
 
-  const rows = enabled ? (listQuery.data?.items ?? []) : []
+  const rows = enabled ? (listData?.items ?? []) : []
   const totalExpected = rows.reduce((sum, row) => sum + Number(row.expected_amount ?? 0), 0)
   const totalPaid = rows.reduce((sum, row) => sum + Number(row.paid_amount ?? 0), 0)
 
@@ -68,11 +72,11 @@ export const useAdvancePayments = (
 
   return {
     rows,
-    isLoading: enabled && listQuery.isPending,
-    error: enabled && listQuery.error ? getErrorMessage(listQuery.error, 'שגיאה בטעינת מקדמות') : null,
+    isLoading: enabled && listPending,
+    error: enabled && listError ? getErrorMessage(listError, 'שגיאה בטעינת מקדמות') : null,
     totalExpected,
     totalPaid,
-    total: listQuery.data?.total ?? 0,
+    total: listData?.total ?? 0,
     updateRow: (id: number, paid_amount: string | null, status?: AdvancePaymentStatus) =>
       updateMutation.mutateAsync({ id, paid_amount: paid_amount ?? '0', status }),
     isUpdating: updateMutation.isPending,

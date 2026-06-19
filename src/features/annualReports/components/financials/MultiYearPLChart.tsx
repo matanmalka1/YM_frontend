@@ -12,12 +12,12 @@ interface MultiYearPLChartProps {
 }
 
 export const MultiYearPLChart: React.FC<MultiYearPLChartProps> = ({ clientId, currentReportId }) => {
-  const reportsQ = useQuery({
+  const { data: reportsData } = useQuery({
     queryKey: annualReportsQK.forClient(clientId),
     queryFn: () => annualReportsApi.listClientReports(clientId, ANNUAL_REPORTS_COMPLETE_LIST_PARAMS),
   })
 
-  const reports = [...(reportsQ.data ?? [])].sort((a, b) => a.tax_year - b.tax_year).slice(-TREND_REPORT_LIMIT)
+  const reports = [...(reportsData ?? [])].sort((a, b) => a.tax_year - b.tax_year).slice(-TREND_REPORT_LIMIT)
 
   const queryInputs = reports.map((report) => ({
     id: report.id,

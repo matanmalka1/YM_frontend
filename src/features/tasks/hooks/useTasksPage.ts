@@ -23,7 +23,7 @@ export const useTasksPage = () => {
 
   const tasksQuery = useTasks(filters.listParams)
 
-  const editTaskQuery = useQuery({
+  const { data: editTaskData, isLoading: editTaskLoading } = useQuery({
     queryKey: tasksQK.detail(actions.modal && actions.modal.mode !== 'create' ? actions.modal.taskId : 0),
     queryFn: () => tasksApi.get((actions.modal as { taskId: number }).taskId),
     enabled: actions.modal !== null && actions.modal.mode !== 'create',
@@ -57,9 +57,9 @@ export const useTasksPage = () => {
     actionError: actions.actionError,
     isActionBusy: actions.isActionBusy,
     modal: actions.modal,
-    modalTask: actions.modal?.mode !== 'create' ? (editTaskQuery.data ?? null) : null,
+    modalTask: actions.modal?.mode !== 'create' ? (editTaskData ?? null) : null,
     isModalLoading:
-      actions.isModalSaving || (actions.modal !== null && actions.modal.mode !== 'create' && editTaskQuery.isLoading),
+      actions.isModalSaving || (actions.modal !== null && actions.modal.mode !== 'create' && editTaskLoading),
     confirmDialog: {
       open: Boolean(actions.pendingConfirm && confirmCopy),
       title: confirmCopy?.title ?? '',

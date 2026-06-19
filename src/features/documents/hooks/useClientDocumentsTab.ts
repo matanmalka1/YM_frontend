@@ -19,7 +19,11 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
   const [page, setPage] = useState(1)
   const { businesses, isLoading: businessesLoading } = useBusinessesForClient({ clientId })
 
-  const documentsQuery = useQuery<PermanentDocumentListResponse>({
+  const {
+    data: documentsData,
+    isPending: documentsPending,
+    error: documentsError,
+  } = useQuery<PermanentDocumentListResponse>({
     enabled: clientId > 0,
     queryKey: [...documentsQK.clientList(clientId), taxYear ?? null, page, PAGE_SIZE],
     queryFn: () =>
@@ -30,7 +34,11 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
       }),
   })
 
-  const signalsQuery = useQuery<OperationalSignalsResponse>({
+  const {
+    data: signalsData,
+    isPending: signalsPending,
+    error: signalsError,
+  } = useQuery<OperationalSignalsResponse>({
     enabled: clientId > 0,
     queryKey: documentsQK.clientSignals(clientId),
     queryFn: () => documentsApi.getSignalsByClient(clientId),
@@ -62,14 +70,14 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
     invalidateDocs()
   }
 
-  const total = documentsQuery.data?.total ?? 0
+  const total = documentsData?.total ?? 0
   const totalPages = getTotalPages(total, PAGE_SIZE)
-  const errorSource = documentsQuery.error ?? signalsQuery.error
+  const errorSource = documentsError ?? signalsError
 
   return {
-    documents: documentsQuery.data?.items ?? [],
-    signals: signalsQuery.data ?? { client_record_id: clientId, missing_documents: [] },
-    loading: documentsQuery.isPending || signalsQuery.isPending,
+    documents: documentsData?.items ?? [],
+    signals: signalsData ?? { client_record_id: clientId, missing_documents: [] },
+    loading: documentsPending || signalsPending,
     error: errorSource ? getErrorMessage(errorSource, 'שגיאה בטעינת מסמכים') : null,
     businesses,
     businessesLoading,

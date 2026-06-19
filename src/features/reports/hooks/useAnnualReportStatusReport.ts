@@ -7,7 +7,7 @@ export const useAnnualReportStatusReport = (controlledYear?: number) => {
   const [internalYear, setInternalYear] = useState<number>(new Date().getFullYear());
   const taxYear = controlledYear ?? internalYear;
 
-  const query = useQuery({
+  const { data, isPending, error } = useQuery({
     queryKey: reportsQK.annualReportStatus(taxYear),
     queryFn: () => reportsApi.getAnnualReportStatusReport(taxYear),
   });
@@ -15,10 +15,10 @@ export const useAnnualReportStatusReport = (controlledYear?: number) => {
   return {
     taxYear,
     setTaxYear: setInternalYear,
-    data: query.data,
-    isLoading: query.isPending,
-    error: query.error
-      ? getErrorMessage(query.error, "שגיאה בטעינת הדוח")
+    data,
+    isLoading: isPending,
+    error: error
+      ? getErrorMessage(error, "שגיאה בטעינת הדוח")
       : null,
   };
 };

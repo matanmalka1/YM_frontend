@@ -8,7 +8,11 @@ export const useVatClientSummary = (
   clientId: number,
   yearParams?: { period_year_after?: number; period_year_before?: number },
 ) => {
-  const summaryQuery = useQuery({
+  const {
+    data: summaryData,
+    isLoading: summaryLoading,
+    error: summaryError,
+  } = useQuery({
     queryKey: vatReportsQK.clientSummary(clientId, yearParams),
     queryFn: () => vatReportsApi.getClientSummary(clientId, yearParams),
     staleTime: QUERY_STALE_TIME.default,
@@ -25,9 +29,9 @@ export const useVatClientSummary = (
   })
 
   return {
-    data: summaryQuery.data,
-    isLoading: summaryQuery.isLoading,
-    error: summaryQuery.error,
+    data: summaryData,
+    isLoading: summaryLoading,
+    error: summaryError,
     createMutation,
   }
 }

@@ -12,13 +12,13 @@ const RELATED_PAGE_SIZE = 5
 export const useClientDetailsActions = (clientId: number, activeTab: string, shouldLoadRelatedData: boolean) => {
   const shouldFetchRelatedData = activeTab === 'details' && shouldLoadRelatedData
 
-  const relatedBindersQuery = useQuery({
+  const { data: relatedBindersData, isFetching: relatedBindersFetching } = useQuery({
     queryKey: bindersQK.forClientPage(clientId, 1, RELATED_PAGE_SIZE),
     queryFn: () => bindersApi.listClientBinders(clientId, { page: 1, page_size: RELATED_PAGE_SIZE }),
     enabled: shouldFetchRelatedData,
   })
 
-  const relatedChargesQuery = useQuery({
+  const { data: relatedChargesData, isFetching: relatedChargesFetching } = useQuery({
     queryKey: chargesQK.forClientPage(clientId, 1, RELATED_PAGE_SIZE),
     queryFn: () => chargesApi.list({ client_record_id: clientId, page: 1, page_size: RELATED_PAGE_SIZE }),
     enabled: shouldFetchRelatedData,
@@ -53,11 +53,11 @@ export const useClientDetailsActions = (clientId: number, activeTab: string, sho
   )
 
   return {
-    binders: relatedBindersQuery.data?.items ?? [],
-    bindersTotal: relatedBindersQuery.data?.total ?? 0,
-    charges: relatedChargesQuery.data?.items ?? [],
-    chargesTotal: relatedChargesQuery.data?.total ?? 0,
-    isFetchingRelatedData: relatedBindersQuery.isFetching || relatedChargesQuery.isFetching,
+    binders: relatedBindersData?.items ?? [],
+    bindersTotal: relatedBindersData?.total ?? 0,
+    charges: relatedChargesData?.items ?? [],
+    chargesTotal: relatedChargesData?.total ?? 0,
+    isFetchingRelatedData: relatedBindersFetching || relatedChargesFetching,
     handleCreateBusiness,
     isCreatingBusiness: createBusinessMutation.isPending,
     handleCreateCharge,

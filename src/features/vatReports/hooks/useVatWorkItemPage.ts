@@ -3,23 +3,28 @@ import { vatReportsApi } from '../api'
 import { vatReportsQK } from '../api/queryKeys'
 
 export const useVatWorkItemPage = (workItemId: number) => {
-  const workItemQuery = useQuery({
+  const {
+    data: workItemData,
+    isPending: workItemPending,
+    isError: workItemError,
+    refetch: workItemRefetch,
+  } = useQuery({
     queryKey: vatReportsQK.detail(workItemId),
     queryFn: () => vatReportsApi.getById(workItemId),
     enabled: workItemId > 0,
   })
 
-  const invoicesQuery = useQuery({
+  const { data: invoicesData } = useQuery({
     queryKey: vatReportsQK.invoices(workItemId),
     queryFn: () => vatReportsApi.listInvoices(workItemId),
     enabled: workItemId > 0,
   })
 
   return {
-    workItem: workItemQuery.data ?? null,
-    invoices: invoicesQuery.data?.items ?? [],
-    isLoading: workItemQuery.isPending,
-    isError: workItemQuery.isError,
-    refetch: workItemQuery.refetch,
+    workItem: workItemData ?? null,
+    invoices: invoicesData?.items ?? [],
+    isLoading: workItemPending,
+    isError: workItemError,
+    refetch: workItemRefetch,
   }
 }

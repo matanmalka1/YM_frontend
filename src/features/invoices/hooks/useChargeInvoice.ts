@@ -9,7 +9,11 @@ export const useChargeInvoice = (chargeId: number | null | undefined) => {
   const queryClient = useQueryClient()
   const hasChargeId = typeof chargeId === 'number' && Number.isInteger(chargeId) && chargeId > 0
 
-  const invoiceQuery = useQuery({
+  const {
+    data: invoiceData,
+    error: invoiceError,
+    isLoading: invoiceLoading,
+  } = useQuery({
     enabled: hasChargeId,
     queryKey: invoicesQK.byChargeId(chargeId ?? 0),
     queryFn: async () => {
@@ -43,9 +47,9 @@ export const useChargeInvoice = (chargeId: number | null | undefined) => {
 
   return {
     attachInvoice,
-    invoice: invoiceQuery.data ?? null,
-    invoiceError: invoiceQuery.error ? getErrorMessage(invoiceQuery.error, 'שגיאה בטעינת פרטי חשבונית') : null,
+    invoice: invoiceData ?? null,
+    invoiceError: invoiceError ? getErrorMessage(invoiceError, 'שגיאה בטעינת פרטי חשבונית') : null,
     isAttaching: attachMutation.isPending,
-    isLoadingInvoice: invoiceQuery.isLoading,
+    isLoadingInvoice: invoiceLoading,
   }
 }

@@ -46,21 +46,21 @@ export const useClientSidebarClients = (searchValue: string) => {
     [search],
   )
 
-  const query = useQuery({
+  const { data, isPending, isError, refetch } = useQuery({
     queryKey: clientsQK.sidebar(queryParams),
     queryFn: () => clientsApi.listSidebar(queryParams),
     staleTime: QUERY_STALE_TIME.long,
     gcTime: 1000 * 60 * 30,
   })
 
-  const clients = useMemo(() => (query.data?.items ?? []).map(toSidebarItem), [query.data?.items])
+  const clients = useMemo(() => (data?.items ?? []).map(toSidebarItem), [data?.items])
 
   return {
     clients,
-    total: query.data?.total ?? 0,
+    total: data?.total ?? 0,
     hasSearch: search.length > 0,
-    isLoading: query.isPending,
-    isError: query.isError,
-    refetch: query.refetch,
+    isLoading: isPending,
+    isError,
+    refetch,
   }
 }

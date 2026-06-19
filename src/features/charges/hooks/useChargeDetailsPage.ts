@@ -16,14 +16,14 @@ export const useChargeDetailsPage = (chargeId: string | undefined) => {
   const hasValidChargeId = isPositiveInt(chargeIdNumber)
   const { isAdvisor, isSecretary } = useRole()
 
-  const chargeQuery = useQuery({
+  const { data: chargeData, error: chargeError } = useQuery({
     enabled: hasValidChargeId,
     queryKey: chargesQK.detail(chargeIdNumber),
     queryFn: () => chargesApi.getById(chargeIdNumber),
   })
 
   // Reflect 403 from query into denied state
-  const queryDenied = getHttpStatus(chargeQuery.error) === 403
+  const queryDenied = getHttpStatus(chargeError) === 403
 
   const actionMutation = useMutation({
     mutationFn: ({ action, reason }: { action: ChargeAction; reason?: string }) =>
@@ -63,7 +63,7 @@ export const useChargeDetailsPage = (chargeId: string | undefined) => {
 
   return {
     actionLoading: actionMutation.isPending,
-    charge: chargeQuery.data ?? null,
+    charge: chargeData ?? null,
     denied: denied || queryDenied,
     runAction,
     deleteCharge: () => deleteMutation.mutateAsync(),

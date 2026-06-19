@@ -41,13 +41,13 @@ export const useAdvancePaymentBatchRows = ({
     page_size: ADVANCE_PAYMENT_BATCH_PAGE_SIZE,
     status,
   }
-  const query = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: advancedPaymentsQK.overview(params),
     queryFn: () => advancePaymentsApi.overview(params),
     staleTime: QUERY_STALE_TIME.default,
   })
 
-  const rows = [...(query.data?.items ?? [])].sort(
+  const rows = [...(data?.items ?? [])].sort(
     (first, second) => Number(second.missing_turnover) - Number(first.missing_turnover),
   )
 
@@ -55,7 +55,7 @@ export const useAdvancePaymentBatchRows = ({
     page,
     setPage,
     rows,
-    total: query.data?.total ?? 0,
-    isLoading: query.isLoading,
+    total: data?.total ?? 0,
+    isLoading,
   }
 }

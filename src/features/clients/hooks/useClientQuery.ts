@@ -18,17 +18,17 @@ export const useClientQuery = ({ clientId }: UseClientQueryParams): UseClientQue
   const isValidId = isPositiveInt(id)
   const { can } = useRole()
 
-  const clientQuery = useQuery({
+  const { data, isPending, error } = useQuery({
     queryKey: clientsQK.detail(id),
     queryFn: () => clientsApi.getById(id),
     enabled: isValidId,
   })
 
   return {
-    client: clientQuery.data ?? null,
+    client: data ?? null,
     isValidId,
-    isLoading: clientQuery.isPending && isValidId,
-    error: clientQuery.error ? getErrorMessage(clientQuery.error, 'שגיאה בטעינת פרטי לקוח') : null,
+    isLoading: isPending && isValidId,
+    error: error ? getErrorMessage(error, 'שגיאה בטעינת פרטי לקוח') : null,
     can,
   }
 }

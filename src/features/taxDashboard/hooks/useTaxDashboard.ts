@@ -13,15 +13,15 @@ export interface TaxDashboardData {
 export const useTaxDashboard = (): TaxDashboardData => {
   const currentYear = getYear(new Date())
 
-  const submissionsQuery = useQuery({
+  const { data, isPending, error } = useQuery({
     queryKey: taxDashboardQK.submissions(currentYear),
     queryFn: () => taxDashboardApi.getTaxSubmissionsWidget(currentYear),
   })
 
   return {
     currentYear,
-    submissions: submissionsQuery.data,
-    isLoading: submissionsQuery.isPending,
-    hasError: Boolean(submissionsQuery.error),
+    submissions: data,
+    isLoading: isPending,
+    hasError: Boolean(error),
   }
 }

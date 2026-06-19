@@ -20,13 +20,16 @@ export const useAnnualReportsPage = () => {
   const status = getParam('status')
   const year = getParam('year')
 
-  const defaultTaxYearQuery = useQuery({
+  const {
+    data: defaultTaxYearData,
+    isPending: defaultTaxYearPending,
+    error: defaultTaxYearError,
+  } = useQuery({
     queryKey: annualReportsQK.defaultTaxYear,
     queryFn: annualReportSeasonApi.getDefaultTaxYear,
     staleTime: QUERY_STALE_TIME.long,
   })
-  const defaultTaxYear = defaultTaxYearQuery.data?.tax_year
-  const defaultTaxYearPending = defaultTaxYearQuery.isPending
+  const defaultTaxYear = defaultTaxYearData?.tax_year
 
   useEffect(() => {
     if (defaultTaxYear == null) return
@@ -43,8 +46,12 @@ export const useAnnualReportsPage = () => {
 
   const season = useSeasonDashboard(selectedTaxYear, !allYearsMode && !defaultTaxYearPending, apiFilters)
 
-  const allReportsQuery = useQuery({
-    enabled: allYearsMode && !defaultTaxYearPending && !defaultTaxYearQuery.error,
+  const {
+    data: allReportsData,
+    isPending: allReportsPending,
+    error: allReportsError,
+  } = useQuery({
+    enabled: allYearsMode && !defaultTaxYearPending && !defaultTaxYearError,
     queryKey: [...annualReportsQK.all, 'all-years', apiFilters] as const,
     queryFn: () =>
       annualReportsApi.listReports({
@@ -66,15 +73,15 @@ export const useAnnualReportsPage = () => {
   const handleResetFilters = () => resetFilters(defaultTaxYear != null ? { year: String(defaultTaxYear) } : {})
 
   const filteredReports = useMemo(
-    () => (allYearsMode ? (allReportsQuery.data?.items ?? []) : season.reports),
-    [allYearsMode, allReportsQuery.data?.items, season.reports],
+    () => (allYearsMode ? (allReportsData?.items ?? []) : season.reports),
+    [allYearsMode, allReportsData?.items, season.reports],
   )
 
-  const isLoading = defaultTaxYearPending || (allYearsMode ? allReportsQuery.isPending : season.isLoading)
-  const error = defaultTaxYearQuery.error
+  const isLoading = defaultTaxYearPending || (allYearsMode ? allReportsPending : season.isLoading)
+  const error = defaultTaxYearError
     ? 'שגיאה בטעינת שנת מס'
     : allYearsMode
-      ? allReportsQuery.error
+      ? allReportsError
         ? 'שגיאה בטעינת דוחות'
         : null
       : season.error

@@ -1,12 +1,9 @@
-import { useQuery } from '@tanstack/react-query'
-import { annualReportFinancialsApi } from '../../api'
-import { annualReportTaxApi } from '../../api'
-import { annualReportsQK } from '../../api'
 import { DrawerSection } from '../../../../components/ui/overlays/DetailDrawer'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { formatCurrencyILS as fmt, formatPercent } from '@/utils/utils'
 import { FINANCIAL_MESSAGES } from '../../constants/financialConstants'
-import { getProfitSummary, toProgressWidth } from '../../utils/financialHelpers'
+import { useAnnualPLSummary } from '../../hooks/useAnnualPLSummary'
+import { toProgressWidth } from '../../utils/financialHelpers'
 import { MultiYearPLChart } from './MultiYearPLChart'
 
 interface Props {
@@ -40,25 +37,12 @@ const WaterfallRow: React.FC<WaterfallRowProps> = ({ label, value, isSubtract, i
 )
 
 export const AnnualPLSummary: React.FC<Props> = ({ reportId, clientId }) => {
-  const financialsQ = useQuery({
-    queryKey: annualReportsQK.financials(reportId),
-    queryFn: () => annualReportFinancialsApi.getFinancials(reportId),
-    enabled: !!reportId,
-  })
+  const { isLoading, summary } = useAnnualPLSummary(reportId)
 
-  const taxQ = useQuery({
-    queryKey: annualReportsQK.taxCalc(reportId),
-    queryFn: () => annualReportTaxApi.getTaxCalculation(reportId),
-    enabled: !!reportId,
-  })
-
-  const isLoading = financialsQ.isLoading || taxQ.isLoading
   if (isLoading) {
     return <p className="px-3 text-sm text-gray-400">{FINANCIAL_MESSAGES.loadingSummary}</p>
   }
-  if (!financialsQ.data || !taxQ.data) return null
-
-  const summary = getProfitSummary(financialsQ.data, taxQ.data)
+  if (!summary) return null
 
   return (
     <DrawerSection title="סיכום רווח והפסד">

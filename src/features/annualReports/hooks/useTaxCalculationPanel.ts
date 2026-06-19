@@ -12,13 +12,21 @@ export const useTaxCalculationPanel = (reportId: number) => {
   const [pension, setPension] = useState('')
   const [otherCredits, setOtherCredits] = useState('')
 
-  const taxCalculationQuery = useQuery({
+  const {
+    data: taxCalculationData,
+    isLoading: taxCalculationLoading,
+    isError: taxCalculationError,
+  } = useQuery({
     queryKey: annualReportsQK.taxCalc(reportId),
     queryFn: () => annualReportTaxApi.getTaxCalculation(reportId),
     enabled: reportId > 0,
   })
 
-  const detailQuery = useQuery({
+  const {
+    data: detailData,
+    isLoading: detailLoading,
+    isError: detailError,
+  } = useQuery({
     queryKey: annualReportsQK.detail(reportId),
     queryFn: () => annualReportsApi.getReport(reportId),
     enabled: reportId > 0,
@@ -47,7 +55,7 @@ export const useTaxCalculationPanel = (reportId: number) => {
   })
 
   const initializeInputs = () => {
-    const values = toTaxInputValues(detailQuery.data)
+    const values = toTaxInputValues(detailData)
     setPension(values.pension)
     setOtherCredits(values.otherCredits)
   }
@@ -57,15 +65,15 @@ export const useTaxCalculationPanel = (reportId: number) => {
   }
 
   const saveTaxResult = () => {
-    const liabilityValue = taxCalculationQuery.data?.total_liability
+    const liabilityValue = taxCalculationData?.total_liability
     if (liabilityValue == null) return
     saveTaxResultMutation.mutate(toTaxResultPayload(Number(liabilityValue)))
   }
 
   return {
-    data: taxCalculationQuery.data,
-    isLoading: taxCalculationQuery.isLoading || detailQuery.isLoading,
-    isError: taxCalculationQuery.isError || detailQuery.isError,
+    data: taxCalculationData,
+    isLoading: taxCalculationLoading || detailLoading,
+    isError: taxCalculationError || detailError,
     isAdvisor,
     pension,
     otherCredits,

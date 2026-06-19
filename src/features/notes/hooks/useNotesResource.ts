@@ -24,7 +24,11 @@ export const useNotesResource = <TNote>({
   update,
   remove,
 }: UseNotesResourceOptions<TNote>) => {
-  const listQuery = useQuery({
+  const {
+    data: listData,
+    isLoading: listLoading,
+    error: listError,
+  } = useQuery({
     enabled,
     queryKey,
     queryFn: list,
@@ -53,10 +57,10 @@ export const useNotesResource = <TNote>({
   })
 
   return {
-    notes: listQuery.data?.items ?? [],
-    total: listQuery.data?.total ?? 0,
-    isLoading: listQuery.isLoading,
-    error: listQuery.error ? getErrorMessage(listQuery.error, 'שגיאה בטעינת הערות') : null,
+    notes: listData?.items ?? [],
+    total: listData?.total ?? 0,
+    isLoading: listLoading,
+    error: listError ? getErrorMessage(listError, 'שגיאה בטעינת הערות') : null,
     addNote: (note: string) => createMutation.mutateAsync(note),
     isAdding: createMutation.isPending,
     updateNote: (noteId: number, note: string) => updateMutation.mutateAsync({ noteId, note }),

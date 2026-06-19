@@ -12,7 +12,12 @@ export const useAuthorityContacts = (clientId: number) => {
   const listParams = { page, page_size: pageSize }
   const qk = authorityContactsQK.list(clientId, listParams)
 
-  const listQuery = useQuery({
+  const {
+    data: listData,
+    isLoading: listLoading,
+    error: listError,
+    refetch: listRefetch,
+  } = useQuery({
     enabled: clientId > 0,
     queryKey: qk,
     queryFn: () => authorityContactsApi.listAuthorityContacts(clientId, listParams),
@@ -25,19 +30,19 @@ export const useAuthorityContacts = (clientId: number) => {
     invalidateKeys: [authorityContactsQK.forClient(clientId)],
   })
 
-  const total = listQuery.data?.total ?? 0
+  const total = listData?.total ?? 0
   const totalPages = getTotalPages(total, pageSize)
 
   return {
-    contacts: listQuery.data?.items ?? [],
+    contacts: listData?.items ?? [],
     total,
     page,
     setPage,
     totalPages,
-    isLoading: listQuery.isLoading,
-    error: listQuery.error ? getErrorMessage(listQuery.error, AUTHORITY_CONTACT_TEXT.loadError) : null,
+    isLoading: listLoading,
+    error: listError ? getErrorMessage(listError, AUTHORITY_CONTACT_TEXT.loadError) : null,
     retry: () => {
-      void listQuery.refetch()
+      void listRefetch()
     },
     deleteContact: (id: number) => deleteMutation.mutateAsync(id),
     deletingId: deleteMutation.isPending ? (deleteMutation.variables ?? null) : null,

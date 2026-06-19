@@ -37,7 +37,7 @@ export const useAnnexDataPanel = (reportId: number, schedule: AnnualReportSchedu
   }, [emptyDefaults, reset])
 
   const queryKey = annualReportsQK.annex(reportId, schedule)
-  const annexQuery = useQuery({
+  const { data: annexData, isLoading: annexIsLoading } = useQuery({
     queryKey,
     queryFn: () => annualReportsApi.getAnnexLines(reportId, schedule),
     enabled: reportId > 0,
@@ -85,8 +85,8 @@ export const useAnnexDataPanel = (reportId: number, schedule: AnnualReportSchedu
 
   return {
     fields,
-    lines: annexQuery.data?.items ?? [],
-    isLoading: annexQuery.isLoading,
+    lines: annexData?.items ?? [],
+    isLoading: annexIsLoading,
     showForm,
     editingLineId,
     register,

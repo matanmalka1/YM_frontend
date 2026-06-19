@@ -30,7 +30,12 @@ export const useUsersPage = () => {
     | undefined
   const filters = { page, page_size, is_active, search }
 
-  const listQuery = useQuery({
+  const {
+    data: listData,
+    isPending: listPending,
+    isFetching: listFetching,
+    error: listError,
+  } = useQuery({
     queryKey: usersQK.list(filters),
     queryFn: () => usersApi.list(filters),
     placeholderData: keepPreviousData,
@@ -115,8 +120,8 @@ export const useUsersPage = () => {
   const handleFilterChange = (key: string, value: string) => setFilter(key, value)
   const resetFilters = () => setFilters({ search: '', is_active: '' })
 
-  const users = listQuery.data?.items ?? []
-  const total = listQuery.data?.total ?? 0
+  const users = listData?.items ?? []
+  const total = listData?.total ?? 0
   const isFiltered = Boolean(search || is_active)
 
   const columns = useMemo(
@@ -132,9 +137,9 @@ export const useUsersPage = () => {
 
   return {
     status: {
-      isLoading: listQuery.isPending,
-      isFetching: listQuery.isFetching,
-      error: listQuery.error ? getErrorMessage(listQuery.error, 'שגיאה בטעינת המשתמשים') : null,
+      isLoading: listPending,
+      isFetching: listFetching,
+      error: listError ? getErrorMessage(listError, 'שגיאה בטעינת המשתמשים') : null,
       loadingMessage: 'טוען משתמשים...',
     },
     headerProps: {

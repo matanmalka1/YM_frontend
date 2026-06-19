@@ -15,16 +15,16 @@ type Result = {
 export const useClientSignatureRequests = ({ clientId, page = 1, pageSize = 10 }: Params): Result => {
   const enabled = clientId != null && clientId > 0
 
-  const query = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: signatureRequestsQK.forClientPage(clientId ?? 0, { page, page_size: pageSize }),
     queryFn: () => signatureRequestsApi.listForClient(clientId!, { page, page_size: pageSize }),
     enabled,
   })
 
   return {
-    items: query.data?.items ?? [],
-    total: query.data?.total ?? 0,
-    isLoading: query.isLoading,
-    error: query.error ? getErrorMessage(query.error, 'שגיאה בטעינת בקשות חתימה') : null,
+    items: data?.items ?? [],
+    total: data?.total ?? 0,
+    isLoading,
+    error: error ? getErrorMessage(error, 'שגיאה בטעינת בקשות חתימה') : null,
   }
 }

@@ -15,13 +15,13 @@ type Result = {
 }
 
 export const usePendingSignatureRequests = ({ page = 1, pageSize = 50 }: Params = {}): Result => {
-  const listQuery = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: signatureRequestsQK.pending({ page, page_size: pageSize }),
     queryFn: () => signatureRequestsApi.listPending({ page, page_size: pageSize }),
     staleTime: QUERY_STALE_TIME.short,
   })
 
-  const items = listQuery.data?.items ?? []
+  const items = data?.items ?? []
   const businessLookup = Object.fromEntries(
     items
       .filter((request) => request.business_id != null)
@@ -36,9 +36,9 @@ export const usePendingSignatureRequests = ({ page = 1, pageSize = 50 }: Params 
 
   return {
     items,
-    total: listQuery.data?.total ?? 0,
+    total: data?.total ?? 0,
     businessLookup,
-    isLoading: listQuery.isLoading,
-    error: listQuery.error ? getErrorMessage(listQuery.error, 'שגיאה בטעינת בקשות חתימה') : null,
+    isLoading,
+    error: error ? getErrorMessage(error, 'שגיאה בטעינת בקשות חתימה') : null,
   }
 }

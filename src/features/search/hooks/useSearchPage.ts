@@ -25,7 +25,11 @@ export const useSearchPage = () => {
 
   const hasAnyFilter = Boolean(filters.search) || SEARCH_ADVANCED_FILTER_KEYS.some((k) => Boolean(filters[k]))
 
-  const searchQuery = useQuery({
+  const {
+    data: searchData,
+    error: searchError,
+    isPending: searchPending,
+  } = useQuery({
     queryKey: searchQK.results(filters),
     queryFn: () =>
       searchApi.search({
@@ -58,14 +62,14 @@ export const useSearchPage = () => {
   }, [resetFilters])
 
   return {
-    error: searchQuery.error ? getErrorMessage(searchQuery.error, 'שגיאה בטעינת תוצאות חיפוש') : null,
+    error: searchError ? getErrorMessage(searchError, 'שגיאה בטעינת תוצאות חיפוש') : null,
     filters,
     hasAnyFilter,
     handleFilterChange,
     handleReset,
-    loading: hasAnyFilter ? searchQuery.isPending : false,
-    results: searchQuery.data?.results ?? [],
-    documents: searchQuery.data?.documents ?? [],
-    total: searchQuery.data?.total ?? 0,
+    loading: hasAnyFilter ? searchPending : false,
+    results: searchData?.results ?? [],
+    documents: searchData?.documents ?? [],
+    total: searchData?.total ?? 0,
   }
 }

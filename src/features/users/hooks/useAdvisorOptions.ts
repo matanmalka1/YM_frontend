@@ -11,7 +11,7 @@ const ADVISOR_LIST_PARAMS = {
 }
 
 export const useAdvisorOptions = (enabled = true) => {
-  const query = useQuery({
+  const { data, isPending } = useQuery({
     enabled,
     queryKey: usersQK.list(ADVISOR_LIST_PARAMS),
     queryFn: () => usersApi.list(ADVISOR_LIST_PARAMS),
@@ -19,8 +19,8 @@ export const useAdvisorOptions = (enabled = true) => {
   })
 
   const advisors = useMemo(
-    () => (query.data?.items ?? []).filter((user) => user.role === 'advisor'),
-    [query.data?.items],
+    () => (data?.items ?? []).filter((user) => user.role === 'advisor'),
+    [data?.items],
   )
 
   const options = useMemo(() => advisors.map((user) => ({ value: String(user.id), label: user.full_name })), [advisors])
@@ -31,6 +31,6 @@ export const useAdvisorOptions = (enabled = true) => {
     advisors,
     options,
     nameById,
-    isLoading: query.isPending,
+    isLoading: isPending,
   }
 }
