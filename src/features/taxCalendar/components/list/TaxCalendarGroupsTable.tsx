@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Inbox } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
@@ -73,12 +73,10 @@ const getDueDatePrefix = (group: TaxCalendarGroup): string =>
 
 const GroupItemsRows = ({
   group,
-  isOpen,
   clientSearchText,
   clientRecordId,
 }: {
   group: TaxCalendarGroup
-  isOpen: boolean
   clientSearchText: string
   clientRecordId?: number
 }) => {
@@ -86,7 +84,7 @@ const GroupItemsRows = ({
   useEffect(() => {
     setPage(1)
   }, [clientSearchText, group.tax_calendar_entry_id])
-  const { data, isPending, isError, error } = useTaxCalendarGroupItems(group.tax_calendar_entry_id, isOpen, {
+  const { data, isPending, isError, error } = useTaxCalendarGroupItems(group.tax_calendar_entry_id, true, {
     page,
     page_size: ITEM_PAGE_SIZE,
     client_search: clientSearchText.trim() || undefined,
@@ -176,11 +174,6 @@ export const TaxCalendarGroupsTable = ({
   const getDueDate = useCallback((g: TaxCalendarGroup) => g.effective_due_date_min, [])
   const defaultOpenKey = useDefaultOpenGroup(groups, getKey, getDueDate)
 
-  const [openEntryId, setOpenEntryId] = useState<number | null>(null)
-  useEffect(() => {
-    setOpenEntryId(defaultOpenKey != null ? Number(defaultOpenKey) : null)
-  }, [defaultOpenKey])
-
   if (isLoading) return <TableSkeleton rows={5} columns={8} />
 
   if (groups.length === 0) {
@@ -197,7 +190,6 @@ export const TaxCalendarGroupsTable = ({
   return (
     <div className="space-y-2" dir="rtl">
       {groups.map((group) => {
-        const isOpen = openEntryId === group.tax_calendar_entry_id
         const isCurrentPeriod = isCurrentReportingPeriod(group.period, group.period_months_count)
         const effectiveRelativeLabel = formatRelativeDueLabel(group.effective_due_date_min)
         const metrics: PeriodSummaryMetric[] = [
@@ -219,8 +211,7 @@ export const TaxCalendarGroupsTable = ({
             }
             relativeDueLabel={effectiveRelativeLabel}
             isCurrentPeriod={isCurrentPeriod}
-            isOpen={isOpen}
-            onToggle={(nextOpen) => setOpenEntryId(nextOpen ? group.tax_calendar_entry_id : null)}
+            defaultOpen={String(group.tax_calendar_entry_id) === defaultOpenKey}
             metrics={metrics}
             ctaLabel="פתח לקוחות"
             closeLabel="סגור"
@@ -228,7 +219,6 @@ export const TaxCalendarGroupsTable = ({
           >
             <GroupItemsRows
               group={group}
-              isOpen={isOpen}
               clientSearchText={clientSearchText}
               clientRecordId={clientRecordId}
             />
