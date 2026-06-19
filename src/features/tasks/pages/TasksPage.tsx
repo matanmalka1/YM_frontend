@@ -1,8 +1,8 @@
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
-import { TaskModal } from '../components/TaskModal'
-import { TasksFiltersPanel } from '../components/TasksFiltersPanel'
-import { TasksListPanel } from '../components/TasksListPanel'
-import { TasksPageHeader } from '../components/TasksPageHeader'
+import { TaskModal } from '../components/form/TaskModal'
+import { TasksFiltersPanel } from '../components/list/TasksFiltersPanel'
+import { TasksListPanel } from '../components/list/TasksListPanel'
+import { TasksPageHeader } from '../components/list/TasksPageHeader'
 import { useTasksPage } from '../hooks/useTasksPage'
 
 export const TasksPage: React.FC = () => {

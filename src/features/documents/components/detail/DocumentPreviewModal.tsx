@@ -1,0 +1,62 @@
+import { Download } from 'lucide-react'
+import { OverlayContainer } from '../../../../components/ui/layout/OverlayContainer'
+import { Button } from '../../../../components/ui/primitives/Button'
+
+interface DocumentPreviewModalProps {
+  open: boolean
+  onClose: () => void
+  url: string | null
+  filename: string | null
+  mimeType: string | null
+  onDownload: () => void
+}
+
+export const DocumentPreviewModal: React.FC<DocumentPreviewModalProps> = ({
+  open,
+  onClose,
+  url,
+  filename,
+  mimeType,
+  onDownload,
+}) => {
+  const isPdf = mimeType === 'application/pdf' || filename?.toLowerCase().endsWith('.pdf')
+  const isImage = mimeType?.startsWith('image/')
+
+  return (
+    <OverlayContainer
+      open={open}
+      variant="modal"
+      title={filename ?? 'תצוגה מקדימה'}
+      onClose={onClose}
+      className="max-w-4xl w-full"
+      footer={
+        <div className="flex justify-end">
+          <Button variant="secondary" className="gap-2" onClick={onDownload}>
+            <Download className="h-4 w-4" />
+            הורד
+          </Button>
+        </div>
+      }
+    >
+      {!url ? (
+        <div className="flex items-center justify-center py-16 text-sm text-gray-400">טוען...</div>
+      ) : isPdf ? (
+        <iframe src={url} className="h-[70vh] w-full rounded border border-gray-100" title={filename ?? 'document'} />
+      ) : isImage ? (
+        <div className="flex justify-center">
+          <img src={url} alt={filename ?? 'document'} className="max-h-[70vh] max-w-full object-contain rounded" />
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center gap-4 py-16 text-sm text-gray-500">
+          <p>לא ניתן להציג קובץ זה בתצוגה מקדימה</p>
+          <Button variant="secondary" className="gap-2" onClick={onDownload}>
+            <Download className="h-4 w-4" />
+            הורד קובץ
+          </Button>
+        </div>
+      )}
+    </OverlayContainer>
+  )
+}
+
+DocumentPreviewModal.displayName = 'DocumentPreviewModal'
