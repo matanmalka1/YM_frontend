@@ -8,7 +8,7 @@ import type {
   VatWorkItemListItem,
 } from './api'
 import type { VatPeriodTypeFilter } from './constants'
-import type { ExpenseCategoryRow } from './vatBreakdown.utils'
+import type { ExpenseCategoryRow } from './utils/vatBreakdown'
 
 export interface VatWorkItemsFilters {
   status: VatWorkItemStatus | ''

@@ -1,5 +1,5 @@
 import { cn } from '@/utils/utils'
-import { formatVatAmount, getVatDeductionRateClass, getVatDeductionRateLabel } from '../utils'
+import { formatVatAmount, getVatDeductionRateClass, getVatDeductionRateLabel } from '../utils/vatHelpers'
 import type { VatCategoryTableProps } from '../types'
 import { VAT_DEDUCTIBLE_ACCENT } from '../visualizationTokens'
 

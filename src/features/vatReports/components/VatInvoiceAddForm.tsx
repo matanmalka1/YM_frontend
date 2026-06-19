@@ -13,9 +13,9 @@ import {
   VAT_EXPENSE_CATEGORY_OPTIONS,
   VAT_RATE_TYPE_OPTIONS,
 } from '../constants'
-import { getVatInvoiceDefaultValues } from '../utils'
+import { getVatInvoiceDefaultValues } from '../utils/vatHelpers'
 import type { VatInvoiceAddFormProps } from '../types'
-import { blockNonNumericKey, getDeductionRateHint, shouldRequireCounterpartyId } from '../view.helpers'
+import { blockNonNumericKey, getDeductionRateHint, shouldRequireCounterpartyId } from '../utils/viewHelpers'
 
 export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({
   invoiceType,

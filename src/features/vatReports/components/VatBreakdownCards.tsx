@@ -1,6 +1,6 @@
 import { ChevronLeft } from 'lucide-react'
-import { formatVatAmount } from '../utils'
-import type { VatBreakdownData } from '../vatBreakdown.utils'
+import { formatVatAmount } from '../utils/vatHelpers'
+import type { VatBreakdownData } from '../utils/vatBreakdown'
 
 interface VatOutputCardProps {
   data: VatBreakdownData

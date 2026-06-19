@@ -1,5 +1,5 @@
-import type { VatInvoiceResponse } from './api'
-import { CATEGORY_TABLE_LABELS } from './constants'
+import type { VatInvoiceResponse } from '../api'
+import { CATEGORY_TABLE_LABELS } from '../constants'
 
 export interface ExpenseCategoryRow {
   categoryKey: string

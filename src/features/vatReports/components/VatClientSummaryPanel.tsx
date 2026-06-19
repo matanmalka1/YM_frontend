@@ -8,10 +8,10 @@ import { VatPeriodCard } from './VatPeriodCard'
 import type { CreateVatWorkItemPayload, VatAnnualSummary, VatPeriodRow } from '../api'
 import { showErrorToast } from '@/utils/utils'
 import { useRole } from '@/hooks/useRole'
-import { formatVatAmount } from '../utils'
+import { formatVatAmount } from '../utils/vatHelpers'
 import { useVatClientSummary } from '../hooks/useVatClientSummary'
 import type { VatClientSummaryPanelProps } from '../types'
-import { canOpenVatPeriodRow, getClientSummaryRowsForYear } from '../view.helpers'
+import { canOpenVatPeriodRow, getClientSummaryRowsForYear } from '../utils/viewHelpers'
 
 const fmt = formatVatAmount
 

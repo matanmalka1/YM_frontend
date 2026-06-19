@@ -4,9 +4,9 @@ import {
   getVatInvoiceActionLabel,
   getVatInvoiceDisplayNumber,
   isGeneratedVatInvoiceNumber,
-} from './utils'
+} from './vatHelpers'
 import type { BackendAction } from '@/lib/actions/types'
-import type { VatInvoiceResponse } from './api'
+import type { VatInvoiceResponse } from '../api'
 
 const addInvoiceAction: BackendAction = {
   key: 'add_invoice',

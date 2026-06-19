@@ -19,10 +19,10 @@ import {
   getVatInvoiceGrossAmount,
   isGeneratedVatInvoiceNumber,
   toDateInputValue,
-} from '../utils'
+} from '../utils/vatHelpers'
 import type { VatInvoiceEditRowProps } from '../types'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
-import { blockNonNumericKey } from '../view.helpers'
+import { blockNonNumericKey } from '../utils/viewHelpers'
 
 export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
   invoice,

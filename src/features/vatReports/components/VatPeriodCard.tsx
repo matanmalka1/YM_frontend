@@ -6,8 +6,8 @@ import { cn, formatDate } from '@/utils/utils'
 import type { VatPeriodRow } from '../api'
 import { getVatClientSummaryStatusVariant } from '../constants'
 import { getVatWorkItemStatusLabel } from '../constants'
-import { formatVatAmount } from '../utils'
-import { formatVatPeriodLabel, getNetVatTone } from '../view.helpers'
+import { formatVatAmount } from '../utils/vatHelpers'
+import { formatVatPeriodLabel, getNetVatTone } from '../utils/viewHelpers'
 
 const getDaysToDueLabel = (days: number | null): { label: string; overdue: boolean } | null => {
   if (days === null) return null

@@ -1,8 +1,8 @@
 import type { KeyboardEvent } from 'react'
 import { formatClientOfficeId, formatPercent, getReportingPeriodMonthLabel } from '@/utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
-import { DEDUCTION_RATES, VAT_NUMERIC_KEYS } from './constants'
-import type { VatPeriodRow, VatType } from './api'
+import { DEDUCTION_RATES, VAT_NUMERIC_KEYS } from '../constants'
+import type { VatPeriodRow, VatType } from '../api'
 
 export const formatVatPeriodTitle = (period: string, periodType: VatType): string => {
   const [year] = period.split('-')

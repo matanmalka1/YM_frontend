@@ -1,6 +1,6 @@
 import { PackageCheck, SendHorizontal, Trash2 } from 'lucide-react'
 import { RowActionGroup, RowActionItem, RowActionsMenu } from '@/components/ui/table'
-import { canMarkMaterialsComplete, canMarkReadyForReview, isFiled } from '../utils'
+import { canMarkMaterialsComplete, canMarkReadyForReview, isFiled } from '../utils/vatHelpers'
 import type { VatWorkItemRowActionsProps } from '../types'
 
 export const VatWorkItemRowActions: React.FC<VatWorkItemRowActionsProps> = ({

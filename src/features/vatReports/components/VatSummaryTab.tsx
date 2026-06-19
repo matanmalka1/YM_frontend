@@ -1,9 +1,9 @@
 import { AlertTriangle } from 'lucide-react'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
-import { computeVatBreakdown } from '../vatBreakdown.utils'
+import { computeVatBreakdown } from '../utils/vatBreakdown'
 import { VatOutputCard, VatInputCard } from './VatBreakdownCards'
 import { VatCategoryTable } from './VatCategoryTable'
-import { formatVatAmount } from '../utils'
+import { formatVatAmount } from '../utils/vatHelpers'
 import type { VatSummaryTabProps } from '../types'
 
 export const VatSummaryTab: React.FC<VatSummaryTabProps> = ({ workItem, invoices }) => {

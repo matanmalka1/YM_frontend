@@ -1,13 +1,15 @@
-export interface SearchFieldDef {
+type FilterKey<TValues> = Extract<keyof TValues, string>
+
+export interface SearchFieldDef<TValues extends Record<string, unknown> = Record<string, unknown>> {
   type: 'search'
-  key: string
+  key: FilterKey<TValues>
   label: string
   placeholder?: string
 }
 
-interface SelectFieldDef {
+interface SelectFieldDef<TValues extends Record<string, unknown> = Record<string, unknown>> {
   type: 'select'
-  key: string
+  key: FilterKey<TValues>
   label: string
   options: { value: string; label: string }[]
   /** Treated as "no active filter" for badge purposes. Default: '' */
@@ -15,29 +17,36 @@ interface SelectFieldDef {
   disabled?: boolean
 }
 
-interface DateFieldDef {
+interface DateFieldDef<TValues extends Record<string, unknown> = Record<string, unknown>> {
   type: 'date'
-  key: string
+  key: FilterKey<TValues>
   label: string
 }
 
-interface DateRangeFieldDef {
+interface DateRangeFieldDef<TValues extends Record<string, unknown> = Record<string, unknown>> {
   type: 'date-range'
-  fromKey: string
-  toKey: string
+  fromKey: FilterKey<TValues>
+  toKey: FilterKey<TValues>
   fromLabel: string
   toLabel: string
 }
 
-export interface ClientPickerFieldDef {
+export interface ClientPickerFieldDef<TValues extends Record<string, unknown> = Record<string, unknown>> {
   type: 'client-picker'
-  idKey: string
-  nameKey?: string
+  idKey: FilterKey<TValues>
+  nameKey?: FilterKey<TValues>
   label?: string
   placeholder?: string
 }
 
-export type FilterFieldDef = SearchFieldDef | SelectFieldDef | DateFieldDef | DateRangeFieldDef | ClientPickerFieldDef
+export type FilterDefinition<TValues extends Record<string, unknown> = Record<string, unknown>> =
+  | SearchFieldDef<TValues>
+  | SelectFieldDef<TValues>
+  | DateFieldDef<TValues>
+  | DateRangeFieldDef<TValues>
+  | ClientPickerFieldDef<TValues>
+
+export type FilterFieldDef = FilterDefinition<Record<string, unknown>>
 
 export interface SearchFieldHandle {
   reset: () => void

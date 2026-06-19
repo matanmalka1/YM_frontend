@@ -11,7 +11,7 @@ import { getTotalPages } from '@/utils/paginationUtils'
 import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
 import { useVatGroupItems } from '../hooks/useVatGroupItems'
 import type { VatWorkItemListItem, VatWorkItemGroupSummary, VatWorkItemStatus } from '../api'
-import { formatVatPeriodTitle } from '../view.helpers'
+import { formatVatPeriodTitle } from '../utils/viewHelpers'
 
 interface VatWorkItemsGroupedCardsProps {
   groups: VatWorkItemGroupSummary[]

@@ -7,7 +7,7 @@ import {
   getVatDeductionRateLabel,
   getVatInvoiceActionLabel,
   getVatInvoiceDisplayNumber,
-} from '../utils'
+} from '../utils/vatHelpers'
 import {
   CATEGORY_COLORS,
   CATEGORY_LABELS,

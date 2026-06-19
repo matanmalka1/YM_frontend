@@ -4,12 +4,12 @@ import type { VatWorkItemListItem } from '../api'
 import { getVatWorkItemStatusLabel } from '../constants'
 import { formatClientOfficeId, formatDate } from '@/utils/utils'
 import { VAT_DEADLINE_WARNING_DAYS, VAT_STATUS_BADGE_VARIANTS } from '../constants'
-import { formatVatAmount, isFiled } from '../utils'
+import { formatVatAmount, isFiled } from '../utils/vatHelpers'
 import { VatWorkItemRowActions } from './VatWorkItemRowActions'
 import type { ColumnOpts } from '../types'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
-import { formatVatPeriodTitle } from '../view.helpers'
+import { formatVatPeriodTitle } from '../utils/viewHelpers'
 
 export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemListItem>[] => [
   monoColumn({

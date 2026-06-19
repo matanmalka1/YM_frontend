@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Receipt } from 'lucide-react'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
-import { formatVatAmount } from '../utils'
+import { formatVatAmount } from '../utils/vatHelpers'
 import { useDeleteInvoice, useUpdateInvoice } from '../hooks/useVatInvoiceMutations'
 import { VatInvoiceEditRow } from './VatInvoiceEditRow'
 import { VatInvoiceRow } from './VatInvoiceRow'

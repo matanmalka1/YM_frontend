@@ -1,8 +1,8 @@
-import type { VatAuditLogResponse } from './api'
-import { formatVatAmount } from './utils'
-import { AUTO_TRANSITION_NOTE, INVOICE_TYPE_LABELS } from './history.constants'
-import { VAT_FILING_METHOD_LABELS } from './constants'
-import { getVatWorkItemStatusLabel } from './constants'
+import type { VatAuditLogResponse } from '../api'
+import { formatVatAmount } from './vatHelpers'
+import { AUTO_TRANSITION_NOTE, INVOICE_TYPE_LABELS } from '../history.constants'
+import { VAT_FILING_METHOD_LABELS } from '../constants'
+import { getVatWorkItemStatusLabel } from '../constants'
 
 const asLabel = (value: unknown, labels: Record<string, string>): string =>
   labels[String(value ?? '')] ?? String(value ?? '')

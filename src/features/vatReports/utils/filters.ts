@@ -1,5 +1,9 @@
-import { VAT_PERIOD_TYPES, VAT_PERIOD_TYPE_OPTIONS, type VatPeriodTypeFilter } from './constants'
-import { getVatWorkItemStatusLabel } from './constants'
+import {
+  VAT_PERIOD_TYPES,
+  VAT_PERIOD_TYPE_OPTIONS,
+  getVatWorkItemStatusLabel,
+  type VatPeriodTypeFilter,
+} from '../constants'
 
 export const toVatPeriodTypeFilter = (value: string | null): VatPeriodTypeFilter | '' =>
   VAT_PERIOD_TYPES.includes(value as VatPeriodTypeFilter) ? (value as VatPeriodTypeFilter) : ''
