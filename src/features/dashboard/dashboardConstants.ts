@@ -1,3 +1,5 @@
+import type { LucideIcon } from 'lucide-react'
+import { ClipboardList, ReceiptText, UserPlus, Wallet } from 'lucide-react'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import type { AttentionUrgency } from './api/contracts'
 import type { DashboardCreateModal } from './hooks/useDashboardCreateModals'
@@ -7,8 +9,7 @@ const withParams = (base: string, params: Record<string, string>) => `${base}?${
 export type VatPeriodType = 'monthly' | 'bimonthly'
 
 export const DASHBOARD_HREFS = {
-  vat: (period: string, periodType: VatPeriodType) =>
-    withParams('/tax/vat', { period, period_type: periodType }),
+  vat: (period: string, periodType: VatPeriodType) => withParams('/tax/vat', { period, period_type: periodType }),
   advancePayments: (year: string | number, periodMonthsCount: 1 | 2) =>
     withParams('/tax/advance-payments', { year: String(year), period: String(periodMonthsCount) }),
   openCharges: withParams('/charges', { status: 'issued' }),
@@ -45,16 +46,30 @@ export interface QuickActionDef {
   id: string
   label: string
   description: string
+  icon: LucideIcon
   href?: string
   modal?: DashboardCreateModal
 }
 
 export const QUICK_ACTIONS: QuickActionDef[] = [
-  { id: 'create-vat', label: 'צור דוח מע״מ חדש', description: 'יצירת דוח לתקופה חדשה', modal: 'vat' },
-  { id: 'advance-payments', label: 'צור מקדמה חדשה', description: 'פתיחת טופס מקדמה חדשה', modal: 'advancePayment' },
-  { id: 'create-charge', label: 'צור חיוב חדש', description: 'יצירת חיוב ללקוח', modal: 'charge' },
-  { id: 'create-client', label: 'צור לקוח חדש', description: 'יצירת כרטיס לקוח', modal: 'client' },
+  { id: 'create-client', label: 'לקוח חדש', description: 'יצירת כרטיס לקוח', icon: UserPlus, modal: 'client' },
+  { id: 'create-vat', label: 'דוח מע״מ', description: 'יצירת דוח לתקופה חדשה', icon: ClipboardList, modal: 'vat' },
+  { id: 'create-charge', label: 'חיוב חדש', description: 'יצירת חיוב ללקוח', icon: ReceiptText, modal: 'charge' },
+  {
+    id: 'advance-payments',
+    label: 'מקדמה',
+    description: 'פתיחת טופס מקדמה חדשה',
+    icon: Wallet,
+    modal: 'advancePayment',
+  },
 ]
+
+export const VAT_STAT_LABELS = {
+  vatMonthly: 'מע״מ חודשי',
+  vatBimonthly: 'מע״מ דו-חודשי',
+  advanceMonthly: 'מקדמות חודשיות',
+  advanceBimonthly: 'מקדמות דו-חודשיות',
+} as const
 
 export const ATTENTION_URGENCY_LABELS: Record<AttentionUrgency, string> = {
   overdue: 'באיחור',

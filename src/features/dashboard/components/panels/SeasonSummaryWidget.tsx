@@ -1,20 +1,168 @@
-import { ArrowLeft, AlertTriangle, CheckCircle, FilePlus, TrendingUp } from 'lucide-react'
+import { AlertTriangle, ArrowLeft, CheckCircle, FilePlus, TrendingUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from '@/utils/utils'
 import { semanticMonoToneClasses, type SemanticTone } from '@/utils/semanticColors'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
-import { useSeasonSummary } from '../hooks/useSeasonSummary'
-import { DashboardBadge, DashboardPanel } from './DashboardLayout'
+import { useSeasonSummary } from '../../hooks/useSeasonSummary'
+import { DashboardBadge, DashboardPanel } from '../shared/DashboardLayout'
 
 interface SeasonSummaryWidgetProps {
   sideContent?: React.ReactNode
+  compact?: boolean
 }
 
-export const SeasonSummaryWidget: React.FC<SeasonSummaryWidgetProps> = ({ sideContent }) => {
+const SeasonRing = ({ pct, size = 120, stroke = 11 }: { pct: number; size?: number; stroke?: number }) => {
+  const r = (size - stroke) / 2
+  const circumference = 2 * Math.PI * r
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0" aria-hidden="true">
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#EEF0F3" strokeWidth={stroke} />
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={r}
+        fill="none"
+        stroke="#4F46E5"
+        strokeWidth={stroke}
+        strokeLinecap="round"
+        strokeDasharray={circumference}
+        strokeDashoffset={circumference * (1 - pct / 100)}
+        transform={`rotate(-90 ${size / 2} ${size / 2})`}
+        style={{ transition: 'stroke-dashoffset 700ms ease-out' }}
+      />
+      <text
+        x="50%"
+        y="48%"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        className="fill-slate-900 font-bold"
+        style={{ fontSize: 22, fontFamily: 'inherit' }}
+      >
+        {pct}%
+      </text>
+      <text
+        x="50%"
+        y="67%"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        className="fill-slate-400"
+        style={{ fontSize: 10, letterSpacing: '0.04em', fontFamily: 'inherit' }}
+      >
+        הושלמו
+      </text>
+    </svg>
+  )
+}
+
+interface LegendItem {
+  label: string
+  value: number
+  color: string
+}
+
+const CompactSeasonSummary = ({
+  taxYear,
+  filingSeasonYear,
+  total,
+  submitted,
+  closed,
+  inProgress,
+  notStarted,
+  completionPct,
+  overdueCount,
+}: {
+  taxYear: number
+  filingSeasonYear: number
+  total: number
+  submitted: number
+  closed: number
+  inProgress: number
+  notStarted: number
+  completionPct: number
+  overdueCount: number
+}) => {
+  const legend: LegendItem[] = [
+    { label: 'הוגשו', value: submitted, color: '#10B981' },
+    { label: 'נסגרו', value: closed, color: '#6366F1' },
+    { label: 'בתהליך', value: inProgress, color: '#F59E0B' },
+    { label: 'טרם החלו', value: notStarted, color: '#CBD5E1' },
+  ]
+
+  return (
+    <Link to="/tax/reports" className="block rounded-3xl border border-slate-100 bg-white p-5 shadow-elevation-1 transition-all hover:shadow-elevation-2">
+      <div className="mb-3">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">דוחות שנתיים</span>
+        <p className="mt-0.5 text-xs text-slate-500 tabular-nums">
+          שנת מס {taxYear} · עונת {filingSeasonYear}
+        </p>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <SeasonRing pct={completionPct} />
+        <ul className="flex flex-1 flex-col gap-2">
+          {legend.map((item) => (
+            <li key={item.label} className="flex items-center gap-2">
+              <span
+                className="h-2 w-2 shrink-0 rounded-[3px]"
+                style={{ background: item.color }}
+              />
+              <span className="flex-1 text-xs font-medium text-slate-500">{item.label}</span>
+              <span className="text-xs font-bold tabular-nums text-slate-800">
+                {item.value.toLocaleString('he-IL')}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-xs font-medium text-slate-500">
+        <span className="tabular-nums">{total.toLocaleString('he-IL')} דוחות בעונה</span>
+        {overdueCount > 0 && (
+          <span className="flex items-center gap-1 font-semibold text-negative-600">
+            <AlertTriangle className="h-3.5 w-3.5" />
+            {overdueCount} באיחור
+          </span>
+        )}
+      </div>
+    </Link>
+  )
+}
+
+export const SeasonSummaryWidget: React.FC<SeasonSummaryWidgetProps> = ({ sideContent, compact }) => {
   const { stats, isPending } = useSeasonSummary()
 
   if (isPending) {
     return <SkeletonBlock height="h-28" width="w-full" rounded="xl" className="rounded-2xl" />
+  }
+
+  if (compact && stats && stats.total > 0) {
+    return (
+      <CompactSeasonSummary
+        taxYear={stats.taxYear}
+        filingSeasonYear={stats.filingSeasonYear}
+        total={stats.total}
+        submitted={stats.submitted}
+        closed={stats.closed}
+        inProgress={stats.inProgress}
+        notStarted={stats.notStarted}
+        completionPct={stats.completionPct}
+        overdueCount={stats.overdueCount}
+      />
+    )
+  }
+
+  if (compact && (!stats || stats.total === 0)) {
+    return (
+      <Link
+        to="/tax/reports"
+        className="flex items-center gap-3 rounded-3xl border border-dashed border-slate-200 bg-white p-5 text-sm font-semibold text-slate-500 shadow-elevation-1 transition-all hover:border-primary-200 hover:text-primary-600"
+      >
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-600">
+          <FilePlus className="h-4 w-4" />
+        </span>
+        אין דוחות שנתיים לעונה הנוכחית
+      </Link>
+    )
   }
 
   if (!stats || stats.total === 0) {

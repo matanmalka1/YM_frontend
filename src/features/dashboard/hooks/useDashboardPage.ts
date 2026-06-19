@@ -5,7 +5,6 @@ import { useRole } from '@/hooks/useRole'
 import { dashboardApi, dashboardQK } from '../api'
 import type { DashboardOverviewResponse } from '../api'
 import { deriveDashboardState } from '../dashboard.utils'
-import { buildDashboardStats } from '../dashboardStats'
 
 export const useDashboardPage = () => {
   const { role, isAdvisor } = useRole()
@@ -26,7 +25,6 @@ export const useDashboardPage = () => {
   const emptyState = dashboard.data ? { is_empty: dashboard.data.is_empty } : undefined
   const vatStats = dashboard.data?.vat_stats
   const recentActivity = dashboard.data?.recent_activity ?? []
-  const stats = dashboard.status === 'ok' && dashboard.data ? buildDashboardStats(dashboard.data, isAdvisor) : []
 
   return {
     attentionItems,
@@ -34,7 +32,6 @@ export const useDashboardPage = () => {
     denied,
     emptyState,
     isAdvisorView,
-    stats,
     vatStats,
     recentActivity,
   }

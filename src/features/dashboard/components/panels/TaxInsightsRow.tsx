@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import { cn } from '@/utils/utils'
-import type { VatDashboardStats } from '../api'
-import { DASHBOARD_HREFS } from '../dashboardConstants'
-import { useSeasonSummary } from '../hooks/useSeasonSummary'
-import { DashboardPanel } from './DashboardLayout'
+import type { VatDashboardStats } from '../../api'
+import { DASHBOARD_HREFS } from '../../dashboardConstants'
+import { useSeasonSummary } from '../../hooks/useSeasonSummary'
+import { DashboardPanel } from '../shared/DashboardLayout'
 
 interface Props {
   vatStats: VatDashboardStats

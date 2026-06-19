@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { CalendarDays, ChevronLeft, Landmark } from 'lucide-react'
-import { DashboardPanel, DashboardSectionHeader } from './DashboardLayout'
+import { DashboardPanel, DashboardSectionHeader } from '../shared/DashboardLayout'
 import { InlineEmptyState } from '@/components/ui/feedback/InlineEmptyState'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarGroup, useTaxCalendarGroups } from '@/features/taxCalendar'

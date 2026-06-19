@@ -19,7 +19,7 @@ interface AttentionResponse {
   total: number
 }
 
-interface VatDashboardPeriodStat {
+export interface VatDashboardPeriodStat {
   period: string
   period_label: string
   status_label: string

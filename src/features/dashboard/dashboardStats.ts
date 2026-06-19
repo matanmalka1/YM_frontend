@@ -10,43 +10,54 @@ type DashboardStatsData = Pick<
   'vat_stats' | 'open_charges_count' | 'open_charges_amount_ils'
 >
 
-const vatVariant = (pending: number): StatItem['variant'] => (pending > 0 ? 'red' : 'green')
+const getVatStatVariant = (stat: DashboardStatsData['vat_stats']['monthly']): StatItem['variant'] => {
+  if (stat.pending <= 0) return 'green'
+  return stat.completion_percent >= 80 ? 'amber' : 'red'
+}
 
 const buildVatStat = (
   key: string,
   title: string,
   stat: DashboardStatsData['vat_stats']['monthly'],
   periodType: VatPeriodType,
-): StatItem => ({
-  key,
-  title,
-  value: `${formatCount(stat.pending)} דוחות ממתינים`,
-  description: `${stat.period_label} · ${stat.status_label}`,
-  icon: FileText,
-  variant: vatVariant(stat.pending),
-  urgent: stat.pending > 0,
-  href: DASHBOARD_HREFS.vat(stat.period, periodType),
-  progress: stat.completion_percent,
-  actionLabel: stat.required > 0 ? 'פתח דוחות מע״מ' : 'צור דוח מע״מ ראשון',
-})
+): StatItem => {
+  const variant = getVatStatVariant(stat)
+
+  return {
+    key,
+    title,
+    value: `${formatCount(stat.pending)} דוחות ממתינים`,
+    description: `${stat.period_label} · ${stat.status_label}`,
+    icon: FileText,
+    variant,
+    urgent: variant === 'red',
+    href: DASHBOARD_HREFS.vat(stat.period, periodType),
+    progress: stat.completion_percent,
+    actionLabel: stat.required > 0 ? 'פתח דוחות מע״מ' : 'צור דוח מע״מ ראשון',
+  }
+}
 
 const buildAdvanceStat = (
   key: string,
   title: string,
   stat: DashboardStatsData['vat_stats']['monthly'],
   period: 1 | 2,
-): StatItem => ({
-  key,
-  title,
-  value: `${formatCount(stat.pending)} מקדמות לתשלום`,
-  description: `${stat.period_label} · ממתינות לתשלום`,
-  icon: CreditCard,
-  variant: vatVariant(stat.pending),
-  urgent: stat.pending > 0,
-  href: DASHBOARD_HREFS.advancePayments(getOperationalTaxYear(), period),
-  progress: stat.completion_percent,
-  actionLabel: 'פתח מקדמות מס הכנסה',
-})
+): StatItem => {
+  const variant = getVatStatVariant(stat)
+
+  return {
+    key,
+    title,
+    value: `${formatCount(stat.pending)} מקדמות לתשלום`,
+    description: `${stat.period_label} · ממתינות לתשלום`,
+    icon: CreditCard,
+    variant,
+    urgent: variant === 'red',
+    href: DASHBOARD_HREFS.advancePayments(getOperationalTaxYear(), period),
+    progress: stat.completion_percent,
+    actionLabel: 'פתח מקדמות מס הכנסה',
+  }
+}
 
 export const buildDashboardStats = (data: DashboardStatsData, isAdvisor: boolean): StatItem[] => {
   const stats: StatItem[] = [

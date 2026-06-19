@@ -1,3 +1,4 @@
+import { ClipboardList, Wallet } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Modal } from '@/components/ui/overlays/Modal'
@@ -6,31 +7,24 @@ import { ClientPickerField } from '@/components/shared/client/ClientPickerField'
 import { CreateAdvancePaymentModal } from '@/features/advancedPayments'
 import { ChargesCreateModal } from '@/features/charges'
 import { CreateClientModal, DeletedClientDialog, type ClientRecordResponse } from '@/features/clients'
-import { SignatureRequestsDashboardPanel } from '@/features/signatureRequests'
 import { VatWorkItemsCreateModal } from '@/features/vatReports'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
-import {
-  AttentionBoard,
-  DashboardOnboardingEmptyState,
-  DashboardStatsGrid,
-  SeasonSummaryWidget,
-  useDashboardPage,
-} from '@/features/dashboard'
-import { DASHBOARD_COPY } from '../dashboardConstants'
-import { DashboardSurface } from '../components/DashboardLayout'
-import { DashboardStatsSkeleton } from '../components/DashboardStatsSkeleton'
-import { RecentActivityPanel } from '../components/RecentActivityPanel'
-import { QuickActionsPanel } from '../components/QuickActionsPanel'
-import { TaxInsightsRow } from '../components/TaxInsightsRow'
-import { UpcomingDeadlinesPanel } from '../components/UpcomingDeadlinesPanel'
+import { AttentionBoard, DashboardOnboardingEmptyState, useDashboardPage } from '@/features/dashboard'
+import { DASHBOARD_COPY, DASHBOARD_HREFS, VAT_STAT_LABELS } from '../dashboardConstants'
+import { DashboardSurface } from '../components/shared/DashboardLayout'
+import { DashboardStatsSkeleton } from '../components/kpi/DashboardStatsSkeleton'
+import { RecentActivityPanel } from '../components/panels/RecentActivityPanel'
+import { QuickActionsPanel } from '../components/panels/QuickActionsPanel'
+import { VatStatCard } from '../components/kpi/VatStatCard'
+import { OpenChargesCard } from '../components/panels/OpenChargesCard'
+import { SeasonInsightsCarousel } from '../components/panels/SeasonInsightsCarousel'
 import { useDashboardCreateModals } from '../hooks/useDashboardCreateModals'
 
 const AttentionSkeleton = () => <SkeletonBlock height="h-80" width="w-full" className="rounded-3xl" />
 
 export const DashboardPage: React.FC = () => {
-  const { attentionItems, dashboard, denied, isAdvisorView, emptyState, stats, vatStats, recentActivity } =
-    useDashboardPage()
+  const { attentionItems, dashboard, denied, isAdvisorView, emptyState, vatStats, recentActivity } = useDashboardPage()
 
   const {
     activeCreateModal,
@@ -64,33 +58,68 @@ export const DashboardPage: React.FC = () => {
         <DashboardStatsSkeleton />
       ) : emptyState?.is_empty ? (
         <DashboardOnboardingEmptyState />
-      ) : dashboard.status === 'ok' ? (
-        <DashboardStatsGrid stats={stats} />
+      ) : dashboard.status === 'ok' && vatStats ? (
+        <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <VatStatCard
+            title={VAT_STAT_LABELS.vatMonthly}
+            unit="דוחות ממתינים"
+            icon={ClipboardList}
+            stat={vatStats.monthly}
+            href={DASHBOARD_HREFS.vat(vatStats.monthly.period, 'monthly')}
+          />
+          <VatStatCard
+            title={VAT_STAT_LABELS.vatBimonthly}
+            unit="דוחות ממתינים"
+            icon={ClipboardList}
+            stat={vatStats.bimonthly}
+            href={DASHBOARD_HREFS.vat(vatStats.bimonthly.period, 'bimonthly')}
+          />
+          <VatStatCard
+            title={VAT_STAT_LABELS.advanceMonthly}
+            unit="מקדמות לתשלום"
+            icon={Wallet}
+            stat={vatStats.advance_payments.monthly}
+            href={DASHBOARD_HREFS.advancePayments(vatStats.advance_payments.monthly.period.slice(0, 4), 1)}
+          />
+          <VatStatCard
+            title={VAT_STAT_LABELS.advanceBimonthly}
+            unit="מקדמות לתשלום"
+            icon={Wallet}
+            stat={vatStats.advance_payments.bimonthly}
+            href={DASHBOARD_HREFS.advancePayments(vatStats.advance_payments.bimonthly.period.slice(0, 4), 2)}
+          />
+        </section>
       ) : null}
 
       {isAdvisorView && !emptyState?.is_empty && (
-        <SeasonSummaryWidget sideContent={vatStats ? <TaxInsightsRow vatStats={vatStats} embedded /> : undefined} />
-      )}
-
-      {isAdvisorView && !emptyState?.is_empty ? (
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
-          <aside className="flex flex-col gap-5 lg:col-start-2 lg:row-start-1">
-            <QuickActionsPanel onOpenModal={setActiveCreateModal} />
-            <UpcomingDeadlinesPanel />
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+          {/* Left column: attention + recent activity */}
+          <div className="flex flex-col gap-5 min-w-0">
+            {dashboard.status === 'loading' ? (
+              <AttentionSkeleton />
+            ) : (
+              <AttentionBoard items={attentionItems} total={dashboard.data?.attention.total} />
+            )}
             <RecentActivityPanel items={recentActivity} className="flex-1" />
-          </aside>
-          <div className="space-y-5 lg:col-start-1 lg:row-start-1">
-            {dashboard.status === 'loading' ? <AttentionSkeleton /> : <AttentionBoard items={attentionItems} />}
-            <SignatureRequestsDashboardPanel />
+          </div>
+
+          {/* Right column: charges + insights + season + quick actions */}
+          <div className="flex flex-col gap-5 min-w-0">
+            {dashboard.data && (
+              <OpenChargesCard
+                count={dashboard.data.open_charges_count}
+                amountIls={dashboard.data.open_charges_amount_ils}
+              />
+            )}
+            {vatStats && <SeasonInsightsCarousel vatStats={vatStats} />}
+            <QuickActionsPanel onOpenModal={setActiveCreateModal} />
           </div>
         </div>
-      ) : dashboard.status === 'loading' ? (
-        <AttentionSkeleton />
-      ) : (
-        <AttentionBoard items={attentionItems} />
       )}
 
-      {vatStats && !emptyState?.is_empty && !isAdvisorView && <TaxInsightsRow vatStats={vatStats} />}
+      {!isAdvisorView &&
+        !emptyState?.is_empty &&
+        (dashboard.status === 'loading' ? <AttentionSkeleton /> : <AttentionBoard items={attentionItems} />)}
 
       <ChargesCreateModal
         open={activeCreateModal === 'charge'}
