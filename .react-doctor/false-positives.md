@@ -42,6 +42,16 @@ Confirmed FP sites (2026-06-20 scan) — all spread/forward/return the whole que
 - `src/features/workQueue/hooks/useWorkQueueActions.ts` (`taskDetail` returned whole)
 - `src/features/dashboard/hooks/useDashboardPage.ts` (`dashboardQuery` passed whole to `deriveDashboardState`)
 
+## react-doctor/no-adjust-state-on-prop-change
+
+Fires on any effect that sets state keyed on a changing value. FP when the effect is a **post-mount DOM measurement** (popover/dropdown positioning) — it reads the just-mounted layer's measured size/position, which doesn't exist during render, then tracks scroll/resize. There is no duplicated state to remove; the position genuinely must be computed after layout.
+
+**Verify before suppressing:** confirm the effect reads DOM geometry (`getBoundingClientRect`/`offsetHeight`) of an element that only exists once open, sets a position state, and adds scroll/resize listeners. A prop→state *copy* (no DOM read) is a REAL finding.
+
+Confirmed FP sites (2026-06-20 scan):
+
+- `src/components/ui/inputs/DatePicker.tsx` (the `isOpen`/`usePortal` effect — measures the mounted calendar to position the portal, tracks scroll/resize)
+
 ## react-doctor/no-mutable-in-deps
 
 Branch (b) matches a dep whose root identifier is named `location`/`window`/`history`/etc. **by name alone** — it never checks what the root resolves to.

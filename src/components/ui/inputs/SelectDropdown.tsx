@@ -57,13 +57,15 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   const [open, setOpen] = useState(false)
   const [internalValue, setInternalValue] = useState<string>('')
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
-  const [coords, setCoords] = useState<{
+  // Menu placement is measured as one unit (position + flip direction), so it lives in a
+  // single state object rather than two correlated useState calls.
+  const [placement, setPlacement] = useState<{
     top: number
     bottom: number
     left: number
     width: number
+    above: boolean
   } | null>(null)
-  const [openAbove, setOpenAbove] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const portalRef = useRef<HTMLDivElement>(null)
   const portalContainer = useOverlayPortalContainer()
@@ -84,8 +86,8 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
     const rect = triggerRef.current?.getBoundingClientRect()
     if (!rect) return
     const spaceBelow = window.innerHeight - rect.bottom
-    setOpenAbove(spaceBelow < 220)
-    setCoords({
+    setPlacement({
+      above: spaceBelow < 220,
       top: rect.bottom,
       bottom: window.innerHeight - rect.top,
       left: rect.left,
@@ -99,16 +101,15 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
     return () => window.removeEventListener('scroll', updateCoords, true)
   }, [open])
 
-  useEffect(() => {
-    if (!open) {
-      setHighlightedIndex(-1)
-      return
-    }
-
+  // Measure placement and seed the keyboard highlight to the selected (or first enabled)
+  // option as we open — instead of resetting highlight from props via an effect.
+  const openMenu = () => {
     const selectedIndex = options.findIndex((opt) => !opt.disabled && String(opt.value) === currentValue)
     const firstEnabledIndex = options.findIndex((opt) => !opt.disabled)
     setHighlightedIndex(selectedIndex >= 0 ? selectedIndex : firstEnabledIndex)
-  }, [currentValue, open, options])
+    updateCoords()
+    setOpen(true)
+  }
 
   const toggle = () => {
     if (disabled) return
@@ -116,8 +117,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
       setOpen(false)
       return
     }
-    updateCoords()
-    setOpen(true)
+    openMenu()
   }
 
   const moveHighlight = (direction: 1 | -1) => {
@@ -140,8 +140,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault()
       if (!open) {
-        updateCoords()
-        setOpen(true)
+        openMenu()
         return
       }
       moveHighlight(event.key === 'ArrowDown' ? 1 : -1)
@@ -150,8 +149,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
 
     if ((event.key === 'Enter' || event.key === ' ') && !open) {
       event.preventDefault()
-      updateCoords()
-      setOpen(true)
+      openMenu()
       return
     }
 
@@ -231,17 +229,17 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
       </button>
 
       {open &&
-        coords &&
+        placement &&
         portalContainer &&
         createPortal(
           <div
             ref={portalRef}
             style={{
               position: 'fixed',
-              top: openAbove ? undefined : coords.top + 4 - portalOffset.top,
-              bottom: openAbove ? coords.bottom + 4 - viewportBottomToPortalBottom : undefined,
-              left: coords.left - portalOffset.left,
-              width: coords.width,
+              top: placement.above ? undefined : placement.top + 4 - portalOffset.top,
+              bottom: placement.above ? placement.bottom + 4 - viewportBottomToPortalBottom : undefined,
+              left: placement.left - portalOffset.left,
+              width: placement.width,
               zIndex: 9999,
             }}
             className="pointer-events-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg overflow-auto max-h-60 overscroll-contain"

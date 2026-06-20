@@ -59,11 +59,6 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
   const selected = value ? parseValue(value) : undefined
 
-  useEffect(() => {
-    if (selected) setMonthState(selected)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
-
   const displayValue = selected ? format(selected, 'dd/MM/yyyy') : ''
 
   const computeDropdownPos = () => {
@@ -86,12 +81,10 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   const handleOpen = () => {
     if (disabled) return
     if (!open) {
-      // Reopening with no value: default the visible month to today (capped at maxDate),
-      // not a stale month captured at mount.
-      if (!selected) {
-        const today = new Date()
-        setMonthState(maxDate && today > maxDate ? maxDate : today)
-      }
+      // Seed the visible month as we open — to the selected date, or today (capped at maxDate)
+      // when there's no value. Done here instead of syncing from `value` via an effect.
+      const base = selected ?? new Date()
+      setMonthState(maxDate && base > maxDate ? maxDate : base)
       if (usePortal) {
         const pos = computeDropdownPos()
         if (pos) setDropdownPos(pos)

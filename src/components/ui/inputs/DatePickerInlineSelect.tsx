@@ -22,18 +22,17 @@ export const DatePickerInlineSelect: React.FC<InlineSelectProps> = ({ value, opt
     }
   }, [open])
 
-  useEffect(() => {
-    if (!open) {
-      setHighlightedIndex(-1)
-      return
-    }
-    const selectedIndex = options.findIndex((opt) => opt.value === value)
-    setHighlightedIndex(selectedIndex >= 0 ? selectedIndex : 0)
-  }, [open, options, value])
-
   useDismissibleLayer({ open, triggerRef: ref, layerRef: listRef, onDismiss: () => setOpen(false) })
 
   const current = options.find((o) => o.value === value)
+
+  // Seed the keyboard highlight to the selected option as we open, rather than syncing it
+  // back from props via an effect (which would cost an extra render and run a beat late).
+  const openMenu = () => {
+    const selectedIndex = options.findIndex((opt) => opt.value === value)
+    setHighlightedIndex(selectedIndex >= 0 ? selectedIndex : 0)
+    setOpen(true)
+  }
 
   const moveHighlight = (direction: 1 | -1) => {
     if (options.length === 0) return
@@ -47,7 +46,7 @@ export const DatePickerInlineSelect: React.FC<InlineSelectProps> = ({ value, opt
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault()
       if (!open) {
-        setOpen(true)
+        openMenu()
         return
       }
       moveHighlight(event.key === 'ArrowDown' ? 1 : -1)
@@ -56,7 +55,7 @@ export const DatePickerInlineSelect: React.FC<InlineSelectProps> = ({ value, opt
 
     if ((event.key === 'Enter' || event.key === ' ') && !open) {
       event.preventDefault()
-      setOpen(true)
+      openMenu()
       return
     }
 
@@ -79,7 +78,7 @@ export const DatePickerInlineSelect: React.FC<InlineSelectProps> = ({ value, opt
     <div ref={ref} className="relative">
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => (open ? setOpen(false) : openMenu())}
         onKeyDown={handleTriggerKeyDown}
         className="flex items-center gap-1 px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200 text-sm font-semibold text-gray-800 transition-colors"
         aria-haspopup="listbox"
