@@ -10,6 +10,7 @@ import {
 } from '../../constants'
 import { Trash2 } from 'lucide-react'
 import { DetailDrawer } from '../../../../components/ui/overlays/DetailDrawer'
+import { ModalFormActions } from '../../../../components/ui/overlays/ModalFormActions'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { DeleteClientModal } from './DeleteClientModal'
 import { AuthorityContactsCard } from '@/features/authorityContacts'
@@ -73,6 +74,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
   const { id: firstBusinessId } = useFirstBusinessId(client.id, activeTab === 'communication')
   const navigate = useNavigate()
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false)
+  const [isEditDirty, setIsEditDirty] = useState(false)
   const [isAddingBusiness, setIsAddingBusiness] = useState(false)
   const [isAddingCharge, setIsAddingCharge] = useState(false)
   // Store which client the related data was requested for and derive the flag, so it
@@ -196,6 +198,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
           title="עריכת פרטי לקוח"
           subtitle={client.full_name}
           onClose={onEditClose}
+          isDirty={isEditDirty}
           footer={
             <div className="flex items-center justify-between gap-3">
               <Button
@@ -211,14 +214,14 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
                 <Trash2 className="h-4 w-4" />
                 מחק לקוח
               </Button>
-              <div className="flex items-center gap-3">
-                <Button type="button" variant="ghost" onClick={onEditClose} disabled={isUpdating}>
-                  ביטול
-                </Button>
-                <Button type="submit" form={EDIT_FORM_ID} variant="ghost" isLoading={isUpdating} disabled={isUpdating}>
-                  שמור שינויים
-                </Button>
-              </div>
+              <ModalFormActions
+                cancelVariant="ghost"
+                isLoading={isUpdating}
+                submitForm={EDIT_FORM_ID}
+                submitLabel="שמור שינויים"
+                submitType="submit"
+                submitVariant="ghost"
+              />
             </div>
           }
         >
@@ -231,6 +234,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
               onEditClose()
             }}
             onCancel={onEditClose}
+            onDirtyChange={setIsEditDirty}
             isLoading={isUpdating}
           />
         </DetailDrawer>

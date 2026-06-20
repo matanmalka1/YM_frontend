@@ -2,6 +2,16 @@
 
 Patterns here are dropped during triage. Each entry says how to verify before suppressing — never suppress on filename alone.
 
+## react-doctor/prefer-useReducer
+
+Pure count — fires at 5+ `useState` regardless of whether they're related. FP when the slices are **conceptually independent** (separate dialog toggles, an unrelated dirty flag, a load-tracking id) that never transition together. The rule's own note: "genuinely independent values should remain as separate `useState` hooks." A reducer here would be artificial and harder to read. (Genuine candidates: clusters that update in lockstep — e.g. one form's fields — which should be consolidated; see SelectDropdown, where merging two correlated position slices was the real fix.)
+
+**Verify before suppressing:** confirm the `useState` calls are unrelated slices with no shared transition; if several always change together, that subset is a REAL consolidation.
+
+Confirmed FP sites (2026-06-20 scan):
+
+- `src/features/clients/components/details/ClientDetailsOverviewTab.tsx` (`isConfirmingDelete`, `isEditDirty`, `isAddingBusiness`, `isAddingCharge`, `relatedDataLoadedForId` — independent toggles + a load-tracking id)
+
 ## react-doctor/query-mutation-missing-invalidation
 
 The rule only detects a literal `.invalidateQueries` / `.setQueryData` / `.resetQueries` member call **inside** the `useMutation` options object. It cannot trace a helper function. This codebase deliberately centralizes invalidation in reusable helpers (endorsed by `docs/frontend/architecture.md` → "Mutation hooks own cache updates, targeted invalidation, and reusable mutation lifecycle behavior"), so the rule fires even though invalidation is correctly present.
