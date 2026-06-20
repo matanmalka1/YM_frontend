@@ -1,6 +1,7 @@
 import React from 'react'
 import { AlertTriangle } from 'lucide-react'
 import { StateCard } from '../ui/feedback/StateCard'
+import { Button } from '../ui/primitives/Button'
 
 interface AppLogger {
   error: (event: string, context?: Record<string, unknown>) => void
@@ -91,9 +92,14 @@ export class AppErrorBoundary extends React.Component<AppErrorBoundaryProps, App
 
           {isDevelopment && (
             <div className="mt-3 text-center">
-              <button className="text-sm text-gray-500 hover:text-gray-700 underline" onClick={this.handleReset}>
+              <Button
+                type="button"
+                variant="link"
+                className="text-gray-500 hover:text-gray-700"
+                onClick={this.handleReset}
+              >
                 נסה שוב ללא רענון
-              </button>
+              </Button>
             </div>
           )}
         </div>

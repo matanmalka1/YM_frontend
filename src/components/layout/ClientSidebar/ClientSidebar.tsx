@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react'
+import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState, type RefObject } from 'react'
 import { useDebounce } from 'use-debounce'
 import { Link } from 'react-router-dom'
 import { SkeletonBlock } from '../../ui/primitives/SkeletonBlock'
@@ -83,6 +83,8 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
     if (mobileOpen) onMobileClose()
   }, [mobileOpen, onMobileClose])
 
+  const onMobileCloseEvent = useEffectEvent(onMobileClose)
+
   useEffect(() => {
     if (!mobileOpen) return
 
@@ -94,7 +96,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault()
-        onMobileClose()
+        onMobileCloseEvent()
         return
       }
 
@@ -125,7 +127,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
       document.body.style.overflow = previousOverflow
       mobileTrigger?.focus()
     }
-  }, [mobileOpen, mobileTriggerRef, onMobileClose])
+  }, [mobileOpen, mobileTriggerRef])
 
   return (
     <>

@@ -157,6 +157,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
           return (
             <button
               key={type}
+              type="button"
               onClick={() => onToggleTypeFilter(type)}
               className={cn(
                 'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium',
@@ -182,6 +183,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
         })}
 
         <button
+          type="button"
           onClick={() => onImportantOnlyChange(!importantOnly)}
           className={cn(
             'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium',

@@ -86,6 +86,7 @@ export const Alert: React.FC<AlertProps> = ({
 
       {dismissible && onDismiss && (
         <button
+          type="button"
           onClick={onDismiss}
           className={cn('shrink-0 rounded-lg p-1.5 transition-colors hover:bg-white/50', c.text)}
           aria-label="סגור התראה"
