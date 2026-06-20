@@ -20,16 +20,26 @@ documented can't-fix (unsandboxed on purpose).
 
 ---
 
-## MODERATE — substantive, do these first (after FP-filtering)
+## MODERATE — ✅ CLEARED (pass 2026-06-20, commit 38b9259c: 224 → 215)
 
-| Rule | Count | Notes |
+All moderate findings are resolved — either fixed at the root cause or triaged into
+`false-positives.md` with a verify recipe. Outcomes:
+
+| Rule | Count | Outcome |
 |---|---|---|
-| `query-mutation-missing-invalidation` | ~30 | **Mostly already-documented FP** — invalidation is centralized in helpers the rule can't trace. Diff each site against `false-positives.md`; only genuinely-new mutation hooks that mutate cached, user-visible data need a real fix. |
-| `exhaustive-deps` | 10 | Per-effect judgment — adding the *wrong* dep can introduce bugs. Stabilize (useCallback/useMemo) or move into the callback rather than blindly adding. |
-| `no-many-boolean-props` | 6 | Local but structural (prop-API change → variant/enum prop). |
-| `no-multi-comp` | 4 | Split secondary components out of the file. |
-| `jsx-no-jsx-as-prop` | 4 | Extract/memoize the JSX passed as a prop. |
-| `jsx-no-constructed-context-values` | 1 | Memoize the context `value={{...}}`. |
+| `query-mutation-missing-invalidation` | ~30 | All confirmed already-documented FP (helper-traced invalidation). No new bugs. |
+| `exhaustive-deps` | 10 | ✅ 2 fixed (`useClientTimelinePage`) · 📝 3 FP (ref-cleanup timers ×2, one-shot seed) · ⏸ **5 deferred — they live in HEAVY files** (`DatePicker`, `useAdvancePaymentDrawerForm`, `AnnualReportDetailForm`, `SendNotificationModal`, `useSearchDebounce`); the per-flow refactor deletes these prop→state sync effects, so patching deps now is throwaway. |
+| `no-many-boolean-props` | 6 | ✅ 1 fixed (`TasksListPanel` isLoading/isError → `status`) · 📝 5 FP (orthogonal state on containers). |
+| `no-multi-comp` | 4 | ✅ all fixed (`DetailDrawer`→`DrawerPrimitives`; `TaskListStates` split). |
+| `jsx-no-jsx-as-prop` | 4 | 📝 all FP (slot JSX on unmemoized `DetailTabPanel`). |
+| `jsx-no-constructed-context-values` | 1 | ✅ fixed (`RowActions` useCallback). |
+
+Also cleared this pass: `no-react19-deprecated-apis` ×1 (fixed), `prefer-dynamic-import`
+×1 (recharts lazy-split; rule can't trace the dynamic boundary → FP), 4 backdrop-`<dialog>`
+a11y findings (FP). **Net: 9 fixed, 19 reclassified as documented FP.**
+
+The 5 deferred `exhaustive-deps` are folded into the HEAVY work below — fix them as part of
+each file's per-flow refactor, not separately.
 
 ---
 
