@@ -97,11 +97,13 @@ export const formatShekelAmount = (value: string | number | null | undefined, fa
   return formatCurrencyILS(value, { fallback, maximumFractionDigits: 0 })
 }
 
+const integerCountFormatter = new Intl.NumberFormat('he-IL', { maximumFractionDigits: 0 })
+
 /** Locale-grouped integer count (e.g. `1,234`). For currency use formatCurrencyILS, for ratios formatPercent. */
 export const formatCount = (value: string | number | null | undefined, fallback = EMPTY_VALUE): string => {
   const numeric = toNumberOrNull(value)
   if (numeric === null) return fallback
-  return new Intl.NumberFormat('he-IL', { maximumFractionDigits: 0 }).format(numeric)
+  return integerCountFormatter.format(numeric)
 }
 
 type PercentFormatOptions = {

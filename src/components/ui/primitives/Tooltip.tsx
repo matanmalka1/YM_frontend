@@ -10,6 +10,7 @@ import {
 } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '../../../utils/utils'
+import { getOverlayPortalOffset, useOverlayPortalContainer } from '../overlays/OverlayPortalContext'
 
 interface TooltipProps {
   text: string
@@ -37,6 +38,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ text, children, className }) =
   const [open, setOpen] = useState(false)
   const [position, setPosition] = useState<TooltipPosition | null>(null)
   const canUseDOM = typeof document !== 'undefined'
+  const portalContainer = useOverlayPortalContainer()
 
   const updatePosition = useCallback(() => {
     const trigger = triggerRef.current
@@ -133,10 +135,12 @@ export const Tooltip: React.FC<TooltipProps> = ({ text, children, className }) =
       </span>
     )
 
+  const portalOffset = getOverlayPortalOffset(portalContainer)
+
   return (
     <>
       {trigger}
-      {open && canUseDOM
+      {open && canUseDOM && portalContainer
         ? createPortal(
             <span
               ref={tooltipRef}
@@ -146,8 +150,8 @@ export const Tooltip: React.FC<TooltipProps> = ({ text, children, className }) =
               style={
                 position
                   ? {
-                      top: position.top,
-                      left: position.left,
+                      top: position.top - portalOffset.top,
+                      left: position.left - portalOffset.left,
                     }
                   : {
                       top: 0,
@@ -161,7 +165,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ text, children, className }) =
             >
               {text}
             </span>,
-            document.body,
+            portalContainer,
           )
         : null}
     </>

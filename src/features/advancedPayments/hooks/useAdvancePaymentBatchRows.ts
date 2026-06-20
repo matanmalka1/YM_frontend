@@ -47,7 +47,7 @@ export const useAdvancePaymentBatchRows = ({
     staleTime: QUERY_STALE_TIME.default,
   })
 
-  const rows = [...(data?.items ?? [])].sort(
+  const rows = (data?.items ?? []).toSorted(
     (first, second) => Number(second.missing_turnover) - Number(first.missing_turnover),
   )
 

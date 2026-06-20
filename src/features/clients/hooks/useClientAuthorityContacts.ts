@@ -4,6 +4,7 @@ import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 
 const PAGE = 1
+const LIST_PARAMS = { page: PAGE, page_size: PAGE_SIZE }
 const DEFAULT_BRANCH_CONTACT_TYPES = new Set<ContactType>(['assessing_officer', 'vat_branch', 'national_insurance'])
 
 const normalizeBranchCity = (city: string | null | undefined): string | null => {
@@ -12,10 +13,9 @@ const normalizeBranchCity = (city: string | null | undefined): string | null => 
 }
 
 export const useClientAuthorityContacts = (clientId: number, addressCity?: string | null) => {
-  const listParams = { page: PAGE, page_size: PAGE_SIZE }
   const { data } = useQuery({
-    queryKey: authorityContactsQK.list(clientId, listParams),
-    queryFn: () => authorityContactsApi.listAuthorityContacts(clientId, listParams),
+    queryKey: authorityContactsQK.list(clientId, LIST_PARAMS),
+    queryFn: () => authorityContactsApi.listAuthorityContacts(clientId, LIST_PARAMS),
     enabled: clientId > 0,
     staleTime: QUERY_STALE_TIME.long,
   })

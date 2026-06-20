@@ -8,9 +8,7 @@ import { toast } from "../../../utils/toast";
 import { PAGE_SIZE_MD as PAGE_SIZE } from "@/constants/pagination.constants";
 
 export const useAgingReport = () => {
-  const [asOfDate, setAsOfDateRaw] = useState<string>(
-    formatDate(new Date(), "yyyy-MM-dd"),
-  );
+  const [asOfDate, setAsOfDateRaw] = useState<string>(() => formatDate(new Date(), "yyyy-MM-dd"));
   const [page, setPage] = useState(1);
   const [exporting, setExporting] = useState<ExportFormat | null>(null);
 

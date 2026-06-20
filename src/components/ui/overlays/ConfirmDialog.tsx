@@ -1,5 +1,6 @@
-import { useEffect, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Button } from '../primitives/Button'
+import { OverlayPortalProvider } from './OverlayPortalContext'
 
 export interface ConfirmDialogProps {
   open: boolean
@@ -30,67 +31,84 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onCancel,
   children,
 }) => {
+  const dialogRef = useRef<HTMLDialogElement>(null)
+  const portalHostRef = useRef<HTMLDivElement>(null)
+  const [portalHost, setPortalHost] = useState<HTMLElement | null>(null)
+
+  // Open modally so the browser provides the focus trap, Escape dismissal, and
+  // ::backdrop. We keep `open` as the single source of truth: Escape is routed
+  // back through onCancel (preventDefault stops the native close), and the
+  // dialog unmounts when the parent flips `open` to false.
   useEffect(() => {
-    if (!open) return
+    const dialog = dialogRef.current
+    if (!open || !dialog) return
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onCancel()
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
+    if (!dialog.open) dialog.showModal()
+    const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      document.body.style.overflow = ''
+      document.body.style.overflow = previousOverflow
     }
-  }, [open, onCancel])
+  }, [open])
+
+  useEffect(() => {
+    setPortalHost(open ? portalHostRef.current : null)
+  }, [open])
 
   if (!open) return null
 
+  const handleBackdropClick = (event: React.MouseEvent<HTMLDialogElement>) => {
+    if (closeOnBackdrop && event.target === dialogRef.current) onCancel()
+  }
+
   return (
-    <div
-      role="presentation"
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 px-3 pb-3 backdrop-blur-[2px] sm:items-center sm:p-4"
-      onClick={() => closeOnBackdrop && onCancel()}
+    // Backdrop click-to-close is a mouse-only enhancement; Escape is handled
+    // natively by the modal <dialog>, so no keyboard listener is required here.
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
+    <dialog
+      ref={dialogRef}
+      aria-labelledby="confirm-sheet-title"
+      aria-describedby="confirm-sheet-description"
+      onCancel={(event) => {
+        event.preventDefault()
+        onCancel()
+      }}
+      onClick={handleBackdropClick}
+      className="mx-auto my-auto w-[calc(100%-1.5rem)] max-w-md border-none bg-transparent p-0 backdrop:bg-black/45 backdrop:backdrop-blur-[2px] max-sm:mb-3 max-sm:mt-auto"
     >
-      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events */}
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="confirm-sheet-title"
-        aria-describedby="confirm-sheet-description"
-        className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-4 shadow-xl animate-in fade-in zoom-in-95 slide-in-from-bottom-4 duration-150 sm:p-5"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-gray-200 sm:hidden" />
+      <OverlayPortalProvider value={portalHost}>
+        <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-xl sm:p-5">
+          <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-gray-200 sm:hidden" />
 
-        <div className="space-y-2 text-right">
-          <h2 id="confirm-sheet-title" className="text-lg font-semibold text-gray-900">
-            {title}
-          </h2>
-          <p id="confirm-sheet-description" className="text-sm leading-6 text-gray-600">
-            {message}
-          </p>
-          {children}
-        </div>
+          <div className="space-y-2 text-right">
+            <h2 id="confirm-sheet-title" className="text-lg font-semibold text-gray-900">
+              {title}
+            </h2>
+            <p id="confirm-sheet-description" className="text-sm leading-6 text-gray-600">
+              {message}
+            </p>
+            {children}
+          </div>
 
-        <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row">
-          <Button variant="secondary" fullWidth disabled={isLoading} onClick={onCancel}>
-            {cancelLabel}
-          </Button>
-          <Button
-            variant={confirmVariant}
-            fullWidth
-            autoFocus
-            isLoading={isLoading}
-            disabled={confirmDisabled || isLoading}
-            onClick={onConfirm}
-          >
-            {confirmLabel}
-          </Button>
+          <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row">
+            <Button variant="secondary" fullWidth disabled={isLoading} onClick={onCancel}>
+              {cancelLabel}
+            </Button>
+            <Button
+              variant={confirmVariant}
+              fullWidth
+              autoFocus
+              isLoading={isLoading}
+              disabled={confirmDisabled || isLoading}
+              onClick={onConfirm}
+            >
+              {confirmLabel}
+            </Button>
+          </div>
         </div>
-      </div>
-    </div>
+        <div ref={portalHostRef} className="pointer-events-none fixed inset-0 z-[1]" />
+      </OverlayPortalProvider>
+    </dialog>
   )
 }

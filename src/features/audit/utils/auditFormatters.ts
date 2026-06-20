@@ -55,16 +55,15 @@ export const makeAuditFormatter = (labels: FieldValueLabels) => {
       const keys = Array.from(new Set([...Object.keys(oldRecord), ...Object.keys(newRecord)]))
 
       return keys
-        .map((key) => {
+        .flatMap((key) => {
           const label = formatFieldLabel(key)
           const oldText = formatValue(oldRecord[key], key)
           const newText = formatValue(newRecord[key], key)
-          if (!(key in oldRecord)) return `${label}: ${newText}`
-          if (!(key in newRecord)) return `${label}: ${oldText}`
-          if (oldText === newText) return null
-          return `${label}: ${oldText} → ${newText}`
+          if (!(key in oldRecord)) return [`${label}: ${newText}`]
+          if (!(key in newRecord)) return [`${label}: ${oldText}`]
+          if (oldText === newText) return []
+          return [`${label}: ${oldText} → ${newText}`]
         })
-        .filter(Boolean)
         .join('; ')
     }
 

@@ -29,7 +29,7 @@ export const getClientTypeLabel = (report: AnnualReportFull): string =>
 export const clampPercent = (value: number): number => Math.max(0, Math.min(100, value))
 
 export const sortReportsByTaxYearDesc = (reports: AnnualReportListItem[]): AnnualReportListItem[] =>
-  [...reports].sort((a, b) => b.tax_year - a.tax_year)
+  reports.toSorted((a, b) => b.tax_year - a.tax_year)
 
 export const getAlertBanners = (report: AnnualReportFull, advances?: BalanceAlertInput): AlertBannerData[] => {
   const banners: AlertBannerData[] = []

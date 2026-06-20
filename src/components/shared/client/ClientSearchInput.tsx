@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback, useId } from 'react'
 import { createPortal } from 'react-dom'
 import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/inputs/Input'
+import { getOverlayPortalOffset, useOverlayPortalContainer } from '@/components/ui/overlays/OverlayPortalContext'
 import { Spinner } from '@/components/ui/primitives/Spinner'
 import { clientsApi, type ClientRecordListItem } from '@/features/clients'
 import { formatClientOfficeId } from '@/utils/utils'
@@ -43,9 +44,10 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const requestIdRef = useRef(0)
   const containerRef = useRef<HTMLDivElement>(null)
-  const listRef = useRef<HTMLUListElement>(null)
+  const listRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [listPosition, setListPosition] = useState<React.CSSProperties>({})
+  const portalContainer = useOverlayPortalContainer()
   const listboxId = useId()
 
   const updateListPosition = useCallback(() => {
@@ -193,6 +195,12 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
   }
 
   const showNoResults = open && results.length === 0 && !loading && value.trim().length >= 2
+  const portalOffset = getOverlayPortalOffset(portalContainer)
+  const listStyle: React.CSSProperties = {
+    ...listPosition,
+    top: typeof listPosition.top === 'number' ? listPosition.top - portalOffset.top : listPosition.top,
+    left: typeof listPosition.left === 'number' ? listPosition.left - portalOffset.left : listPosition.left,
+  }
 
   return (
     <div ref={containerRef} className="relative w-full">
@@ -227,25 +235,25 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
 
       {open &&
         (results.length > 0 || showNoResults) &&
+        portalContainer &&
         createPortal(
-          <ul
+          <div
             ref={listRef}
             id={listboxId}
             role="listbox"
-            className="box-border max-h-72 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 text-right shadow-xl"
-            style={listPosition}
+            className="pointer-events-auto box-border max-h-72 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 text-right shadow-xl"
+            style={listStyle}
             dir="rtl"
           >
             {showNoResults ? (
-              <li role="presentation" className="px-4 py-2.5 text-sm text-gray-400">
-                לא נמצאו לקוחות
-              </li>
+              <div className="px-4 py-2.5 text-sm text-gray-400">לא נמצאו לקוחות</div>
             ) : (
               results.map((result, index) => (
-                <li
+                <div
                   id={`${listboxId}-option-${result.id}`}
                   key={result.id}
                   role="option"
+                  tabIndex={-1}
                   aria-selected={highlightedIndex === index}
                   onMouseDown={() => handleSelect(result)}
                   onMouseEnter={() => setHighlightedIndex(index)}
@@ -259,11 +267,11 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
                       ? `מס׳ לקוח ${formatClientOfficeId(result.office_client_number)}`
                       : 'מס׳ לקוח לא זמין'}
                   </span>
-                </li>
+                </div>
               ))
             )}
-          </ul>,
-          document.body,
+          </div>,
+          portalContainer,
         )}
     </div>
   )

@@ -64,7 +64,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
               {isExpense && <th className={thCls}>מע&quot;מ לניכוי</th>}
               <th className={thCls}>נוצר ע&quot;י</th>
               <th className={thCls}>נוצר ב</th>
-              {canEdit && <th className="w-16 px-2" />}
+              {canEdit && <th className="w-16 px-2" aria-label="פעולות" />}
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 bg-white">

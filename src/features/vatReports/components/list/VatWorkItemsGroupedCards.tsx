@@ -28,9 +28,12 @@ const getVatGroupSecondaryLabel = (group: VatWorkItemGroupSummary): string | nul
   const seen = new Set<string>()
   const periodLabels = (
     group.periods?.length ? group.periods : [{ period: group.period, period_type: group.period_type }]
-  )
-    .map((period) => formatVatPeriodTitle(period.period, period.period_type))
-    .filter((label) => (seen.has(label) ? false : (seen.add(label), true)))
+  ).flatMap((period) => {
+    const label = formatVatPeriodTitle(period.period, period.period_type)
+    if (seen.has(label)) return []
+    seen.add(label)
+    return [label]
+  })
   return periodLabels.length > 0 ? `כולל תקופות: ${periodLabels.join(' · ')}` : null
 }
 
@@ -95,7 +98,7 @@ export const VatWorkItemsGroupedCards = ({
   emptyState,
   filters,
 }: VatWorkItemsGroupedCardsProps) => {
-  const sortedGroups = [...groups].sort((a, b) => a.due_date.localeCompare(b.due_date))
+  const sortedGroups = groups.toSorted((a, b) => a.due_date.localeCompare(b.due_date))
 
   const getKey = useCallback((g: VatWorkItemGroupSummary) => g.group_key, [])
   const getDueDate = useCallback((g: VatWorkItemGroupSummary) => g.due_date, [])

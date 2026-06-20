@@ -32,7 +32,7 @@ export const useBindersPageDialogs = ({
   const [handoverRecipientName, setHandoverRecipientName] = useState('')
   const [bulkReadyForHandoverOpen, setBulkReadyForHandoverOpen] = useState(false)
   const [handoverToClientBulkOpen, setHandoverToClientBulkOpen] = useState(false)
-  const [bulkReadyForHandoverYear, setBulkReadyForHandoverYear] = useState(new Date().getFullYear())
+  const [bulkReadyForHandoverYear, setBulkReadyForHandoverYear] = useState(() => new Date().getFullYear())
   const [bulkReadyForHandoverMonth, setBulkReadyForHandoverMonth] = useState(new Date().getMonth() + 1)
   const [dialogBinder, setDialogBinder] = useState<BinderResponse | null>(null)
 

@@ -1,9 +1,10 @@
 import type { AnchorHTMLAttributes } from 'react'
-import { Children, Fragment, createContext, isValidElement, useContext, useLayoutEffect, useRef, useState } from 'react'
+import { Children, Fragment, createContext, isValidElement, use, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { MoreHorizontal } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { computeDropdownPosition } from '../../../utils/dropdownMenuUtils'
+import { getOverlayPortalOffset, useOverlayPortalContainer } from '../overlays/OverlayPortalContext'
 import { useDismissibleLayer } from '../overlays/useDismissibleLayer'
 import { Tooltip } from '../primitives/Tooltip'
 
@@ -24,10 +25,11 @@ interface DropdownMenuProps {
 
 const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMenuProps) => {
   const [open, setOpen] = useState(false)
-  const [triggerRect, setTriggerRect] = useState<DOMRect | null>(null)
+  const triggerRectRef = useRef<DOMRect | null>(null)
   const [pos, setPos] = useState<DropdownPos | null>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const portalRef = useRef<HTMLDivElement>(null)
+  const portalContainer = useOverlayPortalContainer()
   const focusTrigger = () => triggerRef.current?.focus({ preventScroll: true })
 
   useDismissibleLayer({
@@ -64,7 +66,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
   const openMenu = () => {
     const rect = triggerRef.current?.getBoundingClientRect()
     if (!rect) return
-    setTriggerRect(rect)
+    triggerRectRef.current = rect
     setPos(null)
     setOpen(true)
   }
@@ -129,6 +131,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
   }
 
   useLayoutEffect(() => {
+    const triggerRect = triggerRectRef.current
     if (!open || !triggerRect || pos) return
     const element = portalRef.current
     if (!element) return
@@ -140,7 +143,9 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
         { width: window.innerWidth, height: window.innerHeight },
       ),
     )
-  }, [open, triggerRect, pos])
+  }, [open, pos])
+
+  const portalOffset = getOverlayPortalOffset(portalContainer)
 
   return (
     <>
@@ -159,6 +164,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
       </button>
 
       {open &&
+        portalContainer &&
         createPortal(
           <DropdownCloseContext.Provider value={() => setOpen(false)}>
             <div
@@ -167,8 +173,8 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
                 pos
                   ? {
                       position: 'fixed',
-                      top: pos.top,
-                      left: pos.left,
+                      top: pos.top - portalOffset.top,
+                      left: pos.left - portalOffset.left,
                       maxHeight: pos.maxHeight,
                       overflowY: pos.maxHeight ? 'auto' : undefined,
                       zIndex: 9999,
@@ -181,7 +187,10 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
                       zIndex: 9999,
                     }
               }
-              className={cn('rounded-lg border border-gray-200 bg-white py-1 shadow-lg', menuClassName ?? 'min-w-40')}
+              className={cn(
+                'pointer-events-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg',
+                menuClassName ?? 'min-w-40',
+              )}
               onClick={(event) => event.stopPropagation()}
               onKeyDown={handleMenuKeyDown}
               role="menu"
@@ -190,7 +199,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
               {children}
             </div>
           </DropdownCloseContext.Provider>,
-          document.body,
+          portalContainer,
         )}
     </>
   )
@@ -213,7 +222,7 @@ const DropdownMenuItem = ({
   disabled?: boolean
   tooltip?: string
 }) => {
-  const close = useContext(DropdownCloseContext)
+  const close = use(DropdownCloseContext)
   const item = (
     <button
       role="menuitem"

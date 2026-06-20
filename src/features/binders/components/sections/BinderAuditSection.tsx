@@ -52,7 +52,7 @@ export const BinderAuditSection: React.FC<BinderAuditSectionProps> = ({ binderId
             const oldBadge = entry.old_value ? getAuditBadge(entry.field_name, entry.old_value) : null
             const newBadge = getAuditBadge(entry.field_name, entry.new_value)
             return (
-              <TimelineEntry key={index} animationDelay={staggerDelay(index, 40)}>
+              <TimelineEntry key={`${entry.changed_at}-${entry.field_name}`} animationDelay={staggerDelay(index, 40)}>
                 <div className="mb-1 flex flex-wrap items-center gap-1.5 text-sm">
                   {entry.old_value && (
                     <>

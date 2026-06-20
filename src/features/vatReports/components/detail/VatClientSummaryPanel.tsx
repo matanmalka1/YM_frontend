@@ -58,7 +58,7 @@ export const VatClientSummaryPanel = ({ clientId }: VatClientSummaryPanelProps) 
 
   const [createOpen, setCreateOpen] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
+  const [selectedYear, setSelectedYear] = useState(() => new Date().getFullYear())
   const { data, isLoading, error, createMutation } = useVatClientSummary(clientId)
 
   const yearOptions = useMemo(() => {

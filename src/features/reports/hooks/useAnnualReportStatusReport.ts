@@ -4,7 +4,7 @@ import { reportsApi, reportsQK } from "../api";
 import { getErrorMessage } from "../../../utils/utils";
 
 export const useAnnualReportStatusReport = (controlledYear?: number) => {
-  const [internalYear, setInternalYear] = useState<number>(new Date().getFullYear());
+  const [internalYear, setInternalYear] = useState<number>(() => new Date().getFullYear());
   const taxYear = controlledYear ?? internalYear;
 
   const { data, isPending, error } = useQuery({

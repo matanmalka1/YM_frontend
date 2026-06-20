@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 
 import { Input, type InputProps } from './Input'
 
 type PasswordInputProps = Omit<InputProps, 'type' | 'endElement' | 'endIcon'>
 
-export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>((props, ref) => {
+export const PasswordInput = ({ ref, ...props }: PasswordInputProps) => {
   const [isVisible, setIsVisible] = useState(false)
 
   return (
@@ -31,6 +31,6 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
       }
     />
   )
-})
+}
 
 PasswordInput.displayName = 'PasswordInput'

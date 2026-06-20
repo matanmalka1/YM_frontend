@@ -169,7 +169,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header
-      role="banner"
       dir="rtl"
       className="z-10 flex h-16 shrink-0 items-center gap-3 border-b border-gray-200/80 bg-white px-3 md:px-4"
     >

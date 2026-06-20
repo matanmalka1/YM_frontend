@@ -19,6 +19,12 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   style?: React.CSSProperties
 }
 
+const variants = {
+  default: 'bg-white shadow-elevation-1',
+  elevated: 'bg-white shadow-elevation-2',
+  outlined: 'bg-white border border-gray-200/70',
+}
+
 export const Card: React.FC<CardProps> = ({
   children,
   className,
@@ -34,12 +40,6 @@ export const Card: React.FC<CardProps> = ({
   style,
   ...rest
 }) => {
-  const variants = {
-    default: 'bg-white shadow-elevation-1',
-    elevated: 'bg-white shadow-elevation-2',
-    outlined: 'bg-white border border-gray-200/70',
-  }
-
   const headerPadding = size === 'compact' ? 'px-5 py-3' : 'px-7 py-5'
   const bodyPadding = size === 'compact' ? 'p-5' : 'p-7'
   const footerPadding = size === 'compact' ? 'px-5 py-3' : 'px-7 py-5'

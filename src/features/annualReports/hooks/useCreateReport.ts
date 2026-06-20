@@ -29,6 +29,20 @@ const buildDefaultValues = (taxYear?: number): CreateReportFormValues => ({
   credit_points: '',
 })
 
+const buildPayload = (values: CreateReportFormOutput): CreateAnnualReportPayload => ({
+  client_record_id: Number(values.client_id),
+  tax_year: Number(values.tax_year),
+  client_type: values.client_type,
+  deadline_type: values.deadline_type,
+  submission_method: values.submission_method ?? null,
+  extension_reason: values.extension_reason ?? null,
+  notes: values.notes || null,
+  has_rental_income: values.has_rental_income,
+  has_capital_gains: values.has_capital_gains,
+  has_foreign_income: values.has_foreign_income,
+  has_depreciation: values.has_depreciation,
+})
+
 export const useCreateReport = (taxYear?: number, onSuccess?: () => void) => {
   const queryClient = useQueryClient()
 
@@ -78,20 +92,6 @@ export const useCreateReport = (taxYear?: number, onSuccess?: () => void) => {
       onSuccess?.()
     },
     onError: (err) => showErrorToast(err, 'שגיאה ביצירת דוח'),
-  })
-
-  const buildPayload = (values: CreateReportFormOutput): CreateAnnualReportPayload => ({
-    client_record_id: Number(values.client_id),
-    tax_year: Number(values.tax_year),
-    client_type: values.client_type,
-    deadline_type: values.deadline_type,
-    submission_method: values.submission_method ?? null,
-    extension_reason: values.extension_reason ?? null,
-    notes: values.notes || null,
-    has_rental_income: values.has_rental_income,
-    has_capital_gains: values.has_capital_gains,
-    has_foreign_income: values.has_foreign_income,
-    has_depreciation: values.has_depreciation,
   })
 
   const onSubmit = form.handleSubmit((values) => {

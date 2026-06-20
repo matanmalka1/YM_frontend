@@ -59,8 +59,8 @@ export const ReportAlertBanners: React.FC<Props> = ({ report, advances }) => {
 
   return (
     <div className="space-y-2">
-      {banners.map((b, i) => (
-        <Banner key={i} {...b} />
+      {banners.map((b) => (
+        <Banner key={b.message} {...b} />
       ))}
     </div>
   )

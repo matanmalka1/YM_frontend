@@ -24,10 +24,11 @@ export const toggleAdvancePaymentStatusFilter = (
 
 export const getAdvancePaymentMonthOptions = (periodMonthsCount: 1 | 2) =>
   periodMonthsCount === 2
-    ? MONTH_OPTIONS.filter((option) => BIMONTHLY_START_MONTH_VALUES.has(option.value)).map((option) => ({
-        ...option,
-        label: getAdvancePaymentMonthLabel(`2026-${String(option.value).padStart(2, '0')}`, 2),
-      }))
+    ? MONTH_OPTIONS.flatMap((option) =>
+        BIMONTHLY_START_MONTH_VALUES.has(option.value)
+          ? [{ ...option, label: getAdvancePaymentMonthLabel(`2026-${String(option.value).padStart(2, '0')}`, 2) }]
+          : [],
+      )
     : MONTH_OPTIONS
 
 export const getValidBimonthlyMonth = (month: number) => (BIMONTHLY_START_MONTH_VALUES.has(String(month)) ? month : 1)
@@ -50,9 +51,13 @@ const formatAdvancePaymentPeriod = (year: number, month: number, periodMonthsCou
 export const getIncludedPeriodLabel = (
   sourceBatches: { year: number; month: number; period_months_count: 1 | 2 }[],
 ): string | null => {
-  const labels = sourceBatches
-    .map((b) => formatAdvancePaymentPeriod(b.year, b.month, b.period_months_count))
-    .filter((label, index, all) => all.indexOf(label) === index)
+  const seen = new Set<string>()
+  const labels = sourceBatches.flatMap((b) => {
+    const label = formatAdvancePaymentPeriod(b.year, b.month, b.period_months_count)
+    if (seen.has(label)) return []
+    seen.add(label)
+    return [label]
+  })
   return labels.length > 0 ? `כולל תקופות: ${labels.join(' · ')}` : null
 }
 

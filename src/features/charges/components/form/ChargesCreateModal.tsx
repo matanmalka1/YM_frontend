@@ -27,6 +27,8 @@ interface ChargesCreateModalProps {
   businesses?: BusinessResponse[]
 }
 
+const EMPTY_BUSINESSES: BusinessResponse[] = []
+
 export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
   open,
   createError,
@@ -35,7 +37,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
   onSubmit,
   initialClient,
   initialBusiness,
-  businesses = [],
+  businesses = EMPTY_BUSINESSES,
 }) => {
   const {
     formState: { errors, isDirty },

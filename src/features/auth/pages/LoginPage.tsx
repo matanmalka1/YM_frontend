@@ -13,6 +13,8 @@ import { useAuthStore } from '@/store/auth.store'
 import { selectIsAuthenticated } from '@/store/auth.selectors'
 import { useShallow } from 'zustand/react/shallow'
 
+const CURRENT_YEAR = getYear(new Date())
+
 export const Login: React.FC = () => {
   const isAuthenticated = useAuthStore(selectIsAuthenticated)
   const login = useAuthStore((s) => s.login)
@@ -192,7 +194,7 @@ export const Login: React.FC = () => {
         </div>
 
         {/* Bottom: legal */}
-        <p className="relative z-10 text-xs text-slate-700">© {getYear(new Date())} יוסף מאיר — כל הזכויות שמורות</p>
+        <p className="relative z-10 text-xs text-slate-700">© {CURRENT_YEAR} יוסף מאיר — כל הזכויות שמורות</p>
       </div>
     </div>
   )

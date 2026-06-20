@@ -5,6 +5,7 @@ import { CalendarIcon } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { FormField } from './FormField'
 import { DatePickerCalendar } from './DatePickerCalendar'
+import { getOverlayPortalOffset, useOverlayPortalContainer } from '../overlays/OverlayPortalContext'
 import { useDismissibleLayer } from '../overlays/useDismissibleLayer'
 
 /** Approx. rendered calendar size; used only before the calendar mounts (real size is measured after). */
@@ -54,6 +55,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
+  const portalContainer = useOverlayPortalContainer()
 
   const selected = value ? parseValue(value) : undefined
 
@@ -131,6 +133,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     }
   }, [isOpen, usePortal])
 
+  const portalOffset = getOverlayPortalOffset(portalContainer)
+
   const calendar = (
     <DatePickerCalendar
       selected={selected}
@@ -139,10 +143,14 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       onSelect={handleSelect}
       maxDate={maxDate}
       containerRef={usePortal ? containerRef : undefined}
-      className={usePortal ? 'fixed z-[9999]' : 'absolute z-50 mt-1 end-0'}
+      className={usePortal ? 'pointer-events-auto fixed z-[9999]' : 'absolute z-50 mt-1 end-0'}
       style={
         usePortal && dropdownPos
-          ? { top: dropdownPos.top, left: dropdownPos.left, transform: 'translateX(-100%)' }
+          ? {
+              top: dropdownPos.top - portalOffset.top,
+              left: dropdownPos.left - portalOffset.left,
+              transform: 'translateX(-100%)',
+            }
           : undefined
       }
     />
@@ -171,7 +179,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         <CalendarIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
       </button>
 
-      {isOpen && (usePortal ? createPortal(calendar, document.body) : calendar)}
+      {isOpen && (usePortal && portalContainer ? createPortal(calendar, portalContainer) : calendar)}
     </div>
   )
 

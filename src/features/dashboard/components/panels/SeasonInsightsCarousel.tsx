@@ -285,8 +285,8 @@ export const SeasonInsightsCarousel = ({ vatStats }: SeasonInsightsCarouselProps
           <StatSlide key="vat-bimonthly" stat={bimonthly} href={DASHBOARD_HREFS.vat(bimonthly.period, 'bimonthly')} />,
           <StatSlide key="vat-monthly" stat={monthly} href={DASHBOARD_HREFS.vat(monthly.period, 'monthly')} />,
           <SeasonSlide key="season" />,
-        ].map((el, i) => (
-          <div key={i} dir="rtl" className="w-full shrink-0 snap-center px-5 pb-5">
+        ].map((el) => (
+          <div key={el.key} dir="rtl" className="w-full shrink-0 snap-center px-5 pb-5">
             {el}
           </div>
         ))}

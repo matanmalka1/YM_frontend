@@ -110,8 +110,7 @@ const normalizeEvent = (event: TimelineEvent): NormalizedTimelineEvent => {
 
 export const normalizeTimelineEvents = (events: TimelineEvent[]) => {
   const historicalEvents = events
-    .filter((event) => !shouldHideEvent(event))
-    .map(normalizeEvent)
+    .flatMap((event) => (shouldHideEvent(event) ? [] : [normalizeEvent(event)]))
     .sort((a, b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime())
 
   return { historicalEvents, upcomingDeadlines: [] as NormalizedTimelineEvent[] }

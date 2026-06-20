@@ -12,7 +12,7 @@ const normalizeParams = (params?: WorkQueueParams) => ({
   scope: params?.scope ?? null,
   page: params?.page ?? null,
   page_size: params?.page_size ?? null,
-  exclude_source_types: [...(params?.exclude_source_types ?? [])].sort(),
+  exclude_source_types: (params?.exclude_source_types ?? []).toSorted(),
 })
 
 export const workQueueQK = {

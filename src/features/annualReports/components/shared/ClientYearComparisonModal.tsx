@@ -17,7 +17,7 @@ const ROWS: { label: string; render: (r: AnnualReportListItem) => string }[] = [
 ]
 
 export const ClientYearComparisonModal: React.FC<Props> = ({ open, onClose, reports }) => {
-  const sorted = [...reports].sort((a, b) => b.tax_year - a.tax_year)
+  const sorted = reports.toSorted((a, b) => b.tax_year - a.tax_year)
 
   return (
     <Modal open={open} onClose={onClose} title="השוואה בין שנים" footer={null}>

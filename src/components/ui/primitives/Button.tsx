@@ -10,6 +10,20 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   tooltip?: string
 }
 
+const variants = {
+  primary: 'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 shadow-sm',
+  secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 active:bg-gray-300',
+  outline: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 active:bg-gray-100',
+  ghost: 'text-gray-600 hover:bg-gray-200 active:bg-gray-200',
+  danger: 'bg-negative-600 text-white hover:bg-negative-700 active:bg-negative-800 shadow-sm',
+  link: 'text-gray-600 underline underline-offset-2 hover:text-gray-900 active:text-gray-950',
+}
+
+const sizes = {
+  sm: 'px-3 py-1.5 text-sm',
+  md: 'px-4 py-2 text-sm',
+}
+
 export const Button: React.FC<ButtonProps> = ({
   children,
   className,
@@ -22,20 +36,6 @@ export const Button: React.FC<ButtonProps> = ({
   tooltip,
   ...props
 }) => {
-  const variants = {
-    primary: 'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 shadow-sm',
-    secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 active:bg-gray-300',
-    outline: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 active:bg-gray-100',
-    ghost: 'text-gray-600 hover:bg-gray-200 active:bg-gray-200',
-    danger: 'bg-negative-600 text-white hover:bg-negative-700 active:bg-negative-800 shadow-sm',
-    link: 'text-gray-600 underline underline-offset-2 hover:text-gray-900 active:text-gray-950',
-  }
-
-  const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-sm',
-  }
-
   const isLink = variant === 'link'
 
   const btn = (

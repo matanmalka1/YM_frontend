@@ -48,7 +48,7 @@ export const mergeAdvancePaymentBatches = (
     })
   }
 
-  return [...batchesByKey.values()].sort((first, second) => {
+  return [...batchesByKey.values()].toSorted((first, second) => {
     const firstKey = first.due_date ?? `${first.year}-${String(first.month).padStart(2, '0')}`
     const secondKey = second.due_date ?? `${second.year}-${String(second.month).padStart(2, '0')}`
     return firstKey.localeCompare(secondKey)

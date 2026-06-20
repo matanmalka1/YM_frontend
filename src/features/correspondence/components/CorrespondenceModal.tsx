@@ -22,13 +22,15 @@ interface CorrespondenceModalProps {
   contacts?: AuthorityContactResponse[]
 }
 
+const EMPTY_CONTACTS: AuthorityContactResponse[] = []
+
 export const CorrespondenceModal: React.FC<CorrespondenceModalProps> = ({
   open,
   isCreating,
   onClose,
   onSubmit,
   existing,
-  contacts = [],
+  contacts = EMPTY_CONTACTS,
 }) => {
   const {
     register,

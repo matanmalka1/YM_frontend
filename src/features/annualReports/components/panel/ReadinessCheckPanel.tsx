@@ -57,8 +57,8 @@ export const ReadinessCheckPanel: React.FC<ReadinessCheckPanelProps> = ({ report
 
       {data.issues.length > 0 && (
         <ul className="space-y-1">
-          {data.issues.map((issue, idx) => (
-            <li key={idx} className="flex items-start gap-1.5 text-sm text-negative-700">
+          {data.issues.map((issue) => (
+            <li key={issue} className="flex items-start gap-1.5 text-sm text-negative-700">
               <XCircle className="h-3.5 w-3.5 mt-0.5 shrink-0 text-negative-400" />
               <span>{issue}</span>
             </li>

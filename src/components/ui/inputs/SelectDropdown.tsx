@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Check, ChevronDown } from 'lucide-react'
 import { cn } from '../../../utils/utils'
+import { getOverlayPortalOffset, useOverlayPortalContainer } from '../overlays/OverlayPortalContext'
 import { useDismissibleLayer } from '../overlays/useDismissibleLayer'
 
 interface SelectOption {
@@ -65,6 +66,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   const [openAbove, setOpenAbove] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const portalRef = useRef<HTMLDivElement>(null)
+  const portalContainer = useOverlayPortalContainer()
   const isControlled = value !== undefined
   const currentValue = isControlled ? String(value ?? '') : internalValue
 
@@ -204,6 +206,10 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
     className,
   )
 
+  const portalOffset = getOverlayPortalOffset(portalContainer)
+  const portalRect = portalContainer?.getBoundingClientRect()
+  const viewportBottomToPortalBottom = portalRect ? window.innerHeight - portalRect.bottom : 0
+
   return (
     <>
       <button
@@ -226,18 +232,19 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
 
       {open &&
         coords &&
+        portalContainer &&
         createPortal(
           <div
             ref={portalRef}
             style={{
               position: 'fixed',
-              top: openAbove ? undefined : coords.top + 4,
-              bottom: openAbove ? coords.bottom + 4 : undefined,
-              left: coords.left,
+              top: openAbove ? undefined : coords.top + 4 - portalOffset.top,
+              bottom: openAbove ? coords.bottom + 4 - viewportBottomToPortalBottom : undefined,
+              left: coords.left - portalOffset.left,
               width: coords.width,
               zIndex: 9999,
             }}
-            className="rounded-lg border border-gray-200 bg-white py-1 shadow-lg overflow-auto max-h-60 overscroll-contain"
+            className="pointer-events-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg overflow-auto max-h-60 overscroll-contain"
             role="listbox"
           >
             {options.map((opt, index) => (
@@ -264,7 +271,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
               </button>
             ))}
           </div>,
-          document.body,
+          portalContainer,
         )}
     </>
   )

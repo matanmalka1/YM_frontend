@@ -193,7 +193,7 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
         />
       </Modal>
 
-      <input ref={fileInputRef} type="file" className="hidden" onChange={handleFileChange} />
+      <input ref={fileInputRef} type="file" aria-label="העלאת קובץ" className="hidden" onChange={handleFileChange} />
 
       <DocumentPreviewModal
         open={previewDoc !== null}

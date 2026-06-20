@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useController, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '../../../../components/ui/primitives/Button'
@@ -51,7 +51,7 @@ export const ClientEditForm: React.FC<ClientEditFormProps> = ({
   hideFooter = false,
   formId,
 }) => {
-  const [pendingData, setPendingData] = useState<UpdateClientPayload | null>(null)
+  const pendingDataRef = useRef<UpdateClientPayload | null>(null)
   const [impactMessage, setImpactMessage] = useState<string | null>(null)
 
   const {
@@ -98,7 +98,7 @@ export const ClientEditForm: React.FC<ClientEditFormProps> = ({
 
     const msg = buildClientEditImpactMessage(client.status, data.status, client.entity_type, data.entity_type)
     if (msg) {
-      setPendingData(payload)
+      pendingDataRef.current = payload
       setImpactMessage(msg)
       return
     }
@@ -106,15 +106,15 @@ export const ClientEditForm: React.FC<ClientEditFormProps> = ({
   })
 
   const handleConfirm = async () => {
-    if (!pendingData) return
-    const data = pendingData
-    setPendingData(null)
+    const data = pendingDataRef.current
+    if (!data) return
+    pendingDataRef.current = null
     setImpactMessage(null)
     await onSave(data)
   }
 
   const handleCancelConfirm = () => {
-    setPendingData(null)
+    pendingDataRef.current = null
     setImpactMessage(null)
   }
 

@@ -220,6 +220,7 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
         <input
           ref={fileInputRef}
           type="file"
+          aria-label="העלאת קובץ"
           accept={DOCUMENT_FILE_ACCEPT}
           className="hidden"
           onChange={(e) => {

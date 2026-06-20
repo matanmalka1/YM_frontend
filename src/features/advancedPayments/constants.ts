@@ -48,7 +48,7 @@ export const isAdvancePaymentStatus = (value: string): value is AdvancePaymentSt
 export const ADVANCE_PAYMENT_STATUS_OPTIONS: { value: AdvancePaymentStatus; label: string }[] =
   ADVANCE_PAYMENT_STATUS_VALUES.map((status) => ({ value: status, label: ADVANCE_PAYMENT_STATUS_LABELS[status] }))
 
-export const ADVANCE_PAYMENT_STATUS_OPTIONS_WITH_ALL: {
+const ADVANCE_PAYMENT_STATUS_OPTIONS_WITH_ALL: {
   value: AdvancePaymentStatus | ''
   label: string
 }[] = [ALL_STATUSES_OPTION, ...ADVANCE_PAYMENT_STATUS_OPTIONS]

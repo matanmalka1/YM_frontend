@@ -5,7 +5,7 @@ import { getTotalPages } from "@/utils/paginationUtils";
 import { PAGE_SIZE_MD as PAGE_SIZE } from "@/constants/pagination.constants";
 
 export const useVatComplianceReport = () => {
-  const [year, setYear] = useState(new Date().getFullYear());
+  const [year, setYear] = useState(() => new Date().getFullYear());
   const [page, setPage] = useState(1);
 
   const { data, isLoading, error } = useQuery({

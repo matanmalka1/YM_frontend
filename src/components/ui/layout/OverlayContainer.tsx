@@ -1,6 +1,6 @@
 import { cn } from '../../../utils/utils'
-import { useEffect, useRef } from 'react'
-import { useEscapeToClose } from '../overlays/useEscapeToClose'
+import { useEffect, useRef, useState } from 'react'
+import { OverlayPortalProvider } from '../overlays/OverlayPortalContext'
 
 type OverlayVariant = 'modal' | 'drawer' | 'dialog'
 
@@ -11,16 +11,10 @@ interface OverlayContainerProps {
   subtitle?: React.ReactNode
   footer?: React.ReactNode
   onClose?: () => void
-  /** Z-index override. Defaults: modal=50, drawer=40, dialog=60 */
+  /** Stacking override. Native <dialog> uses the top layer, so this is rarely needed. */
   zIndex?: number
   children: React.ReactNode
   className?: string
-}
-
-const defaultZIndex: Record<OverlayVariant, number> = {
-  modal: 50,
-  drawer: 40,
-  dialog: 60,
 }
 
 export const OverlayContainer: React.FC<OverlayContainerProps> = ({
@@ -34,108 +28,65 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
   children,
   className,
 }) => {
-  const z = zIndex ?? defaultZIndex[variant]
-  const containerRef = useRef<HTMLDivElement>(null)
-  const lastFocusedElementRef = useRef<HTMLElement | null>(null)
-  useEscapeToClose({ open: open && variant !== 'dialog', onClose })
+  const dialogRef = useRef<HTMLDialogElement>(null)
+  const portalHostRef = useRef<HTMLDivElement>(null)
+  const [portalHost, setPortalHost] = useState<HTMLElement | null>(null)
 
+  // Open modally so the browser provides the focus trap, scroll inert-ing,
+  // Escape dismissal, focus restoration, and ::backdrop. `open` stays the single
+  // source of truth: the dialog unmounts when the parent flips it to false.
   useEffect(() => {
-    if (!open) return
+    const dialog = dialogRef.current
+    if (!open || !dialog) return
+
+    if (!dialog.open) dialog.showModal()
+    const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
+
     return () => {
-      document.body.style.overflow = ''
+      document.body.style.overflow = previousOverflow
     }
   }, [open])
 
   useEffect(() => {
-    if (!open) return
-
-    lastFocusedElementRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
-    const frame = requestAnimationFrame(() => {
-      const container = containerRef.current
-      if (!container) return
-      const firstFocusable = container.querySelector<HTMLElement>(
-        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-      )
-      firstFocusable?.focus()
-    })
-
-    return () => {
-      cancelAnimationFrame(frame)
-      lastFocusedElementRef.current?.focus()
-    }
+    setPortalHost(open ? portalHostRef.current : null)
   }, [open])
 
-  useEffect(() => {
-    const container = containerRef.current
-    if (!open || !container) return
+  if (!open) return null
 
-    const handleContainerKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && onClose) {
-        event.preventDefault()
-        onClose()
-        return
-      }
+  const style = zIndex ? { zIndex } : undefined
+  const accessibleName = typeof title === 'string' ? title : undefined
 
-      if (event.key !== 'Tab') return
+  // The `dialog` variant is a forced choice: Escape must not dismiss it.
+  const handleCancel = (event: React.SyntheticEvent<HTMLDialogElement>) => {
+    event.preventDefault()
+    if (variant !== 'dialog') onClose?.()
+  }
 
-      const focusable = Array.from(
-        container.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-        ),
-      ).filter((element) => !element.hasAttribute('disabled') && element.tabIndex !== -1)
-
-      if (focusable.length === 0) return
-
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      const active = document.activeElement as HTMLElement | null
-
-      if (event.shiftKey && active === first) {
-        event.preventDefault()
-        last.focus()
-        return
-      }
-
-      if (!event.shiftKey && active === last) {
-        event.preventDefault()
-        first.focus()
-      }
-    }
-
-    container.addEventListener('keydown', handleContainerKeyDown)
-    return () => container.removeEventListener('keydown', handleContainerKeyDown)
-  }, [onClose, open])
+  const handleBackdropClick = (event: React.MouseEvent<HTMLDialogElement>) => {
+    if (event.target === dialogRef.current) onClose?.()
+  }
 
   if (variant === 'drawer') {
     return (
-      <>
-        {/* Backdrop */}
-        <div
-          className={cn(
-            'fixed inset-0 bg-black/20 transition-opacity duration-200',
-            open ? 'opacity-100' : 'pointer-events-none opacity-0',
-          )}
-          style={{ zIndex: z }}
-          onClick={onClose}
-          aria-hidden="true"
-        />
-
-        {/* Drawer panel — slides in from the inline-end edge (RTL-safe) */}
-        <div
-          ref={containerRef}
-          className={cn(
-            'fixed inset-y-0 right-0 flex w-full max-w-md flex-col bg-white shadow-2xl',
-            'transition-transform duration-300 ease-in-out',
-            open ? 'translate-x-0' : 'translate-x-full',
-            className,
-          )}
-          style={{ zIndex: z + 10 }}
-          role="dialog"
-          aria-modal="true"
-          aria-label={typeof title === 'string' ? title : undefined}
-          tabIndex={-1}
-        >
+      // Backdrop click-to-close is a mouse-only affordance; Escape is handled
+      // natively by the modal <dialog>, so no keyboard listener is needed.
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
+      <dialog
+        ref={dialogRef}
+        aria-label={accessibleName}
+        style={style}
+        onCancel={handleCancel}
+        onClick={handleBackdropClick}
+        className={cn(
+          'fixed inset-y-0 right-0 m-0 h-dvh max-h-dvh w-full max-w-md flex-col border-none bg-white p-0 shadow-2xl',
+          'translate-x-0 transition-transform duration-300 ease-in-out starting:translate-x-full',
+          'backdrop:bg-black/20',
+          'flex',
+          className,
+        )}
+      >
+        <OverlayPortalProvider value={portalHost}>
           {title && (
             <div className="flex shrink-0 items-start justify-between border-b border-gray-100 px-6 py-4" dir="rtl">
               <div>
@@ -158,63 +109,61 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
             {children}
           </div>
           {footer && <div className="shrink-0 border-t border-gray-200 bg-white px-6 py-4">{footer}</div>}
-        </div>
-      </>
+          <div ref={portalHostRef} className="pointer-events-none fixed inset-0 z-[1]" />
+        </OverlayPortalProvider>
+      </dialog>
     )
   }
 
   if (variant === 'dialog') {
-    if (!open) return null
     return (
-      <div
-        ref={containerRef}
-        className="fixed inset-0 flex items-center justify-center bg-black/40 px-4"
-        style={{ zIndex: z }}
-        role="dialog"
-        aria-modal="true"
-        tabIndex={-1}
+      <dialog
+        ref={dialogRef}
+        aria-label={accessibleName ?? 'תיבת דו-שיח'}
+        style={style}
+        onCancel={handleCancel}
+        className="m-auto w-[calc(100%-2rem)] max-w-sm rounded-xl border-none bg-white p-6 shadow-2xl backdrop:bg-black/40"
       >
-        <div className={cn('w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl', className)}>{children}</div>
-      </div>
+        <OverlayPortalProvider value={portalHost}>
+          {children}
+          <div ref={portalHostRef} className="pointer-events-none fixed inset-0 z-[1]" />
+        </OverlayPortalProvider>
+      </dialog>
     )
   }
 
-  // modal (default)
-  if (!open) return null
-
+  // modal (default) — Escape closes, but backdrop click does not.
   return (
-    <div
-      ref={containerRef}
-      className="fixed inset-0 flex items-center justify-center bg-black/30 px-4"
-      style={{ zIndex: z }}
-      role="dialog"
-      aria-modal="true"
-      aria-label={typeof title === 'string' ? title : undefined}
-      tabIndex={-1}
+    <dialog
+      ref={dialogRef}
+      aria-label={accessibleName}
+      style={style}
+      onCancel={handleCancel}
+      className="m-auto flex max-h-[92vh] w-[calc(100%-2rem)] max-w-xl flex-col border-none bg-transparent p-0 backdrop:bg-black/30"
     >
-      <div
-        dir="rtl"
-        className={cn('flex max-h-[92vh] w-full max-w-xl flex-col rounded-xl bg-white shadow-xl', className)}
-      >
-        {title && (
-          <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-6 py-4">
-            <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-            {onClose && (
-              <button
-                type="button"
-                onClick={onClose}
-                className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
-                aria-label="סגירה"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        )}
-        <div className="flex-1 overflow-y-auto p-6 py-4">{children}</div>
-        {footer && <div className="shrink-0 border-t border-gray-100 px-6 py-4">{footer}</div>}
-      </div>
-    </div>
+      <OverlayPortalProvider value={portalHost}>
+        <div dir="rtl" className={cn('flex max-h-[92vh] w-full flex-col rounded-xl bg-white shadow-xl', className)}>
+          {title && (
+            <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-6 py-4">
+              <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+              {onClose && (
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+                  aria-label="סגירה"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          )}
+          <div className="flex-1 overflow-y-auto p-6 py-4">{children}</div>
+          {footer && <div className="shrink-0 border-t border-gray-100 px-6 py-4">{footer}</div>}
+        </div>
+        <div ref={portalHostRef} className="pointer-events-none fixed inset-0 z-[1]" />
+      </OverlayPortalProvider>
+    </dialog>
   )
 }
 

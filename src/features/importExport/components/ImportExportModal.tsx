@@ -75,6 +75,7 @@ const ImportPanel: React.FC<ImportPanelProps> = ({ importing, onFileSelect, onDo
           <input
             ref={fileInputRef}
             type="file"
+            aria-label="ייבוא קובץ"
             accept=".xlsx,.xls"
             onChange={handleChange}
             className="hidden"

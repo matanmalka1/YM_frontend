@@ -17,7 +17,7 @@ export const MultiYearPLChart: React.FC<MultiYearPLChartProps> = ({ clientId, cu
     queryFn: () => annualReportsApi.listClientReports(clientId, ANNUAL_REPORTS_COMPLETE_LIST_PARAMS),
   })
 
-  const reports = [...(reportsData ?? [])].sort((a, b) => a.tax_year - b.tax_year).slice(-TREND_REPORT_LIMIT)
+  const reports = (reportsData ?? []).toSorted((a, b) => a.tax_year - b.tax_year).slice(-TREND_REPORT_LIMIT)
 
   const queryInputs = reports.map((report) => ({
     id: report.id,

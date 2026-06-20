@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle } from 'react'
+import { useImperativeHandle, type Ref } from 'react'
 import { Search, X } from 'lucide-react'
 import { useSearchDebounce } from '@/hooks/useSearchDebounce'
 import { Input } from '@/components/ui/inputs/Input'
@@ -8,9 +8,10 @@ interface Props {
   field: SearchFieldDef
   externalValue: string
   onChange: (key: string, value: string) => void
+  ref?: Ref<SearchFieldHandle>
 }
 
-export const SearchFilter = forwardRef<SearchFieldHandle, Props>(({ field, externalValue, onChange }, ref) => {
+export const SearchFilter = ({ field, externalValue, onChange, ref }: Props) => {
   const [draft, setDraft] = useSearchDebounce(externalValue, (v) => onChange(field.key, v))
 
   useImperativeHandle(ref, () => ({
@@ -40,5 +41,5 @@ export const SearchFilter = forwardRef<SearchFieldHandle, Props>(({ field, exter
       }
     />
   )
-})
+}
 SearchFilter.displayName = 'SearchFilter'

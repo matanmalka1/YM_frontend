@@ -10,6 +10,7 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   startIcon?: React.ReactNode
   endIcon?: React.ReactNode
   endElement?: React.ReactNode
+  ref?: React.Ref<HTMLInputElement>
 }
 
 const inputSizeClasses = {
@@ -24,13 +25,23 @@ const inputIconPadding = {
   md: { start: 'ps-11', end: 'pe-11', defaultStart: 'ps-3', defaultEnd: 'pe-3' },
 }
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, size = 'md', labelClassName, className, startIcon, endIcon, endElement, ...props }, ref) => {
-    const hasStart = Boolean(startIcon)
-    const hasEnd = Boolean(endIcon || endElement)
-    const padding = inputIconPadding[size]
+export const Input = ({
+  label,
+  error,
+  size = 'md',
+  labelClassName,
+  className,
+  startIcon,
+  endIcon,
+  endElement,
+  ref,
+  ...props
+}: InputProps) => {
+  const hasStart = Boolean(startIcon)
+  const hasEnd = Boolean(endIcon || endElement)
+  const padding = inputIconPadding[size]
 
-    return (
+  return (
       <FormField label={label} error={error} labelClassName={labelClassName} className="w-full">
         <div className="relative">
           {startIcon && (
@@ -65,7 +76,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
       </FormField>
     )
-  },
-)
+}
 
 Input.displayName = 'Input'

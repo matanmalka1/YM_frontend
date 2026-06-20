@@ -1,7 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
 import { ClipboardList, ReceiptText, UserPlus, Wallet } from 'lucide-react'
-import type { BadgeVariant } from '@/components/ui/primitives/Badge'
-import type { AttentionUrgency } from './api/contracts'
 import type { DashboardCreateModal } from './hooks/useDashboardCreateModals'
 
 const withParams = (base: string, params: Record<string, string>) => `${base}?${new URLSearchParams(params).toString()}`
@@ -24,8 +22,6 @@ export const DASHBOARD_COPY = {
   dashboardLoadError: 'שגיאה בטעינת לוח הבקרה',
   permissionDenied: 'אין הרשאה לצפות בנתוני לוח בקרה זה',
 } as const
-
-export const DASHBOARD_LOADING_CARD_COUNT = 5
 
 export const DASHBOARD_ONBOARDING_COPY = {
   title: 'עדיין אין נתונים במערכת',
@@ -70,17 +66,3 @@ export const VAT_STAT_LABELS = {
   advanceMonthly: 'מקדמות חודשיות',
   advanceBimonthly: 'מקדמות דו-חודשיות',
 } as const
-
-export const ATTENTION_URGENCY_LABELS: Record<AttentionUrgency, string> = {
-  overdue: 'באיחור',
-  approaching: 'דחוף',
-  important: 'חשוב',
-  upcoming: 'בקרוב',
-}
-
-export const ATTENTION_URGENCY_VARIANTS: Record<AttentionUrgency, BadgeVariant> = {
-  overdue: 'error',
-  approaching: 'warning',
-  important: 'info',
-  upcoming: 'neutral',
-}

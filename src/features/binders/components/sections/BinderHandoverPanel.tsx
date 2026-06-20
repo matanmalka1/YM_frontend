@@ -35,8 +35,8 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
 }) => {
   const [selectedIds, setSelectedIds] = useState<number[]>([initialBinderId])
   const [receivedByName, setReceivedByName] = useState('')
-  const [handedOverAt, setHandedOverAt] = useState(format(new Date(), 'yyyy-MM-dd'))
-  const [untilPeriodYear, setUntilPeriodYear] = useState(new Date().getFullYear())
+  const [handedOverAt, setHandedOverAt] = useState(() => format(new Date(), 'yyyy-MM-dd'))
+  const [untilPeriodYear, setUntilPeriodYear] = useState(() => new Date().getFullYear())
   const [untilPeriodMonth, setUntilPeriodMonth] = useState(new Date().getMonth() + 1)
   const [notes, setNotes] = useState('')
 

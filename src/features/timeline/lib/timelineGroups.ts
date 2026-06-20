@@ -22,13 +22,12 @@ export const getDefaultOpenTimelineGroups = (groups: EventGroup[]): Set<string> 
   if (groups.length === 0) return new Set()
   const todayKey = format(new Date(), 'yyyy-MM-dd')
   const defaults = new Set(
-    groups
-      .filter(
-        (group) =>
-          group.items.some((e) => e.displayTimestamp.slice(0, 10) === todayKey) ||
-          group.items.some((e) => e.filterKeys.includes('future')),
-      )
-      .map((g) => g.date),
+    groups.flatMap((group) =>
+      group.items.some((e) => e.displayTimestamp.slice(0, 10) === todayKey) ||
+      group.items.some((e) => e.filterKeys.includes('future'))
+        ? [group.date]
+        : [],
+    ),
   )
   if (defaults.size === 0) defaults.add(groups[0].date)
   return defaults

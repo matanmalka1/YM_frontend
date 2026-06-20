@@ -27,21 +27,6 @@ export const MONTH_NAMES = [
   'דצמבר',
 ] as const
 
-export const MONTH_SHORT_NAMES = [
-  'ינו',
-  'פבר',
-  'מרץ',
-  'אפר',
-  'מאי',
-  'יונ',
-  'יול',
-  'אוג',
-  'ספט',
-  'אוק',
-  'נוב',
-  'דצמ',
-] as const
-
 export const MONTH_OPTIONS = MONTH_NAMES.map((label, index) => ({
   value: String(index + 1),
   label,
@@ -68,7 +53,7 @@ export const getOperationalYearOptions = (count = 7): { value: string; label: st
 }
 
 const getPeriodLabel = (
-  names: typeof MONTH_NAMES | typeof MONTH_SHORT_NAMES,
+  names: typeof MONTH_NAMES,
   period: string,
   periodMonthsCount: 1 | 2,
 ): string => {

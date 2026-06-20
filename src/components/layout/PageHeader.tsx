@@ -34,7 +34,7 @@ export const PageHeader = ({
           const isCurrentPage = index === breadcrumbs.length - 1
 
           return (
-            <div key={`${crumb.to ?? crumb.label}-${index}`} className="flex items-center gap-2">
+            <div key={crumb.to ?? crumb.label} className="flex items-center gap-2">
               {index > 0 && <ChevronLeft className="h-4 w-4 text-gray-400" aria-hidden="true" />}
 
               {isCurrentPage || !crumb.to ? (

@@ -33,6 +33,7 @@ export const ChargeBulkToolbar: React.FC<ChargeBulkToolbarProps> = ({ selectedCo
               value={cancelReason}
               onChange={(e) => setCancelReason(e.target.value)}
               placeholder={CHARGE_CANCEL_REASON_PLACEHOLDER}
+              aria-label={CHARGE_CANCEL_REASON_PLACEHOLDER}
               rows={1}
               className="flex-1 resize-none rounded border border-gray-300 px-2.5 py-1.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
             />
