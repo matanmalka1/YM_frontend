@@ -1,5 +1,15 @@
 import type { AnchorHTMLAttributes } from 'react'
-import { Children, Fragment, createContext, isValidElement, use, useLayoutEffect, useRef, useState } from 'react'
+import {
+  Children,
+  Fragment,
+  createContext,
+  isValidElement,
+  use,
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 import { createPortal } from 'react-dom'
 import { MoreHorizontal } from 'lucide-react'
 import { cn } from '../../../utils/utils'
@@ -31,6 +41,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
   const portalRef = useRef<HTMLDivElement>(null)
   const portalContainer = useOverlayPortalContainer()
   const focusTrigger = () => triggerRef.current?.focus({ preventScroll: true })
+  const closeMenu = useCallback(() => setOpen(false), [])
 
   useDismissibleLayer({
     open,
@@ -166,7 +177,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
       {open &&
         portalContainer &&
         createPortal(
-          <DropdownCloseContext.Provider value={() => setOpen(false)}>
+          <DropdownCloseContext.Provider value={closeMenu}>
             <div
               ref={portalRef}
               style={

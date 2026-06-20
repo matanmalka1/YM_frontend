@@ -1,4 +1,4 @@
-import { DrawerSection, DrawerField } from '@/components/ui/overlays/DetailDrawer'
+import { DrawerField, DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import { formatShekelAmount, formatDate } from '@/utils/utils'
 import { formatAdvanceRate } from '../../utils/advancePaymentDrawerModel'
 import type { AdvancePaymentDrawerModel } from '../../utils/advancePaymentDrawerModel'

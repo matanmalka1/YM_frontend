@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { signatureRequestsApi, signatureRequestsQK } from '../../api'
-import { DetailDrawer, DrawerField, DrawerSection } from '../../../../components/ui/overlays/DetailDrawer'
+import { DetailDrawer } from '../../../../components/ui/overlays/DetailDrawer'
+import { DrawerField, DrawerSection } from '../../../../components/ui/overlays/DrawerPrimitives'
 import { SkeletonBlock } from '../../../../components/ui/primitives/SkeletonBlock'
 import { StatusBadge } from '../../../../components/ui/primitives/StatusBadge'
 import { formatDate, formatDateTime, formatPhoneNumber } from '../../../../utils/utils'

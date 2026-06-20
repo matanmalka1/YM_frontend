@@ -4,7 +4,7 @@ import { ExternalLink, FilePlus2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
-import { DrawerField, DrawerSection } from '@/components/ui/overlays/DetailDrawer'
+import { DrawerField, DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import { Input } from '@/components/ui/inputs'
 import { formatDateTime } from '@/utils/utils'
 import {

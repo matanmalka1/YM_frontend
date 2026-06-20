@@ -42,9 +42,13 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
   // ── Resolve event_type list to send to backend ─────────────────────────────
 
   const hasGroupedFilter = typeFilters.length > 0 && !typeFilters.includes('all')
-  const eventTypeParam: string[] | undefined = hasGroupedFilter
-    ? typeFilters.flatMap((key) => FILTER_GROUP_TO_EVENT_TYPES[key] ?? [])
-    : undefined
+  // Keyed on the raw param string (a stable primitive) so the resolved array keeps a
+  // steady identity across renders — safe to use directly in the query-params deps below.
+  const eventTypeParam = useMemo<string[] | undefined>(() => {
+    const keys: TimelineFilterKey[] = rawTypeFilters ? (rawTypeFilters.split(',') as TimelineFilterKey[]) : ['all']
+    if (keys.length === 0 || keys.includes('all')) return undefined
+    return keys.flatMap((key) => FILTER_GROUP_TO_EVENT_TYPES[key] ?? [])
+  }, [rawTypeFilters])
 
   // ── Query ──────────────────────────────────────────────────────────────────
 
@@ -56,8 +60,7 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
       event_type: eventTypeParam,
       important_only: importantOnly || undefined,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [page, pageSize, searchTerm, importantOnly, JSON.stringify(eventTypeParam)],
+    [page, pageSize, searchTerm, importantOnly, eventTypeParam],
   )
 
   const {

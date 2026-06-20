@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { AlertTriangle } from 'lucide-react'
-import { DetailDrawer, DrawerField, DrawerSection } from '@/components/ui/overlays/DetailDrawer'
+import { DetailDrawer } from '@/components/ui/overlays/DetailDrawer'
+import { DrawerField, DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import type { UpdateAdvancePaymentPayload } from '../../api/contracts'
 import { formatShekelAmount, formatDate } from '@/utils/utils'
 import { getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'

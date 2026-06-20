@@ -1,13 +1,15 @@
+import type { QueryStatus } from '@tanstack/react-query'
+import { InlineEmptyState, StateCard } from '@/components/ui/feedback'
+import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
+import { AlertTriangle, ListChecks } from 'lucide-react'
 import { TASK_TABLE_COLUMNS } from '../../constants/pageConstants'
 import { TaskListRow } from './TaskListRow'
-import { TasksEmptyState, TasksErrorState, TasksLoadingState } from './TaskListStates'
 import type { Task } from '../../api/contracts'
 
 interface TasksListPanelProps {
   tasks: Task[]
-  isLoading: boolean
-  isError: boolean
+  status: QueryStatus
   hasFilters: boolean
   page: number
   total: number
@@ -24,8 +26,7 @@ interface TasksListPanelProps {
 
 export const TasksListPanel: React.FC<TasksListPanelProps> = ({
   tasks,
-  isLoading,
-  isError,
+  status,
   hasFilters,
   page,
   total,
@@ -46,10 +47,22 @@ export const TasksListPanel: React.FC<TasksListPanelProps> = ({
       </div>
     ) : null}
 
-    {isLoading ? <TasksLoadingState /> : null}
-    {isError ? <TasksErrorState /> : null}
-    {!isLoading && !isError && tasks.length === 0 ? <TasksEmptyState hasFilters={hasFilters} /> : null}
-    {!isLoading && !isError && tasks.length > 0 ? (
+    {status === 'pending' ? (
+      <div className="space-y-2 rounded-2xl border border-gray-200/80 bg-white p-3 shadow-sm" aria-label="טוען משימות">
+        {Array.from({ length: 6 }, (_, index) => (
+          <SkeletonBlock key={index} height="h-16" width="w-full" className="rounded-2xl bg-gray-50" />
+        ))}
+      </div>
+    ) : null}
+    {status === 'error' ? <StateCard icon={AlertTriangle} message="שגיאה בטעינת משימות" variant="error" /> : null}
+    {status === 'success' && tasks.length === 0 ? (
+      <InlineEmptyState
+        title={hasFilters ? 'אין משימות שמתאימות לסינון' : 'אין משימות'}
+        description={hasFilters ? 'נסו לשנות את הסינון או לנקות אותו.' : 'אפשר ליצור משימה חדשה ולהתחיל מעקב.'}
+        icon={ListChecks}
+      />
+    ) : null}
+    {status === 'success' && tasks.length > 0 ? (
       <div className="overflow-hidden rounded-2xl border border-gray-200/80 bg-white shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-4 py-3">
           <div>

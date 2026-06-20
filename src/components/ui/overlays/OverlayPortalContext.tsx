@@ -1,11 +1,11 @@
-import { createContext, useContext } from 'react'
+import { createContext, use } from 'react'
 
 const OverlayPortalContext = createContext<HTMLElement | null | undefined>(undefined)
 
 export const OverlayPortalProvider = OverlayPortalContext.Provider
 
 export const useOverlayPortalContainer = (): HTMLElement | null => {
-  const container = useContext(OverlayPortalContext)
+  const container = use(OverlayPortalContext)
   if (container !== undefined) return container
   return typeof document === 'undefined' ? null : document.body
 }

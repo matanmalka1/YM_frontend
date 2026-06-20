@@ -29,8 +29,7 @@ export const TasksPage: React.FC = () => {
       />
       <TasksListPanel
         tasks={page.tasks}
-        isLoading={page.isLoading}
-        isError={page.isError}
+        status={page.status}
         hasFilters={page.hasFilters}
         page={page.page}
         total={page.total}

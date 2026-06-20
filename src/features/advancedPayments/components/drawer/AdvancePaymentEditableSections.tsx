@@ -1,5 +1,5 @@
 import { AlertTriangle } from 'lucide-react'
-import { DrawerSection } from '@/components/ui/overlays/DetailDrawer'
+import { DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'

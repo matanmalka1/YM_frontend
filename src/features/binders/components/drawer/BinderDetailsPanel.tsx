@@ -1,4 +1,4 @@
-import { DrawerField, DrawerSection } from '@/components/ui/overlays/DetailDrawer'
+import { DrawerField, DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import { Link } from 'react-router-dom'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { MonoValue } from '@/components/ui/primitives/MonoValue'

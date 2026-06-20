@@ -1,10 +1,15 @@
-import { DrawerSection } from '../../../../components/ui/overlays/DetailDrawer'
+import { lazy, Suspense } from 'react'
+import { DrawerSection } from '../../../../components/ui/overlays/DrawerPrimitives'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { formatCurrencyILS as fmt, formatPercent } from '@/utils/utils'
 import { FINANCIAL_MESSAGES } from '../../constants/financialConstants'
 import { useAnnualPLSummary } from '../../hooks/useAnnualPLSummary'
 import { toProgressWidth } from '../../utils/financialHelpers'
-import { MultiYearPLChart } from './MultiYearPLChart'
+
+// Lazy-loaded: pulls in recharts (heavy) only when the summary drawer renders.
+const MultiYearPLChart = lazy(() =>
+  import('./MultiYearPLChart').then((m) => ({ default: m.MultiYearPLChart })),
+)
 
 interface Props {
   reportId: number
@@ -68,7 +73,11 @@ export const AnnualPLSummary: React.FC<Props> = ({ reportId, clientId }) => {
           </div>
         </div>
 
-        {clientId ? <MultiYearPLChart clientId={clientId} currentReportId={reportId} /> : null}
+        {clientId ? (
+          <Suspense fallback={null}>
+            <MultiYearPLChart clientId={clientId} currentReportId={reportId} />
+          </Suspense>
+        ) : null}
       </div>
     </DrawerSection>
   )
