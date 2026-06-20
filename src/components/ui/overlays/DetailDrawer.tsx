@@ -1,6 +1,7 @@
 import { OverlayContainer } from '../layout/OverlayContainer'
 import { UnsavedChangesGuard } from '../feedback/UnsavedChangesGuard'
 import { useUnsavedChangesGuard } from './useUnsavedChangesGuard'
+import { OverlayDismissContext } from './useOverlayDismiss'
 
 interface DetailDrawerProps {
   open: boolean
@@ -32,7 +33,7 @@ export const DetailDrawer: React.FC<DetailDrawerProps> = ({
   })
 
   return (
-    <>
+    <OverlayDismissContext.Provider value={handleClose}>
       <OverlayContainer
         open={open}
         variant="drawer"
@@ -46,7 +47,7 @@ export const DetailDrawer: React.FC<DetailDrawerProps> = ({
       </OverlayContainer>
 
       {showGuard && <UnsavedChangesGuard onContinue={handleContinue} onDiscard={handleDiscard} />}
-    </>
+    </OverlayDismissContext.Provider>
   )
 }
 DetailDrawer.displayName = 'DetailDrawer'

@@ -1,6 +1,7 @@
 import { OverlayContainer } from '../layout/OverlayContainer'
 import { UnsavedChangesGuard } from '../feedback/UnsavedChangesGuard'
 import { useUnsavedChangesGuard } from './useUnsavedChangesGuard'
+import { OverlayDismissContext } from './useOverlayDismiss'
 
 interface ModalProps {
   open: boolean
@@ -20,7 +21,7 @@ export const Modal: React.FC<ModalProps> = ({ open, title, children, footer, onC
   })
 
   return (
-    <>
+    <OverlayDismissContext.Provider value={handleClose}>
       <OverlayContainer
         open={open}
         variant="modal"
@@ -33,7 +34,7 @@ export const Modal: React.FC<ModalProps> = ({ open, title, children, footer, onC
       </OverlayContainer>
 
       {showGuard && <UnsavedChangesGuard onContinue={handleContinue} onDiscard={handleDiscard} />}
-    </>
+    </OverlayDismissContext.Provider>
   )
 }
 

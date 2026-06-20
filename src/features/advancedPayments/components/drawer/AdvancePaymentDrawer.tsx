@@ -89,7 +89,6 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
             rowId={model.id}
             isUpdating={isUpdating}
             isDeleting={isDeleting}
-            onClose={onClose}
             onSave={form.handleSave}
             onDelete={onDelete}
           />

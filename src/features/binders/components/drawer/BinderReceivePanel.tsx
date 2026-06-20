@@ -7,6 +7,7 @@ import { ClientSearchInput } from '@/components/shared/client'
 import { DatePicker } from '@/components/ui'
 import { Select } from '@/components/ui/inputs/Select'
 import { Textarea } from '@/components/ui'
+import { useOverlayDismiss } from '@/components/ui/overlays/useOverlayDismiss'
 import { isClientLockedForCreate } from '@/utils/clientStatus'
 import { getStatusLabel, type AnnualReportListItem } from '@/features/annualReports'
 import { MONTH_OPTIONS } from '@/constants/periodOptions.constants'
@@ -25,7 +26,6 @@ export interface BinderReceivePanelProps {
   onClientSelect: (client: { id: number; name: string; id_number: string; client_status?: string | null }) => void
   onClientQueryChange: (query: string) => void
   onSubmit: (e?: React.BaseSyntheticEvent) => void
-  onClose: () => void
   isSubmitting: boolean
 }
 
@@ -40,9 +40,9 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
   onClientSelect,
   onClientQueryChange,
   onSubmit,
-  onClose,
   isSubmitting,
 }) => {
+  const dismiss = useOverlayDismiss()
   const {
     register,
     control,
@@ -247,7 +247,7 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
       <Textarea label="הערות" rows={3} placeholder="הערות פנימיות (אופציונלי)" {...register('notes')} />
 
       <div className="flex justify-end gap-2 pt-2">
-        <Button type="button" variant="ghost" onClick={onClose}>
+        <Button type="button" variant="ghost" onClick={dismiss}>
           ביטול
         </Button>
         <Button type="submit" variant="primary" isLoading={isSubmitting} disabled={isSubmitting || clientLocked}>

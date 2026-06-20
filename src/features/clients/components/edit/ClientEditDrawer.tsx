@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { DetailDrawer } from '@/components/ui/overlays/DetailDrawer'
 import { ModalFormActions } from '@/components/ui/overlays/ModalFormActions'
@@ -25,17 +26,19 @@ export const ClientEditDrawer = ({
   updateLoading,
   formId,
 }: ClientEditDrawerProps) => {
+  const [isDirty, setIsDirty] = useState(false)
+
   if (!open) return null
 
   return (
     <DetailDrawer
       open
       onClose={onClose}
+      isDirty={isDirty}
       title="עריכת לקוח"
       footer={
         client ? (
           <ModalFormActions
-            onCancel={onClose}
             isLoading={updateLoading}
             submitLabel="שמור שינויים"
             submitType="submit"
@@ -53,6 +56,7 @@ export const ClientEditDrawer = ({
           onSave={onSave}
           onCancel={onClose}
           isLoading={updateLoading}
+          onDirtyChange={setIsDirty}
           hideFooter
         />
       )}

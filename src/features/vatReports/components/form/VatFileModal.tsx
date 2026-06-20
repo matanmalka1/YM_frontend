@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Modal } from '@/components/ui/overlays/Modal'
-import { Button } from '@/components/ui/primitives/Button'
+import { ModalFormActions } from '@/components/ui/overlays/ModalFormActions'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
 import { VAT_FILING_METHOD_LABELS, VAT_FILING_METHODS } from '../../constants/vatConstants'
@@ -68,14 +68,13 @@ export const VatFileModal: React.FC<VatFileModalProps> = ({
       isDirty={isDirty}
       onClose={handleClose}
       footer={
-        <div className="flex items-center justify-end gap-2">
-          <Button type="button" variant="secondary" onClick={handleClose} disabled={isLoading}>
-            ביטול
-          </Button>
-          <Button type="button" isLoading={isLoading} onClick={() => void submitForm()}>
-            הגש
-          </Button>
-        </div>
+        <ModalFormActions
+          cancelVariant="secondary"
+          isLoading={isLoading}
+          submitType="button"
+          onSubmit={() => void submitForm()}
+          submitLabel="הגש"
+        />
       }
     >
       <div className="space-y-4" dir="rtl">

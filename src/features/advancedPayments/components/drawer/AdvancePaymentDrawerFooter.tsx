@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
+import { useOverlayDismiss } from '@/components/ui/overlays/useOverlayDismiss'
 
 interface AdvancePaymentDrawerFooterProps {
   rowId: number
   isUpdating: boolean
   isDeleting: boolean
-  onClose: () => void
   onSave: () => Promise<void>
   onDelete?: (id: number) => Promise<void>
 }
@@ -16,10 +16,10 @@ export const AdvancePaymentDrawerFooter: React.FC<AdvancePaymentDrawerFooterProp
   rowId,
   isUpdating,
   isDeleting,
-  onClose,
   onSave,
   onDelete,
 }) => {
+  const dismiss = useOverlayDismiss()
   const [confirmDelete, setConfirmDelete] = useState(false)
 
   return (
@@ -38,7 +38,7 @@ export const AdvancePaymentDrawerFooter: React.FC<AdvancePaymentDrawerFooterProp
         </Button>
       )}
       <div className="flex gap-2 ms-auto">
-        <Button variant="outline" onClick={onClose} disabled={isUpdating || isDeleting}>
+        <Button variant="outline" onClick={dismiss} disabled={isUpdating || isDeleting}>
           ביטול
         </Button>
         <Button variant="primary" isLoading={isUpdating} onClick={onSave} disabled={isUpdating || isDeleting}>

@@ -23,6 +23,8 @@ interface ClientEditFormProps {
   hideFooter?: boolean
   /** Exposed form id so a parent can submit via <button form="...">. */
   formId?: string
+  /** Notifies the parent when the form's dirty state changes (for the unsaved-changes guard). */
+  onDirtyChange?: (isDirty: boolean) => void
 }
 
 const getClientDefaultValues = (client: ClientRecordResponse): ClientEditFormValues => ({
@@ -50,6 +52,7 @@ export const ClientEditForm: React.FC<ClientEditFormProps> = ({
   isLoading = false,
   hideFooter = false,
   formId,
+  onDirtyChange,
 }) => {
   const pendingDataRef = useRef<UpdateClientPayload | null>(null)
   const [impactMessage, setImpactMessage] = useState<string | null>(null)
@@ -82,6 +85,10 @@ export const ClientEditForm: React.FC<ClientEditFormProps> = ({
   useEffect(() => {
     reset(getClientDefaultValues(client))
   }, [client, reset])
+
+  useEffect(() => {
+    onDirtyChange?.(isDirty)
+  }, [isDirty, onDirtyChange])
 
   useEffect(() => {
     if (isOsekPatur && vatReportingFrequencyField.value != null) {

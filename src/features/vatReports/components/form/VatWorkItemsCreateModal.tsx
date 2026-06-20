@@ -114,7 +114,6 @@ export const VatWorkItemsCreateModal: React.FC<VatWorkItemsCreateModalProps> = (
       onClose={handleClose}
       footer={
         <ModalFormActions
-          onCancel={handleClose}
           cancelVariant="secondary"
           isLoading={createLoading}
           submitType="submit"

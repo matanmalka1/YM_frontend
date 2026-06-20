@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { Button } from '../primitives/Button'
+import { useOverlayDismiss } from './useOverlayDismiss'
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
 
@@ -8,7 +9,8 @@ interface ModalFormActionsProps {
   cancelLabel?: ReactNode
   cancelVariant?: ButtonVariant
   isLoading?: boolean
-  onCancel: () => void
+  /** Optional. When omitted, falls back to the overlay's guarded close handler. */
+  onCancel?: () => void
   onSubmit?: () => void
   submitDisabled?: boolean
   submitForm?: string
@@ -32,11 +34,13 @@ export const ModalFormActions: React.FC<ModalFormActionsProps> = ({
   submitType = 'button',
   submitVariant = 'primary',
 }) => {
+  const dismiss = useOverlayDismiss()
+  const handleCancel = onCancel ?? dismiss
   const submitProps = submitType === 'submit' ? { form: submitForm } : { onClick: onSubmit }
 
   return (
     <div className="flex items-center justify-end gap-2">
-      <Button type="button" variant={cancelVariant} onClick={onCancel} disabled={cancelDisabled || isLoading}>
+      <Button type="button" variant={cancelVariant} onClick={handleCancel} disabled={cancelDisabled || isLoading}>
         {cancelLabel}
       </Button>
       <Button

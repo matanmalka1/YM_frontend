@@ -133,7 +133,6 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
       onClose={handleClose}
       footer={
         <ModalFormActions
-          onCancel={handleClose}
           cancelVariant="secondary"
           isLoading={createLoading}
           submitType="submit"
