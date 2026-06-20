@@ -46,6 +46,7 @@ export const TasksPage: React.FC = () => {
 
       {page.modal !== null && (
         <TaskModal
+          key={`${page.modal.mode}-${page.modalTask?.id ?? 'new'}`}
           mode={page.modal.mode}
           task={page.modalTask}
           isLoading={page.isModalLoading}

@@ -57,7 +57,12 @@ export const WorkQueuePage: React.FC = () => {
 
       <ConfirmDialog {...modals.confirmProps} />
 
-      {modals.taskModalProps && <TaskModal {...modals.taskModalProps} />}
+      {modals.taskModalProps && (
+        <TaskModal
+          key={`${modals.taskModalProps.mode}-${modals.taskModalProps.task?.id ?? 'new'}-${modals.taskModalProps.source?.source_id ?? ''}`}
+          {...modals.taskModalProps}
+        />
+      )}
     </PageStateGuard>
   )
 }

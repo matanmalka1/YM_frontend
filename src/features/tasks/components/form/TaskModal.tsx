@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useReducer, useState } from 'react'
 import { Button } from '@/components/ui/primitives/Button'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { Input } from '@/components/ui/inputs/Input'
@@ -45,16 +45,32 @@ const sourceTypeLabel = (sourceDomain?: string | null) =>
     ? workQueueSourceTypeLabels[sourceDomain as keyof typeof workQueueSourceTypeLabels]
     : 'פריט עבודה'
 
+interface TaskFormState {
+  title: string
+  description: string
+  priority: TaskPriority
+  dueDate: string
+  assignedRole: UserRole | ''
+}
+
 export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoading, onSubmit, onClose }) => {
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [priority, setPriority] = useState<TaskPriority>('normal')
-  const [dueDate, setDueDate] = useState('')
-  const [assignedRole, setAssignedRole] = useState<UserRole | ''>('')
+  // Fields are seeded once from props (the modal is remounted with a `key` at the call site
+  // whenever mode/task/source change), so no prop->state syncing effect is needed.
+  const [form, setForm] = useReducer(
+    (state: TaskFormState, patch: Partial<TaskFormState>) => ({ ...state, ...patch }),
+    undefined,
+    (): TaskFormState => ({
+      title: task?.title ?? '',
+      description: task?.description ?? '',
+      priority: task?.priority ?? 'normal',
+      dueDate: task ? toDateInput(task.due_date) : toDateInput(source?.due_date),
+      assignedRole: task?.assigned_role ?? '',
+    }),
+  )
   const [clientSearch, setClientSearch] = useState('')
   const [pendingSource, setPendingSource] = useState<{ domain: WorkQueueSourceType; id: number } | null>(null)
   const [sourceCleared, setSourceCleared] = useState(false)
-  const [sourcePickerOpen, setSourcePickerOpen] = useState(false)
+  const [sourcePickerOpen, setSourcePickerOpen] = useState(() => mode === 'link')
 
   const {
     selectedClientId,
@@ -90,29 +106,6 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
     setSourcePickerOpen(false)
   }, [clearClient])
 
-  useEffect(() => {
-    if (mode === 'create') {
-      setTitle('')
-      setDescription('')
-      setPriority('normal')
-      setDueDate(toDateInput(source?.due_date))
-      setAssignedRole('')
-      resetSourcePicker()
-    }
-  }, [mode, source, resetSourcePicker])
-
-  useEffect(() => {
-    if ((mode === 'edit' || mode === 'link') && task) {
-      setTitle(task.title ?? '')
-      setDescription(task.description ?? '')
-      setPriority(task.priority ?? 'normal')
-      setDueDate(toDateInput(task.due_date))
-      setAssignedRole(task.assigned_role ?? '')
-      resetSourcePicker()
-      setSourcePickerOpen(mode === 'link')
-    }
-  }, [mode, task, resetSourcePicker])
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!onSubmit) return
@@ -121,13 +114,13 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
       onSubmit({ source_domain: pendingSource.domain, source_id: pendingSource.id })
       return
     }
-    if (readonly || !title.trim()) return
+    if (readonly || !form.title.trim()) return
     const base = {
-      title: title.trim(),
-      description: description.trim() || undefined,
-      priority,
-      due_date: dueDate || undefined,
-      assigned_role: assignedRole || undefined,
+      title: form.title.trim(),
+      description: form.description.trim() || undefined,
+      priority: form.priority,
+      due_date: form.dueDate || undefined,
+      assigned_role: form.assignedRole || undefined,
     }
     if (mode === 'create') {
       const createPayload: TaskCreateRequest = source
@@ -241,32 +234,37 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               label="כותרת *"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={form.title}
+              onChange={(e) => setForm({ title: e.target.value })}
               disabled={readonly}
               required
             />
             <Textarea
               label="פרטים"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={form.description}
+              onChange={(e) => setForm({ description: e.target.value })}
               disabled={readonly}
               rows={4}
             />
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               <Select
                 options={priorityOptions}
-                value={priority}
-                onChange={(e) => setPriority(parseTaskPriority(e.target.value) ?? priority)}
+                value={form.priority}
+                onChange={(e) => setForm({ priority: parseTaskPriority(e.target.value) ?? form.priority })}
                 label="עדיפות"
                 disabled={readonly}
               />
-              <DatePicker label="תאריך יעד" value={dueDate} onChange={setDueDate} disabled={readonly} />
+              <DatePicker
+                label="תאריך יעד"
+                value={form.dueDate}
+                onChange={(value) => setForm({ dueDate: value })}
+                disabled={readonly}
+              />
             </div>
             <Select
               options={roleOptions}
-              value={assignedRole}
-              onChange={(e) => setAssignedRole(parseAssignedRole(e.target.value))}
+              value={form.assignedRole}
+              onChange={(e) => setForm({ assignedRole: parseAssignedRole(e.target.value) })}
               label="שיוך לתפקיד"
               disabled={readonly}
             />
@@ -276,7 +274,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
                 סגור
               </Button>
               {!readonly && (
-                <Button type="submit" disabled={!title.trim() || isLoading} isLoading={isLoading}>
+                <Button type="submit" disabled={!form.title.trim() || isLoading} isLoading={isLoading}>
                   {mode === 'edit' ? 'שמור' : 'צור משימה'}
                 </Button>
               )}
