@@ -27,7 +27,7 @@ root.render(
               </div>
             }
           >
-            <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
+            <div dir="rtl" className="h-screen bg-gray-50 flex flex-col overflow-hidden">
               <AppRoutes />
               <Toaster richColors position="top-center" />
             </div>
