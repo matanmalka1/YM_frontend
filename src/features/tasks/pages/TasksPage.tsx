@@ -23,7 +23,9 @@ export const TasksPage: React.FC = () => {
           </Button>
         }
       />
-      <TasksListSummary total={page.total} visibleCount={page.visibleCount} featuredTask={page.featuredTask} />
+      {!page.isLoading && !page.listError ? (
+        <TasksListSummary total={page.total} visibleCount={page.visibleCount} featuredTask={page.featuredTask} />
+      ) : null}
       <TasksFiltersPanel
         filters={page.filters}
         hasFilters={page.hasFilters}
@@ -37,19 +39,20 @@ export const TasksPage: React.FC = () => {
       />
       <TasksListPanel
         tasks={page.tasks}
-        status={page.status}
+        isLoading={page.isLoading}
+        isFetching={page.isFetching}
+        error={page.listError}
         hasFilters={page.hasFilters}
         page={page.page}
         total={page.total}
-        totalPages={page.totalPages}
         isActionBusy={page.isActionBusy}
-        actionError={page.actionError}
         onView={page.openViewModal}
         onEdit={page.openEditModal}
         onComplete={page.completeTask}
         onCancel={page.cancelTask}
         onDelete={page.deleteTask}
         onPageChange={page.setPage}
+        onRetry={() => void page.retryList()}
       />
 
       {page.modal !== null && (
@@ -58,6 +61,7 @@ export const TasksPage: React.FC = () => {
           mode={page.modal.mode}
           task={page.modalTask}
           isLoading={page.isModalLoading}
+          error={page.actionError}
           onSubmit={page.submitModal}
           onClose={page.closeModal}
         />

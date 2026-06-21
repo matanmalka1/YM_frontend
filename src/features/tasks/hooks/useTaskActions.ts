@@ -93,14 +93,27 @@ export const useTaskActions = () => {
     isActionBusy: completeMutation.isPending || cancelMutation.isPending || deleteMutation.isPending,
     isModalSaving: createMutation.isPending || updateMutation.isPending,
     isConfirming: cancelMutation.isPending || deleteMutation.isPending,
-    openCreateModal: () => setModal({ mode: 'create' }),
-    openViewModal: (taskId: number) => setModal({ mode: 'view', taskId }),
-    openEditModal: (taskId: number) => setModal({ mode: 'edit', taskId }),
-    closeModal: () => setModal(null),
+    openCreateModal: () => {
+      setActionError(null)
+      setModal({ mode: 'create' })
+    },
+    openViewModal: (taskId: number) => {
+      setActionError(null)
+      setModal({ mode: 'view', taskId })
+    },
+    openEditModal: (taskId: number) => {
+      setActionError(null)
+      setModal({ mode: 'edit', taskId })
+    },
+    closeModal: () => {
+      setActionError(null)
+      setModal(null)
+    },
     closeConfirm: () => setPendingConfirm(null),
     confirmPendingAction,
     submitModal: (data: TaskCreateRequest | TaskUpdateRequest) => {
       if (!modal) return
+      setActionError(null)
       if (modal.mode === 'create') {
         createMutation.mutate(data as TaskCreateRequest)
         return

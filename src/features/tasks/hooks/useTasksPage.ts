@@ -1,11 +1,10 @@
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getTotalPages } from '@/utils/paginationUtils'
+import { getErrorMessage } from '@/utils/utils'
 import { useActiveUserOptions } from '@/features/users'
 import { tasksApi } from '../api/tasks.api'
 import { tasksQK } from '../api/queryKeys'
 import {
-  TASKS_PAGE_SIZE,
   TASK_CONFIRM_COPY,
   taskPriorityOptions,
   taskRoleOptions,
@@ -31,7 +30,6 @@ export const useTasksPage = () => {
 
   const tasks = tasksQuery.data?.items ?? []
   const total = tasksQuery.data?.total ?? 0
-  const totalPages = getTotalPages(total, TASKS_PAGE_SIZE)
 
   const userOptions = useMemo(
     () => [
@@ -49,10 +47,12 @@ export const useTasksPage = () => {
     hasFilters: filters.hasFilters,
     tasks,
     total,
-    totalPages,
     visibleCount: tasks.length,
     featuredTask: tasks[0] ?? null,
-    status: tasksQuery.status,
+    isLoading: tasksQuery.isLoading,
+    isFetching: tasksQuery.isFetching,
+    listError: tasksQuery.isError ? getErrorMessage(tasksQuery.error, 'שגיאה בטעינת משימות') : null,
+    retryList: tasksQuery.refetch,
     actionError: actions.actionError,
     isActionBusy: actions.isActionBusy,
     modal: actions.modal,

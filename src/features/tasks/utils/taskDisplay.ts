@@ -21,10 +21,3 @@ export const taskPriorityBadgeClasses: Record<TaskPriority, string> = {
   high: 'bg-warning-50 text-warning-700',
   urgent: 'bg-negative-50 text-negative-700',
 }
-
-export const taskPriorityRailClasses: Record<TaskPriority, string> = {
-  low: 'bg-gray-300',
-  normal: 'bg-primary-400',
-  high: 'bg-warning-400',
-  urgent: 'bg-negative-500',
-}

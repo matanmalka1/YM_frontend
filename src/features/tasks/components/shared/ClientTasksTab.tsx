@@ -1,21 +1,29 @@
 import { useEffect, useState } from 'react'
-import { useClientTasks } from '../../hooks/useClientTasks'
-import { useBulkCompleteTasks } from '../../hooks/useBulkCompleteTasks'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Plus } from 'lucide-react'
+import { TaskModal } from '../form/TaskModal'
+import { tasksApi } from '../../api/tasks.api'
+import { tasksQK } from '../../api/queryKeys'
 import { useBulkAssignTasks } from '../../hooks/useBulkAssignTasks'
+import { useBulkCompleteTasks } from '../../hooks/useBulkCompleteTasks'
+import { useClientTasks } from '../../hooks/useClientTasks'
+import { taskPriorityLabels, taskStatusLabels } from '../../constants/labels'
+import { formatTaskDueDate, isTaskTerminal } from '../../utils/taskFormatters'
+import { getTaskStatusBadgeVariant } from '../../utils/taskDisplay'
 import { useActiveUserOptions } from '@/features/users'
-import { taskStatusLabels, taskPriorityLabels } from '../../constants/labels'
-import { BulkSelectionToolbar, BulkSelectionActionButton } from '@/components/ui/table/BulkSelectionToolbar'
-import { PaginationCard } from '@/components/ui/table/PaginationCard'
-import { TableSkeleton } from '@/components/ui/table'
-import { DetailTabPanel } from '@/components/ui/layout'
-import { InlineState } from '@/components/ui/feedback'
 import { Alert } from '@/components/ui/overlays/Alert'
-import { Checkbox } from '@/components/ui/primitives/Checkbox'
+import { DetailTabPanel } from '@/components/ui/layout'
 import { Select } from '@/components/ui/inputs'
+import { Badge } from '@/components/ui/primitives/Badge'
+import { Button } from '@/components/ui/primitives/Button'
+import { Checkbox } from '@/components/ui/primitives/Checkbox'
+import { BulkSelectionActionButton, BulkSelectionToolbar } from '@/components/ui/table/BulkSelectionToolbar'
+import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
+import type { Column } from '@/components/ui/table/DataTable'
+import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 import { randomUUID } from '@/utils/random'
 import { getErrorMessage } from '@/utils/utils'
-import type { Task } from '../../api/contracts'
-import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
+import type { Task, TaskCreateRequest } from '../../api/contracts'
 
 interface ClientTasksTabProps {
   clientRecordId: number
@@ -26,11 +34,33 @@ interface Feedback {
   hasFailures: boolean
 }
 
+const EMPTY_TASKS: Task[] = []
+
 export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }) => {
+  const queryClient = useQueryClient()
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set())
-  const [assigneeId, setAssigneeId] = useState<string>('')
+  const [assigneeId, setAssigneeId] = useState('')
   const [feedback, setFeedback] = useState<Feedback | null>(null)
   const [page, setPage] = useState(1)
+  const [createOpen, setCreateOpen] = useState(false)
+  const { data, isLoading, isFetching, isError, refetch } = useClientTasks(clientRecordId, {
+    page,
+    page_size: PAGE_SIZE,
+  })
+  const bulkComplete = useBulkCompleteTasks()
+  const bulkAssign = useBulkAssignTasks()
+  const usersQuery = useActiveUserOptions()
+  const createTask = useMutation({
+    mutationFn: (payload: TaskCreateRequest) => tasksApi.create(payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: tasksQK.all })
+      setCreateOpen(false)
+    },
+  })
+
+  const tasks = data?.items ?? EMPTY_TASKS
+  const selectableTasks = tasks.filter((task) => !isTaskTerminal(task.status))
+  const isBulkLoading = bulkComplete.isPending || bulkAssign.isPending
 
   useEffect(() => {
     setSelectedIds(new Set())
@@ -38,40 +68,28 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
     setPage(1)
   }, [clientRecordId])
 
-  const { data, isLoading, isError } = useClientTasks(clientRecordId, { page, page_size: PAGE_SIZE })
-  const bulkComplete = useBulkCompleteTasks()
-  const bulkAssign = useBulkAssignTasks()
-  const usersQuery = useActiveUserOptions()
-
-  const tasks = data?.items ?? []
-  const isBulkLoading = bulkComplete.isPending || bulkAssign.isPending
-
   const toggleAll = () => {
-    if (selectedIds.size === tasks.length) {
-      setSelectedIds(new Set())
-    } else {
-      setSelectedIds(new Set(tasks.map((t) => t.id)))
-    }
+    setSelectedIds((current) =>
+      current.size === selectableTasks.length ? new Set() : new Set(selectableTasks.map((task) => task.id)),
+    )
   }
-
-  const toggleOne = (id: number) => {
-    const next = new Set(selectedIds)
-    if (next.has(id)) next.delete(id)
-    else next.add(id)
-    setSelectedIds(next)
+  const toggleOne = (task: Task) => {
+    if (isTaskTerminal(task.status)) return
+    setSelectedIds((current) => {
+      const next = new Set(current)
+      if (next.has(task.id)) next.delete(task.id)
+      else next.add(task.id)
+      return next
+    })
   }
-
   const clearSelection = () => setSelectedIds(new Set())
-
   const handlePageChange = (nextPage: number) => {
     setPage(nextPage)
-    setSelectedIds(new Set())
+    clearSelection()
   }
-
   const handleBulkComplete = async () => {
-    const ids = [...selectedIds]
     try {
-      const result = await bulkComplete.mutateAsync({ taskIds: ids, idempotencyKey: randomUUID() })
+      const result = await bulkComplete.mutateAsync({ taskIds: [...selectedIds], idempotencyKey: randomUUID() })
       clearSelection()
       setFeedback({
         message:
@@ -84,12 +102,10 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
       setFeedback({ message: getErrorMessage(error, 'פעולת הסימון נכשלה'), hasFailures: true })
     }
   }
-
   const handleBulkAssign = async (targetAssigneeId: number | null) => {
-    const ids = [...selectedIds]
     try {
       const result = await bulkAssign.mutateAsync({
-        taskIds: ids,
+        taskIds: [...selectedIds],
         assigneeUserId: targetAssigneeId,
         idempotencyKey: randomUUID(),
       })
@@ -107,47 +123,78 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
     }
   }
 
-  const userOptions = (usersQuery.data?.items ?? []).map((u) => ({ value: String(u.id), label: u.full_name }))
+  const columns: Array<Column<Task>> = [
+    {
+      key: 'selection',
+      header: '',
+      align: 'center',
+      headerRender: () => (
+        <Checkbox
+          aria-label="בחר את כל המשימות הפתוחות"
+          checked={selectableTasks.length > 0 && selectedIds.size === selectableTasks.length}
+          onChange={toggleAll}
+          disabled={isBulkLoading || selectableTasks.length === 0}
+        />
+      ),
+      render: (task) => (
+        <Checkbox
+          aria-label={`בחר משימה ${task.title}`}
+          checked={selectedIds.has(task.id)}
+          onChange={() => toggleOne(task)}
+          disabled={isBulkLoading || isTaskTerminal(task.status)}
+          title={isTaskTerminal(task.status) ? 'ניתן לבצע פעולות מרוכזות רק על משימות פתוחות' : undefined}
+        />
+      ),
+    },
+    {
+      key: 'title',
+      header: 'כותרת',
+      align: 'right',
+      render: (task) => <span className="font-medium text-gray-900">{task.title}</span>,
+      wrap: true,
+    },
+    {
+      key: 'status',
+      header: 'סטטוס',
+      render: (task) => (
+        <Badge variant={getTaskStatusBadgeVariant(task.status)} size="sm">
+          {taskStatusLabels[task.status]}
+        </Badge>
+      ),
+    },
+    { key: 'priority', header: 'עדיפות', render: (task) => taskPriorityLabels[task.priority] },
+    { key: 'dueDate', header: 'תאריך יעד', render: (task) => formatTaskDueDate(task.due_date) },
+  ]
 
-  if (isLoading) {
-    return (
-      <DetailTabPanel title="משימות" subtitle="משימות פתוחות והיסטוריות המקושרות ללקוח">
-        <TableSkeleton rows={4} columns={5} />
-      </DetailTabPanel>
-    )
-  }
-
-  if (isError) {
-    return (
-      <DetailTabPanel title="משימות" subtitle="משימות פתוחות והיסטוריות המקושרות ללקוח">
-        <Alert variant="error" message="שגיאה בטעינת משימות" />
-      </DetailTabPanel>
-    )
-  }
-
-  if (tasks.length === 0) {
-    return (
-      <DetailTabPanel title="משימות" subtitle="משימות פתוחות והיסטוריות המקושרות ללקוח">
-        <InlineState title="אין משימות ללקוח זה" />
-      </DetailTabPanel>
-    )
-  }
+  const userOptions = (usersQuery.data?.items ?? []).map((user) => ({ value: String(user.id), label: user.full_name }))
+  const createError = createTask.isError ? getErrorMessage(createTask.error, 'יצירת המשימה נכשלה') : null
 
   return (
-    <DetailTabPanel title="משימות" subtitle="משימות פתוחות והיסטוריות המקושרות ללקוח">
-      {feedback && (
-        <div
-          className={
-            feedback.hasFailures
-              ? 'rounded-lg bg-warning-50 border border-warning-200 px-4 py-2 text-sm text-warning-700'
-              : 'rounded-lg bg-success-50 border border-success-200 px-4 py-2 text-sm text-success-700'
-          }
+    <DetailTabPanel
+      title="משימות"
+      subtitle="משימות פתוחות והיסטוריות המקושרות ללקוח"
+      actions={
+        <Button
+          size="sm"
+          onClick={() => {
+            createTask.reset()
+            setCreateOpen(true)
+          }}
         >
-          {feedback.message}
-        </div>
-      )}
-
-      {selectedIds.size > 0 && (
+          <Plus className="h-4 w-4" aria-hidden="true" />
+          משימה חדשה
+        </Button>
+      }
+    >
+      {feedback ? (
+        <Alert
+          variant={feedback.hasFailures ? 'warning' : 'success'}
+          message={feedback.message}
+          onDismiss={() => setFeedback(null)}
+          dismissible
+        />
+      ) : null}
+      {selectedIds.size > 0 ? (
         <BulkSelectionToolbar selectedCount={selectedIds.size} loading={isBulkLoading} onClear={clearSelection}>
           <BulkSelectionActionButton
             label="סמן כהושלם"
@@ -155,17 +202,17 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
             loading={bulkComplete.isPending}
             disabled={isBulkLoading}
           />
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Select
               size="xs"
               value={assigneeId}
               options={[{ value: '', label: 'בחר משתמש לשיוך' }, ...userOptions]}
-              onChange={(e) => setAssigneeId(e.target.value)}
+              onChange={(event) => setAssigneeId(event.target.value)}
               disabled={isBulkLoading}
             />
             <BulkSelectionActionButton
               label="שייך"
-              onClick={() => handleBulkAssign(assigneeId === '' ? null : Number(assigneeId))}
+              onClick={() => handleBulkAssign(Number(assigneeId))}
               loading={bulkAssign.isPending}
               disabled={isBulkLoading || assigneeId === ''}
             />
@@ -177,44 +224,50 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
             />
           </div>
         </BulkSelectionToolbar>
-      )}
-
-      <div className="space-y-1">
-        <div className="flex items-center gap-3 px-3 py-2 text-xs text-neutral-500">
-          <Checkbox checked={tasks.length > 0 && selectedIds.size === tasks.length} onChange={toggleAll} />
-          <span className="flex-1">כותרת</span>
-          <span className="w-20 text-center">סטטוס</span>
-          <span className="w-20 text-center">עדיפות</span>
-          <span className="w-28 text-center">תאריך יעד</span>
-        </div>
-
-        {tasks.map((task: Task) => (
-          <div
-            key={task.id}
-            className="flex items-center gap-3 rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm hover:bg-neutral-50 transition-colors"
-          >
-            <Checkbox checked={selectedIds.has(task.id)} onChange={() => toggleOne(task.id)} />
-            <span className="flex-1 text-neutral-800 truncate">{task.title}</span>
-            <span className="w-20 text-center text-xs text-neutral-600">
-              {taskStatusLabels[task.status] ?? task.status}
-            </span>
-            <span className="w-20 text-center text-xs text-neutral-600">
-              {taskPriorityLabels[task.priority] ?? task.priority}
-            </span>
-            <span className="w-28 text-center text-xs text-neutral-500">{task.due_date ?? '—'}</span>
-          </div>
-        ))}
-      </div>
-
-      {data && data.total > PAGE_SIZE && (
-        <PaginationCard
+      ) : null}
+      {isError ? (
+        <Alert variant="error" message="שגיאה בטעינת משימות" onRetry={() => void refetch()} />
+      ) : (
+        <PaginatedDataTable
+          columns={columns}
+          data={tasks}
+          getRowKey={(task) => task.id}
+          isLoading={isLoading}
+          isFetching={isFetching}
           page={page}
-          totalPages={Math.ceil(data.total / PAGE_SIZE)}
-          total={data.total}
+          pageSize={PAGE_SIZE}
+          total={data?.total ?? 0}
           label="משימות"
           onPageChange={handlePageChange}
+          showPagination={(data?.total ?? 0) > PAGE_SIZE}
+          emptyState={{
+            title: 'אין משימות ללקוח זה',
+            message: 'אפשר ליצור משימה חדשה עבור הלקוח.',
+            action: {
+              label: 'משימה חדשה',
+              onClick: () => {
+                createTask.reset()
+                setCreateOpen(true)
+              },
+            },
+          }}
         />
       )}
+      {createOpen ? (
+        <TaskModal
+          mode="create"
+          clientRecordId={clientRecordId}
+          isLoading={createTask.isPending}
+          error={createError}
+          onSubmit={(data) => createTask.mutate(data as TaskCreateRequest)}
+          onClose={() => {
+            createTask.reset()
+            setCreateOpen(false)
+          }}
+        />
+      ) : null}
     </DetailTabPanel>
   )
 }
+
+ClientTasksTab.displayName = 'ClientTasksTab'

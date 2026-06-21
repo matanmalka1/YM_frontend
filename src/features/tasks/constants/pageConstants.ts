@@ -37,8 +37,6 @@ export const TASK_FILTER_PARAM_KEYS = {
 
 export type TaskFilterParamKey = (typeof TASK_FILTER_PARAM_KEYS)[keyof typeof TASK_FILTER_PARAM_KEYS]
 
-export const TASK_TABLE_COLUMNS = ['כותרת', 'סטטוס', 'עדיפות', 'תאריך יעד', 'פעולות'] as const
-
 export const taskStatusOptions: Array<TasksSelectOption<TaskStatus | ''>> = [
   { value: '', label: 'כל הסטטוסים' },
   ...taskStatusValues.map((value) => ({ value, label: taskStatusLabels[value] })),

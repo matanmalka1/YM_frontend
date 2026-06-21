@@ -1,7 +1,6 @@
 import { Link2Off } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { Select } from '@/components/ui/inputs/Select'
-import { Tooltip } from '@/components/ui/primitives/Tooltip'
 import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client/ClientSearchInput'
 import type { WorkQueueItem, WorkQueueSourceType } from '@/features/workQueue'
 import type { TaskSourceContext } from '../../types'
@@ -93,16 +92,10 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
           </div>
         </div>
         {!readonly && !isLinkMode && !sourceCleared && (
-          <Tooltip text="נתק את המשימה מהפריט המקושר">
-            <button
-              type="button"
-              onClick={onClearSource}
-              className="flex items-center gap-1 text-xs text-red-600 hover:text-red-800"
-            >
-              <Link2Off className="h-3.5 w-3.5" />
-              נתק
-            </button>
-          </Tooltip>
+          <Button type="button" variant="link" size="sm" tooltip="נתק את המשימה מהפריט המקושר" onClick={onClearSource}>
+            <Link2Off className="h-3.5 w-3.5" aria-hidden="true" />
+            נתק
+          </Button>
         )}
       </div>
     )

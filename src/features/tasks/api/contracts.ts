@@ -60,17 +60,18 @@ export interface TaskCreateRequest {
   assigned_role?: UserRole
   source_domain?: WorkQueueSourceType
   source_id?: number
+  client_record_id?: number
   action_key?: string
   action_payload?: Record<string, unknown>
 }
 
 export interface TaskUpdateRequest {
   title?: string
-  description?: string
+  description?: string | null
   priority?: TaskPriority
-  due_date?: string
-  assigned_to_user_id?: number
-  assigned_role?: UserRole
+  due_date?: string | null
+  assigned_to_user_id?: number | null
+  assigned_role?: UserRole | null
   source_domain?: WorkQueueSourceType | null
   source_id?: number | null
   action_key?: string
