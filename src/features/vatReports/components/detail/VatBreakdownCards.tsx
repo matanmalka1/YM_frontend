@@ -2,6 +2,7 @@ import { ChevronLeft } from 'lucide-react'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Card } from '@/components/ui/primitives/Card'
 import { cn } from '@/utils/utils'
+import { semanticStatToneClasses } from '@/utils/semanticColors'
 import { formatVatAmount } from '../../utils/vatHelpers'
 import type { VatBreakdownData } from '../../utils/vatBreakdown'
 
@@ -37,22 +38,17 @@ interface VatTotalRowProps {
   className?: string
 }
 
-const VAT_CARD_CLASSES: Record<VatCardTone, { border: string; title: string; button: string }> = {
+// Tone → value text colour is the canonical semantic token; only the softer accent
+// border and the navigate-button hover are VAT-card-specific.
+const VAT_CARD_CLASSES: Record<VatCardTone, { border: string; button: string }> = {
   positive: {
     border: 'border-r-positive-400',
-    title: 'text-positive-700',
     button: 'text-positive-600 hover:text-positive-800',
   },
   warning: {
     border: 'border-r-warning-400',
-    title: 'text-warning-700',
     button: 'text-warning-600 hover:text-warning-800',
   },
-}
-
-const VAT_TOTAL_VALUE_CLASSES: Record<VatCardTone, string> = {
-  positive: 'text-positive-700',
-  warning: 'text-warning-700',
 }
 
 const VatAmountRow: React.FC<VatAmountRowProps> = ({ label, value, className, valueClassName }) => (
@@ -65,7 +61,7 @@ const VatAmountRow: React.FC<VatAmountRowProps> = ({ label, value, className, va
 const VatTotalRow: React.FC<VatTotalRowProps> = ({ label, value, tone, className }) => (
   <div className={cn('flex items-center justify-between border-t border-gray-100 pt-3', className)}>
     <span className="text-sm font-semibold text-gray-700">{label}</span>
-    <span className={cn('font-mono text-2xl font-bold tabular-nums', VAT_TOTAL_VALUE_CLASSES[tone])}>{value}</span>
+    <span className={cn('font-mono text-2xl font-bold tabular-nums', semanticStatToneClasses[tone].value)}>{value}</span>
   </div>
 )
 
@@ -74,7 +70,7 @@ const VatCard: React.FC<VatCardProps> = ({ title, tone, onNavigate, children }) 
   return (
     <Card variant="outlined" size="compact" className={cn('border-r-2', classes.border)}>
       <div className="mb-3 flex items-center justify-between">
-        <p className={cn('text-xs font-semibold uppercase tracking-wide', classes.title)}>{title}</p>
+        <p className={cn('text-xs font-semibold uppercase tracking-wide', semanticStatToneClasses[tone].value)}>{title}</p>
         {onNavigate && (
           <button
             type="button"

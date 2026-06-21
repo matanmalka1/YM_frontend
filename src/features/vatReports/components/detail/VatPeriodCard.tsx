@@ -2,6 +2,7 @@ import { CalendarDays, Clock, FileText, TrendingDown, TrendingUp, Wallet } from 
 import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
 import { Badge } from '@/components/ui/primitives/Badge'
+import { MonoValue } from '@/components/ui/primitives/MonoValue'
 import { cn, formatDate } from '@/utils/utils'
 import type { VatPeriodRow } from '../../api'
 import { getVatClientSummaryStatusVariant } from '../../constants/vatConstants'
@@ -16,21 +17,23 @@ const getDaysToDueLabel = (days: number | null): { label: string; overdue: boole
   return { label: `באיחור ${Math.abs(days)} ימים`, overdue: true }
 }
 
+type MonoTone = 'neutral' | 'positive' | 'negative' | 'warning' | 'critical'
+
 interface VatMetricRowProps {
   icon: React.ReactNode
   label: string
   value: string
-  valueClassName?: string
+  tone?: MonoTone
 }
 
-const VatMetricRow = ({ icon, label, value, valueClassName }: VatMetricRowProps) => (
+const VatMetricRow = ({ icon, label, value, tone = 'neutral' }: VatMetricRowProps) => (
   <div className="flex items-center justify-between gap-4">
     <span className="inline-flex items-center gap-2 text-sm font-medium text-gray-500">
       <span className="text-gray-400">{icon}</span>
       {label}
     </span>
-    <span dir="ltr" className={cn('text-sm font-bold text-gray-950 font-mono tabular-nums', valueClassName)}>
-      {value}
+    <span dir="ltr">
+      <MonoValue value={value} tone={tone} />
     </span>
   </div>
 )
@@ -83,7 +86,7 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
               icon={<Clock className="h-4 w-4" />}
               label="ימים למועד"
               value={daysToDue.label}
-              valueClassName={daysToDue.overdue ? 'text-negative-600' : 'text-success-700'}
+              tone={daysToDue.overdue ? 'negative' : 'positive'}
             />
           )}
           <VatMetricRow
@@ -105,8 +108,8 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
               <Wallet className="h-4 w-4" />
               {netLabel}
             </span>
-            <span dir="ltr" className={cn('text-lg font-bold font-mono tabular-nums', netTextClass)}>
-              {formatVatAmount(Math.abs(netVat))}
+            <span dir="ltr">
+              <MonoValue value={formatVatAmount(Math.abs(netVat))} tone={isRefund ? 'positive' : 'negative'} className="text-lg font-bold" />
             </span>
           </div>
         </div>
