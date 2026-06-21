@@ -21,11 +21,7 @@ const EmptyTimeline: React.FC<EmptyTimelineProps> = ({ hasActiveFilters, onClear
       action={onClearFilters ? { label: 'נקה סינון', onClick: onClearFilters } : undefined}
     />
   ) : (
-    <StateCard
-      icon={Inbox}
-      title="אין אירועים בציר הזמן"
-      message="אירועים חדשים יופיעו כאן לאחר פעילות לקוח"
-    />
+    <StateCard icon={Inbox} title="אין אירועים בציר הזמן" message="אירועים חדשים יופיעו כאן לאחר פעילות לקוח" />
   )
 
 // ── Date group header ─────────────────────────────────────────────────────────

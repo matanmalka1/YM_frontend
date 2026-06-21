@@ -56,7 +56,7 @@ Confirmed FP sites (2026-06-20 scan) — all spread/forward/return the whole que
 
 Fires on any effect that sets state keyed on a changing value. FP when the effect is a **post-mount DOM measurement** (popover/dropdown positioning) — it reads the just-mounted layer's measured size/position, which doesn't exist during render, then tracks scroll/resize. There is no duplicated state to remove; the position genuinely must be computed after layout.
 
-**Verify before suppressing:** confirm the effect reads DOM geometry (`getBoundingClientRect`/`offsetHeight`) of an element that only exists once open, sets a position state, and adds scroll/resize listeners. A prop→state *copy* (no DOM read) is a REAL finding.
+**Verify before suppressing:** confirm the effect reads DOM geometry (`getBoundingClientRect`/`offsetHeight`) of an element that only exists once open, sets a position state, and adds scroll/resize listeners. A prop→state _copy_ (no DOM read) is a REAL finding.
 
 Confirmed FP sites (2026-06-20 scan):
 
@@ -98,7 +98,7 @@ Confirmed FP sites (2026-06-20 scan):
 
 Recipe FP: "the searched array changes per iteration, so a pre-built index can't be reused."
 
-**Verify before suppressing:** confirm the `.find()`/`.findIndex()` runs over a *different* array each loop iteration.
+**Verify before suppressing:** confirm the `.find()`/`.findIndex()` runs over a _different_ array each loop iteration.
 
 Confirmed FP sites (2026-06-20 scan):
 
@@ -108,7 +108,7 @@ Confirmed FP sites (2026-06-20 scan):
 
 Recipe FP: an early-return that is a legitimate post-await guard.
 
-**Verify before suppressing:** confirm the `if (...) return` after the `await` is a *staleness/race* check that must run **after** the await (e.g. "was this request superseded while awaiting?"). Moving it before the await would defeat its purpose.
+**Verify before suppressing:** confirm the `if (...) return` after the `await` is a _staleness/race_ check that must run **after** the await (e.g. "was this request superseded while awaiting?"). Moving it before the await would defeat its purpose.
 
 Confirmed FP sites (2026-06-20 scan):
 
@@ -179,7 +179,7 @@ Confirmed FP sites (2026-06-20 scan):
 
 ## react-doctor/click-events-have-key-events + react-doctor/no-noninteractive-element-interactions
 
-Both fire together on a native `<dialog>` that carries an `onClick` backdrop-click-to-close handler. The handler only closes when `event.target === dialogRef.current` (i.e. the click landed on the backdrop pseudo-element, not the panel content). The `<dialog>` is a modal: Escape is handled natively via `onCancel`, so no keyboard listener is needed for dismissal, and backdrop click is a pure mouse-only *enhancement* (not the only way to close). Both lines already carry an `eslint-disable-next-line` with the same rationale; react-doctor cannot read eslint-disable comments, so it re-reports.
+Both fire together on a native `<dialog>` that carries an `onClick` backdrop-click-to-close handler. The handler only closes when `event.target === dialogRef.current` (i.e. the click landed on the backdrop pseudo-element, not the panel content). The `<dialog>` is a modal: Escape is handled natively via `onCancel`, so no keyboard listener is needed for dismissal, and backdrop click is a pure mouse-only _enhancement_ (not the only way to close). Both lines already carry an `eslint-disable-next-line` with the same rationale; react-doctor cannot read eslint-disable comments, so it re-reports.
 
 **Verify before suppressing:** confirm (a) the element is a modal `<dialog>` (native Escape dismissal), (b) the click handler is guarded to the backdrop target only, and (c) closing is also reachable by keyboard (Escape) and by an in-panel button. If any is missing, it is a REAL finding.
 
@@ -192,11 +192,11 @@ Confirmed FP sites (2026-06-20 scan):
 
 Two distinct FP shapes here (the rest of the exhaustive-deps findings are REAL and tracked in `remaining-work.md`):
 
-### (a) Unmount cleanup that clears the *latest* pending timer via a ref
+### (a) Unmount cleanup that clears the _latest_ pending timer via a ref
 
-The rule warns "cleanup may read the wrong node since `ref.current` can change before it runs" and suggests capturing the value at effect-setup. For a mount-only effect whose cleanup clears a **pending timer**, capturing at setup grabs `null` (no timer exists yet) — the cleanup must read the *latest* `ref.current` at unmount to clear whatever timer is in flight. The suggested fix would leak the timer.
+The rule warns "cleanup may read the wrong node since `ref.current` can change before it runs" and suggests capturing the value at effect-setup. For a mount-only effect whose cleanup clears a **pending timer**, capturing at setup grabs `null` (no timer exists yet) — the cleanup must read the _latest_ `ref.current` at unmount to clear whatever timer is in flight. The suggested fix would leak the timer.
 
-**Verify before suppressing:** confirm the effect has `[]` deps, the cleanup clears a timer/subscription stored in a ref that is written *after* mount, and capturing at setup time would read a stale/empty value.
+**Verify before suppressing:** confirm the effect has `[]` deps, the cleanup clears a timer/subscription stored in a ref that is written _after_ mount, and capturing at setup time would read a stale/empty value.
 
 - `src/components/shared/client/ClientSearchInput.tsx:78` (`debounceRef.current` — clears pending debounce on unmount)
 - `src/features/vatReports/hooks/useVatWorkItemActions.ts:20` (`cooldownTimerRef.current` — clears action-cooldown timer on unmount)
@@ -211,7 +211,7 @@ The rule wants `year`/`setFilter` added. The effect seeds a URL filter from an a
 
 ## react-doctor/no-many-boolean-props
 
-Fires at 4+ props with boolean-ish prefixes (`is|has|should|can|show|...`). The canonical fix (a `variant`/`size` enum or compound subcomponents) targets **presentational** components with mutually-exclusive style stacks (`<Button isPrimary isLarge hasIcon>`). The rule's own caveat: *"validate that flagged props are actually mutually-exclusive booleans before refactoring."*
+Fires at 4+ props with boolean-ish prefixes (`is|has|should|can|show|...`). The canonical fix (a `variant`/`size` enum or compound subcomponents) targets **presentational** components with mutually-exclusive style stacks (`<Button isPrimary isLarge hasIcon>`). The rule's own caveat: _"validate that flagged props are actually mutually-exclusive booleans before refactoring."_
 
 **Verify before suppressing:** confirm the component is a **stateful container/form/dialog** (not a presentational variant), and the flagged booleans are **orthogonal independent state** (loading + error + permission + UI-mode + dialog-open) that cannot share a single discriminant. Collapsing orthogonal flags into one enum is semantically wrong; bundling them into a state object adds indirection and rewrites every call site for no gain. If the flags ARE a mutually-exclusive set (e.g. a loading/error pair → query `status`), collapse them (REAL finding).
 
@@ -229,7 +229,7 @@ Confirmed FP sites (2026-06-20 scan) — orthogonal state on container component
 
 The rule allowlists slot-style prop names (`icon`/`tooltip`/`fallback`/`header`/`render*`/`*Button`/`*Icon`/`*Component`) but not every layout-slot name. `DetailTabPanel` exposes `summary`/`filters`/`actions` as `React.ReactNode` slots — functionally identical to the allowlisted `header`/`fallback`. The rule's own docs note these fire "despite negligible re-render costs, particularly when child components aren't themselves memoized."
 
-**Verify before suppressing:** confirm (a) the prop is a layout/content slot typed `React.ReactNode`, (b) the receiving component is **not** `React.memo`'d, and (c) the slotted child component is **not** `React.memo`'d either. When all hold, prop identity gates nothing — the parent re-renders with its own parent regardless — so `useMemo` adds dep-array risk for zero render benefit. If the consumer *is* memoized, memoize the slot (REAL finding).
+**Verify before suppressing:** confirm (a) the prop is a layout/content slot typed `React.ReactNode`, (b) the receiving component is **not** `React.memo`'d, and (c) the slotted child component is **not** `React.memo`'d either. When all hold, prop identity gates nothing — the parent re-renders with its own parent regardless — so `useMemo` adds dep-array risk for zero render benefit. If the consumer _is_ memoized, memoize the slot (REAL finding).
 
 Confirmed FP sites (2026-06-20 scan) — `DetailTabPanel` is a plain FC (not memoized), and `ChargesSummaryBar`/`TaxCalendarStatsSection`/`TaxCalendarFiltersBar` are not memoized:
 

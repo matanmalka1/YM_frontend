@@ -18,10 +18,7 @@ export const useAdvisorOptions = (enabled = true) => {
     staleTime: QUERY_STALE_TIME.long,
   })
 
-  const advisors = useMemo(
-    () => (data?.items ?? []).filter((user) => user.role === 'advisor'),
-    [data?.items],
-  )
+  const advisors = useMemo(() => (data?.items ?? []).filter((user) => user.role === 'advisor'), [data?.items])
 
   const options = useMemo(() => advisors.map((user) => ({ value: String(user.id), label: user.full_name })), [advisors])
 

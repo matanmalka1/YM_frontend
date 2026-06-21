@@ -54,11 +54,7 @@ export const ChargesFiltersCard = ({ filters, onClear, onFilterChange }: Charges
 
   // Derived display name: empty without a client filter; otherwise the in-session
   // picked name, falling back to the name resolved from the URL id.
-  const clientName = !filters.client_record_id
-    ? ''
-    : pickedMatchesFilter
-      ? picked!.name
-      : (urlClient?.full_name ?? '')
+  const clientName = !filters.client_record_id ? '' : pickedMatchesFilter ? picked!.name : (urlClient?.full_name ?? '')
 
   return (
     <FilterPanel

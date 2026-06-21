@@ -1,6 +1,5 @@
 import { SectionHeader } from '../layout/SectionHeader'
 
-
 interface DrawerFieldProps {
   label: string
   value: React.ReactNode
@@ -13,7 +12,6 @@ export const DrawerField: React.FC<DrawerFieldProps> = ({ label, value }) => (
   </div>
 )
 DrawerField.displayName = 'DrawerField'
-
 
 interface DrawerSectionProps {
   title: string

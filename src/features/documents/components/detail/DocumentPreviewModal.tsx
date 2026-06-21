@@ -46,11 +46,7 @@ export const DocumentPreviewModal: React.FC<DocumentPreviewModalProps> = ({
         // anyway. The src is a same-origin document we serve, so we accept the
         // unsandboxed frame rather than break preview. (react-doctor
         // iframe-missing-sandbox is a known can't-fix here.)
-        <iframe
-          src={url}
-          className="h-[70vh] w-full rounded border border-gray-100"
-          title={filename ?? 'document'}
-        />
+        <iframe src={url} className="h-[70vh] w-full rounded border border-gray-100" title={filename ?? 'document'} />
       ) : isImage ? (
         <div className="flex justify-center">
           <img src={url} alt={filename ?? 'document'} className="max-h-[70vh] max-w-full object-contain rounded" />

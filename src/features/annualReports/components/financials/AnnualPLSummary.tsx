@@ -7,9 +7,7 @@ import { useAnnualPLSummary } from '../../hooks/useAnnualPLSummary'
 import { toProgressWidth } from '../../utils/financialHelpers'
 
 // Lazy-loaded: pulls in recharts (heavy) only when the summary drawer renders.
-const MultiYearPLChart = lazy(() =>
-  import('./MultiYearPLChart').then((m) => ({ default: m.MultiYearPLChart })),
-)
+const MultiYearPLChart = lazy(() => import('./MultiYearPLChart').then((m) => ({ default: m.MultiYearPLChart })))
 
 interface Props {
   reportId: number

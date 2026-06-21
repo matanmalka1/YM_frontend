@@ -42,40 +42,38 @@ export const Input = ({
   const padding = inputIconPadding[size]
 
   return (
-      <FormField label={label} error={error} labelClassName={labelClassName} className="w-full">
-        <div className="relative">
-          {startIcon && (
-            <span className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-gray-400">
-              {startIcon}
-            </span>
-          )}
+    <FormField label={label} error={error} labelClassName={labelClassName} className="w-full">
+      <div className="relative">
+        {startIcon && (
+          <span className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-gray-400">
+            {startIcon}
+          </span>
+        )}
 
-          <input
-            ref={ref}
-            className={cn(
-              'w-full rounded-lg border shadow-sm transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500',
-              inputSizeClasses[size],
-              error ? 'border-negative-500' : 'border-gray-300',
-              props.disabled ? 'bg-gray-50 cursor-not-allowed' : 'bg-white',
-              hasStart ? padding.start : padding.defaultStart,
-              hasEnd ? padding.end : padding.defaultEnd,
-              className,
-            )}
-            {...props}
-          />
-
-          {endElement ? (
-            <span className="absolute end-2 top-1/2 -translate-y-1/2">{endElement}</span>
-          ) : (
-            endIcon && (
-              <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-gray-400">
-                {endIcon}
-              </span>
-            )
+        <input
+          ref={ref}
+          className={cn(
+            'w-full rounded-lg border shadow-sm transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500',
+            inputSizeClasses[size],
+            error ? 'border-negative-500' : 'border-gray-300',
+            props.disabled ? 'bg-gray-50 cursor-not-allowed' : 'bg-white',
+            hasStart ? padding.start : padding.defaultStart,
+            hasEnd ? padding.end : padding.defaultEnd,
+            className,
           )}
-        </div>
-      </FormField>
-    )
+          {...props}
+        />
+
+        {endElement ? (
+          <span className="absolute end-2 top-1/2 -translate-y-1/2">{endElement}</span>
+        ) : (
+          endIcon && (
+            <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-gray-400">{endIcon}</span>
+          )
+        )}
+      </div>
+    </FormField>
+  )
 }
 
 Input.displayName = 'Input'

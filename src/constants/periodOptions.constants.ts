@@ -52,11 +52,7 @@ export const getOperationalYearOptions = (count = 7): { value: string; label: st
   }))
 }
 
-const getPeriodLabel = (
-  names: typeof MONTH_NAMES,
-  period: string,
-  periodMonthsCount: 1 | 2,
-): string => {
+const getPeriodLabel = (names: typeof MONTH_NAMES, period: string, periodMonthsCount: 1 | 2): string => {
   const month = Number(period.split('-')[1])
   const monthIndex = Number.isInteger(month) && month >= 1 && month <= 12 ? month - 1 : null
   if (monthIndex === null) return period

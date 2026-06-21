@@ -36,10 +36,7 @@ export const useSeasonSummary = () => {
     queryFn: annualReportSeasonApi.getActiveSeasonSummary,
   })
 
-  const activeStats = useMemo(
-    () => (activeSummaryData ? buildStats(activeSummaryData) : null),
-    [activeSummaryData],
-  )
+  const activeStats = useMemo(() => (activeSummaryData ? buildStats(activeSummaryData) : null), [activeSummaryData])
   const shouldCheckNextTaxYear = activeStats !== null && activeStats.total === 0
   const nextTaxYear = activeStats ? activeStats.taxYear + 1 : null
 
@@ -49,10 +46,7 @@ export const useSeasonSummary = () => {
     queryFn: () => annualReportSeasonApi.getSeasonSummary(nextTaxYear!),
   })
 
-  const nextStats = useMemo(
-    () => (nextSummaryData ? buildStats(nextSummaryData) : null),
-    [nextSummaryData],
-  )
+  const nextStats = useMemo(() => (nextSummaryData ? buildStats(nextSummaryData) : null), [nextSummaryData])
 
   const stats = nextStats && nextStats.total > 0 ? nextStats : activeStats
   const isPending = activeSummaryPending || (shouldCheckNextTaxYear && nextSummaryPending)

@@ -23,11 +23,7 @@ export const TasksPage: React.FC = () => {
           </Button>
         }
       />
-      <TasksListSummary
-        total={page.total}
-        visibleCount={page.visibleCount}
-        featuredTask={page.featuredTask}
-      />
+      <TasksListSummary total={page.total} visibleCount={page.visibleCount} featuredTask={page.featuredTask} />
       <TasksFiltersPanel
         filters={page.filters}
         hasFilters={page.hasFilters}

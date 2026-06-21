@@ -151,12 +151,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
 
       <div className={cn('space-y-4', compact ? 'p-5' : 'p-4')}>
         {error ? (
-          <InlineState
-            variant="error"
-            icon={AlertCircle}
-            title="לא ניתן לטעון בקשות חתימה"
-            description={error}
-          />
+          <InlineState variant="error" icon={AlertCircle} title="לא ניתן לטעון בקשות חתימה" description={error} />
         ) : compact ? (
           <div className="divide-y divide-gray-100 rounded-lg border border-gray-100">
             {tableItems.length === 0 ? (

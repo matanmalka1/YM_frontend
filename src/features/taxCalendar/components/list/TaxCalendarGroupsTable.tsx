@@ -217,11 +217,7 @@ export const TaxCalendarGroupsTable = ({
             closeLabel="סגור"
             className={cn(group.overdue_count > 0 && 'border-r-2 border-r-negative-500')}
           >
-            <GroupItemsRows
-              group={group}
-              clientSearchText={clientSearchText}
-              clientRecordId={clientRecordId}
-            />
+            <GroupItemsRows group={group} clientSearchText={clientSearchText} clientRecordId={clientRecordId} />
           </GroupedPeriodRow>
         )
       })}
