@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState, type RefObject } from 'react'
+import { useCallback, useMemo, useState, type RefObject } from 'react'
 import { useDebounce } from 'use-debounce'
 import { Link } from 'react-router-dom'
 import { SkeletonBlock } from '../../ui/primitives/SkeletonBlock'
@@ -8,52 +8,11 @@ import { CLIENT_ROUTES } from '@/features/clients'
 import { useRole } from '@/hooks/useRole'
 import { getRoleLabel } from '@/features/users'
 import { cn, formatCount } from '@/utils/utils'
-import { CLIENT_SIDEBAR_PAGE_SIZE, useClientSidebarClients, type ClientSidebarItem } from './useClientSidebarClients'
+import { CLIENT_SIDEBAR_PAGE_SIZE, useClientSidebarClients } from './useClientSidebarClients'
 import { ClientSidebarClientCard } from './ClientSidebarClientCard'
-import { getEntityLabel, getVatLabel } from './ClientSidebar.labels'
+import { GROUP_MODES, groupClients, type GroupMode } from './ClientSidebar.grouping'
+import { useClientSidebarFocusTrap } from './useClientSidebarFocusTrap'
 import { CLIENT_SEARCH_WITH_CONTACT_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
-
-type GroupMode = 'entity' | 'vat'
-
-interface ClientGroup {
-  key: string
-  label: string
-  clients: ClientSidebarItem[]
-}
-
-const GROUP_MODES: Array<{ value: GroupMode; label: string }> = [
-  { value: 'entity', label: 'סוג התאגדות' },
-  { value: 'vat', label: 'דיווח מע״מ' },
-]
-
-const getGroupInfo = (client: ClientSidebarItem, groupMode: GroupMode): { key: string; label: string } => {
-  if (groupMode === 'entity') {
-    const key = client.entityType ?? 'unknown'
-    return { key, label: getEntityLabel(client) }
-  }
-  const key = client.vatReportingFrequency ?? 'unknown'
-  return { key, label: getVatLabel(client) }
-}
-
-const groupClients = (clients: ClientSidebarItem[], groupMode: GroupMode): ClientGroup[] => {
-  const groups = new Map<string, ClientGroup>()
-
-  clients.forEach((client) => {
-    const { key, label } = getGroupInfo(client, groupMode)
-    const group = groups.get(key)
-
-    if (group) {
-      group.clients.push(client)
-      return
-    }
-
-    groups.set(key, { key, label, clients: [client] })
-  })
-
-  return Array.from(groups.values()).sort(
-    (a, b) => b.clients.length - a.clients.length || a.label.localeCompare(b.label, 'he'),
-  )
-}
 
 interface ClientSidebarProps {
   mobileOpen: boolean
@@ -71,8 +30,6 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
   const [searchValue, setSearchValue] = useState('')
   const [debouncedSearch] = useDebounce(searchValue, 350)
   const [groupMode, setGroupMode] = useState<GroupMode>('entity')
-  const sidebarRef = useRef<HTMLElement>(null)
-  const searchInputRef = useRef<HTMLInputElement>(null)
   const { clients, total, hasSearch, isLoading, isError, refetch } = useClientSidebarClients(debouncedSearch)
   const { user, logout } = useAuthStore()
   const { can } = useRole()
@@ -83,51 +40,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
     if (mobileOpen) onMobileClose()
   }, [mobileOpen, onMobileClose])
 
-  const onMobileCloseEvent = useEffectEvent(onMobileClose)
-
-  useEffect(() => {
-    if (!mobileOpen) return
-
-    const mobileTrigger = mobileTriggerRef.current
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    const frame = requestAnimationFrame(() => searchInputRef.current?.focus())
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault()
-        onMobileCloseEvent()
-        return
-      }
-
-      if (event.key !== 'Tab' || !sidebarRef.current) return
-
-      const focusable = Array.from(
-        sidebarRef.current.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), [href], input:not([disabled]), [tabindex]:not([tabindex="-1"])',
-        ),
-      )
-      if (focusable.length === 0) return
-
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first.focus()
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-    return () => {
-      cancelAnimationFrame(frame)
-      document.removeEventListener('keydown', handleKeyDown)
-      document.body.style.overflow = previousOverflow
-      mobileTrigger?.focus()
-    }
-  }, [mobileOpen, mobileTriggerRef])
+  const { sidebarRef, searchInputRef } = useClientSidebarFocusTrap({ mobileOpen, mobileTriggerRef, onMobileClose })
 
   return (
     <>
