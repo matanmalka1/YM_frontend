@@ -3,6 +3,7 @@ import { signatureRequestsApi, signatureRequestsQK } from '../../api'
 import { DetailDrawer } from '../../../../components/ui/overlays/DetailDrawer'
 import { DrawerField, DrawerSection } from '../../../../components/ui/overlays/DrawerPrimitives'
 import { SkeletonBlock } from '../../../../components/ui/primitives/SkeletonBlock'
+import { Timeline, TimelineEntry } from '@/components/ui/feedback/Timeline'
 import { StatusBadge } from '../../../../components/ui/primitives/StatusBadge'
 import { formatDate, formatDateTime, formatPhoneNumber } from '../../../../utils/utils'
 import { getSignatureRequestTypeLabel, getSignatureRequestStatusLabel } from '../../constants'
@@ -83,9 +84,9 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
 
           <DrawerSection title="היסטוריית פעילות">
             {events.length === 0 && <p className="py-3 text-sm text-gray-400">אין אירועים</p>}
-            <div className="divide-y divide-gray-50">
+            <Timeline>
               {events.map((event) => (
-                <div key={event.id} className="py-2.5">
+                <TimelineEntry key={event.id}>
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-sm font-medium text-gray-800">
                       {EVENT_TYPE_LABELS[event.event_type] ?? event.event_type}
@@ -97,9 +98,9 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
                     {event.actor_name ? ` — ${event.actor_name}` : ''}
                     {event.notes ? ` · ${event.notes}` : ''}
                   </div>
-                </div>
+                </TimelineEntry>
               ))}
-            </div>
+            </Timeline>
           </DrawerSection>
         </>
       )}

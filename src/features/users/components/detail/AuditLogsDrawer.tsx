@@ -5,6 +5,7 @@ import { Badge } from '../../../../components/ui/primitives/Badge'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { DatePicker } from '../../../../components/ui/inputs/DatePicker'
 import { SkeletonBlock } from '../../../../components/ui/primitives/SkeletonBlock'
+import { Timeline, TimelineEntry } from '@/components/ui/feedback/Timeline'
 import { usersApi, usersQK } from '../../api'
 import { formatDateTime } from '../../../../utils/utils'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
@@ -90,19 +91,25 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
 
       {!isPending && !isError && logs.length > 0 && (
         <div className="space-y-3">
-          {logs.map((log) => (
-            <div key={log.id} className="rounded-lg border border-gray-100 bg-gray-50 p-3 space-y-1">
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-sm font-medium text-gray-800">{auditActionLabel[log.action] ?? log.action}</span>
-                <Badge variant={log.status === 'success' ? 'success' : 'error'}>
-                  {log.status === 'success' ? 'הצלחה' : 'כישלון'}
-                </Badge>
-              </div>
-              {log.email && <p className="text-xs text-gray-500">אימייל: {log.email}</p>}
-              {log.reason && <p className="text-xs text-gray-500">סיבה: {log.reason}</p>}
-              <p className="text-xs text-gray-400">{formatDateTime(log.created_at)}</p>
-            </div>
-          ))}
+          <Timeline>
+            {logs.map((log) => (
+              <TimelineEntry key={log.id}>
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm font-medium text-gray-800">
+                      {auditActionLabel[log.action] ?? log.action}
+                    </span>
+                    <Badge variant={log.status === 'success' ? 'success' : 'error'}>
+                      {log.status === 'success' ? 'הצלחה' : 'כישלון'}
+                    </Badge>
+                  </div>
+                  {log.email && <p className="text-xs text-gray-500">אימייל: {log.email}</p>}
+                  {log.reason && <p className="text-xs text-gray-500">סיבה: {log.reason}</p>}
+                  <p className="text-xs text-gray-400">{formatDateTime(log.created_at)}</p>
+                </div>
+              </TimelineEntry>
+            ))}
+          </Timeline>
 
           {hasMore && (
             <Button variant="outline" fullWidth onClick={() => setPage((p) => p + 1)} disabled={isPending}>
