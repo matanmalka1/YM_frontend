@@ -5,6 +5,7 @@ import { Modal } from '@/components/ui/overlays/Modal'
 import { Input } from '@/components/ui/inputs/Input'
 import { Button } from '@/components/ui/primitives/Button'
 import { Select } from '@/components/ui/inputs/Select'
+import { Textarea } from '@/components/ui/inputs/Textarea'
 import {
   createAdvancePaymentSchema,
   CREATE_ADVANCE_PAYMENT_DEFAULTS,
@@ -179,18 +180,14 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
             )}
           />
         ))}
-        <div className="space-y-1">
-          <label htmlFor="create-advance-payment-notes" className="block text-sm font-medium text-gray-700">
-            הערות (אופציונלי)
-          </label>
-          <textarea
-            {...register('notes')}
-            id="create-advance-payment-notes"
-            rows={2}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            placeholder="הערות..."
-          />
-        </div>
+        <Textarea
+          label="הערות (אופציונלי)"
+          id="create-advance-payment-notes"
+          rows={2}
+          className="resize-none"
+          placeholder="הערות..."
+          {...register('notes')}
+        />
       </form>
     </Modal>
   )

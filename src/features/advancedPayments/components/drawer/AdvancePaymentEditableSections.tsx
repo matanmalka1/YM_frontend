@@ -2,6 +2,7 @@ import { AlertTriangle } from 'lucide-react'
 import { DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
+import { Textarea } from '@/components/ui/inputs/Textarea'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { Button } from '@/components/ui/primitives/Button'
 import { ADVANCE_PAYMENT_STATUS_OPTIONS, ADVANCE_PAYMENT_METHOD_OPTIONS } from '../../constants'
@@ -92,19 +93,14 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
           />
           <DatePicker label="תאריך ביצוע תשלום" value={form.paidAt} onChange={form.setPaidAt} />
         </div>
-        <div className="space-y-1">
-          <label htmlFor="advance-payment-notes" className="block text-sm font-medium text-gray-700">
-            הערות
-          </label>
-          <textarea
-            id="advance-payment-notes"
-            rows={3}
-            value={form.notes}
-            onChange={(e) => form.setNotes(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-            placeholder="הערות..."
-          />
-        </div>
+        <Textarea
+          label="הערות"
+          id="advance-payment-notes"
+          rows={3}
+          value={form.notes}
+          onChange={(e) => form.setNotes(e.target.value)}
+          placeholder="הערות..."
+        />
       </div>
     </DrawerSection>
   </>
