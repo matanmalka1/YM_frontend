@@ -1,20 +1,21 @@
 import { useState } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
 import { LayoutDashboard, ClipboardList, ArrowUpCircle, Clock } from 'lucide-react'
+import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
 import { cn } from '@/utils/utils'
-import {
-  isFiled,
-  useVatWorkItemPage,
-  VatFiledBanner,
-  VatHistoryTab,
-  VatSummaryTab,
-  VatWorkItemSummaryBar,
-  VatInvoiceTab,
-} from '@/features/vatReports'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
+import { VatInvoiceTab } from '../components/detail/VatInvoiceTab'
+import { VatSummaryTab } from '../components/detail/VatSummaryTab'
+import { VatWorkItemHeaderActions } from '../components/detail/VatWorkItemHeaderActions'
+import { VatHistoryTab } from '../components/detail/VatHistoryTab'
+import { VatWorkItemSummaryBar } from '../components/list/VatWorkItemSummaryBar'
+import { VatFiledBanner } from '../components/shared/VatFiledBanner'
+import { useVatWorkItemPage } from '../hooks/useVatWorkItemPage'
+import { isFiled } from '../utils/vatHelpers'
+import { formatVatPeriodTitle, getVatClientTitle } from '../utils/viewHelpers'
 
 type TabKey = 'summary' | 'income' | 'expense' | 'history'
 
@@ -53,6 +54,11 @@ const VatDetailContent: React.FC<{ workItemId: number }> = ({ workItemId }) => {
 
   return (
     <div className="space-y-4">
+      <PageHeader
+        breadcrumbs={[{ label: 'דוחות מע״מ', to: '/tax/vat' }, { label: 'תיק תקופתי' }]}
+        title={`${getVatClientTitle(workItem.client_name, workItem.client_record_id)} · ${formatVatPeriodTitle(workItem.period, workItem.period_type)}`}
+        actions={<VatWorkItemHeaderActions workItem={workItem} />}
+      />
       <VatWorkItemSummaryBar workItem={workItem} onFilingPendingChange={setIsFilingPending} />
 
       {isFiled(workItem.status) && workItem.filed_at && (

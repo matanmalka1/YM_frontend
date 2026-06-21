@@ -1,24 +1,16 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Bell, ChevronLeft, Clock, FolderOpen, Info, AlertTriangle, User } from 'lucide-react'
+import { Clock, Info, AlertTriangle } from 'lucide-react'
 import { formatDate } from '@/utils/utils'
 import { Badge } from '@/components/ui/primitives/Badge'
-import { Button } from '@/components/ui/primitives/Button'
-import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
-import { getVatWorkItemStatusLabel } from '../../constants/vatConstants'
 import { useRole } from '@/hooks/useRole'
 import { useVatWorkItemActions } from '../../hooks/useVatWorkItemActions'
-import { useActiveVatBinder } from '../../hooks/useActiveVatBinder'
-import { VAT_DEADLINE_WARNING_DAYS, VAT_STATUS_BADGE_VARIANTS } from '../../constants/vatConstants'
+import { VAT_DEADLINE_WARNING_DAYS } from '../../constants/vatConstants'
 import { VatProgressBar } from '../shared/VatProgressBar'
 import { VatActionButtons } from '../shared/VatActionButtons'
-import { VatExportButtons } from '../shared/VatExportButtons'
 import { VatSendBackForm } from '../form/VatSendBackForm'
 import { VatFileModal } from '../form/VatFileModal'
 import { isFiled } from '../../utils/vatHelpers'
 import type { VatWorkItemSummaryBarProps } from '../../types'
-import { formatVatPeriodTitle, getVatClientTitle } from '../../utils/viewHelpers'
-import { SendNotificationModal } from '@/features/notifications'
 
 type AlertTone = 'warning' | 'error'
 
@@ -56,60 +48,10 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
     useVatWorkItemActions(workItem.id)
   const [showSendBack, setShowSendBack] = useState(false)
   const [showFileModal, setShowFileModal] = useState(false)
-  const [showNotificationModal, setShowNotificationModal] = useState(false)
   const filed = isFiled(workItem.status)
-  const { activeBinder } = useActiveVatBinder(workItem.client_record_id)
-  const titleClient = getVatClientTitle(workItem.client_name, workItem.client_record_id)
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-3" dir="rtl">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="min-w-0 space-y-1">
-          <div className="flex items-center gap-1 text-xs">
-            <Link to="/tax/vat" className="text-gray-400 hover:text-primary-600 transition-colors">
-              דוחות מע&quot;מ
-            </Link>
-            <ChevronLeft className="h-3.5 w-3.5 text-gray-300" />
-            <span className="text-gray-500">תיק תקופתי</span>
-          </div>
-          <h1 className="truncate text-xl font-bold text-gray-950">
-            {titleClient}
-            <span className="mx-2 font-normal text-gray-300">·</span>
-            <span>{formatVatPeriodTitle(workItem.period, workItem.period_type)}</span>
-          </h1>
-        </div>
-        <div className="flex flex-wrap items-center justify-end gap-2">
-          {activeBinder && (
-            <Link
-              to={`/binders?binder_number=${activeBinder.binder_number}`}
-              className="inline-flex items-center gap-1 rounded-full border border-info-200 bg-info-50 px-2.5 py-0.5 text-xs font-medium text-info-700 transition-colors hover:bg-info-100"
-            >
-              <FolderOpen className="h-3 w-3" />
-              קלסר {activeBinder.binder_number}
-            </Link>
-          )}
-          {workItem.assigned_to !== null && (
-            <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-xs font-medium text-gray-600">
-              <User className="h-3 w-3" />
-              <span className="text-gray-400">מטפל:</span>
-              {workItem.assigned_to_name ?? `#${workItem.assigned_to}`}
-            </span>
-          )}
-          <StatusBadge
-            status={workItem.status}
-            getLabel={getVatWorkItemStatusLabel}
-            variantMap={VAT_STATUS_BADGE_VARIANTS}
-          />
-          {isAdvisor && <VatExportButtons clientId={workItem.client_record_id} period={workItem.period} />}
-          {isAdvisor && (
-            <Button variant="outline" size="sm" onClick={() => setShowNotificationModal(true)} className="gap-1.5">
-              <Bell className="h-3.5 w-3.5" />
-              תזכורת מסמכים
-            </Button>
-          )}
-        </div>
-      </div>
-
       {workItem.status === 'pending_materials' && workItem.pending_materials_note && (
         <AlertBanner tone="warning" icon={Info}>
           {workItem.pending_materials_note}
@@ -180,14 +122,6 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
         onClose={() => setShowFileModal(false)}
         onFilingStart={() => onFilingPendingChange?.(true)}
         onFilingEnd={() => onFilingPendingChange?.(false)}
-      />
-      <SendNotificationModal
-        open={showNotificationModal}
-        onClose={() => setShowNotificationModal(false)}
-        clientRecordId={workItem.client_record_id}
-        initialTrigger="vat_documents_reminder"
-        entityId={workItem.id}
-        disableTriggerChange
       />
     </div>
   )
