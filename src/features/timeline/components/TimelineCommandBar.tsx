@@ -1,9 +1,8 @@
 import { format, parseISO } from 'date-fns'
 import { he } from 'date-fns/locale'
-import { ChevronDown, Filter, RefreshCw, Search, Star, X } from 'lucide-react'
+import { Filter, RefreshCw, Search, Star, X } from 'lucide-react'
 import { Button } from '../../../components/ui/primitives/Button'
 import { Input } from '../../../components/ui/inputs/Input'
-import { Select } from '../../../components/ui/inputs/Select'
 import { cn, formatCount } from '../../../utils/utils'
 import { useSearchDebounce } from '../../../hooks/useSearchDebounce'
 import type { EventTypeStat } from '../lib/timelineStats'
@@ -27,8 +26,6 @@ export interface TimelineCommandBarProps {
   onClearFilters: () => void
   onExpandAll: () => void
   onCollapseAll: () => void
-  pageSize: number
-  onPageSizeChange: (value: string) => void
   eventTypeStats: EventTypeStat[]
 }
 
@@ -64,8 +61,6 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
   onClearFilters,
   onExpandAll,
   onCollapseAll,
-  pageSize,
-  onPageSizeChange,
   eventTypeStats,
 }) => {
   const [localSearch, setLocalSearch] = useSearchDebounce(searchTerm, onSearchChange)
@@ -109,25 +104,6 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
               עודכן לאחרונה: {lastUpdated}
             </span>
           )}
-
-          {/* Page size selector */}
-          <div className="flex items-center gap-1.5">
-            <span className="hidden sm:block text-xs text-gray-500 whitespace-nowrap">שורות:</span>
-            <div className="relative">
-              <Select
-                value={String(pageSize)}
-                onChange={(e) => onPageSizeChange(e.target.value)}
-                className="w-20 appearance-none pr-3 pl-7 text-sm"
-              >
-                {[25, 50, 100].map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-              </Select>
-              <ChevronDown className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
-            </div>
-          </div>
 
           {/* Refresh */}
           <Button

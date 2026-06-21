@@ -21,7 +21,6 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
     page,
     pageSize,
     setPage,
-    setPageSize,
     total,
     refresh,
     filters,
@@ -84,8 +83,6 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
         onClearFilters={filters.clearFilters}
         onExpandAll={expandAll}
         onCollapseAll={collapseAll}
-        pageSize={pageSize}
-        onPageSizeChange={setPageSize}
         eventTypeStats={eventTypeStats}
       />
 
