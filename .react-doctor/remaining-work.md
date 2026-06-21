@@ -1,115 +1,90 @@
-# React Doctor — remaining work map
+# React Doctor — remaining work (clean TODO)
 
-Rebuilt from a live scan on **2026-06-21** (tsc clean, vitest 48/48). 161 raw diagnostics →
-**78 real findings** after excluding FP-by-rule noise → **~73 actionable** after the documented
-per-site false positives below.
-Read `.react-doctor/false-positives.md` first — it is the source of truth for findings that must NOT be re-fixed.
+Audited from a live scan on **2026-06-21** (tsc clean, vitest 48/48).
+**158 raw diagnostics → 69 real actionable** (83 excluded by FP-rule, 6 documented per-site FPs).
+`false-positives.md` is the source of truth for what must NOT be re-fixed — every box below is
+already filtered against it.
 
----
+## How to use
+1. Re-scan: `node_modules/.bin/react-doctor --json --no-score . > /tmp/rd.json`
+2. Re-filter against `false-positives.md` (whole-rule + the 6 per-site FPs listed below).
+3. Fix at the root cause (https://react.dev/learn/you-might-not-need-an-effect), re-scan to confirm,
+   then `npx tsc -p tsconfig.app.json --noEmit` + `npx vitest run`. One file/flow per PR.
 
-## How to use this file
+## Guardrails
+- Never delete `@auditContract` exports (backend enum-sync CI).
+- Don't break `OverlayPortalContext` (renders dropdowns inside top-layer `<dialog>`s) — see Tier 0.
+- `DocumentPreviewModal` PDF iframe is an intentional can't-fix (unsandboxed on purpose).
 
-1. Re-scan: `node_modules/.bin/react-doctor --json --no-score . > /tmp/rd.json` (or `npx react-doctor@latest …`).
-2. Filter every finding against `false-positives.md` (whole-rule FPs) AND the per-site FP list below.
-3. Per rule you fix: `curl https://react.doctor/docs/rules/react-doctor/<rule>` (no cache), apply the
-   canonical fix at the root cause, re-run the tool to confirm, then `npx tsc -p tsconfig.app.json --noEmit`
-   + `npx vitest run`.
+## Excluded — documented per-site FPs (DO NOT fix; in `false-positives.md`)
+- `ClientSearchInput.tsx:78` — exhaustive-deps (debounceRef unmount-clear)
+- `useAnnualReportsPage.ts:37` — exhaustive-deps (guarded one-shot year seed)
+- `useVatWorkItemActions.ts:20` — exhaustive-deps (cooldownTimerRef unmount-clear)
+- `DatePicker.tsx:120` — no-adjust-state (post-mount DOM measurement)
+- `ClientDetailsOverviewTab.tsx:73` — prefer-useReducer (independent toggles)
+- `Tooltip.tsx:73` — advanced-event-handler-refs (`updatePosition` is `useCallback([])`)
 
-Guardrails: never delete `@auditContract` exports (backend enum-sync CI); don't break `OverlayPortalContext`
-(makes dropdowns render inside top-layer `<dialog>`s); the PDF iframe in `DocumentPreviewModal` is a
-documented can't-fix (unsandboxed on purpose).
-
-**FP-by-rule (excluded from the 78 — see `false-positives.md`):** prefer-tag-over-role,
-query-mutation-missing-invalidation, query-destructure-result, no-mutable-in-deps, js-hoist-intl,
-js-combine-iterations, js-index-maps, async-defer-await, no-static-element-interactions,
-control-has-associated-label, no-tiny-text, iframe-missing-sandbox, click-events-have-key-events,
-no-noninteractive-element-interactions, prefer-dynamic-import, unused-export, unused-dev-dependency,
-no-many-boolean-props, jsx-no-jsx-as-prop.
-
----
-
-## ✅ Done since the 2026-06-20 snapshot
-
-The previous snapshot was badly stale. Verified clear on the 2026-06-21 scan:
-
-| File | Was | Now | How |
-|---|---|---|---|
-| `features/tasks/components/form/TaskModal.tsx` | 19 | **0** | prior session (uncommitted at snapshot time) |
-| `components/ui/inputs/SelectDropdown.tsx` | 4 | **0** | prior session (1 FP left) |
-| `components/ui/inputs/DatePickerInlineSelect.tsx` | 4 | **0** | prior session (1 FP left) |
-| `components/ui/inputs/DatePicker.tsx` | 3 | **0 real** | prior session (1 documented site-FP left) |
-| `features/advancedPayments/hooks/useAdvancePaymentDrawerForm.ts` | 9 | **0** | 2026-06-21 — sync effect → lazy `useState` + `key={row.id}` |
-| `features/charges/components/list/ChargesFiltersCard.tsx` | 6 | **0** | 2026-06-21 — derived clientName + `onMultiChange` pairing |
-
-Plus the 4 real `exhaustive-deps` fixed 2026-06-21 (see commit history): `AnnualReportDetailForm`
-(RHF `values`), `useSearchDebounce` (ref-latest), `SendNotificationModal` (auto-preview ref),
-`useAdvancePaymentDrawerForm` (above). The "shared primitives first" sequencing is **complete**.
+## Done (2026-06-21)
+TaskModal (19), SelectDropdown (4), DatePickerInlineSelect (4), DatePicker (3) — prior session ·
+useAdvancePaymentDrawerForm (9), ChargesFiltersCard (6), 4× exhaustive-deps, useOverlayDismiss (1),
+ClientTimelineTab (2) — this session. "Shared primitives first" sequencing is complete.
 
 ---
 
-## Documented per-site false positives still in the raw scan (DO NOT fix)
-
-These 5 are real-looking but verified FP in `false-positives.md` — subtract from the table below:
-
-- `components/shared/client/ClientSearchInput.tsx` — `exhaustive-deps` (debounceRef unmount-clear)
-- `features/annualReports/hooks/useAnnualReportsPage.ts` — `exhaustive-deps` (guarded one-shot year seed)
-- `features/vatReports/hooks/useVatWorkItemActions.ts` — `exhaustive-deps` (cooldownTimerRef unmount-clear)
-- `components/ui/inputs/DatePicker.tsx` — `no-adjust-state-on-prop-change` (post-mount DOM measurement)
-- `features/clients/components/details/ClientDetailsOverviewTab.tsx` — `prefer-useReducer` (independent toggles)
+## Canonical fixes (by rule)
+- `no-event-handler` / `no-prop-callback-in-effect` → move the logic into the actual event handler.
+- `no-derived-state` / `no-derived-state-effect` → compute during render; delete the effect.
+- `no-adjust-state-on-prop-change` / `no-reset-all-state-on-prop-change` → `key`-remount, render-time
+  reset (prev-value ref), or derive.
+- `no-pass-data-to-parent` → lift the state to the parent, pass down.
+- `no-cascading-set-state` → compute the final value once, set once.
+- `prefer-useReducer` → consolidate ONLY if the `useState` slices transition in lockstep; independent
+  slices stay separate (judgment call — verify before refactoring).
+- `advanced-event-handler-refs` → ref-latest the handler so the effect deps stay honest.
 
 ---
 
-## HEAVY — deliberate per-flow refactors (~73 actionable, DO NOT start without sign-off)
+## Tier 0 — guardrail-sensitive (needs in-browser verify before touching)
+- [ ] `components/ui/layout/OverlayContainer.tsx` — no-derived-state×1 (`portalHost`)
+- [ ] `components/ui/overlays/ConfirmDialog.tsx` — no-derived-state×1 (`portalHost`)
+  > Both: `useState(portalHost)` + effect → callback-ref-into-state. Touches `OverlayPortalContext`;
+  > verify dropdowns-in-dialogs still render before merging.
 
-The state-derivation + event-handler family. Canonical fix is removing duplicated state
-(`useState` initializers + `key`-based remount / derive-during-render / lift state up), not
-relocating setters — see https://react.dev/learn/you-might-not-need-an-effect . Each touches call
-sites, so it's a focused PR with manual verification of the affected flow.
+## Tier 1 — quick singles (1 finding, low blast radius)
+- [ ] `features/annualReports/components/tax/AnnualReportDetailForm.tsx` — no-event-handler×1
+- [ ] `features/annualReports/components/shared/CreateReportModal.tsx` — no-pass-data-to-parent×1
+- [ ] `features/binders/hooks/useReceiveBinderDrawer.ts` — no-event-handler×1
+- [ ] `features/correspondence/components/CorrespondenceModal.tsx` — no-event-handler×1
+- [ ] `features/documents/components/form/DocumentEditCard.tsx` — no-pass-data-to-parent×1
+- [ ] `features/documents/components/list/DocumentsDataCards.tsx` — prefer-useReducer×1
+- [ ] `features/users/components/form/EditUserModal.tsx` — no-event-handler×1
+- [ ] `features/vatReports/components/form/VatFileModal.tsx` — no-event-handler×1
+- [ ] `features/auth/pages/ResetPasswordPage.tsx` — prefer-useReducer×1
+- [ ] `features/signatureRequests/components/form/CreateSignatureRequestModal.tsx` — prefer-useReducer×1
 
-### By file / flow (count — rules) — 2026-06-21 scan
+## Tier 2 — mid-size, self-contained (2–3 findings)
+- [ ] `features/vatReports/components/form/VatWorkItemsCreateModal.tsx` — no-event-handler×3
+- [ ] `features/charges/components/form/ChargesCreateModal.tsx` — no-event-handler×2
+- [ ] `features/binders/components/sections/BinderDocumentsSection.tsx` — no-adjust-state×1, no-derived-state-effect×1, no-reset-all-state×1
+- [ ] `features/taxCalendar/components/list/TaxCalendarGroupsTable.tsx` — no-adjust-state×1, no-derived-state-effect×1, no-reset-all-state×1
+- [ ] `features/vatReports/components/list/VatWorkItemsGroupedCards.tsx` — no-adjust-state×1, no-reset-all-state×1
+- [ ] `features/advancedPayments/hooks/useAdvancePaymentBatchRows.ts` — no-adjust-state×1, no-derived-state-effect×1
+- [ ] `features/documents/components/form/DocumentsUploadCard.tsx` — no-pass-data-to-parent×1, no-prop-callback-in-effect×1
 
-| Count | File | Rules |
-|---|---|---|
-| 12 | `features/notifications/components/form/SendNotificationModal.tsx` | no-adjust-state×8, prefer-useReducer×1, no-cascading-set-state×1, no-reset-all-state×1, no-event-handler×1 |
-| 5 | `features/binders/components/sections/BinderHandoverPanel.tsx` | no-derived-state×2, no-event-handler×2, prefer-useReducer×1 |
-| 5 | `features/clients/components/edit/ClientEditForm.tsx` | no-pass-data-to-parent×3, no-prop-callback-in-effect×1, no-event-handler×1 |
-| 4 | `features/tasks/components/shared/ClientTasksTab.tsx` | no-adjust-state×3, no-cascading-set-state×1 |
-| 4 | `hooks/useBusinessesForClient.ts` | no-event-handler×3, no-pass-data-to-parent×1 |
-| 3 | `components/ui/filters/ClientPickerFilter.tsx` | no-event-handler×2, no-derived-state×1 |
-| 3 | `features/binders/components/sections/BinderDocumentsSection.tsx` | no-adjust-state×1, no-derived-state-effect×1, no-reset-all-state×1 |
-| 3 | `features/clients/components/createClientModal/CreateClientModal.tsx` | no-adjust-state×1, no-event-handler×1, no-reset-all-state×1 |
-| 3 | `features/taxCalendar/components/list/TaxCalendarGroupsTable.tsx` | no-adjust-state×1, no-derived-state-effect×1, no-reset-all-state×1 |
-| 3 | `features/vatReports/components/form/VatWorkItemsCreateModal.tsx` | no-event-handler×3 |
-| 2 | `components/shared/client/ClientSearchInput.tsx` | prefer-useReducer×1, advanced-event-handler-refs×1 *(+1 exhaustive-deps FP)* |
-| 2 | `features/advancedPayments/hooks/useAdvancePaymentBatchRows.ts` | no-adjust-state×1, no-derived-state-effect×1 |
-| 2 | `features/charges/components/form/ChargesCreateModal.tsx` | no-event-handler×2 |
-| 2 | `features/documents/components/form/DocumentsUploadCard.tsx` | no-pass-data-to-parent×1, no-prop-callback-in-effect×1 |
-| 2 | `features/vatReports/components/list/VatWorkItemsGroupedCards.tsx` | no-adjust-state×1, no-reset-all-state×1 |
-| 2 | `features/timeline/components/ClientTimelineTab.tsx` | no-derived-state×2 |
-| 2 | `hooks/useSearchDebounce.ts` | no-derived-state×1, no-derived-state-effect×1 |
-| 1 | `components/ui/primitives/Tooltip.tsx` | advanced-event-handler-refs×1 |
-| 1 | `components/ui/overlays/ConfirmDialog.tsx` | no-derived-state×1 |
-| 1 | `components/ui/overlays/useOverlayDismiss.ts` | no-react19-deprecated-apis×1 |
-| 1 | `components/ui/layout/OverlayContainer.tsx` | no-derived-state×1 |
-| 1 | `features/annualReports/components/shared/CreateReportModal.tsx` | no-pass-data-to-parent×1 |
-| 1 | `features/annualReports/components/tax/AnnualReportDetailForm.tsx` | no-event-handler×1 |
-| 1 | `features/binders/hooks/useReceiveBinderDrawer.ts` | no-event-handler×1 |
-| 1 | `features/auth/pages/ResetPasswordPage.tsx` | prefer-useReducer×1 |
-| 1 | `features/correspondence/components/CorrespondenceModal.tsx` | no-event-handler×1 |
-| 1 | `features/documents/components/form/DocumentEditCard.tsx` | no-pass-data-to-parent×1 |
-| 1 | `features/documents/components/list/DocumentsDataCards.tsx` | prefer-useReducer×1 |
-| 1 | `features/signatureRequests/components/form/CreateSignatureRequestModal.tsx` | prefer-useReducer×1 |
-| 1 | `features/vatReports/components/form/VatFileModal.tsx` | no-event-handler×1 |
-| 1 | `features/users/components/form/EditUserModal.tsx` | no-event-handler×1 |
+## Tier 3 — modal/flow refactors (one PR each, verify the flow manually)
+- [ ] `features/notifications/components/form/SendNotificationModal.tsx` — no-adjust-state×8, prefer-useReducer×1, no-cascading-set-state×1, no-reset-all-state×1, no-event-handler×1 *(auto-preview already done)*
+- [ ] `features/binders/components/sections/BinderHandoverPanel.tsx` — no-derived-state×2, no-event-handler×2, prefer-useReducer×1
+- [ ] `features/clients/components/edit/ClientEditForm.tsx` — no-pass-data-to-parent×3, no-prop-callback-in-effect×1, no-event-handler×1
+- [ ] `features/tasks/components/shared/ClientTasksTab.tsx` — no-adjust-state×3, no-cascading-set-state×1
+- [ ] `features/clients/components/createClientModal/CreateClientModal.tsx` — no-adjust-state×1, no-event-handler×1, no-reset-all-state×1
 
-`prefer-useReducer` is only a real fix where the flagged `useState` calls transition **in lockstep**;
-independent slices stay as separate `useState` (see `false-positives.md`).
+## Tier 4 — shared hooks/util (ripple risk — touch with care)
+- [ ] `hooks/useBusinessesForClient.ts` — no-event-handler×3, no-pass-data-to-parent×1
+- [ ] `components/ui/filters/ClientPickerFilter.tsx` — no-derived-state×1, no-event-handler×2 *(shared filter)*
+- [ ] `components/shared/client/ClientSearchInput.tsx` — prefer-useReducer×1, advanced-event-handler-refs×1 *(+1 exhaustive-deps FP)*
+- [ ] `hooks/useSearchDebounce.ts` — no-derived-state×1, no-derived-state-effect×1 *(consumed widely)*
 
-### Recommended sequencing
+---
 
-1. **Quick singles** (low blast radius): `useOverlayDismiss` (no-react19-deprecated-apis — likely a one-liner),
-   `ConfirmDialog` / `OverlayContainer` / `ClientTimelineTab` (no-derived-state), `Tooltip`.
-2. **Self-contained mid-size**: `ClientPickerFilter` (3), `VatWorkItemsCreateModal` (3), `ChargesCreateModal` (2).
-3. **One modal/flow per PR** (verify manually): `SendNotificationModal` (12, auto-preview already done),
-   `BinderHandoverPanel` (5), `ClientEditForm` (5), `CreateClientModal` (3).
-4. **Shared hook/util with care** (ripple): `useSearchDebounce`, `useBusinessesForClient`, `ClientSearchInput`.
+**Total actionable: 69 findings across 28 files** (by tier: 2 + 10 + 17 + 29 + 11 findings).
+Counts are a 2026-06-21 snapshot — re-scan before trusting any single number.
