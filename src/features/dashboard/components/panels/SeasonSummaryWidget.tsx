@@ -1,6 +1,6 @@
 import { AlertTriangle, ArrowLeft, CheckCircle, FilePlus, TrendingUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { cn } from '@/utils/utils'
+import { cn, formatCount } from '@/utils/utils'
 import { semanticMonoToneClasses, type SemanticTone } from '@/utils/semanticColors'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { useSeasonSummary } from '../../hooks/useSeasonSummary'
@@ -108,7 +108,7 @@ const CompactSeasonSummary = ({
               <span className="h-2 w-2 shrink-0 rounded-[3px]" style={{ background: item.color }} />
               <span className="flex-1 text-xs font-medium text-slate-500">{item.label}</span>
               <span className="text-xs font-bold tabular-nums text-slate-800">
-                {item.value.toLocaleString('he-IL')}
+                {formatCount(item.value)}
               </span>
             </li>
           ))}
@@ -116,7 +116,7 @@ const CompactSeasonSummary = ({
       </div>
 
       <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-xs font-medium text-slate-500">
-        <span className="tabular-nums">{total.toLocaleString('he-IL')} דוחות בעונה</span>
+        <span className="tabular-nums">{formatCount(total)} דוחות בעונה</span>
         {overdueCount > 0 && (
           <span className="flex items-center gap-1 font-semibold text-negative-600">
             <AlertTriangle className="h-3.5 w-3.5" />

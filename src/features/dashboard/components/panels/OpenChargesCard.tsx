@@ -1,6 +1,6 @@
 import { ArrowLeft, ReceiptText } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { cn } from '@/utils/utils'
+import { cn, formatCount } from '@/utils/utils'
 import { DASHBOARD_HREFS } from '../../constants'
 
 interface OpenChargesCardProps {
@@ -27,7 +27,7 @@ export const OpenChargesCard = ({ count, amountIls }: OpenChargesCardProps) => {
 
       <p className="font-bold tabular-nums text-3xl leading-none text-slate-900">{amountIls ?? '₪ 0'}</p>
       <p className="mt-2 text-sm text-slate-500">
-        <span className="font-bold tabular-nums text-slate-700">{count.toLocaleString('he-IL')}</span> חיובים ממתינים
+        <span className="font-bold tabular-nums text-slate-700">{formatCount(count)}</span> חיובים ממתינים
         לגבייה
       </p>
 

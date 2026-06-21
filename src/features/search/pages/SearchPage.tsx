@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { useSearchDebounce } from '@/hooks/useSearchDebounce'
 import { formatCount } from '@/utils/utils'
+import { getTotalPages } from '@/utils/paginationUtils'
 import { Search as SearchIcon, FileSearch } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageContent } from '@/components/layout/PageContent'
@@ -28,7 +29,7 @@ export const Search: React.FC = () => {
   const hasAdvancedFilter = SEARCH_ADVANCED_FILTER_KEYS.some((key) => Boolean(filters[key]))
   const [filtersOpen, setFiltersOpen] = useState(hasAdvancedFilter)
 
-  const totalPages = Math.max(1, Math.ceil(Math.max(total, 1) / PAGE_SIZE))
+  const totalPages = getTotalPages(total, PAGE_SIZE)
 
   const handleResetAll = () => {
     handleReset()
