@@ -1,10 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
-import { EntityAuditTrailSection } from '@/features/audit'
+import { EntityAuditTrailSection, type FieldValueLabels } from '@/features/audit'
 import { FilingTimelineTab } from '../shared/FilingTimelineTab'
 import { StatusAuditTimeline } from '../statusTransition/StatusAuditTimeline'
 import { annualReportsApi, annualReportsQK } from '../../api'
+import { CLIENT_TYPE_LABELS } from '../../constants/panelConstants'
 import { ReportHistoryTable } from './ReportHistoryTable'
 import type { AnnualReportDetail } from '../../types'
+
+const AUDIT_FIELD_VALUE_LABELS: FieldValueLabels = {
+  client_type: CLIENT_TYPE_LABELS,
+}
 
 interface AnnualReportTimelineSectionProps {
   report: AnnualReportDetail
@@ -36,6 +41,7 @@ export const AnnualReportTimelineSection = ({ report }: AnnualReportTimelineSect
         entityId={report.id}
         title="יומן שינויים"
         subtitle="שינויים שבוצעו בדוח השנתי"
+        fieldValueLabels={AUDIT_FIELD_VALUE_LABELS}
       />
     </div>
   )
