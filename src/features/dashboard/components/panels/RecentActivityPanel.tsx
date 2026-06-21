@@ -2,7 +2,7 @@ import { CheckCircle2, Edit2, FileText, ReceiptText, Table2, UserPlus } from 'lu
 import type { LucideIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from '@/utils/utils'
-import { InlineEmptyState } from '@/components/ui/feedback/InlineEmptyState'
+import { InlineState } from '@/components/ui/feedback/InlineState'
 import { DashboardPanel, DashboardSectionHeader } from '../shared/DashboardLayout'
 import type { RecentActivityItem } from '../../api'
 
@@ -77,7 +77,7 @@ export const RecentActivityPanel = ({ items, className }: { items: RecentActivit
         ))}
       </ul>
     ) : (
-      <InlineEmptyState title="אין פעילות אחרונה" className="py-8" />
+      <InlineState title="אין פעילות אחרונה" className="py-8" />
     )}
   </DashboardPanel>
 )

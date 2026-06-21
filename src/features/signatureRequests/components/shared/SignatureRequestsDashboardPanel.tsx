@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AlertCircle, FileSignature, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
+import { InlineState } from '@/components/ui/feedback'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { DataTable } from '@/components/ui/table/DataTable'
@@ -150,13 +151,12 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
 
       <div className={cn('space-y-4', compact ? 'p-5' : 'p-4')}>
         {error ? (
-          <div className="flex flex-col items-center justify-center gap-2 py-10 text-center">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gray-100 text-gray-400">
-              <AlertCircle className="h-5 w-5" />
-            </span>
-            <p className="text-sm font-semibold text-gray-700">לא ניתן לטעון בקשות חתימה</p>
-            <p className="text-xs text-gray-400">{error}</p>
-          </div>
+          <InlineState
+            variant="error"
+            icon={AlertCircle}
+            title="לא ניתן לטעון בקשות חתימה"
+            description={error}
+          />
         ) : compact ? (
           <div className="divide-y divide-gray-100 rounded-lg border border-gray-100">
             {tableItems.length === 0 ? (

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Receipt } from 'lucide-react'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
+import { InlineState } from '@/components/ui/feedback'
 import { formatVatAmount } from '../../utils/vatHelpers'
 import { useDeleteInvoice, useUpdateInvoice } from '../../hooks/useVatInvoiceMutations'
 import { VatInvoiceEditRow } from './VatInvoiceEditRow'
@@ -35,11 +36,12 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
 
   if (invoices.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed border-gray-200 bg-gray-50/50 py-10 text-center">
-        <Receipt className="h-8 w-8 text-gray-300" />
-        <p className="text-sm font-medium text-gray-400">{emptyMessage ?? 'אין חשבוניות עדיין'}</p>
-        {emptyHint && <p className="text-xs text-gray-300">{emptyHint}</p>}
-      </div>
+      <InlineState
+        icon={Receipt}
+        title={emptyMessage ?? 'אין חשבוניות עדיין'}
+        description={emptyHint}
+        className="rounded-lg border border-dashed border-gray-200 bg-gray-50/50"
+      />
     )
   }
 

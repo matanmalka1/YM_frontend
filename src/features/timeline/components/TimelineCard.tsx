@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import { ChevronDown, InboxIcon } from 'lucide-react'
+import { ChevronDown, Inbox } from 'lucide-react'
 import type { NormalizedTimelineEvent } from '../normalize'
 import { TimelineEventItem } from './TimelineEventItem'
-import { Button } from '../../../components/ui/primitives/Button'
+import { StateCard } from '../../../components/ui/feedback'
 import { cn } from '../../../utils/utils'
 import { groupTimelineEventsByDate } from '../lib/timelineGroups'
 
@@ -13,23 +13,20 @@ interface EmptyTimelineProps {
   onClearFilters?: () => void
 }
 
-const EmptyTimeline: React.FC<EmptyTimelineProps> = ({ hasActiveFilters, onClearFilters }) => (
-  <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-gray-200 bg-gray-50/50 py-16 text-center animate-fade-in">
-    <div className="rounded-full bg-gray-100 p-4">
-      <InboxIcon className="h-7 w-7 text-gray-400" />
-    </div>
-    <p className="text-sm font-medium text-gray-500">
-      {hasActiveFilters ? 'אין אירועים התואמים לסינון' : 'אין אירועים בציר הזמן'}
-    </p>
-    {hasActiveFilters ? (
-      <Button type="button" variant="outline" size="sm" onClick={onClearFilters} className="text-xs">
-        נקה סינון
-      </Button>
-    ) : (
-      <p className="text-xs text-gray-400">אירועים חדשים יופיעו כאן לאחר פעילות לקוח</p>
-    )}
-  </div>
-)
+const EmptyTimeline: React.FC<EmptyTimelineProps> = ({ hasActiveFilters, onClearFilters }) =>
+  hasActiveFilters ? (
+    <StateCard
+      icon={Inbox}
+      message="אין אירועים התואמים לסינון"
+      action={onClearFilters ? { label: 'נקה סינון', onClick: onClearFilters } : undefined}
+    />
+  ) : (
+    <StateCard
+      icon={Inbox}
+      title="אין אירועים בציר הזמן"
+      message="אירועים חדשים יופיעו כאן לאחר פעילות לקוח"
+    />
+  )
 
 // ── Date group header ─────────────────────────────────────────────────────────
 

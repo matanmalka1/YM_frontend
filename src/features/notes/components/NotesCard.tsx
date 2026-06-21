@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Pencil, Trash2, X, Check } from 'lucide-react'
+import { Pencil, Trash2, X, Check, StickyNote } from 'lucide-react'
 import { Card } from '@/components/ui/primitives/Card'
 import { Button } from '@/components/ui/primitives/Button'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Textarea } from '@/components/ui/inputs/Textarea'
+import { InlineState } from '@/components/ui/feedback'
 import { cn, formatDateTime } from '@/utils/utils'
 import type { EntityNote } from '../api'
 import { useEntityNotes, type NotesTarget } from '../hooks/useEntityNotes'
@@ -212,11 +213,7 @@ export const NotesCard = ({ canEdit, ...target }: NotesCardProps) => {
 
         {isLoading && <p className="py-4 text-center text-sm text-gray-500">טוען...</p>}
 
-        {!isLoading && notes.length === 0 && (
-          <p className="rounded-lg border border-dashed border-gray-200 bg-gray-50 px-4 py-5 text-center text-sm text-gray-500">
-            אין הערות עדיין
-          </p>
-        )}
+        {!isLoading && notes.length === 0 && <InlineState icon={StickyNote} title="אין הערות עדיין" />}
 
         {!isLoading && notes.length > 0 && (
           <ul className="space-y-3">

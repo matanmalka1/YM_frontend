@@ -8,7 +8,7 @@ import { BulkSelectionToolbar, BulkSelectionActionButton } from '@/components/ui
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { TableSkeleton } from '@/components/ui/table'
 import { DetailTabPanel } from '@/components/ui/layout'
-import { InlineEmptyState } from '@/components/ui/feedback'
+import { InlineState } from '@/components/ui/feedback'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Checkbox } from '@/components/ui/primitives/Checkbox'
 import { Select } from '@/components/ui/inputs'
@@ -128,7 +128,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
   if (tasks.length === 0) {
     return (
       <DetailTabPanel title="משימות" subtitle="משימות פתוחות והיסטוריות המקושרות ללקוח">
-        <InlineEmptyState title="אין משימות ללקוח זה" />
+        <InlineState title="אין משימות ללקוח זה" />
       </DetailTabPanel>
     )
   }

@@ -1,5 +1,5 @@
 import type { QueryStatus } from '@tanstack/react-query'
-import { InlineEmptyState, StateCard } from '@/components/ui/feedback'
+import { InlineState, StateCard } from '@/components/ui/feedback'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
 import { AlertTriangle, ListChecks } from 'lucide-react'
@@ -56,7 +56,7 @@ export const TasksListPanel: React.FC<TasksListPanelProps> = ({
     ) : null}
     {status === 'error' ? <StateCard icon={AlertTriangle} message="שגיאה בטעינת משימות" variant="error" /> : null}
     {status === 'success' && tasks.length === 0 ? (
-      <InlineEmptyState
+      <InlineState
         title={hasFilters ? 'אין משימות שמתאימות לסינון' : 'אין משימות'}
         description={hasFilters ? 'נסו לשנות את הסינון או לנקות אותו.' : 'אפשר ליצור משימה חדשה ולהתחיל מעקב.'}
         icon={ListChecks}

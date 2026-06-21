@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { CalendarDays, ChevronLeft, Landmark } from 'lucide-react'
 import { DashboardPanel, DashboardSectionHeader } from '../shared/DashboardLayout'
-import { InlineEmptyState } from '@/components/ui/feedback/InlineEmptyState'
+import { InlineState } from '@/components/ui/feedback/InlineState'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarGroup, useTaxCalendarGroups } from '@/features/taxCalendar'
 import { formatDate, formatWeekday, getReportingPeriodLabelWithYear } from '@/utils/utils'
@@ -97,7 +97,7 @@ export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string 
             ))}
           </ol>
         ) : (
-          <InlineEmptyState title="אין מועדים קרובים" description="כל המועדים הפתוחים רחוקים יותר או הושלמו" />
+          <InlineState title="אין מועדים קרובים" description="כל המועדים הפתוחים רחוקים יותר או הושלמו" />
         )}
       </div>
 

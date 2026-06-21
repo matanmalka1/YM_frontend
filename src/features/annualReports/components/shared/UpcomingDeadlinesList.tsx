@@ -6,6 +6,7 @@ import { cn, formatDate } from '../../../../utils/utils'
 import { STATUS_LABELS } from '../../api'
 import { parseAnnualReportCalendarDate } from '../../constants/sharedConstants'
 import { getAnnualReportName, getDeadlineStatus } from '../../utils/sharedHelpers'
+import { InlineState } from '../../../../components/ui/feedback'
 
 interface Props {
   reports: AnnualReportListItem[]
@@ -42,7 +43,7 @@ export const UpcomingDeadlinesList: React.FC<Props> = ({ reports }) => {
       </div>
       <div className="p-4">
         {upcoming.length === 0 ? (
-          <p className="py-4 text-center text-sm text-gray-400">אין מועדי הגשה ממתינים</p>
+          <InlineState icon={CalendarCheck} title="אין מועדי הגשה ממתינים" />
         ) : (
           <ul className="space-y-2">
             {upcoming.map((r) => {

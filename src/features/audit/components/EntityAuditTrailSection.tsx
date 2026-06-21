@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
-import { Button } from '@/components/ui/primitives/Button'
+import { AlertTriangle, History } from 'lucide-react'
 import { Card } from '@/components/ui/primitives/Card'
+import { InlineState } from '@/components/ui/feedback'
+import { Spinner } from '@/components/ui/primitives/Spinner'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { AUDIT_ACTION_LABELS } from '../constants'
 import type { EntityAuditType } from '../api'
@@ -39,34 +41,42 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
     />
   )
 
-  const renderState = (message: string, className = 'text-gray-400', action?: React.ReactNode) => (
+  const renderState = (body: React.ReactNode) => (
     <Card title={title} subtitle={subtitle} className={cardClassName}>
       <div className="space-y-3">
         {filterPanel}
-        <div className="flex flex-col items-center gap-3 py-8 text-center">
-          <p className={`text-sm ${className}`}>{message}</p>
-          {action}
-        </div>
+        {body}
       </div>
     </Card>
   )
 
   if (auditTrail.isPending) {
-    return renderState('טוען...')
+    return renderState(
+      <div className="flex flex-col items-center gap-3 py-8 text-center">
+        <Spinner size="md" />
+        <p className="text-sm text-gray-400">טוען...</p>
+      </div>,
+    )
   }
 
   if (auditTrail.isError) {
     return renderState(
-      'שגיאה בטעינת ההיסטוריה',
-      'text-negative-600',
-      <Button type="button" variant="outline" size="sm" onClick={() => auditTrail.refetch()}>
-        נסה שוב
-      </Button>,
+      <InlineState
+        variant="error"
+        icon={AlertTriangle}
+        title="שגיאה בטעינת ההיסטוריה"
+        action={{ label: 'נסה שוב', onClick: () => auditTrail.refetch() }}
+      />,
     )
   }
 
   if (auditTrail.total === 0) {
-    return renderState(auditTrail.hasActiveFilters ? 'אין תוצאות התואמות את הסינון' : 'אין היסטוריית שינויים')
+    return renderState(
+      <InlineState
+        icon={History}
+        title={auditTrail.hasActiveFilters ? 'אין תוצאות התואמות את הסינון' : 'אין היסטוריית שינויים'}
+      />,
+    )
   }
 
   return (

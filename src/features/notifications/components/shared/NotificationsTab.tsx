@@ -10,7 +10,7 @@ import { CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS } from '../../api'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import { DetailTabPanel } from '../../../../components/ui/layout'
-import { InlineEmptyState } from '../../../../components/ui/feedback'
+import { InlineState } from '../../../../components/ui/feedback'
 import type { NotificationsTabProps } from '../../types'
 
 export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecordId }) => {
@@ -55,7 +55,7 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
       {isLoading ? (
         <p className="py-8 text-center text-sm text-gray-400">טוען התראות...</p>
       ) : notifications.length === 0 ? (
-        <InlineEmptyState title="אין התראות ללקוח זה" />
+        <InlineState title="אין התראות ללקוח זה" />
       ) : (
         <ul className="divide-y divide-gray-100 overflow-hidden rounded-lg border border-gray-200">
           {notifications.map((item) => (
