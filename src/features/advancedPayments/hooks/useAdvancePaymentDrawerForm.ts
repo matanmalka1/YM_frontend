@@ -3,6 +3,7 @@ import type { PrefillTurnoverResponse, UpdateAdvancePaymentPayload } from '../ap
 import { advancePaymentsApi } from '../api'
 import { toast } from '@/utils/toast'
 import { showErrorToast } from '@/utils/utils'
+import { isAdvancePaymentMethod, isAdvancePaymentStatus } from '../constants'
 import { calcAdvanceAmount, toEditableAmount, toStringOrNull } from '../utils/advancePaymentComponentUtils'
 import type { AdvancePaymentDrawerModel } from '../utils/advancePaymentDrawerModel'
 
@@ -132,6 +133,14 @@ export const useAdvancePaymentDrawerForm = ({
       toast.error('תאריך ביצוע תשלום נדרש כאשר הסטטוס שולם או חלקי')
       return
     }
+    if (!isAdvancePaymentStatus(status)) {
+      toast.error('סטטוס תשלום אינו תקין')
+      return
+    }
+    if (normalizedPaymentMethod !== '' && !isAdvancePaymentMethod(normalizedPaymentMethod)) {
+      toast.error('שיטת תשלום אינה תקינה')
+      return
+    }
     const effectiveExpected = liveExpected != null ? Number(liveExpected) : Number(model.expectedAmount ?? 0)
     if (
       status === 'paid' &&
@@ -144,9 +153,9 @@ export const useAdvancePaymentDrawerForm = ({
     }
 
     if (paidAmount !== baselinePaidAmount) payload.paid_amount = paidAmountPayload
-    if (status !== model.status) payload.status = status as UpdateAdvancePaymentPayload['status']
+    if (status !== model.status) payload.status = status
     if (paymentMethod !== baselinePaymentMethod)
-      payload.payment_method = (normalizedPaymentMethod || null) as UpdateAdvancePaymentPayload['payment_method']
+      payload.payment_method = normalizedPaymentMethod === '' ? null : normalizedPaymentMethod
     if (paidAt !== baselinePaidAt) payload.paid_at = normalizedPaidAt || null
     if (notes !== baselineNotes) payload.notes = normalizedNotes || null
     if (turnoverAmount !== baselineTurnover) payload.turnover_amount = toStringOrNull(turnoverAmount)

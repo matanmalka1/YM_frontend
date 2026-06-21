@@ -1,4 +1,4 @@
-import { AlertTriangle } from 'lucide-react'
+import { Alert } from '@/components/ui/overlays/Alert'
 import { DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
@@ -39,10 +39,12 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
           </Button>
         </div>
         {form.prefillSource === 'vat_pending' && (
-          <div className="flex items-center gap-2 rounded-md bg-warning-50 border border-warning-200 px-3 py-2 text-xs text-warning-700">
-            <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-            מבוסס על דוח מע״מ שטרם הוגש
-          </div>
+          <Alert
+            variant="warning"
+            size="sm"
+            message="מבוסס על דוח מע״מ שטרם הוגש"
+            className="rounded-md border-warning-200 bg-none bg-warning-50 shadow-none"
+          />
         )}
         {form.prefillSource === 'none' && <p className="text-xs text-gray-400">לא נמצא דוח מע״מ לתקופה זו</p>}
         <div>

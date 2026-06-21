@@ -322,7 +322,13 @@ const SeasonStatusTile = ({
         )}
       </div>
       {pct !== null && (
-        <ProgressBar value={progress} size="sm" trackClassName="bg-white/80" fillClassName={toneClasses.accent} className="mt-3" />
+        <ProgressBar
+          value={progress}
+          size="sm"
+          trackClassName="bg-white/80"
+          fillClassName={toneClasses.accent}
+          className="mt-3"
+        />
       )}
     </div>
   )

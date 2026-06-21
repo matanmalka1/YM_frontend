@@ -39,11 +39,16 @@ const ADVANCE_PAYMENT_METHOD_LABELS: Record<AdvancePaymentMethod, string> = {
   cash: 'מזומן',
   other: 'אחר',
 }
+const ADVANCE_PAYMENT_METHOD_VALUE_SET = new Set<string>(ADVANCE_PAYMENT_METHOD_VALUES)
+export const getAdvancePaymentMethodLabel = makeLabelGetter(ADVANCE_PAYMENT_METHOD_LABELS)
 
 export const ADVANCE_PAYMENT_STATUS_FILTERS: AdvancePaymentStatus[] = [...ADVANCE_PAYMENT_STATUS_VALUES]
 
 export const isAdvancePaymentStatus = (value: string): value is AdvancePaymentStatus =>
   ADVANCE_PAYMENT_STATUS_VALUE_SET.has(value)
+
+export const isAdvancePaymentMethod = (value: string): value is AdvancePaymentMethod =>
+  ADVANCE_PAYMENT_METHOD_VALUE_SET.has(value)
 
 export const ADVANCE_PAYMENT_STATUS_OPTIONS: { value: AdvancePaymentStatus; label: string }[] =
   ADVANCE_PAYMENT_STATUS_VALUES.map((status) => ({ value: status, label: ADVANCE_PAYMENT_STATUS_LABELS[status] }))

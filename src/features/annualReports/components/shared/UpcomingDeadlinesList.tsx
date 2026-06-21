@@ -37,11 +37,7 @@ export const UpcomingDeadlinesList: React.FC<Props> = ({ reports }) => {
     )
 
   return (
-    <Card
-      title="מועדי הגשה קרובים"
-      icon={<CalendarClock className="h-4 w-4 text-gray-400" />}
-      size="compact"
-    >
+    <Card title="מועדי הגשה קרובים" icon={<CalendarClock className="h-4 w-4 text-gray-400" />} size="compact">
       {upcoming.length === 0 ? (
         <InlineState icon={CalendarCheck} title="אין מועדי הגשה ממתינים" />
       ) : (

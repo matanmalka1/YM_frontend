@@ -1,5 +1,6 @@
 import { DrawerField, DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import { formatShekelAmount, formatDate } from '@/utils/utils'
+import { getAdvancePaymentMethodLabel } from '../../constants'
 import { formatAdvanceRate } from '../../utils/advancePaymentDrawerModel'
 import type { AdvancePaymentDrawerModel } from '../../utils/advancePaymentDrawerModel'
 
@@ -24,7 +25,10 @@ export const AdvancePaymentReadonlySections: React.FC<AdvancePaymentReadonlySect
       label="סכום עקיפה"
       value={model.overrideAmount != null ? formatShekelAmount(model.overrideAmount) : null}
     />
-    <DrawerField label="שיטת תשלום" value={model.paymentMethod ?? null} />
+    <DrawerField
+      label="שיטת תשלום"
+      value={model.paymentMethod ? getAdvancePaymentMethodLabel(model.paymentMethod) : null}
+    />
     <DrawerField label="תאריך ביצוע" value={model.paidAt ? formatDate(model.paidAt) : null} />
     <DrawerField label="הערות" value={model.notes} />
   </DrawerSection>
