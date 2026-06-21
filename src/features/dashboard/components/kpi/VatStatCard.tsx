@@ -1,6 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn, formatCount } from '@/utils/utils'
+import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
 import type { VatDashboardPeriodStat } from '../../api/contracts'
 
 type StatTone = 'green' | 'amber' | 'red'
@@ -71,12 +72,7 @@ export const VatStatCard = ({ title, unit, icon: Icon, stat, href, className }: 
         </span>
       </div>
 
-      <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
-        <div
-          className={cn('h-full rounded-full transition-all duration-700', bar)}
-          style={{ width: `${Math.min(stat.completion_percent, 100)}%` }}
-        />
-      </div>
+      <ProgressBar value={stat.completion_percent} size="sm" trackClassName="bg-slate-100" fillClassName={bar} />
 
       <div className="flex items-center justify-between text-[11px] font-medium text-slate-500">
         <span className="tabular-nums">

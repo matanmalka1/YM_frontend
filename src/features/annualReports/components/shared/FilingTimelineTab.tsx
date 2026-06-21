@@ -2,8 +2,8 @@ import React from 'react'
 import { CalendarCheck } from 'lucide-react'
 import type { AnnualReportListItem } from '../../api'
 import { TimelineEvent } from '../statusTransition/TimelineEvent'
-import { cn } from '../../../../utils/utils'
 import { Card } from '../../../../components/ui/primitives/Card'
+import { ProgressBar } from '../../../../components/ui/primitives/ProgressBar'
 import { UpcomingDeadlinesList } from './UpcomingDeadlinesList'
 import { buildTimelineEvents, getFilingStats } from '../../utils/sharedHelpers'
 
@@ -11,14 +11,14 @@ interface Props {
   reports: AnnualReportListItem[]
 }
 
-interface ProgressBarProps {
+interface ProgressRowProps {
   label: string
   count: number
   pct: number
   color: string
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ label, count, pct, color }) => (
+const ProgressRow: React.FC<ProgressRowProps> = ({ label, count, pct, color }) => (
   <div>
     <div className="mb-1.5 flex items-center justify-between text-xs text-gray-600">
       <span className="font-medium">{label}</span>
@@ -26,9 +26,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ label, count, pct, color }) =
         {count} ({pct}%)
       </span>
     </div>
-    <div className="h-2 overflow-hidden rounded-full bg-gray-100">
-      <div className={cn('h-full rounded-full transition-all', color)} style={{ width: `${pct}%` }} />
-    </div>
+    <ProgressBar value={pct} fillClassName={color} />
   </div>
 )
 
@@ -43,7 +41,7 @@ export const FilingTimelineTab: React.FC<Props> = ({ reports }) => {
         <Card title="סטטוס הגשות" size="compact">
           <div className="space-y-4">
             {filingStats.map((stat) => (
-              <ProgressBar key={stat.label} {...stat} />
+              <ProgressRow key={stat.label} {...stat} />
             ))}
           </div>
         </Card>

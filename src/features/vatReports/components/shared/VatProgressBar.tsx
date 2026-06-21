@@ -1,4 +1,4 @@
-import { cn } from '@/utils/utils'
+import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
 import { VAT_WORKFLOW_STEPS } from '../../constants/vatConstants'
 import type { VatProgressBarProps } from '../../types'
 
@@ -14,15 +14,12 @@ export const VatProgressBar: React.FC<VatProgressBarProps> = ({ currentStatus })
       <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-gray-700 shadow-sm ring-1 ring-gray-200 tabular-nums">
         שלב {step}/{total}
       </span>
-      <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-gray-200">
-        <div
-          className={cn(
-            'absolute inset-y-0 right-0 rounded-full transition-all duration-500',
-            isFiled ? 'bg-positive-500' : 'bg-primary-500',
-          )}
-          style={{ width: `${percent}%` }}
-        />
-      </div>
+      <ProgressBar
+        value={percent}
+        className="flex-1"
+        trackClassName="bg-gray-200"
+        fillClassName={isFiled ? 'bg-positive-500' : 'bg-primary-500'}
+      />
       <span className="shrink-0 text-xs font-medium text-gray-500 tabular-nums" dir="ltr">
         {percent}%
       </span>

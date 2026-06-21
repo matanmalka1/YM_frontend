@@ -1,4 +1,5 @@
 import React from 'react'
+import { X } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { semanticBadgeClasses, semanticSignalBadgeClasses } from '@/utils/semanticColors'
 
@@ -13,9 +14,11 @@ interface BadgeProps {
   dot?: string
   /** Adds ring-1 for signal-style appearance */
   ring?: boolean
-  /** Shows × remove button (active-filter pill mode) */
+  /** Shows X remove button (active-filter pill mode) */
   removable?: boolean
   onRemove?: () => void
+  /** Accessible label for the remove button (default: "הסר סינון") */
+  removeLabel?: string
   onClick?: React.MouseEventHandler<HTMLSpanElement>
   onKeyDown?: React.KeyboardEventHandler<HTMLSpanElement>
   className?: string
@@ -75,6 +78,7 @@ export const Badge: React.FC<BadgeProps> = ({
   ring,
   removable,
   onRemove,
+  removeLabel = 'הסר סינון',
   onClick,
   onKeyDown,
   className,
@@ -96,9 +100,9 @@ export const Badge: React.FC<BadgeProps> = ({
             'flex items-center justify-center rounded-full hover:bg-primary-200 transition-colors',
             removeButtonSizeClasses[size],
           )}
-          aria-label={`הסר סינון`}
+          aria-label={removeLabel}
         >
-          ×
+          <X className="h-3 w-3" />
         </button>
       </span>
     )

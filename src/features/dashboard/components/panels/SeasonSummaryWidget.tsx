@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { cn, formatCount } from '@/utils/utils'
 import { semanticMonoToneClasses, type SemanticTone } from '@/utils/semanticColors'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
+import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
 import { useSeasonSummary } from '../../hooks/useSeasonSummary'
 import { DashboardBadge, DashboardPanel } from '../shared/DashboardLayout'
 
@@ -190,9 +191,7 @@ export const SeasonSummaryWidget: React.FC<SeasonSummaryWidgetProps> = ({ sideCo
               </span>
             </div>
 
-            <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-slate-100">
-              <div className="h-2 w-0 rounded-full bg-primary-500" />
-            </div>
+            <ProgressBar value={0} trackClassName="bg-slate-100" className="mt-5 w-full" />
 
             <div className="mt-4 grid grid-cols-2 gap-3">
               <SeasonStatusTile label="דוחות" value={0} tone="neutral" />
@@ -249,12 +248,12 @@ export const SeasonSummaryWidget: React.FC<SeasonSummaryWidgetProps> = ({ sideCo
             </div>
           </div>
 
-          <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
-            <div
-              className={cn('h-2 rounded-full transition-all duration-700', stats.progressColor)}
-              style={{ width: `${stats.completionPct}%` }}
-            />
-          </div>
+          <ProgressBar
+            value={stats.completionPct}
+            trackClassName="bg-slate-100"
+            fillClassName={stats.progressColor}
+            className="w-full"
+          />
 
           <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <SeasonStatusTile label="לא התחילו" value={stats.notStarted} total={stats.total} tone="warning" />
@@ -323,12 +322,7 @@ const SeasonStatusTile = ({
         )}
       </div>
       {pct !== null && (
-        <div className="relative mt-3 h-1.5 overflow-hidden rounded-full bg-white/80">
-          <div
-            className={cn('h-full rounded-full transition-all duration-700', toneClasses.accent)}
-            style={{ width: `${progress}%` }}
-          />
-        </div>
+        <ProgressBar value={progress} size="sm" trackClassName="bg-white/80" fillClassName={toneClasses.accent} className="mt-3" />
       )}
     </div>
   )

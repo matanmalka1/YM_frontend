@@ -14,8 +14,15 @@ export interface DefinitionListProps {
    * stacked — label + value as a horizontal row with border (DrawerField style)
    */
   layout?: 'grid' | 'stacked'
+  /** Rendered when an item's value is null/undefined/empty-string (default: "—"). */
+  emptyValue?: React.ReactNode
+  /** Extra classes applied to every value (<dd>) cell. */
+  valueClassName?: string
   className?: string
 }
+
+/** Treat null, undefined and empty string as "no value". Keeps falsy 0/false visible. */
+const isEmpty = (value: React.ReactNode) => value == null || value === ''
 
 const gridCols = {
   1: 'grid-cols-1',
@@ -24,7 +31,14 @@ const gridCols = {
   4: 'grid-cols-2 md:grid-cols-4',
 }
 
-export const DefinitionList: React.FC<DefinitionListProps> = ({ items, columns = 2, layout = 'grid', className }) => {
+export const DefinitionList: React.FC<DefinitionListProps> = ({
+  items,
+  columns = 2,
+  layout = 'grid',
+  emptyValue = '—',
+  valueClassName,
+  className,
+}) => {
   if (layout === 'stacked') {
     return (
       <dl className={className}>
@@ -34,7 +48,9 @@ export const DefinitionList: React.FC<DefinitionListProps> = ({ items, columns =
             className="flex items-start justify-between gap-4 py-2 border-b border-gray-50 last:border-0"
           >
             <dt className="text-sm text-gray-500 shrink-0">{item.label}</dt>
-            <dd className="text-sm text-gray-900 text-start font-medium">{item.value ?? '—'}</dd>
+            <dd className={cn('text-sm text-gray-900 text-start font-medium', valueClassName)}>
+              {isEmpty(item.value) ? emptyValue : item.value}
+            </dd>
           </div>
         ))}
       </dl>
@@ -49,7 +65,9 @@ export const DefinitionList: React.FC<DefinitionListProps> = ({ items, columns =
           className={cn('space-y-1', item.fullWidth && columns > 1 && 'col-span-full')}
         >
           <dt className="text-xs font-medium text-gray-500">{item.label}</dt>
-          <dd className="text-sm font-medium text-gray-900">{item.value || '—'}</dd>
+          <dd className={cn('text-sm font-medium text-gray-900', valueClassName)}>
+            {isEmpty(item.value) ? emptyValue : item.value}
+          </dd>
         </div>
       ))}
     </dl>
