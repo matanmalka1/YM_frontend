@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { AlertTriangle, CalendarDays, ListChecks, Play } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { PageContent } from '@/components/layout/PageContent'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { Select } from '@/components/ui/inputs/Select'
@@ -217,15 +218,15 @@ export const TaxCalendarSettingsPage = () => {
 
   if (hasForbiddenError) {
     return (
-      <div className="space-y-6" dir="rtl">
+      <PageContent>
         <PageHeader title="הגדרות יומן מס" description="צפייה בכללי תאריכי יעד וברשומות יומן מס" />
         <Alert variant="warning" message="גישה להגדרות יומן מס זמינה ליועצים בלבד." />
-      </div>
+      </PageContent>
     )
   }
 
   return (
-    <div className="space-y-6" dir="rtl">
+    <PageContent>
       <PageHeader title="הגדרות יומן מס" description="צפייה בכללי תאריכי יעד וברשומות שנוצרו ליומן המס" />
 
       <ToolbarContainer>
@@ -372,7 +373,7 @@ export const TaxCalendarSettingsPage = () => {
           </div>
         )}
       </section>
-    </div>
+    </PageContent>
   )
 }
 

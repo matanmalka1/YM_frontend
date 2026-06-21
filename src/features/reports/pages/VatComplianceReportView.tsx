@@ -1,6 +1,7 @@
 import { type VatComplianceItem, type StalePendingItem } from "../api";
 import { useVatComplianceReport } from "../hooks/useVatComplianceReport";
 import { PageHeader } from "../../../components/layout/PageHeader";
+import { PageContent } from "@/components/layout/PageContent";
 import { PageStateGuard } from "../../../components/ui/layout/PageStateGuard";
 import { Badge } from "../../../components/ui/primitives/Badge";
 import { Select } from "../../../components/ui/inputs/Select";
@@ -134,13 +135,13 @@ export const VatComplianceReportView: React.FC = () => {
   return (
     <PageStateGuard isLoading={isLoading} error={error?.message ?? null} header={header} loadingMessage="טוען דוח...">
       {data && (
-        <div className="space-y-6">
+        <PageContent>
           <ComplianceTable items={data.items} year={data.year} />
           {totalPages > 1 && (
             <PaginationCard page={page} totalPages={totalPages} total={data.total} onPageChange={setPage} />
           )}
           <StalePendingTable items={data.stale_pending} />
-        </div>
+        </PageContent>
       )}
     </PageStateGuard>
   );

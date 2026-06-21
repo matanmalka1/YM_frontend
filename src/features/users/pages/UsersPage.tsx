@@ -1,4 +1,5 @@
 import { PageHeader } from '@/components/layout/PageHeader'
+import { PageContent } from '@/components/layout/PageContent'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
@@ -19,10 +20,10 @@ export const Users: React.FC = () => {
 
   if (!permissions.isAdvisor) {
     return (
-      <div className="space-y-6">
+      <PageContent>
         <PageHeader title="ניהול משתמשים" description="ניהול חשבונות משתמשים במערכת" />
         <Alert variant="warning" message="גישה לניהול משתמשים זמינה ליועצים בלבד." />
-      </div>
+      </PageContent>
     )
   }
 

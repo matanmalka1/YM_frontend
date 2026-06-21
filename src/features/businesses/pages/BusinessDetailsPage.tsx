@@ -1,6 +1,7 @@
 import { type FC } from 'react'
 import { useParams } from 'react-router-dom'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { PageContent } from '@/components/layout/PageContent'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { useRole } from '@/hooks/useRole'
@@ -24,10 +25,10 @@ export const BusinessDetails: FC = () => {
 
   if (!isValidId) {
     return (
-      <div className="space-y-6">
+      <PageContent>
         <PageHeader title={BUSINESS_DETAILS_COPY.title} />
         <Alert variant="error" message={BUSINESS_DETAILS_COPY.invalidId} />
-      </div>
+      </PageContent>
     )
   }
 

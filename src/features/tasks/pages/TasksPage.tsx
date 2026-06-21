@@ -12,7 +12,7 @@ export const TasksPage: React.FC = () => {
   const page = useTasksPage()
 
   return (
-    <div dir="rtl" className="mx-auto max-w-7xl space-y-4">
+    <div className="mx-auto max-w-7xl space-y-4">
       <PageHeader
         title="משימות"
         description="ניהול משימות, שיוכים ותאריכי יעד"

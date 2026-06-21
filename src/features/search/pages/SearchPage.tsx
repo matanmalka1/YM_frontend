@@ -3,6 +3,7 @@ import { useSearchDebounce } from '@/hooks/useSearchDebounce'
 import { formatCount } from '@/utils/utils'
 import { Search as SearchIcon, FileSearch } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { PageContent } from '@/components/layout/PageContent'
 import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
 import { Input } from '@/components/ui/inputs/Input'
 import { DataTable } from '@/components/ui/table/DataTable'
@@ -36,7 +37,7 @@ export const Search: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <PageContent>
       <PageHeader title="חיפוש" description="חיפוש גלובלי על פני לקוחות, קלסרים ומסמכים" />
 
       <ToolbarContainer>
@@ -114,6 +115,6 @@ export const Search: React.FC = () => {
           onFilenameChange={handleFilterChange}
         />
       )}
-    </div>
+    </PageContent>
   )
 }

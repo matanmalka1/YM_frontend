@@ -55,7 +55,7 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
 
   return (
     <>
-      <div dir="rtl">
+      <div>
         <PageHeader
           title={`דוח שנתי ${report.tax_year}`}
           description={getClientLabel(report)}

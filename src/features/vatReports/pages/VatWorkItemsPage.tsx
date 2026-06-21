@@ -1,5 +1,6 @@
 import { Clock, FileText, Hourglass, CheckCircle2, Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { PageContent } from '@/components/layout/PageContent'
 import {
   useVatWorkItemsPage,
   VatWorkItemsCreateModal,
@@ -15,7 +16,7 @@ export const VatWorkItems: React.FC = () => {
   const { headerProps, stats, filters, table, modals, permissions } = useVatWorkItemsPage()
 
   return (
-    <div className="space-y-6">
+    <PageContent>
       <PageHeader
         {...headerProps}
         actions={
@@ -61,6 +62,6 @@ export const VatWorkItems: React.FC = () => {
       <VatWorkItemsCreateModal {...modals.createProps} />
 
       <ConfirmDialog {...modals.deleteConfirmProps} />
-    </div>
+    </PageContent>
   )
 }

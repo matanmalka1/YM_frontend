@@ -1,5 +1,6 @@
 import { Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { PageContent } from '@/components/layout/PageContent'
 import { PageLoading } from '@/components/ui/layout/PageLoading'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
@@ -18,7 +19,7 @@ export const AnnualReportsPage: React.FC = () => {
   const { status, headerProps, stats, filters, table, banner, modals } = useAnnualReportsPage()
 
   return (
-    <div className="space-y-6">
+    <PageContent>
       <PageHeader
         title={headerProps.title}
         description={headerProps.description}
@@ -75,6 +76,6 @@ export const AnnualReportsPage: React.FC = () => {
       )}
 
       <CreateReportModal {...modals.createProps} />
-    </div>
+    </PageContent>
   )
 }

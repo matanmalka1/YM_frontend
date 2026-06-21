@@ -1,5 +1,6 @@
 import { PlusCircle, Calendar } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { PageContent } from '@/components/layout/PageContent'
 import { Button } from '@/components/ui/primitives/Button'
 import { AdvancePaymentsStatsCards } from '../components/stats/AdvancePaymentsStatsCards'
 import { AdvancePaymentsBatchesList } from '../components/table/AdvancePaymentsBatchesList'
@@ -13,7 +14,7 @@ export const AdvancePayments: React.FC = () => {
   const { status, headerProps, permissions, stats, filters, table, drawers, modals } = useAdvancePaymentsPage()
 
   return (
-    <div className="space-y-6">
+    <PageContent>
       <PageHeader
         {...headerProps}
         actions={
@@ -48,6 +49,6 @@ export const AdvancePayments: React.FC = () => {
       <CreateAdvancePaymentFlow {...modals.create} />
 
       <GenerateScheduleModal {...modals.generate} />
-    </div>
+    </PageContent>
   )
 }

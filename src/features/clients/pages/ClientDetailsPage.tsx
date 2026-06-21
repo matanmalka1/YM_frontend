@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { BriefcaseBusiness, Edit2, Fingerprint, IdCard } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { PageContent } from '@/components/layout/PageContent'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { Badge } from '@/components/ui/primitives/Badge'
@@ -122,10 +123,10 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
 
   if (!isValidId)
     return (
-      <div className="space-y-6">
+      <PageContent>
         <PageHeader title="פרטי לקוח" breadcrumbs={[{ label: 'לקוחות', to: CLIENT_ROUTES.list }]} />
         <Alert variant="error" message="מזהה לקוח לא תקין" />
-      </div>
+      </PageContent>
     )
 
   const clientHeader = client ? buildClientHeader(client) : null

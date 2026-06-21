@@ -8,7 +8,7 @@ export const TaxCalendarGroupsPage = () => {
   const { status, headerProps, stats, filters, table } = useTaxCalendarGroupsPage()
 
   return (
-    <div className="space-y-4" dir="rtl">
+    <div className="space-y-4">
       <PageHeader {...headerProps} />
 
       <TaxCalendarStatsSection

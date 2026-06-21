@@ -35,7 +35,7 @@ interface DashboardSurfaceProps {
 }
 
 export const DashboardSurface = ({ children, className }: DashboardSurfaceProps) => (
-  <div dir="rtl" className={cn('space-y-5', className)}>
+  <div className={cn('space-y-5', className)}>
     {children}
   </div>
 )
