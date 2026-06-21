@@ -5,6 +5,7 @@ import { Modal } from '@/components/ui/overlays/Modal'
 import { ModalFormActions } from '@/components/ui/overlays/ModalFormActions'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
+import { Checkbox } from '@/components/ui/primitives/Checkbox'
 import { VAT_FILING_METHOD_LABELS, VAT_FILING_METHODS } from '../../constants/vatConstants'
 import { useFileVatReturn } from '../../hooks/useFileVatReturn'
 import {
@@ -104,14 +105,7 @@ export const VatFileModal: React.FC<VatFileModalProps> = ({
           {...register('submission_reference')}
         />
 
-        <label className="flex items-center gap-2 cursor-pointer select-none">
-          <input
-            type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-primary-600"
-            {...register('is_amendment')}
-          />
-          <span className="text-sm font-medium text-gray-700">תיקון להגשה קודמת</span>
-        </label>
+        <Checkbox label="תיקון להגשה קודמת" {...register('is_amendment')} />
 
         {isAmendment && (
           <Input

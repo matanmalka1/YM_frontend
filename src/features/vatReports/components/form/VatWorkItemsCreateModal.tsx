@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { ClientPickerField, useClientPickerState } from '@/components/shared/client'
 import { Input } from '@/components/ui/inputs'
+import { Checkbox } from '@/components/ui/primitives/Checkbox'
 import { Modal, ModalFormActions } from '@/components/ui/overlays'
 import { VatPeriodSelect } from './VatPeriodSelect'
 import {
@@ -157,14 +158,7 @@ export const VatWorkItemsCreateModal: React.FC<VatWorkItemsCreateModalProps> = (
           <input type="hidden" {...register('period')} />
         </div>
 
-        <label className="flex cursor-pointer select-none items-center gap-2">
-          <input
-            type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-primary-600"
-            {...register('mark_pending')}
-          />
-          <span className="text-sm font-medium text-gray-700">ממתין לחומרים</span>
-        </label>
+        <Checkbox label="ממתין לחומרים" {...register('mark_pending')} />
 
         {watch('mark_pending') && (
           <Input

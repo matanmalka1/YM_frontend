@@ -1,5 +1,7 @@
 import { useCallback, useReducer, useState } from 'react'
 import { Button } from '@/components/ui/primitives/Button'
+import { Modal } from '@/components/ui/overlays/Modal'
+import { ModalFormActions } from '@/components/ui/overlays/ModalFormActions'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
@@ -193,96 +195,115 @@ export const TaskModal: React.FC<TaskModalProps> = ({ mode, task, source, isLoad
     },
   }
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl">
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">{modalTitle}</h2>
-          {!isTaskLoading && !isLinkMode && (source || hasExistingSource) && (
-            <div className="mt-3">
-              <TaskSourceSection {...sourceSectionProps} />
-            </div>
-          )}
-        </div>
+  const formId = 'task-form'
 
-        {isTaskLoading ? (
-          <div className="space-y-4">
-            <div className="rounded-md border border-gray-200 bg-gray-50 px-4 py-8 text-center text-sm text-gray-600">
-              טוען פרטי משימה...
-            </div>
-            <div className="flex justify-end">
-              <Button type="button" variant="ghost" onClick={onClose}>
-                סגור
-              </Button>
-            </div>
-          </div>
-        ) : isLinkMode ? (
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <TaskSourceSection {...sourceSectionProps} />
-            </div>
-            <div className="flex justify-end gap-3 pt-2">
-              <Button type="button" variant="ghost" onClick={onClose}>
-                ביטול
-              </Button>
-              <Button type="submit" disabled={hasExistingSource || !pendingSource || isLoading} isLoading={isLoading}>
-                שמור קישור
-              </Button>
-            </div>
-          </form>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              label="כותרת *"
-              value={form.title}
-              onChange={(e) => setForm({ title: e.target.value })}
-              disabled={readonly}
-              required
-            />
-            <Textarea
-              label="פרטים"
-              value={form.description}
-              onChange={(e) => setForm({ description: e.target.value })}
-              disabled={readonly}
-              rows={4}
-            />
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              <Select
-                options={priorityOptions}
-                value={form.priority}
-                onChange={(e) => setForm({ priority: parseTaskPriority(e.target.value) ?? form.priority })}
-                label="עדיפות"
-                disabled={readonly}
-              />
-              <DatePicker
-                label="תאריך יעד"
-                value={form.dueDate}
-                onChange={(value) => setForm({ dueDate: value })}
-                disabled={readonly}
-              />
-            </div>
-            <Select
-              options={roleOptions}
-              value={form.assignedRole}
-              onChange={(e) => setForm({ assignedRole: parseAssignedRole(e.target.value) })}
-              label="שיוך לתפקיד"
-              disabled={readonly}
-            />
-            {!source && !hasExistingSource && <TaskSourceSection {...sourceSectionProps} />}
-            <div className="flex justify-end gap-3 pt-2">
-              <Button type="button" variant="ghost" onClick={onClose}>
-                סגור
-              </Button>
-              {!readonly && (
-                <Button type="submit" disabled={!form.title.trim() || isLoading} isLoading={isLoading}>
-                  {mode === 'edit' ? 'שמור' : 'צור משימה'}
-                </Button>
-              )}
-            </div>
-          </form>
-        )}
+  let body: React.ReactNode
+  let footer: React.ReactNode
+
+  if (isTaskLoading) {
+    body = (
+      <div className="rounded-md border border-gray-200 bg-gray-50 px-4 py-8 text-center text-sm text-gray-600">
+        טוען פרטי משימה...
       </div>
-    </div>
+    )
+    footer = (
+      <div className="flex justify-end">
+        <Button type="button" variant="ghost" onClick={onClose}>
+          סגור
+        </Button>
+      </div>
+    )
+  } else if (isLinkMode) {
+    body = (
+      <form id={formId} onSubmit={handleSubmit}>
+        <TaskSourceSection {...sourceSectionProps} />
+      </form>
+    )
+    footer = (
+      <ModalFormActions
+        cancelVariant="ghost"
+        cancelLabel="ביטול"
+        onCancel={onClose}
+        submitType="submit"
+        submitForm={formId}
+        submitLabel="שמור קישור"
+        submitDisabled={hasExistingSource || !pendingSource}
+        isLoading={isLoading}
+      />
+    )
+  } else {
+    body = (
+      <>
+        {(source || hasExistingSource) && (
+          <div className="mb-4">
+            <TaskSourceSection {...sourceSectionProps} />
+          </div>
+        )}
+        <form id={formId} onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            label="כותרת *"
+            value={form.title}
+            onChange={(e) => setForm({ title: e.target.value })}
+            disabled={readonly}
+            required
+          />
+          <Textarea
+            label="פרטים"
+            value={form.description}
+            onChange={(e) => setForm({ description: e.target.value })}
+            disabled={readonly}
+            rows={4}
+          />
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <Select
+              options={priorityOptions}
+              value={form.priority}
+              onChange={(e) => setForm({ priority: parseTaskPriority(e.target.value) ?? form.priority })}
+              label="עדיפות"
+              disabled={readonly}
+            />
+            <DatePicker
+              label="תאריך יעד"
+              value={form.dueDate}
+              onChange={(value) => setForm({ dueDate: value })}
+              disabled={readonly}
+            />
+          </div>
+          <Select
+            options={roleOptions}
+            value={form.assignedRole}
+            onChange={(e) => setForm({ assignedRole: parseAssignedRole(e.target.value) })}
+            label="שיוך לתפקיד"
+            disabled={readonly}
+          />
+          {!source && !hasExistingSource && <TaskSourceSection {...sourceSectionProps} />}
+        </form>
+      </>
+    )
+    footer = readonly ? (
+      <div className="flex justify-end">
+        <Button type="button" variant="ghost" onClick={onClose}>
+          סגור
+        </Button>
+      </div>
+    ) : (
+      <ModalFormActions
+        cancelVariant="ghost"
+        cancelLabel="סגור"
+        onCancel={onClose}
+        submitType="submit"
+        submitForm={formId}
+        submitLabel={mode === 'edit' ? 'שמור' : 'צור משימה'}
+        submitDisabled={!form.title.trim()}
+        isLoading={isLoading}
+      />
+    )
+  }
+
+  return (
+    <Modal open title={modalTitle} footer={footer} onClose={onClose}>
+      {body}
+    </Modal>
   )
 }
 

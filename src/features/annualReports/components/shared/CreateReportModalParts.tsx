@@ -1,4 +1,5 @@
 import { Input, Select } from '@/components/ui/inputs'
+import { Checkbox } from '@/components/ui/primitives/Checkbox'
 import { FLAG_FIELDS } from '../../utils/annualReportsUtils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { formatCurrencyILS } from '@/utils/utils'
@@ -71,14 +72,7 @@ export const RequiredAppendices = ({ register }: FinancialFieldsProps) => (
     <p className="mb-2 text-sm font-medium text-gray-700">נספחים נדרשים</p>
     <div className="space-y-2 rounded-lg border border-gray-200 p-3">
       {FLAG_FIELDS.map(({ name, label }) => (
-        <label key={name} className="flex cursor-pointer items-center gap-2 text-sm">
-          <input
-            type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-primary-600"
-            {...register(name as never)}
-          />
-          <span className="text-gray-700">{label}</span>
-        </label>
+        <Checkbox key={name} label={label} {...register(name as never)} />
       ))}
     </div>
   </div>
