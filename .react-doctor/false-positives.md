@@ -269,3 +269,19 @@ FP for CLI tooling that is invoked via `npx`/scripts rather than imported.
 Confirmed FP sites (2026-06-20 scan):
 
 - `package.json` → `react-doctor` (this scanner itself; run via `npx react-doctor`)
+
+## react-doctor/advanced-event-handler-refs
+
+Fires when an effect adds a `window` listener whose handler is in the dep array, warning the
+listener is "re-added every time the handler changes." FP when the handler is already a
+`useCallback(…, [])` reading only refs/stable setters — its identity never changes, so the effect
+re-subscribes only on the real trigger (e.g. `open`), never spuriously.
+
+**Verify before suppressing:** confirm the handler is `useCallback` with an empty (or fully-stable)
+dep array and references only refs / `setState` setters. If it closes over reactive props/state, it
+is a REAL stale-handler risk — apply the ref-latest fix.
+
+Confirmed FP sites (2026-06-21 scan):
+
+- `src/components/ui/primitives/Tooltip.tsx:73` (`updatePosition` is `useCallback(…, [])`; the
+  scroll/resize listeners re-subscribe only when `open` flips)

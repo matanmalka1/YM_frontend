@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react'
+import { createContext, use } from 'react'
 
 /**
  * Exposes the overlay's guarded close handler to any descendant rendered inside
@@ -9,4 +9,4 @@ import { createContext, useContext } from 'react'
 export const OverlayDismissContext = createContext<(() => void) | undefined>(undefined)
 
 /** Returns the guarded close handler, or undefined when used outside an overlay. */
-export const useOverlayDismiss = (): (() => void) | undefined => useContext(OverlayDismissContext)
+export const useOverlayDismiss = (): (() => void) | undefined => use(OverlayDismissContext)
