@@ -1,5 +1,6 @@
 import React, { useRef, useCallback } from 'react'
 import { Select } from '@/components/ui/inputs/Select'
+import { Button } from '@/components/ui/primitives/Button'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
 import { ActiveFilterBadges } from '@/components/ui/table/ActiveFilterBadges'
@@ -79,6 +80,36 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                     disabled={field.disabled}
                     className={cn(isActive && 'border-primary-400 ring-1 ring-primary-200')}
                   />
+                )
+              }
+              if (field.type === 'toggle') {
+                const raw = values[field.key] ?? ''
+                const selected = raw ? raw.split(',') : []
+                return (
+                  <div key={field.key} className="space-y-1">
+                    <span className="block text-sm font-medium text-gray-700">{field.label}</span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {field.options.map((opt) => {
+                        const isOn = selected.includes(opt.value)
+                        return (
+                          <Button
+                            key={opt.value}
+                            type="button"
+                            size="sm"
+                            variant={isOn ? 'primary' : 'outline'}
+                            onClick={() => {
+                              const next = isOn
+                                ? selected.filter((v) => v !== opt.value)
+                                : [...selected, opt.value]
+                              onChange(field.key, next.join(','))
+                            }}
+                          >
+                            {opt.label}
+                          </Button>
+                        )
+                      })}
+                    </div>
+                  </div>
                 )
               }
               if (field.type === 'date') {

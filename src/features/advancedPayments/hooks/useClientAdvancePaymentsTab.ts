@@ -7,11 +7,10 @@ import { getHttpStatus, parsePositiveInt, showErrorToast } from '@/utils/utils'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { toast } from '@/utils/toast'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
-import type { AdvancePaymentRow, AdvancePaymentStatus, UpdateAdvancePaymentPayload } from '../api/contracts'
+import type { AdvancePaymentRow, UpdateAdvancePaymentPayload } from '../api/contracts'
 import { isAdvancePaymentStatus } from '../constants'
 import { useAdvancePayments } from './useAdvancePayments'
 import { useAdvanceRateInsights } from './useAdvanceRateInsights'
-import { toggleAdvancePaymentStatusFilter } from '../utils/advancePaymentComponentUtils'
 
 interface UseClientAdvancePaymentsTabArgs {
   clientRecordId: number
@@ -26,7 +25,7 @@ export const useClientAdvancePaymentsTab = ({
   clientIdNumber,
   officeClientNumber,
 }: UseClientAdvancePaymentsTabArgs) => {
-  const { searchParams, getParam, getPage, setFilter, setPage } = useSearchParamFilters()
+  const { searchParams, getParam, getPage, setFilter, setPage, resetFilters } = useSearchParamFilters()
   const { isAdvisor } = useRole()
   const queryClient = useQueryClient()
 
@@ -82,10 +81,6 @@ export const useClientAdvancePaymentsTab = ({
     generateMutation.mutate(generationFrequency)
   }
 
-  const handleStatusToggle = (status: AdvancePaymentStatus) => {
-    setFilter('status_filter', toggleAdvancePaymentStatusFilter(statusFilter, status).join(','), true)
-  }
-
   const handleSave = async (id: number, payload: UpdateAdvancePaymentPayload) => {
     await updateMutation.mutateAsync({ id, payload })
   }
@@ -115,10 +110,10 @@ export const useClientAdvancePaymentsTab = ({
     permissions: { isAdvisor },
     header: {
       isAdvisor,
-      statusFilter,
-      onToggleStatus: handleStatusToggle,
       year,
-      onYearChange: (nextYear: number) => setFilter('year', String(nextYear), true),
+      filterValues: { status_filter: statusFilter.join(','), year: String(year) },
+      onFilterChange: (key: string, value: string) => setFilter(key, value, true),
+      onFilterReset: () => resetFilters({ year: String(getOperationalTaxYear()) }),
       onOpenCreate: () => setModalOpen(true),
       onGenerateSchedule: handleGenerateSchedule,
       displayFrequency,

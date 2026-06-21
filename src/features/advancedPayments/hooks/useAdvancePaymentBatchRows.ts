@@ -41,7 +41,7 @@ export const useAdvancePaymentBatchRows = ({
     page_size: ADVANCE_PAYMENT_BATCH_PAGE_SIZE,
     status,
   }
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: advancedPaymentsQK.overview(params),
     queryFn: () => advancePaymentsApi.overview(params),
     staleTime: QUERY_STALE_TIME.default,
@@ -57,5 +57,6 @@ export const useAdvancePaymentBatchRows = ({
     rows,
     total: data?.total ?? 0,
     isLoading,
+    isFetching,
   }
 }

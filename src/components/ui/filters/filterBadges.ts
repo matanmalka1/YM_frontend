@@ -31,6 +31,17 @@ export function buildFilterBadges(
         const label = field.options.find((o) => o.value === v)?.label ?? String(v)
         badges.push({ key: field.key, label, onRemove: () => onChange(field.key, defaultV) })
       }
+    } else if (field.type === 'toggle') {
+      const raw = values[field.key]
+      const selected = typeof raw === 'string' && raw ? raw.split(',') : []
+      for (const val of selected) {
+        const label = field.options.find((o) => o.value === val)?.label ?? val
+        badges.push({
+          key: `${field.key}:${val}`,
+          label: `${field.label}: ${label}`,
+          onRemove: () => onChange(field.key, selected.filter((v) => v !== val).join(',')),
+        })
+      }
     } else if (field.type === 'date') {
       const v = values[field.key]
       if (v)

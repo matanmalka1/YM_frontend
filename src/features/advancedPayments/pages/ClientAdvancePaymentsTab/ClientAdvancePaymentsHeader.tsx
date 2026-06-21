@@ -1,24 +1,23 @@
 import { useState } from 'react'
 import { PlusCircle, Calendar } from 'lucide-react'
-import type { AdvancePaymentStatus } from '../../api/contracts'
-import { Select } from '@/components/ui/inputs/Select'
 import { Button } from '@/components/ui/primitives/Button'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
-import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
+import { FilterPanel } from '@/components/ui/filters/FilterPanel'
+import type { FilterFieldDef } from '@/components/ui/filters/types'
 import {
   getAdvancePaymentStatusLabel,
   ADVANCE_PAYMENT_STATUS_FILTERS,
   ADVANCE_PAYMENT_FREQUENCY_PREFIX,
   ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT,
 } from '../../constants'
-import { getOperationalYearOptions, getMonthsCoveredLabel } from '@/constants/periodOptions.constants'
+import { getOperationalYearOptions, getOperationalTaxYear, getMonthsCoveredLabel } from '@/constants/periodOptions.constants'
 
 interface ClientAdvancePaymentsHeaderProps {
   isAdvisor: boolean
-  statusFilter: AdvancePaymentStatus[]
-  onToggleStatus: (status: AdvancePaymentStatus) => void
   year: number
-  onYearChange: (year: number) => void
+  filterValues: Record<string, string>
+  onFilterChange: (key: string, value: string) => void
+  onFilterReset: () => void
   onOpenCreate: () => void
   onGenerateSchedule: () => void
   displayFrequency: 1 | 2 | null
@@ -29,10 +28,10 @@ interface ClientAdvancePaymentsHeaderProps {
 
 export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderProps> = ({
   isAdvisor,
-  statusFilter,
-  onToggleStatus,
   year,
-  onYearChange,
+  filterValues,
+  onFilterChange,
+  onFilterReset,
   onOpenCreate,
   onGenerateSchedule,
   displayFrequency,
@@ -41,6 +40,25 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
   advanceRate,
 }) => {
   const [confirmGenerate, setConfirmGenerate] = useState(false)
+
+  const filterFields: FilterFieldDef[] = [
+    {
+      type: 'toggle',
+      key: 'status_filter',
+      label: 'סטטוס',
+      options: ADVANCE_PAYMENT_STATUS_FILTERS.map((status) => ({
+        value: status,
+        label: getAdvancePaymentStatusLabel(status),
+      })),
+    },
+    {
+      type: 'select',
+      key: 'year',
+      label: 'שנה',
+      options: getOperationalYearOptions(),
+      defaultValue: String(getOperationalTaxYear()),
+    },
+  ]
 
   return (
     <div className="space-y-4">
@@ -98,40 +116,18 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
       </div>
 
       {/* Filter bar */}
-      <ToolbarContainer>
-        <div className="space-y-3">
-          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
-            <div className="space-y-1">
-              <span className="block text-sm font-medium text-gray-700">סטטוס</span>
-              <div className="flex flex-wrap gap-1.5">
-                {ADVANCE_PAYMENT_STATUS_FILTERS.map((status) => (
-                  <Button
-                    key={status}
-                    type="button"
-                    size="sm"
-                    variant={statusFilter.includes(status) ? 'primary' : 'outline'}
-                    onClick={() => onToggleStatus(status)}
-                  >
-                    {getAdvancePaymentStatusLabel(status)}
-                  </Button>
-                ))}
-              </div>
-            </div>
-            <Select
-              label="שנה"
-              value={String(year)}
-              onChange={(e) => onYearChange(Number(e.target.value))}
-              options={getOperationalYearOptions()}
-              fieldClassName="sm:max-w-xs"
-            />
-          </div>
-          {advanceRate != null && (
-            <p className="text-sm text-gray-500">
-              אחוז מקדמות: <span className="font-semibold text-gray-800">{advanceRate}%</span>
-            </p>
-          )}
-        </div>
-      </ToolbarContainer>
+      <FilterPanel
+        fields={filterFields}
+        values={filterValues}
+        onChange={onFilterChange}
+        onReset={onFilterReset}
+        gridClass="grid-cols-1 sm:grid-cols-2"
+      />
+      {advanceRate != null && (
+        <p className="text-sm text-gray-500">
+          אחוז מקדמות: <span className="font-semibold text-gray-800">{advanceRate}%</span>
+        </p>
+      )}
     </div>
   )
 }

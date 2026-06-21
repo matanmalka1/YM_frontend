@@ -17,6 +17,14 @@ interface SelectFieldDef<TValues extends Record<string, unknown> = Record<string
   disabled?: boolean
 }
 
+interface ToggleFieldDef<TValues extends Record<string, unknown> = Record<string, unknown>> {
+  type: 'toggle'
+  key: FilterKey<TValues>
+  label: string
+  /** Multi-select: active values are stored comma-joined in values[key]. */
+  options: { value: string; label: string }[]
+}
+
 interface DateFieldDef<TValues extends Record<string, unknown> = Record<string, unknown>> {
   type: 'date'
   key: FilterKey<TValues>
@@ -42,6 +50,7 @@ export interface ClientPickerFieldDef<TValues extends Record<string, unknown> = 
 export type FilterDefinition<TValues extends Record<string, unknown> = Record<string, unknown>> =
   | SearchFieldDef<TValues>
   | SelectFieldDef<TValues>
+  | ToggleFieldDef<TValues>
   | DateFieldDef<TValues>
   | DateRangeFieldDef<TValues>
   | ClientPickerFieldDef<TValues>

@@ -5,12 +5,12 @@ import { advancePaymentsApi, advancedPaymentsQK } from '../../api'
 import { formatShekelAmount } from '@/utils/utils'
 import { getCollectionPercent } from '../../utils/advancePaymentComponentUtils'
 
-interface ClientAdvancePaymentStatsSectionProps {
+interface ClientAdvancePaymentsStatsSectionProps {
   clientRecordId: number
   year: number
 }
 
-export const ClientAdvancePaymentStatsSection: React.FC<ClientAdvancePaymentStatsSectionProps> = ({
+export const ClientAdvancePaymentsStatsSection: React.FC<ClientAdvancePaymentsStatsSectionProps> = ({
   clientRecordId,
   year,
 }) => {
@@ -68,4 +68,4 @@ export const ClientAdvancePaymentStatsSection: React.FC<ClientAdvancePaymentStat
   )
 }
 
-ClientAdvancePaymentStatsSection.displayName = 'ClientAdvancePaymentStatsSection'
+ClientAdvancePaymentsStatsSection.displayName = 'ClientAdvancePaymentsStatsSection'

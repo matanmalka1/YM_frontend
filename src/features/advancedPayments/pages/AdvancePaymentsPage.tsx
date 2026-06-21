@@ -3,7 +3,7 @@ import { PageHeader } from '@/components/layout/PageHeader'
 import { PageContent } from '@/components/layout/PageContent'
 import { Button } from '@/components/ui/primitives/Button'
 import { AdvancePaymentsStatsSection } from '../components/stats/AdvancePaymentsStatsSection'
-import { AdvancePaymentsBatchesList } from '../components/table/AdvancePaymentsBatchesList'
+import { AdvancePaymentBatchesList } from '../components/table/AdvancePaymentBatchesList'
 import { AdvancePaymentsFiltersBar } from '../components/filters/AdvancePaymentsFiltersBar'
 import { AdvancePaymentDrawer } from '../components/drawer/AdvancePaymentDrawer'
 import { CreateAdvancePaymentFlow } from '../components/create/CreateAdvancePaymentFlow'
@@ -42,7 +42,7 @@ export const AdvancePayments: React.FC = () => {
 
       <AdvancePaymentsFiltersBar {...filters} />
 
-      <AdvancePaymentsBatchesList isLoading={status.isLoading} {...table} />
+      <AdvancePaymentBatchesList isLoading={status.isLoading} {...table} />
 
       <AdvancePaymentDrawer key={drawers.payment.row?.id ?? 'empty'} {...drawers.payment} />
 

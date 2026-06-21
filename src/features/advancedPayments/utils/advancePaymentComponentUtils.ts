@@ -1,6 +1,6 @@
 import { BIMONTHLY_START_MONTH_VALUES, getReportingPeriodMonthLabel } from '@/constants/periodOptions.constants'
 import type { CreateAdvancePaymentFormValues } from '../schemas'
-import type { AdvancePaymentStatus, CreateAdvancePaymentPayload } from '../api/contracts'
+import type { CreateAdvancePaymentPayload } from '../api/contracts'
 import { MONTH_OPTIONS } from '@/utils/utils'
 
 export const getAdvancePaymentMonthLabel = (period: string, periodMonthsCount: 1 | 2 = 1) =>
@@ -13,14 +13,6 @@ export const getCollectionPercent = (rate: string | number | null, cap = false) 
   const roundedRate = Math.round(numericRate)
   return cap ? Math.min(roundedRate, 100) : roundedRate
 }
-
-export const toggleAdvancePaymentStatusFilter = (
-  currentStatuses: AdvancePaymentStatus[],
-  status: AdvancePaymentStatus,
-) =>
-  currentStatuses.includes(status)
-    ? currentStatuses.filter((currentStatus) => currentStatus !== status)
-    : [...currentStatuses, status]
 
 export const getAdvancePaymentMonthOptions = (periodMonthsCount: 1 | 2) =>
   periodMonthsCount === 2

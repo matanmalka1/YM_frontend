@@ -4,7 +4,7 @@ import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaym
 import { getAdvancePaymentBatchKey } from '../../utils/advancePaymentUtils'
 import { AdvancePaymentBatchRow } from './AdvancePaymentBatchRow'
 
-interface AdvancePaymentsBatchesListProps {
+interface AdvancePaymentBatchesListProps {
   isLoading: boolean
   batches: AdvancePaymentDueDateGroup[]
   displayBatches: AdvancePaymentDueDateGroup[]
@@ -19,7 +19,7 @@ interface AdvancePaymentsBatchesListProps {
   onNavigateToClient: (clientRecordId: number) => void
 }
 
-export const AdvancePaymentsBatchesList = ({
+export const AdvancePaymentBatchesList = ({
   isLoading,
   batches,
   displayBatches,
@@ -32,7 +32,7 @@ export const AdvancePaymentsBatchesList = ({
   periodFilter,
   onRowClick,
   onNavigateToClient,
-}: AdvancePaymentsBatchesListProps) => (
+}: AdvancePaymentBatchesListProps) => (
   <MonthlyAccordionList
     isLoading={isLoading}
     isEmpty={!isLoading && batches.length === 0}
@@ -66,4 +66,4 @@ export const AdvancePaymentsBatchesList = ({
   </MonthlyAccordionList>
 )
 
-AdvancePaymentsBatchesList.displayName = 'AdvancePaymentsBatchesList'
+AdvancePaymentBatchesList.displayName = 'AdvancePaymentBatchesList'
