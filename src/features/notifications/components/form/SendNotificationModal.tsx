@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Modal } from '../../../../components/ui/overlays/Modal'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { Select } from '../../../../components/ui/inputs/Select'
@@ -132,13 +132,19 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
     resetClientPicker()
   }, [defaultTrigger, open, resetClientPicker])
 
-  // Auto-preview when context is fully known on open
-  useEffect(() => {
-    if (open && initialTrigger && entityId != null && clientRecordId != null) {
+  // Latest auto-preview action, read by the open effect without making it depend
+  // on the context props/handler (which are fresh each render).
+  const autoPreviewRef = useRef<() => void>(() => {})
+  autoPreviewRef.current = () => {
+    if (initialTrigger && entityId != null && clientRecordId != null) {
       void handlePreview(clientRecordId)
     }
-    // Run only when the modal opens — trigger/entityId/clientRecordId don't change mid-session
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }
+
+  // Auto-preview when context is fully known on open. Fires on the open transition
+  // only; the action itself is read from the ref so deps stay honest at [open].
+  useEffect(() => {
+    if (open) autoPreviewRef.current()
   }, [open])
 
   const handleSend = async () => {

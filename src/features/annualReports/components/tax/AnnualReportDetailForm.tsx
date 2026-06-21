@@ -35,17 +35,13 @@ export const AnnualReportDetailForm: React.FC<AnnualReportDetailFormProps> = ({
     register,
     control,
     handleSubmit,
-    reset,
     formState: { errors, isDirty },
   } = useForm<AnnualReportDetailFormValues>({
     resolver: zodResolver(annualReportDetailSchema),
-    defaultValues: toFormValues(detail),
+    // `values` reactively resyncs the form when `detail` changes — replaces a
+    // manual reset()-in-effect (no stale-deps risk).
+    values: toFormValues(detail),
   })
-
-  useEffect(() => {
-    reset(toFormValues(detail))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [detail?.id, detail?.client_approved_at, detail?.internal_notes])
 
   useEffect(() => {
     onDirtyChangeRef.current?.(isDirty)

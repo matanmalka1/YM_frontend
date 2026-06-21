@@ -34,7 +34,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
         />
       )}
 
-      <AdvancePaymentDrawer {...drawer} />
+      <AdvancePaymentDrawer key={drawer.row?.id ?? 'empty'} {...drawer} />
 
       {permissions.isAdvisor && <CreateAdvancePaymentModal {...createModal} />}
     </div>

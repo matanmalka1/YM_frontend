@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type { PrefillTurnoverResponse, UpdateAdvancePaymentPayload } from '../api/contracts'
 import { advancePaymentsApi } from '../api'
 import { toast } from '@/utils/toast'
@@ -46,31 +46,19 @@ export const useAdvancePaymentDrawerForm = ({
   onSave,
   onClose,
 }: UseAdvancePaymentDrawerFormArgs): AdvancePaymentDrawerForm => {
-  const [paidAmount, setPaidAmount] = useState('')
-  const [status, setStatus] = useState<string>('')
-  const [paymentMethod, setPaymentMethod] = useState<string>('')
-  const [paidAt, setPaidAt] = useState('')
-  const [notes, setNotes] = useState('')
-  const [turnoverAmount, setTurnoverAmount] = useState('')
-  const [overrideAmount, setOverrideAmount] = useState('')
+  // Seeded once from the source row. The consumer keys this component by row id
+  // (`key={row.id}`), so switching rows remounts the hook with fresh state — no
+  // prop→state sync effect, and parent refetches (fresh `model` object, same id)
+  // never wipe in-progress edits.
+  const [paidAmount, setPaidAmount] = useState(() => (model ? toEditableAmount(model.paidAmount) : ''))
+  const [status, setStatus] = useState<string>(() => model?.status ?? '')
+  const [paymentMethod, setPaymentMethod] = useState<string>(() => model?.paymentMethod ?? '')
+  const [paidAt, setPaidAt] = useState(() => (model?.paidAt ? model.paidAt.split('T')[0] : ''))
+  const [notes, setNotes] = useState(() => model?.notes ?? '')
+  const [turnoverAmount, setTurnoverAmount] = useState(() => (model ? toEditableAmount(model.turnoverAmount) : ''))
+  const [overrideAmount, setOverrideAmount] = useState(() => (model ? toEditableAmount(model.overrideAmount) : ''))
   const [prefillSource, setPrefillSource] = useState<PrefillSource>(null)
   const [isPrefilling, setIsPrefilling] = useState(false)
-
-  useEffect(() => {
-    if (!model) return
-    setPaidAmount(toEditableAmount(model.paidAmount))
-    setStatus(model.status)
-    setPaymentMethod(model.paymentMethod ?? '')
-    setPaidAt(model.paidAt ? model.paidAt.split('T')[0] : '')
-    setNotes(model.notes ?? '')
-    setTurnoverAmount(toEditableAmount(model.turnoverAmount))
-    setOverrideAmount(toEditableAmount(model.overrideAmount))
-    setPrefillSource(null)
-    // Reset only when the underlying row changes (by id), not on every parent
-    // refetch — `model` is a fresh object each render and would otherwise wipe
-    // in-progress edits.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [model?.id])
 
   // baseline values derived from the source row
   const baselinePaidAmount = model ? toEditableAmount(model.paidAmount) : ''

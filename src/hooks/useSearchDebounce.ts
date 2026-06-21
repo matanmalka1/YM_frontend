@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 
 /**
@@ -9,6 +9,13 @@ export const useSearchDebounce = (externalValue: string, onCommit: (value: strin
   const [draft, setDraft] = useState(externalValue)
   const [debounced] = useDebounce(draft, delay)
 
+  // Latest values read by the commit effect without retriggering it — keeps the
+  // effect dependent only on `debounced` while always firing the current onCommit.
+  const onCommitRef = useRef(onCommit)
+  onCommitRef.current = onCommit
+  const externalValueRef = useRef(externalValue)
+  externalValueRef.current = externalValue
+
   // Sync draft when external value changes (e.g. reset from parent)
   useEffect(() => {
     setDraft(externalValue)
@@ -16,10 +23,9 @@ export const useSearchDebounce = (externalValue: string, onCommit: (value: strin
 
   // Commit debounced value when it diverges from external
   useEffect(() => {
-    if (debounced !== externalValue) {
-      onCommit(debounced)
+    if (debounced !== externalValueRef.current) {
+      onCommitRef.current(debounced)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounced])
 
   return [draft, setDraft] as const

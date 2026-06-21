@@ -43,7 +43,7 @@ export const AdvancePayments: React.FC = () => {
 
       <AdvancePaymentsBatchesList isLoading={status.isLoading} {...table} />
 
-      <AdvancePaymentDrawer {...drawers.payment} />
+      <AdvancePaymentDrawer key={drawers.payment.row?.id ?? 'empty'} {...drawers.payment} />
 
       <CreateAdvancePaymentFlow {...modals.create} />
 

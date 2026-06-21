@@ -3,6 +3,20 @@
 Snapshot after the 2026-06-20 cleanup pass (292 → 224 findings cleared & verified: tsc clean, vitest 48/48).
 Read `.react-doctor/false-positives.md` first — it is the source of truth for findings that must NOT be re-fixed.
 
+**2026-06-21 update — exhaustive-deps cleared (tsc clean, vitest 48/48).** All 4 real
+`exhaustive-deps` warnings fixed at the root cause (no dep-patch hacks, all `eslint-disable`
+lines removed):
+- `AnnualReportDetailForm.tsx` — `reset()`-in-effect → react-hook-form `values:` option.
+- `useSearchDebounce.ts` — `onCommit`/`externalValue` read via refs; commit effect now honestly `[debounced]`.
+- `SendNotificationModal.tsx` — auto-preview action moved to `autoPreviewRef`; effect now honestly `[open]`.
+- `useAdvancePaymentDrawerForm.ts` — prop→state sync effect deleted → lazy `useState` initializers +
+  `key={row.id}` on `<AdvancePaymentDrawer>` at both call sites (page + client tab).
+
+Only the 3 documented `exhaustive-deps` false positives remain (see `false-positives.md`):
+`ClientSearchInput.tsx:78`, `useVatWorkItemActions.ts:20`, `useAnnualReportsPage.ts:37`.
+Re-scan counts below are stale by these fixes — the HEAVY table rows for the 4 files are updated;
+`useAdvancePaymentDrawerForm` cleared entirely (its whole state-sync family went with the effect).
+
 ---
 
 ## How to use this file
@@ -28,7 +42,7 @@ All moderate findings are resolved — either fixed at the root cause or triaged
 | Rule | Count | Outcome |
 |---|---|---|
 | `query-mutation-missing-invalidation` | ~30 | All confirmed already-documented FP (helper-traced invalidation). No new bugs. |
-| `exhaustive-deps` | 10 | ✅ 2 fixed (`useClientTimelinePage`) · 📝 3 FP (ref-cleanup timers ×2, one-shot seed) · ⏸ **5 deferred — they live in HEAVY files** (`DatePicker`, `useAdvancePaymentDrawerForm`, `AnnualReportDetailForm`, `SendNotificationModal`, `useSearchDebounce`); the per-flow refactor deletes these prop→state sync effects, so patching deps now is throwaway. |
+| `exhaustive-deps` | 10 | ✅ 2 fixed (`useClientTimelinePage`) · 📝 3 FP (ref-cleanup timers ×2, one-shot seed) · ✅ **4 deferred ones fixed 2026-06-21** at the root cause (`useAdvancePaymentDrawerForm`, `AnnualReportDetailForm`, `SendNotificationModal`, `useSearchDebounce` — see top-of-file update). The 5th (`DatePicker`) was already gone by the 2026-06-21 re-scan. |
 | `no-many-boolean-props` | 6 | ✅ 1 fixed (`TasksListPanel` isLoading/isError → `status`) · 📝 5 FP (orthogonal state on containers). |
 | `no-multi-comp` | 4 | ✅ all fixed (`DetailDrawer`→`DrawerPrimitives`; `TaskListStates` split). |
 | `jsx-no-jsx-as-prop` | 4 | 📝 all FP (slot JSX on unmemoized `DetailTabPanel`). |
@@ -38,12 +52,16 @@ Also cleared this pass: `no-react19-deprecated-apis` ×1 (fixed), `prefer-dynami
 ×1 (recharts lazy-split; rule can't trace the dynamic boundary → FP), 4 backdrop-`<dialog>`
 a11y findings (FP). **Net: 9 fixed, 19 reclassified as documented FP.**
 
-The 5 deferred `exhaustive-deps` are folded into the HEAVY work below — fix them as part of
-each file's per-flow refactor, not separately.
+The deferred `exhaustive-deps` were folded into the HEAVY work below and are now resolved
+(2026-06-21) as part of those files' per-flow refactors.
 
 ---
 
-## HEAVY — deliberate per-flow refactors (~124 findings, DO NOT start without sign-off)
+## HEAVY — deliberate per-flow refactors (~106 findings, DO NOT start without sign-off)
+
+> 2026-06-21: down from ~124 — `useAdvancePaymentDrawerForm` (9) cleared entirely, and
+> `SendNotificationModal` (15→12), `useSearchDebounce` (7→2), `AnnualReportDetailForm` (2→1)
+> reduced via the exhaustive-deps root-cause fixes. Re-scan before trusting any count.
 
 The state-derivation + event-handler family. Canonical fix is removing duplicated state
 (`useState` initializers + `key`-based remount), not relocating setters — see
@@ -60,9 +78,8 @@ Rules in this family: `no-adjust-state-on-prop-change`, `no-derived-state`, `no-
 | Count | File | Rules |
 |---|---|---|
 | 19 | `features/tasks/components/form/TaskModal.tsx` | no-derived-state×7, no-adjust-state×6, no-event-handler×3, no-cascading-set-state×2, prefer-useReducer×1 |
-| 15 | `features/notifications/components/form/SendNotificationModal.tsx` | no-adjust-state×8, no-event-handler×4, prefer-useReducer×1, no-cascading-set-state×1, no-reset-all-state×1 |
-| 9 | `features/advancedPayments/hooks/useAdvancePaymentDrawerForm.ts` | no-derived-state×7, no-cascading-set-state×1, no-adjust-state×1 |
-| 7 | `hooks/useSearchDebounce.ts` | no-event-handler×3, no-derived-state-effect×1, no-derived-state×1, no-pass-data-to-parent×1, no-pass-live-state-to-parent×1 — *shared hook, ripple risk* |
+| 12 | `features/notifications/components/form/SendNotificationModal.tsx` | no-adjust-state×8, prefer-useReducer×1, no-cascading-set-state×1, no-reset-all-state×1, no-event-handler×1 — *was 15; auto-preview exhaustive-deps + 3 event-handlers cleared 2026-06-21* |
+| 2 | `hooks/useSearchDebounce.ts` | no-derived-state×1, no-derived-state-effect×1 — *was 7; commit-effect exhaustive-deps + event-handlers cleared 2026-06-21; **shared hook, ripple risk*** |
 | 6 | `features/charges/components/list/ChargesFiltersCard.tsx` | no-event-handler×3, no-derived-state×1, no-reset-all-state×1, no-adjust-state×1 |
 | 5 | `features/binders/components/sections/BinderHandoverPanel.tsx` | no-event-handler×2, no-derived-state×2, prefer-useReducer×1 |
 | 4 | `components/ui/inputs/DatePickerInlineSelect.tsx` | no-chain-state-updates×2, no-adjust-state×1, no-derived-state×1 — *shared primitive* |
@@ -78,7 +95,7 @@ Rules in this family: `no-adjust-state-on-prop-change`, `no-derived-state`, `no-
 | 3 | `features/vatReports/components/form/VatWorkItemsCreateModal.tsx` | no-event-handler×3 |
 | 2 | `components/shared/client/ClientSearchInput.tsx` | prefer-useReducer×1, advanced-event-handler-refs×1 |
 | 2 | `features/advancedPayments/hooks/useAdvancePaymentBatchRows.ts` | no-derived-state-effect×1, no-adjust-state×1 |
-| 2 | `features/annualReports/components/tax/AnnualReportDetailForm.tsx` | no-pass-data-to-parent×1, no-event-handler×1 |
+| 1 | `features/annualReports/components/tax/AnnualReportDetailForm.tsx` | no-event-handler×1 — *was 2; reset-effect exhaustive-deps + no-pass-data cleared 2026-06-21* |
 | 2 | `features/charges/components/form/ChargesCreateModal.tsx` | no-event-handler×2 |
 | 2 | `features/documents/components/form/DocumentsUploadCard.tsx` | no-pass-data-to-parent×1, no-prop-callback-in-effect×1 |
 | 2 | `features/timeline/components/ClientTimelineTab.tsx` | no-derived-state×2 |
@@ -99,6 +116,6 @@ Rules in this family: `no-adjust-state-on-prop-change`, `no-derived-state`, `no-
 ### Recommended sequencing
 
 1. **Shared input primitives first** (they ripple everywhere): `DatePicker.tsx`, `DatePickerInlineSelect.tsx`, `SelectDropdown.tsx`.
-2. **One modal-flow per PR**: `TaskModal` (19), then `SendNotificationModal` (15) — each touches its page + page-hook + call sites; verify create/edit/link/preview flows manually.
-3. **Shared hook with care**: `useSearchDebounce` (consumed widely).
+2. **One modal-flow per PR**: `TaskModal` (19), then `SendNotificationModal` (12) — each touches its page + page-hook + call sites; verify create/edit/link/preview flows manually.
+3. **Shared hook with care**: `useSearchDebounce` (consumed widely; 2 findings left).
 4. **Long tail**: the 1–4-each files above.
