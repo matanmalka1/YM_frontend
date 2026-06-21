@@ -24,7 +24,7 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
   if (!showMaterialsComplete && !showReadyForReview && !showFile && !showSendBack) return null
 
   return (
-    <div className="flex flex-wrap items-center gap-2" dir="rtl">
+    <div className="flex flex-wrap items-center gap-2">
       {showMaterialsComplete && (
         <Button
           variant="primary"

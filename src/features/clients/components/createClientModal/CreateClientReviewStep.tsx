@@ -61,7 +61,7 @@ export const CreateClientReviewStep: React.FC<Props> = ({
   const entityLabels = getCreateClientEntityLabels(isCompany)
 
   return (
-    <div className="space-y-4" dir="rtl">
+    <div className="space-y-4">
       <p className="text-xs text-gray-500">בדוק את הפרטים לפני יצירת הלקוח.</p>
 
       <ReviewSection title="זיהוי">
@@ -85,7 +85,7 @@ export const CreateClientReviewStep: React.FC<Props> = ({
         <ReviewRow label="רואה חשבון" value={advisorLabel} />
       </ReviewSection>
 
-      <div className="rounded-lg border border-blue-200 bg-blue-50/70 p-4" dir="rtl">
+      <div className="rounded-lg border border-blue-200 bg-blue-50/70 p-4">
         <div className="mb-3 flex items-start justify-between gap-3">
           <div>
             <p className="text-sm font-semibold text-blue-900">מה ייווצר לאחר שמירה?</p>

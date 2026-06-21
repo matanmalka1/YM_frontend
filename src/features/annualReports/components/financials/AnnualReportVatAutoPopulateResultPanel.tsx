@@ -36,7 +36,7 @@ export const AnnualReportVatAutoPopulateResultPanel: React.FC<AnnualReportVatAut
   const hasExpenseBreakdown = expenseBreakdown.length > 0
 
   return (
-    <div className="space-y-3 rounded-lg border border-info-100 bg-info-50/40 p-4" dir="rtl">
+    <div className="space-y-3 rounded-lg border border-info-100 bg-info-50/40 p-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="flex-1">
           <div className="flex items-center justify-between gap-2">

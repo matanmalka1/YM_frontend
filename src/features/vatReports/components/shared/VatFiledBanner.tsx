@@ -16,7 +16,7 @@ export const VatFiledBanner: React.FC<VatFiledBannerProps> = ({
   const byLabel = filedByName ?? (filedBy != null ? `#${filedBy}` : null)
 
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-positive-200 bg-positive-50 px-5 py-3" dir="rtl">
+    <div className="flex items-center gap-3 rounded-xl border border-positive-200 bg-positive-50 px-5 py-3">
       <CheckCircle2 className="h-5 w-5 shrink-0 text-positive-600" />
       <p className="text-sm font-medium text-positive-800">
         הדוח הוגש ב‑{formatDateTime(filedAt)}

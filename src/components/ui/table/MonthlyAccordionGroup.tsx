@@ -24,7 +24,6 @@ const MonthlyAccordionGroup = memo(
         <button
           type="button"
           onClick={() => setExpanded((v) => !v)}
-          dir="rtl"
           aria-expanded={expanded}
           className={cn(
             'flex min-h-[56px] w-full items-center justify-between gap-3 px-4 py-2 text-right',

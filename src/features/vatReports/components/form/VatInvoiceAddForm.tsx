@@ -52,7 +52,6 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      dir="rtl"
       className="rounded-lg border border-dashed border-gray-300 bg-gray-50/70 p-4"
     >
       <div className="flex flex-wrap items-end gap-x-3 gap-y-3">

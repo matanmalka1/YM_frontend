@@ -65,7 +65,6 @@ export const GroupedPeriodRow = memo(
       <Card className={cn('overflow-hidden p-0 [&>div]:p-0', isCurrentPeriod && 'ring-1 ring-primary-300', className)}>
         <button
           type="button"
-          dir="rtl"
           aria-expanded={open}
           onClick={toggle}
           className={cn(

@@ -40,7 +40,7 @@ export const Login: React.FC = () => {
   })
 
   return (
-    <div className="flex min-h-screen overflow-hidden bg-slate-950 text-right" dir="rtl">
+    <div className="flex min-h-screen overflow-hidden bg-slate-950 text-right">
       {/* ── Right panel — form ──────────────────────────────────────────── */}
       <div className="relative flex w-full flex-col items-center justify-center px-6 py-12 lg:w-[95%] bg-[#F7F6F2]">
         {/* Subtle top-right corner accent */}

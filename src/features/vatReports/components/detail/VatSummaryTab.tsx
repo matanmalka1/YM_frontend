@@ -11,7 +11,7 @@ export const VatSummaryTab: React.FC<VatSummaryTabProps> = ({ workItem, invoices
   const data = computeVatBreakdown(invoices, workItem.total_output_vat, workItem.total_input_vat)
 
   return (
-    <div className="space-y-4" dir="rtl">
+    <div className="space-y-4">
       {workItem.is_overridden && workItem.final_vat_amount != null && (
         <div className="flex items-center justify-between rounded-xl border border-warning-300 bg-warning-50 px-5 py-4">
           <div className="flex items-center gap-2">

@@ -51,7 +51,7 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
   const filed = isFiled(workItem.status)
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-3" dir="rtl">
+    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-3">
       {workItem.status === 'pending_materials' && workItem.pending_materials_note && (
         <AlertBanner tone="warning" icon={Info}>
           {workItem.pending_materials_note}

@@ -35,7 +35,7 @@ export const FilingTimelineTab: React.FC<Props> = ({ reports }) => {
   const filingStats = getFilingStats(reports)
 
   return (
-    <div dir="rtl" className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <div className="space-y-5">
         <UpcomingDeadlinesList reports={reports} />
         <Card title="סטטוס הגשות" size="compact">

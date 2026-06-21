@@ -73,7 +73,7 @@ const VatDetailContent: React.FC<{ workItemId: number }> = ({ workItemId }) => {
         />
       )}
 
-      <div role="tablist" dir="rtl" className="flex gap-1 border-b border-gray-200 bg-white/95 px-1 backdrop-blur-sm">
+      <div role="tablist" className="flex gap-1 border-b border-gray-200 bg-white/95 px-1 backdrop-blur-sm">
         {tabs.map(({ key, label, icon: Icon, badge }) => (
           <button
             key={key}

@@ -11,7 +11,6 @@ export const VatExportButtons: React.FC<VatExportButtonsProps> = ({ clientId, pe
   return (
     <div
       className="inline-flex items-center overflow-hidden rounded-md border border-gray-200 bg-gray-50 shadow-sm"
-      dir="rtl"
     >
       <Button
         variant="secondary"

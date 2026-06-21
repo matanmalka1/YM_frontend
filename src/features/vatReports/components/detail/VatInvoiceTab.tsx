@@ -36,7 +36,7 @@ export const VatInvoiceTab: React.FC<VatInvoiceTabProps> = ({
       : 'עדיין לא הוספו חשבוניות עסקאות'
 
   return (
-    <div dir="rtl">
+    <div>
       <Card
         title={title}
         className={`border-r-2 ${borderColor}`}

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { PlusCircle, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
+import { Divider } from '@/components/ui/primitives/Divider'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
@@ -62,7 +63,6 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
 
   return (
     <div className="space-y-4">
-      {/* Action row */}
       <div className="flex flex-wrap items-center gap-3">
         {isAdvisor && (
           <>
@@ -70,7 +70,7 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
               <PlusCircle className="h-4 w-4" />
               הוסף מקדמה
             </Button>
-            <div className="h-8 w-px bg-gray-200 hidden sm:block" />
+            <Divider orientation="vertical" className="h-8 hidden sm:block" />
             <div className="flex items-center bg-gray-100 rounded-xl p-1">
               <span className="px-3 py-1.5 text-sm text-gray-500">
                 {displayFrequency != null ? (

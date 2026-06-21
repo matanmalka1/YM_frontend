@@ -24,7 +24,7 @@ export const DetailTabPanel: React.FC<DetailTabPanelProps> = ({
   className,
   contentClassName,
 }) => (
-  <section dir="rtl" className={cn('space-y-4', className)}>
+  <section className={cn('space-y-4', className)}>
     {(title || subtitle || actions) && (
       <SectionHeader title={title} subtitle={subtitle} actions={actions} size="sm" border="bottom" />
     )}

@@ -27,6 +27,8 @@ export interface Column<T> {
   headerAlign?: ColumnAlign
   /** Allow long content to wrap instead of forcing horizontal scroll. */
   wrap?: boolean
+  /** Footer cell content for this column. When any column sets it, a totals <tfoot> is rendered. */
+  footer?: ReactNode
 }
 
 export interface DataTableProps<T> {
@@ -49,6 +51,8 @@ export interface DataTableProps<T> {
     icon?: LucideIcon
     message?: string
   }
+  /** Classes applied to the totals <tfoot> (rendered only when a column defines `footer`). */
+  footerClassName?: string
 }
 
 export const DataTable = <T,>({
@@ -63,7 +67,9 @@ export const DataTable = <T,>({
   stickyHeader = false,
   maxHeight,
   emptyState,
+  footerClassName,
 }: DataTableProps<T>) => {
+  const hasFooter = columns.some((column) => column.footer !== undefined)
   const handleRowKeyDown = (event: KeyboardEvent<HTMLTableRowElement>, item: T) => {
     if (!onRowClick) return
 
@@ -158,6 +164,26 @@ export const DataTable = <T,>({
               </tr>
             ))}
           </tbody>
+          {hasFooter && (
+            <tfoot className={footerClassName}>
+              <tr>
+                {columns.map((column) => (
+                  <td
+                    key={column.key}
+                    dir={column.dir}
+                    className={cn(
+                      'px-3 py-2 align-middle text-sm first:ps-5 last:pe-5',
+                      column.wrap ? 'whitespace-normal' : 'whitespace-nowrap',
+                      ALIGN_CLASS[column.align ?? 'center'],
+                      column.className,
+                    )}
+                  >
+                    {column.footer}
+                  </td>
+                ))}
+              </tr>
+            </tfoot>
+          )}
         </table>
       </div>
     </Card>

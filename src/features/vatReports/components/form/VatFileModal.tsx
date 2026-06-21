@@ -78,7 +78,7 @@ export const VatFileModal: React.FC<VatFileModalProps> = ({
         />
       }
     >
-      <div className="space-y-4" dir="rtl">
+      <div className="space-y-4">
         <div>
           <Select
             id="vat-file-submission-method"

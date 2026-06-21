@@ -5,5 +5,9 @@ interface PageLayoutProps {
 }
 
 export const PageLayout = ({ children }: PageLayoutProps) => {
-  return <main className="flex-1 overflow-y-auto p-6 md:p-8">{children}</main>
+  return (
+    <main className="flex-1 overflow-y-auto p-6 md:p-8">
+      {children}
+    </main>
+  )
 }

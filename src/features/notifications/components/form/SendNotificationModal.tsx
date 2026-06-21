@@ -215,7 +215,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
         </div>
       }
     >
-      <div className="space-y-4" dir="rtl">
+      <div className="space-y-4">
         {clientRecordId == null && (
           <ClientPickerField
             selectedClient={selectedClient}
@@ -256,7 +256,6 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               error={subjectError}
-              dir="rtl"
             />
             <Textarea
               label="תוכן ההודעה"
@@ -264,7 +263,6 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
               value={body}
               onChange={(e) => setBody(e.target.value)}
               error={bodyError}
-              dir="rtl"
             />
           </>
         )}

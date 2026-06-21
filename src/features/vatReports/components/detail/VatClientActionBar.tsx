@@ -1,5 +1,6 @@
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
+import { Divider } from '@/components/ui/primitives/Divider'
 import { Select } from '@/components/ui/inputs/Select'
 import { VatExportButtons } from '../shared/VatExportButtons'
 
@@ -35,7 +36,7 @@ export const VatClientActionBar = ({
             <VatExportButtons clientId={clientId} year={selectedYear} />
           </div>
         )}
-        <div className="hidden h-9 w-px bg-gray-100 sm:block" />
+        <Divider orientation="vertical" className="hidden h-9 bg-gray-100 sm:block" />
         <Select
           value={String(selectedYear)}
           onChange={(e) => onYearChange(Number(e.target.value))}

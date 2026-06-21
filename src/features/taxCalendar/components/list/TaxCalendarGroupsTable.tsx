@@ -188,7 +188,7 @@ export const TaxCalendarGroupsTable = ({
   }
 
   return (
-    <div className="space-y-2" dir="rtl">
+    <div className="space-y-2">
       {groups.map((group) => {
         const isCurrentPeriod = isCurrentReportingPeriod(group.period, group.period_months_count)
         const effectiveRelativeLabel = formatRelativeDueLabel(group.effective_due_date_min)

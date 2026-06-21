@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Loader2, X } from 'lucide-react'
 import { cn } from '../../../utils/utils'
+import { Divider } from '../primitives/Divider'
 
 interface BulkSelectionToolbarProps {
   children: ReactNode
@@ -20,7 +21,6 @@ export const BulkSelectionToolbar: React.FC<BulkSelectionToolbarProps> = ({
   selectedCount,
 }) => (
   <div
-    dir="rtl"
     className="animate-fade-in rounded-xl border border-primary-200 bg-primary-50/60 px-4 py-3 flex flex-col gap-3"
   >
     <div className="flex flex-wrap items-center gap-3">
@@ -29,7 +29,7 @@ export const BulkSelectionToolbar: React.FC<BulkSelectionToolbarProps> = ({
         {selectedCount} נבחרו
       </span>
 
-      <div className="h-4 w-px bg-primary-200" />
+      <Divider orientation="vertical" className="h-4 bg-primary-200" />
 
       <div className="flex flex-wrap items-center gap-2">{children}</div>
 

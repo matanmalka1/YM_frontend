@@ -33,7 +33,7 @@ export const AgingReportCards: React.FC<AgingReportCardsProps> = ({ items }) => 
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 xl:grid-cols-2" dir="rtl">
+    <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
       {items.map((item) => (
         <button
           type="button"

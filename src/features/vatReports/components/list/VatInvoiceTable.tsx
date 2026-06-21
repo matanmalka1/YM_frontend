@@ -50,7 +50,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
   return (
     <>
       <div className="overflow-x-auto rounded-lg border border-gray-100">
-        <table className="w-full border-collapse text-sm" dir="rtl">
+        <table className="w-full border-collapse text-sm">
           <thead className="bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
             <tr>
               <th className={thCls}>מספר</th>

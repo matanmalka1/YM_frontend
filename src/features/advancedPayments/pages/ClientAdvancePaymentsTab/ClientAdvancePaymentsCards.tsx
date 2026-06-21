@@ -47,7 +47,7 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4" dir="rtl">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
       {rows.map((row) => {
         const expected = Number(row.expected_amount ?? 0)
         const paid = Number(row.paid_amount ?? 0)

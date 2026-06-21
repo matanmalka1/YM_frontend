@@ -69,7 +69,7 @@ export const VatClientSummaryPanel = ({ clientId }: VatClientSummaryPanelProps) 
   }
 
   return (
-    <div className="space-y-4" dir="rtl">
+    <div className="space-y-4">
       <VatClientActionBar
         clientId={clientId}
         isAdvisor={isAdvisor}

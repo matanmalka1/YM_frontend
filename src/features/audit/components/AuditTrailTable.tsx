@@ -33,7 +33,7 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
   detailsClassName = 'text-xs text-gray-500',
 }: AuditTrailTableProps<TEntry>) => (
   <div className="space-y-3">
-    <div className="overflow-x-auto rounded-lg border border-gray-100" dir="rtl">
+    <div className="overflow-x-auto rounded-lg border border-gray-100">
       <table className="w-full border-collapse text-sm">
         <colgroup>
           <col className="w-36" />
@@ -67,7 +67,7 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
     </div>
 
     {totalPages > 1 && (
-      <div className="flex items-center justify-between text-sm text-gray-500" dir="rtl">
+      <div className="flex items-center justify-between text-sm text-gray-500">
         <Button
           type="button"
           variant="ghost"

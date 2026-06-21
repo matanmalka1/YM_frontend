@@ -25,7 +25,7 @@ export const ClientYearComparisonModal: React.FC<Props> = ({ open, onClose, repo
         <p className="text-sm text-gray-500 py-4 text-center">אין דוחות להשוואה</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-sm" dir="rtl">
+          <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-200">
                 <th className="py-2 pr-1 text-right font-medium text-gray-500 w-32"></th>

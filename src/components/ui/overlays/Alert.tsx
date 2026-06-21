@@ -3,7 +3,7 @@ import { cn } from '../../../utils/utils'
 
 interface AlertProps {
   message: string
-  variant?: 'warning' | 'info' | 'error' | 'success'
+  variant?: 'warning' | 'info' | 'error' | 'success' | 'neutral'
   size?: 'sm' | 'md'
   dismissible?: boolean
   onDismiss?: () => void
@@ -39,6 +39,13 @@ const config = {
     text: 'text-positive-800',
     iconBg: 'bg-positive-100',
     Icon: CheckCircle,
+  },
+  neutral: {
+    container: 'bg-gray-50 border-gray-200 shadow-none',
+    icon: 'text-gray-500',
+    text: 'text-gray-600',
+    iconBg: 'bg-gray-100',
+    Icon: Info,
   },
 }
 

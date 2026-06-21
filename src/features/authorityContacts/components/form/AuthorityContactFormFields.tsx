@@ -51,7 +51,6 @@ export const AuthorityContactFormFields: React.FC<AuthorityContactFormFieldsProp
       <Input
         label={AUTHORITY_CONTACT_FIELD_LABELS.phone}
         type="tel"
-        dir="rtl"
         placeholder={AUTHORITY_CONTACT_STATIC_PLACEHOLDERS.phone}
         error={errors.phone?.message}
         {...register('phone')}

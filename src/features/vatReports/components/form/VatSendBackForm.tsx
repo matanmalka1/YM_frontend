@@ -13,7 +13,6 @@ export const VatSendBackForm: React.FC<VatSendBackFormProps> = ({ onCancel, onSu
         placeholder="הסבר מה יש לתקן..."
         value={note}
         onChange={(e) => setNote(e.target.value)}
-        dir="rtl"
         autoFocus
       />
       <div className="flex gap-2 justify-end">

@@ -1,4 +1,7 @@
 import { ChevronLeft } from 'lucide-react'
+import { Alert } from '@/components/ui/overlays/Alert'
+import { Card } from '@/components/ui/primitives/Card'
+import { cn } from '@/utils/utils'
 import { formatVatAmount } from '../../utils/vatHelpers'
 import type { VatBreakdownData } from '../../utils/vatBreakdown'
 
@@ -20,6 +23,20 @@ interface VatCardProps {
   children: React.ReactNode
 }
 
+interface VatAmountRowProps {
+  label: React.ReactNode
+  value: React.ReactNode
+  className?: string
+  valueClassName?: string
+}
+
+interface VatTotalRowProps {
+  label: string
+  value: string
+  tone: VatCardTone
+  className?: string
+}
+
 const VAT_CARD_CLASSES: Record<VatCardTone, { border: string; title: string; button: string }> = {
   positive: {
     border: 'border-r-positive-400',
@@ -33,17 +50,39 @@ const VAT_CARD_CLASSES: Record<VatCardTone, { border: string; title: string; but
   },
 }
 
+const VAT_TOTAL_VALUE_CLASSES: Record<VatCardTone, string> = {
+  positive: 'text-positive-700',
+  warning: 'text-warning-700',
+}
+
+const VatAmountRow: React.FC<VatAmountRowProps> = ({ label, value, className, valueClassName }) => (
+  <div className={cn('flex justify-between text-gray-500', className)}>
+    <span>{label}</span>
+    <span className={cn('font-mono tabular-nums', valueClassName)}>{value}</span>
+  </div>
+)
+
+const VatTotalRow: React.FC<VatTotalRowProps> = ({ label, value, tone, className }) => (
+  <div className={cn('flex items-center justify-between border-t border-gray-100 pt-3', className)}>
+    <span className="text-sm font-semibold text-gray-700">{label}</span>
+    <span className={cn('font-mono text-2xl font-bold tabular-nums', VAT_TOTAL_VALUE_CLASSES[tone])}>{value}</span>
+  </div>
+)
+
 const VatCard: React.FC<VatCardProps> = ({ title, tone, onNavigate, children }) => {
   const classes = VAT_CARD_CLASSES[tone]
   return (
-    <div className={`rounded-xl border border-gray-100 border-r-2 ${classes.border} bg-white p-4 shadow-sm`} dir="rtl">
+    <Card variant="outlined" size="compact" className={cn('border-r-2', classes.border)}>
       <div className="mb-3 flex items-center justify-between">
-        <p className={`text-xs font-semibold uppercase tracking-wide ${classes.title}`}>{title}</p>
+        <p className={cn('text-xs font-semibold uppercase tracking-wide', classes.title)}>{title}</p>
         {onNavigate && (
           <button
             type="button"
             onClick={onNavigate}
-            className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold transition-colors hover:bg-gray-50 ${classes.button}`}
+            className={cn(
+              'inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold transition-colors hover:bg-gray-50',
+              classes.button,
+            )}
             aria-label="עבור לפרטים"
           >
             צפה בפירוט
@@ -52,7 +91,7 @@ const VatCard: React.FC<VatCardProps> = ({ title, tone, onNavigate, children }) 
         )}
       </div>
       {children}
-    </div>
+    </Card>
   )
 }
 
@@ -61,21 +100,10 @@ const VatCard: React.FC<VatCardProps> = ({ title, tone, onNavigate, children }) 
 export const VatOutputCard: React.FC<VatOutputCardProps> = ({ data, onNavigate }) => (
   <VatCard title='מע"מ עסקאות – מכירות' tone="positive" onNavigate={onNavigate}>
     <div className="space-y-2 text-sm">
-      <div className="flex justify-between text-gray-500">
-        <span>סה&quot;כ מכירות (ללא מע&quot;מ)</span>
-        <span className="font-mono tabular-nums">{formatVatAmount(data.totalIncomeNet)}</span>
-      </div>
-      <div className="flex justify-between text-gray-400">
-        <span>שיעור מע&quot;מ</span>
-        <span className="font-mono">לפי שיעור המערכת</span>
-      </div>
+      <VatAmountRow label='סה"כ מכירות (ללא מע"מ)' value={formatVatAmount(data.totalIncomeNet)} />
+      <VatAmountRow label='שיעור מע"מ' value="לפי שיעור המערכת" className="text-gray-400" />
     </div>
-    <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-3">
-      <span className="text-sm font-semibold text-gray-700">מע&quot;מ עסקאות</span>
-      <span className="font-mono text-2xl font-bold text-positive-700 tabular-nums">
-        {formatVatAmount(data.totalOutputVat)}
-      </span>
-    </div>
+    <VatTotalRow label='מע"מ עסקאות' value={formatVatAmount(data.totalOutputVat)} tone="positive" className="mt-4" />
   </VatCard>
 )
 
@@ -86,39 +114,40 @@ VatOutputCard.displayName = 'VatOutputCard'
 export const VatInputCard: React.FC<VatInputCardProps> = ({ data, onNavigate }) => (
   <VatCard title='מע"מ תשומות – הוצאות' tone="warning" onNavigate={onNavigate}>
     {data.totalExpenseNet > 0 && data.totalInputVat === 0 && (
-      <div className="mb-3 rounded-lg border border-gray-100 bg-gray-50 px-3 py-2 text-xs text-gray-500">
-        הוצאות אלו אינן מזכות בניכוי מע&quot;מ לפי הקטגוריות שהוזנו.
-      </div>
+      <Alert
+        variant="neutral"
+        size="sm"
+        message='הוצאות אלו אינן מזכות בניכוי מע"מ לפי הקטגוריות שהוזנו.'
+        className="mb-3"
+      />
     )}
     <div className="space-y-1.5 text-sm">
       {data.expenseRows.map((row) => (
-        <div key={row.categoryKey} className="flex justify-between">
-          <span className="text-gray-500">
-            {row.label}
-            {row.deductionRate < 1 && row.deductionRate > 0 && (
-              <span className="mr-1 text-xs text-gray-400">({Math.round(row.deductionRate * 100)}%)</span>
-            )}
-          </span>
-          <span className="font-mono tabular-nums text-warning-700">{formatVatAmount(row.deductibleVat)}</span>
-        </div>
+        <VatAmountRow
+          key={row.categoryKey}
+          label={
+            <>
+              {row.label}
+              {row.deductionRate < 1 && row.deductionRate > 0 && (
+                <span className="mr-1 text-xs text-gray-400">({Math.round(row.deductionRate * 100)}%)</span>
+              )}
+            </>
+          }
+          value={formatVatAmount(row.deductibleVat)}
+          valueClassName="text-warning-700"
+        />
       ))}
     </div>
     <div className="mt-3 space-y-1.5 border-t border-gray-100 pt-3 text-sm">
-      <div className="flex justify-between text-gray-500">
-        <span>סה&quot;כ הוצאות (ללא מע&quot;מ)</span>
-        <span className="font-mono tabular-nums">{formatVatAmount(data.totalExpenseNet)}</span>
-      </div>
-      <div className="flex justify-between text-gray-500">
-        <span>מע&quot;מ בחשבוניות</span>
-        <span className="font-mono tabular-nums">{formatVatAmount(data.totalGrossVat)}</span>
-      </div>
+      <VatAmountRow label='סה"כ הוצאות (ללא מע"מ)' value={formatVatAmount(data.totalExpenseNet)} />
+      <VatAmountRow label='מע"מ בחשבוניות' value={formatVatAmount(data.totalGrossVat)} />
     </div>
-    <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-3">
-      <span className="text-sm font-semibold text-gray-700">מע&quot;מ תשומות לניכוי</span>
-      <span className="font-mono text-2xl font-bold text-warning-700 tabular-nums">
-        {formatVatAmount(data.totalInputVat)}
-      </span>
-    </div>
+    <VatTotalRow
+      label='מע"מ תשומות לניכוי'
+      value={formatVatAmount(data.totalInputVat)}
+      tone="warning"
+      className="mt-3"
+    />
   </VatCard>
 )
 

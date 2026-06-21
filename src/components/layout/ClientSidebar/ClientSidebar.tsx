@@ -63,7 +63,6 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
       >
         <aside
           ref={sidebarRef}
-          dir="rtl"
           className={cn(
             'fixed bottom-0 right-0 top-16 z-50 flex w-[min(320px,calc(100vw-2rem))] shrink-0 flex-col border-l border-gray-200/80 bg-white text-gray-900 shadow-2xl transition-transform duration-300',
             mobileOpen ? 'visible translate-x-0' : 'invisible pointer-events-none translate-x-full',

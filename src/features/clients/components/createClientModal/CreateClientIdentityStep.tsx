@@ -79,7 +79,7 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
         {...register('id_number')}
       />
       {deletedClient && (
-        <div className="rounded-lg border border-amber-300 bg-amber-50 p-4" dir="rtl">
+        <div className="rounded-lg border border-amber-300 bg-amber-50 p-4">
           <div className="flex items-start gap-3">
             <UserRoundX className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
             <div className="min-w-0 flex-1 space-y-3">
@@ -125,7 +125,7 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
         </div>
       )}
       {activeConflicts.length > 0 && (
-        <div className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700" dir="rtl">
+        <div className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700">
           <p className="font-medium mb-1">{idNumberLabel} זה כבר קיים במערכת — לא ניתן לפתוח לקוח כפול.</p>
           <ul className="space-y-1">
             {activeConflicts.map((c) => (

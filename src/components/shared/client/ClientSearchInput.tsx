@@ -243,7 +243,6 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
             role="listbox"
             className="pointer-events-auto box-border max-h-72 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 text-right shadow-xl"
             style={listStyle}
-            dir="rtl"
           >
             {showNoResults ? (
               <div className="px-4 py-2.5 text-sm text-gray-400">לא נמצאו לקוחות</div>

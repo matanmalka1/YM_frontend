@@ -64,7 +64,7 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
 
   return (
     <Card className={cn('h-full', className)}>
-      <div className="flex h-full flex-col gap-4" dir="rtl">
+      <div className="flex h-full flex-col gap-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
