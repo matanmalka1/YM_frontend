@@ -7,6 +7,7 @@ import { STATUS_LABELS } from '../../api'
 import { parseAnnualReportCalendarDate } from '../../constants/sharedConstants'
 import { getAnnualReportName, getDeadlineStatus } from '../../utils/sharedHelpers'
 import { InlineState } from '../../../../components/ui/feedback'
+import { Card } from '../../../../components/ui/primitives/Card'
 
 interface Props {
   reports: AnnualReportListItem[]
@@ -36,35 +37,33 @@ export const UpcomingDeadlinesList: React.FC<Props> = ({ reports }) => {
     )
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-      <div className="flex items-center gap-2 border-b border-gray-100 bg-gray-50 px-5 py-3">
-        <CalendarClock className="h-4 w-4 text-gray-400" />
-        <h3 className="text-sm font-semibold text-gray-700">מועדי הגשה קרובים</h3>
-      </div>
-      <div className="p-4">
-        {upcoming.length === 0 ? (
-          <InlineState icon={CalendarCheck} title="אין מועדי הגשה ממתינים" />
-        ) : (
-          <ul className="space-y-2">
-            {upcoming.map((r) => {
-              const st = getDeadlineStatus(r)
-              return (
-                <li key={r.id} className={cn('flex items-center gap-3 rounded-lg border px-4 py-3', STATUS_COLORS[st])}>
-                  {STATUS_ICONS[st]}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-800 truncate">
-                      {getAnnualReportName(r)} — {r.tax_year}
-                    </p>
-                    <p className="text-xs text-gray-500">{STATUS_LABELS[r.status]}</p>
-                  </div>
-                  <span className="shrink-0 text-xs font-semibold text-gray-600">{formatDate(r.filing_deadline)}</span>
-                </li>
-              )
-            })}
-          </ul>
-        )}
-      </div>
-    </div>
+    <Card
+      title="מועדי הגשה קרובים"
+      icon={<CalendarClock className="h-4 w-4 text-gray-400" />}
+      size="compact"
+    >
+      {upcoming.length === 0 ? (
+        <InlineState icon={CalendarCheck} title="אין מועדי הגשה ממתינים" />
+      ) : (
+        <ul className="space-y-2">
+          {upcoming.map((r) => {
+            const st = getDeadlineStatus(r)
+            return (
+              <li key={r.id} className={cn('flex items-center gap-3 rounded-lg border px-4 py-3', STATUS_COLORS[st])}>
+                {STATUS_ICONS[st]}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-800 truncate">
+                    {getAnnualReportName(r)} — {r.tax_year}
+                  </p>
+                  <p className="text-xs text-gray-500">{STATUS_LABELS[r.status]}</p>
+                </div>
+                <span className="shrink-0 text-xs font-semibold text-gray-600">{formatDate(r.filing_deadline)}</span>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </Card>
   )
 }
 

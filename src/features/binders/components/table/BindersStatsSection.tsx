@@ -22,6 +22,7 @@ export const BindersStatsSection = ({
       count: counters.total,
       icon: FolderKanban,
       variant: 'blue' as const,
+      description: 'כל הקלסרים בהתאם לסינון הנוכחי',
     },
     {
       key: 'in_office',
@@ -29,6 +30,7 @@ export const BindersStatsSection = ({
       count: counters.location_in_office,
       icon: Archive,
       variant: 'orange' as const,
+      description: 'קלסרים שנמצאים במשרד',
     },
     {
       key: 'ready_for_handover',
@@ -36,6 +38,7 @@ export const BindersStatsSection = ({
       count: counters.location_ready_for_handover,
       icon: CheckCircle2,
       variant: 'green' as const,
+      description: 'קלסרים מוכנים למסירה ללקוח',
     },
     {
       key: 'handed_over',
@@ -43,6 +46,7 @@ export const BindersStatsSection = ({
       count: counters.location_handed_over,
       icon: Undo2,
       variant: 'neutral' as const,
+      description: 'קלסרים שנמסרו ללקוח',
     },
   ] as const
 
@@ -53,6 +57,7 @@ export const BindersStatsSection = ({
           key={pill.key || 'total'}
           title={pill.label}
           value={pill.count}
+          description={pill.description}
           loading={countersLoading}
           icon={pill.icon}
           variant={pill.variant}

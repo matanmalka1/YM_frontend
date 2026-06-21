@@ -8,6 +8,7 @@ export { VatSummaryTab } from './components/detail/VatSummaryTab'
 export { VatWorkItemSummaryBar } from './components/list/VatWorkItemSummaryBar'
 export { VatWorkItemsCreateModal } from './components/form/VatWorkItemsCreateModal'
 export { VatWorkItemsFiltersCard } from './components/list/VatWorkItemsFiltersCard'
+export { VatWorkItemsStatsSection } from './components/list/VatWorkItemsStatsSection'
 
 export { VatWorkItemsGroupedCards } from './components/list/VatWorkItemsGroupedCards'
 export { useVatWorkItemPage } from './hooks/useVatWorkItemPage'

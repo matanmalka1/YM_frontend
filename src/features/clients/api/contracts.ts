@@ -71,9 +71,10 @@ export interface ClientRecordListItem {
 }
 
 interface ClientRecordListStats {
-  active: number
-  frozen: number
-  closed: number
+  osek_patur: number
+  osek_murshe: number
+  company_ltd: number
+  employee: number
 }
 
 export type ClientRecordListResponse = PaginatedResponse<ClientRecordListItem> & { stats: ClientRecordListStats }

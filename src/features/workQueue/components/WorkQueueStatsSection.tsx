@@ -5,7 +5,7 @@ import { StatsCard } from '@/components/ui/layout/StatsCard'
 import type { WorkQueueSummary, WorkQueueUrgency } from '../api/contracts'
 import { APPROACHING_DAYS, IMPORTANT_DAYS } from '../constants'
 
-interface WorkQueueSummaryCardsProps {
+interface WorkQueueStatsSectionProps {
   summary: WorkQueueSummary | undefined
   isLoading?: boolean
   summaryError?: string | null
@@ -13,7 +13,7 @@ interface WorkQueueSummaryCardsProps {
   onFilter: (urgency: WorkQueueUrgency | null) => void
 }
 
-export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
+export const WorkQueueStatsSection: React.FC<WorkQueueStatsSectionProps> = ({
   summary,
   isLoading,
   summaryError,
@@ -28,6 +28,7 @@ export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
         variant: 'red' as const,
         count: summary?.overdue ?? 0,
         label: 'באיחור',
+        description: 'משימות שתאריך היעד שלהן חלף',
         value: 'overdue' as WorkQueueUrgency,
       },
       {
@@ -35,6 +36,7 @@ export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
         variant: 'orange' as const,
         count: summary?.approaching ?? 0,
         label: `דחוף (עד ${APPROACHING_DAYS} ימים)`,
+        description: 'משימות לטיפול בימים הקרובים',
         value: 'approaching' as WorkQueueUrgency,
       },
       {
@@ -42,6 +44,7 @@ export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
         variant: 'orange' as const,
         count: summary?.important ?? 0,
         label: `חשוב (${APPROACHING_DAYS + 1}–${IMPORTANT_DAYS} ימים)`,
+        description: 'משימות לטיפול בהמשך התקופה',
         value: 'important' as WorkQueueUrgency,
       },
       {
@@ -49,6 +52,7 @@ export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
         variant: 'blue' as const,
         count: summary?.upcoming ?? 0,
         label: `קרוב (${IMPORTANT_DAYS + 1}+ ימים)`,
+        description: 'משימות עתידיות בתור העבודה',
         value: 'upcoming' as WorkQueueUrgency,
       },
     ],
@@ -69,11 +73,12 @@ export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
 
   return (
     <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
-      {stats.map(({ icon, variant, count, label, value }) => (
+      {stats.map(({ icon, variant, count, label, description, value }) => (
         <StatsCard
           key={value}
           title={label}
           value={count}
+          description={description}
           loading={isInitialLoading}
           icon={icon}
           variant={variant}
@@ -85,3 +90,5 @@ export const WorkQueueSummaryCards: React.FC<WorkQueueSummaryCardsProps> = ({
     </div>
   )
 }
+
+WorkQueueStatsSection.displayName = 'WorkQueueStatsSection'

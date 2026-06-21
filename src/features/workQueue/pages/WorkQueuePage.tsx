@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/primitives/Button'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import { TaskModal } from '@/features/tasks'
 import { useWorkQueuePage } from '../hooks/useWorkQueuePage'
-import { WorkQueueSummaryCards } from '../components/WorkQueueSummaryCards'
+import { WorkQueueStatsSection } from '../components/WorkQueueStatsSection'
 import { WorkQueueFiltersBar } from '../components/WorkQueueFiltersBar'
 
 export const WorkQueuePage: React.FC = () => {
@@ -31,7 +31,7 @@ export const WorkQueuePage: React.FC = () => {
       header={header}
       loadingMessage={status.loadingMessage}
     >
-      <WorkQueueSummaryCards {...stats} />
+      <WorkQueueStatsSection {...stats} />
 
       <WorkQueueFiltersBar {...filters} />
 

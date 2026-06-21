@@ -1,11 +1,9 @@
 import { ArrowUpCircle, ArrowDownCircle } from 'lucide-react'
-import {
-  AddLineForm,
-  AutoPopulateControls,
-  AutoPopulateResultPanel,
-  FinancialSection,
-  FinancialSummaryCards,
-} from './IncomeExpensePanelParts'
+import { AnnualReportAddIncomeLineForm } from './AnnualReportAddIncomeLineForm'
+import { AnnualReportFinancialSection } from './AnnualReportFinancialSection'
+import { AnnualReportFinancialStatsSection } from './AnnualReportFinancialStatsSection'
+import { AnnualReportVatAutoPopulateControls } from './AnnualReportVatAutoPopulateControls'
+import { AnnualReportVatAutoPopulateResultPanel } from './AnnualReportVatAutoPopulateResultPanel'
 import { LineRow, INCOME_LABELS, EXPENSE_LABELS } from '../../constants/reportConstants'
 import { AddExpenseLineForm } from './AddExpenseLineForm'
 import { useIncomeExpensePanel } from '../../hooks/useIncomeExpensePanel'
@@ -28,7 +26,7 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
   return (
     <div className="space-y-5">
       {panel.isAdvisor && (
-        <AutoPopulateControls
+        <AnnualReportVatAutoPopulateControls
           showForceConfirm={panel.showForceConfirm}
           isPending={panel.isAutoPopulating}
           onPopulate={panel.autoPopulate}
@@ -36,10 +34,13 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
         />
       )}
       {panel.autoPopulateResult && (
-        <AutoPopulateResultPanel result={panel.autoPopulateResult} onDismiss={panel.clearAutoPopulateResult} />
+        <AnnualReportVatAutoPopulateResultPanel
+          result={panel.autoPopulateResult}
+          onDismiss={panel.clearAutoPopulateResult}
+        />
       )}
       {panel.hasLines && !panel.autoPopulateResult && (
-        <FinancialSummaryCards
+        <AnnualReportFinancialStatsSection
           totalIncome={panel.totals.income}
           totalExpenses={panel.totals.expenses}
           taxableIncome={panel.totals.taxableIncome}
@@ -47,7 +48,7 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
       )}
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <FinancialSection
+        <AnnualReportFinancialSection
           icon={<ArrowUpCircle className="h-4 w-4 text-positive-600" />}
           title="הכנסות"
           total={panel.totals.income}
@@ -57,7 +58,7 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
           emptyMessage={FINANCIAL_MESSAGES.noIncome}
           isEmpty={panel.incomeLines.length === 0}
           footer={
-            <AddLineForm
+            <AnnualReportAddIncomeLineForm
               typeOptions={INCOME_LABELS}
               onAdd={panel.addIncome}
               isAdding={panel.isAddingIncome}
@@ -86,9 +87,9 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
               )}
             </div>
           ))}
-        </FinancialSection>
+        </AnnualReportFinancialSection>
 
-        <FinancialSection
+        <AnnualReportFinancialSection
           icon={<ArrowDownCircle className="h-4 w-4 text-negative-500" />}
           title="הוצאות"
           total={panel.totals.expenses}
@@ -124,7 +125,7 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
               )}
             </div>
           ))}
-        </FinancialSection>
+        </AnnualReportFinancialSection>
       </div>
     </div>
   )

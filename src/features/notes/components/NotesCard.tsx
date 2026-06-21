@@ -193,7 +193,7 @@ export const NotesCard = ({ canEdit, ...target }: NotesCardProps) => {
 
   return (
     <>
-      <Card title="הערות" subtitle={total > 0 ? `${total} הערות` : undefined} className="shadow-sm">
+      <Card title="הערות" subtitle={total > 0 ? `${total} הערות` : undefined}>
         {error && <Alert variant="error" message={error} />}
 
         {canEdit && (

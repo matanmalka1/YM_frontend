@@ -6,7 +6,7 @@ import {
   ChargesCreateModal,
   ChargeDetailDrawer,
   ChargesFiltersCard,
-  ChargesSummaryBar,
+  ChargesStatsSection,
   ChargesTableBlock,
   useChargesPage,
 } from '@/features/charges'
@@ -38,7 +38,7 @@ export const Charges: React.FC = () => {
       header={header}
       loadingMessage={status.loadingMessage}
     >
-      <ChargesSummaryBar
+      <ChargesStatsSection
         stats={stats.stats}
         isAdvisor={stats.isAdvisor}
         currentStatus={stats.currentStatus}

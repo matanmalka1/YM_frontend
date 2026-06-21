@@ -83,7 +83,7 @@ export const useClientsPage = () => {
 
   const clientItems = listData?.items ?? []
   const total = listData?.total ?? 0
-  const stats = listData?.stats ?? { active: 0, frozen: 0, closed: 0 }
+  const stats = listData?.stats ?? { osek_patur: 0, osek_murshe: 0, company_ltd: 0, employee: 0 }
   const error = listError ? getErrorMessage(listError, 'שגיאה בטעינת רשימת לקוחות') : null
 
   const createMutation = useMutation({
@@ -207,8 +207,9 @@ export const useClientsPage = () => {
     },
     stats: {
       values: stats,
-      selected: filters.status,
-      onStatusClick: (status: string) => handleFilterChange('status', filters.status === status ? '' : status),
+      selected: filters.entity_type,
+      onEntityTypeClick: (entityType: string) =>
+        handleFilterChange('entity_type', filters.entity_type === entityType ? '' : entityType),
     },
     filters: {
       values: filters,

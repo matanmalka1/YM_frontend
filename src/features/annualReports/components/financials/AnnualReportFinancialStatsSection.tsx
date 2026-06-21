@@ -1,0 +1,35 @@
+import { StatsCard } from '../../../../components/ui/layout/StatsCard'
+import { formatCurrencyILS as fmt } from '../../../../utils/utils'
+
+interface AnnualReportFinancialStatsSectionProps {
+  totalIncome: number
+  totalExpenses: number
+  taxableIncome: number
+}
+
+export const AnnualReportFinancialStatsSection: React.FC<AnnualReportFinancialStatsSectionProps> = ({
+  totalIncome,
+  totalExpenses,
+  taxableIncome,
+}) => {
+  const statCards = [
+    { key: 'income', title: 'סה"כ הכנסות', value: fmt(totalIncome), variant: 'green' as const },
+    { key: 'expenses', title: 'סה"כ הוצאות', value: fmt(totalExpenses), variant: 'red' as const },
+    {
+      key: 'taxable-income',
+      title: 'הכנסה חייבת',
+      value: fmt(taxableIncome),
+      variant: taxableIncome >= 0 ? ('blue' as const) : ('red' as const),
+    },
+  ]
+
+  return (
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      {statCards.map((card) => (
+        <StatsCard key={card.key} title={card.title} value={card.value} variant={card.variant} />
+      ))}
+    </div>
+  )
+}
+
+AnnualReportFinancialStatsSection.displayName = 'AnnualReportFinancialStatsSection'

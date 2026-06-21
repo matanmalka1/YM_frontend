@@ -1,16 +1,16 @@
 import { useMemo, useState } from 'react'
-import { AlertTriangle, CalendarDays, ListChecks, Play } from 'lucide-react'
+import { Play } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageContent } from '@/components/layout/PageContent'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { Select } from '@/components/ui/inputs/Select'
-import { StatsCard } from '@/components/ui/layout/StatsCard'
 import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
 import { DataTable, type Column } from '@/components/ui/table/DataTable'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { formatCount, formatDate, getErrorMessage, getHttpStatus } from '@/utils/utils'
 import { useTaxCalendarSettings } from '../hooks/useTaxCalendarSettings'
+import { TaxCalendarSettingsStatsSection } from '../components/TaxCalendarSettingsStatsSection'
 import type { TaxCalendarDeadlineRule, TaxCalendarSettingsEntry } from '../api'
 
 const currentYear = new Date().getFullYear()
@@ -275,28 +275,12 @@ export const TaxCalendarSettingsPage = () => {
         <Alert variant="error" message={getErrorMessage(summaryQuery.error, 'שגיאה בטעינת תקציר יומן המס')} />
       ) : null}
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        <StatsCard
-          title="טווח שנים"
-          value={`${formatYear(startYearState.value)}–${formatYear(endYearState.value)}`}
-          icon={CalendarDays}
-          variant="blue"
-        />
-        <StatsCard
-          title="רשומות"
-          value={summary?.total_entries ?? 0}
-          icon={ListChecks}
-          variant="neutral"
-          loading={summaryQuery.isPending}
-        />
-        <StatsCard
-          title="אזהרות"
-          value={warnings.length}
-          icon={AlertTriangle}
-          variant={warnings.length > 0 ? 'orange' : 'green'}
-          loading={summaryQuery.isPending}
-        />
-      </div>
+      <TaxCalendarSettingsStatsSection
+        yearRange={`${formatYear(startYearState.value)}–${formatYear(endYearState.value)}`}
+        totalEntries={summary?.total_entries ?? 0}
+        warningsCount={warnings.length}
+        isLoading={summaryQuery.isPending}
+      />
 
       {warnings.length > 0 ? (
         <div className="space-y-2">

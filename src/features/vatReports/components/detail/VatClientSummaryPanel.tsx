@@ -1,23 +1,20 @@
 import { useState, useMemo } from 'react'
-import { Activity, CheckCircle2, MinusCircle, ReceiptText, WalletCards } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { StatsCard } from '@/components/ui/layout/StatsCard'
+import { AlertTriangle } from 'lucide-react'
+import { InlineState } from '@/components/ui/feedback'
+import { Spinner } from '@/components/ui/primitives/Spinner'
 import { VatWorkItemsCreateModal } from '../form/VatWorkItemsCreateModal'
 import { VatClientActionBar } from './VatClientActionBar'
 import { VatPeriodCard } from './VatPeriodCard'
 import type { CreateVatWorkItemPayload, VatAnnualSummary, VatPeriodRow } from '../../api'
 import { showErrorToast } from '@/utils/utils'
 import { useRole } from '@/hooks/useRole'
-import { formatVatAmount } from '../../utils/vatHelpers'
 import { useVatClientSummary } from '../../hooks/useVatClientSummary'
 import type { VatClientSummaryPanelProps } from '../../types'
 import { canOpenVatPeriodRow, getClientSummaryRowsForYear } from '../../utils/viewHelpers'
-
-const fmt = formatVatAmount
+import { VatClientSummaryStatsSection } from './VatClientSummaryStatsSection'
 
 const YearSummary = ({ annual }: { annual: VatAnnualSummary }) => {
-  const avgNetVat = annual.periods_count > 0 ? (Number(annual.net_vat) / annual.periods_count).toFixed(2) : null
-
   return (
     <section className="space-y-3">
       <div className="mb-3">
@@ -26,28 +23,7 @@ const YearSummary = ({ annual }: { annual: VatAnnualSummary }) => {
           <p className="mt-0.5 text-xs text-gray-500">נתוני התקופות שהוקלדו והוגשו עבור הלקוח</p>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
-        <StatsCard
-          title="תקופות שהוגשו"
-          value={`${annual.filed_count} מתוך ${annual.periods_count}`}
-          icon={CheckCircle2}
-          variant="green"
-        />
-        <StatsCard title="מע״מ עסקאות" value={fmt(annual.total_output_vat)} icon={ReceiptText} variant="neutral" />
-        <StatsCard title="מע״מ תשומות" value={fmt(annual.total_input_vat)} icon={MinusCircle} variant="neutral" />
-        <StatsCard
-          title="מע״מ נטו לתשלום"
-          value={fmt(annual.net_vat)}
-          icon={WalletCards}
-          variant={Number(annual.net_vat) >= 0 ? 'red' : 'green'}
-        />
-        <StatsCard
-          title="מע״מ ממוצע לתקופה"
-          value={avgNetVat !== null ? fmt(avgNetVat) : '—'}
-          icon={Activity}
-          variant="neutral"
-        />
-      </div>
+      <VatClientSummaryStatsSection annual={annual} />
     </section>
   )
 }
@@ -103,11 +79,8 @@ export const VatClientSummaryPanel = ({ clientId }: VatClientSummaryPanelProps) 
         onYearChange={setSelectedYear}
       />
 
-      {/* Error */}
       {error && (
-        <div className="rounded-lg border border-negative-200 bg-negative-50 px-4 py-3 text-sm text-negative-700">
-          שגיאה בטעינת נתוני מע״מ. אנא נסה שוב מאוחר יותר.
-        </div>
+        <InlineState variant="error" icon={AlertTriangle} title="שגיאה בטעינת נתוני מע״מ. אנא נסה שוב מאוחר יותר." />
       )}
 
       {!error && selectedAnnual && <YearSummary annual={selectedAnnual} />}
@@ -116,9 +89,11 @@ export const VatClientSummaryPanel = ({ clientId }: VatClientSummaryPanelProps) 
       {!error && (
         <>
           {isLoading ? (
-            <div className="py-10 text-center text-sm text-gray-400">טוען...</div>
+            <div className="flex justify-center py-10">
+              <Spinner label="טוען נתוני מע״מ" />
+            </div>
           ) : !selectedAnnual || rows.length === 0 ? (
-            <div className="py-10 text-center text-sm text-gray-400">אין תקופות מע״מ ללקוח זה</div>
+            <InlineState title="אין תקופות מע״מ ללקוח זה" />
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {rows.map((row) => (

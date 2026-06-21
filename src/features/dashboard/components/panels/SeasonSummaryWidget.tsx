@@ -107,9 +107,7 @@ const CompactSeasonSummary = ({
             <li key={item.label} className="flex items-center gap-2">
               <span className="h-2 w-2 shrink-0 rounded-[3px]" style={{ background: item.color }} />
               <span className="flex-1 text-xs font-medium text-slate-500">{item.label}</span>
-              <span className="text-xs font-bold tabular-nums text-slate-800">
-                {formatCount(item.value)}
-              </span>
+              <span className="text-xs font-bold tabular-nums text-slate-800">{formatCount(item.value)}</span>
             </li>
           ))}
         </ul>

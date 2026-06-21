@@ -5200,20 +5200,25 @@ export interface components {
     /** ClientRecordListStats */
     ClientRecordListStats: {
       /**
-       * Active
+       * Osek Patur
        * @default 0
        */
-      active: number
+      osek_patur: number
       /**
-       * Frozen
+       * Osek Murshe
        * @default 0
        */
-      frozen: number
+      osek_murshe: number
       /**
-       * Closed
+       * Company Ltd
        * @default 0
        */
-      closed: number
+      company_ltd: number
+      /**
+       * Employee
+       * @default 0
+       */
+      employee: number
     }
     /** ClientRecordResponse */
     ClientRecordResponse: {

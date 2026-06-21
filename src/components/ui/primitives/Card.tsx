@@ -7,6 +7,7 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string
   title?: string
   subtitle?: string
+  icon?: React.ReactNode
   actions?: React.ReactNode
   footer?: React.ReactNode
   variant?: 'default' | 'elevated' | 'outlined'
@@ -30,6 +31,7 @@ export const Card: React.FC<CardProps> = ({
   className,
   title,
   subtitle,
+  icon,
   actions,
   footer,
   variant = 'default',
@@ -56,9 +58,9 @@ export const Card: React.FC<CardProps> = ({
       style={style}
       {...rest}
     >
-      {(title || subtitle || actions) && (
+      {(title || subtitle || actions || icon) && (
         <div className={cn(headerPadding, 'border-b border-gray-100')}>
-          <SectionHeader title={title} subtitle={subtitle} actions={actions} size="sm" />
+          <SectionHeader title={title} subtitle={subtitle} actions={actions} icon={icon} size="sm" />
         </div>
       )}
 

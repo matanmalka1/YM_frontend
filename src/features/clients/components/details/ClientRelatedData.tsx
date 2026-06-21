@@ -146,7 +146,7 @@ export const ClientRelatedData: FC<ClientRelatedDataProps> = ({
   )
 
   return (
-    <Card title="נתונים קשורים" actions={actions} size="compact" className="shadow-sm">
+    <Card title="נתונים קשורים" actions={actions} size="compact">
       <div ref={loadTriggerRef}>
         {!hasRequestedData ? (
           <div className="min-h-[132px]" />

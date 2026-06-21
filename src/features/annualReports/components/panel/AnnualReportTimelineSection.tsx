@@ -4,6 +4,7 @@ import { FilingTimelineTab } from '../shared/FilingTimelineTab'
 import { StatusAuditTimeline } from '../statusTransition/StatusAuditTimeline'
 import { annualReportsApi, annualReportsQK } from '../../api'
 import { CLIENT_TYPE_LABELS } from '../../constants/panelConstants'
+import { Card } from '../../../../components/ui/primitives/Card'
 import { ReportHistoryTable } from './ReportHistoryTable'
 import type { AnnualReportDetail } from '../../types'
 
@@ -26,15 +27,13 @@ export const AnnualReportTimelineSection = ({ report }: AnnualReportTimelineSect
     <div className="space-y-6">
       <FilingTimelineTab reports={[report]} />
 
-      <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-        <h3 className="mb-4 text-sm font-semibold text-gray-700">היסטוריית דוחות</h3>
+      <Card title="היסטוריית דוחות" size="compact">
         <ReportHistoryTable clientId={report.client_record_id} currentReportId={report.id} />
-      </div>
+      </Card>
 
-      <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-        <h3 className="mb-4 text-sm font-semibold text-gray-700">היסטוריית סטטוסים</h3>
+      <Card title="היסטוריית סטטוסים" size="compact">
         <StatusAuditTimeline audit={audit?.items ?? []} />
-      </div>
+      </Card>
 
       <EntityAuditTrailSection
         entityType="annual_report"

@@ -38,25 +38,36 @@ export const AgingReportHeader: React.FC<AgingReportHeaderProps> = ({ data }) =>
       variant: "red" as const,
     },
   ];
+  const statCards = [
+    {
+      key: 'total-outstanding',
+      title: 'סה"כ חובות',
+      value: formatILS(data.total_outstanding),
+      icon: DollarSign,
+      variant: 'blue' as const,
+      description: `${data.summary.total_clients} לקוחות עם יתרות פתוחות`,
+    },
+    ...buckets.map((bucket) => ({
+      key: bucket.title,
+      title: bucket.title,
+      value: formatILS(bucket.amount),
+      icon: Clock,
+      variant: bucket.variant,
+      description: getBucketShare(bucket.amount, data.total_outstanding),
+    })),
+  ];
 
   return (
     <div className="flex flex-col gap-3">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
-        <StatsCard
-          title='סה"כ חובות'
-          value={formatILS(data.total_outstanding)}
-          icon={DollarSign}
-          variant="blue"
-          description={`${data.summary.total_clients} לקוחות עם יתרות פתוחות`}
-        />
-        {buckets.map((bucket) => (
+        {statCards.map((card) => (
           <StatsCard
-            key={bucket.title}
-            title={bucket.title}
-            value={formatILS(bucket.amount)}
-            icon={Clock}
-            variant={bucket.variant}
-            description={getBucketShare(bucket.amount, data.total_outstanding)}
+            key={card.key}
+            title={card.title}
+            value={card.value}
+            icon={card.icon}
+            variant={card.variant}
+            description={card.description}
           />
         ))}
       </div>

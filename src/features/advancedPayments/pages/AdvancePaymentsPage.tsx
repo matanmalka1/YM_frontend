@@ -2,7 +2,7 @@ import { PlusCircle, Calendar } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageContent } from '@/components/layout/PageContent'
 import { Button } from '@/components/ui/primitives/Button'
-import { AdvancePaymentsStatsCards } from '../components/stats/AdvancePaymentsStatsCards'
+import { AdvancePaymentsStatsSection } from '../components/stats/AdvancePaymentsStatsSection'
 import { AdvancePaymentsBatchesList } from '../components/table/AdvancePaymentsBatchesList'
 import { AdvancePaymentsFiltersBar } from '../components/filters/AdvancePaymentsFiltersBar'
 import { AdvancePaymentDrawer } from '../components/drawer/AdvancePaymentDrawer'
@@ -33,7 +33,7 @@ export const AdvancePayments: React.FC = () => {
         }
       />
 
-      <AdvancePaymentsStatsCards
+      <AdvancePaymentsStatsSection
         dueThisMonthCount={stats.workflowStats.dueThisMonthCount}
         pendingCount={stats.workflowStats.pendingCount}
         missingTurnoverCount={stats.workflowStats.missingTurnoverCount}

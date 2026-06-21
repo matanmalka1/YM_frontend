@@ -7,7 +7,7 @@ import { useClientCharges } from '../../hooks/useClientCharges'
 import { buildChargeColumns } from '../list/ChargeColumns'
 import { ChargeDetailDrawer } from '../detail/ChargeDetailDrawer'
 import { ChargesCreateModal } from '../form/ChargesCreateModal'
-import { ChargesSummaryBar } from '../list/ChargesSummaryBar'
+import { ChargesStatsSection } from '../list/ChargesStatsSection'
 import { ChargesTableBlock } from '../list/ChargesTableBlock'
 
 interface ClientChargesTabProps {
@@ -98,7 +98,7 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
         </div>
       }
       summary={
-        <ChargesSummaryBar
+        <ChargesStatsSection
           stats={stats}
           isAdvisor={isAdvisor}
           currentStatus={currentStatus}

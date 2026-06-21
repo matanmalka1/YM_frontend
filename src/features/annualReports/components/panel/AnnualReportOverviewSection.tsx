@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { ChevronDown, ChevronUp, BarChart3 } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
+import { Card } from '../../../../components/ui/primitives/Card'
 import { ReportAlertBanners } from './ReportAlertBanners'
-import { ReportSummaryCards } from './ReportSummaryCards'
+import { AnnualReportStatsSection } from './AnnualReportStatsSection'
 import { ReportMetaGrid } from './ReportMetaGrid'
 import { AnnualReportDetailForm } from '../tax/AnnualReportDetailForm'
 import { ScheduleChecklist } from '../annex/ScheduleChecklist'
@@ -49,16 +50,14 @@ export const AnnualReportOverviewSection: React.FC<Props> = ({
     <div className="space-y-6">
       <ReportAlertBanners report={report} advances={advances} />
 
-      <ReportSummaryCards report={report} />
+      <AnnualReportStatsSection report={report} />
 
       {/* Meta + detail form */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-          <h3 className="mb-4 text-sm font-semibold text-gray-700">פרטי הדוח</h3>
+        <Card title="פרטי הדוח" size="compact">
           <ReportMetaGrid report={report} />
-        </div>
-        <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-          <h3 className="mb-4 text-sm font-semibold text-gray-700">עדכון נתונים</h3>
+        </Card>
+        <Card title="עדכון נתונים" size="compact">
           <AnnualReportDetailForm
             detail={detail}
             onSave={onDetailSave}
@@ -66,7 +65,7 @@ export const AnnualReportOverviewSection: React.FC<Props> = ({
             onDirtyChange={onDirtyChange}
             submitRef={submitRef}
           />
-        </div>
+        </Card>
       </div>
 
       <ScheduleChecklist

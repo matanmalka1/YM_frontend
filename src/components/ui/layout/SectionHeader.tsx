@@ -4,6 +4,8 @@ interface SectionHeaderProps {
   title?: React.ReactNode
   subtitle?: React.ReactNode
   actions?: React.ReactNode
+  /** Optional icon rendered inline before the title (e.g. a lucide icon). */
+  icon?: React.ReactNode
   /**
    * xs  — DrawerSection label (uppercase, tracking-wide)
    * sm  — Card header
@@ -19,6 +21,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   title,
   subtitle,
   actions,
+  icon,
   size = 'sm',
   border = 'none',
   className,
@@ -30,7 +33,8 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
       className,
     )}
   >
-    <div>
+    <div className={cn(icon && 'flex items-center gap-2')}>
+      {icon && <span className="shrink-0">{icon}</span>}
       {title != null &&
         (size === 'lg' ? (
           <h1 className="font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-black md:text-3xl">

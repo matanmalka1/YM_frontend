@@ -7,6 +7,7 @@ import { cn, formatCurrencyILS as fmt } from '../../../../utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { CATEGORY_ICONS } from '../../constants/taxConstants'
 import { getRecognitionTone } from '../../utils/taxHelpers'
+import { Card } from '../../../../components/ui/primitives/Card'
 
 interface Props {
   reportId: number
@@ -28,16 +29,17 @@ export const DeductionsTab: React.FC<Props> = ({ reportId, taxYear }) => {
     <div className="space-y-5">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {/* Recognized deductions */}
-        <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50 px-5 py-3">
-            <div className="flex items-center gap-2">
-              <Scissors className="h-4 w-4 text-negative-500" />
-              <h3 className="text-sm font-semibold text-gray-800">ניכויים מוכרים</h3>
-            </div>
-            {expenses.length > 0 && (
+        <Card
+          title="ניכויים מוכרים"
+          icon={<Scissors className="h-4 w-4 text-negative-500" />}
+          actions={
+            expenses.length > 0 ? (
               <span className={cn('text-sm font-bold', semanticMonoToneClasses.negative)}>{fmt(totalRecognized)}</span>
-            )}
-          </div>
+            ) : undefined
+          }
+          size="compact"
+          disablePadding
+        >
           <div className="divide-y divide-gray-50">
             {expenses.length === 0 && <p className="px-5 py-8 text-center text-sm text-gray-400">אין ניכויים להצגה</p>}
             {expenses.map((e) => {
@@ -64,7 +66,7 @@ export const DeductionsTab: React.FC<Props> = ({ reportId, taxYear }) => {
               )
             })}
           </div>
-        </div>
+        </Card>
 
         <TaxCreditsPanel reportId={reportId} taxYear={taxYear} />
       </div>

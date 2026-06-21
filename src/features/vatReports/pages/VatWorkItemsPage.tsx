@@ -1,4 +1,4 @@
-import { Clock, FileText, Hourglass, CheckCircle2, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageContent } from '@/components/layout/PageContent'
 import {
@@ -6,10 +6,10 @@ import {
   VatWorkItemsCreateModal,
   VatWorkItemsFiltersCard,
   VatWorkItemsGroupedCards,
+  VatWorkItemsStatsSection,
 } from '@/features/vatReports'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
-import { StatsCard } from '@/components/ui/layout/StatsCard'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 
 export const VatWorkItems: React.FC = () => {
@@ -33,14 +33,7 @@ export const VatWorkItems: React.FC = () => {
         <Alert variant="info" message='צפייה בלבד. פתיחת תיקי מע"מ זמינה ליועץ. ניתן לבצע הקלדת נתונים בתוך כל תיק.' />
       )}
 
-      {stats.visible && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <StatsCard title="ממתין לחומרים" value={stats.pending ?? 0} icon={Hourglass} variant="orange" />
-          <StatsCard title="בהקלדה" value={stats.typing ?? 0} icon={Clock} variant="blue" />
-          <StatsCard title="ממתין לבדיקה" value={stats.review ?? 0} icon={FileText} variant="orange" />
-          <StatsCard title="הוגש" value={stats.filed ?? 0} icon={CheckCircle2} variant="green" />
-        </div>
-      )}
+      {stats.visible && <VatWorkItemsStatsSection stats={stats} />}
 
       <VatWorkItemsFiltersCard
         filters={filters.values}

@@ -52,8 +52,8 @@ export const Clients: React.FC = () => {
         <>
           <ClientsStatsSection
             stats={stats.values}
-            selectedStatus={stats.selected}
-            onStatusClick={stats.onStatusClick}
+            selectedEntityType={stats.selected}
+            onEntityTypeClick={stats.onEntityTypeClick}
           />
           <ClientsFiltersBar
             filters={filters.values}

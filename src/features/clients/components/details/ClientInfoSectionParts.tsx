@@ -27,7 +27,7 @@ export const DefinitionSectionCard = ({
   columns: 2 | 3
   headerAction?: ReactNode
 }) => (
-  <Card title={title} size="compact" className="shadow-sm" actions={headerAction}>
+  <Card title={title} size="compact" actions={headerAction}>
     <DefinitionList
       columns={columns}
       items={items.map((item) => ({ ...item, value: displayValue(item.value) }))}
