@@ -62,7 +62,7 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
   const netVat = Number(row.net_vat)
   const isRefund = netVat < 0
   const netLabel = isRefund ? 'נטו להחזר' : 'נטו לתשלום'
-  const netBg = isRefund ? 'bg-success-50' : 'bg-gray-50'
+  const netBg = isRefund ? 'bg-positive-50' : 'bg-gray-50'
   const netTextClass = getNetVatTone(row.net_vat)
 
   return (

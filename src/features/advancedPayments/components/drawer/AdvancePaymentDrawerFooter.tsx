@@ -28,7 +28,7 @@ export const AdvancePaymentDrawerFooter: React.FC<AdvancePaymentDrawerFooterProp
         <Button
           variant="ghost"
           size="sm"
-          className="text-gray-400 hover:text-error-600 hover:bg-error-50"
+          className="text-gray-400 hover:text-negative-600 hover:bg-negative-50"
           onClick={() => setConfirmDelete(true)}
           disabled={isUpdating || isDeleting}
           aria-label="מחק מקדמה"

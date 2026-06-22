@@ -53,7 +53,7 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
   if (!model) return null
 
   const timingStatusLabel = model.paidLate ? 'שולם באיחור' : model.timingStatus === 'overdue' ? 'באיחור' : null
-  const timingStatusClass = model.paidLate ? 'text-warning-600' : 'text-error-600'
+  const timingStatusClass = model.paidLate ? 'text-warning-600' : 'text-negative-600'
 
   const advanceRateDisplay = formatAdvanceRate(model.advanceRate)
   const subtitle = [

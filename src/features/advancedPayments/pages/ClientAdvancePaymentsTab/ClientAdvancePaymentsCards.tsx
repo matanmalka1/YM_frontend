@@ -65,13 +65,13 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
           {
             label: 'יתרה',
             value: (
-              <span className={balance > 0 ? 'text-error-600' : 'text-success-600'}>{formatShekelAmount(balance)}</span>
+              <span className={balance > 0 ? 'text-negative-600' : 'text-positive-600'}>{formatShekelAmount(balance)}</span>
             ),
           },
           {
             label: turnoverLabel,
             value: (
-              <span className={row.missing_turnover ? 'text-error-600' : undefined}>
+              <span className={row.missing_turnover ? 'text-negative-600' : undefined}>
                 {hasTurnover ? formatShekelAmount(Number(turnover)) : '—'}
               </span>
             ),
@@ -102,7 +102,7 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
 
               <div>
                 <div className="text-xs text-gray-400 mb-0.5">צפוי לתשלום</div>
-                <div className="text-2xl font-bold text-success-700">{formatShekelAmount(expected)}</div>
+                <div className="text-2xl font-bold text-positive-700">{formatShekelAmount(expected)}</div>
               </div>
 
               <DefinitionList
