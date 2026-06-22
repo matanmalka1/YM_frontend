@@ -44,9 +44,7 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
     runAction,
     runBulkAction,
     submitCreate,
-    handleStatusChange,
     setPage,
-    currentStatus,
   } = useClientCharges(clientId)
 
   const columns = useMemo(
@@ -98,12 +96,7 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
         </div>
       }
       summary={
-        <ChargesStatsSection
-          stats={stats}
-          isAdvisor={isAdvisor}
-          currentStatus={currentStatus}
-          onStatusClick={handleStatusChange}
-        />
+        <ChargesStatsSection stats={stats} isAdvisor={isAdvisor} />
       }
     >
       <ChargesTableBlock

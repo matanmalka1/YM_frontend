@@ -1,5 +1,6 @@
 import { CheckCircle2, AlertTriangle, Users } from 'lucide-react'
 import { StatsCard } from '../../../../components/ui/layout/StatsCard'
+import { formatPercent } from '@/utils/utils'
 import type { SeasonSummary } from '../../api'
 
 interface SeasonSummaryCardsProps {
@@ -18,16 +19,16 @@ export const SeasonSummaryCards: React.FC<SeasonSummaryCardsProps> = ({ summary 
       description: `שנת מס ${summary.tax_year}`,
       icon: Users,
       variant: 'blue' as const,
-      trend: undefined,
+      progress: undefined,
     },
     {
       key: 'completed',
       title: 'הוגשו / הסתיימו',
       value: done,
-      description: `${summary.completion_rate}% מכלל הדוחות`,
+      description: `${formatPercent(completionRate)} אחוז הגשה`,
       icon: CheckCircle2,
       variant: 'green' as const,
-      trend: { value: completionRate, label: 'אחוז הגשה' },
+      progress: completionRate,
     },
     {
       key: 'overdue',
@@ -36,7 +37,7 @@ export const SeasonSummaryCards: React.FC<SeasonSummaryCardsProps> = ({ summary 
       description: 'חרגו ממועד הגשה',
       icon: AlertTriangle,
       variant: summary.overdue_count > 0 ? ('red' as const) : ('neutral' as const),
-      trend: undefined,
+      progress: undefined,
     },
   ]
 
@@ -50,7 +51,7 @@ export const SeasonSummaryCards: React.FC<SeasonSummaryCardsProps> = ({ summary 
           description={card.description}
           icon={card.icon}
           variant={card.variant}
-          trend={card.trend}
+          progress={card.progress}
         />
       ))}
     </div>

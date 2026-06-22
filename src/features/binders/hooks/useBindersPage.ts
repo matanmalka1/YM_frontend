@@ -148,8 +148,6 @@ export const useBindersPage = () => {
     stats: {
       counters,
       countersLoading: false,
-      locationStatus: filters.location_status,
-      onFilterChange: handleFilterChange,
     },
     filters: {
       values: filters,

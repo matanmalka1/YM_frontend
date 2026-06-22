@@ -6,19 +6,9 @@ import { getChargeStatusStatDisplay } from '../../utils/chargeHelpers'
 interface ChargesStatsSectionProps {
   stats: ChargeListStats
   isAdvisor: boolean
-  currentStatus: string
-  onStatusClick: (status: string) => void
 }
 
-export const ChargesStatsSection: React.FC<ChargesStatsSectionProps> = ({
-  stats,
-  isAdvisor,
-  currentStatus,
-  onStatusClick,
-}) => {
-  const handleClick = (status: string) => {
-    onStatusClick(currentStatus === status ? '' : status)
-  }
+export const ChargesStatsSection: React.FC<ChargesStatsSectionProps> = ({ stats, isAdvisor }) => {
   const statCards = [
     {
       status: 'issued',
@@ -64,8 +54,6 @@ export const ChargesStatsSection: React.FC<ChargesStatsSectionProps> = ({
           icon={card.icon}
           variant={card.variant}
           description={card.description}
-          selected={currentStatus === card.status}
-          onClick={() => handleClick(card.status)}
         />
       ))}
     </div>

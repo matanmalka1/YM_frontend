@@ -30,12 +30,7 @@ export const Binders: React.FC = () => {
       header={header}
       loadingMessage={status.loadingMessage}
     >
-      <BindersStatsSection
-        counters={stats.counters}
-        countersLoading={stats.countersLoading}
-        locationStatus={stats.locationStatus}
-        onFilterChange={stats.onFilterChange}
-      />
+      <BindersStatsSection counters={stats.counters} countersLoading={stats.countersLoading} />
 
       <BindersFiltersBar
         filters={filters.values}

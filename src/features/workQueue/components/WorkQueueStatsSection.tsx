@@ -9,17 +9,9 @@ interface WorkQueueStatsSectionProps {
   summary: WorkQueueSummary | undefined
   isLoading?: boolean
   summaryError?: string | null
-  urgencyFilter: WorkQueueUrgency | null
-  onFilter: (urgency: WorkQueueUrgency | null) => void
 }
 
-export const WorkQueueStatsSection: React.FC<WorkQueueStatsSectionProps> = ({
-  summary,
-  isLoading,
-  summaryError,
-  urgencyFilter,
-  onFilter,
-}) => {
+export const WorkQueueStatsSection: React.FC<WorkQueueStatsSectionProps> = ({ summary, isLoading, summaryError }) => {
   const isInitialLoading = Boolean(isLoading) && !summary
   const stats = useMemo(
     () => [
@@ -82,8 +74,6 @@ export const WorkQueueStatsSection: React.FC<WorkQueueStatsSectionProps> = ({
           loading={isInitialLoading}
           icon={icon}
           variant={variant}
-          selected={urgencyFilter === value}
-          onClick={() => onFilter(urgencyFilter === value ? null : value)}
           className="h-full w-full"
         />
       ))}

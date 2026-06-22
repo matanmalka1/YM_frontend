@@ -127,8 +127,6 @@ export const useChargesPage = () => {
     stats: {
       stats,
       isAdvisor,
-      currentStatus: filters.status,
-      onStatusClick: (status: string) => setFilter('status', status),
     },
     filters: {
       values: filters,

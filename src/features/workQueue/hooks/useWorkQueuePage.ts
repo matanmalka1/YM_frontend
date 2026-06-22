@@ -17,7 +17,7 @@ import {
 import { buildWorkQueueColumns } from '../components/workQueueColumns'
 import { useWorkQueue } from './useWorkQueue'
 import { useWorkQueueActions } from './useWorkQueueActions'
-import type { WorkQueueParams, WorkQueueUrgency } from '../api/contracts'
+import type { WorkQueueParams } from '../api/contracts'
 
 const parseLinkedFilter = (value: string | null): 'linked' | 'unlinked' | null =>
   value === 'linked' || value === 'unlinked' ? value : null
@@ -154,9 +154,6 @@ export const useWorkQueuePage = () => {
       summary,
       isLoading: isFetching,
       summaryError: requestError,
-      urgencyFilter,
-      onFilter: (urgency: WorkQueueUrgency | null) =>
-        handleFilterChange(WORK_QUEUE_FILTER_PARAM_KEYS.urgency, urgency ?? ''),
     },
     filters: {
       search,

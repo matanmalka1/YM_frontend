@@ -2,11 +2,9 @@ import { StatsCard } from '@/components/ui/layout/StatsCard'
 
 interface ClientsStatsSectionProps {
   stats: { osek_patur: number; osek_murshe: number; company_ltd: number; employee: number }
-  selectedEntityType: string | undefined
-  onEntityTypeClick: (entityType: string) => void
 }
 
-export const ClientsStatsSection = ({ stats, selectedEntityType, onEntityTypeClick }: ClientsStatsSectionProps) => {
+export const ClientsStatsSection = ({ stats }: ClientsStatsSectionProps) => {
   const entityTypeCards = [
     {
       key: 'osek_patur',
@@ -47,8 +45,6 @@ export const ClientsStatsSection = ({ stats, selectedEntityType, onEntityTypeCli
           value={card.count}
           description={card.description}
           variant={card.variant}
-          selected={selectedEntityType === card.key}
-          onClick={() => onEntityTypeClick(card.key)}
         />
       ))}
     </div>

@@ -38,12 +38,7 @@ export const Charges: React.FC = () => {
       header={header}
       loadingMessage={status.loadingMessage}
     >
-      <ChargesStatsSection
-        stats={stats.stats}
-        isAdvisor={stats.isAdvisor}
-        currentStatus={stats.currentStatus}
-        onStatusClick={stats.onStatusClick}
-      />
+      <ChargesStatsSection stats={stats.stats} isAdvisor={stats.isAdvisor} />
 
       <ChargesFiltersCard
         filters={filters.values}

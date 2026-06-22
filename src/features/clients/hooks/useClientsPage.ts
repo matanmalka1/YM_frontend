@@ -149,7 +149,9 @@ export const useClientsPage = () => {
     error: editingClientError,
   } = useClientQuery({ clientId: editingClientId })
 
-  const hasActiveFilters = Boolean(filters.search || filters.status || filters.accountant_id)
+  const hasActiveFilters = Boolean(
+    filters.search || filters.status || filters.accountant_id || filters.entity_type,
+  )
   const isEmptyState = !loading && !error && total === 0 && !hasActiveFilters
 
   return {
@@ -166,9 +168,6 @@ export const useClientsPage = () => {
     },
     stats: {
       values: stats,
-      selected: filters.entity_type,
-      onEntityTypeClick: (entityType: string) =>
-        handleFilterChange('entity_type', filters.entity_type === entityType ? '' : entityType),
     },
     filters: {
       values: filters,
@@ -197,7 +196,13 @@ export const useClientsPage = () => {
           isEmptyState && can.createClients
             ? 'צור לקוח ראשון או ייבא רשימת לקוחות קיימת. יצירת לקוח תפתח אוטומטית קלסר ראשוני, מועדי מס רלוונטיים ותיק דוח שנתי לפי סוג הלקוח.'
             : 'לא נמצאו לקוחות התואמים את החיפוש או הסינון הנוכחי.',
-        action: isEmptyState && can.createClients ? { label: 'לקוח חדש', onClick: openCreate } : undefined,
+        action: isEmptyState
+          ? can.createClients
+            ? { label: 'לקוח חדש', onClick: openCreate }
+            : undefined
+          : hasActiveFilters
+            ? { label: 'איפוס סינון', onClick: handleReset }
+            : undefined,
         secondaryAction:
           isEmptyState && can.createClients ? { label: 'ייבוא לקוחות', onClick: openImportExport } : undefined,
       },

@@ -5,16 +5,9 @@ import type { BinderListCounters } from '../../types'
 interface BindersStatsSectionProps {
   counters: BinderListCounters
   countersLoading?: boolean
-  locationStatus: string
-  onFilterChange: (key: string, value: string) => void
 }
 
-export const BindersStatsSection = ({
-  counters,
-  countersLoading = false,
-  locationStatus,
-  onFilterChange,
-}: BindersStatsSectionProps) => {
+export const BindersStatsSection = ({ counters, countersLoading = false }: BindersStatsSectionProps) => {
   const statusPills = [
     {
       key: '',
@@ -61,8 +54,6 @@ export const BindersStatsSection = ({
           loading={countersLoading}
           icon={pill.icon}
           variant={pill.variant}
-          onClick={() => onFilterChange('location_status', pill.key)}
-          selected={(locationStatus ?? '') === pill.key}
           className="h-full w-full text-right"
         />
       ))}

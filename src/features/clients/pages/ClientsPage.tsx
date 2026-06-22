@@ -50,11 +50,7 @@ export const Clients: React.FC = () => {
       )}
       {!isEmptyState && (
         <>
-          <ClientsStatsSection
-            stats={stats.values}
-            selectedEntityType={stats.selected}
-            onEntityTypeClick={stats.onEntityTypeClick}
-          />
+          <ClientsStatsSection stats={stats.values} />
           <ClientsFiltersBar
             filters={filters.values}
             onFilterChange={filters.onFilterChange}
