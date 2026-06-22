@@ -107,7 +107,7 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
         )}
 
         {contextItems.length > 0 && (
-          <div className="rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+          <div className="rounded-lg border border-gray-200 bg-gray-50/50 px-3 py-2.5 shadow-elevation-0">
             <DefinitionList items={contextItems} columns={2} className="gap-x-4 gap-y-2" valueClassName="truncate" />
           </div>
         )}

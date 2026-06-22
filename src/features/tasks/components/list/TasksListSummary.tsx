@@ -13,7 +13,7 @@ export const TasksListSummary: React.FC<TasksListSummaryProps> = ({ total, visib
   <section className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_20rem]">
     <div className="rounded-2xl border border-gray-200/80 bg-white p-4 shadow-sm">
       <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] border border-gray-200 bg-gray-100 text-gray-700">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tile border border-gray-200 bg-gray-100 text-gray-700">
           <ListChecks className="h-5 w-5" aria-hidden="true" />
         </span>
         <div className="min-w-0">
@@ -33,11 +33,11 @@ export const TasksListSummary: React.FC<TasksListSummaryProps> = ({ total, visib
             {featuredTask?.title ?? 'אין משימות להצגה'}
           </p>
         </div>
-        <span className="shrink-0 rounded-full bg-white px-2 py-1 text-[11px] font-semibold text-gray-600 shadow-sm">
+        <span className="shrink-0 rounded-full bg-white px-2 py-1 text-2xs font-semibold text-gray-600 shadow-sm">
           {featuredTask ? `#${featuredTask.id}` : '—'}
         </span>
       </div>
-      <div className="mt-3 grid grid-cols-3 gap-1.5 text-[11px]">
+      <div className="mt-3 grid grid-cols-3 gap-1.5 text-2xs">
         <TaskFocusPill label="סטטוס" value={featuredTask ? taskStatusLabels[featuredTask.status] : '—'} />
         <TaskFocusPill label="עדיפות" value={featuredTask ? taskPriorityLabels[featuredTask.priority] : '—'} />
         <TaskFocusPill label="יעד" value={formatTaskDueDate(featuredTask?.due_date)} />

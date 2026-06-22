@@ -120,7 +120,7 @@ export const DataTable = <T,>({
                 <th
                   key={column.key}
                   className={cn(
-                    'px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-gray-500',
+                    'px-3 py-2 text-2xs font-semibold uppercase tracking-wider text-gray-500',
                     'first:ps-5 last:pe-5',
                     stickyHeader && 'border-b border-gray-200 bg-gray-50/90 backdrop-blur-sm',
                     ALIGN_CLASS[column.headerAlign ?? column.align ?? 'center'],

@@ -78,7 +78,7 @@ export const NavbarPrimaryNav: React.FC<NavbarPrimaryNavProps> = ({ items }) => 
                   end={item.end}
                   className={({ isActive }) =>
                     cn(
-                      'focus-ring inline-flex h-9 items-center whitespace-nowrap rounded-[10px] border px-3 text-sm font-medium transition',
+                      'focus-ring inline-flex h-9 items-center whitespace-nowrap rounded-nav border px-3 text-sm font-medium transition',
                       isActive
                         ? 'border-gray-200 bg-white font-semibold text-gray-950 shadow-sm'
                         : 'border-transparent text-gray-600 hover:bg-white/80 hover:text-gray-950',

@@ -81,7 +81,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
                 className="focus-ring flex min-w-0 items-center gap-3 rounded-2xl px-1 py-1"
                 aria-label="מעבר ללוח הבקרה"
               >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] border border-gray-200 bg-gray-100 text-sm font-bold tracking-tight text-gray-900">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tile border border-gray-200 bg-gray-100 text-sm font-bold tracking-tight text-gray-900">
                   YM
                 </span>
                 <span className="min-w-0 text-right">
@@ -128,7 +128,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
                 </span>
                 <div>
                   <p className="text-sm font-semibold leading-tight text-gray-900">לקוחות</p>
-                  <p className="mt-0.5 text-[11px] leading-tight text-gray-500">
+                  <p className="mt-0.5 text-2xs leading-tight text-gray-500">
                     <span className="tabular-nums">{formatCount(hasSearch ? clients.length : total)}</span>{' '}
                     {hasSearch ? 'תוצאות' : 'ברשימה'}
                   </p>
@@ -154,7 +154,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
                   type="button"
                   onClick={() => setGroupMode(mode.value)}
                   className={cn(
-                    'focus-ring h-8 rounded-[10px] text-xs font-medium transition',
+                    'focus-ring h-8 rounded-nav text-xs font-medium transition',
                     groupMode === mode.value
                       ? 'bg-white text-gray-950 shadow-sm'
                       : 'text-gray-500 hover:bg-white/70 hover:text-gray-800',
@@ -210,7 +210,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
                   <section key={group.key} aria-label={group.label}>
                     <div className="mb-2 flex items-center gap-2 px-1">
                       <span className="flex-1 truncate text-xs font-semibold text-gray-600">{group.label}</span>
-                      <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-semibold tabular-nums text-gray-500">
+                      <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-2xs font-semibold tabular-nums text-gray-500">
                         {group.clients.length}
                       </span>
                     </div>
@@ -239,7 +239,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
                     {user?.full_name || 'אורח'}
                   </p>
                   {user?.role && (
-                    <p className="mt-0.5 truncate text-[11px] leading-tight text-gray-500">{getRoleLabel(user.role)}</p>
+                    <p className="mt-0.5 truncate text-2xs leading-tight text-gray-500">{getRoleLabel(user.role)}</p>
                   )}
                 </div>
               </div>

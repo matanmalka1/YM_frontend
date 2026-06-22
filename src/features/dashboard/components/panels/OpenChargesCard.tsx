@@ -14,7 +14,7 @@ export const OpenChargesCard = ({ count, amountIls }: OpenChargesCardProps) => {
   return (
     <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-elevation-1">
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">חיובים פתוחים</span>
+        <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">חיובים פתוחים</span>
         <span
           className={cn(
             'flex h-8 w-8 items-center justify-center rounded-xl',

@@ -1,456 +1,394 @@
 ---
 version: alpha
 name: YM Tax CRM
-description: Hebrew-first internal tax advisory CRM with a calm operational interface, dark institutional navigation, white data surfaces, indigo primary actions, amber accents, and clear semantic status colors.
+description: Hebrew-first, RTL internal tax advisory CRM. Calm white work surfaces, a light top navigation bar, blue (#007aff) primary actions, amber accents, indigo informational tone, and semantic status colors. Source of truth is the implemented component code (src/index.css @theme + src/components/ui/primitives), not this prose.
+source-of-truth: code
+derived-from:
+  - src/index.css
+  - src/components/ui/primitives/*
+  - src/components/ui/layout/StatsCard.tsx
+  - src/components/ui/overlays/*
+  - src/components/ui/table/DataTable.tsx
+  - src/utils/semanticColors.ts
 colors:
-  primary: '#4F46E5'
+  # primary = blue ramp (NOT indigo). primary-600 is the action color.
+  primary: '#007aff'
   on-primary: '#FFFFFF'
-  primary-hover: '#4338CA'
-  primary-active: '#312E81'
-  primary-container: '#EEF2FF'
-  on-primary-container: '#312E81'
-  secondary: '#101B2F'
-  on-secondary: '#FFFFFF'
-  secondary-container: '#0C1526'
-  on-secondary-container: '#CBD5E1'
-  tertiary: '#F59E0B'
-  on-tertiary: '#FFFFFF'
-  tertiary-container: '#FEF3C7'
-  on-tertiary-container: '#92400E'
+  primary-hover: '#0062cc'
+  primary-active: '#004A99'
+  primary-50: '#EEF6FF'
+  primary-100: '#E0EEFE'
+  primary-200: '#BCDCFD'
+  primary-300: '#84C2FC'
+  primary-400: '#4AA6FA'
+  primary-500: '#1C8DF5'
+  primary-600: '#007AFF'
+  primary-700: '#0062CC'
+  primary-800: '#004A99'
+  primary-900: '#00305C'
+  # accent = amber. Decorative emphasis / gradient text only.
+  accent-50: '#FFFBEB'
+  accent-100: '#FEF3C7'
+  accent-200: '#FDE68A'
+  accent-300: '#FCD34D'
+  accent-400: '#FBBF24'
+  accent-500: '#F59E0B'
+  accent-600: '#D97706'
+  accent-700: '#B45309'
+  accent-800: '#92400E'
+  accent-900: '#78350F'
+  # semantic: info (indigo)
+  info-50: '#EEF2FF'
+  info-100: '#E0E7FF'
+  info-200: '#C7D2FE'
+  info-400: '#818CF8'
+  info-500: '#6366F1'
+  info-700: '#4338CA'
+  info-800: '#312E81'
+  # semantic: positive (emerald)
+  positive-50: '#ECFDF5'
+  positive-100: '#D1FAE5'
+  positive-200: '#A7F3D0'
+  positive-400: '#34D399'
+  positive-500: '#10B981'
+  positive-700: '#047857'
+  positive-800: '#065F46'
+  # semantic: warning (amber)
+  warning-50: '#FFFBEB'
+  warning-100: '#FEF3C7'
+  warning-200: '#FDE68A'
+  warning-400: '#FBBF24'
+  warning-500: '#F59E0B'
+  warning-600: '#D97706'
+  warning-700: '#B45309'
+  warning-800: '#92400E'
+  # semantic: negative (red)
+  negative-50: '#FEF2F2'
+  negative-100: '#FEE2E2'
+  negative-200: '#FECACA'
+  negative-400: '#F87171'
+  negative-500: '#EF4444'
+  negative-600: '#DC2626'
+  negative-700: '#B91C1C'
+  negative-800: '#991B1B'
+  # surfaces
   background: '#F9FAFB'
-  background-gradient-start: '#F8FAFC'
-  background-gradient-end: '#EEF2FF'
   surface: '#FFFFFF'
-  surface-muted: '#F9FAFB'
-  surface-soft: '#F8FAFC'
-  surface-warm: '#F7F6F2'
-  surface-glass: '#FFFFFF'
   on-surface: '#0F172A'
-  on-surface-strong: '#020617'
-  on-surface-muted: '#475569'
-  on-surface-subtle: '#64748B'
-  inverse-surface: '#0A0F1F'
-  inverse-on-surface: '#FFFFFF'
-  outline: '#D1D5DB'
-  outline-soft: '#E5E7EB'
-  outline-muted: '#F3F4F6'
-  sidebar-start: '#101B2F'
-  sidebar-middle: '#0C1526'
-  sidebar-end: '#0A0F1F'
-  sidebar-active: '#4F7DFF'
-  sidebar-on-active: '#FFFFFF'
-  sidebar-text: '#9CA3AF'
-  sidebar-border: '#FFFFFF'
-  neutral-50: '#F9FAFB'
-  neutral-100: '#F3F4F6'
-  neutral-200: '#E5E7EB'
-  neutral-300: '#D1D5DB'
-  neutral-400: '#9CA3AF'
-  neutral-500: '#6B7280'
-  neutral-600: '#4B5563'
-  neutral-700: '#374151'
-  neutral-800: '#1F2937'
-  neutral-900: '#111827'
-  slate-50: '#F8FAFC'
-  slate-100: '#F1F5F9'
-  slate-200: '#E2E8F0'
-  slate-300: '#CBD5E1'
-  slate-400: '#94A3B8'
-  slate-500: '#64748B'
-  slate-600: '#475569'
-  slate-700: '#334155'
-  slate-800: '#1E293B'
-  slate-900: '#0F172A'
-  slate-950: '#020617'
-  info: '#6366F1'
-  info-container: '#E0E7FF'
-  on-info-container: '#312E81'
-  positive: '#10B981'
-  positive-container: '#D1FAE5'
-  on-positive-container: '#065F46'
-  warning: '#F59E0B'
-  warning-container: '#FEF3C7'
-  on-warning-container: '#92400E'
-  negative: '#DC2626'
-  negative-container: '#FEE2E2'
-  on-negative-container: '#991B1B'
-  chart-blue: '#60A5FA'
-  chart-orange: '#FB923C'
-  chart-purple: '#A78BFA'
-  chart-amber: '#FBBF24'
-  chart-rose: '#FB7185'
-  chart-cyan: '#06B6D4'
-  chart-teal: '#14B8A6'
-  chart-emerald: '#10B981'
+  focus-ring: '#007AFF'
+  # neutrals = Tailwind default `gray` ramp (used pervasively)
+  gray-50: '#F9FAFB'
+  gray-100: '#F3F4F6'
+  gray-200: '#E5E7EB'
+  gray-300: '#D1D5DB'
+  gray-400: '#9CA3AF'
+  gray-500: '#6B7280'
+  gray-600: '#4B5563'
+  gray-700: '#374151'
+  gray-800: '#1F2937'
+  gray-900: '#111827'
 typography:
-  display:
-    fontFamily: Heebo
-    fontSize: 40px
-    fontWeight: 900
-    lineHeight: 1.15
-    letterSpacing: 0em
-  headline-lg:
-    fontFamily: Heebo
-    fontSize: 36px
-    fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: 0em
-  headline-md:
-    fontFamily: Heebo
-    fontSize: 30px
-    fontWeight: 700
-    lineHeight: 1.25
-    letterSpacing: 0em
-  title-lg:
-    fontFamily: Heebo
-    fontSize: 18px
-    fontWeight: 600
-    lineHeight: 1.35
-    letterSpacing: 0em
-  title-md:
-    fontFamily: Heebo
-    fontSize: 16px
-    fontWeight: 600
-    lineHeight: 1.4
-    letterSpacing: 0em
-  body-lg:
-    fontFamily: Heebo
-    fontSize: 18px
-    fontWeight: 400
-    lineHeight: 1.6
-    letterSpacing: 0em
-  body-md:
-    fontFamily: Heebo
-    fontSize: 16px
-    fontWeight: 400
-    lineHeight: 1.5
-    letterSpacing: 0em
-  body-sm:
-    fontFamily: Heebo
-    fontSize: 14px
-    fontWeight: 400
-    lineHeight: 1.45
-    letterSpacing: 0em
-  label-md:
-    fontFamily: Heebo
-    fontSize: 14px
-    fontWeight: 500
-    lineHeight: 1.4
-    letterSpacing: 0em
-  label-sm:
-    fontFamily: Heebo
-    fontSize: 12px
-    fontWeight: 500
-    lineHeight: 1.35
-    letterSpacing: 0em
-  label-caps:
-    fontFamily: Heebo
-    fontSize: 12px
-    fontWeight: 600
-    lineHeight: 1.35
-    letterSpacing: 0.04em
-  value-md:
-    fontFamily: Heebo
-    fontSize: 18px
-    fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: 0em
+  # Single family. Root font-size is scaled to 90% in html (src/index.css).
+  # No bespoke type-scale tokens exist; sizes come from Tailwind text-* utilities.
+  fontFamily: Heebo
+  rootScale: 90%
+  scale:
+    text-3xs: 10px     # dense metadata (pinned px, unaffected by 90% root scale)
+    text-2xs: 11px     # uppercase table headers, eyebrows (pinned px)
+    text-xs: 12px      # badges, metadata, tooltips
+    text-sm: 14px      # body, buttons, inputs, table cells (the workhorse size)
+    text-base: 16px
+    text-lg: 18px      # stat value (default), card titles
+    text-xl: 20px      # stat value (compact)
+  weights:
+    normal: 400
+    medium: 500        # buttons, labels, badges
+    semibold: 600      # table headers, section labels
+    bold: 700          # stat values, emphasis
+  numerics: tabular-nums   # all amounts, counts, dates, days (.font-mono = Heebo tabular)
 spacing:
-  px: 1px
-  '0': 0px
-  '0_5': 2px
-  '1': 4px
-  '1_5': 6px
-  '2': 8px
-  '2_5': 10px
-  '3': 12px
-  '4': 16px
-  '5': 20px
-  '6': 24px
-  '8': 32px
-  '10': 40px
-  '12': 48px
-  '14': 56px
-  '16': 64px
-  page: 32px
-  page-compact: 24px
-  card-padding: 24px
-  card-header-y: 16px
-  drawer-padding-x: 24px
-  drawer-padding-y: 20px
-  table-cell-x: 12px
-  table-cell-y: 10px
+  base: 4px            # Tailwind 0.25rem scale; 8px rhythm for controls
+  card-padding: 28px   # p-7 default Card body
+  card-padding-compact: 20px  # p-5
+  card-header-x: 28px  # px-7
+  card-header-y: 20px  # py-5
+  table-cell-x: 12px   # px-3
+  table-cell-y: 8px    # py-2
+  overlay-padding-x: 24px  # px-6 modal/drawer
+  overlay-padding-y: 16px  # py-4
+  navbar-height: 64px  # h-16
 rounded:
-  none: 0px
-  xs: 2px
-  sm: 4px
-  md: 6px
-  lg: 8px
-  xl: 12px
-  '2xl': 16px
-  full: 9999px
+  sm: 4px      # rounded-sm  (link button, skeleton)
+  md: 6px      # rounded-md  (small icon buttons, alert icon tile sm)
+  lg: 8px      # rounded-lg  (inputs, stat icon tile, alert icon tile, tooltip)
+  nav: 10px    # rounded-nav  (navbar/menu items) — off-scale, pinned px
+  xl: 12px     # rounded-xl  (stat card, modal, alert, group section)
+  tile: 14px   # rounded-tile (square icon tiles) — off-scale, pinned px
+  2xl: 16px    # rounded-2xl
+  3xl: 24px    # rounded-3xl (Card primitive container)
+  full: 9999px # buttons, badges, pills, progress, avatar
 radii:
-  button: '{rounded.md}'
+  button: '{rounded.full}'
+  button-link: '{rounded.sm}'
   input: '{rounded.lg}'
-  card: '{rounded.xl}'
+  card: '{rounded.3xl}'
+  stats-card: '{rounded.xl}'
   modal: '{rounded.xl}'
-  drawer-section: '{rounded.lg}'
+  drawer: '{rounded.none}'   # full-height right panel, no corner radius
   badge: '{rounded.full}'
+  tooltip: '{rounded.lg}'
 shadows:
-  sm: '0 1px 2px #0000000D'
-  md: '0 4px 6px #00000012'
-  lg: '0 10px 15px #0000001A'
-  xl: '0 20px 25px #0000001A'
-  '2xl': '0 25px 50px #00000040'
-  elevation-1: '0 2px 8px #6366F114'
-  elevation-2: '0 4px 16px #6366F11F'
-  elevation-3: '0 8px 24px #6366F129'
-  sidebar-active: '0 12px 28px #4F7DFF40'
+  # Slate-tinted (rgba 15,23,42). NOT indigo-tinted.
+  sm: '0 1px 2px rgba(15,23,42,0.05)'
+  elevation-0: '0 1px 2px rgba(15,23,42,0.04)'   # quiet inset/section box
+  elevation-1: '0 1px 3px rgba(15,23,42,0.05), 0 1px 2px rgba(15,23,42,0.04)'
+  elevation-2: '0 4px 12px rgba(15,23,42,0.06), 0 2px 4px rgba(15,23,42,0.04)'
+  elevation-3: '0 12px 28px rgba(15,23,42,0.1), 0 4px 8px rgba(15,23,42,0.05)'
+  overlay: 'shadow-xl'    # modal
+  drawer: 'shadow-2xl'
 elevation:
-  flat: 'border-only'
-  raised-card: '{shadows.elevation-1}'
-  elevated-card: '{shadows.elevation-2}'
-  interactive-hover: '{shadows.elevation-3}'
-  overlay: '{shadows.xl}'
-  drawer: '{shadows.2xl}'
+  card-default: '{shadows.elevation-1}'
+  card-elevated: '{shadows.elevation-2}'
+  card-interactive-hover: '{shadows.elevation-3}'   # + -translate-y-0.5
+  stats-card: '{shadows.sm}'
 motion:
-  duration-fast: 100ms
-  duration-base: 200ms
-  duration-medium: 300ms
-  duration-slow: 350ms
-  easing-standard: ease-in-out
-  easing-enter: ease-out
-  fade-in: '300ms ease-out'
-  fade-in-up: '350ms ease-out'
-  scale-in: '250ms ease-out'
-  slide-in: '300ms ease-out'
-  shimmer: '2000ms linear infinite'
+  fade-in: '300ms ease-out'        # translateY(6px) -> 0
+  fade-in-up: '350ms ease-out'     # translateY(8px) -> 0, used by stagger-children
+  scale-in: '250ms ease-out'       # scale(0.96) -> 1
+  slide-in: '300ms ease-out'       # translateX(12px) -> 0, alerts
+  shimmer: '2s linear infinite'    # skeleton
+  transition-default: '200ms'      # buttons, cards
+  reduced-motion: respected        # @media prefers-reduced-motion disables all
 components:
-  button-primary:
-    backgroundColor: '{colors.primary}'
-    textColor: '{colors.on-primary}'
-    typography: '{typography.body-md}'
-    rounded: '{rounded.md}'
-    padding: 8px 16px
-  button-primary-hover:
-    backgroundColor: '{colors.primary-hover}'
-    textColor: '{colors.on-primary}'
-  button-primary-active:
-    backgroundColor: '{colors.primary-active}'
-    textColor: '{colors.on-primary}'
-  button-secondary:
-    backgroundColor: '{colors.neutral-100}'
-    textColor: '{colors.neutral-900}'
-    typography: '{typography.body-md}'
-    rounded: '{rounded.md}'
-    padding: 8px 16px
-  button-outline:
+  navbar:
+    height: 64px
     backgroundColor: '{colors.surface}'
-    textColor: '{colors.neutral-700}'
-    typography: '{typography.body-md}'
-    rounded: '{rounded.md}'
-    padding: 8px 16px
-  button-danger:
-    backgroundColor: '{colors.negative}'
-    textColor: '{colors.on-primary}'
-    typography: '{typography.body-md}'
-    rounded: '{rounded.md}'
-    padding: 8px 16px
-  login-button:
-    backgroundColor: '{colors.slate-900}'
-    textColor: '{colors.on-primary}'
-    typography: '{typography.label-md}'
-    rounded: '{rounded.xl}'
-    padding: 14px 24px
-  input-field:
-    backgroundColor: '{colors.surface}'
-    textColor: '{colors.on-surface}'
-    typography: '{typography.body-sm}'
+    borderBottom: '1px solid {colors.gray-200}'   # /80 opacity
+    note: 'Primary navigation is a light TOP bar, not a dark sidebar. A separate collapsible ClientSidebar lists clients.'
+  button-base:
+    rounded: '{rounded.full}'
+    typography: text-sm / medium
+    focusRing: 'focus-ring (2px solid {colors.focus-ring}, offset 2px)'
+    transition: all 200ms
+  button-size-md: { padding: 8px 16px }       # px-4 py-2
+  button-size-sm: { padding: 6px 12px }       # px-3 py-1.5
+  button-primary:   { backgroundColor: '{colors.primary-600}', textColor: '#FFFFFF', hover: '{colors.primary-700}', active: '{colors.primary-800}', shadow: '{shadows.sm}' }
+  button-secondary: { backgroundColor: '{colors.gray-100}', textColor: '{colors.gray-900}', hover: '{colors.gray-200}' }
+  button-outline:   { backgroundColor: '{colors.surface}', textColor: '{colors.gray-700}', border: '1px solid {colors.gray-300}', hover: '{colors.gray-50}' }
+  button-ghost:     { backgroundColor: transparent, textColor: '{colors.gray-600}', hover: '{colors.gray-200}' }
+  button-danger:    { backgroundColor: '{colors.negative-600}', textColor: '#FFFFFF', hover: '{colors.negative-700}', active: '{colors.negative-800}' }
+  button-link:      { textColor: '{colors.gray-600}', decoration: underline, rounded: '{rounded.sm}', hover: '{colors.gray-900}' }
+  input:
     rounded: '{rounded.lg}'
-    height: 36px
-    padding: 8px 12px
-  input-focus:
+    height: 36px           # h-9 (md); sm h-8 / xs h-7
+    padding: 8px 12px      # px-3 py-2
+    border: '1px solid {colors.gray-300}'
     backgroundColor: '{colors.surface}'
-    textColor: '{colors.on-surface}'
-  card-default:
+    shadow: '{shadows.sm}'
+    focus: 'border {colors.primary-500} + ring-2 {colors.primary-500}'
+    error: 'border {colors.negative-500}'
+    disabled: 'bg {colors.gray-50}'
+  checkbox:
+    rounded: '{rounded.sm}'
+    color: '{colors.primary-600}'
+    focus: 'ring-2 {colors.primary-500} ring-offset-1'
+  card:
+    rounded: '{rounded.3xl}'
     backgroundColor: '{colors.surface}'
-    textColor: '{colors.on-surface}'
-    rounded: '{rounded.xl}'
-    padding: '{spacing.card-padding}'
-  card-header:
-    backgroundColor: '{colors.surface-soft}'
-    textColor: '{colors.on-surface}'
-    padding: 16px 24px
+    overflow: hidden
+    default: { shadow: '{shadows.elevation-1}' }
+    elevated: { shadow: '{shadows.elevation-2}' }
+    outlined: { border: '1px solid {colors.gray-200}' }   # /70
+    interactive: 'hover {shadows.elevation-3} + -translate-y-0.5'
+    header: { padding: '20px 28px', borderBottom: '1px solid {colors.gray-100}' }
+    body: { padding: '{spacing.card-padding}' }
+    footer: { padding: '20px 28px', borderTop: '1px solid {colors.gray-100}', backgroundColor: '{colors.gray-50}' }  # /60
   stats-card:
+    rounded: '{rounded.xl}'
     backgroundColor: '{colors.surface}'
-    textColor: '{colors.on-surface}'
-    rounded: '{rounded.xl}'
-    padding: 16px 20px
-  table-card:
-    backgroundColor: '{colors.surface}'
-    textColor: '{colors.on-surface}'
-    rounded: '{rounded.xl}'
-    padding: 0px
-  table-header:
-    backgroundColor: '{colors.neutral-50}'
-    textColor: '{colors.neutral-500}'
-    typography: '{typography.label-caps}'
-    padding: 8px 12px
-  table-row-hover:
-    backgroundColor: '{colors.primary-container}'
-    textColor: '{colors.on-surface}'
-  badge-neutral:
-    backgroundColor: '{colors.neutral-100}'
-    textColor: '{colors.neutral-800}'
-    typography: '{typography.label-sm}'
+    border: '1px solid {colors.gray-100}'
+    shadow: '{shadows.sm}'
+    padding: '16px 20px'        # px-5 py-4
+    accentStrip: 'right edge w-0.5 + border-r-2 in tone-500 (RTL)'
+    iconTile: '40x40 rounded-lg, bg tone-50 text tone-500'
+    value: 'text-lg font-bold tabular-nums, color tone-700'
+    selected: 'ring-2 {colors.primary-400}'
+    variants: 'blue(info) | green(positive) | red(negative) | orange(warning) | purple(violet) | neutral(gray)'
+  badge:
     rounded: '{rounded.full}'
-    padding: 2px 10px
-  badge-info:
-    backgroundColor: '{colors.info-container}'
-    textColor: '{colors.on-info-container}'
-    typography: '{typography.label-sm}'
-    rounded: '{rounded.full}'
-    padding: 2px 10px
-  badge-positive:
-    backgroundColor: '{colors.positive-container}'
-    textColor: '{colors.on-positive-container}'
-    typography: '{typography.label-sm}'
-    rounded: '{rounded.full}'
-    padding: 2px 10px
-  badge-warning:
-    backgroundColor: '{colors.warning-container}'
-    textColor: '{colors.on-warning-container}'
-    typography: '{typography.label-sm}'
-    rounded: '{rounded.full}'
-    padding: 2px 10px
-  badge-negative:
-    backgroundColor: '{colors.negative-container}'
-    textColor: '{colors.on-negative-container}'
-    typography: '{typography.label-sm}'
-    rounded: '{rounded.full}'
-    padding: 2px 10px
-  sidebar:
-    backgroundColor: '{colors.sidebar-middle}'
-    textColor: '{colors.sidebar-text}'
-    width: 224px
-  sidebar-collapsed:
-    backgroundColor: '{colors.sidebar-middle}'
-    textColor: '{colors.sidebar-text}'
-    width: 64px
-  sidebar-item-active:
-    backgroundColor: '{colors.sidebar-active}'
-    textColor: '{colors.sidebar-on-active}'
-    rounded: '{rounded.xl}'
-    padding: 10px 16px
+    typography: text-xs / medium
+    filled: 'bg {tone}-100 text {tone}-800'                       # neutral=gray-100/gray-800
+    signal: 'bg {tone}-50 text {tone}-700 ring-1 ring {tone}-200 + leading dot'
+    removable: 'bg {colors.primary-50} text {colors.primary-800} border {colors.primary-200} + X button'
+    tones: 'neutral | info | positive | warning | negative'
+  table:
+    container: 'composed inside a Card (rounded-3xl), table itself border-collapse'
+    header: { backgroundColor: '{colors.gray-50}', textColor: '{colors.gray-500}', font: 'text-[11px] font-semibold uppercase tracking-wider', padding: '8px 12px' }
+    rowDivider: '1px {colors.gray-200}'   # divide-y
+    cell: { padding: '8px 12px', font: 'text-sm', textColor: '{colors.gray-700}', edgePadding: 'first ps-5 / last pe-5' }
+    rowHoverClickable: 'bg {colors.primary-50} (/60) + inset -3px {colors.primary-400} bar'
+    rowHoverStatic: 'bg {colors.gray-50} (/80)'
   modal:
-    backgroundColor: '{colors.surface}'
-    textColor: '{colors.on-surface}'
     rounded: '{rounded.xl}'
-    padding: 24px
+    backgroundColor: '{colors.surface}'
+    maxWidth: 'max-w-xl'        # dialog variant: max-w-sm
+    maxHeight: '92vh'
+    shadow: '{shadows.overlay}'
+    header: { padding: '16px 24px', borderBottom: '1px solid {colors.gray-100}' }
+    footer: { padding: '16px 24px', borderTop: '1px solid {colors.gray-100}' }
+    backdrop: 'black/30'
+    dismiss: 'Escape closes; backdrop click does NOT (modal). Dialog variant: backdrop black/40.'
   drawer:
     backgroundColor: '{colors.surface}'
-    textColor: '{colors.on-surface}'
-    width: 448px
+    position: 'fixed inset-y-0 right-0 (RTL inline-start)'
+    width: 'w-full max-w-md'
+    rounded: none
+    shadow: '{shadows.drawer}'
+    header: { padding: '16px 24px', borderBottom: '1px solid {colors.gray-100}' }
+    footer: { padding: '16px 24px', borderTop: '1px solid {colors.gray-200}' }
+  alert:
+    rounded: '{rounded.xl}'
+    padding: '16px'            # p-4, gap-4; small: p-2.5 gap-2.5
+    border: '1px solid'
+    shadow: '{shadows.sm}'
+    iconTile: 'rounded-lg p-2 (sm: rounded-md p-1), bg tone-100'
+    variants:
+      info:     'gradient from {colors.primary-50} to cyan-50, border {colors.primary-200}, text primary-900'
+      success:  'gradient from {colors.positive-50} to emerald-50, border positive-200, text positive-800'
+      warning:  'gradient from orange-50 to amber-50, border orange-200, text orange-900'
+      error:    'gradient from {colors.negative-50} to rose-50, border negative-200, text negative-800'
+      neutral:  'bg {colors.gray-50}, border {colors.gray-200}, no shadow'
+  progress-bar:
+    track: 'rounded-full {colors.gray-100}, h-1.5 (sm) / h-2 (md)'
+    fill: 'rounded-full {colors.primary-500}, transition 700ms'
+  spinner:
+    style: 'rounded-full border-2 {colors.gray-200}, top border {colors.primary-600}, animate-spin'
+    sizes: '16 / 24 / 32 px'
+  skeleton:
+    pulse: 'animate-pulse bg {colors.gray-100}'
+    shimmer: 'gradient gray-200/100/200, animate-shimmer 2s'
+  tooltip:
+    backgroundColor: '{colors.gray-900}'
+    textColor: '#FFFFFF'
+    rounded: '{rounded.lg}'
+    padding: '6px 10px'        # px-2.5 py-1.5
+    font: 'text-xs / medium'
+    shadow: 'shadow-lg'
+    placement: 'portal, prefers above trigger, 8px gap'
+  divider:
+    color: '{colors.gray-200}'
+    thickness: 1px
 ---
 
 ## Overview
 
-The product should feel like a focused internal operations system for a Hebrew-speaking tax advisory office: practical, structured, quiet, and trustworthy. The dominant experience is not a marketing site; it is a dense CRM workspace where staff scan client, binder, billing, VAT, tax deadline, reminder, signature, and report data repeatedly throughout the day.
+YM Tax CRM is a focused internal operations system for a Hebrew-speaking tax advisory office: practical, structured, quiet, trustworthy. The dominant experience is a dense CRM workspace where staff scan client, binder, billing, VAT, tax-deadline, reminder, signature, and report data all day.
 
-The visual identity combines a dark institutional navigation rail with light, white-first work surfaces. Indigo is the primary interaction color, amber is the secondary accent, and status colors are reserved for operational meaning. The system should look modern but not decorative: restrained gradients, precise cards, compact tables, readable Hebrew typography, and predictable controls.
+The visual identity is **light and white-first**. The application chrome is a light top navigation bar over pale slate backgrounds and white data surfaces — there is no dark sidebar rail in the main shell. **Blue (`#007aff`)** is the primary interaction color, **amber** is a decorative accent, **indigo** is the informational semantic tone, and status colors are reserved for operational meaning.
 
-The interface is RTL-first. Layout rhythm, alignment, icon placement, drawers, and table reading order should preserve Hebrew ergonomics. English brand snippets may appear in chrome, but product copy and user-facing content should remain Hebrew.
+The interface is **RTL-first**. Layout rhythm, alignment, icon placement, drawers, accent strips, and table reading order preserve Hebrew ergonomics. Product copy is Hebrew; occasional English brand snippets may appear in chrome.
+
+> **Source of truth:** these are the values actually implemented in `src/index.css` (`@theme`) and the primitives under `src/components/ui`. Where prose and code disagree, the code wins. Regenerate this file from the code rather than hand-editing values.
 
 ## Colors
 
-The application palette is built from pale slate backgrounds, white cards, indigo actions, amber accents, dark navy navigation, and semantic status scales.
+The palette is built from a **blue primary ramp**, an **amber accent ramp**, the default Tailwind **gray** neutrals, and four semantic ramps (info=indigo, positive=emerald, warning=amber, negative=red).
 
-- **Indigo primary:** Use for main actions, active focus rings, selected rows, selected filters, and the most important interactive affordance on a screen.
-- **Dark navy:** Use for the persistent sidebar and login brand wall. It gives the product an institutional, secure, back-office feel.
-- **White surfaces:** Use for cards, modals, drawers, tables, forms, and most working areas. White should carry data density; pale gray and slate provide separation.
-- **Amber accent:** Use sparingly for visual emphasis, secondary data highlights, warm dashboard accents, or deductible/business-financial emphasis. Do not use amber as a generic warning unless the context is actually cautionary.
-- **Semantic colors:** Green is positive/success, amber is warning/attention, red is negative/error, and indigo-blue is informational. Status colors should remain distinct from chart/category colors.
+- **Blue primary (`primary-600` `#007aff`):** main actions, focus rings (`#007aff`), selected rows/cards (`ring-primary-400`), clickable table-row hover (`primary-50`), active filter pills. Hover steps to `primary-700`, active to `primary-800`.
+- **Amber accent:** decorative emphasis and warm highlights; shares the same ramp as the `warning` tone. It is *not* the brand action color and is not a generic warning unless the context is cautionary.
+- **Indigo = info tone:** informational badges, info stat cards, info alerts. Do not confuse it with the blue primary.
+- **Semantic ramps:** positive = emerald (success), warning = amber (attention), negative = red (error/validation), info = indigo. Each ramp uses `-50/-100` for tinted containers, `-500` for solid marks, `-700/-800` for text.
+- **Gray neutrals:** standard Tailwind `gray` ramp carries borders (`gray-100/200/300`), muted text (`gray-500/600`), and surfaces. Body background is `gray-50` (`#f9fafb`); base text is `#0f172a`.
 
-Backgrounds should stay light in the main authenticated app. Gradients are allowed as subtle atmospheric backing or card header tint, not as dominant decoration. The login screen may use stronger contrast: a warm off-white form panel paired with a deep slate brand panel.
+Backgrounds stay light throughout the authenticated app. Subtle gradients appear only in alerts (two-tone tinted). The login/auth screens use a warm off-white brand surface (`--color-surface-warm` `#f7f6f2`). No dark cards inside the main content area.
+
+**Neutrals are two-role:** `gray` carries surfaces, borders, and dividers; `slate` carries text (consistent with the slate-900 body text color `#0f172a`). Both are Tailwind defaults — neither is redefined in `@theme`.
+
+**Data-viz:** charts reference the semantic ramps via `var(--color-*)` for status colors, plus two dedicated neutrals — `--color-chart-track` (`#eef0f3`, ring track) and `--color-chart-muted` (`#cbd5e1`, the "not started / none" segment). Never hardcode chart hex.
 
 ## Typography
 
-Use **Heebo** everywhere. It is the product voice: Hebrew-native, legible at small sizes, and neutral enough for professional tax operations.
+Use **Heebo** everywhere — display, body, and "mono". `.font-mono` is Heebo with `tabular-nums`; there is no second font family. The root `html` font-size is scaled to **90%**, so all `rem`-based Tailwind sizes render slightly tighter than default.
 
-Hierarchy is compact. Page titles are bold and direct, card titles are medium-sized and semibold, labels are small and utilitarian, and table text should favor density over display drama. Avoid negative letter spacing. Use tabular-number treatment for financial amounts, counters, dates, VAT totals, and operational metrics.
+There is no bespoke type-scale token set; sizing uses Tailwind utilities:
 
-Typography should support scanning:
+- `text-3xs` / `text-2xs` (10px / 11px): dense metadata, uppercase table headers, and eyebrows. Pinned in px so they don't shrink under the 90% root scale.
+- `text-xs` (12px): badges, metadata, tooltips.
+- `text-sm` (14px): the workhorse — body, buttons, inputs, table cells.
+- `text-base` (16px): occasional body.
+- `text-lg` (18px): card titles, default stat value.
+- `text-xl` (20px): compact stat value.
 
-- Page titles: large, bold, black or near-black.
-- Section titles: semibold, compact, usually 18px.
-- Body text: 14px to 16px, slate or gray depending on importance.
-- Labels and metadata: 12px to 14px, medium weight, muted color.
-- Numeric values: semibold or bold, with stable alignment.
+Weights: `medium` (500) for buttons/labels/badges, `semibold` (600) for table headers and section labels, `bold` (700) for stat values. Financial amounts, counts, dates, VAT totals, and day counters use `tabular-nums`. Avoid negative letter spacing; table headers use positive `tracking-wider`.
 
 ## Layout
 
-The app uses a fixed operational shell: dark sidebar, top navbar, scrollable content area, and a 24px to 32px page inset. Content should fill available width rather than sit in marketing-style centered sections.
+Fixed operational shell: a **light top Navbar** (`h-16`, white, bottom border), an optional collapsible **ClientSidebar** for the client list, a scrollable content area, and a page inset. Content fills available width rather than sitting in marketing-style centered sections.
 
-Use a 4px spacing base with 8px rhythm for most controls. Main pages should compose from compact cards, table cards, filter bars, summary stat rows, and side drawers. Cards usually use 24px internal padding; tables use tighter 12px by 8px or 10px cells.
+Use the 4px Tailwind spacing base with 8px rhythm for controls. Pages compose from cards, table cards, filter bars, stat rows, and right-side drawers. Card bodies use `p-7` (compact `p-5`); tables use tight `px-3 py-2` cells; overlays use `px-6 py-4` header/footer.
 
-Prefer dense but organized layouts:
+- Grids for KPI/stat cards and dashboard summaries.
+- Tables for repeated operational entities.
+- Drawers (right side, `max-w-md`) for detail/edit without leaving list context.
+- Modals (`max-w-xl`, centered) for creation, confirmation, and bounded forms.
+- Filters, bulk actions, and pagination stay visibly tied to their table.
 
-- Use grids for KPI cards and dashboard summaries.
-- Use tables for repeated operational entities.
-- Use drawers for detail/edit workflows that should not remove the user from list context.
-- Use modals for creation, confirmation, and bounded forms.
-- Keep filters, bulk actions, and pagination visibly tied to their table.
-
-Do not build landing-page hero compositions for internal app screens. The first screen of an authenticated flow should expose useful work data immediately.
+Do not build landing-page hero compositions for internal screens. The first authenticated screen exposes useful work data immediately.
 
 ## Elevation & Depth
 
-Depth is restrained. Most hierarchy comes from borders, background tint, spacing, and semantic color strips rather than heavy shadows.
+Depth is restrained and **slate-tinted** (`rgba(15,23,42,…)`), not colored. Most hierarchy comes from borders, pale backgrounds, spacing, and semantic accent strips rather than heavy shadows.
 
-Cards default to white with a soft gray border. Elevated cards use soft indigo-tinted shadows. Interactive cards may lift very slightly on hover with a small upward translation and stronger elevation. Modals and drawers use stronger shadows because they sit above the app shell.
+- `elevation-1` — default cards.
+- `elevation-2` — elevated cards.
+- `elevation-3` — interactive-card hover (paired with a `-translate-y-0.5` lift).
+- `shadow-sm` — stat cards, inputs, primary/danger buttons.
+- `shadow-xl` / `shadow-2xl` — modals / drawers, which sit above the shell.
 
-The sidebar has the strongest persistent depth: a dark vertical gradient, low-contrast borders, and a blue active item shadow. Main content should remain calm and low-contrast so operational data stays readable.
+Stat cards and clickable table rows express state with a **right-edge accent bar** (RTL inline-start visually on the right) rather than shadow.
 
 ## Shapes
 
-The shape language is modern and moderately rounded:
+- **Buttons & pills:** fully rounded (`rounded-full`). The `link` button is the exception (`rounded-sm`).
+- **Inputs, tooltips, stat icon tiles, alert icon tiles:** `rounded-lg` (8px).
+- **Stat cards, modals, alerts, group sections:** `rounded-xl` (12px).
+- **The Card primitive container:** `rounded-3xl` (24px) — the softest shape in the system; tables and most panels live inside it.
+- **Drawers:** square (full-height right panel).
+- **Badges / progress / avatar:** fully rounded.
 
-- Buttons: 6px radius by default; 12px for login and prominent branded controls.
-- Inputs: 8px radius.
-- Cards, modals, and table containers: 12px radius.
-- Badges and pills: fully rounded.
-- Icon containers in stat cards: 8px radius.
-- Empty-state illustration containers may use 16px or full rounding.
-
-Avoid mixing very sharp and overly soft shapes in the same area. The system should feel precise, not playful.
+Keep precise, not playful. The large `rounded-3xl` card paired with small `rounded-lg` inputs is intentional.
 
 ## Components
 
-Buttons use medium-weight Heebo, inline icon support, focus rings, 200ms transitions, and compact padding. Primary buttons are indigo, danger buttons are red, secondary buttons are neutral gray, outline buttons are white with gray borders, and ghost buttons are text-first with subtle hover backgrounds.
+**Buttons** are `rounded-full`, `text-sm`, `font-medium`, `px-4 py-2` (md) / `px-3 py-1.5` (sm), with a 2px `focus-ring` and 200ms transitions. Primary = `primary-600` (hover 700 / active 800) with `shadow-sm`; secondary = `gray-100`; outline = white + `gray-300` border; ghost = text-first with gray hover; danger = `negative-600`; link = underlined gray text. Loading shows a spinning ring and disables the button.
 
-Inputs are white, compact, and bordered. Focus states should use indigo unless a specific screen intentionally uses the slate login style. Validation errors use the negative scale, not custom reds.
+**Inputs** are white, `rounded-lg`, `h-9` (`px-3 py-2`), `gray-300` border with `shadow-sm`. Focus is blue (`border-primary-500` + `ring-2 ring-primary-500`). Errors use `border-negative-500`. Checkboxes use `primary-600` with a `primary-500` focus ring. Validation copy uses the negative ramp.
 
-Cards are the main content containers. Default cards are white with soft borders; elevated cards use subtle indigo shadows. Card headers may use a faint left-to-right neutral gradient and a bottom border.
+**Cards** are the main containers: `rounded-3xl`, white, `overflow-hidden`. Default = `elevation-1`, elevated = `elevation-2`, outlined = `gray-200/70` border. Headers (`px-7 py-5`) have a bottom `gray-100` border; bodies use `p-7` (compact `p-5`); footers add a `gray-50/60` tint. Interactive cards lift on hover.
 
-Tables are high-density work surfaces. Headers are small, uppercase, muted, and semibold. Rows use subtle dividers and either neutral hover or pale indigo hover when clickable. Keep row heights predictable.
+**Stat cards** are `rounded-xl`, white, `gray-100` border, `shadow-sm`, with a right-edge accent strip and a `40×40 rounded-lg` icon tile tinted by tone. Values are `font-bold tabular-nums` and animate-count on mount. Variants: blue(info), green(positive), red(negative), orange(warning), purple(violet), neutral(gray). Selected state = `ring-2 ring-primary-400`. Optional progress bar and trend pill.
 
-Badges are small pills. Standard badges use a filled pale container; signal badges add a dot and ring for timeline/urgency style contexts. Removable filter badges use primary pale indigo.
+**Badges** are `rounded-full` `text-xs` pills in three modes: filled (`tone-100` / `tone-800`), signal (`tone-50` / `tone-700` + `ring-1` + leading dot, for urgency/timeline), and removable filter pills (`primary-50` / `primary-800` + X). Tones: neutral, info, positive, warning, negative.
 
-Stats cards use right-side accent strips in RTL layouts, an icon tile, compact label text, bold numeric values, and optional progress bars. Use semantic stat colors to encode status or category importance.
+**Tables** are high-density and live inside a Card. Headers are `gray-50`, `text-[11px]`, `font-semibold`, `uppercase`, `tracking-wider`, muted. Rows use `divide-y gray-200`; clickable rows hover `primary-50/60` with an inset `primary-400` edge bar; static rows hover `gray-50/80`. Cells are `px-3 py-2 text-sm text-gray-700` with `ps-5/pe-5` edge padding.
 
-Drawers slide from the right side, use white panels, 24px horizontal padding, 20px vertical content rhythm, sticky footer actions, and quiet section boxes with light gray borders. Modals are centered, white, rounded, and capped in height.
+**Modals** are centered, `rounded-xl`, white, `max-w-xl`, capped at `92vh`, `shadow-xl`, with `px-6 py-4` header/footer bordered in `gray-100`. Escape closes; backdrop click does not (the bounded `dialog` variant is `max-w-sm`). **Drawers** slide from the right (`fixed inset-y-0 right-0`, `w-full max-w-md`), square corners, `shadow-2xl`, sticky bordered header/footer.
+
+**Alerts** are `rounded-xl`, bordered, `p-4`, with a tone-tinted `rounded-lg` icon tile and a subtle two-tone gradient background (info = blue→cyan, success = positive→emerald, warning = orange→amber, error = negative→rose, neutral = flat gray).
+
+**Feedback:** Spinner = `border-2 gray-200` ring with a `primary-600` top arc. Skeleton = `animate-pulse gray-100` or a shimmer gradient. Tooltip = portalled `gray-900` bubble, white `text-xs`, `rounded-lg`, prefers above the trigger. Divider = 1px `gray-200` rule.
 
 ## Do's and Don'ts
 
-- Do keep the authenticated app work-focused, compact, and table-friendly.
-- Do use Hebrew-first RTL alignment for content, controls, drawers, breadcrumbs, and forms.
-- Do reserve indigo for primary actions, selected states, focus rings, and interactive emphasis.
-- Do keep semantic colors meaningful and consistent across badges, stats, alerts, and table values.
-- Do use borders and pale surfaces before adding stronger shadows.
-- Do keep card radius at 12px and button/input radii smaller unless the context is a branded login or pill.
-- Don't create decorative hero sections, oversized marketing cards, or ornamental backgrounds in operational screens.
-- Don't use chart/category colors to communicate status.
-- Don't overuse amber; it is an accent and warning color, not the default brand color.
-- Don't introduce a second font family.
-- Don't use negative letter spacing.
-- Don't make dark mode-style cards inside the main content area unless the screen is explicitly a login or navigation surface.
+- Do treat the implemented code as the source of truth; regenerate this file from `@theme` + primitives when they change.
+- Do use **blue `primary-600`** for actions, selection, and focus — not indigo.
+- Do keep the app light and white-first; the main shell is a **top Navbar**, not a dark sidebar.
+- Do use Hebrew-first RTL alignment and right-edge accent strips for stat cards and clickable rows.
+- Do keep semantic ramps meaningful and consistent (info=indigo, positive=emerald, warning=amber, negative=red).
+- Do use the big `rounded-3xl` only for the Card container; smaller widgets stay at `rounded-lg`/`rounded-xl`; buttons stay `rounded-full`.
+- Do use borders, pale fills, and slate-tinted shadows before adding heavy elevation.
+- Don't reintroduce indigo as "primary" — indigo is the info tone.
+- Don't describe a dark navigation rail; the product navigation is a light top bar.
+- Don't claim indigo-tinted shadows; elevation tints are slate (`rgba(15,23,42,…)`).
+- Don't overuse amber; it is a decorative accent, not the brand action color.
+- Don't introduce a second font family or negative letter spacing.

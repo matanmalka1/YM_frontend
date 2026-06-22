@@ -67,14 +67,14 @@ export const VatStatCard = ({ title, unit, icon: Icon, stat, href, className }: 
 
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs text-slate-500">{stat.period_label}</span>
-        <span className={cn('rounded-full px-2.5 py-0.5 text-[11px] font-semibold whitespace-nowrap', chip)}>
+        <span className={cn('rounded-full px-2.5 py-0.5 text-2xs font-semibold whitespace-nowrap', chip)}>
           {stat.status_label}
         </span>
       </div>
 
       <ProgressBar value={stat.completion_percent} size="sm" trackClassName="bg-slate-100" fillClassName={bar} />
 
-      <div className="flex items-center justify-between text-[11px] font-medium text-slate-500">
+      <div className="flex items-center justify-between text-2xs font-medium text-slate-500">
         <span className="tabular-nums">
           {formatCount(stat.submitted)} / {formatCount(stat.required)} הושלמו
         </span>

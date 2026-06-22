@@ -106,7 +106,7 @@ interface DashboardBadgeProps {
 export const DashboardBadge = ({ children, tone = 'neutral', strong, className }: DashboardBadgeProps) => (
   <span
     className={cn(
-      'inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold',
+      'inline-flex items-center rounded-full px-2 py-0.5 text-2xs font-bold',
       toneClasses[tone].badge,
       strong && toneClasses[tone].border,
       strong && 'border',

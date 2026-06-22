@@ -27,7 +27,7 @@ const IconLabel: React.FC<{ icon: React.ReactNode; label: string; className?: st
   label,
   className,
 }) => (
-  <span className={cn('inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[11px]', className)}>
+  <span className={cn('inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-2xs', className)}>
     {icon}
     <span>{label}</span>
   </span>
@@ -37,11 +37,11 @@ const IconLabel: React.FC<{ icon: React.ReactNode; label: string; className?: st
 
 const StatusTransition: React.FC<{ oldStatus: string; newStatus: string }> = ({ oldStatus, newStatus }) => (
   <MetaRow className="bg-slate-50 border-slate-100 flex items-center gap-2">
-    <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-medium text-[10px]">
+    <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-medium text-3xs">
       {getTimelineStatusLabel(oldStatus)}
     </span>
     <span className="text-slate-400">←</span>
-    <span className="px-1.5 py-0.5 rounded bg-positive-100 text-positive-700 font-medium text-[10px]">
+    <span className="px-1.5 py-0.5 rounded bg-positive-100 text-positive-700 font-medium text-3xs">
       {getTimelineStatusLabel(newStatus)}
     </span>
   </MetaRow>
@@ -192,7 +192,7 @@ export const TimelineEventItem: React.FC<TimelineEventItemProps> = ({ timelineEv
         <div className="flex items-center justify-between gap-2">
           <span className={cn('text-sm font-semibold', isQuiet ? 'text-gray-500' : 'text-gray-900')}>{ev.title}</span>
 
-          <time dateTime={ev.displayTimestamp} className="text-[11px] text-gray-400 tabular-nums flex-shrink-0">
+          <time dateTime={ev.displayTimestamp} className="text-2xs text-gray-400 tabular-nums flex-shrink-0">
             {displayDate}
           </time>
         </div>

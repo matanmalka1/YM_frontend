@@ -88,7 +88,7 @@ const SlideFooter = ({
   right?: React.ReactNode
   warn?: React.ReactNode
 }) => (
-  <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 text-[11px] font-medium text-slate-500">
+  <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 text-2xs font-medium text-slate-500">
     <span className="tabular-nums">{left}</span>
     {warn ?? (right && <span className="tabular-nums">{right}</span>)}
   </div>
@@ -222,7 +222,7 @@ export const SeasonInsightsCarousel = ({ vatStats }: SeasonInsightsCarouselProps
     <DashboardPanel>
       {/* header */}
       <div className="flex items-center justify-between gap-2 px-5 pb-3 pt-4">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">
           {SLIDE_DEFS[slide].label}
         </span>
         <div className="flex items-center gap-1">

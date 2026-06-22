@@ -210,10 +210,10 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
                 </div>
                 <div className="space-y-0.5">
                   <p className="text-sm font-medium text-gray-700">גרור קובץ לכאן או לחץ לבחירה</p>
-                  <p className="text-[11px] text-gray-400">PDF, Word, Excel, תמונות · עד 10MB</p>
+                  <p className="text-2xs text-gray-400">PDF, Word, Excel, תמונות · עד 10MB</p>
                 </div>
               </div>
-              <span className="text-[11px] font-medium text-primary-700">בחירת קובץ</span>
+              <span className="text-2xs font-medium text-primary-700">בחירת קובץ</span>
             </>
           )}
         </div>

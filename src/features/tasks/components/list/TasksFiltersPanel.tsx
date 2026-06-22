@@ -46,7 +46,7 @@ export const TasksFiltersPanel: React.FC<TasksFiltersPanelProps> = ({
         </span>
         <div>
           <p className="text-sm font-semibold leading-tight text-gray-900">סינון משימות</p>
-          <p className="mt-0.5 text-[11px] leading-tight text-gray-500">סטטוס, עדיפות, שיוך, מקור וטווח יעד</p>
+          <p className="mt-0.5 text-2xs leading-tight text-gray-500">סטטוס, עדיפות, שיוך, מקור וטווח יעד</p>
         </div>
       </div>
 

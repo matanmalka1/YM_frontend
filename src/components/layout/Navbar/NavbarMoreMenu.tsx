@@ -95,7 +95,7 @@ export const NavbarMoreMenu: React.FC<NavbarMoreMenuProps> = ({ groups }) => {
           }
         }}
         className={cn(
-          'focus-ring inline-flex h-9 items-center gap-1 whitespace-nowrap rounded-[10px] border px-3 text-sm font-medium transition',
+          'focus-ring inline-flex h-9 items-center gap-1 whitespace-nowrap rounded-nav border px-3 text-sm font-medium transition',
           hasActiveItem
             ? 'border-gray-200 bg-white font-semibold text-gray-950 shadow-sm'
             : 'border-transparent text-gray-600 hover:bg-white/80 hover:text-gray-950',

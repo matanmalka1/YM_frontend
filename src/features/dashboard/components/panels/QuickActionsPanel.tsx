@@ -49,7 +49,7 @@ const QuickActionItem = ({
 
 export const QuickActionsPanel = ({ onOpenModal }: QuickActionsPanelProps) => (
   <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-elevation-1">
-    <span className="mb-3 block text-[11px] font-semibold uppercase tracking-wider text-slate-400">פעולות מהירות</span>
+    <span className="mb-3 block text-2xs font-semibold uppercase tracking-wider text-slate-400">פעולות מהירות</span>
     <div className="grid grid-cols-2 gap-2.5">
       {QUICK_ACTIONS.map((action) => (
         <QuickActionItem key={action.id} action={action} onOpenModal={onOpenModal} />

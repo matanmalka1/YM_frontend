@@ -133,7 +133,7 @@ const NoteRow = ({ note, isDeleting, onEdit, onDelete }: NoteRowProps) => {
       </div>
       <div className="flex shrink-0 flex-col items-end gap-2">
         {tag && (
-          <span className={cn('rounded border px-1.5 py-0.5 text-[11px] font-semibold', TAG_COLOR[tag])}>{tag}</span>
+          <span className={cn('rounded border px-1.5 py-0.5 text-2xs font-semibold', TAG_COLOR[tag])}>{tag}</span>
         )}
         <div className="flex items-center gap-1">
           <Button

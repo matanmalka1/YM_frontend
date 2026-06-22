@@ -29,17 +29,17 @@ export const ClientSidebarClientCard: React.FC<ClientSidebarClientCardProps> = (
           {client.displayName}
         </span>
       </div>
-      <span className="shrink-0 rounded-full bg-gray-100 px-2 py-1 text-[11px] font-semibold tabular-nums text-gray-600">
+      <span className="shrink-0 rounded-full bg-gray-100 px-2 py-1 text-2xs font-semibold tabular-nums text-gray-600">
         {client.officeClientNumber == null ? 'ללא מספר משרד' : `מס׳ ${formatClientOfficeId(client.officeClientNumber)}`}
       </span>
     </div>
 
     <div className="mt-3 flex flex-wrap gap-1.5">
-      <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-[11px] font-medium text-gray-600">
+      <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-2xs font-medium text-gray-600">
         <Building2 className="h-3 w-3" />
         {getEntityLabel(client)}
       </span>
-      <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-[11px] font-medium text-gray-600">
+      <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-2xs font-medium text-gray-600">
         <ReceiptText className="h-3 w-3" />
         מע״מ {getVatLabel(client)}
       </span>

@@ -147,7 +147,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
               {count > 0 && (
                 <span
                   className={cn(
-                    'rounded-full px-1.5 py-0.5 text-[10px] font-semibold leading-none',
+                    'rounded-full px-1.5 py-0.5 text-3xs font-semibold leading-none',
                     isActive ? 'bg-white/50' : 'bg-gray-200 text-gray-600',
                   )}
                 >

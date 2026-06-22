@@ -63,7 +63,7 @@ const RelatedItemsSection = <T,>({
                 <span className="truncate text-xs font-semibold text-gray-900">{getTitle(item)}</span>
                 {getBadge?.(item)}
               </div>
-              <div className="truncate text-[11px] text-gray-500">{getSubtitle(item)}</div>
+              <div className="truncate text-2xs text-gray-500">{getSubtitle(item)}</div>
             </div>
             <ChevronLeft className="h-3.5 w-3.5 shrink-0 text-gray-400 group-hover:text-primary-600" />
           </Link>

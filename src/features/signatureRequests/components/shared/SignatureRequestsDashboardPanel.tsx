@@ -166,7 +166,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
                 >
                   <div className="min-w-0">
                     <p className="truncate text-xs font-bold text-gray-900">{req.title}</p>
-                    <p className="mt-0.5 truncate text-[11px] text-gray-500">
+                    <p className="mt-0.5 truncate text-2xs text-gray-500">
                       {req.business_name ??
                         (req.office_client_number != null
                           ? formatClientOfficeId(req.office_client_number)

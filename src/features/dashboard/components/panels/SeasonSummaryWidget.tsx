@@ -95,7 +95,7 @@ const CompactSeasonSummary = ({
       className="block rounded-3xl border border-slate-100 bg-white p-5 shadow-elevation-1 transition-all hover:shadow-elevation-2"
     >
       <div className="mb-3">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">דוחות שנתיים</span>
+        <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">דוחות שנתיים</span>
         <p className="mt-0.5 text-xs text-slate-500 tabular-nums">
           שנת מס {taxYear} · עונת {filingSeasonYear}
         </p>
@@ -316,7 +316,7 @@ const SeasonStatusTile = ({
           <p className="mt-0.5 truncate text-xs font-semibold text-slate-500">{label}</p>
         </div>
         {pct !== null && (
-          <span className={cn('rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums', toneClasses.badge)}>
+          <span className={cn('rounded-full px-2 py-0.5 text-2xs font-bold tabular-nums', toneClasses.badge)}>
             {pct}%
           </span>
         )}

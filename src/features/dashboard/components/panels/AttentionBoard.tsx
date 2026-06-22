@@ -91,7 +91,7 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
           <span className="truncate text-sm font-semibold text-slate-900">{item.title}</span>
           <span
             className={cn(
-              'inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-semibold',
+              'inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-0.5 text-2xs font-semibold',
               toneBadge,
             )}
           >
@@ -123,7 +123,7 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
         {item.due_date && (
           <span className="text-xs font-medium tabular-nums text-slate-500">{formatDate(item.due_date)}</span>
         )}
-        <span className={cn('text-[11px] font-semibold tabular-nums', toneDelta)}>{dueDateLabel(item.days_delta)}</span>
+        <span className={cn('text-2xs font-semibold tabular-nums', toneDelta)}>{dueDateLabel(item.days_delta)}</span>
       </div>
     </Link>
   )

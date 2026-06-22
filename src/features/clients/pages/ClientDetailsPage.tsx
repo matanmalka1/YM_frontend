@@ -37,7 +37,7 @@ const ClientHeaderMetaItem: FC<{ icon: React.ReactNode; label: string; value: Re
       {icon}
     </span>
     <span className="min-w-0 text-right leading-tight">
-      <span className="block text-[11px] font-semibold text-gray-400">{label}</span>
+      <span className="block text-2xs font-semibold text-gray-400">{label}</span>
       <span className="block truncate text-sm font-bold text-gray-900">{value}</span>
     </span>
   </span>

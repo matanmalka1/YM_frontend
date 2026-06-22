@@ -38,7 +38,7 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
         <SlidersHorizontal className="h-4 w-4" />
         פילטרים מתקדמים
         {advancedCount > 0 && (
-          <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-primary-600 px-1 text-[10px] font-semibold text-white">
+          <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-primary-600 px-1 text-3xs font-semibold text-white">
             {advancedCount}
           </span>
         )}

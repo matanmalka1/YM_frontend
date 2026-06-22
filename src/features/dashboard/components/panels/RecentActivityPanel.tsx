@@ -55,7 +55,7 @@ const ActivityRow = ({ item, isLast }: ActivityRowProps) => {
         <p className="text-sm font-semibold text-slate-800 leading-tight">{item.label}</p>
         <div className="mt-1 flex items-center justify-between gap-2">
           <span className="truncate text-xs font-medium text-slate-400">{item.client_name}</span>
-          <time className="shrink-0 text-[11px] tabular-nums text-slate-400">
+          <time className="shrink-0 text-2xs tabular-nums text-slate-400">
             {item.date} · {item.time}
           </time>
         </div>
