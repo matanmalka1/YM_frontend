@@ -50,10 +50,10 @@ const ImportPanel: React.FC<ImportPanelProps> = ({ importing, onFileSelect, onDo
   return (
     <Card title="ייבוא לקוחות" variant="elevated">
       <div className="space-y-4">
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
+        <div className="rounded-lg border border-warning-200 bg-warning-50 p-3">
           <div className="flex gap-2">
-            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
-            <div className="space-y-1 text-sm text-amber-900">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-warning-600" />
+            <div className="space-y-1 text-sm text-warning-900">
               <p className="font-medium">ייבוא יוצר לקוחות חדשים במערכת.</p>
               <p>מומלץ להוריד תבנית, למלא אותה, ואז להעלות את הקובץ.</p>
             </div>

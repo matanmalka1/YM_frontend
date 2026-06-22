@@ -139,7 +139,7 @@ const RelatedIds: React.FC<{
         <IconLabel
           icon={<CreditCard className="h-3 w-3" />}
           label={`חיוב #${chargeId}`}
-          className="bg-amber-50 text-amber-700 border-amber-200"
+          className="bg-warning-50 text-warning-700 border-warning-200"
         />
       )}
       {binderId == null && chargeId == null && relatedEntity && (

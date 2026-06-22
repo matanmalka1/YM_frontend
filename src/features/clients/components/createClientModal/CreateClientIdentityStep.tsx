@@ -79,23 +79,23 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
         {...register('id_number')}
       />
       {deletedClient && (
-        <div className="rounded-lg border border-amber-300 bg-amber-50 p-4">
+        <div className="rounded-lg border border-warning-300 bg-warning-50 p-4">
           <div className="flex items-start gap-3">
-            <UserRoundX className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+            <UserRoundX className="mt-0.5 h-5 w-5 shrink-0 text-warning-600" />
             <div className="min-w-0 flex-1 space-y-3">
               <div>
-                <p className="font-medium text-amber-950">לקוח זה נמחק בעבר</p>
-                <p className="mt-1 text-sm text-amber-800">
+                <p className="font-medium text-warning-950">לקוח זה נמחק בעבר</p>
+                <p className="mt-1 text-sm text-warning-800">
                   כדי לשמור על ההיסטוריה הקיימת, יש לשחזר את הרשומה במקום לפתוח לקוח כפול.
                 </p>
               </div>
-              <dl className="grid gap-2 rounded-md border border-amber-200 bg-white/70 p-3 text-sm sm:grid-cols-2">
+              <dl className="grid gap-2 rounded-md border border-warning-200 bg-white/70 p-3 text-sm sm:grid-cols-2">
                 <div>
-                  <dt className="text-amber-700">שם לקוח</dt>
+                  <dt className="text-warning-700">שם לקוח</dt>
                   <dd className="font-medium text-gray-950">{deletedClient.full_name}</dd>
                 </div>
                 <div>
-                  <dt className="text-amber-700">נמחק בתאריך</dt>
+                  <dt className="text-warning-700">נמחק בתאריך</dt>
                   <dd className="font-medium text-gray-950">{formatDate(deletedClient.deleted_at)}</dd>
                 </div>
               </dl>
@@ -112,10 +112,10 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
                     <RotateCcw className="h-4 w-4" />
                     שחזר לקוח
                   </Button>
-                  <span className="text-sm text-amber-800">מספר רשומה: {deletedClient.id}</span>
+                  <span className="text-sm text-warning-800">מספר רשומה: {deletedClient.id}</span>
                 </div>
               ) : (
-                <div className="flex items-start gap-2 rounded-md border border-amber-200 bg-white/70 p-3 text-sm text-amber-800">
+                <div className="flex items-start gap-2 rounded-md border border-warning-200 bg-white/70 p-3 text-sm text-warning-800">
                   <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0" />
                   <p>שחזור לקוח זמין ליועצים בלבד. יש לפנות ליועץ לביצוע השחזור.</p>
                 </div>

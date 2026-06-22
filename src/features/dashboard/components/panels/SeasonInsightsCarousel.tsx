@@ -24,10 +24,10 @@ const DonutRing = ({
 }) => {
   const r = (size - stroke) / 2
   const circ = 2 * Math.PI * r
-  const fill = color ?? (pct >= 80 ? '#10B981' : pct >= 40 ? '#4F46E5' : '#F59E0B')
+  const fill = color ?? (pct >= 80 ? 'var(--color-positive-500)' : pct >= 40 ? 'var(--color-primary-600)' : 'var(--color-warning-500)')
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0" aria-hidden="true">
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#EEF0F3" strokeWidth={stroke} />
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--color-chart-track)" strokeWidth={stroke} />
       <circle
         cx={size / 2}
         cy={size / 2}
@@ -113,16 +113,16 @@ const SeasonSlide = () => {
   }
 
   const legend: LegendItem[] = [
-    { label: 'הוגשו', value: stats.submitted, color: '#10B981' },
-    { label: 'נסגרו', value: stats.closed, color: '#6366F1' },
-    { label: 'בתהליך', value: stats.inProgress, color: '#F59E0B' },
-    { label: 'טרם החלו', value: stats.notStarted, color: '#CBD5E1' },
+    { label: 'הוגשו', value: stats.submitted, color: 'var(--color-positive-500)' },
+    { label: 'נסגרו', value: stats.closed, color: 'var(--color-info-500)' },
+    { label: 'בתהליך', value: stats.inProgress, color: 'var(--color-warning-500)' },
+    { label: 'טרם החלו', value: stats.notStarted, color: 'var(--color-chart-muted)' },
   ]
 
   return (
     <Link to="/tax/reports" className="block transition-opacity hover:opacity-80">
       <div className="flex items-center gap-4">
-        <DonutRing pct={stats.completionPct} color="#4F46E5" />
+        <DonutRing pct={stats.completionPct} color="var(--color-primary-600)" />
         <RingLegend items={legend} />
       </div>
       <SlideFooter
@@ -143,9 +143,9 @@ const SeasonSlide = () => {
 /* ── slides 1-4 : vat / advance stats ─────────────────────────────── */
 
 const StatSlide = ({ stat, href }: { stat: VatDashboardPeriodStat; href?: string }) => {
-  const pendingColor = stat.pending === 0 ? '#CBD5E1' : stat.completion_percent >= 80 ? '#F59E0B' : '#EF4444'
+  const pendingColor = stat.pending === 0 ? 'var(--color-chart-muted)' : stat.completion_percent >= 80 ? 'var(--color-warning-500)' : 'var(--color-negative-500)'
   const legend: LegendItem[] = [
-    { label: 'הוגשו', value: stat.submitted, color: '#10B981' },
+    { label: 'הוגשו', value: stat.submitted, color: 'var(--color-positive-500)' },
     { label: 'ממתינים', value: stat.pending, color: pendingColor },
   ]
 

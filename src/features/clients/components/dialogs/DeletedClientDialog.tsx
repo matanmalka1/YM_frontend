@@ -56,9 +56,9 @@ export const DeletedClientDialog: React.FC<Props> = ({
       }
     >
       <div className="space-y-4">
-        <div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
-          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-500" />
-          <p className="text-sm text-amber-800">לקוח עם מספר זהות זה קיים במערכת אך נמחק. בחר כיצד להמשיך.</p>
+        <div className="flex items-start gap-3 rounded-lg border border-warning-200 bg-warning-50 p-3">
+          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-warning-500" />
+          <p className="text-sm text-warning-800">לקוח עם מספר זהות זה קיים במערכת אך נמחק. בחר כיצד להמשיך.</p>
         </div>
 
         <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-2">
@@ -80,7 +80,7 @@ export const DeletedClientDialog: React.FC<Props> = ({
           <p>
             <span className="font-medium">צור לקוח חדש</span> — יוצר רשומה חדשה נקייה, הרשומה הישנה תישאר מחוקה.
           </p>
-          {!isAdvisor && <p className="text-amber-700">שחזור לקוח זמין ליועצים בלבד. פנה ליועץ לביצוע שחזור.</p>}
+          {!isAdvisor && <p className="text-warning-700">שחזור לקוח זמין ליועצים בלבד. פנה ליועץ לביצוע שחזור.</p>}
         </div>
       </div>
     </Modal>

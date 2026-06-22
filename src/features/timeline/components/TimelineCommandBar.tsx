@@ -165,11 +165,11 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
             'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium',
             'transition-all duration-150 border',
             importantOnly
-              ? 'bg-amber-100 text-amber-800 border-amber-300 shadow-sm'
+              ? 'bg-warning-100 text-warning-800 border-warning-300 shadow-sm'
               : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-100',
           )}
         >
-          <Star className={cn('h-3 w-3', importantOnly ? 'fill-amber-500 text-amber-500' : 'text-gray-400')} />
+          <Star className={cn('h-3 w-3', importantOnly ? 'fill-amber-500 text-warning-500' : 'text-gray-400')} />
           חשובים בלבד
         </button>
 

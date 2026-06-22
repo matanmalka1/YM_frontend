@@ -42,7 +42,7 @@ export const Login: React.FC = () => {
   return (
     <div className="flex min-h-screen overflow-hidden bg-slate-950 text-right">
       {/* ── Right panel — form ──────────────────────────────────────────── */}
-      <div className="relative flex w-full flex-col items-center justify-center px-6 py-12 lg:w-[95%] bg-[#F7F6F2]">
+      <div className="relative flex w-full flex-col items-center justify-center px-6 py-12 lg:w-[95%] bg-surface-warm">
         {/* Subtle top-right corner accent */}
         <div className="pointer-events-none absolute top-0 left-0 h-48 w-48 rounded-br-full bg-slate-100/70" />
 

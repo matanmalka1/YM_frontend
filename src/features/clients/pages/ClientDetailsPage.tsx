@@ -94,16 +94,16 @@ const ClientHeaderMissingDocuments: FC<{ clientId: number; active: boolean }> = 
   const labels = missingDocuments.map((documentType) => DOC_TYPE_LABELS[documentType] ?? documentType)
 
   return (
-    <div className="flex max-w-full items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950">
-      <span className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-800">
+    <div className="flex max-w-full items-center gap-2 rounded-xl border border-warning-200 bg-warning-50 px-3 py-2 text-sm text-warning-950">
+      <span className="shrink-0 rounded-full bg-warning-100 px-2 py-0.5 text-xs font-bold text-warning-800">
         חסרים {missingDocuments.length}
       </span>
 
-      <span className="min-w-0 flex-1 truncate text-amber-900">{labels.join(' · ')}</span>
+      <span className="min-w-0 flex-1 truncate text-warning-900">{labels.join(' · ')}</span>
 
       <Link
         to={`/clients/${clientId}/documents`}
-        className="shrink-0 font-semibold text-amber-900 underline-offset-4 hover:underline"
+        className="shrink-0 font-semibold text-warning-900 underline-offset-4 hover:underline"
       >
         מעבר למסמכים
       </Link>

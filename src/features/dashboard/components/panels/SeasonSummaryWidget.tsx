@@ -17,13 +17,13 @@ const SeasonRing = ({ pct, size = 120, stroke = 11 }: { pct: number; size?: numb
   const circumference = 2 * Math.PI * r
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0" aria-hidden="true">
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#EEF0F3" strokeWidth={stroke} />
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--color-chart-track)" strokeWidth={stroke} />
       <circle
         cx={size / 2}
         cy={size / 2}
         r={r}
         fill="none"
-        stroke="#4F46E5"
+        stroke="var(--color-primary-600)"
         strokeWidth={stroke}
         strokeLinecap="round"
         strokeDasharray={circumference}
@@ -83,10 +83,10 @@ const CompactSeasonSummary = ({
   overdueCount: number
 }) => {
   const legend: LegendItem[] = [
-    { label: 'הוגשו', value: submitted, color: '#10B981' },
-    { label: 'נסגרו', value: closed, color: '#6366F1' },
-    { label: 'בתהליך', value: inProgress, color: '#F59E0B' },
-    { label: 'טרם החלו', value: notStarted, color: '#CBD5E1' },
+    { label: 'הוגשו', value: submitted, color: 'var(--color-positive-500)' },
+    { label: 'נסגרו', value: closed, color: 'var(--color-info-500)' },
+    { label: 'בתהליך', value: inProgress, color: 'var(--color-warning-500)' },
+    { label: 'טרם החלו', value: notStarted, color: 'var(--color-chart-muted)' },
   ]
 
   return (

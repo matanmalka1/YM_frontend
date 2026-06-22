@@ -239,7 +239,7 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
         <Checkbox
           {...register('open_new_binder')}
           label="קלסר מלא – פתח קלסר חדש"
-          containerClassName="text-amber-700"
+          containerClassName="text-warning-700"
           inputClassName="mt-0.5"
         />
       )}
