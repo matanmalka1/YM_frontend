@@ -179,6 +179,11 @@
   height: 6px;
   border-radius: var(--r-full);
 }
+/* 2xs: smallest neutral chip (11px) */
+.badge-2xs {
+  font-size: var(--text-2xs);
+  padding: 2px 8px;
+}
 /* filled: tone-100 / tone-800 */
 .b-neutral {
   background: var(--gray-100);
@@ -493,6 +498,37 @@ select.input {
   background: var(--primary-500);
   border-radius: var(--r-full);
   transition: width 700ms;
+}
+/* tone: semantic fill + track palette */
+.progress.tone-info {
+  background: var(--info-50);
+}
+.progress.tone-info > span {
+  background: var(--info-500);
+}
+.progress.tone-positive {
+  background: var(--positive-50);
+}
+.progress.tone-positive > span {
+  background: var(--positive-500);
+}
+.progress.tone-warning {
+  background: var(--warning-50);
+}
+.progress.tone-warning > span {
+  background: var(--warning-500);
+}
+.progress.tone-negative {
+  background: var(--negative-50);
+}
+.progress.tone-negative > span {
+  background: var(--negative-500);
+}
+.progress.tone-neutral {
+  background: var(--gray-100);
+}
+.progress.tone-neutral > span {
+  background: var(--gray-500);
 }
 
 /* --- Table (inside a Card; header gray-50 uppercase) -------------------- */

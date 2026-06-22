@@ -7,7 +7,7 @@ interface ModalProps {
   open: boolean
   title: React.ReactNode
   children: React.ReactNode
-  footer: React.ReactNode
+  footer?: React.ReactNode
   onClose: () => void
   className?: string
   /** When true, closing shows a confirmation prompt before discarding */

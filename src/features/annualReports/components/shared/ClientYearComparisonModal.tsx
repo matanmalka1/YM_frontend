@@ -20,7 +20,7 @@ export const ClientYearComparisonModal: React.FC<Props> = ({ open, onClose, repo
   const sorted = reports.toSorted((a, b) => b.tax_year - a.tax_year)
 
   return (
-    <Modal open={open} onClose={onClose} title="השוואה בין שנים" footer={null}>
+    <Modal open={open} onClose={onClose} title="השוואה בין שנים">
       {sorted.length === 0 ? (
         <p className="text-sm text-gray-500 py-4 text-center">אין דוחות להשוואה</p>
       ) : (

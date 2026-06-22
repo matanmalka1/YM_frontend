@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { cn, formatCurrencyILS as fmt } from '@/utils/utils'
+import { Card } from '@/components/ui/primitives/Card'
 
 interface AnnualReportFinancialSectionProps {
   icon: ReactNode
@@ -26,7 +27,7 @@ export const AnnualReportFinancialSection: React.FC<AnnualReportFinancialSection
   children,
   footer,
 }) => (
-  <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+  <Card size="compact" disablePadding className="shadow-sm">
     <div className={cn('flex items-center gap-2 border-b border-gray-100 px-5 py-3', headerClassName)}>
       {icon}
       <h4 className={cn('text-sm font-semibold', titleClassName)}>{title}</h4>
@@ -37,5 +38,5 @@ export const AnnualReportFinancialSection: React.FC<AnnualReportFinancialSection
       {children}
     </div>
     <div className="px-4 pb-3 pt-2">{footer}</div>
-  </div>
+  </Card>
 )

@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState, type RefObject } from 'react'
 import { useDebounce } from 'use-debounce'
 import { Link } from 'react-router-dom'
 import { SkeletonBlock } from '../../ui/primitives/SkeletonBlock'
+import { Badge } from '../../ui/primitives/Badge'
 import { LogOut, Plus, RefreshCw, Search, User as UserIcon, Users, X } from 'lucide-react'
 import { useAuthStore } from '@/store/auth.store'
 import { CLIENT_ROUTES } from '@/features/clients'
@@ -210,9 +211,9 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
                   <section key={group.key} aria-label={group.label}>
                     <div className="mb-2 flex items-center gap-2 px-1">
                       <span className="flex-1 truncate text-xs font-semibold text-gray-600">{group.label}</span>
-                      <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-2xs font-semibold tabular-nums text-gray-500">
+                      <Badge variant="neutral" size="2xs" className="shrink-0 font-semibold tabular-nums text-gray-500">
                         {group.clients.length}
-                      </span>
+                      </Badge>
                     </div>
 
                     <ul className="space-y-2">

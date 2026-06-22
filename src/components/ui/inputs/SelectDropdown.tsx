@@ -19,6 +19,10 @@ interface SelectDropdownProps {
   options: SelectOption[]
   disabled?: boolean
   size?: 'xs' | 'sm' | 'md'
+  /** Apply error styling (negative border + aria-invalid). */
+  error?: boolean
+  /** Placeholder shown when no option is selected (default: "בחר..."). */
+  placeholder?: string
   className?: string
   name?: string
   id?: string
@@ -50,6 +54,8 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   options,
   disabled,
   size = 'md',
+  error = false,
+  placeholder = 'בחר...',
   className,
   name,
   id,
@@ -80,7 +86,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
     closeOnEscape: true,
   })
 
-  const selectedLabel = options.find((o) => String(o.value) === currentValue)?.label ?? 'בחר...'
+  const selectedLabel = options.find((o) => String(o.value) === currentValue)?.label ?? placeholder
 
   const updateCoords = () => {
     const rect = triggerRef.current?.getBoundingClientRect()
@@ -200,7 +206,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
     triggerSizeClasses[size],
     'hover:border-primary-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:border-primary-500',
     'disabled:opacity-50 disabled:cursor-not-allowed',
-    open ? 'border-primary-500 ring-2 ring-primary-500' : 'border-gray-200',
+    open ? 'border-primary-500 ring-2 ring-primary-500' : error ? 'border-negative-500' : 'border-gray-200',
     className,
   )
 

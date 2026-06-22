@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/utils/utils'
+import { Badge } from './Badge'
 
 interface GroupSectionProps {
   label: ReactNode
@@ -31,10 +32,10 @@ export const GroupSection = ({
         <div className="flex min-w-0 flex-wrap items-center gap-2">
           <span className="text-sm font-semibold text-gray-800">{label}</span>
           {count !== undefined && (
-            <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
+            <Badge variant="neutral" size="xs" className="px-2 text-gray-600">
               {count}
               {countLabel ? ` ${countLabel}` : ''}
-            </span>
+            </Badge>
           )}
           {meta && <span className="flex flex-wrap items-center gap-1.5">{meta}</span>}
         </div>

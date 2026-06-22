@@ -1,3 +1,4 @@
+import { X } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { useEffect, useRef, useState } from 'react'
 import { OverlayPortalProvider } from '../overlays/OverlayPortalContext'
@@ -100,7 +101,7 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
                   className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
                   aria-label="סגירה"
                 >
-                  ✕
+                  <X className="h-4 w-4" />
                 </button>
               )}
             </div>
@@ -153,7 +154,7 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
                   className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
                   aria-label="סגירה"
                 >
-                  ✕
+                  <X className="h-4 w-4" />
                 </button>
               )}
             </div>

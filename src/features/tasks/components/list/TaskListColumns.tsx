@@ -42,13 +42,13 @@ export const buildTaskListColumns = ({
           {task.title}
         </button>
         <div className="flex flex-wrap items-center gap-1.5">
-          <span className="rounded-full bg-gray-100 px-2 py-1 text-2xs font-semibold tabular-nums text-gray-600">
+          <Badge variant="neutral" size="2xs" className="font-semibold tabular-nums text-gray-600">
             משימה #{task.id}
-          </span>
+          </Badge>
           {task.source_domain ? (
-            <span className="rounded-full bg-gray-100 px-2 py-1 text-2xs font-medium text-gray-600">
+            <Badge variant="neutral" size="2xs" className="text-gray-600">
               {workQueueSourceTypeLabels[task.source_domain as WorkQueueSourceType] ?? task.source_domain}
-            </span>
+            </Badge>
           ) : null}
         </div>
       </div>

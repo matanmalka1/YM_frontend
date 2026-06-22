@@ -4,7 +4,7 @@ import { cn } from '../../../utils/utils'
 import { semanticBadgeClasses, semanticSignalBadgeClasses } from '@/utils/semanticColors'
 
 export type BadgeVariant = 'success' | 'warning' | 'error' | 'info' | 'neutral'
-export type BadgeSize = 'xs' | 'sm' | 'md'
+export type BadgeSize = '2xs' | 'xs' | 'sm' | 'md'
 
 interface BadgeProps {
   children: React.ReactNode
@@ -41,30 +41,35 @@ const signalVariantClasses: Record<BadgeVariant, string> = {
 }
 
 const sizeClasses: Record<BadgeSize, string> = {
+  '2xs': 'px-2 py-0.5 text-2xs',
   xs: 'px-1.5 py-0.5 text-xs',
   sm: 'px-2.5 py-0.5 text-xs',
   md: 'px-3 py-1 text-sm',
 }
 
 const signalSizeClasses: Record<BadgeSize, string> = {
+  '2xs': 'gap-1 px-2 py-0.5 text-2xs',
   xs: 'gap-1 px-1.5 py-0.5 text-xs',
   sm: 'gap-1 px-1.5 py-0.5 text-xs',
   md: 'gap-1.5 px-2.5 py-1 text-sm',
 }
 
 const dotSizeClasses: Record<BadgeSize, string> = {
+  '2xs': 'h-1.5 w-1.5',
   xs: 'h-1.5 w-1.5',
   sm: 'h-1.5 w-1.5',
   md: 'h-2 w-2',
 }
 
 const removableSizeClasses: Record<BadgeSize, string> = {
+  '2xs': 'gap-1 py-0.5 pe-2 ps-1 text-2xs',
   xs: 'gap-1 py-0.5 pe-2 ps-1 text-xs',
   sm: 'gap-1.5 py-0.5 pe-2.5 ps-1.5 text-xs',
   md: 'gap-2 py-1 pe-3 ps-2 text-sm',
 }
 
 const removeButtonSizeClasses: Record<BadgeSize, string> = {
+  '2xs': 'h-3.5 w-3.5',
   xs: 'h-3.5 w-3.5',
   sm: 'h-3.5 w-3.5',
   md: 'h-4 w-4',

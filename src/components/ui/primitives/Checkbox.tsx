@@ -27,6 +27,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   inputClassName,
   ...props
 }) => {
+  const hasLabel = Boolean(label) || Boolean(description)
   const checkbox = (
     <input
       type="checkbox"
@@ -35,18 +36,19 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         checkboxSizeClasses[size],
         'disabled:cursor-not-allowed disabled:opacity-50',
         inputClassName,
-        className,
+        // Bare className routes to the input only when there's no label wrapper.
+        !hasLabel && className,
       )}
       {...props}
     />
   )
 
-  if (!label && !description) {
+  if (!hasLabel) {
     return checkbox
   }
 
   return (
-    <label className={cn('flex cursor-pointer select-none items-start gap-2', containerClassName)}>
+    <label className={cn('flex cursor-pointer select-none items-start gap-2', containerClassName, className)}>
       {checkbox}
       <span className="min-w-0">
         {label ? <span className={cn('block font-medium text-gray-700', labelSizeClasses[size])}>{label}</span> : null}

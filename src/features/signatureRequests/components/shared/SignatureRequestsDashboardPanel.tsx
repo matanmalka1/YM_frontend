@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AlertCircle, FileSignature, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
+import { Card } from '@/components/ui/primitives/Card'
 import { InlineState } from '@/components/ui/feedback'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
@@ -121,7 +122,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
   )
 
   return (
-    <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+    <Card size="compact" disablePadding className="shadow-sm">
       <div className={cn('border-b border-gray-100', compact ? 'px-5 py-4' : 'px-5 py-4')}>
         <div className="flex items-center justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3">
@@ -220,7 +221,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
         onConfirm={handleConfirmCancel}
         onCancel={() => setCancelTarget(null)}
       />
-    </section>
+    </Card>
   )
 }
 

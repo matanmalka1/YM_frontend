@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Receipt } from 'lucide-react'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { InlineState } from '@/components/ui/feedback'
 import { formatVatAmount } from '../../utils/vatHelpers'
 import { useDeleteInvoice, useUpdateInvoice } from '../../hooks/useVatInvoiceMutations'
@@ -100,9 +101,9 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
               <td colSpan={totalCols - (canEdit ? 3 : 2)} className="px-4 py-2.5 text-right">
                 <span className="inline-flex items-center gap-2">
                   <span className="text-xs font-semibold text-gray-500">סה&quot;כ</span>
-                  <span className="rounded-full bg-gray-200 px-2 py-0.5 text-xs font-bold text-gray-600">
+                  <Badge variant="neutral" size="xs" className="bg-gray-200 px-2 font-bold text-gray-600">
                     {invoices.length}
-                  </span>
+                  </Badge>
                 </span>
               </td>
               <td className="px-4 py-2.5 font-mono tabular-nums font-bold text-gray-800">

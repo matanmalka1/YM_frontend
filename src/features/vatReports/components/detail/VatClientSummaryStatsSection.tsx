@@ -8,7 +8,7 @@ interface VatClientSummaryStatsSectionProps {
 }
 
 export const VatClientSummaryStatsSection = ({ annual }: VatClientSummaryStatsSectionProps) => {
-  const averageNetVat = annual.periods_count > 0 ? (Number(annual.net_vat) / annual.periods_count).toFixed(2) : null
+  const averageNetVat = annual.periods_count > 0 ? Number(annual.net_vat) / annual.periods_count : null
   const statCards = [
     {
       key: 'filed-periods',

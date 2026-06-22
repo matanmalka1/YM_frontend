@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import { cn, formatCount, formatPercent } from '../../../utils/utils'
 import { semanticStatToneClasses } from '@/utils/semanticColors'
+import { ProgressBar, type ProgressTone } from '../primitives/ProgressBar'
 
 type StatVariant = 'blue' | 'green' | 'red' | 'orange' | 'purple' | 'neutral'
 
@@ -34,29 +35,26 @@ const STAT_VARIANTS: Record<
     iconBg: string
     value: string
     strip: string
-    progress: string
-    progressTrack: string
+    progressTone?: ProgressTone
+    progressFill?: string
+    progressTrack?: string
   }
 > = {
   blue: {
     ...semanticStatToneClasses.info,
-    progress: 'bg-info-500',
-    progressTrack: 'bg-info-50',
+    progressTone: 'info',
   },
   green: {
     ...semanticStatToneClasses.positive,
-    progress: 'bg-positive-500',
-    progressTrack: 'bg-positive-50',
+    progressTone: 'positive',
   },
   red: {
     ...semanticStatToneClasses.negative,
-    progress: 'bg-negative-500',
-    progressTrack: 'bg-negative-50',
+    progressTone: 'negative',
   },
   orange: {
     ...semanticStatToneClasses.warning,
-    progress: 'bg-warning-500',
-    progressTrack: 'bg-warning-50',
+    progressTone: 'warning',
   },
   purple: {
     accent: 'bg-violet-500',
@@ -64,17 +62,14 @@ const STAT_VARIANTS: Record<
     iconBg: 'bg-violet-50 text-violet-500',
     value: 'text-violet-700',
     strip: 'from-violet-500/10 to-transparent',
-    progress: 'bg-violet-500',
+    progressFill: 'bg-violet-500',
     progressTrack: 'bg-violet-50',
   },
   neutral: {
     ...semanticStatToneClasses.neutral,
-    progress: 'bg-gray-500',
-    progressTrack: 'bg-gray-100',
+    progressTone: 'neutral',
   },
 }
-
-const clampProgress = (value: number) => Math.min(Math.max(value, 0), 100)
 
 const formatTrend = (value: number) => {
   if (value > 0) return { icon: '↑', className: 'bg-positive-100 text-positive-700' }
@@ -193,12 +188,13 @@ export const StatsCard: React.FC<StatsCardProps> = ({
           </div>
 
           {progress !== undefined && (
-            <div className={cn('mt-3 h-2 w-full rounded-full', config.progressTrack)}>
-              <div
-                className={cn('h-2 rounded-full transition-all duration-700', config.progress)}
-                style={{ width: `${clampProgress(progress)}%` }}
-              />
-            </div>
+            <ProgressBar
+              value={progress}
+              className="mt-3 w-full"
+              tone={config.progressTone}
+              fillClassName={config.progressFill}
+              trackClassName={config.progressTrack}
+            />
           )}
 
           {trend && trendConfig && (

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ChevronDown, ChevronUp, Link2 } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
+import { Card } from '../../../../components/ui/primitives/Card'
 import { StatusBadge } from '../../../../components/ui/primitives/StatusBadge'
 import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
 import { getSignatureRequestTypeLabel, getSignatureRequestStatusLabel } from '../../constants'
@@ -53,7 +54,12 @@ export const SignatureRequestRow: React.FC<SignatureRequestRowProps> = ({
   }
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white transition-shadow hover:shadow-sm">
+    <Card
+      variant="outlined"
+      size="compact"
+      disablePadding
+      className="rounded-xl border-gray-200 transition-shadow hover:shadow-sm"
+    >
       {/* Main row */}
       <div className="flex items-center gap-3 px-4 py-3">
         <div className="min-w-0 flex-1">
@@ -125,7 +131,7 @@ export const SignatureRequestRow: React.FC<SignatureRequestRowProps> = ({
         onConfirm={handleConfirmCancel}
         onCancel={() => setConfirmCancel(false)}
       />
-    </div>
+    </Card>
   )
 }
 SignatureRequestRow.displayName = 'SignatureRequestRow'

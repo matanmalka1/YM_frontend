@@ -14,6 +14,7 @@ interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>
   error?: string
   size?: 'xs' | 'sm' | 'md'
   options?: SelectOption[]
+  placeholder?: string
   fieldClassName?: string
 }
 
@@ -42,6 +43,7 @@ export const Select: React.FC<SelectProps> = ({
   className,
   fieldClassName,
   options,
+  placeholder,
   children,
   value,
   onChange,
@@ -62,7 +64,9 @@ export const Select: React.FC<SelectProps> = ({
         disabled={disabled}
         size={size}
         name={name}
-        className={cn(error ? 'border-negative-500' : undefined, className)}
+        error={Boolean(error)}
+        placeholder={placeholder}
+        className={className}
       />
     ) : (
       <div className="relative">

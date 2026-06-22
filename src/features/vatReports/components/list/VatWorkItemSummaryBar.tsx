@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Clock, Info, AlertTriangle } from 'lucide-react'
 import { formatDate } from '@/utils/utils'
 import { Badge } from '@/components/ui/primitives/Badge'
+import { Card } from '@/components/ui/primitives/Card'
 import { useRole } from '@/hooks/useRole'
 import { useVatWorkItemActions } from '../../hooks/useVatWorkItemActions'
 import { VAT_DEADLINE_WARNING_DAYS } from '../../constants/vatConstants'
@@ -51,7 +52,7 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
   const filed = isFiled(workItem.status)
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-3">
+    <Card size="compact" disablePadding className="shadow-sm" bodyClassName="p-4 space-y-3">
       {workItem.status === 'pending_materials' && workItem.pending_materials_note && (
         <AlertBanner tone="warning" icon={Info}>
           {workItem.pending_materials_note}
@@ -123,7 +124,7 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
         onFilingStart={() => onFilingPendingChange?.(true)}
         onFilingEnd={() => onFilingPendingChange?.(false)}
       />
-    </div>
+    </Card>
   )
 }
 

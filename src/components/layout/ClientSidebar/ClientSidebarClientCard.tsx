@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { Building2, Mail, Phone, ReceiptText } from 'lucide-react'
 import { CLIENT_ROUTES } from '@/features/clients'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { cn, formatClientOfficeId, formatPhoneNumber } from '@/utils/utils'
 import type { ClientSidebarItem } from './useClientSidebarClients'
 import { getEntityLabel, getVatLabel } from './ClientSidebar.labels'
@@ -29,20 +30,20 @@ export const ClientSidebarClientCard: React.FC<ClientSidebarClientCardProps> = (
           {client.displayName}
         </span>
       </div>
-      <span className="shrink-0 rounded-full bg-gray-100 px-2 py-1 text-2xs font-semibold tabular-nums text-gray-600">
+      <Badge variant="neutral" size="2xs" className="shrink-0 font-semibold tabular-nums text-gray-600">
         {client.officeClientNumber == null ? 'ללא מספר משרד' : `מס׳ ${formatClientOfficeId(client.officeClientNumber)}`}
-      </span>
+      </Badge>
     </div>
 
     <div className="mt-3 flex flex-wrap gap-1.5">
-      <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-2xs font-medium text-gray-600">
+      <Badge variant="neutral" size="2xs" className="inline-flex items-center gap-1 text-gray-600">
         <Building2 className="h-3 w-3" />
         {getEntityLabel(client)}
-      </span>
-      <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-2xs font-medium text-gray-600">
+      </Badge>
+      <Badge variant="neutral" size="2xs" className="inline-flex items-center gap-1 text-gray-600">
         <ReceiptText className="h-3 w-3" />
         מע״מ {getVatLabel(client)}
-      </span>
+      </Badge>
     </div>
 
     <div className="mt-3 space-y-1.5 border-t border-gray-100 pt-2.5 text-xs">

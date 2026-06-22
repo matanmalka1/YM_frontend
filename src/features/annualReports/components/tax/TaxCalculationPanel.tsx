@@ -1,4 +1,5 @@
 import { Button } from '../../../../components/ui/primitives/Button'
+import { Card } from '../../../../components/ui/primitives/Card'
 import { cn, formatCurrencyILS, formatPercent } from '../../../../utils/utils'
 import { useTaxCalculationPanel } from '../../hooks/useTaxCalculationPanel'
 import { TaxBracketsTable } from './TaxBracketsTable'
@@ -22,12 +23,12 @@ const Row: React.FC<{ label: string; value: string; className?: string; muted?: 
 )
 
 const SectionCard: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
-  <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+  <Card size="compact" disablePadding className="shadow-sm">
     <div className="border-b border-gray-100 bg-gray-50 px-5 py-3">
       <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-500">{title}</h4>
     </div>
     <dl className="divide-y divide-gray-50 px-5">{children}</dl>
-  </div>
+  </Card>
 )
 
 export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {

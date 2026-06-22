@@ -79,7 +79,7 @@ export const AnnualReportOverviewSection: React.FC<Props> = ({
       />
 
       {/* P&L collapsible */}
-      <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+      <Card size="compact" disablePadding className="shadow-sm">
         <Button
           type="button"
           variant="ghost"
@@ -101,7 +101,7 @@ export const AnnualReportOverviewSection: React.FC<Props> = ({
             <AnnualPLSummary reportId={report.id} clientId={clientId} />
           </div>
         )}
-      </div>
+      </Card>
     </div>
   )
 }
