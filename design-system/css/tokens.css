@@ -21,18 +21,6 @@
   --on-primary: #FFFFFF;
   --focus-ring: #007AFF;
 
-  /* --- accent = amber (decorative only, NOT the action color) --- */
-  --accent-50:  #FFFBEB;
-  --accent-100: #FEF3C7;
-  --accent-200: #FDE68A;
-  --accent-300: #FCD34D;
-  --accent-400: #FBBF24;
-  --accent-500: #F59E0B;
-  --accent-600: #D97706;
-  --accent-700: #B45309;
-  --accent-800: #92400E;
-  --accent-900: #78350F;
-
   /* --- semantic: info (indigo) --- */
   --info-50:  #EEF2FF;
   --info-100: #E0E7FF;
@@ -130,7 +118,6 @@
 
   /* --- motion (src/index.css @theme --animate-*) --- */
   --dur-fade-in: 300ms;     /* fade-in */
-  --dur-fade-in-up: 350ms;  /* fade-in-up / stagger */
   --dur-scale-in: 250ms;    /* scale-in (modal) */
   --dur-slide-in: 300ms;    /* slide-in (alert) */
   --dur-default: 200ms;     /* button/card transition */

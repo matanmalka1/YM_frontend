@@ -54,7 +54,7 @@ export const StateCard: React.FC<StateCardProps> = ({
               isError
                 ? 'rounded-full bg-negative-100 p-4'
                 : isIllustration
-                  ? 'bg-gradient-to-br from-primary-100 to-accent-100 shadow-lg'
+                  ? 'bg-gradient-to-br from-primary-100 to-warning-100 shadow-lg'
                   : 'bg-gray-100',
             )}
           >

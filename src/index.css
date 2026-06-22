@@ -20,17 +20,6 @@
   }
 }
 
-@keyframes fade-in-up {
-  0% {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes scale-in {
   0% {
     opacity: 0;
@@ -56,11 +45,6 @@
 :root {
   --font-display: 'Heebo', sans-serif;
   --font-body: 'Heebo', sans-serif;
-  --font-mono: 'Heebo', sans-serif;
-}
-
-html {
-  font-size: 90%;
 }
 
 input[type='number'] {
@@ -112,26 +96,6 @@ body {
   box-shadow: var(--shadow-elevation-3);
 }
 
-.stagger-children > * {
-  opacity: 0;
-  animation: fade-in-up 350ms ease-out forwards;
-}
-.stagger-children > *:nth-child(2) {
-  animation-delay: 50ms;
-}
-.stagger-children > *:nth-child(3) {
-  animation-delay: 100ms;
-}
-.stagger-children > *:nth-child(4) {
-  animation-delay: 150ms;
-}
-.stagger-children > *:nth-child(5) {
-  animation-delay: 200ms;
-}
-.stagger-children > *:nth-child(6) {
-  animation-delay: 250ms;
-}
-
 @layer components {
   .focus-ring {
     outline: 2px solid transparent;
@@ -146,11 +110,9 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in,
-  .animate-fade-in-up,
   .animate-scale-in,
   .animate-slide-in,
-  .animate-shimmer,
-  .stagger-children > * {
+  .animate-shimmer {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
@@ -158,12 +120,13 @@ body {
 }
 
 @theme {
-  --font-family-sans: 'Heebo', system-ui, sans-serif;
-  --font-family-display: 'Heebo', sans-serif;
-  --font-family-mono: 'Heebo', sans-serif;
+  /* font-mono = true monospace for tabular data, invoice numbers, hashes and
+     IDs. Latin glyphs/digits render monospace; Hebrew falls through to Heebo.
+     (Sans/display intentionally use Tailwind defaults + body/--font-display.) */
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, monospace, 'Heebo';
 
   /* Sub-xs absolute sizes for uppercase table headers, eyebrows, and dense
-     metadata. Pinned in px (not rem) so they stay fixed under the 90% root scale. */
+     metadata. Pinned in px (not rem) so they stay fixed regardless of root scale. */
   --text-2xs: 11px;
   --text-3xs: 10px;
 
@@ -178,17 +141,6 @@ body {
   --color-primary-800: #004a99;
   --color-primary-900: #00305c;
   --color-primary-950: #001f3d;
-
-  --color-accent-50: #fffbeb;
-  --color-accent-100: #fef3c7;
-  --color-accent-200: #fde68a;
-  --color-accent-300: #fcd34d;
-  --color-accent-400: #fbbf24;
-  --color-accent-500: #f59e0b;
-  --color-accent-600: #d97706;
-  --color-accent-700: #b45309;
-  --color-accent-800: #92400e;
-  --color-accent-900: #78350f;
 
   --color-info-50: #eef2ff;
   --color-info-100: #e0e7ff;
@@ -256,7 +208,6 @@ body {
   /* Keyframes are declared as top-level @keyframes above; the --animate-* tokens
      below reference them by name. (Tailwind v4 does not emit --keyframes-* blocks.) */
   --animate-fade-in: fade-in 300ms ease-out;
-  --animate-fade-in-up: fade-in-up 350ms ease-out;
   --animate-scale-in: scale-in 250ms ease-out;
   --animate-slide-in: slide-in 300ms ease-out;
   --animate-shimmer: shimmer 2s linear infinite;

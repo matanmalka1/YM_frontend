@@ -36,10 +36,24 @@ Load order matters: `tokens → base → layout → components`.
 Each component block in `components.css` maps to a primitive in
 `src/components/ui/primitives` (Button, Badge, Card, ProgressBar, …).
 
-## Sections
+## Sections (full UI library coverage)
 
-Base — colors · typography · shapes/radius.
-Components — buttons · badges · inputs · stat cards · cards · tables · modal+drawer · feedback/states.
+- **Foundations** — colors (full ramps + chart/warm) · typography (incl. text-2xs/3xs) · shapes/radius (incl. nav/tile).
+- **Primitives** — Button · Badge / StatusBadge · MonoValue · Divider · ProgressBar · Tooltip.
+- **Forms** — Input · Textarea · Select · DatePicker · PasswordInput · Checkbox · FormField (label+error).
+- **Pickers** — DatePickerCalendar (popover) · SelectDropdown (multi-select) · DatePickerInlineSelect.
+- **Filters & search** — FilterPanel · ClientSearchInput / ClientPickerField · SearchFilter.
+- **Data & structure** — StatsCard · Card · SectionHeader · DefinitionList · GroupSection · Tabs (DetailTabPanel) · DataTable.
+- **Table chrome** — ToolbarContainer · ActiveFilterBadges · PaginationCard · BulkSelectionToolbar · RowActions.
+- **Grouping** — MonthlyAccordionGroup · GroupedPeriodRow.
+- **App chrome** — Breadcrumbs (PageHeader) · NavbarPrimaryNav + NavbarMoreMenu · NotificationBell · Avatar · ClientSidebarClientCard.
+- **Overlays** — Modal · ConfirmDialog · UnsavedChangesGuard · DetailDrawer (DrawerSection/DrawerField) · ModalFormActions.
+- **Feedback & states** — Alert · StateCard · InlineState · TableSkeleton · Spinner · PageLoading · AppErrorBoundary · Timeline.
+
+Every **visual** component under `src/components/` (ui · layout · shared · errors) is represented.
+Not shown — purely behavioral/composition with no distinct visual surface: OverlayContainer/Portal,
+PageStateGuard, PageLayout/PageContent, PaginatedDataTable (DataTable+PaginationCard), columnRenderers,
+commonColumns, tableSelection.
 
 ## Editing
 

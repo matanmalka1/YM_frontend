@@ -88,12 +88,12 @@ colors:
   gray-800: '#1F2937'
   gray-900: '#111827'
 typography:
-  # Single family. Root font-size is scaled to 90% in html (src/index.css).
+  # Single family. Root font-size is 100% (browser default) in html (src/index.css).
   # No bespoke type-scale tokens exist; sizes come from Tailwind text-* utilities.
   fontFamily: Heebo
-  rootScale: 90%
+  rootScale: 100%
   scale:
-    text-3xs: 10px     # dense metadata (pinned px, unaffected by 90% root scale)
+    text-3xs: 10px     # dense metadata (pinned px, unaffected by root scale)
     text-2xs: 11px     # uppercase table headers, eyebrows (pinned px)
     text-xs: 12px      # badges, metadata, tooltips
     text-sm: 14px      # body, buttons, inputs, table cells (the workhorse size)
@@ -308,11 +308,11 @@ Backgrounds stay light throughout the authenticated app. Subtle gradients appear
 
 ## Typography
 
-Use **Heebo** everywhere — display, body, and "mono". `.font-mono` is Heebo with `tabular-nums`; there is no second font family. The root `html` font-size is scaled to **90%**, so all `rem`-based Tailwind sizes render slightly tighter than default.
+Use **Heebo** everywhere — display, body, and "mono". `.font-mono` is Heebo with `tabular-nums`; there is no second font family. The root `html` font-size is **100%** (browser default); `text-2xs`/`text-3xs` are pinned in px so they stay fixed regardless.
 
 There is no bespoke type-scale token set; sizing uses Tailwind utilities:
 
-- `text-3xs` / `text-2xs` (10px / 11px): dense metadata, uppercase table headers, and eyebrows. Pinned in px so they don't shrink under the 90% root scale.
+- `text-3xs` / `text-2xs` (10px / 11px): dense metadata, uppercase table headers, and eyebrows. Pinned in px so they stay fixed regardless of root scale.
 - `text-xs` (12px): badges, metadata, tooltips.
 - `text-sm` (14px): the workhorse — body, buttons, inputs, table cells.
 - `text-base` (16px): occasional body.

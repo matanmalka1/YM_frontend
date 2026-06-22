@@ -1,10 +1,10 @@
 /* ==========================================================================
    base.css — reset, document defaults, shared atoms.
-   Mirrors src/index.css: Heebo only, html scaled to 90%, body bg gray-50.
+   Mirrors src/index.css: Heebo only, html root 100% (browser default), body bg gray-50.
    ========================================================================== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { font-size: 90%; scroll-behavior: smooth; }   /* matches src/index.css */
+html { font-size: 100%; scroll-behavior: smooth; }   /* matches src/index.css */
 
 body {
   font-family: 'Heebo', system-ui, sans-serif;
@@ -14,11 +14,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* tabular figures for amounts / counts / dates (.font-mono is Heebo + tabular) */
+/* tabular figures for amounts / counts / dates */
 .num { font-variant-numeric: tabular-nums; }
-.mono { font-variant-numeric: tabular-nums; font-weight: 500; }
+/* .mono mirrors the app's `font-mono`: true monospace for digits/IDs; Hebrew → Heebo */
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace, 'Heebo'; font-variant-numeric: tabular-nums; font-weight: 500; }
 
-/* Tailwind text-* sizes used by the app (post 90% root scale they render tighter) */
+/* Tailwind text-* sizes used by the app (root 100% = browser default) */
 .text-3xs  { font-size: var(--text-3xs); line-height: 1.35; }   /* 10px */
 .text-2xs  { font-size: var(--text-2xs); line-height: 1.35; }   /* 11px — table headers/eyebrows */
 .text-xs   { font-size: 12px; line-height: 1.4; }
