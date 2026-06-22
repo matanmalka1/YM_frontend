@@ -98,9 +98,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                             size="sm"
                             variant={isOn ? 'primary' : 'outline'}
                             onClick={() => {
-                              const next = isOn
-                                ? selected.filter((v) => v !== opt.value)
-                                : [...selected, opt.value]
+                              const next = isOn ? selected.filter((v) => v !== opt.value) : [...selected, opt.value]
                               onChange(field.key, next.join(','))
                             }}
                           >

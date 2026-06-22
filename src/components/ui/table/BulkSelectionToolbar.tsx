@@ -20,9 +20,7 @@ export const BulkSelectionToolbar: React.FC<BulkSelectionToolbarProps> = ({
   onClear,
   selectedCount,
 }) => (
-  <div
-    className="animate-fade-in rounded-xl border border-primary-200 bg-primary-50/60 px-4 py-3 flex flex-col gap-3"
-  >
+  <div className="animate-fade-in rounded-xl border border-primary-200 bg-primary-50/60 px-4 py-3 flex flex-col gap-3">
     <div className="flex flex-wrap items-center gap-3">
       <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-100 border border-primary-200 px-3 py-1 text-xs font-semibold text-primary-700 tabular-nums">
         <span className="h-1.5 w-1.5 rounded-full bg-primary-500" />

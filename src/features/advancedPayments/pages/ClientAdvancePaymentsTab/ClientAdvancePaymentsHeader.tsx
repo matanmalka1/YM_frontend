@@ -11,7 +11,11 @@ import {
   ADVANCE_PAYMENT_FREQUENCY_PREFIX,
   ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT,
 } from '../../constants'
-import { getOperationalYearOptions, getOperationalTaxYear, getMonthsCoveredLabel } from '@/constants/periodOptions.constants'
+import {
+  getOperationalYearOptions,
+  getOperationalTaxYear,
+  getMonthsCoveredLabel,
+} from '@/constants/periodOptions.constants'
 
 interface ClientAdvancePaymentsHeaderProps {
   isAdvisor: boolean

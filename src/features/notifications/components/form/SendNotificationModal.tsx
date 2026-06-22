@@ -251,12 +251,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
                 ))}
               </div>
             )}
-            <Input
-              label="נושא"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              error={subjectError}
-            />
+            <Input label="נושא" value={subject} onChange={(e) => setSubject(e.target.value)} error={subjectError} />
             <Textarea
               label="תוכן ההודעה"
               rows={8}

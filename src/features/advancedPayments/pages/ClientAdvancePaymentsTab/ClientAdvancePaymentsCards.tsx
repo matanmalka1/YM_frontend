@@ -105,7 +105,12 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
                 <div className="text-2xl font-bold text-success-700">{formatShekelAmount(expected)}</div>
               </div>
 
-              <DefinitionList items={detailItems} columns={2} className="gap-x-4 gap-y-2" valueClassName="text-gray-800" />
+              <DefinitionList
+                items={detailItems}
+                columns={2}
+                className="gap-x-4 gap-y-2"
+                valueClassName="text-gray-800"
+              />
 
               <Button
                 variant={isPaid ? 'outline' : 'primary'}

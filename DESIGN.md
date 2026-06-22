@@ -93,39 +93,39 @@ typography:
   fontFamily: Heebo
   rootScale: 100%
   scale:
-    text-3xs: 10px     # dense metadata (pinned px, unaffected by root scale)
-    text-2xs: 11px     # uppercase table headers, eyebrows (pinned px)
-    text-xs: 12px      # badges, metadata, tooltips
-    text-sm: 14px      # body, buttons, inputs, table cells (the workhorse size)
+    text-3xs: 10px # dense metadata (pinned px, unaffected by root scale)
+    text-2xs: 11px # uppercase table headers, eyebrows (pinned px)
+    text-xs: 12px # badges, metadata, tooltips
+    text-sm: 14px # body, buttons, inputs, table cells (the workhorse size)
     text-base: 16px
-    text-lg: 18px      # stat value (default), card titles
-    text-xl: 20px      # stat value (compact)
+    text-lg: 18px # stat value (default), card titles
+    text-xl: 20px # stat value (compact)
   weights:
     normal: 400
-    medium: 500        # buttons, labels, badges
-    semibold: 600      # table headers, section labels
-    bold: 700          # stat values, emphasis
-  numerics: tabular-nums   # all amounts, counts, dates, days (.font-mono = Heebo tabular)
+    medium: 500 # buttons, labels, badges
+    semibold: 600 # table headers, section labels
+    bold: 700 # stat values, emphasis
+  numerics: tabular-nums # all amounts, counts, dates, days (.font-mono = Heebo tabular)
 spacing:
-  base: 4px            # Tailwind 0.25rem scale; 8px rhythm for controls
-  card-padding: 28px   # p-7 default Card body
-  card-padding-compact: 20px  # p-5
-  card-header-x: 28px  # px-7
-  card-header-y: 20px  # py-5
-  table-cell-x: 12px   # px-3
-  table-cell-y: 8px    # py-2
-  overlay-padding-x: 24px  # px-6 modal/drawer
-  overlay-padding-y: 16px  # py-4
-  navbar-height: 64px  # h-16
+  base: 4px # Tailwind 0.25rem scale; 8px rhythm for controls
+  card-padding: 28px # p-7 default Card body
+  card-padding-compact: 20px # p-5
+  card-header-x: 28px # px-7
+  card-header-y: 20px # py-5
+  table-cell-x: 12px # px-3
+  table-cell-y: 8px # py-2
+  overlay-padding-x: 24px # px-6 modal/drawer
+  overlay-padding-y: 16px # py-4
+  navbar-height: 64px # h-16
 rounded:
-  sm: 4px      # rounded-sm  (link button, skeleton)
-  md: 6px      # rounded-md  (small icon buttons, alert icon tile sm)
-  lg: 8px      # rounded-lg  (inputs, stat icon tile, alert icon tile, tooltip)
-  nav: 10px    # rounded-nav  (navbar/menu items) — off-scale, pinned px
-  xl: 12px     # rounded-xl  (stat card, modal, alert, group section)
-  tile: 14px   # rounded-tile (square icon tiles) — off-scale, pinned px
-  2xl: 16px    # rounded-2xl
-  3xl: 24px    # rounded-3xl (Card primitive container)
+  sm: 4px # rounded-sm  (link button, skeleton)
+  md: 6px # rounded-md  (small icon buttons, alert icon tile sm)
+  lg: 8px # rounded-lg  (inputs, stat icon tile, alert icon tile, tooltip)
+  nav: 10px # rounded-nav  (navbar/menu items) — off-scale, pinned px
+  xl: 12px # rounded-xl  (stat card, modal, alert, group section)
+  tile: 14px # rounded-tile (square icon tiles) — off-scale, pinned px
+  2xl: 16px # rounded-2xl
+  3xl: 24px # rounded-3xl (Card primitive container)
   full: 9999px # buttons, badges, pills, progress, avatar
 radii:
   button: '{rounded.full}'
@@ -134,54 +134,74 @@ radii:
   card: '{rounded.3xl}'
   stats-card: '{rounded.xl}'
   modal: '{rounded.xl}'
-  drawer: '{rounded.none}'   # full-height right panel, no corner radius
+  drawer: '{rounded.none}' # full-height right panel, no corner radius
   badge: '{rounded.full}'
   tooltip: '{rounded.lg}'
 shadows:
   # Slate-tinted (rgba 15,23,42). NOT indigo-tinted.
   sm: '0 1px 2px rgba(15,23,42,0.05)'
-  elevation-0: '0 1px 2px rgba(15,23,42,0.04)'   # quiet inset/section box
+  elevation-0: '0 1px 2px rgba(15,23,42,0.04)' # quiet inset/section box
   elevation-1: '0 1px 3px rgba(15,23,42,0.05), 0 1px 2px rgba(15,23,42,0.04)'
   elevation-2: '0 4px 12px rgba(15,23,42,0.06), 0 2px 4px rgba(15,23,42,0.04)'
   elevation-3: '0 12px 28px rgba(15,23,42,0.1), 0 4px 8px rgba(15,23,42,0.05)'
-  overlay: 'shadow-xl'    # modal
+  overlay: 'shadow-xl' # modal
   drawer: 'shadow-2xl'
 elevation:
   card-default: '{shadows.elevation-1}'
   card-elevated: '{shadows.elevation-2}'
-  card-interactive-hover: '{shadows.elevation-3}'   # + -translate-y-0.5
+  card-interactive-hover: '{shadows.elevation-3}' # + -translate-y-0.5
   stats-card: '{shadows.sm}'
 motion:
-  fade-in: '300ms ease-out'        # translateY(6px) -> 0
-  fade-in-up: '350ms ease-out'     # translateY(8px) -> 0, used by stagger-children
-  scale-in: '250ms ease-out'       # scale(0.96) -> 1
-  slide-in: '300ms ease-out'       # translateX(12px) -> 0, alerts
-  shimmer: '2s linear infinite'    # skeleton
-  transition-default: '200ms'      # buttons, cards
-  reduced-motion: respected        # @media prefers-reduced-motion disables all
+  fade-in: '300ms ease-out' # translateY(6px) -> 0
+  fade-in-up: '350ms ease-out' # translateY(8px) -> 0, used by stagger-children
+  scale-in: '250ms ease-out' # scale(0.96) -> 1
+  slide-in: '300ms ease-out' # translateX(12px) -> 0, alerts
+  shimmer: '2s linear infinite' # skeleton
+  transition-default: '200ms' # buttons, cards
+  reduced-motion: respected # @media prefers-reduced-motion disables all
 components:
   navbar:
     height: 64px
     backgroundColor: '{colors.surface}'
-    borderBottom: '1px solid {colors.gray-200}'   # /80 opacity
+    borderBottom: '1px solid {colors.gray-200}' # /80 opacity
     note: 'Primary navigation is a light TOP bar, not a dark sidebar. A separate collapsible ClientSidebar lists clients.'
   button-base:
     rounded: '{rounded.full}'
     typography: text-sm / medium
     focusRing: 'focus-ring (2px solid {colors.focus-ring}, offset 2px)'
     transition: all 200ms
-  button-size-md: { padding: 8px 16px }       # px-4 py-2
-  button-size-sm: { padding: 6px 12px }       # px-3 py-1.5
-  button-primary:   { backgroundColor: '{colors.primary-600}', textColor: '#FFFFFF', hover: '{colors.primary-700}', active: '{colors.primary-800}', shadow: '{shadows.sm}' }
+  button-size-md: { padding: 8px 16px } # px-4 py-2
+  button-size-sm: { padding: 6px 12px } # px-3 py-1.5
+  button-primary:
+    {
+      backgroundColor: '{colors.primary-600}',
+      textColor: '#FFFFFF',
+      hover: '{colors.primary-700}',
+      active: '{colors.primary-800}',
+      shadow: '{shadows.sm}',
+    }
   button-secondary: { backgroundColor: '{colors.gray-100}', textColor: '{colors.gray-900}', hover: '{colors.gray-200}' }
-  button-outline:   { backgroundColor: '{colors.surface}', textColor: '{colors.gray-700}', border: '1px solid {colors.gray-300}', hover: '{colors.gray-50}' }
-  button-ghost:     { backgroundColor: transparent, textColor: '{colors.gray-600}', hover: '{colors.gray-200}' }
-  button-danger:    { backgroundColor: '{colors.negative-600}', textColor: '#FFFFFF', hover: '{colors.negative-700}', active: '{colors.negative-800}' }
-  button-link:      { textColor: '{colors.gray-600}', decoration: underline, rounded: '{rounded.sm}', hover: '{colors.gray-900}' }
+  button-outline:
+    {
+      backgroundColor: '{colors.surface}',
+      textColor: '{colors.gray-700}',
+      border: '1px solid {colors.gray-300}',
+      hover: '{colors.gray-50}',
+    }
+  button-ghost: { backgroundColor: transparent, textColor: '{colors.gray-600}', hover: '{colors.gray-200}' }
+  button-danger:
+    {
+      backgroundColor: '{colors.negative-600}',
+      textColor: '#FFFFFF',
+      hover: '{colors.negative-700}',
+      active: '{colors.negative-800}',
+    }
+  button-link:
+    { textColor: '{colors.gray-600}', decoration: underline, rounded: '{rounded.sm}', hover: '{colors.gray-900}' }
   input:
     rounded: '{rounded.lg}'
-    height: 36px           # h-9 (md); sm h-8 / xs h-7
-    padding: 8px 12px      # px-3 py-2
+    height: 36px # h-9 (md); sm h-8 / xs h-7
+    padding: 8px 12px # px-3 py-2
     border: '1px solid {colors.gray-300}'
     backgroundColor: '{colors.surface}'
     shadow: '{shadows.sm}'
@@ -198,17 +218,17 @@ components:
     overflow: hidden
     default: { shadow: '{shadows.elevation-1}' }
     elevated: { shadow: '{shadows.elevation-2}' }
-    outlined: { border: '1px solid {colors.gray-200}' }   # /70
+    outlined: { border: '1px solid {colors.gray-200}' } # /70
     interactive: 'hover {shadows.elevation-3} + -translate-y-0.5'
     header: { padding: '20px 28px', borderBottom: '1px solid {colors.gray-100}' }
     body: { padding: '{spacing.card-padding}' }
-    footer: { padding: '20px 28px', borderTop: '1px solid {colors.gray-100}', backgroundColor: '{colors.gray-50}' }  # /60
+    footer: { padding: '20px 28px', borderTop: '1px solid {colors.gray-100}', backgroundColor: '{colors.gray-50}' } # /60
   stats-card:
     rounded: '{rounded.xl}'
     backgroundColor: '{colors.surface}'
     border: '1px solid {colors.gray-100}'
     shadow: '{shadows.sm}'
-    padding: '16px 20px'        # px-5 py-4
+    padding: '16px 20px' # px-5 py-4
     accentStrip: 'right edge w-0.5 + border-r-2 in tone-500 (RTL)'
     iconTile: '40x40 rounded-lg, bg tone-50 text tone-500'
     value: 'text-lg font-bold tabular-nums, color tone-700'
@@ -217,21 +237,28 @@ components:
   badge:
     rounded: '{rounded.full}'
     typography: text-xs / medium
-    filled: 'bg {tone}-100 text {tone}-800'                       # neutral=gray-100/gray-800
+    filled: 'bg {tone}-100 text {tone}-800' # neutral=gray-100/gray-800
     signal: 'bg {tone}-50 text {tone}-700 ring-1 ring {tone}-200 + leading dot'
     removable: 'bg {colors.primary-50} text {colors.primary-800} border {colors.primary-200} + X button'
     tones: 'neutral | info | positive | warning | negative'
   table:
     container: 'composed inside a Card (rounded-3xl), table itself border-collapse'
-    header: { backgroundColor: '{colors.gray-50}', textColor: '{colors.gray-500}', font: 'text-[11px] font-semibold uppercase tracking-wider', padding: '8px 12px' }
-    rowDivider: '1px {colors.gray-200}'   # divide-y
-    cell: { padding: '8px 12px', font: 'text-sm', textColor: '{colors.gray-700}', edgePadding: 'first ps-5 / last pe-5' }
+    header:
+      {
+        backgroundColor: '{colors.gray-50}',
+        textColor: '{colors.gray-500}',
+        font: 'text-[11px] font-semibold uppercase tracking-wider',
+        padding: '8px 12px',
+      }
+    rowDivider: '1px {colors.gray-200}' # divide-y
+    cell:
+      { padding: '8px 12px', font: 'text-sm', textColor: '{colors.gray-700}', edgePadding: 'first ps-5 / last pe-5' }
     rowHoverClickable: 'bg {colors.primary-50} (/60) + inset -3px {colors.primary-400} bar'
     rowHoverStatic: 'bg {colors.gray-50} (/80)'
   modal:
     rounded: '{rounded.xl}'
     backgroundColor: '{colors.surface}'
-    maxWidth: 'max-w-xl'        # dialog variant: max-w-sm
+    maxWidth: 'max-w-xl' # dialog variant: max-w-sm
     maxHeight: '92vh'
     shadow: '{shadows.overlay}'
     header: { padding: '16px 24px', borderBottom: '1px solid {colors.gray-100}' }
@@ -248,16 +275,16 @@ components:
     footer: { padding: '16px 24px', borderTop: '1px solid {colors.gray-200}' }
   alert:
     rounded: '{rounded.xl}'
-    padding: '16px'            # p-4, gap-4; small: p-2.5 gap-2.5
+    padding: '16px' # p-4, gap-4; small: p-2.5 gap-2.5
     border: '1px solid'
     shadow: '{shadows.sm}'
     iconTile: 'rounded-lg p-2 (sm: rounded-md p-1), bg tone-100'
     variants:
-      info:     'gradient from {colors.primary-50} to cyan-50, border {colors.primary-200}, text primary-900'
-      success:  'gradient from {colors.positive-50} to emerald-50, border positive-200, text positive-800'
-      warning:  'gradient from orange-50 to amber-50, border orange-200, text orange-900'
-      error:    'gradient from {colors.negative-50} to rose-50, border negative-200, text negative-800'
-      neutral:  'bg {colors.gray-50}, border {colors.gray-200}, no shadow'
+      info: 'gradient from {colors.primary-50} to cyan-50, border {colors.primary-200}, text primary-900'
+      success: 'gradient from {colors.positive-50} to emerald-50, border positive-200, text positive-800'
+      warning: 'gradient from orange-50 to amber-50, border orange-200, text orange-900'
+      error: 'gradient from {colors.negative-50} to rose-50, border negative-200, text negative-800'
+      neutral: 'bg {colors.gray-50}, border {colors.gray-200}, no shadow'
   progress-bar:
     track: 'rounded-full {colors.gray-100}, h-1.5 (sm) / h-2 (md)'
     fill: 'rounded-full {colors.primary-500}, transition 700ms'
@@ -271,7 +298,7 @@ components:
     backgroundColor: '{colors.gray-900}'
     textColor: '#FFFFFF'
     rounded: '{rounded.lg}'
-    padding: '6px 10px'        # px-2.5 py-1.5
+    padding: '6px 10px' # px-2.5 py-1.5
     font: 'text-xs / medium'
     shadow: 'shadow-lg'
     placement: 'portal, prefers above trigger, 8px gap'
@@ -295,7 +322,7 @@ The interface is **RTL-first**. Layout rhythm, alignment, icon placement, drawer
 The palette is built from a **blue primary ramp**, an **amber accent ramp**, the default Tailwind **gray** neutrals, and four semantic ramps (info=indigo, positive=emerald, warning=amber, negative=red).
 
 - **Blue primary (`primary-600` `#007aff`):** main actions, focus rings (`#007aff`), selected rows/cards (`ring-primary-400`), clickable table-row hover (`primary-50`), active filter pills. Hover steps to `primary-700`, active to `primary-800`.
-- **Amber accent:** decorative emphasis and warm highlights; shares the same ramp as the `warning` tone. It is *not* the brand action color and is not a generic warning unless the context is cautionary.
+- **Amber accent:** decorative emphasis and warm highlights; shares the same ramp as the `warning` tone. It is _not_ the brand action color and is not a generic warning unless the context is cautionary.
 - **Indigo = info tone:** informational badges, info stat cards, info alerts. Do not confuse it with the blue primary.
 - **Semantic ramps:** positive = emerald (success), warning = amber (attention), negative = red (error/validation), info = indigo. Each ramp uses `-50/-100` for tinted containers, `-500` for solid marks, `-700/-800` for text.
 - **Gray neutrals:** standard Tailwind `gray` ramp carries borders (`gray-100/200/300`), muted text (`gray-500/600`), and surfaces. Body background is `gray-50` (`#f9fafb`); base text is `#0f172a`.

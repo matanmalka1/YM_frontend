@@ -6,78 +6,78 @@
    ========================================================================== */
 :root {
   /* --- primary = blue ramp (primary-600 is the action color) --- */
-  --primary-50:  #EEF6FF;
-  --primary-100: #E0EEFE;
-  --primary-200: #BCDCFD;
-  --primary-300: #84C2FC;
-  --primary-400: #4AA6FA;
-  --primary-500: #1C8DF5;
-  --primary-600: #007AFF;   /* main action */
-  --primary-700: #0062CC;   /* hover */
-  --primary-800: #004A99;   /* active */
-  --primary-900: #00305C;
-  --primary-950: #001F3D;
+  --primary-50: #eef6ff;
+  --primary-100: #e0eefe;
+  --primary-200: #bcdcfd;
+  --primary-300: #84c2fc;
+  --primary-400: #4aa6fa;
+  --primary-500: #1c8df5;
+  --primary-600: #007aff; /* main action */
+  --primary-700: #0062cc; /* hover */
+  --primary-800: #004a99; /* active */
+  --primary-900: #00305c;
+  --primary-950: #001f3d;
   --primary: var(--primary-600);
-  --on-primary: #FFFFFF;
-  --focus-ring: #007AFF;
+  --on-primary: #ffffff;
+  --focus-ring: #007aff;
 
   /* --- semantic: info (indigo) --- */
-  --info-50:  #EEF2FF;
-  --info-100: #E0E7FF;
-  --info-200: #C7D2FE;
-  --info-300: #A5B4FC;
-  --info-400: #818CF8;
-  --info-500: #6366F1;
-  --info-600: #4F46E5;
-  --info-700: #4338CA;
-  --info-800: #312E81;
-  --info-900: #1E1B4B;
+  --info-50: #eef2ff;
+  --info-100: #e0e7ff;
+  --info-200: #c7d2fe;
+  --info-300: #a5b4fc;
+  --info-400: #818cf8;
+  --info-500: #6366f1;
+  --info-600: #4f46e5;
+  --info-700: #4338ca;
+  --info-800: #312e81;
+  --info-900: #1e1b4b;
 
   /* --- semantic: positive (emerald) --- */
-  --positive-50:  #ECFDF5;
-  --positive-100: #D1FAE5;
-  --positive-200: #A7F3D0;
-  --positive-300: #6EE7B7;
-  --positive-400: #34D399;
-  --positive-500: #10B981;
+  --positive-50: #ecfdf5;
+  --positive-100: #d1fae5;
+  --positive-200: #a7f3d0;
+  --positive-300: #6ee7b7;
+  --positive-400: #34d399;
+  --positive-500: #10b981;
   --positive-600: #059669;
   --positive-700: #047857;
-  --positive-800: #065F46;
+  --positive-800: #065f46;
 
   /* --- semantic: warning (amber) --- */
-  --warning-50:  #FFFBEB;
-  --warning-100: #FEF3C7;
-  --warning-200: #FDE68A;
-  --warning-300: #FCD34D;
-  --warning-400: #FBBF24;
-  --warning-500: #F59E0B;
-  --warning-600: #D97706;
-  --warning-700: #B45309;
-  --warning-800: #92400E;
-  --warning-900: #78350F;
-  --warning-950: #451A03;
+  --warning-50: #fffbeb;
+  --warning-100: #fef3c7;
+  --warning-200: #fde68a;
+  --warning-300: #fcd34d;
+  --warning-400: #fbbf24;
+  --warning-500: #f59e0b;
+  --warning-600: #d97706;
+  --warning-700: #b45309;
+  --warning-800: #92400e;
+  --warning-900: #78350f;
+  --warning-950: #451a03;
 
   /* --- semantic: negative (red) --- */
-  --negative-50:  #FEF2F2;
-  --negative-100: #FEE2E2;
-  --negative-200: #FECACA;
-  --negative-300: #FCA5A5;
-  --negative-400: #F87171;
-  --negative-500: #EF4444;
-  --negative-600: #DC2626;   /* danger button */
-  --negative-700: #B91C1C;
-  --negative-800: #991B1B;
-  --negative-900: #7F1D1D;
+  --negative-50: #fef2f2;
+  --negative-100: #fee2e2;
+  --negative-200: #fecaca;
+  --negative-300: #fca5a5;
+  --negative-400: #f87171;
+  --negative-500: #ef4444;
+  --negative-600: #dc2626; /* danger button */
+  --negative-700: #b91c1c;
+  --negative-800: #991b1b;
+  --negative-900: #7f1d1d;
 
   /* --- surfaces --- */
-  --background: #F9FAFB;        /* body bg (src/index.css) */
-  --surface: #FFFFFF;
-  --surface-warm: #F7F6F2;      /* login/auth brand surface */
-  --on-surface: #0F172A;        /* body text = slate-900 */
+  --background: #f9fafb; /* body bg (src/index.css) */
+  --surface: #ffffff;
+  --surface-warm: #f7f6f2; /* login/auth brand surface */
+  --on-surface: #0f172a; /* body text = slate-900 */
 
   /* --- data-viz neutrals (outside the semantic ramps) --- */
-  --chart-track: #EEF0F3;       /* donut ring track */
-  --chart-muted: #CBD5E1;       /* "not started / none" segment (= slate-300) */
+  --chart-track: #eef0f3; /* donut ring track */
+  --chart-muted: #cbd5e1; /* "not started / none" segment (= slate-300) */
 
   /* --- neutrals -----------------------------------------------------------
      @theme defines NEITHER gray nor slate — both come from Tailwind defaults.
@@ -85,22 +85,36 @@
        • gray  → surfaces, borders, dividers
        • slate → text (consistent with the slate-900 body text color)
      Values below are the Tailwind defaults for reference/use in this demo. */
-  --gray-50:  #F9FAFB;  --gray-100: #F3F4F6;  --gray-200: #E5E7EB;
-  --gray-300: #D1D5DB;  --gray-400: #9CA3AF;  --gray-500: #6B7280;
-  --gray-600: #4B5563;  --gray-700: #374151;  --gray-800: #1F2937;  --gray-900: #111827;
-  --slate-50: #F8FAFC;  --slate-100: #F1F5F9; --slate-200: #E2E8F0;
-  --slate-300: #CBD5E1; --slate-400: #94A3B8; --slate-500: #64748B;
-  --slate-600: #475569; --slate-700: #334155; --slate-800: #1E293B; --slate-900: #0F172A;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
 
   /* --- radius (Tailwind names) --- */
-  --r-sm:  4px;    /* rounded-sm  (link button, skeleton) */
-  --r-md:  6px;    /* rounded-md  */
-  --r-lg:  8px;    /* rounded-lg  (inputs, tooltips, icon tiles) */
-  --r-nav: 10px;   /* rounded-nav  (navbar/menu items) — off-scale */
-  --r-xl:  12px;   /* rounded-xl  (stat card, modal, alert) */
-  --r-tile: 14px;  /* rounded-tile (square icon tiles) — off-scale */
+  --r-sm: 4px; /* rounded-sm  (link button, skeleton) */
+  --r-md: 6px; /* rounded-md  */
+  --r-lg: 8px; /* rounded-lg  (inputs, tooltips, icon tiles) */
+  --r-nav: 10px; /* rounded-nav  (navbar/menu items) — off-scale */
+  --r-xl: 12px; /* rounded-xl  (stat card, modal, alert) */
+  --r-tile: 14px; /* rounded-tile (square icon tiles) — off-scale */
   --r-2xl: 16px;
-  --r-3xl: 24px;   /* rounded-3xl (Card primitive container) */
+  --r-3xl: 24px; /* rounded-3xl (Card primitive container) */
   --r-full: 9999px; /* buttons, badges, pills, progress, avatar */
 
   /* --- sub-xs absolute font sizes (table headers, eyebrows, dense meta) --- */
@@ -108,18 +122,18 @@
   --text-3xs: 10px;
 
   /* --- shadows: slate-tinted rgba(15,23,42) — exact @theme values --- */
-  --sh-sm: 0 1px 2px rgba(15,23,42,0.05);
-  --el-0: 0 1px 2px rgba(15,23,42,0.04);   /* quiet inset/section box */
-  --el-1: 0 1px 3px rgba(15,23,42,0.05), 0 1px 2px rgba(15,23,42,0.04);
-  --el-2: 0 4px 12px rgba(15,23,42,0.06), 0 2px 4px rgba(15,23,42,0.04);
-  --el-3: 0 12px 28px rgba(15,23,42,0.1), 0 4px 8px rgba(15,23,42,0.05);
-  --sh-xl: 0 20px 25px rgba(15,23,42,0.1), 0 8px 10px rgba(15,23,42,0.04);   /* modal */
-  --sh-2xl: 0 25px 50px rgba(15,23,42,0.25);                                  /* drawer */
+  --sh-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --el-0: 0 1px 2px rgba(15, 23, 42, 0.04); /* quiet inset/section box */
+  --el-1: 0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --el-2: 0 4px 12px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.04);
+  --el-3: 0 12px 28px rgba(15, 23, 42, 0.1), 0 4px 8px rgba(15, 23, 42, 0.05);
+  --sh-xl: 0 20px 25px rgba(15, 23, 42, 0.1), 0 8px 10px rgba(15, 23, 42, 0.04); /* modal */
+  --sh-2xl: 0 25px 50px rgba(15, 23, 42, 0.25); /* drawer */
 
   /* --- motion (src/index.css @theme --animate-*) --- */
-  --dur-fade-in: 300ms;     /* fade-in */
-  --dur-scale-in: 250ms;    /* scale-in (modal) */
-  --dur-slide-in: 300ms;    /* slide-in (alert) */
-  --dur-default: 200ms;     /* button/card transition */
+  --dur-fade-in: 300ms; /* fade-in */
+  --dur-scale-in: 250ms; /* scale-in (modal) */
+  --dur-slide-in: 300ms; /* slide-in (alert) */
+  --dur-default: 200ms; /* button/card transition */
   --ease: ease-out;
 }

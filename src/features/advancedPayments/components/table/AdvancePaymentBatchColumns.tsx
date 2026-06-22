@@ -54,7 +54,8 @@ export const buildAdvancePaymentBatchColumns = ({
     align: 'right',
     className: 'w-28 text-gray-600',
     headerClassName: 'w-28',
-    render: (row) => `${getAdvancePaymentMonthLabel(row.period, row.period_months_count)} ${row.period.substring(0, 4)}`,
+    render: (row) =>
+      `${getAdvancePaymentMonthLabel(row.period, row.period_months_count)} ${row.period.substring(0, 4)}`,
   },
   {
     key: 'due_date',

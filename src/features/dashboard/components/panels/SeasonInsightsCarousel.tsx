@@ -24,7 +24,9 @@ const DonutRing = ({
 }) => {
   const r = (size - stroke) / 2
   const circ = 2 * Math.PI * r
-  const fill = color ?? (pct >= 80 ? 'var(--color-positive-500)' : pct >= 40 ? 'var(--color-primary-600)' : 'var(--color-warning-500)')
+  const fill =
+    color ??
+    (pct >= 80 ? 'var(--color-positive-500)' : pct >= 40 ? 'var(--color-primary-600)' : 'var(--color-warning-500)')
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0" aria-hidden="true">
       <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--color-chart-track)" strokeWidth={stroke} />
@@ -143,7 +145,12 @@ const SeasonSlide = () => {
 /* ── slides 1-4 : vat / advance stats ─────────────────────────────── */
 
 const StatSlide = ({ stat, href }: { stat: VatDashboardPeriodStat; href?: string }) => {
-  const pendingColor = stat.pending === 0 ? 'var(--color-chart-muted)' : stat.completion_percent >= 80 ? 'var(--color-warning-500)' : 'var(--color-negative-500)'
+  const pendingColor =
+    stat.pending === 0
+      ? 'var(--color-chart-muted)'
+      : stat.completion_percent >= 80
+        ? 'var(--color-warning-500)'
+        : 'var(--color-negative-500)'
   const legend: LegendItem[] = [
     { label: 'הוגשו', value: stat.submitted, color: 'var(--color-positive-500)' },
     { label: 'ממתינים', value: stat.pending, color: pendingColor },

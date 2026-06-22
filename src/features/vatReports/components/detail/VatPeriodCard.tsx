@@ -109,7 +109,11 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
               {netLabel}
             </span>
             <span dir="ltr">
-              <MonoValue value={formatVatAmount(Math.abs(netVat))} tone={isRefund ? 'positive' : 'negative'} className="text-lg font-bold" />
+              <MonoValue
+                value={formatVatAmount(Math.abs(netVat))}
+                tone={isRefund ? 'positive' : 'negative'}
+                className="text-lg font-bold"
+              />
             </span>
           </div>
         </div>

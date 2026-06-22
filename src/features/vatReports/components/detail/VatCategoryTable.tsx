@@ -31,7 +31,9 @@ export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({
       align: 'right',
       className: 'font-mono tabular-nums',
       render: (row) => (
-        <span className={getVatDeductionRateClass(row.deductionRate)}>{getVatDeductionRateLabel(row.deductionRate)}</span>
+        <span className={getVatDeductionRateClass(row.deductionRate)}>
+          {getVatDeductionRateLabel(row.deductionRate)}
+        </span>
       ),
       footer: null,
     },

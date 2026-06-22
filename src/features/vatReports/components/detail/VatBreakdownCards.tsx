@@ -61,7 +61,9 @@ const VatAmountRow: React.FC<VatAmountRowProps> = ({ label, value, className, va
 const VatTotalRow: React.FC<VatTotalRowProps> = ({ label, value, tone, className }) => (
   <div className={cn('flex items-center justify-between border-t border-gray-100 pt-3', className)}>
     <span className="text-sm font-semibold text-gray-700">{label}</span>
-    <span className={cn('font-mono text-2xl font-bold tabular-nums', semanticStatToneClasses[tone].value)}>{value}</span>
+    <span className={cn('font-mono text-2xl font-bold tabular-nums', semanticStatToneClasses[tone].value)}>
+      {value}
+    </span>
   </div>
 )
 
@@ -70,7 +72,9 @@ const VatCard: React.FC<VatCardProps> = ({ title, tone, onNavigate, children }) 
   return (
     <Card variant="outlined" size="compact" className={cn('border-r-2', classes.border)}>
       <div className="mb-3 flex items-center justify-between">
-        <p className={cn('text-xs font-semibold uppercase tracking-wide', semanticStatToneClasses[tone].value)}>{title}</p>
+        <p className={cn('text-xs font-semibold uppercase tracking-wide', semanticStatToneClasses[tone].value)}>
+          {title}
+        </p>
         {onNavigate && (
           <button
             type="button"

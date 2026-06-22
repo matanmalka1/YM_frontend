@@ -9,9 +9,7 @@ export const VatExportButtons: React.FC<VatExportButtonsProps> = ({ clientId, pe
   const { exportVat, loadingType } = useVatExport(clientId, exportYear)
 
   return (
-    <div
-      className="inline-flex items-center overflow-hidden rounded-md border border-gray-200 bg-gray-50 shadow-sm"
-    >
+    <div className="inline-flex items-center overflow-hidden rounded-md border border-gray-200 bg-gray-50 shadow-sm">
       <Button
         variant="secondary"
         size="sm"
