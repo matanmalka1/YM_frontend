@@ -62,7 +62,9 @@ export const TaxCalendarStatsSection = ({
   ]
 
   return (
-    <div className={cn('grid grid-cols-2 gap-3', items.length === 5 ? 'sm:grid-cols-3 lg:grid-cols-5' : 'sm:grid-cols-4')}>
+    <div
+      className={cn('grid grid-cols-2 gap-3', items.length === 5 ? 'sm:grid-cols-3 lg:grid-cols-5' : 'sm:grid-cols-4')}
+    >
       {items.map((item) => (
         <StatsCard
           key={item.key}

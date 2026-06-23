@@ -101,9 +101,7 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
           )}
         </div>
       }
-      summary={
-        <ChargesStatsSection stats={stats} isAdvisor={isAdvisor} />
-      }
+      summary={<ChargesStatsSection stats={stats} isAdvisor={isAdvisor} />}
     >
       <ChargesTableBlock
         charges={charges}

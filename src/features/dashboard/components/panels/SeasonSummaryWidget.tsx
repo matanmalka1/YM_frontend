@@ -4,6 +4,7 @@ import { cn, formatCount } from '@/utils/utils'
 import { semanticMonoToneClasses, type SemanticTone } from '@/utils/semanticColors'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
+import { Badge, type BadgeVariant } from '@/components/ui/primitives/Badge'
 import { useSeasonSummary } from '../../hooks/useSeasonSummary'
 import { DashboardBadge, DashboardPanel } from '../shared/DashboardLayout'
 
@@ -59,6 +60,14 @@ interface LegendItem {
   label: string
   value: number
   color: string
+}
+
+const seasonBadgeVariants: Record<SemanticTone, BadgeVariant> = {
+  neutral: 'neutral',
+  info: 'info',
+  positive: 'success',
+  warning: 'warning',
+  negative: 'error',
 }
 
 const CompactSeasonSummary = ({
@@ -316,9 +325,9 @@ const SeasonStatusTile = ({
           <p className="mt-0.5 truncate text-xs font-semibold text-slate-500">{label}</p>
         </div>
         {pct !== null && (
-          <span className={cn('rounded-full px-2 py-0.5 text-2xs font-bold tabular-nums', toneClasses.badge)}>
+          <Badge variant={seasonBadgeVariants[tone]} size="2xs" className="tabular-nums">
             {pct}%
-          </span>
+          </Badge>
         )}
       </div>
       {pct !== null && (

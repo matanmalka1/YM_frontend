@@ -148,4 +148,6 @@ export const buildTrendChartRows = (
     ]
   })
 
-export const toProgressWidth = (value: number) => `${Math.min(Math.max(value * 100, MIN_PERCENTAGE), MAX_PERCENTAGE)}%`
+export const toProgressValue = (value: number) => Math.min(Math.max(value * 100, MIN_PERCENTAGE), MAX_PERCENTAGE)
+
+export const toProgressWidth = (value: number) => `${toProgressValue(value)}%`

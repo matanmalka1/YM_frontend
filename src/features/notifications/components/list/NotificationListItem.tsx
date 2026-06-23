@@ -1,5 +1,6 @@
 import type { NotificationItem } from '../../api'
 import { formatDateTime } from '../../../../utils/utils'
+import { Badge } from '@/components/ui/primitives/Badge'
 
 interface NotificationListItemBaseProps {
   item: NotificationItem
@@ -9,9 +10,9 @@ const NotificationRecipient: React.FC<NotificationListItemBaseProps> = ({ item }
   item.recipient ? <span className="text-xs text-gray-500">נשלח ל: {item.recipient}</span> : null
 
 const TriggerLabel: React.FC<NotificationListItemBaseProps> = ({ item }) => (
-  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+  <Badge variant="neutral" size="xs">
     {item.trigger_label}
-  </span>
+  </Badge>
 )
 
 export const CompactNotificationListItem: React.FC<NotificationListItemBaseProps> = ({ item }) => (

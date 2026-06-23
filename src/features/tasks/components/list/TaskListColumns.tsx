@@ -3,12 +3,11 @@ import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
 import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
 import type { Column } from '@/components/ui/table/DataTable'
-import { cn } from '@/utils/utils'
 import { workQueueSourceTypeLabels } from '@/features/workQueue'
 import type { WorkQueueSourceType } from '@/features/workQueue'
 import type { Task } from '../../api/contracts'
 import { taskPriorityLabels, taskStatusLabels } from '../../constants/labels'
-import { taskPriorityBadgeClasses, getTaskStatusBadgeVariant, taskStatusDotClass } from '../../utils/taskDisplay'
+import { taskPriorityBadgeVariants, getTaskStatusBadgeVariant, taskStatusDotClass } from '../../utils/taskDisplay'
 import { formatTaskDueDate, isTaskTerminal } from '../../utils/taskFormatters'
 
 interface TaskColumnActions {
@@ -35,12 +34,7 @@ export const buildTaskListColumns = ({
     wrap: true,
     render: (task) => (
       <div className="min-w-48 space-y-1">
-        <Button
-          type="button"
-          variant="text"
-          truncate
-          onClick={() => onView(task.id)}
-        >
+        <Button type="button" variant="text" truncate onClick={() => onView(task.id)}>
           {task.title}
         </Button>
         <div className="flex flex-wrap items-center gap-1.5">
@@ -69,14 +63,9 @@ export const buildTaskListColumns = ({
     key: 'priority',
     header: 'עדיפות',
     render: (task) => (
-      <span
-        className={cn(
-          'inline-flex rounded-full px-2 py-1 text-2xs font-semibold',
-          taskPriorityBadgeClasses[task.priority],
-        )}
-      >
+      <Badge variant={taskPriorityBadgeVariants[task.priority]} size="2xs">
         {taskPriorityLabels[task.priority]}
-      </span>
+      </Badge>
     ),
   },
   {

@@ -46,10 +46,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   const pct = Math.max(0, Math.min(100, value))
   return (
     <div className={cn('overflow-hidden rounded-full', sizes[size], track, className)}>
-      <div
-        className={cn('h-full rounded-full transition-all duration-700', fill)}
-        style={{ width: `${pct}%` }}
-      />
+      <div className={cn('h-full rounded-full transition-all duration-700', fill)} style={{ width: `${pct}%` }} />
     </div>
   )
 }

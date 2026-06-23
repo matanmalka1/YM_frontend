@@ -131,13 +131,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
           if (type === 'future' && count === 0) return null
           const isActive = typeFilters.includes(type)
           return (
-            <Chip
-              key={type}
-              tone="primary"
-              selected={isActive}
-              count={count}
-              onClick={() => onToggleTypeFilter(type)}
-            >
+            <Chip key={type} tone="primary" selected={isActive} count={count} onClick={() => onToggleTypeFilter(type)}>
               {FILTER_LABELS[type]}
             </Chip>
           )
@@ -159,7 +153,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
             size="sm"
             icon={<X className="h-3 w-3" />}
             onClick={onClearFilters}
-            className="text-xs text-negative-600 hover:bg-negative-50 hover:text-negative-600 px-2.5 py-1 rounded-full border border-transparent hover:border-negative-200"
+            className="border border-transparent px-2.5 py-1 text-xs text-negative-600 hover:border-negative-200 hover:bg-negative-50 hover:text-negative-600"
           >
             נקה
           </Button>
@@ -171,7 +165,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
             variant="ghost"
             size="sm"
             onClick={onExpandAll}
-            className="text-xs text-gray-600 hover:bg-gray-100 px-2.5 py-1 rounded-full"
+            className="px-2.5 py-1 text-xs text-gray-600 hover:bg-gray-100"
           >
             פתח הכל
           </Button>
@@ -180,7 +174,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
             variant="ghost"
             size="sm"
             onClick={onCollapseAll}
-            className="text-xs text-gray-600 hover:bg-gray-100 px-2.5 py-1 rounded-full"
+            className="px-2.5 py-1 text-xs text-gray-600 hover:bg-gray-100"
           >
             כווץ הכל
           </Button>

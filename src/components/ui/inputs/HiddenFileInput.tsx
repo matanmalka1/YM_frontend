@@ -5,4 +5,3 @@ interface HiddenFileInputProps extends Omit<React.InputHTMLAttributes<HTMLInputE
 export const HiddenFileInput: React.FC<HiddenFileInputProps> = ({ ref, ...props }) => (
   <input ref={ref} type="file" className="hidden" {...props} />
 )
-

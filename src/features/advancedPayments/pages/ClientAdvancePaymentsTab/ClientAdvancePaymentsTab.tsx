@@ -1,9 +1,6 @@
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
-import {
-  getOperationalYearOptions,
-  getOperationalTaxYear,
-} from '@/constants/periodOptions.constants'
+import { getOperationalYearOptions, getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import { getAdvancePaymentStatusLabel, ADVANCE_PAYMENT_STATUS_FILTERS } from '../../constants'
 import { useClientAdvancePaymentsTab } from '../../hooks/useClientAdvancePaymentsTab'
 import { ClientAdvancePaymentsHeader } from './ClientAdvancePaymentsHeader'

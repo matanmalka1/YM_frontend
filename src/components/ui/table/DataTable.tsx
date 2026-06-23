@@ -167,35 +167,35 @@ export const DataTable = <T,>({
               return <Fragment key={getRowKey(item)}>{renderEditRow(item)}</Fragment>
             }
             return (
-            <tr
-              key={getRowKey(item)}
-              className={cn(
-                'transition-colors duration-150',
-                onRowClick &&
-                  'cursor-pointer hover:bg-primary-50/60 active:bg-primary-50/80 hover:shadow-[inset_-3px_0_0_0_var(--color-primary-400)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset',
-                !onRowClick && 'hover:bg-gray-50/80',
-                rowClassName?.(item, index),
-              )}
-              onClick={() => onRowClick?.(item)}
-              onKeyDown={(event) => handleRowKeyDown(event, item)}
-              tabIndex={onRowClick ? 0 : undefined}
-            >
-              {columns.map((column) => (
-                <td
-                  key={column.key}
-                  dir={column.dir}
-                  className={cn(
-                    bodyCellClass,
-                    'align-middle text-gray-700 first:ps-5 last:pe-5',
-                    column.wrap ? 'whitespace-normal' : 'whitespace-nowrap',
-                    ALIGN_CLASS[column.align ?? 'center'],
-                    column.className,
-                  )}
-                >
-                  {isRowEditing && column.editRender ? column.editRender(item, index) : column.render(item, index)}
-                </td>
-              ))}
-            </tr>
+              <tr
+                key={getRowKey(item)}
+                className={cn(
+                  'transition-colors duration-150',
+                  onRowClick &&
+                    'cursor-pointer hover:bg-primary-50/60 active:bg-primary-50/80 hover:shadow-[inset_-3px_0_0_0_var(--color-primary-400)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset',
+                  !onRowClick && 'hover:bg-gray-50/80',
+                  rowClassName?.(item, index),
+                )}
+                onClick={() => onRowClick?.(item)}
+                onKeyDown={(event) => handleRowKeyDown(event, item)}
+                tabIndex={onRowClick ? 0 : undefined}
+              >
+                {columns.map((column) => (
+                  <td
+                    key={column.key}
+                    dir={column.dir}
+                    className={cn(
+                      bodyCellClass,
+                      'align-middle text-gray-700 first:ps-5 last:pe-5',
+                      column.wrap ? 'whitespace-normal' : 'whitespace-nowrap',
+                      ALIGN_CLASS[column.align ?? 'center'],
+                      column.className,
+                    )}
+                  >
+                    {isRowEditing && column.editRender ? column.editRender(item, index) : column.render(item, index)}
+                  </td>
+                ))}
+              </tr>
             )
           })}
         </tbody>
@@ -204,23 +204,23 @@ export const DataTable = <T,>({
             {renderFooter ? (
               renderFooter()
             ) : (
-            <tr>
-              {columns.map((column) => (
-                <td
-                  key={column.key}
-                  dir={column.dir}
-                  className={cn(
-                    bodyCellClass,
-                    'align-middle first:ps-5 last:pe-5',
-                    column.wrap ? 'whitespace-normal' : 'whitespace-nowrap',
-                    ALIGN_CLASS[column.align ?? 'center'],
-                    column.className,
-                  )}
-                >
-                  {column.footer}
-                </td>
-              ))}
-            </tr>
+              <tr>
+                {columns.map((column) => (
+                  <td
+                    key={column.key}
+                    dir={column.dir}
+                    className={cn(
+                      bodyCellClass,
+                      'align-middle first:ps-5 last:pe-5',
+                      column.wrap ? 'whitespace-normal' : 'whitespace-nowrap',
+                      ALIGN_CLASS[column.align ?? 'center'],
+                      column.className,
+                    )}
+                  >
+                    {column.footer}
+                  </td>
+                ))}
+              </tr>
             )}
           </tfoot>
         )}

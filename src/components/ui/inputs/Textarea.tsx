@@ -15,7 +15,15 @@ const textareaSizeClasses = {
   md: 'px-3 py-2 text-sm',
 }
 
-export const Textarea = ({ label, error, size = 'md', nonResizable = false, className, ref, ...props }: TextareaProps) => (
+export const Textarea = ({
+  label,
+  error,
+  size = 'md',
+  nonResizable = false,
+  className,
+  ref,
+  ...props
+}: TextareaProps) => (
   <FormField label={label} error={error} className={cn('w-full text-sm', className)}>
     <textarea
       ref={ref}

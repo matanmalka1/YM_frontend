@@ -15,6 +15,7 @@ import type { AttentionBoardItem, AttentionUrgency } from '../../api/contracts'
 import { ATTENTION_BOARD_COPY } from '../../constants'
 import { dueDateLabel } from '../../utils/dashboardUtils'
 import { DashboardPanel, DashboardSectionHeader } from '../shared/DashboardLayout'
+import { Badge, type BadgeVariant } from '@/components/ui/primitives/Badge'
 
 type AttentionTone = 'neg' | 'warn' | 'info' | 'mut'
 
@@ -31,25 +32,17 @@ const URGENCY_CONFIG: Record<AttentionUrgency, UrgencyConfig> = {
   upcoming: { tone: 'mut', label: 'קרוב', dot: 'bg-slate-300' },
 }
 
-const TONE_ICON_CLASSES: Record<AttentionTone, string> = {
-  neg: 'bg-negative-50 text-negative-500',
-  warn: 'bg-warning-50 text-warning-600',
-  info: 'bg-primary-50 text-primary-600',
-  mut: 'bg-slate-100 text-slate-500',
+interface ToneStyle {
+  icon: string
+  badge: BadgeVariant
+  delta: string
 }
 
-const TONE_BADGE_CLASSES: Record<AttentionTone, string> = {
-  neg: 'bg-negative-50 text-negative-700',
-  warn: 'bg-warning-50 text-warning-700',
-  info: 'bg-primary-50 text-primary-700',
-  mut: 'bg-slate-100 text-slate-600',
-}
-
-const TONE_DELTA_CLASSES: Record<AttentionTone, string> = {
-  neg: 'text-negative-600',
-  warn: 'text-warning-600',
-  info: 'text-primary-600',
-  mut: 'text-slate-500',
+const TONE_STYLES: Record<AttentionTone, ToneStyle> = {
+  neg: { icon: 'bg-negative-50 text-negative-500', badge: 'error', delta: 'text-negative-600' },
+  warn: { icon: 'bg-warning-50 text-warning-600', badge: 'warning', delta: 'text-warning-600' },
+  info: { icon: 'bg-primary-50 text-primary-600', badge: 'primary', delta: 'text-primary-600' },
+  mut: { icon: 'bg-slate-100 text-slate-500', badge: 'neutral', delta: 'text-slate-500' },
 }
 
 interface SourceConfig {
@@ -76,28 +69,20 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
   const urgency = URGENCY_CONFIG[item.urgency]
   const source = SOURCE_CONFIG[item.source_type] ?? DEFAULT_SOURCE
   const { icon: SourceIcon } = source
-  const toneIcon = TONE_ICON_CLASSES[urgency.tone]
-  const toneBadge = TONE_BADGE_CLASSES[urgency.tone]
-  const toneDelta = TONE_DELTA_CLASSES[urgency.tone]
+  const tone = TONE_STYLES[urgency.tone]
 
   return (
     <Link to={item.href} className="flex items-center gap-3 rounded-2xl px-3 py-3 transition-colors hover:bg-slate-50">
-      <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-xl', toneIcon)}>
+      <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-xl', tone.icon)}>
         <SourceIcon className="h-4 w-4" />
       </span>
 
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <span className="truncate text-sm font-semibold text-slate-900">{item.title}</span>
-          <span
-            className={cn(
-              'inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-0.5 text-2xs font-semibold',
-              toneBadge,
-            )}
-          >
-            <span className={cn('h-1.5 w-1.5 rounded-full', urgency.dot)} />
+          <Badge variant={tone.badge} size="2xs" dot={urgency.dot} className="shrink-0">
             {urgency.label}
-          </span>
+          </Badge>
         </div>
         <div className="mt-0.5 flex items-center gap-1.5 text-xs text-slate-400">
           {item.client_name && (
@@ -123,7 +108,7 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
         {item.due_date && (
           <span className="text-xs font-medium tabular-nums text-slate-500">{formatDate(item.due_date)}</span>
         )}
-        <span className={cn('text-2xs font-semibold tabular-nums', toneDelta)}>{dueDateLabel(item.days_delta)}</span>
+        <span className={cn('text-2xs font-semibold tabular-nums', tone.delta)}>{dueDateLabel(item.days_delta)}</span>
       </div>
     </Link>
   )

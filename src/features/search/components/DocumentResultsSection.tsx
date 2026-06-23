@@ -2,6 +2,7 @@ import { FileText, ExternalLink } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Input } from '../../../components/ui/inputs/Input'
 import { DataTable, type Column } from '@/components/ui/table/DataTable'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { DOC_TYPE_LABELS } from '@/features/documents'
 import type { DocumentSearchResult } from '../api'
 import type { SearchFilters } from '../types'
@@ -92,9 +93,9 @@ export const DocumentResultsSection: React.FC<DocumentResultsSectionProps> = ({
         <FileText className="h-4 w-4 text-purple-600" />
         <span className="text-sm font-semibold text-gray-800">מסמכים</span>
         {documents.length > 0 && (
-          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-purple-100 px-1.5 text-xs font-semibold text-purple-700">
+          <Badge variant="purple" size="xs">
             {documents.length}
-          </span>
+          </Badge>
         )}
         {documents.length >= DOCUMENT_SEARCH_LIMIT && (
           <span className="text-xs text-gray-400">מוצגים {DOCUMENT_SEARCH_LIMIT} ראשונים</span>

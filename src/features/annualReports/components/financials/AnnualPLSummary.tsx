@@ -1,10 +1,11 @@
 import { lazy, Suspense } from 'react'
 import { DrawerSection } from '../../../../components/ui/overlays/DrawerPrimitives'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
+import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
 import { formatCurrencyILS as fmt, formatPercent } from '@/utils/utils'
 import { FINANCIAL_MESSAGES } from '../../constants/financialConstants'
 import { useAnnualPLSummary } from '../../hooks/useAnnualPLSummary'
-import { toProgressWidth } from '../../utils/financialHelpers'
+import { toProgressValue } from '../../utils/financialHelpers'
 
 // Lazy-loaded: pulls in recharts (heavy) only when the summary drawer renders.
 const MultiYearPLChart = lazy(() => import('./MultiYearPLChart').then((m) => ({ default: m.MultiYearPLChart })))
@@ -63,12 +64,7 @@ export const AnnualPLSummary: React.FC<Props> = ({ reportId, clientId }) => {
             <span>שיעור רווח גולמי</span>
             <span className="font-semibold text-gray-700">{formatPercent(summary.grossMargin, { isRatio: true })}</span>
           </div>
-          <div className="h-2 w-full rounded-full bg-gray-200">
-            <div
-              className="h-2 rounded-full bg-warning-500 transition-all"
-              style={{ width: toProgressWidth(summary.grossMargin) }}
-            />
-          </div>
+          <ProgressBar value={toProgressValue(summary.grossMargin)} tone="warning" />
         </div>
 
         {clientId ? (

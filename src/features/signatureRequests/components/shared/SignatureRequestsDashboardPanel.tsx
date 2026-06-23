@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
 import { InlineState } from '@/components/ui/feedback'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { DataTable } from '@/components/ui/table/DataTable'
 import { getSignatureRequestStatusLabel, getSignatureRequestTypeLabel } from '@/features/signatureRequests'
@@ -140,9 +141,9 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <span className="inline-flex h-8 min-w-8 items-center justify-center rounded-full bg-slate-100 px-2.5 text-sm font-bold tabular-nums text-slate-700">
+            <Badge variant="neutral" size="md" className="min-w-8 justify-center tabular-nums">
               {total}
-            </span>
+            </Badge>
             <Button variant="ghost" size="sm" onClick={() => setShowCreate(true)}>
               <Plus className="h-3.5 w-3.5" />
               בקשה חדשה
@@ -160,11 +161,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
               <div className="px-3 py-6 text-center text-sm font-semibold text-gray-500">אין בקשות חתימה פעילות</div>
             ) : (
               tableItems.map((req) => (
-                <ActionSurfaceButton
-                  key={req.id}
-                  variant="plainRow"
-                  onClick={() => setAuditRequestId(req.id)}
-                >
+                <ActionSurfaceButton key={req.id} variant="plainRow" onClick={() => setAuditRequestId(req.id)}>
                   <div className="min-w-0">
                     <p className="truncate text-xs font-bold text-gray-900">{req.title}</p>
                     <p className="mt-0.5 truncate text-2xs text-gray-500">

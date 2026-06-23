@@ -46,7 +46,12 @@ const statusOptions = [
 ]
 
 const WORK_QUEUE_FILTER_FIELDS: FilterFieldDef[] = [
-  { type: 'search', key: WORK_QUEUE_FILTER_PARAM_KEYS.search, label: 'חיפוש', placeholder: WORK_QUEUE_SEARCH_PLACEHOLDER },
+  {
+    type: 'search',
+    key: WORK_QUEUE_FILTER_PARAM_KEYS.search,
+    label: 'חיפוש',
+    placeholder: WORK_QUEUE_SEARCH_PLACEHOLDER,
+  },
   { type: 'select', key: WORK_QUEUE_FILTER_PARAM_KEYS.sourceType, label: 'סוג', options: typeOptions },
   { type: 'select', key: WORK_QUEUE_FILTER_PARAM_KEYS.taskStatus, label: 'סטטוס משימה', options: statusOptions },
   { type: 'select', key: TASK_RELATION_KEY, label: 'סוג עבודה', options: taskRelationOptions },

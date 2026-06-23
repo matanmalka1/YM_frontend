@@ -3,6 +3,7 @@ import { CheckCircle2, XCircle } from 'lucide-react'
 import { annualReportTaxApi, annualReportsQK } from '../../api'
 import { cn, formatPercent } from '../../../../utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
+import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
 import { clampPercent } from '../../utils/panelHelpers'
 
 interface ReadinessCheckPanelProps {
@@ -47,12 +48,7 @@ export const ReadinessCheckPanel: React.FC<ReadinessCheckPanelProps> = ({ report
           <span>אחוז השלמת מוכנות</span>
           <span>{formatPercent(completion)}</span>
         </div>
-        <div className="h-2 rounded-full bg-gray-200">
-          <div
-            className={cn('h-2 rounded-full transition-all', data.is_ready ? 'bg-positive-500' : 'bg-warning-500')}
-            style={{ width: `${completion}%` }}
-          />
-        </div>
+        <ProgressBar value={completion} tone={data.is_ready ? 'positive' : 'warning'} />
       </div>
 
       {data.issues.length > 0 && (

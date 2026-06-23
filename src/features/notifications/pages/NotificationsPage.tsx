@@ -37,11 +37,7 @@ export const NotificationsPage: React.FC = () => {
       header={header}
       loadingMessage={status.loadingMessage}
     >
-      <FilterPanel
-        {...filters}
-        title="סינון התראות"
-        subtitle="לקוח, סוג, סטטוס, תאריך ושולח"
-      />
+      <FilterPanel {...filters} title="סינון התראות" subtitle="לקוח, סוג, סטטוס, תאריך ושולח" />
 
       <PaginatedDataTable
         data={table.data}

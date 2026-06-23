@@ -25,22 +25,14 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client }) => {
     {
       label: 'טלפון',
       value: client.phone ? (
-        <InlineLink href={`tel:${client.phone}`}>
-          {formatPhoneNumber(client.phone)}
-        </InlineLink>
+        <InlineLink href={`tel:${client.phone}`}>{formatPhoneNumber(client.phone)}</InlineLink>
       ) : (
         EMPTY_VALUE
       ),
     },
     {
       label: 'אימייל',
-      value: client.email ? (
-        <InlineLink href={`mailto:${client.email}`}>
-          {client.email}
-        </InlineLink>
-      ) : (
-        EMPTY_VALUE
-      ),
+      value: client.email ? <InlineLink href={`mailto:${client.email}`}>{client.email}</InlineLink> : EMPTY_VALUE,
     },
     { label: 'רחוב', value: client.address_street || EMPTY_VALUE },
     { label: 'מספר בניין', value: client.address_building_number || EMPTY_VALUE },

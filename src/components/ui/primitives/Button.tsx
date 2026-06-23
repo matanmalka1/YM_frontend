@@ -98,7 +98,13 @@ export const Button: React.FC<ButtonProps> = ({
       {isLoading && loadingLabel ? (
         <span>{loadingLabel}</span>
       ) : (
-        <span className={cn('inline-flex items-center gap-2', truncate && 'min-w-0 max-w-full truncate', isLoading && 'opacity-0')}>
+        <span
+          className={cn(
+            'inline-flex items-center gap-2',
+            truncate && 'min-w-0 max-w-full truncate',
+            isLoading && 'opacity-0',
+          )}
+        >
           {icon && iconPosition === 'start' && icon}
           {children}
           {icon && iconPosition === 'end' && icon}

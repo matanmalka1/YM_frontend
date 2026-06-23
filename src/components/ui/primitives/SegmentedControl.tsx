@@ -26,7 +26,8 @@ const controlClasses: Record<SegmentedControlVariant, string> = {
 const itemBaseClasses: Record<SegmentedControlVariant, string> = {
   underline: 'relative shrink-0 rounded-t-md px-4 py-2 text-sm font-medium transition-colors',
   tabBar: 'inline-flex items-center gap-2 rounded-t-lg border-b-2 px-5 py-3 text-sm font-medium transition-colors',
-  boxed: 'flex items-center gap-2 px-5 py-3 text-sm whitespace-nowrap transition-colors first:rounded-r-xl last:rounded-l-xl',
+  boxed:
+    'flex items-center gap-2 px-5 py-3 text-sm whitespace-nowrap transition-colors first:rounded-r-xl last:rounded-l-xl',
   choice: 'rounded-lg border px-3.5 py-2 text-sm font-medium transition-all',
   vertical: 'rounded-lg px-3 py-2 text-right text-sm font-medium transition-all',
   switch: 'h-8 rounded-nav text-xs font-medium transition',
@@ -60,7 +61,8 @@ const itemStateClasses: Record<SegmentedControlVariant, { selected: string; idle
 }
 
 const badgeClasses: Partial<Record<SegmentedControlVariant, string>> = {
-  tabBar: 'min-w-[1.35rem] rounded-full bg-gray-100 px-1.5 py-0.5 text-center text-xs font-medium tabular-nums text-gray-700',
+  tabBar:
+    'min-w-[1.35rem] rounded-full bg-gray-100 px-1.5 py-0.5 text-center text-xs font-medium tabular-nums text-gray-700',
 }
 
 const selectedBadgeClasses: Partial<Record<SegmentedControlVariant, string>> = {

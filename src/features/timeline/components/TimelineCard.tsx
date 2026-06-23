@@ -38,12 +38,7 @@ interface GroupHeaderProps {
 
 const GroupHeader: React.FC<GroupHeaderProps> = ({ date, count, isFirst, expanded, controlsId, onToggle }) => (
   <div className={cn('flex items-center gap-2 px-1 py-1', !isFirst && 'mt-2')}>
-    <ActionSurfaceButton
-      variant="timelineGroup"
-      aria-expanded={expanded}
-      aria-controls={controlsId}
-      onClick={onToggle}
-    >
+    <ActionSurfaceButton variant="timelineGroup" aria-expanded={expanded} aria-controls={controlsId} onClick={onToggle}>
       <ChevronDown className={cn('h-3 w-3 text-slate-400 transition-transform', !expanded && '-rotate-90')} />
       {date}
       <span className="text-slate-400 font-normal">· {count}</span>

@@ -57,11 +57,7 @@ export const OverdueBanner: React.FC<OverdueBannerProps> = ({ overdue, onSelect 
         {visible.map((report) => {
           const days = getDaysOverdue(report.filing_deadline)
           return (
-            <ActionSurfaceButton
-              variant="row"
-              key={report.id}
-              onClick={() => onSelect(report.id)}
-            >
+            <ActionSurfaceButton variant="row" key={report.id} onClick={() => onSelect(report.id)}>
               <span className="text-sm font-medium text-gray-900 truncate">{getClientReportName(report)}</span>
               <div className="flex items-center gap-3 shrink-0 text-xs text-gray-500">
                 <span className="tabular-nums">{formatDate(report.filing_deadline)}</span>

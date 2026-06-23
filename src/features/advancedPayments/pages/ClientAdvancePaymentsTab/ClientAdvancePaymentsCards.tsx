@@ -65,7 +65,9 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
           {
             label: 'יתרה',
             value: (
-              <span className={balance > 0 ? 'text-negative-600' : 'text-positive-600'}>{formatShekelAmount(balance)}</span>
+              <span className={balance > 0 ? 'text-negative-600' : 'text-positive-600'}>
+                {formatShekelAmount(balance)}
+              </span>
             ),
           },
           {

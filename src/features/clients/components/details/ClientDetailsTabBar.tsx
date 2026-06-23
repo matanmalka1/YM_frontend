@@ -13,12 +13,7 @@ export const ClientDetailsTabBar: FC<ClientDetailsTabBarProps> = ({ activeTab, o
       const isActive = activeTab === tab
 
       return (
-        <SegmentedControlItem
-          key={tab}
-          variant="underline"
-          selected={isActive}
-          onClick={() => onTabChange(tab)}
-        >
+        <SegmentedControlItem key={tab} variant="underline" selected={isActive} onClick={() => onTabChange(tab)}>
           {CLIENT_DETAILS_TAB_LABELS[tab]}
         </SegmentedControlItem>
       )

@@ -15,9 +15,9 @@ export const taskStatusDotClass: Record<TaskStatus, string> = {
   canceled: 'bg-gray-400',
 }
 
-export const taskPriorityBadgeClasses: Record<TaskPriority, string> = {
-  low: 'bg-gray-100 text-gray-600',
-  normal: 'bg-primary-50 text-primary-700',
-  high: 'bg-warning-50 text-warning-700',
-  urgent: 'bg-negative-50 text-negative-700',
+export const taskPriorityBadgeVariants: Record<TaskPriority, BadgeVariant> = {
+  low: 'neutral',
+  normal: 'info',
+  high: 'warning',
+  urgent: 'error',
 }

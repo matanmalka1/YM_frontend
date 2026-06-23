@@ -84,12 +84,7 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
               >
                 מחק דוח
               </Button>
-              <Button
-                variant="ghost"
-                icon={<Save size={14} />}
-                onClick={handleSave}
-                disabled={!isDirty || isUpdating}
-              >
+              <Button variant="ghost" icon={<Save size={14} />} onClick={handleSave} disabled={!isDirty || isUpdating}>
                 {isUpdating ? 'שומר...' : 'שמור'}
               </Button>
             </>

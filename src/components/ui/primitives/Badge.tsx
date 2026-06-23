@@ -3,8 +3,8 @@ import { X } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { semanticBadgeClasses, semanticSignalBadgeClasses } from '@/utils/semanticColors'
 
-export type BadgeVariant = 'success' | 'warning' | 'error' | 'info' | 'neutral'
-export type BadgeSize = '2xs' | 'xs' | 'sm' | 'md'
+export type BadgeVariant = 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'primary' | 'purple'
+export type BadgeSize = '3xs' | '2xs' | 'xs' | 'sm' | 'md'
 
 interface BadgeProps {
   children: React.ReactNode
@@ -22,6 +22,7 @@ interface BadgeProps {
   onClick?: React.MouseEventHandler<HTMLSpanElement>
   onKeyDown?: React.KeyboardEventHandler<HTMLSpanElement>
   className?: string
+  suppressHydrationWarning?: boolean
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
@@ -30,6 +31,8 @@ const variantClasses: Record<BadgeVariant, string> = {
   error: semanticBadgeClasses.negative,
   info: semanticBadgeClasses.info,
   neutral: semanticBadgeClasses.neutral,
+  primary: 'bg-primary-600 text-white',
+  purple: 'bg-purple-100 text-purple-700',
 }
 
 const signalVariantClasses: Record<BadgeVariant, string> = {
@@ -38,9 +41,22 @@ const signalVariantClasses: Record<BadgeVariant, string> = {
   neutral: semanticSignalBadgeClasses.neutral,
   success: semanticSignalBadgeClasses.positive,
   error: semanticSignalBadgeClasses.negative,
+  primary: 'bg-primary-50 text-primary-700 ring-1 ring-primary-200',
+  purple: 'bg-purple-50 text-purple-700 ring-1 ring-purple-200',
+}
+
+const softSignalVariantClasses: Record<BadgeVariant, string> = {
+  warning: 'bg-warning-50 text-warning-700',
+  info: 'bg-info-50 text-info-700',
+  neutral: 'bg-gray-50 text-gray-600',
+  success: 'bg-positive-50 text-positive-700',
+  error: 'bg-negative-50 text-negative-700',
+  primary: 'bg-primary-50 text-primary-700',
+  purple: 'bg-purple-50 text-purple-700',
 }
 
 const sizeClasses: Record<BadgeSize, string> = {
+  '3xs': 'px-1 py-0 text-3xs',
   '2xs': 'px-2 py-0.5 text-2xs',
   xs: 'px-1.5 py-0.5 text-xs',
   sm: 'px-2.5 py-0.5 text-xs',
@@ -48,6 +64,7 @@ const sizeClasses: Record<BadgeSize, string> = {
 }
 
 const signalSizeClasses: Record<BadgeSize, string> = {
+  '3xs': 'gap-1 px-1 py-0 text-3xs',
   '2xs': 'gap-1 px-2 py-0.5 text-2xs',
   xs: 'gap-1 px-1.5 py-0.5 text-xs',
   sm: 'gap-1 px-1.5 py-0.5 text-xs',
@@ -55,6 +72,7 @@ const signalSizeClasses: Record<BadgeSize, string> = {
 }
 
 const dotSizeClasses: Record<BadgeSize, string> = {
+  '3xs': 'h-1.5 w-1.5',
   '2xs': 'h-1.5 w-1.5',
   xs: 'h-1.5 w-1.5',
   sm: 'h-1.5 w-1.5',
@@ -62,6 +80,7 @@ const dotSizeClasses: Record<BadgeSize, string> = {
 }
 
 const removableSizeClasses: Record<BadgeSize, string> = {
+  '3xs': 'gap-1 py-0 pe-1 ps-1 text-3xs',
   '2xs': 'gap-1 py-0.5 pe-2 ps-1 text-2xs',
   xs: 'gap-1 py-0.5 pe-2 ps-1 text-xs',
   sm: 'gap-1.5 py-0.5 pe-2.5 ps-1.5 text-xs',
@@ -69,6 +88,7 @@ const removableSizeClasses: Record<BadgeSize, string> = {
 }
 
 const removeButtonSizeClasses: Record<BadgeSize, string> = {
+  '3xs': 'h-3.5 w-3.5',
   '2xs': 'h-3.5 w-3.5',
   xs: 'h-3.5 w-3.5',
   sm: 'h-3.5 w-3.5',
@@ -87,6 +107,7 @@ export const Badge: React.FC<BadgeProps> = ({
   onClick,
   onKeyDown,
   className,
+  suppressHydrationWarning,
 }) => {
   if (removable) {
     return (
@@ -119,7 +140,7 @@ export const Badge: React.FC<BadgeProps> = ({
         className={cn(
           'inline-flex items-center rounded-full font-medium',
           signalSizeClasses[size],
-          signalVariantClasses[variant],
+          ring ? signalVariantClasses[variant] : softSignalVariantClasses[variant],
           className,
         )}
       >
@@ -132,7 +153,7 @@ export const Badge: React.FC<BadgeProps> = ({
   return (
     <span
       className={cn(
-        'rounded-full font-medium',
+        'inline-flex items-center rounded-full font-medium',
         sizeClasses[size],
         variantClasses[variant],
         onClick && 'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500',
@@ -142,6 +163,7 @@ export const Badge: React.FC<BadgeProps> = ({
       onKeyDown={onKeyDown}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
+      suppressHydrationWarning={suppressHydrationWarning}
     >
       {children}
     </span>

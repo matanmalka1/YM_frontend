@@ -157,9 +157,7 @@ export const useClientsPage = () => {
     error: editingClientError,
   } = useClientQuery({ clientId: editingClientId })
 
-  const hasActiveFilters = Boolean(
-    filters.search || filters.status || filters.accountant_id || filters.entity_type,
-  )
+  const hasActiveFilters = Boolean(filters.search || filters.status || filters.accountant_id || filters.entity_type)
   const isEmptyState = !loading && !error && total === 0 && !hasActiveFilters
 
   return {

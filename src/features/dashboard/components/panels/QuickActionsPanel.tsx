@@ -25,11 +25,7 @@ const QuickActionItem = ({
 
   if (action.modal) {
     return (
-      <ActionSurfaceButton
-        variant="tile"
-        onClick={() => onOpenModal(action.modal!)}
-        title={action.description}
-      >
+      <ActionSurfaceButton variant="tile" onClick={() => onOpenModal(action.modal!)} title={action.description}>
         {inner}
       </ActionSurfaceButton>
     )

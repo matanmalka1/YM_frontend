@@ -2,6 +2,7 @@ import type { ClientCreationImpactResponse } from '../../api/contracts'
 import type { CreateClientFormValues } from '../../schemas'
 import { formatDate } from '@/utils/utils'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { getCreateClientEntityLabels } from '../../constants'
 import { buildCreateClientReviewModel } from '../../utils/createClientFormUtils'
 import { ImpactIcon } from './createClientImpactIcons'
@@ -92,9 +93,9 @@ export const CreateClientReviewStep: React.FC<Props> = ({
             <p className="mt-0.5 text-xs text-primary-700">פריטים חדשים שייווצרו עבור הלקוח</p>
           </div>
           {impactData && (
-            <span className="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-semibold text-primary-700 shadow-sm ring-1 ring-primary-100">
+            <Badge variant="info" size="xs">
               {impactTotal} פריטים
-            </span>
+            </Badge>
           )}
         </div>
         {impactLoading ? (

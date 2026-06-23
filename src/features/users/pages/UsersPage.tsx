@@ -6,13 +6,7 @@ import { Button } from '@/components/ui/primitives/Button'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
-import {
-  AuditLogsDrawer,
-  CreateUserModal,
-  EditUserModal,
-  ResetPasswordModal,
-  useUsersPage,
-} from '@/features/users'
+import { AuditLogsDrawer, CreateUserModal, EditUserModal, ResetPasswordModal, useUsersPage } from '@/features/users'
 import { Plus } from 'lucide-react'
 
 export const Users: React.FC = () => {

@@ -31,4 +31,3 @@ export const DismissBackdrop: React.FC<DismissBackdropProps> = ({
     tabIndex={open ? 0 : -1}
   />
 )
-

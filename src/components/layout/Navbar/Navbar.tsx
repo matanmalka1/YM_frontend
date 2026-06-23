@@ -3,6 +3,7 @@ import { PanelRight, Search, Users } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { NotificationBell } from '../NotificationBell'
 import { Input } from '@/components/ui/inputs/Input'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
 import { useAuthStore } from '@/store/auth.store'
 import { formatHebrewDate } from '@/utils/utils'
@@ -45,12 +46,9 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header className="z-10 flex h-16 shrink-0 items-center gap-3 border-b border-gray-200/80 bg-white px-3 md:px-4">
       <NavbarPrimaryNav items={visibleItems} />
       <div className="hidden shrink-0 items-center border-r border-gray-100 pr-3 md:flex">
-        <span
-          className="rounded-full bg-gray-50 px-3 py-1.5 text-xs tabular-nums text-gray-500"
-          suppressHydrationWarning
-        >
+        <Badge variant="neutral" size="sm" className="tabular-nums" suppressHydrationWarning>
           {formatHebrewDate(new Date())}
-        </span>
+        </Badge>
       </div>
       <div className="flex shrink-0 items-center gap-1.5 border-r border-gray-100 pr-3">
         <Button

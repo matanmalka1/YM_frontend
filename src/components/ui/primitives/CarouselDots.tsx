@@ -28,4 +28,3 @@ export const CarouselDots: React.FC<CarouselDotsProps> = ({ items, activeIndex, 
     ))}
   </div>
 )
-

@@ -1,27 +1,31 @@
 import type { LucideIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn, formatCount } from '@/utils/utils'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
 import type { VatDashboardPeriodStat } from '../../api/contracts'
 
 type StatTone = 'green' | 'amber' | 'red'
 
-const toneClasses: Record<StatTone, { icon: string; chip: string; bar: string; pct: string }> = {
+const toneClasses: Record<
+  StatTone,
+  { icon: string; badge: 'success' | 'warning' | 'error'; bar: string; pct: string }
+> = {
   green: {
     icon: 'bg-positive-50 text-positive-600',
-    chip: 'bg-positive-50 text-positive-700',
+    badge: 'success',
     bar: 'bg-positive-500',
     pct: 'text-positive-600',
   },
   amber: {
     icon: 'bg-warning-50 text-warning-600',
-    chip: 'bg-warning-50 text-warning-700',
+    badge: 'warning',
     bar: 'bg-warning-400',
     pct: 'text-warning-600',
   },
   red: {
     icon: 'bg-negative-50 text-negative-500',
-    chip: 'bg-negative-50 text-negative-600',
+    badge: 'error',
     bar: 'bg-negative-400',
     pct: 'text-negative-600',
   },
@@ -43,7 +47,7 @@ interface VatStatCardProps {
 
 export const VatStatCard = ({ title, unit, icon: Icon, stat, href, className }: VatStatCardProps) => {
   const tone = getTone(stat)
-  const { icon: iconClass, chip, bar, pct: pctClass } = toneClasses[tone]
+  const { icon: iconClass, badge, bar, pct: pctClass } = toneClasses[tone]
 
   const content = (
     <div
@@ -67,9 +71,9 @@ export const VatStatCard = ({ title, unit, icon: Icon, stat, href, className }: 
 
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs text-slate-500">{stat.period_label}</span>
-        <span className={cn('rounded-full px-2.5 py-0.5 text-2xs font-semibold whitespace-nowrap', chip)}>
+        <Badge variant={badge} size="2xs" className="whitespace-nowrap">
           {stat.status_label}
-        </span>
+        </Badge>
       </div>
 
       <ProgressBar value={stat.completion_percent} size="sm" trackClassName="bg-slate-100" fillClassName={bar} />

@@ -22,12 +22,7 @@ export const ActiveFilterBadges: React.FC<Props> = ({ badges, onReset }) => {
         </Badge>
       ))}
       {onReset && (
-        <Button
-          type="button"
-          variant="link"
-          size="sm"
-          onClick={onReset}
-        >
+        <Button type="button" variant="link" size="sm" onClick={onReset}>
           נקה הכל
         </Button>
       )}

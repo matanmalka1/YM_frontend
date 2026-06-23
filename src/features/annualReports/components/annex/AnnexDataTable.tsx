@@ -80,12 +80,7 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
             onClick={() => onSaveEdit(line.id)}
             disabled={isUpdating}
           />
-          <RowActionButton
-            label="ביטול"
-            icon={<X className={TABLE_ICON_CLASS} />}
-            size="sm"
-            onClick={onCancelEdit}
-          />
+          <RowActionButton label="ביטול" icon={<X className={TABLE_ICON_CLASS} />} size="sm" onClick={onCancelEdit} />
           <RowActionButton
             label="מחיקת שורה"
             icon={<Trash2 className={TABLE_ICON_CLASS} />}

@@ -1,4 +1,5 @@
 import { ListChecks } from 'lucide-react'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { taskPriorityLabels, taskStatusLabels } from '../../constants/labels'
 import { formatTaskDueDate } from '../../utils/taskFormatters'
 import type { Task } from '../../api/contracts'
@@ -33,9 +34,9 @@ export const TasksListSummary: React.FC<TasksListSummaryProps> = ({ total, visib
             {featuredTask?.title ?? 'אין משימות להצגה'}
           </p>
         </div>
-        <span className="shrink-0 rounded-full bg-white px-2 py-1 text-2xs font-semibold text-gray-600 shadow-sm">
+        <Badge variant="neutral" size="2xs" className="shrink-0 tabular-nums shadow-sm">
           {featuredTask ? `#${featuredTask.id}` : '—'}
-        </span>
+        </Badge>
       </div>
       <div className="mt-3 grid grid-cols-3 gap-1.5 text-2xs">
         <TaskFocusPill label="סטטוס" value={featuredTask ? taskStatusLabels[featuredTask.status] : '—'} />

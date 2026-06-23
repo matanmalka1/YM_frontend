@@ -48,6 +48,16 @@ export const TaxCalendarFiltersBar = ({
 
   const fields = useMemo(
     () => [
+      ...(showClientSearch
+        ? [
+            {
+              type: 'search' as const,
+              key: 'clientSearchText',
+              label: 'חיפוש לקוח',
+              placeholder: CLIENT_SEARCH_PLACEHOLDER,
+            },
+          ]
+        : []),
       { type: 'select' as const, key: 'startYear', label: 'משנת מס', options: yearOptions, defaultValue: defaultYear },
       { type: 'select' as const, key: 'endYear', label: 'עד שנת מס', options: yearOptions, defaultValue: defaultYear },
       {
@@ -63,16 +73,6 @@ export const TaxCalendarFiltersBar = ({
         options: TAX_CALENDAR_STATUS_OPTIONS,
         defaultValue: 'all',
       },
-      ...(showClientSearch
-        ? [
-            {
-              type: 'search' as const,
-              key: 'clientSearchText',
-              label: 'חיפוש לקוח',
-              placeholder: CLIENT_SEARCH_PLACEHOLDER,
-            },
-          ]
-        : []),
     ],
     [yearOptions, defaultYear, showClientSearch],
   )

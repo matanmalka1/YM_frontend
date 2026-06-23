@@ -2,6 +2,7 @@ import { RotateCcw, SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-rea
 import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
 import { Button } from '../../../components/ui/primitives/Button'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { ClientPickerField, useClientPickerState } from '@/components/shared/client'
 import { CLIENT_STATUS_OPTIONS, ENTITY_TYPE_OPTIONS } from '@/features/clients'
 import { DOCUMENT_FILENAME_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
@@ -44,9 +45,9 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
       >
         פילטרים מתקדמים
         {advancedCount > 0 && (
-          <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-primary-600 px-1 text-3xs font-semibold text-white">
+          <Badge variant="primary" size="3xs">
             {advancedCount}
-          </span>
+          </Badge>
         )}
         {isOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
       </Button>

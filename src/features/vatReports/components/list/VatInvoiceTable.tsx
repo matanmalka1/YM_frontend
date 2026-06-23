@@ -84,7 +84,13 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
         </>
       ),
     },
-    { key: 'date', header: 'תאריך', align: 'right', className: 'text-gray-500', render: (inv) => formatDate(inv.invoice_date) },
+    {
+      key: 'date',
+      header: 'תאריך',
+      align: 'right',
+      className: 'text-gray-500',
+      render: (inv) => formatDate(inv.invoice_date),
+    },
     {
       key: 'counterparty_name',
       header: 'ספק / לקוח',
@@ -252,7 +258,9 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
               </span>
             </td>
             <td className="px-4 py-2.5 font-mono tabular-nums font-bold text-gray-800">{formatVatAmount(totalNet)}</td>
-            <td className="px-4 py-2.5 font-mono tabular-nums font-semibold text-gray-600">{formatVatAmount(totalVat)}</td>
+            <td className="px-4 py-2.5 font-mono tabular-nums font-semibold text-gray-600">
+              {formatVatAmount(totalVat)}
+            </td>
             {isExpense && (
               <td className={`px-4 py-2.5 font-mono tabular-nums font-bold ${semanticMonoToneClasses.positive}`}>
                 {formatVatAmount(totalDeductibleVat)}

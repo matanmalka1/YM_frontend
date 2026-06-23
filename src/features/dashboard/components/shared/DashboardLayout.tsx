@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import { cn } from '@/utils/utils'
+import { Badge, type BadgeVariant } from '@/components/ui/primitives/Badge'
 
 type Tone = 'neutral' | 'blue' | 'green' | 'amber' | 'red' | 'purple'
 
@@ -27,6 +28,15 @@ const toneClasses: Record<Tone, { icon: string; badge: string; border: string }>
     border: 'border-negative-100',
   },
   purple: { icon: 'bg-violet-50 text-violet-500', badge: 'bg-violet-50 text-violet-600', border: 'border-violet-100' },
+}
+
+const badgeVariants: Record<Tone, BadgeVariant> = {
+  neutral: 'neutral',
+  blue: 'info',
+  green: 'success',
+  amber: 'warning',
+  red: 'error',
+  purple: 'info',
 }
 
 interface DashboardSurfaceProps {
@@ -71,14 +81,9 @@ export const DashboardSectionHeader = ({
     </div>
     <div className="flex shrink-0 items-center gap-2">
       {count !== undefined && (
-        <span
-          className={cn(
-            'inline-flex h-7 min-w-7 items-center justify-center rounded-full px-2 text-xs font-bold tabular-nums',
-            toneClasses[tone].badge,
-          )}
-        >
+        <Badge variant={badgeVariants[tone]} size="sm" className="min-w-7 justify-center tabular-nums">
           {count}
-        </span>
+        </Badge>
       )}
       {action}
     </div>
@@ -104,15 +109,11 @@ interface DashboardBadgeProps {
 }
 
 export const DashboardBadge = ({ children, tone = 'neutral', strong, className }: DashboardBadgeProps) => (
-  <span
-    className={cn(
-      'inline-flex items-center rounded-full px-2 py-0.5 text-2xs font-bold',
-      toneClasses[tone].badge,
-      strong && toneClasses[tone].border,
-      strong && 'border',
-      className,
-    )}
+  <Badge
+    variant={badgeVariants[tone]}
+    size="2xs"
+    className={cn(strong && toneClasses[tone].border, strong && 'border', className)}
   >
     {children}
-  </span>
+  </Badge>
 )

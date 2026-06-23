@@ -3,10 +3,7 @@ import { PlusCircle, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { Divider } from '@/components/ui/primitives/Divider'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
-import {
-  ADVANCE_PAYMENT_FREQUENCY_PREFIX,
-  ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT,
-} from '../../constants'
+import { ADVANCE_PAYMENT_FREQUENCY_PREFIX, ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT } from '../../constants'
 import { getMonthsCoveredLabel } from '@/constants/periodOptions.constants'
 
 interface ClientAdvancePaymentsHeaderProps {
