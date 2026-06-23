@@ -1,4 +1,4 @@
-import type { KeyboardEvent, ReactNode } from 'react'
+import { Fragment, type KeyboardEvent, type ReactNode } from 'react'
 import { Card } from '../primitives/Card'
 import { cn } from '../../../utils/utils'
 import { StateCard } from '../feedback/StateCard'
@@ -20,6 +20,8 @@ export interface Column<T> {
   header: string
   headerRender?: () => ReactNode
   render: (item: T, index: number) => ReactNode
+  /** Rendered in place of `render` for the row whose key === `editingRowKey` (inline edit). */
+  editRender?: (item: T, index: number) => ReactNode
   className?: string
   headerClassName?: string
   dir?: 'ltr' | 'rtl'
@@ -35,6 +37,15 @@ export interface DataTableProps<T> {
   data: T[]
   columns: Column<T>[]
   getRowKey: (item: T) => string | number
+  /** Key of the row currently being inline-edited; its cells use `Column.editRender` where defined. */
+  editingRowKey?: string | number | null
+  /**
+   * Replaces the entire <tr> for the row whose key === `editingRowKey` — use when the edit UI is a
+   * cohesive form spanning the row (returns a full `<tr>`). Takes precedence over per-cell `editRender`.
+   */
+  renderEditRow?: (item: T) => ReactNode
+  /** Replaces the auto per-column `<tfoot>` with a custom footer row (e.g. spanning/colSpan totals). Returns `<tr>` content. */
+  renderFooter?: () => ReactNode
   onRowClick?: (item: T) => void
   className?: string
   emptyMessage?: string
@@ -67,6 +78,9 @@ export const DataTable = <T,>({
   data,
   columns,
   getRowKey,
+  editingRowKey,
+  renderEditRow,
+  renderFooter,
   onRowClick,
   className,
   emptyMessage = 'אין נתונים להצגה',
@@ -147,7 +161,12 @@ export const DataTable = <T,>({
           </tr>
         </thead>
         <tbody className={cn('divide-y divide-gray-200', !isBare && 'bg-white')}>
-          {data.map((item, index) => (
+          {data.map((item, index) => {
+            const isRowEditing = editingRowKey != null && editingRowKey === getRowKey(item)
+            if (isRowEditing && renderEditRow) {
+              return <Fragment key={getRowKey(item)}>{renderEditRow(item)}</Fragment>
+            }
+            return (
             <tr
               key={getRowKey(item)}
               className={cn(
@@ -173,14 +192,18 @@ export const DataTable = <T,>({
                     column.className,
                   )}
                 >
-                  {column.render(item, index)}
+                  {isRowEditing && column.editRender ? column.editRender(item, index) : column.render(item, index)}
                 </td>
               ))}
             </tr>
-          ))}
+            )
+          })}
         </tbody>
-        {hasFooter && (
+        {(renderFooter || hasFooter) && (
           <tfoot className={footerClassName}>
+            {renderFooter ? (
+              renderFooter()
+            ) : (
             <tr>
               {columns.map((column) => (
                 <td
@@ -198,6 +221,7 @@ export const DataTable = <T,>({
                 </td>
               ))}
             </tr>
+            )}
           </tfoot>
         )}
       </table>
