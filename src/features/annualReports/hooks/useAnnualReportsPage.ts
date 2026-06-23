@@ -9,6 +9,36 @@ import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { useState } from 'react'
 import { ANNUAL_REPORTS_TAX_YEAR_DESC_PARAMS } from '../constants/reportConstants'
+import { STATUS_LABELS } from '../api/utils'
+import type { AnnualReportStatus } from '../api/contracts'
+import { ALL_STATUSES_OPTION, ALL_YEARS_OPTION } from '@/constants/filterOptions.constants'
+import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
+
+const STATUS_OPTIONS = [
+  ALL_STATUSES_OPTION,
+  ...(Object.entries(STATUS_LABELS) as [AnnualReportStatus, string][]).map(([value, label]) => ({
+    value,
+    label,
+  })),
+]
+
+const getYearOptions = (defaultYear?: number) => {
+  const options = getOperationalYearOptions()
+  if (!defaultYear || options.some((option) => option.value === String(defaultYear))) return options
+  return [{ value: String(defaultYear), label: String(defaultYear) }, ...options]
+}
+
+const buildAnnualReportsFilterFields = (defaultYear?: number) => [
+  { type: 'client-picker' as const, idKey: 'client_record_id', nameKey: 'client_name' },
+  { type: 'select' as const, key: 'status', label: 'סטטוס', options: STATUS_OPTIONS },
+  {
+    type: 'select' as const,
+    key: 'year',
+    label: 'שנת מס',
+    options: [ALL_YEARS_OPTION, ...getYearOptions(defaultYear)],
+    defaultValue: defaultYear ? String(defaultYear) : '',
+  },
+]
 
 export const useAnnualReportsPage = () => {
   const { getParam, setFilter, resetFilters } = useSearchParamFilters()
@@ -67,6 +97,7 @@ export const useAnnualReportsPage = () => {
   const openReport = (id: number) => navigate(`/tax/reports/${id}`, { state: { from: '/tax/reports' } })
 
   const filters = { client_record_id: clientRecordId, client_name: clientName, status, year }
+  const filterFields = useMemo(() => buildAnnualReportsFilterFields(defaultTaxYear), [defaultTaxYear])
 
   const handleFilterChange = (key: string, value: string) => setFilter(key, value)
 
@@ -100,10 +131,10 @@ export const useAnnualReportsPage = () => {
     },
     stats: { summary: season.summary },
     filters: {
+      fields: filterFields,
       values: filters,
-      defaultYear: defaultTaxYear,
-      onFilterChange: handleFilterChange,
-      resetFilters: handleResetFilters,
+      onChange: handleFilterChange,
+      onReset: handleResetFilters,
     },
     table: {
       reports: filteredReports,

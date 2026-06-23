@@ -26,7 +26,14 @@ export const useBindersFilters = () => {
     order: isBinderSortOrder(rawOrder) ? rawOrder : 'desc',
   }
 
-  const handleFilterChange = (name: string, value: string) => setFilter(name, value)
+  const handleFilterChange = (name: string, value: string) => {
+    // Clearing the client picker must drop both the id and the cached name together.
+    if ((name === 'client_record_id' || name === 'client_name') && !value) {
+      setFilters({ client_record_id: '', client_name: '' })
+      return
+    }
+    setFilter(name, value)
+  }
 
   const handleMultiFilterChange = (updates: BindersFilterUpdates) => {
     const normalizedUpdates: Record<string, string> = {}

@@ -33,12 +33,9 @@ export const NotificationsPage: React.FC = () => {
       loadingMessage={status.loadingMessage}
     >
       <FilterPanel
-        fields={filters.fields}
-        values={filters.values}
-        onChange={filters.onChange}
-        onMultiChange={filters.onMultiChange}
-        onReset={filters.onReset}
-        gridClass={filters.gridClass}
+        {...filters}
+        title="סינון התראות"
+        subtitle="לקוח, סוג, סטטוס, תאריך ושולח"
       />
 
       <PaginatedDataTable

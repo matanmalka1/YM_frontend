@@ -27,6 +27,7 @@ import { useRole } from '../../../hooks/useRole'
 import { toast } from '../../../utils/toast'
 import { buildClientColumns } from '../components/list/ClientColumns'
 import { useClientQuery } from './useClientQuery'
+import { useClientsFilters } from './useClientsFilters'
 import { useDeletedClientConflict } from './useDeletedClientConflict'
 
 const EDIT_FORM_ID = 'client-edit-form-list'
@@ -116,6 +117,13 @@ export const useClientsPage = () => {
       order: DEFAULT_CLIENT_SORT_ORDER,
     })
 
+  const filterBar = useClientsFilters({
+    filters,
+    onFilterChange: handleFilterChange,
+    onReset: handleReset,
+    showAccountantFilter: can.editClients,
+  })
+
   const createClient = async (payload: CreateClientPayload): Promise<void> => {
     await createMutation.mutateAsync(payload)
   }
@@ -169,12 +177,7 @@ export const useClientsPage = () => {
     stats: {
       values: stats,
     },
-    filters: {
-      values: filters,
-      onFilterChange: handleFilterChange,
-      resetFilters: handleReset,
-      showAccountantFilter: can.editClients,
-    },
+    filters: filterBar,
     table: {
       data: clientItems,
       columns,

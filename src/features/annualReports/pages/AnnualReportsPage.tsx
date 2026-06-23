@@ -5,8 +5,8 @@ import { PageLoading } from '@/components/ui/layout/PageLoading'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { StateCard } from '@/components/ui/feedback/StateCard'
+import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import {
-  AnnualReportsFiltersBar,
   CreateReportModal,
   OverdueBanner,
   SeasonProgressBar,
@@ -39,12 +39,7 @@ export const AnnualReportsPage: React.FC = () => {
 
       {banner.overdue.length > 0 && <OverdueBanner overdue={banner.overdue} onSelect={banner.onSelect} />}
 
-      <AnnualReportsFiltersBar
-        filters={filters.values}
-        defaultYear={filters.defaultYear}
-        onFilterChange={filters.onFilterChange}
-        onReset={filters.resetFilters}
-      />
+      <FilterPanel {...filters} title="סינון דוחות שנתיים" subtitle="לקוח, סטטוס ושנת מס" />
 
       {status.isLoading && <PageLoading message="טוען נתוני עונה..." />}
       {status.error && <Alert variant="error" message={status.error} />}

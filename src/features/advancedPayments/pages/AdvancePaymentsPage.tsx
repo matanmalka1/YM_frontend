@@ -4,7 +4,7 @@ import { PageContent } from '@/components/layout/PageContent'
 import { Button } from '@/components/ui/primitives/Button'
 import { AdvancePaymentsStatsSection } from '../components/stats/AdvancePaymentsStatsSection'
 import { AdvancePaymentBatchesList } from '../components/table/AdvancePaymentBatchesList'
-import { AdvancePaymentsFiltersBar } from '../components/filters/AdvancePaymentsFiltersBar'
+import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { AdvancePaymentDrawer } from '../components/drawer/AdvancePaymentDrawer'
 import { CreateAdvancePaymentFlow } from '../components/create/CreateAdvancePaymentFlow'
 import { GenerateScheduleModal } from '../components/create/GenerateScheduleModal'
@@ -40,7 +40,7 @@ export const AdvancePayments: React.FC = () => {
         overdueCount={stats.workflowStats.overdueCount}
       />
 
-      <AdvancePaymentsFiltersBar {...filters} />
+      <FilterPanel {...filters} title="סינון מקדמות" subtitle="לקוח, שנה, סטטוס ותקופה" />
 
       <AdvancePaymentBatchesList isLoading={status.isLoading} {...table} />
 

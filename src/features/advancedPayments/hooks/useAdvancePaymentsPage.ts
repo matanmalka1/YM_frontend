@@ -9,7 +9,7 @@ import { parsePositiveInt, showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import type { AdvancePaymentOverviewRow, AdvancePaymentStatus, UpdateAdvancePaymentPayload } from '../api/contracts'
-import { isAdvancePaymentStatus } from '../constants'
+import { isAdvancePaymentStatus, ADVANCE_PAYMENTS_FILTER_FIELDS } from '../constants'
 import { useAdvancePaymentBatches } from './useAdvancePaymentBatches'
 import {
   getAdvancePaymentBatchKey,
@@ -109,6 +109,7 @@ export const useAdvancePaymentsPage = () => {
       workflowStats,
     },
     filters: {
+      fields: ADVANCE_PAYMENTS_FILTER_FIELDS,
       values: { ...filters, year: year === null ? 'all' : String(year) },
       onChange: changeFilter,
       onMultiChange: (updates: Record<string, string>) => setFilters(updates, false),

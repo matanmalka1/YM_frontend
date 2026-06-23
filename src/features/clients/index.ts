@@ -7,7 +7,6 @@ export { ClientEditDrawer } from './components/edit/ClientEditDrawer'
 
 export { ClientsStatsSection } from './components/list/ClientsStatsSection'
 export { ClientDetailsTabContent } from './components/details/ClientDetailsTabContent'
-export { ClientsFiltersBar } from './components/list/ClientsFiltersBar'
 export { CreateClientModal } from './components/createClientModal/CreateClientModal'
 export { DeletedClientDialog } from './components/dialogs/DeletedClientDialog'
 export { useClientQuery } from './hooks/useClientQuery'

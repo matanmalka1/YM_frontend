@@ -6,9 +6,10 @@ interface Props {
   field: ClientPickerFieldDef
   values: Readonly<Record<string, string | undefined>>
   onMultiChange: (updates: Record<string, string>) => void
+  size?: 'sm' | 'md'
 }
 
-export const ClientPickerFilter: React.FC<Props> = ({ field, values, onMultiChange }) => {
+export const ClientPickerFilter: React.FC<Props> = ({ field, values, onMultiChange, size = 'md' }) => {
   const idVal = values[field.idKey]
   const nameVal = field.nameKey ? values[field.nameKey] : undefined
   const [clientQuery, setClientQuery] = useState(nameVal ?? '')
@@ -24,6 +25,7 @@ export const ClientPickerFilter: React.FC<Props> = ({ field, values, onMultiChan
         <SelectedClientDisplay
           name={selectedClient.name}
           label={field.label}
+          size={size}
           onClear={() => {
             const updates: Record<string, string> = { [field.idKey]: '' }
             if (field.nameKey) updates[field.nameKey] = ''
@@ -33,6 +35,7 @@ export const ClientPickerFilter: React.FC<Props> = ({ field, values, onMultiChan
       ) : (
         <ClientSearchInput
           label={field.label}
+          size={size}
           value={clientQuery}
           onChange={setClientQuery}
           placeholder={field.placeholder}

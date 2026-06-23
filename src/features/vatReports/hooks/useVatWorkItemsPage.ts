@@ -17,12 +17,28 @@ import { invalidateVatWorkItem } from './useVatInvalidation'
 import { useDeleteWorkItem } from './useVatInvoiceMutations'
 import { isFiled } from '../utils/vatHelpers'
 import type { VatWorkItemAction, VatWorkItemsFilters } from '../types'
-import { VAT_WORK_ITEMS_STATS_STATUS_GROUPS } from '../constants/vatConstants'
+import {
+  VAT_WORK_ITEMS_STATS_STATUS_GROUPS,
+  VAT_PERIOD_TYPE_SELECT_OPTIONS,
+  VAT_WORK_ITEMS_STATUS_OPTIONS,
+} from '../constants/vatConstants'
 import { buildVatEmptyStateTitle, toOptionalVatPeriodTypeFilter, toVatPeriodTypeFilter } from '../utils/filters'
 import { buildVatWorkItemColumns } from '../components/list/VatWorkItemColumns'
 import { useVatWorkItemGroups } from './useVatWorkItemGroups'
-import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
+import { ALL_YEARS_URL_OPTION } from '@/constants/filterOptions.constants'
+import { getOperationalTaxYear, getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+
+const buildVatWorkItemsFilterFields = () => {
+  const yearOptions = [ALL_YEARS_URL_OPTION, ...getOperationalYearOptions()]
+  const defaultYear = String(getOperationalTaxYear())
+  return [
+    { type: 'client-picker' as const, idKey: 'client_record_id', nameKey: 'client_name' },
+    { type: 'select' as const, key: 'year', label: 'שנה', options: yearOptions, defaultValue: defaultYear },
+    { type: 'select' as const, key: 'status', label: 'סטטוס', options: VAT_WORK_ITEMS_STATUS_OPTIONS },
+    { type: 'select' as const, key: 'period_type', label: 'סוג דיווח', options: VAT_PERIOD_TYPE_SELECT_OPTIONS },
+  ]
+}
 
 const VAT_PAGE_HEADER = {
   title: 'דוחות מע"מ (לקוח)',
@@ -218,6 +234,8 @@ export const useVatWorkItemsPage = () => {
 
   const resetFilters = useCallback(() => setSearchParams(new URLSearchParams()), [setSearchParams])
 
+  const filterFields = useMemo(() => buildVatWorkItemsFilterFields(), [])
+
   const columns = useMemo(
     () =>
       buildVatWorkItemColumns({
@@ -249,10 +267,17 @@ export const useVatWorkItemsPage = () => {
       visible: !statsLoading && groups.length > 0,
     },
     filters: {
-      values: filters,
-      onFilterChange: setFilter,
-      onMultiFilterChange: setFilters,
-      resetFilters,
+      fields: filterFields,
+      values: {
+        client_record_id: filters.client_record_id ?? '',
+        client_name: filters.client_name ?? '',
+        year: filters.year || 'all',
+        status: filters.status ?? '',
+        period_type: filters.period_type ?? '',
+      },
+      onChange: setFilter,
+      onMultiChange: setFilters,
+      onReset: resetFilters,
     },
     table: {
       groups,

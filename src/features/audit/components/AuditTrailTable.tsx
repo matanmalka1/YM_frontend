@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/primitives/Button'
-import { formatDateTime } from '@/utils/utils'
+import { DataTable, type Column } from '@/components/ui/table/DataTable'
+import { cn, formatDateTime } from '@/utils/utils'
 
 type AuditTrailTableEntry = {
   id: number
@@ -31,67 +32,68 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
   isFetching,
   setPage,
   detailsClassName = 'text-xs text-gray-500',
-}: AuditTrailTableProps<TEntry>) => (
-  <div className="space-y-3">
-    <div className="overflow-x-auto rounded-lg border border-gray-100">
-      <table className="w-full border-collapse text-sm">
-        <colgroup>
-          <col className="w-36" />
-          <col className="w-24" />
-          <col className="min-w-48" />
-          <col className="w-24" />
-        </colgroup>
-        <thead className="bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
-          <tr>
-            <th className="px-4 py-3 text-right">תאריך</th>
-            <th className="px-4 py-3 text-right">פעולה</th>
-            <th className="px-4 py-3 text-right">פרטים</th>
-            <th className="px-4 py-3 text-right">בוצע ע&quot;י</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-100 bg-white">
-          {items.map((entry) => (
-            <tr key={entry.id} className="hover:bg-gray-50/60">
-              <td className="px-4 py-3 text-gray-500 tabular-nums whitespace-nowrap">
-                {formatDateTime(entry.performed_at)}
-              </td>
-              <td className="px-4 py-3 font-medium text-gray-800 whitespace-nowrap">
-                {actionLabels[entry.action] ?? entry.action}
-              </td>
-              <td className={`break-words px-4 py-3 ${detailsClassName}`}>{formatDetails(entry)}</td>
-              <td className="px-4 py-3 font-mono text-xs text-gray-400">
-                {entry.performed_by_name ?? `#${entry.performed_by}`}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+}: AuditTrailTableProps<TEntry>) => {
+  const columns: Column<TEntry>[] = [
+    {
+      key: 'performed_at',
+      header: 'תאריך',
+      align: 'right',
+      className: 'w-36 text-gray-500 tabular-nums',
+      render: (entry) => formatDateTime(entry.performed_at),
+    },
+    {
+      key: 'action',
+      header: 'פעולה',
+      align: 'right',
+      className: 'w-24 font-medium text-gray-800',
+      render: (entry) => actionLabels[entry.action] ?? entry.action,
+    },
+    {
+      key: 'details',
+      header: 'פרטים',
+      align: 'right',
+      wrap: true,
+      className: cn('min-w-48 break-words', detailsClassName),
+      render: (entry) => formatDetails(entry),
+    },
+    {
+      key: 'performed_by',
+      header: 'בוצע ע"י',
+      align: 'right',
+      className: 'w-24 font-mono text-xs text-gray-400',
+      render: (entry) => entry.performed_by_name ?? `#${entry.performed_by}`,
+    },
+  ]
 
-    {totalPages > 1 && (
-      <div className="flex items-center justify-between text-sm text-gray-500">
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={() => setPage(Math.max(0, safePage - 1))}
-          disabled={safePage === 0 || isFetching}
-        >
-          הקודם
-        </Button>
-        <span>{isFetching ? 'טוען...' : `עמוד ${safePage + 1} מתוך ${totalPages}`}</span>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={() => setPage(Math.min(maxPage, safePage + 1))}
-          disabled={safePage >= maxPage || isFetching}
-        >
-          הבא
-        </Button>
-      </div>
-    )}
-  </div>
-)
+  return (
+    <div className="space-y-3">
+      <DataTable data={items} columns={columns} getRowKey={(entry) => entry.id} surface="embedded" />
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between text-sm text-gray-500">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setPage(Math.max(0, safePage - 1))}
+            disabled={safePage === 0 || isFetching}
+          >
+            הקודם
+          </Button>
+          <span>{isFetching ? 'טוען...' : `עמוד ${safePage + 1} מתוך ${totalPages}`}</span>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setPage(Math.min(maxPage, safePage + 1))}
+            disabled={safePage >= maxPage || isFetching}
+          >
+            הבא
+          </Button>
+        </div>
+      )}
+    </div>
+  )
+}
 
 AuditTrailTable.displayName = 'AuditTrailTable'

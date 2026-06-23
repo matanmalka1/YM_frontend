@@ -2,10 +2,13 @@ import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getErrorMessage } from '@/utils/utils'
 import { useActiveUserOptions } from '@/features/users'
+import type { FilterFieldDef } from '@/components/ui/filters/types'
 import { tasksApi } from '../api/tasks.api'
 import { tasksQK } from '../api/queryKeys'
 import {
   TASK_CONFIRM_COPY,
+  TASK_FILTER_PARAM_KEYS,
+  type TaskFilterParamKey,
   taskPriorityOptions,
   taskRoleOptions,
   taskSourceOptions,
@@ -41,10 +44,46 @@ export const useTasksPage = () => {
 
   const confirmCopy = actions.pendingConfirm ? TASK_CONFIRM_COPY[actions.pendingConfirm.action] : null
 
+  const filterFields = useMemo<FilterFieldDef[]>(
+    () => [
+      { type: 'select', key: TASK_FILTER_PARAM_KEYS.status, label: 'סטטוס', options: taskStatusOptions },
+      { type: 'select', key: TASK_FILTER_PARAM_KEYS.priority, label: 'עדיפות', options: taskPriorityOptions },
+      { type: 'select', key: TASK_FILTER_PARAM_KEYS.assignedRole, label: 'תפקיד', options: taskRoleOptions },
+      { type: 'select', key: TASK_FILTER_PARAM_KEYS.assignedUser, label: 'משתמש', options: userOptions },
+      { type: 'select', key: TASK_FILTER_PARAM_KEYS.sourceDomain, label: 'מקור', options: taskSourceOptions },
+      {
+        type: 'date-range',
+        fromKey: TASK_FILTER_PARAM_KEYS.dueAfter,
+        toKey: TASK_FILTER_PARAM_KEYS.dueBefore,
+        fromLabel: 'מתאריך',
+        toLabel: 'עד תאריך',
+      },
+    ],
+    [userOptions],
+  )
+
+  const filterValues = useMemo(
+    () => ({
+      [TASK_FILTER_PARAM_KEYS.status]: filters.filters.status,
+      [TASK_FILTER_PARAM_KEYS.priority]: filters.filters.priority,
+      [TASK_FILTER_PARAM_KEYS.assignedRole]: filters.filters.assignedRole,
+      [TASK_FILTER_PARAM_KEYS.assignedUser]: filters.filters.assignedUser,
+      [TASK_FILTER_PARAM_KEYS.sourceDomain]: filters.filters.sourceDomain,
+      [TASK_FILTER_PARAM_KEYS.dueAfter]: filters.filters.dueAfter,
+      [TASK_FILTER_PARAM_KEYS.dueBefore]: filters.filters.dueBefore,
+    }),
+    [filters.filters],
+  )
+
   return {
     page: filters.page,
-    filters: filters.filters,
     hasFilters: filters.hasFilters,
+    filterBar: {
+      fields: filterFields,
+      values: filterValues,
+      onChange: (key: string, value: string) => filters.handleFilterChange(key as TaskFilterParamKey, value),
+      onReset: filters.resetFilters,
+    },
     tasks,
     total,
     visibleCount: tasks.length,
@@ -68,14 +107,7 @@ export const useTasksPage = () => {
       onConfirm: actions.confirmPendingAction,
       onCancel: actions.closeConfirm,
     },
-    statusOptions: taskStatusOptions,
-    priorityOptions: taskPriorityOptions,
-    roleOptions: taskRoleOptions,
-    userOptions,
-    sourceOptions: taskSourceOptions,
     setPage: filters.setPage,
-    handleFilterChange: filters.handleFilterChange,
-    resetFilters: filters.resetFilters,
     openCreateModal: actions.openCreateModal,
     openViewModal: actions.openViewModal,
     openEditModal: actions.openEditModal,

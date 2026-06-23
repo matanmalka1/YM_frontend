@@ -12,12 +12,14 @@ import { buildChargeColumns } from '../components/list/ChargeColumns'
 import type { NotificationTrigger } from '@/features/notifications'
 import { useChargeActions } from './useChargeActions'
 import { useChargeCreateMutation } from './useChargeCreateMutation'
+import { useChargesFilters } from './useChargesFilters'
 
 export const useChargesPage = () => {
   const { searchParams, setFilter, setPage, resetFilters, setSearchParams } = useSearchParamFilters()
 
   const filters = getChargesFilters(searchParams)
   const apiParams = toChargesListParams(filters)
+  const filterBar = useChargesFilters({ filters, onFilterChange: setFilter, onReset: resetFilters })
 
   const {
     data: listData,
@@ -128,11 +130,7 @@ export const useChargesPage = () => {
       stats,
       isAdvisor,
     },
-    filters: {
-      values: filters,
-      onFilterChange: setFilter,
-      resetFilters,
-    },
+    filters: filterBar,
     table: {
       data: chargeItems,
       columns,

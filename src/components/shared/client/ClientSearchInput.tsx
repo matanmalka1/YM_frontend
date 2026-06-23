@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/inputs/Input'
 import { getOverlayPortalOffset, useOverlayPortalContainer } from '@/components/ui/overlays/OverlayPortalContext'
 import { Spinner } from '@/components/ui/primitives/Spinner'
 import { clientsApi, type ClientRecordListItem } from '@/features/clients'
-import { formatClientOfficeId } from '@/utils/utils'
+import { cn, formatClientOfficeId } from '@/utils/utils'
 import { CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 
 // ── Controlled search input (value/onChange) ──────────────────────────────────
@@ -26,6 +26,7 @@ interface ClientSearchInputProps {
   label?: string
   placeholder?: string
   helperText?: string
+  size?: 'sm' | 'md'
 }
 
 export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
@@ -36,6 +37,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
   label = 'לקוח',
   placeholder = CLIENT_SEARCH_PLACEHOLDER,
   helperText,
+  size = 'md',
 }) => {
   const [results, setResults] = useState<ClientRecordListItem[]>([])
   const [open, setOpen] = useState(false)
@@ -207,6 +209,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
       <Input
         ref={inputRef}
         label={label}
+        size={size}
         value={value}
         onChange={(e) => handleChange(e.target.value)}
         onKeyDown={handleKeyDown}
@@ -285,6 +288,7 @@ interface SelectedClientDisplayProps {
   officeClientNumber?: number | null
   onClear: () => void
   label?: string
+  size?: 'sm' | 'md'
 }
 
 export const SelectedClientDisplay: React.FC<SelectedClientDisplayProps> = ({
@@ -292,10 +296,16 @@ export const SelectedClientDisplay: React.FC<SelectedClientDisplayProps> = ({
   officeClientNumber,
   onClear,
   label = 'לקוח',
+  size = 'md',
 }) => (
   <div className="space-y-1">
     <label className="block text-sm font-medium text-gray-700">{label}</label>
-    <div className="flex items-center gap-2 rounded-lg border border-primary-200 bg-primary-50 px-3 py-3">
+    <div
+      className={cn(
+        'flex items-center gap-2 rounded-lg border border-primary-200 bg-primary-50 px-3',
+        size === 'sm' ? 'h-8 py-1.5' : 'py-3',
+      )}
+    >
       <span className="flex-1 text-sm font-medium text-primary-900">{name}</span>
       <span className="text-xs text-primary-500">
         {officeClientNumber != null ? formatClientOfficeId(officeClientNumber) : 'מס׳ לקוח לא זמין'}

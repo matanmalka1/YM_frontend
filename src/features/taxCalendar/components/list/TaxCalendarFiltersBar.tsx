@@ -100,7 +100,8 @@ export const TaxCalendarFiltersBar = ({
         values={values}
         onChange={handleChange}
         onReset={onReset}
-        gridClass="grid-cols-1 sm:grid-cols-2 lg:grid-cols-5"
+        title="סינון לוח מס"
+        subtitle="טווח שנים, סוג חובה, מצב וחיפוש"
       />
       {showIncludeEmpty ? (
         <Checkbox

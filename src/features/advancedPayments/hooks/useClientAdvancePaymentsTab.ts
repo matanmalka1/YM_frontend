@@ -111,15 +111,17 @@ export const useClientAdvancePaymentsTab = ({
     header: {
       isAdvisor,
       year,
-      filterValues: { status_filter: statusFilter.join(','), year: String(year) },
-      onFilterChange: (key: string, value: string) => setFilter(key, value, true),
-      onFilterReset: () => resetFilters({ year: String(getOperationalTaxYear()) }),
       onOpenCreate: () => setModalOpen(true),
       onGenerateSchedule: handleGenerateSchedule,
       displayFrequency,
       generationFrequency,
       isGenerating: generateMutation.isPending,
       advanceRate,
+    },
+    filters: {
+      values: { status_filter: statusFilter.join(','), year: String(year) },
+      onChange: (key: string, value: string) => setFilter(key, value, true),
+      onReset: () => resetFilters({ year: String(getOperationalTaxYear()) }),
     },
     kpi: { clientRecordId, year },
     table: {

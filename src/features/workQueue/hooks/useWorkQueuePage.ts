@@ -12,18 +12,51 @@ import {
   WORK_QUEUE_PAGE_SIZE,
   parseWorkQueueSourceType,
   parseWorkQueueUrgency,
+  workQueueSourceTypeLabels,
+  workQueueSourceTypeValues,
+  workQueueUrgencyLabels,
   type WorkQueueFilterParamKey,
 } from '../constants'
 import { buildWorkQueueColumns } from '../components/workQueueColumns'
+import {
+  TASK_RELATION_KEY,
+  expandTaskRelation,
+  parseLinkedFilter,
+  parseScopeFilter,
+  taskRelationOptions,
+  taskRelationValue,
+} from '../utils/taskRelationFilter'
 import { useWorkQueue } from './useWorkQueue'
 import { useWorkQueueActions } from './useWorkQueueActions'
 import type { WorkQueueParams } from '../api/contracts'
+import type { FilterFieldDef } from '@/components/ui/filters/types'
+import type { FilterBadge } from '@/components/ui/table/ActiveFilterBadges'
+import { WORK_QUEUE_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
+// eslint-disable-next-line no-restricted-imports -- avoid the tasks feature barrel here; it imports workQueue-backed components.
+import { taskStatusLabels, taskStatusValues } from '@/features/tasks/constants/labels'
 
-const parseLinkedFilter = (value: string | null): 'linked' | 'unlinked' | null =>
-  value === 'linked' || value === 'unlinked' ? value : null
+const typeOptions = [
+  { value: '', label: 'כל הסוגים' },
+  ...workQueueSourceTypeValues.map((v) => ({ value: v, label: workQueueSourceTypeLabels[v] })),
+]
 
-const parseScopeFilter = (value: string | null): 'system' | 'manual' | null =>
-  value === 'system' || value === 'manual' ? value : null
+const statusOptions = [
+  { value: '', label: 'כל סטטוסי המשימה' },
+  ...taskStatusValues.map((v) => ({ value: v, label: taskStatusLabels[v] })),
+]
+
+const viewOptions = [
+  { value: '', label: 'עבודה פעילה' },
+  { value: 'true', label: 'היסטוריית משימות' },
+]
+
+const WORK_QUEUE_FILTER_FIELDS: FilterFieldDef[] = [
+  { type: 'search', key: WORK_QUEUE_FILTER_PARAM_KEYS.search, label: 'חיפוש', placeholder: WORK_QUEUE_SEARCH_PLACEHOLDER },
+  { type: 'select', key: WORK_QUEUE_FILTER_PARAM_KEYS.sourceType, label: 'סוג', options: typeOptions },
+  { type: 'select', key: WORK_QUEUE_FILTER_PARAM_KEYS.taskStatus, label: 'סטטוס משימה', options: statusOptions },
+  { type: 'select', key: TASK_RELATION_KEY, label: 'סוג עבודה', options: taskRelationOptions },
+  { type: 'select', key: WORK_QUEUE_FILTER_PARAM_KEYS.history, label: 'תצוגה', options: viewOptions },
+]
 
 export const useWorkQueuePage = () => {
   const { getParam, getPage, setFilter, setFilters, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
@@ -69,7 +102,6 @@ export const useWorkQueuePage = () => {
     statusFilter !== null ||
     linkedFilter !== null ||
     scopeFilter !== null
-  const hasFilters = hasContentFilters || historyMode
 
   const requestError = !hasRole
     ? 'לא ניתן לזהות תפקיד משתמש'
@@ -89,6 +121,40 @@ export const useWorkQueuePage = () => {
   const clearFilters = useCallback(() => {
     resetFilters()
   }, [resetFilters])
+
+  const filterValues = useMemo(
+    () => ({
+      [WORK_QUEUE_FILTER_PARAM_KEYS.search]: search,
+      [WORK_QUEUE_FILTER_PARAM_KEYS.sourceType]: typeFilter ?? '',
+      [WORK_QUEUE_FILTER_PARAM_KEYS.taskStatus]: statusFilter ?? '',
+      [TASK_RELATION_KEY]: taskRelationValue(scopeFilter, linkedFilter),
+      [WORK_QUEUE_FILTER_PARAM_KEYS.history]: historyMode ? 'true' : '',
+    }),
+    [search, typeFilter, statusFilter, scopeFilter, linkedFilter, historyMode],
+  )
+
+  const handleFilterPanelChange = (key: string, value: string) => {
+    if (key === TASK_RELATION_KEY) {
+      const { scope, linked } = expandTaskRelation(value)
+      handleMultiFilterChange({
+        [WORK_QUEUE_FILTER_PARAM_KEYS.scope]: scope,
+        [WORK_QUEUE_FILTER_PARAM_KEYS.linked]: linked,
+      })
+      return
+    }
+    handleFilterChange(key as WorkQueueFilterParamKey, value)
+  }
+
+  // Urgency is set by clicking the stats cards (no dropdown), so surface it as a removable badge.
+  const filterBadges: FilterBadge[] | undefined = urgencyFilter
+    ? [
+        {
+          key: WORK_QUEUE_FILTER_PARAM_KEYS.urgency,
+          label: `דחיפות: ${workQueueUrgencyLabels[urgencyFilter]}`,
+          onRemove: () => handleFilterChange(WORK_QUEUE_FILTER_PARAM_KEYS.urgency, ''),
+        },
+      ]
+    : undefined
 
   const actions = useWorkQueueActions()
   const {
@@ -156,19 +222,11 @@ export const useWorkQueuePage = () => {
       summaryError: requestError,
     },
     filters: {
-      search,
-      urgencyFilter,
-      typeFilter,
-      statusFilter,
-      linkedFilter,
-      scopeFilter,
-      historyMode,
-      hasFilters,
-      hasContentFilters,
-      onFilterChange: handleFilterChange,
-      onMultiFilterChange: handleMultiFilterChange,
-      onClear: clearFilters,
-      resetFilters: clearFilters,
+      fields: WORK_QUEUE_FILTER_FIELDS,
+      values: filterValues,
+      onChange: handleFilterPanelChange,
+      onReset: clearFilters,
+      extraBadges: filterBadges,
     },
     table: {
       data: items,

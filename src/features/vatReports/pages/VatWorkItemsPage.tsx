@@ -4,10 +4,10 @@ import { PageContent } from '@/components/layout/PageContent'
 import {
   useVatWorkItemsPage,
   VatWorkItemsCreateModal,
-  VatWorkItemsFiltersCard,
   VatWorkItemsGroupedCards,
   VatWorkItemsStatsSection,
 } from '@/features/vatReports'
+import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
@@ -35,12 +35,7 @@ export const VatWorkItems: React.FC = () => {
 
       {stats.visible && <VatWorkItemsStatsSection stats={stats} />}
 
-      <VatWorkItemsFiltersCard
-        filters={filters.values}
-        onFilterChange={filters.onFilterChange}
-        onMultiFilterChange={filters.onMultiFilterChange}
-        onClear={filters.resetFilters}
-      />
+      <FilterPanel {...filters} title="סינון דוחות מע״מ" subtitle="לקוח, שנה, סטטוס וסוג דיווח" />
 
       <VatWorkItemsGroupedCards
         groups={table.groups}

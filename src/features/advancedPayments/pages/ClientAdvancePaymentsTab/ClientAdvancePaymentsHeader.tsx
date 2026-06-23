@@ -3,26 +3,15 @@ import { PlusCircle, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { Divider } from '@/components/ui/primitives/Divider'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
-import { FilterPanel } from '@/components/ui/filters/FilterPanel'
-import type { FilterFieldDef } from '@/components/ui/filters/types'
 import {
-  getAdvancePaymentStatusLabel,
-  ADVANCE_PAYMENT_STATUS_FILTERS,
   ADVANCE_PAYMENT_FREQUENCY_PREFIX,
   ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT,
 } from '../../constants'
-import {
-  getOperationalYearOptions,
-  getOperationalTaxYear,
-  getMonthsCoveredLabel,
-} from '@/constants/periodOptions.constants'
+import { getMonthsCoveredLabel } from '@/constants/periodOptions.constants'
 
 interface ClientAdvancePaymentsHeaderProps {
   isAdvisor: boolean
   year: number
-  filterValues: Record<string, string>
-  onFilterChange: (key: string, value: string) => void
-  onFilterReset: () => void
   onOpenCreate: () => void
   onGenerateSchedule: () => void
   displayFrequency: 1 | 2 | null
@@ -34,9 +23,6 @@ interface ClientAdvancePaymentsHeaderProps {
 export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderProps> = ({
   isAdvisor,
   year,
-  filterValues,
-  onFilterChange,
-  onFilterReset,
   onOpenCreate,
   onGenerateSchedule,
   displayFrequency,
@@ -45,25 +31,6 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
   advanceRate,
 }) => {
   const [confirmGenerate, setConfirmGenerate] = useState(false)
-
-  const filterFields: FilterFieldDef[] = [
-    {
-      type: 'toggle',
-      key: 'status_filter',
-      label: 'סטטוס',
-      options: ADVANCE_PAYMENT_STATUS_FILTERS.map((status) => ({
-        value: status,
-        label: getAdvancePaymentStatusLabel(status),
-      })),
-    },
-    {
-      type: 'select',
-      key: 'year',
-      label: 'שנה',
-      options: getOperationalYearOptions(),
-      defaultValue: String(getOperationalTaxYear()),
-    },
-  ]
 
   return (
     <div className="space-y-4">
@@ -119,14 +86,6 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
         )}
       </div>
 
-      {/* Filter bar */}
-      <FilterPanel
-        fields={filterFields}
-        values={filterValues}
-        onChange={onFilterChange}
-        onReset={onFilterReset}
-        gridClass="grid-cols-1 sm:grid-cols-2"
-      />
       {advanceRate != null && (
         <p className="text-sm text-gray-500">
           אחוז מקדמות: <span className="font-semibold text-gray-800">{advanceRate}%</span>

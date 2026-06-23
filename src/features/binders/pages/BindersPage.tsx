@@ -3,7 +3,8 @@ import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { DetailDrawer } from '@/components/ui/overlays/DetailDrawer'
-import { BinderDetailDrawer, BindersFiltersBar, BindersStatsSection, useBindersPage } from '@/features/binders'
+import { FilterPanel } from '@/components/ui/filters/FilterPanel'
+import { BinderDetailDrawer, BindersStatsSection, useBindersPage } from '@/features/binders'
 import { BinderReceivePanel } from '../components/drawer/BinderReceivePanel'
 import { BindersPageDialogs } from '../components/dialogs/BindersPageDialogs'
 import { Plus } from 'lucide-react'
@@ -32,12 +33,7 @@ export const Binders: React.FC = () => {
     >
       <BindersStatsSection counters={stats.counters} countersLoading={stats.countersLoading} />
 
-      <BindersFiltersBar
-        filters={filters.values}
-        onFilterChange={filters.onFilterChange}
-        onMultiFilterChange={filters.onMultiFilterChange}
-        onReset={filters.resetFilters}
-      />
+      <FilterPanel {...filters} title="סינון קלסרים" subtitle="לקוח, מספר, מיקום, קיבולת ושנה" />
 
       <PaginatedDataTable
         data={table.data}

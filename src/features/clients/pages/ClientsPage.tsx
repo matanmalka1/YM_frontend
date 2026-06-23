@@ -4,9 +4,9 @@ import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
+import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import {
   ClientEditDrawer,
-  ClientsFiltersBar,
   ClientsStatsSection,
   CreateClientModal,
   DeletedClientDialog,
@@ -51,12 +51,7 @@ export const Clients: React.FC = () => {
       {!isEmptyState && (
         <>
           <ClientsStatsSection stats={stats.values} />
-          <ClientsFiltersBar
-            filters={filters.values}
-            onFilterChange={filters.onFilterChange}
-            onReset={filters.resetFilters}
-            showAccountantFilter={filters.showAccountantFilter}
-          />
+          <FilterPanel {...filters} title="סינון לקוחות" subtitle="חיפוש, סטטוס, סוג יישות ורואה חשבון" />
         </>
       )}
       <PaginatedDataTable

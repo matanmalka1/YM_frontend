@@ -2,8 +2,8 @@ import { Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Button } from '@/components/ui/primitives/Button'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
+import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { TaskModal } from '../components/form/TaskModal'
-import { TasksFiltersPanel } from '../components/list/TasksFiltersPanel'
 import { TasksListPanel } from '../components/list/TasksListPanel'
 import { TasksListSummary } from '../components/list/TasksListSummary'
 import { useTasksPage } from '../hooks/useTasksPage'
@@ -26,17 +26,7 @@ export const TasksPage: React.FC = () => {
       {!page.isLoading && !page.listError ? (
         <TasksListSummary total={page.total} visibleCount={page.visibleCount} featuredTask={page.featuredTask} />
       ) : null}
-      <TasksFiltersPanel
-        filters={page.filters}
-        hasFilters={page.hasFilters}
-        statusOptions={page.statusOptions}
-        priorityOptions={page.priorityOptions}
-        roleOptions={page.roleOptions}
-        userOptions={page.userOptions}
-        sourceOptions={page.sourceOptions}
-        onFilterChange={page.handleFilterChange}
-        onReset={page.resetFilters}
-      />
+      <FilterPanel {...page.filterBar} title="סינון משימות" subtitle="סטטוס, עדיפות, שיוך, מקור וטווח יעד" />
       <TasksListPanel
         tasks={page.tasks}
         isLoading={page.isLoading}

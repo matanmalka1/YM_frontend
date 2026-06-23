@@ -5,13 +5,13 @@ import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
+import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import {
   AuditLogsDrawer,
   CreateUserModal,
   EditUserModal,
   ResetPasswordModal,
   useUsersPage,
-  UsersFiltersBar,
 } from '@/features/users'
 import { Plus } from 'lucide-react'
 
@@ -51,11 +51,7 @@ export const Users: React.FC = () => {
       header={header}
       loadingMessage={status.loadingMessage}
     >
-      <UsersFiltersBar
-        filters={filters.values}
-        onFilterChange={filters.onFilterChange}
-        onReset={filters.resetFilters}
-      />
+      <FilterPanel {...filters} title="סינון משתמשים" subtitle="חיפוש וסטטוס" />
       <PaginatedDataTable
         data={table.data}
         columns={table.columns}

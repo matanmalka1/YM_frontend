@@ -148,7 +148,6 @@ export const useNotificationsPage = () => {
       onChange: (key: string, value: string) => setFilter(key, value),
       onMultiChange: (updates: Record<string, string>) => setFilters(updates),
       onReset: resetFilters,
-      gridClass: 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3',
     },
     table: {
       data: items,

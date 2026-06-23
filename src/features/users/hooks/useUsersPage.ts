@@ -10,6 +10,26 @@ import { useRole } from '../../../hooks/useRole'
 import { useAuthStore } from '@/store/auth.store'
 import { buildUserColumns } from '../components/list/UsersColumns'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
+import { USER_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
+
+const USERS_FILTER_FIELDS = [
+  {
+    type: 'search' as const,
+    key: 'search',
+    label: 'חיפוש משתמש',
+    placeholder: USER_SEARCH_PLACEHOLDER,
+  },
+  {
+    type: 'select' as const,
+    key: 'is_active',
+    label: 'סטטוס',
+    options: [
+      { value: '', label: 'כל המשתמשים' },
+      { value: 'true', label: 'פעילים בלבד' },
+      { value: 'false', label: 'לא פעילים' },
+    ],
+  },
+]
 
 const invalidateUsers = (queryClient: ReturnType<typeof useQueryClient>) =>
   queryClient.invalidateQueries({ queryKey: usersQK.all })
@@ -147,9 +167,10 @@ export const useUsersPage = () => {
       description: 'ניהול חשבונות משתמשים, תפקידים והרשאות',
     },
     filters: {
-      values: filters,
-      onFilterChange: handleFilterChange,
-      resetFilters,
+      fields: USERS_FILTER_FIELDS,
+      values: { search: search ?? '', is_active: is_active ?? '' },
+      onChange: handleFilterChange,
+      onReset: resetFilters,
     },
     table: {
       data: users,

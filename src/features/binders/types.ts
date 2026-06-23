@@ -141,13 +141,6 @@ export type BindersFilterUpdates = Partial<{
   page: string
 }>
 
-export interface BindersFiltersBarProps {
-  filters: BindersUrlFilters
-  onFilterChange: (name: string, value: string) => void
-  onMultiFilterChange: (updates: BindersFilterUpdates) => void
-  onReset: () => void
-}
-
 export interface BinderIntakeMaterialResponse {
   id: number
   intake_id: number

@@ -2,10 +2,10 @@ import { Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { Button } from '@/components/ui/primitives/Button'
+import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import {
   ChargesCreateModal,
   ChargeDetailDrawer,
-  ChargesFiltersCard,
   ChargesStatsSection,
   ChargesTableBlock,
   useChargesPage,
@@ -40,11 +40,7 @@ export const Charges: React.FC = () => {
     >
       <ChargesStatsSection stats={stats.stats} isAdvisor={stats.isAdvisor} />
 
-      <ChargesFiltersCard
-        filters={filters.values}
-        onFilterChange={filters.onFilterChange}
-        onClear={filters.resetFilters}
-      />
+      <FilterPanel {...filters} title="סינון חיובים" subtitle="סטטוס, סוג, תקופה וטווח הנפקה" />
 
       <ChargesTableBlock
         charges={table.data}

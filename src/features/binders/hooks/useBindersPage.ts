@@ -10,9 +10,39 @@ import { useBinderMutations } from './useBinderMutations'
 import { useBindersPageDialogs } from './useBindersPageDialogs'
 import { useReceiveBinderDrawer } from './useReceiveBinderDrawer'
 import { buildBindersColumns } from '../components/table/BindersColumns'
+import { BINDER_CAPACITY_STATUS_OPTIONS, BINDER_LOCATION_STATUS_OPTIONS } from '../constants'
+import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
+import {
+  BINDER_NUMBER_SEARCH_PLACEHOLDER,
+  CLIENT_SEARCH_PLACEHOLDER,
+} from '@/constants/searchPlaceholders.constants'
+
+const buildBindersFilterFields = () => [
+  {
+    type: 'client-picker' as const,
+    idKey: 'client_record_id',
+    nameKey: 'client_name',
+    label: 'לקוח',
+    placeholder: CLIENT_SEARCH_PLACEHOLDER,
+  },
+  {
+    type: 'search' as const,
+    key: 'binder_number',
+    label: 'מספר קלסר',
+    placeholder: BINDER_NUMBER_SEARCH_PLACEHOLDER,
+  },
+  { type: 'select' as const, key: 'location_status', label: 'מיקום', options: BINDER_LOCATION_STATUS_OPTIONS },
+  { type: 'select' as const, key: 'capacity_status', label: 'קיבולת', options: BINDER_CAPACITY_STATUS_OPTIONS },
+  {
+    type: 'select' as const,
+    key: 'year',
+    label: 'שנה',
+    options: [{ value: '', label: 'כל התקופות' }, ...getOperationalYearOptions()],
+  },
+]
 
 export const useBindersPage = () => {
-  const { filters, setPage, handleFilterChange, handleMultiFilterChange, handleReset, handleSort } = useBindersFilters()
+  const { filters, setPage, handleFilterChange, handleMultiFilterChange, handleReset } = useBindersFilters()
 
   const listParams = useMemo<ListBindersParams>(
     () => ({
@@ -125,6 +155,8 @@ export const useBindersPage = () => {
     ],
   )
 
+  const filterFields = useMemo(() => buildBindersFilterFields(), [])
+
   const isFiltered = Boolean(
     filters.location_status ||
     filters.capacity_status ||
@@ -150,11 +182,18 @@ export const useBindersPage = () => {
       countersLoading: false,
     },
     filters: {
-      values: filters,
-      onFilterChange: handleFilterChange,
-      onMultiFilterChange: handleMultiFilterChange,
-      resetFilters: handleReset,
-      onSort: handleSort,
+      fields: filterFields,
+      values: {
+        client_record_id: filters.client_record_id ? String(filters.client_record_id) : '',
+        client_name: filters.client_name ?? '',
+        binder_number: filters.binder_number ?? '',
+        location_status: filters.location_status ?? '',
+        capacity_status: filters.capacity_status ?? '',
+        year: filters.year ?? '',
+      },
+      onChange: handleFilterChange,
+      onMultiChange: handleMultiFilterChange,
+      onReset: handleReset,
     },
     table: {
       data: pageItems,

@@ -4,10 +4,10 @@ import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Button } from '@/components/ui/primitives/Button'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
+import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { TaskModal } from '@/features/tasks'
 import { useWorkQueuePage } from '../hooks/useWorkQueuePage'
 import { WorkQueueStatsSection } from '../components/WorkQueueStatsSection'
-import { WorkQueueFiltersBar } from '../components/WorkQueueFiltersBar'
 
 export const WorkQueuePage: React.FC = () => {
   const { status, headerProps, stats, filters, table, modals } = useWorkQueuePage()
@@ -33,7 +33,7 @@ export const WorkQueuePage: React.FC = () => {
     >
       <WorkQueueStatsSection {...stats} />
 
-      <WorkQueueFiltersBar {...filters} />
+      <FilterPanel {...filters} title="סינון עבודה" subtitle="סוג, סטטוס, סוג עבודה ותצוגה" />
 
       <PaginatedDataTable
         data={table.data}

@@ -8,10 +8,11 @@ interface Props {
   field: SearchFieldDef
   externalValue: string
   onChange: (key: string, value: string) => void
+  size?: 'sm' | 'md'
   ref?: Ref<SearchFieldHandle>
 }
 
-export const SearchFilter = ({ field, externalValue, onChange, ref }: Props) => {
+export const SearchFilter = ({ field, externalValue, onChange, size = 'md', ref }: Props) => {
   const [draft, setDraft] = useSearchDebounce(externalValue, (v) => onChange(field.key, v))
 
   useImperativeHandle(ref, () => ({
@@ -21,6 +22,7 @@ export const SearchFilter = ({ field, externalValue, onChange, ref }: Props) => 
   return (
     <Input
       label={field.label}
+      size={size}
       value={draft}
       onChange={(e) => setDraft(e.target.value)}
       placeholder={field.placeholder}

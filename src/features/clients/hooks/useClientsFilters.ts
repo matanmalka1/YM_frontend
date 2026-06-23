@@ -1,5 +1,8 @@
 import { useMemo } from 'react'
-import { FilterPanel } from '@/components/ui/filters/FilterPanel'
+import { useAdvisorOptions } from '@/features/users'
+import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
+import { CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
+import type { FilterBadge } from '@/components/ui/table/ActiveFilterBadges'
 import {
   CLIENT_SORT_BY_OPTIONS,
   CLIENT_STATUS_OPTIONS,
@@ -7,21 +10,33 @@ import {
   DEFAULT_CLIENT_SORT_ORDER,
   ENTITY_TYPE_OPTIONS,
   getClientSortOrderOptions,
-} from '../../constants'
-import type { ClientsFiltersBarProps } from '../../types'
-import { useAdvisorOptions } from '@/features/users'
-import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
-import { CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
-import type { FilterBadge } from '@/components/ui/table/ActiveFilterBadges'
+} from '../constants'
+import type { ClientsFilters } from '../types'
 
 const STATUS_OPTIONS = [ALL_STATUSES_OPTION, ...CLIENT_STATUS_OPTIONS]
 
-export const ClientsFiltersBar: React.FC<ClientsFiltersBarProps> = ({
+type ClientFilterChange = (
+  name: 'accountant_id' | 'entity_type' | 'page_size' | 'search' | 'status' | 'sort_by' | 'order',
+  value: string,
+) => void
+
+interface UseClientsFiltersArgs {
+  filters: ClientsFilters
+  onFilterChange: ClientFilterChange
+  onReset: () => void
+  showAccountantFilter?: boolean
+}
+
+/**
+ * Builds the clients FilterPanel slot. Owns the advisor-options query (only fetched
+ * when the accountant filter is visible) and the accountant active-filter badge.
+ */
+export const useClientsFilters = ({
   filters,
   onFilterChange,
   onReset,
   showAccountantFilter = false,
-}) => {
+}: UseClientsFiltersArgs) => {
   const { options: advisorOptions, nameById } = useAdvisorOptions(showAccountantFilter)
   const activeAccountantId = filters.accountant_id ? String(filters.accountant_id) : ''
 
@@ -78,21 +93,18 @@ export const ClientsFiltersBar: React.FC<ClientsFiltersBarProps> = ({
       ]
     : []
 
-  return (
-    <FilterPanel
-      fields={fields}
-      values={{
-        search: filters.search ?? '',
-        status: filters.status ?? '',
-        entity_type: filters.entity_type ?? '',
-        accountant_id: activeAccountantId,
-        sort_by: filters.sort_by ?? '',
-        order: filters.order ?? '',
-      }}
-      onChange={(key, value) => onFilterChange(key as Parameters<typeof onFilterChange>[0], value)}
-      onReset={onReset}
-      gridClass="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-      extraBadges={extraBadges}
-    />
-  )
+  return {
+    fields,
+    values: {
+      search: filters.search ?? '',
+      status: filters.status ?? '',
+      entity_type: filters.entity_type ?? '',
+      accountant_id: activeAccountantId,
+      sort_by: filters.sort_by ?? '',
+      order: filters.order ?? '',
+    },
+    onChange: (key: string, value: string) => onFilterChange(key as Parameters<ClientFilterChange>[0], value),
+    onReset,
+    extraBadges,
+  }
 }
