@@ -130,7 +130,6 @@ export interface WorkQueueParams {
   client_record_id?: number
   business_id?: number
   exclude_source_types?: WorkQueueSourceType[]
-  include_task_history?: boolean
   search?: string
   source_type?: WorkQueueSourceType
   urgency?: WorkQueueUrgency

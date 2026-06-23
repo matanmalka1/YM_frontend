@@ -33,7 +33,7 @@ export const WorkQueuePage: React.FC = () => {
     >
       <WorkQueueStatsSection {...stats} />
 
-      <FilterPanel {...filters} title="סינון עבודה" subtitle="סוג, סטטוס, סוג עבודה ותצוגה" />
+      <FilterPanel {...filters} title="סינון עבודה" subtitle="סוג, סטטוס וסוג עבודה" />
 
       <PaginatedDataTable
         data={table.data}

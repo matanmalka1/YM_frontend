@@ -3,7 +3,6 @@ import type { WorkQueueParams } from './contracts'
 const normalizeParams = (params?: WorkQueueParams) => ({
   client_record_id: params?.client_record_id ?? null,
   business_id: params?.business_id ?? null,
-  include_task_history: params?.include_task_history ?? false,
   search: params?.search ?? '',
   source_type: params?.source_type ?? null,
   urgency: params?.urgency ?? null,

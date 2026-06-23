@@ -24,7 +24,6 @@ export const WORK_QUEUE_FILTER_PARAM_KEYS = {
   taskStatus: 'task_status',
   linked: 'linked',
   scope: 'scope',
-  history: 'history',
 } as const
 
 export type WorkQueueSourceType = (typeof workQueueSourceTypeValues)[number]

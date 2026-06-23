@@ -8,7 +8,6 @@ const toSearchParams = (params?: WorkQueueParams): URLSearchParams | undefined =
 
   return toQueryParams({
     ...params,
-    include_task_history: params.include_task_history ? true : undefined,
     search: params.search?.trim() || undefined,
   })
 }

@@ -45,17 +45,11 @@ const statusOptions = [
   ...taskStatusValues.map((v) => ({ value: v, label: taskStatusLabels[v] })),
 ]
 
-const viewOptions = [
-  { value: '', label: 'עבודה פעילה' },
-  { value: 'true', label: 'היסטוריית משימות' },
-]
-
 const WORK_QUEUE_FILTER_FIELDS: FilterFieldDef[] = [
   { type: 'search', key: WORK_QUEUE_FILTER_PARAM_KEYS.search, label: 'חיפוש', placeholder: WORK_QUEUE_SEARCH_PLACEHOLDER },
   { type: 'select', key: WORK_QUEUE_FILTER_PARAM_KEYS.sourceType, label: 'סוג', options: typeOptions },
   { type: 'select', key: WORK_QUEUE_FILTER_PARAM_KEYS.taskStatus, label: 'סטטוס משימה', options: statusOptions },
   { type: 'select', key: TASK_RELATION_KEY, label: 'סוג עבודה', options: taskRelationOptions },
-  { type: 'select', key: WORK_QUEUE_FILTER_PARAM_KEYS.history, label: 'תצוגה', options: viewOptions },
 ]
 
 export const useWorkQueuePage = () => {
@@ -69,14 +63,12 @@ export const useWorkQueuePage = () => {
   const statusFilter = parseTaskStatus(getParam(WORK_QUEUE_FILTER_PARAM_KEYS.taskStatus))
   const linkedFilter = parseLinkedFilter(getParam(WORK_QUEUE_FILTER_PARAM_KEYS.linked))
   const scopeFilter = parseScopeFilter(getParam(WORK_QUEUE_FILTER_PARAM_KEYS.scope))
-  const historyMode = getParam(WORK_QUEUE_FILTER_PARAM_KEYS.history) === 'true'
   const page = getPage()
 
   const [debouncedSearch] = useDebounce(search, 350)
 
   const listParams = useMemo<WorkQueueParams>(
     () => ({
-      include_task_history: historyMode,
       search: debouncedSearch.trim() || undefined,
       source_type: typeFilter ?? undefined,
       urgency: urgencyFilter ?? undefined,
@@ -86,7 +78,7 @@ export const useWorkQueuePage = () => {
       page,
       page_size: WORK_QUEUE_PAGE_SIZE,
     }),
-    [historyMode, linkedFilter, page, scopeFilter, debouncedSearch, statusFilter, typeFilter, urgencyFilter],
+    [linkedFilter, page, scopeFilter, debouncedSearch, statusFilter, typeFilter, urgencyFilter],
   )
 
   const { data, isLoading, isFetching, error } = useWorkQueue(listParams, hasRole)
@@ -128,9 +120,8 @@ export const useWorkQueuePage = () => {
       [WORK_QUEUE_FILTER_PARAM_KEYS.sourceType]: typeFilter ?? '',
       [WORK_QUEUE_FILTER_PARAM_KEYS.taskStatus]: statusFilter ?? '',
       [TASK_RELATION_KEY]: taskRelationValue(scopeFilter, linkedFilter),
-      [WORK_QUEUE_FILTER_PARAM_KEYS.history]: historyMode ? 'true' : '',
     }),
-    [search, typeFilter, statusFilter, scopeFilter, linkedFilter, historyMode],
+    [search, typeFilter, statusFilter, scopeFilter, linkedFilter],
   )
 
   const handleFilterPanelChange = (key: string, value: string) => {
@@ -199,10 +190,8 @@ export const useWorkQueuePage = () => {
         isFiltered: false,
         icon: CheckSquare,
         variant: 'illustration' as const,
-        title: historyMode ? 'אין היסטוריה' : 'אין עבודה לטיפול',
-        message: historyMode
-          ? 'אין משימות היסטוריות להצגה.'
-          : 'אין כרגע עבודה לטיפול. כל הדוחות, התשלומים והמשימות הפעילות מסודרים.',
+        title: 'אין עבודה לטיפול',
+        message: 'אין כרגע עבודה לטיפול. כל הדוחות, התשלומים והמשימות הפעילות מסודרים.',
       }
 
   return {
