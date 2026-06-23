@@ -17,8 +17,14 @@ interface AddLineTriggerButtonProps {
 }
 
 const AddLineTriggerButton: React.FC<AddLineTriggerButtonProps> = ({ label, onClick }) => (
-  <Button type="button" variant="ghost" size="sm" onClick={onClick} className="mt-1 gap-1 text-xs">
-    <Plus className="h-3.5 w-3.5" />
+  <Button
+    type="button"
+    variant="ghost"
+    size="sm"
+    icon={<Plus className="h-3.5 w-3.5" />}
+    onClick={onClick}
+    className="mt-1 text-xs"
+  >
     {label}
   </Button>
 )

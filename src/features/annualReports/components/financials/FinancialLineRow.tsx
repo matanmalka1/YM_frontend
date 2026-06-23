@@ -51,11 +51,11 @@ export const LineRow: React.FC<LineRowProps> = ({
             type="button"
             variant="ghost"
             size="sm"
+            icon={<Paperclip className="h-3 w-3" />}
             onClick={handleDownload}
-            className="p-0 text-primary-500 hover:text-primary-700 hover:bg-transparent gap-0.5"
+            className="p-0 text-primary-500 hover:text-primary-700 hover:bg-transparent"
             title={supportingDocumentFilename ?? 'מסמך מצורף'}
           >
-            <Paperclip className="h-3 w-3" />
             <span className="text-xs">{supportingDocumentFilename ?? 'מסמך'}</span>
           </Button>
         ) : supportingDocumentRef ? (
@@ -72,24 +72,22 @@ export const LineRow: React.FC<LineRowProps> = ({
             type="button"
             variant="ghost"
             size="sm"
+            icon={<Pencil className="h-3.5 w-3.5" />}
             onClick={onEdit}
             className="p-0.5 text-primary-400 hover:text-primary-600 hover:bg-transparent"
             aria-label="עריכת שורה"
-          >
-            <Pencil className="h-3.5 w-3.5" />
-          </Button>
+          />
         ) : null}
         <Button
           type="button"
           variant="ghost"
           size="sm"
+          icon={<Trash2 className="h-3.5 w-3.5" />}
           onClick={onDelete}
           disabled={isDeleting}
           className="p-0.5 text-negative-400 hover:text-negative-600 hover:bg-transparent"
           aria-label="מחק"
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-        </Button>
+        />
       </div>
     </div>
   )

@@ -70,18 +70,21 @@ export const BinderDocumentsSection: React.FC<BinderDocumentsSectionProps> = ({ 
                   </div>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
-                  <Button variant="ghost" size="sm" onClick={() => handlePreviewClick(doc)} aria-label="צפייה במסמך">
-                    <Eye className="h-4 w-4" />
-                  </Button>
                   <Button
                     variant="ghost"
                     size="sm"
+                    icon={<Eye className="h-4 w-4" />}
+                    onClick={() => handlePreviewClick(doc)}
+                    aria-label="צפייה במסמך"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    icon={<Download className="h-4 w-4" />}
                     isLoading={downloadingId === doc.id}
                     onClick={() => handleDownloadClick(doc)}
                     aria-label="הורדת מסמך"
-                  >
-                    <Download className="h-4 w-4" />
-                  </Button>
+                  />
                 </div>
               </li>
             ))}

@@ -13,21 +13,21 @@ export const VatExportButtons: React.FC<VatExportButtonsProps> = ({ clientId, pe
       <Button
         variant="secondary"
         size="sm"
+        icon={<FileSpreadsheet className={`h-4 w-4 ${FILE_FORMAT_COLORS.excel}`} />}
         className="rounded-none border-l border-gray-200 bg-gray-50 shadow-none"
         isLoading={loadingType === 'excel'}
         onClick={() => exportVat('excel')}
       >
-        <FileSpreadsheet className={`h-4 w-4 ${FILE_FORMAT_COLORS.excel}`} />
         Excel
       </Button>
       <Button
         variant="secondary"
         size="sm"
+        icon={<FileText className={`h-4 w-4 ${FILE_FORMAT_COLORS.pdf}`} />}
         className="rounded-none bg-gray-50 shadow-none"
         isLoading={loadingType === 'pdf'}
         onClick={() => exportVat('pdf')}
       >
-        <FileText className={`h-4 w-4 ${FILE_FORMAT_COLORS.pdf}`} />
         PDF
       </Button>
     </div>

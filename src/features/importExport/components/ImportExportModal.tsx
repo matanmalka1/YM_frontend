@@ -20,8 +20,7 @@ const ExportPanel: React.FC<ExportPanelProps> = ({ exporting, onExport }) => (
         הקובץ כולל שדות לקוח, פרטי עסק, סטטוס ונתוני מס רלוונטיים.
       </div>
 
-      <Button variant="primary" onClick={onExport} isLoading={exporting} className="gap-2">
-        <Download className="h-4 w-4" />
+      <Button variant="primary" icon={<Download className="h-4 w-4" />} onClick={onExport} isLoading={exporting}>
         ייצוא ל־Excel
       </Button>
     </div>
@@ -89,12 +88,11 @@ const ImportPanel: React.FC<ImportPanelProps> = ({ importing, onFileSelect, onDo
           <Button
             type="button"
             variant="primary"
+            icon={<Upload className="h-4 w-4" />}
             onClick={() => fileInputRef.current?.click()}
             isLoading={importing}
             disabled={importing}
-            className="gap-2"
           >
-            <Upload className="h-4 w-4" />
             {importing ? 'מייבא...' : 'בחר קובץ'}
           </Button>
         </div>

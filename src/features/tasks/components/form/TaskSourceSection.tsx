@@ -92,8 +92,14 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
           </div>
         </div>
         {!readonly && !isLinkMode && !sourceCleared && (
-          <Button type="button" variant="link" size="sm" tooltip="נתק את המשימה מהפריט המקושר" onClick={onClearSource}>
-            <Link2Off className="h-3.5 w-3.5" aria-hidden="true" />
+          <Button
+            type="button"
+            variant="link"
+            size="sm"
+            icon={<Link2Off className="h-3.5 w-3.5" aria-hidden="true" />}
+            tooltip="נתק את המשימה מהפריט המקושר"
+            onClick={onClearSource}
+          >
             נתק
           </Button>
         )}

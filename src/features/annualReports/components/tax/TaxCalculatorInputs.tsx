@@ -46,10 +46,11 @@ export const TaxCalculatorInputs = ({
             type="button"
             variant="outline"
             size="sm"
+            icon={<Pencil className="h-3 w-3" />}
             onClick={handleEdit}
             className="border-info-300 text-info-700 hover:bg-info-50 shrink-0 text-xs px-2.5 py-1"
           >
-            <Pencil className="h-3 w-3" /> עריכה
+            עריכה
           </Button>
         ) : (
           <div className="flex gap-1 shrink-0">
@@ -57,20 +58,22 @@ export const TaxCalculatorInputs = ({
               type="button"
               variant="primary"
               size="sm"
+              icon={<Check className="h-3 w-3" />}
               onClick={handleSave}
               disabled={isSaving}
               className="bg-info-600 hover:bg-info-700 text-xs px-2.5 py-1"
             >
-              <Check className="h-3 w-3" /> שמור
+              שמור
             </Button>
             <Button
               type="button"
               variant="outline"
               size="sm"
+              icon={<X className="h-3 w-3" />}
               onClick={handleCancel}
               className="border-info-300 text-info-700 text-xs px-2.5 py-1"
             >
-              <X className="h-3 w-3" /> ביטול
+              ביטול
             </Button>
           </div>
         )}

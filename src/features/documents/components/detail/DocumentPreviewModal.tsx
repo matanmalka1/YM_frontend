@@ -31,8 +31,7 @@ export const DocumentPreviewModal: React.FC<DocumentPreviewModalProps> = ({
       className="max-w-4xl w-full"
       footer={
         <div className="flex justify-end">
-          <Button variant="secondary" className="gap-2" onClick={onDownload}>
-            <Download className="h-4 w-4" />
+          <Button variant="secondary" icon={<Download className="h-4 w-4" />} onClick={onDownload}>
             הורד
           </Button>
         </div>
@@ -54,8 +53,7 @@ export const DocumentPreviewModal: React.FC<DocumentPreviewModalProps> = ({
       ) : (
         <div className="flex flex-col items-center justify-center gap-4 py-16 text-sm text-gray-500">
           <p>לא ניתן להציג קובץ זה בתצוגה מקדימה</p>
-          <Button variant="secondary" className="gap-2" onClick={onDownload}>
-            <Download className="h-4 w-4" />
+          <Button variant="secondary" icon={<Download className="h-4 w-4" />} onClick={onDownload}>
             הורד קובץ
           </Button>
         </div>

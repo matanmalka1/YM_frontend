@@ -88,9 +88,15 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
             />
           )}
           {isAdvisor && (
-            <Button variant="ghost" size="sm" onClick={() => setShowCreateModal(true)} className="whitespace-nowrap">
+            <Button
+              variant="ghost"
+              size="sm"
+              icon={<Plus className="h-3.5 w-3.5" />}
+              iconPosition="end"
+              onClick={() => setShowCreateModal(true)}
+              className="whitespace-nowrap"
+            >
               חיוב חדש
-              <Plus className="h-3.5 w-3.5" />
             </Button>
           )}
         </div>

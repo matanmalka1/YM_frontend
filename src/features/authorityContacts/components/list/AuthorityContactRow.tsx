@@ -48,24 +48,22 @@ export const AuthorityContactRow: React.FC<AuthorityContactRowProps> = ({ contac
         type="button"
         variant="ghost"
         size="sm"
+        icon={<Edit2 className="h-4 w-4" />}
         tooltip="עריכת איש קשר"
         aria-label="עריכת איש קשר"
         onClick={() => onEdit(contact)}
-      >
-        <Edit2 className="h-4 w-4" />
-      </Button>
+      />
       <Button
         type="button"
         variant="ghost"
         size="sm"
+        icon={<Trash2 className="h-4 w-4" />}
         isLoading={isDeleting}
         tooltip="מחיקת איש קשר"
         aria-label="מחיקת איש קשר"
         onClick={() => onDelete(contact.id)}
         className="text-negative-600 hover:bg-negative-50"
-      >
-        <Trash2 className="h-4 w-4" />
-      </Button>
+      />
     </div>
   </div>
 )

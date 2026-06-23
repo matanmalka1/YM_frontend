@@ -16,9 +16,14 @@ export const Binders: React.FC = () => {
     <PageHeader
       {...headerProps}
       actions={
-        <Button variant="ghost" size="sm" onClick={drawers.openReceive}>
+        <Button
+          variant="ghost"
+          size="sm"
+          icon={<Plus className="h-3.5 w-3.5" />}
+          iconPosition="end"
+          onClick={drawers.openReceive}
+        >
           קליטת חומר
-          <Plus className="h-3.5 w-3.5" />
         </Button>
       }
     />

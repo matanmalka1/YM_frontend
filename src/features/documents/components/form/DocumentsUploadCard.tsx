@@ -185,6 +185,7 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
                   type="button"
                   variant="ghost"
                   size="sm"
+                  icon={<X className="h-4 w-4" />}
                   onClick={(e) => {
                     e.stopPropagation()
                     setValue('file', null, { shouldValidate: false })
@@ -193,9 +194,7 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
                   }}
                   className="rounded-full p-0.5 text-gray-400 hover:bg-gray-200 hover:text-gray-600"
                   aria-label="הסר קובץ"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
+                />
               </div>
               <div className="flex items-center gap-3 text-xs text-gray-500">
                 <span>{formatFileSize(selectedFile.size)}</span>

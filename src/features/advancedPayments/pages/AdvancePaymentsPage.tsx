@@ -20,13 +20,23 @@ export const AdvancePayments: React.FC = () => {
         actions={
           permissions.isAdvisor ? (
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" onClick={modals.openGenerate}>
+              <Button
+                variant="ghost"
+                size="sm"
+                icon={<Calendar className="h-4 w-4" />}
+                iconPosition="end"
+                onClick={modals.openGenerate}
+              >
                 צור לוח שנתי
-                <Calendar className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="sm" onClick={modals.openCreate}>
+              <Button
+                variant="ghost"
+                size="sm"
+                icon={<PlusCircle className="h-4 w-4" />}
+                iconPosition="end"
+                onClick={modals.openCreate}
+              >
                 הוסף מקדמה
-                <PlusCircle className="h-4 w-4" />
               </Button>
             </div>
           ) : undefined

@@ -133,14 +133,20 @@ export const SigningForm: React.FC<SigningFormProps> = ({
             <Button
               variant="outline"
               size="sm"
+              icon={<XCircle className="h-4 w-4" />}
               onClick={onStartDecline}
               className="flex-1 border-negative-200 text-negative-600 hover:bg-negative-50"
             >
-              <XCircle className="h-4 w-4" />
               דחייה
             </Button>
-            <Button variant="primary" size="md" isLoading={isApproving} onClick={onStartApprove} className="flex-[2]">
-              <CheckCircle2 className="h-4 w-4" />
+            <Button
+              variant="primary"
+              size="md"
+              icon={<CheckCircle2 className="h-4 w-4" />}
+              isLoading={isApproving}
+              onClick={onStartApprove}
+              className="flex-[2]"
+            >
               אני מאשר/ת וחותם/ת
             </Button>
           </div>

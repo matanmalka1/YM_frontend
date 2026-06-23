@@ -61,8 +61,13 @@ export const CorrespondenceCard = ({ businessId, clientId }: CorrespondenceCardP
         title="יומן תקשורת עם רשויות"
         subtitle={total > 0 ? `${total} רשומות` : undefined}
         actions={
-          <Button type="button" variant="ghost" size="sm" onClick={() => setModalOpen(true)} className="gap-2">
-            <Plus className="h-4 w-4" />
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            icon={<Plus className="h-4 w-4" />}
+            onClick={() => setModalOpen(true)}
+          >
             הוסף רשומה
           </Button>
         }

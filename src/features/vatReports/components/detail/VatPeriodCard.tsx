@@ -119,8 +119,7 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
         </div>
 
         {/* Action */}
-        <Button fullWidth onClick={onOpen} disabled={disabled} className="mt-auto">
-          <FileText className="h-4 w-4" />
+        <Button fullWidth icon={<FileText className="h-4 w-4" />} onClick={onOpen} disabled={disabled} className="mt-auto">
           פתח דוח
         </Button>
       </div>

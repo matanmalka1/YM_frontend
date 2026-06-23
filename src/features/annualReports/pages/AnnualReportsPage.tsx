@@ -27,12 +27,12 @@ export const AnnualReportsPage: React.FC = () => {
           <Button
             variant="ghost"
             size="sm"
+            icon={<Plus className="h-4 w-4" />}
+            iconPosition="end"
             onClick={modals.openCreate}
             disabled={!headerProps.taxYear}
-            className="gap-2"
           >
             {headerProps.taxYear ? `דוח שנתי ${headerProps.taxYear}` : 'דוח שנתי'}
-            <Plus className="h-4 w-4" />
           </Button>
         }
       />

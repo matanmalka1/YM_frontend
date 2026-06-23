@@ -34,8 +34,14 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
 
   return (
     <div>
-      <Button type="button" variant="ghost" size="sm" onClick={onToggle} className="text-gray-600 hover:text-gray-900">
-        <SlidersHorizontal className="h-4 w-4" />
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        icon={<SlidersHorizontal className="h-4 w-4" />}
+        onClick={onToggle}
+        className="text-gray-600 hover:text-gray-900"
+      >
         פילטרים מתקדמים
         {advancedCount > 0 && (
           <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-primary-600 px-1 text-3xs font-semibold text-white">
@@ -106,8 +112,14 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
           {advancedCount > 0 && onReset && (
             <div className="flex items-center justify-between border-t border-gray-100 pt-2">
               <span className="text-xs text-gray-500">{advancedCount} פילטרים פעילים</span>
-              <Button type="button" variant="ghost" size="sm" onClick={onReset} className="gap-1.5 text-xs">
-                <RotateCcw className="h-3.5 w-3.5" />
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                icon={<RotateCcw className="h-3.5 w-3.5" />}
+                onClick={onReset}
+                className="text-xs"
+              >
                 איפוס הכל
               </Button>
             </div>

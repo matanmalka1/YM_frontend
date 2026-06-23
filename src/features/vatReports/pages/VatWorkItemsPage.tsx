@@ -21,9 +21,14 @@ export const VatWorkItems: React.FC = () => {
         {...headerProps}
         actions={
           permissions.isAdvisor ? (
-            <Button variant="ghost" size="sm" onClick={modals.openCreate}>
+            <Button
+              variant="ghost"
+              size="sm"
+              icon={<Plus className="h-4 w-4" />}
+              iconPosition="end"
+              onClick={modals.openCreate}
+            >
               דוח מע״מ חדש
-              <Plus className="h-4 w-4" />
             </Button>
           ) : undefined
         }

@@ -17,8 +17,12 @@ export const TasksPage: React.FC = () => {
         title="משימות"
         description="ניהול משימות, שיוכים ותאריכי יעד"
         actions={
-          <Button size="sm" onClick={page.openCreateModal} className="shrink-0 rounded-xl">
-            <Plus className="h-4 w-4" aria-hidden="true" />
+          <Button
+            size="sm"
+            icon={<Plus className="h-4 w-4" aria-hidden="true" />}
+            onClick={page.openCreateModal}
+            className="shrink-0 rounded-xl"
+          >
             משימה חדשה
           </Button>
         }

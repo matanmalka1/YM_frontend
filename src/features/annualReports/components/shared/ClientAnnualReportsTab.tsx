@@ -77,13 +77,16 @@ export const ClientAnnualReportsTab: React.FC<ClientAnnualReportsTabProps> = ({ 
     <>
       <div className="flex justify-end mb-2 gap-2">
         {canCompareYears && (
-          <Button variant="ghost" size="sm" onClick={() => setShowComparison(true)}>
-            <BarChart2 className="h-4 w-4" />
+          <Button
+            variant="ghost"
+            size="sm"
+            icon={<BarChart2 className="h-4 w-4" />}
+            onClick={() => setShowComparison(true)}
+          >
             השוואה בין שנים
           </Button>
         )}
-        <Button variant="ghost" size="sm" onClick={() => setShowCreate(true)}>
-          <Plus className="h-4 w-4" />
+        <Button variant="ghost" size="sm" icon={<Plus className="h-4 w-4" />} onClick={() => setShowCreate(true)}>
           דוח חדש
         </Button>
       </div>
@@ -115,8 +118,13 @@ export const ClientAnnualReportsTab: React.FC<ClientAnnualReportsTabProps> = ({ 
           ) : (
             <div className="rounded-xl border border-dashed border-gray-300 py-12 text-center text-gray-500">
               <p className="text-base font-medium">אין דוח לשנת מס {selectedYear}</p>
-              <Button variant="ghost" size="sm" className="mt-3" onClick={() => setShowCreate(true)}>
-                <Plus className="h-4 w-4" />
+              <Button
+                variant="ghost"
+                size="sm"
+                icon={<Plus className="h-4 w-4" />}
+                className="mt-3"
+                onClick={() => setShowCreate(true)}
+              >
                 צור דוח חדש
               </Button>
             </div>

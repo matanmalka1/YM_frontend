@@ -24,8 +24,13 @@ export const VatClientActionBar = ({
   <section>
     <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
       <div className="flex md:order-2">
-        <Button onClick={onCreateClick} size="sm" variant="ghost" className="w-full justify-center sm:w-auto">
-          <Plus className="h-4 w-4" />
+        <Button
+          icon={<Plus className="h-4 w-4" />}
+          onClick={onCreateClick}
+          size="sm"
+          variant="ghost"
+          className="w-full justify-center sm:w-auto"
+        >
           פתיחת דוח מע״מ
         </Button>
       </div>

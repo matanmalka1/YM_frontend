@@ -254,12 +254,12 @@ export const TaxCalendarSettingsPage = () => {
             <Button
               type="button"
               size="sm"
+              icon={<Play className="h-4 w-4" />}
               onClick={handleBootstrap}
               disabled={params === null || hasInvalidRange}
               isLoading={bootstrapMutation.isPending}
               loadingLabel="מאתחל..."
             >
-              <Play className="h-4 w-4" />
               אתחול יומן מס
             </Button>
           </div>

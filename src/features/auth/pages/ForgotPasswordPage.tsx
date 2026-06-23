@@ -81,13 +81,14 @@ export const ForgotPassword: React.FC = () => {
 
           <Button
             type="submit"
+            icon={<Send className="h-4 w-4" />}
+            iconPosition="end"
             isLoading={isSubmitting}
             loadingLabel="שולחים..."
             fullWidth
             className="rounded-xl bg-slate-900 px-6 py-3.5 text-sm font-bold text-white hover:bg-slate-800 focus:ring-slate-900 active:scale-[0.98]"
           >
             <span>שליחת קישור איפוס</span>
-            <Send className="h-4 w-4" />
           </Button>
         </form>
       )}

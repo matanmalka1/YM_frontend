@@ -3,7 +3,10 @@ import { useDebounce } from 'use-debounce'
 import { Link } from 'react-router-dom'
 import { SkeletonBlock } from '../../ui/primitives/SkeletonBlock'
 import { Badge } from '../../ui/primitives/Badge'
-import { LogOut, Plus, RefreshCw, Search, User as UserIcon, Users, X } from 'lucide-react'
+import { Button } from '../../ui/primitives/Button'
+import { Input } from '../../ui/inputs/Input'
+import { InlineState } from '../../ui/feedback/InlineState'
+import { AlertCircle, LogOut, Plus, Search, User as UserIcon, Users, X } from 'lucide-react'
 import { useAuthStore } from '@/store/auth.store'
 import { CLIENT_ROUTES } from '@/features/clients'
 import { useRole } from '@/hooks/useRole'
@@ -97,30 +100,28 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
                   </span>
                 </span>
               </Link>
-              <button
-                type="button"
+              <Button
+                variant="ghost"
+                shape="square"
+                icon={<X className="h-4 w-4" />}
                 onClick={onMobileClose}
-                className="focus-ring mt-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-gray-500 hover:bg-gray-100 md:hidden"
+                className="mt-1 text-gray-500 hover:bg-gray-100 md:hidden"
                 aria-label="סגירה"
-              >
-                <X className="h-4 w-4" />
-              </button>
+              />
             </div>
           </div>
 
           <div className="shrink-0 space-y-3 border-b border-gray-100 px-4 pb-4">
-            <label className="relative block">
-              <span className="sr-only">חיפוש לקוח</span>
-              <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              <input
-                ref={searchInputRef}
-                type="search"
-                value={searchValue}
-                onChange={(event) => setSearchValue(event.target.value)}
-                placeholder={CLIENT_SEARCH_WITH_CONTACT_PLACEHOLDER}
-                className="h-10 w-full rounded-xl border border-gray-200 bg-gray-50/80 pr-9 pl-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-primary-300 focus:bg-white focus:ring-4 focus:ring-primary-50"
-              />
-            </label>
+            <Input
+              ref={searchInputRef}
+              type="search"
+              size="xs"
+              aria-label="חיפוש לקוח"
+              startIcon={<Search className="h-3.5 w-3.5" />}
+              value={searchValue}
+              onChange={(event) => setSearchValue(event.target.value)}
+              placeholder={CLIENT_SEARCH_WITH_CONTACT_PLACEHOLDER}
+            />
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -181,25 +182,18 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
                 ))}
               </div>
             ) : isError ? (
-              <div className="rounded-2xl border border-negative-100 bg-negative-50 p-4 text-center">
-                <p className="text-sm font-semibold text-negative-800">לא הצלחנו לטעון את הלקוחות</p>
-                <button
-                  type="button"
-                  onClick={() => void refetch()}
-                  className="focus-ring mx-auto mt-3 flex h-8 items-center gap-1.5 rounded-xl bg-white px-3 text-xs font-semibold text-negative-700 shadow-sm"
-                >
-                  <RefreshCw className="h-3.5 w-3.5" />
-                  ניסיון נוסף
-                </button>
-              </div>
+              <InlineState
+                variant="error"
+                icon={AlertCircle}
+                title="לא הצלחנו לטעון את הלקוחות"
+                action={{ label: 'ניסיון נוסף', onClick: () => void refetch() }}
+              />
             ) : clients.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/70 px-4 py-8 text-center">
-                <Users className="mx-auto h-5 w-5 text-gray-400" />
-                <p className="mt-2 text-sm font-medium text-gray-700">
-                  {hasSearch ? 'לא נמצאו לקוחות מתאימים' : 'עדיין אין לקוחות'}
-                </p>
-                {hasSearch ? <p className="mt-1 text-xs text-gray-500">נסו לחפש בשם או במספר אחר</p> : null}
-              </div>
+              <InlineState
+                icon={Users}
+                title={hasSearch ? 'לא נמצאו לקוחות מתאימים' : 'עדיין אין לקוחות'}
+                description={hasSearch ? 'נסו לחפש בשם או במספר אחר' : undefined}
+              />
             ) : (
               <div className="space-y-5">
                 {isTruncated ? (
@@ -244,14 +238,15 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
                   )}
                 </div>
               </div>
-              <button
-                type="button"
+              <Button
+                variant="ghost"
+                shape="square"
+                size="sm"
+                icon={<LogOut className="h-4 w-4" />}
                 onClick={() => void logout()}
-                className="focus-ring shrink-0 rounded-xl p-2 text-gray-400 transition-colors hover:bg-white hover:text-negative-600 hover:shadow-sm"
+                className="text-gray-400 hover:bg-white hover:text-negative-600 hover:shadow-sm"
                 aria-label="התנתקות"
-              >
-                <LogOut className="h-4 w-4" />
-              </button>
+              />
             </div>
           </div>
         </aside>

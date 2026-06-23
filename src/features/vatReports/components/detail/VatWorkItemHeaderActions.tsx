@@ -45,8 +45,12 @@ export const VatWorkItemHeaderActions: React.FC<VatWorkItemHeaderActionsProps> =
         />
         {isAdvisor && <VatExportButtons clientId={workItem.client_record_id} period={workItem.period} />}
         {isAdvisor && (
-          <Button variant="outline" size="sm" onClick={() => setShowNotificationModal(true)} className="gap-1.5">
-            <Bell className="h-3.5 w-3.5" />
+          <Button
+            variant="outline"
+            size="sm"
+            icon={<Bell className="h-3.5 w-3.5" />}
+            onClick={() => setShowNotificationModal(true)}
+          >
             תזכורת מסמכים
           </Button>
         )}

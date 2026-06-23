@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/inputs/Input'
 import { getOverlayPortalOffset, useOverlayPortalContainer } from '@/components/ui/overlays/OverlayPortalContext'
+import { Button } from '@/components/ui/primitives/Button'
 import { Spinner } from '@/components/ui/primitives/Spinner'
 import { clientsApi, type ClientRecordListItem } from '@/features/clients'
 import { cn, formatClientOfficeId } from '@/utils/utils'
@@ -227,9 +228,15 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
           loading ? (
             <Spinner size="sm" label="מחפש..." />
           ) : value ? (
-            <button type="button" onClick={handleClear} className="p-1 text-gray-400 hover:text-gray-600">
-              <X className="h-3.5 w-3.5" />
-            </button>
+            <Button
+              type="button"
+              variant="ghost"
+              shape="square"
+              size="sm"
+              icon={<X className="h-3.5 w-3.5" />}
+              onClick={handleClear}
+              aria-label="נקה חיפוש"
+            />
           ) : undefined
         }
       />
@@ -310,14 +317,15 @@ export const SelectedClientDisplay: React.FC<SelectedClientDisplayProps> = ({
       <span className="text-xs text-primary-500">
         {officeClientNumber != null ? formatClientOfficeId(officeClientNumber) : 'מס׳ לקוח לא זמין'}
       </span>
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        shape="square"
+        size="sm"
+        icon={<X className="h-3.5 w-3.5" />}
         onClick={onClear}
-        className="rounded p-0.5 text-primary-400 hover:bg-primary-100 hover:text-primary-600"
         aria-label="נקה בחירה"
-      >
-        <X className="h-3.5 w-3.5" />
-      </button>
+      />
     </div>
   </div>
 )

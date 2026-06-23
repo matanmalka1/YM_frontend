@@ -35,9 +35,14 @@ export const Users: React.FC = () => {
           <Button variant="ghost" size="sm" onClick={modals.openAuditLogs}>
             לוג ביקורת
           </Button>
-          <Button variant="ghost" size="sm" onClick={modals.openCreate}>
+          <Button
+            variant="ghost"
+            size="sm"
+            icon={<Plus className="h-4 w-4" />}
+            iconPosition="end"
+            onClick={modals.openCreate}
+          >
             משתמש חדש
-            <Plus className="h-4 w-4" />
           </Button>
         </div>
       }

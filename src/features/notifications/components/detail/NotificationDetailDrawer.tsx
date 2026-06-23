@@ -34,9 +34,15 @@ export const NotificationDetailDrawer = ({
     footer={
       notification && onSend ? (
         <div className="flex justify-end">
-          <Button type="button" variant="primary" size="sm" onClick={onSend}>
+          <Button
+            type="button"
+            variant="primary"
+            size="sm"
+            icon={<Send className="h-4 w-4" />}
+            iconPosition="end"
+            onClick={onSend}
+          >
             שליחת הודעה ללקוח
-            <Send className="h-4 w-4" />
           </Button>
         </div>
       ) : undefined

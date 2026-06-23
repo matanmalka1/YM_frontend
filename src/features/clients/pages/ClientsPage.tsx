@@ -27,9 +27,14 @@ export const Clients: React.FC = () => {
               ייבוא / ייצוא
             </Button>
             {permissions.can.createClients && (
-              <Button variant="ghost" size="sm" onClick={modals.openCreate}>
+              <Button
+                variant="ghost"
+                size="sm"
+                icon={<Plus className="h-3.5 w-3.5" />}
+                iconPosition="end"
+                onClick={modals.openCreate}
+              >
                 לקוח חדש
-                <Plus className="h-3.5 w-3.5" />
               </Button>
             )}
           </div>

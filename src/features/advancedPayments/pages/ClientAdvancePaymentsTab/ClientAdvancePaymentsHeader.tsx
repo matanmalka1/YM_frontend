@@ -37,8 +37,7 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
       <div className="flex flex-wrap items-center gap-3">
         {isAdvisor && (
           <>
-            <Button type="button" onClick={onOpenCreate}>
-              <PlusCircle className="h-4 w-4" />
+            <Button type="button" icon={<PlusCircle className="h-4 w-4" />} onClick={onOpenCreate}>
               הוסף מקדמה
             </Button>
             <Divider orientation="vertical" className="h-8 hidden sm:block" />
@@ -57,6 +56,7 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
                 type="button"
                 variant="ghost"
                 size="sm"
+                icon={<Calendar className="h-3.5 w-3.5" />}
                 onClick={() => setConfirmGenerate(true)}
                 disabled={generationFrequency == null}
                 isLoading={isGenerating}
@@ -64,7 +64,6 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
                 tooltip={generationFrequency == null ? 'לא ניתן ליצור לוח בלי תדירות מקדמות בפרופיל הלקוח' : undefined}
                 className="rounded-lg text-gray-700 hover:bg-white hover:shadow-sm"
               >
-                <Calendar className="h-3.5 w-3.5" />
                 צור לוח שנתי
               </Button>
             </div>

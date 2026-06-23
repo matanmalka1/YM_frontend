@@ -69,18 +69,23 @@ const NoteComposer = ({ value, onChange, onSave, onCancel, isLoading, initialTag
       />
       <div className="flex items-center justify-between gap-2 border-t border-gray-100 px-3 py-2">
         <div className="flex items-center gap-2">
-          <Button type="button" variant="outline" size="sm" onClick={onCancel} disabled={isLoading}>
-            <X className="h-3.5 w-3.5" />
-          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            icon={<X className="h-3.5 w-3.5" />}
+            onClick={onCancel}
+            disabled={isLoading}
+          />
           <Button
             type="button"
             variant="primary"
             size="sm"
+            icon={<Check className="h-3.5 w-3.5" />}
             onClick={handleSave}
             isLoading={isLoading}
             disabled={!value.trim()}
           >
-            <Check className="h-3.5 w-3.5" />
             שמור
           </Button>
         </div>
@@ -140,23 +145,21 @@ const NoteRow = ({ note, isDeleting, onEdit, onDelete }: NoteRowProps) => {
             type="button"
             variant="ghost"
             size="sm"
+            icon={<Pencil className="h-4 w-4" />}
             onClick={() => onEdit(note)}
             className="h-8 w-8 px-0 text-gray-500"
             title="ערוך"
-          >
-            <Pencil className="h-4 w-4" />
-          </Button>
+          />
           <Button
             type="button"
             variant="ghost"
             size="sm"
+            icon={<Trash2 className="h-4 w-4" />}
             onClick={() => onDelete(note.id)}
             disabled={isDeleting}
             className="h-8 w-8 px-0 text-gray-500 hover:text-negative-600"
             title="מחק"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          />
         </div>
       </div>
     </li>

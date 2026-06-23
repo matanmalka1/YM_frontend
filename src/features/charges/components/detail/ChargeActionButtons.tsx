@@ -41,11 +41,11 @@ export const ChargeActionButtons: React.FC<ChargeActionButtonsProps> = ({
           type="button"
           variant="outline"
           size="sm"
+          icon={<CheckCircle2 className="h-3.5 w-3.5" />}
           disabled={disabled}
           onClick={onMarkPaid}
           className="border-positive-200 bg-positive-50 text-positive-700 hover:bg-positive-100 text-xs px-2.5 py-1"
         >
-          <CheckCircle2 className="h-3.5 w-3.5" />
           סימון שולם
         </Button>
       )}

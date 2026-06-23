@@ -30,8 +30,13 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
       subtitle="התראות והודעות שנשלחו ללקוח"
       actions={
         isAdvisor && clientRecordId != null ? (
-          <Button type="button" variant="outline" size="sm" onClick={() => setSendOpen(true)} className="gap-1.5">
-            <Send className="h-4 w-4" />
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            icon={<Send className="h-4 w-4" />}
+            onClick={() => setSendOpen(true)}
+          >
             שלח הודעה
           </Button>
         ) : null

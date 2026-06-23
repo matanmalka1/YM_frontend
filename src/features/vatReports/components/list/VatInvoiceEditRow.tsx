@@ -160,25 +160,23 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
             type="button"
             variant="ghost"
             size="sm"
+            icon={<Check className="h-3.5 w-3.5" />}
             onClick={handleSubmit(onSubmit)}
             onKeyDown={handleEscapeKeyDown}
             disabled={isSaving}
             className="p-1 text-positive-600 hover:bg-positive-50 hover:text-positive-600"
             aria-label="שמור"
-          >
-            <Check className="h-3.5 w-3.5" />
-          </Button>
+          />
           <Button
             type="button"
             variant="ghost"
             size="sm"
+            icon={<X className="h-3.5 w-3.5" />}
             onClick={onCancel}
             onKeyDown={handleEscapeKeyDown}
             className="p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
             aria-label="ביטול"
-          >
-            <X className="h-3.5 w-3.5" />
-          </Button>
+          />
         </div>
       </td>
     </tr>

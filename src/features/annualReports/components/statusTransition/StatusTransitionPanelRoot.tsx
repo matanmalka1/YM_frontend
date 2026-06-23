@@ -39,10 +39,10 @@ export const StatusTransitionPanel = ({ report, onTransition, isLoading }: Statu
             type="button"
             variant="ghost"
             size="sm"
+            icon={<ShieldCheck className="h-3.5 w-3.5" />}
             onClick={panel.toggleReadiness}
             className="text-xs text-gray-500 hover:text-gray-700 px-1.5"
           >
-            <ShieldCheck className="h-3.5 w-3.5" />
             בדיקת מוכנות להגשה
           </Button>
         }

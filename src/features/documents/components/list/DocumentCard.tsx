@@ -97,23 +97,23 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
         type="button"
         variant="outline"
         size="sm"
+        icon={<Eye className="h-3.5 w-3.5" />}
         onClick={() => onPreview(doc)}
-        className="flex-1 gap-1.5"
+        className="flex-1"
         aria-label="צפייה במסמך"
       >
-        <Eye className="h-3.5 w-3.5" />
         צפייה
       </Button>
       <Button
         type="button"
         variant="outline"
         size="sm"
+        icon={<Download className="h-3.5 w-3.5" />}
         isLoading={downloadingId === doc.id}
         onClick={() => onDownload(doc)}
-        className="flex-1 gap-1.5"
+        className="flex-1"
         aria-label="הורדת מסמך"
       >
-        <Download className="h-3.5 w-3.5" />
         הורדה
       </Button>
     </div>

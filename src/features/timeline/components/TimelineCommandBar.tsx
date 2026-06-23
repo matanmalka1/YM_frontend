@@ -84,14 +84,13 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
               type="button"
               variant="ghost"
               size="sm"
+              icon={<X className="h-3.5 w-3.5" />}
               onClick={() => {
                 setLocalSearch('')
                 onSearchChange('')
               }}
               className="absolute left-3 top-1/2 -translate-y-1/2 p-0.5 text-gray-400 hover:text-gray-600 hover:bg-transparent"
-            >
-              <X className="h-3.5 w-3.5" />
-            </Button>
+            />
           )}
         </div>
 
@@ -109,11 +108,11 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
           <Button
             variant="outline"
             size="sm"
+            icon={<RefreshCw className="h-3.5 w-3.5" />}
             onClick={onRefresh}
             isLoading={refreshing}
-            className="gap-1.5 text-gray-600 hover:text-gray-900"
+            className="text-gray-600 hover:text-gray-900"
           >
-            <RefreshCw className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">ריענון</span>
           </Button>
         </div>
@@ -178,10 +177,10 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
             type="button"
             variant="ghost"
             size="sm"
+            icon={<X className="h-3 w-3" />}
             onClick={onClearFilters}
             className="text-xs text-negative-600 hover:bg-negative-50 hover:text-negative-600 px-2.5 py-1 rounded-full border border-transparent hover:border-negative-200"
           >
-            <X className="h-3 w-3" />
             נקה
           </Button>
         )}

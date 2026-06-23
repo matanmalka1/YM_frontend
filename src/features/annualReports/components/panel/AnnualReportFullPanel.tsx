@@ -66,21 +66,30 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
           actions={
             <>
               {isAdvisor && (
-                <Button variant="ghost" size="sm" onClick={handleExportPdf} isLoading={isExportingPdf}>
-                  <Download className="h-4 w-4" />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  icon={<Download className="h-4 w-4" />}
+                  onClick={handleExportPdf}
+                  isLoading={isExportingPdf}
+                >
                   הורד טיוטה
                 </Button>
               )}
               <Button
                 variant="ghost"
+                icon={<Trash2 size={14} />}
                 onClick={() => setShowDeleteConfirm(true)}
-                className="gap-1.5 border-negative-300 text-negative-600 hover:bg-negative-50"
+                className="border-negative-300 text-negative-600 hover:bg-negative-50"
               >
-                <Trash2 size={14} />
                 מחק דוח
               </Button>
-              <Button variant="ghost" onClick={handleSave} disabled={!isDirty || isUpdating} className="gap-1.5">
-                <Save size={14} />
+              <Button
+                variant="ghost"
+                icon={<Save size={14} />}
+                onClick={handleSave}
+                disabled={!isDirty || isUpdating}
+              >
                 {isUpdating ? 'שומר...' : 'שמור'}
               </Button>
             </>

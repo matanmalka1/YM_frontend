@@ -29,23 +29,35 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
         <Button
           variant="primary"
           size="sm"
+          icon={<PackageCheck className="h-4 w-4" />}
           isLoading={isLoading}
           disabled={actionsDisabled}
           onClick={onMaterialsComplete}
         >
-          <PackageCheck className="h-4 w-4" />
           אישור קבלת חומרים
         </Button>
       )}
       {showReadyForReview && (
-        <Button variant="primary" size="sm" isLoading={isLoading} disabled={actionsDisabled} onClick={onReadyForReview}>
-          <Send className="h-4 w-4" />
+        <Button
+          variant="primary"
+          size="sm"
+          icon={<Send className="h-4 w-4" />}
+          isLoading={isLoading}
+          disabled={actionsDisabled}
+          onClick={onReadyForReview}
+        >
           שלח לבדיקה
         </Button>
       )}
       {showFile && (
-        <Button variant="primary" size="sm" isLoading={isLoading} disabled={actionsDisabled} onClick={onFile}>
-          <Send className="h-4 w-4" />
+        <Button
+          variant="primary"
+          size="sm"
+          icon={<Send className="h-4 w-4" />}
+          isLoading={isLoading}
+          disabled={actionsDisabled}
+          onClick={onFile}
+        >
           הגש מע&quot;מ
         </Button>
       )}
@@ -53,12 +65,12 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
         <Button
           variant="outline"
           size="sm"
+          icon={<RotateCcw className="h-4 w-4" />}
           isLoading={isLoading}
           disabled={actionsDisabled}
           onClick={onSendBack}
           className="border-warning-200 bg-warning-50 text-warning-700 hover:bg-warning-100"
         >
-          <RotateCcw className="h-4 w-4" />
           החזר לתיקון
         </Button>
       )}
