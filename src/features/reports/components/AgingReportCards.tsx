@@ -1,8 +1,8 @@
-import { useNavigate } from "react-router-dom";
 import { StateCard } from "../../../components/ui/feedback/StateCard";
 import { Inbox } from "lucide-react";
 import type { AgingReportItem } from "../api";
 import { formatCount, formatDate } from "../../../utils/utils";
+import { ActionSurfaceLink } from "../../../components/ui/primitives/ActionSurface";
 import { Badge } from "../../../components/ui/primitives/Badge";
 import { formatILS, toReportNumber, type ReportMoneyValue } from "../utils";
 
@@ -26,8 +26,6 @@ const getBucketPercent = (amount: ReportMoneyValue, total: ReportMoneyValue) => 
 };
 
 export const AgingReportCards: React.FC<AgingReportCardsProps> = ({ items }) => {
-  const navigate = useNavigate();
-
   if (items.length === 0) {
     return <StateCard icon={Inbox} message="אין חובות פתוחים" />;
   }
@@ -35,11 +33,10 @@ export const AgingReportCards: React.FC<AgingReportCardsProps> = ({ items }) => 
   return (
     <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
       {items.map((item) => (
-        <button
-          type="button"
+        <ActionSurfaceLink
+          variant="card"
           key={item.client_record_id}
-          onClick={() => navigate(`/clients/${item.client_record_id}`)}
-          className="rounded-xl border border-gray-200 bg-white p-5 text-right shadow-sm animate-fade-in cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+          to={`/clients/${item.client_record_id}`}
         >
           <div className="mb-4 flex items-start justify-between">
             <div>
@@ -91,7 +88,7 @@ export const AgingReportCards: React.FC<AgingReportCardsProps> = ({ items }) => 
               )}
             </div>
           )}
-        </button>
+        </ActionSurfaceLink>
       ))}
     </div>
   );

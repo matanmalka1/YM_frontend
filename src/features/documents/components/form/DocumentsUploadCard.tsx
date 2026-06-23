@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { CloudUpload, X } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { HiddenFileInput } from '../../../../components/ui/inputs/HiddenFileInput'
 import { Select } from '../../../../components/ui/inputs/Select'
 import type { UploadDocumentPayload } from '../../api'
 import type { BusinessResponse } from '@/features/clients'
@@ -216,12 +217,10 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
             </>
           )}
         </div>
-        <input
+        <HiddenFileInput
           ref={fileInputRef}
-          type="file"
           aria-label="העלאת קובץ"
           accept={DOCUMENT_FILE_ACCEPT}
-          className="hidden"
           onChange={(e) => {
             const file = e.target.files?.[0]
             if (file) applyFile(file)

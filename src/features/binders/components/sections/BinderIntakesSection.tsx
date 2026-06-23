@@ -3,8 +3,9 @@ import { Clock } from 'lucide-react'
 import { format, parseISO } from 'date-fns'
 import { he } from 'date-fns/locale'
 import { useNavigate } from 'react-router-dom'
-import { Card } from '@/components/ui/primitives/Card'
 import { Badge } from '@/components/ui/primitives/Badge'
+import { Button } from '@/components/ui/primitives/Button'
+import { Card } from '@/components/ui/primitives/Card'
 import { Timeline, TimelineEntry } from '@/components/ui/feedback/Timeline'
 import { bindersApi, bindersQK } from '../../api'
 import {
@@ -144,9 +145,9 @@ export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({
                         {m.material_type === 'annual_report' && m.annual_report_id != null && (
                           <div className="flex items-center gap-1">
                             <span className="text-gray-400 w-20 shrink-0">דוח שנתי</span>
-                            <button
+                            <Button
                               type="button"
-                              className="text-primary-700 hover:text-primary-800 hover:underline"
+                              variant="linkPrimary"
                               onClick={() => {
                                 onNavigateToAnnualReport?.()
                                 navigate(`/tax/reports/${m.annual_report_id}`)
@@ -155,7 +156,7 @@ export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({
                               {annualReport
                                 ? `${annualReport.tax_year} — ${getStatusLabel(annualReport.status)}`
                                 : `דוח #${m.annual_report_id}`}
-                            </button>
+                            </Button>
                           </div>
                         )}
                         {period && (

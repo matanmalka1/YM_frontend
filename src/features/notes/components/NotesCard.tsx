@@ -2,30 +2,35 @@ import { useState } from 'react'
 import { Pencil, Trash2, X, Check, StickyNote } from 'lucide-react'
 import { Card } from '@/components/ui/primitives/Card'
 import { Button } from '@/components/ui/primitives/Button'
+import { Chip, ChipLabel } from '@/components/ui/primitives/Chip'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Textarea } from '@/components/ui/inputs/Textarea'
 import { InlineState } from '@/components/ui/feedback'
-import { cn, formatDateTime } from '@/utils/utils'
+import { formatDateTime } from '@/utils/utils'
 import type { EntityNote } from '../api'
 import { useEntityNotes, type NotesTarget } from '../hooks/useEntityNotes'
 
 const NOTE_TAGS = [
-  { key: 'תזכורת', label: 'תזכורת', color: 'text-orange-600 bg-orange-50 border-orange-200' },
-  { key: 'פגישה', label: 'פגישה', color: 'text-purple-600 bg-purple-50 border-purple-200' },
-  { key: 'טיפול', label: 'טיפול', color: 'text-rose-600 bg-rose-50 border-rose-200' },
-  { key: 'תיעוד', label: 'תיעוד', color: 'text-gray-600 bg-gray-100 border-gray-200' },
+  { key: 'תזכורת', label: 'תזכורת', tone: 'orange' },
+  { key: 'פגישה', label: 'פגישה', tone: 'purple' },
+  { key: 'טיפול', label: 'טיפול', tone: 'rose' },
+  { key: 'תיעוד', label: 'תיעוד', tone: 'neutral' },
 ] as const
 
 type NoteTagKey = (typeof NOTE_TAGS)[number]['key']
 
-const TAG_COLOR = Object.fromEntries(NOTE_TAGS.map((t) => [t.key, t.color])) as Record<NoteTagKey, string>
+const TAGS_BY_KEY = new Set<NoteTagKey>(NOTE_TAGS.map((t) => t.key))
+const TAG_TONES = Object.fromEntries(NOTE_TAGS.map((tag) => [tag.key, tag.tone])) as Record<
+  NoteTagKey,
+  (typeof NOTE_TAGS)[number]['tone']
+>
 
 const TAG_PREFIX_RE = /^\[([^\]]+)\]\s*/
 
 const parseNote = (raw: string): { tag: NoteTagKey | null; body: string } => {
   const m = raw.match(TAG_PREFIX_RE)
-  if (m && m[1] in TAG_COLOR) return { tag: m[1] as NoteTagKey, body: raw.slice(m[0].length) }
+  if (m && TAGS_BY_KEY.has(m[1] as NoteTagKey)) return { tag: m[1] as NoteTagKey, body: raw.slice(m[0].length) }
   return { tag: null, body: raw }
 }
 
@@ -91,19 +96,15 @@ const NoteComposer = ({ value, onChange, onSave, onCancel, isLoading, initialTag
         </div>
         <div className="flex items-center gap-1">
           {NOTE_TAGS.map((tag) => (
-            <button
+            <Chip
               key={tag.key}
-              type="button"
+              tone={tag.tone}
+              size="xs"
+              selected={selectedTag === tag.key}
               onClick={() => toggleTag(tag.key)}
-              className={cn(
-                'rounded border px-2 py-0.5 text-xs font-medium transition-colors',
-                selectedTag === tag.key
-                  ? tag.color
-                  : 'border-transparent text-gray-400 hover:text-gray-600 hover:bg-gray-50',
-              )}
             >
               {tag.label}
-            </button>
+            </Chip>
           ))}
         </div>
       </div>
@@ -138,7 +139,9 @@ const NoteRow = ({ note, isDeleting, onEdit, onDelete }: NoteRowProps) => {
       </div>
       <div className="flex shrink-0 flex-col items-end gap-2">
         {tag && (
-          <span className={cn('rounded border px-1.5 py-0.5 text-2xs font-semibold', TAG_COLOR[tag])}>{tag}</span>
+          <ChipLabel tone={TAG_TONES[tag]} size="xs">
+            {tag}
+          </ChipLabel>
         )}
         <div className="flex items-center gap-1">
           <Button

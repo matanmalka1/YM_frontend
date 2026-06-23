@@ -4,6 +4,7 @@ import { ExternalLink, FilePlus2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
+import { InlineLink } from '@/components/ui/primitives/InlineLink'
 import { DrawerField, DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import { Input } from '@/components/ui/inputs'
 import { formatDateTime } from '@/utils/utils'
@@ -58,16 +59,15 @@ export const ChargeInvoiceSection: React.FC<ChargeInvoiceSectionProps> = ({ char
             <DrawerField
               label="מסמך"
               value={
-                <a
+                <InlineLink
                   href={invoice.document_url}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1 text-primary-600 hover:underline"
                   onClick={(event) => event.stopPropagation()}
+                  icon={<ExternalLink className="h-3.5 w-3.5" />}
                 >
                   פתח מסמך
-                  <ExternalLink className="h-3.5 w-3.5" />
-                </a>
+                </InlineLink>
               }
             />
           )}

@@ -1,4 +1,3 @@
-import { cn } from '@/utils/utils'
 import { Download, Trash2, Save } from 'lucide-react'
 import { useAnnualReportDetailPage } from '../../hooks/useAnnualReportDetailPage'
 import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
@@ -6,7 +5,8 @@ import { AnnualReportSidebarStatus } from './AnnualReportSidebarStatus'
 import { AnnualReportSectionContent } from './AnnualReportSectionContent'
 import { PageHeader } from '../../../../components/layout/PageHeader'
 import { Button } from '../../../../components/ui/primitives/Button'
-import { PANEL_NAV_ITEMS, PANEL_TAB_VARIANTS } from '../../constants/panelConstants'
+import { SegmentedControl, SegmentedControlItem } from '../../../../components/ui/primitives/SegmentedControl'
+import { PANEL_NAV_ITEMS } from '../../constants/panelConstants'
 import { getClientLabel } from '../../utils/panelHelpers'
 
 interface AnnualReportFullPanelProps {
@@ -97,26 +97,19 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
         />
 
         {/* Navbar tabs */}
-        <div className="mt-6 overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
-          <div className="flex" role="tablist">
-            {PANEL_NAV_ITEMS.map(({ key, icon: Icon, label }) => (
-              <button
-                key={key}
-                type="button"
-                role="tab"
-                aria-selected={activeSection === key}
-                onClick={() => setActiveSection(key)}
-                className={cn(
-                  'flex items-center gap-2 px-5 py-3 text-sm whitespace-nowrap transition-colors first:rounded-r-xl last:rounded-l-xl',
-                  PANEL_TAB_VARIANTS[activeSection === key ? 'active' : 'inactive'],
-                )}
-              >
-                <Icon size={15} />
-                <span>{label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+        <SegmentedControl variant="boxed" className="mt-6" aria-label="ניווט דוח שנתי">
+          {PANEL_NAV_ITEMS.map(({ key, icon: Icon, label }) => (
+            <SegmentedControlItem
+              key={key}
+              variant="boxed"
+              selected={activeSection === key}
+              onClick={() => setActiveSection(key)}
+              icon={<Icon size={15} />}
+            >
+              {label}
+            </SegmentedControlItem>
+          ))}
+        </SegmentedControl>
 
         {/* Status strip */}
         <div className="mt-3 rounded-xl border border-gray-200 bg-gray-50">

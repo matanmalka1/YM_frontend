@@ -1,8 +1,9 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { AlertTriangle, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { cn } from '@/utils/utils'
 import { formatCount } from '@/utils/utils'
+import { Button } from '@/components/ui/primitives/Button'
+import { CarouselDots } from '@/components/ui/primitives/CarouselDots'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { useSeasonSummary } from '../../hooks/useSeasonSummary'
 import type { VatDashboardStats, VatDashboardPeriodStat } from '../../api/contracts'
@@ -233,36 +234,25 @@ export const SeasonInsightsCarousel = ({ vatStats }: SeasonInsightsCarouselProps
           {SLIDE_DEFS[slide].label}
         </span>
         <div className="flex items-center gap-1">
-          <div className="flex items-center gap-1 px-1">
-            {SLIDE_DEFS.map((s, i) => (
-              <button
-                key={s.key}
-                type="button"
-                onClick={() => goTo(i)}
-                aria-label={s.label}
-                className={cn(
-                  'rounded-full transition-all duration-200',
-                  i === slide ? 'h-1.5 w-4 bg-primary-500' : 'h-1.5 w-1.5 bg-slate-200 hover:bg-slate-300',
-                )}
-              />
-            ))}
-          </div>
-          <button
+          <CarouselDots items={SLIDE_DEFS} activeIndex={slide} onSelect={goTo} />
+          <Button
             type="button"
             onClick={prev}
             aria-label="שקף קודם"
-            className="flex h-6 w-6 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-700"
-          >
-            <ChevronRight className="h-3.5 w-3.5" />
-          </button>
-          <button
+            variant="ghost"
+            shape="square"
+            size="sm"
+            icon={<ChevronRight className="h-3.5 w-3.5" />}
+          />
+          <Button
             type="button"
             onClick={next}
             aria-label="שקף הבא"
-            className="flex h-6 w-6 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-700"
-          >
-            <ChevronLeft className="h-3.5 w-3.5" />
-          </button>
+            variant="ghost"
+            shape="square"
+            size="sm"
+            icon={<ChevronLeft className="h-3.5 w-3.5" />}
+          />
         </div>
       </div>
 

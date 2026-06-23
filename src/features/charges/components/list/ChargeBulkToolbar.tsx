@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BulkSelectionActionButton, BulkSelectionToolbar } from '@/components/ui/table/BulkSelectionToolbar'
+import { Textarea } from '@/components/ui/inputs/Textarea'
 import { Button } from '@/components/ui/primitives/Button'
 import type { BulkChargeActionPayload } from '../../api'
 import { CHARGE_CANCEL_REASON_PLACEHOLDER } from '../../constants'
@@ -29,14 +30,17 @@ export const ChargeBulkToolbar: React.FC<ChargeBulkToolbarProps> = ({ selectedCo
       extra={
         showCancelInput ? (
           <div className="flex items-center gap-2">
-            <textarea
-              value={cancelReason}
-              onChange={(e) => setCancelReason(e.target.value)}
-              placeholder={CHARGE_CANCEL_REASON_PLACEHOLDER}
-              aria-label={CHARGE_CANCEL_REASON_PLACEHOLDER}
-              rows={1}
-              className="flex-1 resize-none rounded border border-gray-300 px-2.5 py-1.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
-            />
+            <div className="flex-1">
+              <Textarea
+                size="sm"
+                nonResizable
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                placeholder={CHARGE_CANCEL_REASON_PLACEHOLDER}
+                aria-label={CHARGE_CANCEL_REASON_PLACEHOLDER}
+                rows={1}
+              />
+            </div>
             <BulkSelectionActionButton
               label="אשר ביטול"
               disabled={loading}

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { FileText, Plus } from 'lucide-react'
 import { Modal } from '../../../../components/ui/overlays/Modal'
+import { HiddenFileInput } from '../../../../components/ui/inputs/HiddenFileInput'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { DocumentCard } from './DocumentCard'
 import { DocumentsUploadCard, type DocumentUploadSubmitPayload } from '../form/DocumentsUploadCard'
@@ -193,7 +194,7 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
         />
       </Modal>
 
-      <input ref={fileInputRef} type="file" aria-label="העלאת קובץ" className="hidden" onChange={handleFileChange} />
+      <HiddenFileInput ref={fileInputRef} aria-label="העלאת קובץ" onChange={handleFileChange} />
 
       <DocumentPreviewModal
         open={previewDoc !== null}

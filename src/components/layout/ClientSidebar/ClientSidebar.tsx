@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import { SkeletonBlock } from '../../ui/primitives/SkeletonBlock'
 import { Badge } from '../../ui/primitives/Badge'
 import { Button } from '../../ui/primitives/Button'
+import { DismissBackdrop } from '../../ui/primitives/DismissBackdrop'
+import { SegmentedControl, SegmentedControlItem } from '../../ui/primitives/SegmentedControl'
 import { Input } from '../../ui/inputs/Input'
 import { InlineState } from '../../ui/feedback/InlineState'
 import { AlertCircle, LogOut, Plus, Search, User as UserIcon, Users, X } from 'lucide-react'
@@ -48,16 +50,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
 
   return (
     <>
-      <button
-        type="button"
-        onClick={onMobileClose}
-        className={cn(
-          'fixed inset-x-0 bottom-0 top-16 z-40 bg-black/20 transition-opacity md:hidden',
-          mobileOpen ? 'visible opacity-100' : 'invisible pointer-events-none opacity-0',
-        )}
-        aria-label="סגירת רשימת לקוחות"
-        tabIndex={mobileOpen ? 0 : -1}
-      />
+      <DismissBackdrop open={mobileOpen} onDismiss={onMobileClose} ariaLabel="סגירת רשימת לקוחות" />
       <div
         className={cn(
           'hidden shrink-0 overflow-hidden transition-[width] duration-300 md:block',
@@ -149,24 +142,20 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
               ) : null}
             </div>
 
-            <div className="grid grid-cols-2 gap-1 rounded-xl bg-gray-100 p-1" aria-label="קיבוץ לקוחות">
+            <SegmentedControl variant="switch" role="group" aria-label="קיבוץ לקוחות">
               {GROUP_MODES.map((mode) => (
-                <button
+                <SegmentedControlItem
                   key={mode.value}
-                  type="button"
+                  role="button"
+                  variant="switch"
+                  selected={groupMode === mode.value}
                   onClick={() => setGroupMode(mode.value)}
-                  className={cn(
-                    'focus-ring h-8 rounded-nav text-xs font-medium transition',
-                    groupMode === mode.value
-                      ? 'bg-white text-gray-950 shadow-sm'
-                      : 'text-gray-500 hover:bg-white/70 hover:text-gray-800',
-                  )}
                   aria-pressed={groupMode === mode.value}
                 >
                   {mode.label}
-                </button>
+                </SegmentedControlItem>
               ))}
-            </div>
+            </SegmentedControl>
           </div>
 
           <nav className="min-h-0 flex-1 overflow-y-auto px-3 py-3" aria-label="רשימת לקוחות">

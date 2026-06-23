@@ -1,5 +1,6 @@
 import { CalendarClock, CheckCircle2, Eye, Pencil, Trash2, XCircle } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
+import { Button } from '@/components/ui/primitives/Button'
 import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
 import type { Column } from '@/components/ui/table/DataTable'
 import { cn } from '@/utils/utils'
@@ -34,13 +35,14 @@ export const buildTaskListColumns = ({
     wrap: true,
     render: (task) => (
       <div className="min-w-48 space-y-1">
-        <button
+        <Button
           type="button"
-          className="focus-ring max-w-full truncate rounded text-right font-semibold text-gray-950 hover:text-primary-700"
+          variant="text"
+          truncate
           onClick={() => onView(task.id)}
         >
           {task.title}
-        </button>
+        </Button>
         <div className="flex flex-wrap items-center gap-1.5">
           <Badge variant="neutral" size="2xs" className="font-semibold tabular-nums text-gray-600">
             משימה #{task.id}

@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
 import { FileText, Receipt, CreditCard, TrendingUp, FolderOpen, FileCheck } from 'lucide-react'
 import { Select } from '@/components/ui/inputs/Select'
 import { clientsApi, clientsQK } from '../../api'
@@ -8,6 +7,7 @@ import { CLIENT_ROUTES } from '../../api/endpoints'
 import { vatReportsApi, vatReportsQK } from '@/features/vatReports'
 import { useFirstBusinessId } from '../../hooks/useFirstBusinessId'
 import { formatShekelAmount, formatDate } from '@/utils/utils'
+import { ActionSurfaceButton, ActionSurfaceLink } from '@/components/ui/primitives/ActionSurface'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 interface Props {
@@ -19,31 +19,37 @@ interface TileProps {
   title: string
   primary: string
   secondary: string
-  onClick?: () => void
+  to?: string
+  disabled?: boolean
 }
 
-const Tile: React.FC<TileProps> = ({ icon, title, primary, secondary, onClick }) => (
-  <button
-    type="button"
-    disabled={!onClick}
-    className={`flex min-w-0 items-center gap-2 rounded-md px-3 py-2 text-right transition-colors ${
-      onClick ? 'hover:bg-gray-50' : 'cursor-default'
-    }`}
-    onClick={onClick}
-  >
-    <div className="shrink-0 text-gray-400">{icon}</div>
-    <div className="min-w-0 flex-1">
-      <p className="truncate text-xs font-medium text-gray-500">{title}</p>
-      <p className="truncate text-sm font-semibold leading-tight text-gray-900">{primary}</p>
-      <p className="truncate text-xs text-gray-500">{secondary}</p>
-    </div>
-  </button>
-)
+const Tile: React.FC<TileProps> = ({ icon, title, primary, secondary, to, disabled }) => {
+  const body = (
+    <>
+      <div className="shrink-0 text-gray-400">{icon}</div>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-xs font-medium text-gray-500">{title}</p>
+        <p className="truncate text-sm font-semibold leading-tight text-gray-900">{primary}</p>
+        <p className="truncate text-xs text-gray-500">{secondary}</p>
+      </div>
+    </>
+  )
+
+  // Navigation tiles render as a real link; disabled tiles stay non-interactive.
+  return to && !disabled ? (
+    <ActionSurfaceLink variant="compact" to={to}>
+      {body}
+    </ActionSurfaceLink>
+  ) : (
+    <ActionSurfaceButton variant="compact" disabled>
+      {body}
+    </ActionSurfaceButton>
+  )
+}
 
 const CURRENT_YEAR = new Date().getFullYear()
 
 export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
-  const navigate = useNavigate()
   const [selectedYear, setSelectedYear] = useState<number>(CURRENT_YEAR)
   const { id: firstBusinessId, isLoading: isBusinessLoading } = useFirstBusinessId(clientId)
 
@@ -143,42 +149,44 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
           title='מע"מ (לקוח)'
           primary={vatPrimary}
           secondary={vatStatus}
-          onClick={() => navigate(CLIENT_ROUTES.vat(clientId))}
+          to={CLIENT_ROUTES.vat(clientId)}
         />
         <Tile
           icon={<FileText size={14} />}
           title="דוח שנתי"
           primary={arStatus}
           secondary={arSecondary}
-          onClick={() => navigate(CLIENT_ROUTES.annualReports(clientId))}
+          to={CLIENT_ROUTES.annualReports(clientId)}
         />
         <Tile
           icon={<CreditCard size={14} />}
           title="חיובים פתוחים"
           primary={formatShekelAmount(charges.total_outstanding)}
           secondary={`${charges.unpaid_count} חיובים`}
-          onClick={() => navigate(`/charges?client_record_id=${clientId}`)}
+          to={`/charges?client_record_id=${clientId}`}
         />
         <Tile
           icon={<TrendingUp size={14} />}
           title="מקדמות"
           primary={formatShekelAmount(advance_payments.total_paid)}
           secondary={`${advance_payments.count} תשלומים`}
-          onClick={() => navigate(CLIENT_ROUTES.advancePayments(clientId))}
+          to={CLIENT_ROUTES.advancePayments(clientId)}
         />
         <Tile
           icon={<FolderOpen size={14} />}
           title="קלסרים"
           primary={firstBusinessId == null ? '—' : `${binders.active_count} פעילים`}
           secondary={firstBusinessId == null ? 'אין עסקים רשומים' : `${binders.in_office_count} במשרד`}
-          onClick={firstBusinessId == null ? undefined : () => navigate(`/binders?client_record_id=${clientId}`)}
+          to={`/binders?client_record_id=${clientId}`}
+          disabled={firstBusinessId == null}
         />
         <Tile
           icon={<FileCheck size={14} />}
           title="מסמכים"
           primary={firstBusinessId == null ? '—' : `${documents.present_count}/${documents.total_count}`}
           secondary={firstBusinessId == null ? 'אין עסקים רשומים' : 'מסמכים קיימים'}
-          onClick={firstBusinessId == null ? undefined : () => navigate(CLIENT_ROUTES.documents(clientId))}
+          to={CLIENT_ROUTES.documents(clientId)}
+          disabled={firstBusinessId == null}
         />
       </div>
     </section>

@@ -1,4 +1,5 @@
 import { Badge } from '../primitives/Badge'
+import { Button } from '../primitives/Button'
 
 export interface FilterBadge {
   key: string
@@ -21,13 +22,14 @@ export const ActiveFilterBadges: React.FC<Props> = ({ badges, onReset }) => {
         </Badge>
       ))}
       {onReset && (
-        <button
+        <Button
           type="button"
+          variant="link"
+          size="sm"
           onClick={onReset}
-          className="text-xs text-gray-500 transition-colors underline underline-offset-2 hover:text-gray-700"
         >
           נקה הכל
-        </button>
+        </Button>
       )}
     </div>
   )

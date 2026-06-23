@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AlertCircle, FileSignature, Plus } from 'lucide-react'
+import { ActionSurfaceButton } from '@/components/ui/primitives/ActionSurface'
 import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
 import { InlineState } from '@/components/ui/feedback'
@@ -159,11 +160,10 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
               <div className="px-3 py-6 text-center text-sm font-semibold text-gray-500">אין בקשות חתימה פעילות</div>
             ) : (
               tableItems.map((req) => (
-                <button
+                <ActionSurfaceButton
                   key={req.id}
-                  type="button"
+                  variant="plainRow"
                   onClick={() => setAuditRequestId(req.id)}
-                  className="flex w-full items-center justify-between gap-3 px-3 py-2 text-right transition-colors hover:bg-slate-50"
                 >
                   <div className="min-w-0">
                     <p className="truncate text-xs font-bold text-gray-900">{req.title}</p>
@@ -180,7 +180,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
                     getLabel={getSignatureRequestStatusLabel}
                     variantMap={signatureRequestStatusVariants}
                   />
-                </button>
+                </ActionSurfaceButton>
               ))
             )}
           </div>

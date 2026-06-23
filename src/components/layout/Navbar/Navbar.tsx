@@ -2,8 +2,10 @@ import { useState, type RefObject } from 'react'
 import { PanelRight, Search, Users } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { NotificationBell } from '../NotificationBell'
+import { Input } from '@/components/ui/inputs/Input'
+import { Button } from '@/components/ui/primitives/Button'
 import { useAuthStore } from '@/store/auth.store'
-import { cn, formatHebrewDate } from '@/utils/utils'
+import { formatHebrewDate } from '@/utils/utils'
 import { NAV_GROUPS } from './Navbar.constants'
 import { NavbarPrimaryNav } from './NavbarPrimaryNav'
 import { canShowItem } from './Navbar.utils'
@@ -51,39 +53,37 @@ export const Navbar: React.FC<NavbarProps> = ({
         </span>
       </div>
       <div className="flex shrink-0 items-center gap-1.5 border-r border-gray-100 pr-3">
-        <button
+        <Button
           ref={clientSidebarTriggerRef}
           type="button"
+          variant="outline"
+          shape="square"
+          size="lg"
+          icon={<Users className="h-[18px] w-[18px]" />}
           onClick={onOpenClientSidebar}
-          className="focus-ring inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 md:hidden"
+          className="md:hidden"
           aria-label="רשימת לקוחות"
-        >
-          <Users className="h-[18px] w-[18px]" />
-        </button>
-        <button
+        />
+        <Button
           type="button"
+          variant={sidebarOpen ? 'outline' : 'secondary'}
+          shape="square"
+          size="lg"
+          icon={<PanelRight className="h-[18px] w-[18px]" />}
           onClick={onToggleSidebar}
-          className={cn(
-            'focus-ring hidden h-10 w-10 items-center justify-center rounded-xl border transition md:inline-flex',
-            sidebarOpen
-              ? 'border-gray-200 bg-white text-gray-500 shadow-sm hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900'
-              : 'border-primary-200 bg-primary-50 text-primary-600 shadow-sm hover:border-primary-300 hover:bg-primary-100',
-          )}
+          className="hidden md:inline-flex"
           aria-label={sidebarOpen ? 'סגירת רשימת לקוחות' : 'פתיחת רשימת לקוחות'}
           aria-pressed={sidebarOpen}
-        >
-          <PanelRight className="h-[18px] w-[18px]" />
-        </button>
+        />
         <form onSubmit={handleSearchSubmit} role="search" className="hidden md:block">
-          <div className="relative">
-            <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <input
+          <div className="w-44">
+            <Input
               type="search"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               placeholder="חיפוש..."
               aria-label="חיפוש"
-              className="h-10 w-44 rounded-xl border border-gray-200 bg-gray-50/80 pr-9 pl-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:w-56 focus:border-primary-300 focus:bg-white focus:ring-4 focus:ring-primary-50"
+              startIcon={<Search className="h-4 w-4" />}
             />
           </div>
         </form>

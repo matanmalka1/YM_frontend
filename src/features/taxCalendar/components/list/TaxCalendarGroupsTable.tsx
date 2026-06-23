@@ -4,10 +4,10 @@ import { Inbox } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
-import { PaginationCard } from '@/components/ui/table/PaginationCard'
+import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
+import { type Column } from '@/components/ui/table/DataTable'
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
 import { formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
-import { getTotalPages } from '@/utils/paginationUtils'
 import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
 import { cn, formatDate, formatPlainIdentifier, getErrorMessage, getReportingPeriodLabelWithYear } from '@/utils/utils'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
@@ -112,54 +112,67 @@ const GroupItemsRows = ({
     )
   }
 
+  const columns: Column<TaxCalendarGroupItem>[] = [
+    {
+      key: 'client',
+      header: 'לקוח',
+      align: 'right',
+      render: (item) => (
+        <Link
+          className="block max-w-[240px] truncate font-medium text-primary-700 hover:text-primary-900"
+          to={`/clients/${item.client_record_id}`}
+        >
+          {item.client_name ?? `לקוח #${item.client_record_id}`}
+        </Link>
+      ),
+    },
+    {
+      key: 'office',
+      header: 'מס׳ לקוח',
+      align: 'right',
+      render: (item) => formatPlainIdentifier(item.office_client_number),
+      className: 'font-mono tabular-nums text-gray-600',
+    },
+    {
+      key: 'type',
+      header: 'סוג רשומה',
+      align: 'right',
+      render: (item) => SOURCE_TYPE_LABELS[item.source_type],
+      className: 'text-gray-600',
+    },
+    {
+      key: 'state',
+      header: 'מצב',
+      align: 'right',
+      render: (item) => <Badge variant={getStateVariant(item)}>{getStateLabel(item)}</Badge>,
+    },
+    {
+      key: 'action',
+      header: 'פעולה',
+      align: 'right',
+      render: (item) => (
+        <Link className="font-medium text-primary-700 hover:text-primary-900" to={getItemPath(item)}>
+          פתח
+        </Link>
+      ),
+    },
+  ]
+
   return (
     <div className="bg-gray-50/70 px-2 py-2">
-      <table className="w-full border-collapse text-right text-sm">
-        <thead>
-          <tr className="border-b border-gray-100 text-gray-400">
-            <th className="px-3 py-1.5 text-xs font-medium">לקוח</th>
-            <th className="px-3 py-1.5 text-xs font-medium">מס׳ לקוח</th>
-            <th className="px-3 py-1.5 text-xs font-medium">סוג רשומה</th>
-            <th className="px-3 py-1.5 text-xs font-medium">מצב</th>
-            <th className="px-3 py-1.5 text-xs font-medium">פעולה</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-100/80">
-          {items.map((item) => (
-            <tr key={`${item.source_type}-${item.source_id}`} className="transition-colors hover:bg-white/70">
-              <td className="px-3 py-1.5">
-                <Link
-                  className="block max-w-[240px] truncate font-medium text-primary-700 hover:text-primary-900"
-                  to={`/clients/${item.client_record_id}`}
-                >
-                  {item.client_name ?? `לקוח #${item.client_record_id}`}
-                </Link>
-              </td>
-              <td className="px-3 py-1.5 font-mono tabular-nums text-gray-600">
-                {formatPlainIdentifier(item.office_client_number)}
-              </td>
-              <td className="px-3 py-1.5 text-gray-600">{SOURCE_TYPE_LABELS[item.source_type]}</td>
-              <td className="px-3 py-1.5">
-                <Badge variant={getStateVariant(item)}>{getStateLabel(item)}</Badge>
-              </td>
-              <td className="px-3 py-1.5">
-                <Link className="font-medium text-primary-700 hover:text-primary-900" to={getItemPath(item)}>
-                  פתח
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {data && data.total > ITEM_PAGE_SIZE ? (
-        <PaginationCard
-          page={page}
-          totalPages={getTotalPages(data.total, ITEM_PAGE_SIZE)}
-          total={data.total}
-          label="רשומות"
-          onPageChange={setPage}
-        />
-      ) : null}
+      <PaginatedDataTable
+        data={items}
+        columns={columns}
+        getRowKey={(item) => `${item.source_type}-${item.source_id}`}
+        surface="bare"
+        density="compact"
+        page={page}
+        pageSize={ITEM_PAGE_SIZE}
+        total={data?.total ?? 0}
+        label="רשומות"
+        onPageChange={setPage}
+        showPagination={Boolean(data && data.total > ITEM_PAGE_SIZE)}
+      />
     </div>
   )
 }

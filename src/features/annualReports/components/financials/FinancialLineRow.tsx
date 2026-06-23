@@ -1,5 +1,6 @@
 import { Paperclip, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
+import { RowActionButton } from '../../../../components/ui/table/RowActions'
 import { formatCurrencyILS } from '@/utils/utils'
 import { documentsApi } from '@/features/documents'
 
@@ -68,25 +69,21 @@ export const LineRow: React.FC<LineRowProps> = ({
       <div className="flex items-center gap-2 mr-2">
         <span className="text-gray-700 font-mono">{formatCurrencyILS(amount)}</span>
         {onEdit ? (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
+          <RowActionButton
+            label="עריכת שורה"
             icon={<Pencil className="h-3.5 w-3.5" />}
+            tone="primary"
+            size="sm"
             onClick={onEdit}
-            className="p-0.5 text-primary-400 hover:text-primary-600 hover:bg-transparent"
-            aria-label="עריכת שורה"
           />
         ) : null}
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
+        <RowActionButton
+          label="מחיקת שורה"
           icon={<Trash2 className="h-3.5 w-3.5" />}
+          tone="danger"
+          size="sm"
           onClick={onDelete}
           disabled={isDeleting}
-          className="p-0.5 text-negative-400 hover:text-negative-600 hover:bg-transparent"
-          aria-label="מחק"
         />
       </div>
     </div>

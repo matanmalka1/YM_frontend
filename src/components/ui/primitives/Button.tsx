@@ -2,7 +2,17 @@ import { cn } from '../../../utils/utils'
 import { Tooltip } from './Tooltip'
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link'
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'outline'
+    | 'ghost'
+    | 'danger'
+    | 'link'
+    | 'linkPrimary'
+    | 'linkPositive'
+    | 'linkWarning'
+    | 'text'
   size?: 'sm' | 'md' | 'lg'
   /** `pill` (default) for text buttons; `square` for icon-only chrome (rounded-xl, equal h/w). */
   shape?: 'pill' | 'square'
@@ -14,6 +24,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   loadingLabel?: string
   fullWidth?: boolean
   tooltip?: string
+  ref?: React.Ref<HTMLButtonElement>
+  truncate?: boolean
 }
 
 const variants = {
@@ -23,7 +35,13 @@ const variants = {
   ghost: 'text-gray-600 hover:bg-gray-200 active:bg-gray-200',
   danger: 'bg-negative-600 text-white hover:bg-negative-700 active:bg-negative-800 shadow-sm',
   link: 'text-gray-600 underline underline-offset-2 hover:text-gray-900 active:text-gray-950',
+  linkPrimary: 'text-primary-700 underline underline-offset-2 hover:text-primary-800 active:text-primary-900',
+  linkPositive: 'text-positive-600 underline underline-offset-2 hover:text-positive-800 active:text-positive-900',
+  linkWarning: 'text-warning-600 underline underline-offset-2 hover:text-warning-800 active:text-warning-900',
+  text: 'text-gray-950 hover:text-primary-700 active:text-primary-800',
 }
+
+const textLikeVariants = new Set<ButtonProps['variant']>(['link', 'linkPrimary', 'linkPositive', 'linkWarning', 'text'])
 
 const sizes = {
   sm: 'px-3 py-1.5 text-sm',
@@ -50,22 +68,26 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   fullWidth = false,
   tooltip,
+  ref,
+  truncate = false,
   ...props
 }) => {
-  const isLink = variant === 'link'
+  const isTextLike = textLikeVariants.has(variant)
   const isSquare = shape === 'square'
 
   const btn = (
     <button
+      ref={ref}
       type="button"
       className={cn(
         'font-medium disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2',
         'focus-ring',
         'transition-all duration-200',
-        isLink ? 'rounded-sm' : isSquare ? 'rounded-xl' : 'rounded-full',
+        isTextLike ? 'rounded-sm' : isSquare ? 'rounded-xl' : 'rounded-full',
         variants[variant],
-        !isLink && (isSquare ? squareSizes[size] : sizes[size]),
+        !isTextLike && (isSquare ? squareSizes[size] : sizes[size]),
         fullWidth && 'w-full',
+        truncate && 'max-w-full',
         className,
       )}
       disabled={disabled || isLoading}
@@ -76,7 +98,7 @@ export const Button: React.FC<ButtonProps> = ({
       {isLoading && loadingLabel ? (
         <span>{loadingLabel}</span>
       ) : (
-        <span className={cn('inline-flex items-center gap-2', isLoading && 'opacity-0')}>
+        <span className={cn('inline-flex items-center gap-2', truncate && 'min-w-0 max-w-full truncate', isLoading && 'opacity-0')}>
           {icon && iconPosition === 'start' && icon}
           {children}
           {icon && iconPosition === 'end' && icon}

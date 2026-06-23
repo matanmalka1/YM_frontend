@@ -2,6 +2,7 @@ import { useRef, useState, type KeyboardEvent } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { NavLink, useLocation } from 'react-router-dom'
 
+import { Button } from '@/components/ui/primitives/Button'
 import { useDismissibleLayer } from '@/components/ui/overlays/useDismissibleLayer'
 import { cn } from '@/utils/utils'
 
@@ -81,9 +82,13 @@ export const NavbarMoreMenu: React.FC<NavbarMoreMenuProps> = ({ groups }) => {
 
   return (
     <div className="relative mr-1 shrink-0 rounded-xl bg-gray-50 p-1">
-      <button
+      <Button
         ref={buttonRef}
         type="button"
+        variant={hasActiveItem ? 'secondary' : 'ghost'}
+        size="sm"
+        icon={<ChevronDown className={cn('h-4 w-4 transition-transform', open && 'rotate-180')} />}
+        iconPosition="end"
         onClick={() => setOpen((isOpen) => !isOpen)}
         onKeyDown={(event) => {
           if (event.key === 'ArrowDown') {
@@ -94,18 +99,11 @@ export const NavbarMoreMenu: React.FC<NavbarMoreMenuProps> = ({ groups }) => {
             focusMenuBoundary('last')
           }
         }}
-        className={cn(
-          'focus-ring inline-flex h-9 items-center gap-1 whitespace-nowrap rounded-nav border px-3 text-sm font-medium transition',
-          hasActiveItem
-            ? 'border-gray-200 bg-white font-semibold text-gray-950 shadow-sm'
-            : 'border-transparent text-gray-600 hover:bg-white/80 hover:text-gray-950',
-        )}
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        <span>עוד</span>
-        <ChevronDown className={cn('h-4 w-4 transition-transform', open && 'rotate-180')} />
-      </button>
+        עוד
+      </Button>
       {open ? (
         <div
           ref={menuRef}

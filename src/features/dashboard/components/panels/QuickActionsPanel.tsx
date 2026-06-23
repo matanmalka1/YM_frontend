@@ -1,14 +1,10 @@
-import { Link } from 'react-router-dom'
-import { cn } from '@/utils/utils'
+import { ActionSurfaceButton, ActionSurfaceLink } from '@/components/ui/primitives/ActionSurface'
 import { QUICK_ACTIONS, type QuickActionDef } from '../../constants'
 import type { DashboardCreateModal } from '../../hooks/useDashboardCreateModals'
 
 interface QuickActionsPanelProps {
   onOpenModal: (modal: DashboardCreateModal) => void
 }
-
-const TILE_CLASS =
-  'flex flex-col items-start gap-2.5 rounded-xl border border-transparent bg-slate-50 p-3.5 text-start font-semibold text-slate-800 text-sm transition-all hover:border-primary-200 hover:bg-white hover:shadow-elevation-1'
 
 const QuickActionItem = ({
   action,
@@ -29,21 +25,20 @@ const QuickActionItem = ({
 
   if (action.modal) {
     return (
-      <button
-        type="button"
+      <ActionSurfaceButton
+        variant="tile"
         onClick={() => onOpenModal(action.modal!)}
-        className={cn(TILE_CLASS)}
         title={action.description}
       >
         {inner}
-      </button>
+      </ActionSurfaceButton>
     )
   }
 
   return (
-    <Link to={action.href ?? '/'} className={cn(TILE_CLASS)} title={action.description}>
+    <ActionSurfaceLink variant="tile" to={action.href ?? '/'} title={action.description}>
       {inner}
-    </Link>
+    </ActionSurfaceLink>
   )
 }
 

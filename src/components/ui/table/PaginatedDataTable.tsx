@@ -9,12 +9,14 @@ type BasePaginatedDataTableProps<T> = Pick<
   | 'className'
   | 'columns'
   | 'data'
+  | 'density'
   | 'emptyMessage'
   | 'emptyState'
   | 'getRowKey'
   | 'onRowClick'
   | 'rowClassName'
   | 'stickyHeader'
+  | 'surface'
 >
 
 export interface PaginatedDataTableProps<T> extends BasePaginatedDataTableProps<T> {
@@ -55,6 +57,8 @@ export const PaginatedDataTable = <T,>({
   showPagination,
   stickyHeader,
   summary,
+  surface,
+  density,
   total,
 }: PaginatedDataTableProps<T>) => {
   const shouldShowPagination = showPagination ?? (!isLoading && total > 0 && data.length > 0)
@@ -82,6 +86,8 @@ export const PaginatedDataTable = <T,>({
           rowClassName={rowClassName}
           emptyState={emptyState}
           stickyHeader={stickyHeader}
+          surface={surface}
+          density={density}
         />
       )}
       {shouldShowPagination && (

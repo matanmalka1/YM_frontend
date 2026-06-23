@@ -1,5 +1,6 @@
 import { ChevronLeft } from 'lucide-react'
 import { Alert } from '@/components/ui/overlays/Alert'
+import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
 import { cn } from '@/utils/utils'
 import { semanticStatToneClasses } from '@/utils/semanticColors'
@@ -38,16 +39,14 @@ interface VatTotalRowProps {
   className?: string
 }
 
-// Tone → value text colour is the canonical semantic token; only the softer accent
-// border and the navigate-button hover are VAT-card-specific.
-const VAT_CARD_CLASSES: Record<VatCardTone, { border: string; button: string }> = {
+const VAT_CARD_CLASSES: Record<VatCardTone, { border: string; buttonVariant: 'linkPositive' | 'linkWarning' }> = {
   positive: {
     border: 'border-r-positive-400',
-    button: 'text-positive-600 hover:text-positive-800',
+    buttonVariant: 'linkPositive',
   },
   warning: {
     border: 'border-r-warning-400',
-    button: 'text-warning-600 hover:text-warning-800',
+    buttonVariant: 'linkWarning',
   },
 }
 
@@ -76,18 +75,17 @@ const VatCard: React.FC<VatCardProps> = ({ title, tone, onNavigate, children }) 
           {title}
         </p>
         {onNavigate && (
-          <button
+          <Button
             type="button"
+            variant={classes.buttonVariant}
+            size="sm"
+            icon={<ChevronLeft className="h-4 w-4" />}
+            iconPosition="end"
             onClick={onNavigate}
-            className={cn(
-              'inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold transition-colors hover:bg-gray-50',
-              classes.button,
-            )}
             aria-label="עבור לפרטים"
           >
             צפה בפירוט
-            <ChevronLeft className="h-4 w-4" />
-          </button>
+          </Button>
         )}
       </div>
       {children}

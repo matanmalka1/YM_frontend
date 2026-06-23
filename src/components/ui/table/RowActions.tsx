@@ -354,11 +354,28 @@ export const RowActionLink: React.FC<RowActionLinkProps> = ({ href, label, icon,
 
 RowActionLink.displayName = 'RowActionLink'
 
+type RowActionTone = 'neutral' | 'primary' | 'info' | 'positive' | 'danger'
+
+const rowActionToneClasses: Record<RowActionTone, string> = {
+  neutral: 'text-gray-400 hover:bg-gray-100 hover:text-gray-700',
+  primary: 'text-primary-400 hover:bg-primary-50 hover:text-primary-600',
+  info: 'text-info-400 hover:bg-info-50 hover:text-info-600',
+  positive: 'text-positive-500 hover:bg-positive-50 hover:text-positive-700',
+  danger: 'text-negative-600 hover:bg-negative-50 hover:text-negative-700',
+}
+
+const rowActionSizeClasses = { sm: 'h-6 w-6', md: 'h-8 w-8' } as const
+
 interface RowActionButtonProps {
   label: string
   icon: React.ReactNode
   onClick: () => void
   disabled?: boolean
+  /** Semantic colour. Defaults to `neutral` (or `danger` if the legacy `danger` flag is set). */
+  tone?: RowActionTone
+  /** `sm` (h-6) for dense / inline-edit rows; `md` (h-8, default) for standard tables. */
+  size?: 'sm' | 'md'
+  /** @deprecated use `tone="danger"`. */
   danger?: boolean
   className?: string
 }
@@ -368,9 +385,12 @@ export const RowActionButton: React.FC<RowActionButtonProps> = ({
   icon,
   onClick,
   disabled = false,
+  tone,
+  size = 'md',
   danger = false,
   className,
 }) => {
+  const resolvedTone = tone ?? (danger ? 'danger' : 'neutral')
   const button = (
     <button
       type="button"
@@ -386,8 +406,9 @@ export const RowActionButton: React.FC<RowActionButtonProps> = ({
         }
       }}
       className={cn(
-        'focus-ring inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 disabled:cursor-not-allowed disabled:opacity-40',
-        danger && 'text-negative-600 hover:bg-negative-50 hover:text-negative-700',
+        'focus-ring inline-flex items-center justify-center rounded-md transition-colors disabled:cursor-not-allowed disabled:opacity-40',
+        rowActionSizeClasses[size],
+        rowActionToneClasses[resolvedTone],
         className,
       )}
     >

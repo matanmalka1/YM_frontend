@@ -4,6 +4,7 @@ import type { ClientRecordResponse } from '../../api'
 import { ADVANCE_PAYMENT_FREQUENCY_LABELS, getClientStatusLabel, getClientVatReportingLabel } from '../../constants'
 import { useClientAuthorityContacts } from '../../hooks/useClientAuthorityContacts'
 import { useAdvisorOptions } from '@/features/users'
+import { InlineLink } from '@/components/ui/primitives/InlineLink'
 import { DefinitionSectionCard, EMPTY_VALUE } from './ClientInfoSectionParts'
 
 const TURNOVER_SOURCE_LABELS: Record<string, string> = {
@@ -24,9 +25,9 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client }) => {
     {
       label: 'טלפון',
       value: client.phone ? (
-        <a href={`tel:${client.phone}`} className="text-primary-600 hover:underline">
+        <InlineLink href={`tel:${client.phone}`}>
           {formatPhoneNumber(client.phone)}
-        </a>
+        </InlineLink>
       ) : (
         EMPTY_VALUE
       ),
@@ -34,9 +35,9 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client }) => {
     {
       label: 'אימייל',
       value: client.email ? (
-        <a href={`mailto:${client.email}`} className="text-primary-600 hover:underline">
+        <InlineLink href={`mailto:${client.email}`}>
           {client.email}
-        </a>
+        </InlineLink>
       ) : (
         EMPTY_VALUE
       ),

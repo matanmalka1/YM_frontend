@@ -70,15 +70,17 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
       </RowActionsMenu>
     </div>
 
-    <button
+    <Button
       type="button"
       onClick={() => onPreview(doc)}
-      className="flex items-center gap-1.5 text-right text-xs font-mono text-primary-700 hover:underline truncate"
+      variant="linkPrimary"
+      size="sm"
+      icon={<FileText className="h-3.5 w-3.5 shrink-0 text-gray-400" />}
+      truncate
       title={doc.original_filename ?? undefined}
     >
-      <FileText className="h-3.5 w-3.5 shrink-0 text-gray-400" />
       <span className="truncate">{doc.original_filename ?? '—'}</span>
-    </button>
+    </Button>
 
     <div className="flex items-center justify-between gap-2 border-t border-gray-100 pt-2">
       {doc.tax_year ? (

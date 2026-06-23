@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { ChevronDown, Inbox } from 'lucide-react'
 import type { NormalizedTimelineEvent } from '../normalize'
 import { TimelineEventItem } from './TimelineEventItem'
+import { ActionSurfaceButton } from '../../../components/ui/primitives/ActionSurface'
 import { StateCard } from '../../../components/ui/feedback'
 import { cn } from '../../../utils/utils'
 import { groupTimelineEventsByDate } from '../lib/timelineGroups'
@@ -37,17 +38,16 @@ interface GroupHeaderProps {
 
 const GroupHeader: React.FC<GroupHeaderProps> = ({ date, count, isFirst, expanded, controlsId, onToggle }) => (
   <div className={cn('flex items-center gap-2 px-1 py-1', !isFirst && 'mt-2')}>
-    <button
-      type="button"
+    <ActionSurfaceButton
+      variant="timelineGroup"
       aria-expanded={expanded}
       aria-controls={controlsId}
       onClick={onToggle}
-      className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-200/70 focus:outline-none focus:ring-2 focus:ring-primary-300"
     >
       <ChevronDown className={cn('h-3 w-3 text-slate-400 transition-transform', !expanded && '-rotate-90')} />
       {date}
       <span className="text-slate-400 font-normal">· {count}</span>
-    </button>
+    </ActionSurfaceButton>
     <div className="flex-1 h-px bg-slate-100" />
   </div>
 )

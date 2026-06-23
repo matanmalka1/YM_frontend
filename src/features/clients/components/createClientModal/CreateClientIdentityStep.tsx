@@ -9,6 +9,7 @@ import {
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
 import { Button } from '../../../../components/ui/primitives/Button'
+import { InlineLink } from '../../../../components/ui/primitives/InlineLink'
 import { formatDate } from '@/utils/utils'
 import { CREATE_CLIENT_ENTITY_OPTIONS, getCreateClientEntityLabels } from '../../constants'
 import type { ActiveClientSummary, DeletedClientSummary } from '../../api/contracts'
@@ -130,9 +131,9 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
           <ul className="space-y-1">
             {activeConflicts.map((c) => (
               <li key={c.id}>
-                <a href={CLIENT_ROUTES.detail(c.id)} className="underline font-medium" target="_blank" rel="noreferrer">
+                <InlineLink href={CLIENT_ROUTES.detail(c.id)} target="_blank" rel="noreferrer">
                   {c.full_name}
-                </a>
+                </InlineLink>
               </li>
             ))}
           </ul>

@@ -2,8 +2,9 @@ import { format, parseISO } from 'date-fns'
 import { he } from 'date-fns/locale'
 import { Filter, RefreshCw, Search, Star, X } from 'lucide-react'
 import { Button } from '../../../components/ui/primitives/Button'
+import { Chip } from '../../../components/ui/primitives/Chip'
 import { Input } from '../../../components/ui/inputs/Input'
-import { cn, formatCount } from '../../../utils/utils'
+import { formatCount } from '../../../utils/utils'
 import { useSearchDebounce } from '../../../hooks/useSearchDebounce'
 import type { EventTypeStat } from '../lib/timelineStats'
 import type { TimelineFilterKey } from '../normalize'
@@ -130,47 +131,26 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
           if (type === 'future' && count === 0) return null
           const isActive = typeFilters.includes(type)
           return (
-            <button
+            <Chip
               key={type}
-              type="button"
+              tone="primary"
+              selected={isActive}
+              count={count}
               onClick={() => onToggleTypeFilter(type)}
-              className={cn(
-                'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium',
-                'transition-all duration-150 border',
-                isActive
-                  ? 'bg-primary-100 text-primary-800 border-primary-300 shadow-sm'
-                  : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-100',
-              )}
             >
               {FILTER_LABELS[type]}
-              {count > 0 && (
-                <span
-                  className={cn(
-                    'rounded-full px-1.5 py-0.5 text-3xs font-semibold leading-none',
-                    isActive ? 'bg-white/50' : 'bg-gray-200 text-gray-600',
-                  )}
-                >
-                  {count}
-                </span>
-              )}
-            </button>
+            </Chip>
           )
         })}
 
-        <button
-          type="button"
+        <Chip
+          tone="warning"
+          selected={importantOnly}
           onClick={() => onImportantOnlyChange(!importantOnly)}
-          className={cn(
-            'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium',
-            'transition-all duration-150 border',
-            importantOnly
-              ? 'bg-warning-100 text-warning-800 border-warning-300 shadow-sm'
-              : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-100',
-          )}
+          icon={<Star className="h-3 w-3" />}
         >
-          <Star className={cn('h-3 w-3', importantOnly ? 'fill-amber-500 text-warning-500' : 'text-gray-400')} />
           חשובים בלבד
-        </button>
+        </Chip>
 
         {hasActiveFilters && (
           <Button

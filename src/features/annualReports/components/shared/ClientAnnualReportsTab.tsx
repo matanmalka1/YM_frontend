@@ -6,8 +6,8 @@ import { STATUS_LABELS } from '../../api'
 import { PageLoading } from '../../../../components/ui/layout/PageLoading'
 import { Alert } from '../../../../components/ui/overlays/Alert'
 import { Button } from '../../../../components/ui/primitives/Button'
+import { SegmentedControl, SegmentedControlItem } from '../../../../components/ui/primitives/SegmentedControl'
 import { cn, formatDate } from '../../../../utils/utils'
-import { semanticSignalBadgeClasses } from '@/utils/semanticColors'
 import { ClientYearComparisonModal } from './ClientYearComparisonModal'
 import { CreateReportModal } from './CreateReportModal'
 import { AnnualReportFullPanel } from '../panel/AnnualReportFullPanel'
@@ -92,24 +92,19 @@ export const ClientAnnualReportsTab: React.FC<ClientAnnualReportsTabProps> = ({ 
       </div>
 
       <div className="flex gap-4">
-        <div className="flex flex-col gap-1 min-w-[80px]">
+        <SegmentedControl variant="vertical" aria-label="שנות מס לדוחות שנתיים">
           {YEAR_LIST.map((year) => (
-            <button
+            <SegmentedControlItem
               key={year}
-              type="button"
+              variant="vertical"
+              selected={selectedYear === year}
               onClick={() => setSelectedYear(year)}
-              className={cn(
-                'rounded-lg px-3 py-2 text-sm font-medium text-right transition-all',
-                selectedYear === year
-                  ? `border ${semanticSignalBadgeClasses.warning}`
-                  : 'text-gray-600 hover:bg-gray-100',
-              )}
+              trailing={yearHasReports(year) ? <span className="mr-1 text-xs text-positive-600">✓</span> : null}
             >
               {year}
-              {yearHasReports(year) && <span className="mr-1 text-xs text-positive-600">✓</span>}
-            </button>
+            </SegmentedControlItem>
           ))}
-        </div>
+        </SegmentedControl>
 
         <div className="flex-1 min-w-0">
           <AnnualReportStatusBanner selectedYear={selectedYear} report={selectedReport ?? null} />

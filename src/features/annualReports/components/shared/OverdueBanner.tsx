@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { AlertTriangle, ChevronDown, ChevronUp } from 'lucide-react'
+import { ActionSurfaceButton } from '../../../../components/ui/primitives/ActionSurface'
 import { Button } from '../../../../components/ui/primitives/Button'
 import type { AnnualReportListItem } from '../../api'
-import { cn, formatDate } from '../../../../utils/utils'
+import { formatDate } from '../../../../utils/utils'
 import { getClientReportName, getDaysOverdue } from '../../utils/sharedHelpers'
 import { OVERDUE_PREVIEW_LIMIT } from '../../constants/sharedConstants'
 
@@ -56,13 +57,9 @@ export const OverdueBanner: React.FC<OverdueBannerProps> = ({ overdue, onSelect 
         {visible.map((report) => {
           const days = getDaysOverdue(report.filing_deadline)
           return (
-            <button
-              type="button"
+            <ActionSurfaceButton
+              variant="row"
               key={report.id}
-              className={cn(
-                'flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-right',
-                'bg-white/60 hover:bg-white/90 transition-colors cursor-pointer',
-              )}
               onClick={() => onSelect(report.id)}
             >
               <span className="text-sm font-medium text-gray-900 truncate">{getClientReportName(report)}</span>
@@ -70,7 +67,7 @@ export const OverdueBanner: React.FC<OverdueBannerProps> = ({ overdue, onSelect 
                 <span className="tabular-nums">{formatDate(report.filing_deadline)}</span>
                 {days !== null && <span className="font-semibold text-negative-600 tabular-nums">{days} ימים</span>}
               </div>
-            </button>
+            </ActionSurfaceButton>
           )
         })}
 

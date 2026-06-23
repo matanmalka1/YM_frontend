@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { Download, Upload, FileSpreadsheet, AlertCircle } from 'lucide-react'
 import { Modal } from '../../../components/ui/overlays/Modal'
+import { HiddenFileInput } from '../../../components/ui/inputs/HiddenFileInput'
 import { Button } from '../../../components/ui/primitives/Button'
 import { Card } from '../../../components/ui/primitives/Card'
 import { useImportExport } from '../hooks/useImportExport'
@@ -71,13 +72,11 @@ const ImportPanel: React.FC<ImportPanelProps> = ({ importing, onFileSelect, onDo
         </div>
 
         <div className="rounded-lg border-2 border-dashed border-gray-300 p-6 text-center transition-colors hover:border-primary-400">
-          <input
+          <HiddenFileInput
             ref={fileInputRef}
-            type="file"
             aria-label="ייבוא קובץ"
             accept=".xlsx,.xls"
             onChange={handleChange}
-            className="hidden"
             disabled={importing}
           />
 

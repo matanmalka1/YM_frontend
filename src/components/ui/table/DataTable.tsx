@@ -53,8 +53,14 @@ export interface DataTableProps<T> {
   }
   /** Classes applied to the totals <tfoot> (rendered only when a column defines `footer`). */
   footerClassName?: string
-  /** Use the plain embedded surface when the table already lives inside another Card. */
-  surface?: 'card' | 'embedded'
+  /**
+   * `card` (default) wraps in a Card; `embedded` is a bordered box for use inside
+   * another Card; `bare` is chrome-less (no border/bg) for compact sub-tables nested
+   * on a tinted surface (e.g. an accordion detail strip).
+   */
+  surface?: 'card' | 'embedded' | 'bare'
+  /** `compact` tightens padding + text for dense / nested tables. */
+  density?: 'default' | 'compact'
 }
 
 export const DataTable = <T,>({
@@ -71,7 +77,12 @@ export const DataTable = <T,>({
   emptyState,
   footerClassName,
   surface = 'card',
+  density = 'default',
 }: DataTableProps<T>) => {
+  const isBare = surface === 'bare'
+  const isCompact = density === 'compact'
+  const headerCellClass = isCompact ? 'px-3 py-1.5 text-xs' : 'px-3 py-2 text-2xs'
+  const bodyCellClass = isCompact ? 'px-3 py-1.5 text-xs' : 'px-3 py-2 text-sm'
   const hasFooter = columns.some((column) => column.footer !== undefined)
   const handleRowKeyDown = (event: KeyboardEvent<HTMLTableRowElement>, item: T) => {
     if (!onRowClick) return
@@ -117,12 +128,13 @@ export const DataTable = <T,>({
     <div className={cn('overflow-x-auto', stickyHeader && cn('overflow-y-auto', heightClass))}>
       <table className="w-full border-collapse">
         <thead className={cn(stickyHeader && 'sticky top-0 z-20')}>
-          <tr className="border-b border-gray-200 bg-gray-50/80 text-right">
+          <tr className={cn('border-b border-gray-200 text-right', !isBare && 'bg-gray-50/80')}>
             {columns.map((column) => (
               <th
                 key={column.key}
                 className={cn(
-                  'px-3 py-2 text-2xs font-semibold uppercase tracking-wider text-gray-500',
+                  headerCellClass,
+                  'font-semibold uppercase tracking-wider text-gray-500',
                   'first:ps-5 last:pe-5',
                   stickyHeader && 'border-b border-gray-200 bg-gray-50/90 backdrop-blur-sm',
                   ALIGN_CLASS[column.headerAlign ?? column.align ?? 'center'],
@@ -134,7 +146,7 @@ export const DataTable = <T,>({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 bg-white">
+        <tbody className={cn('divide-y divide-gray-200', !isBare && 'bg-white')}>
           {data.map((item, index) => (
             <tr
               key={getRowKey(item)}
@@ -154,7 +166,8 @@ export const DataTable = <T,>({
                   key={column.key}
                   dir={column.dir}
                   className={cn(
-                    'px-3 py-2 align-middle text-sm text-gray-700 first:ps-5 last:pe-5',
+                    bodyCellClass,
+                    'align-middle text-gray-700 first:ps-5 last:pe-5',
                     column.wrap ? 'whitespace-normal' : 'whitespace-nowrap',
                     ALIGN_CLASS[column.align ?? 'center'],
                     column.className,
@@ -174,7 +187,8 @@ export const DataTable = <T,>({
                   key={column.key}
                   dir={column.dir}
                   className={cn(
-                    'px-3 py-2 align-middle text-sm first:ps-5 last:pe-5',
+                    bodyCellClass,
+                    'align-middle first:ps-5 last:pe-5',
                     column.wrap ? 'whitespace-normal' : 'whitespace-nowrap',
                     ALIGN_CLASS[column.align ?? 'center'],
                     column.className,
@@ -189,6 +203,10 @@ export const DataTable = <T,>({
       </table>
     </div>
   )
+
+  if (isBare) {
+    return className ? <div className={className}>{table}</div> : table
+  }
 
   if (surface === 'embedded') {
     return <div className={cn('overflow-hidden rounded-lg border border-gray-100', className)}>{table}</div>

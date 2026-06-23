@@ -3,9 +3,8 @@ import { useParams, Navigate } from 'react-router-dom'
 import { LayoutDashboard, ClipboardList, ArrowUpCircle, Clock } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
-import { Badge } from '@/components/ui/primitives/Badge'
+import { SegmentedControl, SegmentedControlItem } from '@/components/ui/primitives/SegmentedControl'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
-import { cn } from '@/utils/utils'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { VatInvoiceTab } from '../components/detail/VatInvoiceTab'
 import { VatSummaryTab } from '../components/detail/VatSummaryTab'
@@ -73,37 +72,20 @@ const VatDetailContent: React.FC<{ workItemId: number }> = ({ workItemId }) => {
         />
       )}
 
-      <div role="tablist" className="flex gap-1 border-b border-gray-200 bg-white/95 px-1 backdrop-blur-sm">
+      <SegmentedControl variant="tabBar" aria-label="לשוניות תיק מע״מ">
         {tabs.map(({ key, label, icon: Icon, badge }) => (
-          <button
+          <SegmentedControlItem
             key={key}
-            type="button"
-            role="tab"
-            aria-selected={activeTab === key}
+            variant="tabBar"
+            selected={activeTab === key}
             onClick={() => setTab(key)}
-            className={cn(
-              'inline-flex items-center gap-2 rounded-t-lg border-b-2 px-5 py-3 text-sm font-medium transition-colors focus:outline-none',
-              activeTab === key
-                ? 'border-primary-600 bg-primary-50 text-primary-800 shadow-sm'
-                : 'border-transparent text-gray-500 hover:text-gray-800 hover:bg-gray-50',
-            )}
+            icon={<Icon className="h-4 w-4 shrink-0" />}
+            badge={badge}
           >
-            <Icon className="h-4 w-4 shrink-0" />
             {label}
-            {badge !== undefined && (
-              <Badge
-                variant="neutral"
-                className={cn(
-                  'min-w-[1.35rem] rounded-full px-1.5 py-0.5 text-center text-xs tabular-nums',
-                  activeTab === key && 'bg-white text-primary-800 ring-1 ring-primary-200',
-                )}
-              >
-                {badge}
-              </Badge>
-            )}
-          </button>
+          </SegmentedControlItem>
         ))}
-      </div>
+      </SegmentedControl>
 
       <div>
         {activeTab === 'summary' && <VatSummaryTab workItem={workItem} invoices={invoices} />}
