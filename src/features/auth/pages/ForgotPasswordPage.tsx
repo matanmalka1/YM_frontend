@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/primitives/Button'
 import { getErrorMessage } from '@/utils/utils'
 import { AuthPageShell } from '@/features/auth'
 import { AUTH_MESSAGES } from '../messages'
+import { AUTH_ERROR_MESSAGES } from '../errorMessages'
 
 export const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -22,11 +23,11 @@ export const ForgotPassword: React.FC = () => {
 
     const trimmed = email.trim()
     if (!trimmed) {
-      setError(AUTH_MESSAGES.forgotPassword.emptyEmail)
+      setError(AUTH_ERROR_MESSAGES.forgotPassword.emptyEmail)
       return
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
-      setError(AUTH_MESSAGES.forgotPassword.invalidEmail)
+      setError(AUTH_ERROR_MESSAGES.forgotPassword.invalidEmail)
       return
     }
 
@@ -37,7 +38,7 @@ export const ForgotPassword: React.FC = () => {
       setMessage(res.message)
       setEmail('')
     } catch (err) {
-      setError(getErrorMessage(err, AUTH_MESSAGES.forgotPassword.submitError))
+      setError(getErrorMessage(err, AUTH_ERROR_MESSAGES.forgotPassword.submitError))
     } finally {
       setIsSubmitting(false)
     }

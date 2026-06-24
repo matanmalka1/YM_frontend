@@ -1,5 +1,5 @@
 /**
- * Centralized Hebrew UI strings for auth screens and auth-local validation.
+ * Centralized Hebrew UI strings for auth screens.
  */
 export const AUTH_MESSAGES = {
   common: {
@@ -31,9 +31,6 @@ export const AUTH_MESSAGES = {
     legal: (year: number) => `© ${year} יוסף מאיר — כל הזכויות שמורות`,
   },
   forgotPassword: {
-    emptyEmail: 'יש להזין כתובת דוא״ל',
-    invalidEmail: 'כתובת דוא״ל אינה תקינה',
-    submitError: 'לא ניתן לשלוח קישור איפוס כרגע. נסה שוב.',
     title: 'שכחתי סיסמה',
     description: 'הזן את כתובת הדוא״ל שלך ונשלח קישור מאובטח לאיפוס הסיסמה אם החשבון קיים.',
     loading: 'שולחים...',
@@ -41,17 +38,8 @@ export const AUTH_MESSAGES = {
   },
   resetPassword: {
     title: 'איפוס סיסמה',
-    invalidLink: 'קישור איפוס הסיסמה חסר או אינו תקין.',
-    confirmRequired: 'יש לאמת את הסיסמה',
-    mismatch: 'הסיסמאות אינן תואמות',
-    submitError: 'לא ניתן לאפס את הסיסמה כרגע. נסה שוב.',
     description: 'בחר סיסמה חדשה. הסיסמה חייבת לכלול אות גדולה, אות קטנה ותו מיוחד.',
     loading: 'מאפסים...',
     submit: 'שמירת סיסמה חדשה',
-  },
-  validation: {
-    emailRequired: 'יש להזין דוא״ל',
-    invalidEmail: 'כתובת דוא״ל לא תקינה',
-    passwordRequired: 'יש להזין סיסמה',
   },
 } as const

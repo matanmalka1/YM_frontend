@@ -10,6 +10,7 @@ import { getErrorMessage } from '@/utils/utils'
 import { passwordSchema } from '@/utils/passwordSchema'
 import { AuthPageShell } from '@/features/auth'
 import { AUTH_MESSAGES } from '../messages'
+import { AUTH_ERROR_MESSAGES } from '../errorMessages'
 
 type FieldErrors = { newPassword?: string; confirmPassword?: string }
 
@@ -29,7 +30,12 @@ export const ResetPassword: React.FC = () => {
     return (
       <AuthPageShell title={AUTH_MESSAGES.resetPassword.title}>
         <div className="space-y-5">
-          <Alert variant="error" size="sm" message={AUTH_MESSAGES.resetPassword.invalidLink} className="rounded-xl" />
+          <Alert
+            variant="error"
+            size="sm"
+            message={AUTH_ERROR_MESSAGES.resetPassword.invalidLink}
+            className="rounded-xl"
+          />
           <Button
             type="button"
             fullWidth
@@ -48,8 +54,8 @@ export const ResetPassword: React.FC = () => {
     const pwResult = passwordSchema.safeParse(newPassword)
     if (!pwResult.success) next.newPassword = pwResult.error.issues[0].message
 
-    if (!confirmPassword) next.confirmPassword = AUTH_MESSAGES.resetPassword.confirmRequired
-    else if (confirmPassword !== newPassword) next.confirmPassword = AUTH_MESSAGES.resetPassword.mismatch
+    if (!confirmPassword) next.confirmPassword = AUTH_ERROR_MESSAGES.resetPassword.confirmRequired
+    else if (confirmPassword !== newPassword) next.confirmPassword = AUTH_ERROR_MESSAGES.resetPassword.mismatch
 
     setFieldErrors(next)
     return Object.keys(next).length === 0
@@ -64,7 +70,7 @@ export const ResetPassword: React.FC = () => {
       const res = await authApi.resetPassword({ token, new_password: newPassword })
       setMessage(res.message)
     } catch (err) {
-      setError(getErrorMessage(err, AUTH_MESSAGES.resetPassword.submitError))
+      setError(getErrorMessage(err, AUTH_ERROR_MESSAGES.resetPassword.submitError))
     } finally {
       setIsSubmitting(false)
     }
