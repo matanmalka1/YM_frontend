@@ -18,6 +18,7 @@ import { useTaskActions } from './useTaskActions'
 import { useTaskFilters } from './useTaskFilters'
 import { useTasks } from './useTasks'
 import { TASKS_MESSAGES } from '../messages'
+import { TASKS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useTasksPage = () => {
   const filters = useTaskFilters()
@@ -91,7 +92,7 @@ export const useTasksPage = () => {
     featuredTask: tasks[0] ?? null,
     isLoading: tasksQuery.isLoading,
     isFetching: tasksQuery.isFetching,
-    listError: tasksQuery.isError ? getErrorMessage(tasksQuery.error, TASKS_MESSAGES.clientTab.loadError) : null,
+    listError: tasksQuery.isError ? getErrorMessage(tasksQuery.error, TASKS_ERROR_MESSAGES.clientTab.loadError) : null,
     retryList: tasksQuery.refetch,
     actionError: actions.actionError,
     isActionBusy: actions.isActionBusy,

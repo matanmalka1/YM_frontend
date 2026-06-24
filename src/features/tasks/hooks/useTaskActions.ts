@@ -7,6 +7,7 @@ import { tasksQK } from '../api/queryKeys'
 import type { TaskCreateRequest, TaskUpdateRequest } from '../api/contracts'
 import type { TaskConfirmAction, TaskConfirmState, TaskModalState } from '../types'
 import { TASKS_MESSAGES } from '../messages'
+import { TASKS_ERROR_MESSAGES } from '../errorMessages'
 
 const getMutationError = (error: unknown, fallback: string): string => getErrorMessage(error, fallback)
 
@@ -26,7 +27,7 @@ export const useTaskActions = () => {
       setModal(null)
       setActionError(null)
     },
-    onError: (error) => setActionError(getMutationError(error, TASKS_MESSAGES.mutations.createError)),
+    onError: (error) => setActionError(getMutationError(error, TASKS_ERROR_MESSAGES.mutations.createError)),
   })
 
   const updateMutation = useMutation({
@@ -38,7 +39,7 @@ export const useTaskActions = () => {
       setModal(null)
       setActionError(null)
     },
-    onError: (error) => setActionError(getMutationError(error, TASKS_MESSAGES.mutations.updateError)),
+    onError: (error) => setActionError(getMutationError(error, TASKS_ERROR_MESSAGES.mutations.updateError)),
   })
 
   const completeMutation = useMutation({
@@ -49,7 +50,7 @@ export const useTaskActions = () => {
       await invalidateTaskLists()
       setActionError(null)
     },
-    onError: (error) => setActionError(getMutationError(error, TASKS_MESSAGES.mutations.completeError)),
+    onError: (error) => setActionError(getMutationError(error, TASKS_ERROR_MESSAGES.mutations.completeError)),
   })
 
   const cancelMutation = useMutation({
@@ -61,7 +62,7 @@ export const useTaskActions = () => {
       setPendingConfirm(null)
       setActionError(null)
     },
-    onError: (error) => setActionError(getMutationError(error, TASKS_MESSAGES.mutations.cancelError)),
+    onError: (error) => setActionError(getMutationError(error, TASKS_ERROR_MESSAGES.mutations.cancelError)),
   })
 
   const deleteMutation = useMutation({
@@ -73,7 +74,7 @@ export const useTaskActions = () => {
       setPendingConfirm(null)
       setActionError(null)
     },
-    onError: (error) => setActionError(getMutationError(error, TASKS_MESSAGES.mutations.deleteError)),
+    onError: (error) => setActionError(getMutationError(error, TASKS_ERROR_MESSAGES.mutations.deleteError)),
   })
 
   const openConfirm = (action: TaskConfirmAction, taskId: number) => setPendingConfirm({ action, taskId })

@@ -25,6 +25,7 @@ import { randomUUID } from '@/utils/random'
 import { getErrorMessage } from '@/utils/utils'
 import type { Task, TaskCreateRequest } from '../../api/contracts'
 import { TASKS_MESSAGES } from '../../messages'
+import { TASKS_ERROR_MESSAGES } from '../../errorMessages'
 
 interface ClientTasksTabProps {
   clientRecordId: number
@@ -96,11 +97,11 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
         message:
           result.failed.length === 0
             ? TASKS_MESSAGES.clientTab.bulkCompleteSuccess(result.succeeded.length)
-            : TASKS_MESSAGES.clientTab.bulkCompletePartial(result.succeeded.length, result.failed.length),
+            : TASKS_ERROR_MESSAGES.clientTab.bulkCompletePartial(result.succeeded.length, result.failed.length),
         hasFailures: result.failed.length > 0,
       })
     } catch (error) {
-      setFeedback({ message: getErrorMessage(error, TASKS_MESSAGES.clientTab.bulkCompleteFailed), hasFailures: true })
+      setFeedback({ message: getErrorMessage(error, TASKS_ERROR_MESSAGES.clientTab.bulkCompleteFailed), hasFailures: true })
     }
   }
   const handleBulkAssign = async (targetAssigneeId: number | null) => {
@@ -116,11 +117,11 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
         message:
           result.failed.length === 0
             ? TASKS_MESSAGES.clientTab.bulkAssignSuccess(result.succeeded.length)
-            : TASKS_MESSAGES.clientTab.bulkAssignPartial(result.succeeded.length, result.failed.length),
+            : TASKS_ERROR_MESSAGES.clientTab.bulkAssignPartial(result.succeeded.length, result.failed.length),
         hasFailures: result.failed.length > 0,
       })
     } catch (error) {
-      setFeedback({ message: getErrorMessage(error, TASKS_MESSAGES.clientTab.bulkAssignFailed), hasFailures: true })
+      setFeedback({ message: getErrorMessage(error, TASKS_ERROR_MESSAGES.clientTab.bulkAssignFailed), hasFailures: true })
     }
   }
 
@@ -169,7 +170,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
 
   const userOptions = (usersQuery.data?.items ?? []).map((user) => ({ value: String(user.id), label: user.full_name }))
   const createError = createTask.isError
-    ? getErrorMessage(createTask.error, TASKS_MESSAGES.clientTab.createError)
+    ? getErrorMessage(createTask.error, TASKS_ERROR_MESSAGES.clientTab.createError)
     : null
 
   return (
@@ -229,7 +230,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
         </BulkSelectionToolbar>
       ) : null}
       {isError ? (
-        <Alert variant="error" message={TASKS_MESSAGES.clientTab.loadError} onRetry={() => void refetch()} />
+        <Alert variant="error" message={TASKS_ERROR_MESSAGES.clientTab.loadError} onRetry={() => void refetch()} />
       ) : (
         <PaginatedDataTable
           columns={columns}
