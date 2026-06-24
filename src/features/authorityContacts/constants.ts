@@ -26,9 +26,6 @@ export const AUTHORITY_CONTACT_TEXT = {
   createSuccess: 'איש קשר נוצר בהצלחה',
   updateSuccess: 'איש קשר עודכן בהצלחה',
   deleteSuccess: 'איש קשר נמחק בהצלחה',
-  loadError: 'שגיאה בטעינת אנשי קשר',
-  saveError: 'שגיאה בשמירת איש קשר',
-  deleteError: 'שגיאה במחיקת איש קשר',
 } as const
 
 export const AUTHORITY_CONTACT_FIELD_LABELS = {

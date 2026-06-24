@@ -7,6 +7,7 @@ import { showErrorToast } from '../../../utils/utils'
 import { authorityContactSchema, authorityContactDefaults, type AuthorityContactFormValues } from '../schemas'
 import { toast } from '../../../utils/toast'
 import { AUTHORITY_CONTACT_TEXT } from '../constants'
+import { AUTHORITY_CONTACTS_ERROR_MESSAGES } from '../errorMessages'
 import { toAuthorityContactFormValues, toAuthorityContactPayload } from '../helpers'
 
 export const useAuthorityContactForm = (
@@ -38,7 +39,7 @@ export const useAuthorityContactForm = (
       queryClient.invalidateQueries({ queryKey: qk })
       onSuccess()
     },
-    onError: (err) => showErrorToast(err, AUTHORITY_CONTACT_TEXT.saveError),
+    onError: (err) => showErrorToast(err, AUTHORITY_CONTACTS_ERROR_MESSAGES.save),
   })
 
   const onSubmit = form.handleSubmit((values) => saveMutation.mutate(values))

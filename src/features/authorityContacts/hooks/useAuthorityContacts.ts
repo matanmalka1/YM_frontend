@@ -5,6 +5,7 @@ import { getErrorMessage } from '../../../utils/utils'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { useMutationWithToast } from '@/hooks/useMutationWithToast'
 import { AUTHORITY_CONTACTS_LIST_PARAMS, AUTHORITY_CONTACT_TEXT } from '../constants'
+import { AUTHORITY_CONTACTS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useAuthorityContacts = (clientId: number) => {
   const [page, setPage] = useState<number>(AUTHORITY_CONTACTS_LIST_PARAMS.page)
@@ -26,7 +27,7 @@ export const useAuthorityContacts = (clientId: number) => {
   const deleteMutation = useMutationWithToast({
     mutationFn: (contactId: number) => authorityContactsApi.deleteAuthorityContact(clientId, contactId),
     successMessage: AUTHORITY_CONTACT_TEXT.deleteSuccess,
-    errorMessage: AUTHORITY_CONTACT_TEXT.deleteError,
+    errorMessage: AUTHORITY_CONTACTS_ERROR_MESSAGES.delete,
     invalidateKeys: [authorityContactsQK.forClient(clientId)],
   })
 
@@ -40,7 +41,7 @@ export const useAuthorityContacts = (clientId: number) => {
     setPage,
     totalPages,
     isLoading: listLoading,
-    error: listError ? getErrorMessage(listError, AUTHORITY_CONTACT_TEXT.loadError) : null,
+    error: listError ? getErrorMessage(listError, AUTHORITY_CONTACTS_ERROR_MESSAGES.load) : null,
     retry: () => {
       void listRefetch()
     },
