@@ -49,8 +49,8 @@ export const STATUS_LABELS: Record<string, string> = {
 const STATUS_BADGE_VARIANT: Record<string, BadgeVariant> = {
   pending: 'neutral',
   received: 'info',
-  approved: 'success',
-  rejected: 'error',
+  approved: 'positive',
+  rejected: 'negative',
 }
 export const getDocumentStatusVariant = makeVariantGetter(STATUS_BADGE_VARIANT)
 

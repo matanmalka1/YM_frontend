@@ -4,7 +4,7 @@ import type { TaskPriority, TaskStatus } from '../api/contracts'
 
 const taskStatusBadgeVariant: Record<TaskStatus, BadgeVariant> = {
   open: 'info',
-  done: 'success',
+  done: 'positive',
   canceled: 'neutral',
 }
 export const getTaskStatusBadgeVariant = makeVariantGetter(taskStatusBadgeVariant)
@@ -19,5 +19,5 @@ export const taskPriorityBadgeVariants: Record<TaskPriority, BadgeVariant> = {
   low: 'neutral',
   normal: 'info',
   high: 'warning',
-  urgent: 'error',
+  urgent: 'negative',
 }

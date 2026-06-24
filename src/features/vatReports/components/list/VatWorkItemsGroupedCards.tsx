@@ -122,9 +122,9 @@ export const VatWorkItemsGroupedCards = ({
         const metrics: PeriodSummaryMetric[] = [
           { label: 'לקוחות', value: group.total_count },
           { label: 'ממתינים', value: group.pending_count, tone: group.pending_count > 0 ? 'warning' : 'muted' },
-          { label: 'הוגשו', value: group.filed_count, tone: group.filed_count > 0 ? 'success' : 'muted' },
+          { label: 'הוגשו', value: group.filed_count, tone: group.filed_count > 0 ? 'positive' : 'muted' },
           { label: 'לא הוגשו', value: group.not_filed_count, tone: group.not_filed_count > 0 ? 'warning' : 'muted' },
-          { label: 'באיחור', value: group.overdue_count, tone: group.overdue_count > 0 ? 'danger' : 'muted' },
+          { label: 'באיחור', value: group.overdue_count, tone: group.overdue_count > 0 ? 'negative' : 'muted' },
         ]
 
         return (

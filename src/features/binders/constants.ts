@@ -82,13 +82,13 @@ export const PERIODIC_BINDER_TYPES = new Set<BinderTypeValue>(['vat', 'salary'])
 
 export const BINDER_LOCATION_STATUS_VARIANTS: Record<BinderLocationStatus, BadgeVariant> = {
   in_office: 'info',
-  ready_for_handover: 'success',
+  ready_for_handover: 'positive',
   handed_over: 'neutral',
 }
 export const getBinderLocationStatusVariant = makeVariantGetter(BINDER_LOCATION_STATUS_VARIANTS)
 
 export const BINDER_CAPACITY_STATUS_VARIANTS: Record<BinderCapacityStatus, BadgeVariant> = {
-  open: 'success',
+  open: 'positive',
   full: 'warning',
 }
 export const getBinderCapacityStatusVariant = makeVariantGetter(BINDER_CAPACITY_STATUS_VARIANTS)

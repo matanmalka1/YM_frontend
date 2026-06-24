@@ -95,10 +95,10 @@ export const CLIENT_STATUS_LABELS: Record<ClientStatus, string> = {
 }
 
 export const CLIENT_STATUS_BADGE_VARIANTS = {
-  active: 'success',
+  active: 'positive',
   frozen: 'warning',
   closed: 'neutral',
-} as const satisfies Record<ClientStatus, 'success' | 'warning' | 'neutral'>
+} as const satisfies Record<ClientStatus, 'positive' | 'warning' | 'neutral'>
 export const getClientStatusBadgeVariant = makeVariantGetter(CLIENT_STATUS_BADGE_VARIANTS)
 
 export const VAT_TYPES = ['monthly', 'bimonthly', 'exempt'] as const satisfies readonly VatType[]

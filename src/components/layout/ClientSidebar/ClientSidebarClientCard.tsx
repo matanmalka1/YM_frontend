@@ -36,12 +36,10 @@ export const ClientSidebarClientCard: React.FC<ClientSidebarClientCardProps> = (
     </div>
 
     <div className="mt-3 flex flex-wrap gap-1.5">
-      <Badge variant="neutral" size="2xs" className="inline-flex items-center gap-1 text-gray-600">
-        <Building2 className="h-3 w-3" />
+      <Badge variant="neutral" size="2xs" icon={<Building2 className="h-3 w-3" />} className="text-gray-600">
         {getEntityLabel(client)}
       </Badge>
-      <Badge variant="neutral" size="2xs" className="inline-flex items-center gap-1 text-gray-600">
-        <ReceiptText className="h-3 w-3" />
+      <Badge variant="neutral" size="2xs" icon={<ReceiptText className="h-3 w-3" />} className="text-gray-600">
         מע״מ {getVatLabel(client)}
       </Badge>
     </div>

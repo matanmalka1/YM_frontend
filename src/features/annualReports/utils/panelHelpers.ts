@@ -37,7 +37,7 @@ export const getAlertBanners = (report: AnnualReportFull, advances?: BalanceAler
 
   if (advances?.balance_type === 'due' && finalBalance > 0) {
     banners.push({
-      variant: 'negative',
+      variant: 'error',
       icon: 'x',
       message: `יתרת מס לתשלום — ${formatCurrencyILS(finalBalance)}. לאחר קיזוז מקדמות ששולמו.`,
       cta: { label: 'שלח הודעה', onClick: () => {} },
@@ -59,7 +59,7 @@ export const getAlertBanners = (report: AnnualReportFull, advances?: BalanceAler
 
     if (daysLeft < 0) {
       banners.push({
-        variant: 'negative',
+        variant: 'error',
         icon: 'x',
         message: `מועד הגשת הדוח לשנת מס ${report.tax_year} חלף לפני ${Math.abs(daysLeft)} ימים.`,
       })
@@ -76,7 +76,7 @@ export const getAlertBanners = (report: AnnualReportFull, advances?: BalanceAler
 
   if (report.status === 'closed') {
     banners.push({
-      variant: 'positive',
+      variant: 'success',
       icon: 'check',
       message: `דוח שנת מס ${report.tax_year} אושר וסגור בהצלחה.`,
     })
@@ -84,7 +84,7 @@ export const getAlertBanners = (report: AnnualReportFull, advances?: BalanceAler
 
   if (advances?.balance_type === 'refund' && finalBalance < 0) {
     banners.push({
-      variant: 'positive',
+      variant: 'success',
       icon: 'check',
       message: `צפוי החזר מס בסך ${formatCurrencyILS(Math.abs(finalBalance))} לשנת מס ${report.tax_year}.`,
     })

@@ -40,8 +40,8 @@ export const getSignatureRequestTypeLabel = makeLabelGetter(SIGNATURE_REQUEST_TY
 
 export const SIGNATURE_REQUEST_STATUS_VARIANTS: Record<SignatureRequestStatus, BadgeVariant> = {
   pending_signature: 'info',
-  signed: 'success',
-  declined: 'error',
+  signed: 'positive',
+  declined: 'negative',
   expired: 'warning',
   canceled: 'neutral',
 }

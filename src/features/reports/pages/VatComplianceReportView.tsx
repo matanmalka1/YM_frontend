@@ -13,9 +13,9 @@ import { formatPercent } from "@/utils/utils";
 
 const complianceBadgeVariant = (rate: string) => {
   const numericRate = Number(rate);
-  if (numericRate >= 80) return "success" as const;
+  if (numericRate >= 80) return "positive" as const;
   if (numericRate >= 50) return "warning" as const;
-  return "error" as const;
+  return "negative" as const;
 };
 
 const getComplianceDisambiguation = (item: VatComplianceItem, reportYear?: number) => {

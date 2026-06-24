@@ -62,9 +62,9 @@ const getStateLabel = (item: TaxCalendarGroupItem): string => {
   return 'פתוח'
 }
 
-const getStateVariant = (item: TaxCalendarGroupItem): 'success' | 'warning' | 'error' => {
-  if (item.done) return 'success'
-  if (item.overdue) return 'error'
+const getStateVariant = (item: TaxCalendarGroupItem): 'positive' | 'warning' | 'negative' => {
+  if (item.done) return 'positive'
+  if (item.overdue) return 'negative'
   return 'warning'
 }
 
@@ -208,8 +208,8 @@ export const TaxCalendarGroupsTable = ({
         const metrics: PeriodSummaryMetric[] = [
           { label: 'סה״כ מקושרים', value: group.linked_count },
           { label: 'פתוחים', value: group.open_count, tone: group.open_count > 0 ? 'warning' : 'muted' },
-          { label: 'באיחור', value: group.overdue_count, tone: group.overdue_count > 0 ? 'danger' : 'muted' },
-          { label: 'הושלמו', value: group.done_count, tone: group.done_count > 0 ? 'success' : 'muted' },
+          { label: 'באיחור', value: group.overdue_count, tone: group.overdue_count > 0 ? 'negative' : 'muted' },
+          { label: 'הושלמו', value: group.done_count, tone: group.done_count > 0 ? 'positive' : 'muted' },
         ]
 
         return (

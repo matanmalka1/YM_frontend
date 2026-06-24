@@ -23,7 +23,7 @@ const statusVariants: Record<AnnualReportStatus, BadgeVariant> = {
   collecting_docs: 'info',
   in_preparation: 'info',
   pending_client: 'warning',
-  submitted: 'success',
+  submitted: 'positive',
   closed: 'neutral',
   canceled: 'neutral',
 }

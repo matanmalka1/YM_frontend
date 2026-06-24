@@ -11,8 +11,8 @@ export const NOTIFICATION_STATUS_LABELS: Record<NotificationStatus, string> = {
 
 export const getNotificationStatusVariant = makeVariantGetter({
   pending: 'info',
-  sent: 'success',
-  failed: 'error',
+  sent: 'positive',
+  failed: 'negative',
   skipped: 'warning',
 } satisfies Record<NotificationStatus, BadgeVariant>)
 

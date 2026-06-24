@@ -15,6 +15,8 @@ interface BadgeProps {
   children: React.ReactNode
   variant?: BadgeVariant
   size?: BadgeSize
+  /** Decorative icon rendered before the badge label. */
+  icon?: React.ReactNode
   /** Dot color class for signal-style badges (e.g. "bg-negative-500") */
   dot?: string
   /** Adds ring-1 for signal-style appearance */
@@ -29,7 +31,6 @@ interface BadgeProps {
   className?: string
   suppressHydrationWarning?: boolean
 }
-
 
 const sizeClasses: Record<BadgeSize, string> = {
   '3xs': 'px-1 py-0 text-3xs',
@@ -75,6 +76,7 @@ export const Badge: React.FC<BadgeProps> = ({
   children,
   variant = 'neutral',
   size = 'sm',
+  icon,
   dot,
   ring,
   removable,
@@ -94,6 +96,11 @@ export const Badge: React.FC<BadgeProps> = ({
           className,
         )}
       >
+        {icon && (
+          <span aria-hidden="true" className="shrink-0">
+            {icon}
+          </span>
+        )}
         {children}
         <button
           type="button"
@@ -121,6 +128,11 @@ export const Badge: React.FC<BadgeProps> = ({
         )}
       >
         <span className={cn('rounded-full shrink-0', dotSizeClasses[size], dot ?? 'bg-gray-400')} />
+        {icon && (
+          <span aria-hidden="true" className="shrink-0">
+            {icon}
+          </span>
+        )}
         {children}
       </span>
     )
@@ -131,6 +143,7 @@ export const Badge: React.FC<BadgeProps> = ({
       className={cn(
         'inline-flex items-center rounded-full font-medium',
         sizeClasses[size],
+        icon && 'gap-1',
         badgeVariantClasses[variant],
         onClick && 'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500',
         className,
@@ -141,6 +154,11 @@ export const Badge: React.FC<BadgeProps> = ({
       tabIndex={onClick ? 0 : undefined}
       suppressHydrationWarning={suppressHydrationWarning}
     >
+      {icon && (
+        <span aria-hidden="true" className="shrink-0">
+          {icon}
+        </span>
+      )}
       {children}
     </span>
   )

@@ -12,7 +12,7 @@ import { getWorkQueueUrgencyVariant, workQueueSourceTypeLabels, workQueueUrgency
 const typeLabel = (sourceType: WorkQueueSourceType): string => workQueueSourceTypeLabels[sourceType] ?? sourceType
 
 const warningVariant = (warning: WorkQueueWarning) => {
-  if (warning.severity === 'danger') return 'error'
+  if (warning.severity === 'danger') return 'negative'
   if (warning.severity === 'warning') return 'warning'
   return 'info'
 }
@@ -76,8 +76,11 @@ export const buildWorkQueueColumns = ({
       className: 'w-28',
       render: (item: WorkQueueItem) =>
         item.source_type === 'task' ? (
-          <Badge variant="neutral" className="inline-flex items-center justify-center gap-1 whitespace-nowrap">
-            <ClipboardCheck className="h-3 w-3 shrink-0" />
+          <Badge
+            variant="neutral"
+            icon={<ClipboardCheck className="h-3 w-3" />}
+            className="justify-center whitespace-nowrap"
+          >
             {item.type_label ?? typeLabel(item.source_type)}
           </Badge>
         ) : (
@@ -151,7 +154,7 @@ export const buildWorkQueueColumns = ({
         if (!priority && !assignedRole) return <span className="text-sm text-gray-400">—</span>
         return (
           <div className="flex flex-wrap justify-center gap-1">
-            {priority && <Badge variant={priority === 'דחוף' ? 'error' : 'neutral'}>{priority}</Badge>}
+            {priority && <Badge variant={priority === 'דחוף' ? 'negative' : 'neutral'}>{priority}</Badge>}
             {assignedRole && <Badge variant="info">{assignedRole}</Badge>}
           </div>
         )

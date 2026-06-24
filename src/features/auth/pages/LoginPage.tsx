@@ -7,6 +7,7 @@ import { Mail, Lock, ArrowLeft, Loader2 } from 'lucide-react'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Input } from '@/components/ui/inputs/Input'
 import { PasswordInput } from '@/components/ui/inputs/PasswordInput'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
 import { loginDefaultValues, loginSchema, type LoginFormValues } from '@/features/auth'
 import { useAuthStore } from '@/store/auth.store'
@@ -183,12 +184,9 @@ export const Login: React.FC = () => {
           {/* Feature pills */}
           <div className="flex flex-wrap gap-2 pt-2">
             {['לקוחות', 'קלסרים', 'חיובים', 'מסמכים', 'דוחות מס'].map((label) => (
-              <span
-                key={label}
-                className="rounded-full border border-slate-700 bg-slate-800/60 px-3 py-1 text-xs font-medium text-slate-400"
-              >
+              <Badge key={label} variant="neutral" size="sm">
                 {label}
-              </span>
+              </Badge>
             ))}
           </div>
         </div>

@@ -99,7 +99,7 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
                     <span className="text-sm font-medium text-gray-800">
                       {auditActionLabel[log.action] ?? log.action}
                     </span>
-                    <Badge variant={log.status === 'success' ? 'success' : 'error'}>
+                    <Badge variant={log.status === 'success' ? 'positive' : 'negative'}>
                       {log.status === 'success' ? 'הצלחה' : 'כישלון'}
                     </Badge>
                   </div>

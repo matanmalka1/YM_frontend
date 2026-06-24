@@ -21,8 +21,8 @@ export const getChargeStatusLabel = makeLabelGetter(CHARGE_STATUS_LABELS)
 export const chargeStatusVariants: Record<ChargeStatusValue, BadgeVariant> = {
   draft: 'neutral',
   issued: 'info',
-  paid: 'success',
-  canceled: 'error',
+  paid: 'positive',
+  canceled: 'negative',
 }
 
 export const CHARGE_TYPE_VALUES = [

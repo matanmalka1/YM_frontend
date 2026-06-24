@@ -10,10 +10,10 @@ export const BUSINESS_STATUS_LABELS: Record<BusinessStatus, string> = {
 export const getBusinessStatusLabel = makeLabelGetter(BUSINESS_STATUS_LABELS)
 
 export const BUSINESS_STATUS_BADGE_VARIANTS = {
-  active: 'success',
+  active: 'positive',
   frozen: 'warning',
   closed: 'neutral',
-} as const satisfies Record<BusinessStatus, 'success' | 'warning' | 'neutral'>
+} as const satisfies Record<BusinessStatus, 'positive' | 'warning' | 'neutral'>
 
 export const BUSINESS_STATUS_OPTIONS = (Object.keys(BUSINESS_STATUS_LABELS) as BusinessStatus[]).map((status) => ({
   value: status,

@@ -61,7 +61,7 @@ export const workQueueUrgencyLabels: Record<WorkQueueUrgency, string> = {
 }
 
 const workQueueUrgencyVariant: Record<WorkQueueUrgency, BadgeVariant> = {
-  overdue: 'error',
+  overdue: 'negative',
   approaching: 'warning',
   important: 'warning',
   upcoming: 'info',

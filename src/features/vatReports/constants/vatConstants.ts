@@ -157,13 +157,13 @@ export const VAT_STATUS_BADGE_VARIANTS: Record<VatWorkItemStatus, BadgeVariant> 
   material_received: 'info',
   data_entry_in_progress: 'info',
   ready_for_review: 'warning',
-  filed: 'success',
+  filed: 'positive',
   canceled: 'neutral',
 }
 export const getVatWorkItemStatusVariant = makeVariantGetter(VAT_STATUS_BADGE_VARIANTS)
 
 const VAT_CLIENT_SUMMARY_STATUS_VARIANTS: Record<VatWorkItemStatus, BadgeVariant> = {
-  filed: 'success',
+  filed: 'positive',
   canceled: 'neutral',
   ready_for_review: 'warning',
   data_entry_in_progress: 'info',

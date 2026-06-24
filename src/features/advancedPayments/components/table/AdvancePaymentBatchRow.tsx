@@ -19,9 +19,9 @@ const getBatchSummary = (batch: AdvancePaymentDueDateGroup): PeriodSummaryMetric
   const summary: PeriodSummaryMetric[] = [
     { label: 'לקוחות', value: batch.client_count },
     { label: 'ממתינים', value: batch.pending_count, tone: batch.pending_count > 0 ? 'warning' : 'muted' },
-    { label: 'שולם', value: batch.paid_count, tone: batch.paid_count > 0 ? 'success' : 'muted' },
+    { label: 'שולם', value: batch.paid_count, tone: batch.paid_count > 0 ? 'positive' : 'muted' },
     { label: 'לא שולם', value: batch.not_paid_count, tone: batch.not_paid_count > 0 ? 'warning' : 'muted' },
-    { label: 'באיחור', value: batch.overdue_count, tone: batch.overdue_count > 0 ? 'danger' : 'muted' },
+    { label: 'באיחור', value: batch.overdue_count, tone: batch.overdue_count > 0 ? 'negative' : 'muted' },
   ]
   if (batch.missing_turnover_count > 0) {
     summary.push({ label: 'חסרי מחזור', value: batch.missing_turnover_count, tone: 'warning' })

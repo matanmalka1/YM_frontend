@@ -37,7 +37,7 @@ export const buildUserColumns = ({
   {
     key: 'is_active',
     header: 'סטטוס',
-    render: (user) => <Badge variant={user.is_active ? 'success' : 'error'}>{user.is_active ? 'פעיל' : 'מושבת'}</Badge>,
+    render: (user) => <Badge variant={user.is_active ? 'positive' : 'negative'}>{user.is_active ? 'פעיל' : 'מושבת'}</Badge>,
   },
   textColumn({
     key: 'last_login_at',

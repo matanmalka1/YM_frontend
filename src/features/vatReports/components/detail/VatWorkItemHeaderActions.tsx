@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { SendNotificationModal } from '@/features/notifications'
 import { useRole } from '@/hooks/useRole'
 import { Button } from '@/components/ui/primitives/Button'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { useActiveVatBinder } from '../../hooks/useActiveVatBinder'
 import { getVatWorkItemStatusLabel, VAT_STATUS_BADGE_VARIANTS } from '../../constants/vatConstants'
@@ -32,11 +33,10 @@ export const VatWorkItemHeaderActions: React.FC<VatWorkItemHeaderActionsProps> =
           </Link>
         )}
         {workItem.assigned_to !== null && (
-          <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-xs font-medium text-gray-600">
-            <User className="h-3 w-3" />
+          <Badge variant="neutral" size="sm" icon={<User className="h-3 w-3" />}>
             <span className="text-gray-400">מטפל:</span>
             {workItem.assigned_to_name ?? `#${workItem.assigned_to}`}
-          </span>
+          </Badge>
         )}
         <StatusBadge
           status={workItem.status}
