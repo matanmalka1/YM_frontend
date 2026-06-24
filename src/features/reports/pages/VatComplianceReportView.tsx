@@ -10,6 +10,7 @@ import { PaginationCard } from "@/components/ui/table/PaginationCard";
 import { getOperationalYearOptions } from "@/constants/periodOptions.constants";
 import { getVatTypeLabel } from "@/features/clients";
 import { formatPercent } from "@/utils/utils";
+import { REPORTS_MESSAGES } from "../messages";
 
 const complianceBadgeVariant = (rate: string) => {
   const numericRate = Number(rate);
@@ -33,7 +34,7 @@ const numericCell = (value: number) => <span className="text-gray-700 tabular-nu
 const buildComplianceColumns = (year?: number): Column<VatComplianceItem>[] => [
   {
     key: "client",
-    header: "לקוח",
+    header: REPORTS_MESSAGES.common.client,
     align: "right",
     render: (item) => {
       const disambiguation = getComplianceDisambiguation(item, year);
@@ -45,14 +46,14 @@ const buildComplianceColumns = (year?: number): Column<VatComplianceItem>[] => [
       );
     },
   },
-  { key: "expected", header: "תקופות צפויות", align: "right", render: (item) => numericCell(item.periods_expected) },
-  { key: "filed", header: "הוגשו", align: "right", render: (item) => numericCell(item.periods_filed) },
-  { key: "open", header: "פתוחות", align: "right", render: (item) => numericCell(item.periods_open) },
-  { key: "onTime", header: "בזמן", align: "right", render: (item) => numericCell(item.on_time_count) },
-  { key: "late", header: "באיחור", align: "right", render: (item) => numericCell(item.late_count) },
+  { key: "expected", header: REPORTS_MESSAGES.vatCompliance.expectedPeriods, align: "right", render: (item) => numericCell(item.periods_expected) },
+  { key: "filed", header: REPORTS_MESSAGES.vatCompliance.filed, align: "right", render: (item) => numericCell(item.periods_filed) },
+  { key: "open", header: REPORTS_MESSAGES.vatCompliance.open, align: "right", render: (item) => numericCell(item.periods_open) },
+  { key: "onTime", header: REPORTS_MESSAGES.vatCompliance.onTime, align: "right", render: (item) => numericCell(item.on_time_count) },
+  { key: "late", header: REPORTS_MESSAGES.vatCompliance.late, align: "right", render: (item) => numericCell(item.late_count) },
   {
     key: "rate",
-    header: "ציות",
+    header: REPORTS_MESSAGES.vatCompliance.compliance,
     align: "right",
     render: (item) => (
       <Badge variant={complianceBadgeVariant(item.compliance_rate)}>
@@ -63,7 +64,7 @@ const buildComplianceColumns = (year?: number): Column<VatComplianceItem>[] => [
 ];
 
 const ComplianceTable = ({ items, year }: { items: VatComplianceItem[]; year?: number }) => {
-  if (items.length === 0) return <p className="text-sm text-gray-500">אין נתונים לשנה זו.</p>;
+  if (items.length === 0) return <p className="text-sm text-gray-500">{REPORTS_MESSAGES.vatCompliance.noYearData}</p>;
   return (
     <DataTable
       data={items}
@@ -78,21 +79,21 @@ const ComplianceTable = ({ items, year }: { items: VatComplianceItem[]; year?: n
 const STALE_PENDING_COLUMNS: Column<StalePendingItem>[] = [
   {
     key: "client",
-    header: "לקוח",
+    header: REPORTS_MESSAGES.common.client,
     align: "right",
     render: (item) => <span className="font-semibold text-gray-900">{item.client_name}</span>,
   },
   {
     key: "period",
-    header: "תקופה",
+    header: REPORTS_MESSAGES.vatCompliance.period,
     align: "right",
     render: (item) => <span className="text-gray-700 tabular-nums">{item.period}</span>,
   },
   {
     key: "days",
-    header: "ימים ממתין",
+    header: REPORTS_MESSAGES.vatCompliance.pendingDays,
     align: "right",
-    render: (item) => <Badge variant="negative">{item.days_pending} ימים</Badge>,
+    render: (item) => <Badge variant="negative">{REPORTS_MESSAGES.common.days(item.days_pending)}</Badge>,
   },
 ];
 
@@ -101,7 +102,7 @@ const StalePendingTable = ({ items }: { items: StalePendingItem[] }) => {
   return (
     <div className="space-y-3">
       <h3 className="text-sm font-semibold text-negative-700">
-        ממתין לחומרים מעל 30 יום ({items.length})
+        {REPORTS_MESSAGES.vatCompliance.pendingOverThirty(items.length)}
       </h3>
       <DataTable
         data={items}
@@ -115,11 +116,11 @@ const StalePendingTable = ({ items }: { items: StalePendingItem[] }) => {
 export const VatComplianceReportView: React.FC = () => {
   const { year, setYear, page, setPage, totalPages, data, isLoading, error } = useVatComplianceReport();
 
-  const description = data ? `${data.total_clients} לקוחות` : "";
+  const description = data ? REPORTS_MESSAGES.vatCompliance.description(data.total_clients) : "";
 
   const header = (
     <PageHeader
-      title='דוח ציות מע"מ'
+      title={REPORTS_MESSAGES.vatCompliance.title}
       description={description}
       actions={
         <Select
@@ -133,7 +134,7 @@ export const VatComplianceReportView: React.FC = () => {
   );
 
   return (
-    <PageStateGuard isLoading={isLoading} error={error?.message ?? null} header={header} loadingMessage="טוען דוח...">
+    <PageStateGuard isLoading={isLoading} error={error?.message ?? null} header={header} loadingMessage={REPORTS_MESSAGES.common.loadingReport}>
       {data && (
         <PageContent>
           <ComplianceTable items={data.items} year={data.year} />

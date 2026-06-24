@@ -2,6 +2,7 @@ import { Clock, DollarSign } from "lucide-react";
 import { StatsCard } from "../../../components/ui/layout/StatsCard";
 import type { AgingReportResponse } from "../api";
 import { formatILS, toReportNumber, type ReportMoneyValue } from "../utils";
+import { REPORTS_MESSAGES } from "../messages";
 
 interface AgingReportHeaderProps {
   data: AgingReportResponse;
@@ -11,29 +12,29 @@ const getBucketShare = (amount: ReportMoneyValue, total: ReportMoneyValue) => {
   const numericAmount = toReportNumber(amount);
   const numericTotal = toReportNumber(total);
   return numericTotal > 0
-    ? `${Math.round((numericAmount / numericTotal) * 100)}% מסך החוב`
-    : "0% מסך החוב";
+    ? REPORTS_MESSAGES.aging.shareOfDebt(Math.round((numericAmount / numericTotal) * 100))
+    : REPORTS_MESSAGES.aging.zeroShareOfDebt;
 };
 
 export const AgingReportHeader: React.FC<AgingReportHeaderProps> = ({ data }) => {
   const buckets = [
     {
-      title: "עד 30 יום",
+      title: REPORTS_MESSAGES.aging.buckets.current,
       amount: data.summary.total_current,
       variant: "blue" as const,
     },
     {
-      title: "31-60 יום",
+      title: REPORTS_MESSAGES.aging.buckets.days30,
       amount: data.summary.total_30_days,
       variant: "neutral" as const,
     },
     {
-      title: "61-90 יום",
+      title: REPORTS_MESSAGES.aging.buckets.days60,
       amount: data.summary.total_60_days,
       variant: "green" as const,
     },
     {
-      title: "מעל 90 יום",
+      title: REPORTS_MESSAGES.aging.buckets.days90Plus,
       amount: data.summary.total_90_plus,
       variant: "red" as const,
     },
@@ -41,11 +42,11 @@ export const AgingReportHeader: React.FC<AgingReportHeaderProps> = ({ data }) =>
   const statCards = [
     {
       key: 'total-outstanding',
-      title: 'סה"כ חובות',
+      title: REPORTS_MESSAGES.aging.totalDebts,
       value: formatILS(data.total_outstanding),
       icon: DollarSign,
       variant: 'blue' as const,
-      description: `${data.summary.total_clients} לקוחות עם יתרות פתוחות`,
+      description: REPORTS_MESSAGES.aging.openBalanceClients(data.summary.total_clients),
     },
     ...buckets.map((bucket) => ({
       key: bucket.title,

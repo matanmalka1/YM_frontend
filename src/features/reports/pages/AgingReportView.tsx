@@ -7,6 +7,7 @@ import { PaginationCard } from "../../../components/ui/table/PaginationCard";
 import { AgingReportHeader } from "../components/AgingReportHeader";
 import { AgingReportCards } from "../components/AgingReportCards";
 import { useAgingReport } from "../hooks/useAgingReport";
+import { REPORTS_MESSAGES } from "../messages";
 
 interface AgingReportViewProps {
   embedded?: boolean
@@ -45,19 +46,19 @@ export const AgingReportView: React.FC<AgingReportViewProps> = ({ embedded = fal
 
   const header = embedded ? undefined : (
     <PageHeader
-      title="דוח חובות לקוחות"
-      description="ניתוח חובות לפי גיל החוב"
+      title={REPORTS_MESSAGES.aging.title}
+      description={REPORTS_MESSAGES.aging.description}
       actions={actions}
     />
   );
 
   return (
-    <PageStateGuard isLoading={isLoading} error={error} header={header} loadingMessage="טוען דוח...">
+    <PageStateGuard isLoading={isLoading} error={error} header={header} loadingMessage={REPORTS_MESSAGES.common.loadingReport}>
       {data && (
         <>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-xs">
-              <DatePicker label="נכון לתאריך" value={asOfDate} onChange={setAsOfDate} />
+              <DatePicker label={REPORTS_MESSAGES.aging.asOfDate} value={asOfDate} onChange={setAsOfDate} />
             </div>
             {embedded && actions}
           </div>
@@ -68,7 +69,7 @@ export const AgingReportView: React.FC<AgingReportViewProps> = ({ embedded = fal
               page={page}
               totalPages={totalPages}
               total={data.total}
-              label="לקוחות"
+              label={REPORTS_MESSAGES.common.clients}
               onPageChange={setPage}
             />
           )}

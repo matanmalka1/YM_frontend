@@ -6,6 +6,7 @@ import { getErrorMessage, showErrorToast } from "../../../utils/utils";
 import { getTotalPages } from "@/utils/paginationUtils";
 import { toast } from "../../../utils/toast";
 import { PAGE_SIZE_MD as PAGE_SIZE } from "@/constants/pagination.constants";
+import { REPORTS_MESSAGES } from "../messages";
 
 export const useAgingReport = () => {
   const [asOfDate, setAsOfDateRaw] = useState<string>(() => formatDate(new Date(), "yyyy-MM-dd"));
@@ -28,9 +29,9 @@ export const useAgingReport = () => {
     setExporting(format);
     try {
       const result = await reportsApi.exportAgingReport(format, asOfDate);
-      toast.success(`דוח יוצא בהצלחה: ${result.filename}`);
+      toast.success(REPORTS_MESSAGES.actions.exportSuccess(result.filename));
     } catch (error) {
-      showErrorToast(error, "שגיאה בייצוא דוח");
+      showErrorToast(error, REPORTS_MESSAGES.actions.exportError);
     } finally {
       setExporting(null);
     }
@@ -47,7 +48,7 @@ export const useAgingReport = () => {
     data,
     isLoading: isPending,
     error: error
-      ? getErrorMessage(error, "שגיאה בטעינת הדוח")
+      ? getErrorMessage(error, REPORTS_MESSAGES.common.loadError)
       : null,
   };
 };

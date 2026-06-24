@@ -6,6 +6,7 @@ import { MONTH_OPTIONS as BASE_MONTH_OPTIONS, formatPercent } from "../../../uti
 import { getOperationalYearOptions } from "@/constants/periodOptions.constants";
 import { Select } from "../../../components/ui/inputs/Select";
 import { ALL_MONTHS_OPTION } from "@/constants/filterOptions.constants";
+import { REPORTS_MESSAGES } from "../messages";
 
 const MONTH_OPTIONS = [ALL_MONTHS_OPTION, ...BASE_MONTH_OPTIONS];
 
@@ -33,19 +34,19 @@ export const AdvancePaymentReportView: React.FC = () => {
   );
 
   const description = data
-    ? `${data.items.length} לקוחות · אחוז גבייה: ${formatPercent(data.collection_rate)}`
+    ? REPORTS_MESSAGES.advances.description(data.items.length, formatPercent(data.collection_rate))
     : "";
 
   const header = (
     <PageHeader
-      title="דוח גבייה — מקדמות"
+      title={REPORTS_MESSAGES.advances.title}
       description={description}
       actions={actions}
     />
   );
 
   return (
-    <PageStateGuard isLoading={isLoading} error={error?.message ?? null} header={header} loadingMessage="טוען דוח...">
+    <PageStateGuard isLoading={isLoading} error={error?.message ?? null} header={header} loadingMessage={REPORTS_MESSAGES.common.loadingReport}>
       {data && <AdvancePaymentReportTable data={data} />}
     </PageStateGuard>
   );

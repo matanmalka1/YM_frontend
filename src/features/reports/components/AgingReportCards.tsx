@@ -6,16 +6,17 @@ import { semanticDotClasses } from "../../../utils/semanticColors";
 import { ActionSurfaceLink } from "../../../components/ui/primitives/ActionSurface";
 import { Badge } from "../../../components/ui/primitives/Badge";
 import { formatILS, toReportNumber, type ReportMoneyValue } from "../utils";
+import { REPORTS_MESSAGES } from "../messages";
 
 interface AgingReportCardsProps {
   items: AgingReportItem[];
 }
 
 const BUCKETS = [
-  { key: "current", label: "עד 30", className: semanticDotClasses.info },
-  { key: "days_30", label: "31-60", className: semanticDotClasses.neutral },
-  { key: "days_60", label: "61-90", className: semanticDotClasses.warning },
-  { key: "days_90_plus", label: "90+", className: semanticDotClasses.negative },
+  { key: "current", label: REPORTS_MESSAGES.aging.buckets.currentShort, className: semanticDotClasses.info },
+  { key: "days_30", label: REPORTS_MESSAGES.aging.buckets.days30Short, className: semanticDotClasses.neutral },
+  { key: "days_60", label: REPORTS_MESSAGES.aging.buckets.days60Short, className: semanticDotClasses.warning },
+  { key: "days_90_plus", label: REPORTS_MESSAGES.aging.buckets.days90PlusShort, className: semanticDotClasses.negative },
 ] as const;
 
 const getBucketPercent = (amount: ReportMoneyValue, total: ReportMoneyValue) => {
@@ -28,7 +29,7 @@ const getBucketPercent = (amount: ReportMoneyValue, total: ReportMoneyValue) => 
 
 export const AgingReportCards: React.FC<AgingReportCardsProps> = ({ items }) => {
   if (items.length === 0) {
-    return <StateCard icon={Inbox} message="אין חובות פתוחים" />;
+    return <StateCard icon={Inbox} message={REPORTS_MESSAGES.aging.noOpenDebts} />;
   }
 
   return (
@@ -42,17 +43,17 @@ export const AgingReportCards: React.FC<AgingReportCardsProps> = ({ items }) => 
           <div className="mb-4 flex items-start justify-between">
             <div>
               <p className="font-semibold text-gray-900">{item.client_name}</p>
-              <p className="text-xs text-gray-500">לקוח #{item.client_record_id}</p>
+              <p className="text-xs text-gray-500">{REPORTS_MESSAGES.aging.clientNumber(item.client_record_id)}</p>
             </div>
             {toReportNumber(item.days_90_plus) > 0 && (
-              <Badge variant="negative">דורש טיפול</Badge>
+              <Badge variant="negative">{REPORTS_MESSAGES.aging.requiresAttention}</Badge>
             )}
           </div>
 
           <p className="text-2xl font-bold text-gray-900 tabular-nums">
             {formatILS(item.total_outstanding)}
           </p>
-          <p className="mt-0.5 text-xs text-gray-500">סה"כ חוב פתוח</p>
+          <p className="mt-0.5 text-xs text-gray-500">{REPORTS_MESSAGES.aging.totalOpenDebt}</p>
 
           <div className="mt-4 overflow-hidden rounded-full bg-gray-100">
             <div className="flex h-2 w-full">
@@ -81,10 +82,10 @@ export const AgingReportCards: React.FC<AgingReportCardsProps> = ({ items }) => 
 
           {item.oldest_invoice_date && (
             <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-gray-100 pt-3 text-sm text-gray-500">
-              <span>חוב מאז {formatDate(item.oldest_invoice_date)}</span>
+              <span>{REPORTS_MESSAGES.aging.debtSince(formatDate(item.oldest_invoice_date))}</span>
               {item.oldest_invoice_days != null && (
                 <span className="font-medium text-gray-700 tabular-nums">
-                  {formatCount(item.oldest_invoice_days)} ימים
+                  {REPORTS_MESSAGES.common.days(formatCount(item.oldest_invoice_days))}
                 </span>
               )}
             </div>
