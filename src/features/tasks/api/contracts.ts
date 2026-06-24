@@ -15,8 +15,6 @@ export const parseTaskStatus = (value: string | null): TaskStatus | null => (isT
 export const isTaskPriority = (value: string | null): value is TaskPriority =>
   value !== null && taskPriorityValues.includes(value as TaskPriority)
 
-export const parseTaskPriority = (value: string | null): TaskPriority | null => (isTaskPriority(value) ? value : null)
-
 export const taskSchema = z.object({
   id: z.number().int(),
   title: z.string(),

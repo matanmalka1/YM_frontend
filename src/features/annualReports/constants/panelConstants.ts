@@ -22,11 +22,6 @@ export const PANEL_NAV_ITEMS: { key: SectionKey; icon: IconComponent; label: str
   { key: 'timeline', icon: CalendarClock, label: 'ציר זמן' },
 ]
 
-export const PANEL_TAB_VARIANTS: Record<'active' | 'inactive', string> = {
-  active: 'border-b-2 border-info-600 text-info-700 font-semibold bg-info-50/40',
-  inactive: 'text-gray-500 hover:text-gray-800 hover:bg-gray-50',
-}
-
 export const CLIENT_TYPE_LABELS = {
   individual: 'יחיד (1301)',
   self_employed: 'עצמאי (1301)',

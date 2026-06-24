@@ -100,20 +100,3 @@ export const DashboardPanel = ({ children, className }: DashboardPanelProps) => 
     {children}
   </section>
 )
-
-interface DashboardBadgeProps {
-  children: ReactNode
-  tone?: Tone
-  strong?: boolean
-  className?: string
-}
-
-export const DashboardBadge = ({ children, tone = 'neutral', strong, className }: DashboardBadgeProps) => (
-  <Badge
-    variant={badgeVariants[tone]}
-    size="2xs"
-    className={cn(strong && toneClasses[tone].border, strong && 'border', className)}
-  >
-    {children}
-  </Badge>
-)

@@ -20,16 +20,6 @@ export interface VatWorkItemsFilters {
 
 export type VatWorkItemAction = 'materialsComplete' | 'readyForReview' | 'sendBack'
 
-export interface VatInvoiceRowProps {
-  inv: VatInvoiceResponse
-  sectionType: 'income' | 'expense'
-  accentBorder: string
-  canEdit: boolean
-  editingAny: boolean
-  onEdit: () => void
-  onDelete: () => void
-}
-
 export interface VatHistoryTabProps {
   workItemId: number
 }

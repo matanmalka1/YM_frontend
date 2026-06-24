@@ -67,10 +67,10 @@ export const DOCUMENT_ACCEPTED_MIME_TYPES: readonly string[] = [
 export const DOCUMENT_FILE_ACCEPT = '.pdf,.doc,.docx,.xlsx,.xls,.jpg,.jpeg,.png'
 export const DOCUMENT_MAX_SIZE_MB = 10
 export const DOCUMENT_MAX_SIZE_BYTES = DOCUMENT_MAX_SIZE_MB * 1024 * 1024
-export const DOCUMENT_TAX_YEAR_RANGE = 7
 
+const TAX_YEAR_RANGE = 7
 const CURRENT_YEAR = new Date().getFullYear()
-const TAX_YEARS = Array.from({ length: DOCUMENT_TAX_YEAR_RANGE }, (_, i) => CURRENT_YEAR - i)
+const TAX_YEARS = Array.from({ length: TAX_YEAR_RANGE }, (_, i) => CURRENT_YEAR - i)
 
 const ALL_DOCUMENT_TYPES_OPTION = { value: '', label: 'כל הסוגים' }
 const ALL_TAX_YEARS_OPTION = { value: '', label: 'כל השנים' }

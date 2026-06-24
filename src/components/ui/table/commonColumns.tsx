@@ -2,7 +2,13 @@ import type { ReactNode } from 'react'
 import type { BadgeVariant } from '../primitives/Badge'
 import type { StatusBadgeVariantMap } from '../primitives/StatusBadge'
 import type { Column } from './DataTable'
-import { renderDateText, renderMonoText, renderMutedText, renderStatusBadge, type TableCellValue } from './columnRenderers'
+import {
+  renderDateText,
+  renderMonoText,
+  renderMutedText,
+  renderStatusBadge,
+  type TableCellValue,
+} from './columnRenderers'
 
 interface ColumnBaseOptions {
   key: string

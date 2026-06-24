@@ -16825,7 +16825,6 @@ export interface operations {
     parameters: {
       query?: {
         page?: number
-        page_size?: number
         search?: string | null
         event_type?: string[] | null
         important_only?: boolean
@@ -21441,7 +21440,6 @@ export interface operations {
         client_record_id?: number | null
         business_id?: number | null
         exclude_source_types?: components['schemas']['WorkQueueSourceType'][] | null
-        include_task_history?: boolean
         search?: string | null
         source_type?: components['schemas']['WorkQueueSourceType'] | null
         urgency?: components['schemas']['WorkQueueUrgency'] | null

@@ -47,7 +47,7 @@ export interface ClientPickerFieldDef<TValues extends Record<string, unknown> = 
   placeholder?: string
 }
 
-export type FilterDefinition<TValues extends Record<string, unknown> = Record<string, unknown>> =
+type FilterDefinition<TValues extends Record<string, unknown> = Record<string, unknown>> =
   | SearchFieldDef<TValues>
   | SelectFieldDef<TValues>
   | ToggleFieldDef<TValues>

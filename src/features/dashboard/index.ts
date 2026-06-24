@@ -1,10 +1,5 @@
 export { AttentionBoard } from './components/panels/AttentionBoard'
 export { DashboardOnboardingEmptyState } from './components/shared/DashboardOnboardingEmptyState'
-export { SeasonSummaryWidget } from './components/panels/SeasonSummaryWidget'
-export { VatStatCard } from './components/kpi/VatStatCard'
-export { OpenChargesCard } from './components/panels/OpenChargesCard'
-export { UpcomingDeadlinesPanel } from './components/panels/UpcomingDeadlinesPanel'
-export { TaxInsightsRow } from './components/panels/TaxInsightsRow'
 
 export { useDashboardPage } from './hooks/useDashboardPage'
 export { DashboardPage } from './pages/DashboardPage'
