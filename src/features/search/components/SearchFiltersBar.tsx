@@ -8,6 +8,7 @@ import { CLIENT_STATUS_OPTIONS, ENTITY_TYPE_OPTIONS } from '@/features/clients'
 import { DOCUMENT_FILENAME_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 import { BINDER_CAPACITY_STATUS_OPTIONS, BINDER_LOCATION_STATUS_OPTIONS } from '../../binders'
 import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFiltersBarProps } from '../types'
+import { SEARCH_MESSAGES } from '../messages'
 
 const withEmptyOption = (label: string, options: { value: string; label: string }[]) => [
   { value: '', label },
@@ -30,7 +31,7 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
   const activeClient =
     selectedClient ??
     (filters.client_record_id
-      ? { id: Number(filters.client_record_id), name: `לקוח #${filters.client_record_id}` }
+      ? { id: Number(filters.client_record_id), name: SEARCH_MESSAGES.filters.clientFallback(filters.client_record_id) }
       : null)
 
   return (
@@ -43,7 +44,7 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
         onClick={onToggle}
         className="text-gray-600 hover:text-gray-900"
       >
-        פילטרים מתקדמים
+        {SEARCH_MESSAGES.filters.advanced}
         {advancedCount > 0 && (
           <Badge variant="primary" size="3xs">
             {advancedCount}
@@ -61,48 +62,48 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
               onQueryChange={handleClientQueryChange}
               onSelect={handleSelectClient}
               onClear={handleClearClient}
-              label="לקוח"
+              label={SEARCH_MESSAGES.filters.client}
             />
             <Input
-              label="ת.ז / ח.פ"
+              label={SEARCH_MESSAGES.filters.idNumber}
               type="text"
               value={filters.id_number}
               onChange={(e) => onFilterChange('id_number', e.target.value)}
-              placeholder="מספר מזהה"
+              placeholder={SEARCH_MESSAGES.filters.idNumberPlaceholder}
             />
             <Input
-              label="מספר קלסר"
+              label={SEARCH_MESSAGES.filters.binderNumber}
               type="text"
               value={filters.binder_number}
               onChange={(e) => onFilterChange('binder_number', e.target.value)}
-              placeholder="לדוגמה: 12345"
+              placeholder={SEARCH_MESSAGES.filters.binderNumberPlaceholder}
             />
             <Select
-              label="סטטוס לקוח"
+              label={SEARCH_MESSAGES.filters.clientStatus}
               value={filters.client_status}
               onChange={(e) => onFilterChange('client_status', e.target.value)}
-              options={withEmptyOption('כל הסטטוסים', CLIENT_STATUS_OPTIONS)}
+              options={withEmptyOption(SEARCH_MESSAGES.filters.allStatuses, CLIENT_STATUS_OPTIONS)}
             />
             <Select
-              label="סוג עסק"
+              label={SEARCH_MESSAGES.filters.entityType}
               value={filters.entity_type}
               onChange={(e) => onFilterChange('entity_type', e.target.value)}
-              options={withEmptyOption('כל הסוגים', ENTITY_TYPE_OPTIONS)}
+              options={withEmptyOption(SEARCH_MESSAGES.filters.allTypes, ENTITY_TYPE_OPTIONS)}
             />
             <Select
-              label="מיקום קלסר"
+              label={SEARCH_MESSAGES.filters.binderLocation}
               value={filters.binder_location_status}
               onChange={(e) => onFilterChange('binder_location_status', e.target.value)}
-              options={withEmptyOption('כל הסטטוסים', BINDER_LOCATION_STATUS_OPTIONS)}
+              options={withEmptyOption(SEARCH_MESSAGES.filters.allStatuses, BINDER_LOCATION_STATUS_OPTIONS)}
             />
             <Select
-              label="קיבולת קלסר"
+              label={SEARCH_MESSAGES.filters.binderCapacity}
               value={filters.binder_capacity_status}
               onChange={(e) => onFilterChange('binder_capacity_status', e.target.value)}
               options={BINDER_CAPACITY_STATUS_OPTIONS}
             />
             <Input
-              label="שם קובץ"
+              label={SEARCH_MESSAGES.filters.filename}
               type="text"
               value={filters.filename}
               onChange={(e) => onFilterChange('filename', e.target.value)}
@@ -112,7 +113,7 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
 
           {advancedCount > 0 && onReset && (
             <div className="flex items-center justify-between border-t border-gray-100 pt-2">
-              <span className="text-xs text-gray-500">{advancedCount} פילטרים פעילים</span>
+              <span className="text-xs text-gray-500">{SEARCH_MESSAGES.filters.activeFilters(advancedCount)}</span>
               <Button
                 type="button"
                 variant="ghost"
@@ -121,7 +122,7 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
                 onClick={onReset}
                 className="text-xs"
               >
-                איפוס הכל
+                {SEARCH_MESSAGES.filters.resetAll}
               </Button>
             </div>
           )}

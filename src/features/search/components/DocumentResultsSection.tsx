@@ -8,13 +8,14 @@ import type { DocumentSearchResult } from '../api'
 import type { SearchFilters } from '../types'
 import { cn, formatClientOfficeId } from '../../../utils/utils'
 import { DOCUMENT_FILENAME_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
+import { SEARCH_MESSAGES } from '../messages'
 
 const DOCUMENT_SEARCH_LIMIT = 50
 
 const DOCUMENT_COLUMNS: Column<DocumentSearchResult>[] = [
   {
     key: 'office',
-    header: "מס' לקוח",
+    header: SEARCH_MESSAGES.columns.officeNumber,
     align: 'right',
     render: (doc) => (
       <span className="font-mono text-sm text-gray-500 tabular-nums">
@@ -24,21 +25,23 @@ const DOCUMENT_COLUMNS: Column<DocumentSearchResult>[] = [
   },
   {
     key: 'client',
-    header: 'לקוח',
+    header: SEARCH_MESSAGES.columns.client,
     align: 'right',
     render: (doc) => <span className="text-gray-700">{doc.client_name}</span>,
   },
   {
     key: 'type',
-    header: 'סוג מסמך',
+    header: SEARCH_MESSAGES.documents.type,
     align: 'right',
     render: (doc) => (
-      <span className="font-medium text-gray-800">{DOC_TYPE_LABELS[doc.document_type] ?? 'סוג מסמך לא ידוע'}</span>
+      <span className="font-medium text-gray-800">
+        {DOC_TYPE_LABELS[doc.document_type] ?? SEARCH_MESSAGES.documents.unknownType}
+      </span>
     ),
   },
   {
     key: 'filename',
-    header: 'שם קובץ',
+    header: SEARCH_MESSAGES.filters.filename,
     align: 'right',
     className: 'max-w-xs truncate',
     render: (doc) => (
@@ -49,7 +52,7 @@ const DOCUMENT_COLUMNS: Column<DocumentSearchResult>[] = [
   },
   {
     key: 'taxYear',
-    header: 'שנת מס',
+    header: SEARCH_MESSAGES.documents.taxYear,
     align: 'right',
     render: (doc) => <span className="text-gray-600">{doc.tax_year ?? <span className="text-gray-300">—</span>}</span>,
   },
@@ -68,7 +71,7 @@ const DOCUMENT_COLUMNS: Column<DocumentSearchResult>[] = [
         )}
       >
         <ExternalLink className="h-3 w-3" />
-        פירוט
+        {SEARCH_MESSAGES.actions.details}
       </Link>
     ),
   },
@@ -91,14 +94,16 @@ export const DocumentResultsSection: React.FC<DocumentResultsSectionProps> = ({
     <div className="space-y-2">
       <div className="flex items-center gap-3 px-1">
         <FileText className="h-4 w-4 text-purple-600" />
-        <span className="text-sm font-semibold text-gray-800">מסמכים</span>
+        <span className="text-sm font-semibold text-gray-800">{SEARCH_MESSAGES.documents.title}</span>
         {documents.length > 0 && (
           <Badge variant="purple" size="xs">
             {documents.length}
           </Badge>
         )}
         {documents.length >= DOCUMENT_SEARCH_LIMIT && (
-          <span className="text-xs text-gray-400">מוצגים {DOCUMENT_SEARCH_LIMIT} ראשונים</span>
+          <span className="text-xs text-gray-400">
+            {SEARCH_MESSAGES.documents.displayedFirst(DOCUMENT_SEARCH_LIMIT)}
+          </span>
         )}
         <div className="mr-auto w-56">
           <Input
@@ -114,7 +119,7 @@ export const DocumentResultsSection: React.FC<DocumentResultsSectionProps> = ({
         data={documents}
         columns={DOCUMENT_COLUMNS}
         getRowKey={(doc) => doc.id}
-        emptyMessage="לא נמצאו מסמכים"
+        emptyMessage={SEARCH_MESSAGES.documents.empty}
       />
     </div>
   )

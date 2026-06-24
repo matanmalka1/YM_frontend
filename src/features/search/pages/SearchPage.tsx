@@ -19,6 +19,8 @@ import { useSearchPage } from '../hooks/useSearchPage'
 import { SEARCH_ADVANCED_FILTER_KEYS } from '../types'
 import type { SearchResult } from '../api'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
+import { SEARCH_MESSAGES } from '../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 export const Search: React.FC = () => {
   const { error, filters, hasAnyFilter, handleFilterChange, handleReset, loading, results, documents, total } =
@@ -39,7 +41,7 @@ export const Search: React.FC = () => {
 
   return (
     <PageContent>
-      <PageHeader title="חיפוש" description="חיפוש גלובלי על פני לקוחות, קלסרים ומסמכים" />
+      <PageHeader title={SEARCH_MESSAGES.page.title} description={SEARCH_MESSAGES.page.description} />
 
       <ToolbarContainer>
         <div className="space-y-3">
@@ -67,8 +69,8 @@ export const Search: React.FC = () => {
       {!loading && !error && !hasAnyFilter && (
         <StateCard
           icon={SearchIcon}
-          title="מה תרצה למצוא?"
-          message="הקלד שם לקוח, מספר קלסר, או השתמש בפילטרים המתקדמים"
+          title={SEARCH_MESSAGES.page.promptTitle}
+          message={SEARCH_MESSAGES.page.promptMessage}
           variant="illustration"
         />
       )}
@@ -76,9 +78,9 @@ export const Search: React.FC = () => {
       {!loading && !error && hasAnyFilter && results.length === 0 && documents.length === 0 && (
         <StateCard
           icon={FileSearch}
-          title="לא נמצאו תוצאות"
-          message="נסה להרחיב את קריטריוני החיפוש או לאפס את הפילטרים"
-          action={{ label: 'איפוס חיפוש', onClick: handleResetAll }}
+          title={SEARCH_MESSAGES.page.emptyTitle}
+          message={SEARCH_MESSAGES.page.emptyMessage}
+          action={{ label: SEARCH_MESSAGES.page.resetSearch, onClick: handleResetAll }}
         />
       )}
 
@@ -86,7 +88,9 @@ export const Search: React.FC = () => {
         <>
           {!loading && (
             <p className="px-1 text-sm text-gray-500">
-              נמצאו <strong className="text-gray-900">{formatCount(total + documents.length)}</strong> תוצאות
+              {SEARCH_MESSAGES.page.foundResultsPrefix}{' '}
+              <strong className="text-gray-900">{formatCount(total + documents.length)}</strong>{' '}
+              {GLOBAL_UI_MESSAGES.common.results}
             </p>
           )}
 
@@ -95,7 +99,7 @@ export const Search: React.FC = () => {
             columns={searchColumns}
             getRowKey={(r) => `${r.result_type}-${r.client_record_id}-${r.binder_id ?? 'none'}`}
             isLoading={loading}
-            emptyMessage="אין תוצאות"
+            emptyMessage={SEARCH_MESSAGES.page.emptyResults}
           />
 
           {!loading && total > 0 && (

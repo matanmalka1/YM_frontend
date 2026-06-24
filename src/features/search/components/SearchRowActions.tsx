@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import type { SearchResult } from '../api'
 import { toQueryParams } from '../../../api/queryParams'
 import { RowActionButton } from '@/components/ui/table'
+import { SEARCH_MESSAGES } from '../messages'
 
 const buildDetailUrl = (result: SearchResult): string | null => {
   if (result.result_type === 'client') return `/clients/${result.client_record_id}`
@@ -23,7 +24,13 @@ export const SearchRowActions: React.FC<SearchRowActionsProps> = ({ result }) =>
 
   if (!url) return <span className="text-sm text-gray-300">—</span>
 
-  return <RowActionButton label="פירוט" icon={<ExternalLink className="h-4 w-4" />} onClick={() => navigate(url)} />
+  return (
+    <RowActionButton
+      label={SEARCH_MESSAGES.actions.details}
+      icon={<ExternalLink className="h-4 w-4" />}
+      onClick={() => navigate(url)}
+    />
+  )
 }
 
 SearchRowActions.displayName = 'SearchRowActions'
