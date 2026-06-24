@@ -1,16 +1,15 @@
 import { formatDate } from '@/utils/utils'
 import type { FilterBadge } from '@/components/ui/table/ActiveFilterBadges'
-import type { FilterFieldDef, SearchFieldHandle } from './types'
+import type { FilterFieldDef } from './types'
 
 type ValuesMap = Record<string, unknown>
-type SearchRefs = Record<string, SearchFieldHandle | null>
 
-export function buildFilterBadges(
+export const buildFilterBadges = (
   fields: FilterFieldDef[],
   values: ValuesMap,
   onChange: (key: string, value: string) => void,
-  searchRefs: SearchRefs,
-): FilterBadge[] {
+  onMultiChange: (updates: Record<string, string>) => void,
+): FilterBadge[] => {
   const badges: FilterBadge[] = []
   for (const field of fields) {
     if (field.type === 'search') {
@@ -19,10 +18,7 @@ export function buildFilterBadges(
         badges.push({
           key: field.key,
           label: `${field.label}: ${String(v)}`,
-          onRemove: () => {
-            searchRefs[field.key]?.reset()
-            onChange(field.key, '')
-          },
+          onRemove: () => onChange(field.key, ''),
         })
     } else if (field.type === 'select') {
       const v = values[field.key]
@@ -73,10 +69,8 @@ export function buildFilterBadges(
         badges.push({
           key: field.idKey,
           label: `לקוח: ${name ?? `#${id}`}`,
-          onRemove: () => {
-            onChange(field.idKey, '')
-            if (nameKey) onChange(nameKey, '')
-          },
+          onRemove: () =>
+            onMultiChange(nameKey ? { [field.idKey]: '', [nameKey]: '' } : { [field.idKey]: '' }),
         })
     }
   }

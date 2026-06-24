@@ -1,5 +1,5 @@
-import React, { useRef, useCallback } from 'react'
-import { Filter } from 'lucide-react'
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { Filter, X } from 'lucide-react'
 import { Select } from '@/components/ui/inputs/Select'
 import { Button } from '@/components/ui/primitives/Button'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
@@ -10,7 +10,9 @@ import { cn } from '@/utils/utils'
 import { SearchFilter } from './SearchFilter'
 import { ClientPickerFilter } from './ClientPickerFilter'
 import { buildFilterBadges } from './filterBadges'
-import type { FilterFieldDef, SearchFieldHandle } from './types'
+import type { FilterFieldDef } from './types'
+
+type FilterSize = 'xs' | 'sm' | 'md'
 
 export interface FilterPanelProps {
   fields: FilterFieldDef[]
@@ -18,18 +20,157 @@ export interface FilterPanelProps {
   onChange: (key: string, value: string) => void
   onMultiChange?: (updates: Record<string, string>) => void
   onReset: () => void
-  /** Tailwind grid class. Default flows all fields into one row at xl (stacked/2-col below). */
-  gridClass?: string
-  /** Extra badge(s) appended to the auto-generated badge list */
   extraBadges?: FilterBadge[]
-  /** Optional header title; when set, renders a heading row above the fields. */
   title?: string
-  /** Optional header subtitle, shown under the title. */
   subtitle?: string
-  /** Optional icon rendered in a chip beside the header title. Defaults to a funnel icon when `title` is set. */
   icon?: React.ReactNode
-  /** Input density passed to Select/DatePicker fields. Default: 'sm' (compact) */
-  size?: 'sm' | 'md'
+}
+
+const FALLBACK_TITLE = 'סינון'
+const STACKED_GRID = 'grid-cols-1 sm:grid-cols-2'
+
+/**
+ * Closes the panel on outside click / Escape while it is open.
+ *
+ * Inside-ness is detected purely via the React tree, not DOM geometry: every interaction
+ * inside the panel — the trigger button, the fields, and the field menus that Select/
+ * DatePicker portal out to `document.body` — bubbles through the wrapper's
+ * `onPointerDownCapture` (returned as `markInside`), which sets `insideRef` before the
+ * document-level `pointerdown` handler runs. A geometric `contains` check is avoided on
+ * purpose: the wrapper is full-width (`flex justify-end`), so its empty band would read as
+ * "inside", and portal'd menus would read as "outside".
+ *
+ * The flag is only set while the panel is `active`, so the click that opens the panel does
+ * not leave a stale `insideRef` that would swallow the first outside click afterwards.
+ *
+ * Returns the capture handler to spread on the wrapper element.
+ */
+const useDismiss = (active: boolean, close: () => void) => {
+  const insideRef = useRef(false)
+  useEffect(() => {
+    if (!active) return
+    insideRef.current = false
+    const onPointer = () => {
+      if (insideRef.current) {
+        insideRef.current = false
+        return
+      }
+      close()
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') close()
+    }
+    document.addEventListener('pointerdown', onPointer)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('pointerdown', onPointer)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [active, close])
+  return useCallback(() => {
+    if (active) insideRef.current = true
+  }, [active])
+}
+
+interface FilterFieldProps {
+  field: FilterFieldDef
+  values: Readonly<Record<string, string | undefined>>
+  size: FilterSize
+  onChange: (key: string, value: string) => void
+  onMultiChange: (updates: Record<string, string>) => void
+}
+
+const FilterField: React.FC<FilterFieldProps> = ({ field, values, size, onChange, onMultiChange }) => {
+  switch (field.type) {
+    case 'search':
+      return <SearchFilter field={field} size={size} externalValue={values[field.key] ?? ''} onChange={onChange} />
+    case 'select': {
+      const v = values[field.key] ?? ''
+      const isActive = v !== '' && v !== (field.defaultValue ?? '')
+      return (
+        <Select
+          label={field.label}
+          size={size}
+          value={v}
+          onChange={(e) => onChange(field.key, e.target.value)}
+          options={field.options}
+          disabled={field.disabled}
+          className={cn(isActive && 'border-primary-400 ring-1 ring-primary-200')}
+        />
+      )
+    }
+    case 'toggle': {
+      const raw = values[field.key] ?? ''
+      const selected = raw ? raw.split(',') : []
+      return (
+        <div className="space-y-1">
+          <span className="block text-sm font-medium text-gray-700">{field.label}</span>
+          <div className="flex flex-wrap gap-1.5">
+            {field.options.map((opt) => {
+              const isOn = selected.includes(opt.value)
+              return (
+                <Button
+                  key={opt.value}
+                  type="button"
+                  size="sm"
+                  variant={isOn ? 'primary' : 'outline'}
+                  onClick={() => {
+                    const next = isOn ? selected.filter((v) => v !== opt.value) : [...selected, opt.value]
+                    onChange(field.key, next.join(','))
+                  }}
+                >
+                  {opt.label}
+                </Button>
+              )
+            })}
+          </div>
+        </div>
+      )
+    }
+    case 'date':
+      return (
+        <DatePicker
+          label={field.label}
+          compact={size !== 'md'}
+          value={values[field.key] ?? ''}
+          onChange={(v) => onChange(field.key, v)}
+        />
+      )
+    case 'date-range':
+      return (
+        <>
+          <DatePicker
+            label={field.fromLabel}
+            compact={size !== 'md'}
+            value={values[field.fromKey] ?? ''}
+            onChange={(v) => onChange(field.fromKey, v)}
+          />
+          <DatePicker
+            label={field.toLabel}
+            compact={size !== 'md'}
+            value={values[field.toKey] ?? ''}
+            onChange={(v) => onChange(field.toKey, v)}
+          />
+        </>
+      )
+    case 'client-picker':
+      return (
+        <ClientPickerFilter
+          field={field}
+          values={values}
+          onMultiChange={onMultiChange}
+          size={size === 'md' ? 'md' : 'sm'}
+        />
+      )
+    default:
+      return null
+  }
+}
+
+const fieldKey = (field: FilterFieldDef): string => {
+  if (field.type === 'date-range') return `${field.fromKey}__${field.toKey}`
+  if (field.type === 'client-picker') return field.nameKey ? `${field.idKey}__${field.nameKey}` : field.idKey
+  return field.key
 }
 
 export const FilterPanel: React.FC<FilterPanelProps> = ({
@@ -38,150 +179,87 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   onChange,
   onMultiChange,
   onReset,
-  gridClass = 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-none xl:grid-flow-col xl:auto-cols-fr',
   extraBadges,
   title,
   subtitle,
   icon,
-  size = 'sm',
 }) => {
-  const searchRefs = useRef<Record<string, SearchFieldHandle | null>>({})
+  const [open, setOpen] = useState(false)
+  const panelId = useId()
 
-  const handleReset = useCallback(() => {
-    for (const ref of Object.values(searchRefs.current)) ref?.reset()
-    onReset()
-  }, [onReset])
+  const close = useCallback(() => setOpen(false), [])
+  const markInside = useDismiss(open, close)
 
-  const badges = buildFilterBadges(fields, values, onChange, searchRefs.current)
+  const handleMulti = useCallback(
+    (updates: Record<string, string>) => {
+      if (onMultiChange) return onMultiChange(updates)
+      for (const [k, v] of Object.entries(updates)) onChange(k, v)
+    },
+    [onMultiChange, onChange],
+  )
+
+  const badges = buildFilterBadges(fields, values, onChange, handleMulti)
   const allBadges = extraBadges ? [...badges, ...extraBadges] : badges
 
-  const handleMulti =
-    onMultiChange ??
-    ((updates: Record<string, string>) => {
-      for (const [k, v] of Object.entries(updates)) onChange(k, v)
-    })
-
   return (
-    <div className="space-y-3">
-      <ToolbarContainer>
-        <div className="space-y-3">
-          {title ? (
-            <div className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gray-100 text-gray-600">
-                {icon ?? <Filter className="h-4 w-4" aria-hidden="true" />}
-              </span>
-              <div>
-                <p className="text-sm font-semibold leading-tight text-gray-900">{title}</p>
-                {subtitle ? <p className="mt-0.5 text-2xs leading-tight text-gray-500">{subtitle}</p> : null}
+    <div onPointerDownCapture={markInside} className="relative flex justify-end">
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        icon={icon ?? <Filter className="h-4 w-4" aria-hidden="true" />}
+        aria-expanded={open}
+        aria-controls={open ? panelId : undefined}
+        aria-label={title ?? FALLBACK_TITLE}
+        onClick={() => setOpen((v) => !v)}
+      >
+        {title ?? FALLBACK_TITLE}
+        {allBadges.length > 0 ? (
+          <span className="ms-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-600 px-1.5 text-2xs font-semibold text-white">
+            {allBadges.length}
+          </span>
+        ) : null}
+      </Button>
+      {open ? (
+        <div
+          id={panelId}
+          role="region"
+          aria-label={title ?? FALLBACK_TITLE}
+          className="absolute end-0 top-full z-30 mt-2 w-[min(34rem,calc(100vw-2rem))]"
+        >
+          <ToolbarContainer className="shadow-lg">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                <div>
+                  <p className="text-sm font-semibold leading-tight text-gray-900">{title ?? FALLBACK_TITLE}</p>
+                  {subtitle ? <p className="mt-0.5 text-2xs leading-tight text-gray-500">{subtitle}</p> : null}
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  icon={<X className="h-4 w-4" aria-hidden="true" />}
+                  aria-label="סגור"
+                  onClick={close}
+                />
               </div>
-            </div>
-          ) : null}
-          <div className={cn('grid gap-3', gridClass)}>
-            {fields.map((field) => {
-              if (field.type === 'search') {
-                return (
-                  <SearchFilter
-                    key={field.key}
-                    ref={(el) => {
-                      searchRefs.current[field.key] = el
-                    }}
-                    field={field}
-                    size={size}
-                    externalValue={values[field.key] ?? ''}
-                    onChange={onChange}
-                  />
-                )
-              }
-              if (field.type === 'select') {
-                const v = values[field.key] ?? ''
-                const isActive = v !== '' && v !== (field.defaultValue ?? '')
-                return (
-                  <Select
-                    key={field.key}
-                    label={field.label}
-                    size={size}
-                    value={v}
-                    onChange={(e) => onChange(field.key, e.target.value)}
-                    options={field.options}
-                    disabled={field.disabled}
-                    className={cn(isActive && 'border-primary-400 ring-1 ring-primary-200')}
-                  />
-                )
-              }
-              if (field.type === 'toggle') {
-                const raw = values[field.key] ?? ''
-                const selected = raw ? raw.split(',') : []
-                return (
-                  <div key={field.key} className="space-y-1">
-                    <span className="block text-sm font-medium text-gray-700">{field.label}</span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {field.options.map((opt) => {
-                        const isOn = selected.includes(opt.value)
-                        return (
-                          <Button
-                            key={opt.value}
-                            type="button"
-                            size="sm"
-                            variant={isOn ? 'primary' : 'outline'}
-                            onClick={() => {
-                              const next = isOn ? selected.filter((v) => v !== opt.value) : [...selected, opt.value]
-                              onChange(field.key, next.join(','))
-                            }}
-                          >
-                            {opt.label}
-                          </Button>
-                        )
-                      })}
-                    </div>
-                  </div>
-                )
-              }
-              if (field.type === 'date') {
-                return (
-                  <DatePicker
-                    key={field.key}
-                    label={field.label}
-                    compact={size === 'sm'}
-                    value={values[field.key] ?? ''}
-                    onChange={(v) => onChange(field.key, v)}
-                  />
-                )
-              }
-              if (field.type === 'date-range') {
-                return (
-                  <React.Fragment key={`${field.fromKey}__${field.toKey}`}>
-                    <DatePicker
-                      label={field.fromLabel}
-                      compact={size === 'sm'}
-                      value={values[field.fromKey] ?? ''}
-                      onChange={(v) => onChange(field.fromKey, v)}
-                    />
-                    <DatePicker
-                      label={field.toLabel}
-                      compact={size === 'sm'}
-                      value={values[field.toKey] ?? ''}
-                      onChange={(v) => onChange(field.toKey, v)}
-                    />
-                  </React.Fragment>
-                )
-              }
-              if (field.type === 'client-picker') {
-                return (
-                  <ClientPickerFilter
-                    key={field.idKey}
+              <div className={cn('grid gap-2.5', STACKED_GRID)}>
+                {fields.map((field) => (
+                  <FilterField
+                    key={fieldKey(field)}
                     field={field}
                     values={values}
+                    size="sm"
+                    onChange={onChange}
                     onMultiChange={handleMulti}
-                    size={size}
                   />
-                )
-              }
-              return null
-            })}
-          </div>
-          <ActiveFilterBadges badges={allBadges} onReset={handleReset} />
+                ))}
+              </div>
+              <ActiveFilterBadges badges={allBadges} onReset={onReset} withDivider />
+            </div>
+          </ToolbarContainer>
         </div>
-      </ToolbarContainer>
+      ) : null}
     </div>
   )
 }

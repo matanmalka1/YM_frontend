@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { useAdvisorOptions } from '@/features/users'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 import { CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
-import type { FilterBadge } from '@/components/ui/table/ActiveFilterBadges'
 import {
   CLIENT_SORT_BY_OPTIONS,
   CLIENT_STATUS_OPTIONS,
@@ -37,7 +36,7 @@ export const useClientsFilters = ({
   onReset,
   showAccountantFilter = false,
 }: UseClientsFiltersArgs) => {
-  const { options: advisorOptions, nameById } = useAdvisorOptions(showAccountantFilter)
+  const { options: advisorOptions } = useAdvisorOptions(showAccountantFilter)
   const activeAccountantId = filters.accountant_id ? String(filters.accountant_id) : ''
 
   const fields = useMemo(
@@ -83,16 +82,6 @@ export const useClientsFilters = ({
     [showAccountantFilter, advisorOptions, filters.sort_by],
   )
 
-  const extraBadges: FilterBadge[] = activeAccountantId
-    ? [
-        {
-          key: 'accountant_id',
-          label: `רואה חשבון: ${nameById.get(Number(activeAccountantId)) ?? activeAccountantId}`,
-          onRemove: () => onFilterChange('accountant_id', ''),
-        },
-      ]
-    : []
-
   return {
     fields,
     values: {
@@ -105,6 +94,5 @@ export const useClientsFilters = ({
     },
     onChange: (key: string, value: string) => onFilterChange(key as Parameters<ClientFilterChange>[0], value),
     onReset,
-    extraBadges,
   }
 }

@@ -56,7 +56,3 @@ type FilterDefinition<TValues extends Record<string, unknown> = Record<string, u
   | ClientPickerFieldDef<TValues>
 
 export type FilterFieldDef = FilterDefinition<Record<string, unknown>>
-
-export interface SearchFieldHandle {
-  reset: () => void
-}

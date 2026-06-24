@@ -1,23 +1,19 @@
-import { useImperativeHandle, type Ref } from 'react'
 import { Search, X } from 'lucide-react'
 import { useSearchDebounce } from '@/hooks/useSearchDebounce'
 import { Input } from '@/components/ui/inputs/Input'
-import type { SearchFieldDef, SearchFieldHandle } from './types'
+import type { SearchFieldDef } from './types'
 
 interface Props {
   field: SearchFieldDef
   externalValue: string
   onChange: (key: string, value: string) => void
-  size?: 'sm' | 'md'
-  ref?: Ref<SearchFieldHandle>
+  size?: 'xs' | 'sm' | 'md'
 }
 
-export const SearchFilter = ({ field, externalValue, onChange, size = 'md', ref }: Props) => {
+// Controlled via `externalValue`: useSearchDebounce syncs the local draft back to it,
+// so a parent reset (values[key] -> '') clears the input — no imperative handle needed.
+export const SearchFilter = ({ field, externalValue, onChange, size = 'md' }: Props) => {
   const [draft, setDraft] = useSearchDebounce(externalValue, (v) => onChange(field.key, v))
-
-  useImperativeHandle(ref, () => ({
-    reset: () => setDraft(''),
-  }))
 
   return (
     <Input
@@ -35,9 +31,9 @@ export const SearchFilter = ({ field, externalValue, onChange, size = 'md', ref 
               setDraft('')
               onChange(field.key, '')
             }}
-            className="p-1 text-gray-400 hover:text-gray-600"
+            className="p-0.5 text-gray-400 hover:text-gray-600"
           >
-            <X className="h-3.5 w-3.5" />
+            <X className="h-3 w-3" />
           </button>
         ) : undefined
       }
