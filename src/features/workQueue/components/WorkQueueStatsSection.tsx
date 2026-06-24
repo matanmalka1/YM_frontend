@@ -4,6 +4,7 @@ import { StateCard } from '@/components/ui/feedback/StateCard'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
 import type { WorkQueueSummary, WorkQueueUrgency } from '../api/contracts'
 import { APPROACHING_DAYS, IMPORTANT_DAYS } from '../constants'
+import { WORK_QUEUE_MESSAGES } from '../messages'
 
 interface WorkQueueStatsSectionProps {
   summary: WorkQueueSummary | undefined
@@ -19,32 +20,32 @@ export const WorkQueueStatsSection: React.FC<WorkQueueStatsSectionProps> = ({ su
         icon: AlertTriangle,
         variant: 'red' as const,
         count: summary?.overdue ?? 0,
-        label: 'באיחור',
-        description: 'משימות שתאריך היעד שלהן חלף',
+        label: WORK_QUEUE_MESSAGES.stats.overdue,
+        description: WORK_QUEUE_MESSAGES.stats.overdueDescription,
         value: 'overdue' as WorkQueueUrgency,
       },
       {
         icon: Clock,
         variant: 'orange' as const,
         count: summary?.approaching ?? 0,
-        label: `דחוף (עד ${APPROACHING_DAYS} ימים)`,
-        description: 'משימות לטיפול בימים הקרובים',
+        label: WORK_QUEUE_MESSAGES.stats.approaching(APPROACHING_DAYS),
+        description: WORK_QUEUE_MESSAGES.stats.approachingDescription,
         value: 'approaching' as WorkQueueUrgency,
       },
       {
         icon: Clock,
         variant: 'orange' as const,
         count: summary?.important ?? 0,
-        label: `חשוב (${APPROACHING_DAYS + 1}–${IMPORTANT_DAYS} ימים)`,
-        description: 'משימות לטיפול בהמשך התקופה',
+        label: WORK_QUEUE_MESSAGES.stats.important(APPROACHING_DAYS + 1, IMPORTANT_DAYS),
+        description: WORK_QUEUE_MESSAGES.stats.importantDescription,
         value: 'important' as WorkQueueUrgency,
       },
       {
         icon: Calendar,
         variant: 'blue' as const,
         count: summary?.upcoming ?? 0,
-        label: `קרוב (${IMPORTANT_DAYS + 1}+ ימים)`,
-        description: 'משימות עתידיות בתור העבודה',
+        label: WORK_QUEUE_MESSAGES.stats.upcoming(IMPORTANT_DAYS + 1),
+        description: WORK_QUEUE_MESSAGES.stats.upcomingDescription,
         value: 'upcoming' as WorkQueueUrgency,
       },
     ],
@@ -57,7 +58,7 @@ export const WorkQueueStatsSection: React.FC<WorkQueueStatsSectionProps> = ({ su
         icon={AlertTriangle}
         variant="error"
         size="compact"
-        title="שגיאה בטעינת הסיכום"
+        title={WORK_QUEUE_MESSAGES.stats.summaryError}
         message={summaryError}
       />
     )

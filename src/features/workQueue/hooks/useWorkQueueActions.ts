@@ -7,6 +7,7 @@ import { toast } from '@/utils/toast'
 import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { workQueueQK } from '../api'
 import type { WorkQueueAction, WorkQueueItem, WorkQueueListResponse, WorkQueueSourceType } from '../api'
+import { WORK_QUEUE_MESSAGES } from '../messages'
 
 type TaskModalState = {
   mode: 'create' | 'edit' | 'view' | 'link'
@@ -94,11 +95,11 @@ export const useWorkQueueActions = () => {
   const actionMutation = useMutation({
     mutationFn: async ({ item, action }: { item: WorkQueueItem; action: WorkQueueAction }) => {
       const taskId = action.task_id ?? (item.source_type === 'task' ? item.source_id : undefined)
-      if (taskId == null) throw new Error('פעולה לא תקינה')
+      if (taskId == null) throw new Error(WORK_QUEUE_MESSAGES.actions.invalidAction)
       if (isTaskActionKey(action.key, 'complete_task')) return tasksApi.complete(taskId)
       if (isTaskActionKey(action.key, 'cancel_task')) return tasksApi.cancel(taskId)
       if (isTaskActionKey(action.key, 'delete_task')) return tasksApi.delete(taskId)
-      throw new Error('פעולה לא נתמכת')
+      throw new Error(WORK_QUEUE_MESSAGES.actions.unsupportedAction)
     },
     onMutate: async ({ item, action }) => {
       const taskId = action.task_id ?? (item.source_type === 'task' ? item.source_id : undefined)
@@ -116,7 +117,7 @@ export const useWorkQueueActions = () => {
       return { previousLists }
     },
     onSuccess: async (_data, variables) => {
-      toast.success('הפעולה בוצעה בהצלחה')
+      toast.success(WORK_QUEUE_MESSAGES.actions.success)
       await qc.invalidateQueries({ queryKey: workQueueQK.all })
       if (variables.action.task_id != null || variables.item.source_type === 'task') {
         await qc.invalidateQueries({ queryKey: tasksQK.all })
@@ -126,8 +127,8 @@ export const useWorkQueueActions = () => {
       context?.previousLists?.forEach(([queryKey, data]) => {
         qc.setQueryData(queryKey, data)
       })
-      toast.error('הפעולה נכשלה', {
-        description: getErrorMessage(err, err instanceof Error ? err.message : 'הפעולה נכשלה'),
+      toast.error(WORK_QUEUE_MESSAGES.actions.failure, {
+        description: getErrorMessage(err, err instanceof Error ? err.message : WORK_QUEUE_MESSAGES.actions.failure),
       })
       void qc.invalidateQueries({ queryKey: workQueueQK.all })
     },
@@ -147,14 +148,14 @@ export const useWorkQueueActions = () => {
 
   const createTaskMutation = useMutation({
     mutationFn: (data: TaskCreateRequest) => tasksApi.create(data),
-    onSuccess: () => handleTaskMutationSuccess('המשימה נוצרה בהצלחה'),
-    onError: (err) => showErrorToast(err, 'יצירת המשימה נכשלה'),
+    onSuccess: () => handleTaskMutationSuccess(WORK_QUEUE_MESSAGES.actions.createTaskSuccess),
+    onError: (err) => showErrorToast(err, WORK_QUEUE_MESSAGES.actions.createTaskError),
   })
 
   const updateTaskMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: TaskUpdateRequest }) => tasksApi.update(id, data),
-    onSuccess: () => handleTaskMutationSuccess('המשימה עודכנה בהצלחה'),
-    onError: (err) => showErrorToast(err, 'עדכון המשימה נכשל'),
+    onSuccess: () => handleTaskMutationSuccess(WORK_QUEUE_MESSAGES.actions.updateTaskSuccess),
+    onError: (err) => showErrorToast(err, WORK_QUEUE_MESSAGES.actions.updateTaskError),
   })
 
   const rememberFocus = (target?: HTMLElement | null) => {
@@ -209,7 +210,7 @@ export const useWorkQueueActions = () => {
       }
       const taskId = action.task_id ?? (item.source_type === 'task' ? item.source_id : undefined)
       if (!taskId) {
-        toast.error('לא נמצאה משימה לפתיחה')
+        toast.error(WORK_QUEUE_MESSAGES.actions.taskNotFound)
         return
       }
       setTaskModal({

@@ -34,14 +34,16 @@ import type { FilterBadge } from '@/components/ui/table/ActiveFilterBadges'
 import { WORK_QUEUE_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 // eslint-disable-next-line no-restricted-imports -- avoid the tasks feature barrel here; it imports workQueue-backed components.
 import { taskStatusLabels, taskStatusValues } from '@/features/tasks/constants/labels'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { WORK_QUEUE_MESSAGES } from '../messages'
 
 const typeOptions = [
-  { value: '', label: 'כל הסוגים' },
+  { value: '', label: WORK_QUEUE_MESSAGES.filters.allTypes },
   ...workQueueSourceTypeValues.map((v) => ({ value: v, label: workQueueSourceTypeLabels[v] })),
 ]
 
 const statusOptions = [
-  { value: '', label: 'כל סטטוסי המשימה' },
+  { value: '', label: WORK_QUEUE_MESSAGES.filters.allTaskStatuses },
   ...taskStatusValues.map((v) => ({ value: v, label: taskStatusLabels[v] })),
 ]
 
@@ -49,12 +51,22 @@ const WORK_QUEUE_FILTER_FIELDS: FilterFieldDef[] = [
   {
     type: 'search',
     key: WORK_QUEUE_FILTER_PARAM_KEYS.search,
-    label: 'חיפוש',
+    label: WORK_QUEUE_MESSAGES.filters.search,
     placeholder: WORK_QUEUE_SEARCH_PLACEHOLDER,
   },
-  { type: 'select', key: WORK_QUEUE_FILTER_PARAM_KEYS.sourceType, label: 'סוג', options: typeOptions },
-  { type: 'select', key: WORK_QUEUE_FILTER_PARAM_KEYS.taskStatus, label: 'סטטוס משימה', options: statusOptions },
-  { type: 'select', key: TASK_RELATION_KEY, label: 'סוג עבודה', options: taskRelationOptions },
+  {
+    type: 'select',
+    key: WORK_QUEUE_FILTER_PARAM_KEYS.sourceType,
+    label: WORK_QUEUE_MESSAGES.filters.type,
+    options: typeOptions,
+  },
+  {
+    type: 'select',
+    key: WORK_QUEUE_FILTER_PARAM_KEYS.taskStatus,
+    label: WORK_QUEUE_MESSAGES.filters.taskStatus,
+    options: statusOptions,
+  },
+  { type: 'select', key: TASK_RELATION_KEY, label: WORK_QUEUE_MESSAGES.filters.workType, options: taskRelationOptions },
 ]
 
 export const useWorkQueuePage = () => {
@@ -101,13 +113,13 @@ export const useWorkQueuePage = () => {
     scopeFilter !== null
 
   const requestError = !hasRole
-    ? 'לא ניתן לזהות תפקיד משתמש'
+    ? WORK_QUEUE_MESSAGES.page.roleError
     : error
-      ? getErrorMessage(error, 'שגיאה בטעינת המשימות')
+      ? getErrorMessage(error, WORK_QUEUE_MESSAGES.page.loadError)
       : null
 
   useEffect(() => {
-    if (requestError) toast.error('טעינת העבודה לטיפול נכשלה', { description: requestError })
+    if (requestError) toast.error(WORK_QUEUE_MESSAGES.page.loadToast, { description: requestError })
   }, [requestError])
 
   const handleFilterChange = (key: WorkQueueFilterParamKey, value: string) => setFilter(key, value, true)
@@ -146,7 +158,7 @@ export const useWorkQueuePage = () => {
     ? [
         {
           key: WORK_QUEUE_FILTER_PARAM_KEYS.urgency,
-          label: `דחיפות: ${workQueueUrgencyLabels[urgencyFilter]}`,
+          label: WORK_QUEUE_MESSAGES.filters.urgencyBadge(workQueueUrgencyLabels[urgencyFilter]),
           onRemove: () => handleFilterChange(WORK_QUEUE_FILTER_PARAM_KEYS.urgency, ''),
         },
       ]
@@ -187,16 +199,16 @@ export const useWorkQueuePage = () => {
         isFiltered: true,
         icon: CheckSquare,
         variant: 'default' as const,
-        title: 'אין תוצאות',
-        message: 'אין תוצאות שתואמות לסינון',
+        title: WORK_QUEUE_MESSAGES.page.emptyFilteredTitle,
+        message: WORK_QUEUE_MESSAGES.page.emptyFilteredMessage,
       }
     : {
         isEmpty: items.length === 0,
         isFiltered: false,
         icon: CheckSquare,
         variant: 'illustration' as const,
-        title: 'אין עבודה לטיפול',
-        message: 'אין כרגע עבודה לטיפול. כל הדוחות, התשלומים והמשימות הפעילות מסודרים.',
+        title: WORK_QUEUE_MESSAGES.page.emptyTitle,
+        message: WORK_QUEUE_MESSAGES.page.emptyMessage,
       }
 
   return {
@@ -204,11 +216,11 @@ export const useWorkQueuePage = () => {
       isLoading,
       isFetching,
       error: requestError,
-      loadingMessage: 'טוען משימות...',
+      loadingMessage: WORK_QUEUE_MESSAGES.page.loading,
     },
     headerProps: {
-      title: 'עבודה לטיפול',
-      description: 'כל מה שדורש טיפול: דוחות, חיובים, מקדמות, קלסרים ומשימות ידניות.',
+      title: WORK_QUEUE_MESSAGES.page.title,
+      description: WORK_QUEUE_MESSAGES.page.description,
     },
     stats: {
       summary,
@@ -233,7 +245,7 @@ export const useWorkQueuePage = () => {
         total,
         onPageChange: setPage,
       },
-      label: 'משימות',
+      label: WORK_QUEUE_MESSAGES.page.tableLabel,
       showPagination: total > 0,
       emptyState,
     },
@@ -241,10 +253,10 @@ export const useWorkQueuePage = () => {
       openCreateTask,
       confirmProps: {
         open: Boolean(pendingConfirm),
-        title: pendingConfirm?.action.confirm_title ?? 'אישור פעולה',
-        message: pendingConfirm?.action.confirm_message ?? 'האם לבצע את הפעולה?',
-        confirmLabel: 'אישור',
-        cancelLabel: 'ביטול',
+        title: pendingConfirm?.action.confirm_title ?? WORK_QUEUE_MESSAGES.page.confirmTitle,
+        message: pendingConfirm?.action.confirm_message ?? WORK_QUEUE_MESSAGES.page.confirmMessage,
+        confirmLabel: GLOBAL_UI_MESSAGES.actions.confirm,
+        cancelLabel: GLOBAL_UI_MESSAGES.actions.cancel,
         isLoading: actionMutation.isPending,
         onConfirm: confirmAction,
         onCancel: closeConfirm,

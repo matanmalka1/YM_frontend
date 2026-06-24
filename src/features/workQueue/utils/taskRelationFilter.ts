@@ -1,3 +1,5 @@
+import { WORK_QUEUE_MESSAGES } from '../messages'
+
 export type LinkedFilter = 'linked' | 'unlinked'
 export type ScopeFilter = 'system' | 'manual'
 
@@ -11,11 +13,11 @@ export const parseScopeFilter = (value: string | null): ScopeFilter | null =>
 export const TASK_RELATION_KEY = 'task_relation'
 
 export const taskRelationOptions = [
-  { value: '', label: 'כל העבודה הפעילה' },
-  { value: 'manual', label: 'משימות עצמאיות בלבד' },
-  { value: 'linked', label: 'פריטים עם משימה קשורה' },
-  { value: 'unlinked', label: 'פריטים ללא משימה קשורה' },
-  { value: 'system', label: 'פריטי עבודה שאינם משימה' },
+  { value: '', label: WORK_QUEUE_MESSAGES.filters.taskRelationOptions.all },
+  { value: 'manual', label: WORK_QUEUE_MESSAGES.filters.taskRelationOptions.manual },
+  { value: 'linked', label: WORK_QUEUE_MESSAGES.filters.taskRelationOptions.linked },
+  { value: 'unlinked', label: WORK_QUEUE_MESSAGES.filters.taskRelationOptions.unlinked },
+  { value: 'system', label: WORK_QUEUE_MESSAGES.filters.taskRelationOptions.system },
 ]
 
 /** Collapse the two underlying filters into the single dropdown value. */

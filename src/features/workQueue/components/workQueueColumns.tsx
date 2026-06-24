@@ -9,6 +9,8 @@ import { formatDate } from '@/utils/utils'
 import { taskPriorityLabels, taskRoleLabels } from '@/features/tasks'
 import type { WorkQueueAction, WorkQueueItem, WorkQueueSourceType, WorkQueueWarning } from '../api/contracts'
 import { getWorkQueueUrgencyVariant, workQueueSourceTypeLabels, workQueueUrgencyLabels } from '../constants'
+import { WORK_QUEUE_MESSAGES } from '../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 const typeLabel = (sourceType: WorkQueueSourceType): string => workQueueSourceTypeLabels[sourceType] ?? sourceType
 
@@ -34,7 +36,7 @@ const actionVariant = (action: WorkQueueAction): 'ghost' | 'danger' =>
 const metadataValue = (item: WorkQueueItem, key: string): unknown =>
   item.metadata && typeof item.metadata === 'object' ? (item.metadata as Record<string, unknown>)[key] : undefined
 
-const taskPriorityLabel = (item: WorkQueueItem): string | null => {
+const taskPriority = (item: WorkQueueItem): string | null => {
   const priority =
     item.source_type === 'task'
       ? metadataValue(item, 'priority')
@@ -42,6 +44,12 @@ const taskPriorityLabel = (item: WorkQueueItem): string | null => {
         ? item.linked_tasks[0].priority
         : null
   if (typeof priority !== 'string') return null
+  return priority
+}
+
+const taskPriorityLabel = (item: WorkQueueItem): string | null => {
+  const priority = taskPriority(item)
+  if (!priority) return null
   return taskPriorityLabels[priority] ?? priority
 }
 
@@ -72,7 +80,7 @@ export const buildWorkQueueColumns = ({
   [
     {
       key: 'type',
-      header: 'סוג',
+      header: WORK_QUEUE_MESSAGES.columns.type,
       headerClassName: 'w-28',
       className: 'w-28',
       render: (item: WorkQueueItem) =>
@@ -88,7 +96,7 @@ export const buildWorkQueueColumns = ({
     },
     {
       key: 'client',
-      header: 'לקוח',
+      header: WORK_QUEUE_MESSAGES.columns.client,
       headerClassName: 'w-48',
       className: 'w-48',
       render: (item: WorkQueueItem) =>
@@ -98,7 +106,7 @@ export const buildWorkQueueColumns = ({
             className="inline-flex max-w-44 flex-col text-center text-sm text-primary-600 hover:underline"
             onClick={(e) => e.stopPropagation()}
           >
-            <span className="truncate">{item.client_name ?? 'לפרופיל לקוח'}</span>
+            <span className="truncate">{item.client_name ?? WORK_QUEUE_MESSAGES.columns.clientProfile}</span>
             {item.office_client_number != null && (
               <span className="text-xs text-gray-500">{item.office_client_number}</span>
             )}
@@ -109,7 +117,7 @@ export const buildWorkQueueColumns = ({
     },
     {
       key: 'title',
-      header: 'מה צריך לעשות',
+      header: WORK_QUEUE_MESSAGES.columns.title,
       headerClassName: 'min-w-64 w-[28rem] text-start',
       className: 'min-w-64 max-w-[30rem] whitespace-normal text-start',
       render: (item: WorkQueueItem) => (
@@ -117,14 +125,16 @@ export const buildWorkQueueColumns = ({
           <div className="font-medium text-gray-900">{item.title}</div>
           {item.description && <div className="text-xs text-gray-500">{item.description}</div>}
           {item.source_type === 'task' && item.source_summary && (
-            <div className="text-xs text-gray-500">קשורה אל: {item.source_summary.label}</div>
+            <div className="text-xs text-gray-500">
+              {WORK_QUEUE_MESSAGES.columns.sourcePrefix(item.source_summary.label)}
+            </div>
           )}
         </div>
       ),
     },
     {
       key: 'due_date',
-      header: 'תאריך יעד',
+      header: WORK_QUEUE_MESSAGES.columns.dueDate,
       headerClassName: 'w-32',
       className: 'w-32',
       render: (item: WorkQueueItem) => (
@@ -133,7 +143,7 @@ export const buildWorkQueueColumns = ({
     },
     {
       key: 'urgency',
-      header: 'דחיפות זמן',
+      header: WORK_QUEUE_MESSAGES.columns.urgency,
       headerClassName: 'w-28',
       className: 'w-28',
       render: (item: WorkQueueItem) => (
@@ -142,16 +152,17 @@ export const buildWorkQueueColumns = ({
     },
     {
       key: 'task_meta',
-      header: 'עדיפות/שיוך',
+      header: WORK_QUEUE_MESSAGES.columns.taskMeta,
       headerClassName: 'w-36',
       className: 'w-36',
       render: (item: WorkQueueItem) => {
+        const priorityKey = taskPriority(item)
         const priority = taskPriorityLabel(item)
         const assignedRole = assignedRoleLabel(item)
         if (!priority && !assignedRole) return <span className="text-sm text-gray-400">—</span>
         return (
           <div className="flex flex-wrap justify-center gap-1">
-            {priority && <Badge variant={priority === 'דחוף' ? 'negative' : 'neutral'}>{priority}</Badge>}
+            {priority && <Badge variant={priorityKey === 'urgent' ? 'negative' : 'neutral'}>{priority}</Badge>}
             {assignedRole && <Badge variant="info">{assignedRole}</Badge>}
           </div>
         )
@@ -159,14 +170,14 @@ export const buildWorkQueueColumns = ({
     },
     {
       key: 'status',
-      header: 'סטטוס',
+      header: WORK_QUEUE_MESSAGES.columns.status,
       headerClassName: 'w-28',
       className: 'w-28',
       render: (item: WorkQueueItem) => <span className="text-sm text-gray-600">{item.status_label ?? '—'}</span>,
     },
     {
       key: 'linked_tasks',
-      header: 'משימות קשורות',
+      header: WORK_QUEUE_MESSAGES.columns.linkedTasks,
       headerClassName: 'w-40',
       className: 'w-40 whitespace-normal',
       render: (item: WorkQueueItem) => {
@@ -174,7 +185,9 @@ export const buildWorkQueueColumns = ({
         if (!count) return <span className="text-sm text-gray-400">—</span>
         return (
           <div className="space-y-1">
-            <Badge variant="info">{count === 1 ? 'משימה קשורה' : `${count} משימות`}</Badge>
+            <Badge variant="info">
+              {count === 1 ? WORK_QUEUE_MESSAGES.columns.linkedTask : WORK_QUEUE_MESSAGES.columns.taskCount(count)}
+            </Badge>
             {item.linked_tasks.slice(0, 2).map((task) => (
               <div key={task.id} className="max-w-40 truncate text-xs text-gray-500">
                 {task.title}
@@ -186,7 +199,7 @@ export const buildWorkQueueColumns = ({
     },
     {
       key: 'warnings',
-      header: 'אזהרות',
+      header: WORK_QUEUE_MESSAGES.columns.warnings,
       headerClassName: 'w-44',
       className: 'w-44 whitespace-normal',
       render: (item: WorkQueueItem) =>
@@ -204,7 +217,7 @@ export const buildWorkQueueColumns = ({
     },
     {
       key: 'actions',
-      header: 'פעולות',
+      header: GLOBAL_UI_MESSAGES.common.actions,
       headerClassName: 'w-36',
       className: 'w-36',
       render: (item: WorkQueueItem) => {
@@ -224,7 +237,7 @@ export const buildWorkQueueColumns = ({
               : undefined
         const linkAction: WorkQueueAction = {
           key: 'link_task_to_source',
-          label: 'קשר לפריט',
+          label: WORK_QUEUE_MESSAGES.columns.linkToItem,
           type: 'modal',
         }
         const secondaryActions = isUnlinkedTask ? [linkAction, ...secondary] : secondary
@@ -253,7 +266,7 @@ export const buildWorkQueueColumns = ({
                   return (
                     <RowActionItem
                       key={action.key}
-                      label={activeActionKey === key ? 'מבצע פעולה...' : action.label}
+                      label={activeActionKey === key ? WORK_QUEUE_MESSAGES.columns.actionRunning : action.label}
                       icon={activeActionKey === key ? <Spinner size="sm" /> : actionIcon(action)}
                       danger={action.variant === 'danger'}
                       disabled={action.disabled || activeActionKey === key}

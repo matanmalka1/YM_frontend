@@ -8,6 +8,7 @@ import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { TaskModal } from '@/features/tasks'
 import { useWorkQueuePage } from '../hooks/useWorkQueuePage'
 import { WorkQueueStatsSection } from '../components/WorkQueueStatsSection'
+import { WORK_QUEUE_MESSAGES } from '../messages'
 
 export const WorkQueuePage: React.FC = () => {
   const { status, headerProps, stats, filters, table, modals } = useWorkQueuePage()
@@ -24,7 +25,7 @@ export const WorkQueuePage: React.FC = () => {
           data-work-queue-focus-fallback="true"
           onClick={modals.openCreateTask}
         >
-          משימה חדשה
+          {WORK_QUEUE_MESSAGES.page.newTask}
         </Button>
       }
     />
@@ -39,7 +40,11 @@ export const WorkQueuePage: React.FC = () => {
     >
       <WorkQueueStatsSection {...stats} />
 
-      <FilterPanel {...filters} title="סינון עבודה" subtitle="סוג, סטטוס וסוג עבודה" />
+      <FilterPanel
+        {...filters}
+        title={WORK_QUEUE_MESSAGES.page.filterTitle}
+        subtitle={WORK_QUEUE_MESSAGES.page.filterSubtitle}
+      />
 
       <PaginatedDataTable
         data={table.data}
