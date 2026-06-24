@@ -5,14 +5,12 @@
 export const REPORTS_MESSAGES = {
   common: {
     loadingReport: 'טוען דוח...',
-    loadError: 'שגיאה בטעינת הדוח',
     clients: 'לקוחות',
     client: 'לקוח',
     days: (count: number | string) => `${count} ימים`,
   },
   actions: {
     exportSuccess: (filename: string) => `דוח יוצא בהצלחה: ${filename}`,
-    exportError: 'שגיאה בייצוא דוח',
   },
   aging: {
     title: 'דוח חובות לקוחות',

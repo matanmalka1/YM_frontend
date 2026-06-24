@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { reportsApi, reportsQK } from "../api";
 import { getErrorMessage } from "../../../utils/utils";
-import { REPORTS_MESSAGES } from "../messages";
+import { REPORTS_ERROR_MESSAGES } from "../errorMessages";
 
 export const useAnnualReportStatusReport = (controlledYear?: number) => {
   const [internalYear, setInternalYear] = useState<number>(() => new Date().getFullYear());
@@ -19,7 +19,7 @@ export const useAnnualReportStatusReport = (controlledYear?: number) => {
     data,
     isLoading: isPending,
     error: error
-      ? getErrorMessage(error, REPORTS_MESSAGES.common.loadError)
+      ? getErrorMessage(error, REPORTS_ERROR_MESSAGES.common.loadError)
       : null,
   };
 };
