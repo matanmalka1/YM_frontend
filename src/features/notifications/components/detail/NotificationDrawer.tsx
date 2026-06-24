@@ -9,6 +9,7 @@ import { DrawerNotificationListItem } from '../list/NotificationListItem'
 import { SendNotificationModal } from '../form/SendNotificationModal'
 import { CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS } from '../../api'
 import type { NotificationDrawerProps } from '../../types'
+import { NOTIFICATIONS_MESSAGES } from '../../messages'
 
 export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, onClose, clientRecordId }) => {
   const { data } = useNotifications(
@@ -35,7 +36,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
     <>
       <DetailDrawer
         open={open}
-        title="התראות"
+        title={NOTIFICATIONS_MESSAGES.drawer.title}
         onClose={handleClose}
         className="sm:max-w-sm"
         footer={
@@ -50,12 +51,12 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
                   className="w-full justify-center gap-1.5 text-xs font-medium text-primary-600 hover:text-primary-700"
                 >
                   <Send className="h-3.5 w-3.5" />
-                  שלח הודעה
+                  {NOTIFICATIONS_MESSAGES.actions.sendMessageShort}
                 </Button>
               )}
               {hasMore && (
                 <p className="text-center text-xs text-gray-400">
-                  מוצגות {PAGE_SIZE_SM} ההתראות שנשלחו לאחרונה מתוך {total}
+                  {NOTIFICATIONS_MESSAGES.drawer.recentVisible(PAGE_SIZE_SM, total)}
                 </p>
               )}
             </div>
@@ -63,7 +64,9 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
         }
       >
         <div className="-mx-6 -my-5 divide-y divide-gray-100">
-          {notifications.length === 0 && <p className="px-5 py-8 text-center text-sm text-gray-400">אין התראות</p>}
+          {notifications.length === 0 && (
+            <p className="px-5 py-8 text-center text-sm text-gray-400">{NOTIFICATIONS_MESSAGES.drawer.empty}</p>
+          )}
           {notifications.map((item) => (
             <DrawerNotificationListItem key={item.id} item={item} />
           ))}

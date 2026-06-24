@@ -1,0 +1,87 @@
+import type { NotificationTrigger } from './api'
+
+/**
+ * Centralized Hebrew UI strings for the notifications feature. Cross-cutting
+ * strings stay in GLOBAL_UI_MESSAGES; everything here is notification-domain copy.
+ */
+export const NOTIFICATIONS_MESSAGES = {
+  actions: {
+    sendMessage: 'שליחת הודעה',
+    sendMessageShort: 'שלח הודעה',
+    sendToClient: 'שליחת הודעה ללקוח',
+    back: 'חזרה',
+    preview: 'תצוגה מקדימה',
+    send: 'שלח',
+    viewDetails: 'צפייה בפרטים',
+  },
+  form: {
+    title: 'שליחת הודעה',
+    domainLabels: {
+      binder_missing_documents: 'קלסר',
+      binder_general_reminder: 'קלסר',
+      invoice_issued: 'חיובים',
+      payment_reminder: 'חיובים',
+      vat_documents_reminder: 'מע"מ',
+      annual_report_documents_request: 'דוח שנתי',
+      annual_report_client_reminder: 'דוח שנתי',
+      signature_request_sent: 'חתימה',
+      signature_request_reminder: 'חתימה',
+      client_missing_information: 'לקוח',
+      client_documents_request: 'לקוח',
+      client_general_message: 'לקוח',
+    } satisfies Partial<Record<NotificationTrigger, string>>,
+    generalDomain: 'כללי',
+    triggerOptionLabel: (domain: string, triggerLabel: string) => `${domain} — ${triggerLabel}`,
+    clientRequired: 'יש לבחור לקוח',
+    blockedFallback: 'שליחת ההודעה חסומה',
+    subjectRequired: 'נדרש נושא ההודעה',
+    bodyRequired: 'נדרש תוכן ההודעה',
+    typeLabel: 'סוג הודעה',
+    subjectLabel: 'נושא',
+    bodyLabel: 'תוכן ההודעה',
+  },
+  tab: {
+    title: 'התראות',
+    subtitle: 'התראות והודעות שנשלחו ללקוח',
+    sent: (count: number) => `נשלחו: ${count}`,
+    pending: (count: number) => `בהמתנה: ${count}`,
+    failed: (count: number) => `נכשלו: ${count}`,
+    loading: 'טוען התראות...',
+    emptyClient: 'אין התראות ללקוח זה',
+  },
+  detail: {
+    fallbackTitle: 'הודעה',
+    loading: 'טוען את פרטי ההודעה...',
+    loadError: 'שגיאה בטעינת פרטי ההודעה',
+    sectionDetails: 'פרטים',
+    type: 'סוג',
+    domain: 'תחום',
+    client: 'לקוח',
+    recipient: 'נמען',
+    status: 'סטטוס',
+    sectionContent: 'תוכן',
+    contentUnavailable: 'תוכן ההודעה לא זמין',
+  },
+  drawer: {
+    title: 'התראות',
+    recentVisible: (shown: number, total: number) => `מוצגות ${shown} ההתראות שנשלחו לאחרונה מתוך ${total}`,
+    empty: 'אין התראות',
+  },
+  columns: {
+    fallbackTrigger: 'הודעה',
+    fallbackDomain: 'כללי',
+    date: 'תאריך',
+    type: 'סוג',
+    client: 'לקוח',
+    status: 'סטטוס',
+    recipient: 'נמען',
+    rowActionsAriaLabel: 'פעולות הודעה',
+  },
+  listItem: {
+    recipient: (recipient: string) => `נשלח ל: ${recipient}`,
+  },
+  page: {
+    filterTitle: 'סינון התראות',
+    filterSubtitle: 'לקוח, סוג, סטטוס, תאריך ושולח',
+  },
+} as const

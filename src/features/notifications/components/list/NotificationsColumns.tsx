@@ -5,16 +5,17 @@ import type { Column } from '@/components/ui/table'
 import { formatDateTime } from '@/utils/utils'
 import { TRIGGER_LABELS, type NotificationItem } from '../../api'
 import { NOTIFICATION_DOMAIN_LABELS, NOTIFICATION_STATUS_LABELS, getNotificationStatusVariant } from '../../constants'
+import { NOTIFICATIONS_MESSAGES } from '../../messages'
 
 const ENGLISH_TEXT_PATTERN = /[A-Za-z]/
 
 export const getTriggerLabel = (item: Pick<NotificationItem, 'trigger' | 'trigger_label'>) =>
-  item.trigger_label || TRIGGER_LABELS[item.trigger] || 'הודעה'
+  item.trigger_label || TRIGGER_LABELS[item.trigger] || NOTIFICATIONS_MESSAGES.columns.fallbackTrigger
 
 export const getDomainLabel = (domain: string | null | undefined) => {
-  if (!domain) return 'כללי'
+  if (!domain) return NOTIFICATIONS_MESSAGES.columns.fallbackDomain
   if (NOTIFICATION_DOMAIN_LABELS[domain]) return NOTIFICATION_DOMAIN_LABELS[domain]
-  return ENGLISH_TEXT_PATTERN.test(domain) ? 'כללי' : domain
+  return ENGLISH_TEXT_PATTERN.test(domain) ? NOTIFICATIONS_MESSAGES.columns.fallbackDomain : domain
 }
 
 interface BuildNotificationColumnsParams {
@@ -30,12 +31,12 @@ export const buildNotificationColumns = ({
 }: BuildNotificationColumnsParams): Column<NotificationItem>[] => [
   {
     key: 'created_at',
-    header: 'תאריך',
+    header: NOTIFICATIONS_MESSAGES.columns.date,
     render: (item) => <span className="text-sm text-gray-700">{formatDateTime(item.created_at)}</span>,
   },
   {
     key: 'trigger',
-    header: 'סוג',
+    header: NOTIFICATIONS_MESSAGES.columns.type,
     render: (item) => (
       <div className="min-w-0 text-right">
         <div className="text-sm font-medium text-gray-900">{getTriggerLabel(item)}</div>
@@ -45,12 +46,12 @@ export const buildNotificationColumns = ({
   },
   {
     key: 'client',
-    header: 'לקוח',
+    header: NOTIFICATIONS_MESSAGES.columns.client,
     render: (item) => <span className="text-sm text-gray-700">{item.client_name ?? `#${item.client_record_id}`}</span>,
   },
   {
     key: 'status',
-    header: 'סטטוס',
+    header: NOTIFICATIONS_MESSAGES.columns.status,
     render: (item) => (
       <Badge variant={getNotificationStatusVariant(item.status)} size="sm">
         {NOTIFICATION_STATUS_LABELS[item.status]}
@@ -59,7 +60,7 @@ export const buildNotificationColumns = ({
   },
   {
     key: 'recipient',
-    header: 'נמען',
+    header: NOTIFICATIONS_MESSAGES.columns.recipient,
     render: (item) => <span className="text-sm text-gray-600">{item.recipient ?? '—'}</span>,
   },
   {
@@ -67,11 +68,15 @@ export const buildNotificationColumns = ({
     header: '',
     align: 'center',
     render: (item) => (
-      <RowActionsMenu ariaLabel="פעולות הודעה">
-        <RowActionItem label="צפייה בפרטים" icon={<Eye className="h-4 w-4" />} onClick={() => onView(item.id)} />
+      <RowActionsMenu ariaLabel={NOTIFICATIONS_MESSAGES.columns.rowActionsAriaLabel}>
+        <RowActionItem
+          label={NOTIFICATIONS_MESSAGES.actions.viewDetails}
+          icon={<Eye className="h-4 w-4" />}
+          onClick={() => onView(item.id)}
+        />
         {isAdvisor && (
           <RowActionItem
-            label="שליחת הודעה ללקוח"
+            label={NOTIFICATIONS_MESSAGES.actions.sendToClient}
             icon={<Send className="h-4 w-4" />}
             onClick={() => onSend({ id: item.client_record_id, name: item.client_name ?? `#${item.client_record_id}` })}
           />

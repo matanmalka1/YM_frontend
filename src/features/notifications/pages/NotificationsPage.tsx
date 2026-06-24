@@ -7,6 +7,7 @@ import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import { SendNotificationModal } from '../components/form/SendNotificationModal'
 import { NotificationDetailDrawer } from '../components/detail/NotificationDetailDrawer'
 import { useNotificationsPage } from '../hooks/useNotificationsPage'
+import { NOTIFICATIONS_MESSAGES } from '../messages'
 
 export const NotificationsPage: React.FC = () => {
   const { status, headerProps, permissions, filters, table, drawers, modals } = useNotificationsPage()
@@ -23,7 +24,7 @@ export const NotificationsPage: React.FC = () => {
             iconPosition="end"
             onClick={() => modals.openSend()}
           >
-            שליחת הודעה
+            {NOTIFICATIONS_MESSAGES.actions.sendMessage}
           </Button>
         ) : undefined
       }
@@ -37,7 +38,11 @@ export const NotificationsPage: React.FC = () => {
       header={header}
       loadingMessage={status.loadingMessage}
     >
-      <FilterPanel {...filters} title="סינון התראות" subtitle="לקוח, סוג, סטטוס, תאריך ושולח" />
+      <FilterPanel
+        {...filters}
+        title={NOTIFICATIONS_MESSAGES.page.filterTitle}
+        subtitle={NOTIFICATIONS_MESSAGES.page.filterSubtitle}
+      />
 
       <PaginatedDataTable
         data={table.data}

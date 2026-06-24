@@ -12,6 +12,7 @@ import { Badge } from '../../../../components/ui/primitives/Badge'
 import { DetailTabPanel } from '../../../../components/ui/layout'
 import { InlineState } from '../../../../components/ui/feedback'
 import type { NotificationsTabProps } from '../../types'
+import { NOTIFICATIONS_MESSAGES } from '../../messages'
 
 export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecordId }) => {
   const { data, isLoading } = useNotifications({
@@ -26,8 +27,8 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
 
   return (
     <DetailTabPanel
-      title="התראות"
-      subtitle="התראות והודעות שנשלחו ללקוח"
+      title={NOTIFICATIONS_MESSAGES.tab.title}
+      subtitle={NOTIFICATIONS_MESSAGES.tab.subtitle}
       actions={
         isAdvisor && clientRecordId != null ? (
           <Button
@@ -37,7 +38,7 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
             icon={<Send className="h-4 w-4" />}
             onClick={() => setSendOpen(true)}
           >
-            שלח הודעה
+            {NOTIFICATIONS_MESSAGES.actions.sendMessageShort}
           </Button>
         ) : null
       }
@@ -45,22 +46,22 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
         summary && summary.total > 0 ? (
           <div className="flex items-center gap-2">
             <Badge variant="positive" size="sm">
-              נשלחו: {summary.sent}
+              {NOTIFICATIONS_MESSAGES.tab.sent(summary.sent)}
             </Badge>
             <Badge variant="warning" size="sm">
-              בהמתנה: {summary.pending}
+              {NOTIFICATIONS_MESSAGES.tab.pending(summary.pending)}
             </Badge>
             <Badge variant="negative" size="sm">
-              נכשלו: {summary.failed}
+              {NOTIFICATIONS_MESSAGES.tab.failed(summary.failed)}
             </Badge>
           </div>
         ) : null
       }
     >
       {isLoading ? (
-        <p className="py-8 text-center text-sm text-gray-400">טוען התראות...</p>
+        <p className="py-8 text-center text-sm text-gray-400">{NOTIFICATIONS_MESSAGES.tab.loading}</p>
       ) : notifications.length === 0 ? (
-        <InlineState title="אין התראות ללקוח זה" />
+        <InlineState title={NOTIFICATIONS_MESSAGES.tab.emptyClient} />
       ) : (
         <ul className="divide-y divide-gray-100 overflow-hidden rounded-lg border border-gray-200">
           {notifications.map((item) => (

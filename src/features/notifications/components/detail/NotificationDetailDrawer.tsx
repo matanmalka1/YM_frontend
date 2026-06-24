@@ -7,6 +7,7 @@ import { formatDateTime } from '@/utils/utils'
 import type { NotificationDetail } from '../../api'
 import { NOTIFICATION_STATUS_LABELS } from '../../constants'
 import { getDomainLabel, getTriggerLabel } from '../list/NotificationsColumns'
+import { NOTIFICATIONS_MESSAGES } from '../../messages'
 
 interface NotificationDetailDrawerProps {
   open: boolean
@@ -28,7 +29,7 @@ export const NotificationDetailDrawer = ({
 }: NotificationDetailDrawerProps) => (
   <DetailDrawer
     open={open}
-    title={notification?.subject_snapshot || notification?.trigger_label || 'הודעה'}
+    title={notification?.subject_snapshot || notification?.trigger_label || NOTIFICATIONS_MESSAGES.detail.fallbackTitle}
     subtitle={notification ? formatDateTime(notification.created_at) : undefined}
     onClose={onClose}
     footer={
@@ -42,26 +43,32 @@ export const NotificationDetailDrawer = ({
             iconPosition="end"
             onClick={onSend}
           >
-            שליחת הודעה ללקוח
+            {NOTIFICATIONS_MESSAGES.actions.sendToClient}
           </Button>
         </div>
       ) : undefined
     }
   >
-    {isLoading && <Alert variant="info" message="טוען את פרטי ההודעה..." />}
-    {error ? <Alert variant="error" message="שגיאה בטעינת פרטי ההודעה" /> : null}
+    {isLoading && <Alert variant="info" message={NOTIFICATIONS_MESSAGES.detail.loading} />}
+    {error ? <Alert variant="error" message={NOTIFICATIONS_MESSAGES.detail.loadError} /> : null}
     {notification && (
       <div className="space-y-4">
-        <DrawerSection title="פרטים">
-          <DrawerField label="סוג" value={getTriggerLabel(notification)} />
-          <DrawerField label="תחום" value={getDomainLabel(notification.domain_label)} />
-          <DrawerField label="לקוח" value={notification.client_name ?? `#${notification.client_record_id}`} />
-          <DrawerField label="נמען" value={notification.recipient ?? '—'} />
-          <DrawerField label="סטטוס" value={NOTIFICATION_STATUS_LABELS[notification.status]} />
+        <DrawerSection title={NOTIFICATIONS_MESSAGES.detail.sectionDetails}>
+          <DrawerField label={NOTIFICATIONS_MESSAGES.detail.type} value={getTriggerLabel(notification)} />
+          <DrawerField label={NOTIFICATIONS_MESSAGES.detail.domain} value={getDomainLabel(notification.domain_label)} />
+          <DrawerField
+            label={NOTIFICATIONS_MESSAGES.detail.client}
+            value={notification.client_name ?? `#${notification.client_record_id}`}
+          />
+          <DrawerField label={NOTIFICATIONS_MESSAGES.detail.recipient} value={notification.recipient ?? '—'} />
+          <DrawerField
+            label={NOTIFICATIONS_MESSAGES.detail.status}
+            value={NOTIFICATION_STATUS_LABELS[notification.status]}
+          />
         </DrawerSection>
-        <DrawerSection title="תוכן">
+        <DrawerSection title={NOTIFICATIONS_MESSAGES.detail.sectionContent}>
           <div className="whitespace-pre-wrap py-3 text-sm leading-7 text-gray-800">
-            {notification.content_snapshot || 'תוכן ההודעה לא זמין'}
+            {notification.content_snapshot || NOTIFICATIONS_MESSAGES.detail.contentUnavailable}
           </div>
         </DrawerSection>
       </div>

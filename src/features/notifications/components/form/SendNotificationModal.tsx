@@ -9,26 +9,18 @@ import { ClientPickerField, useClientPickerState } from '../../../../components/
 import { usePreviewNotification, useSendNotification } from '../../hooks/useSendNotification'
 import { CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS, TRIGGER_LABELS, isNotificationTrigger } from '../../api'
 import type { NotificationTrigger } from '../../api'
+import { NOTIFICATIONS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
-const DOMAIN_LABELS: Partial<Record<NotificationTrigger, string>> = {
-  binder_missing_documents: 'קלסר',
-  binder_general_reminder: 'קלסר',
-  invoice_issued: 'חיובים',
-  payment_reminder: 'חיובים',
-  vat_documents_reminder: 'מע"מ',
-  annual_report_documents_request: 'דוח שנתי',
-  annual_report_client_reminder: 'דוח שנתי',
-  signature_request_sent: 'חתימה',
-  signature_request_reminder: 'חתימה',
-  client_missing_information: 'לקוח',
-  client_documents_request: 'לקוח',
-  client_general_message: 'לקוח',
-}
+const DOMAIN_LABELS: Partial<Record<NotificationTrigger, string>> = NOTIFICATIONS_MESSAGES.form.domainLabels
 
 const buildTriggerOptions = (triggers: readonly NotificationTrigger[]) =>
   triggers.map((trigger) => ({
     value: trigger,
-    label: `${DOMAIN_LABELS[trigger] ?? 'כללי'} — ${TRIGGER_LABELS[trigger]}`,
+    label: NOTIFICATIONS_MESSAGES.form.triggerOptionLabel(
+      DOMAIN_LABELS[trigger] ?? NOTIFICATIONS_MESSAGES.form.generalDomain,
+      TRIGGER_LABELS[trigger],
+    ),
   }))
 
 export interface SendNotificationModalProps {
@@ -96,7 +88,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
   const handlePreview = async (overrideClientId?: number) => {
     const cid = overrideClientId ?? resolvedClientRecordId
     if (cid == null) {
-      setClientError('יש לבחור לקוח')
+      setClientError(NOTIFICATIONS_MESSAGES.form.clientRequired)
       return
     }
     setClientError(undefined)
@@ -109,7 +101,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
       entity_id: entityId,
     })
     if (result.status === 'blocked') {
-      setBlockedReason(result.reason ?? 'שליחת ההודעה חסומה')
+      setBlockedReason(result.reason ?? NOTIFICATIONS_MESSAGES.form.blockedFallback)
       return
     }
     setSubject(result.subject ?? '')
@@ -154,13 +146,13 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
     const trimmedBody = body.trim()
 
     if (!trimmedSubject) {
-      setSubjectError('נדרש נושא ההודעה')
+      setSubjectError(NOTIFICATIONS_MESSAGES.form.subjectRequired)
       valid = false
     } else {
       setSubjectError(undefined)
     }
     if (!trimmedBody) {
-      setBodyError('נדרש תוכן ההודעה')
+      setBodyError(NOTIFICATIONS_MESSAGES.form.bodyRequired)
       valid = false
     } else {
       setBodyError(undefined)
@@ -187,17 +179,17 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
   return (
     <Modal
       open={open}
-      title="שליחת הודעה"
+      title={NOTIFICATIONS_MESSAGES.form.title}
       onClose={onClose}
       footer={
         <div className="flex gap-2 justify-end">
           {step === 'preview' && (
             <Button type="button" variant="ghost" disabled={isSending} onClick={() => setStep('compose')}>
-              חזרה
+              {NOTIFICATIONS_MESSAGES.actions.back}
             </Button>
           )}
           <Button type="button" variant="ghost" disabled={isPreviewing || isSending} onClick={onClose}>
-            ביטול
+            {GLOBAL_UI_MESSAGES.actions.cancel}
           </Button>
           {step === 'compose' ? (
             <Button
@@ -206,11 +198,11 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
               disabled={isPreviewing || !!blockedReason}
               onClick={() => void handlePreview()}
             >
-              תצוגה מקדימה
+              {NOTIFICATIONS_MESSAGES.actions.preview}
             </Button>
           ) : (
             <Button type="button" isLoading={isSending} disabled={isSending} onClick={() => void handleSend()}>
-              שלח
+              {NOTIFICATIONS_MESSAGES.actions.send}
             </Button>
           )}
         </div>
@@ -231,7 +223,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
         {step === 'compose' && (
           <>
             <Select
-              label="סוג הודעה"
+              label={NOTIFICATIONS_MESSAGES.form.typeLabel}
               options={triggerOptions}
               value={trigger}
               onChange={(event) => handleTriggerChange(event.target.value)}
@@ -244,9 +236,14 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
         {step === 'preview' && (
           <>
             {warnings.length > 0 && <Alert variant="warning" size="sm" message={warnings.join(' · ')} />}
-            <Input label="נושא" value={subject} onChange={(e) => setSubject(e.target.value)} error={subjectError} />
+            <Input
+              label={NOTIFICATIONS_MESSAGES.form.subjectLabel}
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              error={subjectError}
+            />
             <Textarea
-              label="תוכן ההודעה"
+              label={NOTIFICATIONS_MESSAGES.form.bodyLabel}
               rows={8}
               value={body}
               onChange={(e) => setBody(e.target.value)}

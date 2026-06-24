@@ -1,13 +1,16 @@
 import type { NotificationItem } from '../../api'
 import { formatDateTime } from '../../../../utils/utils'
 import { Badge } from '@/components/ui/primitives/Badge'
+import { NOTIFICATIONS_MESSAGES } from '../../messages'
 
 interface NotificationListItemBaseProps {
   item: NotificationItem
 }
 
 const NotificationRecipient: React.FC<NotificationListItemBaseProps> = ({ item }) =>
-  item.recipient ? <span className="text-xs text-gray-500">נשלח ל: {item.recipient}</span> : null
+  item.recipient ? (
+    <span className="text-xs text-gray-500">{NOTIFICATIONS_MESSAGES.listItem.recipient(item.recipient)}</span>
+  ) : null
 
 const TriggerLabel: React.FC<NotificationListItemBaseProps> = ({ item }) => (
   <Badge variant="neutral" size="xs">
