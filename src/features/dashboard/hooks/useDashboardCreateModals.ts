@@ -9,6 +9,7 @@ import { useClientPickerState } from '@/components/shared/client/useClientPicker
 import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { dashboardQK } from '../api/queryKeys'
+import { DASHBOARD_ERROR_MESSAGES } from '../errorMessages'
 
 export type DashboardCreateModal = 'charge' | 'client' | 'vat' | 'advancePayment'
 
@@ -57,7 +58,7 @@ export const useDashboardCreateModals = () => {
         invalidateDashboardData(),
       ])
     },
-    onError: (err) => showErrorToast(err, 'שגיאה ביצירת מקדמה'),
+    onError: (err) => showErrorToast(err, DASHBOARD_ERROR_MESSAGES.advancePaymentCreate),
   })
 
   const clientCreateMutation = useMutation({
@@ -70,14 +71,14 @@ export const useDashboardCreateModals = () => {
     },
     onError: async (err, payload) => {
       if (extractClientErrorCode(err) !== 'CLIENT.DELETED_EXISTS') {
-        showErrorToast(err, 'שגיאה ביצירת לקוח')
+        showErrorToast(err, DASHBOARD_ERROR_MESSAGES.clientCreate)
         return
       }
       try {
         const deleted = await clientsApi.getConflictByIdNumber(payload.id_number)
         setDeletedClientInfo(deleted.deleted_clients[0] ?? null)
       } catch {
-        showErrorToast(err, 'שגיאה ביצירת לקוח')
+        showErrorToast(err, DASHBOARD_ERROR_MESSAGES.clientCreate)
       }
     },
   })
@@ -91,7 +92,7 @@ export const useDashboardCreateModals = () => {
       await Promise.all([queryClient.invalidateQueries({ queryKey: clientsQK.all }), invalidateDashboardData()])
       navigate(CLIENT_ROUTES.detail(client.id))
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בשחזור לקוח'),
+    onError: (err) => showErrorToast(err, DASHBOARD_ERROR_MESSAGES.clientRestore),
   })
 
   const closeCreateModal = () => {
@@ -115,7 +116,7 @@ export const useDashboardCreateModals = () => {
       await vatCreateMutation.mutateAsync(payload)
       return true
     } catch (err) {
-      showErrorToast(err, 'שגיאה ביצירת תיק מע"מ')
+      showErrorToast(err, DASHBOARD_ERROR_MESSAGES.vatCreate)
       return false
     }
   }
@@ -148,8 +149,10 @@ export const useDashboardCreateModals = () => {
     setAdvancePaymentClientId,
     advancePaymentClientPicker,
     chargeCreateError: chargeCreateMutation.error
-      ? getErrorMessage(chargeCreateMutation.error, 'שגיאה ביצירת חיוב')
+      ? getErrorMessage(chargeCreateMutation.error, DASHBOARD_ERROR_MESSAGES.chargeCreate)
       : null,
-    vatCreateError: vatCreateMutation.error ? getErrorMessage(vatCreateMutation.error, 'שגיאה ביצירת תיק מע"מ') : null,
+    vatCreateError: vatCreateMutation.error
+      ? getErrorMessage(vatCreateMutation.error, DASHBOARD_ERROR_MESSAGES.vatCreate)
+      : null,
   }
 }
