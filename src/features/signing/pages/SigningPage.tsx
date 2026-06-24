@@ -1,9 +1,12 @@
 import { useParams } from 'react-router-dom'
 import { FileSignature } from 'lucide-react'
+import { Card } from '@/components/ui/primitives/Card'
 import { SigningForm, SigningStatus, useSigningPageState, type SigningTerminalState } from '@/features/signing'
 
 const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-6 shadow-lg">{children}</div>
+  <Card size="compact" className="w-full max-w-md">
+    {children}
+  </Card>
 )
 
 const TERMINAL_STATES: SigningTerminalState[] = ['loading', 'error', 'signed', 'declined']

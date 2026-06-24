@@ -11,38 +11,50 @@ import {
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn, formatCurrencyILS, formatDate } from '@/utils/utils'
+import { semanticDotClasses, semanticStatToneClasses } from '@/utils/semanticColors'
 import type { AttentionBoardItem, AttentionUrgency } from '../../api/contracts'
 import { ATTENTION_BOARD_COPY } from '../../constants'
 import { dueDateLabel } from '../../utils/dashboardUtils'
 import { DashboardPanel, DashboardSectionHeader } from '../shared/DashboardLayout'
 import { Badge, type BadgeVariant } from '@/components/ui/primitives/Badge'
 
-type AttentionTone = 'neg' | 'warn' | 'info' | 'mut'
-
-interface UrgencyConfig {
-  tone: AttentionTone
+interface UrgencyStyle {
   label: string
   dot: string
-}
-
-const URGENCY_CONFIG: Record<AttentionUrgency, UrgencyConfig> = {
-  overdue: { tone: 'neg', label: 'באיחור', dot: 'bg-negative-500' },
-  approaching: { tone: 'warn', label: 'מתקרב', dot: 'bg-warning-400' },
-  important: { tone: 'info', label: 'חשוב', dot: 'bg-primary-500' },
-  upcoming: { tone: 'mut', label: 'קרוב', dot: 'bg-slate-300' },
-}
-
-interface ToneStyle {
-  icon: string
+  iconBg: string
   badge: BadgeVariant
   delta: string
 }
 
-const TONE_STYLES: Record<AttentionTone, ToneStyle> = {
-  neg: { icon: 'bg-negative-50 text-negative-500', badge: 'error', delta: 'text-negative-600' },
-  warn: { icon: 'bg-warning-50 text-warning-600', badge: 'warning', delta: 'text-warning-600' },
-  info: { icon: 'bg-primary-50 text-primary-600', badge: 'primary', delta: 'text-primary-600' },
-  mut: { icon: 'bg-slate-100 text-slate-500', badge: 'neutral', delta: 'text-slate-500' },
+const URGENCY_CONFIG: Record<AttentionUrgency, UrgencyStyle> = {
+  overdue: {
+    label: 'באיחור',
+    dot: semanticDotClasses.negative,
+    iconBg: semanticStatToneClasses.negative.iconBg,
+    badge: 'negative',
+    delta: 'text-negative-600',
+  },
+  approaching: {
+    label: 'מתקרב',
+    dot: semanticDotClasses.warning,
+    iconBg: semanticStatToneClasses.warning.iconBg,
+    badge: 'warning',
+    delta: 'text-warning-600',
+  },
+  important: {
+    label: 'חשוב',
+    dot: semanticDotClasses.info,
+    iconBg: semanticStatToneClasses.info.iconBg,
+    badge: 'info',
+    delta: 'text-info-600',
+  },
+  upcoming: {
+    label: 'קרוב',
+    dot: 'bg-slate-300',
+    iconBg: 'bg-slate-100 text-slate-500',
+    badge: 'neutral',
+    delta: 'text-slate-500',
+  },
 }
 
 interface SourceConfig {
@@ -69,18 +81,17 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
   const urgency = URGENCY_CONFIG[item.urgency]
   const source = SOURCE_CONFIG[item.source_type] ?? DEFAULT_SOURCE
   const { icon: SourceIcon } = source
-  const tone = TONE_STYLES[urgency.tone]
 
   return (
     <Link to={item.href} className="flex items-center gap-3 rounded-2xl px-3 py-3 transition-colors hover:bg-slate-50">
-      <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-xl', tone.icon)}>
+      <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-xl', urgency.iconBg)}>
         <SourceIcon className="h-4 w-4" />
       </span>
 
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <span className="truncate text-sm font-semibold text-slate-900">{item.title}</span>
-          <Badge variant={tone.badge} size="2xs" dot={urgency.dot} className="shrink-0">
+          <Badge variant={urgency.badge} size="2xs" dot={urgency.dot} className="shrink-0">
             {urgency.label}
           </Badge>
         </div>
@@ -108,7 +119,7 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
         {item.due_date && (
           <span className="text-xs font-medium tabular-nums text-slate-500">{formatDate(item.due_date)}</span>
         )}
-        <span className={cn('text-2xs font-semibold tabular-nums', tone.delta)}>{dueDateLabel(item.days_delta)}</span>
+        <span className={cn('text-2xs font-semibold tabular-nums', urgency.delta)}>{dueDateLabel(item.days_delta)}</span>
       </div>
     </Link>
   )
@@ -135,7 +146,7 @@ export const AttentionBoard = ({ items, total }: AttentionBoardProps) => {
               : `${displayTotal} פריטים פתוחים · ${items.length} בראש סדר העדיפויות`
           }
           count={isEmpty ? undefined : items.length}
-          tone={isEmpty ? 'neutral' : 'amber'}
+          tone={isEmpty ? 'neutral' : 'warning'}
           action={
             !isEmpty && displayTotal > items.length ? (
               <Link

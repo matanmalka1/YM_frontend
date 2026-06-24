@@ -1,6 +1,7 @@
 import { Calendar, Download, Eye, FileText, History, Pencil, RefreshCw, Trash2 } from 'lucide-react'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import { Button } from '../../../../components/ui/primitives/Button'
+import { Card } from '../../../../components/ui/primitives/Card'
 import { RowActionsMenu, RowActionItem, RowActionSeparator } from '@/components/ui/table'
 import { formatDate } from '../../../../utils/utils'
 import { DOC_TYPE_LABELS } from '../../constants'
@@ -35,7 +36,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
   onToggleVersions,
   onEdit,
 }) => (
-  <div className="flex flex-col gap-3 rounded-xl border border-gray-200/80 bg-white p-4 transition-all duration-200 hover:shadow-md animate-fade-in">
+  <Card size="compact" bodyClassName="flex flex-col gap-3">
     <div className="flex items-start justify-between gap-2">
       <span className="text-sm font-semibold text-gray-900 leading-snug">
         {DOC_TYPE_LABELS[doc.document_type] ?? doc.document_type}
@@ -119,7 +120,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
         הורדה
       </Button>
     </div>
-  </div>
+  </Card>
 )
 
 DocumentCard.displayName = 'DocumentCard'

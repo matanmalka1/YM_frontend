@@ -3,6 +3,7 @@ import { he } from 'date-fns/locale'
 import { Filter, RefreshCw, Search, Star, X } from 'lucide-react'
 import { Button } from '../../../components/ui/primitives/Button'
 import { Chip } from '../../../components/ui/primitives/Chip'
+import { Card } from '../../../components/ui/primitives/Card'
 import { Input } from '../../../components/ui/inputs/Input'
 import { formatCount } from '../../../utils/utils'
 import { useSearchDebounce } from '../../../hooks/useSearchDebounce'
@@ -68,7 +69,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
   const lastUpdated = lastEventTimestamp ? format(parseISO(lastEventTimestamp), 'd MMM HH:mm', { locale: he }) : null
 
   return (
-    <div className="rounded-xl border border-gray-200/80 bg-white overflow-hidden">
+    <Card variant="outlined" disablePadding>
       {/* ── Top row: search + controls ── */}
       <div className="flex flex-col gap-3 px-4 py-3 md:flex-row md:items-center border-b border-gray-100">
         {/* Search */}
@@ -180,7 +181,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
           </Button>
         </div>
       </div>
-    </div>
+    </Card>
   )
 }
 

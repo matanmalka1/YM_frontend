@@ -1,43 +1,19 @@
 import type { ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import { cn } from '@/utils/utils'
+import { semanticStatToneClasses, type SemanticTone } from '@/utils/semanticColors'
 import { Badge, type BadgeVariant } from '@/components/ui/primitives/Badge'
+import { Card } from '@/components/ui/primitives/Card'
 
-type Tone = 'neutral' | 'blue' | 'green' | 'amber' | 'red' | 'purple'
+type Tone = SemanticTone | 'purple'
 
-const toneClasses: Record<Tone, { icon: string; badge: string; border: string }> = {
-  neutral: { icon: 'bg-slate-100 text-slate-500', badge: 'bg-slate-100 text-slate-600', border: 'border-slate-200' },
-  blue: {
-    icon: 'bg-primary-50 text-primary-600',
-    badge: 'bg-primary-50 text-primary-700',
-    border: 'border-primary-100',
-  },
-  green: {
-    icon: 'bg-positive-50 text-positive-600',
-    badge: 'bg-positive-50 text-positive-700',
-    border: 'border-positive-100',
-  },
-  amber: {
-    icon: 'bg-warning-50 text-warning-600',
-    badge: 'bg-warning-50 text-warning-700',
-    border: 'border-warning-100',
-  },
-  red: {
-    icon: 'bg-negative-50 text-negative-500',
-    badge: 'bg-negative-50 text-negative-600',
-    border: 'border-negative-100',
-  },
-  purple: { icon: 'bg-violet-50 text-violet-500', badge: 'bg-violet-50 text-violet-600', border: 'border-violet-100' },
-}
+const purpleTone = { iconBg: 'bg-violet-50 text-violet-500' }
 
-const badgeVariants: Record<Tone, BadgeVariant> = {
-  neutral: 'neutral',
-  blue: 'info',
-  green: 'success',
-  amber: 'warning',
-  red: 'error',
-  purple: 'info',
-}
+const getToneClasses = (tone: Tone) =>
+  tone === 'purple' ? purpleTone : semanticStatToneClasses[tone]
+
+const getBadgeVariant = (tone: Tone): BadgeVariant =>
+  tone === 'purple' ? 'info' : tone
 
 interface DashboardSurfaceProps {
   children: ReactNode
@@ -70,7 +46,7 @@ export const DashboardSectionHeader = ({
   <div className={cn('flex items-center justify-between gap-4', className)}>
     <div className="flex min-w-0 items-center gap-3">
       {Icon && (
-        <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl', toneClasses[tone].icon)}>
+        <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl', getToneClasses(tone).iconBg)}>
           <Icon className="h-4 w-4" />
         </span>
       )}
@@ -81,7 +57,7 @@ export const DashboardSectionHeader = ({
     </div>
     <div className="flex shrink-0 items-center gap-2">
       {count !== undefined && (
-        <Badge variant={badgeVariants[tone]} size="sm" className="min-w-7 justify-center tabular-nums">
+        <Badge variant={getBadgeVariant(tone)} size="sm" className="min-w-7 justify-center tabular-nums">
           {count}
         </Badge>
       )}
@@ -96,7 +72,7 @@ interface DashboardPanelProps {
 }
 
 export const DashboardPanel = ({ children, className }: DashboardPanelProps) => (
-  <section className={cn('overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-elevation-1', className)}>
+  <Card variant="soft" disablePadding className={className}>
     {children}
-  </section>
+  </Card>
 )

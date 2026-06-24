@@ -36,7 +36,7 @@ export const CORRESPONDENCE_TYPE_CONFIG: Record<CorrespondenceType, Corresponden
   meeting: {
     label: 'פגישה',
     icon: Users,
-    variant: 'success',
+    variant: 'positive',
     dotColor: 'bg-positive-500',
   },
   fax: {

@@ -10,7 +10,7 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   icon?: React.ReactNode
   actions?: React.ReactNode
   footer?: React.ReactNode
-  variant?: 'default' | 'elevated' | 'outlined'
+  variant?: 'default' | 'elevated' | 'outlined' | 'soft'
   interactive?: boolean
   size?: 'default' | 'compact'
   /** Remove body padding for full-bleed content (e.g. tables). */
@@ -24,6 +24,7 @@ const variants = {
   default: 'bg-white shadow-elevation-1',
   elevated: 'bg-white shadow-elevation-2',
   outlined: 'bg-white border border-gray-200/70',
+  soft: 'border border-slate-100 bg-white shadow-elevation-1',
 }
 
 export const Card: React.FC<CardProps> = ({

@@ -2,6 +2,7 @@ import { StateCard } from "../../../components/ui/feedback/StateCard";
 import { Inbox } from "lucide-react";
 import type { AgingReportItem } from "../api";
 import { formatCount, formatDate } from "../../../utils/utils";
+import { semanticDotClasses } from "../../../utils/semanticColors";
 import { ActionSurfaceLink } from "../../../components/ui/primitives/ActionSurface";
 import { Badge } from "../../../components/ui/primitives/Badge";
 import { formatILS, toReportNumber, type ReportMoneyValue } from "../utils";
@@ -11,10 +12,10 @@ interface AgingReportCardsProps {
 }
 
 const BUCKETS = [
-  { key: "current", label: "עד 30", className: "bg-info-500" },
-  { key: "days_30", label: "31-60", className: "bg-gray-500" },
-  { key: "days_60", label: "61-90", className: "bg-warning-500" },
-  { key: "days_90_plus", label: "90+", className: "bg-negative-500" },
+  { key: "current", label: "עד 30", className: semanticDotClasses.info },
+  { key: "days_30", label: "31-60", className: semanticDotClasses.neutral },
+  { key: "days_60", label: "61-90", className: semanticDotClasses.warning },
+  { key: "days_90_plus", label: "90+", className: semanticDotClasses.negative },
 ] as const;
 
 const getBucketPercent = (amount: ReportMoneyValue, total: ReportMoneyValue) => {
@@ -44,7 +45,7 @@ export const AgingReportCards: React.FC<AgingReportCardsProps> = ({ items }) => 
               <p className="text-xs text-gray-500">לקוח #{item.client_record_id}</p>
             </div>
             {toReportNumber(item.days_90_plus) > 0 && (
-              <Badge variant="error">דורש טיפול</Badge>
+              <Badge variant="negative">דורש טיפול</Badge>
             )}
           </div>
 

@@ -92,7 +92,7 @@ const STALE_PENDING_COLUMNS: Column<StalePendingItem>[] = [
     key: "days",
     header: "ימים ממתין",
     align: "right",
-    render: (item) => <Badge variant="error">{item.days_pending} ימים</Badge>,
+    render: (item) => <Badge variant="negative">{item.days_pending} ימים</Badge>,
   },
 ];
 

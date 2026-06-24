@@ -1,6 +1,7 @@
 import { ArrowLeft, ReceiptText } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn, formatCount, formatShekelAmount } from '@/utils/utils'
+import { Card } from '@/components/ui/primitives/Card'
 import { DASHBOARD_HREFS } from '../../constants'
 
 interface OpenChargesCardProps {
@@ -12,7 +13,7 @@ export const OpenChargesCard = ({ count, amountIls }: OpenChargesCardProps) => {
   const hasCharges = count > 0
 
   return (
-    <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-elevation-1">
+    <Card variant="soft" size="compact">
       <div className="mb-3 flex items-center justify-between">
         <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">חיובים פתוחים</span>
         <span
@@ -39,7 +40,7 @@ export const OpenChargesCard = ({ count, amountIls }: OpenChargesCardProps) => {
         <span>פתח את כל החיובים</span>
         <ArrowLeft className="h-4 w-4" />
       </Link>
-    </div>
+    </Card>
   )
 }
 

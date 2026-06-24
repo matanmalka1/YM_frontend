@@ -1,4 +1,5 @@
 export type SemanticTone = 'neutral' | 'info' | 'positive' | 'warning' | 'negative'
+export type BadgeVariant = SemanticTone | 'primary' | 'purple'
 
 type StatToneClasses = {
   accent: string
@@ -38,6 +39,35 @@ export const semanticDotClasses: Record<SemanticTone, string> = {
   positive: 'bg-positive-500',
   warning: 'bg-warning-500',
   negative: 'bg-negative-500',
+}
+
+export const semanticSoftSignalBadgeClasses: Record<SemanticTone, string> = {
+  neutral: 'bg-gray-50 text-gray-600',
+  info: 'bg-info-50 text-info-700',
+  positive: 'bg-positive-50 text-positive-700',
+  warning: 'bg-warning-50 text-warning-700',
+  negative: 'bg-negative-50 text-negative-700',
+}
+
+const badgeExtras: Record<'primary' | 'purple', { solid: string; signal: string; soft: string }> = {
+  primary: { solid: 'bg-primary-600 text-white', signal: 'bg-primary-50 text-primary-700 ring-1 ring-primary-200', soft: 'bg-primary-50 text-primary-700' },
+  purple:  { solid: 'bg-purple-100 text-purple-700', signal: 'bg-purple-50 text-purple-700 ring-1 ring-purple-200', soft: 'bg-purple-50 text-purple-700' },
+}
+
+export const badgeVariantClasses: Record<BadgeVariant, string> = {
+  ...semanticBadgeClasses,
+  primary: badgeExtras.primary.solid,
+  purple: badgeExtras.purple.solid,
+}
+export const badgeSignalVariantClasses: Record<BadgeVariant, string> = {
+  ...semanticSignalBadgeClasses,
+  primary: badgeExtras.primary.signal,
+  purple: badgeExtras.purple.signal,
+}
+export const badgeSoftSignalVariantClasses: Record<BadgeVariant, string> = {
+  ...semanticSoftSignalBadgeClasses,
+  primary: badgeExtras.primary.soft,
+  purple: badgeExtras.purple.soft,
 }
 
 export const semanticStatToneClasses: Record<SemanticTone, StatToneClasses> = {

@@ -13,19 +13,11 @@ import { VatFileModal } from '../form/VatFileModal'
 import { isFiled } from '../../utils/vatHelpers'
 import type { VatWorkItemSummaryBarProps } from '../../types'
 
-type AlertTone = 'warning' | 'error'
+type AlertTone = 'warning' | 'negative'
 
-const ALERT_CLASSES: Record<AlertTone, { wrap: string; icon: string; Icon: typeof AlertTriangle }> = {
-  warning: {
-    wrap: 'border-warning-200 bg-warning-50 text-warning-800',
-    icon: 'text-warning-500',
-    Icon: AlertTriangle,
-  },
-  error: {
-    wrap: 'border-negative-200 bg-negative-50 text-negative-800',
-    icon: 'text-negative-500',
-    Icon: AlertTriangle,
-  },
+const ALERT_CLASSES: Record<AlertTone, { wrap: string; Icon: typeof AlertTriangle }> = {
+  warning: { wrap: 'border-warning-200 bg-warning-50 text-warning-800', Icon: AlertTriangle },
+  negative: { wrap: 'border-negative-200 bg-negative-50 text-negative-800', Icon: AlertTriangle },
 }
 
 const AlertBanner: React.FC<{
@@ -33,11 +25,11 @@ const AlertBanner: React.FC<{
   icon?: typeof AlertTriangle
   children: React.ReactNode
 }> = ({ tone, icon: IconOverride, children }) => {
-  const { wrap, icon, Icon } = ALERT_CLASSES[tone]
+  const { wrap, Icon } = ALERT_CLASSES[tone]
   const FinalIcon = IconOverride ?? Icon
   return (
     <div className={`flex items-start gap-2 rounded-lg border px-3 py-2 text-sm ${wrap}`}>
-      <FinalIcon className={`mt-0.5 h-4 w-4 shrink-0 ${icon}`} />
+      <FinalIcon className="mt-0.5 h-4 w-4 shrink-0 opacity-70" />
       <span>{children}</span>
     </div>
   )
@@ -60,7 +52,7 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
       )}
 
       {workItem.is_overdue && (workItem.extended_deadline ?? workItem.submission_deadline) && (
-        <AlertBanner tone="error">
+        <AlertBanner tone="negative">
           תאריך הגשה חלף — {formatDate(workItem.extended_deadline ?? workItem.submission_deadline)}
         </AlertBanner>
       )}

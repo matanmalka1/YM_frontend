@@ -1,39 +1,16 @@
 import type { LucideIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn, formatCount } from '@/utils/utils'
+import { semanticStatToneClasses, type SemanticTone } from '@/utils/semanticColors'
 import { Badge } from '@/components/ui/primitives/Badge'
+import { Card } from '@/components/ui/primitives/Card'
 import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
 import type { VatDashboardPeriodStat } from '../../api/contracts'
 
-type StatTone = 'green' | 'amber' | 'red'
 
-const toneClasses: Record<
-  StatTone,
-  { icon: string; badge: 'success' | 'warning' | 'error'; bar: string; pct: string }
-> = {
-  green: {
-    icon: 'bg-positive-50 text-positive-600',
-    badge: 'success',
-    bar: 'bg-positive-500',
-    pct: 'text-positive-600',
-  },
-  amber: {
-    icon: 'bg-warning-50 text-warning-600',
-    badge: 'warning',
-    bar: 'bg-warning-400',
-    pct: 'text-warning-600',
-  },
-  red: {
-    icon: 'bg-negative-50 text-negative-500',
-    badge: 'error',
-    bar: 'bg-negative-400',
-    pct: 'text-negative-600',
-  },
-}
-
-const getTone = (stat: VatDashboardPeriodStat): StatTone => {
-  if (stat.pending <= 0) return 'green'
-  return stat.completion_percent >= 80 ? 'amber' : 'red'
+const getTone = (stat: VatDashboardPeriodStat): SemanticTone => {
+  if (stat.pending <= 0) return 'positive'
+  return stat.completion_percent >= 80 ? 'warning' : 'negative'
 }
 
 interface VatStatCardProps {
@@ -47,18 +24,18 @@ interface VatStatCardProps {
 
 export const VatStatCard = ({ title, unit, icon: Icon, stat, href, className }: VatStatCardProps) => {
   const tone = getTone(stat)
-  const { icon: iconClass, badge, bar, pct: pctClass } = toneClasses[tone]
+  const { iconBg, value: pctClass } = semanticStatToneClasses[tone]
 
   const content = (
-    <div
-      className={cn(
-        'flex flex-col gap-3 rounded-3xl border border-slate-100 bg-white p-5 shadow-elevation-1 transition-all duration-200 hover:shadow-elevation-2',
-        href && 'cursor-pointer',
-        className,
-      )}
+    <Card
+      variant="soft"
+      size="compact"
+      interactive={Boolean(href)}
+      bodyClassName="flex flex-col gap-3"
+      className={className}
     >
       <div className="flex items-center gap-3">
-        <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl', iconClass)}>
+        <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl', iconBg)}>
           <Icon className="h-4 w-4" />
         </span>
         <span className="text-sm font-semibold text-slate-500">{title}</span>
@@ -71,12 +48,12 @@ export const VatStatCard = ({ title, unit, icon: Icon, stat, href, className }: 
 
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs text-slate-500">{stat.period_label}</span>
-        <Badge variant={badge} size="2xs" className="whitespace-nowrap">
+        <Badge variant={tone} size="2xs" className="whitespace-nowrap">
           {stat.status_label}
         </Badge>
       </div>
 
-      <ProgressBar value={stat.completion_percent} size="sm" trackClassName="bg-slate-100" fillClassName={bar} />
+      <ProgressBar value={stat.completion_percent} size="sm" tone={tone} trackClassName="bg-slate-100" />
 
       <div className="flex items-center justify-between text-2xs font-medium text-slate-500">
         <span className="tabular-nums">
@@ -84,10 +61,15 @@ export const VatStatCard = ({ title, unit, icon: Icon, stat, href, className }: 
         </span>
         <span className={cn('font-bold tabular-nums', pctClass)}>{stat.completion_percent}%</span>
       </div>
-    </div>
+    </Card>
   )
 
-  if (href) return <Link to={href}>{content}</Link>
+  if (href)
+    return (
+      <Link to={href} className="block">
+        {content}
+      </Link>
+    )
   return content
 }
 

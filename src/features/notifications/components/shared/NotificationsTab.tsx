@@ -44,13 +44,13 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
       summary={
         summary && summary.total > 0 ? (
           <div className="flex items-center gap-2">
-            <Badge variant="success" size="sm">
+            <Badge variant="positive" size="sm">
               נשלחו: {summary.sent}
             </Badge>
             <Badge variant="warning" size="sm">
               בהמתנה: {summary.pending}
             </Badge>
-            <Badge variant="error" size="sm">
+            <Badge variant="negative" size="sm">
               נכשלו: {summary.failed}
             </Badge>
           </div>

@@ -2,8 +2,9 @@ import { memo, useState } from 'react'
 import { ChevronDown, ChevronLeft } from 'lucide-react'
 import { Card } from '@/components/ui/primitives/Card'
 import { cn } from '@/utils/utils'
+import { semanticMonoToneClasses } from '@/utils/semanticColors'
 
-type PeriodMetricTone = 'default' | 'success' | 'warning' | 'danger' | 'muted'
+type PeriodMetricTone = 'default' | 'positive' | 'warning' | 'negative' | 'muted'
 
 export interface PeriodSummaryMetric {
   label: string
@@ -29,9 +30,9 @@ interface GroupedPeriodRowProps {
 
 const metricToneClass: Record<PeriodMetricTone, string> = {
   default: 'text-gray-700',
-  success: 'text-positive-700',
-  warning: 'text-warning-700',
-  danger: 'text-negative-700',
+  positive: semanticMonoToneClasses.positive,
+  warning: semanticMonoToneClasses.warning,
+  negative: semanticMonoToneClasses.negative,
   muted: 'text-gray-500',
 }
 

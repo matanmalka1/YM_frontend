@@ -1,9 +1,14 @@
 import React from 'react'
 import { X } from 'lucide-react'
 import { cn } from '../../../utils/utils'
-import { semanticBadgeClasses, semanticSignalBadgeClasses } from '@/utils/semanticColors'
+import {
+  badgeVariantClasses,
+  badgeSignalVariantClasses,
+  badgeSoftSignalVariantClasses,
+  type BadgeVariant,
+} from '@/utils/semanticColors'
 
-export type BadgeVariant = 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'primary' | 'purple'
+export type { BadgeVariant }
 export type BadgeSize = '3xs' | '2xs' | 'xs' | 'sm' | 'md'
 
 interface BadgeProps {
@@ -25,35 +30,6 @@ interface BadgeProps {
   suppressHydrationWarning?: boolean
 }
 
-const variantClasses: Record<BadgeVariant, string> = {
-  success: semanticBadgeClasses.positive,
-  warning: semanticBadgeClasses.warning,
-  error: semanticBadgeClasses.negative,
-  info: semanticBadgeClasses.info,
-  neutral: semanticBadgeClasses.neutral,
-  primary: 'bg-primary-600 text-white',
-  purple: 'bg-purple-100 text-purple-700',
-}
-
-const signalVariantClasses: Record<BadgeVariant, string> = {
-  warning: semanticSignalBadgeClasses.warning,
-  info: semanticSignalBadgeClasses.info,
-  neutral: semanticSignalBadgeClasses.neutral,
-  success: semanticSignalBadgeClasses.positive,
-  error: semanticSignalBadgeClasses.negative,
-  primary: 'bg-primary-50 text-primary-700 ring-1 ring-primary-200',
-  purple: 'bg-purple-50 text-purple-700 ring-1 ring-purple-200',
-}
-
-const softSignalVariantClasses: Record<BadgeVariant, string> = {
-  warning: 'bg-warning-50 text-warning-700',
-  info: 'bg-info-50 text-info-700',
-  neutral: 'bg-gray-50 text-gray-600',
-  success: 'bg-positive-50 text-positive-700',
-  error: 'bg-negative-50 text-negative-700',
-  primary: 'bg-primary-50 text-primary-700',
-  purple: 'bg-purple-50 text-purple-700',
-}
 
 const sizeClasses: Record<BadgeSize, string> = {
   '3xs': 'px-1 py-0 text-3xs',
@@ -140,7 +116,7 @@ export const Badge: React.FC<BadgeProps> = ({
         className={cn(
           'inline-flex items-center rounded-full font-medium',
           signalSizeClasses[size],
-          ring ? signalVariantClasses[variant] : softSignalVariantClasses[variant],
+          ring ? badgeSignalVariantClasses[variant] : badgeSoftSignalVariantClasses[variant],
           className,
         )}
       >
@@ -155,7 +131,7 @@ export const Badge: React.FC<BadgeProps> = ({
       className={cn(
         'inline-flex items-center rounded-full font-medium',
         sizeClasses[size],
-        variantClasses[variant],
+        badgeVariantClasses[variant],
         onClick && 'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500',
         className,
       )}

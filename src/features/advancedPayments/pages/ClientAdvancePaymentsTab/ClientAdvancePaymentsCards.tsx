@@ -97,7 +97,7 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
                   {row.paid_late ? (
                     <Badge variant="warning">שולם באיחור</Badge>
                   ) : row.timing_status === 'overdue' ? (
-                    <Badge variant="error">באיחור</Badge>
+                    <Badge variant="negative">באיחור</Badge>
                   ) : null}
                 </div>
               </div>
