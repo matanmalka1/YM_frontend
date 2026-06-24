@@ -6,5 +6,9 @@ export const TAX_CALENDAR_SETTINGS_ERROR_MESSAGES = {
     invalidRange: 'שנת ההתחלה חייבת להיות קטנה או שווה לשנת הסיום.',
     invalidRangeToLoad: 'יש להזין טווח שנים תקין כדי לטעון תקציר ורשומות יומן מס.',
   },
-  load: { summary: 'שגיאה בטעינת תקציר יומן המס', rules: 'שגיאה בטעינת כללי יומן המס', entries: 'שגיאה בטעינת רשומות יומן המס' },
+  load: {
+    summary: 'שגיאה בטעינת תקציר יומן המס',
+    rules: 'שגיאה בטעינת כללי יומן המס',
+    entries: 'שגיאה בטעינת רשומות יומן המס',
+  },
 } as const
