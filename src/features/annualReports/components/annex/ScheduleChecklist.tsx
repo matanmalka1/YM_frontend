@@ -10,6 +10,7 @@ import { ScheduleAddForm } from './ScheduleAddForm'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { ANNEX_TEXT } from '../../constants/annexTextConstants'
 import { getCompletedCount, toggleExpandedSchedule } from '../../utils/annexHelpers'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface ScheduleChecklistProps {
   reportId: number
@@ -51,7 +52,7 @@ export const ScheduleChecklist: React.FC<ScheduleChecklistProps> = ({
   return (
     <Card
       title={ANNEX_TEXT.requiredSchedules}
-      subtitle={allDone ? ANNEX_TEXT.allSchedulesComplete : `${completed}/${schedules.length} הושלמו`}
+      subtitle={allDone ? ANNEX_TEXT.allSchedulesComplete : ANNUAL_REPORTS_MESSAGES.scheduleChecklist.completionSummary(completed, schedules.length)}
     >
       <ul className="space-y-2">
         {schedules.map((entry) => {
@@ -80,7 +81,7 @@ export const ScheduleChecklist: React.FC<ScheduleChecklistProps> = ({
                     {entry.notes && <p className="text-xs text-gray-500">{entry.notes}</p>}
                     {entry.completed_at && (
                       <p className={cn('text-xs', semanticMonoToneClasses.positive)}>
-                        הושלם: {formatDate(entry.completed_at)}
+                        {ANNUAL_REPORTS_MESSAGES.scheduleChecklist.completedAt(formatDate(entry.completed_at))}
                       </p>
                     )}
                   </div>

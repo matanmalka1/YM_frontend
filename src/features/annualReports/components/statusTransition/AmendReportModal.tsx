@@ -5,6 +5,7 @@ import type { AmendReportModalProps } from '../../types'
 import { AMEND_REASON_MIN_LENGTH } from '../../constants/statusTransitionConstants'
 import { isValidAmendReason } from '../../utils/statusTransitionHelpers'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../../errorMessages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 export const AmendReportModal = ({
@@ -42,7 +43,7 @@ export const AmendReportModal = ({
         onChange={(e) => onReasonChange(e.target.value)}
         placeholder={ANNUAL_REPORTS_MESSAGES.amendModal.reasonPlaceholder(AMEND_REASON_MIN_LENGTH)}
       />
-      {showValidation && <p className="mt-1 text-xs text-negative-500">{ANNUAL_REPORTS_MESSAGES.amendModal.minLengthError(AMEND_REASON_MIN_LENGTH)}</p>}
+      {showValidation && <p className="mt-1 text-xs text-negative-500">{ANNUAL_REPORTS_ERROR_MESSAGES.amend.minLength(AMEND_REASON_MIN_LENGTH)}</p>}
     </Modal>
   )
 }

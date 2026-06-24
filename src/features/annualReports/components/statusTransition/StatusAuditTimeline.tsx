@@ -5,6 +5,7 @@ import { Timeline, TimelineEntry } from '@/components/ui/feedback/Timeline'
 import type { AnnualReportAuditEntry } from '../../api'
 import { getStatusLabel, getStatusVariant } from '../../api'
 import { staggerDelay } from '../../../../utils/animation'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface StatusAuditTimelineProps {
   audit: AnnualReportAuditEntry[]
@@ -12,7 +13,7 @@ interface StatusAuditTimelineProps {
 
 export const StatusAuditTimeline: React.FC<StatusAuditTimelineProps> = ({ audit }) => {
   if (audit.length === 0) {
-    return <p className="text-sm text-gray-500">אין רשומות היסטוריה</p>
+    return <p className="text-sm text-gray-500">{ANNUAL_REPORTS_MESSAGES.statusAudit.empty}</p>
   }
 
   const reversed = [...audit].reverse()
@@ -32,7 +33,7 @@ export const StatusAuditTimeline: React.FC<StatusAuditTimelineProps> = ({ audit 
           </div>
 
           <div className="flex items-center justify-between gap-2 text-xs text-gray-500">
-            <span className="font-medium text-gray-700">משתמש #{entry.changed_by}</span>
+            <span className="font-medium text-gray-700">{ANNUAL_REPORTS_MESSAGES.statusAudit.changedBy(entry.changed_by)}</span>
             <div className="flex items-center gap-1">
               <Clock className="h-3 w-3" />
               {formatAuditTimestamp(entry.occurred_at)}

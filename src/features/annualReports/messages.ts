@@ -64,7 +64,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
   },
   fullPanel: {
     loading: 'טוען דוח...',
-    loadError: 'שגיאה בטעינת הדוח',
     title: (year: number) => `דוח שנתי ${year}`,
     breadcrumbList: 'דוחות שנתיים',
     breadcrumbReport: (year: number) => `דוח ${year}`,
@@ -93,6 +92,21 @@ export const ANNUAL_REPORTS_MESSAGES = {
     notCalculated: 'לא חושב',
     ofIncomeShort: 'מהכנסות',
     profitMarginTrend: (percentLabel: string) => `${percentLabel} שיעור רווח`,
+    incomeTrendLabel: '% מהכנסות',
+  },
+  readinessCheck: {
+    loading: 'בודק מוכנות...',
+    ready: 'הדוח מוכן להגשה',
+    notReady: (issuesCount: number) => `הדוח אינו מוכן להגשה (${issuesCount} בעיות)`,
+    completionLabel: 'אחוז השלמת מוכנות',
+  },
+  statusAudit: {
+    empty: 'אין רשומות היסטוריה',
+    changedBy: (userId: number) => `משתמש #${userId}`,
+  },
+  scheduleChecklist: {
+    completionSummary: (completed: number, total: number) => `${completed}/${total} הושלמו`,
+    completedAt: (date: string) => `הושלם: ${date}`,
   },
   timelineSection: {
     reportHistoryTitle: 'היסטוריית דוחות',
@@ -222,7 +236,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
     submit: 'שלח',
     reasonLabel: 'סיבת תיקון *',
     reasonPlaceholder: (minLength: number) => `תאר את סיבת התיקון (לפחות ${minLength} תווים)...`,
-    minLengthError: (minLength: number) => `נדרשים לפחות ${minLength} תווים`,
   },
   statusTransitionPanel: {
     noTransitions: (statusLabel: string) => `אין מעברי סטטוס זמינים (הדוח ${statusLabel})`,
@@ -266,7 +279,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
   },
   taxCalculationPanel: {
     calculating: 'מחשב מס...',
-    loadError: 'שגיאה בטעינת חישוב מס',
     taxBeforeCredits: 'מס לפני זיכויים',
     taxCredits: 'זיכויי מס',
     finalTaxDue: 'מס סופי לתשלום',

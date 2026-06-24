@@ -9,6 +9,7 @@ import { SegmentedControl, SegmentedControlItem } from '../../../../components/u
 import { PANEL_NAV_ITEMS } from '../../constants/panelConstants'
 import { getClientLabel } from '../../utils/panelHelpers'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../../errorMessages'
 
 interface AnnualReportFullPanelProps {
   reportId: number
@@ -49,7 +50,7 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
   if (error || !report) {
     return (
       <div className="flex flex-1 items-center justify-center py-24 text-sm text-negative-500">
-        {error ?? ANNUAL_REPORTS_MESSAGES.fullPanel.loadError}
+        {error ?? ANNUAL_REPORTS_ERROR_MESSAGES.fullPanel.loadError}
       </div>
     )
   }

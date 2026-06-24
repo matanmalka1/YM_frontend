@@ -30,7 +30,7 @@ export const AnnualReportStatsSection: React.FC<Props> = ({ report }) => {
       description: ANNUAL_REPORTS_MESSAGES.statsSection.recognizedExpensesNote(fmt(recognizedExpenses)),
       icon: SUMMARY_CARD_META.recognizedExpenses.icon,
       variant: SUMMARY_CARD_META.recognizedExpenses.variant,
-      trend: { value: expenseRatio, label: '% מהכנסות' },
+      trend: { value: expenseRatio, label: ANNUAL_REPORTS_MESSAGES.statsSection.incomeTrendLabel },
     },
     {
       key: 'final-balance',

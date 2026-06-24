@@ -6,6 +6,7 @@ import { TaxBracketsTable } from './TaxBracketsTable'
 import { TaxCalculatorInputs } from './TaxCalculatorInputs'
 import { getLiabilityTone, getTotalCredits } from '../../utils/taxHelpers'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../../errorMessages'
 
 interface Props {
   reportId: number
@@ -37,7 +38,7 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
   const { data } = panel
 
   if (panel.isLoading) return <p className="py-8 text-center text-sm text-gray-400">{ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.calculating}</p>
-  if (panel.isError || !data) return <p className="py-8 text-center text-sm text-negative-500">{ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.loadError}</p>
+  if (panel.isError || !data) return <p className="py-8 text-center text-sm text-negative-500">{ANNUAL_REPORTS_ERROR_MESSAGES.taxCalculation.loadError}</p>
 
   const totalLiability = data.total_liability == null ? null : Number(data.total_liability)
   const totalCredits = getTotalCredits(data)

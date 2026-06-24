@@ -5,6 +5,7 @@ import { cn, formatPercent } from '../../../../utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
 import { clampPercent } from '../../utils/panelHelpers'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface ReadinessCheckPanelProps {
   reportId: number
@@ -17,7 +18,7 @@ export const ReadinessCheckPanel: React.FC<ReadinessCheckPanelProps> = ({ report
     enabled: !!reportId,
   })
 
-  if (isLoading) return <p className="text-sm text-gray-400 py-2">בודק מוכנות...</p>
+  if (isLoading) return <p className="text-sm text-gray-400 py-2">{ANNUAL_REPORTS_MESSAGES.readinessCheck.loading}</p>
   if (!data) return null
 
   const completion = clampPercent(data.completion_pct)
@@ -33,19 +34,19 @@ export const ReadinessCheckPanel: React.FC<ReadinessCheckPanelProps> = ({ report
         {data.is_ready ? (
           <>
             <CheckCircle2 className="h-4 w-4 shrink-0" />
-            <span>הדוח מוכן להגשה</span>
+            <span>{ANNUAL_REPORTS_MESSAGES.readinessCheck.ready}</span>
           </>
         ) : (
           <>
             <XCircle className="h-4 w-4 shrink-0" />
-            <span>הדוח אינו מוכן להגשה ({data.issues.length} בעיות)</span>
+            <span>{ANNUAL_REPORTS_MESSAGES.readinessCheck.notReady(data.issues.length)}</span>
           </>
         )}
       </div>
 
       <div className="space-y-1">
         <div className="flex items-center justify-between text-xs text-gray-600">
-          <span>אחוז השלמת מוכנות</span>
+          <span>{ANNUAL_REPORTS_MESSAGES.readinessCheck.completionLabel}</span>
           <span>{formatPercent(completion)}</span>
         </div>
         <ProgressBar value={completion} tone={data.is_ready ? 'positive' : 'warning'} />
