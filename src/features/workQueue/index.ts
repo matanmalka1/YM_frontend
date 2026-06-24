@@ -1,9 +1,5 @@
 export { workQueueApi, workQueueQK } from './api'
 export { type WorkQueueItem, type WorkQueueSourceType } from './api'
-export {
-  isWorkQueueSourceType,
-  workQueueSourceTypeLabels,
-  workQueueSourceTypeValues,
-} from './constants'
+export { isWorkQueueSourceType, workQueueSourceTypeLabels, workQueueSourceTypeValues } from './constants'
 
 export { WorkQueuePage } from './pages/WorkQueuePage'
