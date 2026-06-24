@@ -1,18 +1,12 @@
 import { type FC } from 'react'
 import { formatAdvanceRatePercent, formatDate, formatPhoneNumber, formatPlainIdentifier, formatShekelAmount } from '@/utils/utils'
 import type { ClientRecordResponse } from '../../api'
-import { ADVANCE_PAYMENT_FREQUENCY_LABELS, getClientStatusLabel, getClientVatReportingLabel } from '../../constants'
+import { ADVANCE_PAYMENT_FREQUENCY_LABELS, TURNOVER_SOURCE_LABELS, getClientStatusLabel, getClientVatReportingLabel } from '../../constants'
 import { useClientAuthorityContacts } from '../../hooks/useClientAuthorityContacts'
 import { useAdvisorOptions } from '@/features/users'
 import { InlineLink } from '@/components/ui/primitives/InlineLink'
 import { DefinitionSectionCard, EMPTY_VALUE } from './ClientInfoSectionParts'
 import { CLIENTS_MESSAGES } from '../../messages'
-
-const TURNOVER_SOURCE_LABELS: Record<string, string> = {
-  reported: CLIENTS_MESSAGES.info.turnoverSourceReported,
-  manual: CLIENTS_MESSAGES.info.turnoverSourceManual,
-  none: '',
-}
 
 type ClientInfoSectionProps = {
   client: ClientRecordResponse

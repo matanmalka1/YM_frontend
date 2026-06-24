@@ -17,8 +17,8 @@ import {
   TAX_CALENDAR_OBLIGATION_LABELS,
   type TaxCalendarGroup,
   type TaxCalendarGroupItem,
-  type TaxCalendarGroupItemSourceType,
 } from '../../api'
+import { TAX_CALENDAR_SOURCE_TYPE_LABELS } from '../../constants'
 import { TAX_CALENDAR_MESSAGES } from '../../messages'
 import { TAX_CALENDAR_ERROR_MESSAGES } from '../../errorMessages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
@@ -46,12 +46,6 @@ const formatEffectiveDueDateRange = (group: TaxCalendarGroup): string => {
 const hasGroupOverride = (group: TaxCalendarGroup): boolean =>
   group.effective_due_date_min !== group.regulatory_due_date ||
   group.effective_due_date_max !== group.regulatory_due_date
-
-const SOURCE_TYPE_LABELS: Record<TaxCalendarGroupItemSourceType, string> = {
-  vat_work_item: TAX_CALENDAR_MESSAGES.item.vat,
-  advance_payment: TAX_CALENDAR_MESSAGES.item.advancePayment,
-  annual_report: TAX_CALENDAR_MESSAGES.item.annualReport,
-}
 
 const getItemPath = (item: TaxCalendarGroupItem): string => {
   if (item.source_type === 'vat_work_item') return `/tax/vat/${item.source_id}`
@@ -144,7 +138,7 @@ const GroupItemsRows = ({
       key: 'type',
       header: TAX_CALENDAR_MESSAGES.item.recordType,
       align: 'right',
-      render: (item) => SOURCE_TYPE_LABELS[item.source_type],
+      render: (item) => TAX_CALENDAR_SOURCE_TYPE_LABELS[item.source_type],
       className: 'text-gray-600',
     },
     {

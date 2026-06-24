@@ -1,5 +1,12 @@
 import { makeLabelGetter, makeVariantGetter } from '../../utils/labels'
 import type { AdvancePaymentFrequency, ClientRecordResponse, ClientStatus, EntityType, VatType } from './api'
+import { CLIENTS_MESSAGES } from './messages'
+
+export const TURNOVER_SOURCE_LABELS: Record<string, string> = {
+  reported: CLIENTS_MESSAGES.info.turnoverSourceReported,
+  manual: CLIENTS_MESSAGES.info.turnoverSourceManual,
+  none: '',
+}
 
 export type ActiveClientDetailsTab =
   | 'details'

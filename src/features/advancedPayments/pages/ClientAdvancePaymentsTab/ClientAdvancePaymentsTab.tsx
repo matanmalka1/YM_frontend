@@ -1,7 +1,7 @@
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
 import { getOperationalYearOptions, getOperationalTaxYear } from '@/constants/periodOptions.constants'
-import { getAdvancePaymentStatusLabel, ADVANCE_PAYMENT_STATUS_FILTERS } from '../../constants'
+import { ADVANCE_PAYMENT_STATUS_OPTIONS } from '../../constants'
 import { useClientAdvancePaymentsTab } from '../../hooks/useClientAdvancePaymentsTab'
 import { ClientAdvancePaymentsHeader } from './ClientAdvancePaymentsHeader'
 import { ClientAdvancePaymentsCards } from './ClientAdvancePaymentsCards'
@@ -23,10 +23,7 @@ const CLIENT_ADVANCE_PAYMENTS_FILTER_FIELDS: FilterFieldDef[] = [
     type: 'toggle',
     key: 'status_filter',
     label: ADVANCED_PAYMENTS_MESSAGES.clientTab.statusFilterLabel,
-    options: ADVANCE_PAYMENT_STATUS_FILTERS.map((status) => ({
-      value: status,
-      label: getAdvancePaymentStatusLabel(status),
-    })),
+    options: ADVANCE_PAYMENT_STATUS_OPTIONS,
   },
   {
     type: 'select',

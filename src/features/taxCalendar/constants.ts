@@ -1,4 +1,4 @@
-import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarObligationType } from './api'
+import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarObligationType, type TaxCalendarGroupItemSourceType } from './api'
 import { TAX_CALENDAR_MESSAGES } from './messages'
 
 export const TAX_CALENDAR_OBLIGATION_TYPES = [
@@ -30,3 +30,9 @@ export const TAX_CALENDAR_STATUS_OPTIONS = TAX_CALENDAR_GROUP_STATUSES.map((valu
   value,
   label: TAX_CALENDAR_STATUS_LABELS[value],
 }))
+
+export const TAX_CALENDAR_SOURCE_TYPE_LABELS: Record<TaxCalendarGroupItemSourceType, string> = {
+  vat_work_item: TAX_CALENDAR_MESSAGES.item.vat,
+  advance_payment: TAX_CALENDAR_MESSAGES.item.advancePayment,
+  annual_report: TAX_CALENDAR_MESSAGES.item.annualReport,
+}

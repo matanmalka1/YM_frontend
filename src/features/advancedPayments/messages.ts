@@ -98,6 +98,10 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     loadingProfile: 'טוען פרופיל לקוח...',
     scheduleNote: 'ייווצרו רק מקדמות שתאריך היעד שלהן מהיום והלאה',
   },
+  frequency: {
+    prefix: 'תדירות מקדמות:',
+    unset: 'תדירות מקדמות לא הוגדרה',
+  },
   createModal: {
     title: 'מקדמה חדשה',
     createButton: 'יצירה',

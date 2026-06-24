@@ -7,6 +7,7 @@ import {
 } from '@/constants/periodOptions.constants'
 import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION, ALL_YEARS_URL_OPTION } from '@/constants/filterOptions.constants'
 import type { AdvancePaymentMethod, AdvancePaymentStatus } from './api/contracts'
+import { ADVANCED_PAYMENTS_MESSAGES } from './messages'
 
 const ADVANCE_PAYMENT_STATUS_VALUES = ['pending', 'paid', 'partial'] as const satisfies readonly AdvancePaymentStatus[]
 const ADVANCE_PAYMENT_STATUS_VALUE_SET = new Set<string>(ADVANCE_PAYMENT_STATUS_VALUES)
@@ -42,8 +43,6 @@ const ADVANCE_PAYMENT_METHOD_LABELS: Record<AdvancePaymentMethod, string> = {
 const ADVANCE_PAYMENT_METHOD_VALUE_SET = new Set<string>(ADVANCE_PAYMENT_METHOD_VALUES)
 export const getAdvancePaymentMethodLabel = makeLabelGetter(ADVANCE_PAYMENT_METHOD_LABELS)
 
-export const ADVANCE_PAYMENT_STATUS_FILTERS: AdvancePaymentStatus[] = [...ADVANCE_PAYMENT_STATUS_VALUES]
-
 export const isAdvancePaymentStatus = (value: string): value is AdvancePaymentStatus =>
   ADVANCE_PAYMENT_STATUS_VALUE_SET.has(value)
 
@@ -63,8 +62,8 @@ export const ADVANCE_PAYMENT_METHOD_OPTIONS: { value: AdvancePaymentMethod; labe
 
 export const ADVANCE_PAYMENT_FREQUENCY_OPTIONS = MONTHS_COVERED_OPTIONS
 
-export const ADVANCE_PAYMENT_FREQUENCY_PREFIX = 'תדירות מקדמות:'
-export const ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT = 'תדירות מקדמות לא הוגדרה'
+export const ADVANCE_PAYMENT_FREQUENCY_PREFIX = ADVANCED_PAYMENTS_MESSAGES.frequency.prefix
+export const ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT = ADVANCED_PAYMENTS_MESSAGES.frequency.unset
 
 const PERIOD_OPTIONS = [ALL_TYPES_OPTION, ...MONTHS_COVERED_OPTIONS]
 const YEAR_OPTIONS = [ALL_YEARS_URL_OPTION, ...getOperationalYearOptions()]
