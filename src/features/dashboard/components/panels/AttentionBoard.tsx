@@ -17,6 +17,7 @@ import { ATTENTION_BOARD_COPY } from '../../constants'
 import { dueDateLabel } from '../../utils/dashboardUtils'
 import { DashboardPanel, DashboardSectionHeader } from '../shared/DashboardLayout'
 import { Badge, type BadgeVariant } from '@/components/ui/primitives/Badge'
+import { DASHBOARD_MESSAGES } from '../../messages'
 
 interface UrgencyStyle {
   label: string
@@ -28,28 +29,28 @@ interface UrgencyStyle {
 
 const URGENCY_CONFIG: Record<AttentionUrgency, UrgencyStyle> = {
   overdue: {
-    label: 'באיחור',
+    label: DASHBOARD_MESSAGES.attention.overdue,
     dot: semanticDotClasses.negative,
     iconBg: semanticStatToneClasses.negative.iconBg,
     badge: 'negative',
     delta: 'text-negative-600',
   },
   approaching: {
-    label: 'מתקרב',
+    label: DASHBOARD_MESSAGES.attention.approaching,
     dot: semanticDotClasses.warning,
     iconBg: semanticStatToneClasses.warning.iconBg,
     badge: 'warning',
     delta: 'text-warning-600',
   },
   important: {
-    label: 'חשוב',
+    label: DASHBOARD_MESSAGES.attention.important,
     dot: semanticDotClasses.info,
     iconBg: semanticStatToneClasses.info.iconBg,
     badge: 'info',
     delta: 'text-info-600',
   },
   upcoming: {
-    label: 'קרוב',
+    label: DASHBOARD_MESSAGES.attention.upcoming,
     dot: 'bg-slate-300',
     iconBg: 'bg-slate-100 text-slate-500',
     badge: 'neutral',
@@ -63,15 +64,15 @@ interface SourceConfig {
 }
 
 const SOURCE_CONFIG: Record<string, SourceConfig> = {
-  vat_work_item: { icon: ClipboardList, label: 'מע״מ' },
-  charge: { icon: ReceiptText, label: 'חיוב' },
-  advance_payment: { icon: Wallet, label: 'מקדמה' },
-  annual_report: { icon: Table2, label: 'דוח שנתי' },
-  binder: { icon: Briefcase, label: 'קלסר' },
-  task: { icon: ClipboardList, label: 'משימה' },
+  vat_work_item: { icon: ClipboardList, label: DASHBOARD_MESSAGES.attention.vat },
+  charge: { icon: ReceiptText, label: DASHBOARD_MESSAGES.attention.charge },
+  advance_payment: { icon: Wallet, label: DASHBOARD_MESSAGES.attention.advancePayment },
+  annual_report: { icon: Table2, label: DASHBOARD_MESSAGES.attention.annualReport },
+  binder: { icon: Briefcase, label: DASHBOARD_MESSAGES.attention.binder },
+  task: { icon: ClipboardList, label: DASHBOARD_MESSAGES.attention.task },
 }
 
-const DEFAULT_SOURCE: SourceConfig = { icon: TriangleAlert, label: 'כללי' }
+const DEFAULT_SOURCE: SourceConfig = { icon: TriangleAlert, label: DASHBOARD_MESSAGES.attention.general }
 
 interface AttentionItemRowProps {
   item: AttentionBoardItem
@@ -145,7 +146,7 @@ export const AttentionBoard = ({ items, total }: AttentionBoardProps) => {
           subtitle={
             isEmpty
               ? ATTENTION_BOARD_COPY.subtitleEmpty
-              : `${displayTotal} פריטים פתוחים · ${items.length} בראש סדר העדיפויות`
+              : DASHBOARD_MESSAGES.attention.prioritySummary(displayTotal, items.length)
           }
           count={isEmpty ? undefined : items.length}
           tone={isEmpty ? 'neutral' : 'warning'}
@@ -155,7 +156,7 @@ export const AttentionBoard = ({ items, total }: AttentionBoardProps) => {
                 to="/work"
                 className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-primary-700 transition-colors hover:bg-primary-50"
               >
-                הצג הכל
+                {DASHBOARD_MESSAGES.attention.showAll}
               </Link>
             ) : undefined
           }

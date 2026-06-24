@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { cn, formatCount, formatShekelAmount } from '@/utils/utils'
 import { Card } from '@/components/ui/primitives/Card'
 import { DASHBOARD_HREFS } from '../../constants'
+import { DASHBOARD_MESSAGES } from '../../messages'
 
 interface OpenChargesCardProps {
   count: number
@@ -15,7 +16,9 @@ export const OpenChargesCard = ({ count, amountIls }: OpenChargesCardProps) => {
   return (
     <Card variant="soft" size="compact">
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">חיובים פתוחים</span>
+        <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">
+          {DASHBOARD_MESSAGES.openCharges.title}
+        </span>
         <span
           className={cn(
             'flex h-8 w-8 items-center justify-center rounded-xl',
@@ -30,14 +33,14 @@ export const OpenChargesCard = ({ count, amountIls }: OpenChargesCardProps) => {
         {amountIls ?? formatShekelAmount(0)}
       </p>
       <p className="mt-2 text-sm text-slate-500">
-        <span className="font-bold tabular-nums text-slate-700">{formatCount(count)}</span> חיובים ממתינים לגבייה
+        {DASHBOARD_MESSAGES.openCharges.pendingCollection(formatCount(count))}
       </p>
 
       <Link
         to={DASHBOARD_HREFS.openCharges}
         className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-primary-50 px-4 py-2.5 text-sm font-semibold text-primary-700 transition-colors hover:bg-primary-100"
       >
-        <span>פתח את כל החיובים</span>
+        <span>{DASHBOARD_MESSAGES.openCharges.openAll}</span>
         <ArrowLeft className="h-4 w-4" />
       </Link>
     </Card>

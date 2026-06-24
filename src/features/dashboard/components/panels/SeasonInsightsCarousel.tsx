@@ -9,6 +9,7 @@ import { useSeasonSummary } from '../../hooks/useSeasonSummary'
 import type { VatDashboardStats, VatDashboardPeriodStat } from '../../api/contracts'
 import { DASHBOARD_HREFS, VAT_STAT_LABELS } from '../../constants'
 import { DashboardPanel } from '../shared/DashboardLayout'
+import { DASHBOARD_MESSAGES } from '../../messages'
 
 /* ── shared ring + legend primitives ──────────────────────────────── */
 
@@ -62,7 +63,7 @@ const DonutRing = ({
         className="fill-slate-400"
         style={{ fontSize: 9, letterSpacing: '0.04em', fontFamily: 'inherit' }}
       >
-        הושלמו
+        {DASHBOARD_MESSAGES.season.completed}
       </text>
     </svg>
   )
@@ -110,16 +111,16 @@ const SeasonSlide = () => {
         to="/tax/reports"
         className="flex items-center gap-2 text-sm font-semibold text-slate-400 transition-colors hover:text-primary-600"
       >
-        אין דוחות שנתיים לעונה הנוכחית
+        {DASHBOARD_MESSAGES.season.noReports}
       </Link>
     )
   }
 
   const legend: LegendItem[] = [
-    { label: 'הוגשו', value: stats.submitted, color: 'var(--color-positive-500)' },
-    { label: 'נסגרו', value: stats.closed, color: 'var(--color-info-500)' },
-    { label: 'בתהליך', value: stats.inProgress, color: 'var(--color-warning-500)' },
-    { label: 'טרם החלו', value: stats.notStarted, color: 'var(--color-chart-muted)' },
+    { label: DASHBOARD_MESSAGES.season.submitted, value: stats.submitted, color: 'var(--color-positive-500)' },
+    { label: DASHBOARD_MESSAGES.season.closed, value: stats.closed, color: 'var(--color-info-500)' },
+    { label: DASHBOARD_MESSAGES.season.inProgress, value: stats.inProgress, color: 'var(--color-warning-500)' },
+    { label: DASHBOARD_MESSAGES.season.notStarted, value: stats.notStarted, color: 'var(--color-chart-muted)' },
   ]
 
   return (
@@ -129,12 +130,12 @@ const SeasonSlide = () => {
         <RingLegend items={legend} />
       </div>
       <SlideFooter
-        left={`${formatCount(stats.total)} דוחות בעונה`}
+        left={DASHBOARD_MESSAGES.season.reportsInSeason(formatCount(stats.total))}
         warn={
           stats.hasOverdue && (
             <span className="flex items-center gap-1 font-semibold text-negative-600">
               <AlertTriangle className="h-3.5 w-3.5" />
-              {stats.overdueCount} באיחור
+              {DASHBOARD_MESSAGES.season.overdue(stats.overdueCount)}
             </span>
           )
         }
@@ -153,8 +154,8 @@ const StatSlide = ({ stat, href }: { stat: VatDashboardPeriodStat; href?: string
         ? 'var(--color-warning-500)'
         : 'var(--color-negative-500)'
   const legend: LegendItem[] = [
-    { label: 'הוגשו', value: stat.submitted, color: 'var(--color-positive-500)' },
-    { label: 'ממתינים', value: stat.pending, color: pendingColor },
+    { label: DASHBOARD_MESSAGES.season.submitted, value: stat.submitted, color: 'var(--color-positive-500)' },
+    { label: DASHBOARD_MESSAGES.season.pending, value: stat.pending, color: pendingColor },
   ]
 
   const content = (
@@ -163,7 +164,7 @@ const StatSlide = ({ stat, href }: { stat: VatDashboardPeriodStat; href?: string
         <DonutRing pct={stat.completion_percent} />
         <RingLegend items={legend} />
       </div>
-      <SlideFooter left={stat.period_label} right={`${formatCount(stat.required)} בסך הכל`} />
+      <SlideFooter left={stat.period_label} right={DASHBOARD_MESSAGES.season.total(formatCount(stat.required))} />
     </div>
   )
 
@@ -179,7 +180,7 @@ const StatSlide = ({ stat, href }: { stat: VatDashboardPeriodStat; href?: string
 /* ── carousel ──────────────────────────────────────────────────────── */
 
 const SLIDE_DEFS = [
-  { key: 'season', label: 'דוחות שנתיים' },
+  { key: 'season', label: DASHBOARD_MESSAGES.season.annualReports },
   { key: 'vat-monthly', label: VAT_STAT_LABELS.vatMonthly },
   { key: 'vat-bimonthly', label: VAT_STAT_LABELS.vatBimonthly },
   { key: 'advance-monthly', label: VAT_STAT_LABELS.advanceMonthly },
@@ -238,7 +239,7 @@ export const SeasonInsightsCarousel = ({ vatStats }: SeasonInsightsCarouselProps
           <Button
             type="button"
             onClick={prev}
-            aria-label="שקף קודם"
+            aria-label={DASHBOARD_MESSAGES.season.previousSlideAriaLabel}
             variant="ghost"
             shape="square"
             size="sm"
@@ -247,7 +248,7 @@ export const SeasonInsightsCarousel = ({ vatStats }: SeasonInsightsCarouselProps
           <Button
             type="button"
             onClick={next}
-            aria-label="שקף הבא"
+            aria-label={DASHBOARD_MESSAGES.season.nextSlideAriaLabel}
             variant="ghost"
             shape="square"
             size="sm"

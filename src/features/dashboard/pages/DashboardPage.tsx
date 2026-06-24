@@ -22,6 +22,8 @@ import { OpenChargesCard } from '../components/panels/OpenChargesCard'
 import { SeasonInsightsCarousel } from '../components/panels/SeasonInsightsCarousel'
 import { UpcomingDeadlinesPanel } from '../components/panels/UpcomingDeadlinesPanel'
 import { useDashboardCreateModals } from '../hooks/useDashboardCreateModals'
+import { DASHBOARD_MESSAGES } from '../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 const AttentionSkeleton = () => <SkeletonBlock height="h-80" width="w-full" className="rounded-3xl" />
 
@@ -64,28 +66,28 @@ export const DashboardPage: React.FC = () => {
         <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <VatStatCard
             title={VAT_STAT_LABELS.vatMonthly}
-            unit="דוחות ממתינים"
+            unit={DASHBOARD_MESSAGES.stats.pendingReports}
             icon={ClipboardList}
             stat={vatStats.monthly}
             href={DASHBOARD_HREFS.vat(vatStats.monthly.period, 'monthly')}
           />
           <VatStatCard
             title={VAT_STAT_LABELS.vatBimonthly}
-            unit="דוחות ממתינים"
+            unit={DASHBOARD_MESSAGES.stats.pendingReports}
             icon={ClipboardList}
             stat={vatStats.bimonthly}
             href={DASHBOARD_HREFS.vat(vatStats.bimonthly.period, 'bimonthly')}
           />
           <VatStatCard
             title={VAT_STAT_LABELS.advanceMonthly}
-            unit="מקדמות לתשלום"
+            unit={DASHBOARD_MESSAGES.stats.advancesDue}
             icon={Wallet}
             stat={vatStats.advance_payments.monthly}
             href={DASHBOARD_HREFS.advancePayments(vatStats.advance_payments.monthly.period.slice(0, 4), 1)}
           />
           <VatStatCard
             title={VAT_STAT_LABELS.advanceBimonthly}
-            unit="מקדמות לתשלום"
+            unit={DASHBOARD_MESSAGES.stats.advancesDue}
             icon={Wallet}
             stat={vatStats.advance_payments.bimonthly}
             href={DASHBOARD_HREFS.advancePayments(vatStats.advance_payments.bimonthly.period.slice(0, 4), 2)}
@@ -141,12 +143,12 @@ export const DashboardPage: React.FC = () => {
       />
       <Modal
         open={activeCreateModal === 'advancePayment' && advancePaymentClientId === null}
-        title="מקדמה חדשה — בחר לקוח"
+        title={DASHBOARD_MESSAGES.modals.chooseAdvancePaymentClient}
         className="min-h-[240px]"
         onClose={closeCreateModal}
         footer={
           <Button variant="outline" onClick={closeCreateModal}>
-            ביטול
+            {GLOBAL_UI_MESSAGES.actions.cancel}
           </Button>
         }
       >

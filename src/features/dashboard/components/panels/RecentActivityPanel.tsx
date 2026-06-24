@@ -5,6 +5,7 @@ import { cn } from '@/utils/utils'
 import { InlineState } from '@/components/ui/feedback/InlineState'
 import { DashboardPanel, DashboardSectionHeader } from '../shared/DashboardLayout'
 import type { RecentActivityItem } from '../../api'
+import { DASHBOARD_MESSAGES } from '../../messages'
 
 type ActivityTone = 'info' | 'pos' | 'warn' | 'mut'
 
@@ -63,7 +64,10 @@ const ActivityRow = ({ item, isLast }: ActivityRowProps) => {
 export const RecentActivityPanel = ({ items, className }: { items: RecentActivityItem[]; className?: string }) => (
   <DashboardPanel className={cn('flex flex-col', className)}>
     <div className="border-b border-slate-100 px-5 py-4">
-      <DashboardSectionHeader title="פעילות אחרונה" subtitle="עדכוני המשרד מהיומיים האחרונים" />
+      <DashboardSectionHeader
+        title={DASHBOARD_MESSAGES.recentActivity.title}
+        subtitle={DASHBOARD_MESSAGES.recentActivity.subtitle}
+      />
     </div>
 
     {items.length > 0 ? (
@@ -73,7 +77,7 @@ export const RecentActivityPanel = ({ items, className }: { items: RecentActivit
         ))}
       </ul>
     ) : (
-      <InlineState title="אין פעילות אחרונה" className="py-8" />
+      <InlineState title={DASHBOARD_MESSAGES.recentActivity.empty} className="py-8" />
     )}
   </DashboardPanel>
 )

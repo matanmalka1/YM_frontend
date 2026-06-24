@@ -2,6 +2,7 @@ import { ActionSurfaceButton, ActionSurfaceLink } from '@/components/ui/primitiv
 import { Card } from '@/components/ui/primitives/Card'
 import { QUICK_ACTIONS, type QuickActionDef } from '../../constants'
 import type { DashboardCreateModal } from '../../hooks/useDashboardCreateModals'
+import { DASHBOARD_MESSAGES } from '../../messages'
 
 interface QuickActionsPanelProps {
   onOpenModal: (modal: DashboardCreateModal) => void
@@ -41,7 +42,9 @@ const QuickActionItem = ({
 
 export const QuickActionsPanel = ({ onOpenModal }: QuickActionsPanelProps) => (
   <Card variant="soft" size="compact">
-    <span className="mb-3 block text-2xs font-semibold uppercase tracking-wider text-slate-400">פעולות מהירות</span>
+    <span className="mb-3 block text-2xs font-semibold uppercase tracking-wider text-slate-400">
+      {DASHBOARD_MESSAGES.quickActions.title}
+    </span>
     <div className="grid grid-cols-2 gap-2.5">
       {QUICK_ACTIONS.map((action) => (
         <QuickActionItem key={action.id} action={action} onOpenModal={onOpenModal} />

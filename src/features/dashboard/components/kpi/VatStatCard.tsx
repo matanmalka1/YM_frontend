@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/primitives/Badge'
 import { Card } from '@/components/ui/primitives/Card'
 import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
 import type { VatDashboardPeriodStat } from '../../api/contracts'
+import { DASHBOARD_MESSAGES } from '../../messages'
 
 const getTone = (stat: VatDashboardPeriodStat): SemanticTone => {
   if (stat.pending <= 0) return 'positive'
@@ -56,7 +57,7 @@ export const VatStatCard = ({ title, unit, icon: Icon, stat, href, className }: 
 
       <div className="flex items-center justify-between text-2xs font-medium text-slate-500">
         <span className="tabular-nums">
-          {formatCount(stat.submitted)} / {formatCount(stat.required)} הושלמו
+          {formatCount(stat.submitted)} / {formatCount(stat.required)} {DASHBOARD_MESSAGES.stats.completed}
         </span>
         <span className={cn('font-bold tabular-nums', pctClass)}>{stat.completion_percent}%</span>
       </div>
