@@ -28,6 +28,8 @@ export const TASKS_MESSAGES = {
     filterSubtitle: 'סטטוס, עדיפות, שיוך, מקור וטווח יעד',
   },
   form: {
+    titleRequired: 'יש להזין כותרת למשימה',
+    titleTooLong: 'הכותרת יכולה להכיל עד 500 תווים',
     unconfigured: 'לא מוגדר',
     titleLabel: 'כותרת *',
     detailsLabel: 'פרטים',
@@ -36,6 +38,18 @@ export const TASKS_MESSAGES = {
     assignedUserLabel: 'שיוך למשתמש',
     unassigned: 'לא משויך',
     assignedRoleLabel: 'שיוך לתפקיד',
+  },
+  mutations: {
+    createSuccess: 'המשימה נוצרה בהצלחה',
+    createError: 'שגיאה ביצירת משימה',
+    updateSuccess: 'המשימה עודכנה בהצלחה',
+    updateError: 'שגיאה בעדכון משימה',
+    completeSuccess: 'המשימה סומנה כהושלמה',
+    completeError: 'שגיאה בסימון המשימה כהושלמה',
+    cancelSuccess: 'המשימה בוטלה',
+    cancelError: 'שגיאה בביטול המשימה',
+    deleteSuccess: 'המשימה נמחקה',
+    deleteError: 'שגיאה במחיקת המשימה',
   },
   source: {
     fallbackType: 'פריט עבודה',

@@ -1,9 +1,14 @@
 import { z } from 'zod'
 import type { Task } from './api/contracts'
 import { taskPriorityValues } from './constants/labels'
+import { TASKS_MESSAGES } from './messages'
 
 export const taskFormSchema = z.object({
-  title: z.string().trim().min(1, 'יש להזין כותרת למשימה').max(500, 'הכותרת יכולה להכיל עד 500 תווים'),
+  title: z
+    .string()
+    .trim()
+    .min(1, TASKS_MESSAGES.form.titleRequired)
+    .max(500, TASKS_MESSAGES.form.titleTooLong),
   description: z.string(),
   priority: z.enum(taskPriorityValues),
   dueDate: z.string(),

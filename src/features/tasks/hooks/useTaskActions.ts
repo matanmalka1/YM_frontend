@@ -6,6 +6,7 @@ import { tasksApi } from '../api/tasks.api'
 import { tasksQK } from '../api/queryKeys'
 import type { TaskCreateRequest, TaskUpdateRequest } from '../api/contracts'
 import type { TaskConfirmAction, TaskConfirmState, TaskModalState } from '../types'
+import { TASKS_MESSAGES } from '../messages'
 
 const getMutationError = (error: unknown, fallback: string): string => getErrorMessage(error, fallback)
 
@@ -20,59 +21,59 @@ export const useTaskActions = () => {
   const createMutation = useMutation({
     mutationFn: (data: TaskCreateRequest) => tasksApi.create(data),
     onSuccess: async () => {
-      toast.success('המשימה נוצרה בהצלחה')
+      toast.success(TASKS_MESSAGES.mutations.createSuccess)
       await invalidateTaskLists()
       setModal(null)
       setActionError(null)
     },
-    onError: (error) => setActionError(getMutationError(error, 'שגיאה ביצירת משימה')),
+    onError: (error) => setActionError(getMutationError(error, TASKS_MESSAGES.mutations.createError)),
   })
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: TaskUpdateRequest }) => tasksApi.update(id, data),
     onSuccess: async (task) => {
-      toast.success('המשימה עודכנה בהצלחה')
+      toast.success(TASKS_MESSAGES.mutations.updateSuccess)
       qc.setQueryData(tasksQK.detail(task.id), task)
       await invalidateTaskLists()
       setModal(null)
       setActionError(null)
     },
-    onError: (error) => setActionError(getMutationError(error, 'שגיאה בעדכון משימה')),
+    onError: (error) => setActionError(getMutationError(error, TASKS_MESSAGES.mutations.updateError)),
   })
 
   const completeMutation = useMutation({
     mutationFn: (id: number) => tasksApi.complete(id),
     onSuccess: async (task) => {
-      toast.success('המשימה סומנה כהושלמה')
+      toast.success(TASKS_MESSAGES.mutations.completeSuccess)
       qc.setQueryData(tasksQK.detail(task.id), task)
       await invalidateTaskLists()
       setActionError(null)
     },
-    onError: (error) => setActionError(getMutationError(error, 'שגיאה בסימון המשימה כהושלמה')),
+    onError: (error) => setActionError(getMutationError(error, TASKS_MESSAGES.mutations.completeError)),
   })
 
   const cancelMutation = useMutation({
     mutationFn: (id: number) => tasksApi.cancel(id),
     onSuccess: async (task) => {
-      toast.success('המשימה בוטלה')
+      toast.success(TASKS_MESSAGES.mutations.cancelSuccess)
       qc.setQueryData(tasksQK.detail(task.id), task)
       await invalidateTaskLists()
       setPendingConfirm(null)
       setActionError(null)
     },
-    onError: (error) => setActionError(getMutationError(error, 'שגיאה בביטול המשימה')),
+    onError: (error) => setActionError(getMutationError(error, TASKS_MESSAGES.mutations.cancelError)),
   })
 
   const deleteMutation = useMutation({
     mutationFn: (id: number) => tasksApi.delete(id),
     onSuccess: async (_data, id) => {
-      toast.success('המשימה נמחקה')
+      toast.success(TASKS_MESSAGES.mutations.deleteSuccess)
       qc.removeQueries({ queryKey: tasksQK.detail(id) })
       await invalidateTaskLists()
       setPendingConfirm(null)
       setActionError(null)
     },
-    onError: (error) => setActionError(getMutationError(error, 'שגיאה במחיקת המשימה')),
+    onError: (error) => setActionError(getMutationError(error, TASKS_MESSAGES.mutations.deleteError)),
   })
 
   const openConfirm = (action: TaskConfirmAction, taskId: number) => setPendingConfirm({ action, taskId })
