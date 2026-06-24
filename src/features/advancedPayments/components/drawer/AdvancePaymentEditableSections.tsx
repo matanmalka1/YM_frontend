@@ -39,12 +39,7 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
           </Button>
         </div>
         {form.prefillSource === 'vat_pending' && (
-          <Alert
-            variant="warning"
-            size="sm"
-            message="מבוסס על דוח מע״מ שטרם הוגש"
-            className="rounded-md border-warning-200 bg-none bg-warning-50 shadow-none"
-          />
+          <Alert variant="warning" size="sm" message="מבוסס על דוח מע״מ שטרם הוגש" />
         )}
         {form.prefillSource === 'none' && <p className="text-xs text-gray-400">לא נמצא דוח מע״מ לתקופה זו</p>}
         <div>

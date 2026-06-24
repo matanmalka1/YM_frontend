@@ -25,9 +25,11 @@ export const CorrespondenceEntryItem = ({ entry, isDeleting, onEdit, onDelete }:
       <div className="flex-1 min-w-0 space-y-1">
         <div className="flex flex-wrap items-start justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
-            <Badge variant={config.variant} icon={<Icon className="h-3.5 w-3.5" />} className="shrink-0">
-              {config.label}
-            </Badge>
+            <span className="shrink-0">
+              <Badge variant={config.variant} icon={<Icon className="h-3.5 w-3.5" />}>
+                {config.label}
+              </Badge>
+            </span>
             <p className="truncate text-sm font-semibold text-gray-900">{entry.subject}</p>
           </div>
           <div className="flex items-center gap-1 shrink-0">

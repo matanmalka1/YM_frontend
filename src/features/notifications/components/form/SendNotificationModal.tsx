@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Modal } from '../../../../components/ui/overlays/Modal'
+import { Alert } from '../../../../components/ui/overlays/Alert'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { Select } from '../../../../components/ui/inputs/Select'
 import { Input } from '../../../../components/ui/inputs/Input'
@@ -242,15 +243,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
 
         {step === 'preview' && (
           <>
-            {warnings.length > 0 && (
-              <div className="rounded-md bg-yellow-50 border border-yellow-200 px-3 py-2 space-y-1">
-                {warnings.map((w) => (
-                  <p key={w} className="text-xs text-yellow-800">
-                    {w}
-                  </p>
-                ))}
-              </div>
-            )}
+            {warnings.length > 0 && <Alert variant="warning" size="sm" message={warnings.join(' · ')} />}
             <Input label="נושא" value={subject} onChange={(e) => setSubject(e.target.value)} error={subjectError} />
             <Textarea
               label="תוכן ההודעה"

@@ -1,4 +1,4 @@
-import { AlertTriangle } from 'lucide-react'
+import { Alert } from '../../../../components/ui/overlays/Alert'
 import { Modal } from '../../../../components/ui/overlays/Modal'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { formatDate } from '../../../../utils/utils'
@@ -56,10 +56,7 @@ export const DeletedClientDialog: React.FC<Props> = ({
       }
     >
       <div className="space-y-4">
-        <div className="flex items-start gap-3 rounded-lg border border-warning-200 bg-warning-50 p-3">
-          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-warning-500" />
-          <p className="text-sm text-warning-800">לקוח עם מספר זהות זה קיים במערכת אך נמחק. בחר כיצד להמשיך.</p>
-        </div>
+        <Alert variant="warning" size="sm" message="לקוח עם מספר זהות זה קיים במערכת אך נמחק. בחר כיצד להמשיך." />
 
         <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-2">
           <div className="flex justify-between text-sm">

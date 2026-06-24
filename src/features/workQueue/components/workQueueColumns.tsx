@@ -76,11 +76,7 @@ export const buildWorkQueueColumns = ({
       className: 'w-28',
       render: (item: WorkQueueItem) =>
         item.source_type === 'task' ? (
-          <Badge
-            variant="neutral"
-            icon={<ClipboardCheck className="h-3 w-3" />}
-            className="justify-center whitespace-nowrap"
-          >
+          <Badge variant="neutral" icon={<ClipboardCheck className="h-3 w-3" />}>
             {item.type_label ?? typeLabel(item.source_type)}
           </Badge>
         ) : (

@@ -98,12 +98,7 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
     >
       <div className="space-y-5">
         {model.missingTurnover && (
-          <Alert
-            variant="warning"
-            size="sm"
-            message="חסר מחזור לתקופה — לא ניתן לחשב מקדמה מדויקת"
-            className="rounded-lg border-warning-200 bg-none bg-warning-50 shadow-none"
-          />
+          <Alert variant="warning" size="sm" message="חסר מחזור לתקופה — לא ניתן לחשב מקדמה מדויקת" />
         )}
 
         {contextItems.length > 0 && (

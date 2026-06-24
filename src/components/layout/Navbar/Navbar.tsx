@@ -43,14 +43,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   }
 
   return (
-    <header className="z-10 flex h-16 shrink-0 items-center gap-3 border-b border-gray-200/80 bg-white px-3 md:px-4">
+    <header className="z-10 flex h-16 shrink-0 items-center gap-2 border-b border-gray-200/80 bg-white px-2 md:px-3">
       <NavbarPrimaryNav items={visibleItems} />
-      <div className="hidden shrink-0 items-center border-r border-gray-100 pr-3 md:flex">
+      <div className="hidden shrink-0 items-center border-r border-gray-100 pr-2 md:flex">
         <Badge variant="neutral" size="sm" className="tabular-nums" suppressHydrationWarning>
           {formatHebrewDate(new Date())}
         </Badge>
       </div>
-      <div className="flex shrink-0 items-center gap-1.5 border-r border-gray-100 pr-3">
+      <div className="flex shrink-0 items-center gap-1 border-r border-gray-100 pr-2">
         <Button
           ref={clientSidebarTriggerRef}
           type="button"

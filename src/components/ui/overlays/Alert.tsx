@@ -1,10 +1,13 @@
 import { AlertTriangle, Info, AlertCircle, CheckCircle, RotateCcw, X } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 
 interface AlertProps {
   message: string
   variant?: 'warning' | 'info' | 'error' | 'success' | 'neutral'
   size?: 'sm' | 'md'
+  /** Replaces the variant's default icon while retaining its semantic palette. */
+  icon?: LucideIcon
   dismissible?: boolean
   onDismiss?: () => void
   onRetry?: () => void
@@ -53,13 +56,14 @@ export const Alert: React.FC<AlertProps> = ({
   message,
   variant = 'warning',
   size = 'md',
+  icon: CustomIcon,
   dismissible = false,
   onDismiss,
   onRetry,
   className,
 }) => {
   const c = config[variant]
-  const Icon = c.Icon
+  const Icon = CustomIcon ?? c.Icon
   const isSmall = size === 'sm'
 
   return (

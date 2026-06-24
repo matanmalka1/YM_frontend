@@ -37,7 +37,7 @@ export const NavbarPrimaryNav: React.FC<NavbarPrimaryNavProps> = ({ items }) => 
       let usedWidth = 8 // p-1 padding both sides
       let firstHidden = visibleNavItems.length
       for (let index = 0; index < visibleNavItems.length; index++) {
-        const itemWidth = (cachedWidths.current[index] ?? 80) + 4 // gap-1
+        const itemWidth = (cachedWidths.current[index] ?? 80) + 2 // gap-0.5
         const reserveMore = alwaysShowMore || index < visibleNavItems.length - 1 ? 88 : 0
         if (usedWidth + itemWidth + reserveMore > nav.clientWidth) {
           firstHidden = index
@@ -62,7 +62,7 @@ export const NavbarPrimaryNav: React.FC<NavbarPrimaryNavProps> = ({ items }) => 
   return (
     <div className="flex min-w-0 flex-1 items-center">
       <nav ref={navRef} className="min-w-0 flex-1 overflow-hidden" aria-label="ניווט ראשי">
-        <ul className="flex items-center gap-1 rounded-xl bg-gray-50 p-1">
+        <ul className="flex items-center gap-0.5 rounded-xl bg-gray-50 p-1">
           {visibleNavItems.map((item, index) => {
             const hidden = hiddenCount > 0 && index >= visibleNavItems.length - hiddenCount
             return (

@@ -65,14 +65,7 @@ export const AnnualReportVatAutoPopulateResultPanel: React.FC<AnnualReportVatAut
         </div>
       </div>
 
-      {hasWarnings ? (
-        <Alert
-          variant="warning"
-          size="sm"
-          message={warnings.join(' · ')}
-          className="rounded-lg border-warning-200 bg-warning-50"
-        />
-      ) : null}
+      {hasWarnings ? <Alert variant="warning" size="sm" message={warnings.join(' · ')} /> : null}
 
       {hasSkippedItems ? (
         <section className="rounded-lg border border-warning-100 bg-white p-3">

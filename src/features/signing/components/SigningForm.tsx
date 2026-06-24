@@ -1,5 +1,6 @@
-import { CheckCircle2, Clock, ShieldCheck, XCircle } from 'lucide-react'
+import { CheckCircle2, ShieldCheck, XCircle } from 'lucide-react'
 import type { SignerViewResponse } from '@/features/signatureRequests'
+import { Alert } from '../../../components/ui/overlays/Alert'
 import { Button } from '../../../components/ui/primitives/Button'
 import { Textarea } from '../../../components/ui/inputs/Textarea'
 import { formatDate } from '../../../utils/utils'
@@ -114,21 +115,19 @@ export const SigningForm: React.FC<SigningFormProps> = ({
       </dl>
 
       {isExpired && (
-        <div className="flex gap-2.5 rounded-xl border border-negative-200 bg-negative-50 p-3">
-          <Clock className="mt-0.5 h-4 w-4 shrink-0 text-negative-500" />
-          <p className="text-sm text-negative-700">קישור זה פג תוקפו. לא ניתן לחתום. פנה למשרד לחידוש הבקשה.</p>
-        </div>
+        <Alert variant="error" size="sm" message="קישור זה פג תוקפו. לא ניתן לחתום. פנה למשרד לחידוש הבקשה." />
       )}
 
       {!isExpired && (
         <>
-          <div className="flex gap-2.5 rounded-xl border border-primary-100 bg-primary-50 p-3">
-            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" />
-            <p className="text-xs leading-relaxed text-primary-700">
-              בלחיצה על "אני מאשר/ת וחותם/ת" הנך מאשר/ת את תוכן המסמך ומסכים/ה לחתימה דיגיטלית מחייבת בהתאם לחוק חתימה
-              אלקטרונית (התשס\"א-2001).
-            </p>
-          </div>
+          <Alert
+            variant="info"
+            size="sm"
+            icon={ShieldCheck}
+            message={
+              'בלחיצה על "אני מאשר/ת וחותם/ת" הנך מאשר/ת את תוכן המסמך ומסכים/ה לחתימה דיגיטלית מחייבת בהתאם לחוק חתימה אלקטרונית (התשס"א-2001).'
+            }
+          />
           <div className="flex gap-2">
             <Button
               variant="outline"

@@ -88,7 +88,7 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
               return (
                 <div
                   key={binder.id}
-                  className="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 bg-white px-3 py-2"
+                  className="flex items-start gap-3 rounded-lg border border-gray-200 bg-white px-3 py-2"
                 >
                   <Checkbox
                     id={`handover-binder-${binder.id}`}

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Clock } from 'lucide-react'
 import { format, parseISO } from 'date-fns'
 import { he } from 'date-fns/locale'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
@@ -28,7 +28,6 @@ const VatStatusBadge: React.FC<{ material: BinderIntakeMaterialResponse; clientI
   material,
   clientId,
 }) => {
-  const navigate = useNavigate()
   const period =
     material.period_year && material.period_month_start && material.period_month_end
       ? toBinderPeriodValue(material.period_year, material.period_month_start, material.period_month_end)
@@ -44,22 +43,9 @@ const VatStatusBadge: React.FC<{ material: BinderIntakeMaterialResponse; clientI
   if (!lookup) return null
 
   return (
-    <Badge
-      variant={getVatWorkItemStatusVariant(lookup.status)}
-      className="cursor-pointer mr-1"
-      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-        e.stopPropagation()
-        navigate(`/tax/vat/${lookup.id}`)
-      }}
-      onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => {
-        if (e.key !== 'Enter' && e.key !== ' ') return
-        e.preventDefault()
-        e.stopPropagation()
-        navigate(`/tax/vat/${lookup.id}`)
-      }}
-    >
-      {getVatWorkItemStatusLabel(lookup.status)}
-    </Badge>
+    <Link to={`/tax/vat/${lookup.id}`} className="focus-ring mr-1 inline-flex rounded-full">
+      <Badge variant={getVatWorkItemStatusVariant(lookup.status)}>{getVatWorkItemStatusLabel(lookup.status)}</Badge>
+    </Link>
   )
 }
 

@@ -1,5 +1,6 @@
 import { useRef } from 'react'
-import { Download, Upload, FileSpreadsheet, AlertCircle } from 'lucide-react'
+import { Download, Upload, FileSpreadsheet } from 'lucide-react'
+import { Alert } from '../../../components/ui/overlays/Alert'
 import { Modal } from '../../../components/ui/overlays/Modal'
 import { HiddenFileInput } from '../../../components/ui/inputs/HiddenFileInput'
 import { Button } from '../../../components/ui/primitives/Button'
@@ -50,15 +51,11 @@ const ImportPanel: React.FC<ImportPanelProps> = ({ importing, onFileSelect, onDo
   return (
     <Card title="ייבוא לקוחות" variant="elevated">
       <div className="space-y-4">
-        <div className="rounded-lg border border-warning-200 bg-warning-50 p-3">
-          <div className="flex gap-2">
-            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-warning-600" />
-            <div className="space-y-1 text-sm text-warning-900">
-              <p className="font-medium">ייבוא יוצר לקוחות חדשים במערכת.</p>
-              <p>מומלץ להוריד תבנית, למלא אותה, ואז להעלות את הקובץ.</p>
-            </div>
-          </div>
-        </div>
+        <Alert
+          variant="warning"
+          size="sm"
+          message="ייבוא יוצר לקוחות חדשים במערכת. מומלץ להוריד תבנית, למלא אותה, ואז להעלות את הקובץ."
+        />
 
         <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 p-3">
           <div>
