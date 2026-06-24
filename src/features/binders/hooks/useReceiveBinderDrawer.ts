@@ -21,8 +21,7 @@ import { toBinderPeriodValue } from '../utils'
 import { PAGE_SIZE_XS } from '@/constants/pagination.constants'
 import { ANNUAL_BINDER_TYPES, PERIODIC_BINDER_TYPES } from '../constants'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
-
-const DUPLICATE_BINDER_NUMBER_MESSAGE = 'קיים כבר קלסר עם מספר זה ללקוח'
+import { BINDERS_MESSAGES } from '../messages'
 
 const getDefaultValues = (): ReceiveBinderFormValues => ({
   client_record_id: undefined as unknown as number,
@@ -232,7 +231,11 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
       })
     },
     onSuccess: async (result, values) => {
-      toast.success(result.is_new_binder ? 'קלסר חדש נפתח והחומר נקלט' : 'החומר נוסף לקלסר קיים')
+      toast.success(
+        result.is_new_binder
+          ? BINDERS_MESSAGES.receive.newBinderReceived
+          : BINDERS_MESSAGES.receive.materialAddedToExisting,
+      )
       await queryClient.invalidateQueries({ queryKey: bindersQK.all })
 
       if (
@@ -246,13 +249,13 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
         try {
           const existing = await vatReportsApi.lookup(values.client_record_id, period)
           if (existing) {
-            toast.info('קיים דוח מע״מ לתקופה זו', {
-              action: { label: 'פתח', onClick: () => navigate(`/tax/vat/${existing.id}`) },
+            toast.info(BINDERS_MESSAGES.receive.existingVatReport, {
+              action: { label: BINDERS_MESSAGES.receive.openVatReport, onClick: () => navigate(`/tax/vat/${existing.id}`) },
             })
           } else {
-            toast.info('לא קיים תיק מע"מ לתקופה זו', {
+            toast.info(BINDERS_MESSAGES.receive.missingVatReport, {
               action: {
-                label: 'צור דוח מע״מ',
+                label: BINDERS_MESSAGES.receive.createVatReport,
                 onClick: () => navigate(`/tax/vat?create=1&client_id=${values.client_record_id}&period=${period}`),
               },
             })
@@ -267,10 +270,10 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
     },
     onError: (err) => {
       if (getHttpStatus(err) === 409) {
-        toast.error(DUPLICATE_BINDER_NUMBER_MESSAGE)
+        toast.error(BINDERS_MESSAGES.receive.duplicateBinderNumber)
         return
       }
-      showErrorToast(err, 'שגיאה בקליטת חומר')
+      showErrorToast(err, BINDERS_MESSAGES.receive.receiveError)
     },
   })
 

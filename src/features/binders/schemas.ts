@@ -1,21 +1,31 @@
 import { z } from 'zod'
 import { format } from 'date-fns'
 import { ANNUAL_BINDER_TYPES, BINDER_TYPE_VALUES, PERIODIC_BINDER_TYPES } from './constants'
+import { BINDERS_MESSAGES } from './messages'
 
 export const receiveBinderSchema = z
   .object({
-    client_record_id: z.number({ error: 'נא לבחור לקוח' }).positive('נא לבחור לקוח'),
-    business_id: z.number({ error: 'נא לבחור עסק' }).positive('נא לבחור עסק').nullable().optional(),
-    binder_types: z.array(z.enum(BINDER_TYPE_VALUES)).min(1, 'נא לבחור לפחות סוג חומר אחד'),
-    annual_report_id: z.number().positive('נא לבחור דוח שנתי').nullable().optional(),
-    period_year: z.number({ error: 'נא לבחור שנת דיווח' }).int('נא לבחור שנת דיווח').min(2000, 'נא לבחור שנת דיווח'),
+    client_record_id: z
+      .number({ error: BINDERS_MESSAGES.validation.clientRequired })
+      .positive(BINDERS_MESSAGES.validation.clientRequired),
+    business_id: z
+      .number({ error: BINDERS_MESSAGES.validation.businessRequired })
+      .positive(BINDERS_MESSAGES.validation.businessRequired)
+      .nullable()
+      .optional(),
+    binder_types: z.array(z.enum(BINDER_TYPE_VALUES)).min(1, BINDERS_MESSAGES.validation.materialTypeRequired),
+    annual_report_id: z.number().positive(BINDERS_MESSAGES.validation.annualReportRequired).nullable().optional(),
+    period_year: z
+      .number({ error: BINDERS_MESSAGES.validation.reportingYearRequired })
+      .int(BINDERS_MESSAGES.validation.reportingYearRequired)
+      .min(2000, BINDERS_MESSAGES.validation.reportingYearRequired),
     period_month_start: z.number().int().min(1).max(12).nullable().optional(),
     period_month_end: z.number().int().min(1).max(12).nullable().optional(),
     salary_month: z.number().int().min(1).max(12).nullable().optional(),
     received_at: z
       .string()
-      .min(1, 'נא לבחור תאריך קבלה')
-      .refine((value) => value <= format(new Date(), 'yyyy-MM-dd'), 'לא ניתן לבחור תאריך עתידי'),
+      .min(1, BINDERS_MESSAGES.validation.receivedAtRequired)
+      .refine((value) => value <= format(new Date(), 'yyyy-MM-dd'), BINDERS_MESSAGES.validation.futureDateNotAllowed),
     open_new_binder: z.boolean().optional(),
     notes: z.string().optional().nullable(),
   })
@@ -25,7 +35,7 @@ export const receiveBinderSchema = z
     if (selectedTypes.has('vat') && data.business_id === undefined) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'נא לבחור עסק',
+        message: BINDERS_MESSAGES.validation.businessRequired,
         path: ['business_id'],
       })
     }
@@ -33,7 +43,7 @@ export const receiveBinderSchema = z
     if (!data.period_year) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'נא לבחור שנת דיווח',
+        message: BINDERS_MESSAGES.validation.reportingYearRequired,
         path: ['period_year'],
       })
     }
@@ -48,7 +58,7 @@ export const receiveBinderSchema = z
     if (data.period_month_start == null) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'נא לבחור חודש דיווח',
+        message: BINDERS_MESSAGES.validation.reportingMonthRequired,
         path: ['period_month_start'],
       })
     }
@@ -56,7 +66,7 @@ export const receiveBinderSchema = z
     if (selectedTypes.has('salary') && selectedTypes.has('vat') && data.salary_month == null) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'נא לבחור חודש שכר',
+        message: BINDERS_MESSAGES.validation.salaryMonthRequired,
         path: ['salary_month'],
       })
     }

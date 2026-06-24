@@ -1,11 +1,12 @@
 import { bindersApi, bindersQK } from '../api'
 import { useMutationWithToast } from '../../../hooks/useMutationWithToast'
+import { BINDERS_MESSAGES } from '../messages'
 
 export const useBinderMutations = (onDeleteSuccess: () => void) => {
   const deleteMutation = useMutationWithToast<void, number>({
     mutationFn: (binderId) => bindersApi.delete(binderId),
-    successMessage: 'הקלסר נמחק בהצלחה',
-    errorMessage: 'שגיאה במחיקת קלסר',
+    successMessage: BINDERS_MESSAGES.mutations.deleteSuccess,
+    errorMessage: BINDERS_MESSAGES.mutations.deleteError,
     invalidateKeys: [bindersQK.all],
     onSuccess: onDeleteSuccess,
   })
@@ -15,29 +16,29 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
     number
   >({
     mutationFn: (binderId) => bindersApi.markReadyForHandover(binderId),
-    successMessage: 'הקלסר סומן כמוכן למסירה',
-    errorMessage: 'שגיאה בסימון קלסר כמוכן למסירה',
+    successMessage: BINDERS_MESSAGES.mutations.markReadySuccess,
+    errorMessage: BINDERS_MESSAGES.mutations.markReadyError,
     invalidateKeys: [bindersQK.all],
   })
 
   const receiveMaterialMutation = useMutationWithToast<Awaited<ReturnType<typeof bindersApi.receiveMaterial>>, number>({
     mutationFn: (binderId) => bindersApi.receiveMaterial(binderId),
-    successMessage: 'קליטת החומר נרשמה',
-    errorMessage: 'שגיאה ברישום קליטת חומר',
+    successMessage: BINDERS_MESSAGES.mutations.receiveMaterialSuccess,
+    errorMessage: BINDERS_MESSAGES.mutations.receiveMaterialError,
     invalidateKeys: [bindersQK.all],
   })
 
   const markFullMutation = useMutationWithToast<Awaited<ReturnType<typeof bindersApi.markFull>>, number>({
     mutationFn: (binderId) => bindersApi.markFull(binderId),
-    successMessage: 'הקלסר סומן כמלא',
-    errorMessage: 'שגיאה בסימון קלסר כמלא',
+    successMessage: BINDERS_MESSAGES.mutations.markFullSuccess,
+    errorMessage: BINDERS_MESSAGES.mutations.markFullError,
     invalidateKeys: [bindersQK.all],
   })
 
   const reopenCapacityMutation = useMutationWithToast<Awaited<ReturnType<typeof bindersApi.reopenCapacity>>, number>({
     mutationFn: (binderId) => bindersApi.reopenCapacity(binderId),
-    successMessage: 'הקלסר נפתח לקיבולת נוספת',
-    errorMessage: 'שגיאה בפתיחת קיבולת הקלסר',
+    successMessage: BINDERS_MESSAGES.mutations.reopenCapacitySuccess,
+    errorMessage: BINDERS_MESSAGES.mutations.reopenCapacityError,
     invalidateKeys: [bindersQK.all],
   })
 
@@ -52,8 +53,10 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
         until_period_month: untilPeriodMonth,
       }),
     successMessage: (response) =>
-      response.length > 0 ? `${response.length} קלסרים סומנו כמוכנים למסירה` : 'לא נמצאו קלסרים מתאימים לסימון',
-    errorMessage: 'שגיאה בסימון קבוצתי למסירה',
+      response.length > 0
+        ? BINDERS_MESSAGES.mutations.bulkReadySuccess(response.length)
+        : BINDERS_MESSAGES.mutations.bulkReadyEmpty,
+    errorMessage: BINDERS_MESSAGES.mutations.bulkReadyError,
     invalidateKeys: [bindersQK.all],
   })
 
@@ -62,8 +65,8 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
     number
   >({
     mutationFn: (binderId) => bindersApi.revertReadyForHandover(binderId),
-    successMessage: 'סטטוס מוכן למסירה בוטל',
-    errorMessage: 'שגיאה בביטול סטטוס מוכן למסירה',
+    successMessage: BINDERS_MESSAGES.mutations.revertReadySuccess,
+    errorMessage: BINDERS_MESSAGES.mutations.revertReadyError,
     invalidateKeys: [bindersQK.all],
   })
 
@@ -73,8 +76,8 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
   >({
     mutationFn: ({ binderId, handoverRecipientName }) =>
       bindersApi.handoverToClient(binderId, { handover_recipient_name: handoverRecipientName }),
-    successMessage: 'הקלסר נמסר בהצלחה',
-    errorMessage: 'שגיאה במסירת קלסר',
+    successMessage: BINDERS_MESSAGES.mutations.handoverSuccess,
+    errorMessage: BINDERS_MESSAGES.mutations.handoverError,
     invalidateKeys: [bindersQK.all],
   })
 
@@ -100,8 +103,8 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
         until_period_month: payload.untilPeriodMonth,
         notes: payload.notes ?? null,
       }),
-    successMessage: (handover) => `בוצעה מסירה של ${handover.binder_ids.length} קלסרים`,
-    errorMessage: 'שגיאה במסירת קלסרים',
+    successMessage: (handover) => BINDERS_MESSAGES.mutations.bulkHandoverSuccess(handover.binder_ids.length),
+    errorMessage: BINDERS_MESSAGES.mutations.bulkHandoverError,
     invalidateKeys: [bindersQK.all],
   })
 
