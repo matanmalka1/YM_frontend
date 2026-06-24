@@ -13,6 +13,7 @@ import { getTotalPages } from '@/utils/paginationUtils'
 import { useDocumentUpload } from './useDocumentUpload'
 import { toast } from '../../../utils/toast'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
+import { DOCUMENTS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useClientDocumentsTab = (clientId: number, taxYear?: number | null) => {
   const queryClient = useQueryClient()
@@ -78,7 +79,7 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
     documents: documentsData?.items ?? [],
     signals: signalsData ?? { client_record_id: clientId, missing_documents: [] },
     loading: documentsPending || signalsPending,
-    error: errorSource ? getErrorMessage(errorSource, 'שגיאה בטעינת מסמכים') : null,
+    error: errorSource ? getErrorMessage(errorSource, DOCUMENTS_ERROR_MESSAGES.load) : null,
     businesses,
     businessesLoading,
     submitUpload: (payload: {

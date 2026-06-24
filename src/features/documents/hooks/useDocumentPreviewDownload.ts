@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { documentsApi } from '../api'
 import type { PermanentDocumentResponse } from '../api'
 import { toast } from '../../../utils/toast'
-import { DOWNLOAD_ERROR_MESSAGE, PREVIEW_ERROR_MESSAGE } from '../constants'
+import { DOCUMENTS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useDocumentPreviewDownload = () => {
   const [downloadingId, setDownloadingId] = useState<number | null>(null)
@@ -15,7 +15,7 @@ export const useDocumentPreviewDownload = () => {
       const { url } = await documentsApi.getDownloadUrl(doc.client_record_id, doc.id)
       window.open(url, '_blank', 'noopener,noreferrer')
     } catch {
-      toast.error(DOWNLOAD_ERROR_MESSAGE)
+      toast.error(DOCUMENTS_ERROR_MESSAGES.download)
     } finally {
       setDownloadingId(null)
     }
@@ -28,7 +28,7 @@ export const useDocumentPreviewDownload = () => {
       const { url } = await documentsApi.getDownloadUrl(doc.client_record_id, doc.id)
       setPreviewUrl(url)
     } catch {
-      toast.error(PREVIEW_ERROR_MESSAGE)
+      toast.error(DOCUMENTS_ERROR_MESSAGES.preview)
       setPreviewDoc(null)
     }
   }

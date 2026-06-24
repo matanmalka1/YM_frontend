@@ -3,6 +3,7 @@ import type { ChangeEvent } from 'react'
 import type { PermanentDocumentResponse, UpdateDocumentPayload } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
 import { useDocumentPreviewDownload } from './useDocumentPreviewDownload'
+import { DOCUMENTS_ERROR_MESSAGES } from '../errorMessages'
 
 interface UseDocumentCardActionsParams {
   onDelete: (id: number) => Promise<void>
@@ -70,7 +71,7 @@ export const useDocumentCardActions = ({ onDelete, onReplace, onUpdate }: UseDoc
       await onUpdate(editDoc.id, payload)
       closeEdit()
     } catch (err) {
-      setEditError(getErrorMessage(err, 'שגיאה בעדכון פרטי המסמך'))
+      setEditError(getErrorMessage(err, DOCUMENTS_ERROR_MESSAGES.update))
     } finally {
       setUpdatingId(null)
     }

@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { documentsApi, documentsQK, type UploadDocumentPayload } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
+import { DOCUMENTS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useDocumentUpload = () => {
   const queryClient = useQueryClient()
@@ -35,7 +36,7 @@ export const useDocumentUpload = () => {
       await uploadMutation.mutateAsync(payload)
       return true
     } catch (err: unknown) {
-      setUploadError(getErrorMessage(err, 'שגיאה בהעלאת מסמך'))
+      setUploadError(getErrorMessage(err, DOCUMENTS_ERROR_MESSAGES.upload))
       return false
     }
   }

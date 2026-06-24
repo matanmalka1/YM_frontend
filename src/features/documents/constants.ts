@@ -77,8 +77,6 @@ const ALL_TAX_YEARS_OPTION = { value: '', label: 'כל השנים' }
 
 export const UPLOAD_FORM_ID = 'documents-upload-form'
 export const SEARCH_PLACEHOLDER = DOCUMENT_SEARCH_PLACEHOLDER
-export const DOWNLOAD_ERROR_MESSAGE = 'שגיאה בהורדת המסמך'
-export const PREVIEW_ERROR_MESSAGE = 'שגיאה בטעינת המסמך'
 const DOCUMENT_TYPE_PLACEHOLDER = 'בחר סוג מסמך'
 const WITHOUT_TAX_YEAR_LABEL = 'ללא שנה'
 export const GENERAL_CLIENT_DOCUMENT_LABEL = 'מסמך כללי ללקוח'
