@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
+import type { BadgeVariant } from '../primitives/Badge'
+import type { StatusBadgeVariantMap } from '../primitives/StatusBadge'
 import type { Column } from './DataTable'
-import type { StatusVariant, StatusVariantMap, TableCellValue } from './columnTypes'
-import { renderDateText, renderMonoText, renderMutedText, renderStatusBadge } from './columnRenderers'
+import { renderDateText, renderMonoText, renderMutedText, renderStatusBadge, type TableCellValue } from './columnRenderers'
 
 interface ColumnBaseOptions {
   key: string
@@ -23,10 +24,10 @@ interface DateColumnOptions<T> extends ColumnBaseOptions {
 }
 
 interface StatusColumnOptions<T, TStatus extends string> extends ColumnBaseOptions {
-  defaultVariant?: StatusVariant
+  defaultVariant?: BadgeVariant
   getLabel: (status: TStatus) => string
   getStatus: (item: T, index: number) => TStatus
-  variantMap: StatusVariantMap
+  variantMap: StatusBadgeVariantMap
 }
 
 interface ActionsColumnOptions<T> {

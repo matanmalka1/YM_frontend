@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react'
-import { StatusBadge } from '../primitives/StatusBadge'
+import type { BadgeVariant } from '../primitives/Badge'
+import { StatusBadge, type StatusBadgeVariantMap } from '../primitives/StatusBadge'
 import { cn, formatDate } from '../../../utils/utils'
-import type { StatusVariantMap, TableCellValue } from './columnTypes'
+
+export type TableCellValue = ReactNode | null | undefined
 
 const EMPTY_VALUE = '—'
 
@@ -16,8 +18,8 @@ interface TextRendererProps {
 interface StatusRendererProps<TStatus extends string> {
   status: TStatus
   getLabel: (status: TStatus) => string
-  variantMap: StatusVariantMap
-  defaultVariant?: 'success' | 'warning' | 'error' | 'info' | 'neutral'
+  variantMap: StatusBadgeVariantMap
+  defaultVariant?: BadgeVariant
 }
 
 const renderEmptyFallback = (emptyValue: ReactNode = EMPTY_VALUE): ReactNode => emptyValue

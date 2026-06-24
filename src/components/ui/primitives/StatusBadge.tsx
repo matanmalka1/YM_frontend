@@ -1,10 +1,12 @@
 import { Badge, type BadgeSize, type BadgeVariant } from './Badge'
 import { makeVariantGetter } from '@/utils/labels'
 
+export type StatusBadgeVariantMap = Record<string, BadgeVariant>
+
 interface StatusBadgeProps {
   status: string
   getLabel: (status: string) => string
-  variantMap: Record<string, BadgeVariant>
+  variantMap: StatusBadgeVariantMap
   defaultVariant?: BadgeVariant
   size?: BadgeSize
   className?: string
