@@ -8,6 +8,7 @@ import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { workQueueQK } from '../api'
 import type { WorkQueueAction, WorkQueueItem, WorkQueueListResponse, WorkQueueSourceType } from '../api'
 import { WORK_QUEUE_MESSAGES } from '../messages'
+import { WORK_QUEUE_ERROR_MESSAGES } from '../errorMessages'
 
 type TaskModalState = {
   mode: 'create' | 'edit' | 'view' | 'link'
@@ -95,11 +96,11 @@ export const useWorkQueueActions = () => {
   const actionMutation = useMutation({
     mutationFn: async ({ item, action }: { item: WorkQueueItem; action: WorkQueueAction }) => {
       const taskId = action.task_id ?? (item.source_type === 'task' ? item.source_id : undefined)
-      if (taskId == null) throw new Error(WORK_QUEUE_MESSAGES.actions.invalidAction)
+      if (taskId == null) throw new Error(WORK_QUEUE_ERROR_MESSAGES.actions.invalidAction)
       if (isTaskActionKey(action.key, 'complete_task')) return tasksApi.complete(taskId)
       if (isTaskActionKey(action.key, 'cancel_task')) return tasksApi.cancel(taskId)
       if (isTaskActionKey(action.key, 'delete_task')) return tasksApi.delete(taskId)
-      throw new Error(WORK_QUEUE_MESSAGES.actions.unsupportedAction)
+      throw new Error(WORK_QUEUE_ERROR_MESSAGES.actions.unsupportedAction)
     },
     onMutate: async ({ item, action }) => {
       const taskId = action.task_id ?? (item.source_type === 'task' ? item.source_id : undefined)
@@ -127,8 +128,8 @@ export const useWorkQueueActions = () => {
       context?.previousLists?.forEach(([queryKey, data]) => {
         qc.setQueryData(queryKey, data)
       })
-      toast.error(WORK_QUEUE_MESSAGES.actions.failure, {
-        description: getErrorMessage(err, err instanceof Error ? err.message : WORK_QUEUE_MESSAGES.actions.failure),
+      toast.error(WORK_QUEUE_ERROR_MESSAGES.actions.failure, {
+        description: getErrorMessage(err, err instanceof Error ? err.message : WORK_QUEUE_ERROR_MESSAGES.actions.failure),
       })
       void qc.invalidateQueries({ queryKey: workQueueQK.all })
     },
@@ -149,13 +150,13 @@ export const useWorkQueueActions = () => {
   const createTaskMutation = useMutation({
     mutationFn: (data: TaskCreateRequest) => tasksApi.create(data),
     onSuccess: () => handleTaskMutationSuccess(WORK_QUEUE_MESSAGES.actions.createTaskSuccess),
-    onError: (err) => showErrorToast(err, WORK_QUEUE_MESSAGES.actions.createTaskError),
+    onError: (err) => showErrorToast(err, WORK_QUEUE_ERROR_MESSAGES.actions.createTaskError),
   })
 
   const updateTaskMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: TaskUpdateRequest }) => tasksApi.update(id, data),
     onSuccess: () => handleTaskMutationSuccess(WORK_QUEUE_MESSAGES.actions.updateTaskSuccess),
-    onError: (err) => showErrorToast(err, WORK_QUEUE_MESSAGES.actions.updateTaskError),
+    onError: (err) => showErrorToast(err, WORK_QUEUE_ERROR_MESSAGES.actions.updateTaskError),
   })
 
   const rememberFocus = (target?: HTMLElement | null) => {
@@ -210,7 +211,7 @@ export const useWorkQueueActions = () => {
       }
       const taskId = action.task_id ?? (item.source_type === 'task' ? item.source_id : undefined)
       if (!taskId) {
-        toast.error(WORK_QUEUE_MESSAGES.actions.taskNotFound)
+        toast.error(WORK_QUEUE_ERROR_MESSAGES.actions.taskNotFound)
         return
       }
       setTaskModal({

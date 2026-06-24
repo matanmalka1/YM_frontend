@@ -36,6 +36,7 @@ import { WORK_QUEUE_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.co
 import { taskStatusLabels, taskStatusValues } from '@/features/tasks/constants/labels'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { WORK_QUEUE_MESSAGES } from '../messages'
+import { WORK_QUEUE_ERROR_MESSAGES } from '../errorMessages'
 
 const typeOptions = [
   { value: '', label: WORK_QUEUE_MESSAGES.filters.allTypes },
@@ -113,13 +114,13 @@ export const useWorkQueuePage = () => {
     scopeFilter !== null
 
   const requestError = !hasRole
-    ? WORK_QUEUE_MESSAGES.page.roleError
+    ? WORK_QUEUE_ERROR_MESSAGES.page.roleError
     : error
-      ? getErrorMessage(error, WORK_QUEUE_MESSAGES.page.loadError)
+      ? getErrorMessage(error, WORK_QUEUE_ERROR_MESSAGES.page.loadError)
       : null
 
   useEffect(() => {
-    if (requestError) toast.error(WORK_QUEUE_MESSAGES.page.loadToast, { description: requestError })
+    if (requestError) toast.error(WORK_QUEUE_ERROR_MESSAGES.page.loadToast, { description: requestError })
   }, [requestError])
 
   const handleFilterChange = (key: WorkQueueFilterParamKey, value: string) => setFilter(key, value, true)

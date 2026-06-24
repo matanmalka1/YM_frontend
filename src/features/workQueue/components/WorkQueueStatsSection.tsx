@@ -5,6 +5,7 @@ import { StatsCard } from '@/components/ui/layout/StatsCard'
 import type { WorkQueueSummary, WorkQueueUrgency } from '../api/contracts'
 import { APPROACHING_DAYS, IMPORTANT_DAYS } from '../constants'
 import { WORK_QUEUE_MESSAGES } from '../messages'
+import { WORK_QUEUE_ERROR_MESSAGES } from '../errorMessages'
 
 interface WorkQueueStatsSectionProps {
   summary: WorkQueueSummary | undefined
@@ -58,7 +59,7 @@ export const WorkQueueStatsSection: React.FC<WorkQueueStatsSectionProps> = ({ su
         icon={AlertTriangle}
         variant="error"
         size="compact"
-        title={WORK_QUEUE_MESSAGES.stats.summaryError}
+        title={WORK_QUEUE_ERROR_MESSAGES.stats.summaryError}
         message={summaryError}
       />
     )
