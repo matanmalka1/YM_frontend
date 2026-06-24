@@ -20,6 +20,7 @@ import {
   type TaxCalendarGroupItemSourceType,
 } from '../../api'
 import { TAX_CALENDAR_MESSAGES } from '../../messages'
+import { TAX_CALENDAR_ERROR_MESSAGES } from '../../errorMessages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface TaxCalendarGroupsTableProps {
@@ -103,7 +104,7 @@ const GroupItemsRows = ({
   if (isError) {
     return (
       <div className="bg-negative-50 px-4 py-4 text-sm text-negative-700">
-        {getErrorMessage(error, TAX_CALENDAR_MESSAGES.list.linkedLoadError)}
+        {getErrorMessage(error, TAX_CALENDAR_ERROR_MESSAGES.list.linkedLoad)}
       </div>
     )
   }

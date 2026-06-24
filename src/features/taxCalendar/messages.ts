@@ -20,20 +20,17 @@ export const TAX_CALENDAR_MESSAGES = {
     noGroupsTitle: 'אין קבוצות להצגה',
     noGroupsMessage: 'לא נמצאו קבוצות יומן מס התואמות לסינון הנוכחי',
     loadingLinked: 'טוען רשומות מקושרות...',
-    linkedLoadError: 'שגיאה בטעינת רשומות מקושרות',
     noMatchingClients: 'אין לקוחות תואמים בקבוצה זו',
     noLinkedRecords: 'אין רשומות מקושרות לקבוצה זו',
   },
   header: {
     title: 'יומן מס',
     description: 'מעקב אחר מועדי מס, סטטוסי טיפול וקישור ללקוחות',
-    loadError: 'שגיאה בטעינת יומן המס',
   },
   clientTab: {
     title: 'מועדי מס',
     subtitle: 'חובות ומועדים המקושרים ללקוח זה',
     linkedLabel: 'מועדים',
-    loadError: 'שגיאה בטעינת מועדי המס',
   },
   stats: {
     groups: 'סה״כ קבוצות',

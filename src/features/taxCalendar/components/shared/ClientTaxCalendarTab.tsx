@@ -13,6 +13,7 @@ import { TaxCalendarStatsSection } from '../list/TaxCalendarStatsSection'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { DetailTabPanel } from '@/components/ui/layout'
 import { TAX_CALENDAR_MESSAGES } from '../../messages'
+import { TAX_CALENDAR_ERROR_MESSAGES } from '../../errorMessages'
 
 interface ClientTaxCalendarTabProps {
   clientId: number
@@ -69,7 +70,7 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
         groups={groups}
         isLoading={groupsQuery.isPending}
         error={groupsQuery.error}
-        errorFallback={TAX_CALENDAR_MESSAGES.clientTab.loadError}
+        errorFallback={TAX_CALENDAR_ERROR_MESSAGES.clientTab.load}
         clientRecordId={clientId}
         page={page}
         pageSize={TAX_CALENDAR_GROUP_PAGE_SIZE}

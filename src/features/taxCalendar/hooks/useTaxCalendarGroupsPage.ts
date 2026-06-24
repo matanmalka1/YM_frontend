@@ -10,6 +10,7 @@ import {
 } from '../utils'
 import { useTaxCalendarGroups } from './useTaxCalendarGroups'
 import { TAX_CALENDAR_MESSAGES } from '../messages'
+import { TAX_CALENDAR_ERROR_MESSAGES } from '../errorMessages'
 
 const EMPTY_SUMMARY: TaxCalendarGroupsSummary = { groups: 0, linked: 0, open: 0, overdue: 0, done: 0 }
 
@@ -44,7 +45,7 @@ export const useTaxCalendarGroupsPage = () => {
       isLoading: groupsQuery.isPending,
       isFetching: groupsQuery.isFetching,
       error: groupsQuery.error,
-      errorFallback: TAX_CALENDAR_MESSAGES.header.loadError,
+      errorFallback: TAX_CALENDAR_ERROR_MESSAGES.header.load,
     },
     headerProps: {
       title: TAX_CALENDAR_MESSAGES.header.title,
