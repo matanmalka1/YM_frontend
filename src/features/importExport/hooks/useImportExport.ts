@@ -5,6 +5,7 @@ import { importExportApi } from '../api'
 import { clientsQK } from '@/features/clients'
 import { showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
+import { IMPORT_EXPORT_MESSAGES } from '../messages'
 
 const EXCEL_MIME = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
@@ -16,7 +17,7 @@ const isExcelFile = (file: File) => {
 const formatImportErrors = (errors: Array<{ row: number; error: string }>) =>
   errors
     .slice(0, 3)
-    .map((error) => `שורה ${error.row}: ${error.error}`)
+    .map((error) => IMPORT_EXPORT_MESSAGES.actions.importRowError(error.row, error.error))
     .join('\n')
 
 const downloadBlob = (data: BlobPart, filename: string) => {
@@ -51,9 +52,9 @@ export const useImportExport = () => {
 
       downloadBlob(data, `clients_export_${format(new Date(), 'yyyy-MM-dd')}.xlsx`)
 
-      toast.success('ייצוא לקוחות הושלם בהצלחה')
+      toast.success(IMPORT_EXPORT_MESSAGES.actions.exportSuccess)
     } catch (error) {
-      showErrorToast(error, 'שגיאה בייצוא לקוחות')
+      showErrorToast(error, IMPORT_EXPORT_MESSAGES.actions.exportError)
     } finally {
       setExporting(false)
     }
@@ -63,7 +64,7 @@ export const useImportExport = () => {
     if (importing) return
 
     if (!isExcelFile(file)) {
-      toast.error('יש לבחור קובץ Excel בפורמט xlsx או xls')
+      toast.error(IMPORT_EXPORT_MESSAGES.actions.invalidFile)
       return
     }
 
@@ -82,16 +83,24 @@ export const useImportExport = () => {
         const description = formatImportErrors(data.errors)
         const remainingErrors = data.errors.length - 3
 
-        toast.warning(data.created > 0 ? `נוצרו ${data.created} לקוחות, וחלק מהשורות נכשלו` : 'לא נוצרו לקוחות', {
-          description: remainingErrors > 0 ? `${description}\nועוד ${remainingErrors} שגיאות` : description,
-          duration: 8000,
-        })
+        toast.warning(
+          data.created > 0
+            ? IMPORT_EXPORT_MESSAGES.actions.partialSuccess(data.created)
+            : IMPORT_EXPORT_MESSAGES.actions.noneCreated,
+          {
+            description:
+              remainingErrors > 0
+                ? `${description}\n${IMPORT_EXPORT_MESSAGES.actions.moreErrors(remainingErrors)}`
+                : description,
+            duration: 8000,
+          },
+        )
         return
       }
 
-      toast.success(`נוצרו ${data.created} לקוחות מתוך ${data.total_rows} שורות`)
+      toast.success(IMPORT_EXPORT_MESSAGES.actions.importSuccess(data.created, data.total_rows))
     } catch (error) {
-      showErrorToast(error, 'שגיאה בייבוא לקוחות')
+      showErrorToast(error, IMPORT_EXPORT_MESSAGES.actions.importError)
     } finally {
       setImporting(false)
     }
@@ -107,9 +116,9 @@ export const useImportExport = () => {
 
       downloadBlob(data, 'clients_template.xlsx')
 
-      toast.success('התבנית ירדה בהצלחה')
+      toast.success(IMPORT_EXPORT_MESSAGES.actions.templateSuccess)
     } catch (error) {
-      showErrorToast(error, 'שגיאה בהורדת תבנית')
+      showErrorToast(error, IMPORT_EXPORT_MESSAGES.actions.templateError)
     } finally {
       setDownloadingTemplate(false)
     }

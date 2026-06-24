@@ -6,6 +6,8 @@ import { HiddenFileInput } from '../../../components/ui/inputs/HiddenFileInput'
 import { Button } from '../../../components/ui/primitives/Button'
 import { Card } from '../../../components/ui/primitives/Card'
 import { useImportExport } from '../hooks/useImportExport'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { IMPORT_EXPORT_MESSAGES } from '../messages'
 
 // ── Export panel ───────────────────────────────────────────────────────────────
 
@@ -14,16 +16,16 @@ interface ExportPanelProps {
   onExport: () => void
 }
 const ExportPanel: React.FC<ExportPanelProps> = ({ exporting, onExport }) => (
-  <Card title="ייצוא לקוחות" variant="elevated">
+  <Card title={IMPORT_EXPORT_MESSAGES.exportPanel.title} variant="elevated">
     <div className="space-y-4">
-      <p className="text-sm text-gray-600">הורדת כל נתוני הלקוחות לקובץ Excel מסודר.</p>
+      <p className="text-sm text-gray-600">{IMPORT_EXPORT_MESSAGES.exportPanel.description}</p>
 
       <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-700">
-        הקובץ כולל שדות לקוח, פרטי עסק, סטטוס ונתוני מס רלוונטיים.
+        {IMPORT_EXPORT_MESSAGES.exportPanel.details}
       </div>
 
       <Button variant="primary" icon={<Download className="h-4 w-4" />} onClick={onExport} isLoading={exporting}>
-        ייצוא ל־Excel
+        {IMPORT_EXPORT_MESSAGES.exportPanel.action}
       </Button>
     </div>
   </Card>
@@ -49,29 +51,25 @@ const ImportPanel: React.FC<ImportPanelProps> = ({ importing, onFileSelect, onDo
   }
 
   return (
-    <Card title="ייבוא לקוחות" variant="elevated">
+    <Card title={IMPORT_EXPORT_MESSAGES.importPanel.title} variant="elevated">
       <div className="space-y-4">
-        <Alert
-          variant="warning"
-          size="sm"
-          message="ייבוא יוצר לקוחות חדשים במערכת. מומלץ להוריד תבנית, למלא אותה, ואז להעלות את הקובץ."
-        />
+        <Alert variant="warning" size="sm" message={IMPORT_EXPORT_MESSAGES.importPanel.warning} />
 
         <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 p-3">
           <div>
-            <p className="text-sm font-medium text-gray-900">תבנית ייבוא</p>
-            <p className="text-xs text-gray-500">כוללת את שמות העמודות הנדרשים</p>
+            <p className="text-sm font-medium text-gray-900">{IMPORT_EXPORT_MESSAGES.importPanel.templateTitle}</p>
+            <p className="text-xs text-gray-500">{IMPORT_EXPORT_MESSAGES.importPanel.templateDescription}</p>
           </div>
 
           <Button type="button" variant="outline" size="sm" onClick={onDownloadTemplate}>
-            הורד תבנית
+            {IMPORT_EXPORT_MESSAGES.importPanel.downloadTemplate}
           </Button>
         </div>
 
         <div className="rounded-lg border-2 border-dashed border-gray-300 p-6 text-center transition-colors hover:border-primary-400">
           <HiddenFileInput
             ref={fileInputRef}
-            aria-label="ייבוא קובץ"
+            aria-label={IMPORT_EXPORT_MESSAGES.importPanel.fileInputAriaLabel}
             accept=".xlsx,.xls"
             onChange={handleChange}
             disabled={importing}
@@ -79,7 +77,7 @@ const ImportPanel: React.FC<ImportPanelProps> = ({ importing, onFileSelect, onDo
 
           <FileSpreadsheet className="mx-auto mb-3 h-10 w-10 text-gray-400" />
 
-          <p className="mb-3 text-sm text-gray-600">העלה קובץ Excel בפורמט התבנית</p>
+          <p className="mb-3 text-sm text-gray-600">{IMPORT_EXPORT_MESSAGES.importPanel.uploadPrompt}</p>
 
           <Button
             type="button"
@@ -89,11 +87,11 @@ const ImportPanel: React.FC<ImportPanelProps> = ({ importing, onFileSelect, onDo
             isLoading={importing}
             disabled={importing}
           >
-            {importing ? 'מייבא...' : 'בחר קובץ'}
+            {importing ? IMPORT_EXPORT_MESSAGES.importPanel.importing : IMPORT_EXPORT_MESSAGES.importPanel.chooseFile}
           </Button>
         </div>
 
-        <p className="text-xs text-gray-500">פורמטים נתמכים: xlsx, xls. תאריכים בפורמט YYYY-MM-DD.</p>
+        <p className="text-xs text-gray-500">{IMPORT_EXPORT_MESSAGES.importPanel.supportedFormats}</p>
       </div>
     </Card>
   )
@@ -110,12 +108,12 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ open, onCl
   return (
     <Modal
       open={open}
-      title="ייבוא וייצוא לקוחות"
+      title={IMPORT_EXPORT_MESSAGES.modal.title}
       onClose={onClose}
       footer={
         <div className="flex justify-end">
           <Button type="button" variant="secondary" onClick={onClose}>
-            סגור
+            {GLOBAL_UI_MESSAGES.actions.close}
           </Button>
         </div>
       }
