@@ -3,6 +3,7 @@ import type { AnnualReportDetail } from '../types'
 import { useDetailQuery } from '../../../hooks/useDetailQuery'
 import { useReportMutations } from './useReportMutations'
 import { useReportSchedules } from './useReportSchedules'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useReportDetail = (reportId: number | null, onDeleted?: () => void) => {
   const reportQuery = useDetailQuery<AnnualReportDetail>(
@@ -18,7 +19,7 @@ export const useReportDetail = (reportId: number | null, onDeleted?: () => void)
   return {
     report: reportQuery.data ?? null,
     isLoading: reportQuery.isPending,
-    error: reportQuery.error ? 'שגיאה בטעינת דוח' : null,
+    error: reportQuery.error ? ANNUAL_REPORTS_ERROR_MESSAGES.reports.load : null,
     transition: mutations.transition,
     isTransitioning: mutations.isTransitioning,
     completeSchedule: schedules.completeSchedule,

@@ -7,6 +7,7 @@ import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import type { TimelineEvent } from '../api'
 import { normalizeTimelineEvents, type NormalizedTimelineEvent, type TimelineFilterKey } from '../normalize'
 import { buildTimelineFilterStats, type EventTypeStat } from '../lib/timelineStats'
+import { TIMELINE_ERROR_MESSAGES } from '../errorMessages'
 
 export type { EventTypeStat }
 
@@ -125,7 +126,7 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
   const error = !hasValidClient
     ? 'מזהה לקוח חסר'
     : timelineError
-      ? getErrorMessage(timelineError, 'שגיאה בטעינת ציר זמן')
+      ? getErrorMessage(timelineError, TIMELINE_ERROR_MESSAGES.clientTimelineLoad)
       : null
 
   // ── Public API ─────────────────────────────────────────────────────────────

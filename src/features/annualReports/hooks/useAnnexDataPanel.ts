@@ -4,6 +4,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { showErrorToast } from '@/utils/utils'
 import { annualReportsApi, annualReportsQK, type AnnualReportScheduleKey } from '../api'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 import { SCHEDULE_FIELDS } from '../constants/annexConstants'
 import {
   buildAnnexSchema,
@@ -51,7 +52,7 @@ export const useAnnexDataPanel = (reportId: number, schedule: AnnualReportSchedu
       setShowForm(false)
       reset(emptyDefaults)
     },
-    onError: (error) => showErrorToast(error, 'שגיאה בהוספת שורה'),
+    onError: (error) => showErrorToast(error, ANNUAL_REPORTS_ERROR_MESSAGES.annex.add),
   })
 
   const updateMutation = useMutation({
@@ -62,13 +63,13 @@ export const useAnnexDataPanel = (reportId: number, schedule: AnnualReportSchedu
       setEditingLineId(null)
       reset(emptyDefaults)
     },
-    onError: (error) => showErrorToast(error, 'שגיאה בעדכון שורה'),
+    onError: (error) => showErrorToast(error, ANNUAL_REPORTS_ERROR_MESSAGES.annex.update),
   })
 
   const deleteMutation = useMutation({
     mutationFn: (lineId: number) => annualReportsApi.deleteAnnexLine(reportId, schedule, lineId),
     onSuccess: invalidate,
-    onError: (error) => showErrorToast(error, 'שגיאה במחיקת שורה'),
+    onError: (error) => showErrorToast(error, ANNUAL_REPORTS_ERROR_MESSAGES.annex.delete),
   })
 
   const add: SubmitHandler<AnnexFormValues> = (values) => addMutation.mutate(values)

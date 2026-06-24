@@ -6,6 +6,7 @@ import { toast } from '../../../utils/toast'
 import { useReportDetail } from './useReportDetail'
 import type { SectionKey } from '../types'
 import type { StatusTransitionPayload } from '../api'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useAnnualReportDetailPage = (reportId: number, backPath: string) => {
   const [activeSection, setActiveSection] = useState<SectionKey>('overview')
@@ -30,7 +31,7 @@ export const useAnnualReportDetailPage = (reportId: number, backPath: string) =>
     try {
       await annualReportsApi.exportPdf(reportId, detail.report.tax_year)
     } catch {
-      toast.error('שגיאה בהפקת הטיוטה')
+      toast.error(ANNUAL_REPORTS_ERROR_MESSAGES.reports.draftExport)
     } finally {
       setIsExportingPdf(false)
     }

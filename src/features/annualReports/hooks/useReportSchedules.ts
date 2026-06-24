@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { annualReportsApi, annualReportsQK, type AnnualReportScheduleKey } from '../api'
 import { showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useReportSchedules = (reportId: number | null) => {
   const queryClient = useQueryClient()
@@ -15,7 +16,7 @@ export const useReportSchedules = (reportId: number | null) => {
       toast.success('נספח סומן כהושלם')
       if (qk) void queryClient.invalidateQueries({ queryKey: qk })
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בעדכון נספח'),
+    onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.schedules.update),
   })
 
   const addScheduleMutation = useMutation({
@@ -25,7 +26,7 @@ export const useReportSchedules = (reportId: number | null) => {
       toast.success('נספח נוסף בהצלחה')
       if (qk) void queryClient.invalidateQueries({ queryKey: qk })
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בהוספת נספח'),
+    onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.schedules.add),
   })
 
   return {

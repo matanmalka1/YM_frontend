@@ -29,6 +29,7 @@ import { buildClientColumns } from '../components/list/ClientColumns'
 import { useClientQuery } from './useClientQuery'
 import { useClientsFilters } from './useClientsFilters'
 import { useDeletedClientConflict } from './useDeletedClientConflict'
+import { CLIENTS_ERROR_MESSAGES } from '../errorMessages'
 
 const EDIT_FORM_ID = 'client-edit-form-list'
 
@@ -80,7 +81,7 @@ export const useClientsPage = () => {
   const clientItems = listData?.items ?? []
   const total = listData?.total ?? 0
   const stats = listData?.stats ?? { osek_patur: 0, osek_murshe: 0, company_ltd: 0, employee: 0 }
-  const error = listError ? getErrorMessage(listError, 'שגיאה בטעינת רשימת לקוחות') : null
+  const error = listError ? getErrorMessage(listError, CLIENTS_ERROR_MESSAGES.client.listLoad) : null
 
   const createMutation = useMutation({
     mutationFn: (payload: CreateClientPayload) => clientsApi.create(payload),
@@ -92,7 +93,7 @@ export const useClientsPage = () => {
     },
     onError: async (err, payload) => {
       const handled = await conflict.handleCreateError(err, payload.id_number)
-      if (!handled) showErrorToast(err, 'שגיאה ביצירת לקוח')
+      if (!handled) showErrorToast(err, CLIENTS_ERROR_MESSAGES.client.create)
     },
   })
 
@@ -102,7 +103,7 @@ export const useClientsPage = () => {
   >({
     mutationFn: ({ clientId, payload }) => clientsApi.update(clientId, payload),
     successMessage: 'הלקוח עודכן בהצלחה',
-    errorMessage: 'שגיאה בעדכון לקוח',
+    errorMessage: CLIENTS_ERROR_MESSAGES.client.update,
     invalidateKeys: [clientsQK.all],
   })
 

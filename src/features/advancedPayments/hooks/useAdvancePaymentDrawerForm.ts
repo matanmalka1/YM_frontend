@@ -6,6 +6,7 @@ import { showErrorToast } from '@/utils/utils'
 import { isAdvancePaymentMethod, isAdvancePaymentStatus } from '../constants'
 import { calcAdvanceAmount, toEditableAmount, toStringOrNull } from '../utils/advancePaymentComponentUtils'
 import type { AdvancePaymentDrawerModel } from '../utils/advancePaymentDrawerModel'
+import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
 
 // `null` = idle (no prefill attempted yet); the rest mirror the API contract.
 type PrefillSource = PrefillTurnoverResponse['source'] | null
@@ -109,7 +110,7 @@ export const useAdvancePaymentDrawerForm = ({
         setTurnoverAmount(result.turnover_amount)
       }
     } catch (err) {
-      showErrorToast(err, 'טעינת מחזור ממע״מ נכשלה')
+      showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.vatPrefill)
     } finally {
       setIsPrefilling(false)
     }
@@ -122,23 +123,23 @@ export const useAdvancePaymentDrawerForm = ({
     const numericPaid = Number(paidAmountPayload)
 
     if (!Number.isFinite(numericPaid) || numericPaid < 0) {
-      toast.error('סכום ששולם חייב להיות מספר תקין שאינו שלילי')
+      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.paidAmountInvalid)
       return
     }
     if (isPaymentStatus && numericPaid <= 0) {
-      toast.error('סטטוס שולם או חלקי מחייב סכום ששולם גדול מאפס')
+      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.paidAmountRequired)
       return
     }
     if (isPaymentStatus && normalizedPaidAt === '') {
-      toast.error('תאריך ביצוע תשלום נדרש כאשר הסטטוס שולם או חלקי')
+      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.paidAtRequired)
       return
     }
     if (!isAdvancePaymentStatus(status)) {
-      toast.error('סטטוס תשלום אינו תקין')
+      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.paymentStatusInvalid)
       return
     }
     if (normalizedPaymentMethod !== '' && !isAdvancePaymentMethod(normalizedPaymentMethod)) {
-      toast.error('שיטת תשלום אינה תקינה')
+      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.paymentMethodInvalid)
       return
     }
     const effectiveExpected = liveExpected != null ? Number(liveExpected) : Number(model.expectedAmount ?? 0)
@@ -148,7 +149,7 @@ export const useAdvancePaymentDrawerForm = ({
       effectiveExpected > 0 &&
       numericPaid < effectiveExpected
     ) {
-      toast.error('סכום ששולם נמוך מהסכום הצפוי. יש לבחור סטטוס חלקי')
+      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.partialPaymentRequired)
       return
     }
 

@@ -6,6 +6,7 @@ import { showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
 import { timelineQK } from '@/features/timeline'
 import type { AnnualReportDetail } from '../types'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useReportMutations = (reportId: number | null, onDeleted?: () => void) => {
   const queryClient = useQueryClient()
@@ -38,7 +39,7 @@ export const useReportMutations = (reportId: number | null, onDeleted?: () => vo
       if (qk && context?.previous) {
         queryClient.setQueryData(qk, context.previous)
       }
-      showErrorToast(err, 'שגיאה בעדכון סטטוס')
+      showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.reports.statusUpdate)
     },
     onSuccess: () => {
       toast.success('סטטוס עודכן בהצלחה')
@@ -66,7 +67,7 @@ export const useReportMutations = (reportId: number | null, onDeleted?: () => vo
       }
       void queryClient.invalidateQueries({ queryKey: annualReportsQK.lists() })
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בעדכון דוח'),
+    onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.reports.update),
   })
 
   const deleteMutation = useMutation({
@@ -80,7 +81,7 @@ export const useReportMutations = (reportId: number | null, onDeleted?: () => vo
         navigate('/tax/reports')
       }
     },
-    onError: (err) => showErrorToast(err, 'שגיאה במחיקת דוח'),
+    onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.reports.delete),
   })
 
   return {

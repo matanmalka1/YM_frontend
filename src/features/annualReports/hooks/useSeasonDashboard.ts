@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { annualReportSeasonApi, annualReportsQK } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
 import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../constants/reportConstants'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 
 interface SeasonFilters {
   client_record_id?: number
@@ -47,9 +48,9 @@ export const useSeasonDashboard = (taxYear?: number, enabled = true, filters?: S
     overdue: overdueData ?? [],
     isLoading: summaryPending || reportsPending,
     error: summaryError
-      ? getErrorMessage(summaryError, 'שגיאה בטעינת סיכום עונה')
+      ? getErrorMessage(summaryError, ANNUAL_REPORTS_ERROR_MESSAGES.reports.seasonSummaryLoad)
       : reportsError
-        ? getErrorMessage(reportsError, 'שגיאה בטעינת דוחות')
+        ? getErrorMessage(reportsError, ANNUAL_REPORTS_ERROR_MESSAGES.reports.seasonListLoad)
         : null,
   }
 }

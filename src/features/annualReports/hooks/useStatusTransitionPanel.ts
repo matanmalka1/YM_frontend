@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { annualReportsApi, annualReportsQK, getAllowedTransitions } from '../api'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 import type { StatusTransitionPanelProps, TransitionForm } from '../types'
 import { buildTransitionPayload, getEmptyTransitionForm, isValidAmendReason } from '../utils/statusTransitionHelpers'
 
@@ -33,7 +34,7 @@ export const useStatusTransitionPanel = (
       ])
       closeAmendModal()
     },
-    onError: (error) => showErrorToast(error, 'שגיאה בשליחת תיקון'),
+    onError: (error) => showErrorToast(error, ANNUAL_REPORTS_ERROR_MESSAGES.statusTransition.amend),
   })
 
   const setField =

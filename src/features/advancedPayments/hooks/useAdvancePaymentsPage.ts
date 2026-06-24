@@ -10,6 +10,7 @@ import { toast } from '@/utils/toast'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import type { AdvancePaymentOverviewRow, AdvancePaymentStatus, UpdateAdvancePaymentPayload } from '../api/contracts'
 import { isAdvancePaymentStatus, ADVANCE_PAYMENTS_FILTER_FIELDS } from '../constants'
+import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
 import { useAdvancePaymentBatches } from './useAdvancePaymentBatches'
 import {
   getAdvancePaymentBatchKey,
@@ -70,7 +71,7 @@ export const useAdvancePaymentsPage = () => {
       await queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
       setDrawerRow(null)
     },
-    onError: (error) => showErrorToast(error, 'שגיאה בעדכון מקדמה'),
+    onError: (error) => showErrorToast(error, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.update),
   })
 
   const changeFilter = (key: string, value: string) => {

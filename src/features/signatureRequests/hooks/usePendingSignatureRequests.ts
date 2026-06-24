@@ -3,6 +3,7 @@ import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { signatureRequestsApi, signatureRequestsQK } from '../api'
 import type { SignatureRequestResponse } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
+import { SIGNATURE_REQUESTS_ERROR_MESSAGES } from '../errorMessages'
 
 type Params = { page?: number; pageSize?: number }
 
@@ -39,6 +40,6 @@ export const usePendingSignatureRequests = ({ page = 1, pageSize = 50 }: Params 
     total: data?.total ?? 0,
     businessLookup,
     isLoading,
-    error: error ? getErrorMessage(error, 'שגיאה בטעינת בקשות חתימה') : null,
+    error: error ? getErrorMessage(error, SIGNATURE_REQUESTS_ERROR_MESSAGES.list.load) : null,
   }
 }

@@ -13,6 +13,7 @@ import { STATUS_LABELS } from '../api/utils'
 import type { AnnualReportStatus } from '../api/contracts'
 import { ALL_STATUSES_OPTION, ALL_YEARS_OPTION } from '@/constants/filterOptions.constants'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 
 const STATUS_OPTIONS = [
   ALL_STATUSES_OPTION,
@@ -110,10 +111,10 @@ export const useAnnualReportsPage = () => {
 
   const isLoading = defaultTaxYearPending || (allYearsMode ? allReportsPending : season.isLoading)
   const error = defaultTaxYearError
-    ? 'שגיאה בטעינת שנת מס'
+    ? ANNUAL_REPORTS_ERROR_MESSAGES.reports.taxYearLoad
     : allYearsMode
       ? allReportsError
-        ? 'שגיאה בטעינת דוחות'
+        ? ANNUAL_REPORTS_ERROR_MESSAGES.reports.seasonListLoad
         : null
       : season.error
 

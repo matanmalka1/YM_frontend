@@ -7,6 +7,7 @@ import {
 } from '../api'
 import { showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
+import { SIGNATURE_REQUESTS_ERROR_MESSAGES } from '../errorMessages'
 
 /**
  * When `clientId` is provided, also invalidates that client's signature requests.
@@ -31,7 +32,7 @@ export const useSignatureRequestActions = (clientId?: number) => {
       toast.success('בקשת החתימה נוצרה ונשלחה')
       invalidate()
     },
-    onError: (err) => showErrorToast(err, 'שגיאה ביצירת ושליחת בקשת חתימה'),
+    onError: (err) => showErrorToast(err, SIGNATURE_REQUESTS_ERROR_MESSAGES.create.request),
   })
 
   const cancelMutation = useMutation({
@@ -41,7 +42,7 @@ export const useSignatureRequestActions = (clientId?: number) => {
       toast.success('בקשת החתימה בוטלה')
       invalidate()
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בביטול בקשת חתימה'),
+    onError: (err) => showErrorToast(err, SIGNATURE_REQUESTS_ERROR_MESSAGES.cancel.request),
   })
 
   return {

@@ -4,6 +4,7 @@ import { useTaxProfile } from '@/features/taxProfile'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import { toast } from '@/utils/toast'
 import { showErrorToast } from '@/utils/utils'
+import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useGenerateSchedule = (year: number) => {
   const queryClient = useQueryClient()
@@ -29,24 +30,24 @@ export const useGenerateSchedule = (year: number) => {
       toast.success(data.created > 0 ? `נוצרו ${data.created} מקדמות, דולגו ${data.skipped}` : 'לא נוצרו מקדמות חדשות')
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
     },
-    onError: (err) => showErrorToast(err, 'שגיאה ביצירת לוח מקדמות'),
+    onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.generateSchedule.create),
   })
 
   const handleGenerate = () => {
     if (clientRecordId === 0) {
-      toast.error('לא נבחר לקוח תקין')
+      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.generateSchedule.missingClient)
       return
     }
     if (isProfileLoading) {
-      toast.error('פרופיל הלקוח עדיין נטען')
+      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.generateSchedule.profileLoading)
       return
     }
     if (isProfileError) {
-      toast.error('שגיאה בטעינת פרופיל הלקוח')
+      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.generateSchedule.profileLoad)
       return
     }
     if (frequency == null) {
-      toast.error('לא ניתן ליצור לוח בלי תדירות מקדמות בפרופיל הלקוח')
+      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.generateSchedule.missingFrequency)
       return
     }
     mutation.mutate(frequency)

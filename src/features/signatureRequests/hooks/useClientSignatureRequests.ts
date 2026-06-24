@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { signatureRequestsApi, signatureRequestsQK } from '../api'
 import type { SignatureRequestResponse } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
+import { SIGNATURE_REQUESTS_ERROR_MESSAGES } from '../errorMessages'
 
 type Params = { clientId: number | null; page?: number; pageSize?: number }
 
@@ -25,6 +26,6 @@ export const useClientSignatureRequests = ({ clientId, page = 1, pageSize = 10 }
     items: data?.items ?? [],
     total: data?.total ?? 0,
     isLoading,
-    error: error ? getErrorMessage(error, 'שגיאה בטעינת בקשות חתימה') : null,
+    error: error ? getErrorMessage(error, SIGNATURE_REQUESTS_ERROR_MESSAGES.list.load) : null,
   }
 }

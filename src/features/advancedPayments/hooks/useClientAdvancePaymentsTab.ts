@@ -11,6 +11,7 @@ import type { AdvancePaymentRow, UpdateAdvancePaymentPayload } from '../api/cont
 import { isAdvancePaymentStatus } from '../constants'
 import { useAdvancePayments } from './useAdvancePayments'
 import { useAdvanceRateInsights } from './useAdvanceRateInsights'
+import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
 
 interface UseClientAdvancePaymentsTabArgs {
   clientRecordId: number
@@ -59,7 +60,7 @@ export const useClientAdvancePaymentsTab = ({
       toast.success(data.created > 0 ? `נוצרו ${data.created} מקדמות` : 'הכול קיים')
       void invalidateClientYear()
     },
-    onError: (err) => showErrorToast(err, 'שגיאה ביצירת לוח מקדמות'),
+    onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.generateSchedule.create),
   })
 
   const updateMutation = useMutation({
@@ -70,12 +71,12 @@ export const useClientAdvancePaymentsTab = ({
       void invalidateClientYear()
       setDrawerRow(null)
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בעדכון מקדמה'),
+    onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.update),
   })
 
   const handleGenerateSchedule = () => {
     if (generationFrequency == null) {
-      toast.error('לא ניתן ליצור לוח בלי תדירות מקדמות בפרופיל הלקוח')
+      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.generateSchedule.missingFrequency)
       return
     }
     generateMutation.mutate(generationFrequency)
@@ -98,9 +99,9 @@ export const useClientAdvancePaymentsTab = ({
       return result
     } catch (err) {
       if (getHttpStatus(err) === 409) {
-        toast.error('מקדמה לחודש זה כבר קיימת')
+        toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.alreadyExists)
       } else {
-        showErrorToast(err, 'שגיאה ביצירת מקדמה')
+        showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.create)
       }
       throw err
     }

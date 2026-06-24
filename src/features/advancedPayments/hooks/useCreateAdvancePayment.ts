@@ -6,6 +6,7 @@ import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import type { CreateAdvancePaymentPayload } from '../api/contracts'
 import { toast } from '@/utils/toast'
 import { showErrorToast } from '@/utils/utils'
+import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useCreateAdvancePayment = () => {
   const queryClient = useQueryClient()
@@ -27,7 +28,7 @@ export const useCreateAdvancePayment = () => {
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
       reset()
     },
-    onError: (err) => showErrorToast(err, 'שגיאה ביצירת מקדמה'),
+    onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.create),
   })
 
   const reset = () => {

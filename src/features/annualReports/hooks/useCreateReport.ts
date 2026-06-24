@@ -8,6 +8,7 @@ import { formatCurrencyILS, showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
 import { createReportSchema, type CreateReportFormValues } from '../schemas'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 
 type CreateReportFormOutput = z.output<typeof createReportSchema>
 
@@ -91,7 +92,7 @@ export const useCreateReport = (taxYear?: number, onSuccess?: () => void) => {
       form.reset(buildDefaultValues(taxYear))
       onSuccess?.()
     },
-    onError: (err) => showErrorToast(err, 'שגיאה ביצירת דוח'),
+    onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.reports.create),
   })
 
   const onSubmit = form.handleSubmit((values) => {

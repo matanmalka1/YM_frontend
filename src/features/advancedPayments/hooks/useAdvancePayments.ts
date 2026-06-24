@@ -3,6 +3,7 @@ import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import type { AdvancePaymentStatus, CreateAdvancePaymentPayload } from '../api/contracts'
 import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
+import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
 
 interface UpdatePayload {
   id: number
@@ -44,7 +45,7 @@ export const useAdvancePayments = (
       void queryClient.invalidateQueries({ queryKey: qk })
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בעדכון מקדמה'),
+    onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.update),
   })
 
   const createMutation = useMutation({
@@ -52,7 +53,7 @@ export const useAdvancePayments = (
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: qk })
     },
-    onError: (err) => showErrorToast(err, 'שגיאה ביצירת מקדמה'),
+    onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.create),
   })
 
   const deleteMutation = useMutation({
@@ -61,7 +62,7 @@ export const useAdvancePayments = (
       void queryClient.invalidateQueries({ queryKey: qk })
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
     },
-    onError: (err) => showErrorToast(err, 'שגיאה במחיקת מקדמה'),
+    onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.delete),
   })
 
   const rows = enabled ? (listData?.items ?? []) : []
@@ -73,7 +74,10 @@ export const useAdvancePayments = (
   return {
     rows,
     isLoading: enabled && listPending,
-    error: enabled && listError ? getErrorMessage(listError, 'שגיאה בטעינת מקדמות') : null,
+    error:
+      enabled && listError
+        ? getErrorMessage(listError, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.listLoad)
+        : null,
     totalExpected,
     totalPaid,
     total: listData?.total ?? 0,

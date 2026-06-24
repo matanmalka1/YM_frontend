@@ -4,6 +4,7 @@ import type { ExpenseLinePayload, ExpenseLineResponse, IncomeLinePayload, Income
 import { EXPENSE_LABELS, INCOME_LABELS } from '../constants/reportConstants'
 import { toast } from '../../../utils/toast'
 import { formatCurrencyILS, showErrorToast } from '../../../utils/utils'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 
 const incomeToast = (verb: string, line: IncomeLineResponse) => {
   const label = INCOME_LABELS[line.source_type] ?? line.source_type
@@ -35,7 +36,7 @@ export const useIncomeExpenseMutations = (reportId: number) => {
       incomeToast('הכנסה נוספה', line)
       invalidate()
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בהוספת הכנסה'),
+    onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.financials.incomeAdd),
   })
 
   const deleteIncome = useMutation({
@@ -44,7 +45,7 @@ export const useIncomeExpenseMutations = (reportId: number) => {
       incomeToast('הכנסה נמחקה', line)
       invalidate()
     },
-    onError: (err) => showErrorToast(err, 'שגיאה במחיקת הכנסה'),
+    onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.financials.incomeDelete),
   })
 
   const addExpense = useMutation({
@@ -60,7 +61,7 @@ export const useIncomeExpenseMutations = (reportId: number) => {
       expenseToast('הוצאה נוספה', line)
       invalidate()
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בהוספת הוצאה'),
+    onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.financials.expenseAdd),
   })
 
   const updateIncome = useMutation({
@@ -70,7 +71,7 @@ export const useIncomeExpenseMutations = (reportId: number) => {
       incomeToast('הכנסה עודכנה', line)
       invalidate()
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בעדכון הכנסה'),
+    onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.financials.incomeUpdate),
   })
 
   const updateExpense = useMutation({
@@ -80,7 +81,7 @@ export const useIncomeExpenseMutations = (reportId: number) => {
       expenseToast('הוצאה עודכנה', line)
       invalidate()
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בעדכון הוצאה'),
+    onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.financials.expenseUpdate),
   })
 
   const deleteExpense = useMutation({
@@ -89,7 +90,7 @@ export const useIncomeExpenseMutations = (reportId: number) => {
       expenseToast('הוצאה נמחקה', line)
       invalidate()
     },
-    onError: (err) => showErrorToast(err, 'שגיאה במחיקת הוצאה'),
+    onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.financials.expenseDelete),
   })
 
   return { addIncome, deleteIncome, addExpense, updateIncome, updateExpense, deleteExpense }

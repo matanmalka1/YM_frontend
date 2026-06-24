@@ -4,6 +4,7 @@ import { useRole } from '@/hooks/useRole'
 import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { annualReportsApi, annualReportsQK, annualReportTaxApi } from '../api'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 import { toReportDetailsPayload, toTaxInputValues, toTaxResultPayload } from '../utils/taxHelpers'
 
 export const useTaxCalculationPanel = (reportId: number) => {
@@ -41,7 +42,7 @@ export const useTaxCalculationPanel = (reportId: number) => {
         queryClient.invalidateQueries({ queryKey: annualReportsQK.detail(reportId) }),
       ])
     },
-    onError: (error) => showErrorToast(error, 'שגיאה בשמירת נתוני דוח'),
+    onError: (error) => showErrorToast(error, ANNUAL_REPORTS_ERROR_MESSAGES.taxCalculation.detailSave),
   })
 
   const saveTaxResultMutation = useMutation({
@@ -51,7 +52,8 @@ export const useTaxCalculationPanel = (reportId: number) => {
       toast.success('חישוב המס נשמר בהצלחה')
       await queryClient.invalidateQueries({ queryKey: annualReportsQK.readiness(reportId) })
     },
-    onError: (error) => toast.error(getErrorMessage(error, 'שגיאה בשמירת חישוב המס')),
+    onError: (error) =>
+      toast.error(getErrorMessage(error, ANNUAL_REPORTS_ERROR_MESSAGES.taxCalculation.calculationSave)),
   })
 
   const initializeInputs = () => {

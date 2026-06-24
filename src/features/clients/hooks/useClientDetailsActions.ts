@@ -6,6 +6,7 @@ import { chargesApi, chargesQK, useChargeCreateMutation } from '@/features/charg
 import type { CreateChargePayload } from '@/features/charges'
 import { bindersApi, bindersQK } from '@/features/binders'
 import { useMutationWithToast } from '@/hooks/useMutationWithToast'
+import { CLIENTS_ERROR_MESSAGES } from '../errorMessages'
 
 const RELATED_PAGE_SIZE = 5
 
@@ -27,7 +28,7 @@ export const useClientDetailsActions = (clientId: number, activeTab: string, sho
   const createBusinessMutation = useMutationWithToast({
     mutationFn: (payload: CreateBusinessPayload) => clientsApi.createBusiness(clientId, payload),
     successMessage: 'העסק נוצר בהצלחה',
-    errorMessage: 'שגיאה ביצירת עסק',
+    errorMessage: CLIENTS_ERROR_MESSAGES.business.create,
     invalidateKeys: [clientsQK.businessesAll(clientId), clientsQK.businesses(clientId)],
   })
 

@@ -4,6 +4,7 @@ import { annualReportsApi, annualReportsQK } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
 import { CURRENT_YEAR } from '../types'
 import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../constants/reportConstants'
+import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 
 const YEAR_LIST = [CURRENT_YEAR, CURRENT_YEAR - 1, CURRENT_YEAR - 2, CURRENT_YEAR - 3]
 
@@ -26,7 +27,7 @@ export const useClientAnnualReportsTab = (clientId: number) => {
     selectedReport,
     yearHasReports,
     isPending,
-    errorMessage: error ? getErrorMessage(error, 'שגיאה בטעינת דוחות שנתיים') : null,
+    errorMessage: error ? getErrorMessage(error, ANNUAL_REPORTS_ERROR_MESSAGES.reports.clientListLoad) : null,
     YEAR_LIST,
   }
 }
