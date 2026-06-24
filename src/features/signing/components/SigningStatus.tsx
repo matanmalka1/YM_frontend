@@ -3,6 +3,7 @@ import { Spinner } from '@/components/ui/primitives/Spinner'
 import type { SignatureRequestStatus } from '@/features/signatureRequests'
 import type { SigningTerminalState } from '../types'
 import { SIGNING_MESSAGES } from '../messages'
+import { SIGNING_ERROR_MESSAGES } from '../errorMessages'
 
 interface StatusIllustrationProps {
   icon: React.ReactNode
@@ -64,10 +65,13 @@ export const SigningStatus: React.FC<SigningStatusProps> = ({ state, status, tit
       bg="bg-negative-100"
       title={
         title ??
-        (status === 'expired' ? SIGNING_MESSAGES.status.expiredTitle : SIGNING_MESSAGES.status.unavailableTitle)
+        (status === 'expired'
+          ? SIGNING_ERROR_MESSAGES.status.expiredTitle
+          : SIGNING_ERROR_MESSAGES.status.unavailableTitle)
       }
       body={
-        body ?? (status === 'expired' ? SIGNING_MESSAGES.status.expiredBody : SIGNING_MESSAGES.status.unavailableBody)
+        body ??
+        (status === 'expired' ? SIGNING_ERROR_MESSAGES.status.expiredBody : SIGNING_ERROR_MESSAGES.status.unavailableBody)
       }
     />
   )

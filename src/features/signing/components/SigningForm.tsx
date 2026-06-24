@@ -7,6 +7,7 @@ import { Textarea } from '../../../components/ui/inputs/Textarea'
 import { formatDate } from '../../../utils/utils'
 import type { SigningPageState } from '../types'
 import { SIGNING_MESSAGES } from '../messages'
+import { SIGNING_ERROR_MESSAGES } from '../errorMessages'
 
 interface SigningFormProps {
   data: SignerViewResponse
@@ -120,7 +121,7 @@ export const SigningForm: React.FC<SigningFormProps> = ({
         ]}
       />
 
-      {isExpired && <Alert variant="error" size="sm" message={SIGNING_MESSAGES.details.expiredAlert} />}
+      {isExpired && <Alert variant="error" size="sm" message={SIGNING_ERROR_MESSAGES.details.expiredAlert} />}
 
       {!isExpired && (
         <>
