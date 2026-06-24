@@ -4,6 +4,7 @@ import { getTotalPages } from '@/utils/paginationUtils'
 import { getErrorMessage } from '@/utils/utils'
 import type { TaxCalendarGroup } from '../../api'
 import { TaxCalendarGroupsTable } from './TaxCalendarGroupsTable'
+import { TAX_CALENDAR_MESSAGES } from '../../messages'
 
 interface TaxCalendarGroupsContentProps {
   groups: TaxCalendarGroup[]
@@ -45,7 +46,7 @@ export const TaxCalendarGroupsContent = ({
         page={page}
         totalPages={getTotalPages(total, pageSize)}
         total={total}
-        label="קבוצות"
+        label={TAX_CALENDAR_MESSAGES.list.groups}
         onPageChange={onPageChange}
       />
     ) : null}

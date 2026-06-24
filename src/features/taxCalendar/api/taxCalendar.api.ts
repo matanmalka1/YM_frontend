@@ -1,5 +1,6 @@
 import { api } from '@/api/client'
 import { toQueryParams } from '@/api/queryParams'
+import { TAX_CALENDAR_MESSAGES } from '../messages'
 
 export type TaxCalendarObligationType = 'vat' | 'advance_payment' | 'annual_report'
 
@@ -74,9 +75,9 @@ export interface TaxCalendarGroupItemResponse {
 }
 
 export const TAX_CALENDAR_OBLIGATION_LABELS: Record<TaxCalendarObligationType, string> = {
-  vat: 'מע״מ',
-  advance_payment: 'מקדמות מס הכנסה',
-  annual_report: 'דוח שנתי',
+  vat: TAX_CALENDAR_MESSAGES.obligations.vat,
+  advance_payment: TAX_CALENDAR_MESSAGES.obligations.advancePayment,
+  annual_report: TAX_CALENDAR_MESSAGES.obligations.annualReport,
 }
 
 export const taxCalendarQK = {

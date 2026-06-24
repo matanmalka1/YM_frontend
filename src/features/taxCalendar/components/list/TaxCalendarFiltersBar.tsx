@@ -9,6 +9,7 @@ import {
 } from '../../constants'
 import { taxCalendarCurrentYear } from '../../utils'
 import { CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
+import { TAX_CALENDAR_MESSAGES } from '../../messages'
 
 interface TaxCalendarFiltersBarProps {
   startYear: string
@@ -53,23 +54,35 @@ export const TaxCalendarFiltersBar = ({
             {
               type: 'search' as const,
               key: 'clientSearchText',
-              label: 'חיפוש לקוח',
+              label: TAX_CALENDAR_MESSAGES.filters.clientSearch,
               placeholder: CLIENT_SEARCH_PLACEHOLDER,
             },
           ]
         : []),
-      { type: 'select' as const, key: 'startYear', label: 'משנת מס', options: yearOptions, defaultValue: defaultYear },
-      { type: 'select' as const, key: 'endYear', label: 'עד שנת מס', options: yearOptions, defaultValue: defaultYear },
+      {
+        type: 'select' as const,
+        key: 'startYear',
+        label: TAX_CALENDAR_MESSAGES.filters.startYear,
+        options: yearOptions,
+        defaultValue: defaultYear,
+      },
+      {
+        type: 'select' as const,
+        key: 'endYear',
+        label: TAX_CALENDAR_MESSAGES.filters.endYear,
+        options: yearOptions,
+        defaultValue: defaultYear,
+      },
       {
         type: 'select' as const,
         key: 'obligationType',
-        label: 'סוג חובה',
+        label: TAX_CALENDAR_MESSAGES.filters.obligationType,
         options: TAX_CALENDAR_OBLIGATION_TYPE_OPTIONS,
       },
       {
         type: 'select' as const,
         key: 'status',
-        label: 'מצב',
+        label: TAX_CALENDAR_MESSAGES.filters.status,
         options: TAX_CALENDAR_STATUS_OPTIONS,
         defaultValue: 'all',
       },
@@ -100,15 +113,15 @@ export const TaxCalendarFiltersBar = ({
         values={values}
         onChange={handleChange}
         onReset={onReset}
-        title="סינון לוח מס"
-        subtitle="טווח שנים, סוג חובה, מצב וחיפוש"
+        title={TAX_CALENDAR_MESSAGES.filters.title}
+        subtitle={TAX_CALENDAR_MESSAGES.filters.subtitle}
       />
       {showIncludeEmpty ? (
         <Checkbox
           checked={includeEmpty}
           onChange={(event) => onIncludeEmptyChange(event.target.checked)}
-          label="כולל ריקים"
-          description="הצג חובות ללא תיקים מקושרים"
+          label={TAX_CALENDAR_MESSAGES.filters.includeEmpty}
+          description={TAX_CALENDAR_MESSAGES.filters.includeEmptyDescription}
         />
       ) : null}
     </div>

@@ -9,6 +9,7 @@ import {
   toTaxCalendarCommonParams,
 } from '../utils'
 import { useTaxCalendarGroups } from './useTaxCalendarGroups'
+import { TAX_CALENDAR_MESSAGES } from '../messages'
 
 const EMPTY_SUMMARY: TaxCalendarGroupsSummary = { groups: 0, linked: 0, open: 0, overdue: 0, done: 0 }
 
@@ -43,15 +44,15 @@ export const useTaxCalendarGroupsPage = () => {
       isLoading: groupsQuery.isPending,
       isFetching: groupsQuery.isFetching,
       error: groupsQuery.error,
-      errorFallback: 'שגיאה בטעינת יומן המס',
+      errorFallback: TAX_CALENDAR_MESSAGES.header.loadError,
     },
     headerProps: {
-      title: 'יומן מס',
-      description: 'מעקב אחר מועדי מס, סטטוסי טיפול וקישור ללקוחות',
+      title: TAX_CALENDAR_MESSAGES.header.title,
+      description: TAX_CALENDAR_MESSAGES.header.description,
     },
     stats: {
       summary: groupsQuery.data?.summary ?? EMPTY_SUMMARY,
-      linkedLabel: 'לקוחות מקושרים',
+      linkedLabel: TAX_CALENDAR_MESSAGES.stats.linkedClients,
       showGroupsCount: true,
     },
     filters: {

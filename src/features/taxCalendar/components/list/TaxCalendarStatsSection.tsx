@@ -2,6 +2,7 @@ import { CalendarDays, CheckCircle2, Clock, AlertTriangle } from 'lucide-react'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
 import { cn } from '../../../../utils/utils'
 import type { TaxCalendarGroupsSummary } from '../../api'
+import { TAX_CALENDAR_MESSAGES } from '../../messages'
 
 interface TaxCalendarStatsSectionProps {
   summary: TaxCalendarGroupsSummary
@@ -19,11 +20,11 @@ export const TaxCalendarStatsSection = ({
       ? [
           {
             key: 'groups',
-            label: 'סה״כ קבוצות',
+            label: TAX_CALENDAR_MESSAGES.stats.groups,
             value: summary.groups,
             icon: CalendarDays,
             variant: 'blue' as const,
-            description: 'קבוצות שנמצאו',
+            description: TAX_CALENDAR_MESSAGES.stats.groupsDescription,
           },
         ]
       : []),
@@ -33,31 +34,31 @@ export const TaxCalendarStatsSection = ({
       value: summary.linked,
       icon: CalendarDays,
       variant: 'blue' as const,
-      description: 'משויכים ללקוחות',
+      description: TAX_CALENDAR_MESSAGES.stats.linkedDescription,
     },
     {
       key: 'open',
-      label: 'פתוחים',
+      label: TAX_CALENDAR_MESSAGES.status.open,
       value: summary.open,
       icon: Clock,
       variant: 'orange' as const,
-      description: 'טרם הושלמו',
+      description: TAX_CALENDAR_MESSAGES.stats.openDescription,
     },
     {
       key: 'overdue',
-      label: 'באיחור',
+      label: TAX_CALENDAR_MESSAGES.status.overdue,
       value: summary.overdue,
       icon: AlertTriangle,
       variant: 'red' as const,
-      description: 'עבר תאריך היעד',
+      description: TAX_CALENDAR_MESSAGES.stats.overdueDescription,
     },
     {
       key: 'done',
-      label: 'הושלמו',
+      label: TAX_CALENDAR_MESSAGES.status.done,
       value: summary.done,
       icon: CheckCircle2,
       variant: 'green' as const,
-      description: 'הטיפול הסתיים',
+      description: TAX_CALENDAR_MESSAGES.stats.doneDescription,
     },
   ]
 

@@ -12,6 +12,7 @@ import { TaxCalendarGroupsContent } from '../list/TaxCalendarGroupsContent'
 import { TaxCalendarStatsSection } from '../list/TaxCalendarStatsSection'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { DetailTabPanel } from '@/components/ui/layout'
+import { TAX_CALENDAR_MESSAGES } from '../../messages'
 
 interface ClientTaxCalendarTabProps {
   clientId: number
@@ -42,12 +43,12 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
 
   return (
     <DetailTabPanel
-      title="מועדי מס"
-      subtitle="חובות ומועדים המקושרים ללקוח זה"
+      title={TAX_CALENDAR_MESSAGES.clientTab.title}
+      subtitle={TAX_CALENDAR_MESSAGES.clientTab.subtitle}
       summary={
         <TaxCalendarStatsSection
           summary={groupsSummary ?? { groups: 0, linked: 0, open: 0, overdue: 0, done: 0 }}
-          linkedLabel="מועדים"
+          linkedLabel={TAX_CALENDAR_MESSAGES.clientTab.linkedLabel}
         />
       }
       filters={
@@ -68,7 +69,7 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
         groups={groups}
         isLoading={groupsQuery.isPending}
         error={groupsQuery.error}
-        errorFallback="שגיאה בטעינת מועדי המס"
+        errorFallback={TAX_CALENDAR_MESSAGES.clientTab.loadError}
         clientRecordId={clientId}
         page={page}
         pageSize={TAX_CALENDAR_GROUP_PAGE_SIZE}

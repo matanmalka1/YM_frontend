@@ -19,6 +19,8 @@ import {
   type TaxCalendarGroupItem,
   type TaxCalendarGroupItemSourceType,
 } from '../../api'
+import { TAX_CALENDAR_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface TaxCalendarGroupsTableProps {
   groups: TaxCalendarGroup[]
@@ -45,9 +47,9 @@ const hasGroupOverride = (group: TaxCalendarGroup): boolean =>
   group.effective_due_date_max !== group.regulatory_due_date
 
 const SOURCE_TYPE_LABELS: Record<TaxCalendarGroupItemSourceType, string> = {
-  vat_work_item: 'מע״מ',
-  advance_payment: 'מקדמה',
-  annual_report: 'דוח שנתי',
+  vat_work_item: TAX_CALENDAR_MESSAGES.item.vat,
+  advance_payment: TAX_CALENDAR_MESSAGES.item.advancePayment,
+  annual_report: TAX_CALENDAR_MESSAGES.item.annualReport,
 }
 
 const getItemPath = (item: TaxCalendarGroupItem): string => {
@@ -57,9 +59,9 @@ const getItemPath = (item: TaxCalendarGroupItem): string => {
 }
 
 const getStateLabel = (item: TaxCalendarGroupItem): string => {
-  if (item.done) return 'הושלם'
-  if (item.overdue) return 'באיחור'
-  return 'פתוח'
+  if (item.done) return TAX_CALENDAR_MESSAGES.item.done
+  if (item.overdue) return TAX_CALENDAR_MESSAGES.item.overdue
+  return TAX_CALENDAR_MESSAGES.item.open
 }
 
 const getStateVariant = (item: TaxCalendarGroupItem): 'positive' | 'warning' | 'negative' => {
@@ -69,7 +71,9 @@ const getStateVariant = (item: TaxCalendarGroupItem): 'positive' | 'warning' | '
 }
 
 const getDueDatePrefix = (group: TaxCalendarGroup): string =>
-  group.obligation_type === 'advance_payment' ? 'מועד תשלום' : 'מועד דיווח'
+  group.obligation_type === 'advance_payment'
+    ? TAX_CALENDAR_MESSAGES.item.paymentDue
+    : TAX_CALENDAR_MESSAGES.item.reportingDue
 
 const GroupItemsRows = ({
   group,
@@ -93,13 +97,13 @@ const GroupItemsRows = ({
   const items = data?.items ?? []
 
   if (isPending) {
-    return <div className="py-4 text-center text-sm text-gray-400">טוען רשומות מקושרות...</div>
+    return <div className="py-4 text-center text-sm text-gray-400">{TAX_CALENDAR_MESSAGES.list.loadingLinked}</div>
   }
 
   if (isError) {
     return (
       <div className="bg-negative-50 px-4 py-4 text-sm text-negative-700">
-        {getErrorMessage(error, 'שגיאה בטעינת רשומות מקושרות')}
+        {getErrorMessage(error, TAX_CALENDAR_MESSAGES.list.linkedLoadError)}
       </div>
     )
   }
@@ -107,7 +111,9 @@ const GroupItemsRows = ({
   if (items.length === 0) {
     return (
       <div className="py-4 text-center text-sm text-gray-400">
-        {clientSearchText.trim() ? 'אין לקוחות תואמים בקבוצה זו' : 'אין רשומות מקושרות לקבוצה זו'}
+        {clientSearchText.trim()
+          ? TAX_CALENDAR_MESSAGES.list.noMatchingClients
+          : TAX_CALENDAR_MESSAGES.list.noLinkedRecords}
       </div>
     )
   }
@@ -115,44 +121,44 @@ const GroupItemsRows = ({
   const columns: Column<TaxCalendarGroupItem>[] = [
     {
       key: 'client',
-      header: 'לקוח',
+      header: TAX_CALENDAR_MESSAGES.item.client,
       align: 'right',
       render: (item) => (
         <Link
           className="block max-w-[240px] truncate font-medium text-primary-700 hover:text-primary-900"
           to={`/clients/${item.client_record_id}`}
         >
-          {item.client_name ?? `לקוח #${item.client_record_id}`}
+          {item.client_name ?? TAX_CALENDAR_MESSAGES.item.clientName(item.client_record_id)}
         </Link>
       ),
     },
     {
       key: 'office',
-      header: 'מס׳ לקוח',
+      header: TAX_CALENDAR_MESSAGES.item.clientNumber,
       align: 'right',
       render: (item) => formatPlainIdentifier(item.office_client_number),
       className: 'font-mono tabular-nums text-gray-600',
     },
     {
       key: 'type',
-      header: 'סוג רשומה',
+      header: TAX_CALENDAR_MESSAGES.item.recordType,
       align: 'right',
       render: (item) => SOURCE_TYPE_LABELS[item.source_type],
       className: 'text-gray-600',
     },
     {
       key: 'state',
-      header: 'מצב',
+      header: TAX_CALENDAR_MESSAGES.item.status,
       align: 'right',
       render: (item) => <Badge variant={getStateVariant(item)}>{getStateLabel(item)}</Badge>,
     },
     {
       key: 'action',
-      header: 'פעולה',
+      header: TAX_CALENDAR_MESSAGES.item.action,
       align: 'right',
       render: (item) => (
         <Link className="font-medium text-primary-700 hover:text-primary-900" to={getItemPath(item)}>
-          פתח
+          {TAX_CALENDAR_MESSAGES.item.openAction}
         </Link>
       ),
     },
@@ -169,7 +175,7 @@ const GroupItemsRows = ({
         page={page}
         pageSize={ITEM_PAGE_SIZE}
         total={data?.total ?? 0}
-        label="רשומות"
+        label={TAX_CALENDAR_MESSAGES.list.records}
         onPageChange={setPage}
         showPagination={Boolean(data && data.total > ITEM_PAGE_SIZE)}
       />
@@ -193,8 +199,8 @@ export const TaxCalendarGroupsTable = ({
     return (
       <StateCard
         icon={Inbox}
-        title="אין קבוצות להצגה"
-        message="לא נמצאו קבוצות יומן מס התואמות לסינון הנוכחי"
+        title={TAX_CALENDAR_MESSAGES.list.noGroupsTitle}
+        message={TAX_CALENDAR_MESSAGES.list.noGroupsMessage}
         variant="illustration"
       />
     )
@@ -206,10 +212,22 @@ export const TaxCalendarGroupsTable = ({
         const isCurrentPeriod = isCurrentReportingPeriod(group.period, group.period_months_count)
         const effectiveRelativeLabel = formatRelativeDueLabel(group.effective_due_date_min)
         const metrics: PeriodSummaryMetric[] = [
-          { label: 'סה״כ מקושרים', value: group.linked_count },
-          { label: 'פתוחים', value: group.open_count, tone: group.open_count > 0 ? 'warning' : 'muted' },
-          { label: 'באיחור', value: group.overdue_count, tone: group.overdue_count > 0 ? 'negative' : 'muted' },
-          { label: 'הושלמו', value: group.done_count, tone: group.done_count > 0 ? 'positive' : 'muted' },
+          { label: TAX_CALENDAR_MESSAGES.group.linkedTotal, value: group.linked_count },
+          {
+            label: TAX_CALENDAR_MESSAGES.group.open,
+            value: group.open_count,
+            tone: group.open_count > 0 ? 'warning' : 'muted',
+          },
+          {
+            label: TAX_CALENDAR_MESSAGES.group.overdue,
+            value: group.overdue_count,
+            tone: group.overdue_count > 0 ? 'negative' : 'muted',
+          },
+          {
+            label: TAX_CALENDAR_MESSAGES.group.done,
+            value: group.done_count,
+            tone: group.done_count > 0 ? 'positive' : 'muted',
+          },
         ]
 
         return (
@@ -219,15 +237,18 @@ export const TaxCalendarGroupsTable = ({
             primaryLabel={`${getDueDatePrefix(group)}: ${formatEffectiveDueDateRange(group)}`}
             secondaryLabel={
               hasGroupOverride(group)
-                ? `מועד רשמי: ${formatDate(group.regulatory_due_date)} · מועד אפקטיבי: ${formatEffectiveDueDateRange(group)}`
-                : `מועד רשמי: ${formatDate(group.regulatory_due_date)}`
+                ? TAX_CALENDAR_MESSAGES.group.officialAndEffectiveDue(
+                    formatDate(group.regulatory_due_date),
+                    formatEffectiveDueDateRange(group),
+                  )
+                : TAX_CALENDAR_MESSAGES.group.officialDue(formatDate(group.regulatory_due_date))
             }
             relativeDueLabel={effectiveRelativeLabel}
             isCurrentPeriod={isCurrentPeriod}
             defaultOpen={String(group.tax_calendar_entry_id) === defaultOpenKey}
             metrics={metrics}
-            ctaLabel="פתח לקוחות"
-            closeLabel="סגור"
+            ctaLabel={TAX_CALENDAR_MESSAGES.group.openClients}
+            closeLabel={GLOBAL_UI_MESSAGES.actions.close}
             className={cn(group.overdue_count > 0 && 'border-r-2 border-r-negative-500')}
           >
             <GroupItemsRows group={group} clientSearchText={clientSearchText} clientRecordId={clientRecordId} />
