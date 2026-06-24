@@ -3,7 +3,7 @@ import { formatCurrencyILS, parsePositiveInt } from '@/utils/utils'
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 import { toOptionalNumber, toOptionalString } from '@/utils/filters'
 import { chargesApi, type ChargeStatusStat, type ChargesListParams } from '../api'
-import { CHARGE_PERIOD_YEAR_SPAN } from '../constants'
+import { CHARGE_PERIOD_YEAR_SPAN, CHARGE_PERIOD_NONE_LABEL } from '../constants'
 import type { ChargeAction, ChargesFilters } from '../types'
 import { getChargePeriodLabel } from './chargeUtils'
 import { CHARGES_MESSAGES } from '../messages'
@@ -38,7 +38,7 @@ export const buildChargePeriodOptions = (monthsCovered: number) => {
   )
 
   return [
-    { value: '', label: CHARGES_MESSAGES.periods.none },
+    { value: '', label: CHARGE_PERIOD_NONE_LABEL },
     ...years.flatMap((year) =>
       Array.from({ length: 12 }, (_, monthIndex) => {
         const value = `${year}-${String(monthIndex + 1).padStart(2, '0')}`

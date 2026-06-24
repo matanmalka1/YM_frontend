@@ -10,6 +10,7 @@ import { PANEL_NAV_ITEMS } from '../../constants/panelConstants'
 import { getClientLabel } from '../../utils/panelHelpers'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../../errorMessages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface AnnualReportFullPanelProps {
   reportId: number
@@ -87,7 +88,7 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
                 {ANNUAL_REPORTS_MESSAGES.fullPanel.deleteReport}
               </Button>
               <Button variant="ghost" icon={<Save size={14} />} onClick={handleSave} disabled={!isDirty || isUpdating}>
-                {isUpdating ? ANNUAL_REPORTS_MESSAGES.fullPanel.saving : ANNUAL_REPORTS_MESSAGES.fullPanel.save}
+                {isUpdating ? GLOBAL_UI_MESSAGES.common.saving : GLOBAL_UI_MESSAGES.actions.save}
               </Button>
             </>
           }
@@ -140,7 +141,7 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
         open={showDeleteConfirm}
         title={ANNUAL_REPORTS_MESSAGES.fullPanel.deleteModalTitle}
         message={ANNUAL_REPORTS_MESSAGES.fullPanel.deleteModalMessage}
-        confirmLabel={ANNUAL_REPORTS_MESSAGES.fullPanel.deleteConfirm}
+        confirmLabel={GLOBAL_UI_MESSAGES.actions.delete}
         confirmVariant="danger"
         closeOnBackdrop={false}
         isLoading={isDeleting}

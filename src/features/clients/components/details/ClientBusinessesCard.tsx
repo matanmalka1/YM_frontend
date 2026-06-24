@@ -118,7 +118,7 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
                     ariaLabel={CLIENTS_MESSAGES.businessesCard.rowActionsAriaLabel(biz.business_name ?? biz.id)}
                   >
                     <RowActionItem
-                      label={CLIENTS_MESSAGES.businessesCard.edit}
+                      label={GLOBAL_UI_MESSAGES.actions.edit}
                       icon={<Pencil className="h-4 w-4" />}
                       onClick={() => openEdit(biz)}
                     />
@@ -144,7 +144,7 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
                       />
                     )}
                     <RowActionItem
-                      label={CLIENTS_MESSAGES.businessesCard.delete}
+                      label={GLOBAL_UI_MESSAGES.actions.delete}
                       icon={<Trash2 className="h-4 w-4" />}
                       danger
                       onClick={() => setDeleteTarget(biz)}
@@ -166,7 +166,7 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
             onCancel={() => setEditState(null)}
             onSubmit={submitEdit}
             isLoading={isUpdating}
-            submitLabel={CLIENTS_MESSAGES.businessesCard.save}
+            submitLabel={GLOBAL_UI_MESSAGES.actions.save}
           />
         }
       >
@@ -212,7 +212,7 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
         open={!!deleteTarget}
         title={CLIENTS_MESSAGES.businessesCard.deleteModalTitle}
         message={CLIENTS_MESSAGES.businessesCard.deleteMessage(deleteTarget?.business_name ?? '')}
-        confirmLabel={CLIENTS_MESSAGES.businessesCard.deleteConfirm}
+        confirmLabel={GLOBAL_UI_MESSAGES.actions.delete}
         cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
         confirmVariant="danger"
         isLoading={isDeleting}

@@ -11,6 +11,7 @@ import { sortReportsByTaxYearDesc } from '../../utils/panelHelpers'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../../constants/reportConstants'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface Props {
   clientId: number
@@ -71,7 +72,7 @@ export const ReportHistoryTable: React.FC<Props> = ({ clientId, currentReportId,
           header: '',
           render: (r) => (
             <RowActionsMenu ariaLabel={ANNUAL_REPORTS_MESSAGES.reportHistoryTable.rowActionsAriaLabel(r.id)}>
-              <RowActionItem label={ANNUAL_REPORTS_MESSAGES.reportHistoryTable.view} onClick={() => onSelect?.(r.id)} icon={<Eye className="h-4 w-4" />} />
+              <RowActionItem label={GLOBAL_UI_MESSAGES.actions.view} onClick={() => onSelect?.(r.id)} icon={<Eye className="h-4 w-4" />} />
             </RowActionsMenu>
           ),
         },

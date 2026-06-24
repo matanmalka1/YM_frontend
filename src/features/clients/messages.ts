@@ -118,18 +118,14 @@ export const CLIENTS_MESSAGES = {
     notDefined: 'לא הוגדר',
     openedAt: (date: string) => `נפתח בתאריך ${date}`,
     rowActionsAriaLabel: (name: string | number) => `פעולות לעסק ${name}`,
-    edit: 'עריכה',
     activate: 'העבר לפעיל',
     freeze: 'הקפא עסק',
     closeBusiness: 'סגור עסק',
-    delete: 'מחק',
     editModalTitle: 'עריכת עסק',
-    save: 'שמור',
     nameLabel: 'שם עסק',
     statusLabel: 'סטטוס',
     closeDateLabel: 'תאריך סגירה',
     deleteModalTitle: 'מחיקת עסק',
-    deleteConfirm: 'מחק',
     deleteMessage: (name: string) => `האם למחוק את העסק "${name}"? פעולה זו אינה ניתנת לביטול.`,
   },
   relatedData: {
@@ -229,10 +225,7 @@ export const CLIENTS_MESSAGES = {
   },
   createModal: {
     title: 'יצירת לקוח חדש',
-    cancelLabel: 'חזרה',
     submitLabel: 'צור לקוח',
-    back: 'חזרה',
-    next: 'הבא',
     stepIndicatorAriaLabel: 'שלבי יצירת לקוח',
     impactIconActiveBinder: 'קלסר פעיל',
     impactIconVatReports: 'דוחות מע"מ',
@@ -304,8 +297,5 @@ export const CLIENTS_MESSAGES = {
     impactSubtitle: 'פריטים חדשים שייווצרו עבור הלקוח',
     impactItemsCount: (count: number) => `${count} פריטים`,
     impactTwoYearScope: 'ייווצר עבור השנה הנוכחית והשנה הבאה',
-  },
-  shared: {
-    advanceRatePercent: (rate: number | string) => `${rate}%`,
   },
 } as const

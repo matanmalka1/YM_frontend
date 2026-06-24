@@ -1,35 +1,9 @@
-/** Centralized Hebrew UI strings for the charges feature. */
+/**
+ * Centralized Hebrew UI strings for the charges feature. Enum/status/type labels
+ * and month/period filter labels live in ./constants (CHARGE_STATUS_LABELS,
+ * CHARGE_TYPE_LABELS, CHARGE_PERIOD_OPTIONS); this catalog holds screen copy only.
+ */
 export const CHARGES_MESSAGES = {
-  status: {
-    draft: 'טיוטה',
-    issued: 'הונפק',
-    paid: 'שולם',
-    canceled: 'בוטל',
-  },
-  types: {
-    monthlyRetainer: 'ריטיינר חודשי',
-    annualReportFee: 'שכר טרחה לדוח שנתי',
-    vatFilingFee: 'שכר טרחה לדוח מע״מ',
-    representationFee: 'שכר טרחה לייצוג',
-    consultationFee: 'שכר טרחה לייעוץ',
-    other: 'אחר',
-  },
-  periods: {
-    january: 'ינואר',
-    february: 'פברואר',
-    march: 'מרץ',
-    april: 'אפריל',
-    may: 'מאי',
-    june: 'יוני',
-    july: 'יולי',
-    august: 'אוגוסט',
-    september: 'ספטמבר',
-    october: 'אוקטובר',
-    november: 'נובמבר',
-    december: 'דצמבר',
-    all: 'כל התקופות',
-    none: 'ללא תקופה',
-  },
   list: {
     title: 'חיובים',
     description: 'רשימת חיובים ופעולות חיוב נתמכות',

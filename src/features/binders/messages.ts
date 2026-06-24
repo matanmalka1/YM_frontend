@@ -150,7 +150,6 @@ export const BINDERS_MESSAGES = {
     bulkReadyTitle: 'סימון קבוצתי כמוכן למסירה',
     bulkReadyDescription: 'הפעולה תסמן את כל הקלסרים של הלקוח עד תקופת הדיווח שנבחרה כמוכנים למסירה.',
     bulkHandoverTitle: 'מסירת קלסרים ללקוח',
-    close: 'סגור',
   },
   mutations: {
     deleteSuccess: 'הקלסר נמחק בהצלחה',

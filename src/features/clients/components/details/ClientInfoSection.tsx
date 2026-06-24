@@ -1,5 +1,5 @@
 import { type FC } from 'react'
-import { formatDate, formatPhoneNumber, formatPlainIdentifier, formatShekelAmount } from '@/utils/utils'
+import { formatAdvanceRatePercent, formatDate, formatPhoneNumber, formatPlainIdentifier, formatShekelAmount } from '@/utils/utils'
 import type { ClientRecordResponse } from '../../api'
 import { ADVANCE_PAYMENT_FREQUENCY_LABELS, getClientStatusLabel, getClientVatReportingLabel } from '../../constants'
 import { useClientAuthorityContacts } from '../../hooks/useClientAuthorityContacts'
@@ -67,7 +67,7 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client }) => {
       label: CLIENTS_MESSAGES.info.advanceRate,
       value:
         client.advance_rate != null
-          ? CLIENTS_MESSAGES.shared.advanceRatePercent(client.advance_rate)
+          ? formatAdvanceRatePercent(client.advance_rate)
           : CLIENTS_MESSAGES.info.advanceRateNotVerified,
     },
     {

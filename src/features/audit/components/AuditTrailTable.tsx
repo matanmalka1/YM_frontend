@@ -85,7 +85,7 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
           <span>
             {isFetching
               ? GLOBAL_UI_MESSAGES.common.loading
-              : AUDIT_MESSAGES.table.pageIndicator(safePage + 1, totalPages)}
+              : GLOBAL_UI_MESSAGES.pagination.pageSummary(safePage + 1, totalPages)}
           </span>
           <Button
             type="button"

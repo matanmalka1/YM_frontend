@@ -68,7 +68,7 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
         variant="error"
         icon={AlertTriangle}
         title={AUDIT_ERROR_MESSAGES.section.load}
-        action={{ label: AUDIT_MESSAGES.section.retryAction, onClick: () => auditTrail.refetch() }}
+        action={{ label: GLOBAL_UI_MESSAGES.actions.retry, onClick: () => auditTrail.refetch() }}
       />,
     )
   }

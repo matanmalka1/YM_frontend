@@ -56,8 +56,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
   },
   financialForms: {
     addExpense: 'הוסף הוצאה',
-    add: 'הוסף',
-    save: 'שמור',
   },
   panelNav: {
     ariaLabel: 'ניווט דוח שנתי',
@@ -69,11 +67,8 @@ export const ANNUAL_REPORTS_MESSAGES = {
     breadcrumbReport: (year: number) => `דוח ${year}`,
     downloadDraft: 'הורד טיוטה',
     deleteReport: 'מחק דוח',
-    saving: 'שומר...',
-    save: 'שמור',
     deleteModalTitle: 'מחיקת דוח',
     deleteModalMessage: 'האם למחוק את הדוח? פעולה זו אינה הפיכה.',
-    deleteConfirm: 'מחק',
   },
   overviewSection: {
     detailsCardTitle: 'פרטי הדוח',
@@ -123,7 +118,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
     submittedAtHeader: 'תאריך הגשה',
     statusHeader: 'סטטוס',
     rowActionsAriaLabel: (id: number) => `פעולות לדוח ${id}`,
-    view: 'צפה',
   },
   reportMetaGrid: {
     taxYear: 'שנת מס',
@@ -137,12 +131,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
   season: {
     progressTitle: 'התקדמות עונת הגשה',
     progressSubtitle: (year: number) => `שנת מס ${year}`,
-    deadlineTypeLabels: {
-      standard: 'רגיל',
-      extended: 'מוארך',
-      custom: 'מותאם אישית',
-    },
-    unknownDeadlineType: 'סוג מועד לא ידוע',
     overdueDays: (days: number) => `באיחור ${days} ימים`,
     daysRemaining: (days: number) => `${days} ימים נותרו`,
     officeNumberHeader: "מס' לקוח",
@@ -300,9 +288,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
   },
   calculatorInputs: {
     methodologyNote: 'המחשבון מציג שיעורי מס עפ"י מדרגות מס לעסק יחיד/שותפות.',
-    edit: 'עריכה',
-    save: 'שמור',
-    cancel: 'ביטול',
     pensionDepositsLabel: 'הפקדות פנסיה/קה"ש (₪)',
     otherCreditsLabel: 'זיכויים אחרים (₪)',
   },
@@ -314,7 +299,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
   annexDataTable: {
     deleteLine: 'מחיקת שורה',
     saveLine: 'שמירת שורה',
-    cancel: 'ביטול',
   },
   page: {
     newReportButton: (year: number) => `דוח שנתי ${year}`,

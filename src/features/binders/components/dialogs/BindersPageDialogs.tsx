@@ -173,7 +173,7 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
       footer={
         <div className="flex items-center justify-end">
           <Button type="button" variant="secondary" onClick={onCloseHandoverToClientBulk}>
-            {BINDERS_MESSAGES.dialogs.close}
+            {GLOBAL_UI_MESSAGES.actions.close}
           </Button>
         </div>
       }

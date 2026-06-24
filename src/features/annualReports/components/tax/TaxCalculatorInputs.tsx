@@ -3,6 +3,7 @@ import { Pencil, X, Check, Info } from 'lucide-react'
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface TaxCalculatorInputsProps {
   pension: string
@@ -51,7 +52,7 @@ export const TaxCalculatorInputs = ({
             onClick={handleEdit}
             className="border-info-300 text-info-700 hover:bg-info-50 shrink-0 text-xs px-2.5 py-1"
           >
-            {ANNUAL_REPORTS_MESSAGES.calculatorInputs.edit}
+            {GLOBAL_UI_MESSAGES.actions.edit}
           </Button>
         ) : (
           <div className="flex gap-1 shrink-0">
@@ -64,7 +65,7 @@ export const TaxCalculatorInputs = ({
               disabled={isSaving}
               className="bg-info-600 hover:bg-info-700 text-xs px-2.5 py-1"
             >
-              {ANNUAL_REPORTS_MESSAGES.calculatorInputs.save}
+              {GLOBAL_UI_MESSAGES.actions.save}
             </Button>
             <Button
               type="button"
@@ -74,7 +75,7 @@ export const TaxCalculatorInputs = ({
               onClick={handleCancel}
               className="border-info-300 text-info-700 text-xs px-2.5 py-1"
             >
-              {ANNUAL_REPORTS_MESSAGES.calculatorInputs.cancel}
+              {GLOBAL_UI_MESSAGES.actions.cancel}
             </Button>
           </div>
         )}

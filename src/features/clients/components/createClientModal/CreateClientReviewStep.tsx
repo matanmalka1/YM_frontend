@@ -1,6 +1,6 @@
 import type { ClientCreationImpactResponse } from '../../api/contracts'
 import type { CreateClientFormValues } from '../../schemas'
-import { formatDate } from '@/utils/utils'
+import { formatAdvanceRatePercent, formatDate } from '@/utils/utils'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { getCreateClientEntityLabels } from '../../constants'
@@ -86,7 +86,7 @@ export const CreateClientReviewStep: React.FC<Props> = ({
         <ReviewRow label={CLIENTS_MESSAGES.createReview.advanceFrequency} value={advanceLabel} />
         <ReviewRow
           label={CLIENTS_MESSAGES.createReview.advanceRate}
-          value={values.advance_rate ? CLIENTS_MESSAGES.shared.advanceRatePercent(values.advance_rate) : null}
+          value={values.advance_rate ? formatAdvanceRatePercent(values.advance_rate) : null}
         />
         <ReviewRow label={CLIENTS_MESSAGES.createReview.accountant} value={advisorLabel} />
       </ReviewSection>

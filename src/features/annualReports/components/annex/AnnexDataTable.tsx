@@ -9,6 +9,7 @@ import { getLineFieldValue } from '../../utils/annexHelpers'
 import { AnnexFieldInput } from './AnnexFieldInput'
 import type { AnnexFormValues } from '../../constants/annexSchema'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface AnnexDataTableProps {
   lines: AnnexDataLine[]
@@ -81,7 +82,7 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
             onClick={() => onSaveEdit(line.id)}
             disabled={isUpdating}
           />
-          <RowActionButton label={ANNUAL_REPORTS_MESSAGES.annexDataTable.cancel} icon={<X className={TABLE_ICON_CLASS} />} size="sm" onClick={onCancelEdit} />
+          <RowActionButton label={GLOBAL_UI_MESSAGES.actions.cancel} icon={<X className={TABLE_ICON_CLASS} />} size="sm" onClick={onCancelEdit} />
           <RowActionButton
             label={ANNUAL_REPORTS_MESSAGES.annexDataTable.deleteLine}
             icon={<Trash2 className={TABLE_ICON_CLASS} />}

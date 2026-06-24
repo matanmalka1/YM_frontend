@@ -11,12 +11,10 @@ export const AUDIT_MESSAGES = {
     columnPerformedBy: 'בוצע ע"י',
     previousPage: 'הקודם',
     nextPage: 'הבא',
-    pageIndicator: (page: number, total: number) => `עמוד ${page} מתוך ${total}`,
   },
   section: {
     defaultTitle: 'היסטוריית שינויים',
     defaultSubtitle: 'פעולות שבוצעו על הרשומה',
-    retryAction: 'נסה שוב',
     emptyFiltered: 'אין תוצאות התואמות את הסינון',
     emptyDefault: 'אין היסטוריית שינויים',
   },

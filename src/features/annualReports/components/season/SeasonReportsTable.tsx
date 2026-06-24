@@ -2,9 +2,7 @@ import { DataTable, type Column } from '../../../../components/ui/table/DataTabl
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import type { AnnualReportListItem } from '../../api'
 import { getStatusLabel, getStatusVariant, getClientTypeLabel } from '../../api'
-
-const getDeadlineTypeLabel = (type: string | null | undefined): string =>
-  (type && ANNUAL_REPORTS_MESSAGES.season.deadlineTypeLabels[type as keyof typeof ANNUAL_REPORTS_MESSAGES.season.deadlineTypeLabels]) ?? ANNUAL_REPORTS_MESSAGES.season.unknownDeadlineType
+import { getDeadlineTypeLabel } from '../../constants/sharedConstants'
 import { formatClientOfficeId, formatDate } from '../../../../utils/utils'
 import { AlertTriangle, Clock } from 'lucide-react'
 import { cn } from '../../../../utils/utils'

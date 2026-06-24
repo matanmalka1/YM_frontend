@@ -13,8 +13,15 @@ export const ANNUAL_REPORTS_ERROR_MESSAGES = {
     seasonListLoad: 'שגיאה בטעינת דוחות',
     taxYearLoad: 'שגיאה בטעינת שנת מס',
   },
-  schedules: { update: 'שגיאה בעדכון נספח', add: 'שגיאה בהוספת נספח' },
-  annex: { add: 'שגיאה בהוספת שורה', update: 'שגיאה בעדכון שורה', delete: 'שגיאה במחיקת שורה' },
+  schedules: {
+    update: 'שגיאה בעדכון נספח',
+    add: 'שגיאה בהוספת נספח',
+  },
+  annex: {
+    add: 'שגיאה בהוספת שורה',
+    update: 'שגיאה בעדכון שורה',
+    delete: 'שגיאה במחיקת שורה',
+  },
   statusTransition: { amend: 'שגיאה בשליחת תיקון' },
   taxCalculation: {
     loadError: 'שגיאה בטעינת חישוב מס',
