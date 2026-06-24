@@ -3,6 +3,7 @@ import { vatReportsApi, type CreateVatInvoicePayload, type UpdateVatInvoicePaylo
 import { showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
 import { invalidateVatWorkItem } from './useVatInvalidation'
+import { VAT_MESSAGES } from '../messages'
 
 const invalidateVatInvoiceQueries = async (queryClient: QueryClient, workItemId: number) => {
   await invalidateVatWorkItem(queryClient, {
@@ -35,7 +36,11 @@ export const useAddInvoice = (workItemId: number) => {
   })
 
   const addInvoice = async (payload: CreateVatInvoicePayload): Promise<boolean> =>
-    runMutationWithFeedback(() => mutation.mutateAsync(payload), 'החשבונית נוספה בהצלחה', 'שגיאה בהוספת חשבונית')
+    runMutationWithFeedback(
+      () => mutation.mutateAsync(payload),
+      VAT_MESSAGES.mutations.invoiceAdded,
+      VAT_MESSAGES.mutations.invoiceAddError,
+    )
 
   return { addInvoice, isAdding: mutation.isPending }
 }
@@ -49,7 +54,11 @@ export const useDeleteInvoice = (workItemId: number) => {
   })
 
   const deleteInvoice = async (invoiceId: number): Promise<boolean> =>
-    runMutationWithFeedback(() => mutation.mutateAsync(invoiceId), 'החשבונית נמחקה', 'שגיאה במחיקת חשבונית')
+    runMutationWithFeedback(
+      () => mutation.mutateAsync(invoiceId),
+      VAT_MESSAGES.mutations.invoiceDeleted,
+      VAT_MESSAGES.mutations.invoiceDeleteError,
+    )
 
   return { deleteInvoice, isDeleting: mutation.isPending }
 }
@@ -63,7 +72,11 @@ export const useDeleteWorkItem = () => {
   })
 
   const deleteWorkItem = async (workItemId: number): Promise<boolean> =>
-    runMutationWithFeedback(() => mutation.mutateAsync(workItemId), 'התיק נמחק בהצלחה', 'שגיאה במחיקת התיק')
+    runMutationWithFeedback(
+      () => mutation.mutateAsync(workItemId),
+      VAT_MESSAGES.mutations.workItemDeleted,
+      VAT_MESSAGES.mutations.workItemDeleteError,
+    )
 
   return { deleteWorkItem, isDeleting: mutation.isPending }
 }
@@ -80,8 +93,8 @@ export const useUpdateInvoice = (workItemId: number) => {
   const updateInvoice = async (invoiceId: number, payload: UpdateVatInvoicePayload): Promise<boolean> =>
     runMutationWithFeedback(
       () => mutation.mutateAsync({ invoiceId, payload }),
-      'החשבונית עודכנה',
-      'שגיאה בעדכון חשבונית',
+      VAT_MESSAGES.mutations.invoiceUpdated,
+      VAT_MESSAGES.mutations.invoiceUpdateError,
     )
 
   return { updateInvoice, isUpdating: mutation.isPending }

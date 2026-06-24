@@ -7,13 +7,14 @@ import {
   INVOICE_TYPES,
   type CounterpartyIdType,
 } from '../constants/vatConstants'
+import { VAT_MESSAGES } from '../messages'
 
 const grossAmountSchema = z
   .string()
   .trim()
-  .min(1, 'חובה להזין סכום')
+  .min(1, VAT_MESSAGES.validation.grossAmountRequired)
   .refine((v) => !isNaN(Number(v)) && Number(v) > 0, {
-    message: 'סכום חייב להיות חיובי',
+    message: VAT_MESSAGES.validation.grossAmountPositive,
   })
 
 const invoiceCommonFields = {
@@ -42,7 +43,7 @@ export const vatInvoiceRowSchema = z
     if (data.invoice_type === 'expense' && data.document_type === 'tax_invoice' && !data.counterparty_id) {
       ctx.addIssue({
         code: 'custom',
-        message: 'חובה להזין מספר עוסק של הספק',
+        message: VAT_MESSAGES.validation.counterpartyIdRequired,
         path: ['counterparty_id'],
       })
     }

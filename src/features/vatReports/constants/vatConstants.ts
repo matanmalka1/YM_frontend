@@ -214,12 +214,6 @@ export const VAT_FILING_METHOD_LABELS: Record<string, string> = {
 export const VAT_FILING_METHODS = ['online', 'manual', 'representative'] as const
 export const DEFAULT_VAT_FILING_METHOD = VAT_FILING_METHODS[0]
 
-export const VAT_FILE_MODAL_MESSAGES = {
-  invalidAmendmentId: 'מזהה ההגשה המקורית חייב להיות מספר',
-  filingSuccess: 'התיק הוגש בהצלחה',
-  filingError: 'שגיאה בהגשה',
-} as const
-
 export const DEFAULT_RATE_TYPE = 'standard' as const
 
 // Mirrors app/vat_reports/services/constants.py: EXCEPTIONAL_INVOICE_THRESHOLD

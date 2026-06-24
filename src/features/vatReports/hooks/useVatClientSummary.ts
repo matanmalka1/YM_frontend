@@ -3,6 +3,7 @@ import { vatReportsApi, type CreateVatWorkItemPayload } from '../api'
 import { vatReportsQK } from '../api/queryKeys'
 import { toast } from '@/utils/toast'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+import { VAT_MESSAGES } from '../messages'
 
 export const useVatClientSummary = (
   clientId: number,
@@ -25,7 +26,7 @@ export const useVatClientSummary = (
   const createMutation = useMutation({
     mutationFn: (payload: CreateVatWorkItemPayload) => vatReportsApi.create(payload),
     onSuccess: async () => {
-      toast.success('תיק מע"מ נוצר בהצלחה')
+      toast.success(VAT_MESSAGES.mutations.createWorkItemSuccess)
       await queryClient.invalidateQueries({ queryKey: vatReportsQK.clientSummary(clientId, yearParams) })
     },
   })

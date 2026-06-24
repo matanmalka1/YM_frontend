@@ -28,6 +28,8 @@ import { useVatWorkItemGroups } from './useVatWorkItemGroups'
 import { ALL_YEARS_URL_OPTION } from '@/constants/filterOptions.constants'
 import { getOperationalTaxYear, getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+import { VAT_MESSAGES } from '../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 const buildVatWorkItemsFilterFields = () => {
   const yearOptions = [ALL_YEARS_URL_OPTION, ...getOperationalYearOptions()]
@@ -127,7 +129,7 @@ export const useVatWorkItemsPage = () => {
   const createMutation = useMutation({
     mutationFn: (payload: CreateVatWorkItemPayload) => vatReportsApi.create(payload),
     onSuccess: async (workItem) => {
-      toast.success('תיק מע"מ נוצר בהצלחה')
+      toast.success(VAT_MESSAGES.mutations.createWorkItemSuccess)
       await invalidateVatWorkItem(queryClient, {
         workItemId: workItem.id,
         clientRecordId: workItem.client_record_id,
@@ -144,7 +146,7 @@ export const useVatWorkItemsPage = () => {
       return vatReportsApi.markReadyForReview(itemId)
     },
     onSuccess: async (workItem) => {
-      toast.success('הפעולה בוצעה בהצלחה')
+      toast.success(VAT_MESSAGES.mutations.genericActionSuccess)
       await invalidateVatWorkItem(queryClient, {
         workItemId: workItem.id,
         clientRecordId: workItem.client_record_id,
@@ -155,7 +157,7 @@ export const useVatWorkItemsPage = () => {
   const sendBackMutation = useMutation({
     mutationFn: ({ itemId, note }: { itemId: number; note: string }) => vatReportsApi.sendBack(itemId, note),
     onSuccess: async (workItem) => {
-      toast.success('התיק הוחזר לתיקון')
+      toast.success(VAT_MESSAGES.mutations.sendBackSuccess)
       await invalidateVatWorkItem(queryClient, {
         workItemId: workItem.id,
         clientRecordId: workItem.client_record_id,
@@ -166,7 +168,7 @@ export const useVatWorkItemsPage = () => {
   const runAction = useCallback(
     async (itemId: number, action: VatWorkItemAction) => {
       if (action === 'sendBack' && !isAdvisor) {
-        toast.error('פעולה זו זמינה ליועץ בלבד')
+        toast.error(VAT_MESSAGES.page.actionAdvisorOnly)
         return
       }
       if (action === 'sendBack') return // handled by sendBackWithNote
@@ -174,7 +176,7 @@ export const useVatWorkItemsPage = () => {
         setActionLoadingId(itemId)
         await actionMutation.mutateAsync({ action, itemId })
       } catch (err: unknown) {
-        showErrorToast(err, 'שגיאה בביצוע הפעולה')
+        showErrorToast(err, VAT_MESSAGES.page.actionError)
       } finally {
         setActionLoadingId(null)
       }
@@ -185,14 +187,14 @@ export const useVatWorkItemsPage = () => {
   const sendBackWithNote = useCallback(
     async (itemId: number, note: string): Promise<void> => {
       if (!isAdvisor) {
-        toast.error('פעולה זו זמינה ליועץ בלבד')
+        toast.error(VAT_MESSAGES.page.actionAdvisorOnly)
         return
       }
       try {
         setActionLoadingId(itemId)
         await sendBackMutation.mutateAsync({ itemId, note })
       } catch (err: unknown) {
-        showErrorToast(err, 'שגיאה בהחזרת התיק לתיקון')
+        showErrorToast(err, VAT_MESSAGES.page.sendBackError)
       } finally {
         setActionLoadingId(null)
       }
@@ -206,7 +208,7 @@ export const useVatWorkItemsPage = () => {
       await createMutation.mutateAsync(payload)
       return true
     } catch (err: unknown) {
-      showErrorToast(err, 'שגיאה ביצירת תיק מע"מ')
+      showErrorToast(err, VAT_MESSAGES.page.createWorkItemError)
       return false
     }
   }
@@ -249,14 +251,16 @@ export const useVatWorkItemsPage = () => {
     [actionLoadingId, canDeleteWorkItem, isDeleting, requestDelete, runAction],
   )
 
-  const createError = createMutation.error ? getErrorMessage(createMutation.error, 'שגיאה ביצירת תיק מע"מ') : null
+  const createError = createMutation.error
+    ? getErrorMessage(createMutation.error, VAT_MESSAGES.page.createWorkItemError)
+    : null
 
   return {
     status: {
       isLoading: groupsLoading,
       isFetching: groupsFetching,
       error: groupsError,
-      loadingMessage: 'טוען תיקי מע"מ...',
+      loadingMessage: VAT_MESSAGES.page.loadingWorkItems,
     },
     headerProps: VAT_PAGE_HEADER,
     stats: {
@@ -305,10 +309,10 @@ export const useVatWorkItemsPage = () => {
       },
       deleteConfirmProps: {
         open: deleteTarget !== null,
-        title: 'מחיקת תיק מע"מ',
-        message: 'האם למחוק את התיק? פעולה זו אינה הפיכה.',
-        confirmLabel: 'מחק',
-        cancelLabel: 'ביטול',
+        title: VAT_MESSAGES.deleteWorkItem.title,
+        message: VAT_MESSAGES.deleteWorkItem.message,
+        confirmLabel: VAT_MESSAGES.deleteWorkItem.confirm,
+        cancelLabel: GLOBAL_UI_MESSAGES.actions.cancel,
         confirmVariant: 'danger' as const,
         isLoading: isDeleting,
         onConfirm: confirmDelete,

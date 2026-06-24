@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import type { FileVatReturnPayload } from '../api'
 import { DEFAULT_VAT_FILING_METHOD, VAT_FILING_METHODS } from '../constants/vatConstants'
+import { VAT_MESSAGES } from '../messages'
 
 export const vatFileModalSchema = z
   .object({
@@ -16,7 +17,7 @@ export const vatFileModalSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['amends_item_id'],
-        message: 'יש להזין מזהה ההגשה המקורית',
+        message: VAT_MESSAGES.validation.originalSubmissionRequired,
       })
       return
     }
@@ -26,7 +27,7 @@ export const vatFileModalSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['amends_item_id'],
-        message: 'מזהה ההגשה המקורית חייב להיות מספר',
+        message: VAT_MESSAGES.validation.originalSubmissionNumeric,
       })
     }
   })

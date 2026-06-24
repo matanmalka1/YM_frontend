@@ -5,8 +5,8 @@ import { vatReportsQK } from '../api/queryKeys'
 import { toast } from '@/utils/toast'
 import { showErrorToast } from '@/utils/utils'
 import { invalidateVatWorkItem } from './useVatInvalidation'
-import { VAT_FILE_MODAL_MESSAGES } from '../constants/vatConstants'
 import type { FileVatReturnPayload } from '../api'
+import { VAT_MESSAGES } from '../messages'
 
 export const useFileVatReturn = (workItemId: number) => {
   const queryClient = useQueryClient()
@@ -16,7 +16,7 @@ export const useFileVatReturn = (workItemId: number) => {
     setIsLoading(true)
     try {
       const workItem = await vatReportsApi.fileVatReturn(workItemId, payload)
-      toast.success(VAT_FILE_MODAL_MESSAGES.filingSuccess)
+      toast.success(VAT_MESSAGES.mutations.filingSuccess)
       queryClient.setQueryData(vatReportsQK.detail(workItemId), (prev: unknown) => {
         if (!prev || typeof prev !== 'object') return prev
         return { ...(prev as object), status: 'filed' }
@@ -28,7 +28,7 @@ export const useFileVatReturn = (workItemId: number) => {
       })
       return true
     } catch (err) {
-      showErrorToast(err, VAT_FILE_MODAL_MESSAGES.filingError)
+      showErrorToast(err, VAT_MESSAGES.mutations.filingError)
       return false
     } finally {
       setIsLoading(false)

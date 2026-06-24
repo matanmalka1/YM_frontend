@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { vatReportsApi, vatReportsQK } from '../api'
 import type { VatWorkItemGroupSummary, VatWorkItemGroupsParams } from '../api'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+import { VAT_MESSAGES } from '../messages'
 
 export const useVatWorkItemGroups = (params: VatWorkItemGroupsParams = {}) => {
   const { data, isLoading, isFetching, error } = useQuery({
@@ -14,6 +15,6 @@ export const useVatWorkItemGroups = (params: VatWorkItemGroupsParams = {}) => {
     groups: (data?.groups ?? []) as VatWorkItemGroupSummary[],
     isLoading,
     isFetching,
-    error: error ? 'שגיאה בטעינת קבוצות תיקי מע"מ' : null,
+    error: error ? VAT_MESSAGES.page.loadingGroupsError : null,
   }
 }

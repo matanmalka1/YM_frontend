@@ -4,6 +4,7 @@ import { vatReportsApi } from '../api'
 import { toast } from '../../../utils/toast'
 import { showErrorToast } from '../../../utils/utils'
 import { invalidateVatWorkItem } from './useVatInvalidation'
+import { VAT_MESSAGES } from '../messages'
 
 // After a status-changing action succeeds, the set of available actions (and their
 // labels/positions) can change in the same render. Keep actions disabled briefly so a
@@ -50,13 +51,25 @@ export const useVatWorkItemActions = (workItemId: number) => {
   }
 
   const handleMaterialsComplete = () =>
-    run(() => vatReportsApi.markMaterialsComplete(workItemId), 'קבלת החומרים אושרה', 'שגיאה בשינוי סטטוס')
+    run(
+      () => vatReportsApi.markMaterialsComplete(workItemId),
+      VAT_MESSAGES.mutations.materialsConfirmed,
+      VAT_MESSAGES.mutations.statusChangeError,
+    )
 
   const handleReadyForReview = () =>
-    run(() => vatReportsApi.markReadyForReview(workItemId), 'התיק נשלח לבדיקה', 'שגיאה בשינוי סטטוס')
+    run(
+      () => vatReportsApi.markReadyForReview(workItemId),
+      VAT_MESSAGES.mutations.readyForReview,
+      VAT_MESSAGES.mutations.statusChangeError,
+    )
 
   const handleSendBack = (note: string) =>
-    run(() => vatReportsApi.sendBack(workItemId, note), 'התיק הוחזר לתיקון', 'שגיאה בהחזרה לתיקון')
+    run(
+      () => vatReportsApi.sendBack(workItemId, note),
+      VAT_MESSAGES.mutations.sendBackSuccess,
+      VAT_MESSAGES.page.sendBackError,
+    )
 
   return {
     handleMaterialsComplete,
