@@ -13,11 +13,10 @@ import {
   getChargeAmountText,
   getChargeClientLabel,
   getChargePeriodLabel,
-  getChargeTypeLabel,
   canDeleteCharge,
 } from '../../utils/chargeUtils'
 import { formatDateTime } from '../../../../utils/utils'
-import { CHARGE_STATUS_LABELS, CHARGE_TYPE_LABELS, getChargeStatusLabel } from '../../constants'
+import { CHARGE_STATUS_LABELS, CHARGE_TYPE_LABELS, getChargeStatusLabel, getChargeTypeLabel } from '../../constants'
 import { ChargeActionButtons } from './ChargeActionButtons'
 import { useChargeDetailsPage } from '../../hooks/useChargeDetailsPage'
 import { CHARGE_CANCEL_REASON_PLACEHOLDER, chargeStatusVariants } from '../../constants'

@@ -2,7 +2,6 @@ import { formatCurrencyILS, MONTH_NAMES } from '../../../utils/utils'
 import type { ChargeListItem } from '../api'
 import { CHARGE_PERIOD_PATTERN } from '../constants'
 import type { BackendAction } from '@/lib/actions/types'
-export { getChargeTypeLabel } from '../constants'
 
 const hasChargeAction = (actions: BackendAction[] | null | undefined, key: string): boolean =>
   actions?.some((action) => action.key === key) ?? false
