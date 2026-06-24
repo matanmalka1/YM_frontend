@@ -9,6 +9,7 @@ import { ClientAdvancePaymentsStatsSection } from './ClientAdvancePaymentsStatsS
 import { AdvancePaymentDrawer } from '../../components/drawer/AdvancePaymentDrawer'
 import { CreateAdvancePaymentModal } from '../../components/create/CreateAdvancePaymentModal'
 import { PaginationCard } from '@/components/ui/table/PaginationCard'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 interface ClientAdvancePaymentsTabProps {
   clientRecordId: number
@@ -21,7 +22,7 @@ const CLIENT_ADVANCE_PAYMENTS_FILTER_FIELDS: FilterFieldDef[] = [
   {
     type: 'toggle',
     key: 'status_filter',
-    label: 'סטטוס',
+    label: ADVANCED_PAYMENTS_MESSAGES.clientTab.statusFilterLabel,
     options: ADVANCE_PAYMENT_STATUS_FILTERS.map((status) => ({
       value: status,
       label: getAdvancePaymentStatusLabel(status),
@@ -30,7 +31,7 @@ const CLIENT_ADVANCE_PAYMENTS_FILTER_FIELDS: FilterFieldDef[] = [
   {
     type: 'select',
     key: 'year',
-    label: 'שנה',
+    label: ADVANCED_PAYMENTS_MESSAGES.clientTab.yearFilterLabel,
     options: getOperationalYearOptions(),
     defaultValue: String(getOperationalTaxYear()),
   },
@@ -61,7 +62,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
           page={pagination.page}
           totalPages={pagination.totalPages}
           total={pagination.total}
-          label="מקדמות"
+          label={ADVANCED_PAYMENTS_MESSAGES.clientTab.paginationLabel}
           onPageChange={pagination.onPageChange}
         />
       )}

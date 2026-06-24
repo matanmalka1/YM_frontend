@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/primitives/Button'
 import { ClientPickerField } from '@/components/shared/client/ClientPickerField'
 import { CreateAdvancePaymentModal } from './CreateAdvancePaymentModal'
 import { useCreateAdvancePayment } from '../../hooks/useCreateAdvancePayment'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface Props {
   open: boolean
@@ -35,12 +37,12 @@ export const CreateAdvancePaymentFlow: React.FC<Props> = ({ open, year, onClose 
   return (
     <Modal
       open={open}
-      title="הוסף מקדמה — בחר לקוח"
+      title={ADVANCED_PAYMENTS_MESSAGES.createFlow.selectClientTitle}
       className="min-h-[240px]"
       onClose={handleClose}
       footer={
         <Button variant="outline" onClick={handleClose}>
-          ביטול
+          {GLOBAL_UI_MESSAGES.actions.cancel}
         </Button>
       }
     >

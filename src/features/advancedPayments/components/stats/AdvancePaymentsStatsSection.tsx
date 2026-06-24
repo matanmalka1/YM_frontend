@@ -1,5 +1,6 @@
 import { AlertTriangle, CalendarClock, Clock, ListChecks } from 'lucide-react'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 interface AdvancePaymentsStatsSectionProps {
   dueThisMonthCount: number
@@ -17,35 +18,35 @@ export const AdvancePaymentsStatsSection: React.FC<AdvancePaymentsStatsSectionPr
   const statCards = [
     {
       key: 'due-this-month',
-      title: 'לתשלום החודש',
+      title: ADVANCED_PAYMENTS_MESSAGES.stats.dueThisMonthTitle,
       value: dueThisMonthCount,
       icon: CalendarClock,
       variant: 'blue' as const,
-      description: 'מקדמות לתקופה הנוכחית',
+      description: ADVANCED_PAYMENTS_MESSAGES.stats.dueThisMonthDescription,
     },
     {
       key: 'pending',
-      title: 'לקוחות ממתינים',
+      title: ADVANCED_PAYMENTS_MESSAGES.stats.pendingTitle,
       value: pendingCount,
       icon: ListChecks,
       variant: 'orange' as const,
-      description: 'בסינון השנה הנוכחי',
+      description: ADVANCED_PAYMENTS_MESSAGES.stats.pendingDescription,
     },
     {
       key: 'missing-turnover',
-      title: 'חסרי מחזור',
+      title: ADVANCED_PAYMENTS_MESSAGES.stats.missingTurnoverTitle,
       value: missingTurnoverCount,
       icon: AlertTriangle,
       variant: 'orange' as const,
-      description: 'בסינון השנה הנוכחי',
+      description: ADVANCED_PAYMENTS_MESSAGES.stats.missingTurnoverDescription,
     },
     {
       key: 'overdue',
-      title: 'באיחור',
+      title: ADVANCED_PAYMENTS_MESSAGES.stats.overdueTitle,
       value: overdueCount,
       icon: Clock,
       variant: 'red' as const,
-      description: 'בסינון השנה הנוכחי',
+      description: ADVANCED_PAYMENTS_MESSAGES.stats.overdueDescription,
     },
   ] as const
 

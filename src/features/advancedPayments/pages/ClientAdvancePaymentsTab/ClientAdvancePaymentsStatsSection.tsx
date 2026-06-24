@@ -4,6 +4,7 @@ import { StatsCard } from '@/components/ui/layout/StatsCard'
 import { advancePaymentsApi, advancedPaymentsQK } from '../../api'
 import { formatShekelAmount } from '@/utils/utils'
 import { getCollectionPercent } from '../../utils/advancePaymentComponentUtils'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 interface ClientAdvancePaymentsStatsSectionProps {
   clientRecordId: number
@@ -24,28 +25,28 @@ export const ClientAdvancePaymentsStatsSection: React.FC<ClientAdvancePaymentsSt
   const statCards = [
     {
       key: 'total-expected',
-      title: 'סה״כ צפוי',
+      title: ADVANCED_PAYMENTS_MESSAGES.clientStats.totalExpectedTitle,
       value: data ? formatShekelAmount(data.total_expected) : '—',
       icon: BarChart2,
       variant: 'blue' as const,
     },
     {
       key: 'total-paid',
-      title: 'סה״כ שולם',
+      title: ADVANCED_PAYMENTS_MESSAGES.clientStats.totalPaidTitle,
       value: data ? formatShekelAmount(data.total_paid) : '—',
       icon: Wallet,
       variant: 'green' as const,
     },
     {
       key: 'collection-rate',
-      title: 'שיעור גבייה',
+      title: ADVANCED_PAYMENTS_MESSAGES.clientStats.collectionRateTitle,
       value: data ? `${collectionPct}%` : '—',
       icon: TrendingUp,
       variant: 'purple' as const,
     },
     {
       key: 'overdue',
-      title: 'פיגורים',
+      title: ADVANCED_PAYMENTS_MESSAGES.clientStats.overdueTitle,
       value: data?.overdue_count ?? 0,
       icon: AlertCircle,
       variant: data && data.overdue_count > 0 ? ('red' as const) : ('neutral' as const),

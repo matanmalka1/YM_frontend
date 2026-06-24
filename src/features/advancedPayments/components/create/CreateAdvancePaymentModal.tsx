@@ -22,6 +22,8 @@ import {
   toNumberOrNull,
 } from '../../utils/advancePaymentComponentUtils'
 import { formatShekelAmount } from '@/utils/utils'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface CreateAdvancePaymentModalProps {
   open: boolean
@@ -90,15 +92,15 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
   return (
     <Modal
       open={open}
-      title="מקדמה חדשה"
+      title={ADVANCED_PAYMENTS_MESSAGES.createModal.title}
       onClose={handleClose}
       footer={
         <div className="flex justify-end gap-2">
           <Button variant="outline" onClick={handleClose} disabled={isCreating}>
-            ביטול
+            {GLOBAL_UI_MESSAGES.actions.cancel}
           </Button>
           <Button variant="primary" isLoading={isCreating} onClick={onSubmit}>
-            יצירה
+            {ADVANCED_PAYMENTS_MESSAGES.createModal.createButton}
           </Button>
         </div>
       }
@@ -109,7 +111,7 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
           control={control}
           render={({ field }) => (
             <Select
-              label="חודש"
+              label={ADVANCED_PAYMENTS_MESSAGES.createModal.monthLabel}
               value={String(field.value)}
               onChange={(e) => field.onChange(Number(e.target.value))}
               options={monthOptions}
@@ -122,7 +124,7 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
           control={control}
           render={({ field }) => (
             <Select
-              label="תדירות מקדמות"
+              label={ADVANCED_PAYMENTS_MESSAGES.createModal.frequencyLabel}
               value={String(field.value)}
               onChange={(e) => field.onChange(toFrequency(e.target.value))}
               options={ADVANCE_PAYMENT_FREQUENCY_OPTIONS}
@@ -132,8 +134,8 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
         />
         {(
           [
-            { name: 'turnover_amount', label: 'מחזור לתקופה (אופציונלי)' },
-            { name: 'advance_rate', label: 'אחוז מקדמה (%) (אופציונלי)' },
+            { name: 'turnover_amount', label: ADVANCED_PAYMENTS_MESSAGES.createModal.turnoverLabel },
+            { name: 'advance_rate', label: ADVANCED_PAYMENTS_MESSAGES.createModal.advanceRateLabel },
           ] as const
         ).map(({ name, label }) => (
           <Controller
@@ -154,14 +156,14 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
         ))}
         {liveCalculated != null && (
           <div>
-            <div className="text-xs text-gray-500 mb-1">סכום מחושב</div>
+            <div className="text-xs text-gray-500 mb-1">{ADVANCED_PAYMENTS_MESSAGES.createModal.calculatedAmountLabel}</div>
             <div className="text-sm font-medium text-gray-800">{formatShekelAmount(liveCalculated)}</div>
           </div>
         )}
         {(
           [
-            { name: 'override_amount', label: 'סכום עקיפה (אופציונלי)' },
-            { name: 'paid_amount', label: 'סכום ששולם (אופציונלי)' },
+            { name: 'override_amount', label: ADVANCED_PAYMENTS_MESSAGES.createModal.overrideAmountLabel },
+            { name: 'paid_amount', label: ADVANCED_PAYMENTS_MESSAGES.createModal.paidAmountLabel },
           ] as const
         ).map(({ name, label }) => (
           <Controller
@@ -181,11 +183,11 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
           />
         ))}
         <Textarea
-          label="הערות (אופציונלי)"
+          label={ADVANCED_PAYMENTS_MESSAGES.createModal.notesLabel}
           id="create-advance-payment-notes"
           rows={2}
           className="resize-none"
-          placeholder="הערות..."
+          placeholder={ADVANCED_PAYMENTS_MESSAGES.createModal.notesPlaceholder}
           {...register('notes')}
         />
       </form>

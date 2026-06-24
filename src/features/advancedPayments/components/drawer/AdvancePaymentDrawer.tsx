@@ -15,6 +15,7 @@ import { useAdvancePaymentDrawerForm } from '../../hooks/useAdvancePaymentDrawer
 import { AdvancePaymentDrawerFooter } from './AdvancePaymentDrawerFooter'
 import { AdvancePaymentEditableSections } from './AdvancePaymentEditableSections'
 import { AdvancePaymentReadonlySections } from './AdvancePaymentReadonlySections'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 interface AdvancePaymentDrawerProps {
   row: AdvancePaymentDrawerRow | null
@@ -52,29 +53,29 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
 
   if (!model) return null
 
-  const timingStatusLabel = model.paidLate ? 'שולם באיחור' : model.timingStatus === 'overdue' ? 'באיחור' : null
+  const timingStatusLabel = model.paidLate ? ADVANCED_PAYMENTS_MESSAGES.drawer.paidLateLabel : model.timingStatus === 'overdue' ? ADVANCED_PAYMENTS_MESSAGES.drawer.overdueLabel : null
   const timingStatusClass = model.paidLate ? 'text-warning-600' : 'text-negative-600'
 
   const advanceRateDisplay = formatAdvanceRate(model.advanceRate)
   const subtitle = [
     model.clientDisplayName,
-    model.officeClientNumber != null ? `מס׳ לקוח ${model.officeClientNumber}` : null,
+    model.officeClientNumber != null ? ADVANCED_PAYMENTS_MESSAGES.drawer.clientNumberPrefix(model.officeClientNumber) : null,
   ]
     .filter(Boolean)
     .join(' · ')
   const contextItems = [
-    ...(model.idNumber ? [{ label: 'ת.ז / ח.פ', value: model.idNumber }] : []),
-    ...(advanceRateDisplay ? [{ label: 'שיעור מקדמה', value: advanceRateDisplay }] : []),
+    ...(model.idNumber ? [{ label: ADVANCED_PAYMENTS_MESSAGES.drawer.idNumberLabel, value: model.idNumber }] : []),
+    ...(advanceRateDisplay ? [{ label: ADVANCED_PAYMENTS_MESSAGES.drawer.advanceRateLabel, value: advanceRateDisplay }] : []),
   ]
 
   const turnoverLabel =
     model.turnoverAmount != null
-      ? `${formatShekelAmount(model.turnoverAmount)} (מוזן)`
+      ? ADVANCED_PAYMENTS_MESSAGES.drawer.manualTurnoverSuffix(formatShekelAmount(model.turnoverAmount))
       : model.liveTurnover != null
-        ? `${formatShekelAmount(model.liveTurnover)} (מחזור חי מדוח מע"מ)`
+        ? ADVANCED_PAYMENTS_MESSAGES.drawer.liveTurnoverSuffix(formatShekelAmount(model.liveTurnover))
         : null
 
-  const title = `מקדמה - ${getAdvancePaymentMonthLabel(model.period, model.periodMonthsCount)}`
+  const title = ADVANCED_PAYMENTS_MESSAGES.drawer.title(getAdvancePaymentMonthLabel(model.period, model.periodMonthsCount))
 
   return (
     <DetailDrawer
@@ -98,7 +99,7 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
     >
       <div className="space-y-5">
         {model.missingTurnover && (
-          <Alert variant="warning" size="sm" message="חסר מחזור לתקופה — לא ניתן לחשב מקדמה מדויקת" />
+          <Alert variant="warning" size="sm" message={ADVANCED_PAYMENTS_MESSAGES.drawer.missingTurnoverAlert} />
         )}
 
         {contextItems.length > 0 && (
@@ -107,15 +108,15 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
           </div>
         )}
 
-        <DrawerSection title="פרטי תקופה">
-          <DrawerField label="תאריך יעד" value={formatDate(model.dueDateEffective ?? model.dueDate)} />
+        <DrawerSection title={ADVANCED_PAYMENTS_MESSAGES.drawer.periodSectionTitle}>
+          <DrawerField label={ADVANCED_PAYMENTS_MESSAGES.drawer.dueDateLabel} value={formatDate(model.dueDateEffective ?? model.dueDate)} />
           <DrawerField
-            label="מחזור לתקופה"
-            value={turnoverLabel ?? <span className="text-gray-400 text-xs">דוח מע״מ טרם הוגש</span>}
+            label={ADVANCED_PAYMENTS_MESSAGES.drawer.periodTurnoverLabel}
+            value={turnoverLabel ?? <span className="text-gray-400 text-xs">{ADVANCED_PAYMENTS_MESSAGES.drawer.vatPendingNote}</span>}
           />
           {timingStatusLabel && (
             <DrawerField
-              label="סטטוס עמידה"
+              label={ADVANCED_PAYMENTS_MESSAGES.drawer.timingStatusLabel}
               value={<span className={`${timingStatusClass} text-xs font-medium`}>{timingStatusLabel}</span>}
             />
           )}

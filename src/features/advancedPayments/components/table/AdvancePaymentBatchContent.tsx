@@ -3,6 +3,7 @@ import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
 import { ADVANCE_PAYMENT_BATCH_PAGE_SIZE, useAdvancePaymentBatchRows } from '../../hooks/useAdvancePaymentBatchRows'
 import { buildAdvancePaymentBatchColumns } from './AdvancePaymentBatchColumns'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 interface AdvancePaymentBatchContentProps {
   batch: AdvancePaymentDueDateGroup
@@ -35,13 +36,13 @@ export const AdvancePaymentBatchContent = ({
       onRowClick={onRowClick}
       isLoading={content.isLoading}
       isFetching={content.isFetching}
-      emptyMessage="אין תוצאות"
+      emptyMessage={ADVANCED_PAYMENTS_MESSAGES.batchContent.emptyMessage}
       rowClassName={(row) => (row.timing_status === 'overdue' ? 'bg-negative-50/30 hover:bg-negative-50/60' : '')}
       page={content.page}
       pageSize={ADVANCE_PAYMENT_BATCH_PAGE_SIZE}
       total={content.total}
       onPageChange={content.setPage}
-      label="מקדמות"
+      label={ADVANCED_PAYMENTS_MESSAGES.batchContent.paginationLabel}
       showPagination={content.total > ADVANCE_PAYMENT_BATCH_PAGE_SIZE}
     />
   )

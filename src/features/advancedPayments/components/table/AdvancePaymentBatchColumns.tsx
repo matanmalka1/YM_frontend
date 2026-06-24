@@ -5,6 +5,7 @@ import { formatClientOfficeId, formatDate, formatPercent, formatShekelAmount } f
 import type { AdvancePaymentOverviewRow } from '../../api/contracts'
 import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
 import { getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 interface AdvancePaymentBatchColumnOpts {
   onRowClick: (row: AdvancePaymentOverviewRow) => void
@@ -17,7 +18,7 @@ export const buildAdvancePaymentBatchColumns = ({
 }: AdvancePaymentBatchColumnOpts): Column<AdvancePaymentOverviewRow>[] => [
   {
     key: 'office_client_number',
-    header: 'מס׳',
+    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.officeNumberHeader,
     align: 'right',
     className: 'w-16 tabular-nums text-gray-400',
     headerClassName: 'w-16',
@@ -25,7 +26,7 @@ export const buildAdvancePaymentBatchColumns = ({
   },
   {
     key: 'business_name',
-    header: 'שם לקוח',
+    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.clientNameHeader,
     align: 'right',
     wrap: true,
     className: 'w-48',
@@ -42,7 +43,7 @@ export const buildAdvancePaymentBatchColumns = ({
         {row.missing_turnover && (
           <span className="mt-0.5 inline-flex items-center gap-1 rounded border border-warning-200 bg-warning-50 px-1.5 py-0.5 text-xs font-semibold text-warning-700">
             <AlertTriangle className="h-2.5 w-2.5" />
-            חסר מחזור
+            {ADVANCED_PAYMENTS_MESSAGES.batchColumns.missingTurnoverBadge}
           </span>
         )}
       </>
@@ -50,7 +51,7 @@ export const buildAdvancePaymentBatchColumns = ({
   },
   {
     key: 'period',
-    header: 'תקופת מקדמה',
+    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.periodHeader,
     align: 'right',
     className: 'w-28 text-gray-600',
     headerClassName: 'w-28',
@@ -59,7 +60,7 @@ export const buildAdvancePaymentBatchColumns = ({
   },
   {
     key: 'due_date',
-    header: 'תאריך יעד',
+    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.dueDateHeader,
     align: 'right',
     className: 'w-24 tabular-nums',
     headerClassName: 'w-24',
@@ -73,7 +74,7 @@ export const buildAdvancePaymentBatchColumns = ({
   },
   {
     key: 'turnover',
-    header: 'מחזור מדווח',
+    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.turnoverHeader,
     dir: 'ltr',
     className: 'w-24 tabular-nums',
     headerClassName: 'w-24',
@@ -88,7 +89,7 @@ export const buildAdvancePaymentBatchColumns = ({
   },
   {
     key: 'expected_amount',
-    header: 'צפוי',
+    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.expectedHeader,
     dir: 'ltr',
     className: 'w-20 font-semibold tabular-nums text-gray-800',
     headerClassName: 'w-20',
@@ -96,7 +97,7 @@ export const buildAdvancePaymentBatchColumns = ({
   },
   {
     key: 'paid_amount',
-    header: 'שולם',
+    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.paidHeader,
     dir: 'ltr',
     className: 'w-20 tabular-nums text-gray-600',
     headerClassName: 'w-20',
@@ -104,7 +105,7 @@ export const buildAdvancePaymentBatchColumns = ({
   },
   {
     key: 'delta',
-    header: 'יתרה',
+    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.balanceHeader,
     dir: 'ltr',
     className: 'w-20 tabular-nums',
     headerClassName: 'w-20',
@@ -119,7 +120,7 @@ export const buildAdvancePaymentBatchColumns = ({
   },
   {
     key: 'advance_rate',
-    header: 'אחוז מקדמה',
+    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.advanceRateHeader,
     dir: 'ltr',
     className: 'w-20 tabular-nums text-gray-600',
     headerClassName: 'w-20',
@@ -132,7 +133,7 @@ export const buildAdvancePaymentBatchColumns = ({
   },
   statusColumn({
     key: 'status',
-    header: 'סטטוס',
+    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.statusHeader,
     className: 'w-24',
     headerClassName: 'w-24',
     getStatus: (row) => row.status,
@@ -145,10 +146,10 @@ export const buildAdvancePaymentBatchColumns = ({
     className: 'w-10',
     headerClassName: 'w-10',
     render: (row) => (
-      <RowActionsMenu ariaLabel={`פעולות למקדמה ${row.id}`}>
-        <RowActionItem label="עדכן תשלום" icon={<Edit className="h-3.5 w-3.5" />} onClick={() => onRowClick(row)} />
+      <RowActionsMenu ariaLabel={ADVANCED_PAYMENTS_MESSAGES.batchColumns.rowActionsAriaLabel(row.id)}>
+        <RowActionItem label={ADVANCED_PAYMENTS_MESSAGES.batchColumns.updatePaymentAction} icon={<Edit className="h-3.5 w-3.5" />} onClick={() => onRowClick(row)} />
         <RowActionItem
-          label="עבור ללקוח"
+          label={ADVANCED_PAYMENTS_MESSAGES.batchColumns.goToClientAction}
           icon={<ExternalLink className="h-3.5 w-3.5" />}
           onClick={() => onNavigateToClient(row.client_record_id)}
         />

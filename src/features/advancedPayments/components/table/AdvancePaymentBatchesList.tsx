@@ -3,6 +3,7 @@ import { reportingPeriodIncludesMonth } from '@/utils/reportingPeriod'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
 import { getAdvancePaymentBatchKey } from '../../utils/advancePaymentUtils'
 import { AdvancePaymentBatchRow } from './AdvancePaymentBatchRow'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 interface AdvancePaymentBatchesListProps {
   isLoading: boolean
@@ -36,7 +37,7 @@ export const AdvancePaymentBatchesList = ({
   <MonthlyAccordionList
     isLoading={isLoading}
     isEmpty={!isLoading && batches.length === 0}
-    emptyState={{ message: year === null ? 'אין מקדמות' : `אין מקדמות לשנה ${year}` }}
+    emptyState={{ message: year === null ? ADVANCED_PAYMENTS_MESSAGES.batchesList.emptyNoYear : ADVANCED_PAYMENTS_MESSAGES.batchesList.emptyWithYear(year) }}
     skeletonCols={11}
   >
     {displayBatches.map((batch) => {

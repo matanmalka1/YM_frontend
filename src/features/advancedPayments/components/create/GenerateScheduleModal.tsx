@@ -4,6 +4,9 @@ import { ClientPickerField } from '@/components/shared/client/ClientPickerField'
 import { useGenerateSchedule } from '../../hooks/useGenerateSchedule'
 import { ADVANCE_PAYMENT_FREQUENCY_PREFIX, ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT } from '../../constants'
 import { getMonthsCoveredLabel } from '@/constants/periodOptions.constants'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
+import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../../errorMessages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface Props {
   open: boolean
@@ -27,12 +30,12 @@ export const GenerateScheduleModal: React.FC<Props> = ({ open, year, onClose }) 
   return (
     <Modal
       open={open}
-      title="צור לוח מקדמות שנתי"
+      title={ADVANCED_PAYMENTS_MESSAGES.generateScheduleModal.title}
       onClose={handleClose}
       footer={
         <div className="flex justify-end gap-2">
           <Button variant="outline" onClick={handleClose}>
-            ביטול
+            {GLOBAL_UI_MESSAGES.actions.cancel}
           </Button>
           <Button
             variant="primary"
@@ -42,7 +45,7 @@ export const GenerateScheduleModal: React.FC<Props> = ({ open, year, onClose }) 
             }
             onClick={handleConfirm}
           >
-            צור לוח
+            {ADVANCED_PAYMENTS_MESSAGES.generateScheduleModal.createButton}
           </Button>
         </div>
       }
@@ -58,15 +61,15 @@ export const GenerateScheduleModal: React.FC<Props> = ({ open, year, onClose }) 
         {picker.selectedClient !== null && (
           <p className="text-sm text-gray-500">
             {isProfileLoading
-              ? 'טוען פרופיל לקוח...'
+              ? ADVANCED_PAYMENTS_MESSAGES.generateScheduleModal.loadingProfile
               : isProfileError
-                ? 'שגיאה בטעינת פרופיל הלקוח'
+                ? ADVANCED_PAYMENTS_ERROR_MESSAGES.generateSchedule.profileLoad
                 : frequency != null
                   ? `${ADVANCE_PAYMENT_FREQUENCY_PREFIX} ${getMonthsCoveredLabel(frequency)}`
                   : ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT}
           </p>
         )}
-        <p className="text-sm text-gray-500">ייווצרו רק מקדמות שתאריך היעד שלהן מהיום והלאה</p>
+        <p className="text-sm text-gray-500">{ADVANCED_PAYMENTS_MESSAGES.generateScheduleModal.scheduleNote}</p>
       </div>
     </Modal>
   )

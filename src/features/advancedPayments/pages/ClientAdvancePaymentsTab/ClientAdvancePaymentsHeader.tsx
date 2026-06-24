@@ -5,6 +5,8 @@ import { Divider } from '@/components/ui/primitives/Divider'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { ADVANCE_PAYMENT_FREQUENCY_PREFIX, ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT } from '../../constants'
 import { getMonthsCoveredLabel } from '@/constants/periodOptions.constants'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface ClientAdvancePaymentsHeaderProps {
   isAdvisor: boolean
@@ -35,7 +37,7 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
         {isAdvisor && (
           <>
             <Button type="button" icon={<PlusCircle className="h-4 w-4" />} onClick={onOpenCreate}>
-              הוסף מקדמה
+              {ADVANCED_PAYMENTS_MESSAGES.clientHeader.addPayment}
             </Button>
             <Divider orientation="vertical" className="h-8 hidden sm:block" />
             <div className="flex items-center bg-gray-100 rounded-xl p-1">
@@ -57,20 +59,20 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
                 onClick={() => setConfirmGenerate(true)}
                 disabled={generationFrequency == null}
                 isLoading={isGenerating}
-                loadingLabel="יוצר..."
-                tooltip={generationFrequency == null ? 'לא ניתן ליצור לוח בלי תדירות מקדמות בפרופיל הלקוח' : undefined}
+                loadingLabel={ADVANCED_PAYMENTS_MESSAGES.clientHeader.loadingLabel}
+                tooltip={generationFrequency == null ? ADVANCED_PAYMENTS_MESSAGES.clientHeader.noFrequencyTooltip : undefined}
                 className="rounded-lg text-gray-700 hover:bg-white hover:shadow-sm"
               >
-                צור לוח שנתי
+                {ADVANCED_PAYMENTS_MESSAGES.clientHeader.createYearlySchedule}
               </Button>
             </div>
             {generationFrequency != null && (
               <ConfirmDialog
                 open={confirmGenerate}
-                title="יצירת לוח מקדמות"
-                message={`ליצור מקדמות ${getMonthsCoveredLabel(generationFrequency)} לשנת ${year}? ייווצרו רק מקדמות שתאריך היעד שלהן מהיום והלאה. מקדמות קיימות לא יושפעו.`}
-                confirmLabel="צור"
-                cancelLabel="ביטול"
+                title={ADVANCED_PAYMENTS_MESSAGES.clientHeader.confirmTitle}
+                message={ADVANCED_PAYMENTS_MESSAGES.clientHeader.confirmMessage(getMonthsCoveredLabel(generationFrequency), year)}
+                confirmLabel={ADVANCED_PAYMENTS_MESSAGES.clientHeader.confirmButton}
+                cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
                 onConfirm={() => {
                   setConfirmGenerate(false)
                   onGenerateSchedule()
@@ -84,7 +86,7 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
 
       {advanceRate != null && (
         <p className="text-sm text-gray-500">
-          אחוז מקדמות: <span className="font-semibold text-gray-800">{advanceRate}%</span>
+          {ADVANCED_PAYMENTS_MESSAGES.clientHeader.advanceRateNote(advanceRate)}
         </p>
       )}
     </div>

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/primitives/Button'
 import { ADVANCE_PAYMENT_STATUS_OPTIONS, ADVANCE_PAYMENT_METHOD_OPTIONS } from '../../constants'
 import { formatShekelAmount } from '@/utils/utils'
 import type { AdvancePaymentDrawerForm } from '../../hooks/useAdvancePaymentDrawerForm'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 interface AdvancePaymentEditableSectionsProps {
   form: AdvancePaymentDrawerForm
@@ -15,12 +16,12 @@ interface AdvancePaymentEditableSectionsProps {
 
 export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSectionsProps> = ({ form }) => (
   <>
-    <DrawerSection title="חישוב מקדמה">
+    <DrawerSection title={ADVANCED_PAYMENTS_MESSAGES.editableSections.calculationSectionTitle}>
       <div className="py-4 space-y-3">
         <div className="flex items-end gap-2">
           <div className="flex-1">
             <Input
-              label="מחזור לתקופה"
+              label={ADVANCED_PAYMENTS_MESSAGES.editableSections.periodTurnoverLabel}
               type="number"
               min={0}
               value={form.turnoverAmount}
@@ -35,28 +36,28 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
             onClick={form.handlePrefill}
             className="mb-0.5 whitespace-nowrap"
           >
-            מלא ממע״מ
+            {ADVANCED_PAYMENTS_MESSAGES.editableSections.prefillButton}
           </Button>
         </div>
         {form.prefillSource === 'vat_pending' && (
-          <Alert variant="warning" size="sm" message="מבוסס על דוח מע״מ שטרם הוגש" />
+          <Alert variant="warning" size="sm" message={ADVANCED_PAYMENTS_MESSAGES.editableSections.vatPendingAlert} />
         )}
-        {form.prefillSource === 'none' && <p className="text-xs text-gray-400">לא נמצא דוח מע״מ לתקופה זו</p>}
+        {form.prefillSource === 'none' && <p className="text-xs text-gray-400">{ADVANCED_PAYMENTS_MESSAGES.editableSections.noVatReportNote}</p>}
         <div>
-          <div className="text-xs text-gray-500 mb-1">סכום מחושב</div>
+          <div className="text-xs text-gray-500 mb-1">{ADVANCED_PAYMENTS_MESSAGES.editableSections.calculatedAmountLabel}</div>
           <div className="text-sm font-medium text-gray-800">
             {form.liveCalculated != null ? formatShekelAmount(form.liveCalculated) : '—'}
           </div>
         </div>
         <Input
-          label="סכום עקיפה (אופציונלי)"
+          label={ADVANCED_PAYMENTS_MESSAGES.editableSections.overrideAmountLabel}
           type="number"
           min={0}
           value={form.overrideAmount}
           onChange={(e) => form.setOverrideAmount(e.target.value)}
         />
         <div>
-          <div className="text-xs text-gray-500 mb-1">סכום סופי</div>
+          <div className="text-xs text-gray-500 mb-1">{ADVANCED_PAYMENTS_MESSAGES.editableSections.finalAmountLabel}</div>
           <div className="text-sm font-semibold text-gray-900">
             {form.liveExpected != null ? formatShekelAmount(form.liveExpected) : '—'}
           </div>
@@ -64,11 +65,11 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
       </div>
     </DrawerSection>
 
-    <DrawerSection title="עדכון תשלום">
+    <DrawerSection title={ADVANCED_PAYMENTS_MESSAGES.editableSections.paymentSectionTitle}>
       <div className="py-4 space-y-4">
         <div className="space-y-3">
           <Input
-            label="סכום שולם"
+            label={ADVANCED_PAYMENTS_MESSAGES.editableSections.paidAmountLabel}
             type="number"
             min={0}
             value={form.paidAmount}
@@ -77,26 +78,26 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
         </div>
         <div className="space-y-3">
           <Select
-            label="סטטוס"
+            label={ADVANCED_PAYMENTS_MESSAGES.editableSections.statusLabel}
             value={form.status}
             onChange={(e) => form.setStatus(e.target.value)}
             options={ADVANCE_PAYMENT_STATUS_OPTIONS}
           />
           <Select
-            label="שיטת תשלום"
+            label={ADVANCED_PAYMENTS_MESSAGES.editableSections.paymentMethodLabel}
             value={form.paymentMethod}
             onChange={(e) => form.setPaymentMethod(e.target.value)}
-            options={[{ value: '', label: 'ללא' }, ...ADVANCE_PAYMENT_METHOD_OPTIONS]}
+            options={[{ value: '', label: ADVANCED_PAYMENTS_MESSAGES.editableSections.noMethodOption }, ...ADVANCE_PAYMENT_METHOD_OPTIONS]}
           />
-          <DatePicker label="תאריך ביצוע תשלום" value={form.paidAt} onChange={form.setPaidAt} />
+          <DatePicker label={ADVANCED_PAYMENTS_MESSAGES.editableSections.paidAtLabel} value={form.paidAt} onChange={form.setPaidAt} />
         </div>
         <Textarea
-          label="הערות"
+          label={ADVANCED_PAYMENTS_MESSAGES.editableSections.notesLabel}
           id="advance-payment-notes"
           rows={3}
           value={form.notes}
           onChange={(e) => form.setNotes(e.target.value)}
-          placeholder="הערות..."
+          placeholder={ADVANCED_PAYMENTS_MESSAGES.editableSections.notesPlaceholder}
         />
       </div>
     </DrawerSection>

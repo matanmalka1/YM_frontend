@@ -3,6 +3,8 @@ import { Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { useOverlayDismiss } from '@/components/ui/overlays/useOverlayDismiss'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface AdvancePaymentDrawerFooterProps {
   rowId: number
@@ -31,27 +33,27 @@ export const AdvancePaymentDrawerFooter: React.FC<AdvancePaymentDrawerFooterProp
           className="text-gray-400 hover:text-negative-600 hover:bg-negative-50"
           onClick={() => setConfirmDelete(true)}
           disabled={isUpdating || isDeleting}
-          aria-label="מחק מקדמה"
-          title="מחק מקדמה"
+          aria-label={ADVANCED_PAYMENTS_MESSAGES.drawerFooter.deleteAriaLabel}
+          title={ADVANCED_PAYMENTS_MESSAGES.drawerFooter.deleteTitle}
         >
           <Trash2 size={14} />
         </Button>
       )}
       <div className="flex gap-2 ms-auto">
         <Button variant="outline" onClick={dismiss} disabled={isUpdating || isDeleting}>
-          ביטול
+          {GLOBAL_UI_MESSAGES.actions.cancel}
         </Button>
         <Button variant="primary" isLoading={isUpdating} onClick={onSave} disabled={isUpdating || isDeleting}>
-          שמור
+          {ADVANCED_PAYMENTS_MESSAGES.drawerFooter.save}
         </Button>
       </div>
 
       {onDelete && (
         <ConfirmDialog
           open={confirmDelete}
-          title="מחיקת מקדמה"
-          message="האם למחוק מקדמה זו?"
-          confirmLabel="כן, מחק"
+          title={ADVANCED_PAYMENTS_MESSAGES.drawerFooter.deleteModalTitle}
+          message={ADVANCED_PAYMENTS_MESSAGES.drawerFooter.deleteModalMessage}
+          confirmLabel={ADVANCED_PAYMENTS_MESSAGES.drawerFooter.deleteConfirm}
           confirmVariant="danger"
           isLoading={isDeleting}
           onConfirm={async () => {

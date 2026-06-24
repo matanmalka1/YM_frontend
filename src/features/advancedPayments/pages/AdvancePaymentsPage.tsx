@@ -9,6 +9,7 @@ import { AdvancePaymentDrawer } from '../components/drawer/AdvancePaymentDrawer'
 import { CreateAdvancePaymentFlow } from '../components/create/CreateAdvancePaymentFlow'
 import { GenerateScheduleModal } from '../components/create/GenerateScheduleModal'
 import { useAdvancePaymentsPage } from '../hooks/useAdvancePaymentsPage'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../messages'
 
 export const AdvancePayments: React.FC = () => {
   const { status, headerProps, permissions, stats, filters, table, drawers, modals } = useAdvancePaymentsPage()
@@ -27,7 +28,7 @@ export const AdvancePayments: React.FC = () => {
                 iconPosition="end"
                 onClick={modals.openGenerate}
               >
-                צור לוח שנתי
+                {ADVANCED_PAYMENTS_MESSAGES.page.createYearlySchedule}
               </Button>
               <Button
                 variant="ghost"
@@ -36,7 +37,7 @@ export const AdvancePayments: React.FC = () => {
                 iconPosition="end"
                 onClick={modals.openCreate}
               >
-                הוסף מקדמה
+                {ADVANCED_PAYMENTS_MESSAGES.page.addPayment}
               </Button>
             </div>
           ) : undefined
@@ -50,7 +51,7 @@ export const AdvancePayments: React.FC = () => {
         overdueCount={stats.workflowStats.overdueCount}
       />
 
-      <FilterPanel {...filters} title="סינון מקדמות" subtitle="לקוח, שנה, סטטוס ותקופה" />
+      <FilterPanel {...filters} title={ADVANCED_PAYMENTS_MESSAGES.page.filterTitle} subtitle={ADVANCED_PAYMENTS_MESSAGES.page.filterSubtitle} />
 
       <AdvancePaymentBatchesList isLoading={status.isLoading} {...table} />
 

@@ -10,6 +10,7 @@ import type { AdvancePaymentRow } from '../../api/contracts'
 import { formatShekelAmount, formatDate } from '@/utils/utils'
 import { getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
 import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 interface Props {
   rows: AdvancePaymentRow[]
@@ -43,7 +44,7 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
   }
 
   if (rows.length === 0) {
-    return <StateCard icon={Wallet} message="אין מקדמות להצגה" size="compact" />
+    return <StateCard icon={Wallet} message={ADVANCED_PAYMENTS_MESSAGES.clientCards.empty} size="compact" />
   }
 
   return (
@@ -54,16 +55,16 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
         const balance = Math.max(expected - paid, 0)
         const turnover = row.turnover_amount ?? row.live_turnover
         const hasTurnover = turnover !== null && turnover !== undefined
-        const turnoverSource = row.turnover_amount ? 'מחזור מוזן' : row.live_turnover ? 'נגזר ממע״מ' : 'חסר'
-        const turnoverLabel = row.missing_turnover ? 'חסר מחזור' : `מחזור (${turnoverSource})`
+        const turnoverSource = row.turnover_amount ? ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverManual : row.live_turnover ? ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverFromVat : ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverMissing
+        const turnoverLabel = row.missing_turnover ? ADVANCED_PAYMENTS_MESSAGES.clientCards.missingTurnoverLabel : ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverLabelTemplate(turnoverSource)
         const isPaid = row.status === 'paid'
 
         const detailItems: DefinitionItem[] = [
-          { label: 'לתשלום עד', value: formatDate(row.due_date_effective ?? row.due_date) },
-          ...(row.paid_at ? [{ label: 'שולם ב', value: formatDate(row.paid_at) }] : []),
-          { label: 'שולם', value: formatShekelAmount(paid) },
+          { label: ADVANCED_PAYMENTS_MESSAGES.clientCards.dueDateLabel, value: formatDate(row.due_date_effective ?? row.due_date) },
+          ...(row.paid_at ? [{ label: ADVANCED_PAYMENTS_MESSAGES.clientCards.paidAtLabel, value: formatDate(row.paid_at) }] : []),
+          { label: ADVANCED_PAYMENTS_MESSAGES.clientCards.paidLabel, value: formatShekelAmount(paid) },
           {
-            label: 'יתרה',
+            label: ADVANCED_PAYMENTS_MESSAGES.clientCards.balanceLabel,
             value: (
               <span className={balance > 0 ? 'text-negative-600' : 'text-positive-600'}>
                 {formatShekelAmount(balance)}
@@ -95,15 +96,15 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
                     variantMap={ADVANCE_PAYMENT_STATUS_VARIANTS}
                   />
                   {row.paid_late ? (
-                    <Badge variant="warning">שולם באיחור</Badge>
+                    <Badge variant="warning">{ADVANCED_PAYMENTS_MESSAGES.clientCards.paidLate}</Badge>
                   ) : row.timing_status === 'overdue' ? (
-                    <Badge variant="negative">באיחור</Badge>
+                    <Badge variant="negative">{ADVANCED_PAYMENTS_MESSAGES.clientCards.overdue}</Badge>
                   ) : null}
                 </div>
               </div>
 
               <div>
-                <div className="text-xs text-gray-400 mb-0.5">צפוי לתשלום</div>
+                <div className="text-xs text-gray-400 mb-0.5">{ADVANCED_PAYMENTS_MESSAGES.clientCards.expectedLabel}</div>
                 <div className="text-2xl font-bold text-positive-700">{formatShekelAmount(expected)}</div>
               </div>
 
@@ -120,7 +121,7 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
                 onClick={() => onRowClick(row)}
                 className="mt-auto"
               >
-                {isPaid ? 'צפה בפרטים' : 'עדכן תשלום'}
+                {isPaid ? ADVANCED_PAYMENTS_MESSAGES.clientCards.viewDetails : ADVANCED_PAYMENTS_MESSAGES.clientCards.updatePayment}
               </Button>
             </div>
           </Card>
