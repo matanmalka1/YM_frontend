@@ -12,31 +12,32 @@ import { formatCount, formatDate, getErrorMessage, getHttpStatus } from '@/utils
 import { useTaxCalendarSettings } from '../hooks/useTaxCalendarSettings'
 import { TaxCalendarSettingsStatsSection } from '../components/TaxCalendarSettingsStatsSection'
 import type { TaxCalendarDeadlineRule, TaxCalendarSettingsEntry } from '../api'
+import { TAX_CALENDAR_SETTINGS_MESSAGES } from '../messages'
 
 const currentYear = new Date().getFullYear()
 const MIN_YEAR = 2000
 const MAX_YEAR = 2100
 
 const RULE_TYPE_LABELS: Record<string, string> = {
-  vat_monthly: 'מע״מ חודשי',
-  vat_bimonthly: 'מע״מ דו־חודשי',
-  advance_monthly: 'מקדמות חודשיות',
-  advance_bimonthly: 'מקדמות דו־חודשיות',
-  annual_report: 'דוח שנתי',
+  vat_monthly: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.vatMonthly,
+  vat_bimonthly: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.vatBimonthly,
+  advance_monthly: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.advanceMonthly,
+  advance_bimonthly: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.advanceBimonthly,
+  annual_report: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.annualReport,
 }
 
 const OBLIGATION_TYPE_LABELS: Record<string, string> = {
-  vat: 'מע״מ',
-  advance_payment: 'מקדמות מס הכנסה',
-  annual_report: 'דוח שנתי',
+  vat: TAX_CALENDAR_SETTINGS_MESSAGES.obligationTypes.vat,
+  advance_payment: TAX_CALENDAR_SETTINGS_MESSAGES.obligationTypes.advancePayment,
+  annual_report: TAX_CALENDAR_SETTINGS_MESSAGES.obligationTypes.annualReport,
 }
 
 const SUMMARY_LABELS: Record<string, string> = {
-  vat_1m: 'מע״מ חודשי',
-  vat_2m: 'מע״מ דו־חודשי',
-  advance_payment_1m: 'מקדמות חודשיות',
-  advance_payment_2m: 'מקדמות דו־חודשיות',
-  annual_report_annual: 'דוח שנתי',
+  vat_1m: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.vatMonthly,
+  vat_2m: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.vatBimonthly,
+  advance_payment_1m: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.advanceMonthly,
+  advance_payment_2m: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.advanceBimonthly,
+  annual_report_annual: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.annualReport,
 }
 
 const formatYear = (value: number | null | undefined): string => {
@@ -61,12 +62,13 @@ const isForbidden = (...errors: unknown[]): boolean => errors.some((error) => ge
 
 const parseYearInput = (value: string, label: string): { value: number | null; error: string | null } => {
   const trimmed = value.trim()
-  if (!trimmed) return { value: null, error: `${label} היא שדה חובה` }
+  if (!trimmed) return { value: null, error: TAX_CALENDAR_SETTINGS_MESSAGES.validation.required(label) }
 
   const parsed = Number(trimmed)
-  if (!Number.isInteger(parsed)) return { value: null, error: `${label} חייבת להיות שנה תקינה` }
+  if (!Number.isInteger(parsed))
+    return { value: null, error: TAX_CALENDAR_SETTINGS_MESSAGES.validation.invalidYear(label) }
   if (parsed < MIN_YEAR || parsed > MAX_YEAR) {
-    return { value: null, error: `${label} חייבת להיות בין ${MIN_YEAR} ל-${MAX_YEAR}` }
+    return { value: null, error: TAX_CALENDAR_SETTINGS_MESSAGES.validation.yearRange(label, MIN_YEAR, MAX_YEAR) }
   }
 
   return { value: parsed, error: null }
@@ -77,7 +79,7 @@ const translateWarning = (warning: string): string => {
   if (countWarning) {
     const [, year, key, expected, found] = countWarning
     const label = SUMMARY_LABELS[key] ?? key
-    return `שנת ${year}: ${label} — צפויות ${expected} רשומות, נמצאו ${found}.`
+    return TAX_CALENDAR_SETTINGS_MESSAGES.warnings.countMismatch(year, label, expected, found)
   }
 
   const fallbackWarning =
@@ -85,7 +87,7 @@ const translateWarning = (warning: string): string => {
       warning,
     )
   if (fallbackWarning) {
-    return `שנת ${fallbackWarning[1]} משתמשת בתאריכי ברירת מחדל משום שחסרים נתוני יומן מס רשמיים.`
+    return TAX_CALENDAR_SETTINGS_MESSAGES.warnings.fallbackDates(fallbackWarning[1])
   }
 
   return warning
@@ -136,27 +138,27 @@ const groupEntries = (entries: TaxCalendarSettingsEntry[]): EntryGroup[] => {
 const rulesColumns: Column<TaxCalendarDeadlineRule>[] = [
   {
     key: 'rule_type',
-    header: 'סוג כלל',
+    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.ruleType,
     render: (rule) => <span className="font-medium text-gray-900">{getRuleTypeLabel(rule.rule_type)}</span>,
   },
   {
     key: 'due_day_of_month',
-    header: 'יום בחודש',
+    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.dueDayOfMonth,
     render: (rule) => <span className="font-mono tabular-nums">{formatCount(rule.due_day_of_month)}</span>,
   },
   {
     key: 'offset_months',
-    header: 'היסט חודשים',
+    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.offsetMonths,
     render: (rule) => <span className="font-mono tabular-nums">{formatCount(rule.offset_months)}</span>,
   },
   {
     key: 'effective_from',
-    header: 'בתוקף מ',
+    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.effectiveFrom,
     render: (rule) => <span className="font-mono tabular-nums">{formatDate(rule.effective_from)}</span>,
   },
   {
     key: 'effective_to',
-    header: 'בתוקף עד',
+    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.effectiveTo,
     render: (rule) => <span className="font-mono tabular-nums">{formatDate(rule.effective_to)}</span>,
   },
 ]
@@ -164,17 +166,17 @@ const rulesColumns: Column<TaxCalendarDeadlineRule>[] = [
 const groupedEntriesColumns: Column<TaxCalendarSettingsEntry>[] = [
   {
     key: 'period',
-    header: 'תקופה',
+    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.period,
     render: (entry) => <span className="font-mono tabular-nums">{formatText(entry.period)}</span>,
   },
   {
     key: 'period_months_count',
-    header: 'מספר חודשים',
+    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.periodMonthsCount,
     render: (entry) => <span className="font-mono tabular-nums">{formatCount(entry.period_months_count)}</span>,
   },
   {
     key: 'due_date',
-    header: 'תאריך יעד',
+    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.dueDate,
     render: (entry) => <span className="font-mono tabular-nums">{formatDate(entry.due_date)}</span>,
   },
 ]
@@ -184,8 +186,11 @@ export const TaxCalendarSettingsPage = () => {
   const [endYear, setEndYear] = useState(String(currentYear))
   const yearOptions = useMemo(getYearOptions, [])
 
-  const startYearState = useMemo(() => parseYearInput(startYear, 'שנת ההתחלה'), [startYear])
-  const endYearState = useMemo(() => parseYearInput(endYear, 'שנת הסיום'), [endYear])
+  const startYearState = useMemo(
+    () => parseYearInput(startYear, TAX_CALENDAR_SETTINGS_MESSAGES.labels.startYear),
+    [startYear],
+  )
+  const endYearState = useMemo(() => parseYearInput(endYear, TAX_CALENDAR_SETTINGS_MESSAGES.labels.endYear), [endYear])
   const hasInvalidRange =
     startYearState.value !== null && endYearState.value !== null && startYearState.value > endYearState.value
   const params = useMemo(() => {
@@ -219,27 +224,33 @@ export const TaxCalendarSettingsPage = () => {
   if (hasForbiddenError) {
     return (
       <PageContent>
-        <PageHeader title="הגדרות יומן מס" description="צפייה בכללי תאריכי יעד וברשומות יומן מס" />
-        <Alert variant="warning" message="גישה להגדרות יומן מס זמינה ליועצים בלבד." />
+        <PageHeader
+          title={TAX_CALENDAR_SETTINGS_MESSAGES.labels.pageTitle}
+          description={TAX_CALENDAR_SETTINGS_MESSAGES.labels.limitedAccessDescription}
+        />
+        <Alert variant="warning" message={TAX_CALENDAR_SETTINGS_MESSAGES.labels.accessDenied} />
       </PageContent>
     )
   }
 
   return (
     <PageContent>
-      <PageHeader title="הגדרות יומן מס" description="צפייה בכללי תאריכי יעד וברשומות שנוצרו ליומן המס" />
+      <PageHeader
+        title={TAX_CALENDAR_SETTINGS_MESSAGES.labels.pageTitle}
+        description={TAX_CALENDAR_SETTINGS_MESSAGES.labels.description}
+      />
 
       <ToolbarContainer>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,180px)_minmax(0,180px)_auto_auto]">
           <Select
-            label="משנת מס"
+            label={TAX_CALENDAR_SETTINGS_MESSAGES.labels.startYearField}
             value={startYear}
             options={yearOptions}
             onChange={(event) => setStartYear(event.target.value)}
             error={startYearState.error ?? undefined}
           />
           <Select
-            label="עד שנת מס"
+            label={TAX_CALENDAR_SETTINGS_MESSAGES.labels.endYearField}
             value={endYear}
             options={yearOptions}
             onChange={(event) => setEndYear(event.target.value)}
@@ -247,7 +258,7 @@ export const TaxCalendarSettingsPage = () => {
           />
           <div className="flex items-end">
             <Button type="button" variant="outline" size="sm" onClick={resetFilters}>
-              איפוס שנים
+              {TAX_CALENDAR_SETTINGS_MESSAGES.labels.resetYears}
             </Button>
           </div>
           <div className="flex items-end">
@@ -258,21 +269,26 @@ export const TaxCalendarSettingsPage = () => {
               onClick={handleBootstrap}
               disabled={params === null || hasInvalidRange}
               isLoading={bootstrapMutation.isPending}
-              loadingLabel="מאתחל..."
+              loadingLabel={TAX_CALENDAR_SETTINGS_MESSAGES.labels.initializing}
             >
-              אתחול יומן מס
+              {TAX_CALENDAR_SETTINGS_MESSAGES.labels.initializeCalendar}
             </Button>
           </div>
         </div>
       </ToolbarContainer>
 
-      {hasInvalidRange ? <Alert variant="warning" message="שנת ההתחלה חייבת להיות קטנה או שווה לשנת הסיום." /> : null}
+      {hasInvalidRange ? (
+        <Alert variant="warning" message={TAX_CALENDAR_SETTINGS_MESSAGES.validation.invalidRange} />
+      ) : null}
       {!hasInvalidRange && params === null ? (
-        <Alert variant="warning" message="יש להזין טווח שנים תקין כדי לטעון תקציר ורשומות יומן מס." />
+        <Alert variant="warning" message={TAX_CALENDAR_SETTINGS_MESSAGES.validation.invalidRangeToLoad} />
       ) : null}
 
       {summaryQuery.isError && !hasInvalidRange ? (
-        <Alert variant="error" message={getErrorMessage(summaryQuery.error, 'שגיאה בטעינת תקציר יומן המס')} />
+        <Alert
+          variant="error"
+          message={getErrorMessage(summaryQuery.error, TAX_CALENDAR_SETTINGS_MESSAGES.errors.summaryLoad)}
+        />
       ) : null}
 
       <TaxCalendarSettingsStatsSection
@@ -293,16 +309,23 @@ export const TaxCalendarSettingsPage = () => {
       {bootstrapMutation.data ? (
         <Alert
           variant={bootstrapMutation.data.warnings.length > 0 ? 'warning' : 'success'}
-          message={`אתחול הושלם: ${formatCount(bootstrapMutation.data.entries_created)} רשומות נוצרו, ${formatCount(
-            bootstrapMutation.data.entries_skipped,
-          )} רשומות דולגו, ${formatCount(bootstrapMutation.data.total_entries_for_range)} רשומות קיימות בטווח.`}
+          message={TAX_CALENDAR_SETTINGS_MESSAGES.bootstrap.complete(
+            formatCount(bootstrapMutation.data.entries_created),
+            formatCount(bootstrapMutation.data.entries_skipped),
+            formatCount(bootstrapMutation.data.total_entries_for_range),
+          )}
         />
       ) : null}
 
       <section className="space-y-3">
-        <h2 className="text-base font-semibold text-gray-900">כללי תאריכי יעד</h2>
+        <h2 className="text-base font-semibold text-gray-900">
+          {TAX_CALENDAR_SETTINGS_MESSAGES.labels.deadlineRulesTitle}
+        </h2>
         {rulesQuery.isError ? (
-          <Alert variant="error" message={getErrorMessage(rulesQuery.error, 'שגיאה בטעינת כללי יומן המס')} />
+          <Alert
+            variant="error"
+            message={getErrorMessage(rulesQuery.error, TAX_CALENDAR_SETTINGS_MESSAGES.errors.rulesLoad)}
+          />
         ) : null}
         <DataTable
           data={rules}
@@ -310,16 +333,21 @@ export const TaxCalendarSettingsPage = () => {
           getRowKey={(rule) => rule.id}
           isLoading={rulesQuery.isPending}
           emptyState={{
-            title: 'אין כללים להצגה',
-            message: 'לא נמצאו כללי תאריכי יעד.',
+            title: TAX_CALENDAR_SETTINGS_MESSAGES.emptyStates.noRulesTitle,
+            message: TAX_CALENDAR_SETTINGS_MESSAGES.emptyStates.noRulesMessage,
           }}
         />
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-base font-semibold text-gray-900">רשומות יומן מס</h2>
+        <h2 className="text-base font-semibold text-gray-900">
+          {TAX_CALENDAR_SETTINGS_MESSAGES.labels.calendarEntriesTitle}
+        </h2>
         {entriesQuery.isError ? (
-          <Alert variant="error" message={getErrorMessage(entriesQuery.error, 'שגיאה בטעינת רשומות יומן המס')} />
+          <Alert
+            variant="error"
+            message={getErrorMessage(entriesQuery.error, TAX_CALENDAR_SETTINGS_MESSAGES.errors.entriesLoad)}
+          />
         ) : null}
         {entriesQuery.isPending || entryGroups.length === 0 ? (
           <DataTable
@@ -328,15 +356,17 @@ export const TaxCalendarSettingsPage = () => {
             getRowKey={(entry) => entry.id}
             isLoading={entriesQuery.isPending}
             emptyState={{
-              title: 'אין רשומות להצגה',
-              message: 'לא נמצאו רשומות יומן מס בטווח השנים שנבחר.',
+              title: TAX_CALENDAR_SETTINGS_MESSAGES.emptyStates.noEntriesTitle,
+              message: TAX_CALENDAR_SETTINGS_MESSAGES.emptyStates.noEntriesMessage,
             }}
           />
         ) : (
           <div className="space-y-5">
             {Array.from(new Set(entryGroups.map((group) => group.taxYear))).map((taxYear) => (
               <div key={taxYear} className="space-y-3">
-                <h3 className="text-sm font-semibold text-gray-700">שנת מס {formatYear(taxYear)}</h3>
+                <h3 className="text-sm font-semibold text-gray-700">
+                  {TAX_CALENDAR_SETTINGS_MESSAGES.labels.taxYear(formatYear(taxYear))}
+                </h3>
                 {entryGroups
                   .filter((group) => group.taxYear === taxYear)
                   .map((group) => (
@@ -346,7 +376,7 @@ export const TaxCalendarSettingsPage = () => {
                           {getObligationLabel(group.obligationType)}
                         </h4>
                         <span className="text-xs font-medium text-gray-500">
-                          {formatCount(group.entries.length)} רשומות
+                          {TAX_CALENDAR_SETTINGS_MESSAGES.labels.entriesCount(formatCount(group.entries.length))}
                         </span>
                       </div>
                       <DataTable data={group.entries} columns={groupedEntriesColumns} getRowKey={(entry) => entry.id} />

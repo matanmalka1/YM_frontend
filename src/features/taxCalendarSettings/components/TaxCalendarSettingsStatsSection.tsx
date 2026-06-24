@@ -1,5 +1,6 @@
 import { AlertTriangle, CalendarDays, ListChecks } from 'lucide-react'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
+import { TAX_CALENDAR_SETTINGS_MESSAGES } from '../messages'
 
 interface TaxCalendarSettingsStatsSectionProps {
   yearRange: string
@@ -17,29 +18,29 @@ export const TaxCalendarSettingsStatsSection = ({
   const statCards = [
     {
       key: 'year-range',
-      title: 'טווח שנים',
+      title: TAX_CALENDAR_SETTINGS_MESSAGES.stats.yearRangeTitle,
       value: yearRange,
       icon: CalendarDays,
       variant: 'blue' as const,
-      description: 'טווח השנים של תקציר יומן המס',
+      description: TAX_CALENDAR_SETTINGS_MESSAGES.stats.yearRangeDescription,
       loading: false,
     },
     {
       key: 'entries',
-      title: 'רשומות',
+      title: TAX_CALENDAR_SETTINGS_MESSAGES.stats.entriesTitle,
       value: totalEntries,
       icon: ListChecks,
       variant: 'neutral' as const,
-      description: 'רשומות יומן המס בטווח שנבחר',
+      description: TAX_CALENDAR_SETTINGS_MESSAGES.stats.entriesDescription,
       loading: isLoading,
     },
     {
       key: 'warnings',
-      title: 'אזהרות',
+      title: TAX_CALENDAR_SETTINGS_MESSAGES.stats.warningsTitle,
       value: warningsCount,
       icon: AlertTriangle,
       variant: warningsCount > 0 ? ('orange' as const) : ('green' as const),
-      description: 'פערים שנמצאו בבדיקת היומן',
+      description: TAX_CALENDAR_SETTINGS_MESSAGES.stats.warningsDescription,
       loading: isLoading,
     },
   ]
