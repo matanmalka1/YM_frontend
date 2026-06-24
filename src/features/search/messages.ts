@@ -13,7 +13,6 @@ export const SEARCH_MESSAGES = {
     resetSearch: 'איפוס חיפוש',
     foundResultsPrefix: 'נמצאו',
     emptyResults: 'אין תוצאות',
-    loadError: 'שגיאה בטעינת תוצאות חיפוש',
   },
   columns: {
     officeNumber: "מס' לקוח",

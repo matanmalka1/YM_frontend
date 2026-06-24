@@ -6,6 +6,7 @@ import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFilters } from '../types'
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 import { SEARCH_MESSAGES } from '../messages'
+import { SEARCH_ERROR_MESSAGES } from '../errorMessages'
 
 export const useSearchPage = () => {
   const { searchParams, getParam, getPage, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
@@ -63,7 +64,7 @@ export const useSearchPage = () => {
   }, [resetFilters])
 
   return {
-    error: searchError ? getErrorMessage(searchError, SEARCH_MESSAGES.page.loadError) : null,
+    error: searchError ? getErrorMessage(searchError, SEARCH_ERROR_MESSAGES.page.loadError) : null,
     filters,
     hasAnyFilter,
     handleFilterChange,
