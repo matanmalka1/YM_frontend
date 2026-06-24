@@ -5,6 +5,7 @@ import { ModalFormActions } from '../../../../components/ui/overlays/ModalFormAc
 import { UserFormFields } from './UserFormFields'
 import { createUserSchema, type CreateUserFormValues } from '../../schemas'
 import type { CreateUserPayload } from '../../api'
+import { USERS_MESSAGES } from '../../messages'
 
 interface CreateUserModalProps {
   open: boolean
@@ -44,11 +45,11 @@ export const CreateUserModal: React.FC<CreateUserModalProps> = ({ open, onClose,
     <Modal
       open={open}
       onClose={handleClose}
-      title="יצירת משתמש חדש"
+      title={USERS_MESSAGES.create.title}
       footer={
         <ModalFormActions
           isLoading={isLoading}
-          submitLabel="צור משתמש"
+          submitLabel={USERS_MESSAGES.create.submit}
           onCancel={handleClose}
           onSubmit={onFormSubmit}
         />

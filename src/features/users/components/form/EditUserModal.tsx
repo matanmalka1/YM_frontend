@@ -6,6 +6,7 @@ import { ModalFormActions } from '../../../../components/ui/overlays/ModalFormAc
 import { UserFormFields } from './UserFormFields'
 import { editUserSchema, type EditUserFormValues } from '../../schemas'
 import type { UserResponse, UpdateUserPayload } from '../../api'
+import { USERS_MESSAGES } from '../../messages'
 
 interface EditUserModalProps {
   open: boolean
@@ -56,11 +57,11 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ open, user, onClos
     <Modal
       open={open}
       onClose={handleClose}
-      title={`עריכת משתמש — ${user?.full_name ?? ''}`}
+      title={USERS_MESSAGES.edit.title(user?.full_name ?? '')}
       footer={
         <ModalFormActions
           isLoading={isLoading}
-          submitLabel="שמור שינויים"
+          submitLabel={USERS_MESSAGES.edit.submit}
           onCancel={handleClose}
           onSubmit={onFormSubmit}
         />

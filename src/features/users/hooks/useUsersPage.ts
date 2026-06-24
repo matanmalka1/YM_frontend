@@ -11,22 +11,24 @@ import { useAuthStore } from '@/store/auth.store'
 import { buildUserColumns } from '../components/list/UsersColumns'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 import { USER_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { USERS_MESSAGES } from '../messages'
 
 const USERS_FILTER_FIELDS = [
   {
     type: 'search' as const,
     key: 'search',
-    label: 'חיפוש משתמש',
+    label: USERS_MESSAGES.filters.searchLabel,
     placeholder: USER_SEARCH_PLACEHOLDER,
   },
   {
     type: 'select' as const,
     key: 'is_active',
-    label: 'סטטוס',
+    label: USERS_MESSAGES.filters.statusLabel,
     options: [
-      { value: '', label: 'כל המשתמשים' },
-      { value: 'true', label: 'פעילים בלבד' },
-      { value: 'false', label: 'לא פעילים' },
+      { value: '', label: USERS_MESSAGES.filters.allUsers },
+      { value: 'true', label: USERS_MESSAGES.filters.activeOnly },
+      { value: 'false', label: USERS_MESSAGES.filters.inactive },
     ],
   },
 ]
@@ -74,37 +76,37 @@ export const useUsersPage = () => {
   const createMutation = useMutation({
     mutationFn: (payload: CreateUserPayload) => usersApi.create(payload),
     onSuccess: async () => {
-      toast.success('משתמש נוצר בהצלחה')
+      toast.success(USERS_MESSAGES.mutations.created)
       await invalidateUsers(queryClient)
     },
-    onError: (err) => showErrorToast(err, 'שגיאה ביצירת משתמש'),
+    onError: (err) => showErrorToast(err, USERS_MESSAGES.mutations.createError),
   })
 
   const updateMutation = useMutation({
     mutationFn: ({ userId, payload }: { userId: number; payload: UpdateUserPayload }) =>
       usersApi.update(userId, payload),
     onSuccess: async () => {
-      toast.success('פרטי המשתמש עודכנו')
+      toast.success(USERS_MESSAGES.mutations.updated)
       await invalidateUsers(queryClient)
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בעדכון המשתמש'),
+    onError: (err) => showErrorToast(err, USERS_MESSAGES.mutations.updateError),
   })
 
   const toggleActiveMutation = useMutation({
     mutationFn: ({ userId, isActive }: { userId: number; isActive: boolean }) =>
       isActive ? usersApi.deactivate(userId) : usersApi.activate(userId),
     onSuccess: async (_, { isActive }) => {
-      toast.success(isActive ? 'המשתמש הושבת בהצלחה' : 'המשתמש הופעל בהצלחה')
+      toast.success(isActive ? USERS_MESSAGES.mutations.deactivated : USERS_MESSAGES.mutations.activated)
       await invalidateUsers(queryClient)
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בשינוי סטטוס המשתמש'),
+    onError: (err) => showErrorToast(err, USERS_MESSAGES.mutations.statusError),
   })
 
   const resetPasswordMutation = useMutation({
     mutationFn: ({ userId, newPassword }: { userId: number; newPassword: string }) =>
       usersApi.resetPassword(userId, { new_password: newPassword }),
-    onSuccess: () => toast.success('הסיסמה אופסה בהצלחה'),
-    onError: (err) => showErrorToast(err, 'שגיאה באיפוס הסיסמה'),
+    onSuccess: () => toast.success(USERS_MESSAGES.mutations.passwordReset),
+    onError: (err) => showErrorToast(err, USERS_MESSAGES.mutations.passwordResetError),
   })
 
   // ── Actions ──────────────────────────────────────────────────────────────────
@@ -159,12 +161,12 @@ export const useUsersPage = () => {
     status: {
       isLoading: listPending,
       isFetching: listFetching,
-      error: listError ? getErrorMessage(listError, 'שגיאה בטעינת המשתמשים') : null,
-      loadingMessage: 'טוען משתמשים...',
+      error: listError ? getErrorMessage(listError, USERS_MESSAGES.page.loadError) : null,
+      loadingMessage: USERS_MESSAGES.page.loadingUsers,
     },
     headerProps: {
-      title: 'ניהול משתמשים',
-      description: 'ניהול חשבונות משתמשים, תפקידים והרשאות',
+      title: USERS_MESSAGES.page.title,
+      description: USERS_MESSAGES.page.description,
     },
     filters: {
       fields: USERS_FILTER_FIELDS,
@@ -185,9 +187,9 @@ export const useUsersPage = () => {
       emptyState: {
         isEmpty: users.length === 0,
         isFiltered,
-        title: 'אין משתמשים להצגה',
-        message: 'לא נמצאו משתמשים. הוסף משתמש חדש למערכת.',
-        action: { label: 'משתמש חדש', onClick: () => setShowCreateModal(true) },
+        title: USERS_MESSAGES.page.emptyTitle,
+        message: USERS_MESSAGES.page.emptyMessage,
+        action: { label: USERS_MESSAGES.page.newUser, onClick: () => setShowCreateModal(true) },
       },
     },
     modals: {
@@ -219,12 +221,16 @@ export const useUsersPage = () => {
       },
       toggleActiveProps: {
         open: Boolean(pendingToggle),
-        title: pendingToggle?.is_active ? 'השבתת משתמש' : 'הפעלת משתמש',
+        title: pendingToggle?.is_active
+          ? USERS_MESSAGES.toggleActive.deactivateTitle
+          : USERS_MESSAGES.toggleActive.activateTitle,
         message: pendingToggle?.is_active
-          ? `האם להשבית את המשתמש ${pendingToggle?.full_name}? המשתמש לא יוכל להתחבר למערכת.`
-          : `האם להפעיל את המשתמש ${pendingToggle?.full_name}?`,
-        confirmLabel: pendingToggle?.is_active ? 'השבת' : 'הפעל',
-        cancelLabel: 'ביטול',
+          ? USERS_MESSAGES.toggleActive.deactivateMessage(pendingToggle?.full_name)
+          : USERS_MESSAGES.toggleActive.activateMessage(pendingToggle?.full_name ?? ''),
+        confirmLabel: pendingToggle?.is_active
+          ? USERS_MESSAGES.toggleActive.deactivateConfirm
+          : USERS_MESSAGES.toggleActive.activateConfirm,
+        cancelLabel: GLOBAL_UI_MESSAGES.actions.cancel,
         isLoading: toggleActiveMutation.isPending,
         onConfirm: confirmToggleActive,
         onCancel: () => setPendingToggle(null),

@@ -8,6 +8,7 @@ import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { AuditLogsDrawer, CreateUserModal, EditUserModal, ResetPasswordModal, useUsersPage } from '@/features/users'
 import { Plus } from 'lucide-react'
+import { USERS_MESSAGES } from '../messages'
 
 export const Users: React.FC = () => {
   const { status, headerProps, filters, table, modals, permissions } = useUsersPage()
@@ -15,8 +16,8 @@ export const Users: React.FC = () => {
   if (!permissions.isAdvisor) {
     return (
       <PageContent>
-        <PageHeader title="ניהול משתמשים" description="ניהול חשבונות משתמשים במערכת" />
-        <Alert variant="warning" message="גישה לניהול משתמשים זמינה ליועצים בלבד." />
+        <PageHeader title={USERS_MESSAGES.page.title} description={USERS_MESSAGES.page.advisorOnlyDescription} />
+        <Alert variant="warning" message={USERS_MESSAGES.page.advisorOnlyWarning} />
       </PageContent>
     )
   }
@@ -27,7 +28,7 @@ export const Users: React.FC = () => {
       actions={
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" onClick={modals.openAuditLogs}>
-            לוג ביקורת
+            {USERS_MESSAGES.page.auditLog}
           </Button>
           <Button
             variant="ghost"
@@ -36,7 +37,7 @@ export const Users: React.FC = () => {
             iconPosition="end"
             onClick={modals.openCreate}
           >
-            משתמש חדש
+            {USERS_MESSAGES.page.newUser}
           </Button>
         </div>
       }
@@ -50,7 +51,7 @@ export const Users: React.FC = () => {
       header={header}
       loadingMessage={status.loadingMessage}
     >
-      <FilterPanel {...filters} title="סינון משתמשים" subtitle="חיפוש וסטטוס" />
+      <FilterPanel {...filters} title={USERS_MESSAGES.page.filterTitle} subtitle={USERS_MESSAGES.page.filterSubtitle} />
       <PaginatedDataTable
         data={table.data}
         columns={table.columns}

@@ -5,6 +5,8 @@ import { Input } from '../../../../components/ui/inputs/Input'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { resetPasswordSchema, type ResetPasswordFormValues } from '../../schemas'
 import type { UserResponse } from '../../api'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { USERS_MESSAGES } from '../../messages'
 
 interface ResetPasswordModalProps {
   open: boolean
@@ -50,33 +52,33 @@ export const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
     <Modal
       open={open}
       onClose={handleClose}
-      title={`איפוס סיסמה — ${user?.full_name ?? ''}`}
+      title={USERS_MESSAGES.resetPassword.title(user?.full_name ?? '')}
       footer={
         <div className="flex justify-end gap-3">
           <Button variant="outline" onClick={handleClose} disabled={isLoading}>
-            ביטול
+            {GLOBAL_UI_MESSAGES.actions.cancel}
           </Button>
           <Button variant="danger" onClick={onFormSubmit} isLoading={isLoading}>
-            אפס סיסמה
+            {USERS_MESSAGES.resetPassword.submit}
           </Button>
         </div>
       }
     >
       <form onSubmit={onFormSubmit} className="space-y-4">
-        <p className="text-sm text-gray-600">הזן סיסמה חדשה עבור המשתמש. הסיסמה חייבת להכיל לפחות 8 תווים.</p>
+        <p className="text-sm text-gray-600">{USERS_MESSAGES.resetPassword.description}</p>
         <Input
-          label="סיסמה חדשה *"
+          label={USERS_MESSAGES.resetPassword.newPassword}
           type="password"
           {...register('new_password')}
           error={errors.new_password?.message}
-          placeholder="לפחות 8 תווים"
+          placeholder={USERS_MESSAGES.form.passwordPlaceholder}
         />
         <Input
-          label="אימות סיסמה *"
+          label={USERS_MESSAGES.resetPassword.confirmPassword}
           type="password"
           {...register('confirm_password')}
           error={errors.confirm_password?.message}
-          placeholder="הקלד שוב את הסיסמה"
+          placeholder={USERS_MESSAGES.resetPassword.confirmPasswordPlaceholder}
         />
       </form>
     </Modal>

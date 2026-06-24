@@ -4,6 +4,7 @@ import type { UserResponse } from '../../api'
 import { getRoleLabel } from '../../constants'
 import { formatDateTime } from '../../../../utils/utils'
 import { UserRowActions } from './UserRowActions'
+import { USERS_MESSAGES } from '../../messages'
 
 interface BuildUserColumnsParams {
   onEdit: (user: UserResponse) => void
@@ -20,36 +21,38 @@ export const buildUserColumns = ({
 }: BuildUserColumnsParams): Column<UserResponse>[] => [
   textColumn({
     key: 'full_name',
-    header: 'שם מלא',
+    header: USERS_MESSAGES.columns.fullName,
     valueClassName: 'font-semibold text-gray-900',
     getValue: (user) => user.full_name,
   }),
   textColumn({
     key: 'email',
-    header: 'אימייל',
+    header: USERS_MESSAGES.columns.email,
     getValue: (user) => user.email,
   }),
   {
     key: 'role',
-    header: 'תפקיד',
+    header: USERS_MESSAGES.columns.role,
     render: (user) => <Badge variant={user.role === 'advisor' ? 'info' : 'neutral'}>{getRoleLabel(user.role)}</Badge>,
   },
   {
     key: 'is_active',
-    header: 'סטטוס',
+    header: USERS_MESSAGES.columns.status,
     render: (user) => (
-      <Badge variant={user.is_active ? 'positive' : 'negative'}>{user.is_active ? 'פעיל' : 'מושבת'}</Badge>
+      <Badge variant={user.is_active ? 'positive' : 'negative'}>
+        {user.is_active ? USERS_MESSAGES.columns.active : USERS_MESSAGES.columns.inactive}
+      </Badge>
     ),
   },
   textColumn({
     key: 'last_login_at',
-    header: 'כניסה אחרונה',
+    header: USERS_MESSAGES.columns.lastLogin,
     valueClassName: 'tabular-nums',
     getValue: (user) => formatDateTime(user.last_login_at),
   }),
   textColumn({
     key: 'created_at',
-    header: 'נוצר בתאריך',
+    header: USERS_MESSAGES.columns.createdAt,
     valueClassName: 'tabular-nums',
     getValue: (user) => formatDateTime(user.created_at),
   }),

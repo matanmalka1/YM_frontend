@@ -10,17 +10,10 @@ import { usersApi, usersQK } from '../../api'
 import { formatDateTime } from '../../../../utils/utils'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 import type { ListAuditLogsParams } from '../../api'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { USERS_MESSAGES } from '../../messages'
 
-const auditActionLabel: Record<string, string> = {
-  login_success: 'כניסה למערכת',
-  login_failure: 'כניסה נכשלה',
-  user_created: 'משתמש נוצר',
-  user_updated: 'פרטים עודכנו',
-  user_activated: 'הופעל',
-  user_deactivated: 'הושבת',
-  password_reset: 'סיסמה אופסה',
-  logout: 'יציאה מהמערכת',
-}
+const auditActionLabel: Record<string, string> = USERS_MESSAGES.auditLog.actionLabels
 
 interface AuditLogsDrawerProps {
   open: boolean
@@ -69,12 +62,12 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
     <DetailDrawer
       open={open}
       onClose={handleClose}
-      title="לוג ביקורת משתמשים"
-      subtitle={total > 0 ? `${total} רשומות` : undefined}
+      title={USERS_MESSAGES.auditLog.title}
+      subtitle={total > 0 ? USERS_MESSAGES.auditLog.recordsCount(total) : undefined}
     >
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <DatePicker label="מתאריך" value={fromDate} onChange={handleFromDateChange} compact />
-        <DatePicker label="עד תאריך" value={toDate} onChange={handleToDateChange} compact />
+        <DatePicker label={USERS_MESSAGES.auditLog.fromDate} value={fromDate} onChange={handleFromDateChange} compact />
+        <DatePicker label={USERS_MESSAGES.auditLog.toDate} value={toDate} onChange={handleToDateChange} compact />
       </div>
 
       {isPending && (
@@ -85,9 +78,11 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
         </div>
       )}
 
-      {isError && <p className="text-sm text-negative-600">שגיאה בטעינת לוג הביקורת</p>}
+      {isError && <p className="text-sm text-negative-600">{USERS_MESSAGES.auditLog.loadError}</p>}
 
-      {!isPending && !isError && logs.length === 0 && <p className="text-sm text-gray-500">אין רשומות להצגה</p>}
+      {!isPending && !isError && logs.length === 0 && (
+        <p className="text-sm text-gray-500">{USERS_MESSAGES.auditLog.empty}</p>
+      )}
 
       {!isPending && !isError && logs.length > 0 && (
         <div className="space-y-3">
@@ -100,11 +95,15 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
                       {auditActionLabel[log.action] ?? log.action}
                     </span>
                     <Badge variant={log.status === 'success' ? 'positive' : 'negative'}>
-                      {log.status === 'success' ? 'הצלחה' : 'כישלון'}
+                      {log.status === 'success' ? USERS_MESSAGES.auditLog.success : USERS_MESSAGES.auditLog.failure}
                     </Badge>
                   </div>
-                  {log.email && <p className="text-xs text-gray-500">אימייל: {log.email}</p>}
-                  {log.reason && <p className="text-xs text-gray-500">סיבה: {log.reason}</p>}
+                  {log.email && (
+                    <p className="text-xs text-gray-500">{USERS_MESSAGES.auditLog.emailPrefix(log.email)}</p>
+                  )}
+                  {log.reason && (
+                    <p className="text-xs text-gray-500">{USERS_MESSAGES.auditLog.reasonPrefix(log.reason)}</p>
+                  )}
                   <p className="text-xs text-gray-400">{formatDateTime(log.created_at)}</p>
                 </div>
               </TimelineEntry>
@@ -113,7 +112,7 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
 
           {hasMore && (
             <Button variant="outline" fullWidth onClick={() => setPage((p) => p + 1)} disabled={isPending}>
-              טען עוד ({total - page * PAGE_SIZE} נותרו)
+              {USERS_MESSAGES.auditLog.loadMore(total - page * PAGE_SIZE)}
             </Button>
           )}
         </div>
@@ -121,7 +120,7 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
 
       <div className="pt-2">
         <Button variant="outline" fullWidth onClick={handleClose}>
-          סגירה
+          {GLOBAL_UI_MESSAGES.actions.close}
         </Button>
       </div>
     </DetailDrawer>

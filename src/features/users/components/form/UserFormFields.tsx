@@ -4,6 +4,7 @@ import { PasswordInput } from '../../../../components/ui/inputs/PasswordInput'
 import { Select } from '../../../../components/ui/inputs/Select'
 import type { CreateUserFormValues } from '../../schemas'
 import type { EditUserFormValues } from '../../schemas'
+import { USERS_MESSAGES } from '../../messages'
 
 // Both schemas share these four fields; password is create-only.
 // We use CreateUserFormValues as the widest type (superset of Edit).
@@ -25,26 +26,36 @@ export const UserFormFields: React.FC<UserFormFieldsProps> = ({ register, errors
 
   return (
     <div className="space-y-4">
-      <Input label="שם מלא *" {...reg('full_name')} error={err.full_name?.message} placeholder="ישראל ישראלי" />
       <Input
-        label="אימייל *"
+        label={USERS_MESSAGES.form.fullName}
+        {...reg('full_name')}
+        error={err.full_name?.message}
+        placeholder={USERS_MESSAGES.form.fullNamePlaceholder}
+      />
+      <Input
+        label={USERS_MESSAGES.form.email}
         type="email"
         {...reg('email')}
         error={err.email?.message}
         placeholder="user@example.com"
       />
-      <Input label="טלפון" {...reg('phone')} error={err.phone?.message} placeholder="050-0000000" />
+      <Input label={USERS_MESSAGES.form.phone} {...reg('phone')} error={err.phone?.message} placeholder="050-0000000" />
       <Select
-        label="תפקיד *"
+        label={USERS_MESSAGES.form.role}
         options={[
-          { value: 'secretary', label: 'מזכירה' },
-          { value: 'advisor', label: 'יועץ' },
+          { value: 'secretary', label: USERS_MESSAGES.form.secretary },
+          { value: 'advisor', label: USERS_MESSAGES.form.advisor },
         ]}
         {...reg('role')}
         error={err.role?.message}
       />
       {showPassword && (
-        <PasswordInput label="סיסמה *" {...reg('password')} error={err.password?.message} placeholder="לפחות 8 תווים" />
+        <PasswordInput
+          label={USERS_MESSAGES.form.password}
+          {...reg('password')}
+          error={err.password?.message}
+          placeholder={USERS_MESSAGES.form.passwordPlaceholder}
+        />
       )}
     </div>
   )
