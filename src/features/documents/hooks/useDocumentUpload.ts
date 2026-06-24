@@ -4,6 +4,7 @@ import { documentsApi, documentsQK, type UploadDocumentPayload } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
 import { DOCUMENTS_ERROR_MESSAGES } from '../errorMessages'
+import { DOCUMENTS_MESSAGES } from '../messages'
 
 export const useDocumentUpload = () => {
   const queryClient = useQueryClient()
@@ -13,7 +14,7 @@ export const useDocumentUpload = () => {
     mutationFn: (payload: UploadDocumentPayload) => documentsApi.upload(payload),
     onSuccess: async (_, variables) => {
       setUploadError(null)
-      toast.success('מסמך הועלה בהצלחה')
+      toast.success(DOCUMENTS_MESSAGES.success.uploaded)
       await Promise.all([
         queryClient.invalidateQueries({
           queryKey: documentsQK.clientList(variables.client_record_id),

@@ -10,6 +10,7 @@ import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { dashboardQK } from '../api/queryKeys'
 import { DASHBOARD_ERROR_MESSAGES } from '../errorMessages'
+import { DASHBOARD_MESSAGES } from '../messages'
 
 export type DashboardCreateModal = 'charge' | 'client' | 'vat' | 'advancePayment'
 
@@ -40,7 +41,7 @@ export const useDashboardCreateModals = () => {
   const vatCreateMutation = useMutation({
     mutationFn: (payload: CreateVatWorkItemPayload) => vatReportsApi.create(payload),
     onSuccess: async () => {
-      toast.success('תיק מע"מ נוצר בהצלחה')
+      toast.success(DASHBOARD_MESSAGES.success.vatFileCreated)
       await Promise.all([queryClient.invalidateQueries({ queryKey: vatReportsQK.all }), invalidateDashboardData()])
     },
   })
@@ -49,7 +50,7 @@ export const useDashboardCreateModals = () => {
     mutationFn: ({ clientId, payload }: { clientId: number; payload: CreateAdvancePaymentPayload }) =>
       advancePaymentsApi.create(clientId, payload),
     onSuccess: async () => {
-      toast.success('מקדמה נוצרה בהצלחה')
+      toast.success(DASHBOARD_MESSAGES.success.advancePaymentCreated)
       setAdvancePaymentClientId(null)
       setActiveCreateModal(null)
       advancePaymentClientPicker.resetClientPicker()
@@ -65,7 +66,7 @@ export const useDashboardCreateModals = () => {
     mutationFn: (payload: Parameters<typeof clientsApi.create>[0]) => clientsApi.create(payload),
     onSuccess: async (data) => {
       const summary = data.impact.items.map((item) => `${item.label}: ${item.count}`).join(' | ')
-      toast.success(`לקוח נוצר בהצלחה\n${summary}`)
+      toast.success(DASHBOARD_MESSAGES.success.clientCreated(summary))
       setDeletedClientInfo(null)
       await Promise.all([queryClient.invalidateQueries({ queryKey: clientsQK.all }), invalidateDashboardData()])
     },
@@ -86,7 +87,7 @@ export const useDashboardCreateModals = () => {
   const restoreClientMutation = useMutation({
     mutationFn: (clientId: number) => clientsApi.restore(clientId),
     onSuccess: async (client) => {
-      toast.success('הלקוח שוחזר בהצלחה')
+      toast.success(DASHBOARD_MESSAGES.success.clientRestored)
       setDeletedClientInfo(null)
       setActiveCreateModal(null)
       await Promise.all([queryClient.invalidateQueries({ queryKey: clientsQK.all }), invalidateDashboardData()])

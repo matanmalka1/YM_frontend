@@ -12,6 +12,7 @@ import { getErrorMessage } from '../../../utils/utils'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { useDocumentUpload } from './useDocumentUpload'
 import { toast } from '../../../utils/toast'
+import { DOCUMENTS_MESSAGES } from '../messages'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 import { DOCUMENTS_ERROR_MESSAGES } from '../errorMessages'
 
@@ -55,19 +56,19 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
 
   const handleDelete = async (id: number) => {
     await documentsApi.deleteDocument(clientId, id)
-    toast.success('מסמך נמחק')
+    toast.success(DOCUMENTS_MESSAGES.success.deleted)
     invalidateDocs()
   }
 
   const handleReplace = async (id: number, file: File) => {
     await documentsApi.replaceDocument(clientId, id, file)
-    toast.success('מסמך הוחלף')
+    toast.success(DOCUMENTS_MESSAGES.success.replaced)
     invalidateDocs()
   }
 
   const handleUpdate = async (id: number, payload: UpdateDocumentPayload) => {
     await documentsApi.updateDocument(clientId, id, payload)
-    toast.success('פרטי המסמך עודכנו')
+    toast.success(DOCUMENTS_MESSAGES.success.updated)
     invalidateDocs()
   }
 

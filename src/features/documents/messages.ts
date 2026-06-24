@@ -65,4 +65,10 @@ export const DOCUMENTS_MESSAGES = {
     deleteMessage: 'האם למחוק מסמך זה?',
     deleteConfirm: 'מחק',
   },
+  success: {
+    uploaded: 'מסמך הועלה בהצלחה',
+    deleted: 'מסמך נמחק',
+    replaced: 'מסמך הוחלף',
+    updated: 'פרטי המסמך עודכנו',
+  },
 } as const
