@@ -47,11 +47,7 @@ const ActivityRow = ({ item, isLast }: ActivityRowProps) => {
         {!isLast && <span className="my-1 w-0.5 flex-1 rounded-full bg-slate-100" />}
       </div>
 
-      <Link
-        to={item.href}
-        className={cn('min-w-0 flex-1 hover:opacity-80 transition-opacity', !isLast && 'pb-4')}
-        style={{ paddingTop: '4px' }}
-      >
+      <Link to={item.href} className={cn('min-w-0 flex-1 pt-1 hover:opacity-80 transition-opacity', !isLast && 'pb-4')}>
         <p className="text-sm font-semibold text-slate-800 leading-tight">{item.label}</p>
         <div className="mt-1 flex items-center justify-between gap-2">
           <span className="truncate text-xs font-medium text-slate-400">{item.client_name}</span>

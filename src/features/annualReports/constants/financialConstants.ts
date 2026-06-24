@@ -45,10 +45,10 @@ export const PERCENTAGE_INPUT_PROPS = {
 export const CHART_MARGIN = { top: 4, right: 8, bottom: 4, left: 8 }
 
 export const CHART_LINES = [
-  { dataKey: 'הכנסות', stroke: '#3b82f6', strokeWidth: 2 },
-  { dataKey: 'הוצאות', stroke: '#ef4444', strokeWidth: 2 },
-  { dataKey: 'רווח', stroke: '#22c55e', strokeWidth: 2 },
-  { dataKey: 'מס', stroke: '#f59e0b', strokeWidth: 1.5, strokeDasharray: '4 2' },
+  { dataKey: 'הכנסות', stroke: 'var(--color-primary-500)', strokeWidth: 2 },
+  { dataKey: 'הוצאות', stroke: 'var(--color-negative-500)', strokeWidth: 2 },
+  { dataKey: 'רווח', stroke: 'var(--color-positive-500)', strokeWidth: 2 },
+  { dataKey: 'מס', stroke: 'var(--color-warning-500)', strokeWidth: 1.5, strokeDasharray: '4 2' },
 ] as const
 
 export const VAT_AUTO_POPULATE_SKIPPED_REASON_LABELS: Record<VatAutoPopulateSkippedItem['reason'], string> = {

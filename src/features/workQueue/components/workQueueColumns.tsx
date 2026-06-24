@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
-import { CheckCircle2, ClipboardCheck, ExternalLink, Link2, Loader2, Play, XCircle } from 'lucide-react'
+import { CheckCircle2, ClipboardCheck, ExternalLink, Link2, Play, XCircle } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
+import { Spinner } from '@/components/ui/primitives/Spinner'
 import { Tooltip } from '@/components/ui/primitives/Tooltip'
 import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
 import { formatDate } from '@/utils/utils'
@@ -253,7 +254,7 @@ export const buildWorkQueueColumns = ({
                     <RowActionItem
                       key={action.key}
                       label={activeActionKey === key ? 'מבצע פעולה...' : action.label}
-                      icon={activeActionKey === key ? <Loader2 className="h-4 w-4 animate-spin" /> : actionIcon(action)}
+                      icon={activeActionKey === key ? <Spinner size="sm" /> : actionIcon(action)}
                       danger={action.variant === 'danger'}
                       disabled={action.disabled || activeActionKey === key}
                       tooltip={action.disabled_reason ?? undefined}
