@@ -12,6 +12,8 @@ import type { CorrespondenceEntry } from '../api'
 import type { AuthorityContactResponse } from '@/features/authorityContacts'
 import { CORRESPONDENCE_TYPE_OPTIONS } from '../constants'
 import { getCorrespondenceDefaults, getCorrespondenceFormValues } from '../utils'
+import { CORRESPONDENCE_MESSAGES } from '../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface CorrespondenceModalProps {
   open: boolean
@@ -59,7 +61,7 @@ export const CorrespondenceModal: React.FC<CorrespondenceModalProps> = ({
     reset(getCorrespondenceDefaults())
   })
 
-  const title = existing ? 'עריכת רשומת התכתבות' : 'הוספת רשומת התכתבות'
+  const title = existing ? CORRESPONDENCE_MESSAGES.modal.editTitle : CORRESPONDENCE_MESSAGES.modal.addTitle
 
   return (
     <Modal
@@ -69,30 +71,34 @@ export const CorrespondenceModal: React.FC<CorrespondenceModalProps> = ({
       footer={
         <div className="flex gap-2 justify-end">
           <Button type="button" variant="ghost" disabled={isCreating} onClick={handleClose}>
-            ביטול
+            {GLOBAL_UI_MESSAGES.actions.cancel}
           </Button>
           <Button type="button" isLoading={isCreating} disabled={isCreating} onClick={submit}>
-            {existing ? 'עדכן' : 'הוסף'}
+            {existing ? CORRESPONDENCE_MESSAGES.modal.updateButton : CORRESPONDENCE_MESSAGES.modal.addButton}
           </Button>
         </div>
       }
     >
       <form onSubmit={submit} className="space-y-4">
         <Select
-          label="סוג"
+          label={CORRESPONDENCE_MESSAGES.modal.typeLabel}
           error={errors.correspondence_type?.message}
           options={CORRESPONDENCE_TYPE_OPTIONS}
           {...register('correspondence_type')}
         />
 
-        <Input label="נושא *" error={errors.subject?.message} {...register('subject')} />
+        <Input
+          label={CORRESPONDENCE_MESSAGES.modal.subjectLabel}
+          error={errors.subject?.message}
+          {...register('subject')}
+        />
 
         <Controller
           name="occurred_at"
           control={control}
           render={({ field }) => (
             <DatePicker
-              label="תאריך *"
+              label={CORRESPONDENCE_MESSAGES.modal.dateLabel}
               error={errors.occurred_at?.message}
               value={field.value}
               onChange={field.onChange}
@@ -107,14 +113,14 @@ export const CorrespondenceModal: React.FC<CorrespondenceModalProps> = ({
             control={control}
             render={({ field }) => (
               <Select
-                label="איש קשר (רשות)"
+                label={CORRESPONDENCE_MESSAGES.modal.contactLabel}
                 value={field.value ?? ''}
                 onChange={(e) => {
                   const val = e.target.value
                   field.onChange(val === '' ? null : Number(val))
                 }}
                 options={[
-                  { value: '', label: 'ללא איש קשר' },
+                  { value: '', label: CORRESPONDENCE_MESSAGES.modal.noContactOption },
                   ...contacts.map((c) => ({
                     value: String(c.id),
                     label: `${c.name}${c.office ? ` — ${c.office}` : ''}`,
@@ -125,7 +131,12 @@ export const CorrespondenceModal: React.FC<CorrespondenceModalProps> = ({
           />
         )}
 
-        <Textarea label="הערות" rows={3} placeholder="הוסף הערות..." {...register('notes')} />
+        <Textarea
+          label={CORRESPONDENCE_MESSAGES.modal.notesLabel}
+          rows={3}
+          placeholder={CORRESPONDENCE_MESSAGES.modal.notesPlaceholder}
+          {...register('notes')}
+        />
       </form>
     </Modal>
   )

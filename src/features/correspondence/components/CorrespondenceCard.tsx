@@ -10,6 +10,8 @@ import { CorrespondenceModal } from './CorrespondenceModal'
 import { useCorrespondence } from '../hooks/useCorrespondence'
 import type { CorrespondenceEntry } from '../api'
 import type { CorrespondenceFormValues } from '../schemas'
+import { CORRESPONDENCE_MESSAGES } from '../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface CorrespondenceCardProps {
   businessId: number | undefined
@@ -58,8 +60,8 @@ export const CorrespondenceCard = ({ businessId, clientId }: CorrespondenceCardP
   return (
     <>
       <Card
-        title="יומן תקשורת עם רשויות"
-        subtitle={total > 0 ? `${total} רשומות` : undefined}
+        title={CORRESPONDENCE_MESSAGES.card.title}
+        subtitle={total > 0 ? CORRESPONDENCE_MESSAGES.card.recordsCount(total) : undefined}
         actions={
           <Button
             type="button"
@@ -68,18 +70,18 @@ export const CorrespondenceCard = ({ businessId, clientId }: CorrespondenceCardP
             icon={<Plus className="h-4 w-4" />}
             onClick={() => setModalOpen(true)}
           >
-            הוסף רשומה
+            {CORRESPONDENCE_MESSAGES.card.addRecordButton}
           </Button>
         }
       >
         {error && <Alert variant="error" message={error} />}
 
-        {isLoading && <p className="py-4 text-center text-sm text-gray-500">טוען...</p>}
+        {isLoading && <p className="py-4 text-center text-sm text-gray-500">{GLOBAL_UI_MESSAGES.common.loading}</p>}
 
         {!isLoading && entries.length === 0 && (
           <StateCard
             icon={MessageSquare}
-            message="אין רשומות תקשורת עדיין — הוסף את הרשומה הראשונה"
+            message={CORRESPONDENCE_MESSAGES.card.emptyMessage}
             size="compact"
             variant="minimal"
           />
@@ -114,10 +116,10 @@ export const CorrespondenceCard = ({ businessId, clientId }: CorrespondenceCardP
 
       <ConfirmDialog
         open={confirmDeleteId !== null}
-        title="מחיקת רשומה"
-        message="האם למחוק את הרשומה? פעולה זו אינה הפיכה."
-        confirmLabel="מחק"
-        cancelLabel="ביטול"
+        title={CORRESPONDENCE_MESSAGES.card.deleteModalTitle}
+        message={CORRESPONDENCE_MESSAGES.card.deleteMessage}
+        confirmLabel={CORRESPONDENCE_MESSAGES.card.deleteConfirm}
+        cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
         confirmVariant="danger"
         isLoading={deletingId === confirmDeleteId}
         onConfirm={() => {

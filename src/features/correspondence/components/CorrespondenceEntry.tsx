@@ -4,6 +4,7 @@ import { Button } from '../../../components/ui/primitives/Button'
 import type { CorrespondenceEntry as CorrespondenceEntryType } from '../api'
 import { formatDate } from '../../../utils/utils'
 import { CORRESPONDENCE_TYPE_CONFIG } from '../constants'
+import { CORRESPONDENCE_MESSAGES } from '../messages'
 
 interface CorrespondenceEntryItemProps {
   entry: CorrespondenceEntryType
@@ -41,7 +42,7 @@ export const CorrespondenceEntryItem = ({ entry, isDeleting, onEdit, onDelete }:
               icon={<Edit2 className="h-3.5 w-3.5" />}
               onClick={() => onEdit(entry)}
               className="h-6 w-6 p-0"
-              title="ערוך רשומה"
+              title={CORRESPONDENCE_MESSAGES.entry.editTitle}
             />
             <Button
               type="button"
@@ -51,7 +52,7 @@ export const CorrespondenceEntryItem = ({ entry, isDeleting, onEdit, onDelete }:
               isLoading={isDeleting}
               onClick={() => onDelete(entry.id)}
               className="h-6 w-6 p-0 text-negative-600 hover:bg-negative-50"
-              title="מחק רשומה"
+              title={CORRESPONDENCE_MESSAGES.entry.deleteTitle}
             />
           </div>
         </div>
