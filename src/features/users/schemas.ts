@@ -1,17 +1,22 @@
 import { z } from 'zod'
 import { USER_ROLE_VALUES } from './constants'
 import { passwordSchema } from '@/utils/passwordSchema'
+import { USERS_MESSAGES } from './messages'
 
 // ── Shared field validators ────────────────────────────────────────────────────
 
-const fullNameField = z.string().trim().min(2, 'שם מלא חייב להכיל לפחות 2 תווים').max(50, 'שם מלא ארוך מדי')
+const fullNameField = z
+  .string()
+  .trim()
+  .min(2, USERS_MESSAGES.form.fullNameMin)
+  .max(50, USERS_MESSAGES.form.fullNameMax)
 
-const emailField = z.string().trim().email('כתובת אימייל לא תקינה')
+const emailField = z.string().trim().email(USERS_MESSAGES.form.invalidEmail)
 
 const phoneField = z
   .string()
   .trim()
-  .regex(/^0\d{1,2}-?\d{7}$/, 'מספר טלפון לא תקין')
+  .regex(/^0\d{1,2}-?\d{7}$/, USERS_MESSAGES.form.invalidPhone)
   .optional()
   .or(z.literal(''))
 
@@ -44,7 +49,7 @@ export const resetPasswordSchema = z
     confirm_password: z.string(),
   })
   .refine((data) => data.new_password === data.confirm_password, {
-    message: 'הסיסמאות אינן תואמות',
+    message: USERS_MESSAGES.form.passwordsMismatch,
     path: ['confirm_password'],
   })
 

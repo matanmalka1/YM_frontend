@@ -25,6 +25,11 @@ export const USERS_MESSAGES = {
     inactive: 'לא פעילים',
   },
   form: {
+    fullNameMin: 'שם מלא חייב להכיל לפחות 2 תווים',
+    fullNameMax: 'שם מלא ארוך מדי',
+    invalidEmail: 'כתובת אימייל לא תקינה',
+    invalidPhone: 'מספר טלפון לא תקין',
+    passwordsMismatch: 'הסיסמאות אינן תואמות',
     fullName: 'שם מלא *',
     fullNamePlaceholder: 'ישראל ישראלי',
     email: 'אימייל *',
