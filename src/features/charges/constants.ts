@@ -1,6 +1,6 @@
 import { makeLabelGetter } from '@/utils/labels'
-import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION } from '@/constants/filterOptions.constants'
-import { PERIOD_PATTERN, MONTH_NAMES } from '@/constants/periodOptions.constants'
+import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION, ALL_PERIODS_OPTION } from '@/constants/filterOptions.constants'
+import { PERIOD_PATTERN, NO_PERIOD_LABEL, getMonthlyPeriodOptions } from '@/constants/periodOptions.constants'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import type { ChargeListStats, ChargeStatusStat } from './api'
 import { CHARGES_MESSAGES } from './messages'
@@ -74,20 +74,9 @@ export const CHARGE_TYPE_OPTIONS_WITH_ALL: { value: string; label: string }[] = 
   ...CHARGE_TYPE_OPTIONS,
 ]
 
-const _currentYear = new Date().getFullYear()
-
-const CHARGE_PERIOD_ALL_LABEL = 'כל התקופות'
-export const CHARGE_PERIOD_NONE_LABEL = 'ללא תקופה'
+export const CHARGE_PERIOD_NONE_LABEL = NO_PERIOD_LABEL
 
 export const CHARGE_PERIOD_OPTIONS: { value: string; label: string }[] = [
-  { value: '', label: CHARGE_PERIOD_ALL_LABEL },
-  ...Array.from(
-    { length: CHARGE_PERIOD_YEAR_SPAN * 2 + 1 },
-    (_, i) => _currentYear - CHARGE_PERIOD_YEAR_SPAN + i,
-  ).flatMap((year) =>
-    Array.from({ length: 12 }, (_, m) => ({
-      value: `${year}-${String(m + 1).padStart(2, '0')}`,
-      label: `${MONTH_NAMES[m]} ${year}`,
-    })),
-  ),
+  ALL_PERIODS_OPTION,
+  ...getMonthlyPeriodOptions(CHARGE_PERIOD_YEAR_SPAN),
 ]

@@ -3,6 +3,7 @@ import { formatCurrencyILS, parsePositiveInt } from '@/utils/utils'
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 import { toOptionalNumber, toOptionalString } from '@/utils/filters'
 import { chargesApi, type ChargeStatusStat, type ChargesListParams } from '../api'
+import { getMonthlyPeriodOptions } from '@/constants/periodOptions.constants'
 import { CHARGE_PERIOD_YEAR_SPAN, CHARGE_PERIOD_NONE_LABEL } from '../constants'
 import type { ChargeAction, ChargesFilters } from '../types'
 import { getChargePeriodLabel } from './chargeUtils'
@@ -30,23 +31,12 @@ export const toChargesListParams = (filters: ChargesFilters): ChargesListParams 
   page_size: filters.page_size,
 })
 
-export const buildChargePeriodOptions = (monthsCovered: number) => {
-  const currentYear = new Date().getFullYear()
-  const years = Array.from(
-    { length: CHARGE_PERIOD_YEAR_SPAN * 2 + 1 },
-    (_, index) => currentYear - CHARGE_PERIOD_YEAR_SPAN + index,
-  )
-
-  return [
-    { value: '', label: CHARGE_PERIOD_NONE_LABEL },
-    ...years.flatMap((year) =>
-      Array.from({ length: 12 }, (_, monthIndex) => {
-        const value = `${year}-${String(monthIndex + 1).padStart(2, '0')}`
-        return { value, label: getChargePeriodLabel(value, monthsCovered) }
-      }),
-    ),
-  ]
-}
+export const buildChargePeriodOptions = (monthsCovered: number) => [
+  { value: '', label: CHARGE_PERIOD_NONE_LABEL },
+  ...getMonthlyPeriodOptions(CHARGE_PERIOD_YEAR_SPAN, (period) =>
+    getChargePeriodLabel(period, monthsCovered),
+  ),
+]
 
 export const runChargeActionRequest = (chargeId: number, action: ChargeAction, reason?: string) => {
   if (action === 'issue_charge') return chargesApi.issue(chargeId)

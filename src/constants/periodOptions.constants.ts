@@ -1,6 +1,9 @@
 /** Shared YYYY-MM period regex. Matches backend PeriodStr. */
 export const PERIOD_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/
 
+/** Label for records with no monthly period. */
+export const NO_PERIOD_LABEL = 'ללא תקופה'
+
 export const MONTHS_COVERED_OPTIONS = [
   { value: '1', label: 'חודשי' },
   { value: '2', label: 'דו-חודשי' },
@@ -62,6 +65,24 @@ const getPeriodLabel = (names: typeof MONTH_NAMES, period: string, periodMonthsC
   return `${names[monthIndex]}-${names[endMonthIndex]}`
 }
 
+/**
+ * Monthly period options across a year window centered on the current year (±yearSpan).
+ * Values are `YYYY-MM`; labels default to `<month> <year>`, override via formatLabel.
+ */
+export const getMonthlyPeriodOptions = (
+  yearSpan: number,
+  formatLabel: (period: string) => string = (period) =>
+    getReportingPeriodLabelWithYear(period, 1, null),
+): { value: string; label: string }[] => {
+  const currentYear = new Date().getFullYear()
+  return Array.from({ length: yearSpan * 2 + 1 }, (_, i) => currentYear - yearSpan + i).flatMap((year) =>
+    Array.from({ length: 12 }, (_, m) => {
+      const value = `${year}-${String(m + 1).padStart(2, '0')}`
+      return { value, label: formatLabel(value) }
+    }),
+  )
+}
+
 export const getReportingPeriodMonthLabel = (period: string, periodMonthsCount: 1 | 2 = 1): string =>
   getPeriodLabel(MONTH_NAMES, period, periodMonthsCount)
 
@@ -74,7 +95,7 @@ export const getReportingPeriodLabelWithYear = (
   periodMonthsCount: number | null,
   taxYear: number | null,
 ): string => {
-  if (!period) return taxYear != null ? String(taxYear) : 'ללא תקופה'
+  if (!period) return taxYear != null ? String(taxYear) : NO_PERIOD_LABEL
   if (!PERIOD_PATTERN.test(period)) return period
 
   const year = period.slice(0, 4)
