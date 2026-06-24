@@ -16,6 +16,7 @@ import { useNotificationDetail } from './useNotificationDetail'
 import { buildNotificationColumns } from '../components/list/NotificationsColumns'
 import { NOTIFICATION_STATUS_OPTIONS, NOTIFICATION_TRIGGER_OPTIONS } from '../constants'
 import { NOTIFICATIONS_MESSAGES } from '../messages'
+import { NOTIFICATIONS_ERROR_MESSAGES } from '../errorMessages'
 
 const DEFAULT_PAGE_SIZE = PAGE_SIZE_25
 
@@ -135,7 +136,7 @@ export const useNotificationsPage = () => {
     status: {
       isLoading: isPending,
       isFetching,
-      error: error ? NOTIFICATIONS_MESSAGES.page.loadError : null,
+      error: error ? NOTIFICATIONS_ERROR_MESSAGES.page.loadError : null,
       loadingMessage: NOTIFICATIONS_MESSAGES.page.loading,
     },
     headerProps: {

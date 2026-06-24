@@ -4,11 +4,12 @@ import { toast } from '../../../utils/toast'
 import { getErrorMessage } from '../../../utils/utils'
 import type { NotificationPreviewRequest, NotificationResult, NotificationSendVariables } from '../api'
 import { NOTIFICATIONS_MESSAGES } from '../messages'
+import { NOTIFICATIONS_ERROR_MESSAGES } from '../errorMessages'
 
 export const usePreviewNotification = () => {
   const mutation = useMutation({
     mutationFn: (payload: NotificationPreviewRequest) => notificationsApi.preview(payload),
-    onError: (err) => toast.error(getErrorMessage(err, NOTIFICATIONS_MESSAGES.form.previewError)),
+    onError: (err) => toast.error(getErrorMessage(err, NOTIFICATIONS_ERROR_MESSAGES.form.previewError)),
   })
 
   return {
@@ -32,14 +33,14 @@ export const useSendNotification = () => {
       if (result.status === 'sent') {
         toast.success(NOTIFICATIONS_MESSAGES.form.sendSuccess)
       } else if (result.status === 'skipped') {
-        toast.warning(NOTIFICATIONS_MESSAGES.form.sendSkippedNoEmail)
+        toast.warning(NOTIFICATIONS_ERROR_MESSAGES.form.sendSkippedNoEmail)
       } else if (result.status === 'blocked') {
-        toast.error(result.reason ?? NOTIFICATIONS_MESSAGES.form.blockedFallback)
+        toast.error(result.reason ?? NOTIFICATIONS_ERROR_MESSAGES.form.blockedFallback)
       } else {
-        toast.error(result.reason ?? NOTIFICATIONS_MESSAGES.form.sendError)
+        toast.error(result.reason ?? NOTIFICATIONS_ERROR_MESSAGES.form.sendError)
       }
     },
-    onError: (err) => toast.error(getErrorMessage(err, NOTIFICATIONS_MESSAGES.form.sendError)),
+    onError: (err) => toast.error(getErrorMessage(err, NOTIFICATIONS_ERROR_MESSAGES.form.sendError)),
   })
 
   return {

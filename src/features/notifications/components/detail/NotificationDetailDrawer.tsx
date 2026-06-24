@@ -8,6 +8,7 @@ import type { NotificationDetail } from '../../api'
 import { NOTIFICATION_STATUS_LABELS } from '../../constants'
 import { getDomainLabel, getTriggerLabel } from '../list/NotificationsColumns'
 import { NOTIFICATIONS_MESSAGES } from '../../messages'
+import { NOTIFICATIONS_ERROR_MESSAGES } from '../../errorMessages'
 
 interface NotificationDetailDrawerProps {
   open: boolean
@@ -50,7 +51,7 @@ export const NotificationDetailDrawer = ({
     }
   >
     {isLoading && <Alert variant="info" message={NOTIFICATIONS_MESSAGES.detail.loading} />}
-    {error ? <Alert variant="error" message={NOTIFICATIONS_MESSAGES.detail.loadError} /> : null}
+    {error ? <Alert variant="error" message={NOTIFICATIONS_ERROR_MESSAGES.detail.loadError} /> : null}
     {notification && (
       <div className="space-y-4">
         <DrawerSection title={NOTIFICATIONS_MESSAGES.detail.sectionDetails}>

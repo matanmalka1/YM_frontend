@@ -10,6 +10,7 @@ import { usePreviewNotification, useSendNotification } from '../../hooks/useSend
 import { CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS, TRIGGER_LABELS, isNotificationTrigger } from '../../api'
 import type { NotificationTrigger } from '../../api'
 import { NOTIFICATIONS_MESSAGES } from '../../messages'
+import { NOTIFICATIONS_ERROR_MESSAGES } from '../../errorMessages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 const DOMAIN_LABELS: Partial<Record<NotificationTrigger, string>> = NOTIFICATIONS_MESSAGES.form.domainLabels
@@ -88,7 +89,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
   const handlePreview = async (overrideClientId?: number) => {
     const cid = overrideClientId ?? resolvedClientRecordId
     if (cid == null) {
-      setClientError(NOTIFICATIONS_MESSAGES.form.clientRequired)
+      setClientError(NOTIFICATIONS_ERROR_MESSAGES.form.clientRequired)
       return
     }
     setClientError(undefined)
@@ -101,7 +102,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
       entity_id: entityId,
     })
     if (result.status === 'blocked') {
-      setBlockedReason(result.reason ?? NOTIFICATIONS_MESSAGES.form.blockedFallback)
+      setBlockedReason(result.reason ?? NOTIFICATIONS_ERROR_MESSAGES.form.blockedFallback)
       return
     }
     setSubject(result.subject ?? '')
@@ -146,13 +147,13 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
     const trimmedBody = body.trim()
 
     if (!trimmedSubject) {
-      setSubjectError(NOTIFICATIONS_MESSAGES.form.subjectRequired)
+      setSubjectError(NOTIFICATIONS_ERROR_MESSAGES.form.subjectRequired)
       valid = false
     } else {
       setSubjectError(undefined)
     }
     if (!trimmedBody) {
-      setBodyError(NOTIFICATIONS_MESSAGES.form.bodyRequired)
+      setBodyError(NOTIFICATIONS_ERROR_MESSAGES.form.bodyRequired)
       valid = false
     } else {
       setBodyError(undefined)

@@ -13,6 +13,7 @@ import { DetailTabPanel } from '../../../../components/ui/layout'
 import { InlineState } from '../../../../components/ui/feedback'
 import type { NotificationsTabProps } from '../../types'
 import { NOTIFICATIONS_MESSAGES } from '../../messages'
+import { NOTIFICATIONS_ERROR_MESSAGES } from '../../errorMessages'
 
 export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecordId }) => {
   const { data, isLoading } = useNotifications({
@@ -52,7 +53,7 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
               {NOTIFICATIONS_MESSAGES.tab.pending(summary.pending)}
             </Badge>
             <Badge variant="negative" size="sm">
-              {NOTIFICATIONS_MESSAGES.tab.failed(summary.failed)}
+              {NOTIFICATIONS_ERROR_MESSAGES.tab.failed(summary.failed)}
             </Badge>
           </div>
         ) : null
