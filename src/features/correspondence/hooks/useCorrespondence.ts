@@ -7,6 +7,7 @@ import type { CorrespondenceFormValues } from '../schemas'
 import { CORRESPONDENCE_LIST_PARAMS } from '../constants'
 import { toCreateCorrespondencePayload, toUpdateCorrespondencePayload } from '../utils'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+import { CORRESPONDENCE_ERROR_MESSAGES } from '../errorMessages'
 
 export const useCorrespondence = (businessId: number | undefined, clientId?: number, loadContacts = false) => {
   const resolvedClientId = clientId ?? 0
@@ -35,7 +36,7 @@ export const useCorrespondence = (businessId: number | undefined, clientId?: num
     mutationFn: (values: CorrespondenceFormValues) =>
       correspondenceApi.create(resolvedClientId, toCreateCorrespondencePayload(values, businessId)),
     successMessage: 'רשומת התכתבות נוספה בהצלחה',
-    errorMessage: 'שגיאה בהוספת רשומה',
+    errorMessage: CORRESPONDENCE_ERROR_MESSAGES.create,
     invalidateKeys: [queryKey],
   })
 
@@ -43,14 +44,14 @@ export const useCorrespondence = (businessId: number | undefined, clientId?: num
     mutationFn: ({ id, values }: { id: number; values: CorrespondenceFormValues }) =>
       correspondenceApi.update(resolvedClientId, id, toUpdateCorrespondencePayload(values, businessId)),
     successMessage: 'רשומת התכתבות עודכנה בהצלחה',
-    errorMessage: 'שגיאה בעדכון רשומה',
+    errorMessage: CORRESPONDENCE_ERROR_MESSAGES.update,
     invalidateKeys: [queryKey],
   })
 
   const deleteMutation = useMutationWithToast({
     mutationFn: (id: number) => correspondenceApi.delete(resolvedClientId, id),
     successMessage: 'רשומת התכתבות נמחקה בהצלחה',
-    errorMessage: 'שגיאה במחיקת רשומה',
+    errorMessage: CORRESPONDENCE_ERROR_MESSAGES.delete,
     invalidateKeys: [queryKey],
   })
 
@@ -60,7 +61,7 @@ export const useCorrespondence = (businessId: number | undefined, clientId?: num
     entries: listData?.items ?? [],
     total: listData?.total ?? 0,
     isLoading: listLoading,
-    error: listError ? getErrorMessage(listError, 'שגיאה בטעינת התכתבויות') : null,
+    error: listError ? getErrorMessage(listError, CORRESPONDENCE_ERROR_MESSAGES.load) : null,
     contacts: contactsData?.items ?? [],
     createEntry: (values: CorrespondenceFormValues) => createMutation.mutateAsync(values),
     isCreating: createMutation.isPending,
