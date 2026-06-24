@@ -9,11 +9,9 @@ type Tone = SemanticTone | 'purple'
 
 const purpleTone = { iconBg: 'bg-violet-50 text-violet-500' }
 
-const getToneClasses = (tone: Tone) =>
-  tone === 'purple' ? purpleTone : semanticStatToneClasses[tone]
+const getToneClasses = (tone: Tone) => (tone === 'purple' ? purpleTone : semanticStatToneClasses[tone])
 
-const getBadgeVariant = (tone: Tone): BadgeVariant =>
-  tone === 'purple' ? 'info' : tone
+const getBadgeVariant = (tone: Tone): BadgeVariant => (tone === 'purple' ? 'info' : tone)
 
 interface DashboardSurfaceProps {
   children: ReactNode
@@ -46,7 +44,9 @@ export const DashboardSectionHeader = ({
   <div className={cn('flex items-center justify-between gap-4', className)}>
     <div className="flex min-w-0 items-center gap-3">
       {Icon && (
-        <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl', getToneClasses(tone).iconBg)}>
+        <span
+          className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl', getToneClasses(tone).iconBg)}
+        >
           <Icon className="h-4 w-4" />
         </span>
       )}

@@ -51,9 +51,7 @@ export const Clients: React.FC = () => {
       header={header}
       loadingMessage={status.loadingMessage}
     >
-      {!permissions.can.editClients && (
-        <Alert variant="info" message={CLIENTS_MESSAGES.list.viewOnlyNotice} />
-      )}
+      {!permissions.can.editClients && <Alert variant="info" message={CLIENTS_MESSAGES.list.viewOnlyNotice} />}
       {!isEmptyState && (
         <>
           <ClientsStatsSection stats={stats.values} />

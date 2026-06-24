@@ -7,7 +7,6 @@ import { Card } from '@/components/ui/primitives/Card'
 import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
 import type { VatDashboardPeriodStat } from '../../api/contracts'
 
-
 const getTone = (stat: VatDashboardPeriodStat): SemanticTone => {
   if (stat.pending <= 0) return 'positive'
   return stat.completion_percent >= 80 ? 'warning' : 'negative'

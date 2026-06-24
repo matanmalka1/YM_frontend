@@ -190,7 +190,9 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
           title={CLIENTS_MESSAGES.statusCard.documentsTitle}
           primary={firstBusinessId == null ? '—' : `${documents.present_count}/${documents.total_count}`}
           secondary={
-            firstBusinessId == null ? CLIENTS_MESSAGES.statusCard.noBusinesses : CLIENTS_MESSAGES.statusCard.documentsExist
+            firstBusinessId == null
+              ? CLIENTS_MESSAGES.statusCard.noBusinesses
+              : CLIENTS_MESSAGES.statusCard.documentsExist
           }
           to={CLIENT_ROUTES.documents(clientId)}
           disabled={firstBusinessId == null}

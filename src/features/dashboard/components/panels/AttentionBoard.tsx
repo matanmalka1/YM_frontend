@@ -119,7 +119,9 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
         {item.due_date && (
           <span className="text-xs font-medium tabular-nums text-slate-500">{formatDate(item.due_date)}</span>
         )}
-        <span className={cn('text-2xs font-semibold tabular-nums', urgency.delta)}>{dueDateLabel(item.days_delta)}</span>
+        <span className={cn('text-2xs font-semibold tabular-nums', urgency.delta)}>
+          {dueDateLabel(item.days_delta)}
+        </span>
       </div>
     </Link>
   )

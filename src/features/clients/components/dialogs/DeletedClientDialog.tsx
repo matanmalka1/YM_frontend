@@ -80,9 +80,7 @@ export const DeletedClientDialog: React.FC<Props> = ({
             <span className="font-medium">{CLIENTS_MESSAGES.deletedClientDialog.createExplanationLead}</span>
             {CLIENTS_MESSAGES.deletedClientDialog.createExplanationRest}
           </p>
-          {!isAdvisor && (
-            <p className="text-warning-700">{CLIENTS_MESSAGES.deletedClientDialog.advisorOnlyNotice}</p>
-          )}
+          {!isAdvisor && <p className="text-warning-700">{CLIENTS_MESSAGES.deletedClientDialog.advisorOnlyNotice}</p>}
         </div>
       </div>
     </Modal>

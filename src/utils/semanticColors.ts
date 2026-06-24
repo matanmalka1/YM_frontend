@@ -50,8 +50,16 @@ export const semanticSoftSignalBadgeClasses: Record<SemanticTone, string> = {
 }
 
 const badgeExtras: Record<'primary' | 'purple', { solid: string; signal: string; soft: string }> = {
-  primary: { solid: 'bg-primary-600 text-white', signal: 'bg-primary-50 text-primary-700 ring-1 ring-primary-200', soft: 'bg-primary-50 text-primary-700' },
-  purple:  { solid: 'bg-purple-100 text-purple-700', signal: 'bg-purple-50 text-purple-700 ring-1 ring-purple-200', soft: 'bg-purple-50 text-purple-700' },
+  primary: {
+    solid: 'bg-primary-600 text-white',
+    signal: 'bg-primary-50 text-primary-700 ring-1 ring-primary-200',
+    soft: 'bg-primary-50 text-primary-700',
+  },
+  purple: {
+    solid: 'bg-purple-100 text-purple-700',
+    signal: 'bg-purple-50 text-purple-700 ring-1 ring-purple-200',
+    soft: 'bg-purple-50 text-purple-700',
+  },
 }
 
 export const badgeVariantClasses: Record<BadgeVariant, string> = {

@@ -211,7 +211,9 @@ export const ClientTaxProfileSection = ({
         <ReadonlyField
           label={CLIENTS_MESSAGES.edit.advanceRateUpdatedAt}
           value={
-            client.advance_rate_updated_at ? formatDate(client.advance_rate_updated_at) : CLIENTS_MESSAGES.edit.notAvailable
+            client.advance_rate_updated_at
+              ? formatDate(client.advance_rate_updated_at)
+              : CLIENTS_MESSAGES.edit.notAvailable
           }
           help={CLIENTS_MESSAGES.edit.advanceRateUpdatedAtHelp}
         />

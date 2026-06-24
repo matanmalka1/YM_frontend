@@ -301,7 +301,11 @@ export const RowActionsMenu: React.FC<RowActionsMenuProps> = ({ ariaLabel, child
 
   return (
     <div className="flex justify-center">
-      <DropdownMenu ariaLabel={ariaLabel ?? GLOBAL_UI_MESSAGES.common.actions} title={title} menuClassName={menuClassName}>
+      <DropdownMenu
+        ariaLabel={ariaLabel ?? GLOBAL_UI_MESSAGES.common.actions}
+        title={title}
+        menuClassName={menuClassName}
+      >
         {isGrouped
           ? visibleGroups.map((group, index) => (
               <Fragment key={group.key ?? index}>
