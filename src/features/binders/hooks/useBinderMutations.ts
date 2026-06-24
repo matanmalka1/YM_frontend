@@ -1,12 +1,13 @@
 import { bindersApi, bindersQK } from '../api'
 import { useMutationWithToast } from '../../../hooks/useMutationWithToast'
 import { BINDERS_MESSAGES } from '../messages'
+import { BINDERS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useBinderMutations = (onDeleteSuccess: () => void) => {
   const deleteMutation = useMutationWithToast<void, number>({
     mutationFn: (binderId) => bindersApi.delete(binderId),
     successMessage: BINDERS_MESSAGES.mutations.deleteSuccess,
-    errorMessage: BINDERS_MESSAGES.mutations.deleteError,
+    errorMessage: BINDERS_ERROR_MESSAGES.mutations.deleteError,
     invalidateKeys: [bindersQK.all],
     onSuccess: onDeleteSuccess,
   })
@@ -17,28 +18,28 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
   >({
     mutationFn: (binderId) => bindersApi.markReadyForHandover(binderId),
     successMessage: BINDERS_MESSAGES.mutations.markReadySuccess,
-    errorMessage: BINDERS_MESSAGES.mutations.markReadyError,
+    errorMessage: BINDERS_ERROR_MESSAGES.mutations.markReadyError,
     invalidateKeys: [bindersQK.all],
   })
 
   const receiveMaterialMutation = useMutationWithToast<Awaited<ReturnType<typeof bindersApi.receiveMaterial>>, number>({
     mutationFn: (binderId) => bindersApi.receiveMaterial(binderId),
     successMessage: BINDERS_MESSAGES.mutations.receiveMaterialSuccess,
-    errorMessage: BINDERS_MESSAGES.mutations.receiveMaterialError,
+    errorMessage: BINDERS_ERROR_MESSAGES.mutations.receiveMaterialError,
     invalidateKeys: [bindersQK.all],
   })
 
   const markFullMutation = useMutationWithToast<Awaited<ReturnType<typeof bindersApi.markFull>>, number>({
     mutationFn: (binderId) => bindersApi.markFull(binderId),
     successMessage: BINDERS_MESSAGES.mutations.markFullSuccess,
-    errorMessage: BINDERS_MESSAGES.mutations.markFullError,
+    errorMessage: BINDERS_ERROR_MESSAGES.mutations.markFullError,
     invalidateKeys: [bindersQK.all],
   })
 
   const reopenCapacityMutation = useMutationWithToast<Awaited<ReturnType<typeof bindersApi.reopenCapacity>>, number>({
     mutationFn: (binderId) => bindersApi.reopenCapacity(binderId),
     successMessage: BINDERS_MESSAGES.mutations.reopenCapacitySuccess,
-    errorMessage: BINDERS_MESSAGES.mutations.reopenCapacityError,
+    errorMessage: BINDERS_ERROR_MESSAGES.mutations.reopenCapacityError,
     invalidateKeys: [bindersQK.all],
   })
 
@@ -55,8 +56,8 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
     successMessage: (response) =>
       response.length > 0
         ? BINDERS_MESSAGES.mutations.bulkReadySuccess(response.length)
-        : BINDERS_MESSAGES.mutations.bulkReadyEmpty,
-    errorMessage: BINDERS_MESSAGES.mutations.bulkReadyError,
+        : BINDERS_ERROR_MESSAGES.mutations.bulkReadyEmpty,
+    errorMessage: BINDERS_ERROR_MESSAGES.mutations.bulkReadyError,
     invalidateKeys: [bindersQK.all],
   })
 
@@ -66,7 +67,7 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
   >({
     mutationFn: (binderId) => bindersApi.revertReadyForHandover(binderId),
     successMessage: BINDERS_MESSAGES.mutations.revertReadySuccess,
-    errorMessage: BINDERS_MESSAGES.mutations.revertReadyError,
+    errorMessage: BINDERS_ERROR_MESSAGES.mutations.revertReadyError,
     invalidateKeys: [bindersQK.all],
   })
 
@@ -77,7 +78,7 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
     mutationFn: ({ binderId, handoverRecipientName }) =>
       bindersApi.handoverToClient(binderId, { handover_recipient_name: handoverRecipientName }),
     successMessage: BINDERS_MESSAGES.mutations.handoverSuccess,
-    errorMessage: BINDERS_MESSAGES.mutations.handoverError,
+    errorMessage: BINDERS_ERROR_MESSAGES.mutations.handoverError,
     invalidateKeys: [bindersQK.all],
   })
 
@@ -104,7 +105,7 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
         notes: payload.notes ?? null,
       }),
     successMessage: (handover) => BINDERS_MESSAGES.mutations.bulkHandoverSuccess(handover.binder_ids.length),
-    errorMessage: BINDERS_MESSAGES.mutations.bulkHandoverError,
+    errorMessage: BINDERS_ERROR_MESSAGES.mutations.bulkHandoverError,
     invalidateKeys: [bindersQK.all],
   })
 

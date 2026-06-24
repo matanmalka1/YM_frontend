@@ -22,6 +22,7 @@ import { PAGE_SIZE_XS } from '@/constants/pagination.constants'
 import { ANNUAL_BINDER_TYPES, PERIODIC_BINDER_TYPES } from '../constants'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { BINDERS_MESSAGES } from '../messages'
+import { BINDERS_ERROR_MESSAGES } from '../errorMessages'
 
 const getDefaultValues = (): ReceiveBinderFormValues => ({
   client_record_id: undefined as unknown as number,
@@ -270,10 +271,10 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
     },
     onError: (err) => {
       if (getHttpStatus(err) === 409) {
-        toast.error(BINDERS_MESSAGES.receive.duplicateBinderNumber)
+        toast.error(BINDERS_ERROR_MESSAGES.receive.duplicateBinderNumber)
         return
       }
-      showErrorToast(err, BINDERS_MESSAGES.receive.receiveError)
+      showErrorToast(err, BINDERS_ERROR_MESSAGES.receive.receiveError)
     },
   })
 

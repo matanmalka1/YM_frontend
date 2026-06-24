@@ -16,6 +16,7 @@ import { formatDate, getErrorMessage } from '@/utils/utils'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 import { BINDERS_MESSAGES } from '../../messages'
+import { BINDERS_ERROR_MESSAGES } from '../../errorMessages'
 
 interface BinderDocumentsSectionProps {
   binderId: number
@@ -49,7 +50,7 @@ export const BinderDocumentsSection: React.FC<BinderDocumentsSectionProps> = ({ 
       {isLoading ? (
         <p className="text-sm text-gray-400">{BINDERS_MESSAGES.documents.loading}</p>
       ) : error ? (
-        <p className="text-sm text-negative-600">{getErrorMessage(error, BINDERS_MESSAGES.documents.loadError)}</p>
+        <p className="text-sm text-negative-600">{getErrorMessage(error, BINDERS_ERROR_MESSAGES.documents.loadError)}</p>
       ) : documents.length === 0 ? (
         <p className="text-sm text-gray-500">{BINDERS_MESSAGES.documents.empty}</p>
       ) : (
