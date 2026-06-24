@@ -12,6 +12,7 @@ import { VatSendBackForm } from '../form/VatSendBackForm'
 import { VatFileModal } from '../form/VatFileModal'
 import { isFiled } from '../../utils/vatHelpers'
 import type { VatWorkItemSummaryBarProps } from '../../types'
+import { VAT_MESSAGES } from '../../messages'
 
 type AlertTone = 'warning' | 'negative'
 
@@ -53,7 +54,7 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
 
       {workItem.is_overdue && (workItem.extended_deadline ?? workItem.submission_deadline) && (
         <AlertBanner tone="negative">
-          תאריך הגשה חלף — {formatDate(workItem.extended_deadline ?? workItem.submission_deadline)}
+          {VAT_MESSAGES.summary.overdueDeadline(formatDate(workItem.extended_deadline ?? workItem.submission_deadline))}
         </AlertBanner>
       )}
 
@@ -61,7 +62,7 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
         workItem.days_until_deadline != null &&
         workItem.days_until_deadline <= VAT_DEADLINE_WARNING_DAYS && (
           <AlertBanner tone="warning" icon={Clock}>
-            נותרו {workItem.days_until_deadline} ימים להגשה
+            {VAT_MESSAGES.summary.daysRemaining(workItem.days_until_deadline)}
           </AlertBanner>
         )}
 
@@ -69,7 +70,7 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
         <AlertBanner tone="warning">
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="warning" size="xs" className="font-semibold">
-              סכום מע&quot;מ עוקף
+              {VAT_MESSAGES.summary.overriddenAmount}
             </Badge>
             {workItem.override_justification && (
               <span className="text-warning-700">{workItem.override_justification}</span>
@@ -84,7 +85,7 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-100 pt-3">
           {showSendBack ? (
             <div className="w-full">
-              <p className="mb-2 text-sm font-medium text-warning-700">הוספת הערה לתיקון</p>
+              <p className="mb-2 text-sm font-medium text-warning-700">{VAT_MESSAGES.summary.sendBackNoteTitle}</p>
               <VatSendBackForm
                 loading={isLoading}
                 onCancel={() => setShowSendBack(false)}

@@ -23,6 +23,8 @@ import {
 import type { VatInvoiceEditRowProps } from '../../types'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { blockNonNumericKey } from '../../utils/viewHelpers'
+import { VAT_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
   invoice,
@@ -135,7 +137,7 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
           size="xs"
           className="w-24 font-mono"
           inputMode="decimal"
-          aria-label='סכום כולל מע"מ'
+          aria-label={VAT_MESSAGES.form.grossAmountLabel}
           onKeyDown={(e) => {
             if (e.key === 'Escape') {
               e.preventDefault()
@@ -165,7 +167,7 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
             onKeyDown={handleEscapeKeyDown}
             disabled={isSaving}
             className="p-1 text-positive-600 hover:bg-positive-50 hover:text-positive-600"
-            aria-label="שמור"
+            aria-label={VAT_MESSAGES.actions.save}
           />
           <Button
             type="button"
@@ -175,7 +177,7 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
             onClick={onCancel}
             onKeyDown={handleEscapeKeyDown}
             className="p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
-            aria-label="ביטול"
+            aria-label={GLOBAL_UI_MESSAGES.actions.cancel}
           />
         </div>
       </td>

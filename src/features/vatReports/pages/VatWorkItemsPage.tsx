@@ -11,6 +11,7 @@ import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
+import { VAT_MESSAGES } from '../messages'
 
 export const VatWorkItems: React.FC = () => {
   const { headerProps, stats, filters, table, modals, permissions } = useVatWorkItemsPage()
@@ -28,19 +29,17 @@ export const VatWorkItems: React.FC = () => {
               iconPosition="end"
               onClick={modals.openCreate}
             >
-              דוח מע״מ חדש
+              {VAT_MESSAGES.actions.newVatReport}
             </Button>
           ) : undefined
         }
       />
 
-      {!permissions.isAdvisor && (
-        <Alert variant="info" message='צפייה בלבד. פתיחת תיקי מע"מ זמינה ליועץ. ניתן לבצע הקלדת נתונים בתוך כל תיק.' />
-      )}
+      {!permissions.isAdvisor && <Alert variant="info" message={VAT_MESSAGES.list.viewOnlyNotice} />}
 
       {stats.visible && <VatWorkItemsStatsSection stats={stats} />}
 
-      <FilterPanel {...filters} title="סינון דוחות מע״מ" subtitle="לקוח, שנה, סטטוס וסוג דיווח" />
+      <FilterPanel {...filters} title={VAT_MESSAGES.list.filterTitle} subtitle={VAT_MESSAGES.list.filterSubtitle} />
 
       <VatWorkItemsGroupedCards
         groups={table.groups}

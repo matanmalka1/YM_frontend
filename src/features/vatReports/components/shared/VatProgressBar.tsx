@@ -2,6 +2,7 @@ import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { VAT_WORKFLOW_STEPS } from '../../constants/vatConstants'
 import type { VatProgressBarProps } from '../../types'
+import { VAT_MESSAGES } from '../../messages'
 
 export const VatProgressBar: React.FC<VatProgressBarProps> = ({ currentStatus }) => {
   const currentIdx = VAT_WORKFLOW_STEPS.indexOf(currentStatus as (typeof VAT_WORKFLOW_STEPS)[number])
@@ -13,7 +14,7 @@ export const VatProgressBar: React.FC<VatProgressBarProps> = ({ currentStatus })
   return (
     <div className="flex items-center gap-3 rounded-lg border border-gray-100 bg-gray-50 px-3 py-2">
       <Badge variant="neutral" size="xs" className="shrink-0 tabular-nums shadow-sm ring-1 ring-gray-200">
-        שלב {step}/{total}
+        {VAT_MESSAGES.progress.step(step, total)}
       </Badge>
       <ProgressBar
         value={percent}

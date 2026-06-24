@@ -14,6 +14,7 @@ import {
   vatFileModalSchema,
   type VatFileModalFormValues,
 } from '../../schemas/fileVatReturn.schema'
+import { VAT_MESSAGES } from '../../messages'
 
 interface VatFileModalProps {
   open: boolean
@@ -65,7 +66,7 @@ export const VatFileModal: React.FC<VatFileModalProps> = ({
   return (
     <Modal
       open={open}
-      title='הגשת דוח מע"מ'
+      title={VAT_MESSAGES.form.filingModalTitle}
       isDirty={isDirty}
       onClose={handleClose}
       footer={
@@ -74,7 +75,7 @@ export const VatFileModal: React.FC<VatFileModalProps> = ({
           isLoading={isLoading}
           submitType="button"
           onSubmit={() => void submitForm()}
-          submitLabel="הגש"
+          submitLabel={VAT_MESSAGES.actions.file}
         />
       }
     >
@@ -82,7 +83,7 @@ export const VatFileModal: React.FC<VatFileModalProps> = ({
         <div>
           <Select
             id="vat-file-submission-method"
-            label="אופן הגשה"
+            label={VAT_MESSAGES.form.filingMethodLabel}
             value={filingMethod}
             onChange={(e) =>
               setValue('submission_method', e.target.value as VatFileModalFormValues['submission_method'], {
@@ -100,19 +101,19 @@ export const VatFileModal: React.FC<VatFileModalProps> = ({
         </div>
 
         <Input
-          label="מספר אסמכתא (לא חובה)"
-          placeholder="מספר אסמכתא מרשות המסים"
+          label={VAT_MESSAGES.form.submissionReferenceLabel}
+          placeholder={VAT_MESSAGES.form.submissionReferencePlaceholder}
           {...register('submission_reference')}
         />
 
-        <Checkbox label="תיקון להגשה קודמת" {...register('is_amendment')} />
+        <Checkbox label={VAT_MESSAGES.form.amendmentLabel} {...register('is_amendment')} />
 
         {isAmendment && (
           <Input
-            label="מזהה ההגשה המקורית"
+            label={VAT_MESSAGES.form.amendsItemIdLabel}
             type="number"
             min={1}
-            placeholder="מזהה דוח מע״מ מקורי"
+            placeholder={VAT_MESSAGES.form.amendsItemIdPlaceholder}
             error={errors.amends_item_id?.message}
             {...register('amends_item_id')}
           />

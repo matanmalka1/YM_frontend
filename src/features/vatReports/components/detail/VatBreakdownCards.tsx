@@ -6,6 +6,7 @@ import { cn } from '@/utils/utils'
 import { semanticStatToneClasses } from '@/utils/semanticColors'
 import { formatVatAmount } from '../../utils/vatHelpers'
 import type { VatBreakdownData } from '../../utils/vatBreakdown'
+import { VAT_MESSAGES } from '../../messages'
 
 interface VatOutputCardProps {
   data: VatBreakdownData
@@ -82,9 +83,9 @@ const VatCard: React.FC<VatCardProps> = ({ title, tone, onNavigate, children }) 
             icon={<ChevronLeft className="h-4 w-4" />}
             iconPosition="end"
             onClick={onNavigate}
-            aria-label="עבור לפרטים"
+            aria-label={VAT_MESSAGES.actions.goToDetails}
           >
-            צפה בפירוט
+            {VAT_MESSAGES.actions.viewDetails}
           </Button>
         )}
       </div>
@@ -96,12 +97,21 @@ const VatCard: React.FC<VatCardProps> = ({ title, tone, onNavigate, children }) 
 // ── Output (income) card ──────────────────────────────────────────────────────
 
 export const VatOutputCard: React.FC<VatOutputCardProps> = ({ data, onNavigate }) => (
-  <VatCard title='מע"מ עסקאות – מכירות' tone="positive" onNavigate={onNavigate}>
+  <VatCard title={VAT_MESSAGES.breakdown.outputTitle} tone="positive" onNavigate={onNavigate}>
     <div className="space-y-2 text-sm">
-      <VatAmountRow label='סה"כ מכירות (ללא מע"מ)' value={formatVatAmount(data.totalIncomeNet)} />
-      <VatAmountRow label='שיעור מע"מ' value="לפי שיעור המערכת" className="text-gray-400" />
+      <VatAmountRow label={VAT_MESSAGES.breakdown.totalIncomeNet} value={formatVatAmount(data.totalIncomeNet)} />
+      <VatAmountRow
+        label={VAT_MESSAGES.breakdown.vatRate}
+        value={VAT_MESSAGES.breakdown.systemRate}
+        className="text-gray-400"
+      />
     </div>
-    <VatTotalRow label='מע"מ עסקאות' value={formatVatAmount(data.totalOutputVat)} tone="positive" className="mt-4" />
+    <VatTotalRow
+      label={VAT_MESSAGES.breakdown.outputVat}
+      value={formatVatAmount(data.totalOutputVat)}
+      tone="positive"
+      className="mt-4"
+    />
   </VatCard>
 )
 
@@ -110,14 +120,9 @@ VatOutputCard.displayName = 'VatOutputCard'
 // ── Input (expense) card ──────────────────────────────────────────────────────
 
 export const VatInputCard: React.FC<VatInputCardProps> = ({ data, onNavigate }) => (
-  <VatCard title='מע"מ תשומות – הוצאות' tone="warning" onNavigate={onNavigate}>
+  <VatCard title={VAT_MESSAGES.breakdown.inputTitle} tone="warning" onNavigate={onNavigate}>
     {data.totalExpenseNet > 0 && data.totalInputVat === 0 && (
-      <Alert
-        variant="neutral"
-        size="sm"
-        message='הוצאות אלו אינן מזכות בניכוי מע"מ לפי הקטגוריות שהוזנו.'
-        className="mb-3"
-      />
+      <Alert variant="neutral" size="sm" message={VAT_MESSAGES.breakdown.nonDeductibleExpenseNote} className="mb-3" />
     )}
     <div className="space-y-1.5 text-sm">
       {data.expenseRows.map((row) => (
@@ -137,11 +142,11 @@ export const VatInputCard: React.FC<VatInputCardProps> = ({ data, onNavigate }) 
       ))}
     </div>
     <div className="mt-3 space-y-1.5 border-t border-gray-100 pt-3 text-sm">
-      <VatAmountRow label='סה"כ הוצאות (ללא מע"מ)' value={formatVatAmount(data.totalExpenseNet)} />
-      <VatAmountRow label='מע"מ בחשבוניות' value={formatVatAmount(data.totalGrossVat)} />
+      <VatAmountRow label={VAT_MESSAGES.breakdown.totalExpenseNet} value={formatVatAmount(data.totalExpenseNet)} />
+      <VatAmountRow label={VAT_MESSAGES.breakdown.invoiceVat} value={formatVatAmount(data.totalGrossVat)} />
     </div>
     <VatTotalRow
-      label='מע"מ תשומות לניכוי'
+      label={VAT_MESSAGES.breakdown.deductibleInputVat}
       value={formatVatAmount(data.totalInputVat)}
       tone="warning"
       className="mt-3"

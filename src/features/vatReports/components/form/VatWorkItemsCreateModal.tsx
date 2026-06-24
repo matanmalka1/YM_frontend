@@ -13,6 +13,7 @@ import {
   type VatWorkItemCreateFormValues,
 } from '../../schemas/workItem.schema'
 import type { VatWorkItemsCreateModalProps } from '../../types'
+import { VAT_MESSAGES } from '../../messages'
 
 export const VatWorkItemsCreateModal: React.FC<VatWorkItemsCreateModalProps> = ({
   open,
@@ -110,7 +111,7 @@ export const VatWorkItemsCreateModal: React.FC<VatWorkItemsCreateModalProps> = (
   return (
     <Modal
       open={open}
-      title='פתיחת תיק מע"מ חדש'
+      title={VAT_MESSAGES.form.createModalTitle}
       isDirty={isDirty}
       onClose={handleClose}
       footer={
@@ -119,7 +120,7 @@ export const VatWorkItemsCreateModal: React.FC<VatWorkItemsCreateModalProps> = (
           isLoading={createLoading}
           submitType="submit"
           submitForm="vat-work-items-create-form"
-          submitLabel="פתיחת תיק"
+          submitLabel={VAT_MESSAGES.form.createSubmitLabel}
         />
       }
     >
@@ -133,7 +134,7 @@ export const VatWorkItemsCreateModal: React.FC<VatWorkItemsCreateModalProps> = (
                 onQueryChange={handleClientQueryChange}
                 onSelect={handleSelectClient}
                 onClear={handleClearClient}
-                label="לקוח *"
+                label={VAT_MESSAGES.form.clientLabel}
                 error={showClientError ? errors.client_id?.message : undefined}
               />
               <input type="hidden" {...register('client_id')} />
@@ -158,12 +159,12 @@ export const VatWorkItemsCreateModal: React.FC<VatWorkItemsCreateModalProps> = (
           <input type="hidden" {...register('period')} />
         </div>
 
-        <Checkbox label="ממתין לחומרים" {...register('mark_pending')} />
+        <Checkbox label={VAT_MESSAGES.form.pendingMaterialsLabel} {...register('mark_pending')} />
 
         {watch('mark_pending') && (
           <Input
-            label="הערה לחומרים חסרים"
-            placeholder="פרט אילו מסמכים חסרים..."
+            label={VAT_MESSAGES.form.pendingMaterialsNoteLabel}
+            placeholder={VAT_MESSAGES.form.pendingMaterialsNotePlaceholder}
             error={errors.pending_materials_note?.message}
             {...register('pending_materials_note')}
           />

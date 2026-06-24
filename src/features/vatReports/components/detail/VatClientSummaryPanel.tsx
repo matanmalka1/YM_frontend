@@ -13,14 +13,15 @@ import { useVatClientSummary } from '../../hooks/useVatClientSummary'
 import type { VatClientSummaryPanelProps } from '../../types'
 import { canOpenVatPeriodRow, getClientSummaryRowsForYear } from '../../utils/viewHelpers'
 import { VatClientSummaryStatsSection } from './VatClientSummaryStatsSection'
+import { VAT_MESSAGES } from '../../messages'
 
 const YearSummary = ({ annual }: { annual: VatAnnualSummary }) => {
   return (
     <section className="space-y-3">
       <div className="mb-3">
         <div>
-          <h3 className="text-sm font-semibold text-gray-900">סיכום מע״מ לשנת {annual.year}</h3>
-          <p className="mt-0.5 text-xs text-gray-500">נתוני התקופות שהוקלדו והוגשו עבור הלקוח</p>
+          <h3 className="text-sm font-semibold text-gray-900">{VAT_MESSAGES.clientSummary.yearTitle(annual.year)}</h3>
+          <p className="mt-0.5 text-xs text-gray-500">{VAT_MESSAGES.clientSummary.yearSubtitle}</p>
         </div>
       </div>
       <VatClientSummaryStatsSection annual={annual} />
@@ -58,7 +59,7 @@ export const VatClientSummaryPanel = ({ clientId }: VatClientSummaryPanelProps) 
       setCreateOpen(false)
       return true
     } catch (err) {
-      setCreateError(showErrorToast(err, 'שגיאה ביצירת תיק המע״מ'))
+      setCreateError(showErrorToast(err, VAT_MESSAGES.detail.createWorkItemError))
       return false
     }
   }
@@ -79,9 +80,7 @@ export const VatClientSummaryPanel = ({ clientId }: VatClientSummaryPanelProps) 
         onYearChange={setSelectedYear}
       />
 
-      {error && (
-        <InlineState variant="error" icon={AlertTriangle} title="שגיאה בטעינת נתוני מע״מ. אנא נסה שוב מאוחר יותר." />
-      )}
+      {error && <InlineState variant="error" icon={AlertTriangle} title={VAT_MESSAGES.detail.loadClientVatError} />}
 
       {!error && selectedAnnual && <YearSummary annual={selectedAnnual} />}
 
@@ -90,10 +89,10 @@ export const VatClientSummaryPanel = ({ clientId }: VatClientSummaryPanelProps) 
         <>
           {isLoading ? (
             <div className="flex justify-center py-10">
-              <Spinner label="טוען נתוני מע״מ" />
+              <Spinner label={VAT_MESSAGES.detail.loadingClientVat} />
             </div>
           ) : !selectedAnnual || rows.length === 0 ? (
-            <InlineState title="אין תקופות מע״מ ללקוח זה" />
+            <InlineState title={VAT_MESSAGES.detail.noClientPeriods} />
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {rows.map((row) => (

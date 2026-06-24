@@ -10,6 +10,7 @@ import { useActiveVatBinder } from '../../hooks/useActiveVatBinder'
 import { getVatWorkItemStatusLabel, VAT_STATUS_BADGE_VARIANTS } from '../../constants/vatConstants'
 import { VatExportButtons } from '../shared/VatExportButtons'
 import type { VatWorkItemResponse } from '../../api'
+import { VAT_MESSAGES } from '../../messages'
 
 interface VatWorkItemHeaderActionsProps {
   workItem: VatWorkItemResponse
@@ -29,12 +30,12 @@ export const VatWorkItemHeaderActions: React.FC<VatWorkItemHeaderActionsProps> =
             className="inline-flex items-center gap-1 rounded-full border border-info-200 bg-info-50 px-2.5 py-0.5 text-xs font-medium text-info-700 transition-colors hover:bg-info-100"
           >
             <FolderOpen className="h-3 w-3" />
-            קלסר {activeBinder.binder_number}
+            {VAT_MESSAGES.detail.binderLabel(activeBinder.binder_number)}
           </Link>
         )}
         {workItem.assigned_to !== null && (
           <Badge variant="neutral" size="sm" icon={<User className="h-3 w-3" />}>
-            <span className="text-gray-400">מטפל:</span>
+            <span className="text-gray-400">{VAT_MESSAGES.detail.assigneeLabel}</span>
             {workItem.assigned_to_name ?? `#${workItem.assigned_to}`}
           </Badge>
         )}
@@ -51,7 +52,7 @@ export const VatWorkItemHeaderActions: React.FC<VatWorkItemHeaderActionsProps> =
             icon={<Bell className="h-3.5 w-3.5" />}
             onClick={() => setShowNotificationModal(true)}
           >
-            תזכורת מסמכים
+            {VAT_MESSAGES.actions.documentsReminder}
           </Button>
         )}
       </div>

@@ -5,6 +5,7 @@ import { formatVatAmount, getVatDeductionRateClass, getVatDeductionRateLabel } f
 import type { VatCategoryTableProps } from '../../types'
 import type { ExpenseCategoryRow } from '../../utils/vatBreakdown'
 import { VAT_DEDUCTIBLE_ACCENT } from '../../constants/visualizationTokens'
+import { VAT_MESSAGES } from '../../messages'
 
 export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({
   rows,
@@ -20,14 +21,14 @@ export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({
   const columns: Column<ExpenseCategoryRow>[] = [
     {
       key: 'category',
-      header: 'קטגוריה',
+      header: VAT_MESSAGES.categoryTable.category,
       align: 'right',
       render: (row) => <span className="font-medium text-gray-900">{row.label}</span>,
-      footer: 'סה"כ',
+      footer: VAT_MESSAGES.categoryTable.total,
     },
     {
       key: 'rate',
-      header: '% ניכוי',
+      header: VAT_MESSAGES.categoryTable.deductionPercent,
       align: 'right',
       className: 'font-mono tabular-nums',
       render: (row) => (
@@ -39,7 +40,7 @@ export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({
     },
     {
       key: 'gross',
-      header: 'הוצאה ברוטו',
+      header: VAT_MESSAGES.categoryTable.grossExpense,
       align: 'right',
       className: 'font-mono tabular-nums',
       render: (row) => <span className="text-gray-600">{formatVatAmount(row.netAmount + row.grossVat)}</span>,
@@ -47,7 +48,7 @@ export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({
     },
     {
       key: 'invoiceVat',
-      header: 'מע"מ בחשבוניות',
+      header: VAT_MESSAGES.categoryTable.invoiceVat,
       align: 'right',
       className: 'font-mono tabular-nums',
       render: (row) => <span className="text-gray-600">{formatVatAmount(row.grossVat)}</span>,
@@ -55,7 +56,7 @@ export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({
     },
     {
       key: 'deductible',
-      header: 'מע"מ לניכוי',
+      header: VAT_MESSAGES.categoryTable.deductibleVat,
       align: 'right',
       className: 'font-mono tabular-nums',
       render: (row) => (
@@ -71,9 +72,11 @@ export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({
 
   return (
     <section className="space-y-3">
-      <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400">פירוט לפי קטגוריה</h3>
+      <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400">
+        {VAT_MESSAGES.detail.categoryBreakdownTitle}
+      </h3>
       {showNonDeductibleNote && (
-        <Alert variant="neutral" size="sm" message='קטגוריות אלו אינן מזכות בניכוי מע"מ לפי הנתונים שהוזנו.' />
+        <Alert variant="neutral" size="sm" message={VAT_MESSAGES.detail.categoryNonDeductibleNote} />
       )}
 
       <DataTable

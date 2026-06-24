@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Select } from '@/components/ui/inputs/Select'
 import { useVatPeriodOptions } from '../../hooks/useVatPeriodOptions'
+import { VAT_MESSAGES } from '../../messages'
 
 interface VatPeriodSelectProps {
   clientId: number
@@ -28,23 +29,27 @@ export const VatPeriodSelect: React.FC<VatPeriodSelectProps> = ({
     () => [
       {
         value: '',
-        label: !isValidClient ? 'בחר לקוח תחילה' : isLoading ? 'טוען תקופות...' : 'בחר תקופה...',
+        label: !isValidClient
+          ? VAT_MESSAGES.periodSelect.chooseClientFirst
+          : isLoading
+            ? VAT_MESSAGES.periodSelect.loadingPeriods
+            : VAT_MESSAGES.periodSelect.choosePeriod,
       },
       ...periodOptions.map((opt) => ({
         value: opt.period,
-        label: `${opt.label}${opt.is_opened ? ' (קיים תיק)' : ''}`,
+        label: opt.is_opened ? VAT_MESSAGES.periodSelect.existingWorkItemSuffix(opt.label) : opt.label,
         disabled: opt.is_opened,
       })),
     ],
     [isValidClient, isLoading, periodOptions],
   )
 
-  const combinedError = error || (!selectedPeriodExists ? 'התקופה שנבחרה אינה זמינה ללקוח זה' : undefined)
+  const combinedError = error || (!selectedPeriodExists ? VAT_MESSAGES.periodSelect.unavailablePeriod : undefined)
 
   return (
     <>
       <Select
-        label="תקופת דיווח *"
+        label={VAT_MESSAGES.periodSelect.reportingPeriodLabel}
         error={combinedError}
         fieldClassName={className}
         value={value}
@@ -53,10 +58,10 @@ export const VatPeriodSelect: React.FC<VatPeriodSelectProps> = ({
         disabled={!isValidClient || isLoading}
       />
       {periodType === 'bimonthly' && (
-        <p className={`text-xs text-gray-500 ${className ?? ''}`}>הלקוח מוגדר לדיווח דו-חודשי</p>
+        <p className={`text-xs text-gray-500 ${className ?? ''}`}>{VAT_MESSAGES.periodSelect.bimonthlyClient}</p>
       )}
       {!isLoading && isValidClient && periodOptions.length === 0 && (
-        <p className={`text-xs text-gray-500 ${className ?? ''}`}>לא נמצאו תקופות זמינות לשנה זו</p>
+        <p className={`text-xs text-gray-500 ${className ?? ''}`}>{VAT_MESSAGES.periodSelect.noAvailablePeriods}</p>
       )}
     </>
   )

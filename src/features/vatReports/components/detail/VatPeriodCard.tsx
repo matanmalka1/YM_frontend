@@ -9,12 +9,13 @@ import { getVatClientSummaryStatusVariant } from '../../constants/vatConstants'
 import { getVatWorkItemStatusLabel } from '../../constants/vatConstants'
 import { formatVatAmount } from '../../utils/vatHelpers'
 import { formatVatPeriodLabel, getNetVatTone } from '../../utils/viewHelpers'
+import { VAT_MESSAGES } from '../../messages'
 
 const getDaysToDueLabel = (days: number | null): { label: string; overdue: boolean } | null => {
   if (days === null) return null
-  if (days === 0) return { label: 'היום', overdue: false }
-  if (days > 0) return { label: `עוד ${days} ימים`, overdue: false }
-  return { label: `באיחור ${Math.abs(days)} ימים`, overdue: true }
+  if (days === 0) return { label: VAT_MESSAGES.periodCard.today, overdue: false }
+  if (days > 0) return { label: VAT_MESSAGES.periodCard.daysRemaining(days), overdue: false }
+  return { label: VAT_MESSAGES.periodCard.daysOverdue(Math.abs(days)), overdue: true }
 }
 
 type MonoTone = 'neutral' | 'positive' | 'negative' | 'warning' | 'critical'
@@ -55,13 +56,14 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
 
   const dueDateLabel = isFiled && row.filed_at ? formatDate(row.filed_at) : formatDate(row.submission_deadline)
 
-  const dueDateRowLabel = isFiled && row.filed_at ? 'תאריך הגשה' : 'מועד הגשה'
+  const dueDateRowLabel =
+    isFiled && row.filed_at ? VAT_MESSAGES.periodCard.filedAtLabel : VAT_MESSAGES.periodCard.dueDateLabel
 
   const daysToDue = isFiled ? null : getDaysToDueLabel(row.days_until_deadline)
 
   const netVat = Number(row.net_vat)
   const isRefund = netVat < 0
-  const netLabel = isRefund ? 'נטו להחזר' : 'נטו לתשלום'
+  const netLabel = isRefund ? VAT_MESSAGES.periodCard.netRefund : VAT_MESSAGES.periodCard.netPayment
   const netBg = isRefund ? 'bg-positive-50' : 'bg-gray-50'
   const netTextClass = getNetVatTone(row.net_vat)
 
@@ -84,19 +86,19 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
           {daysToDue && (
             <VatMetricRow
               icon={<Clock className="h-4 w-4" />}
-              label="ימים למועד"
+              label={VAT_MESSAGES.periodCard.daysToDueLabel}
               value={daysToDue.label}
               tone={daysToDue.overdue ? 'negative' : 'positive'}
             />
           )}
           <VatMetricRow
             icon={<TrendingUp className="h-4 w-4" />}
-            label="מע״מ עסקאות"
+            label={VAT_MESSAGES.periodCard.outputVat}
             value={formatVatAmount(row.total_output_vat)}
           />
           <VatMetricRow
             icon={<TrendingDown className="h-4 w-4" />}
-            label="מע״מ תשומות"
+            label={VAT_MESSAGES.periodCard.inputVat}
             value={formatVatAmount(row.total_input_vat)}
           />
         </div>
@@ -126,7 +128,7 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
           disabled={disabled}
           className="mt-auto"
         >
-          פתח דוח
+          {VAT_MESSAGES.actions.openVatReport}
         </Button>
       </div>
     </Card>

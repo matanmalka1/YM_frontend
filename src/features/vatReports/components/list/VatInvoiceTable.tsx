@@ -26,6 +26,8 @@ import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { useDeleteInvoice, useUpdateInvoice } from '../../hooks/useVatInvoiceMutations'
 import { VatInvoiceEditRow } from './VatInvoiceEditRow'
 import type { VatInvoiceTableProps } from '../../types'
+import { VAT_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 type Invoice = VatInvoiceTableProps['invoices'][number]
 
@@ -57,7 +59,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
     return (
       <InlineState
         icon={Receipt}
-        title={emptyMessage ?? 'אין חשבוניות עדיין'}
+        title={emptyMessage ?? VAT_MESSAGES.invoices.emptyTitle}
         description={emptyHint}
         className="rounded-lg border border-dashed border-gray-200 bg-gray-50/50"
       />
@@ -67,7 +69,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
   const columns: Column<Invoice>[] = [
     {
       key: 'number',
-      header: 'מספר',
+      header: VAT_MESSAGES.invoices.number,
       align: 'right',
       className: `border-r-2 ${accentBorder} font-mono text-xs text-gray-500`,
       render: (inv) => (
@@ -78,7 +80,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
               title={VAT_EXCEPTIONAL_INVOICE_TOOLTIP}
               className="mr-1.5 rounded bg-warning-100 px-1 py-0.5 text-xs font-medium text-warning-700"
             >
-              חריגה
+              {VAT_MESSAGES.invoices.exceptional}
             </span>
           )}
         </>
@@ -86,28 +88,28 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
     },
     {
       key: 'date',
-      header: 'תאריך',
+      header: VAT_MESSAGES.invoices.date,
       align: 'right',
       className: 'text-gray-500',
       render: (inv) => formatDate(inv.invoice_date),
     },
     {
       key: 'counterparty_name',
-      header: 'ספק / לקוח',
+      header: VAT_MESSAGES.invoices.counterparty,
       align: 'right',
       className: 'font-medium text-gray-700',
       render: (inv) => inv.counterparty_name,
     },
     {
       key: 'counterparty_id',
-      header: 'ח.פ / ע.מ',
+      header: VAT_MESSAGES.invoices.counterpartyId,
       align: 'right',
       className: 'whitespace-nowrap text-xs text-gray-500',
       render: (inv) => (inv.counterparty_id ? <span className="font-mono">{inv.counterparty_id}</span> : '—'),
     },
     {
       key: 'document_type',
-      header: 'סוג מסמך',
+      header: VAT_MESSAGES.invoices.documentType,
       align: 'right',
       render: (inv) =>
         inv.document_type ? (
@@ -120,7 +122,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
     },
     {
       key: 'rate_type',
-      header: 'סוג עסקה',
+      header: VAT_MESSAGES.invoices.rateType,
       align: 'right',
       render: (inv) =>
         inv.rate_type && inv.rate_type !== 'standard' ? (
@@ -133,7 +135,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
       ? ([
           {
             key: 'expense_category',
-            header: 'קטגוריה',
+            header: VAT_MESSAGES.invoices.category,
             align: 'right',
             render: (inv) => (
               <span className="inline-flex items-center gap-1.5">
@@ -150,7 +152,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
       : []),
     {
       key: 'deduction_rate',
-      header: '% הכרה',
+      header: VAT_MESSAGES.invoices.recognitionPercent,
       align: 'right',
       className: 'whitespace-nowrap',
       render: (inv) => (
@@ -161,14 +163,14 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
     },
     {
       key: 'net_amount',
-      header: 'נטו ₪',
+      header: VAT_MESSAGES.invoices.netAmount,
       align: 'right',
       className: 'font-medium font-mono tabular-nums',
       render: (inv) => formatVatAmount(inv.net_amount),
     },
     {
       key: 'vat_amount',
-      header: 'מע"מ ₪',
+      header: VAT_MESSAGES.invoices.vatAmount,
       align: 'right',
       className: 'font-mono tabular-nums text-gray-500',
       render: (inv) => formatVatAmount(inv.vat_amount),
@@ -177,7 +179,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
       ? ([
           {
             key: 'deductible_vat',
-            header: 'מע"מ לניכוי',
+            header: VAT_MESSAGES.invoices.deductibleVat,
             align: 'right',
             className: `font-mono tabular-nums font-semibold ${semanticMonoToneClasses.positive}`,
             render: (inv) => formatVatAmount(Number(inv.vat_amount) * Number(inv.deduction_rate)),
@@ -186,14 +188,14 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
       : []),
     {
       key: 'created_by',
-      header: 'נוצר ע"י',
+      header: VAT_MESSAGES.invoices.createdBy,
       align: 'right',
       className: 'font-mono text-xs text-gray-400',
       render: (inv) => `#${inv.created_by}`,
     },
     {
       key: 'created_at',
-      header: 'נוצר ב',
+      header: VAT_MESSAGES.invoices.createdAt,
       align: 'right',
       className: 'whitespace-nowrap text-xs tabular-nums text-gray-400',
       render: (inv) => formatDateTime(inv.created_at),
@@ -206,16 +208,16 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
             align: 'right',
             headerClassName: 'w-16',
             render: (inv) => (
-              <RowActionsMenu ariaLabel={`פעולות עבור ${getVatInvoiceActionLabel(inv)}`}>
+              <RowActionsMenu ariaLabel={VAT_MESSAGES.invoices.rowActionsAriaLabel(getVatInvoiceActionLabel(inv))}>
                 <RowActionItem
-                  label="עריכה"
+                  label={VAT_MESSAGES.actions.edit}
                   onClick={() => setEditingId(inv.id)}
                   disabled={editingId !== null}
                   icon={<Pencil className="h-4 w-4" />}
                 />
                 <RowActionSeparator />
                 <RowActionItem
-                  label="מחק"
+                  label={VAT_MESSAGES.actions.delete}
                   onClick={() => setConfirmId(inv.id)}
                   disabled={editingId !== null}
                   icon={<Trash2 className="h-4 w-4" />}
@@ -251,7 +253,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
           <tr>
             <td colSpan={totalCols - (canEdit ? 3 : 2)} className="px-4 py-2.5 text-right">
               <span className="inline-flex items-center gap-2">
-                <span className="text-xs font-semibold text-gray-500">סה&quot;כ</span>
+                <span className="text-xs font-semibold text-gray-500">{VAT_MESSAGES.categoryTable.total}</span>
                 <Badge variant="neutral" size="xs" className="bg-gray-200 px-2 font-bold text-gray-600">
                   {invoices.length}
                 </Badge>
@@ -272,10 +274,10 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
       />
       <ConfirmDialog
         open={confirmId !== null}
-        title="מחיקת חשבונית"
-        message="האם למחוק את החשבונית? פעולה זו אינה הפיכה."
-        confirmLabel="מחק"
-        cancelLabel="ביטול"
+        title={VAT_MESSAGES.invoices.deleteTitle}
+        message={VAT_MESSAGES.invoices.deleteMessage}
+        confirmLabel={VAT_MESSAGES.actions.delete}
+        cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
         confirmVariant="danger"
         isLoading={isDeleting}
         onConfirm={async () => {

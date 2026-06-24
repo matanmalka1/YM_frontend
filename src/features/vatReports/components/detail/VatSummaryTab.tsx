@@ -5,6 +5,7 @@ import { VatOutputCard, VatInputCard } from './VatBreakdownCards'
 import { VatCategoryTable } from './VatCategoryTable'
 import { formatVatAmount } from '../../utils/vatHelpers'
 import type { VatSummaryTabProps } from '../../types'
+import { VAT_MESSAGES } from '../../messages'
 
 export const VatSummaryTab: React.FC<VatSummaryTabProps> = ({ workItem, invoices }) => {
   const { setSearchParams } = useSearchParamFilters()
@@ -16,7 +17,7 @@ export const VatSummaryTab: React.FC<VatSummaryTabProps> = ({ workItem, invoices
         <div className="flex items-center justify-between rounded-xl border border-warning-300 bg-warning-50 px-5 py-4">
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-5 w-5 shrink-0 text-warning-500" />
-            <span className="text-sm font-semibold text-warning-800">סכום מע&quot;מ סופי (עוקף)</span>
+            <span className="text-sm font-semibold text-warning-800">{VAT_MESSAGES.detail.overriddenFinalAmount}</span>
           </div>
           <span className="font-mono text-3xl font-bold tabular-nums text-warning-700">
             {formatVatAmount(workItem.final_vat_amount)}

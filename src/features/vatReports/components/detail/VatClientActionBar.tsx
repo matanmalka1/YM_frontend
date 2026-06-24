@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/primitives/Button'
 import { Divider } from '@/components/ui/primitives/Divider'
 import { Select } from '@/components/ui/inputs/Select'
 import { VatExportButtons } from '../shared/VatExportButtons'
+import { VAT_MESSAGES } from '../../messages'
 
 interface VatClientActionBarProps {
   clientId: number
@@ -31,7 +32,7 @@ export const VatClientActionBar = ({
           variant="ghost"
           className="w-full justify-center sm:w-auto"
         >
-          פתיחת דוח מע״מ
+          {VAT_MESSAGES.actions.openNewVatReport}
         </Button>
       </div>
 

@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/primitives/Button'
 import { canMarkMaterialsComplete, canMarkReadyForReview, canFile, canSendBack } from '../../utils/vatHelpers'
 import { isClientClosed } from '@/utils/clientStatus'
 import type { VatActionButtonsProps } from '../../types'
+import { VAT_MESSAGES } from '../../messages'
 
 export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
   workItem,
@@ -34,7 +35,7 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
           disabled={actionsDisabled}
           onClick={onMaterialsComplete}
         >
-          אישור קבלת חומרים
+          {VAT_MESSAGES.actions.materialsComplete}
         </Button>
       )}
       {showReadyForReview && (
@@ -46,7 +47,7 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
           disabled={actionsDisabled}
           onClick={onReadyForReview}
         >
-          שלח לבדיקה
+          {VAT_MESSAGES.actions.readyForReview}
         </Button>
       )}
       {showFile && (
@@ -58,7 +59,7 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
           disabled={actionsDisabled}
           onClick={onFile}
         >
-          הגש מע&quot;מ
+          {VAT_MESSAGES.actions.fileVat}
         </Button>
       )}
       {showSendBack && (
@@ -71,7 +72,7 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
           onClick={onSendBack}
           className="border-warning-200 bg-warning-50 text-warning-700 hover:bg-warning-100"
         >
-          החזר לתיקון
+          {VAT_MESSAGES.actions.sendBack}
         </Button>
       )}
     </div>

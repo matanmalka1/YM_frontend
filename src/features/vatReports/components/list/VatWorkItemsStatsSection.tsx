@@ -1,5 +1,6 @@
 import { CheckCircle2, Clock, FileText, Hourglass } from 'lucide-react'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
+import { VAT_MESSAGES } from '../../messages'
 
 interface VatWorkItemsStatsSectionProps {
   stats: {
@@ -14,35 +15,35 @@ export const VatWorkItemsStatsSection = ({ stats }: VatWorkItemsStatsSectionProp
   const statCards = [
     {
       key: 'pending',
-      title: 'ממתין לחומרים',
+      title: VAT_MESSAGES.stats.pendingTitle,
       value: stats.pending,
       icon: Hourglass,
       variant: 'orange' as const,
-      description: 'דורשים מסמכים מהלקוח',
+      description: VAT_MESSAGES.stats.pendingDescription,
     },
     {
       key: 'typing',
-      title: 'בהקלדה',
+      title: VAT_MESSAGES.stats.typingTitle,
       value: stats.typing,
       icon: Clock,
       variant: 'blue' as const,
-      description: 'דוחות שנמצאים בטיפול',
+      description: VAT_MESSAGES.stats.typingDescription,
     },
     {
       key: 'review',
-      title: 'ממתין לבדיקה',
+      title: VAT_MESSAGES.stats.reviewTitle,
       value: stats.review,
       icon: FileText,
       variant: 'orange' as const,
-      description: 'מוכנים לאישור ולהגשה',
+      description: VAT_MESSAGES.stats.reviewDescription,
     },
     {
       key: 'filed',
-      title: 'הוגש',
+      title: VAT_MESSAGES.stats.filedTitle,
       value: stats.filed,
       icon: CheckCircle2,
       variant: 'green' as const,
-      description: 'דוחות שהוגשו לרשות המסים',
+      description: VAT_MESSAGES.stats.filedDescription,
     },
   ] as const
 

@@ -2,6 +2,7 @@ import { Activity, CheckCircle2, MinusCircle, ReceiptText, WalletCards } from 'l
 import { StatsCard } from '@/components/ui/layout/StatsCard'
 import type { VatAnnualSummary } from '../../api'
 import { formatVatAmount } from '../../utils/vatHelpers'
+import { VAT_MESSAGES } from '../../messages'
 
 interface VatClientSummaryStatsSectionProps {
   annual: VatAnnualSummary
@@ -12,35 +13,35 @@ export const VatClientSummaryStatsSection = ({ annual }: VatClientSummaryStatsSe
   const statCards = [
     {
       key: 'filed-periods',
-      title: 'תקופות שהוגשו',
-      value: `${annual.filed_count} מתוך ${annual.periods_count}`,
+      title: VAT_MESSAGES.clientSummary.filedPeriods,
+      value: VAT_MESSAGES.clientSummary.filedPeriodsValue(annual.filed_count, annual.periods_count),
       icon: CheckCircle2,
       variant: 'green' as const,
     },
     {
       key: 'output-vat',
-      title: 'מע״מ עסקאות',
+      title: VAT_MESSAGES.clientSummary.outputVat,
       value: formatVatAmount(annual.total_output_vat),
       icon: ReceiptText,
       variant: 'neutral' as const,
     },
     {
       key: 'input-vat',
-      title: 'מע״מ תשומות',
+      title: VAT_MESSAGES.clientSummary.inputVat,
       value: formatVatAmount(annual.total_input_vat),
       icon: MinusCircle,
       variant: 'neutral' as const,
     },
     {
       key: 'net-vat',
-      title: 'מע״מ נטו לתשלום',
+      title: VAT_MESSAGES.clientSummary.netVatPayable,
       value: formatVatAmount(annual.net_vat),
       icon: WalletCards,
       variant: Number(annual.net_vat) >= 0 ? ('red' as const) : ('green' as const),
     },
     {
       key: 'average-vat',
-      title: 'מע״מ ממוצע לתקופה',
+      title: VAT_MESSAGES.clientSummary.averageVatPerPeriod,
       value: averageNetVat !== null ? formatVatAmount(averageNetVat) : '—',
       icon: Activity,
       variant: 'neutral' as const,

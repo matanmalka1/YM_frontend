@@ -10,16 +10,17 @@ import type { ColumnOpts } from '../../types'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { formatVatPeriodTitle } from '../../utils/viewHelpers'
+import { VAT_MESSAGES } from '../../messages'
 
 export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemListItem>[] => [
   monoColumn({
     key: 'office_client_number',
-    header: "מס' לקוח",
+    header: VAT_MESSAGES.columns.officeClientNumber,
     getValue: (item) => formatClientOfficeId(item.office_client_number),
   }),
   {
     key: 'client_id',
-    header: 'לקוח',
+    header: VAT_MESSAGES.columns.client,
     headerClassName: 'text-center',
     className: 'text-center',
     render: (item) => {
@@ -29,24 +30,26 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
       return (
         <span className="mx-auto block max-w-[220px] text-center">
           <span className="block truncate font-semibold text-gray-900">{name}</span>
-          {showPeriod && <span className="block text-xs font-medium text-gray-500">פריט מע״מ #{item.id}</span>}
+          {showPeriod && (
+            <span className="block text-xs font-medium text-gray-500">{VAT_MESSAGES.columns.vatItemId(item.id)}</span>
+          )}
         </span>
       )
     },
   },
   monoColumn({
     key: 'client_id_number',
-    header: 'ת.ז / ח.פ',
+    header: VAT_MESSAGES.columns.idNumber,
     getValue: (item) => item.client_id_number,
   }),
   textColumn({
     key: 'period',
-    header: 'תקופת דיווח',
+    header: VAT_MESSAGES.columns.reportingPeriod,
     getValue: (item) => formatVatPeriodTitle(item.period, item.period_type),
   }),
   statusColumn({
     key: 'status',
-    header: 'סטטוס',
+    header: VAT_MESSAGES.columns.status,
     headerClassName: 'text-center',
     className: 'text-center',
     getStatus: (item) => item.status,
@@ -55,7 +58,7 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
   }),
   {
     key: 'net_vat',
-    header: 'מע"מ נטו',
+    header: VAT_MESSAGES.columns.netVat,
     render: (item) => {
       const amount = item.is_overridden && item.final_vat_amount != null ? item.final_vat_amount : item.net_vat
       return (
@@ -72,7 +75,7 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
           {formatVatAmount(amount)}
           {item.is_overridden && (
             <Badge variant="warning" size="xs">
-              עוקף
+              {VAT_MESSAGES.columns.overrideBadge}
             </Badge>
           )}
         </span>
@@ -81,7 +84,7 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
   },
   {
     key: 'submission_deadline',
-    header: 'מועד הגשה',
+    header: VAT_MESSAGES.columns.dueDate,
     render: (item) => {
       const displayDeadline = item.extended_deadline ?? item.submission_deadline
       if (!displayDeadline) return <span className="text-gray-400 text-sm">—</span>
@@ -102,13 +105,13 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
   },
   textColumn({
     key: 'updated_at',
-    header: 'עדכון אחרון',
+    header: VAT_MESSAGES.columns.updatedAt,
     valueClassName: 'text-gray-400 tabular-nums',
     getValue: (item) => formatDate(item.updated_at),
   }),
   textColumn({
     key: 'filed_at',
-    header: 'הוגש ב',
+    header: VAT_MESSAGES.columns.filedAt,
     valueClassName: 'tabular-nums',
     getValue: (item) => (item.filed_at ? formatDate(item.filed_at) : null),
   }),

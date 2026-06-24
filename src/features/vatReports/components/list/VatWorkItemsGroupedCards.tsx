@@ -13,6 +13,7 @@ import { useVatGroupItems } from '../../hooks/useVatGroupItems'
 import type { VatWorkItemListItem, VatWorkItemGroupSummary, VatWorkItemStatus } from '../../api'
 import { formatVatPeriodTitle } from '../../utils/viewHelpers'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
+import { VAT_MESSAGES } from '../../messages'
 
 interface VatWorkItemsGroupedCardsProps {
   groups: VatWorkItemGroupSummary[]
@@ -34,7 +35,7 @@ const getVatGroupSecondaryLabel = (group: VatWorkItemGroupSummary): string | nul
     seen.add(label)
     return [label]
   })
-  return periodLabels.length > 0 ? `כולל תקופות: ${periodLabels.join(' · ')}` : null
+  return periodLabels.length > 0 ? VAT_MESSAGES.list.includedPeriods(periodLabels.join(' · ')) : null
 }
 
 const GroupContent = memo(
@@ -71,14 +72,14 @@ const GroupContent = memo(
           columns={columns}
           getRowKey={(r) => r.id}
           onRowClick={onRowClick}
-          emptyMessage="אין תיקים בתקופה זו"
+          emptyMessage={VAT_MESSAGES.list.noWorkItemsInPeriod}
         />
         {data && data.total > PAGE_SIZE && (
           <PaginationCard
             page={page}
             totalPages={getTotalPages(data.total, PAGE_SIZE)}
             total={data.total}
-            label="תיקים"
+            label={VAT_MESSAGES.list.workItemsPaginationLabel}
             onPageChange={setPage}
           />
         )}
@@ -110,8 +111,8 @@ export const VatWorkItemsGroupedCards = ({
       isEmpty={groups.length === 0}
       emptyState={{
         icon: Inbox,
-        title: emptyState?.title ?? 'אין תיקי מע"מ',
-        message: emptyState?.message ?? 'לא נמצאו תיקים התואמים לסינון',
+        title: emptyState?.title ?? VAT_MESSAGES.list.noWorkItems,
+        message: emptyState?.message ?? VAT_MESSAGES.list.noMatchingWorkItems,
         action: emptyState?.action,
       }}
     >
@@ -120,24 +121,40 @@ export const VatWorkItemsGroupedCards = ({
         const periodMonthsCount = group.period_type === 'bimonthly' ? 2 : 1
         const isCurrentPeriod = isCurrentReportingPeriod(group.period, periodMonthsCount)
         const metrics: PeriodSummaryMetric[] = [
-          { label: 'לקוחות', value: group.total_count },
-          { label: 'ממתינים', value: group.pending_count, tone: group.pending_count > 0 ? 'warning' : 'muted' },
-          { label: 'הוגשו', value: group.filed_count, tone: group.filed_count > 0 ? 'positive' : 'muted' },
-          { label: 'לא הוגשו', value: group.not_filed_count, tone: group.not_filed_count > 0 ? 'warning' : 'muted' },
-          { label: 'באיחור', value: group.overdue_count, tone: group.overdue_count > 0 ? 'negative' : 'muted' },
+          { label: VAT_MESSAGES.list.clientsMetric, value: group.total_count },
+          {
+            label: VAT_MESSAGES.list.pendingMetric,
+            value: group.pending_count,
+            tone: group.pending_count > 0 ? 'warning' : 'muted',
+          },
+          {
+            label: VAT_MESSAGES.list.filedMetric,
+            value: group.filed_count,
+            tone: group.filed_count > 0 ? 'positive' : 'muted',
+          },
+          {
+            label: VAT_MESSAGES.list.notFiledMetric,
+            value: group.not_filed_count,
+            tone: group.not_filed_count > 0 ? 'warning' : 'muted',
+          },
+          {
+            label: VAT_MESSAGES.list.overdueMetric,
+            value: group.overdue_count,
+            tone: group.overdue_count > 0 ? 'negative' : 'muted',
+          },
         ]
 
         return (
           <GroupedPeriodRow
             key={group.group_key}
-            typeLabel="מע״מ"
-            primaryLabel={formatDueDateLabel(group.due_date, 'להגשה עד') ?? group.due_date}
+            typeLabel={VAT_MESSAGES.list.vatTypeLabel}
+            primaryLabel={formatDueDateLabel(group.due_date, VAT_MESSAGES.list.dueByPrefix) ?? group.due_date}
             secondaryLabel={getVatGroupSecondaryLabel(group)}
             relativeDueLabel={formatRelativeDueLabel(group.due_date)}
             isCurrentPeriod={isCurrentPeriod}
             defaultOpen={group.group_key === defaultOpenKey}
             metrics={metrics}
-            ctaLabel="פתח לקוחות"
+            ctaLabel={VAT_MESSAGES.actions.openClients}
           >
             <GroupContent group={group} columns={columns} onRowClick={onRowClick} filters={filters} />
           </GroupedPeriodRow>

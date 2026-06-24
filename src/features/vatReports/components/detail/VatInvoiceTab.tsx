@@ -9,6 +9,7 @@ import { VAT_EXPENSE_CATEGORY_FILTER_OPTIONS } from '../../constants/vatConstant
 import { VatInvoiceTable } from '../list/VatInvoiceTable'
 import { VatInvoiceAddForm } from '../form/VatInvoiceAddForm'
 import type { VatInvoiceTabProps } from '../../types'
+import { VAT_MESSAGES } from '../../messages'
 
 export const VatInvoiceTab: React.FC<VatInvoiceTabProps> = ({
   invoiceType,
@@ -26,21 +27,21 @@ export const VatInvoiceTab: React.FC<VatInvoiceTabProps> = ({
   const byType = invoices.filter((i) => i.invoice_type === invoiceType)
   const filtered = byType.filter((i) => !isExpense || !categoryFilter || i.expense_category === categoryFilter)
 
-  const title = isExpense ? 'תשומות (מע"מ תשומות)' : 'עסקאות (מע"מ עסקאות)'
+  const title = isExpense ? VAT_MESSAGES.invoiceTab.expenseTitle : VAT_MESSAGES.invoiceTab.incomeTitle
   const borderColor = isExpense ? 'border-r-warning-400' : 'border-r-positive-400'
   const noResultsForFilter = byType.length > 0 && filtered.length === 0
   const emptyMessage = noResultsForFilter
-    ? 'אין חשבוניות בקטגוריה זו'
+    ? VAT_MESSAGES.invoiceTab.noCategoryInvoices
     : isExpense
-      ? 'עדיין לא הוספו חשבוניות תשומות'
-      : 'עדיין לא הוספו חשבוניות עסקאות'
+      ? VAT_MESSAGES.invoiceTab.noExpenseInvoices
+      : VAT_MESSAGES.invoiceTab.noIncomeInvoices
 
   return (
     <div>
       <Card
         title={title}
         className={`border-r-2 ${borderColor}`}
-        actions={<Badge variant="neutral">{filtered.length} רשומות</Badge>}
+        actions={<Badge variant="neutral">{VAT_MESSAGES.invoiceTab.records(filtered.length)}</Badge>}
       >
         {isExpense && (
           <Select
@@ -56,7 +57,7 @@ export const VatInvoiceTab: React.FC<VatInvoiceTabProps> = ({
           workItemId={workItemId}
           sectionType={invoiceType}
           emptyMessage={emptyMessage}
-          emptyHint={noResultsForFilter ? undefined : "לחץ על 'הוסף חשבונית' כדי להוסיף"}
+          emptyHint={noResultsForFilter ? undefined : VAT_MESSAGES.invoiceTab.addInvoiceHint}
         />
         {canEdit && (
           <div className="mt-3">

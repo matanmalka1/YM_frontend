@@ -16,6 +16,8 @@ import {
 import { getVatInvoiceDefaultValues } from '../../utils/vatHelpers'
 import type { VatInvoiceAddFormProps } from '../../types'
 import { blockNonNumericKey, getDeductionRateHint, shouldRequireCounterpartyId } from '../../utils/viewHelpers'
+import { VAT_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({
   invoiceType,
@@ -56,7 +58,11 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({
     >
       <div className="flex flex-wrap items-end gap-x-3 gap-y-3">
         {/* Required: amount */}
-        <FormField label='סכום כולל מע"מ ₪' error={errors.gross_amount?.message} className="w-36 shrink-0">
+        <FormField
+          label={VAT_MESSAGES.form.grossAmountLabel}
+          error={errors.gross_amount?.message}
+          className="w-36 shrink-0"
+        >
           <Input
             {...register('gross_amount')}
             placeholder="0.00"
@@ -68,7 +74,11 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({
         </FormField>
 
         {/* Required: date */}
-        <FormField label="תאריך חשבונית" error={errors.invoice_date?.message} className="w-36 shrink-0">
+        <FormField
+          label={VAT_MESSAGES.form.invoiceDateLabel}
+          error={errors.invoice_date?.message}
+          className="w-36 shrink-0"
+        >
           <Controller
             control={control}
             name="invoice_date"
@@ -84,7 +94,7 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({
           name="rate_type"
           render={({ field }) => (
             <Select
-              label='סוג מע"מ'
+              label={VAT_MESSAGES.form.vatTypeLabel}
               fieldClassName="w-32 shrink-0"
               name={field.name}
               value={field.value}
@@ -102,7 +112,7 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({
             name="expense_category"
             render={({ field }) => (
               <Select
-                label="קטגוריה"
+                label={VAT_MESSAGES.form.categoryLabel}
                 error={errors.expense_category?.message}
                 fieldClassName="w-44 shrink-0"
                 name={field.name}
@@ -122,35 +132,39 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({
             name="document_type"
             render={({ field }) => (
               <Select
-                label="סוג מסמך"
+                label={VAT_MESSAGES.form.documentTypeLabel}
                 error={errors.document_type?.message}
                 fieldClassName="w-40 shrink-0"
                 name={field.name}
                 value={field.value ?? ''}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
-                options={[{ value: '', label: '— בחר —' }, ...DOCUMENT_TYPE_OPTIONS]}
+                options={[{ value: '', label: VAT_MESSAGES.form.selectPlaceholder }, ...DOCUMENT_TYPE_OPTIONS]}
               />
             )}
           />
         )}
 
         {/* Optional: invoice number */}
-        <FormField label="מספר חשבונית" className="w-36 shrink-0">
-          <Input {...register('invoice_number')} placeholder="לא חובה" />
+        <FormField label={VAT_MESSAGES.form.invoiceNumberLabel} className="w-36 shrink-0">
+          <Input {...register('invoice_number')} placeholder={VAT_MESSAGES.form.optionalPlaceholder} />
         </FormField>
 
         {/* Optional: counterparty name */}
-        <FormField label="שם ספק / לקוח" className="w-44 shrink-0">
-          <Input {...register('counterparty_name')} placeholder="לא חובה" />
+        <FormField label={VAT_MESSAGES.form.counterpartyNameLabel} className="w-44 shrink-0">
+          <Input {...register('counterparty_name')} placeholder={VAT_MESSAGES.form.optionalPlaceholder} />
         </FormField>
 
         {/* Conditional: counterparty ID (tax invoice expense only) */}
         {requiresCounterpartyId && (
-          <FormField label="מספר עוסק של הספק" error={errors.counterparty_id?.message} className="w-36 shrink-0">
+          <FormField
+            label={VAT_MESSAGES.form.counterpartyIdLabel}
+            error={errors.counterparty_id?.message}
+            className="w-36 shrink-0"
+          >
             <Input
               {...register('counterparty_id')}
-              placeholder="9 ספרות"
+              placeholder={VAT_MESSAGES.form.counterpartyIdPlaceholder}
               dir="ltr"
               inputMode="numeric"
               onKeyDown={(e) => blockNonNumericKey(e)}
@@ -164,11 +178,11 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({
             <span className={`text-xs font-medium ${deductionRateHint.className}`}>{deductionRateHint.label}</span>
           )}
           <Button type="submit" variant="ghost" size="sm" icon={<Plus className="h-3.5 w-3.5" />} isLoading={isAdding}>
-            הוסף
+            {VAT_MESSAGES.actions.add}
           </Button>
           {onCancel && (
             <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
-              ביטול
+              {GLOBAL_UI_MESSAGES.actions.cancel}
             </Button>
           )}
         </div>

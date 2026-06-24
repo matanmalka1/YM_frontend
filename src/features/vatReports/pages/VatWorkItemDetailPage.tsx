@@ -15,6 +15,7 @@ import { VatFiledBanner } from '../components/shared/VatFiledBanner'
 import { useVatWorkItemPage } from '../hooks/useVatWorkItemPage'
 import { isFiled } from '../utils/vatHelpers'
 import { formatVatPeriodTitle, getVatClientTitle } from '../utils/viewHelpers'
+import { VAT_MESSAGES } from '../messages'
 
 type TabKey = 'summary' | 'income' | 'expense' | 'history'
 
@@ -39,22 +40,25 @@ const VatDetailContent: React.FC<{ workItemId: number }> = ({ workItemId }) => {
       </div>
     )
   }
-  if (isError || !workItem) return <Alert variant="error" message='שגיאה בטעינת תיק מע"מ' />
+  if (isError || !workItem) return <Alert variant="error" message={VAT_MESSAGES.detail.loadingWorkItemError} />
 
   const incomeCount = invoices.filter((i) => i.invoice_type === 'income').length
   const expenseCount = invoices.filter((i) => i.invoice_type === 'expense').length
 
   const tabs: { key: TabKey; label: string; icon: React.ElementType; badge?: number }[] = [
-    { key: 'summary', label: 'סיכום', icon: LayoutDashboard },
-    { key: 'income', label: 'עסקאות', icon: ClipboardList, badge: incomeCount },
-    { key: 'expense', label: 'תשומות', icon: ArrowUpCircle, badge: expenseCount },
-    { key: 'history', label: 'היסטוריה', icon: Clock },
+    { key: 'summary', label: VAT_MESSAGES.detail.tabSummary, icon: LayoutDashboard },
+    { key: 'income', label: VAT_MESSAGES.detail.tabIncome, icon: ClipboardList, badge: incomeCount },
+    { key: 'expense', label: VAT_MESSAGES.detail.tabExpense, icon: ArrowUpCircle, badge: expenseCount },
+    { key: 'history', label: VAT_MESSAGES.detail.tabHistory, icon: Clock },
   ]
 
   return (
     <div className="space-y-4">
       <PageHeader
-        breadcrumbs={[{ label: 'דוחות מע״מ', to: '/tax/vat' }, { label: 'תיק תקופתי' }]}
+        breadcrumbs={[
+          { label: VAT_MESSAGES.detail.breadcrumbList, to: '/tax/vat' },
+          { label: VAT_MESSAGES.detail.breadcrumbCurrent },
+        ]}
         title={`${getVatClientTitle(workItem.client_name, workItem.client_record_id)} · ${formatVatPeriodTitle(workItem.period, workItem.period_type)}`}
         actions={<VatWorkItemHeaderActions workItem={workItem} />}
       />
@@ -72,7 +76,7 @@ const VatDetailContent: React.FC<{ workItemId: number }> = ({ workItemId }) => {
         />
       )}
 
-      <SegmentedControl variant="tabBar" aria-label="לשוניות תיק מע״מ">
+      <SegmentedControl variant="tabBar" aria-label={VAT_MESSAGES.detail.tabsAriaLabel}>
         {tabs.map(({ key, label, icon: Icon, badge }) => (
           <SegmentedControlItem
             key={key}
