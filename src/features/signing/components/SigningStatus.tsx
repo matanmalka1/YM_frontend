@@ -2,6 +2,7 @@ import { AlertTriangle, CheckCircle2, XCircle } from 'lucide-react'
 import { Spinner } from '@/components/ui/primitives/Spinner'
 import type { SignatureRequestStatus } from '@/features/signatureRequests'
 import type { SigningTerminalState } from '../types'
+import { SIGNING_MESSAGES } from '../messages'
 
 interface StatusIllustrationProps {
   icon: React.ReactNode
@@ -30,7 +31,7 @@ export const SigningStatus: React.FC<SigningStatusProps> = ({ state, status, tit
     return (
       <div className="flex flex-col items-center gap-3 py-8">
         <Spinner size="lg" />
-        <p className="text-sm text-gray-500">טוען מסמך...</p>
+        <p className="text-sm text-gray-500">{SIGNING_MESSAGES.status.loading}</p>
       </div>
     )
   }
@@ -40,8 +41,8 @@ export const SigningStatus: React.FC<SigningStatusProps> = ({ state, status, tit
       <StatusIllustration
         icon={<CheckCircle2 className="h-8 w-8 text-positive-700" />}
         bg="bg-positive-100"
-        title={title ?? 'המסמך נחתם בהצלחה'}
-        body={body ?? 'תודה! חתימתך נקלטה במערכת.'}
+        title={title ?? SIGNING_MESSAGES.status.signedTitle}
+        body={body ?? SIGNING_MESSAGES.status.signedBody}
       />
     )
   }
@@ -51,8 +52,8 @@ export const SigningStatus: React.FC<SigningStatusProps> = ({ state, status, tit
       <StatusIllustration
         icon={<XCircle className="h-8 w-8 text-gray-500" />}
         bg="bg-gray-100"
-        title={title ?? 'הבקשה נדחתה'}
-        body={body ?? 'דחית את בקשת החתימה. פנה למשרד לפרטים נוספים.'}
+        title={title ?? SIGNING_MESSAGES.status.declinedTitle}
+        body={body ?? SIGNING_MESSAGES.status.declinedBody}
       />
     )
   }
@@ -61,12 +62,12 @@ export const SigningStatus: React.FC<SigningStatusProps> = ({ state, status, tit
     <StatusIllustration
       icon={<AlertTriangle className="h-8 w-8 text-negative-500" />}
       bg="bg-negative-100"
-      title={title ?? (status === 'expired' ? 'הקישור פג תוקף' : 'בקשה לא זמינה')}
+      title={
+        title ??
+        (status === 'expired' ? SIGNING_MESSAGES.status.expiredTitle : SIGNING_MESSAGES.status.unavailableTitle)
+      }
       body={
-        body ??
-        (status === 'expired'
-          ? 'קישור זה לחתימה פג תוקפו. פנה למשרד לקבלת קישור חדש.'
-          : 'הקישור שגוי, בוטל, או שאירעה שגיאה. פנה למשרד לבירור.')
+        body ?? (status === 'expired' ? SIGNING_MESSAGES.status.expiredBody : SIGNING_MESSAGES.status.unavailableBody)
       }
     />
   )

@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom'
 import { FileSignature } from 'lucide-react'
 import { Card } from '@/components/ui/primitives/Card'
 import { SigningForm, SigningStatus, useSigningPageState, type SigningTerminalState } from '@/features/signing'
+import { SIGNING_MESSAGES } from '../messages'
 
 const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <Card size="compact" className="w-full max-w-md">
@@ -39,8 +40,8 @@ export const SigningPage: React.FC = () => {
           <FileSignature className="h-7 w-7 text-white" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-gray-900">חתימה דיגיטלית</h1>
-          <p className="mt-0.5 text-xs text-gray-500">מערכת ניהול משרד · מאובטח ומוצפן</p>
+          <h1 className="text-xl font-bold text-gray-900">{SIGNING_MESSAGES.page.title}</h1>
+          <p className="mt-0.5 text-xs text-gray-500">{SIGNING_MESSAGES.page.subtitle}</p>
         </div>
       </div>
 
@@ -67,7 +68,7 @@ export const SigningPage: React.FC = () => {
         )}
       </Shell>
 
-      <p className="mt-8 text-center text-xs text-gray-400">מערכת ניהול משרד · חתימה מאובטחת ומוצפנת</p>
+      <p className="mt-8 text-center text-xs text-gray-400">{SIGNING_MESSAGES.page.footer}</p>
     </div>
   )
 }
