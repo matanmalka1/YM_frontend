@@ -13,7 +13,6 @@ import { buildBindersColumns } from '../components/table/BindersColumns'
 import { BINDER_CAPACITY_STATUS_OPTIONS, BINDER_LOCATION_STATUS_OPTIONS } from '../constants'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { BINDER_NUMBER_SEARCH_PLACEHOLDER, CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
-import { BINDERS_MESSAGES } from '../messages'
 import { BINDERS_ERROR_MESSAGES } from '../errorMessages'
 
 const buildBindersFilterFields = () => [

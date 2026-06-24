@@ -11,7 +11,6 @@ import { DEFAULT_CHARGE_LIST_STATS } from '../constants'
 import { useChargeActions } from './useChargeActions'
 import { useChargeCreateMutation } from './useChargeCreateMutation'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
-import { CHARGES_MESSAGES } from '../messages'
 import { CHARGES_ERROR_MESSAGES } from '../errorMessages'
 
 export const useClientCharges = (clientId: number) => {

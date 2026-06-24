@@ -306,6 +306,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
     filterTitle: 'סינון דוחות שנתיים',
     filterSubtitle: 'לקוח, סטטוס ושנת מס',
     loadingSeason: 'טוען נתוני עונה...',
-    allReportsTitle: (year: number) => `כל הדוחות — שנת מס ${year}`,
+    allReportsTitle: (year: number | undefined) => (year != null ? `כל הדוחות — שנת מס ${year}` : 'כל הדוחות'),
   },
 } as const

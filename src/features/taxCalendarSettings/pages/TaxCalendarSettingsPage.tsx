@@ -14,32 +14,15 @@ import { TaxCalendarSettingsStatsSection } from '../components/TaxCalendarSettin
 import type { TaxCalendarDeadlineRule, TaxCalendarSettingsEntry } from '../api'
 import { TAX_CALENDAR_SETTINGS_MESSAGES } from '../messages'
 import { TAX_CALENDAR_SETTINGS_ERROR_MESSAGES } from '../errorMessages'
+import {
+  TAX_CALENDAR_DEADLINE_RULE_TYPE_LABELS,
+  TAX_CALENDAR_OBLIGATION_TYPE_LABELS,
+  TAX_CALENDAR_SUMMARY_TYPE_LABELS,
+} from '../constants'
 
 const currentYear = new Date().getFullYear()
 const MIN_YEAR = 2000
 const MAX_YEAR = 2100
-
-const RULE_TYPE_LABELS: Record<string, string> = {
-  vat_monthly: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.vatMonthly,
-  vat_bimonthly: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.vatBimonthly,
-  advance_monthly: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.advanceMonthly,
-  advance_bimonthly: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.advanceBimonthly,
-  annual_report: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.annualReport,
-}
-
-const OBLIGATION_TYPE_LABELS: Record<string, string> = {
-  vat: TAX_CALENDAR_SETTINGS_MESSAGES.obligationTypes.vat,
-  advance_payment: TAX_CALENDAR_SETTINGS_MESSAGES.obligationTypes.advancePayment,
-  annual_report: TAX_CALENDAR_SETTINGS_MESSAGES.obligationTypes.annualReport,
-}
-
-const SUMMARY_LABELS: Record<string, string> = {
-  vat_1m: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.vatMonthly,
-  vat_2m: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.vatBimonthly,
-  advance_payment_1m: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.advanceMonthly,
-  advance_payment_2m: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.advanceBimonthly,
-  annual_report_annual: TAX_CALENDAR_SETTINGS_MESSAGES.ruleTypes.annualReport,
-}
 
 const formatYear = (value: number | null | undefined): string => {
   if (value == null) return '—'
@@ -48,9 +31,11 @@ const formatYear = (value: number | null | undefined): string => {
 
 const formatText = (value: string | null | undefined): string => value || '—'
 
-const getRuleTypeLabel = (value: string): string => RULE_TYPE_LABELS[value] ?? value
+const getRuleTypeLabel = (value: string): string =>
+  TAX_CALENDAR_DEADLINE_RULE_TYPE_LABELS[value as keyof typeof TAX_CALENDAR_DEADLINE_RULE_TYPE_LABELS] ?? value
 
-const getObligationLabel = (value: string): string => OBLIGATION_TYPE_LABELS[value] ?? value
+const getObligationLabel = (value: string): string =>
+  TAX_CALENDAR_OBLIGATION_TYPE_LABELS[value as keyof typeof TAX_CALENDAR_OBLIGATION_TYPE_LABELS] ?? value
 
 const getYearOptions = () => {
   const nextYear = String(currentYear + 1)
@@ -79,7 +64,7 @@ const translateWarning = (warning: string): string => {
   const countWarning = /^Year (\d+): ([\w_]+) — expected (\d+), found (\d+)\.$/.exec(warning)
   if (countWarning) {
     const [, year, key, expected, found] = countWarning
-    const label = SUMMARY_LABELS[key] ?? key
+    const label = TAX_CALENDAR_SUMMARY_TYPE_LABELS[key as keyof typeof TAX_CALENDAR_SUMMARY_TYPE_LABELS] ?? key
     return TAX_CALENDAR_SETTINGS_MESSAGES.warnings.countMismatch(year, label, expected, found)
   }
 

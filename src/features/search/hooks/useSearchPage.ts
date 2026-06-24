@@ -5,7 +5,6 @@ import { getErrorMessage, parsePositiveInt } from '../../../utils/utils'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFilters } from '../types'
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
-import { SEARCH_MESSAGES } from '../messages'
 import { SEARCH_ERROR_MESSAGES } from '../errorMessages'
 
 export const useSearchPage = () => {

@@ -5,6 +5,7 @@
 export const BUSINESSES_MESSAGES = {
   details: {
     title: 'פרטי עסק',
+    invalidId: 'מזהה עסק לא תקין',
     loading: 'טוען פרטי עסק...',
     clientsListLabel: 'לקוחות',
     clientFallback: 'לקוח',

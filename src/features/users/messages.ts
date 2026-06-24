@@ -51,16 +51,6 @@ export const USERS_MESSAGES = {
     confirmPasswordPlaceholder: 'הקלד שוב את הסיסמה',
   },
   auditLog: {
-    actionLabels: {
-      login_success: 'כניסה למערכת',
-      login_failure: 'כניסה נכשלה',
-      user_created: 'משתמש נוצר',
-      user_updated: 'פרטים עודכנו',
-      user_activated: 'הופעל',
-      user_deactivated: 'הושבת',
-      password_reset: 'סיסמה אופסה',
-      logout: 'יציאה מהמערכת',
-    },
     title: 'לוג ביקורת משתמשים',
     recordsCount: (count: number) => `${count} רשומות`,
     fromDate: 'מתאריך',

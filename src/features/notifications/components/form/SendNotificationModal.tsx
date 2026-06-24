@@ -11,15 +11,14 @@ import { CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS, TRIGGER_LABELS, isNotificati
 import type { NotificationTrigger } from '../../api'
 import { NOTIFICATIONS_MESSAGES } from '../../messages'
 import { NOTIFICATIONS_ERROR_MESSAGES } from '../../errorMessages'
+import { NOTIFICATION_TRIGGER_DOMAIN_LABELS } from '../../constants'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
-
-const DOMAIN_LABELS: Partial<Record<NotificationTrigger, string>> = NOTIFICATIONS_MESSAGES.form.domainLabels
 
 const buildTriggerOptions = (triggers: readonly NotificationTrigger[]) =>
   triggers.map((trigger) => ({
     value: trigger,
     label: NOTIFICATIONS_MESSAGES.form.triggerOptionLabel(
-      DOMAIN_LABELS[trigger] ?? NOTIFICATIONS_MESSAGES.form.generalDomain,
+      NOTIFICATION_TRIGGER_DOMAIN_LABELS[trigger] ?? NOTIFICATIONS_MESSAGES.form.generalDomain,
       TRIGGER_LABELS[trigger],
     ),
   }))

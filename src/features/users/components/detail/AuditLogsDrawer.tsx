@@ -13,8 +13,7 @@ import type { ListAuditLogsParams } from '../../api'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { USERS_MESSAGES } from '../../messages'
 import { USERS_ERROR_MESSAGES } from '../../errorMessages'
-
-const auditActionLabel: Record<string, string> = USERS_MESSAGES.auditLog.actionLabels
+import { USER_AUDIT_ACTION_LABELS } from '../../constants'
 
 interface AuditLogsDrawerProps {
   open: boolean
@@ -93,7 +92,7 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
                 <div className="space-y-1">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-sm font-medium text-gray-800">
-                      {auditActionLabel[log.action] ?? log.action}
+                      {USER_AUDIT_ACTION_LABELS[log.action as keyof typeof USER_AUDIT_ACTION_LABELS] ?? log.action}
                     </span>
                     <Badge variant={log.status === 'success' ? 'positive' : 'negative'}>
                       {log.status === 'success' ? USERS_MESSAGES.auditLog.success : USERS_MESSAGES.auditLog.failure}

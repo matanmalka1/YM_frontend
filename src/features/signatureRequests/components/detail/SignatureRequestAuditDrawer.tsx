@@ -6,31 +6,18 @@ import { SkeletonBlock } from '../../../../components/ui/primitives/SkeletonBloc
 import { Timeline, TimelineEntry } from '@/components/ui/feedback/Timeline'
 import { StatusBadge } from '../../../../components/ui/primitives/StatusBadge'
 import { formatDate, formatDateTime, formatPhoneNumber } from '../../../../utils/utils'
-import { getSignatureRequestTypeLabel, getSignatureRequestStatusLabel } from '../../constants'
+import {
+  SIGNATURE_REQUEST_ACTOR_TYPE_LABELS,
+  SIGNATURE_REQUEST_EVENT_TYPE_LABELS,
+  getSignatureRequestTypeLabel,
+  getSignatureRequestStatusLabel,
+} from '../../constants'
 import { signatureRequestStatusVariants } from '../../utils'
 import { SIGNATURE_REQUESTS_MESSAGES } from '../../messages'
 
 interface Props {
   requestId: number | null
   onClose: () => void
-}
-
-const EVENT_TYPE_LABELS: Record<string, string> = {
-  created: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.created,
-  sent: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.sent,
-  viewed: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.viewed,
-  signed: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.signed,
-  annual_report_signed: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.annualReportSigned,
-  declined: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.declined,
-  canceled: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.canceled,
-  expired: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.expired,
-}
-
-const ACTOR_TYPE_LABELS: Record<string, string> = {
-  advisor: SIGNATURE_REQUESTS_MESSAGES.audit.actorTypes.advisor,
-  secretary: SIGNATURE_REQUESTS_MESSAGES.audit.actorTypes.secretary,
-  signer: SIGNATURE_REQUESTS_MESSAGES.audit.actorTypes.signer,
-  system: SIGNATURE_REQUESTS_MESSAGES.audit.actorTypes.system,
 }
 
 export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClose }) => {
@@ -112,12 +99,16 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
                 <TimelineEntry key={event.id}>
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-sm font-medium text-gray-800">
-                      {EVENT_TYPE_LABELS[event.event_type] ?? event.event_type}
+                      {SIGNATURE_REQUEST_EVENT_TYPE_LABELS[
+                        event.event_type as keyof typeof SIGNATURE_REQUEST_EVENT_TYPE_LABELS
+                      ] ?? event.event_type}
                     </span>
                     <span className="text-xs text-gray-400">{formatDateTime(event.occurred_at)}</span>
                   </div>
                   <div className="mt-0.5 text-xs text-gray-500">
-                    {ACTOR_TYPE_LABELS[event.actor_type] ?? event.actor_type}
+                    {SIGNATURE_REQUEST_ACTOR_TYPE_LABELS[
+                      event.actor_type as keyof typeof SIGNATURE_REQUEST_ACTOR_TYPE_LABELS
+                    ] ?? event.actor_type}
                     {event.actor_name ? ` — ${event.actor_name}` : ''}
                     {event.notes ? ` · ${event.notes}` : ''}
                   </div>

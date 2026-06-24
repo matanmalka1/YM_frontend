@@ -60,7 +60,9 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
                 disabled={generationFrequency == null}
                 isLoading={isGenerating}
                 loadingLabel={ADVANCED_PAYMENTS_MESSAGES.clientHeader.loadingLabel}
-                tooltip={generationFrequency == null ? ADVANCED_PAYMENTS_MESSAGES.clientHeader.noFrequencyTooltip : undefined}
+                tooltip={
+                  generationFrequency == null ? ADVANCED_PAYMENTS_MESSAGES.clientHeader.noFrequencyTooltip : undefined
+                }
                 className="rounded-lg text-gray-700 hover:bg-white hover:shadow-sm"
               >
                 {ADVANCED_PAYMENTS_MESSAGES.clientHeader.createYearlySchedule}
@@ -70,7 +72,10 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
               <ConfirmDialog
                 open={confirmGenerate}
                 title={ADVANCED_PAYMENTS_MESSAGES.clientHeader.confirmTitle}
-                message={ADVANCED_PAYMENTS_MESSAGES.clientHeader.confirmMessage(getMonthsCoveredLabel(generationFrequency), year)}
+                message={ADVANCED_PAYMENTS_MESSAGES.clientHeader.confirmMessage(
+                  getMonthsCoveredLabel(generationFrequency)!,
+                  year,
+                )}
                 confirmLabel={ADVANCED_PAYMENTS_MESSAGES.clientHeader.confirmButton}
                 cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
                 onConfirm={() => {
@@ -85,9 +90,7 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
       </div>
 
       {advanceRate != null && (
-        <p className="text-sm text-gray-500">
-          {ADVANCED_PAYMENTS_MESSAGES.clientHeader.advanceRateNote(advanceRate)}
-        </p>
+        <p className="text-sm text-gray-500">{ADVANCED_PAYMENTS_MESSAGES.clientHeader.advanceRateNote(advanceRate)}</p>
       )}
     </div>
   )

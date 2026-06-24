@@ -2,6 +2,24 @@ import { makeLabelGetter } from '@/utils/labels'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import type { SignatureRequestStatus, SignatureRequestType } from './api'
 
+export const SIGNATURE_REQUEST_EVENT_TYPE_LABELS = {
+  created: 'נוצרה',
+  sent: 'נשלחה',
+  viewed: 'נצפתה',
+  signed: 'נחתמה',
+  annual_report_signed: 'דוח שנתי נחתם',
+  declined: 'נדחתה',
+  canceled: 'בוטלה',
+  expired: 'פגה תוקף',
+} as const
+
+export const SIGNATURE_REQUEST_ACTOR_TYPE_LABELS = {
+  advisor: 'יועץ',
+  secretary: 'מזכירה',
+  signer: 'חותם',
+  system: 'מערכת',
+} as const
+
 /** @auditContract Read by the backend enum-sync audit. */
 export const SIGNATURE_REQUEST_STATUS_VALUES = [
   'pending_signature',

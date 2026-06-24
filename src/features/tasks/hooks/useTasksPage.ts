@@ -17,7 +17,6 @@ import {
 import { useTaskActions } from './useTaskActions'
 import { useTaskFilters } from './useTaskFilters'
 import { useTasks } from './useTasks'
-import { TASKS_MESSAGES } from '../messages'
 import { TASKS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useTasksPage = () => {

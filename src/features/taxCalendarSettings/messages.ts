@@ -1,16 +1,4 @@
 export const TAX_CALENDAR_SETTINGS_MESSAGES = {
-  ruleTypes: {
-    vatMonthly: 'מע״מ חודשי',
-    vatBimonthly: 'מע״מ דו־חודשי',
-    advanceMonthly: 'מקדמות חודשיות',
-    advanceBimonthly: 'מקדמות דו־חודשיות',
-    annualReport: 'דוח שנתי',
-  },
-  obligationTypes: {
-    vat: 'מע״מ',
-    advancePayment: 'מקדמות מס הכנסה',
-    annualReport: 'דוח שנתי',
-  },
   labels: {
     startYear: 'שנת ההתחלה',
     endYear: 'שנת הסיום',

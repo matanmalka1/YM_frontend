@@ -1,5 +1,3 @@
-import type { NotificationTrigger } from './api'
-
 /**
  * Centralized Hebrew UI strings for the notifications feature. Cross-cutting
  * strings stay in GLOBAL_UI_MESSAGES; everything here is notification-domain copy.
@@ -16,20 +14,6 @@ export const NOTIFICATIONS_MESSAGES = {
   },
   form: {
     title: 'שליחת הודעה',
-    domainLabels: {
-      binder_missing_documents: 'קלסר',
-      binder_general_reminder: 'קלסר',
-      invoice_issued: 'חיובים',
-      payment_reminder: 'חיובים',
-      vat_documents_reminder: 'מע"מ',
-      annual_report_documents_request: 'דוח שנתי',
-      annual_report_client_reminder: 'דוח שנתי',
-      signature_request_sent: 'חתימה',
-      signature_request_reminder: 'חתימה',
-      client_missing_information: 'לקוח',
-      client_documents_request: 'לקוח',
-      client_general_message: 'לקוח',
-    } satisfies Partial<Record<NotificationTrigger, string>>,
     generalDomain: 'כללי',
     triggerOptionLabel: (domain: string, triggerLabel: string) => `${domain} — ${triggerLabel}`,
     sendSuccess: 'ההודעה נשלחה בהצלחה',

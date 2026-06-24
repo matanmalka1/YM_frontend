@@ -35,22 +35,6 @@ export const SIGNATURE_REQUESTS_MESSAGES = {
     requestDetails: 'פרטי הבקשה',
     activityHistory: 'היסטוריית פעילות',
     noEvents: 'אין אירועים',
-    eventTypes: {
-      created: 'נוצרה',
-      sent: 'נשלחה',
-      viewed: 'נצפתה',
-      signed: 'נחתמה',
-      annualReportSigned: 'דוח שנתי נחתם',
-      declined: 'נדחתה',
-      canceled: 'בוטלה',
-      expired: 'פגה תוקף',
-    },
-    actorTypes: {
-      advisor: 'יועץ',
-      secretary: 'מזכירה',
-      signer: 'חותם',
-      system: 'מערכת',
-    },
   },
   dashboard: {
     title: 'בקשות חתימה',
