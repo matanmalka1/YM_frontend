@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/primitives/Button'
 import { NUMERIC_MONTH_OPTIONS, getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import type { BinderResponse } from '../../types'
 import { BinderHandoverPanel } from '../sections/BinderHandoverPanel'
+import { BINDERS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface BindersPageDialogsProps {
   confirmHandoverForId: number | null
@@ -78,14 +80,14 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
   <>
     <ConfirmDialog
       open={confirmHandoverForId !== null}
-      title="מסירת קלסר"
+      title={BINDERS_MESSAGES.dialogs.handoverTitle}
       message={
         confirmHandoverForId !== null
-          ? `האם למסור את קלסר ${getBinderNumberLabel(confirmHandoverForId)} ללקוח?`
-          : 'האם למסור את הקלסר ללקוח?'
+          ? BINDERS_MESSAGES.dialogs.handoverMessage(getBinderNumberLabel(confirmHandoverForId))
+          : BINDERS_MESSAGES.dialogs.handoverFallbackMessage
       }
-      confirmLabel="מסור קלסר"
-      cancelLabel="ביטול"
+      confirmLabel={BINDERS_MESSAGES.dialogs.handoverConfirm}
+      cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
       isLoading={isHandingOverToClient}
       onConfirm={onConfirmHandoverToClient}
       confirmDisabled={!handoverRecipientName.trim()}
@@ -93,8 +95,8 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
     >
       <Input
         type="text"
-        label="נמסר לידי"
-        placeholder="שם חובה"
+        label={BINDERS_MESSAGES.handover.recipientLabel}
+        placeholder={BINDERS_MESSAGES.dialogs.recipientRequiredPlaceholder}
         value={handoverRecipientName}
         onChange={(e) => setHandoverRecipientName(e.target.value)}
         className="mt-3"
@@ -104,10 +106,10 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
 
     <ConfirmDialog
       open={confirmReadyForHandoverForId !== null}
-      title="סימון כמוכן למסירה"
-      message={`האם לסמן את קלסר ${getBinderNumberLabel(confirmReadyForHandoverForId)} כמוכן למסירה?`}
-      confirmLabel="סמן כמוכן למסירה"
-      cancelLabel="ביטול"
+      title={BINDERS_MESSAGES.dialogs.readyTitle}
+      message={BINDERS_MESSAGES.dialogs.readyMessage(getBinderNumberLabel(confirmReadyForHandoverForId))}
+      confirmLabel={BINDERS_MESSAGES.actions.markReadyForHandover}
+      cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
       isLoading={isMarkingReadyForHandover}
       onConfirm={onConfirmReadyForHandover}
       onCancel={onCancelReadyForHandover}
@@ -115,10 +117,10 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
 
     <ConfirmDialog
       open={confirmDeleteForId !== null}
-      title="מחיקת קלסר"
-      message={`האם למחוק את קלסר ${getBinderNumberLabel(confirmDeleteForId)}? פעולה זו אינה ניתנת לביטול.`}
-      confirmLabel="מחק קלסר"
-      cancelLabel="ביטול"
+      title={BINDERS_MESSAGES.dialogs.deleteTitle}
+      message={BINDERS_MESSAGES.dialogs.deleteMessage(getBinderNumberLabel(confirmDeleteForId))}
+      confirmLabel={BINDERS_MESSAGES.actions.deleteBinder}
+      cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
       confirmVariant="danger"
       isLoading={isDeleting}
       onConfirm={onConfirmDelete}
@@ -127,12 +129,12 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
 
     <Modal
       open={bulkReadyForHandoverOpen}
-      title="סימון קבוצתי כמוכן למסירה"
+      title={BINDERS_MESSAGES.dialogs.bulkReadyTitle}
       onClose={onCloseBulkReadyForHandover}
       footer={
         <div className="flex items-center justify-end gap-2">
           <Button type="button" variant="secondary" onClick={onCloseBulkReadyForHandover}>
-            ביטול
+            {GLOBAL_UI_MESSAGES.actions.cancel}
           </Button>
           <Button
             type="button"
@@ -140,24 +142,22 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
             disabled={!dialogBinder}
             onClick={onConfirmBulkReadyForHandover}
           >
-            סמן כמוכן למסירה
+            {BINDERS_MESSAGES.actions.markReadyForHandover}
           </Button>
         </div>
       }
     >
       <div className="space-y-4">
-        <p className="text-sm text-gray-700">
-          הפעולה תסמן את כל הקלסרים של הלקוח עד תקופת הדיווח שנבחרה כמוכנים למסירה.
-        </p>
+        <p className="text-sm text-gray-700">{BINDERS_MESSAGES.dialogs.bulkReadyDescription}</p>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Select
-            label="עד שנת דיווח"
+            label={BINDERS_MESSAGES.handover.untilYear}
             value={String(bulkReadyForHandoverYear)}
             onChange={(event) => setBulkReadyForHandoverYear(Number(event.target.value))}
             options={getOperationalYearOptions()}
           />
           <Select
-            label="עד חודש דיווח"
+            label={BINDERS_MESSAGES.handover.untilMonth}
             value={String(bulkReadyForHandoverMonth)}
             onChange={(event) => setBulkReadyForHandoverMonth(Number(event.target.value))}
             options={NUMERIC_MONTH_OPTIONS}
@@ -168,12 +168,12 @@ export const BindersPageDialogs: React.FC<BindersPageDialogsProps> = ({
 
     <Modal
       open={handoverToClientBulkOpen}
-      title="מסירת קלסרים ללקוח"
+      title={BINDERS_MESSAGES.dialogs.bulkHandoverTitle}
       onClose={onCloseHandoverToClientBulk}
       footer={
         <div className="flex items-center justify-end">
           <Button type="button" variant="secondary" onClick={onCloseHandoverToClientBulk}>
-            סגור
+            {BINDERS_MESSAGES.dialogs.close}
           </Button>
         </div>
       }

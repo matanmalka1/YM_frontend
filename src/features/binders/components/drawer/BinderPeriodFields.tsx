@@ -7,6 +7,7 @@ import {
 } from '@/constants/periodOptions.constants'
 import type { ReceiveBinderFormValues } from '../../schemas'
 import { PERIODIC_BINDER_TYPES, type BinderTypeValue } from '../../constants'
+import { BINDERS_MESSAGES } from '../../messages'
 
 interface BinderPeriodFieldsProps {
   form: UseFormReturn<ReceiveBinderFormValues>
@@ -33,9 +34,12 @@ export const BinderPeriodFields: React.FC<BinderPeriodFieldsProps> = ({ form, ma
         control={control}
         render={({ field }) => (
           <Select
-            label="שנת דיווח"
+            label={BINDERS_MESSAGES.period.reportingYear}
             error={errors.period_year?.message}
-            options={[{ value: '', label: 'בחר שנה...', disabled: true }, ...getOperationalYearOptions()]}
+            options={[
+              { value: '', label: BINDERS_MESSAGES.period.chooseYear, disabled: true },
+              ...getOperationalYearOptions(),
+            ]}
             value={field.value ? String(field.value) : ''}
             onChange={(event) => field.onChange(event.target.value ? Number(event.target.value) : undefined)}
             onBlur={field.onBlur}
@@ -50,9 +54,9 @@ export const BinderPeriodFields: React.FC<BinderPeriodFieldsProps> = ({ form, ma
           control={control}
           render={({ field }) => (
             <Select
-              label={bimonthlyVatMode ? 'חודש התחלה' : 'חודש דיווח'}
+              label={bimonthlyVatMode ? BINDERS_MESSAGES.period.startMonth : BINDERS_MESSAGES.period.reportingMonth}
               error={errors.period_month_start?.message}
-              options={[{ value: '', label: 'בחר חודש...', disabled: true }, ...monthOptions]}
+              options={[{ value: '', label: BINDERS_MESSAGES.period.chooseMonth, disabled: true }, ...monthOptions]}
               value={field.value ? String(field.value) : ''}
               onChange={(event) => field.onChange(event.target.value ? Number(event.target.value) : null)}
               onBlur={field.onBlur}
@@ -68,9 +72,9 @@ export const BinderPeriodFields: React.FC<BinderPeriodFieldsProps> = ({ form, ma
           control={control}
           render={({ field }) => (
             <Select
-              label="חודש סיום"
+              label={BINDERS_MESSAGES.period.endMonth}
               error={errors.period_month_end?.message}
-              options={[{ value: '', label: 'ייבחר אוטומטית', disabled: true }, ...MONTH_OPTIONS]}
+              options={[{ value: '', label: BINDERS_MESSAGES.period.autoSelected, disabled: true }, ...MONTH_OPTIONS]}
               value={field.value ? String(field.value) : ''}
               onChange={() => undefined}
               onBlur={field.onBlur}

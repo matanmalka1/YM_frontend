@@ -7,6 +7,8 @@ import { BinderDetailsPanel } from './BinderDetailsPanel'
 import { BinderAuditSection } from '../sections/BinderAuditSection'
 import { BinderIntakesSection } from '../sections/BinderIntakesSection'
 import { BinderDocumentsSection } from '../sections/BinderDocumentsSection'
+import { BINDERS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface BinderDetailDrawerProps {
   open: boolean
@@ -41,19 +43,23 @@ export const BinderDetailDrawer: React.FC<BinderDetailDrawerProps> = ({
 }) => (
   <DetailDrawer
     open={open}
-    title={binder ? `קלסר ${binder.binder_number}` : ''}
+    title={binder ? BINDERS_MESSAGES.details.title(binder.binder_number) : ''}
     onClose={onClose}
     footer={
       binder && onDelete ? (
         <div className="flex justify-end">
           <Button variant="ghost" size="sm" icon={<Trash2 className="h-4 w-4" />} onClick={onDelete}>
-            מחק קלסר
+            {BINDERS_MESSAGES.actions.deleteBinder}
           </Button>
         </div>
       ) : undefined
     }
   >
-    {!binder && <div className="flex items-center justify-center py-12 text-sm text-gray-400">טוען...</div>}
+    {!binder && (
+      <div className="flex items-center justify-center py-12 text-sm text-gray-400">
+        {GLOBAL_UI_MESSAGES.common.loading}
+      </div>
+    )}
     {binder && (
       <>
         <BinderDetailsPanel binder={binder} />

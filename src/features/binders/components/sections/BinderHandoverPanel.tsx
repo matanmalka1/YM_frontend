@@ -12,6 +12,7 @@ import { formatMonthYear } from '@/utils/utils'
 import { NUMERIC_MONTH_OPTIONS, getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { PAGE_SIZE_LG } from '@/constants/pagination.constants'
+import { BINDERS_MESSAGES } from '../../messages'
 
 interface BinderHandoverPanelProps {
   clientId: number
@@ -74,14 +75,14 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
   return (
     <div className="space-y-4">
       <div className="rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <p className="text-sm font-medium text-gray-900">בחירת קלסרים למסירה</p>
-        <p className="mt-1 text-xs text-gray-500">בחר את כל הקלסרים במצב "מוכן למסירה" שנמסרים ללקוח באותו אירוע.</p>
+        <p className="text-sm font-medium text-gray-900">{BINDERS_MESSAGES.handover.selectionTitle}</p>
+        <p className="mt-1 text-xs text-gray-500">{BINDERS_MESSAGES.handover.selectionHelp}</p>
 
         <div className="mt-3 space-y-2">
           {isLoading ? (
-            <p className="text-sm text-gray-500">טוען קלסרים מוכנים...</p>
+            <p className="text-sm text-gray-500">{BINDERS_MESSAGES.handover.loadingReadyBinders}</p>
           ) : readyBinders.length === 0 ? (
-            <p className="text-sm text-gray-500">אין קלסרים מוכנים למסירה עבור לקוח זה.</p>
+            <p className="text-sm text-gray-500">{BINDERS_MESSAGES.handover.noReadyBinders}</p>
           ) : (
             readyBinders.map((binder) => {
               const checked = selectedIds.includes(binder.id)
@@ -104,8 +105,8 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
                     <div className="text-sm font-medium text-gray-900">{binder.binder_number}</div>
                     <div className="text-xs text-gray-500">
                       {binder.period_start
-                        ? `${formatMonthYear(binder.period_start)} - ${binder.period_end ? formatMonthYear(binder.period_end) : 'פעיל'}`
-                        : 'ללא תקופה'}
+                        ? `${formatMonthYear(binder.period_start)} - ${binder.period_end ? formatMonthYear(binder.period_end) : BINDERS_MESSAGES.period.active}`
+                        : BINDERS_MESSAGES.period.noPeriod}
                     </div>
                   </label>
                 </div>
@@ -116,23 +117,23 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
       </div>
 
       <Input
-        label="נמסר לידי"
+        label={BINDERS_MESSAGES.handover.recipientLabel}
         value={receivedByName}
         onChange={(event) => setReceivedByName(event.target.value)}
-        placeholder="שם מקבל הקלסרים"
+        placeholder={BINDERS_MESSAGES.handover.recipientPlaceholder}
       />
 
-      <DatePicker label="תאריך מסירה" value={handedOverAt} onChange={setHandedOverAt} />
+      <DatePicker label={BINDERS_MESSAGES.handover.handoverDate} value={handedOverAt} onChange={setHandedOverAt} />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Select
-          label="עד שנת דיווח"
+          label={BINDERS_MESSAGES.handover.untilYear}
           value={String(untilPeriodYear)}
           onChange={(event) => setUntilPeriodYear(Number(event.target.value))}
           options={getOperationalYearOptions()}
         />
         <Select
-          label="עד חודש דיווח"
+          label={BINDERS_MESSAGES.handover.untilMonth}
           value={String(untilPeriodMonth)}
           onChange={(event) => setUntilPeriodMonth(Number(event.target.value))}
           options={NUMERIC_MONTH_OPTIONS}
@@ -140,15 +141,15 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
       </div>
 
       <Textarea
-        label="הערות"
+        label={BINDERS_MESSAGES.receive.notes}
         rows={3}
         value={notes}
         onChange={(event) => setNotes(event.target.value)}
-        placeholder="הערת מסירה (אופציונלי)"
+        placeholder={BINDERS_MESSAGES.handover.notesPlaceholder}
       />
 
       <div className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600">
-        <span>{selectedCount} קלסרים נבחרו למסירה</span>
+        <span>{BINDERS_MESSAGES.handover.selectedCount(selectedCount)}</span>
         <Button
           type="button"
           variant="ghost"
@@ -165,7 +166,7 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
             })
           }
         >
-          אשר מסירה
+          {BINDERS_MESSAGES.actions.confirmHandover}
         </Button>
       </div>
     </div>

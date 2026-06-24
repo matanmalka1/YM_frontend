@@ -14,6 +14,8 @@ import { MONTH_OPTIONS } from '@/constants/periodOptions.constants'
 import { BINDER_TYPE_OPTIONS, PERIODIC_BINDER_TYPES } from '../../constants'
 import type { ReceiveBinderFormValues } from '../../schemas'
 import { BinderPeriodFields } from './BinderPeriodFields'
+import { BINDERS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 export interface BinderReceivePanelProps {
   form: UseFormReturn<ReceiveBinderFormValues>
@@ -63,15 +65,21 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
   const clientLocked = isClientLockedForCreate(selectedClient?.client_status)
 
   const businessOptions = [
-    { value: '', label: 'בחר עסק...', disabled: true },
-    ...(businesses.length > 1 ? [{ value: 'all', label: 'כל העסקים' }] : []),
-    ...businesses.map((b) => ({ value: String(b.id), label: b.business_name ?? `עסק #${b.id}` })),
+    { value: '', label: BINDERS_MESSAGES.receive.chooseBusiness, disabled: true },
+    ...(businesses.length > 1 ? [{ value: 'all', label: BINDERS_MESSAGES.receive.allBusinesses }] : []),
+    ...businesses.map((b) => ({
+      value: String(b.id),
+      label: b.business_name ?? BINDERS_MESSAGES.receive.businessOption(b.id),
+    })),
   ]
 
   const annualReportOptions = [
     {
       value: '',
-      label: annualReports.length > 0 ? 'ללא קישור לדוח שנתי' : 'אין דוחות שנתיים לעסק זה',
+      label:
+        annualReports.length > 0
+          ? BINDERS_MESSAGES.receive.noAnnualReportLink
+          : BINDERS_MESSAGES.receive.noAnnualReportsForBusiness,
     },
     ...annualReports.map((report) => ({
       value: String(report.id),
@@ -87,13 +95,13 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
         onSelect={onClientSelect}
         error={
           errors.client_record_id?.message ??
-          (!selectedClient && clientQuery.length > 0 ? 'נא לבחור לקוח מהרשימה' : undefined)
+          (!selectedClient && clientQuery.length > 0 ? BINDERS_MESSAGES.receive.clientSelectionRequired : undefined)
         }
       />
 
       {selectedClient && (
         <p className="text-xs text-positive-700 font-medium -mt-2">
-          ✓ נבחר: {selectedClient.name} (#{selectedClient.id})
+          {BINDERS_MESSAGES.receive.selectedClient(selectedClient.name, selectedClient.id)}
         </p>
       )}
 
@@ -102,8 +110,8 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
           variant={selectedClient.client_status === 'closed' ? 'error' : 'warning'}
           message={
             selectedClient.client_status === 'closed'
-              ? 'לקוח סגור – לא ניתן לקלוט קלסר'
-              : 'לקוח מוקפא – לא ניתן לקלוט קלסר חדש'
+              ? BINDERS_MESSAGES.receive.closedClient
+              : BINDERS_MESSAGES.receive.frozenClient
           }
         />
       )}
@@ -116,7 +124,7 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
 
           return (
             <div className="space-y-2">
-              <div className="text-sm font-medium text-gray-700">סוג חומר</div>
+              <div className="text-sm font-medium text-gray-700">{BINDERS_MESSAGES.receive.materialType}</div>
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {BINDER_TYPE_OPTIONS.filter((option) => option.value !== '').map((option) => (
                   <Checkbox
@@ -149,7 +157,7 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
           control={control}
           render={({ field }) => (
             <Select
-              label="עסק"
+              label={BINDERS_MESSAGES.receive.business}
               error={errors.business_id?.message}
               options={businessOptions}
               value={field.value === null ? 'all' : field.value !== undefined ? String(field.value) : ''}
@@ -188,9 +196,12 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
 
             return (
               <Select
-                label="חודש שכר"
+                label={BINDERS_MESSAGES.receive.salaryMonth}
                 error={errors.salary_month?.message}
-                options={[{ value: '', label: 'בחר חודש שכר...', disabled: true }, ...salaryMonthOptions]}
+                options={[
+                  { value: '', label: BINDERS_MESSAGES.receive.chooseSalaryMonth, disabled: true },
+                  ...salaryMonthOptions,
+                ]}
                 value={field.value ? String(field.value) : ''}
                 onChange={(event) => field.onChange(event.target.value ? Number(event.target.value) : null)}
                 onBlur={field.onBlur}
@@ -207,7 +218,7 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
           control={control}
           render={({ field }) => (
             <Select
-              label="דוח שנתי"
+              label={BINDERS_MESSAGES.receive.annualReport}
               error={errors.annual_report_id?.message}
               options={annualReportOptions}
               value={field.value != null ? String(field.value) : ''}
@@ -226,7 +237,7 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
         control={control}
         render={({ field }) => (
           <DatePicker
-            label="תאריך קבלה"
+            label={BINDERS_MESSAGES.receive.receivedAt}
             error={errors.received_at?.message}
             value={field.value}
             onChange={field.onChange}
@@ -238,20 +249,25 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
       {selectedClient && hasActiveBinder && (
         <Checkbox
           {...register('open_new_binder')}
-          label="קלסר מלא – פתח קלסר חדש"
+          label={BINDERS_MESSAGES.receive.openNewBinder}
           containerClassName="text-warning-700"
           inputClassName="mt-0.5"
         />
       )}
 
-      <Textarea label="הערות" rows={3} placeholder="הערות פנימיות (אופציונלי)" {...register('notes')} />
+      <Textarea
+        label={BINDERS_MESSAGES.receive.notes}
+        rows={3}
+        placeholder={BINDERS_MESSAGES.receive.notesPlaceholder}
+        {...register('notes')}
+      />
 
       <div className="flex justify-end gap-2 pt-2">
         <Button type="button" variant="ghost" onClick={dismiss}>
-          ביטול
+          {GLOBAL_UI_MESSAGES.actions.cancel}
         </Button>
         <Button type="submit" variant="primary" isLoading={isSubmitting} disabled={isSubmitting || clientLocked}>
-          קליטה
+          {BINDERS_MESSAGES.actions.intake}
         </Button>
       </div>
     </form>

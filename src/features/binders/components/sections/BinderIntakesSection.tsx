@@ -23,6 +23,7 @@ import { getVatWorkItemStatusLabel } from '@/features/vatReports'
 import type { BinderIntakeMaterialResponse } from '../../types'
 import { formatStructuredBinderPeriod, toBinderPeriodValue } from '../../utils'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+import { BINDERS_MESSAGES } from '../../messages'
 
 const VatStatusBadge: React.FC<{ material: BinderIntakeMaterialResponse; clientId: number }> = ({
   material,
@@ -85,9 +86,12 @@ export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({
   if (isLoading) return null
 
   return (
-    <Card title="קליטות חומר" subtitle={intakes.length ? `${intakes.length} קליטות` : undefined}>
+    <Card
+      title={BINDERS_MESSAGES.intakes.title}
+      subtitle={intakes.length ? BINDERS_MESSAGES.intakes.count(intakes.length) : undefined}
+    >
       {intakes.length === 0 ? (
-        <p className="text-sm text-gray-500">אין קליטות חומר</p>
+        <p className="text-sm text-gray-500">{BINDERS_MESSAGES.intakes.empty}</p>
       ) : (
         <Timeline>
           {[...intakes].reverse().map((intake, index) => (
@@ -104,7 +108,7 @@ export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({
                     const businessName =
                       m.business_id != null
                         ? (businesses.find((business) => business.id === m.business_id)?.business_name ??
-                          `עסק #${m.business_id}`)
+                          BINDERS_MESSAGES.receive.businessOption(m.business_id))
                         : null
                     const annualReport =
                       m.annual_report_id != null
@@ -116,7 +120,7 @@ export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({
                         className="flex flex-col gap-0.5 text-xs border-t border-gray-100 pt-1 first:border-0 first:pt-0"
                       >
                         <div className="flex items-center gap-1">
-                          <span className="text-gray-400 w-20 shrink-0">סוג חומר</span>
+                          <span className="text-gray-400 w-20 shrink-0">{BINDERS_MESSAGES.intakes.materialType}</span>
                           <span className="text-gray-700 font-medium">{getBinderTypeLabel(m.material_type)}</span>
                           {m.material_type === 'vat' && m.period_year && m.period_month_start && m.period_month_end && (
                             <VatStatusBadge material={m} clientId={clientId} />
@@ -124,13 +128,13 @@ export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({
                         </div>
                         {businessName && (
                           <div className="flex items-center gap-1">
-                            <span className="text-gray-400 w-20 shrink-0">עסק</span>
+                            <span className="text-gray-400 w-20 shrink-0">{BINDERS_MESSAGES.intakes.business}</span>
                             <span className="text-gray-700">{businessName}</span>
                           </div>
                         )}
                         {m.material_type === 'annual_report' && m.annual_report_id != null && (
                           <div className="flex items-center gap-1">
-                            <span className="text-gray-400 w-20 shrink-0">דוח שנתי</span>
+                            <span className="text-gray-400 w-20 shrink-0">{BINDERS_MESSAGES.intakes.annualReport}</span>
                             <Button
                               type="button"
                               variant="linkPrimary"
@@ -141,25 +145,27 @@ export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({
                             >
                               {annualReport
                                 ? `${annualReport.tax_year} — ${getStatusLabel(annualReport.status)}`
-                                : `דוח #${m.annual_report_id}`}
+                                : BINDERS_MESSAGES.intakes.annualReportFallback(m.annual_report_id)}
                             </Button>
                           </div>
                         )}
                         {period && (
                           <div className="flex items-center gap-1">
-                            <span className="text-gray-400 w-20 shrink-0">תקופת דיווח</span>
+                            <span className="text-gray-400 w-20 shrink-0">
+                              {BINDERS_MESSAGES.intakes.reportingPeriod}
+                            </span>
                             <span className="text-gray-700">{period}</span>
                           </div>
                         )}
                         {!period && m.description && (
                           <div className="flex items-center gap-1">
-                            <span className="text-gray-400 w-20 shrink-0">תיאור</span>
+                            <span className="text-gray-400 w-20 shrink-0">{BINDERS_MESSAGES.intakes.description}</span>
                             <span className="text-gray-700">{m.description}</span>
                           </div>
                         )}
                         {intake.received_by_name && (
                           <div className="flex items-center gap-1">
-                            <span className="text-gray-400 w-20 shrink-0">נקלט ע״י</span>
+                            <span className="text-gray-400 w-20 shrink-0">{BINDERS_MESSAGES.intakes.receivedBy}</span>
                             <span className="text-gray-700">{intake.received_by_name}</span>
                           </div>
                         )}

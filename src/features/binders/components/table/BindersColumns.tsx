@@ -10,6 +10,7 @@ import {
 } from '../../constants'
 import { formatBinderNumber, formatClientOfficeId, formatMonthYear } from '@/utils/utils'
 import { BinderRowActions } from './BinderRowActions'
+import { BINDERS_MESSAGES } from '../../messages'
 
 const renderClientCell = (binder: BinderResponse) => (
   <span className="flex flex-col gap-0.5">
@@ -52,45 +53,53 @@ export const buildBindersColumns = ({
 }: BuildBindersColumnsParams): Column<BinderResponse>[] => [
   monoColumn({
     key: 'office_client_number',
-    header: "מס' לקוח",
+    header: BINDERS_MESSAGES.columns.officeClientNumber,
     getValue: (binder) => formatClientOfficeId(binder.office_client_number),
   }),
-  textColumn({ key: 'client_name', header: 'לקוח', getValue: (binder) => renderClientCell(binder) }),
-  monoColumn({ key: 'client_id_number', header: 'ת.ז / ח.פ', getValue: (binder) => binder.client_id_number }),
+  textColumn({
+    key: 'client_name',
+    header: BINDERS_MESSAGES.columns.client,
+    getValue: (binder) => renderClientCell(binder),
+  }),
+  monoColumn({
+    key: 'client_id_number',
+    header: BINDERS_MESSAGES.columns.idNumber,
+    getValue: (binder) => binder.client_id_number,
+  }),
   monoColumn({
     key: 'binder_number',
-    header: 'מספר קלסר',
+    header: BINDERS_MESSAGES.columns.binderNumber,
     valueClassName: 'font-semibold text-gray-700',
     getValue: (binder) => formatBinderNumber(binder.binder_number),
   }),
   statusColumn({
     key: 'location_status',
-    header: 'מיקום',
+    header: BINDERS_MESSAGES.columns.location,
     getStatus: (binder) => binder.location_status,
     getLabel: getBinderLocationStatusLabel,
     variantMap: BINDER_LOCATION_STATUS_VARIANTS,
   }),
   statusColumn({
     key: 'capacity_status',
-    header: 'קיבולת',
+    header: BINDERS_MESSAGES.columns.capacity,
     getStatus: (binder) => binder.capacity_status,
     getLabel: getBinderCapacityStatusLabel,
     variantMap: BINDER_CAPACITY_STATUS_VARIANTS,
   }),
   textColumn({
     key: 'period_start',
-    header: 'תקופה',
+    header: BINDERS_MESSAGES.columns.period,
     valueClassName: 'text-gray-600 tabular-nums',
     getValue: (binder) => {
       if (!binder.period_start && !binder.period_end) return <span className="text-gray-400">—</span>
       const start = formatMonthYear(binder.period_start)
-      const end = binder.period_end ? formatMonthYear(binder.period_end) : 'פעיל'
+      const end = binder.period_end ? formatMonthYear(binder.period_end) : BINDERS_MESSAGES.period.active
       return `${start} - ${end}`
     },
   }),
   {
     key: 'days_in_office',
-    header: 'ימים במשרד',
+    header: BINDERS_MESSAGES.columns.daysInOffice,
     render: (binder) => (
       <MonoValue value={binder.days_in_office} format="days" isInactive={binder.location_status === 'handed_over'} />
     ),

@@ -2,6 +2,7 @@ import { ArrowLeft, CheckCircle2, ClipboardCheck, Eye, ListChecks, Lock, RotateC
 import { RowActionItem, RowActionSeparator, RowActionsMenu } from '@/components/ui/table'
 import { hasBinderAction } from '../../utils'
 import type { BinderResponse } from '../../types'
+import { BINDERS_MESSAGES } from '../../messages'
 
 interface BinderRowActionsProps {
   binder: BinderResponse
@@ -42,9 +43,9 @@ export const BinderRowActions: React.FC<BinderRowActionsProps> = ({
     canReceiveMaterial || canMarkFull || canReopenCapacity || canMarkReady || canRevertReady || canHandover
 
   return (
-    <RowActionsMenu ariaLabel={`פעולות לקלסר ${binder.id}`}>
+    <RowActionsMenu ariaLabel={BINDERS_MESSAGES.rowActions.ariaLabel(binder.id)}>
       <RowActionItem
-        label="צפייה בפרטים"
+        label={BINDERS_MESSAGES.actions.viewDetails}
         onClick={onOpenDetail}
         icon={<Eye className="h-4 w-4" />}
         disabled={disabled}
@@ -52,18 +53,23 @@ export const BinderRowActions: React.FC<BinderRowActionsProps> = ({
       {hasActions && <RowActionSeparator />}
       {canReceiveMaterial && (
         <RowActionItem
-          label="רשום קליטת חומר"
+          label={BINDERS_MESSAGES.actions.receiveMaterial}
           onClick={onReceiveMaterial}
           icon={<ClipboardCheck className="h-4 w-4" />}
           disabled={disabled}
         />
       )}
       {canMarkFull && (
-        <RowActionItem label="סמן כמלא" onClick={onMarkFull} icon={<Lock className="h-4 w-4" />} disabled={disabled} />
+        <RowActionItem
+          label={BINDERS_MESSAGES.actions.markFull}
+          onClick={onMarkFull}
+          icon={<Lock className="h-4 w-4" />}
+          disabled={disabled}
+        />
       )}
       {canReopenCapacity && (
         <RowActionItem
-          label="פתח קיבולת"
+          label={BINDERS_MESSAGES.actions.reopenCapacity}
           onClick={onReopenCapacity}
           icon={<Unlock className="h-4 w-4" />}
           disabled={disabled}
@@ -72,13 +78,13 @@ export const BinderRowActions: React.FC<BinderRowActionsProps> = ({
       {canMarkReady && (
         <>
           <RowActionItem
-            label="מוכן למסירה"
+            label={BINDERS_MESSAGES.actions.readyForHandover}
             onClick={onMarkReadyForHandover}
             icon={<CheckCircle2 className="h-4 w-4" />}
             disabled={disabled}
           />
           <RowActionItem
-            label="סימון קבוצתי למסירה"
+            label={BINDERS_MESSAGES.actions.bulkReadyForHandover}
             onClick={onMarkReadyForHandoverBulk}
             icon={<ListChecks className="h-4 w-4" />}
             disabled={disabled}
@@ -87,7 +93,7 @@ export const BinderRowActions: React.FC<BinderRowActionsProps> = ({
       )}
       {canRevertReady && (
         <RowActionItem
-          label="בטל מוכן למסירה"
+          label={BINDERS_MESSAGES.actions.revertReadyForHandover}
           onClick={onRevertReadyForHandover}
           icon={<RotateCcw className="h-4 w-4" />}
           disabled={disabled}
@@ -96,13 +102,13 @@ export const BinderRowActions: React.FC<BinderRowActionsProps> = ({
       {canHandover && (
         <>
           <RowActionItem
-            label="מסירה ללקוח"
+            label={BINDERS_MESSAGES.actions.handoverToClient}
             onClick={onHandoverToClient}
             icon={<ArrowLeft className="h-4 w-4" />}
             disabled={disabled}
           />
           <RowActionItem
-            label="מסירה קבוצתית"
+            label={BINDERS_MESSAGES.actions.bulkHandoverToClient}
             onClick={onHandoverToClientBulk}
             icon={<ListChecks className="h-4 w-4" />}
             disabled={disabled}
@@ -111,7 +117,7 @@ export const BinderRowActions: React.FC<BinderRowActionsProps> = ({
       )}
       <RowActionSeparator />
       <RowActionItem
-        label="מחק קלסר"
+        label={BINDERS_MESSAGES.actions.deleteBinder}
         onClick={onDelete}
         icon={<Trash2 className="h-4 w-4" />}
         danger

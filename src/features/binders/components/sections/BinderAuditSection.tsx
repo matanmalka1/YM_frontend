@@ -14,6 +14,7 @@ import {
   isBinderLocationStatus,
 } from '../../constants'
 import { staggerDelay } from '@/utils/animation'
+import { BINDERS_MESSAGES } from '../../messages'
 
 interface BinderAuditSectionProps {
   binderId: number
@@ -43,9 +44,12 @@ export const BinderAuditSection: React.FC<BinderAuditSectionProps> = ({ binderId
   if (isLoading) return null
 
   return (
-    <Card title="היסטוריית שינויים" subtitle={audit.length ? `${audit.length} שינויים` : undefined}>
+    <Card
+      title={BINDERS_MESSAGES.audit.title}
+      subtitle={audit.length ? BINDERS_MESSAGES.audit.changesCount(audit.length) : undefined}
+    >
       {audit.length === 0 ? (
-        <p className="text-sm text-gray-500">אין רשומות היסטוריה</p>
+        <p className="text-sm text-gray-500">{BINDERS_MESSAGES.audit.empty}</p>
       ) : (
         <Timeline>
           {[...audit].reverse().map((entry, index) => {

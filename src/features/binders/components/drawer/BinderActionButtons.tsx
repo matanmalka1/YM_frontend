@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/primitives/Button'
 import type { BinderResponse } from '../../types'
 import { hasBinderAction } from '../../utils'
+import { BINDERS_MESSAGES } from '../../messages'
 
 interface BinderActionButtonsProps {
   binder: BinderResponse
@@ -35,44 +36,44 @@ export const BinderActionButtons: React.FC<BinderActionButtonsProps> = ({
     <div className={gap}>
       {hasBinderAction(binder, 'receive_material') && onReceiveMaterial && (
         <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onReceiveMaterial}>
-          רשום קליטת חומר
+          {BINDERS_MESSAGES.actions.receiveMaterial}
         </Button>
       )}
       {hasBinderAction(binder, 'mark_full') && onMarkFull && (
         <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onMarkFull}>
-          סמן כמלא
+          {BINDERS_MESSAGES.actions.markFull}
         </Button>
       )}
       {hasBinderAction(binder, 'reopen_capacity') && onReopenCapacity && (
         <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onReopenCapacity}>
-          פתח קיבולת
+          {BINDERS_MESSAGES.actions.reopenCapacity}
         </Button>
       )}
       {hasBinderAction(binder, 'mark_ready_for_handover') && (
         <>
           <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onMarkReadyForHandover}>
-            מוכן למסירה
+            {BINDERS_MESSAGES.actions.readyForHandover}
           </Button>
           {onMarkReadyForHandoverBulk && (
             <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onMarkReadyForHandoverBulk}>
-              סימון קבוצתי למסירה
+              {BINDERS_MESSAGES.actions.bulkReadyForHandover}
             </Button>
           )}
         </>
       )}
       {hasBinderAction(binder, 'revert_ready_for_handover') && (
         <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onRevertReadyForHandover}>
-          בטל מוכן למסירה
+          {BINDERS_MESSAGES.actions.revertReadyForHandover}
         </Button>
       )}
       {hasBinderAction(binder, 'handover_to_client') && (
         <>
           <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onHandoverToClient}>
-            מסירה ללקוח
+            {BINDERS_MESSAGES.actions.handoverToClient}
           </Button>
           {onHandoverToClientBulk && (
             <Button type="button" variant="outline" size="sm" disabled={disabled} onClick={onHandoverToClientBulk}>
-              מסירה קבוצתית
+              {BINDERS_MESSAGES.actions.bulkHandoverToClient}
             </Button>
           )}
         </>

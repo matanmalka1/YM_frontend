@@ -8,6 +8,7 @@ import { BinderDetailDrawer, BindersStatsSection, useBindersPage } from '@/featu
 import { BinderReceivePanel } from '../components/drawer/BinderReceivePanel'
 import { BindersPageDialogs } from '../components/dialogs/BindersPageDialogs'
 import { Plus } from 'lucide-react'
+import { BINDERS_MESSAGES } from '../messages'
 
 export const Binders: React.FC = () => {
   const { status, headerProps, stats, filters, table, modals, drawers } = useBindersPage()
@@ -23,7 +24,7 @@ export const Binders: React.FC = () => {
           iconPosition="end"
           onClick={drawers.openReceive}
         >
-          קליטת חומר
+          {BINDERS_MESSAGES.actions.intake}
         </Button>
       }
     />
@@ -38,7 +39,11 @@ export const Binders: React.FC = () => {
     >
       <BindersStatsSection counters={stats.counters} countersLoading={stats.countersLoading} />
 
-      <FilterPanel {...filters} title="סינון קלסרים" subtitle="לקוח, מספר, מיקום, קיבולת ושנה" />
+      <FilterPanel
+        {...filters}
+        title={BINDERS_MESSAGES.page.filterTitle}
+        subtitle={BINDERS_MESSAGES.page.filterSubtitle}
+      />
 
       <PaginatedDataTable
         data={table.data}
@@ -63,7 +68,7 @@ export const Binders: React.FC = () => {
 
       <DetailDrawer
         open={drawers.receive.open}
-        title="קליטת חומר מלקוח"
+        title={BINDERS_MESSAGES.page.receiveDrawerTitle}
         onClose={drawers.receive.onClose}
         isDirty={drawers.receive.form.formState.isDirty}
       >

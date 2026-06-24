@@ -15,6 +15,7 @@ import {
 import { formatDate, getErrorMessage } from '@/utils/utils'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
+import { BINDERS_MESSAGES } from '../../messages'
 
 interface BinderDocumentsSectionProps {
   binderId: number
@@ -41,13 +42,16 @@ export const BinderDocumentsSection: React.FC<BinderDocumentsSectionProps> = ({ 
   const totalPages = getTotalPages(total, PAGE_SIZE)
 
   return (
-    <Card title="מסמכים בקלסר" subtitle={total ? `${total} מסמכים` : undefined}>
+    <Card
+      title={BINDERS_MESSAGES.documents.title}
+      subtitle={total ? BINDERS_MESSAGES.documents.count(total) : undefined}
+    >
       {isLoading ? (
-        <p className="text-sm text-gray-400">טוען מסמכים...</p>
+        <p className="text-sm text-gray-400">{BINDERS_MESSAGES.documents.loading}</p>
       ) : error ? (
-        <p className="text-sm text-negative-600">{getErrorMessage(error, 'שגיאה בטעינת מסמכי הקלסר')}</p>
+        <p className="text-sm text-negative-600">{getErrorMessage(error, BINDERS_MESSAGES.documents.loadError)}</p>
       ) : documents.length === 0 ? (
-        <p className="text-sm text-gray-500">אין מסמכים בקלסר זה</p>
+        <p className="text-sm text-gray-500">{BINDERS_MESSAGES.documents.empty}</p>
       ) : (
         <>
           <ul className="space-y-2">
@@ -75,7 +79,7 @@ export const BinderDocumentsSection: React.FC<BinderDocumentsSectionProps> = ({ 
                     size="sm"
                     icon={<Eye className="h-4 w-4" />}
                     onClick={() => handlePreviewClick(doc)}
-                    aria-label="צפייה במסמך"
+                    aria-label={BINDERS_MESSAGES.documents.previewAriaLabel}
                   />
                   <Button
                     variant="ghost"
@@ -83,14 +87,20 @@ export const BinderDocumentsSection: React.FC<BinderDocumentsSectionProps> = ({ 
                     icon={<Download className="h-4 w-4" />}
                     isLoading={downloadingId === doc.id}
                     onClick={() => handleDownloadClick(doc)}
-                    aria-label="הורדת מסמך"
+                    aria-label={BINDERS_MESSAGES.documents.downloadAriaLabel}
                   />
                 </div>
               </li>
             ))}
           </ul>
           {totalPages > 1 && (
-            <PaginationCard page={page} totalPages={totalPages} total={total} label="מסמכים" onPageChange={setPage} />
+            <PaginationCard
+              page={page}
+              totalPages={totalPages}
+              total={total}
+              label={BINDERS_MESSAGES.documents.paginationLabel}
+              onPageChange={setPage}
+            />
           )}
         </>
       )}

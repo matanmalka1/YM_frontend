@@ -1,6 +1,7 @@
 import { Archive, CheckCircle2, FolderKanban, Undo2 } from 'lucide-react'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
 import type { BinderListCounters } from '../../types'
+import { BINDERS_MESSAGES } from '../../messages'
 
 interface BindersStatsSectionProps {
   counters: BinderListCounters
@@ -11,35 +12,35 @@ export const BindersStatsSection = ({ counters, countersLoading = false }: Binde
   const statusPills = [
     {
       key: '',
-      label: 'סה"כ קלסרים',
+      label: BINDERS_MESSAGES.stats.totalLabel,
       count: counters.total,
       icon: FolderKanban,
       variant: 'blue' as const,
-      description: 'כל הקלסרים בהתאם לסינון הנוכחי',
+      description: BINDERS_MESSAGES.stats.totalDescription,
     },
     {
       key: 'in_office',
-      label: 'במשרד',
+      label: BINDERS_MESSAGES.stats.inOfficeLabel,
       count: counters.location_in_office,
       icon: Archive,
       variant: 'orange' as const,
-      description: 'קלסרים שנמצאים במשרד',
+      description: BINDERS_MESSAGES.stats.inOfficeDescription,
     },
     {
       key: 'ready_for_handover',
-      label: 'מוכן למסירה',
+      label: BINDERS_MESSAGES.stats.readyLabel,
       count: counters.location_ready_for_handover,
       icon: CheckCircle2,
       variant: 'green' as const,
-      description: 'קלסרים מוכנים למסירה ללקוח',
+      description: BINDERS_MESSAGES.stats.readyDescription,
     },
     {
       key: 'handed_over',
-      label: 'נמסר ללקוח',
+      label: BINDERS_MESSAGES.stats.handedOverLabel,
       count: counters.location_handed_over,
       icon: Undo2,
       variant: 'neutral' as const,
-      description: 'קלסרים שנמסרו ללקוח',
+      description: BINDERS_MESSAGES.stats.handedOverDescription,
     },
   ] as const
 
