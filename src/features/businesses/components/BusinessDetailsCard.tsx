@@ -4,6 +4,7 @@ import { EntityAuditTrailSection, type FieldValueLabels } from '@/features/audit
 import type { BusinessResponse, ClientRecordResponse } from '@/features/clients'
 import { NotesCard } from '@/features/notes'
 import { BUSINESS_DETAILS_COPY, BUSINESS_STATUS_LABELS } from '../constants'
+import { BUSINESSES_MESSAGES } from '../messages'
 import { buildBusinessSummaryItems } from '../utils/businessUtils'
 
 const FIELD_VALUE_LABELS: FieldValueLabels = {
@@ -26,8 +27,8 @@ export const BusinessDetailsCard = ({ business, client, canEdit = false }: Busin
       <EntityAuditTrailSection
         entityType="business"
         entityId={business.id}
-        title="יומן שינויים"
-        subtitle="שינויים שבוצעו בפרטי העסק"
+        title={BUSINESSES_MESSAGES.details.auditTitle}
+        subtitle={BUSINESSES_MESSAGES.details.auditSubtitle}
         fieldValueLabels={FIELD_VALUE_LABELS}
       />
 

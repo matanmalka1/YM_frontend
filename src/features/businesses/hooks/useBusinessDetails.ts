@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { clientsApi, clientsQK } from '@/features/clients'
 import { getErrorMessage, isPositiveInt } from '@/utils/utils'
+import { BUSINESSES_MESSAGES } from '../messages'
 
 type UseBusinessDetailsParams = {
   clientId: number | null
@@ -38,11 +39,11 @@ export const useBusinessDetails = ({ clientId, businessId }: UseBusinessDetailsP
 
   const isLoading = clientLoading || businessLoading
   const error = clientError
-    ? getErrorMessage(clientError, 'שגיאה בטעינת פרטי לקוח')
+    ? getErrorMessage(clientError, BUSINESSES_MESSAGES.details.clientLoadError)
     : businessError
-      ? getErrorMessage(businessError, 'שגיאה בטעינת פרטי עסק')
+      ? getErrorMessage(businessError, BUSINESSES_MESSAGES.details.businessLoadError)
       : businessData && businessData.client_id !== clientId
-        ? 'העסק אינו שייך ללקוח שנבחר'
+        ? BUSINESSES_MESSAGES.details.wrongClientError
         : null
 
   return {
