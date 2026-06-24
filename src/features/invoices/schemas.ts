@@ -1,22 +1,23 @@
 import { z } from 'zod'
 import type { InvoiceAttachRequest } from './api'
+import { INVOICES_MESSAGES } from './messages'
 
 export const invoiceAttachSchema = z.object({
-  provider: z.string().trim().min(1, 'יש להזין ספק חשבונית'),
-  external_invoice_id: z.string().trim().min(1, 'יש להזין מזהה חשבונית'),
+  provider: z.string().trim().min(1, INVOICES_MESSAGES.validation.providerRequired),
+  external_invoice_id: z.string().trim().min(1, INVOICES_MESSAGES.validation.invoiceIdRequired),
   issued_at: z
     .string()
     .trim()
-    .min(1, 'יש להזין תאריך הנפקה')
+    .min(1, INVOICES_MESSAGES.validation.issuedAtRequired)
     .refine((value) => Number.isFinite(new Date(value).getTime()), {
-      message: 'יש להזין תאריך הנפקה תקין',
+      message: INVOICES_MESSAGES.validation.validIssuedAt,
     }),
   document_url: z
     .string()
     .trim()
     .optional()
     .refine((value) => !value || /^https?:\/\/\S+$/i.test(value), {
-      message: 'יש להזין קישור תקין',
+      message: INVOICES_MESSAGES.validation.validUrl,
     }),
 })
 

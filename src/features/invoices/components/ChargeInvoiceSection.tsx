@@ -15,6 +15,8 @@ import {
   type InvoiceAttachFormValues,
 } from '../schemas'
 import { useChargeInvoice } from '../hooks/useChargeInvoice'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { INVOICES_MESSAGES } from '../messages'
 
 interface ChargeInvoiceSectionProps {
   chargeId: number
@@ -45,19 +47,21 @@ export const ChargeInvoiceSection: React.FC<ChargeInvoiceSectionProps> = ({ char
   })
 
   return (
-    <DrawerSection title="חשבונית">
-      {isLoadingInvoice && <DrawerField label="סטטוס" value="טוען פרטי חשבונית..." />}
+    <DrawerSection title={INVOICES_MESSAGES.section.title}>
+      {isLoadingInvoice && (
+        <DrawerField label={INVOICES_MESSAGES.section.status} value={INVOICES_MESSAGES.section.loadingDetails} />
+      )}
       {invoiceError && <Alert variant="warning" message={invoiceError} />}
 
       {!isLoadingInvoice && invoice && (
         <>
-          <DrawerField label="ספק" value={invoice.provider} />
-          <DrawerField label="מזהה חיצוני" value={invoice.external_invoice_id} />
-          <DrawerField label="הונפקה" value={formatDateTime(invoice.issued_at)} />
-          <DrawerField label="צורפה" value={formatDateTime(invoice.created_at)} />
+          <DrawerField label={INVOICES_MESSAGES.section.provider} value={invoice.provider} />
+          <DrawerField label={INVOICES_MESSAGES.section.externalId} value={invoice.external_invoice_id} />
+          <DrawerField label={INVOICES_MESSAGES.section.issuedAt} value={formatDateTime(invoice.issued_at)} />
+          <DrawerField label={INVOICES_MESSAGES.section.attachedAt} value={formatDateTime(invoice.created_at)} />
           {invoice.document_url && (
             <DrawerField
-              label="מסמך"
+              label={INVOICES_MESSAGES.section.document}
               value={
                 <InlineLink
                   href={invoice.document_url}
@@ -66,7 +70,7 @@ export const ChargeInvoiceSection: React.FC<ChargeInvoiceSectionProps> = ({ char
                   onClick={(event) => event.stopPropagation()}
                   icon={<ExternalLink className="h-3.5 w-3.5" />}
                 >
-                  פתח מסמך
+                  {INVOICES_MESSAGES.section.openDocument}
                 </InlineLink>
               }
             />
@@ -77,39 +81,45 @@ export const ChargeInvoiceSection: React.FC<ChargeInvoiceSectionProps> = ({ char
       {!isLoadingInvoice && !invoice && (
         <div className="space-y-3">
           <p className="text-sm text-gray-500">
-            {chargeStatus === 'issued' ? 'לא צורפה חשבונית לחיוב זה.' : 'ניתן לצרף חשבונית רק לחיוב שהונפק.'}
+            {chargeStatus === 'issued'
+              ? INVOICES_MESSAGES.section.noInvoice
+              : INVOICES_MESSAGES.section.attachIssuedOnly}
           </p>
 
           {canShowAttachForm && !showForm && (
             <Button type="button" variant="outline" size="sm" onClick={() => setShowForm(true)} className="gap-1.5">
               <FilePlus2 className="h-3.5 w-3.5" />
-              צרף חשבונית
+              {INVOICES_MESSAGES.section.attachInvoice}
             </Button>
           )}
 
           {canShowAttachForm && showForm && (
             <form onSubmit={submitForm} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <Input label="ספק *" error={errors.provider?.message} {...register('provider')} />
               <Input
-                label="מזהה חשבונית *"
+                label={INVOICES_MESSAGES.section.providerRequired}
+                error={errors.provider?.message}
+                {...register('provider')}
+              />
+              <Input
+                label={INVOICES_MESSAGES.section.invoiceIdRequired}
                 error={errors.external_invoice_id?.message}
                 {...register('external_invoice_id')}
               />
               <Input
-                label="תאריך הנפקה *"
+                label={INVOICES_MESSAGES.section.issuedAtRequired}
                 type="datetime-local"
                 error={errors.issued_at?.message}
                 {...register('issued_at')}
               />
               <Input
-                label="קישור למסמך"
+                label={INVOICES_MESSAGES.section.documentUrl}
                 type="url"
                 error={errors.document_url?.message}
                 {...register('document_url')}
               />
               <div className="flex flex-wrap items-center gap-2 sm:col-span-2">
                 <Button type="submit" size="sm" isLoading={isAttaching}>
-                  שמור חשבונית
+                  {INVOICES_MESSAGES.section.save}
                 </Button>
                 <Button
                   type="button"
@@ -118,7 +128,7 @@ export const ChargeInvoiceSection: React.FC<ChargeInvoiceSectionProps> = ({ char
                   onClick={() => setShowForm(false)}
                   disabled={isAttaching}
                 >
-                  ביטול
+                  {GLOBAL_UI_MESSAGES.actions.cancel}
                 </Button>
               </div>
             </form>

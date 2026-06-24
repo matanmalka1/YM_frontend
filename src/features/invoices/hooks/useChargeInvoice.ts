@@ -4,6 +4,7 @@ import { invoicesApi, type InvoiceAttachRequest } from '../api'
 import { invoicesQK } from '../api/queryKeys'
 import { toast } from '@/utils/toast'
 import { getErrorMessage, getHttpStatus, showErrorToast } from '@/utils/utils'
+import { INVOICES_MESSAGES } from '../messages'
 
 export const useChargeInvoice = (chargeId: number | null | undefined) => {
   const queryClient = useQueryClient()
@@ -31,9 +32,9 @@ export const useChargeInvoice = (chargeId: number | null | undefined) => {
     mutationFn: (payload: InvoiceAttachRequest) => invoicesApi.attach(payload),
     onSuccess: (invoice) => {
       queryClient.setQueryData(invoicesQK.byChargeId(invoice.charge_id), invoice)
-      toast.success('החשבונית צורפה לחיוב')
+      toast.success(INVOICES_MESSAGES.mutations.attached)
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בצירוף חשבונית'),
+    onError: (err) => showErrorToast(err, INVOICES_MESSAGES.mutations.attachError),
   })
 
   const attachInvoice = async (payload: InvoiceAttachRequest): Promise<boolean> => {
@@ -48,7 +49,7 @@ export const useChargeInvoice = (chargeId: number | null | undefined) => {
   return {
     attachInvoice,
     invoice: invoiceData ?? null,
-    invoiceError: invoiceError ? getErrorMessage(invoiceError, 'שגיאה בטעינת פרטי חשבונית') : null,
+    invoiceError: invoiceError ? getErrorMessage(invoiceError, INVOICES_MESSAGES.mutations.loadError) : null,
     isAttaching: attachMutation.isPending,
     isLoadingInvoice: invoiceLoading,
   }
