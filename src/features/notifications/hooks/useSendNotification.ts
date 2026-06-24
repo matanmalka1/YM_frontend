@@ -3,11 +3,12 @@ import { notificationsApi, notificationsQK } from '../api'
 import { toast } from '../../../utils/toast'
 import { getErrorMessage } from '../../../utils/utils'
 import type { NotificationPreviewRequest, NotificationResult, NotificationSendVariables } from '../api'
+import { NOTIFICATIONS_MESSAGES } from '../messages'
 
 export const usePreviewNotification = () => {
   const mutation = useMutation({
     mutationFn: (payload: NotificationPreviewRequest) => notificationsApi.preview(payload),
-    onError: (err) => toast.error(getErrorMessage(err, 'שגיאה בטעינת תצוגה מקדימה')),
+    onError: (err) => toast.error(getErrorMessage(err, NOTIFICATIONS_MESSAGES.form.previewError)),
   })
 
   return {
@@ -29,16 +30,16 @@ export const useSendNotification = () => {
       void queryClient.invalidateQueries({ queryKey: notificationsQK.lists() })
       void queryClient.invalidateQueries({ queryKey: notificationsQK.summaries() })
       if (result.status === 'sent') {
-        toast.success('ההודעה נשלחה בהצלחה')
+        toast.success(NOTIFICATIONS_MESSAGES.form.sendSuccess)
       } else if (result.status === 'skipped') {
-        toast.warning('ההודעה לא נשלחה — לא נמצאה כתובת אימייל ללקוח')
+        toast.warning(NOTIFICATIONS_MESSAGES.form.sendSkippedNoEmail)
       } else if (result.status === 'blocked') {
-        toast.error(result.reason ?? 'שליחת ההודעה חסומה')
+        toast.error(result.reason ?? NOTIFICATIONS_MESSAGES.form.blockedFallback)
       } else {
-        toast.error(result.reason ?? 'שגיאה בשליחת ההודעה')
+        toast.error(result.reason ?? NOTIFICATIONS_MESSAGES.form.sendError)
       }
     },
-    onError: (err) => toast.error(getErrorMessage(err, 'שגיאה בשליחת ההודעה')),
+    onError: (err) => toast.error(getErrorMessage(err, NOTIFICATIONS_MESSAGES.form.sendError)),
   })
 
   return {

@@ -15,6 +15,7 @@ import { useNotifications } from './useNotifications'
 import { useNotificationDetail } from './useNotificationDetail'
 import { buildNotificationColumns } from '../components/list/NotificationsColumns'
 import { NOTIFICATION_STATUS_OPTIONS, NOTIFICATION_TRIGGER_OPTIONS } from '../constants'
+import { NOTIFICATIONS_MESSAGES } from '../messages'
 
 const DEFAULT_PAGE_SIZE = PAGE_SIZE_25
 
@@ -134,12 +135,12 @@ export const useNotificationsPage = () => {
     status: {
       isLoading: isPending,
       isFetching,
-      error: error ? 'שגיאה בטעינת הודעות' : null,
-      loadingMessage: 'טוען הודעות...',
+      error: error ? NOTIFICATIONS_MESSAGES.page.loadError : null,
+      loadingMessage: NOTIFICATIONS_MESSAGES.page.loading,
     },
     headerProps: {
-      title: 'הודעות',
-      description: 'מרכז הודעות שנשלחו ונרשמו במערכת',
+      title: NOTIFICATIONS_MESSAGES.page.title,
+      description: NOTIFICATIONS_MESSAGES.page.description,
     },
     permissions: { isAdvisor },
     filters: {
@@ -163,7 +164,7 @@ export const useNotificationsPage = () => {
       showPagination: total > 0,
       emptyState: {
         icon: Bell,
-        message: 'אין הודעות להצגה',
+        message: NOTIFICATIONS_MESSAGES.page.empty,
       },
     },
     drawers: {

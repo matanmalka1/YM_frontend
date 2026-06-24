@@ -34,6 +34,10 @@ export const NOTIFICATIONS_MESSAGES = {
     triggerOptionLabel: (domain: string, triggerLabel: string) => `${domain} — ${triggerLabel}`,
     clientRequired: 'יש לבחור לקוח',
     blockedFallback: 'שליחת ההודעה חסומה',
+    previewError: 'שגיאה בטעינת תצוגה מקדימה',
+    sendSuccess: 'ההודעה נשלחה בהצלחה',
+    sendSkippedNoEmail: 'ההודעה לא נשלחה — לא נמצאה כתובת אימייל ללקוח',
+    sendError: 'שגיאה בשליחת ההודעה',
     subjectRequired: 'נדרש נושא ההודעה',
     bodyRequired: 'נדרש תוכן ההודעה',
     typeLabel: 'סוג הודעה',
@@ -83,5 +87,10 @@ export const NOTIFICATIONS_MESSAGES = {
   page: {
     filterTitle: 'סינון התראות',
     filterSubtitle: 'לקוח, סוג, סטטוס, תאריך ושולח',
+    loadError: 'שגיאה בטעינת הודעות',
+    loading: 'טוען הודעות...',
+    title: 'הודעות',
+    description: 'מרכז הודעות שנשלחו ונרשמו במערכת',
+    empty: 'אין הודעות להצגה',
   },
 } as const
