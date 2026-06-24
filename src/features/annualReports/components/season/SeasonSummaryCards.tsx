@@ -2,6 +2,7 @@ import { CheckCircle2, AlertTriangle, Users } from 'lucide-react'
 import { StatsCard } from '../../../../components/ui/layout/StatsCard'
 import { formatPercent } from '@/utils/utils'
 import type { SeasonSummary } from '../../api'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface SeasonSummaryCardsProps {
   summary: SeasonSummary
@@ -14,27 +15,27 @@ export const SeasonSummaryCards: React.FC<SeasonSummaryCardsProps> = ({ summary 
   const statCards = [
     {
       key: 'total',
-      title: 'סה״כ דוחות',
+      title: ANNUAL_REPORTS_MESSAGES.season.totalReports,
       value: total,
-      description: `שנת מס ${summary.tax_year}`,
+      description: ANNUAL_REPORTS_MESSAGES.season.progressSubtitle(summary.tax_year),
       icon: Users,
       variant: 'blue' as const,
       progress: undefined,
     },
     {
       key: 'completed',
-      title: 'הוגשו / הסתיימו',
+      title: ANNUAL_REPORTS_MESSAGES.season.submittedOrClosed,
       value: done,
-      description: `${formatPercent(completionRate)} אחוז הגשה`,
+      description: ANNUAL_REPORTS_MESSAGES.season.filingPercentNote(formatPercent(completionRate)),
       icon: CheckCircle2,
       variant: 'green' as const,
       progress: completionRate,
     },
     {
       key: 'overdue',
-      title: 'באיחור',
+      title: ANNUAL_REPORTS_MESSAGES.season.overdue,
       value: summary.overdue_count,
-      description: 'חרגו ממועד הגשה',
+      description: ANNUAL_REPORTS_MESSAGES.season.overdueNote,
       icon: AlertTriangle,
       variant: summary.overdue_count > 0 ? ('red' as const) : ('neutral' as const),
       progress: undefined,

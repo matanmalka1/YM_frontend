@@ -8,6 +8,7 @@ import { ANNEX_TEXT, TABLE_ICON_CLASS } from '../../constants/annexTextConstants
 import { getLineFieldValue } from '../../utils/annexHelpers'
 import { AnnexFieldInput } from './AnnexFieldInput'
 import type { AnnexFormValues } from '../../constants/annexSchema'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface AnnexDataTableProps {
   lines: AnnexDataLine[]
@@ -61,7 +62,7 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
             onClick={() => onStartEdit(line)}
           />
           <RowActionButton
-            label="מחיקת שורה"
+            label={ANNUAL_REPORTS_MESSAGES.annexDataTable.deleteLine}
             icon={<Trash2 className={TABLE_ICON_CLASS} />}
             tone="danger"
             size="sm"
@@ -73,16 +74,16 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
       editRender: (line) => (
         <div className="flex items-center gap-1">
           <RowActionButton
-            label="שמירת שורה"
+            label={ANNUAL_REPORTS_MESSAGES.annexDataTable.saveLine}
             icon={<Check className={TABLE_ICON_CLASS} />}
             tone="positive"
             size="sm"
             onClick={() => onSaveEdit(line.id)}
             disabled={isUpdating}
           />
-          <RowActionButton label="ביטול" icon={<X className={TABLE_ICON_CLASS} />} size="sm" onClick={onCancelEdit} />
+          <RowActionButton label={ANNUAL_REPORTS_MESSAGES.annexDataTable.cancel} icon={<X className={TABLE_ICON_CLASS} />} size="sm" onClick={onCancelEdit} />
           <RowActionButton
-            label="מחיקת שורה"
+            label={ANNUAL_REPORTS_MESSAGES.annexDataTable.deleteLine}
             icon={<Trash2 className={TABLE_ICON_CLASS} />}
             tone="danger"
             size="sm"

@@ -8,6 +8,7 @@ import { parseAnnualReportCalendarDate } from '../../constants/sharedConstants'
 import { getAnnualReportName, getDeadlineStatus } from '../../utils/sharedHelpers'
 import { InlineState } from '../../../../components/ui/feedback'
 import { Card } from '../../../../components/ui/primitives/Card'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface Props {
   reports: AnnualReportListItem[]
@@ -37,9 +38,9 @@ export const UpcomingDeadlinesList: React.FC<Props> = ({ reports }) => {
     )
 
   return (
-    <Card title="מועדי הגשה קרובים" icon={<CalendarClock className="h-4 w-4 text-gray-400" />} size="compact">
+    <Card title={ANNUAL_REPORTS_MESSAGES.upcomingDeadlines.title} icon={<CalendarClock className="h-4 w-4 text-gray-400" />} size="compact">
       {upcoming.length === 0 ? (
-        <InlineState icon={CalendarCheck} title="אין מועדי הגשה ממתינים" />
+        <InlineState icon={CalendarCheck} title={ANNUAL_REPORTS_MESSAGES.upcomingDeadlines.empty} />
       ) : (
         <ul className="space-y-2">
           {upcoming.map((r) => {

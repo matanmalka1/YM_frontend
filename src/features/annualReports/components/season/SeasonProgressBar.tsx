@@ -2,6 +2,7 @@ import { Card } from '../../../../components/ui/primitives/Card'
 import type { SeasonSummary } from '../../api'
 import { SEASON_PROGRESS_STAGES } from '../../api'
 import { cn } from '../../../../utils/utils'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface SeasonProgressBarProps {
   summary: SeasonSummary
@@ -11,7 +12,7 @@ export const SeasonProgressBar: React.FC<SeasonProgressBarProps> = ({ summary })
   const total = summary.total || 1
 
   return (
-    <Card variant="elevated" title="התקדמות עונת הגשה" subtitle={`שנת מס ${summary.tax_year}`}>
+    <Card variant="elevated" title={ANNUAL_REPORTS_MESSAGES.season.progressTitle} subtitle={ANNUAL_REPORTS_MESSAGES.season.progressSubtitle(summary.tax_year)}>
       {/* Stacked progress bar */}
       <div className="mb-6 h-5 w-full overflow-hidden rounded-full bg-gray-100 flex">
         {SEASON_PROGRESS_STAGES.map((stage) => {

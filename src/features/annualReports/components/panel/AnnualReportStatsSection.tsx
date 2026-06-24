@@ -2,6 +2,7 @@ import { StatsCard, type StatsCardProps } from '../../../../components/ui/layout
 import { formatCurrencyILS as fmt, formatPercent } from '@/utils/utils'
 import { SUMMARY_CARD_META } from '../../constants/panelConstants'
 import type { AnnualReportFull } from '../../api'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface Props {
   report: AnnualReportFull
@@ -26,7 +27,7 @@ export const AnnualReportStatsSection: React.FC<Props> = ({ report }) => {
       key: 'recognized-expenses',
       title: SUMMARY_CARD_META.recognizedExpenses.title,
       value: fmt(grossExpenses),
-      description: `מוכר למס ${fmt(recognizedExpenses)}`,
+      description: ANNUAL_REPORTS_MESSAGES.statsSection.recognizedExpensesNote(fmt(recognizedExpenses)),
       icon: SUMMARY_CARD_META.recognizedExpenses.icon,
       variant: SUMMARY_CARD_META.recognizedExpenses.variant,
       trend: { value: expenseRatio, label: '% מהכנסות' },
@@ -35,21 +36,21 @@ export const AnnualReportStatsSection: React.FC<Props> = ({ report }) => {
       key: 'final-balance',
       title: SUMMARY_CARD_META.finalBalance.title,
       value: fmt(finalBalance),
-      description: finalBalance > 0 ? 'לתשלום לאחר מקדמות' : finalBalance < 0 ? 'החזר צפוי לאחר מקדמות' : 'מאוזן',
+      description: finalBalance > 0 ? ANNUAL_REPORTS_MESSAGES.statsSection.balanceDuePayment : finalBalance < 0 ? ANNUAL_REPORTS_MESSAGES.statsSection.balanceDueRefund : ANNUAL_REPORTS_MESSAGES.statsSection.balanced,
       icon: SUMMARY_CARD_META.finalBalance.icon,
       variant: finalBalance < 0 ? 'green' : finalBalance > 0 ? 'red' : 'neutral',
       trend: undefined,
     },
     {
       key: 'annual-tax',
-      title: taxAfterCredits > 0 ? 'מס מחושב' : taxAfterCredits < 0 ? 'החזר מחושב' : 'מס שנתי',
+      title: taxAfterCredits > 0 ? ANNUAL_REPORTS_MESSAGES.statsSection.calculatedTax : taxAfterCredits < 0 ? ANNUAL_REPORTS_MESSAGES.statsSection.calculatedRefund : ANNUAL_REPORTS_MESSAGES.statsSection.annualTax,
       value: fmt(Math.abs(taxAfterCredits)),
-      description: taxAfterCredits !== 0 ? 'לפני קיזוז מקדמות' : 'לא חושב',
+      description: taxAfterCredits !== 0 ? ANNUAL_REPORTS_MESSAGES.statsSection.beforeAdvancesOffset : ANNUAL_REPORTS_MESSAGES.statsSection.notCalculated,
       icon: SUMMARY_CARD_META.annualTax.icon,
       variant: taxAfterCredits > 0 ? 'red' : taxAfterCredits < 0 ? 'green' : 'neutral',
       trend: {
         value: totalIncome > 0 ? -(Math.abs(taxAfterCredits) / totalIncome) * 100 : 0,
-        label: 'מהכנסות',
+        label: ANNUAL_REPORTS_MESSAGES.statsSection.ofIncomeShort,
       },
     },
     {
@@ -59,7 +60,7 @@ export const AnnualReportStatsSection: React.FC<Props> = ({ report }) => {
       description: undefined,
       icon: SUMMARY_CARD_META.netProfit.icon,
       variant: SUMMARY_CARD_META.netProfit.variant,
-      trend: { value: profitMargin, label: `${formatPercent(profitMargin)} שיעור רווח` },
+      trend: { value: profitMargin, label: ANNUAL_REPORTS_MESSAGES.statsSection.profitMarginTrend(formatPercent(profitMargin)) },
     },
     {
       key: 'gross-income',

@@ -9,6 +9,7 @@ import {
 } from './FinancialLineFormParts'
 import type { AddExpensePayload } from '../../utils/financialHelpers'
 import { useExpenseLineForm } from '../../hooks/useFinancialLineForm'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface AddExpenseLineFormProps {
   onAdd: (payload: AddExpensePayload) => void
@@ -31,7 +32,7 @@ export const AddExpenseLineForm: React.FC<AddExpenseLineFormProps> = ({ onAdd, i
   return (
     <FinancialAddFormShell
       open={open}
-      label="הוסף הוצאה"
+      label={ANNUAL_REPORTS_MESSAGES.financialForms.addExpense}
       error={form.error}
       isSubmitting={isAdding}
       onOpen={() => setOpen(true)}

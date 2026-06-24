@@ -11,6 +11,7 @@ import { EditIncomeLineForm } from './EditIncomeLineForm'
 import { EditExpenseLineForm } from './EditExpenseLineForm'
 import { FINANCIAL_MESSAGES } from '../../constants/financialConstants'
 import { normalizeExpenseDescription } from '../../utils/financialHelpers'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface IncomeExpensePanelProps {
   reportId: number
@@ -50,7 +51,7 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <AnnualReportFinancialSection
           icon={<ArrowUpCircle className="h-4 w-4 text-positive-600" />}
-          title="הכנסות"
+          title={ANNUAL_REPORTS_MESSAGES.incomeExpense.incomeTitle}
           total={panel.totals.income}
           titleClassName="text-positive-800"
           headerClassName="bg-positive-50"
@@ -62,7 +63,7 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
               typeOptions={INCOME_LABELS}
               onAdd={panel.addIncome}
               isAdding={panel.isAddingIncome}
-              label="הוסף הכנסה"
+              label={ANNUAL_REPORTS_MESSAGES.incomeExpense.addIncome}
             />
           }
         >
@@ -91,7 +92,7 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
 
         <AnnualReportFinancialSection
           icon={<ArrowDownCircle className="h-4 w-4 text-negative-500" />}
-          title="הוצאות"
+          title={ANNUAL_REPORTS_MESSAGES.incomeExpense.expensesTitle}
           total={panel.totals.expenses}
           titleClassName="text-negative-800"
           headerClassName="bg-negative-50"

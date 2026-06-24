@@ -10,6 +10,7 @@ import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { sortReportsByTaxYearDesc } from '../../utils/panelHelpers'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../../constants/reportConstants'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface Props {
   clientId: number
@@ -32,45 +33,45 @@ export const ReportHistoryTable: React.FC<Props> = ({ clientId, currentReportId,
       data={sorted}
       isLoading={isLoading}
       getRowKey={(r) => r.id}
-      emptyMessage="אין היסטוריית דוחות"
+      emptyMessage={ANNUAL_REPORTS_MESSAGES.reportHistoryTable.emptyMessage}
       rowClassName={(r) => (r.id === currentReportId ? 'bg-primary-50' : '')}
       columns={[
         {
           key: 'tax_year',
-          header: 'שנה',
+          header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.yearHeader,
           render: (r) => <span className="font-semibold text-gray-900">{r.tax_year}</span>,
         },
         {
           key: 'assessment_amount',
-          header: 'שומה',
+          header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.assessmentHeader,
           render: (r) => <span className="text-gray-700">{fmt(r.assessment_amount)}</span>,
         },
         {
           key: 'refund_due',
-          header: 'החזר מס',
+          header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.refundDueHeader,
           render: (r) => <span className={semanticMonoToneClasses.positive}>{fmt(r.refund_due)}</span>,
         },
         {
           key: 'tax_due',
-          header: 'חבות מס',
+          header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.taxDueHeader,
           render: (r) => <span className={semanticMonoToneClasses.negative}>{fmt(r.tax_due)}</span>,
         },
         {
           key: 'submitted_at',
-          header: 'תאריך הגשה',
+          header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.submittedAtHeader,
           render: (r) => <span className="text-gray-500 text-xs">{formatDate(r.submitted_at) ?? '—'}</span>,
         },
         {
           key: 'status',
-          header: 'סטטוס',
+          header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.statusHeader,
           render: (r) => <Badge variant={getStatusVariant(r.status)}>{getStatusLabel(r.status)}</Badge>,
         },
         {
           key: 'actions',
           header: '',
           render: (r) => (
-            <RowActionsMenu ariaLabel={`פעולות לדוח ${r.id}`}>
-              <RowActionItem label="צפה" onClick={() => onSelect?.(r.id)} icon={<Eye className="h-4 w-4" />} />
+            <RowActionsMenu ariaLabel={ANNUAL_REPORTS_MESSAGES.reportHistoryTable.rowActionsAriaLabel(r.id)}>
+              <RowActionItem label={ANNUAL_REPORTS_MESSAGES.reportHistoryTable.view} onClick={() => onSelect?.(r.id)} icon={<Eye className="h-4 w-4" />} />
             </RowActionsMenu>
           ),
         },

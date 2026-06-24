@@ -5,6 +5,7 @@ import { useTaxCalculationPanel } from '../../hooks/useTaxCalculationPanel'
 import { TaxBracketsTable } from './TaxBracketsTable'
 import { TaxCalculatorInputs } from './TaxCalculatorInputs'
 import { getLiabilityTone, getTotalCredits } from '../../utils/taxHelpers'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface Props {
   reportId: number
@@ -35,8 +36,8 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
   const panel = useTaxCalculationPanel(reportId)
   const { data } = panel
 
-  if (panel.isLoading) return <p className="py-8 text-center text-sm text-gray-400">מחשב מס...</p>
-  if (panel.isError || !data) return <p className="py-8 text-center text-sm text-negative-500">שגיאה בטעינת חישוב מס</p>
+  if (panel.isLoading) return <p className="py-8 text-center text-sm text-gray-400">{ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.calculating}</p>
+  if (panel.isError || !data) return <p className="py-8 text-center text-sm text-negative-500">{ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.loadError}</p>
 
   const totalLiability = data.total_liability == null ? null : Number(data.total_liability)
   const totalCredits = getTotalCredits(data)
@@ -45,15 +46,15 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
     <div className="space-y-5">
       <div className="grid grid-cols-3 gap-3">
         <div className="rounded-xl border border-negative-100 bg-negative-50 p-4 text-center">
-          <p className="text-xs text-gray-500 mb-1">מס לפני זיכויים</p>
+          <p className="text-xs text-gray-500 mb-1">{ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.taxBeforeCredits}</p>
           <p className="text-xl font-bold text-negative-700">{formatCurrencyILS(data.tax_before_credits)}</p>
         </div>
         <div className="rounded-xl border border-info-100 bg-info-50 p-4 text-center">
-          <p className="text-xs text-gray-500 mb-1">זיכויי מס</p>
+          <p className="text-xs text-gray-500 mb-1">{ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.taxCredits}</p>
           <p className="text-xl font-bold text-info-700">{formatCurrencyILS(totalCredits)}</p>
         </div>
         <div className="rounded-xl border border-positive-100 bg-positive-50 p-4 text-center">
-          <p className="text-xs text-gray-500 mb-1">מס סופי לתשלום</p>
+          <p className="text-xs text-gray-500 mb-1">{ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.finalTaxDue}</p>
           <p className="text-xl font-bold text-positive-700">{formatCurrencyILS(data.tax_after_credits)}</p>
         </div>
       </div>
@@ -69,31 +70,31 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
       />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <SectionCard title="חישוב מס הכנסה">
-          <Row label="הכנסה חייבת" value={formatCurrencyILS(data.taxable_income)} />
-          <Row label="ניכוי פנסיה" value={formatCurrencyILS(data.pension_deduction)} muted />
-          <Row label="מס לפני זיכויים" value={formatCurrencyILS(data.tax_before_credits)} />
-          <Row label="שווי נקודות זיכוי" value={formatCurrencyILS(data.credit_points_value)} muted />
+        <SectionCard title={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.incomeTaxSectionTitle}>
+          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.taxableIncome} value={formatCurrencyILS(data.taxable_income)} />
+          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.pensionDeduction} value={formatCurrencyILS(data.pension_deduction)} muted />
+          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.taxBeforeCredits} value={formatCurrencyILS(data.tax_before_credits)} />
+          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.creditPointsValue} value={formatCurrencyILS(data.credit_points_value)} muted />
           {Number(data.donation_credit) > 0 && (
-            <Row label="זיכוי תרומות (סע׳ 46)" value={formatCurrencyILS(data.donation_credit)} muted />
+            <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.donationCredit} value={formatCurrencyILS(data.donation_credit)} muted />
           )}
           <Row
-            label="שיעור אפקטיבי"
+            label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.effectiveRate}
             value={formatPercent(data.effective_rate, { isRatio: true, fractionDigits: 2 })}
             muted
           />
           <Row
-            label="מס לתשלום"
+            label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.taxDue}
             value={formatCurrencyILS(data.tax_after_credits)}
             className="text-positive-700 font-semibold"
           />
         </SectionCard>
-        <SectionCard title="ביטוח לאומי">
-          <Row label="הכנסה מבוטחת" value={formatCurrencyILS(data.net_profit)} />
-          <Row label="שיעור עד תקרה (5.97%)" value={formatCurrencyILS(data.national_insurance.base_amount)} muted />
-          <Row label="שיעור מעל תקרה (17.83%)" value={formatCurrencyILS(data.national_insurance.high_amount)} muted />
+        <SectionCard title={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.nationalInsuranceSectionTitle}>
+          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.insuredIncome} value={formatCurrencyILS(data.net_profit)} />
+          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.rateUpToCeiling} value={formatCurrencyILS(data.national_insurance.base_amount)} muted />
+          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.rateAboveCeiling} value={formatCurrencyILS(data.national_insurance.high_amount)} muted />
           <Row
-            label='סה"כ ביטוח לאומי'
+            label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.totalNationalInsurance}
             value={formatCurrencyILS(data.national_insurance.total)}
             className="font-semibold"
           />
@@ -102,10 +103,10 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
 
       <div className="rounded-xl border border-gray-200 bg-gray-50 px-5 py-1 shadow-sm">
         <dl className="divide-y divide-gray-100">
-          <Row label="רווח נקי" value={formatCurrencyILS(data.net_profit)} />
+          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.netProfit} value={formatCurrencyILS(data.net_profit)} />
           {totalLiability !== null && (
             <Row
-              label='חבות כוללת (מס + בל + מע"מ − מקדמות)'
+              label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.totalLiability}
               value={formatCurrencyILS(totalLiability)}
               className={getLiabilityTone(totalLiability)}
             />
@@ -122,7 +123,7 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
             onClick={panel.saveTaxResult}
             isLoading={panel.isSavingTaxResult}
           >
-            שמור חישוב מס
+            {ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.saveCalculation}
           </Button>
         </div>
       )}

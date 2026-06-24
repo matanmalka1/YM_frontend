@@ -5,6 +5,7 @@ import { formatCurrencyILS as fmt } from '../../../../utils/utils'
 import { CHART_LINES, CHART_MARGIN, TREND_REPORT_LIMIT } from '../../constants/financialConstants'
 import { buildTrendChartRows } from '../../utils/financialHelpers'
 import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../../constants/reportConstants'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface MultiYearPLChartProps {
   clientId: number
@@ -51,16 +52,19 @@ export const MultiYearPLChart: React.FC<MultiYearPLChartProps> = ({ clientId, cu
 
   return (
     <div>
-      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">מגמה רב-שנתית</p>
+      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">{ANNUAL_REPORTS_MESSAGES.chart.trendTitle}</p>
       <ResponsiveContainer width="100%" height={200}>
         <LineChart data={chartData} margin={CHART_MARGIN}>
-          <XAxis dataKey="שנה" tick={{ fontSize: 11 }} />
+          <XAxis dataKey={ANNUAL_REPORTS_MESSAGES.chart.yearAxisKey} tick={{ fontSize: 11 }} />
           <YAxis
             tickFormatter={(value) => `₪${(Number(value) / 1000).toFixed(0)}K`}
             tick={{ fontSize: 10 }}
             width={52}
           />
-          <Tooltip formatter={(value) => fmt(Number(value))} labelFormatter={(label) => `שנת מס ${label}`} />
+          <Tooltip
+            formatter={(value) => fmt(Number(value))}
+            labelFormatter={(label) => ANNUAL_REPORTS_MESSAGES.chart.yearTooltipLabel(label)}
+          />
           <Legend wrapperStyle={{ fontSize: 11 }} />
           {CHART_LINES.map((line) => (
             <Line key={line.dataKey} type="monotone" dot={false} {...line} />

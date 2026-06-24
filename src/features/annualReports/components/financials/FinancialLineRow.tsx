@@ -3,6 +3,7 @@ import { Button } from '../../../../components/ui/primitives/Button'
 import { RowActionButton } from '../../../../components/ui/table/RowActions'
 import { formatCurrencyILS } from '@/utils/utils'
 import { documentsApi } from '@/features/documents'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 export interface LineRowProps {
   label: string
@@ -55,9 +56,9 @@ export const LineRow: React.FC<LineRowProps> = ({
             icon={<Paperclip className="h-3 w-3" />}
             onClick={handleDownload}
             className="p-0 text-primary-500 hover:text-primary-700 hover:bg-transparent"
-            title={supportingDocumentFilename ?? 'מסמך מצורף'}
+            title={supportingDocumentFilename ?? ANNUAL_REPORTS_MESSAGES.financialLineRow.attachedDocument}
           >
-            <span className="text-xs">{supportingDocumentFilename ?? 'מסמך'}</span>
+            <span className="text-xs">{supportingDocumentFilename ?? ANNUAL_REPORTS_MESSAGES.financialLineRow.document}</span>
           </Button>
         ) : supportingDocumentRef ? (
           <span className="flex items-center gap-0.5 text-xs text-gray-500" title={supportingDocumentRef}>
@@ -70,7 +71,7 @@ export const LineRow: React.FC<LineRowProps> = ({
         <span className="text-gray-700 font-mono">{formatCurrencyILS(amount)}</span>
         {onEdit ? (
           <RowActionButton
-            label="עריכת שורה"
+            label={ANNUAL_REPORTS_MESSAGES.financialLineRow.editLine}
             icon={<Pencil className="h-3.5 w-3.5" />}
             tone="primary"
             size="sm"
@@ -78,7 +79,7 @@ export const LineRow: React.FC<LineRowProps> = ({
           />
         ) : null}
         <RowActionButton
-          label="מחיקת שורה"
+          label={ANNUAL_REPORTS_MESSAGES.financialLineRow.deleteLine}
           icon={<Trash2 className="h-3.5 w-3.5" />}
           tone="danger"
           size="sm"

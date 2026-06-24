@@ -11,6 +11,7 @@ import { cn, formatDate } from '../../../../utils/utils'
 import { ClientYearComparisonModal } from './ClientYearComparisonModal'
 import { CreateReportModal } from './CreateReportModal'
 import { AnnualReportFullPanel } from '../panel/AnnualReportFullPanel'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface ClientAnnualReportsTabProps {
   clientId: number
@@ -22,7 +23,7 @@ const AnnualReportStatusBanner: React.FC<{
 }> = ({ selectedYear, report }) => {
   const submitted = Boolean(report?.submitted_at)
   const Icon = submitted ? Check : Clock
-  const statusLabel = report ? STATUS_LABELS[report.status] : 'לא קיים דוח'
+  const statusLabel = report ? STATUS_LABELS[report.status] : ANNUAL_REPORTS_MESSAGES.clientTab.noReportExists
   return (
     <div
       className={cn(
@@ -41,14 +42,14 @@ const AnnualReportStatusBanner: React.FC<{
         </div>
         <div className="min-w-0 flex-1 text-right">
           <p className={cn('text-base font-bold', submitted ? 'text-positive-700' : 'text-warning-700')}>
-            {submitted ? `דוח שנתי ${selectedYear} הוגש בהצלחה` : `דוח שנתי ${selectedYear} עדיין לא הוגש`}
+            {submitted ? ANNUAL_REPORTS_MESSAGES.clientTab.submittedTitle(selectedYear) : ANNUAL_REPORTS_MESSAGES.clientTab.notSubmittedTitle(selectedYear)}
           </p>
           <p className="mt-1 text-sm font-medium text-gray-500">
             {submitted
-              ? `תאריך הגשה: ${formatDate(report?.submitted_at ?? null)}`
-              : `מועד הגשה: ${formatDate(report?.filing_deadline ?? null)}`}
+              ? ANNUAL_REPORTS_MESSAGES.clientTab.submittedAtNote(formatDate(report?.submitted_at ?? null))
+              : ANNUAL_REPORTS_MESSAGES.clientTab.filingDeadlineNote(formatDate(report?.filing_deadline ?? null))}
           </p>
-          <p className="mt-1 text-xs font-semibold text-gray-500">סטטוס: {statusLabel}</p>
+          <p className="mt-1 text-xs font-semibold text-gray-500">{ANNUAL_REPORTS_MESSAGES.clientTab.statusPrefix(statusLabel)}</p>
         </div>
       </div>
     </div>
@@ -70,7 +71,7 @@ export const ClientAnnualReportsTab: React.FC<ClientAnnualReportsTabProps> = ({ 
   const [showCreate, setShowCreate] = useState(false)
   const canCompareYears = new Set(allReports.map((report) => report.tax_year)).size >= 2
 
-  if (isPending) return <PageLoading message="טוען דוחות שנתיים..." />
+  if (isPending) return <PageLoading message={ANNUAL_REPORTS_MESSAGES.clientTab.loading} />
   if (errorMessage) return <Alert variant="error" message={errorMessage} />
 
   return (
@@ -83,16 +84,16 @@ export const ClientAnnualReportsTab: React.FC<ClientAnnualReportsTabProps> = ({ 
             icon={<BarChart2 className="h-4 w-4" />}
             onClick={() => setShowComparison(true)}
           >
-            השוואה בין שנים
+            {ANNUAL_REPORTS_MESSAGES.clientTab.compareYears}
           </Button>
         )}
         <Button variant="ghost" size="sm" icon={<Plus className="h-4 w-4" />} onClick={() => setShowCreate(true)}>
-          דוח חדש
+          {ANNUAL_REPORTS_MESSAGES.clientTab.newReport}
         </Button>
       </div>
 
       <div className="flex gap-4">
-        <SegmentedControl variant="vertical" aria-label="שנות מס לדוחות שנתיים">
+        <SegmentedControl variant="vertical" aria-label={ANNUAL_REPORTS_MESSAGES.clientTab.yearsAriaLabel}>
           {YEAR_LIST.map((year) => (
             <SegmentedControlItem
               key={year}
@@ -112,7 +113,7 @@ export const ClientAnnualReportsTab: React.FC<ClientAnnualReportsTabProps> = ({ 
             <AnnualReportFullPanel reportId={selectedReport.id} backPath={`/clients/${clientId}`} />
           ) : (
             <div className="rounded-xl border border-dashed border-gray-300 py-12 text-center text-gray-500">
-              <p className="text-base font-medium">אין דוח לשנת מס {selectedYear}</p>
+              <p className="text-base font-medium">{ANNUAL_REPORTS_MESSAGES.clientTab.noReportForYear(selectedYear)}</p>
               <Button
                 variant="ghost"
                 size="sm"
@@ -120,7 +121,7 @@ export const ClientAnnualReportsTab: React.FC<ClientAnnualReportsTabProps> = ({ 
                 className="mt-3"
                 onClick={() => setShowCreate(true)}
               >
-                צור דוח חדש
+                {ANNUAL_REPORTS_MESSAGES.clientTab.createNewReport}
               </Button>
             </div>
           )}

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Pencil, X, Check, Info } from 'lucide-react'
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Button } from '../../../../components/ui/primitives/Button'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface TaxCalculatorInputsProps {
   pension: string
@@ -39,7 +40,7 @@ export const TaxCalculatorInputs = ({
       <div className="mb-3 flex items-start justify-between gap-2">
         <div className="flex items-center gap-1.5">
           <Info className="h-3.5 w-3.5 text-info-600 shrink-0 mt-px" />
-          <p className="text-xs text-info-700">המחשבון מציג שיעורי מס עפ"י מדרגות מס לעסק יחיד/שותפות.</p>
+          <p className="text-xs text-info-700">{ANNUAL_REPORTS_MESSAGES.calculatorInputs.methodologyNote}</p>
         </div>
         {!editMode ? (
           <Button
@@ -50,7 +51,7 @@ export const TaxCalculatorInputs = ({
             onClick={handleEdit}
             className="border-info-300 text-info-700 hover:bg-info-50 shrink-0 text-xs px-2.5 py-1"
           >
-            עריכה
+            {ANNUAL_REPORTS_MESSAGES.calculatorInputs.edit}
           </Button>
         ) : (
           <div className="flex gap-1 shrink-0">
@@ -63,7 +64,7 @@ export const TaxCalculatorInputs = ({
               disabled={isSaving}
               className="bg-info-600 hover:bg-info-700 text-xs px-2.5 py-1"
             >
-              שמור
+              {ANNUAL_REPORTS_MESSAGES.calculatorInputs.save}
             </Button>
             <Button
               type="button"
@@ -73,7 +74,7 @@ export const TaxCalculatorInputs = ({
               onClick={handleCancel}
               className="border-info-300 text-info-700 text-xs px-2.5 py-1"
             >
-              ביטול
+              {ANNUAL_REPORTS_MESSAGES.calculatorInputs.cancel}
             </Button>
           </div>
         )}
@@ -81,13 +82,13 @@ export const TaxCalculatorInputs = ({
       {editMode && (
         <div className="grid grid-cols-2 gap-3">
           <Input
-            label={'הפקדות פנסיה/קה"ש (₪)'}
+            label={ANNUAL_REPORTS_MESSAGES.calculatorInputs.pensionDepositsLabel}
             type="number"
             value={pension}
             onChange={(e) => onPensionChange(e.target.value)}
           />
           <Input
-            label="זיכויים אחרים (₪)"
+            label={ANNUAL_REPORTS_MESSAGES.calculatorInputs.otherCreditsLabel}
             type="number"
             value={otherCredits}
             onChange={(e) => onOtherCreditsChange(e.target.value)}

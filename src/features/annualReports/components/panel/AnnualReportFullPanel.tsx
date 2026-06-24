@@ -8,6 +8,7 @@ import { Button } from '../../../../components/ui/primitives/Button'
 import { SegmentedControl, SegmentedControlItem } from '../../../../components/ui/primitives/SegmentedControl'
 import { PANEL_NAV_ITEMS } from '../../constants/panelConstants'
 import { getClientLabel } from '../../utils/panelHelpers'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface AnnualReportFullPanelProps {
   reportId: number
@@ -42,13 +43,13 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
   } = useAnnualReportDetailPage(reportId, backPath)
 
   if (isLoading) {
-    return <div className="flex flex-1 items-center justify-center py-24 text-sm text-gray-400">טוען דוח...</div>
+    return <div className="flex flex-1 items-center justify-center py-24 text-sm text-gray-400">{ANNUAL_REPORTS_MESSAGES.fullPanel.loading}</div>
   }
 
   if (error || !report) {
     return (
       <div className="flex flex-1 items-center justify-center py-24 text-sm text-negative-500">
-        {error ?? 'שגיאה בטעינת הדוח'}
+        {error ?? ANNUAL_REPORTS_MESSAGES.fullPanel.loadError}
       </div>
     )
   }
@@ -57,11 +58,11 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
     <>
       <div>
         <PageHeader
-          title={`דוח שנתי ${report.tax_year}`}
+          title={ANNUAL_REPORTS_MESSAGES.fullPanel.title(report.tax_year)}
           description={getClientLabel(report)}
           breadcrumbs={[
-            { label: 'דוחות שנתיים', to: backPath },
-            { label: `דוח ${report.tax_year}`, to: '#' },
+            { label: ANNUAL_REPORTS_MESSAGES.fullPanel.breadcrumbList, to: backPath },
+            { label: ANNUAL_REPORTS_MESSAGES.fullPanel.breadcrumbReport(report.tax_year), to: '#' },
           ]}
           actions={
             <>
@@ -73,7 +74,7 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
                   onClick={handleExportPdf}
                   isLoading={isExportingPdf}
                 >
-                  הורד טיוטה
+                  {ANNUAL_REPORTS_MESSAGES.fullPanel.downloadDraft}
                 </Button>
               )}
               <Button
@@ -82,17 +83,17 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
                 onClick={() => setShowDeleteConfirm(true)}
                 className="border-negative-300 text-negative-600 hover:bg-negative-50"
               >
-                מחק דוח
+                {ANNUAL_REPORTS_MESSAGES.fullPanel.deleteReport}
               </Button>
               <Button variant="ghost" icon={<Save size={14} />} onClick={handleSave} disabled={!isDirty || isUpdating}>
-                {isUpdating ? 'שומר...' : 'שמור'}
+                {isUpdating ? ANNUAL_REPORTS_MESSAGES.fullPanel.saving : ANNUAL_REPORTS_MESSAGES.fullPanel.save}
               </Button>
             </>
           }
         />
 
         {/* Navbar tabs */}
-        <SegmentedControl variant="boxed" className="mt-6" aria-label="ניווט דוח שנתי">
+        <SegmentedControl variant="boxed" className="mt-6" aria-label={ANNUAL_REPORTS_MESSAGES.panelNav.ariaLabel}>
           {PANEL_NAV_ITEMS.map(({ key, icon: Icon, label }) => (
             <SegmentedControlItem
               key={key}
@@ -136,9 +137,9 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
 
       <ConfirmDialog
         open={showDeleteConfirm}
-        title="מחיקת דוח"
-        message="האם למחוק את הדוח? פעולה זו אינה הפיכה."
-        confirmLabel="מחק"
+        title={ANNUAL_REPORTS_MESSAGES.fullPanel.deleteModalTitle}
+        message={ANNUAL_REPORTS_MESSAGES.fullPanel.deleteModalMessage}
+        confirmLabel={ANNUAL_REPORTS_MESSAGES.fullPanel.deleteConfirm}
         confirmVariant="danger"
         closeOnBackdrop={false}
         isLoading={isDeleting}

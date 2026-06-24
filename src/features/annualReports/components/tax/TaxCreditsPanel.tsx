@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { annualReportsApi, annualReportsQK } from '../../api'
 import { formatCurrencyILS as fmt } from '@/utils/utils'
 import { buildCreditRows, sumCreditRows } from '../../utils/taxHelpers'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface Props {
   reportId: number
@@ -14,7 +15,7 @@ export const TaxCreditsPanel: React.FC<Props> = ({ reportId, taxYear }) => {
     queryFn: () => annualReportsApi.getReport(reportId),
   })
 
-  if (isLoading) return <p className="text-sm text-gray-400">טוען זיכויים...</p>
+  if (isLoading) return <p className="text-sm text-gray-400">{ANNUAL_REPORTS_MESSAGES.creditsPanel.loading}</p>
   if (!data) return null
 
   const rows = buildCreditRows(data, taxYear)
@@ -23,7 +24,7 @@ export const TaxCreditsPanel: React.FC<Props> = ({ reportId, taxYear }) => {
   return (
     <div className="rounded-lg border border-gray-200 bg-white">
       <div className="border-b border-gray-100 px-4 py-3">
-        <h3 className="text-sm font-semibold text-gray-900">זיכויי מס אישיים</h3>
+        <h3 className="text-sm font-semibold text-gray-900">{ANNUAL_REPORTS_MESSAGES.creditsPanel.title}</h3>
       </div>
       <div className="divide-y divide-gray-50">
         {rows.map((r) => (
@@ -37,7 +38,7 @@ export const TaxCreditsPanel: React.FC<Props> = ({ reportId, taxYear }) => {
         ))}
       </div>
       <div className="border-t border-gray-200 bg-gray-50 px-4 py-3 flex justify-between">
-        <span className="text-sm font-semibold text-gray-700">סה"כ זיכויים</span>
+        <span className="text-sm font-semibold text-gray-700">{ANNUAL_REPORTS_MESSAGES.creditsPanel.total}</span>
         <span className="text-sm font-bold text-info-800">{fmt(total)}</span>
       </div>
     </div>

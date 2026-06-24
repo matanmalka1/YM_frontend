@@ -10,6 +10,7 @@ import { ScheduleChecklist } from '../annex/ScheduleChecklist'
 import { AnnualPLSummary } from '../financials/AnnualPLSummary'
 import type { AnnualReportDetail } from '../../types'
 import type { AnnualReportFull, AnnualReportScheduleKey, ScheduleEntry } from '../../api'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface Props {
   report: AnnualReportFull
@@ -54,10 +55,10 @@ export const AnnualReportOverviewSection: React.FC<Props> = ({
 
       {/* Meta + detail form */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card title="פרטי הדוח" size="compact">
+        <Card title={ANNUAL_REPORTS_MESSAGES.overviewSection.detailsCardTitle} size="compact">
           <ReportMetaGrid report={report} />
         </Card>
-        <Card title="עדכון נתונים" size="compact">
+        <Card title={ANNUAL_REPORTS_MESSAGES.overviewSection.updateDataCardTitle} size="compact">
           <AnnualReportDetailForm
             detail={detail}
             onSave={onDetailSave}
@@ -88,7 +89,7 @@ export const AnnualReportOverviewSection: React.FC<Props> = ({
         >
           <div className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4 text-gray-400" />
-            <span>סיכום רווח והפסד</span>
+            <span>{ANNUAL_REPORTS_MESSAGES.overviewSection.plSummaryTitle}</span>
           </div>
           {plExpanded ? (
             <ChevronUp className="h-4 w-4 text-gray-400" />

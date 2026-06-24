@@ -6,6 +6,7 @@ import { DatePicker } from '../../../../components/ui/inputs/DatePicker'
 import { Textarea } from '../../../../components/ui/inputs/Textarea'
 import type { AnnualReportDetail } from '../../types'
 import { annualReportDetailSchema, annualReportDetailDefaults, type AnnualReportDetailFormValues } from '../../schemas'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface AnnualReportDetailFormProps {
   detail: AnnualReportDetail | null
@@ -68,7 +69,7 @@ export const AnnualReportDetailForm: React.FC<AnnualReportDetailFormProps> = ({
           name="client_approved_at"
           render={({ field }) => (
             <DatePicker
-              label="תאריך אישור לקוח"
+              label={ANNUAL_REPORTS_MESSAGES.detailForm.clientApprovedAtLabel}
               error={errors.client_approved_at?.message}
               value={field.value}
               onChange={field.onChange}
@@ -78,11 +79,11 @@ export const AnnualReportDetailForm: React.FC<AnnualReportDetailFormProps> = ({
         />
       </div>
 
-      <Textarea label="הערות פנימיות" rows={3} error={errors.internal_notes?.message} {...register('internal_notes')} />
+      <Textarea label={ANNUAL_REPORTS_MESSAGES.detailForm.internalNotesLabel} rows={3} error={errors.internal_notes?.message} {...register('internal_notes')} />
 
       <div className="flex justify-end">
         <Button type="submit" isLoading={isSaving}>
-          שמור פרטים
+          {ANNUAL_REPORTS_MESSAGES.detailForm.save}
         </Button>
       </div>
     </form>

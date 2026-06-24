@@ -2,6 +2,7 @@ import type { BracketBreakdownItem } from '../../api'
 import { DataTable, type Column } from '@/components/ui/table/DataTable'
 import { formatCurrencyILS as fmt } from '@/utils/utils'
 import { fmtRange, fmtRate } from '../../utils/taxHelpers'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface Props {
   brackets: BracketBreakdownItem[]
@@ -13,10 +14,10 @@ export const TaxBracketsTable: React.FC<Props> = ({ brackets }) => {
   const lastIndex = brackets.length - 1
 
   const columns: Column<BracketBreakdownItem>[] = [
-    { key: 'rate', header: 'מדרגה', align: 'right', render: (b) => fmtRate(b.rate), className: 'text-gray-900' },
+    { key: 'rate', header: ANNUAL_REPORTS_MESSAGES.bracketsTable.rateHeader, align: 'right', render: (b) => fmtRate(b.rate), className: 'text-gray-900' },
     {
       key: 'range',
-      header: 'טווח הכנסה',
+      header: ANNUAL_REPORTS_MESSAGES.bracketsTable.rangeHeader,
       align: 'right',
       dir: 'ltr',
       render: (b) => fmtRange(b.from_amount, b.to_amount),
@@ -24,7 +25,7 @@ export const TaxBracketsTable: React.FC<Props> = ({ brackets }) => {
     },
     {
       key: 'taxable',
-      header: 'הכנסה במדרגה',
+      header: ANNUAL_REPORTS_MESSAGES.bracketsTable.taxableInBracketHeader,
       align: 'right',
       dir: 'ltr',
       render: (b) => fmt(b.taxable_in_bracket),
@@ -32,7 +33,7 @@ export const TaxBracketsTable: React.FC<Props> = ({ brackets }) => {
     },
     {
       key: 'tax',
-      header: 'מס במדרגה',
+      header: ANNUAL_REPORTS_MESSAGES.bracketsTable.taxInBracketHeader,
       align: 'right',
       dir: 'ltr',
       render: (b) => fmt(b.tax_in_bracket),
@@ -42,7 +43,7 @@ export const TaxBracketsTable: React.FC<Props> = ({ brackets }) => {
 
   return (
     <div className="mt-3">
-      <p className="mb-1.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">פירוט מדרגות מס</p>
+      <p className="mb-1.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">{ANNUAL_REPORTS_MESSAGES.bracketsTable.sectionTitle}</p>
       <DataTable
         data={brackets}
         columns={columns}

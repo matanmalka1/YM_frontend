@@ -10,6 +10,8 @@ import {
   MONEY_INPUT_PROPS,
   PERCENTAGE_INPUT_PROPS,
 } from '../../constants/financialConstants'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface AddLineTriggerButtonProps {
   label: string
@@ -151,7 +153,7 @@ const FinancialFormActions: React.FC<FinancialFormActionsProps> = ({ isSubmittin
       {submitLabel}
     </Button>
     <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
-      ביטול
+      {GLOBAL_UI_MESSAGES.actions.cancel}
     </Button>
   </div>
 )
@@ -193,7 +195,7 @@ export const FinancialAddFormShell: React.FC<FinancialAddFormShellProps> = ({
       <div className={INLINE_ADD_FORM_CLASS}>
         {children}
         <FinancialFormError error={error} />
-        <FinancialFormActions isSubmitting={isSubmitting} submitLabel="הוסף" onCancel={onCancel} />
+        <FinancialFormActions isSubmitting={isSubmitting} submitLabel={ANNUAL_REPORTS_MESSAGES.financialForms.add} onCancel={onCancel} />
       </div>
     </form>
   )
@@ -211,7 +213,7 @@ interface FinancialEditFormShellProps {
 export const FinancialEditFormShell: React.FC<FinancialEditFormShellProps> = ({
   error,
   isSubmitting,
-  submitLabel = 'שמור',
+  submitLabel = ANNUAL_REPORTS_MESSAGES.financialForms.save,
   onSubmit,
   onCancel,
   children,

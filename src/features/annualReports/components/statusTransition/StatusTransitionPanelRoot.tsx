@@ -9,6 +9,7 @@ import { TransitionDetailsForm } from './TransitionDetailsForm'
 import { TransitionTargetSelector } from './TransitionTargetSelector'
 import { ReadinessCheckPanel } from '../panel/ReadinessCheckPanel'
 import { useStatusTransitionPanel } from '../../hooks/useStatusTransitionPanel'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 export const StatusTransitionPanel = ({ report, onTransition, isLoading }: StatusTransitionPanelProps) => {
   const panel = useStatusTransitionPanel(report, onTransition)
@@ -16,7 +17,7 @@ export const StatusTransitionPanel = ({ report, onTransition, isLoading }: Statu
   if (panel.allowed.length === 0) {
     return (
       <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-center text-sm text-gray-500">
-        אין מעברי סטטוס זמינים (הדוח {getStatusLabel(report.status)})
+        {ANNUAL_REPORTS_MESSAGES.statusTransitionPanel.noTransitions(getStatusLabel(report.status))}
       </div>
     )
   }
@@ -33,7 +34,7 @@ export const StatusTransitionPanel = ({ report, onTransition, isLoading }: Statu
       />
 
       <Card
-        title="מעבר סטטוס"
+        title={ANNUAL_REPORTS_MESSAGES.statusTransitionPanel.title}
         actions={
           <Button
             type="button"
@@ -43,7 +44,7 @@ export const StatusTransitionPanel = ({ report, onTransition, isLoading }: Statu
             onClick={panel.toggleReadiness}
             className="text-xs text-gray-500 hover:text-gray-700 px-1.5"
           >
-            בדיקת מוכנות להגשה
+            {ANNUAL_REPORTS_MESSAGES.statusTransitionPanel.readinessCheck}
           </Button>
         }
       >
@@ -56,12 +57,12 @@ export const StatusTransitionPanel = ({ report, onTransition, isLoading }: Statu
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm text-gray-600">
-              <span>סטטוס נוכחי:</span>
+              <span>{ANNUAL_REPORTS_MESSAGES.statusTransitionPanel.currentStatus}</span>
               <Badge variant={getStatusVariant(report.status)}>{getStatusLabel(report.status)}</Badge>
             </div>
             {report.status === 'submitted' && (
               <Button type="button" variant="outline" size="sm" onClick={panel.openAmendModal}>
-                תיקון דוח
+                {ANNUAL_REPORTS_MESSAGES.statusTransitionPanel.amendReport}
               </Button>
             )}
           </div>

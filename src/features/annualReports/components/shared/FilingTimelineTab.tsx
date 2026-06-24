@@ -6,6 +6,7 @@ import { Card } from '../../../../components/ui/primitives/Card'
 import { ProgressBar } from '../../../../components/ui/primitives/ProgressBar'
 import { UpcomingDeadlinesList } from './UpcomingDeadlinesList'
 import { buildTimelineEvents, getFilingStats } from '../../utils/sharedHelpers'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface Props {
   reports: AnnualReportListItem[]
@@ -38,7 +39,7 @@ export const FilingTimelineTab: React.FC<Props> = ({ reports }) => {
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <div className="space-y-5">
         <UpcomingDeadlinesList reports={reports} />
-        <Card title="סטטוס הגשות" size="compact">
+        <Card title={ANNUAL_REPORTS_MESSAGES.filingTimelineTab.filingStatusTitle} size="compact">
           <div className="space-y-4">
             {filingStats.map((stat) => (
               <ProgressRow key={stat.label} {...stat} />
@@ -47,9 +48,9 @@ export const FilingTimelineTab: React.FC<Props> = ({ reports }) => {
         </Card>
       </div>
 
-      <Card title="היסטוריית אירועים" icon={<CalendarCheck className="h-4 w-4 text-gray-400" />} size="compact">
+      <Card title={ANNUAL_REPORTS_MESSAGES.filingTimelineTab.eventHistoryTitle} icon={<CalendarCheck className="h-4 w-4 text-gray-400" />} size="compact">
         {timelineEvents.length === 0 ? (
-          <p className="py-4 text-center text-sm text-gray-400">אין אירועים להצגה</p>
+          <p className="py-4 text-center text-sm text-gray-400">{ANNUAL_REPORTS_MESSAGES.filingTimelineTab.noEvents}</p>
         ) : (
           <div>
             {timelineEvents.map((ev) => (

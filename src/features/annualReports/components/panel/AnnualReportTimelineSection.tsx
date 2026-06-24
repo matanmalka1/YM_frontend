@@ -7,6 +7,7 @@ import { CLIENT_TYPE_LABELS } from '../../constants/panelConstants'
 import { Card } from '../../../../components/ui/primitives/Card'
 import { ReportHistoryTable } from './ReportHistoryTable'
 import type { AnnualReportDetail } from '../../types'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 const AUDIT_FIELD_VALUE_LABELS: FieldValueLabels = {
   client_type: CLIENT_TYPE_LABELS,
@@ -27,19 +28,19 @@ export const AnnualReportTimelineSection = ({ report }: AnnualReportTimelineSect
     <div className="space-y-6">
       <FilingTimelineTab reports={[report]} />
 
-      <Card title="היסטוריית דוחות" size="compact">
+      <Card title={ANNUAL_REPORTS_MESSAGES.timelineSection.reportHistoryTitle} size="compact">
         <ReportHistoryTable clientId={report.client_record_id} currentReportId={report.id} />
       </Card>
 
-      <Card title="היסטוריית סטטוסים" size="compact">
+      <Card title={ANNUAL_REPORTS_MESSAGES.timelineSection.statusHistoryTitle} size="compact">
         <StatusAuditTimeline audit={audit?.items ?? []} />
       </Card>
 
       <EntityAuditTrailSection
         entityType="annual_report"
         entityId={report.id}
-        title="יומן שינויים"
-        subtitle="שינויים שבוצעו בדוח השנתי"
+        title={ANNUAL_REPORTS_MESSAGES.timelineSection.auditTitle}
+        subtitle={ANNUAL_REPORTS_MESSAGES.timelineSection.auditSubtitle}
         fieldValueLabels={AUDIT_FIELD_VALUE_LABELS}
       />
     </div>

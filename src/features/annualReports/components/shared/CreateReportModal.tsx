@@ -11,6 +11,7 @@ import {
   TAX_YEAR_LIMITS,
 } from '../../constants/sharedConstants'
 import { FinancialFields, RequiredAppendices, SelectOptions, TaxPreview } from './CreateReportModalParts'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface CreateReportModalProps {
   open: boolean
@@ -49,10 +50,10 @@ export const CreateReportModal: React.FC<CreateReportModalProps> = ({ open, onCl
   return (
     <Modal
       open={open}
-      title="דוח שנתי חדש"
+      title={ANNUAL_REPORTS_MESSAGES.createModal.title}
       onClose={handleClose}
       footer={
-        <ModalFormActions onCancel={handleClose} onSubmit={onSubmit} isLoading={isSubmitting} submitLabel="צור דוח" />
+        <ModalFormActions onCancel={handleClose} onSubmit={onSubmit} isLoading={isSubmitting} submitLabel={ANNUAL_REPORTS_MESSAGES.createModal.submitLabel} />
       }
     >
       <form onSubmit={onSubmit} className="space-y-4">
@@ -66,11 +67,11 @@ export const CreateReportModal: React.FC<CreateReportModalProps> = ({ open, onCl
               onSelect={handleSelectClient}
               onClear={handleClearClient}
               error={errors.client_id?.message}
-              label="לקוח *"
+              label={ANNUAL_REPORTS_MESSAGES.createModal.clientLabel}
             />
           </div>
           <Input
-            label="שנת מס *"
+            label={ANNUAL_REPORTS_MESSAGES.createModal.taxYearLabel}
             type="number"
             min={TAX_YEAR_LIMITS.min}
             max={TAX_YEAR_LIMITS.max}
@@ -80,27 +81,27 @@ export const CreateReportModal: React.FC<CreateReportModalProps> = ({ open, onCl
         </div>
 
         <SelectOptions
-          label="סוג לקוח *"
+          label={ANNUAL_REPORTS_MESSAGES.createModal.clientTypeLabel}
           options={CLIENT_TYPE_OPTIONS}
           error={errors.client_type?.message}
           registerProps={register('client_type')}
         />
 
         <SelectOptions
-          label="סוג מועד"
+          label={ANNUAL_REPORTS_MESSAGES.createModal.deadlineTypeLabel}
           options={DEADLINE_TYPE_OPTIONS}
           error={errors.deadline_type?.message}
           registerProps={register('deadline_type')}
         />
 
         <SelectOptions
-          label="שיטת הגשה"
+          label={ANNUAL_REPORTS_MESSAGES.createModal.submissionMethodLabel}
           options={SUBMISSION_METHOD_OPTIONS}
           registerProps={register('submission_method')}
         />
 
         <SelectOptions
-          label="סיבת הארכה"
+          label={ANNUAL_REPORTS_MESSAGES.createModal.extensionReasonLabel}
           options={EXTENSION_REASON_OPTIONS}
           registerProps={register('extension_reason')}
         />
@@ -109,7 +110,7 @@ export const CreateReportModal: React.FC<CreateReportModalProps> = ({ open, onCl
         <TaxPreview preview={preview} />
         <RequiredAppendices register={register} />
 
-        <Textarea label="הערות" rows={2} {...register('notes')} />
+        <Textarea label={ANNUAL_REPORTS_MESSAGES.createModal.notesLabel} rows={2} {...register('notes')} />
       </form>
     </Modal>
   )

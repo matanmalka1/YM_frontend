@@ -3,19 +3,14 @@ import { Badge } from '../../../../components/ui/primitives/Badge'
 import type { AnnualReportListItem } from '../../api'
 import { getStatusLabel, getStatusVariant, getClientTypeLabel } from '../../api'
 
-const FILING_DEADLINE_TYPE_LABELS: Record<string, string> = {
-  standard: 'רגיל',
-  extended: 'מוארך',
-  custom: 'מותאם אישית',
-}
-
 const getDeadlineTypeLabel = (type: string | null | undefined): string =>
-  (type && FILING_DEADLINE_TYPE_LABELS[type]) ?? 'סוג מועד לא ידוע'
+  (type && ANNUAL_REPORTS_MESSAGES.season.deadlineTypeLabels[type as keyof typeof ANNUAL_REPORTS_MESSAGES.season.deadlineTypeLabels]) ?? ANNUAL_REPORTS_MESSAGES.season.unknownDeadlineType
 import { formatClientOfficeId, formatDate } from '../../../../utils/utils'
 import { AlertTriangle, Clock } from 'lucide-react'
 import { cn } from '../../../../utils/utils'
 import { TERMINAL_STATUSES, daysUntil } from '../../utils/annualReportsUtils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface SeasonReportsTableProps {
   reports: AnnualReportListItem[]
@@ -44,12 +39,12 @@ const DeadlineCell: React.FC<{ report: AnnualReportListItem }> = ({ report }) =>
           {days < 0 ? (
             <>
               <AlertTriangle className="h-3 w-3" />
-              באיחור {Math.abs(days)} ימים
+              {ANNUAL_REPORTS_MESSAGES.season.overdueDays(Math.abs(days))}
             </>
           ) : (
             <>
               <Clock className="h-3 w-3" />
-              {days} ימים נותרו
+              {ANNUAL_REPORTS_MESSAGES.season.daysRemaining(days)}
             </>
           )}
         </span>
@@ -61,7 +56,7 @@ const DeadlineCell: React.FC<{ report: AnnualReportListItem }> = ({ report }) =>
 const columns: Column<AnnualReportListItem>[] = [
   {
     key: 'office_client_number',
-    header: "מס' לקוח",
+    header: ANNUAL_REPORTS_MESSAGES.season.officeNumberHeader,
     render: (r) => (
       <span className="font-mono text-sm text-gray-500 tabular-nums">
         {formatClientOfficeId(r.office_client_number)}
@@ -70,19 +65,19 @@ const columns: Column<AnnualReportListItem>[] = [
   },
   {
     key: 'client_name',
-    header: 'לקוח',
+    header: ANNUAL_REPORTS_MESSAGES.season.clientHeader,
     render: (r) => (
-      <span className="text-sm font-medium text-gray-900">{r.client_name ?? `לקוח #${r.client_record_id}`}</span>
+      <span className="text-sm font-medium text-gray-900">{r.client_name ?? ANNUAL_REPORTS_MESSAGES.season.clientFallbackName(r.client_record_id)}</span>
     ),
   },
   {
     key: 'client_id_number',
-    header: 'ת.ז / ח.פ',
+    header: ANNUAL_REPORTS_MESSAGES.season.idNumberHeader,
     render: (r) => <span className="font-mono text-sm text-gray-500 tabular-nums">{r.client_id_number ?? '—'}</span>,
   },
   {
     key: 'client_type',
-    header: 'סוג / טופס',
+    header: ANNUAL_REPORTS_MESSAGES.season.typeFormHeader,
     render: (r) => (
       <div className="flex flex-col gap-0.5">
         <span className="text-sm text-gray-700">{getClientTypeLabel(r.client_type)}</span>
@@ -94,22 +89,22 @@ const columns: Column<AnnualReportListItem>[] = [
   },
   {
     key: 'status',
-    header: 'סטטוס',
+    header: ANNUAL_REPORTS_MESSAGES.season.statusHeader,
     render: (r) => <Badge variant={getStatusVariant(r.status)}>{getStatusLabel(r.status)}</Badge>,
   },
   {
     key: 'filing_deadline',
-    header: 'מועד הגשה',
+    header: ANNUAL_REPORTS_MESSAGES.season.filingDeadlineHeader,
     render: (r) => <DeadlineCell report={r} />,
   },
   {
     key: 'deadline_type',
-    header: 'סוג מועד',
+    header: ANNUAL_REPORTS_MESSAGES.season.deadlineTypeHeader,
     render: (r) => <span className="text-sm text-gray-500">{getDeadlineTypeLabel(r.deadline_type)}</span>,
   },
   {
     key: 'submitted_at',
-    header: 'הוגש ב',
+    header: ANNUAL_REPORTS_MESSAGES.season.submittedAtHeader,
     render: (r) => <span className="text-sm text-gray-500 tabular-nums">{formatDate(r.submitted_at)}</span>,
   },
 ]
@@ -121,7 +116,7 @@ export const SeasonReportsTable: React.FC<SeasonReportsTableProps> = ({ reports,
     getRowKey={(r) => r.id}
     isLoading={isLoading}
     onRowClick={onSelect}
-    emptyMessage={taxYear ? `עדיין אין דוחות שנתיים לשנת המס ${taxYear}` : 'אין דוחות לשנה זו'}
+    emptyMessage={taxYear ? ANNUAL_REPORTS_MESSAGES.season.noReportsForYear(taxYear) : ANNUAL_REPORTS_MESSAGES.season.noReportsThisYear}
     rowClassName={(r) => {
       const days = daysUntil(r.filing_deadline)
       const overdue = days !== null && days < 0 && !TERMINAL_STATUSES.has(r.status)

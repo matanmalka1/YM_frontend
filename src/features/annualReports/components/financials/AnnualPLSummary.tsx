@@ -6,6 +6,7 @@ import { formatCurrencyILS as fmt, formatPercent } from '@/utils/utils'
 import { FINANCIAL_MESSAGES } from '../../constants/financialConstants'
 import { useAnnualPLSummary } from '../../hooks/useAnnualPLSummary'
 import { toProgressValue } from '../../utils/financialHelpers'
+import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 // Lazy-loaded: pulls in recharts (heavy) only when the summary drawer renders.
 const MultiYearPLChart = lazy(() => import('./MultiYearPLChart').then((m) => ({ default: m.MultiYearPLChart })))
@@ -49,19 +50,31 @@ export const AnnualPLSummary: React.FC<Props> = ({ reportId, clientId }) => {
   if (!summary) return null
 
   return (
-    <DrawerSection title="סיכום רווח והפסד">
+    <DrawerSection title={ANNUAL_REPORTS_MESSAGES.plSummary.title}>
       <div className="space-y-4 py-2">
         <div className="space-y-0.5">
-          <WaterfallRow label="הכנסות ברוטו" value={summary.grossIncome} />
-          <WaterfallRow label="פחות: הוצאות מוכרות" value={summary.expenses} isSubtract />
-          <WaterfallRow label="רווח לפני מס" value={summary.profitBeforeTax} isResult />
-          <WaterfallRow label="פחות: מס הכנסה" value={summary.taxAmount} isSubtract />
-          <WaterfallRow label="רווח נקי אחרי מס" value={summary.netProfitAfterTax} highlight />
+          <WaterfallRow label={ANNUAL_REPORTS_MESSAGES.plSummary.grossIncome} value={summary.grossIncome} />
+          <WaterfallRow
+            label={ANNUAL_REPORTS_MESSAGES.plSummary.expensesDeduction}
+            value={summary.expenses}
+            isSubtract
+          />
+          <WaterfallRow label={ANNUAL_REPORTS_MESSAGES.plSummary.profitBeforeTax} value={summary.profitBeforeTax} isResult />
+          <WaterfallRow
+            label={ANNUAL_REPORTS_MESSAGES.plSummary.taxDeduction}
+            value={summary.taxAmount}
+            isSubtract
+          />
+          <WaterfallRow
+            label={ANNUAL_REPORTS_MESSAGES.plSummary.netProfitAfterTax}
+            value={summary.netProfitAfterTax}
+            highlight
+          />
         </div>
 
         <div>
           <div className="mb-1 flex items-center justify-between text-xs text-gray-500">
-            <span>שיעור רווח גולמי</span>
+            <span>{ANNUAL_REPORTS_MESSAGES.plSummary.grossMarginLabel}</span>
             <span className="font-semibold text-gray-700">{formatPercent(summary.grossMargin, { isRatio: true })}</span>
           </div>
           <ProgressBar value={toProgressValue(summary.grossMargin)} tone="warning" />
