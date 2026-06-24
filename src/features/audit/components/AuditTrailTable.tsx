@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/primitives/Button'
 import { DataTable, type Column } from '@/components/ui/table/DataTable'
 import { cn, formatDateTime } from '@/utils/utils'
+import { AUDIT_MESSAGES } from '../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 type AuditTrailTableEntry = {
   id: number
@@ -36,21 +38,21 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
   const columns: Column<TEntry>[] = [
     {
       key: 'performed_at',
-      header: 'תאריך',
+      header: AUDIT_MESSAGES.table.columnDate,
       align: 'right',
       className: 'w-36 text-gray-500 tabular-nums',
       render: (entry) => formatDateTime(entry.performed_at),
     },
     {
       key: 'action',
-      header: 'פעולה',
+      header: AUDIT_MESSAGES.table.columnAction,
       align: 'right',
       className: 'w-24 font-medium text-gray-800',
       render: (entry) => actionLabels[entry.action] ?? entry.action,
     },
     {
       key: 'details',
-      header: 'פרטים',
+      header: AUDIT_MESSAGES.table.columnDetails,
       align: 'right',
       wrap: true,
       className: cn('min-w-48 break-words', detailsClassName),
@@ -58,7 +60,7 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
     },
     {
       key: 'performed_by',
-      header: 'בוצע ע"י',
+      header: AUDIT_MESSAGES.table.columnPerformedBy,
       align: 'right',
       className: 'w-24 font-mono text-xs text-gray-400',
       render: (entry) => entry.performed_by_name ?? `#${entry.performed_by}`,
@@ -78,9 +80,13 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
             onClick={() => setPage(Math.max(0, safePage - 1))}
             disabled={safePage === 0 || isFetching}
           >
-            הקודם
+            {AUDIT_MESSAGES.table.previousPage}
           </Button>
-          <span>{isFetching ? 'טוען...' : `עמוד ${safePage + 1} מתוך ${totalPages}`}</span>
+          <span>
+            {isFetching
+              ? GLOBAL_UI_MESSAGES.common.loading
+              : AUDIT_MESSAGES.table.pageIndicator(safePage + 1, totalPages)}
+          </span>
           <Button
             type="button"
             variant="ghost"
@@ -88,7 +94,7 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
             onClick={() => setPage(Math.min(maxPage, safePage + 1))}
             disabled={safePage >= maxPage || isFetching}
           >
-            הבא
+            {AUDIT_MESSAGES.table.nextPage}
           </Button>
         </div>
       )}

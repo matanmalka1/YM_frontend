@@ -9,6 +9,9 @@ import type { EntityAuditType } from '../api'
 import { useEntityAuditTrailSection } from '../hooks/useEntityAuditTrailSection'
 import { EMPTY_FIELD_VALUE_LABELS, makeAuditFormatter, type FieldValueLabels } from '../utils/auditFormatters'
 import { AuditTrailTable } from './AuditTrailTable'
+import { AUDIT_MESSAGES } from '../messages'
+import { AUDIT_ERROR_MESSAGES } from '../errorMessages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 type EntityAuditTrailSectionProps = {
   entityType: EntityAuditType
@@ -22,8 +25,8 @@ type EntityAuditTrailSectionProps = {
 export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = ({
   entityType,
   entityId,
-  title = 'היסטוריית שינויים',
-  subtitle = 'פעולות שבוצעו על הרשומה',
+  title = AUDIT_MESSAGES.section.defaultTitle,
+  subtitle = AUDIT_MESSAGES.section.defaultSubtitle,
   compact = false,
   fieldValueLabels = EMPTY_FIELD_VALUE_LABELS,
 }) => {
@@ -54,7 +57,7 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
     return renderState(
       <div className="flex flex-col items-center gap-3 py-8 text-center">
         <Spinner size="md" />
-        <p className="text-sm text-gray-400">טוען...</p>
+        <p className="text-sm text-gray-400">{GLOBAL_UI_MESSAGES.common.loading}</p>
       </div>,
     )
   }
@@ -64,8 +67,8 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
       <InlineState
         variant="error"
         icon={AlertTriangle}
-        title="שגיאה בטעינת ההיסטוריה"
-        action={{ label: 'נסה שוב', onClick: () => auditTrail.refetch() }}
+        title={AUDIT_ERROR_MESSAGES.section.load}
+        action={{ label: AUDIT_MESSAGES.section.retryAction, onClick: () => auditTrail.refetch() }}
       />,
     )
   }
@@ -74,7 +77,7 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
     return renderState(
       <InlineState
         icon={History}
-        title={auditTrail.hasActiveFilters ? 'אין תוצאות התואמות את הסינון' : 'אין היסטוריית שינויים'}
+        title={auditTrail.hasActiveFilters ? AUDIT_MESSAGES.section.emptyFiltered : AUDIT_MESSAGES.section.emptyDefault}
       />,
     )
   }
