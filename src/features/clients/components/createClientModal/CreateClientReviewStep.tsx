@@ -7,6 +7,7 @@ import { getCreateClientEntityLabels } from '../../constants'
 import { buildCreateClientReviewModel } from '../../utils/createClientFormUtils'
 import { ImpactIcon } from './createClientImpactIcons'
 import { CLIENTS_MESSAGES } from '../../messages'
+import { CLIENTS_ERROR_MESSAGES } from '../../errorMessages'
 
 interface Props {
   values: CreateClientFormValues
@@ -109,7 +110,7 @@ export const CreateClientReviewStep: React.FC<Props> = ({
             ))}
           </div>
         ) : impactError ? (
-          <p className="text-sm text-primary-700">{CLIENTS_MESSAGES.createReview.impactError}</p>
+          <p className="text-sm text-primary-700">{CLIENTS_ERROR_MESSAGES.create.impact}</p>
         ) : impactData ? (
           <>
             <ul className="grid gap-2 sm:grid-cols-2">

@@ -7,6 +7,7 @@ import type { CreateClientFormValues } from '../../schemas'
 import { formatShekelAmount } from '@/utils/utils'
 import { stripNonDecimal } from '../../utils/createClientFormUtils'
 import { CLIENTS_MESSAGES } from '../../messages'
+import { CLIENTS_ERROR_MESSAGES } from '../../errorMessages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface Props {
@@ -81,7 +82,7 @@ export const CreateClientTaxStep: React.FC<Props> = ({
               {impactLoading
                 ? GLOBAL_UI_MESSAGES.common.loading
                 : impactError
-                  ? CLIENTS_MESSAGES.createTax.vatExemptCeilingError
+                  ? CLIENTS_ERROR_MESSAGES.create.vatExemptCeiling
                   : vatExemptCeilingText}
             </div>
             <p className="mt-1 text-xs text-gray-400">{CLIENTS_MESSAGES.createTax.vatExemptCeilingDerivedNote}</p>

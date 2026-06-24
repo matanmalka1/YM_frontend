@@ -23,6 +23,7 @@ import { ClientDetailsTabContent, useClientQuery, useClientMutations } from '@/f
 import type { ClientRecordResponse } from '../api'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { CLIENTS_MESSAGES } from '../messages'
+import { CLIENTS_ERROR_MESSAGES } from '../errorMessages'
 
 interface ClientDetailsProps {
   initialTab?: ActiveClientDetailsTab
@@ -129,7 +130,7 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
           title={CLIENTS_MESSAGES.details.pageTitle}
           breadcrumbs={[{ label: CLIENTS_MESSAGES.details.breadcrumbList, to: CLIENT_ROUTES.list }]}
         />
-        <Alert variant="error" message={CLIENTS_MESSAGES.details.invalidIdError} />
+        <Alert variant="error" message={CLIENTS_ERROR_MESSAGES.details.invalidId} />
       </PageContent>
     )
 

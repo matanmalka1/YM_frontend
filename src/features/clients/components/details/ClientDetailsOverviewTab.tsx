@@ -37,6 +37,7 @@ import type { UpdateClientPayload, ClientRecordResponse } from '../../api'
 import { useFirstBusinessId } from '../../hooks/useFirstBusinessId'
 import { useClientDetailsActions } from '../../hooks/useClientDetailsActions'
 import { CLIENTS_MESSAGES } from '../../messages'
+import { CLIENTS_ERROR_MESSAGES } from '../../errorMessages'
 
 const EDIT_FORM_ID = 'client-edit-form'
 
@@ -139,7 +140,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
           <ChargesCreateModal
             open={isAddingCharge}
             createError={
-              createChargeError ? getErrorMessage(createChargeError, CLIENTS_MESSAGES.edit.chargeCreateError) : null
+              createChargeError ? getErrorMessage(createChargeError, CLIENTS_ERROR_MESSAGES.charges.create) : null
             }
             createLoading={isCreatingCharge}
             onClose={() => setIsAddingCharge(false)}

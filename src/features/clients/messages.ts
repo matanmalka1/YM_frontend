@@ -43,7 +43,6 @@ export const CLIENTS_MESSAGES = {
   details: {
     pageTitle: 'פרטי לקוח',
     breadcrumbList: 'לקוחות',
-    invalidIdError: 'מזהה לקוח לא תקין',
     viewOnlyNotice: 'צפייה בלבד. עריכת פרטי לקוח זמינה ליועצים בלבד.',
     editDetails: 'ערוך פרטים',
     loadingMessage: 'טוען פרטי לקוח...',
@@ -185,7 +184,6 @@ export const CLIENTS_MESSAGES = {
     noChanges: 'לא בוצעו שינויים בטופס',
     notDefined: 'לא הוגדר',
     notAvailable: 'לא זמין',
-    chargeCreateError: 'שגיאה ביצירת חיוב',
     auditTitle: 'יומן שינויים',
     auditSubtitle: 'פעולות שבוצעו על הלקוח',
     sectionIdentity: 'זהות משפטית',
@@ -281,7 +279,6 @@ export const CLIENTS_MESSAGES = {
     advanceFrequencyLabel: 'תדירות מקדמות מס הכנסה *',
     advanceFrequencyPlaceholder: 'בחר תדירות מקדמות',
     vatExemptCeiling: 'תקרת פטור מע״מ',
-    vatExemptCeilingError: 'לא ניתן לטעון את תקרת הפטור כרגע',
     vatExemptCeilingMissing: 'לא נמצאה תקרת פטור בהגדרות המערכת',
     vatExemptCeilingAuto: 'תקרת עוסק פטור תיקבע אוטומטית לפי שנת המס.',
     vatExemptCeilingDerivedNote: 'נגזר אוטומטית לפי הגדרת המערכת',
@@ -306,7 +303,6 @@ export const CLIENTS_MESSAGES = {
     impactTitle: 'מה ייווצר לאחר שמירה?',
     impactSubtitle: 'פריטים חדשים שייווצרו עבור הלקוח',
     impactItemsCount: (count: number) => `${count} פריטים`,
-    impactError: 'לא ניתן לטעון את הפרטים כרגע',
     impactTwoYearScope: 'ייווצר עבור השנה הנוכחית והשנה הבאה',
   },
   shared: {
