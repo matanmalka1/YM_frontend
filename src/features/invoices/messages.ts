@@ -21,16 +21,7 @@ export const INVOICES_MESSAGES = {
     documentUrl: 'קישור למסמך',
     save: 'שמור חשבונית',
   },
-  validation: {
-    providerRequired: 'יש להזין ספק חשבונית',
-    invoiceIdRequired: 'יש להזין מזהה חשבונית',
-    issuedAtRequired: 'יש להזין תאריך הנפקה',
-    validIssuedAt: 'יש להזין תאריך הנפקה תקין',
-    validUrl: 'יש להזין קישור תקין',
-  },
   mutations: {
     attached: 'החשבונית צורפה לחיוב',
-    attachError: 'שגיאה בצירוף חשבונית',
-    loadError: 'שגיאה בטעינת פרטי חשבונית',
   },
 } as const

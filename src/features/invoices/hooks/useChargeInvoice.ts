@@ -5,6 +5,7 @@ import { invoicesQK } from '../api/queryKeys'
 import { toast } from '@/utils/toast'
 import { getErrorMessage, getHttpStatus, showErrorToast } from '@/utils/utils'
 import { INVOICES_MESSAGES } from '../messages'
+import { INVOICES_ERROR_MESSAGES } from '../errorMessages'
 
 export const useChargeInvoice = (chargeId: number | null | undefined) => {
   const queryClient = useQueryClient()
@@ -34,7 +35,7 @@ export const useChargeInvoice = (chargeId: number | null | undefined) => {
       queryClient.setQueryData(invoicesQK.byChargeId(invoice.charge_id), invoice)
       toast.success(INVOICES_MESSAGES.mutations.attached)
     },
-    onError: (err) => showErrorToast(err, INVOICES_MESSAGES.mutations.attachError),
+    onError: (err) => showErrorToast(err, INVOICES_ERROR_MESSAGES.mutations.attachError),
   })
 
   const attachInvoice = async (payload: InvoiceAttachRequest): Promise<boolean> => {
@@ -49,7 +50,7 @@ export const useChargeInvoice = (chargeId: number | null | undefined) => {
   return {
     attachInvoice,
     invoice: invoiceData ?? null,
-    invoiceError: invoiceError ? getErrorMessage(invoiceError, INVOICES_MESSAGES.mutations.loadError) : null,
+    invoiceError: invoiceError ? getErrorMessage(invoiceError, INVOICES_ERROR_MESSAGES.mutations.loadError) : null,
     isAttaching: attachMutation.isPending,
     isLoadingInvoice: invoiceLoading,
   }

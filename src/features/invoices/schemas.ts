@@ -1,23 +1,23 @@
 import { z } from 'zod'
 import type { InvoiceAttachRequest } from './api'
-import { INVOICES_MESSAGES } from './messages'
+import { INVOICES_ERROR_MESSAGES } from './errorMessages'
 
 export const invoiceAttachSchema = z.object({
-  provider: z.string().trim().min(1, INVOICES_MESSAGES.validation.providerRequired),
-  external_invoice_id: z.string().trim().min(1, INVOICES_MESSAGES.validation.invoiceIdRequired),
+  provider: z.string().trim().min(1, INVOICES_ERROR_MESSAGES.validation.providerRequired),
+  external_invoice_id: z.string().trim().min(1, INVOICES_ERROR_MESSAGES.validation.invoiceIdRequired),
   issued_at: z
     .string()
     .trim()
-    .min(1, INVOICES_MESSAGES.validation.issuedAtRequired)
+    .min(1, INVOICES_ERROR_MESSAGES.validation.issuedAtRequired)
     .refine((value) => Number.isFinite(new Date(value).getTime()), {
-      message: INVOICES_MESSAGES.validation.validIssuedAt,
+      message: INVOICES_ERROR_MESSAGES.validation.validIssuedAt,
     }),
   document_url: z
     .string()
     .trim()
     .optional()
     .refine((value) => !value || /^https?:\/\/\S+$/i.test(value), {
-      message: INVOICES_MESSAGES.validation.validUrl,
+      message: INVOICES_ERROR_MESSAGES.validation.validUrl,
     }),
 })
 
