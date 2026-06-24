@@ -24,16 +24,9 @@ export const IMPORT_EXPORT_MESSAGES = {
     title: 'ייבוא וייצוא לקוחות',
   },
   actions: {
-    importRowError: (row: number, error: string) => `שורה ${row}: ${error}`,
     exportSuccess: 'ייצוא לקוחות הושלם בהצלחה',
-    exportError: 'שגיאה בייצוא לקוחות',
-    invalidFile: 'יש לבחור קובץ Excel בפורמט xlsx או xls',
-    partialSuccess: (created: number) => `נוצרו ${created} לקוחות, וחלק מהשורות נכשלו`,
     noneCreated: 'לא נוצרו לקוחות',
-    moreErrors: (count: number) => `ועוד ${count} שגיאות`,
     importSuccess: (created: number, totalRows: number) => `נוצרו ${created} לקוחות מתוך ${totalRows} שורות`,
-    importError: 'שגיאה בייבוא לקוחות',
     templateSuccess: 'התבנית ירדה בהצלחה',
-    templateError: 'שגיאה בהורדת תבנית',
   },
 } as const

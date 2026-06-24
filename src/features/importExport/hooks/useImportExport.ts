@@ -6,6 +6,7 @@ import { clientsQK } from '@/features/clients'
 import { showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
 import { IMPORT_EXPORT_MESSAGES } from '../messages'
+import { IMPORT_EXPORT_ERROR_MESSAGES } from '../errorMessages'
 
 const EXCEL_MIME = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
@@ -17,7 +18,7 @@ const isExcelFile = (file: File) => {
 const formatImportErrors = (errors: Array<{ row: number; error: string }>) =>
   errors
     .slice(0, 3)
-    .map((error) => IMPORT_EXPORT_MESSAGES.actions.importRowError(error.row, error.error))
+    .map((error) => IMPORT_EXPORT_ERROR_MESSAGES.actions.importRowError(error.row, error.error))
     .join('\n')
 
 const downloadBlob = (data: BlobPart, filename: string) => {
@@ -54,7 +55,7 @@ export const useImportExport = () => {
 
       toast.success(IMPORT_EXPORT_MESSAGES.actions.exportSuccess)
     } catch (error) {
-      showErrorToast(error, IMPORT_EXPORT_MESSAGES.actions.exportError)
+      showErrorToast(error, IMPORT_EXPORT_ERROR_MESSAGES.actions.exportError)
     } finally {
       setExporting(false)
     }
@@ -64,7 +65,7 @@ export const useImportExport = () => {
     if (importing) return
 
     if (!isExcelFile(file)) {
-      toast.error(IMPORT_EXPORT_MESSAGES.actions.invalidFile)
+      toast.error(IMPORT_EXPORT_ERROR_MESSAGES.actions.invalidFile)
       return
     }
 
@@ -85,12 +86,12 @@ export const useImportExport = () => {
 
         toast.warning(
           data.created > 0
-            ? IMPORT_EXPORT_MESSAGES.actions.partialSuccess(data.created)
+            ? IMPORT_EXPORT_ERROR_MESSAGES.actions.partialSuccess(data.created)
             : IMPORT_EXPORT_MESSAGES.actions.noneCreated,
           {
             description:
               remainingErrors > 0
-                ? `${description}\n${IMPORT_EXPORT_MESSAGES.actions.moreErrors(remainingErrors)}`
+                ? `${description}\n${IMPORT_EXPORT_ERROR_MESSAGES.actions.moreErrors(remainingErrors)}`
                 : description,
             duration: 8000,
           },
@@ -100,7 +101,7 @@ export const useImportExport = () => {
 
       toast.success(IMPORT_EXPORT_MESSAGES.actions.importSuccess(data.created, data.total_rows))
     } catch (error) {
-      showErrorToast(error, IMPORT_EXPORT_MESSAGES.actions.importError)
+      showErrorToast(error, IMPORT_EXPORT_ERROR_MESSAGES.actions.importError)
     } finally {
       setImporting(false)
     }
@@ -118,7 +119,7 @@ export const useImportExport = () => {
 
       toast.success(IMPORT_EXPORT_MESSAGES.actions.templateSuccess)
     } catch (error) {
-      showErrorToast(error, IMPORT_EXPORT_MESSAGES.actions.templateError)
+      showErrorToast(error, IMPORT_EXPORT_ERROR_MESSAGES.actions.templateError)
     } finally {
       setDownloadingTemplate(false)
     }
