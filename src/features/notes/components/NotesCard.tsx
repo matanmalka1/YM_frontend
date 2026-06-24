@@ -10,12 +10,14 @@ import { InlineState } from '@/components/ui/feedback'
 import { formatDateTime } from '@/utils/utils'
 import type { EntityNote } from '../api'
 import { useEntityNotes, type NotesTarget } from '../hooks/useEntityNotes'
+import { NOTES_MESSAGES } from '../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 const NOTE_TAGS = [
-  { key: 'תזכורת', label: 'תזכורת', tone: 'orange' },
-  { key: 'פגישה', label: 'פגישה', tone: 'purple' },
-  { key: 'טיפול', label: 'טיפול', tone: 'rose' },
-  { key: 'תיעוד', label: 'תיעוד', tone: 'neutral' },
+  { key: NOTES_MESSAGES.tags.reminder, label: NOTES_MESSAGES.tags.reminder, tone: 'orange' },
+  { key: NOTES_MESSAGES.tags.meeting, label: NOTES_MESSAGES.tags.meeting, tone: 'purple' },
+  { key: NOTES_MESSAGES.tags.treatment, label: NOTES_MESSAGES.tags.treatment, tone: 'rose' },
+  { key: NOTES_MESSAGES.tags.documentation, label: NOTES_MESSAGES.tags.documentation, tone: 'neutral' },
 ] as const
 
 type NoteTagKey = (typeof NOTE_TAGS)[number]['key']
@@ -65,7 +67,7 @@ const NoteComposer = ({ value, onChange, onSave, onCancel, isLoading, initialTag
     <div className="rounded-lg border border-gray-200 bg-white overflow-hidden shadow-sm">
       <Textarea
         rows={3}
-        placeholder="הזן הערה..."
+        placeholder={NOTES_MESSAGES.composer.placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={isLoading}
@@ -91,7 +93,7 @@ const NoteComposer = ({ value, onChange, onSave, onCancel, isLoading, initialTag
             isLoading={isLoading}
             disabled={!value.trim()}
           >
-            שמור
+            {NOTES_MESSAGES.composer.saveButton}
           </Button>
         </div>
         <div className="flex items-center gap-1">
@@ -151,7 +153,7 @@ const NoteRow = ({ note, isDeleting, onEdit, onDelete }: NoteRowProps) => {
             icon={<Pencil className="h-4 w-4" />}
             onClick={() => onEdit(note)}
             className="h-8 w-8 px-0 text-gray-500"
-            title="ערוך"
+            title={NOTES_MESSAGES.row.editTitle}
           />
           <Button
             type="button"
@@ -161,7 +163,7 @@ const NoteRow = ({ note, isDeleting, onEdit, onDelete }: NoteRowProps) => {
             onClick={() => onDelete(note.id)}
             disabled={isDeleting}
             className="h-8 w-8 px-0 text-gray-500 hover:text-negative-600"
-            title="מחק"
+            title={NOTES_MESSAGES.row.deleteTitle}
           />
         </div>
       </div>
@@ -199,7 +201,7 @@ export const NotesCard = ({ canEdit, ...target }: NotesCardProps) => {
 
   return (
     <>
-      <Card title="הערות" subtitle={total > 0 ? `${total} הערות` : undefined}>
+      <Card title={NOTES_MESSAGES.card.title} subtitle={total > 0 ? NOTES_MESSAGES.card.notesCount(total) : undefined}>
         {error && <Alert variant="error" message={error} />}
 
         {canEdit && (
@@ -217,9 +219,9 @@ export const NotesCard = ({ canEdit, ...target }: NotesCardProps) => {
           </div>
         )}
 
-        {isLoading && <p className="py-4 text-center text-sm text-gray-500">טוען...</p>}
+        {isLoading && <p className="py-4 text-center text-sm text-gray-500">{GLOBAL_UI_MESSAGES.common.loading}</p>}
 
-        {!isLoading && notes.length === 0 && <InlineState icon={StickyNote} title="אין הערות עדיין" />}
+        {!isLoading && notes.length === 0 && <InlineState icon={StickyNote} title={NOTES_MESSAGES.card.emptyTitle} />}
 
         {!isLoading && notes.length > 0 && (
           <ul className="space-y-3">
@@ -251,10 +253,10 @@ export const NotesCard = ({ canEdit, ...target }: NotesCardProps) => {
 
       <ConfirmDialog
         open={confirmDeleteId !== null}
-        title="מחיקת הערה"
-        message="האם למחוק את ההערה? פעולה זו אינה הפיכה."
-        confirmLabel="מחק"
-        cancelLabel="ביטול"
+        title={NOTES_MESSAGES.card.deleteModalTitle}
+        message={NOTES_MESSAGES.card.deleteMessage}
+        confirmLabel={NOTES_MESSAGES.card.deleteConfirm}
+        cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
         confirmVariant="danger"
         isLoading={deletingId === confirmDeleteId}
         onConfirm={() => {
