@@ -1,6 +1,8 @@
 import { Download } from 'lucide-react'
 import { OverlayContainer } from '../../../../components/ui/layout/OverlayContainer'
 import { Button } from '../../../../components/ui/primitives/Button'
+import { DOCUMENTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface DocumentPreviewModalProps {
   open: boolean
@@ -26,19 +28,21 @@ export const DocumentPreviewModal: React.FC<DocumentPreviewModalProps> = ({
     <OverlayContainer
       open={open}
       variant="modal"
-      title={filename ?? 'תצוגה מקדימה'}
+      title={filename ?? DOCUMENTS_MESSAGES.preview.defaultTitle}
       onClose={onClose}
       className="max-w-4xl w-full"
       footer={
         <div className="flex justify-end">
           <Button variant="secondary" icon={<Download className="h-4 w-4" />} onClick={onDownload}>
-            הורד
+            {DOCUMENTS_MESSAGES.preview.downloadButton}
           </Button>
         </div>
       }
     >
       {!url ? (
-        <div className="flex items-center justify-center py-16 text-sm text-gray-400">טוען...</div>
+        <div className="flex items-center justify-center py-16 text-sm text-gray-400">
+          {GLOBAL_UI_MESSAGES.common.loading}
+        </div>
       ) : isPdf ? (
         // No `sandbox`: Chrome's built-in PDF viewer requires both allow-scripts
         // and allow-same-origin to render, and that pair defeats the sandbox
@@ -52,9 +56,9 @@ export const DocumentPreviewModal: React.FC<DocumentPreviewModalProps> = ({
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center gap-4 py-16 text-sm text-gray-500">
-          <p>לא ניתן להציג קובץ זה בתצוגה מקדימה</p>
+          <p>{DOCUMENTS_MESSAGES.preview.unsupportedFile}</p>
           <Button variant="secondary" icon={<Download className="h-4 w-4" />} onClick={onDownload}>
-            הורד קובץ
+            {DOCUMENTS_MESSAGES.preview.downloadFileButton}
           </Button>
         </div>
       )}

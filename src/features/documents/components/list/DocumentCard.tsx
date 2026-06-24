@@ -6,6 +6,7 @@ import { RowActionsMenu, RowActionItem, RowActionSeparator } from '@/components/
 import { formatDate } from '../../../../utils/utils'
 import { DOC_TYPE_LABELS } from '../../constants'
 import type { PermanentDocumentResponse } from '../../api'
+import { DOCUMENTS_MESSAGES } from '../../messages'
 
 interface DocumentCardProps {
   doc: PermanentDocumentResponse
@@ -41,18 +42,29 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
       <span className="text-sm font-semibold text-gray-900 leading-snug">
         {DOC_TYPE_LABELS[doc.document_type] ?? doc.document_type}
       </span>
-      <RowActionsMenu ariaLabel={`פעולות נוספות למסמך ${doc.id}`} title="פעולות נוספות">
+      <RowActionsMenu
+        ariaLabel={DOCUMENTS_MESSAGES.card.rowActionsAriaLabel(doc.id)}
+        title={DOCUMENTS_MESSAGES.card.rowActionsTitle}
+      >
         <RowActionItem
-          label="היסטוריית גרסאות"
+          label={DOCUMENTS_MESSAGES.card.versionHistoryLabel}
           onClick={() => onToggleVersions(doc.id)}
           icon={<History className="h-4 w-4" />}
         />
         {(canEditReplace || isAdvisor) && <RowActionSeparator />}
         {canEditReplace && (
           <>
-            <RowActionItem label="עריכת פרטים" onClick={() => onEdit(doc)} icon={<Pencil className="h-4 w-4" />} />
             <RowActionItem
-              label={replacingId === doc.id ? 'מחליף...' : 'החלף קובץ'}
+              label={DOCUMENTS_MESSAGES.card.editDetailsLabel}
+              onClick={() => onEdit(doc)}
+              icon={<Pencil className="h-4 w-4" />}
+            />
+            <RowActionItem
+              label={
+                replacingId === doc.id
+                  ? DOCUMENTS_MESSAGES.card.replacingLabel
+                  : DOCUMENTS_MESSAGES.card.replaceFileLabel
+              }
               onClick={() => onReplace(doc.id)}
               icon={<RefreshCw className="h-4 w-4" />}
               disabled={replacingId === doc.id}
@@ -61,7 +73,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
         )}
         {isAdvisor && (
           <RowActionItem
-            label={deletingId === doc.id ? 'מוחק...' : 'מחק'}
+            label={deletingId === doc.id ? DOCUMENTS_MESSAGES.card.deletingLabel : DOCUMENTS_MESSAGES.card.deleteLabel}
             onClick={() => onDelete(doc.id)}
             icon={<Trash2 className="h-4 w-4" />}
             danger
@@ -87,7 +99,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
       {doc.tax_year ? (
         <Badge variant="info">{doc.tax_year}</Badge>
       ) : (
-        <span className="text-xs text-gray-400">ללא שנת מס</span>
+        <span className="text-xs text-gray-400">{DOCUMENTS_MESSAGES.card.noTaxYear}</span>
       )}
       <div className="flex items-center gap-1 text-xs text-gray-400">
         <Calendar className="h-3 w-3 shrink-0" />
@@ -103,9 +115,9 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
         icon={<Eye className="h-3.5 w-3.5" />}
         onClick={() => onPreview(doc)}
         className="flex-1"
-        aria-label="צפייה במסמך"
+        aria-label={DOCUMENTS_MESSAGES.card.previewAriaLabel}
       >
-        צפייה
+        {DOCUMENTS_MESSAGES.card.previewLabel}
       </Button>
       <Button
         type="button"
@@ -115,9 +127,9 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
         isLoading={downloadingId === doc.id}
         onClick={() => onDownload(doc)}
         className="flex-1"
-        aria-label="הורדת מסמך"
+        aria-label={DOCUMENTS_MESSAGES.card.downloadAriaLabel}
       >
-        הורדה
+        {DOCUMENTS_MESSAGES.card.downloadLabel}
       </Button>
     </div>
   </Card>

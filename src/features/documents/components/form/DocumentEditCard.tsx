@@ -6,6 +6,7 @@ import { Input } from '../../../../components/ui/inputs/Input'
 import type { PermanentDocumentResponse, UpdateDocumentPayload } from '../../api'
 import { documentEditSchema, type DocumentEditFormValues } from '../../schemas'
 import { UPLOAD_DOCUMENT_TYPE_OPTIONS, UPLOAD_TAX_YEAR_OPTIONS } from '../../constants'
+import { DOCUMENTS_MESSAGES } from '../../messages'
 
 export const EDIT_FORM_ID = 'documents-edit-form'
 
@@ -60,14 +61,14 @@ export const DocumentEditCard: React.FC<DocumentEditCardProps> = ({
   return (
     <form id={formId} onSubmit={submit} className="space-y-4">
       <Input
-        label="שם קובץ"
+        label={DOCUMENTS_MESSAGES.form.fileNameLabel}
         value={filename}
         onChange={(e) => setValue('original_filename', e.target.value, { shouldValidate: true })}
         error={errors.original_filename?.message}
       />
 
       <Select
-        label="סוג מסמך"
+        label={DOCUMENTS_MESSAGES.form.documentTypeLabel}
         value={documentType}
         onChange={(e) =>
           setValue('document_type', e.target.value as DocumentEditFormValues['document_type'], {
@@ -79,7 +80,7 @@ export const DocumentEditCard: React.FC<DocumentEditCardProps> = ({
       />
 
       <Select
-        label="שנת מס"
+        label={DOCUMENTS_MESSAGES.form.taxYearLabel}
         value={taxYear ?? ''}
         onChange={(e) => setValue('tax_year', e.target.value ? Number(e.target.value) : null, { shouldValidate: true })}
         options={UPLOAD_TAX_YEAR_OPTIONS}

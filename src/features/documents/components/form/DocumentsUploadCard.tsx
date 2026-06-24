@@ -13,6 +13,7 @@ import { Button } from '../../../../components/ui/primitives/Button'
 import { UPLOAD_DOCUMENT_TYPE_OPTIONS, UPLOAD_TAX_YEAR_OPTIONS } from '../../constants'
 import { getBusinessOptions } from '../../utils/documentsDataCardsUtils'
 import { validateDocumentFile } from '../../utils/documentsUploadCardHelpers'
+import { DOCUMENTS_MESSAGES } from '../../messages'
 
 export type DocumentUploadSubmitPayload = {
   document_type: UploadDocumentPayload['document_type']
@@ -112,7 +113,7 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
     <form id={formId} onSubmit={onSubmit} className="space-y-4">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Select
-          label="סוג מסמך"
+          label={DOCUMENTS_MESSAGES.form.documentTypeLabel}
           error={errors.document_type?.message}
           value={selectedDocType}
           name={documentTypeField.name}
@@ -128,7 +129,7 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
         />
 
         <Select
-          label="שנת מס (אופציונלי)"
+          label={DOCUMENTS_MESSAGES.form.taxYearOptionalLabel}
           value={selectedTaxYear ?? ''}
           onChange={(e) =>
             setValue('tax_year', e.target.value ? Number(e.target.value) : null, {
@@ -141,7 +142,7 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
         {showBusinessSelect && (
           <div>
             <Select
-              label="שיוך עסקי"
+              label={DOCUMENTS_MESSAGES.form.businessAssociationLabel}
               value={isClientScopedType ? '' : (selectedBusinessId ?? '')}
               onChange={(e) =>
                 setValue('business_id', e.target.value ? Number(e.target.value) : null, {
@@ -151,13 +152,15 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
               disabled={businessesLoading || isClientScopedType}
               options={businessOptions}
             />
-            {isClientScopedType && <p className="mt-1 text-xs text-gray-400">סוג מסמך זה שייך ללקוח בלבד</p>}
+            {isClientScopedType && (
+              <p className="mt-1 text-xs text-gray-400">{DOCUMENTS_MESSAGES.form.clientScopedTypeNote}</p>
+            )}
           </div>
         )}
       </div>
 
       <div className="space-y-2">
-        <span className="block text-sm font-medium text-gray-700">קובץ</span>
+        <span className="block text-sm font-medium text-gray-700">{DOCUMENTS_MESSAGES.form.fileLabel}</span>
         <div
           role="button"
           tabIndex={0}
@@ -194,12 +197,12 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
                     if (fileInputRef.current) fileInputRef.current.value = ''
                   }}
                   className="rounded-full p-0.5 text-gray-400 hover:bg-gray-200 hover:text-gray-600"
-                  aria-label="הסר קובץ"
+                  aria-label={DOCUMENTS_MESSAGES.form.removeFileAriaLabel}
                 />
               </div>
               <div className="flex items-center gap-3 text-xs text-gray-500">
                 <span>{formatFileSize(selectedFile.size)}</span>
-                <span className="font-medium text-positive-700">מוכן להעלאה</span>
+                <span className="font-medium text-positive-700">{DOCUMENTS_MESSAGES.form.readyToUpload}</span>
               </div>
             </>
           ) : (
@@ -209,17 +212,17 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
                   <CloudUpload className="h-4 w-4" />
                 </div>
                 <div className="space-y-0.5">
-                  <p className="text-sm font-medium text-gray-700">גרור קובץ לכאן או לחץ לבחירה</p>
-                  <p className="text-2xs text-gray-400">PDF, Word, Excel, תמונות · עד 10MB</p>
+                  <p className="text-sm font-medium text-gray-700">{DOCUMENTS_MESSAGES.form.dropOrClickPrompt}</p>
+                  <p className="text-2xs text-gray-400">{DOCUMENTS_MESSAGES.form.acceptedFormats}</p>
                 </div>
               </div>
-              <span className="text-2xs font-medium text-primary-700">בחירת קובץ</span>
+              <span className="text-2xs font-medium text-primary-700">{DOCUMENTS_MESSAGES.form.chooseFile}</span>
             </>
           )}
         </div>
         <HiddenFileInput
           ref={fileInputRef}
-          aria-label="העלאת קובץ"
+          aria-label={DOCUMENTS_MESSAGES.form.uploadFileAriaLabel}
           accept={DOCUMENT_FILE_ACCEPT}
           onChange={(e) => {
             const file = e.target.files?.[0]

@@ -3,6 +3,7 @@ import { documentsApi, documentsQK } from '../../api'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import { STATUS_LABELS, getDocumentStatusVariant } from '../../constants'
 import { formatDate, formatFileSize } from '../../../../utils/utils'
+import { DOCUMENTS_MESSAGES } from '../../messages'
 
 interface DocumentVersionsPanelProps {
   clientId: number
@@ -20,16 +21,18 @@ export const DocumentVersionsPanel: React.FC<DocumentVersionsPanelProps> = ({ cl
   const hasMore = data?.has_more ?? false
 
   if (isLoading) {
-    return <div className="px-4 py-2 text-xs text-gray-400">טוען גרסאות...</div>
+    return <div className="px-4 py-2 text-xs text-gray-400">{DOCUMENTS_MESSAGES.versions.loading}</div>
   }
 
   if (items.length === 0) {
-    return <div className="px-4 py-2 text-xs text-gray-400">אין גרסאות קודמות</div>
+    return <div className="px-4 py-2 text-xs text-gray-400">{DOCUMENTS_MESSAGES.versions.noVersions}</div>
   }
 
   return (
     <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
-      <p className="mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">היסטוריית גרסאות</p>
+      <p className="mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+        {DOCUMENTS_MESSAGES.versions.sectionTitle}
+      </p>
       <ul className="space-y-2">
         {items.map((v) => (
           <li key={v.id} className="flex items-center gap-3 text-xs text-gray-700">
@@ -49,7 +52,7 @@ export const DocumentVersionsPanel: React.FC<DocumentVersionsPanelProps> = ({ cl
           </li>
         ))}
       </ul>
-      {hasMore && <p className="mt-2 text-xs text-gray-400">מוצגות 10 גרסאות אחרונות בלבד</p>}
+      {hasMore && <p className="mt-2 text-xs text-gray-400">{DOCUMENTS_MESSAGES.versions.truncatedNote}</p>}
     </div>
   )
 }

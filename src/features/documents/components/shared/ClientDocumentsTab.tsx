@@ -4,6 +4,7 @@ import { TableSkeleton } from '../../../../components/ui/table/TableSkeleton'
 import { PaginationCard } from '../../../../components/ui/table/PaginationCard'
 import { DocumentsDataCards } from '../list/DocumentsDataCards'
 import { useClientDocumentsTab } from '../../hooks/useClientDocumentsTab'
+import { DOCUMENTS_MESSAGES } from '../../messages'
 
 interface ClientDocumentsTabProps {
   clientId: number
@@ -54,7 +55,13 @@ export const ClientDocumentsTab: React.FC<ClientDocumentsTabProps> = ({ clientId
         onUpdate={handleUpdate}
       />
       {totalPages > 1 && (
-        <PaginationCard page={page} totalPages={totalPages} total={total} label="מסמכים" onPageChange={setPage} />
+        <PaginationCard
+          page={page}
+          totalPages={totalPages}
+          total={total}
+          label={DOCUMENTS_MESSAGES.shared.paginationLabel}
+          onPageChange={setPage}
+        />
       )}
     </>
   )

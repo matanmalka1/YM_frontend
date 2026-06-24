@@ -17,6 +17,8 @@ import { filterDocuments, getCountLabel } from '../../utils/documentsDataCardsUt
 import { useDocumentCardActions } from '../../hooks/useDocumentCardActions'
 import { DocumentsDataCardsToolbar } from './DocumentsDataCardsToolbar'
 import { StateCard } from '../../../../components/ui/feedback/StateCard'
+import { DOCUMENTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface DocumentsDataCardsProps {
   documents: PermanentDocumentResponse[]
@@ -103,10 +105,10 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-3">
-        <h3 className="text-base font-semibold text-gray-900">מסמכים ({countLabel})</h3>
+        <h3 className="text-base font-semibold text-gray-900">{DOCUMENTS_MESSAGES.list.sectionTitle(countLabel)}</h3>
         <Button variant="ghost" size="sm" onClick={() => setUploadOpen(true)} className="gap-1.5 shrink-0">
           <Plus className="h-4 w-4" />
-          העלאת מסמך
+          {DOCUMENTS_MESSAGES.list.uploadButton}
         </Button>
       </div>
 
@@ -121,12 +123,12 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
 
       {filteredDocuments.length === 0 ? (
         documents.length > 0 ? (
-          <StateCard icon={FileText} message="לא נמצאו מסמכים מתאימים לחיפוש" />
+          <StateCard icon={FileText} message={DOCUMENTS_MESSAGES.list.noResultsMessage} />
         ) : (
           <StateCard
             icon={FileText}
-            message="עדיין לא הועלו מסמכים ללקוח זה"
-            action={{ label: 'העלאת מסמך ראשון', onClick: () => setUploadOpen(true) }}
+            message={DOCUMENTS_MESSAGES.list.emptyMessage}
+            action={{ label: DOCUMENTS_MESSAGES.list.firstUploadAction, onClick: () => setUploadOpen(true) }}
           />
         )
       ) : (
@@ -161,22 +163,22 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
 
       <Modal
         open={uploadOpen}
-        title="העלאת מסמך חדש"
+        title={DOCUMENTS_MESSAGES.list.uploadModalTitle}
         onClose={closeUploadModal}
         footer={
           <div className="flex items-center justify-end gap-2">
             <Button variant="outline" onClick={closeUploadModal} disabled={uploading}>
-              ביטול
+              {GLOBAL_UI_MESSAGES.actions.cancel}
             </Button>
             <Button
               type="submit"
               form={UPLOAD_FORM_ID}
               isLoading={uploading}
-              loadingLabel="מעלה..."
+              loadingLabel={DOCUMENTS_MESSAGES.list.uploading}
               disabled={!uploadCanSubmit}
               className="gap-2 shrink-0"
             >
-              העלה מסמך
+              {DOCUMENTS_MESSAGES.list.uploadSubmit}
             </Button>
           </div>
         }
@@ -194,7 +196,11 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
         />
       </Modal>
 
-      <HiddenFileInput ref={fileInputRef} aria-label="העלאת קובץ" onChange={handleFileChange} />
+      <HiddenFileInput
+        ref={fileInputRef}
+        aria-label={DOCUMENTS_MESSAGES.form.uploadFileAriaLabel}
+        onChange={handleFileChange}
+      />
 
       <DocumentPreviewModal
         open={previewDoc !== null}
@@ -207,21 +213,21 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
 
       <Modal
         open={editDoc !== null}
-        title="עריכת פרטי מסמך"
+        title={DOCUMENTS_MESSAGES.list.editModalTitle}
         onClose={closeEdit}
         footer={
           <div className="flex items-center justify-end gap-2">
             <Button variant="outline" onClick={closeEdit} disabled={updatingId !== null}>
-              ביטול
+              {GLOBAL_UI_MESSAGES.actions.cancel}
             </Button>
             <Button
               type="submit"
               form={EDIT_FORM_ID}
               isLoading={editDoc ? updatingId === editDoc.id : false}
-              loadingLabel="שומר..."
+              loadingLabel={DOCUMENTS_MESSAGES.list.saving}
               className="gap-2 shrink-0"
             >
-              שמירה
+              {DOCUMENTS_MESSAGES.list.saveLabel}
             </Button>
           </div>
         }
@@ -233,10 +239,10 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
 
       <ConfirmDialog
         open={confirmDeleteId !== null}
-        title="מחיקת מסמך"
-        message="האם למחוק מסמך זה?"
-        confirmLabel="מחק"
-        cancelLabel="ביטול"
+        title={DOCUMENTS_MESSAGES.list.deleteModalTitle}
+        message={DOCUMENTS_MESSAGES.list.deleteMessage}
+        confirmLabel={DOCUMENTS_MESSAGES.list.deleteConfirm}
+        cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
         confirmVariant="danger"
         onConfirm={handleConfirmDelete}
         onCancel={() => setConfirmDeleteId(null)}
