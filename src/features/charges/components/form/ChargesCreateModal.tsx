@@ -15,6 +15,7 @@ import {
   type ChargeCreateFormValues,
 } from '../../schemas'
 import { buildChargePeriodOptions } from '../../utils/chargeHelpers'
+import { CHARGES_MESSAGES } from '../../messages'
 
 interface ChargesCreateModalProps {
   open: boolean
@@ -75,7 +76,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
     const [business] = businesses
     return {
       id: business.id,
-      name: business.business_name ?? `עסק #${business.id}`,
+      name: business.business_name ?? CHARGES_MESSAGES.create.businessName(business.id),
     }
   }, [businesses, initialBusiness])
 
@@ -104,8 +105,11 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
 
   const businessOptions = useMemo(
     () => [
-      { value: '', label: 'ללא שיוך עסקי' },
-      ...businesses.map((b) => ({ value: String(b.id), label: b.business_name ?? `עסק #${b.id}` })),
+      { value: '', label: CHARGES_MESSAGES.create.noBusiness },
+      ...businesses.map((b) => ({
+        value: String(b.id),
+        label: b.business_name ?? CHARGES_MESSAGES.create.businessName(b.id),
+      })),
     ],
     [businesses],
   )
@@ -128,7 +132,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
   return (
     <Modal
       open={open}
-      title="יצירת חיוב חדש"
+      title={CHARGES_MESSAGES.create.title}
       isDirty={isDirty}
       onClose={handleClose}
       footer={
@@ -137,7 +141,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
           isLoading={createLoading}
           submitType="submit"
           submitForm={CHARGE_CREATE_FORM_ID}
-          submitLabel="יצירת חיוב"
+          submitLabel={CHARGES_MESSAGES.create.submit}
         />
       }
     >
@@ -152,7 +156,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
               onSelect={handleSelectClient}
               onClear={handleClearClient}
               error={errors.client_record_id?.message}
-              label="לקוח *"
+              label={CHARGES_MESSAGES.create.client}
             />
           </div>
 
@@ -163,7 +167,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
                 name="business_id"
                 render={({ field }) => (
                   <Select
-                    label="עסק"
+                    label={CHARGES_MESSAGES.create.business}
                     value={field.value != null ? String(field.value) : ''}
                     onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : null)}
                     onBlur={field.onBlur}
@@ -177,14 +181,14 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
 
           {businesses.length === 1 && selectedSingleBusiness && (
             <div className="col-span-2">
-              <FormField label="עסק">
+              <FormField label={CHARGES_MESSAGES.create.business}>
                 <Input value={selectedSingleBusiness.name} readOnly disabled />
               </FormField>
             </div>
           )}
 
           <Input
-            label="סכום *"
+            label={CHARGES_MESSAGES.create.amount}
             type="number"
             min={0.01}
             step="0.01"
@@ -198,7 +202,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
             name="charge_type"
             render={({ field }) => (
               <Select
-                label="סוג חיוב *"
+                label={CHARGES_MESSAGES.create.type}
                 error={errors.charge_type?.message}
                 value={field.value}
                 onChange={field.onChange}
@@ -213,7 +217,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
             name="months_covered"
             render={({ field }) => (
               <Select
-                label="חודשים לחיוב"
+                label={CHARGES_MESSAGES.create.monthsCovered}
                 error={errors.months_covered?.message}
                 value={field.value != null ? String(field.value) : '1'}
                 onChange={(e) => field.onChange(Number(e.target.value) as 1 | 2)}
@@ -228,7 +232,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
             name="period"
             render={({ field }) => (
               <Select
-                label="תקופה"
+                label={CHARGES_MESSAGES.create.period}
                 error={errors.period?.message}
                 value={field.value ?? ''}
                 onChange={(e) => field.onChange(e.target.value)}

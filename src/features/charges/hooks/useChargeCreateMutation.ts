@@ -1,11 +1,13 @@
 import type { QueryKey } from '@tanstack/react-query'
 import { useMutationWithToast } from '@/hooks/useMutationWithToast'
 import { chargesApi, chargesQK, type CreateChargePayload } from '../api'
+import { CHARGES_MESSAGES } from '../messages'
+import { CHARGES_ERROR_MESSAGES } from '../errorMessages'
 
 export const useChargeCreateMutation = (extraInvalidationKeys: readonly QueryKey[] = []) =>
   useMutationWithToast<Awaited<ReturnType<typeof chargesApi.create>>, CreateChargePayload>({
     mutationFn: (payload) => chargesApi.create(payload),
-    successMessage: 'חיוב נוצר בהצלחה',
-    errorMessage: 'שגיאה ביצירת חיוב',
+    successMessage: CHARGES_MESSAGES.feedback.created,
+    errorMessage: CHARGES_ERROR_MESSAGES.mutations.create,
     invalidateKeys: [chargesQK.all, ...extraInvalidationKeys],
   })

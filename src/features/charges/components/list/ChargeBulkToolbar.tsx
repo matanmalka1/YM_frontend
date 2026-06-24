@@ -4,6 +4,8 @@ import { Textarea } from '@/components/ui/inputs/Textarea'
 import { Button } from '@/components/ui/primitives/Button'
 import type { BulkChargeActionPayload } from '../../api'
 import { CHARGE_CANCEL_REASON_PLACEHOLDER } from '../../constants'
+import { CHARGES_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface ChargeBulkToolbarProps {
   selectedCount: number
@@ -42,7 +44,7 @@ export const ChargeBulkToolbar: React.FC<ChargeBulkToolbarProps> = ({ selectedCo
               />
             </div>
             <BulkSelectionActionButton
-              label="אשר ביטול"
+              label={CHARGES_MESSAGES.actions.confirmCancel}
               disabled={loading}
               loading={loading}
               variant="danger"
@@ -58,26 +60,26 @@ export const ChargeBulkToolbar: React.FC<ChargeBulkToolbarProps> = ({ selectedCo
               }}
               className="text-xs text-gray-500 hover:text-gray-700 px-2"
             >
-              חזור
+              {CHARGES_MESSAGES.actions.back}
             </Button>
           </div>
         ) : null
       }
     >
       <BulkSelectionActionButton
-        label="הנפק"
+        label={CHARGES_MESSAGES.actions.issueBulk}
         disabled={loading}
         loading={loading}
         onClick={() => void onAction('issue')}
       />
       <BulkSelectionActionButton
-        label="סמן כשולם"
+        label={CHARGES_MESSAGES.actions.markPaidBulk}
         disabled={loading}
         loading={loading}
         onClick={() => void onAction('mark-paid')}
       />
       <BulkSelectionActionButton
-        label="בטל"
+        label={GLOBAL_UI_MESSAGES.actions.cancel}
         disabled={loading}
         loading={loading}
         variant="danger"

@@ -5,18 +5,19 @@ import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
 import { CHARGE_STATUS_OPTIONS, CHARGE_TYPE_OPTIONS_WITH_ALL, CHARGE_PERIOD_OPTIONS } from '../constants'
 import type { ChargesFilters } from '../types'
+import { CHARGES_MESSAGES } from '../messages'
 
 const FIELDS: FilterFieldDef[] = [
   { type: 'client-picker', idKey: 'client_record_id', nameKey: 'client_name' },
-  { type: 'select', key: 'status', label: 'סטטוס', options: CHARGE_STATUS_OPTIONS },
-  { type: 'select', key: 'charge_type', label: 'סוג חיוב', options: CHARGE_TYPE_OPTIONS_WITH_ALL },
-  { type: 'select', key: 'period', label: 'תקופה', options: CHARGE_PERIOD_OPTIONS },
+  { type: 'select', key: 'status', label: CHARGES_MESSAGES.filters.status, options: CHARGE_STATUS_OPTIONS },
+  { type: 'select', key: 'charge_type', label: CHARGES_MESSAGES.filters.type, options: CHARGE_TYPE_OPTIONS_WITH_ALL },
+  { type: 'select', key: 'period', label: CHARGES_MESSAGES.filters.period, options: CHARGE_PERIOD_OPTIONS },
   {
     type: 'date-range',
     fromKey: 'issued_after',
     toKey: 'issued_before',
-    fromLabel: 'הונפק מתאריך',
-    toLabel: 'הונפק עד תאריך',
+    fromLabel: CHARGES_MESSAGES.filters.issuedFrom,
+    toLabel: CHARGES_MESSAGES.filters.issuedTo,
   },
 ]
 

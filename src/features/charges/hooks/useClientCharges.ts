@@ -11,6 +11,8 @@ import { DEFAULT_CHARGE_LIST_STATS } from '../constants'
 import { useChargeActions } from './useChargeActions'
 import { useChargeCreateMutation } from './useChargeCreateMutation'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
+import { CHARGES_MESSAGES } from '../messages'
+import { CHARGES_ERROR_MESSAGES } from '../errorMessages'
 
 export const useClientCharges = (clientId: number) => {
   const { isAdvisor, isSecretary } = useRole()
@@ -51,7 +53,7 @@ export const useClientCharges = (clientId: number) => {
   const charges = listData?.items ?? []
   const total = listData?.total ?? 0
   const stats = listData?.stats ?? DEFAULT_CHARGE_LIST_STATS
-  const error = listError ? getErrorMessage(listError, 'שגיאה בטעינת חיובי הלקוח') : null
+  const error = listError ? getErrorMessage(listError, CHARGES_ERROR_MESSAGES.client.load) : null
   const allIds = useMemo(() => listData?.items.map((c) => c.id) ?? [], [listData])
   const createMutation = useChargeCreateMutation()
   const { clearSelection, selectedIds, toggleSelect, toggleSelectAll } = useTableSelection<number>()
@@ -64,7 +66,7 @@ export const useClientCharges = (clientId: number) => {
   const submitCreate = useCallback(
     async (payload: CreateChargePayload): Promise<boolean> => {
       if (!isAdvisor) {
-        toast.error('אין הרשאה ליצור חיוב')
+        toast.error(CHARGES_ERROR_MESSAGES.permissions.create)
         return false
       }
 
@@ -111,7 +113,7 @@ export const useClientCharges = (clientId: number) => {
     selectedIds,
     actionLoadingId,
     bulkLoading,
-    createError: createMutation.error ? getErrorMessage(createMutation.error, 'שגיאה ביצירת חיוב') : null,
+    createError: createMutation.error ? getErrorMessage(createMutation.error, CHARGES_ERROR_MESSAGES.mutations.create) : null,
     createLoading: createMutation.isPending,
     toggleSelect,
     toggleSelectAll,

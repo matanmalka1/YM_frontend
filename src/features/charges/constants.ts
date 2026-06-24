@@ -3,6 +3,7 @@ import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION } from '@/constants/filterOptions
 import { PERIOD_PATTERN } from '@/constants/periodOptions.constants'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import type { ChargeListStats, ChargeStatusStat } from './api'
+import { CHARGES_MESSAGES } from './messages'
 
 export { PERIOD_PATTERN as CHARGE_PERIOD_PATTERN }
 
@@ -11,10 +12,10 @@ export const CHARGE_STATUS_VALUES = ['draft', 'issued', 'paid', 'canceled'] as c
 export type ChargeStatusValue = (typeof CHARGE_STATUS_VALUES)[number]
 
 export const CHARGE_STATUS_LABELS: Record<ChargeStatusValue, string> = {
-  draft: 'טיוטה',
-  issued: 'הונפק',
-  paid: 'שולם',
-  canceled: 'בוטל',
+  draft: CHARGES_MESSAGES.status.draft,
+  issued: CHARGES_MESSAGES.status.issued,
+  paid: CHARGES_MESSAGES.status.paid,
+  canceled: CHARGES_MESSAGES.status.canceled,
 }
 export const getChargeStatusLabel = makeLabelGetter(CHARGE_STATUS_LABELS)
 
@@ -36,17 +37,17 @@ export const CHARGE_TYPE_VALUES = [
 export type ChargeTypeValue = (typeof CHARGE_TYPE_VALUES)[number]
 
 export const CHARGE_TYPE_LABELS: Record<ChargeTypeValue, string> = {
-  monthly_retainer: 'ריטיינר חודשי',
-  annual_report_fee: 'שכר טרחה לדוח שנתי',
-  vat_filing_fee: 'שכר טרחה לדוח מע״מ',
-  representation_fee: 'שכר טרחה לייצוג',
-  consultation_fee: 'שכר טרחה לייעוץ',
-  other: 'אחר',
+  monthly_retainer: CHARGES_MESSAGES.types.monthlyRetainer,
+  annual_report_fee: CHARGES_MESSAGES.types.annualReportFee,
+  vat_filing_fee: CHARGES_MESSAGES.types.vatFilingFee,
+  representation_fee: CHARGES_MESSAGES.types.representationFee,
+  consultation_fee: CHARGES_MESSAGES.types.consultationFee,
+  other: CHARGES_MESSAGES.types.other,
 }
 export const getChargeTypeLabel = makeLabelGetter(CHARGE_TYPE_LABELS)
 
 export const CHARGE_CREATE_FORM_ID = 'charges-create-form'
-export const CHARGE_CANCEL_REASON_PLACEHOLDER = 'סיבת ביטול (אופציונלי)'
+export const CHARGE_CANCEL_REASON_PLACEHOLDER = CHARGES_MESSAGES.detail.cancelReasonPlaceholder
 export const CHARGE_PERIOD_YEAR_SPAN = 1
 
 const DEFAULT_CHARGE_STATUS_STAT: ChargeStatusStat = { count: 0, amount: '0' }
@@ -75,22 +76,22 @@ export const CHARGE_TYPE_OPTIONS_WITH_ALL: { value: string; label: string }[] = 
 
 const _currentYear = new Date().getFullYear()
 const _MONTH_LABELS = [
-  'ינואר',
-  'פברואר',
-  'מרץ',
-  'אפריל',
-  'מאי',
-  'יוני',
-  'יולי',
-  'אוגוסט',
-  'ספטמבר',
-  'אוקטובר',
-  'נובמבר',
-  'דצמבר',
+  CHARGES_MESSAGES.periods.january,
+  CHARGES_MESSAGES.periods.february,
+  CHARGES_MESSAGES.periods.march,
+  CHARGES_MESSAGES.periods.april,
+  CHARGES_MESSAGES.periods.may,
+  CHARGES_MESSAGES.periods.june,
+  CHARGES_MESSAGES.periods.july,
+  CHARGES_MESSAGES.periods.august,
+  CHARGES_MESSAGES.periods.september,
+  CHARGES_MESSAGES.periods.october,
+  CHARGES_MESSAGES.periods.november,
+  CHARGES_MESSAGES.periods.december,
 ]
 
 export const CHARGE_PERIOD_OPTIONS: { value: string; label: string }[] = [
-  { value: '', label: 'כל התקופות' },
+  { value: '', label: CHARGES_MESSAGES.periods.all },
   ...Array.from(
     { length: CHARGE_PERIOD_YEAR_SPAN * 2 + 1 },
     (_, i) => _currentYear - CHARGE_PERIOD_YEAR_SPAN + i,

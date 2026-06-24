@@ -16,6 +16,7 @@ import { chargeStatusVariants } from '../../constants'
 import type { ChargeAction } from '../../types'
 import { ChargeClientCell } from './ChargeClientCell'
 import type { NotificationTrigger } from '@/features/notifications'
+import { CHARGES_MESSAGES } from '../../messages'
 
 interface BuildChargeColumnsParams {
   isAdvisor: boolean
@@ -43,35 +44,35 @@ export const buildChargeColumns = ({
   const dataColumns: Column<ChargeListItem>[] = [
     monoColumn({
       key: 'office_client_number',
-      header: "מס' לקוח",
+      header: CHARGES_MESSAGES.columns.clientNumber,
       headerClassName: 'w-20',
       className: 'w-20',
       getValue: (charge) => formatClientOfficeId(charge.office_client_number),
     }),
     {
       key: 'client_record_id',
-      header: 'לקוח',
+      header: CHARGES_MESSAGES.columns.client,
       headerClassName: 'w-48',
       className: 'w-48 max-w-[12rem]',
       render: (charge) => <ChargeClientCell charge={charge} />,
     },
     textColumn({
       key: 'charge_type',
-      header: 'סוג',
+      header: CHARGES_MESSAGES.columns.type,
       headerClassName: 'w-24',
       className: 'w-24',
       getValue: (charge) => getChargeTypeLabel(charge.charge_type),
     }),
     textColumn({
       key: 'period',
-      header: 'תקופה',
+      header: CHARGES_MESSAGES.columns.period,
       headerClassName: 'w-28',
       className: 'w-28',
       getValue: (charge) => getChargePeriodLabel(charge.period, charge.months_covered),
     }),
     statusColumn({
       key: 'status',
-      header: 'סטטוס',
+      header: CHARGES_MESSAGES.columns.status,
       headerClassName: 'w-28',
       className: 'w-28',
       getStatus: (charge) => charge.status,
@@ -80,21 +81,21 @@ export const buildChargeColumns = ({
     }),
     dateColumn({
       key: 'issued_at',
-      header: 'הונפק',
+      header: CHARGES_MESSAGES.columns.issued,
       headerClassName: 'w-24',
       className: 'w-24',
       getValue: (charge) => charge.issued_at,
     }),
     dateColumn({
       key: 'paid_at',
-      header: 'שולם',
+      header: CHARGES_MESSAGES.columns.paid,
       headerClassName: 'w-24',
       className: 'w-24',
       getValue: (charge) => charge.paid_at,
     }),
     monoColumn({
       key: 'amount',
-      header: 'סכום',
+      header: CHARGES_MESSAGES.columns.amount,
       headerClassName: 'w-36',
       className: 'w-36',
       valueClassName: 'font-semibold text-gray-900',
@@ -102,7 +103,7 @@ export const buildChargeColumns = ({
     }),
     dateColumn({
       key: 'created_at',
-      header: 'נוצר',
+      header: CHARGES_MESSAGES.columns.created,
       headerClassName: 'w-24',
       className: 'w-24',
       valueClassName: 'text-gray-500',
@@ -133,7 +134,7 @@ export const buildChargeColumns = ({
 
   const idColumn: Column<ChargeListItem> = monoColumn({
     key: 'id',
-    header: "מס' חיוב",
+    header: CHARGES_MESSAGES.columns.chargeNumber,
     headerClassName: 'w-20',
     className: 'w-20',
     getValue: (charge) => `#${charge.id}`,
@@ -147,7 +148,7 @@ export const buildChargeColumns = ({
         onToggleSelect,
         onToggleAll,
         getId: (charge) => charge.id,
-        getItemAriaLabel: (charge) => `בחר חיוב ${charge.id}`,
+        getItemAriaLabel: (charge) => CHARGES_MESSAGES.actions.selectChargeAria(charge.id),
       }),
       idColumn,
       ...dataColumns,

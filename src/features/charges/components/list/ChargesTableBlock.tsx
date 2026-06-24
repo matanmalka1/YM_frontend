@@ -4,6 +4,7 @@ import { Alert } from '@/components/ui/overlays/Alert'
 import { getChargeRowClassName, getChargesEmptyState } from '../../utils/chargeHelpers'
 import type { BulkChargeActionPayload, ChargeListItem } from '../../api'
 import { ChargeBulkToolbar } from './ChargeBulkToolbar'
+import { CHARGES_MESSAGES } from '../../messages'
 
 interface ChargesTableBlockProps {
   charges: ChargeListItem[]
@@ -43,7 +44,7 @@ export const ChargesTableBlock = ({
   onPageSizeChange,
 }: ChargesTableBlockProps) => (
   <>
-    {!isAdvisor && <Alert variant="info" message="צפייה בלבד. יצירה ושינוי חיובים זמינים ליועץ בלבד." />}
+    {!isAdvisor && <Alert variant="info" message={CHARGES_MESSAGES.list.viewOnly} />}
 
     {isAdvisor && selectedCount > 0 && (
       <ChargeBulkToolbar
@@ -64,11 +65,11 @@ export const ChargesTableBlock = ({
       page={page}
       pageSize={pageSize}
       total={total}
-      label="חיובים"
+      label={CHARGES_MESSAGES.list.title}
       onPageChange={onPageChange}
       onPageSizeChange={onPageSizeChange}
       rowClassName={(charge) => getChargeRowClassName(charge.status)}
-      emptyMessage="אין חיובים להצגה"
+      emptyMessage={CHARGES_MESSAGES.list.empty}
       emptyState={getChargesEmptyState(isAdvisor, onCreateCharge)}
     />
   </>

@@ -2,6 +2,7 @@ import { Clock, CheckCircle2, FileText, XCircle } from 'lucide-react'
 import type { ChargeListStats } from '../../api'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
 import { getChargeStatusStatDisplay } from '../../utils/chargeHelpers'
+import { CHARGES_MESSAGES } from '../../messages'
 
 interface ChargesStatsSectionProps {
   stats: ChargeListStats
@@ -12,35 +13,35 @@ export const ChargesStatsSection: React.FC<ChargesStatsSectionProps> = ({ stats,
   const statCards = [
     {
       status: 'issued',
-      title: 'ממתין לגביה',
+      title: CHARGES_MESSAGES.stats.pendingTitle,
       value: getChargeStatusStatDisplay(stats.issued, isAdvisor),
       icon: Clock,
       variant: 'blue' as const,
-      description: 'חיובים שהופקו וממתינים לתשלום',
+      description: CHARGES_MESSAGES.stats.pendingDescription,
     },
     {
       status: 'paid',
-      title: 'שולם',
+      title: CHARGES_MESSAGES.stats.paidTitle,
       value: getChargeStatusStatDisplay(stats.paid, isAdvisor),
       icon: CheckCircle2,
       variant: 'green' as const,
-      description: 'חיובים ששולמו במלואם',
+      description: CHARGES_MESSAGES.stats.paidDescription,
     },
     {
       status: 'draft',
-      title: 'טיוטה',
+      title: CHARGES_MESSAGES.stats.draftTitle,
       value: getChargeStatusStatDisplay(stats.draft, isAdvisor),
       icon: FileText,
       variant: 'neutral' as const,
-      description: 'חיובים שטרם הופקו',
+      description: CHARGES_MESSAGES.stats.draftDescription,
     },
     {
       status: 'canceled',
-      title: 'בוטל',
+      title: CHARGES_MESSAGES.stats.canceledTitle,
       value: getChargeStatusStatDisplay(stats.canceled, isAdvisor),
       icon: XCircle,
       variant: 'red' as const,
-      description: 'חיובים שבוטלו',
+      description: CHARGES_MESSAGES.stats.canceledDescription,
     },
   ] as const
 

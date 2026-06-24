@@ -1,21 +1,22 @@
 import { z } from 'zod'
 import type { CreateChargePayload } from './api'
 import { CHARGE_PERIOD_PATTERN, CHARGE_TYPE_VALUES } from './constants'
+import { CHARGES_MESSAGES } from './messages'
 
 export const chargeCreateSchema = z.object({
   client_record_id: z
     .string()
     .trim()
-    .min(1, 'יש להזין לקוח')
+    .min(1, CHARGES_MESSAGES.validation.clientRequired)
     .refine((value) => Number.isInteger(Number(value)) && Number(value) > 0, {
-      message: 'יש להזין מזהה לקוח חיובי',
+      message: CHARGES_MESSAGES.validation.clientIdPositive,
     }),
   amount: z
     .string()
     .trim()
-    .min(1, 'יש להזין סכום')
+    .min(1, CHARGES_MESSAGES.validation.amountRequired)
     .refine((value) => Number.isFinite(Number(value)) && Number(value) > 0, {
-      message: 'יש להזין סכום חיובי',
+      message: CHARGES_MESSAGES.validation.amountPositive,
     }),
   charge_type: z.enum(CHARGE_TYPE_VALUES),
   months_covered: z.union([z.literal(1), z.literal(2)]),
@@ -24,7 +25,7 @@ export const chargeCreateSchema = z.object({
     .trim()
     .optional()
     .refine((value) => !value || CHARGE_PERIOD_PATTERN.test(value), {
-      message: 'פורמט תקופה חייב להיות YYYY-MM',
+      message: CHARGES_MESSAGES.validation.periodFormat,
     }),
   business_id: z.number().int().positive().optional().nullable(),
 })

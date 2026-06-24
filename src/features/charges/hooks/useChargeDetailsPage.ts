@@ -7,6 +7,8 @@ import { getHttpStatus, isPositiveInt, showErrorToast } from '../../../utils/uti
 import { useRole } from '../../../hooks/useRole'
 import { runChargeActionRequest } from '../utils/chargeHelpers'
 import type { ChargeAction } from '../types'
+import { CHARGES_MESSAGES } from '../messages'
+import { CHARGES_ERROR_MESSAGES } from '../errorMessages'
 
 export const useChargeDetailsPage = (chargeId: string | undefined) => {
   const queryClient = useQueryClient()
@@ -29,7 +31,7 @@ export const useChargeDetailsPage = (chargeId: string | undefined) => {
     mutationFn: ({ action, reason }: { action: ChargeAction; reason?: string }) =>
       runChargeActionRequest(chargeIdNumber, action, reason),
     onSuccess: async () => {
-      toast.success('פעולת חיוב בוצעה בהצלחה')
+      toast.success(CHARGES_MESSAGES.feedback.actionSuccess)
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: chargesQK.detail(chargeIdNumber) }),
         queryClient.invalidateQueries({ queryKey: chargesQK.lists() }),
@@ -41,10 +43,10 @@ export const useChargeDetailsPage = (chargeId: string | undefined) => {
   const deleteMutation = useMutation({
     mutationFn: () => chargesApi.delete(chargeIdNumber),
     onSuccess: async () => {
-      toast.success('החיוב נמחק בהצלחה')
+      toast.success(CHARGES_MESSAGES.feedback.deleted)
       await queryClient.invalidateQueries({ queryKey: chargesQK.lists() })
     },
-    onError: (err) => showErrorToast(err, 'שגיאה במחיקת חיוב'),
+    onError: (err) => showErrorToast(err, CHARGES_ERROR_MESSAGES.mutations.delete),
   })
 
   const runAction = async (action: ChargeAction, reason?: string) => {
@@ -57,7 +59,7 @@ export const useChargeDetailsPage = (chargeId: string | undefined) => {
       await actionMutation.mutateAsync({ action, reason })
     } catch (err: unknown) {
       if (getHttpStatus(err) === 403) setDenied(true)
-      showErrorToast(err, 'שגיאה בביצוע פעולה')
+      showErrorToast(err, CHARGES_ERROR_MESSAGES.mutations.action)
     }
   }
 

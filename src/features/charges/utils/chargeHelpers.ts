@@ -6,6 +6,7 @@ import { chargesApi, type ChargeStatusStat, type ChargesListParams } from '../ap
 import { CHARGE_PERIOD_YEAR_SPAN } from '../constants'
 import type { ChargeAction, ChargesFilters } from '../types'
 import { getChargePeriodLabel } from './chargeUtils'
+import { CHARGES_MESSAGES } from '../messages'
 
 export const getChargesFilters = (searchParams: URLSearchParams): ChargesFilters => ({
   client_record_id: searchParams.get('client_record_id') ?? '',
@@ -37,7 +38,7 @@ export const buildChargePeriodOptions = (monthsCovered: number) => {
   )
 
   return [
-    { value: '', label: 'ללא תקופה' },
+    { value: '', label: CHARGES_MESSAGES.periods.none },
     ...years.flatMap((year) =>
       Array.from({ length: 12 }, (_, monthIndex) => {
         const value = `${year}-${String(monthIndex + 1).padStart(2, '0')}`
@@ -66,9 +67,7 @@ export const getChargesEmptyState = (
   isAdvisor: boolean,
   onCreate: () => void,
 ): DataTableProps<unknown>['emptyState'] => ({
-  title: 'לא נמצאו חיובים',
-  message: isAdvisor
-    ? 'אין חיובים התואמים את הסינון. ניתן ליצור חיוב חדש בטופס למעלה.'
-    : 'אין חיובים התואמים את הסינון הנוכחי.',
-  action: isAdvisor ? { label: 'חיוב חדש', onClick: onCreate } : undefined,
+  title: CHARGES_MESSAGES.list.emptyTitle,
+  message: isAdvisor ? CHARGES_MESSAGES.list.emptyForAdvisor : CHARGES_MESSAGES.list.emptyFiltered,
+  action: isAdvisor ? { label: CHARGES_MESSAGES.list.newCharge, onClick: onCreate } : undefined,
 })

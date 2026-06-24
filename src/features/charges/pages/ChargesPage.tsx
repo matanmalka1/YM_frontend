@@ -11,6 +11,7 @@ import {
   useChargesPage,
 } from '@/features/charges'
 import { SendNotificationModal } from '@/features/notifications'
+import { CHARGES_MESSAGES } from '../messages'
 
 export const Charges: React.FC = () => {
   const { status, headerProps, stats, filters, table, drawers, modals, permissions } = useChargesPage()
@@ -28,7 +29,7 @@ export const Charges: React.FC = () => {
               iconPosition="end"
               onClick={table.onCreateCharge}
             >
-              חיוב חדש
+              {CHARGES_MESSAGES.list.newCharge}
             </Button>
           )}
         </div>
@@ -45,7 +46,11 @@ export const Charges: React.FC = () => {
     >
       <ChargesStatsSection stats={stats.stats} isAdvisor={stats.isAdvisor} />
 
-      <FilterPanel {...filters} title="סינון חיובים" subtitle="סטטוס, סוג, תקופה וטווח הנפקה" />
+      <FilterPanel
+        {...filters}
+        title={CHARGES_MESSAGES.list.filterTitle}
+        subtitle={CHARGES_MESSAGES.list.filterSubtitle}
+      />
 
       <ChargesTableBlock
         charges={table.data}

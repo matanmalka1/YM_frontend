@@ -9,6 +9,7 @@ import { ChargeDetailDrawer } from '../detail/ChargeDetailDrawer'
 import { ChargesCreateModal } from '../form/ChargesCreateModal'
 import { ChargesStatsSection } from '../list/ChargesStatsSection'
 import { ChargesTableBlock } from '../list/ChargesTableBlock'
+import { CHARGES_MESSAGES } from '../../messages'
 
 interface ClientChargesTabProps {
   clientId: number
@@ -64,8 +65,11 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
 
   const businessOptions = useMemo(
     () => [
-      { value: '', label: 'כל העסקים' },
-      ...businesses.map((b) => ({ value: String(b.id), label: b.business_name ?? `עסק #${b.id}` })),
+      { value: '', label: CHARGES_MESSAGES.list.allBusinesses },
+      ...businesses.map((b) => ({
+        value: String(b.id),
+        label: b.business_name ?? CHARGES_MESSAGES.create.businessName(b.id),
+      })),
     ],
     [businesses],
   )
@@ -75,8 +79,8 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
 
   return (
     <DetailTabPanel
-      title="חיובים"
-      subtitle="חיובים המקושרים ללקוח זה"
+      title={CHARGES_MESSAGES.list.title}
+      subtitle={CHARGES_MESSAGES.list.clientTabSubtitle}
       actions={
         <div className="flex items-center gap-2">
           {businesses.length > 1 && (
@@ -96,7 +100,7 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
               onClick={() => setShowCreateModal(true)}
               className="whitespace-nowrap"
             >
-              חיוב חדש
+              {CHARGES_MESSAGES.list.newCharge}
             </Button>
           )}
         </div>
@@ -131,7 +135,10 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
         initialClient={{ id: clientId, name: clientName }}
         initialBusiness={
           selectedBusiness
-            ? { id: selectedBusiness.id, name: selectedBusiness.business_name ?? `עסק #${selectedBusiness.id}` }
+            ? {
+                id: selectedBusiness.id,
+                name: selectedBusiness.business_name ?? CHARGES_MESSAGES.create.businessName(selectedBusiness.id),
+              }
             : null
         }
         businesses={businesses}

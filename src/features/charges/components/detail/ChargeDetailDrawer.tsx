@@ -23,6 +23,9 @@ import { useChargeDetailsPage } from '../../hooks/useChargeDetailsPage'
 import { CHARGE_CANCEL_REASON_PLACEHOLDER, chargeStatusVariants } from '../../constants'
 import { SendNotificationModal, type NotificationTrigger } from '@/features/notifications'
 import { ChargeInvoiceSection } from '@/features/invoices'
+import { CHARGES_MESSAGES } from '../../messages'
+import { CHARGES_ERROR_MESSAGES } from '../../errorMessages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 const FIELD_VALUE_LABELS: FieldValueLabels = {
   status: CHARGE_STATUS_LABELS,
@@ -70,7 +73,7 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
             className="gap-1.5"
           >
             <Bell className="h-3.5 w-3.5" />
-            הודעת חשבונית
+            {CHARGES_MESSAGES.actions.invoiceNotification}
           </Button>
           <Button
             type="button"
@@ -81,7 +84,7 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
             className="gap-1.5"
           >
             <Bell className="h-3.5 w-3.5" />
-            תזכורת לתשלום
+            {CHARGES_MESSAGES.actions.paymentReminder}
           </Button>
         </div>
         {canDeleteCharge(charge.available_actions) && (
@@ -95,7 +98,7 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
             className="gap-1.5 text-negative-600 border-negative-200 hover:bg-negative-50 shrink-0"
           >
             <Trash2 className="h-3.5 w-3.5" />
-            מחק
+            {CHARGES_MESSAGES.actions.delete}
           </Button>
         )}
       </div>
@@ -105,10 +108,10 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
     <>
       <ConfirmDialog
         open={isConfirmingCancel}
-        title="ביטול חיוב"
-        message={charge ? `האם לבטל את חיוב #${charge.id}?` : 'האם לבטל את החיוב?'}
-        confirmLabel="בטל חיוב"
-        cancelLabel="חזור"
+        title={CHARGES_MESSAGES.detail.cancelTitle}
+        message={charge ? CHARGES_MESSAGES.detail.cancelMessage(charge.id) : CHARGES_MESSAGES.detail.cancelFallback}
+        confirmLabel={CHARGES_MESSAGES.actions.cancelCharge}
+        cancelLabel={CHARGES_MESSAGES.actions.back}
         isLoading={actionLoading}
         onConfirm={async () => {
           await runAction('cancel_charge', cancelReason || undefined)
@@ -127,10 +130,10 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
 
       <ConfirmDialog
         open={isConfirmingDelete}
-        title="מחיקת חיוב"
-        message={charge ? `האם למחוק את חיוב #${charge.id}? פעולה זו אינה ניתנת לביטול.` : 'האם למחוק את החיוב?'}
-        confirmLabel="מחק חיוב"
-        cancelLabel="ביטול"
+        title={CHARGES_MESSAGES.detail.deleteTitle}
+        message={charge ? CHARGES_MESSAGES.detail.deleteMessage(charge.id) : CHARGES_MESSAGES.detail.deleteFallback}
+        confirmLabel={CHARGES_MESSAGES.detail.deleteConfirm}
+        cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
         confirmVariant="danger"
         isLoading={isDeleting}
         onConfirm={async () => {
@@ -147,7 +150,7 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
 
       <DetailDrawer
         open={chargeId !== null}
-        title={charge ? `חיוב #${charge.id}` : 'פירוט חיוב'}
+        title={charge ? CHARGES_MESSAGES.detail.title(charge.id) : CHARGES_MESSAGES.detail.fallbackTitle}
         subtitle={
           charge ? (
             <span className="inline-flex items-center gap-2 flex-wrap">
@@ -165,13 +168,13 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
         onClose={onClose}
         footer={footer}
       >
-        {denied && <Alert variant="warning" message="אין לך הרשאה לבצע פעולה זו" />}
+        {denied && <Alert variant="warning" message={CHARGES_ERROR_MESSAGES.permissions.detail} />}
 
         {charge && (
           <>
-            <DrawerSection title="פרטים">
+            <DrawerSection title={CHARGES_MESSAGES.detail.details}>
               <DrawerField
-                label="לקוח"
+                label={CHARGES_MESSAGES.detail.client}
                 value={
                   <Link
                     to={`/clients/${charge.client_record_id}`}
@@ -182,22 +185,33 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
                   </Link>
                 }
               />
-              <DrawerField label="סוג" value={getChargeTypeLabel(charge.charge_type)} />
+              <DrawerField label={CHARGES_MESSAGES.detail.type} value={getChargeTypeLabel(charge.charge_type)} />
               {charge.amount != null && (
                 <DrawerField
-                  label="סכום"
+                  label={CHARGES_MESSAGES.detail.amount}
                   value={<span className="font-semibold text-gray-900">{getChargeAmountText(charge)}</span>}
                 />
               )}
-              <DrawerField label="תקופה" value={getChargePeriodLabel(charge.period, charge.months_covered)} />
-              {charge.description && <DrawerField label="תיאור" value={charge.description} />}
-              {charge.annual_report_id && <DrawerField label="דוח שנתי" value={`#${charge.annual_report_id}`} />}
-              <DrawerField label="נוצר" value={formatDateTime(charge.created_at)} />
-              {charge.updated_at && <DrawerField label="עודכן" value={formatDateTime(charge.updated_at)} />}
-              <DrawerField label="הונפק" value={formatDateTime(charge.issued_at)} />
-              <DrawerField label="שולם" value={formatDateTime(charge.paid_at)} />
-              <DrawerField label="בוטל" value={formatDateTime(charge.canceled_at)} />
-              {charge.cancellation_reason && <DrawerField label="סיבת ביטול" value={charge.cancellation_reason} />}
+              <DrawerField
+                label={CHARGES_MESSAGES.detail.period}
+                value={getChargePeriodLabel(charge.period, charge.months_covered)}
+              />
+              {charge.description && (
+                <DrawerField label={CHARGES_MESSAGES.detail.description} value={charge.description} />
+              )}
+              {charge.annual_report_id && (
+                <DrawerField label={CHARGES_MESSAGES.detail.annualReport} value={`#${charge.annual_report_id}`} />
+              )}
+              <DrawerField label={CHARGES_MESSAGES.detail.created} value={formatDateTime(charge.created_at)} />
+              {charge.updated_at && (
+                <DrawerField label={CHARGES_MESSAGES.detail.updated} value={formatDateTime(charge.updated_at)} />
+              )}
+              <DrawerField label={CHARGES_MESSAGES.detail.issued} value={formatDateTime(charge.issued_at)} />
+              <DrawerField label={CHARGES_MESSAGES.detail.paid} value={formatDateTime(charge.paid_at)} />
+              <DrawerField label={CHARGES_MESSAGES.detail.canceled} value={formatDateTime(charge.canceled_at)} />
+              {charge.cancellation_reason && (
+                <DrawerField label={CHARGES_MESSAGES.detail.cancellationReason} value={charge.cancellation_reason} />
+              )}
             </DrawerSection>
 
             <ChargeInvoiceSection chargeId={charge.id} chargeStatus={charge.status} canAttach={isAdvisor} />
@@ -205,8 +219,8 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
             <EntityAuditTrailSection
               entityType="charge"
               entityId={charge.id}
-              title="יומן שינויים"
-              subtitle="שינויים שבוצעו בחיוב"
+              title={CHARGES_MESSAGES.detail.auditTitle}
+              subtitle={CHARGES_MESSAGES.detail.auditSubtitle}
               compact
               fieldValueLabels={FIELD_VALUE_LABELS}
             />

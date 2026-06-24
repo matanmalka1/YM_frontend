@@ -2,6 +2,8 @@ import { CheckCircle2 } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { canCancel, canIssue, canMarkPaid } from '../../utils/chargeUtils'
 import type { BackendAction } from '@/lib/actions/types'
+import { CHARGES_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface ChargeActionButtonsProps {
   actions?: BackendAction[] | null
@@ -33,7 +35,7 @@ export const ChargeActionButtons: React.FC<ChargeActionButtonsProps> = ({
           onClick={onIssue}
           className="border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50 text-xs px-2.5 py-1"
         >
-          הנפקה
+          {CHARGES_MESSAGES.actions.issue}
         </Button>
       )}
       {canMarkPaid(actions) && (
@@ -46,7 +48,7 @@ export const ChargeActionButtons: React.FC<ChargeActionButtonsProps> = ({
           onClick={onMarkPaid}
           className="border-positive-200 bg-positive-50 text-positive-700 hover:bg-positive-100 text-xs px-2.5 py-1"
         >
-          סימון שולם
+          {CHARGES_MESSAGES.actions.markPaid}
         </Button>
       )}
       {canCancel(actions) && (
@@ -58,7 +60,7 @@ export const ChargeActionButtons: React.FC<ChargeActionButtonsProps> = ({
           onClick={onCancel}
           className="border-negative-200 bg-negative-50 text-negative-700 hover:bg-negative-100 text-xs px-2.5 py-1"
         >
-          ביטול
+          {GLOBAL_UI_MESSAGES.actions.cancel}
         </Button>
       )}
     </div>

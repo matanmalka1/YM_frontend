@@ -13,6 +13,8 @@ import type { NotificationTrigger } from '@/features/notifications'
 import { useChargeActions } from './useChargeActions'
 import { useChargeCreateMutation } from './useChargeCreateMutation'
 import { useChargesFilters } from './useChargesFilters'
+import { CHARGES_MESSAGES } from '../messages'
+import { CHARGES_ERROR_MESSAGES } from '../errorMessages'
 
 export const useChargesPage = () => {
   const { searchParams, setFilter, setPage, resetFilters, setSearchParams } = useSearchParamFilters()
@@ -35,7 +37,7 @@ export const useChargesPage = () => {
   const chargeItems = useMemo(() => listData?.items ?? [], [listData?.items])
   const total = listData?.total ?? 0
   const stats = listData?.stats ?? DEFAULT_CHARGE_LIST_STATS
-  const error = listError ? getErrorMessage(listError, 'שגיאה בטעינת רשימת חיובים') : null
+  const error = listError ? getErrorMessage(listError, CHARGES_ERROR_MESSAGES.list.load) : null
 
   const { isAdvisor, isSecretary } = useRole()
   const createMutation = useChargeCreateMutation()
@@ -103,7 +105,7 @@ export const useChargesPage = () => {
 
   const submitCreate = async (payload: CreateChargePayload): Promise<boolean> => {
     if (!isAdvisor) {
-      toast.error('אין הרשאה ליצור חיוב')
+      toast.error(CHARGES_ERROR_MESSAGES.permissions.create)
       return false
     }
 
@@ -120,11 +122,11 @@ export const useChargesPage = () => {
       isLoading: loading,
       isFetching,
       error,
-      loadingMessage: 'טוען חיובים...',
+      loadingMessage: CHARGES_MESSAGES.list.loading,
     },
     headerProps: {
-      title: 'חיובים',
-      description: 'רשימת חיובים ופעולות חיוב נתמכות',
+      title: CHARGES_MESSAGES.list.title,
+      description: CHARGES_MESSAGES.list.description,
     },
     stats: {
       stats,
@@ -159,7 +161,9 @@ export const useChargesPage = () => {
     modals: {
       createProps: {
         open: showCreateModal,
-        createError: createMutation.error ? getErrorMessage(createMutation.error, 'שגיאה ביצירת חיוב') : null,
+        createError: createMutation.error
+          ? getErrorMessage(createMutation.error, CHARGES_ERROR_MESSAGES.mutations.create)
+          : null,
         createLoading: createMutation.isPending,
         onClose: closeCreate,
         onSubmit: submitCreate,
