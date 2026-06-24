@@ -3,6 +3,7 @@ import { Button } from '../../../../components/ui/primitives/Button'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import { formatPhoneNumber } from '@/utils/utils'
 import { getContactTypeLabel, type AuthorityContactResponse } from '../../api'
+import { AUTHORITY_CONTACTS_MESSAGES } from '../../messages'
 
 interface AuthorityContactRowProps {
   contact: AuthorityContactResponse
@@ -49,8 +50,8 @@ export const AuthorityContactRow: React.FC<AuthorityContactRowProps> = ({ contac
         variant="ghost"
         size="sm"
         icon={<Edit2 className="h-4 w-4" />}
-        tooltip="עריכת איש קשר"
-        aria-label="עריכת איש קשר"
+        tooltip={AUTHORITY_CONTACTS_MESSAGES.row.editTooltip}
+        aria-label={AUTHORITY_CONTACTS_MESSAGES.row.editAriaLabel}
         onClick={() => onEdit(contact)}
       />
       <Button
@@ -59,8 +60,8 @@ export const AuthorityContactRow: React.FC<AuthorityContactRowProps> = ({ contac
         size="sm"
         icon={<Trash2 className="h-4 w-4" />}
         isLoading={isDeleting}
-        tooltip="מחיקת איש קשר"
-        aria-label="מחיקת איש קשר"
+        tooltip={AUTHORITY_CONTACTS_MESSAGES.row.deleteTooltip}
+        aria-label={AUTHORITY_CONTACTS_MESSAGES.row.deleteAriaLabel}
         onClick={() => onDelete(contact.id)}
         className="text-negative-600 hover:bg-negative-50"
       />
