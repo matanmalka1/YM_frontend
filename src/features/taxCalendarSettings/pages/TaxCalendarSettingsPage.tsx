@@ -13,6 +13,7 @@ import { useTaxCalendarSettings } from '../hooks/useTaxCalendarSettings'
 import { TaxCalendarSettingsStatsSection } from '../components/TaxCalendarSettingsStatsSection'
 import type { TaxCalendarDeadlineRule, TaxCalendarSettingsEntry } from '../api'
 import { TAX_CALENDAR_SETTINGS_MESSAGES } from '../messages'
+import { TAX_CALENDAR_SETTINGS_ERROR_MESSAGES } from '../errorMessages'
 
 const currentYear = new Date().getFullYear()
 const MIN_YEAR = 2000
@@ -62,13 +63,13 @@ const isForbidden = (...errors: unknown[]): boolean => errors.some((error) => ge
 
 const parseYearInput = (value: string, label: string): { value: number | null; error: string | null } => {
   const trimmed = value.trim()
-  if (!trimmed) return { value: null, error: TAX_CALENDAR_SETTINGS_MESSAGES.validation.required(label) }
+  if (!trimmed) return { value: null, error: TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.validation.required(label) }
 
   const parsed = Number(trimmed)
   if (!Number.isInteger(parsed))
-    return { value: null, error: TAX_CALENDAR_SETTINGS_MESSAGES.validation.invalidYear(label) }
+    return { value: null, error: TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.validation.invalidYear(label) }
   if (parsed < MIN_YEAR || parsed > MAX_YEAR) {
-    return { value: null, error: TAX_CALENDAR_SETTINGS_MESSAGES.validation.yearRange(label, MIN_YEAR, MAX_YEAR) }
+    return { value: null, error: TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.validation.yearRange(label, MIN_YEAR, MAX_YEAR) }
   }
 
   return { value: parsed, error: null }
@@ -278,16 +279,16 @@ export const TaxCalendarSettingsPage = () => {
       </ToolbarContainer>
 
       {hasInvalidRange ? (
-        <Alert variant="warning" message={TAX_CALENDAR_SETTINGS_MESSAGES.validation.invalidRange} />
+        <Alert variant="warning" message={TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.validation.invalidRange} />
       ) : null}
       {!hasInvalidRange && params === null ? (
-        <Alert variant="warning" message={TAX_CALENDAR_SETTINGS_MESSAGES.validation.invalidRangeToLoad} />
+        <Alert variant="warning" message={TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.validation.invalidRangeToLoad} />
       ) : null}
 
       {summaryQuery.isError && !hasInvalidRange ? (
         <Alert
           variant="error"
-          message={getErrorMessage(summaryQuery.error, TAX_CALENDAR_SETTINGS_MESSAGES.errors.summaryLoad)}
+            message={getErrorMessage(summaryQuery.error, TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.load.summary)}
         />
       ) : null}
 
@@ -324,7 +325,7 @@ export const TaxCalendarSettingsPage = () => {
         {rulesQuery.isError ? (
           <Alert
             variant="error"
-            message={getErrorMessage(rulesQuery.error, TAX_CALENDAR_SETTINGS_MESSAGES.errors.rulesLoad)}
+            message={getErrorMessage(rulesQuery.error, TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.load.rules)}
           />
         ) : null}
         <DataTable
@@ -346,7 +347,7 @@ export const TaxCalendarSettingsPage = () => {
         {entriesQuery.isError ? (
           <Alert
             variant="error"
-            message={getErrorMessage(entriesQuery.error, TAX_CALENDAR_SETTINGS_MESSAGES.errors.entriesLoad)}
+            message={getErrorMessage(entriesQuery.error, TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.load.entries)}
           />
         ) : null}
         {entriesQuery.isPending || entryGroups.length === 0 ? (

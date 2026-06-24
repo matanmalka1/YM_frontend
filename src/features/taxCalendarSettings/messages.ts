@@ -28,13 +28,6 @@ export const TAX_CALENDAR_SETTINGS_MESSAGES = {
     taxYear: (year: string) => `שנת מס ${year}`,
     entriesCount: (count: string) => `${count} רשומות`,
   },
-  validation: {
-    required: (label: string) => `${label} היא שדה חובה`,
-    invalidYear: (label: string) => `${label} חייבת להיות שנה תקינה`,
-    yearRange: (label: string, minYear: number, maxYear: number) => `${label} חייבת להיות בין ${minYear} ל-${maxYear}`,
-    invalidRange: 'שנת ההתחלה חייבת להיות קטנה או שווה לשנת הסיום.',
-    invalidRangeToLoad: 'יש להזין טווח שנים תקין כדי לטעון תקציר ורשומות יומן מס.',
-  },
   warnings: {
     countMismatch: (year: string, label: string, expected: string, found: string) =>
       `שנת ${year}: ${label} — צפויות ${expected} רשומות, נמצאו ${found}.`,
@@ -49,11 +42,6 @@ export const TAX_CALENDAR_SETTINGS_MESSAGES = {
     period: 'תקופה',
     periodMonthsCount: 'מספר חודשים',
     dueDate: 'תאריך יעד',
-  },
-  errors: {
-    summaryLoad: 'שגיאה בטעינת תקציר יומן המס',
-    rulesLoad: 'שגיאה בטעינת כללי יומן המס',
-    entriesLoad: 'שגיאה בטעינת רשומות יומן המס',
   },
   emptyStates: {
     noRulesTitle: 'אין כללים להצגה',
