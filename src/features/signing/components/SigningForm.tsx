@@ -1,6 +1,7 @@
 import { CheckCircle2, ShieldCheck, XCircle } from 'lucide-react'
 import type { SignerViewResponse } from '@/features/signatureRequests'
 import { Alert } from '../../../components/ui/overlays/Alert'
+import { DefinitionList } from '../../../components/ui/layout/DefinitionList'
 import { Button } from '../../../components/ui/primitives/Button'
 import { Textarea } from '../../../components/ui/inputs/Textarea'
 import { formatDate } from '../../../utils/utils'
@@ -99,20 +100,24 @@ export const SigningForm: React.FC<SigningFormProps> = ({
         {data.description && <p className="mt-2 text-sm leading-relaxed text-gray-700">{data.description}</p>}
       </div>
 
-      <dl className="space-y-2">
-        <div className="flex justify-between text-sm">
-          <dt className="text-gray-500">שם החותם</dt>
-          <dd className="font-medium text-gray-900">{data.signer_name}</dd>
-        </div>
-        {data.expires_at && (
-          <div className="flex justify-between text-sm">
-            <dt className="text-gray-500">תוקף הקישור</dt>
-            <dd className={`font-medium ${isExpired ? 'text-negative-600' : 'text-gray-900'}`}>
-              {isExpired ? 'פג תוקף' : formatDate(data.expires_at)}
-            </dd>
-          </div>
-        )}
-      </dl>
+      <DefinitionList
+        layout="stacked"
+        items={[
+          { label: 'שם החותם', value: data.signer_name },
+          ...(data.expires_at
+            ? [
+                {
+                  label: 'תוקף הקישור',
+                  value: (
+                    <span className={isExpired ? 'text-negative-600' : undefined}>
+                      {isExpired ? 'פג תוקף' : formatDate(data.expires_at)}
+                    </span>
+                  ),
+                },
+              ]
+            : []),
+        ]}
+      />
 
       {isExpired && (
         <Alert variant="error" size="sm" message="קישור זה פג תוקפו. לא ניתן לחתום. פנה למשרד לחידוש הבקשה." />
