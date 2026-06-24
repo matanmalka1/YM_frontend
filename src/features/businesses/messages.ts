@@ -5,7 +5,6 @@
 export const BUSINESSES_MESSAGES = {
   details: {
     title: 'פרטי עסק',
-    invalidId: 'מזהה לא תקין',
     loading: 'טוען פרטי עסק...',
     clientsListLabel: 'לקוחות',
     clientFallback: 'לקוח',
@@ -20,8 +19,5 @@ export const BUSINESSES_MESSAGES = {
     emptyValue: '—',
     auditTitle: 'יומן שינויים',
     auditSubtitle: 'שינויים שבוצעו בפרטי העסק',
-    clientLoadError: 'שגיאה בטעינת פרטי לקוח',
-    businessLoadError: 'שגיאה בטעינת פרטי עסק',
-    wrongClientError: 'העסק אינו שייך ללקוח שנבחר',
   },
 } as const
