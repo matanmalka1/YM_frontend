@@ -6,6 +6,7 @@ import {
   type TaxCalendarBootstrapPayload,
   type TaxCalendarSettingsYearRangeParams,
 } from '../api'
+import { TAX_CALENDAR_SETTINGS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useTaxCalendarSettings = (params: TaxCalendarSettingsYearRangeParams | null, enabled = true) => {
   const rulesQuery = useQuery({
@@ -35,7 +36,7 @@ export const useTaxCalendarSettings = (params: TaxCalendarSettingsYearRangeParam
     mutationFn: (payload: TaxCalendarBootstrapPayload) => taxCalendarSettingsApi.bootstrap(payload),
     successMessage: (result) =>
       `יומן המס אותחל: ${result.entries_created} רשומות נוצרו, ${result.entries_skipped} רשומות דולגו.`,
-    errorMessage: 'שגיאה באתחול יומן המס',
+    errorMessage: TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.bootstrap,
     invalidateKeys: [taxCalendarSettingsQK.all],
   })
 

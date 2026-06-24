@@ -11,4 +11,5 @@ export const TAX_CALENDAR_SETTINGS_ERROR_MESSAGES = {
     rules: 'שגיאה בטעינת כללי יומן המס',
     entries: 'שגיאה בטעינת רשומות יומן המס',
   },
+  bootstrap: 'שגיאה באתחול יומן המס',
 } as const
