@@ -5,6 +5,7 @@ import { toast } from '../../../utils/toast'
 import { showErrorToast } from '../../../utils/utils'
 import { invalidateVatWorkItem } from './useVatInvalidation'
 import { VAT_MESSAGES } from '../messages'
+import { VAT_ERROR_MESSAGES } from '../errorMessages'
 
 // After a status-changing action succeeds, the set of available actions (and their
 // labels/positions) can change in the same render. Keep actions disabled briefly so a
@@ -54,21 +55,21 @@ export const useVatWorkItemActions = (workItemId: number) => {
     run(
       () => vatReportsApi.markMaterialsComplete(workItemId),
       VAT_MESSAGES.mutations.materialsConfirmed,
-      VAT_MESSAGES.mutations.statusChangeError,
+      VAT_ERROR_MESSAGES.mutations.statusChangeError,
     )
 
   const handleReadyForReview = () =>
     run(
       () => vatReportsApi.markReadyForReview(workItemId),
       VAT_MESSAGES.mutations.readyForReview,
-      VAT_MESSAGES.mutations.statusChangeError,
+      VAT_ERROR_MESSAGES.mutations.statusChangeError,
     )
 
   const handleSendBack = (note: string) =>
     run(
       () => vatReportsApi.sendBack(workItemId, note),
       VAT_MESSAGES.mutations.sendBackSuccess,
-      VAT_MESSAGES.page.sendBackError,
+      VAT_ERROR_MESSAGES.page.sendBackError,
     )
 
   return {

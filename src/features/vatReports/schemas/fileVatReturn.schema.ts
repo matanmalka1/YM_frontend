@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import type { FileVatReturnPayload } from '../api'
 import { DEFAULT_VAT_FILING_METHOD, VAT_FILING_METHODS } from '../constants/vatConstants'
-import { VAT_MESSAGES } from '../messages'
+import { VAT_ERROR_MESSAGES } from '../errorMessages'
 
 export const vatFileModalSchema = z
   .object({
@@ -17,7 +17,7 @@ export const vatFileModalSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['amends_item_id'],
-        message: VAT_MESSAGES.validation.originalSubmissionRequired,
+        message: VAT_ERROR_MESSAGES.validation.originalSubmissionRequired,
       })
       return
     }
@@ -27,7 +27,7 @@ export const vatFileModalSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['amends_item_id'],
-        message: VAT_MESSAGES.validation.originalSubmissionNumeric,
+        message: VAT_ERROR_MESSAGES.validation.originalSubmissionNumeric,
       })
     }
   })

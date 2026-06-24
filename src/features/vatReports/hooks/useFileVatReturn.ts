@@ -7,6 +7,7 @@ import { showErrorToast } from '@/utils/utils'
 import { invalidateVatWorkItem } from './useVatInvalidation'
 import type { FileVatReturnPayload } from '../api'
 import { VAT_MESSAGES } from '../messages'
+import { VAT_ERROR_MESSAGES } from '../errorMessages'
 
 export const useFileVatReturn = (workItemId: number) => {
   const queryClient = useQueryClient()
@@ -28,7 +29,7 @@ export const useFileVatReturn = (workItemId: number) => {
       })
       return true
     } catch (err) {
-      showErrorToast(err, VAT_MESSAGES.mutations.filingError)
+      showErrorToast(err, VAT_ERROR_MESSAGES.mutations.filingError)
       return false
     } finally {
       setIsLoading(false)

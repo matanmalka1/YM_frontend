@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { vatReportsApi } from '../api'
 import { showErrorToast } from '@/utils/utils'
-import { VAT_MESSAGES } from '../messages'
+import { VAT_ERROR_MESSAGES } from '../errorMessages'
 
 export const useVatExport = (clientId: number, year: number) => {
   const [loadingType, setLoadingType] = useState<'excel' | 'pdf' | null>(null)
@@ -11,7 +11,7 @@ export const useVatExport = (clientId: number, year: number) => {
     try {
       await vatReportsApi.exportClientVat(clientId, format, year)
     } catch (err) {
-      showErrorToast(err, VAT_MESSAGES.mutations.exportError)
+      showErrorToast(err, VAT_ERROR_MESSAGES.mutations.exportError)
     } finally {
       setLoadingType(null)
     }

@@ -4,6 +4,7 @@ import { showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
 import { invalidateVatWorkItem } from './useVatInvalidation'
 import { VAT_MESSAGES } from '../messages'
+import { VAT_ERROR_MESSAGES } from '../errorMessages'
 
 const invalidateVatInvoiceQueries = async (queryClient: QueryClient, workItemId: number) => {
   await invalidateVatWorkItem(queryClient, {
@@ -39,7 +40,7 @@ export const useAddInvoice = (workItemId: number) => {
     runMutationWithFeedback(
       () => mutation.mutateAsync(payload),
       VAT_MESSAGES.mutations.invoiceAdded,
-      VAT_MESSAGES.mutations.invoiceAddError,
+      VAT_ERROR_MESSAGES.mutations.invoiceAddError,
     )
 
   return { addInvoice, isAdding: mutation.isPending }
@@ -57,7 +58,7 @@ export const useDeleteInvoice = (workItemId: number) => {
     runMutationWithFeedback(
       () => mutation.mutateAsync(invoiceId),
       VAT_MESSAGES.mutations.invoiceDeleted,
-      VAT_MESSAGES.mutations.invoiceDeleteError,
+      VAT_ERROR_MESSAGES.mutations.invoiceDeleteError,
     )
 
   return { deleteInvoice, isDeleting: mutation.isPending }
@@ -75,7 +76,7 @@ export const useDeleteWorkItem = () => {
     runMutationWithFeedback(
       () => mutation.mutateAsync(workItemId),
       VAT_MESSAGES.mutations.workItemDeleted,
-      VAT_MESSAGES.mutations.workItemDeleteError,
+      VAT_ERROR_MESSAGES.mutations.workItemDeleteError,
     )
 
   return { deleteWorkItem, isDeleting: mutation.isPending }
@@ -94,7 +95,7 @@ export const useUpdateInvoice = (workItemId: number) => {
     runMutationWithFeedback(
       () => mutation.mutateAsync({ invoiceId, payload }),
       VAT_MESSAGES.mutations.invoiceUpdated,
-      VAT_MESSAGES.mutations.invoiceUpdateError,
+      VAT_ERROR_MESSAGES.mutations.invoiceUpdateError,
     )
 
   return { updateInvoice, isUpdating: mutation.isPending }

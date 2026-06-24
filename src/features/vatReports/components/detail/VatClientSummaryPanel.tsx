@@ -14,6 +14,7 @@ import type { VatClientSummaryPanelProps } from '../../types'
 import { canOpenVatPeriodRow, getClientSummaryRowsForYear } from '../../utils/viewHelpers'
 import { VatClientSummaryStatsSection } from './VatClientSummaryStatsSection'
 import { VAT_MESSAGES } from '../../messages'
+import { VAT_ERROR_MESSAGES } from '../../errorMessages'
 
 const YearSummary = ({ annual }: { annual: VatAnnualSummary }) => {
   return (
@@ -59,7 +60,7 @@ export const VatClientSummaryPanel = ({ clientId }: VatClientSummaryPanelProps) 
       setCreateOpen(false)
       return true
     } catch (err) {
-      setCreateError(showErrorToast(err, VAT_MESSAGES.detail.createWorkItemError))
+      setCreateError(showErrorToast(err, VAT_ERROR_MESSAGES.detail.createWorkItemError))
       return false
     }
   }
@@ -80,7 +81,7 @@ export const VatClientSummaryPanel = ({ clientId }: VatClientSummaryPanelProps) 
         onYearChange={setSelectedYear}
       />
 
-      {error && <InlineState variant="error" icon={AlertTriangle} title={VAT_MESSAGES.detail.loadClientVatError} />}
+      {error && <InlineState variant="error" icon={AlertTriangle} title={VAT_ERROR_MESSAGES.detail.loadClientVatError} />}
 
       {!error && selectedAnnual && <YearSummary annual={selectedAnnual} />}
 

@@ -16,6 +16,7 @@ import { useVatWorkItemPage } from '../hooks/useVatWorkItemPage'
 import { isFiled } from '../utils/vatHelpers'
 import { formatVatPeriodTitle, getVatClientTitle } from '../utils/viewHelpers'
 import { VAT_MESSAGES } from '../messages'
+import { VAT_ERROR_MESSAGES } from '../errorMessages'
 
 type TabKey = 'summary' | 'income' | 'expense' | 'history'
 
@@ -40,7 +41,7 @@ const VatDetailContent: React.FC<{ workItemId: number }> = ({ workItemId }) => {
       </div>
     )
   }
-  if (isError || !workItem) return <Alert variant="error" message={VAT_MESSAGES.detail.loadingWorkItemError} />
+  if (isError || !workItem) return <Alert variant="error" message={VAT_ERROR_MESSAGES.detail.loadingWorkItemError} />
 
   const incomeCount = invoices.filter((i) => i.invoice_type === 'income').length
   const expenseCount = invoices.filter((i) => i.invoice_type === 'expense').length

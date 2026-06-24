@@ -29,6 +29,7 @@ import { ALL_YEARS_URL_OPTION } from '@/constants/filterOptions.constants'
 import { getOperationalTaxYear, getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { VAT_MESSAGES } from '../messages'
+import { VAT_ERROR_MESSAGES } from '../errorMessages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 const buildVatWorkItemsFilterFields = () => {
@@ -168,7 +169,7 @@ export const useVatWorkItemsPage = () => {
   const runAction = useCallback(
     async (itemId: number, action: VatWorkItemAction) => {
       if (action === 'sendBack' && !isAdvisor) {
-        toast.error(VAT_MESSAGES.page.actionAdvisorOnly)
+        toast.error(VAT_ERROR_MESSAGES.page.actionAdvisorOnly)
         return
       }
       if (action === 'sendBack') return // handled by sendBackWithNote
@@ -176,7 +177,7 @@ export const useVatWorkItemsPage = () => {
         setActionLoadingId(itemId)
         await actionMutation.mutateAsync({ action, itemId })
       } catch (err: unknown) {
-        showErrorToast(err, VAT_MESSAGES.page.actionError)
+        showErrorToast(err, VAT_ERROR_MESSAGES.page.actionError)
       } finally {
         setActionLoadingId(null)
       }
@@ -187,14 +188,14 @@ export const useVatWorkItemsPage = () => {
   const sendBackWithNote = useCallback(
     async (itemId: number, note: string): Promise<void> => {
       if (!isAdvisor) {
-        toast.error(VAT_MESSAGES.page.actionAdvisorOnly)
+        toast.error(VAT_ERROR_MESSAGES.page.actionAdvisorOnly)
         return
       }
       try {
         setActionLoadingId(itemId)
         await sendBackMutation.mutateAsync({ itemId, note })
       } catch (err: unknown) {
-        showErrorToast(err, VAT_MESSAGES.page.sendBackError)
+        showErrorToast(err, VAT_ERROR_MESSAGES.page.sendBackError)
       } finally {
         setActionLoadingId(null)
       }
@@ -208,7 +209,7 @@ export const useVatWorkItemsPage = () => {
       await createMutation.mutateAsync(payload)
       return true
     } catch (err: unknown) {
-      showErrorToast(err, VAT_MESSAGES.page.createWorkItemError)
+      showErrorToast(err, VAT_ERROR_MESSAGES.page.createWorkItemError)
       return false
     }
   }
@@ -252,7 +253,7 @@ export const useVatWorkItemsPage = () => {
   )
 
   const createError = createMutation.error
-    ? getErrorMessage(createMutation.error, VAT_MESSAGES.page.createWorkItemError)
+    ? getErrorMessage(createMutation.error, VAT_ERROR_MESSAGES.page.createWorkItemError)
     : null
 
   return {
@@ -310,7 +311,7 @@ export const useVatWorkItemsPage = () => {
       deleteConfirmProps: {
         open: deleteTarget !== null,
         title: VAT_MESSAGES.deleteWorkItem.title,
-        message: VAT_MESSAGES.deleteWorkItem.message,
+        message: VAT_ERROR_MESSAGES.deleteWorkItem.message,
         confirmLabel: VAT_MESSAGES.deleteWorkItem.confirm,
         cancelLabel: GLOBAL_UI_MESSAGES.actions.cancel,
         confirmVariant: 'danger' as const,
