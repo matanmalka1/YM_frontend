@@ -80,7 +80,7 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
             onClick={() => setPage(Math.max(0, safePage - 1))}
             disabled={safePage === 0 || isFetching}
           >
-            {AUDIT_MESSAGES.table.previousPage}
+            {GLOBAL_UI_MESSAGES.pagination.previousPage}
           </Button>
           <span>
             {isFetching
@@ -94,7 +94,7 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
             onClick={() => setPage(Math.min(maxPage, safePage + 1))}
             disabled={safePage >= maxPage || isFetching}
           >
-            {AUDIT_MESSAGES.table.nextPage}
+            {GLOBAL_UI_MESSAGES.pagination.nextPage}
           </Button>
         </div>
       )}

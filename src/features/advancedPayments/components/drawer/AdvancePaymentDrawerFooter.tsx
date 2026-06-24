@@ -44,7 +44,7 @@ export const AdvancePaymentDrawerFooter: React.FC<AdvancePaymentDrawerFooterProp
           {GLOBAL_UI_MESSAGES.actions.cancel}
         </Button>
         <Button variant="primary" isLoading={isUpdating} onClick={onSave} disabled={isUpdating || isDeleting}>
-          {ADVANCED_PAYMENTS_MESSAGES.drawerFooter.save}
+          {GLOBAL_UI_MESSAGES.actions.save}
         </Button>
       </div>
 

@@ -9,8 +9,6 @@ export const AUDIT_MESSAGES = {
     columnAction: 'פעולה',
     columnDetails: 'פרטים',
     columnPerformedBy: 'בוצע ע"י',
-    previousPage: 'הקודם',
-    nextPage: 'הבא',
   },
   section: {
     defaultTitle: 'היסטוריית שינויים',

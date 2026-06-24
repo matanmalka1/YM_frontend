@@ -22,7 +22,6 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     deleteModalTitle: 'מחיקת מקדמה',
     deleteModalMessage: 'האם למחוק מקדמה זו?',
     deleteConfirm: 'כן, מחק',
-    save: 'שמור',
   },
   drawer: {
     paidLateLabel: 'שולם באיחור',
