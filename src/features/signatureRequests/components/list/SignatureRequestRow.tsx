@@ -9,6 +9,8 @@ import { formatDate, formatDateTime, showErrorToast } from '../../../../utils/ut
 import { signatureRequestStatusVariants } from '../../utils'
 import { SignatureRequestRowActions } from './SignatureRequestRowActions'
 import type { SignatureRequestResponse } from '../../api'
+import { SIGNATURE_REQUESTS_MESSAGES } from '../../messages'
+import { SIGNATURE_REQUESTS_ERROR_MESSAGES } from '../../errorMessages'
 
 export interface SignatureRequestRowProps {
   request: SignatureRequestResponse
@@ -49,7 +51,7 @@ export const SignatureRequestRow: React.FC<SignatureRequestRowProps> = ({
       await onCancel(request.id)
       setConfirmCancel(false)
     } catch (err) {
-      showErrorToast(err, 'שגיאה בביטול בקשת חתימה')
+      showErrorToast(err, SIGNATURE_REQUESTS_ERROR_MESSAGES.cancel.request)
     }
   }
 
@@ -102,16 +104,30 @@ export const SignatureRequestRow: React.FC<SignatureRequestRowProps> = ({
       {/* Expanded details */}
       {expanded && (
         <div className="space-y-2 border-t border-gray-100 bg-gray-50/60 px-4 pb-4 pt-3">
-          {request.description && <FieldRow label="תיאור" value={request.description} />}
-          {request.signer_email && <FieldRow label='דוא"ל' value={request.signer_email} />}
-          {request.expires_at && <FieldRow label="תפוגה" value={formatDate(request.expires_at)} />}
+          {request.description && (
+            <FieldRow label={SIGNATURE_REQUESTS_MESSAGES.fields.description} value={request.description} />
+          )}
+          {request.signer_email && (
+            <FieldRow label={SIGNATURE_REQUESTS_MESSAGES.fields.signerEmail} value={request.signer_email} />
+          )}
+          {request.expires_at && (
+            <FieldRow label={SIGNATURE_REQUESTS_MESSAGES.fields.expiresAt} value={formatDate(request.expires_at)} />
+          )}
           {request.sent_at && (
-            <FieldRow label="נשלח" value={<span className="tabular-nums">{formatDateTime(request.sent_at)}</span>} />
+            <FieldRow
+              label={SIGNATURE_REQUESTS_MESSAGES.fields.sentAt}
+              value={<span className="tabular-nums">{formatDateTime(request.sent_at)}</span>}
+            />
           )}
           {request.signed_at && (
-            <FieldRow label="נחתם" value={<span className="tabular-nums">{formatDateTime(request.signed_at)}</span>} />
+            <FieldRow
+              label={SIGNATURE_REQUESTS_MESSAGES.fields.signedAt}
+              value={<span className="tabular-nums">{formatDateTime(request.signed_at)}</span>}
+            />
           )}
-          {request.decline_reason && <FieldRow label="סיבת דחייה" value={request.decline_reason} />}
+          {request.decline_reason && (
+            <FieldRow label={SIGNATURE_REQUESTS_MESSAGES.fields.declineReason} value={request.decline_reason} />
+          )}
           {isPending && signingUrl && (
             <div className="flex items-center gap-2 pt-1">
               <Link2 className="h-3.5 w-3.5 shrink-0 text-gray-400" />
@@ -123,10 +139,10 @@ export const SignatureRequestRow: React.FC<SignatureRequestRowProps> = ({
 
       <ConfirmDialog
         open={confirmCancel}
-        title="ביטול בקשת חתימה"
-        message="האם לבטל את בקשת החתימה? פעולה זו אינה הפיכה."
-        confirmLabel="בטל בקשה"
-        cancelLabel="חזור"
+        title={SIGNATURE_REQUESTS_MESSAGES.cancel.title}
+        message={SIGNATURE_REQUESTS_MESSAGES.cancel.message}
+        confirmLabel={SIGNATURE_REQUESTS_MESSAGES.actions.cancelRequest}
+        cancelLabel={SIGNATURE_REQUESTS_MESSAGES.actions.back}
         isLoading={isCanceling}
         onConfirm={handleConfirmCancel}
         onCancel={() => setConfirmCancel(false)}

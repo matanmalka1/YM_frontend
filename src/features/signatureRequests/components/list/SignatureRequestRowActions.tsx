@@ -3,6 +3,7 @@ import { Bell, Link2, Copy, Check, X, History } from 'lucide-react'
 import { RowActionGroup, RowActionItem, RowActionLink, RowActionsMenu } from '@/components/ui/table'
 import { toast } from '../../../../utils/toast'
 import type { SignatureRequestResponse } from '../../api'
+import { SIGNATURE_REQUESTS_MESSAGES } from '../../messages'
 
 interface SignatureRequestRowActionsProps {
   request: SignatureRequestResponse
@@ -25,7 +26,7 @@ export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProp
   onAudit,
   onSendNotification,
   showOpenLink = false,
-  copySuccessMessage = 'הקישור הועתק',
+  copySuccessMessage = SIGNATURE_REQUESTS_MESSAGES.actions.linkCopied,
 }) => {
   const [copied, setCopied] = useState(false)
 
@@ -49,7 +50,7 @@ export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProp
   }
 
   return (
-    <RowActionsMenu ariaLabel={`פעולות לבקשת חתימה ${request.id}`}>
+    <RowActionsMenu ariaLabel={SIGNATURE_REQUESTS_MESSAGES.rowActions.ariaLabel(request.id)}>
       <RowActionGroup>
         {hasLinkActions && (
           <>
@@ -58,12 +59,12 @@ export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProp
                 href={signingUrl!}
                 target="_blank"
                 rel="noopener noreferrer"
-                label="פתח קישור"
+                label={SIGNATURE_REQUESTS_MESSAGES.actions.openLink}
                 icon={<Link2 className="h-4 w-4" />}
               />
             )}
             <RowActionItem
-              label={copied ? 'הועתק!' : 'העתק קישור'}
+              label={copied ? SIGNATURE_REQUESTS_MESSAGES.actions.copied : SIGNATURE_REQUESTS_MESSAGES.actions.copyLink}
               onClick={() => void handleCopy()}
               icon={copied ? <Check className="h-4 w-4 text-positive-700" /> : <Copy className="h-4 w-4" />}
             />
@@ -74,13 +75,13 @@ export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProp
         {hasNotificationActions && (
           <>
             <RowActionItem
-              label="שלח בקשת חתימה"
+              label={SIGNATURE_REQUESTS_MESSAGES.actions.sendRequest}
               onClick={() => onSendNotification!(request.id, 'signature_request_sent')}
               icon={<Bell className="h-4 w-4" />}
               disabled={isCanceling}
             />
             <RowActionItem
-              label="שלח תזכורת לחתימה"
+              label={SIGNATURE_REQUESTS_MESSAGES.actions.sendReminder}
               onClick={() => onSendNotification!(request.id, 'signature_request_reminder')}
               icon={<Bell className="h-4 w-4" />}
               disabled={isCanceling}
@@ -90,7 +91,7 @@ export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProp
       </RowActionGroup>
       <RowActionGroup>
         <RowActionItem
-          label="היסטוריית פעילות"
+          label={SIGNATURE_REQUESTS_MESSAGES.actions.activityHistory}
           onClick={() => onAudit(request.id)}
           icon={<History className="h-4 w-4" />}
         />
@@ -98,7 +99,7 @@ export const SignatureRequestRowActions: React.FC<SignatureRequestRowActionsProp
       <RowActionGroup>
         {hasCancelAction && (
           <RowActionItem
-            label="בטל בקשה"
+            label={SIGNATURE_REQUESTS_MESSAGES.actions.cancelRequest}
             onClick={onCancelRequest}
             icon={<X className="h-4 w-4" />}
             danger

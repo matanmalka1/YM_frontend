@@ -18,6 +18,8 @@ import { signatureRequestStatusVariants, useSignatureRequestSigningUrls } from '
 import { CreateSignatureRequestModal } from '../form/CreateSignatureRequestModal'
 import { SignatureRequestAuditDrawer } from '../detail/SignatureRequestAuditDrawer'
 import { SignatureRequestRowActions } from '../list/SignatureRequestRowActions'
+import { SIGNATURE_REQUESTS_MESSAGES } from '../../messages'
+import { SIGNATURE_REQUESTS_ERROR_MESSAGES } from '../../errorMessages'
 
 interface Props {
   compact?: boolean
@@ -39,7 +41,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
       await cancel(cancelTarget.client_record_id, cancelTarget.id)
       setCancelTarget(null)
     } catch (err) {
-      showErrorToast(err, 'שגיאה בביטול בקשת חתימה')
+      showErrorToast(err, SIGNATURE_REQUESTS_ERROR_MESSAGES.cancel.request)
     }
   }
 
@@ -47,7 +49,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
     () => [
       {
         key: 'office_client_number',
-        header: "מס' לקוח",
+        header: SIGNATURE_REQUESTS_MESSAGES.dashboard.clientOfficeNumber,
         render: (req: SignatureRequestResponse) => (
           <span className="font-mono text-sm text-gray-500 tabular-nums">
             {formatClientOfficeId(req.office_client_number)}
@@ -56,7 +58,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
       },
       {
         key: 'title',
-        header: 'בקשה',
+        header: SIGNATURE_REQUESTS_MESSAGES.dashboard.request,
         render: (req: SignatureRequestResponse) => (
           <div className="min-w-0">
             <p className="truncate font-semibold text-gray-900">{req.title}</p>
@@ -68,10 +70,13 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
       },
       {
         key: 'client',
-        header: 'לקוח',
+        header: SIGNATURE_REQUESTS_MESSAGES.dashboard.client,
         render: (req: SignatureRequestResponse) => {
           const entry = req.business_id != null ? businessLookup[req.business_id] : undefined
-          const name = entry?.name ?? req.business_name ?? `לקוח #${req.client_record_id}`
+          const name =
+            entry?.name ??
+            req.business_name ??
+            SIGNATURE_REQUESTS_MESSAGES.dashboard.clientReference(req.client_record_id)
           return (
             <Link
               to={`/clients/${req.client_record_id}`}
@@ -85,7 +90,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
       },
       {
         key: 'status',
-        header: 'סטטוס',
+        header: SIGNATURE_REQUESTS_MESSAGES.fields.status,
         render: (req: SignatureRequestResponse) => (
           <StatusBadge
             status={req.status}
@@ -96,7 +101,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
       },
       {
         key: 'created_at',
-        header: 'נוצר',
+        header: SIGNATURE_REQUESTS_MESSAGES.fields.createdAt,
         render: (req: SignatureRequestResponse) => (
           <span className="tabular-nums text-gray-500">{formatDate(req.created_at)}</span>
         ),
@@ -132,10 +137,12 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
               <FileSignature className="h-3.5 w-3.5" />
             </span>
             <div className="min-w-0">
-              <h2 className={cn('truncate font-bold text-gray-900', compact ? 'text-base' : 'text-sm')}>בקשות חתימה</h2>
+              <h2 className={cn('truncate font-bold text-gray-900', compact ? 'text-base' : 'text-sm')}>
+                {SIGNATURE_REQUESTS_MESSAGES.dashboard.title}
+              </h2>
               {!compact && (
                 <p className="mt-0.5 truncate text-xs text-gray-500">
-                  {error ?? 'ניהול בקשות חתימה פעילות מכל הלקוחות'}
+                  {error ?? SIGNATURE_REQUESTS_MESSAGES.dashboard.description}
                 </p>
               )}
             </div>
@@ -146,7 +153,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
             </Badge>
             <Button variant="ghost" size="sm" onClick={() => setShowCreate(true)}>
               <Plus className="h-3.5 w-3.5" />
-              בקשה חדשה
+              {SIGNATURE_REQUESTS_MESSAGES.actions.newRequest}
             </Button>
           </div>
         </div>
@@ -154,11 +161,18 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
 
       <div className={cn('space-y-4', compact ? 'p-5' : 'p-4')}>
         {error ? (
-          <InlineState variant="error" icon={AlertCircle} title="לא ניתן לטעון בקשות חתימה" description={error} />
+          <InlineState
+            variant="error"
+            icon={AlertCircle}
+            title={SIGNATURE_REQUESTS_ERROR_MESSAGES.dashboard.load}
+            description={error}
+          />
         ) : compact ? (
           <div className="divide-y divide-gray-100 rounded-lg border border-gray-100">
             {tableItems.length === 0 ? (
-              <div className="px-3 py-6 text-center text-sm font-semibold text-gray-500">אין בקשות חתימה פעילות</div>
+              <div className="px-3 py-6 text-center text-sm font-semibold text-gray-500">
+                {SIGNATURE_REQUESTS_MESSAGES.dashboard.noActiveRequests}
+              </div>
             ) : (
               tableItems.map((req) => (
                 <ActionSurfaceButton key={req.id} variant="plainRow" onClick={() => setAuditRequestId(req.id)}>
@@ -168,7 +182,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
                       {req.business_name ??
                         (req.office_client_number != null
                           ? formatClientOfficeId(req.office_client_number)
-                          : `לקוח #${req.client_record_id}`)}{' '}
+                          : SIGNATURE_REQUESTS_MESSAGES.dashboard.clientReference(req.client_record_id))}{' '}
                       · {formatDate(req.created_at)}
                     </p>
                   </div>
@@ -190,8 +204,8 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
             isLoading={isLoading}
             emptyState={{
               icon: FileSignature,
-              title: 'אין בקשות חתימה',
-              message: 'אין בקשות חתימה פעילות',
+              title: SIGNATURE_REQUESTS_MESSAGES.dashboard.noRequests,
+              message: SIGNATURE_REQUESTS_MESSAGES.dashboard.noActiveRequests,
             }}
           />
         )}
@@ -210,10 +224,10 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
 
       <ConfirmDialog
         open={cancelTarget !== null}
-        title="ביטול בקשת חתימה"
-        message="האם לבטל את בקשת החתימה? פעולה זו אינה הפיכה."
-        confirmLabel="בטל בקשה"
-        cancelLabel="חזור"
+        title={SIGNATURE_REQUESTS_MESSAGES.cancel.title}
+        message={SIGNATURE_REQUESTS_MESSAGES.cancel.message}
+        confirmLabel={SIGNATURE_REQUESTS_MESSAGES.actions.cancelRequest}
+        cancelLabel={SIGNATURE_REQUESTS_MESSAGES.actions.back}
         isLoading={isCanceling}
         onConfirm={handleConfirmCancel}
         onCancel={() => setCancelTarget(null)}

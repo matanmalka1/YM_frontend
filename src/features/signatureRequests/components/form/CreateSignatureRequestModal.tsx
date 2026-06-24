@@ -7,6 +7,7 @@ import { Textarea } from '../../../../components/ui/inputs/Textarea'
 import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client'
 import type { CreateSignatureRequestPayload, SignatureRequestType } from '../../api'
 import { getSignatureRequestTypeLabel } from '../../constants'
+import { SIGNATURE_REQUESTS_MESSAGES } from '../../messages'
 
 const REQUEST_TYPES: SignatureRequestType[] = [
   'engagement_agreement',
@@ -85,14 +86,14 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
   return (
     <Modal
       open={open}
-      title="בקשת חתימה חדשה"
+      title={SIGNATURE_REQUESTS_MESSAGES.form.title}
       onClose={handleClose}
       footer={
         <ModalFormActions
           onCancel={handleClose}
           submitForm={CREATE_SIGNATURE_REQUEST_FORM_ID}
           submitType="submit"
-          submitLabel="צור ושלח"
+          submitLabel={SIGNATURE_REQUESTS_MESSAGES.actions.createAndSend}
           isLoading={isLoading}
           submitDisabled={isLoading}
         />
@@ -122,7 +123,7 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
             />
           ))}
         <Select
-          label="סוג מסמך"
+          label={SIGNATURE_REQUESTS_MESSAGES.form.documentType}
           value={requestType}
           onChange={(e) => setRequestType(e.target.value as SignatureRequestType)}
           options={REQUEST_TYPES.map((t) => ({
@@ -132,31 +133,31 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
           required
         />
         <Input
-          label="כותרת"
+          label={SIGNATURE_REQUESTS_MESSAGES.form.requestTitle}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="לדוג': הסכם התקשרות 2025"
+          placeholder={SIGNATURE_REQUESTS_MESSAGES.form.titlePlaceholder}
           required
         />
         <Textarea
-          label="תיאור (אופציונלי)"
+          label={SIGNATURE_REQUESTS_MESSAGES.form.description}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="פרטים נוספים עבור החותם..."
+          placeholder={SIGNATURE_REQUESTS_MESSAGES.form.descriptionPlaceholder}
           rows={3}
         />
         <div className="border-t border-gray-100 pt-3">
-          <p className="text-xs text-gray-500 mb-3">פרטי חותם</p>
+          <p className="text-xs text-gray-500 mb-3">{SIGNATURE_REQUESTS_MESSAGES.form.signerDetails}</p>
           <div className="grid grid-cols-2 gap-3">
             <Input
-              label="שם חותם"
+              label={SIGNATURE_REQUESTS_MESSAGES.form.signerName}
               value={overrideName}
               onChange={(e) => setOverrideName(e.target.value)}
               placeholder={resolvedSignerName}
               required
             />
             <Input
-              label='דוא"ל חותם'
+              label={SIGNATURE_REQUESTS_MESSAGES.form.signerEmail}
               value={overrideEmail}
               onChange={(e) => setOverrideEmail(e.target.value)}
               placeholder={signerEmail ?? ''}

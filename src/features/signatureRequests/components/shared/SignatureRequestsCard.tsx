@@ -16,6 +16,7 @@ import { useSignatureRequestActions } from '../../hooks/useSignatureRequestActio
 import { useSignatureRequestSigningUrls } from '../../utils'
 import type { ClientRecordResponse } from '@/features/clients'
 import { PAGE_SIZE_XS as PAGE_SIZE } from '@/constants/pagination.constants'
+import { SIGNATURE_REQUESTS_MESSAGES } from '../../messages'
 
 interface Props {
   client: ClientRecordResponse
@@ -45,7 +46,7 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
   return (
     <>
       <Card
-        title={`בקשות חתימה${total > 0 ? ` (${total})` : ''}`}
+        title={SIGNATURE_REQUESTS_MESSAGES.card.title(total)}
         actions={
           canManage ? (
             <Button
@@ -54,7 +55,7 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
               icon={<Plus className="h-3.5 w-3.5" />}
               onClick={() => setShowCreate(true)}
             >
-              בקשה חדשה
+              {SIGNATURE_REQUESTS_MESSAGES.actions.newRequest}
             </Button>
           ) : undefined
         }
@@ -73,8 +74,15 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
           {!isLoading && !error && items.length === 0 && (
             <StateCard
               icon={FileSignature}
-              message="אין בקשות חתימה עבור לקוח זה"
-              action={canManage ? { label: 'יצירת בקשה ראשונה', onClick: () => setShowCreate(true) } : undefined}
+              message={SIGNATURE_REQUESTS_MESSAGES.card.noRequestsForClient}
+              action={
+                canManage
+                  ? {
+                      label: SIGNATURE_REQUESTS_MESSAGES.actions.createFirstRequest,
+                      onClick: () => setShowCreate(true),
+                    }
+                  : undefined
+              }
               size="compact"
             />
           )}
@@ -99,7 +107,13 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
       </Card>
 
       {totalPages > 1 && (
-        <PaginationCard page={page} totalPages={totalPages} total={total} label="בקשות חתימה" onPageChange={setPage} />
+        <PaginationCard
+          page={page}
+          totalPages={totalPages}
+          total={total}
+          label={SIGNATURE_REQUESTS_MESSAGES.card.paginationLabel}
+          onPageChange={setPage}
+        />
       )}
 
       <SignatureRequestAuditDrawer requestId={auditRequestId} onClose={() => setAuditRequestId(null)} />

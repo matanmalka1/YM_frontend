@@ -8,6 +8,7 @@ import { StatusBadge } from '../../../../components/ui/primitives/StatusBadge'
 import { formatDate, formatDateTime, formatPhoneNumber } from '../../../../utils/utils'
 import { getSignatureRequestTypeLabel, getSignatureRequestStatusLabel } from '../../constants'
 import { signatureRequestStatusVariants } from '../../utils'
+import { SIGNATURE_REQUESTS_MESSAGES } from '../../messages'
 
 interface Props {
   requestId: number | null
@@ -15,21 +16,21 @@ interface Props {
 }
 
 const EVENT_TYPE_LABELS: Record<string, string> = {
-  created: 'נוצרה',
-  sent: 'נשלחה',
-  viewed: 'נצפתה',
-  signed: 'נחתמה',
-  annual_report_signed: 'דוח שנתי נחתם',
-  declined: 'נדחתה',
-  canceled: 'בוטלה',
-  expired: 'פגה תוקף',
+  created: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.created,
+  sent: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.sent,
+  viewed: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.viewed,
+  signed: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.signed,
+  annual_report_signed: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.annualReportSigned,
+  declined: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.declined,
+  canceled: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.canceled,
+  expired: SIGNATURE_REQUESTS_MESSAGES.audit.eventTypes.expired,
 }
 
 const ACTOR_TYPE_LABELS: Record<string, string> = {
-  advisor: 'יועץ',
-  secretary: 'מזכירה',
-  signer: 'חותם',
-  system: 'מערכת',
+  advisor: SIGNATURE_REQUESTS_MESSAGES.audit.actorTypes.advisor,
+  secretary: SIGNATURE_REQUESTS_MESSAGES.audit.actorTypes.secretary,
+  signer: SIGNATURE_REQUESTS_MESSAGES.audit.actorTypes.signer,
+  system: SIGNATURE_REQUESTS_MESSAGES.audit.actorTypes.system,
 }
 
 export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClose }) => {
@@ -46,7 +47,7 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
   return (
     <DetailDrawer
       open={open}
-      title={data?.title ?? 'בקשת חתימה'}
+      title={data?.title ?? SIGNATURE_REQUESTS_MESSAGES.audit.defaultTitle}
       subtitle={data ? getSignatureRequestTypeLabel(data.request_type) : undefined}
       onClose={onClose}
     >
@@ -60,9 +61,9 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
 
       {data && (
         <>
-          <DrawerSection title="פרטי הבקשה">
+          <DrawerSection title={SIGNATURE_REQUESTS_MESSAGES.audit.requestDetails}>
             <DrawerField
-              label="סטטוס"
+              label={SIGNATURE_REQUESTS_MESSAGES.fields.status}
               value={
                 <StatusBadge
                   status={data.status}
@@ -71,19 +72,41 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
                 />
               }
             />
-            <DrawerField label="חותם" value={data.signer_name} />
-            {data.signer_email && <DrawerField label='דוא"ל' value={data.signer_email} />}
-            {data.signer_phone && <DrawerField label="טלפון" value={formatPhoneNumber(data.signer_phone)} />}
-            <DrawerField label="נוצר" value={formatDateTime(data.created_at)} />
-            {data.updated_at && <DrawerField label="עודכן" value={formatDateTime(data.updated_at)} />}
-            {data.sent_at && <DrawerField label="נשלח" value={formatDateTime(data.sent_at)} />}
-            {data.expires_at && <DrawerField label="תפוגה" value={formatDate(data.expires_at)} />}
-            {data.signed_at && <DrawerField label="נחתם" value={formatDateTime(data.signed_at)} />}
-            {data.decline_reason && <DrawerField label="סיבת דחייה" value={data.decline_reason} />}
+            <DrawerField label={SIGNATURE_REQUESTS_MESSAGES.fields.signer} value={data.signer_name} />
+            {data.signer_email && (
+              <DrawerField label={SIGNATURE_REQUESTS_MESSAGES.fields.signerEmail} value={data.signer_email} />
+            )}
+            {data.signer_phone && (
+              <DrawerField
+                label={SIGNATURE_REQUESTS_MESSAGES.fields.signerPhone}
+                value={formatPhoneNumber(data.signer_phone)}
+              />
+            )}
+            <DrawerField label={SIGNATURE_REQUESTS_MESSAGES.fields.createdAt} value={formatDateTime(data.created_at)} />
+            {data.updated_at && (
+              <DrawerField
+                label={SIGNATURE_REQUESTS_MESSAGES.fields.updatedAt}
+                value={formatDateTime(data.updated_at)}
+              />
+            )}
+            {data.sent_at && (
+              <DrawerField label={SIGNATURE_REQUESTS_MESSAGES.fields.sentAt} value={formatDateTime(data.sent_at)} />
+            )}
+            {data.expires_at && (
+              <DrawerField label={SIGNATURE_REQUESTS_MESSAGES.fields.expiresAt} value={formatDate(data.expires_at)} />
+            )}
+            {data.signed_at && (
+              <DrawerField label={SIGNATURE_REQUESTS_MESSAGES.fields.signedAt} value={formatDateTime(data.signed_at)} />
+            )}
+            {data.decline_reason && (
+              <DrawerField label={SIGNATURE_REQUESTS_MESSAGES.fields.declineReason} value={data.decline_reason} />
+            )}
           </DrawerSection>
 
-          <DrawerSection title="היסטוריית פעילות">
-            {events.length === 0 && <p className="py-3 text-sm text-gray-400">אין אירועים</p>}
+          <DrawerSection title={SIGNATURE_REQUESTS_MESSAGES.audit.activityHistory}>
+            {events.length === 0 && (
+              <p className="py-3 text-sm text-gray-400">{SIGNATURE_REQUESTS_MESSAGES.audit.noEvents}</p>
+            )}
             <Timeline>
               {events.map((event) => (
                 <TimelineEntry key={event.id}>
