@@ -14,6 +14,7 @@ import { loginDefaultValues, loginSchema, type LoginFormValues } from '@/feature
 import { useAuthStore } from '@/store/auth.store'
 import { selectIsAuthenticated } from '@/store/auth.selectors'
 import { useShallow } from 'zustand/react/shallow'
+import { AUTH_MESSAGES } from '../messages'
 
 const CURRENT_YEAR = getYear(new Date())
 
@@ -52,15 +53,17 @@ export const Login: React.FC = () => {
           {/* Logo mark (mobile only) */}
           <div className="mb-10 flex items-center gap-3 lg:hidden">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 text-white">
-              <span className="text-sm font-black tracking-tight">ב</span>
+              <span className="text-sm font-black tracking-tight">{AUTH_MESSAGES.login.mobileLogoLetter}</span>
             </div>
-            <span className="text-lg font-bold text-slate-900 tracking-tight">יוסף מאיר המלך </span>
+            <span className="text-lg font-bold text-slate-900 tracking-tight">
+              {AUTH_MESSAGES.login.mobileLogoName}
+            </span>
           </div>
 
           {/* Heading */}
           <div className="mb-8">
-            <h1 className="mb-1.5 text-3xl font-black tracking-tight text-slate-900">ברוכים השבים</h1>
-            <p className="text-sm text-slate-500">התחברו לחשבון הניהול שלכם כדי להמשיך</p>
+            <h1 className="mb-1.5 text-3xl font-black tracking-tight text-slate-900">{AUTH_MESSAGES.login.heading}</h1>
+            <p className="text-sm text-slate-500">{AUTH_MESSAGES.login.subheading}</p>
           </div>
 
           {/* Form */}
@@ -68,7 +71,7 @@ export const Login: React.FC = () => {
             <Input
               type="text"
               inputMode="email"
-              label="כתובת דוא״ל"
+              label={AUTH_MESSAGES.common.emailLabel}
               placeholder="name@company.co.il"
               disabled={isLoading}
               autoComplete="email"
@@ -79,7 +82,7 @@ export const Login: React.FC = () => {
             />
 
             <PasswordInput
-              label="סיסמה"
+              label={AUTH_MESSAGES.common.passwordLabel}
               placeholder="••••••••"
               disabled={isLoading}
               autoComplete="current-password"
@@ -94,7 +97,7 @@ export const Login: React.FC = () => {
                 to="/forgot-password"
                 className="text-sm font-medium text-slate-500 transition-colors hover:text-slate-900"
               >
-                שכחתי סיסמה
+                {AUTH_MESSAGES.login.forgotPassword}
               </Link>
             </div>
 
@@ -105,7 +108,7 @@ export const Login: React.FC = () => {
                   role="status"
                 >
                   <Spinner size="sm" />
-                  <span>בודקים את פרטי ההתחברות...</span>
+                  <span>{AUTH_MESSAGES.login.checkingCredentials}</span>
                 </div>
               ) : error ? (
                 <Alert variant="error" size="sm" message={error} className="rounded-xl" />
@@ -116,11 +119,11 @@ export const Login: React.FC = () => {
             <Button
               type="submit"
               isLoading={isLoading}
-              loadingLabel="מתחברים..."
+              loadingLabel={AUTH_MESSAGES.login.loading}
               fullWidth
               className="group relative mt-2 overflow-hidden rounded-xl bg-slate-900 px-6 py-3.5 text-sm font-bold text-white hover:bg-slate-800 focus:ring-slate-900 active:scale-[0.98]"
             >
-              <span>כניסה למערכת</span>
+              <span>{AUTH_MESSAGES.login.submit}</span>
               <ArrowLeft className="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5" />
               {/* Shimmer on hover */}
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
@@ -128,7 +131,7 @@ export const Login: React.FC = () => {
           </form>
 
           {/* Footer */}
-          <p className="mt-10 text-center text-xs text-slate-400">מערכת פנים ארגונית בלבד — גישה מורשית בלבד</p>
+          <p className="mt-10 text-center text-xs text-slate-400">{AUTH_MESSAGES.login.internalOnly}</p>
         </div>
       </div>
 
@@ -163,8 +166,8 @@ export const Login: React.FC = () => {
             <span className="text-base font-black text-white">YM</span>
           </div>
           <div>
-            <p className="text-base font-bold tracking-tight text-white">יוסף מאיר יועץ מס </p>
-            <p className="text-xs text-slate-500">מערכת ניהול</p>
+            <p className="text-base font-bold tracking-tight text-white">{AUTH_MESSAGES.login.brandName}</p>
+            <p className="text-xs text-slate-500">{AUTH_MESSAGES.login.systemName}</p>
           </div>
         </div>
 
@@ -172,19 +175,17 @@ export const Login: React.FC = () => {
         <div className="relative z-10 space-y-6">
           <div className="h-px w-12 bg-slate-600" />
           <h2 className="text-4xl font-black leading-[1.15] tracking-tight text-white">
-            ניהול לקוחות,
+            {AUTH_MESSAGES.login.headlineLead}
             <br />
-            <span className="text-slate-400">קלסרים חיובים ודוחות</span>
+            <span className="text-slate-400">{AUTH_MESSAGES.login.headlineMiddle}</span>
             <br />
-            במקום אחד
+            {AUTH_MESSAGES.login.headlineEnd}
           </h2>
-          <p className="max-w-xs text-sm leading-relaxed text-slate-500">
-            פלטפורמת הניהול הפנים ארגונית של יוסף מאיר מרוכזת, מאובטחת, ויעילה.
-          </p>
+          <p className="max-w-xs text-sm leading-relaxed text-slate-500">{AUTH_MESSAGES.login.description}</p>
 
           {/* Feature pills */}
           <div className="flex flex-wrap gap-2 pt-2">
-            {['לקוחות', 'קלסרים', 'חיובים', 'מסמכים', 'דוחות מס'].map((label) => (
+            {AUTH_MESSAGES.login.featurePills.map((label) => (
               <Badge key={label} variant="neutral" size="sm">
                 {label}
               </Badge>
@@ -193,7 +194,7 @@ export const Login: React.FC = () => {
         </div>
 
         {/* Bottom: legal */}
-        <p className="relative z-10 text-xs text-slate-700">© {CURRENT_YEAR} יוסף מאיר — כל הזכויות שמורות</p>
+        <p className="relative z-10 text-xs text-slate-700">{AUTH_MESSAGES.login.legal(CURRENT_YEAR)}</p>
       </div>
     </div>
   )

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/primitives/Button'
 import { getErrorMessage } from '@/utils/utils'
 import { passwordSchema } from '@/utils/passwordSchema'
 import { AuthPageShell } from '@/features/auth'
+import { AUTH_MESSAGES } from '../messages'
 
 type FieldErrors = { newPassword?: string; confirmPassword?: string }
 
@@ -26,16 +27,16 @@ export const ResetPassword: React.FC = () => {
 
   if (!token) {
     return (
-      <AuthPageShell title="איפוס סיסמה">
+      <AuthPageShell title={AUTH_MESSAGES.resetPassword.title}>
         <div className="space-y-5">
-          <Alert variant="error" size="sm" message="קישור איפוס הסיסמה חסר או אינו תקין." className="rounded-xl" />
+          <Alert variant="error" size="sm" message={AUTH_MESSAGES.resetPassword.invalidLink} className="rounded-xl" />
           <Button
             type="button"
             fullWidth
             onClick={() => void navigate('/forgot-password')}
             className="rounded-xl bg-slate-900 px-6 py-3.5 text-sm font-bold text-white hover:bg-slate-800 focus:ring-slate-900 active:scale-[0.98]"
           >
-            שלח קישור חדש
+            {AUTH_MESSAGES.common.sendNewLink}
           </Button>
         </div>
       </AuthPageShell>
@@ -47,8 +48,8 @@ export const ResetPassword: React.FC = () => {
     const pwResult = passwordSchema.safeParse(newPassword)
     if (!pwResult.success) next.newPassword = pwResult.error.issues[0].message
 
-    if (!confirmPassword) next.confirmPassword = 'יש לאמת את הסיסמה'
-    else if (confirmPassword !== newPassword) next.confirmPassword = 'הסיסמאות אינן תואמות'
+    if (!confirmPassword) next.confirmPassword = AUTH_MESSAGES.resetPassword.confirmRequired
+    else if (confirmPassword !== newPassword) next.confirmPassword = AUTH_MESSAGES.resetPassword.mismatch
 
     setFieldErrors(next)
     return Object.keys(next).length === 0
@@ -63,14 +64,14 @@ export const ResetPassword: React.FC = () => {
       const res = await authApi.resetPassword({ token, new_password: newPassword })
       setMessage(res.message)
     } catch (err) {
-      setError(getErrorMessage(err, 'לא ניתן לאפס את הסיסמה כרגע. נסה שוב.'))
+      setError(getErrorMessage(err, AUTH_MESSAGES.resetPassword.submitError))
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <AuthPageShell title="איפוס סיסמה" description="בחר סיסמה חדשה. הסיסמה חייבת לכלול אות גדולה, אות קטנה ותו מיוחד.">
+    <AuthPageShell title={AUTH_MESSAGES.resetPassword.title} description={AUTH_MESSAGES.resetPassword.description}>
       {message ? (
         <div className="space-y-5" aria-live="polite">
           <Alert variant="success" size="sm" message={message} className="rounded-xl" />
@@ -80,13 +81,13 @@ export const ResetPassword: React.FC = () => {
             onClick={() => void navigate('/login')}
             className="rounded-xl bg-slate-900 px-6 py-3.5 text-sm font-bold text-white hover:bg-slate-800 focus:ring-slate-900 active:scale-[0.98]"
           >
-            מעבר להתחברות
+            {AUTH_MESSAGES.common.goToLogin}
           </Button>
         </div>
       ) : (
         <form onSubmit={onSubmit} noValidate className="space-y-5">
           <PasswordInput
-            label="סיסמה חדשה"
+            label={AUTH_MESSAGES.common.newPasswordLabel}
             placeholder="••••••••"
             disabled={isSubmitting}
             autoComplete="new-password"
@@ -101,7 +102,7 @@ export const ResetPassword: React.FC = () => {
           />
 
           <PasswordInput
-            label="אימות סיסמה"
+            label={AUTH_MESSAGES.common.confirmPasswordLabel}
             placeholder="••••••••"
             disabled={isSubmitting}
             autoComplete="new-password"
@@ -126,11 +127,11 @@ export const ResetPassword: React.FC = () => {
             icon={<Save className="h-4 w-4" />}
             iconPosition="end"
             isLoading={isSubmitting}
-            loadingLabel="מאפסים..."
+            loadingLabel={AUTH_MESSAGES.resetPassword.loading}
             fullWidth
             className="rounded-xl bg-slate-900 px-6 py-3.5 text-sm font-bold text-white hover:bg-slate-800 focus:ring-slate-900 active:scale-[0.98]"
           >
-            <span>שמירת סיסמה חדשה</span>
+            <span>{AUTH_MESSAGES.resetPassword.submit}</span>
           </Button>
 
           <div className="text-center">
@@ -138,7 +139,7 @@ export const ResetPassword: React.FC = () => {
               to="/forgot-password"
               className="text-sm font-medium text-slate-500 transition-colors hover:text-slate-900"
             >
-              שלח קישור חדש
+              {AUTH_MESSAGES.common.sendNewLink}
             </Link>
           </div>
         </form>

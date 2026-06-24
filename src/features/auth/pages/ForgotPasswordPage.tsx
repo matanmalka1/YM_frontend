@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/inputs/Input'
 import { Button } from '@/components/ui/primitives/Button'
 import { getErrorMessage } from '@/utils/utils'
 import { AuthPageShell } from '@/features/auth'
+import { AUTH_MESSAGES } from '../messages'
 
 export const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -21,11 +22,11 @@ export const ForgotPassword: React.FC = () => {
 
     const trimmed = email.trim()
     if (!trimmed) {
-      setError('יש להזין כתובת דוא״ל')
+      setError(AUTH_MESSAGES.forgotPassword.emptyEmail)
       return
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
-      setError('כתובת דוא״ל אינה תקינה')
+      setError(AUTH_MESSAGES.forgotPassword.invalidEmail)
       return
     }
 
@@ -36,7 +37,7 @@ export const ForgotPassword: React.FC = () => {
       setMessage(res.message)
       setEmail('')
     } catch (err) {
-      setError(getErrorMessage(err, 'לא ניתן לשלוח קישור איפוס כרגע. נסה שוב.'))
+      setError(getErrorMessage(err, AUTH_MESSAGES.forgotPassword.submitError))
     } finally {
       setIsSubmitting(false)
     }
@@ -44,15 +45,15 @@ export const ForgotPassword: React.FC = () => {
 
   return (
     <AuthPageShell
-      title="שכחתי סיסמה"
-      description="הזן את כתובת הדוא״ל שלך ונשלח קישור מאובטח לאיפוס הסיסמה אם החשבון קיים."
+      title={AUTH_MESSAGES.forgotPassword.title}
+      description={AUTH_MESSAGES.forgotPassword.description}
       footer={
         <Link
           to="/login"
           className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-900"
         >
           <ArrowLeft className="h-4 w-4 rotate-180" />
-          חזרה להתחברות
+          {AUTH_MESSAGES.common.backToLogin}
         </Link>
       }
     >
@@ -65,7 +66,7 @@ export const ForgotPassword: React.FC = () => {
           <Input
             type="text"
             inputMode="email"
-            label="כתובת דוא״ל"
+            label={AUTH_MESSAGES.common.emailLabel}
             placeholder="name@company.co.il"
             disabled={isSubmitting}
             autoComplete="email"
@@ -84,11 +85,11 @@ export const ForgotPassword: React.FC = () => {
             icon={<Send className="h-4 w-4" />}
             iconPosition="end"
             isLoading={isSubmitting}
-            loadingLabel="שולחים..."
+            loadingLabel={AUTH_MESSAGES.forgotPassword.loading}
             fullWidth
             className="rounded-xl bg-slate-900 px-6 py-3.5 text-sm font-bold text-white hover:bg-slate-800 focus:ring-slate-900 active:scale-[0.98]"
           >
-            <span>שליחת קישור איפוס</span>
+            <span>{AUTH_MESSAGES.forgotPassword.submit}</span>
           </Button>
         </form>
       )}

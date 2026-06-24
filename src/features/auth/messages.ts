@@ -1,0 +1,57 @@
+/**
+ * Centralized Hebrew UI strings for auth screens and auth-local validation.
+ */
+export const AUTH_MESSAGES = {
+  common: {
+    emailLabel: 'כתובת דוא״ל',
+    passwordLabel: 'סיסמה',
+    newPasswordLabel: 'סיסמה חדשה',
+    confirmPasswordLabel: 'אימות סיסמה',
+    sendNewLink: 'שלח קישור חדש',
+    backToLogin: 'חזרה להתחברות',
+    goToLogin: 'מעבר להתחברות',
+  },
+  login: {
+    mobileLogoLetter: 'ב',
+    mobileLogoName: 'יוסף מאיר המלך ',
+    heading: 'ברוכים השבים',
+    subheading: 'התחברו לחשבון הניהול שלכם כדי להמשיך',
+    forgotPassword: 'שכחתי סיסמה',
+    checkingCredentials: 'בודקים את פרטי ההתחברות...',
+    loading: 'מתחברים...',
+    submit: 'כניסה למערכת',
+    internalOnly: 'מערכת פנים ארגונית בלבד — גישה מורשית בלבד',
+    brandName: 'יוסף מאיר יועץ מס ',
+    systemName: 'מערכת ניהול',
+    headlineLead: 'ניהול לקוחות,',
+    headlineMiddle: 'קלסרים חיובים ודוחות',
+    headlineEnd: 'במקום אחד',
+    description: 'פלטפורמת הניהול הפנים ארגונית של יוסף מאיר מרוכזת, מאובטחת, ויעילה.',
+    featurePills: ['לקוחות', 'קלסרים', 'חיובים', 'מסמכים', 'דוחות מס'],
+    legal: (year: number) => `© ${year} יוסף מאיר — כל הזכויות שמורות`,
+  },
+  forgotPassword: {
+    emptyEmail: 'יש להזין כתובת דוא״ל',
+    invalidEmail: 'כתובת דוא״ל אינה תקינה',
+    submitError: 'לא ניתן לשלוח קישור איפוס כרגע. נסה שוב.',
+    title: 'שכחתי סיסמה',
+    description: 'הזן את כתובת הדוא״ל שלך ונשלח קישור מאובטח לאיפוס הסיסמה אם החשבון קיים.',
+    loading: 'שולחים...',
+    submit: 'שליחת קישור איפוס',
+  },
+  resetPassword: {
+    title: 'איפוס סיסמה',
+    invalidLink: 'קישור איפוס הסיסמה חסר או אינו תקין.',
+    confirmRequired: 'יש לאמת את הסיסמה',
+    mismatch: 'הסיסמאות אינן תואמות',
+    submitError: 'לא ניתן לאפס את הסיסמה כרגע. נסה שוב.',
+    description: 'בחר סיסמה חדשה. הסיסמה חייבת לכלול אות גדולה, אות קטנה ותו מיוחד.',
+    loading: 'מאפסים...',
+    submit: 'שמירת סיסמה חדשה',
+  },
+  validation: {
+    emailRequired: 'יש להזין דוא״ל',
+    invalidEmail: 'כתובת דוא״ל לא תקינה',
+    passwordRequired: 'יש להזין סיסמה',
+  },
+} as const
