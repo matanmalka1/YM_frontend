@@ -107,7 +107,17 @@ export const TaxCalendarFiltersBar = ({
   }
 
   return (
-    <div className="space-y-3">
+    <div className="flex items-start justify-between gap-3">
+      {showIncludeEmpty ? (
+        <Checkbox
+          checked={includeEmpty}
+          onChange={(event) => onIncludeEmptyChange(event.target.checked)}
+          label={TAX_CALENDAR_MESSAGES.filters.includeEmpty}
+          description={TAX_CALENDAR_MESSAGES.filters.includeEmptyDescription}
+        />
+      ) : (
+        <span />
+      )}
       <FilterPanel
         fields={fields}
         values={values}
@@ -116,14 +126,6 @@ export const TaxCalendarFiltersBar = ({
         title={TAX_CALENDAR_MESSAGES.filters.title}
         subtitle={TAX_CALENDAR_MESSAGES.filters.subtitle}
       />
-      {showIncludeEmpty ? (
-        <Checkbox
-          checked={includeEmpty}
-          onChange={(event) => onIncludeEmptyChange(event.target.checked)}
-          label={TAX_CALENDAR_MESSAGES.filters.includeEmpty}
-          description={TAX_CALENDAR_MESSAGES.filters.includeEmptyDescription}
-        />
-      ) : null}
     </div>
   )
 }

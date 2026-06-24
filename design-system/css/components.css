@@ -163,6 +163,167 @@
 .btn-sm {
   padding: 6px 12px;
 }
+.btn-lg {
+  padding: 10px 20px;
+}
+/* shape="square" — icon-only chrome: rounded-xl, equal h/w (sm 32 / md 36 / lg 40) */
+.btn-square {
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-xl);
+}
+.btn-square.btn-sm {
+  width: 32px;
+  height: 32px;
+}
+.btn-square.btn-lg {
+  width: 40px;
+  height: 40px;
+}
+/* link variant family — underlined text buttons in tone colors (rounded-sm) */
+.btn-link-primary {
+  background: transparent;
+  color: var(--primary-700);
+  border-radius: var(--r-sm);
+  padding: 4px 4px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.btn-link-primary:hover {
+  color: var(--primary-800);
+}
+.btn-link-positive {
+  background: transparent;
+  color: var(--positive-600);
+  border-radius: var(--r-sm);
+  padding: 4px 4px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.btn-link-warning {
+  background: transparent;
+  color: var(--warning-600);
+  border-radius: var(--r-sm);
+  padding: 4px 4px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* --- SegmentedControl · switch variant (boxed toggle on gray-100) ------- */
+.seg-switch {
+  display: inline-grid;
+  grid-auto-flow: column;
+  gap: 4px;
+  border-radius: var(--r-xl);
+  background: var(--gray-100);
+  padding: 4px;
+}
+.seg-switch button {
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--r-nav);
+  background: transparent;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray-500);
+  cursor: pointer;
+  transition: all var(--dur-default);
+}
+.seg-switch button:hover {
+  color: var(--gray-800);
+}
+.seg-switch button.on {
+  background: var(--surface);
+  color: var(--gray-900);
+  box-shadow: var(--sh-sm);
+}
+
+/* --- InlineLink (text-primary-600, underline on hover) ------------------ */
+.inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--primary-600);
+  cursor: pointer;
+}
+.inline-link:hover {
+  text-decoration: underline;
+}
+
+/* --- ActionSurface (clickable Link/Button surfaces by intent) ----------- */
+.action-surface {
+  cursor: pointer;
+  transition: all var(--dur-default);
+  text-align: start;
+}
+.as-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: var(--r-xl);
+  border: 1px solid transparent;
+  background: var(--slate-50);
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--slate-800);
+}
+.as-tile:hover {
+  border-color: var(--primary-200);
+  background: var(--surface);
+  box-shadow: var(--el-1);
+}
+.as-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-radius: var(--r-lg);
+  background: rgba(255, 255, 255, 0.6);
+  padding: 8px 12px;
+}
+.as-row:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+.as-card {
+  border-radius: var(--r-xl);
+  border: 1px solid var(--gray-200);
+  background: var(--surface);
+  padding: 20px;
+  box-shadow: var(--sh-sm);
+}
+.as-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--el-2);
+}
+
+/* --- CarouselDots (active = pill, idle = dot) --------------------------- */
+.carousel-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px;
+}
+.carousel-dots .dot {
+  height: 6px;
+  width: 6px;
+  border-radius: var(--r-full);
+  background: var(--slate-200);
+  cursor: pointer;
+  transition: all var(--dur-default);
+}
+.carousel-dots .dot:hover {
+  background: var(--slate-300);
+}
+.carousel-dots .dot.active {
+  width: 16px;
+  background: var(--primary-500);
+}
 
 /* --- Badge (rounded-full, text-xs) -------------------------------------- */
 .badge {

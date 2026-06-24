@@ -39,11 +39,12 @@ Each component block in `components.css` maps to a primitive in
 ## Sections (full UI library coverage)
 
 - **Foundations** — colors (full ramps + chart/warm) · typography (incl. text-2xs/3xs) · shapes/radius (incl. nav/tile).
-- **Primitives** — Button · Badge / StatusBadge · MonoValue · Divider · ProgressBar · Tooltip.
+- **Primitives** — Button (incl. lg · shape=square · link family) · Badge / StatusBadge · Chip / ChipLabel · MonoValue · Divider · ProgressBar · Tooltip.
+- **Links & surfaces** — InlineLink · ActionSurface (tile/compact/row/plainRow/card/timelineGroup) · CarouselDots · DismissBackdrop (behavioral, no card).
 - **Forms** — Input · Textarea · Select · DatePicker · PasswordInput · Checkbox · FormField (label+error).
 - **Pickers** — DatePickerCalendar (popover) · SelectDropdown (multi-select) · DatePickerInlineSelect.
 - **Filters & search** — FilterPanel · ClientSearchInput / ClientPickerField · SearchFilter.
-- **Data & structure** — StatsCard · Card · SectionHeader · DefinitionList · GroupSection · Tabs (DetailTabPanel) · DataTable.
+- **Data & structure** — StatsCard · Card · SectionHeader · DefinitionList · GroupSection · SegmentedControl (6 variants, incl. DetailTabPanel + switch) · DataTable.
 - **Table chrome** — ToolbarContainer · ActiveFilterBadges · PaginationCard · BulkSelectionToolbar · RowActions.
 - **Grouping** — MonthlyAccordionGroup · GroupedPeriodRow.
 - **App chrome** — Breadcrumbs (PageHeader) · NavbarPrimaryNav + NavbarMoreMenu · NotificationBell · Avatar · ClientSidebarClientCard.

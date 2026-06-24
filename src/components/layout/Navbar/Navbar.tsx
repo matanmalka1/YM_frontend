@@ -43,7 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   }
 
   return (
-    <header className="z-10 flex h-16 shrink-0 items-center gap-2 border-b border-gray-200/80 bg-white px-2 md:px-3">
+    <header className="z-10 flex h-14 shrink-0 items-center gap-2 border-b border-gray-200/80 bg-white px-2 md:px-3">
       <NavbarPrimaryNav items={visibleItems} />
       <div className="hidden shrink-0 items-center border-r border-gray-100 pr-2 md:flex">
         <Badge variant="neutral" size="sm" className="tabular-nums" suppressHydrationWarning>

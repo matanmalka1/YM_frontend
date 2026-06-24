@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: YM Tax CRM
-description: Hebrew-first, RTL internal tax advisory CRM. Calm white work surfaces, a light top navigation bar, blue (#007aff) primary actions, amber accents, indigo informational tone, and semantic status colors. Source of truth is the implemented component code (src/index.css @theme + src/components/ui/primitives), not this prose.
+description: Hebrew-first, RTL internal tax advisory CRM. Calm white work surfaces, a light top navigation bar, blue (#007aff) primary actions, indigo informational tone, and semantic status colors (positive=emerald, warning=amber, negative=red). Source of truth is the implemented component code (src/index.css @theme + src/components/ui/primitives), not this prose.
 source-of-truth: code
 derived-from:
   - src/index.css
@@ -26,17 +26,8 @@ colors:
   primary-700: '#0062CC'
   primary-800: '#004A99'
   primary-900: '#00305C'
-  # accent = amber. Decorative emphasis / gradient text only.
-  accent-50: '#FFFBEB'
-  accent-100: '#FEF3C7'
-  accent-200: '#FDE68A'
-  accent-300: '#FCD34D'
-  accent-400: '#FBBF24'
-  accent-500: '#F59E0B'
-  accent-600: '#D97706'
-  accent-700: '#B45309'
-  accent-800: '#92400E'
-  accent-900: '#78350F'
+  # NOTE: there is no separate `accent` ramp in @theme. Amber lives only as the
+  # `warning` semantic ramp below; it is not a standalone decorative brand color.
   # semantic: info (indigo)
   info-50: '#EEF2FF'
   info-100: '#E0E7FF'
@@ -166,12 +157,14 @@ components:
     borderBottom: '1px solid {colors.gray-200}' # /80 opacity
     note: 'Primary navigation is a light TOP bar, not a dark sidebar. A separate collapsible ClientSidebar lists clients.'
   button-base:
-    rounded: '{rounded.full}'
+    rounded: '{rounded.full}' # pill (default); text-like variants = rounded-sm; shape=square = rounded-xl
     typography: text-sm / medium
     focusRing: 'focus-ring (2px solid {colors.focus-ring}, offset 2px)'
     transition: all 200ms
-  button-size-md: { padding: 8px 16px } # px-4 py-2
   button-size-sm: { padding: 6px 12px } # px-3 py-1.5
+  button-size-md: { padding: 8px 16px } # px-4 py-2
+  button-size-lg: { padding: 10px 20px } # px-5 py-2.5
+  button-shape-square: { sm: 32x32, md: 36x36, lg: 40x40, rounded: '{rounded.xl}' } # icon-only chrome, p-0
   button-primary:
     {
       backgroundColor: '{colors.primary-600}',
@@ -198,6 +191,13 @@ components:
     }
   button-link:
     { textColor: '{colors.gray-600}', decoration: underline, rounded: '{rounded.sm}', hover: '{colors.gray-900}' }
+  button-link-family: # text-like variants (rounded-sm, underline-offset-2, no padding box)
+    {
+      linkPrimary: 'text {colors.primary-700} hover primary-800',
+      linkPositive: 'text {colors.positive-600} hover positive-800',
+      linkWarning: 'text {colors.warning-600} hover warning-800',
+      text: 'text {colors.gray-950}, no underline, hover primary-700 (inline action)',
+    }
   input:
     rounded: '{rounded.lg}'
     height: 36px # h-9 (md); sm h-8 / xs h-7
@@ -237,10 +237,12 @@ components:
   badge:
     rounded: '{rounded.full}'
     typography: text-xs / medium
+    sizes: '3xs | 2xs | xs | sm(default) | md' # 3xs/2xs use text-3xs/2xs px-pinned sizes
     filled: 'bg {tone}-100 text {tone}-800' # neutral=gray-100/gray-800
-    signal: 'bg {tone}-50 text {tone}-700 ring-1 ring {tone}-200 + leading dot'
+    signal: 'leading dot + bg {tone}-50 text {tone}-700; ring=true adds ring-1 ring {tone}-200 (soft = no ring)'
     removable: 'bg {colors.primary-50} text {colors.primary-800} border {colors.primary-200} + X button'
     tones: 'neutral | info | positive | warning | negative'
+    statusBadge: 'StatusBadge = Badge driven by (status, getLabel, variantMap, defaultVariant); no own styling'
   table:
     container: 'composed inside a Card (rounded-3xl), table itself border-collapse'
     header:
@@ -305,13 +307,42 @@ components:
   divider:
     color: '{colors.gray-200}'
     thickness: 1px
+  chip:
+    rounded: '{rounded.full}'
+    typography: text-xs / medium
+    base: 'inline-flex border, transition; aria-pressed toggle'
+    sizes: 'xs (px-2 py-0.5) | sm (px-3 py-1, default)'
+    tones: 'neutral | primary | warning | orange | purple | rose'
+    selectedExample: 'primary = border-primary-300 bg-primary-100 text-primary-800 + shadow-sm'
+    idle: 'border-gray-200 bg-gray-50 text-gray-600 (hover gray-100); orange/purple/rose idle = borderless muted'
+    count: 'optional trailing count pill (text-3xs); selected = bg-white/50'
+  chip-label:
+    note: 'NON-interactive sibling of Chip (<span>) — rounded (not full), font-semibold, same tone palette; labels/tags'
+  segmented-control:
+    note: 'SegmentedControl + SegmentedControlItem; aria-current (not role=tab) unless adopter drives aria-pressed'
+    variants: 'underline (DetailTabPanel, primary underline bar) | tabBar (border-b-2 + count badge) | boxed (bordered rounded-xl strip) | choice (default, pill chips w/ ring) | vertical (stacked) | switch (toggle on gray-100, rounded-nav items, active=white+shadow)'
+  action-surface:
+    note: 'ActionSurfaceLink (Link, intent=navigate) vs ActionSurfaceButton (Button, intent=act) — pick by intent, not looks; enabled both = footgun'
+    variants:
+      tile: 'flex-col bg-slate-50 rounded-xl p-3.5 font-semibold; hover border-primary-200 + white + elevation-1'
+      compact: 'rounded-md px-3 py-2 hover gray-50'
+      row: 'justify-between rounded-lg bg-white/60; hover white/90'
+      plainRow: 'justify-between, no bg; hover slate-50'
+      card: 'rounded-xl border gray-200 bg-white p-5 shadow-sm; hover -translate-y-0.5 + shadow-md'
+      timelineGroup: 'pill, border slate-200 bg-slate-100 text-xs font-semibold'
+  inline-link:
+    note: 'In-flow <a> text link: text-primary-600, hover underline, focus-ring; optional icon start/end (default end)'
+  carousel-dots:
+    note: 'state indicator; active = w-4 h-1.5 pill bg-primary-500, idle = h-1.5 w-1.5 dot bg-slate-200; aria-current on active'
+  dismiss-backdrop:
+    note: 'BEHAVIORAL, not visual — invisible bg-black/20 click-catcher button to dismiss mobile overlays (placement=mobileBelowHeader, md:hidden). No demo card.'
 ---
 
 ## Overview
 
 YM Tax CRM is a focused internal operations system for a Hebrew-speaking tax advisory office: practical, structured, quiet, trustworthy. The dominant experience is a dense CRM workspace where staff scan client, binder, billing, VAT, tax-deadline, reminder, signature, and report data all day.
 
-The visual identity is **light and white-first**. The application chrome is a light top navigation bar over pale slate backgrounds and white data surfaces — there is no dark sidebar rail in the main shell. **Blue (`#007aff`)** is the primary interaction color, **amber** is a decorative accent, **indigo** is the informational semantic tone, and status colors are reserved for operational meaning.
+The visual identity is **light and white-first**. The application chrome is a light top navigation bar over pale slate backgrounds and white data surfaces — there is no dark sidebar rail in the main shell. **Blue (`#007aff`)** is the primary interaction color, **indigo** is the informational semantic tone, and status colors (positive=emerald, warning=amber, negative=red) are reserved for operational meaning. Amber appears only as the `warning` tone — there is no standalone decorative accent color.
 
 The interface is **RTL-first**. Layout rhythm, alignment, icon placement, drawers, accent strips, and table reading order preserve Hebrew ergonomics. Product copy is Hebrew; occasional English brand snippets may appear in chrome.
 
@@ -319,10 +350,10 @@ The interface is **RTL-first**. Layout rhythm, alignment, icon placement, drawer
 
 ## Colors
 
-The palette is built from a **blue primary ramp**, an **amber accent ramp**, the default Tailwind **gray** neutrals, and four semantic ramps (info=indigo, positive=emerald, warning=amber, negative=red).
+The palette is built from a **blue primary ramp**, the default Tailwind **gray** neutrals, and four semantic ramps (info=indigo, positive=emerald, warning=amber, negative=red). There is no separate `accent` ramp — amber is the `warning` tone.
 
 - **Blue primary (`primary-600` `#007aff`):** main actions, focus rings (`#007aff`), selected rows/cards (`ring-primary-400`), clickable table-row hover (`primary-50`), active filter pills. Hover steps to `primary-700`, active to `primary-800`.
-- **Amber accent:** decorative emphasis and warm highlights; shares the same ramp as the `warning` tone. It is _not_ the brand action color and is not a generic warning unless the context is cautionary.
+- **Amber = warning tone:** amber (`#f59e0b` and ramp) is the `warning` semantic color — cautionary states, attention badges, the warning Alert gradient. It is not a brand action color and has no decorative-accent role outside operational meaning.
 - **Indigo = info tone:** informational badges, info stat cards, info alerts. Do not confuse it with the blue primary.
 - **Semantic ramps:** positive = emerald (success), warning = amber (attention), negative = red (error/validation), info = indigo. Each ramp uses `-50/-100` for tinted containers, `-500` for solid marks, `-700/-800` for text.
 - **Gray neutrals:** standard Tailwind `gray` ramp carries borders (`gray-100/200/300`), muted text (`gray-500/600`), and surfaces. Body background is `gray-50` (`#f9fafb`); base text is `#0f172a`.
@@ -405,6 +436,8 @@ Keep precise, not playful. The large `rounded-3xl` card paired with small `round
 
 **Feedback:** Spinner = `border-2 gray-200` ring with a `primary-600` top arc. Skeleton = `animate-pulse gray-100` or a shimmer gradient. Tooltip = portalled `gray-900` bubble, white `text-xs`, `rounded-lg`, prefers above the trigger. Divider = 1px `gray-200` rule.
 
+**Interactive surfaces & links.** Beyond `Button`, the system has lighter-weight clickable primitives. **Chips** (`rounded-full`, `text-xs`, `aria-pressed`) are toggle filters across six tones; **ChipLabel** is their non-interactive `rounded` sibling for tags. **SegmentedControl** covers six layouts — `underline` (the `DetailTabPanel` tab bar with a `primary` underline), `tabBar`, `boxed`, `choice` (default pill chips), `vertical`, and `switch` (a `gray-100` toggle whose active item is white + `shadow-sm`); it exposes `aria-current` rather than claiming `role="tab"`. **ActionSurface** is a clickable container chosen by *intent* — `ActionSurfaceLink` for navigation, `ActionSurfaceButton` for actions — in `tile`/`compact`/`row`/`plainRow`/`card`/`timelineGroup` variants. **InlineLink** is an in-flow `primary-600` text link (underline on hover, optional icon). **CarouselDots** indicate position (active = `primary-500` pill, idle = `slate-200` dot). **DismissBackdrop** is a behavioral, invisible `black/20` click-catcher that dismisses mobile overlays — it has no visual demo card.
+
 ## Do's and Don'ts
 
 - Do treat the implemented code as the source of truth; regenerate this file from `@theme` + primitives when they change.
@@ -417,5 +450,5 @@ Keep precise, not playful. The large `rounded-3xl` card paired with small `round
 - Don't reintroduce indigo as "primary" — indigo is the info tone.
 - Don't describe a dark navigation rail; the product navigation is a light top bar.
 - Don't claim indigo-tinted shadows; elevation tints are slate (`rgba(15,23,42,…)`).
-- Don't overuse amber; it is a decorative accent, not the brand action color.
+- Don't treat amber as a decorative brand accent; it is the `warning` semantic tone only, not an action color.
 - Don't introduce a second font family or negative letter spacing.

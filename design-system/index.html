@@ -52,6 +52,7 @@
         <a class="idx-item" href="#buttons">כפתורים</a>
         <a class="idx-item" href="#badges">תגיות וסטטוס</a>
         <a class="idx-item" href="#primitives">מספרים · קו · התקדמות</a>
+        <a class="idx-item" href="#interactive">קישורים · משטחים לחיצים</a>
         <div class="idx-label">טפסים</div>
         <a class="idx-item" href="#forms">שדות קלט</a>
         <a class="idx-item" href="#pickers">לוח שנה · בחירה</a>
@@ -382,6 +383,57 @@
                   >
                 </div>
               </div>
+              <div class="spec">
+                <div class="spec-head">
+                  <span class="spec-name"><code>size=lg</code> · <code>shape=square</code></span>
+                  <div class="props">
+                    <span class="prop"><b>size</b>=sm · md · lg</span
+                    ><span class="prop"><b>shape</b>=pill · square</span>
+                  </div>
+                </div>
+                <div class="spec-body">
+                  <span class="variant"
+                    ><button class="btn btn-primary btn-lg">גדול</button><span class="caption">size=lg</span></span
+                  >
+                  <span class="variant"
+                    ><button class="btn btn-outline btn-square btn-sm">✎</button
+                    ><span class="caption">square · sm</span></span
+                  >
+                  <span class="variant"
+                    ><button class="btn btn-outline btn-square">✎</button
+                    ><span class="caption">square · md</span></span
+                  >
+                  <span class="variant"
+                    ><button class="btn btn-outline btn-square btn-lg">✎</button
+                    ><span class="caption">square · lg</span></span
+                  >
+                </div>
+              </div>
+              <div class="spec">
+                <div class="spec-head">
+                  <span class="spec-name">link family · <code>text</code></span>
+                  <div class="props">
+                    <span class="prop"><b>variant</b>=link · linkPrimary · linkPositive · linkWarning · text</span>
+                  </div>
+                </div>
+                <div class="spec-body">
+                  <span class="variant"
+                    ><button class="btn btn-link">קישור</button><span class="caption">link (gray)</span></span
+                  >
+                  <span class="variant"
+                    ><button class="btn btn-link-primary">פעולה</button
+                    ><span class="caption">linkPrimary</span></span
+                  >
+                  <span class="variant"
+                    ><button class="btn btn-link-positive">אישור</button
+                    ><span class="caption">linkPositive</span></span
+                  >
+                  <span class="variant"
+                    ><button class="btn btn-link-warning">אזהרה</button
+                    ><span class="caption">linkWarning</span></span
+                  >
+                </div>
+              </div>
             </div>
           </section>
 
@@ -622,6 +674,79 @@
             </div>
           </section>
 
+          <!-- ---------- INTERACTIVE: InlineLink / ActionSurface / CarouselDots ---------- -->
+          <section id="interactive">
+            <div class="sec-head">
+              <h2>קישורים · משטחים לחיצים</h2>
+              <p>
+                <code>InlineLink</code> (קישור בתוך טקסט) · <code>ActionSurface</code> (משטח לחיץ — Link/Button לפי
+                כוונה) · <code>CarouselDots</code> (אינדיקטור מצב). <code>DismissBackdrop</code> = רקע סגירה שקוף
+                (התנהגותי, ללא חזות).
+              </p>
+            </div>
+            <div class="specs">
+              <div class="spec">
+                <div class="spec-head">
+                  <span class="spec-name"><code>InlineLink</code></span>
+                  <div class="props">
+                    <span class="prop"><b>icon</b></span><span class="prop"><b>iconPosition</b>=start · end</span>
+                  </div>
+                </div>
+                <div class="spec-body">
+                  <span class="variant"
+                    ><span>צפה בכל <a class="inline-link">12 התיקים ›</a></span
+                    ><span class="caption">end (ברירת מחדל)</span></span
+                  >
+                  <span class="variant"
+                    ><a class="inline-link">‹ חזרה לרשימה</a><span class="caption">start</span></span
+                  >
+                </div>
+              </div>
+              <div class="spec">
+                <div class="spec-head">
+                  <span class="spec-name"><code>ActionSurface</code></span>
+                  <div class="props">
+                    <span class="prop"><b>variant</b>=tile · compact · row · plainRow · card · timelineGroup</span>
+                  </div>
+                </div>
+                <div class="spec-body stack">
+                  <span class="variant"
+                    ><button class="action-surface as-tile" style="min-width: 160px">
+                      ＋ תיק חדש<span class="card-sub" style="font-weight: 400">צור תיק עבור הלקוח</span></button
+                    ><span class="caption">tile (Link)</span></span
+                  >
+                  <span class="variant" style="min-width: 220px"
+                    ><button class="action-surface as-row">
+                      <span>דוח שנתי 2025</span><span class="mono-val mv-neutral">₪ 8,400</span></button
+                    ><span class="caption">row (Button)</span></span
+                  >
+                  <span class="variant" style="min-width: 220px"
+                    ><button class="action-surface as-card">
+                      <div style="font-weight: 600">כרטיס לחיץ</div>
+                      <div class="card-sub">מרים ב-hover (-translate-y)</div></button
+                    ><span class="caption">card</span></span
+                  >
+                </div>
+              </div>
+              <div class="spec">
+                <div class="spec-head">
+                  <span class="spec-name"><code>CarouselDots</code></span>
+                  <div class="props">
+                    <span class="prop"><b>activeIndex</b></span><span class="prop"><b>aria-current</b></span>
+                  </div>
+                </div>
+                <div class="spec-body">
+                  <span class="variant"
+                    ><span class="carousel-dots"
+                      ><span class="dot active"></span><span class="dot"></span><span class="dot"></span
+                      ><span class="dot"></span></span
+                    ><span class="caption">פעיל = גלולה</span></span
+                  >
+                </div>
+              </div>
+            </div>
+          </section>
+
           <!-- ---------- FORMS ---------- -->
           <section id="forms">
             <div class="sec-head">
@@ -843,11 +968,15 @@
           <!-- ---------- TABS ---------- -->
           <section id="tabs">
             <div class="sec-head">
-              <h2>טאבים</h2>
-              <p>DetailTabPanel · פס תחתון primary-600 לטאב פעיל. <span class="live">לחיץ</span> לחץ להחלפת טאב.</p>
+              <h2>טאבים · בורר מקטעים</h2>
+              <p>
+                <code>SegmentedControl</code> — 6 וריאנטים: underline · tabBar · boxed · choice · vertical · switch.
+                DetailTabPanel = וריאנט underline (פס תחתון primary לטאב פעיל). <span class="live">לחיץ</span>
+              </p>
             </div>
             <div class="card default">
               <div class="card-body">
+                <div class="card-sub" style="margin-bottom: 8px">variant=underline (DetailTabPanel)</div>
                 <div class="tabs">
                   <div class="tab active">פרטים</div>
                   <div class="tab">דוחות</div>
@@ -856,6 +985,12 @@
                   <div class="tab">היסטוריה</div>
                 </div>
                 <div style="padding-top: 18px; font-size: 14px; color: var(--gray-600)">תוכן הטאב הפעיל מוצג כאן.</div>
+                <div class="card-sub" style="margin: 22px 0 8px">variant=switch (בורר מצב)</div>
+                <div class="seg-switch">
+                  <button class="on">הכל</button>
+                  <button>פעילים</button>
+                  <button>בארכיון</button>
+                </div>
               </div>
             </div>
           </section>

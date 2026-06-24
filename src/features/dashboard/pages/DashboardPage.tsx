@@ -1,5 +1,4 @@
 import { ClipboardList, Wallet } from 'lucide-react'
-import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
@@ -53,8 +52,6 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <DashboardSurface>
-      <PageHeader title={DASHBOARD_COPY.pageTitle} description={DASHBOARD_COPY.pageSubtitle} />
-
       {denied && <Alert variant="warning" message={DASHBOARD_COPY.permissionDenied} />}
       {dashboard.status === 'error' && !denied && <Alert variant="error" message={dashboard.message} />}
 

@@ -10,7 +10,7 @@ interface DismissBackdropProps {
 }
 
 const placementClasses: Record<DismissBackdropPlacement, string> = {
-  mobileBelowHeader: 'fixed inset-x-0 bottom-0 top-16 z-40 md:hidden',
+  mobileBelowHeader: 'fixed inset-x-0 bottom-0 top-14 z-40 md:hidden',
 }
 
 export const DismissBackdrop: React.FC<DismissBackdropProps> = ({

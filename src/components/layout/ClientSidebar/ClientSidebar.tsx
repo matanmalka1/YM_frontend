@@ -8,7 +8,7 @@ import { DismissBackdrop } from '../../ui/primitives/DismissBackdrop'
 import { SegmentedControl, SegmentedControlItem } from '../../ui/primitives/SegmentedControl'
 import { Input } from '../../ui/inputs/Input'
 import { InlineState } from '../../ui/feedback/InlineState'
-import { AlertCircle, LogOut, Plus, Search, User as UserIcon, Users, X } from 'lucide-react'
+import { AlertCircle, LogOut, Search, User as UserIcon, Users, X } from 'lucide-react'
 import { useAuthStore } from '@/store/auth.store'
 import { CLIENT_ROUTES } from '@/features/clients'
 import { useRole } from '@/hooks/useRole'
@@ -61,7 +61,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
         <aside
           ref={sidebarRef}
           className={cn(
-            'fixed bottom-0 right-0 top-16 z-50 flex w-[min(320px,calc(100vw-2rem))] shrink-0 flex-col border-l border-gray-200/80 bg-white text-gray-900 shadow-2xl transition-transform duration-300',
+            'fixed bottom-0 right-0 top-14 z-50 flex w-[min(320px,calc(100vw-2rem))] shrink-0 flex-col border-l border-gray-200/80 bg-white text-gray-900 shadow-2xl transition-transform duration-300',
             mobileOpen ? 'visible translate-x-0' : 'invisible pointer-events-none translate-x-full',
             'md:visible md:static md:z-auto md:h-full md:w-[300px] md:translate-x-0 md:pointer-events-auto md:shadow-none 2xl:w-[320px]',
             !desktopOpen && 'md:invisible md:pointer-events-none',
@@ -136,7 +136,6 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
                   className="focus-ring flex h-9 items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 text-xs font-semibold text-gray-700 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 hover:text-gray-950"
                   aria-label="הוספת לקוח חדש"
                 >
-                  <Plus className="h-3.5 w-3.5" />
                   לקוח חדש
                 </Link>
               ) : null}
