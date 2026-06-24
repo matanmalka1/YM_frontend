@@ -7,6 +7,7 @@ import { TaskModal } from '../components/form/TaskModal'
 import { TasksListPanel } from '../components/list/TasksListPanel'
 import { TasksListSummary } from '../components/list/TasksListSummary'
 import { useTasksPage } from '../hooks/useTasksPage'
+import { TASKS_MESSAGES } from '../messages'
 
 export const TasksPage: React.FC = () => {
   const page = useTasksPage()
@@ -14,8 +15,8 @@ export const TasksPage: React.FC = () => {
   return (
     <div className="mx-auto max-w-7xl space-y-4">
       <PageHeader
-        title="משימות"
-        description="ניהול משימות, שיוכים ותאריכי יעד"
+        title={TASKS_MESSAGES.page.title}
+        description={TASKS_MESSAGES.page.description}
         actions={
           <Button
             size="sm"
@@ -23,14 +24,18 @@ export const TasksPage: React.FC = () => {
             onClick={page.openCreateModal}
             className="shrink-0 rounded-xl"
           >
-            משימה חדשה
+            {TASKS_MESSAGES.actions.newTask}
           </Button>
         }
       />
       {!page.isLoading && !page.listError ? (
         <TasksListSummary total={page.total} visibleCount={page.visibleCount} featuredTask={page.featuredTask} />
       ) : null}
-      <FilterPanel {...page.filterBar} title="סינון משימות" subtitle="סטטוס, עדיפות, שיוך, מקור וטווח יעד" />
+      <FilterPanel
+        {...page.filterBar}
+        title={TASKS_MESSAGES.page.filterTitle}
+        subtitle={TASKS_MESSAGES.page.filterSubtitle}
+      />
       <TasksListPanel
         tasks={page.tasks}
         isLoading={page.isLoading}

@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/primitives/Card'
 import { taskPriorityLabels, taskStatusLabels } from '../../constants/labels'
 import { formatTaskDueDate } from '../../utils/taskFormatters'
 import type { Task } from '../../api/contracts'
+import { TASKS_MESSAGES } from '../../messages'
 
 interface TasksListSummaryProps {
   total: number
@@ -19,10 +20,8 @@ export const TasksListSummary: React.FC<TasksListSummaryProps> = ({ total, visib
           <ListChecks className="h-5 w-5" aria-hidden="true" />
         </span>
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-gray-950">רשימת משימות</p>
-          <p className="mt-1 text-xs text-gray-500">
-            מוצגות {visibleCount} מתוך {total} משימות לפי הסינון הנוכחי
-          </p>
+          <p className="text-sm font-semibold text-gray-950">{TASKS_MESSAGES.summary.title}</p>
+          <p className="mt-1 text-xs text-gray-500">{TASKS_MESSAGES.summary.visibleCount(visibleCount, total)}</p>
         </div>
       </div>
     </Card>
@@ -30,9 +29,9 @@ export const TasksListSummary: React.FC<TasksListSummaryProps> = ({ total, visib
     <Card size="compact">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-xs font-semibold text-gray-500">מיקוד נוכחי</p>
+          <p className="text-xs font-semibold text-gray-500">{TASKS_MESSAGES.summary.currentFocus}</p>
           <p className="mt-1 line-clamp-2 text-sm font-semibold leading-5 text-gray-950">
-            {featuredTask?.title ?? 'אין משימות להצגה'}
+            {featuredTask?.title ?? TASKS_MESSAGES.summary.noTask}
           </p>
         </div>
         <Badge variant="neutral" size="2xs" className="shrink-0 tabular-nums shadow-sm">
@@ -40,9 +39,15 @@ export const TasksListSummary: React.FC<TasksListSummaryProps> = ({ total, visib
         </Badge>
       </div>
       <div className="mt-3 grid grid-cols-3 gap-1.5 text-2xs">
-        <TaskFocusPill label="סטטוס" value={featuredTask ? taskStatusLabels[featuredTask.status] : '—'} />
-        <TaskFocusPill label="עדיפות" value={featuredTask ? taskPriorityLabels[featuredTask.priority] : '—'} />
-        <TaskFocusPill label="יעד" value={formatTaskDueDate(featuredTask?.due_date)} />
+        <TaskFocusPill
+          label={TASKS_MESSAGES.summary.status}
+          value={featuredTask ? taskStatusLabels[featuredTask.status] : '—'}
+        />
+        <TaskFocusPill
+          label={TASKS_MESSAGES.summary.priority}
+          value={featuredTask ? taskPriorityLabels[featuredTask.priority] : '—'}
+        />
+        <TaskFocusPill label={TASKS_MESSAGES.summary.target} value={formatTaskDueDate(featuredTask?.due_date)} />
       </div>
     </Card>
   </section>

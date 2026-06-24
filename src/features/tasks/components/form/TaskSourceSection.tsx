@@ -4,6 +4,8 @@ import { Select } from '@/components/ui/inputs/Select'
 import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client/ClientSearchInput'
 import type { WorkQueueItem, WorkQueueSourceType } from '@/features/workQueue'
 import type { TaskSourceContext } from '../../types'
+import { TASKS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface TaskSourceSectionProps {
   source: TaskSourceContext | null | undefined
@@ -63,11 +65,15 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
   if (source && !isLinkMode) {
     return (
       <div className="rounded-md border border-primary-100 bg-primary-50 p-3 text-sm text-primary-950">
-        <div className="text-xs font-medium text-primary-700">פריט עבודה מקושר</div>
+        <div className="text-xs font-medium text-primary-700">{TASKS_MESSAGES.source.linkedWorkItem}</div>
         <div className="mt-1 font-medium">{source.title}</div>
-        {source.client_name && <div className="mt-0.5 text-xs text-primary-700">לקוח: {source.client_name}</div>}
+        {source.client_name && (
+          <div className="mt-0.5 text-xs text-primary-700">{TASKS_MESSAGES.source.clientLabel(source.client_name)}</div>
+        )}
         {linkedCount > 0 && (
-          <div className="mt-2 text-xs font-medium text-orange-800">כבר קיימות {linkedCount} משימות קשורות</div>
+          <div className="mt-2 text-xs font-medium text-orange-800">
+            {TASKS_MESSAGES.source.existingLinkedTasks(linkedCount)}
+          </div>
         )}
         {source.linked_tasks?.length ? (
           <ul className="mt-2 list-inside list-disc text-xs text-primary-800">
@@ -86,9 +92,9 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
     return (
       <div className="flex items-center justify-between gap-3 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm">
         <div className="min-w-0">
-          <div className="text-xs font-medium text-gray-500">פריט עבודה מקושר</div>
+          <div className="text-xs font-medium text-gray-500">{TASKS_MESSAGES.source.linkedWorkItem}</div>
           <div className="truncate font-medium text-gray-800">
-            {sourceCleared ? 'הקישור יוסר בשמירה' : existingSourceTitle}
+            {sourceCleared ? TASKS_MESSAGES.source.linkWillBeRemoved : existingSourceTitle}
           </div>
         </div>
         {!readonly && !isLinkMode && !sourceCleared && (
@@ -97,10 +103,10 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
             variant="link"
             size="sm"
             icon={<Link2Off className="h-3.5 w-3.5" aria-hidden="true" />}
-            tooltip="נתק את המשימה מהפריט המקושר"
+            tooltip={TASKS_MESSAGES.source.unlinkTooltip}
             onClick={onClearSource}
           >
-            נתק
+            {TASKS_MESSAGES.actions.unlink}
           </Button>
         )}
       </div>
@@ -112,9 +118,9 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
   if (!isLinkMode && !sourcePickerOpen) {
     return (
       <div className="flex items-center justify-between gap-3 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm">
-        <span className="text-gray-500">המשימה אינה מקושרת לפריט עבודה.</span>
+        <span className="text-gray-500">{TASKS_MESSAGES.source.unlinkedMessage}</span>
         <Button type="button" variant="ghost" size="sm" onClick={onOpenPicker}>
-          קשר לפריט
+          {TASKS_MESSAGES.actions.linkToItem}
         </Button>
       </div>
     )
@@ -124,13 +130,13 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
     <div className="space-y-3 rounded-md border border-gray-200 bg-gray-50 p-3">
       {isLinkMode && taskTitle && (
         <div className="rounded-md bg-white px-3 py-2 text-sm">
-          <div className="text-xs font-medium text-gray-500">משימה</div>
+          <div className="text-xs font-medium text-gray-500">{TASKS_MESSAGES.source.taskLabel}</div>
           <div className="font-medium text-gray-900">{taskTitle}</div>
         </div>
       )}
       <div>
-        <div className="text-sm font-medium text-gray-900">פריט עבודה לקישור</div>
-        <div className="text-xs text-gray-500">בחר לקוח ואז פריט פתוח שעדיין אין לו משימה.</div>
+        <div className="text-sm font-medium text-gray-900">{TASKS_MESSAGES.source.linkWorkItemTitle}</div>
+        <div className="text-xs text-gray-500">{TASKS_MESSAGES.source.linkWorkItemHelp}</div>
       </div>
 
       {selectedClientId && selectedClientName ? (
@@ -138,30 +144,30 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
           name={selectedClientName}
           officeClientNumber={selectedClientOfficeNumber}
           onClear={onClientClear}
-          label="לקוח"
+          label={TASKS_MESSAGES.source.client}
         />
       ) : (
         <ClientSearchInput
           value={clientSearch}
           onChange={onClientSearchChange}
           onSelect={(c) => onClientSelect(c.id, c.name, c.office_client_number)}
-          label="לקוח"
-          helperText="הקלד לפחות 2 תווים כדי לחפש לקוח"
+          label={TASKS_MESSAGES.source.client}
+          helperText={TASKS_MESSAGES.source.clientSearchHelp}
         />
       )}
 
       {selectedClientId && (
         <>
           <Select
-            label="פריט לקישור"
+            label={TASKS_MESSAGES.source.itemToLink}
             options={[
               {
                 value: '',
                 label: isLoadingItems
-                  ? 'טוען...'
+                  ? GLOBAL_UI_MESSAGES.common.loading
                   : sourceOptions.length
-                    ? 'בחר פריט...'
-                    : 'אין פריטים פתוחים ללא משימה',
+                    ? TASKS_MESSAGES.source.chooseItem
+                    : TASKS_MESSAGES.source.noOpenItems,
               },
               ...sourceOptions,
             ]}
@@ -178,14 +184,14 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
             disabled={isLoadingItems || sourceOptions.length === 0}
           />
           {!isLoadingItems && sourceOptions.length === 0 && (
-            <p className="text-xs text-gray-500">אין ללקוח הזה פריטים פתוחים שאפשר לקשר למשימה.</p>
+            <p className="text-xs text-gray-500">{TASKS_MESSAGES.source.noClientOpenItems}</p>
           )}
         </>
       )}
       {!isLinkMode && (
         <div className="flex justify-end">
           <Button type="button" variant="ghost" size="sm" onClick={onCancelPicker}>
-            השאר ללא קישור
+            {TASKS_MESSAGES.actions.leaveUnlinked}
           </Button>
         </div>
       )}

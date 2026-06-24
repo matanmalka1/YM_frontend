@@ -24,6 +24,7 @@ import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 import { randomUUID } from '@/utils/random'
 import { getErrorMessage } from '@/utils/utils'
 import type { Task, TaskCreateRequest } from '../../api/contracts'
+import { TASKS_MESSAGES } from '../../messages'
 
 interface ClientTasksTabProps {
   clientRecordId: number
@@ -94,12 +95,12 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
       setFeedback({
         message:
           result.failed.length === 0
-            ? `הושלמו ${result.succeeded.length} משימות`
-            : `הושלמו ${result.succeeded.length} משימות, ${result.failed.length} נכשלו`,
+            ? TASKS_MESSAGES.clientTab.bulkCompleteSuccess(result.succeeded.length)
+            : TASKS_MESSAGES.clientTab.bulkCompletePartial(result.succeeded.length, result.failed.length),
         hasFailures: result.failed.length > 0,
       })
     } catch (error) {
-      setFeedback({ message: getErrorMessage(error, 'פעולת הסימון נכשלה'), hasFailures: true })
+      setFeedback({ message: getErrorMessage(error, TASKS_MESSAGES.clientTab.bulkCompleteFailed), hasFailures: true })
     }
   }
   const handleBulkAssign = async (targetAssigneeId: number | null) => {
@@ -114,12 +115,12 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
       setFeedback({
         message:
           result.failed.length === 0
-            ? `שויכו ${result.succeeded.length} משימות`
-            : `שויכו ${result.succeeded.length} משימות, ${result.failed.length} נכשלו`,
+            ? TASKS_MESSAGES.clientTab.bulkAssignSuccess(result.succeeded.length)
+            : TASKS_MESSAGES.clientTab.bulkAssignPartial(result.succeeded.length, result.failed.length),
         hasFailures: result.failed.length > 0,
       })
     } catch (error) {
-      setFeedback({ message: getErrorMessage(error, 'פעולת השיוך נכשלה'), hasFailures: true })
+      setFeedback({ message: getErrorMessage(error, TASKS_MESSAGES.clientTab.bulkAssignFailed), hasFailures: true })
     }
   }
 
@@ -130,7 +131,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
       align: 'center',
       headerRender: () => (
         <Checkbox
-          aria-label="בחר את כל המשימות הפתוחות"
+          aria-label={TASKS_MESSAGES.clientTab.selectAllOpen}
           checked={selectableTasks.length > 0 && selectedIds.size === selectableTasks.length}
           onChange={toggleAll}
           disabled={isBulkLoading || selectableTasks.length === 0}
@@ -138,41 +139,43 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
       ),
       render: (task) => (
         <Checkbox
-          aria-label={`בחר משימה ${task.title}`}
+          aria-label={TASKS_MESSAGES.clientTab.selectTask(task.title)}
           checked={selectedIds.has(task.id)}
           onChange={() => toggleOne(task)}
           disabled={isBulkLoading || isTaskTerminal(task.status)}
-          title={isTaskTerminal(task.status) ? 'ניתן לבצע פעולות מרוכזות רק על משימות פתוחות' : undefined}
+          title={isTaskTerminal(task.status) ? TASKS_MESSAGES.clientTab.terminalBulkTitle : undefined}
         />
       ),
     },
     {
       key: 'title',
-      header: 'כותרת',
+      header: TASKS_MESSAGES.columns.title,
       align: 'right',
       render: (task) => <span className="font-medium text-gray-900">{task.title}</span>,
       wrap: true,
     },
     {
       key: 'status',
-      header: 'סטטוס',
+      header: TASKS_MESSAGES.columns.status,
       render: (task) => (
         <Badge variant={getTaskStatusBadgeVariant(task.status)} size="sm">
           {taskStatusLabels[task.status]}
         </Badge>
       ),
     },
-    { key: 'priority', header: 'עדיפות', render: (task) => taskPriorityLabels[task.priority] },
-    { key: 'dueDate', header: 'תאריך יעד', render: (task) => formatTaskDueDate(task.due_date) },
+    { key: 'priority', header: TASKS_MESSAGES.columns.priority, render: (task) => taskPriorityLabels[task.priority] },
+    { key: 'dueDate', header: TASKS_MESSAGES.columns.dueDate, render: (task) => formatTaskDueDate(task.due_date) },
   ]
 
   const userOptions = (usersQuery.data?.items ?? []).map((user) => ({ value: String(user.id), label: user.full_name }))
-  const createError = createTask.isError ? getErrorMessage(createTask.error, 'יצירת המשימה נכשלה') : null
+  const createError = createTask.isError
+    ? getErrorMessage(createTask.error, TASKS_MESSAGES.clientTab.createError)
+    : null
 
   return (
     <DetailTabPanel
-      title="משימות"
-      subtitle="משימות פתוחות והיסטוריות המקושרות ללקוח"
+      title={TASKS_MESSAGES.clientTab.title}
+      subtitle={TASKS_MESSAGES.clientTab.subtitle}
       actions={
         <Button
           size="sm"
@@ -182,7 +185,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
             setCreateOpen(true)
           }}
         >
-          משימה חדשה
+          {TASKS_MESSAGES.actions.newTask}
         </Button>
       }
     >
@@ -197,7 +200,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
       {selectedIds.size > 0 ? (
         <BulkSelectionToolbar selectedCount={selectedIds.size} loading={isBulkLoading} onClear={clearSelection}>
           <BulkSelectionActionButton
-            label="סמן כהושלם"
+            label={TASKS_MESSAGES.actions.completeBulk}
             onClick={handleBulkComplete}
             loading={bulkComplete.isPending}
             disabled={isBulkLoading}
@@ -206,18 +209,18 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
             <Select
               size="xs"
               value={assigneeId}
-              options={[{ value: '', label: 'בחר משתמש לשיוך' }, ...userOptions]}
+              options={[{ value: '', label: TASKS_MESSAGES.clientTab.chooseAssignee }, ...userOptions]}
               onChange={(event) => setAssigneeId(event.target.value)}
               disabled={isBulkLoading}
             />
             <BulkSelectionActionButton
-              label="שייך"
+              label={TASKS_MESSAGES.actions.assign}
               onClick={() => handleBulkAssign(Number(assigneeId))}
               loading={bulkAssign.isPending}
               disabled={isBulkLoading || assigneeId === ''}
             />
             <BulkSelectionActionButton
-              label="הסר שיוך"
+              label={TASKS_MESSAGES.actions.unassign}
               onClick={() => handleBulkAssign(null)}
               loading={bulkAssign.isPending}
               disabled={isBulkLoading}
@@ -226,7 +229,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
         </BulkSelectionToolbar>
       ) : null}
       {isError ? (
-        <Alert variant="error" message="שגיאה בטעינת משימות" onRetry={() => void refetch()} />
+        <Alert variant="error" message={TASKS_MESSAGES.clientTab.loadError} onRetry={() => void refetch()} />
       ) : (
         <PaginatedDataTable
           columns={columns}
@@ -237,14 +240,14 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
           page={page}
           pageSize={PAGE_SIZE}
           total={data?.total ?? 0}
-          label="משימות"
+          label={TASKS_MESSAGES.list.label}
           onPageChange={handlePageChange}
           showPagination={(data?.total ?? 0) > PAGE_SIZE}
           emptyState={{
-            title: 'אין משימות ללקוח זה',
-            message: 'אפשר ליצור משימה חדשה עבור הלקוח.',
+            title: TASKS_MESSAGES.clientTab.emptyTitle,
+            message: TASKS_MESSAGES.clientTab.emptyMessage,
             action: {
-              label: 'משימה חדשה',
+              label: TASKS_MESSAGES.actions.newTask,
               onClick: () => {
                 createTask.reset()
                 setCreateOpen(true)

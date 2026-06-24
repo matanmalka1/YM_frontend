@@ -5,6 +5,7 @@ import { Alert } from '@/components/ui/overlays/Alert'
 import type { Task } from '../../api/contracts'
 import { TASKS_PAGE_SIZE } from '../../constants/pageConstants'
 import { buildTaskListColumns } from './TaskListColumns'
+import { TASKS_MESSAGES } from '../../messages'
 
 interface TasksListPanelProps {
   tasks: Task[]
@@ -46,7 +47,7 @@ export const TasksListPanel: React.FC<TasksListPanelProps> = ({
     [isActionBusy, onView, onEdit, onComplete, onCancel, onDelete],
   )
   return (
-    <section aria-label="רשימת משימות">
+    <section aria-label={TASKS_MESSAGES.list.ariaLabel}>
       {error ? (
         <Alert variant="error" message={error} onRetry={onRetry} />
       ) : (
@@ -59,12 +60,12 @@ export const TasksListPanel: React.FC<TasksListPanelProps> = ({
           page={page}
           pageSize={TASKS_PAGE_SIZE}
           total={total}
-          label="משימות"
+          label={TASKS_MESSAGES.list.label}
           onPageChange={onPageChange}
           emptyState={{
             icon: ListChecks,
-            title: hasFilters ? 'אין משימות שמתאימות לסינון' : 'אין משימות',
-            message: hasFilters ? 'נסו לשנות את הסינון או לנקות אותו.' : 'אפשר ליצור משימה חדשה ולהתחיל מעקב.',
+            title: hasFilters ? TASKS_MESSAGES.list.emptyFilteredTitle : TASKS_MESSAGES.list.emptyTitle,
+            message: hasFilters ? TASKS_MESSAGES.list.emptyFilteredMessage : TASKS_MESSAGES.list.emptyMessage,
           }}
         />
       )}

@@ -14,6 +14,8 @@ import { getTaskFormDefaultValues, taskFormSchema, type TaskFormValues } from '.
 import type { TaskSourceContext } from '../../types'
 import { TaskDetailsFields } from './TaskDetailsFields'
 import { TaskSourceSection } from './TaskSourceSection'
+import { TASKS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface TaskModalProps {
   mode: 'create' | 'edit' | 'view' | 'link'
@@ -29,7 +31,7 @@ interface TaskModalProps {
 const sourceTypeLabel = (sourceDomain?: string | null) =>
   sourceDomain && sourceDomain in workQueueSourceTypeLabels
     ? workQueueSourceTypeLabels[sourceDomain as keyof typeof workQueueSourceTypeLabels]
-    : 'פריט עבודה'
+    : TASKS_MESSAGES.source.fallbackType
 
 export const TaskModal: React.FC<TaskModalProps> = ({
   mode,
@@ -171,30 +173,36 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   const formId = 'task-form'
   const hasUnsavedChanges = isDirty || pendingSource !== null || sourceCleared
   const modalTitle = isLinkMode
-    ? 'קישור משימה לפריט עבודה'
+    ? TASKS_MESSAGES.modal.linkTitle
     : mode === 'create'
       ? source
-        ? 'משימה חדשה לפריט עבודה'
-        : 'משימה חדשה'
+        ? TASKS_MESSAGES.modal.createForWorkItemTitle
+        : TASKS_MESSAGES.modal.createTitle
       : mode === 'edit'
-        ? 'עריכת משימה'
-        : 'פרטי משימה'
+        ? TASKS_MESSAGES.modal.editTitle
+        : TASKS_MESSAGES.modal.viewTitle
 
   const footer =
     isTaskLoading || readonly ? (
       <div className="flex justify-end">
         <Button type="button" variant="ghost" onClick={onClose}>
-          סגור
+          {TASKS_MESSAGES.actions.close}
         </Button>
       </div>
     ) : (
       <ModalFormActions
         cancelVariant="ghost"
-        cancelLabel={isLinkMode ? 'ביטול' : 'סגור'}
+        cancelLabel={isLinkMode ? GLOBAL_UI_MESSAGES.actions.cancel : TASKS_MESSAGES.actions.close}
         onCancel={onClose}
         submitType="submit"
         submitForm={formId}
-        submitLabel={isLinkMode ? 'שמור קישור' : mode === 'edit' ? 'שמור' : 'צור משימה'}
+        submitLabel={
+          isLinkMode
+            ? TASKS_MESSAGES.actions.saveLink
+            : mode === 'edit'
+              ? TASKS_MESSAGES.actions.save
+              : TASKS_MESSAGES.actions.createTask
+        }
         submitDisabled={isLinkMode ? hasExistingSource || !pendingSource : false}
         isLoading={isLoading}
       />
@@ -204,7 +212,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
     <Modal open title={modalTitle} footer={footer} isDirty={!readonly && hasUnsavedChanges} onClose={onClose}>
       {isTaskLoading ? (
         <div className="rounded-md border border-gray-200 bg-gray-50 px-4 py-8 text-center text-sm text-gray-600">
-          טוען פרטי משימה...
+          {TASKS_MESSAGES.modal.loadingDetails}
         </div>
       ) : (
         <form id={formId} onSubmit={handleSubmit(submitForm)} className="space-y-4">

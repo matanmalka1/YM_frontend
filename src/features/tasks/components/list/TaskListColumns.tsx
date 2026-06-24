@@ -9,6 +9,8 @@ import type { Task } from '../../api/contracts'
 import { taskPriorityLabels, taskStatusLabels } from '../../constants/labels'
 import { taskPriorityBadgeVariants, getTaskStatusBadgeVariant, taskStatusDotClass } from '../../utils/taskDisplay'
 import { formatTaskDueDate, isTaskTerminal } from '../../utils/taskFormatters'
+import { TASKS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface TaskColumnActions {
   isActionBusy: boolean
@@ -29,7 +31,7 @@ export const buildTaskListColumns = ({
 }: TaskColumnActions): Array<Column<Task>> => [
   {
     key: 'title',
-    header: 'כותרת',
+    header: TASKS_MESSAGES.columns.title,
     align: 'right',
     wrap: true,
     render: (task) => (
@@ -39,7 +41,7 @@ export const buildTaskListColumns = ({
         </Button>
         <div className="flex flex-wrap items-center gap-1.5">
           <Badge variant="neutral" size="2xs" className="font-semibold tabular-nums text-gray-600">
-            משימה #{task.id}
+            {TASKS_MESSAGES.columns.taskId(task.id)}
           </Badge>
           {task.source_domain ? (
             <Badge variant="neutral" size="2xs" className="text-gray-600">
@@ -52,7 +54,7 @@ export const buildTaskListColumns = ({
   },
   {
     key: 'status',
-    header: 'סטטוס',
+    header: TASKS_MESSAGES.columns.status,
     render: (task) => (
       <Badge variant={getTaskStatusBadgeVariant(task.status)} size="sm" dot={taskStatusDotClass[task.status]} ring>
         {taskStatusLabels[task.status]}
@@ -61,7 +63,7 @@ export const buildTaskListColumns = ({
   },
   {
     key: 'priority',
-    header: 'עדיפות',
+    header: TASKS_MESSAGES.columns.priority,
     render: (task) => (
       <Badge variant={taskPriorityBadgeVariants[task.priority]} size="2xs">
         {taskPriorityLabels[task.priority]}
@@ -70,7 +72,7 @@ export const buildTaskListColumns = ({
   },
   {
     key: 'dueDate',
-    header: 'תאריך יעד',
+    header: TASKS_MESSAGES.columns.dueDate,
     render: (task) => (
       <span className="inline-flex items-center gap-1">
         <CalendarClock className="h-3.5 w-3.5 text-gray-400" aria-hidden="true" />
@@ -80,28 +82,32 @@ export const buildTaskListColumns = ({
   },
   {
     key: 'actions',
-    header: 'פעולות',
+    header: GLOBAL_UI_MESSAGES.common.actions,
     render: (task) => {
       const terminal = isTaskTerminal(task.status)
       return (
-        <RowActionsMenu ariaLabel={`פעולות למשימה ${task.id}`}>
-          <RowActionItem label="צפה בפרטי המשימה" icon={<Eye className="h-4 w-4" />} onClick={() => onView(task.id)} />
+        <RowActionsMenu ariaLabel={TASKS_MESSAGES.columns.rowActionsAriaLabel(task.id)}>
+          <RowActionItem
+            label={TASKS_MESSAGES.actions.viewDetails}
+            icon={<Eye className="h-4 w-4" />}
+            onClick={() => onView(task.id)}
+          />
           {!terminal ? (
             <>
               <RowActionItem
-                label="עריכת משימה"
+                label={TASKS_MESSAGES.actions.edit}
                 icon={<Pencil className="h-4 w-4" />}
                 onClick={() => onEdit(task.id)}
                 disabled={isActionBusy}
               />
               <RowActionItem
-                label="סמן כהושלמה"
+                label={TASKS_MESSAGES.actions.complete}
                 icon={<CheckCircle2 className="h-4 w-4" />}
                 onClick={() => onComplete(task.id)}
                 disabled={isActionBusy}
               />
               <RowActionItem
-                label="בטל משימה"
+                label={TASKS_MESSAGES.actions.cancelTask}
                 icon={<XCircle className="h-4 w-4" />}
                 onClick={() => onCancel(task.id)}
                 disabled={isActionBusy}
@@ -110,7 +116,7 @@ export const buildTaskListColumns = ({
             </>
           ) : (
             <RowActionItem
-              label="מחק משימה"
+              label={TASKS_MESSAGES.actions.deleteTask}
               icon={<Trash2 className="h-4 w-4" />}
               onClick={() => onDelete(task.id)}
               disabled={isActionBusy}
