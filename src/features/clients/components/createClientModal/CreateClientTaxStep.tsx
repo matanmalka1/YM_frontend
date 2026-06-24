@@ -6,6 +6,8 @@ import type { ClientCreationImpactResponse } from '../../api/contracts'
 import type { CreateClientFormValues } from '../../schemas'
 import { formatShekelAmount } from '@/utils/utils'
 import { stripNonDecimal } from '../../utils/createClientFormUtils'
+import { CLIENTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface Props {
   advisorOptions: Array<{ value: string; label: string }>
@@ -41,45 +43,52 @@ export const CreateClientTaxStep: React.FC<Props> = ({
   const vatExemptCeilingText = impactData
     ? impactData.vat_exempt_ceiling != null
       ? formatShekelAmount(impactData.vat_exempt_ceiling)
-      : 'לא נמצאה תקרת פטור בהגדרות המערכת'
-    : 'תקרת עוסק פטור תיקבע אוטומטית לפי שנת המס.'
+      : CLIENTS_MESSAGES.createTax.vatExemptCeilingMissing
+    : CLIENTS_MESSAGES.createTax.vatExemptCeilingAuto
 
   return (
     <div className="space-y-4">
-      <p className="text-xs text-gray-500">בדוק את הגדרות המס לפני יצירת הלקוח.</p>
+      <p className="text-xs text-gray-500">{CLIENTS_MESSAGES.createTax.intro}</p>
       {showVatFrequency && (
         <Select
-          label="תדירות דיווח מע״מ *"
+          label={CLIENTS_MESSAGES.createTax.vatFrequencyLabel}
           error={errors.vat_reporting_frequency?.message}
           disabled={disabled}
-          options={[{ value: '', label: 'בחר תדירות דיווח' }, ...CREATE_CLIENT_VAT_OPTIONS]}
+          options={[{ value: '', label: CLIENTS_MESSAGES.createTax.vatFrequencyPlaceholder }, ...CREATE_CLIENT_VAT_OPTIONS]}
           value={vatFrequencyValue ?? ''}
           {...register('vat_reporting_frequency')}
         />
       )}
       <Select
-        label="תדירות מקדמות מס הכנסה *"
+        label={CLIENTS_MESSAGES.createTax.advanceFrequencyLabel}
         error={errors.advance_payment_frequency?.message}
         disabled={disabled}
-        options={[{ value: '', label: 'בחר תדירות מקדמות' }, ...ADVANCE_PAYMENT_FREQUENCY_OPTIONS]}
+        options={[
+          { value: '', label: CLIENTS_MESSAGES.createTax.advanceFrequencyPlaceholder },
+          ...ADVANCE_PAYMENT_FREQUENCY_OPTIONS,
+        ]}
         value={advancePaymentFrequencyValue ?? ''}
         {...register('advance_payment_frequency')}
       />
       <div className="grid grid-cols-2 gap-4">
         {isExempt && (
           <div>
-            <p className="mb-2 text-sm font-medium text-gray-700">תקרת פטור מע״מ</p>
+            <p className="mb-2 text-sm font-medium text-gray-700">{CLIENTS_MESSAGES.createTax.vatExemptCeiling}</p>
             <div className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-600">
-              {impactLoading ? 'טוען...' : impactError ? 'לא ניתן לטעון את תקרת הפטור כרגע' : vatExemptCeilingText}
+              {impactLoading
+                ? GLOBAL_UI_MESSAGES.common.loading
+                : impactError
+                  ? CLIENTS_MESSAGES.createTax.vatExemptCeilingError
+                  : vatExemptCeilingText}
             </div>
-            <p className="mt-1 text-xs text-gray-400">נגזר אוטומטית לפי הגדרת המערכת</p>
+            <p className="mt-1 text-xs text-gray-400">{CLIENTS_MESSAGES.createTax.vatExemptCeilingDerivedNote}</p>
           </div>
         )}
         <div className={isExempt ? undefined : 'col-span-1 max-w-[75%]'}>
           <Input
-            label="שיעור מקדמות מס הכנסה (%)"
+            label={CLIENTS_MESSAGES.createTax.advanceRateLabel}
             labelClassName="whitespace-nowrap"
-            placeholder="ריק = אין מקדמות / לא ידוע"
+            placeholder={CLIENTS_MESSAGES.createTax.advanceRatePlaceholder}
             error={errors.advance_rate?.message}
             disabled={disabled}
             onInput={stripNonDecimal}
@@ -88,10 +97,18 @@ export const CreateClientTaxStep: React.FC<Props> = ({
         </div>
       </div>
       <Select
-        label="רואה חשבון מלווה"
+        label={CLIENTS_MESSAGES.createTax.accountantLabel}
         error={errors.accountant_id?.message}
         disabled={disabled || advisorsLoading}
-        options={[{ value: '', label: advisorsLoading ? 'טוען רואי חשבון...' : 'בחר רואה חשבון' }, ...advisorOptions]}
+        options={[
+          {
+            value: '',
+            label: advisorsLoading
+              ? CLIENTS_MESSAGES.createTax.accountantsLoading
+              : CLIENTS_MESSAGES.createTax.accountantPlaceholder,
+          },
+          ...advisorOptions,
+        ]}
         value={accountantValue ?? ''}
         {...register('accountant_id')}
       />

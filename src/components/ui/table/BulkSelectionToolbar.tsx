@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { Loader2, X } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { Divider } from '../primitives/Divider'
+import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 interface BulkSelectionToolbarProps {
   children: ReactNode
@@ -14,7 +15,7 @@ interface BulkSelectionToolbarProps {
 
 export const BulkSelectionToolbar: React.FC<BulkSelectionToolbarProps> = ({
   children,
-  clearLabel = 'נקה בחירה',
+  clearLabel = GLOBAL_UI_MESSAGES.actions.clearSelection,
   extra,
   loading,
   onClear,

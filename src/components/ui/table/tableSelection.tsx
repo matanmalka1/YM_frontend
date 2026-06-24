@@ -1,4 +1,5 @@
 import type { Column } from './DataTable'
+import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 interface BuildSelectionColumnParams<T> {
   allIds: number[]
@@ -16,7 +17,7 @@ export const buildSelectionColumn = <T,>({
   getItemAriaLabel,
   onToggleAll,
   onToggleSelect,
-  selectAllAriaLabel = 'בחר הכל',
+  selectAllAriaLabel = GLOBAL_UI_MESSAGES.actions.selectAll,
   selectedIds,
 }: BuildSelectionColumnParams<T>): Column<T> => {
   const allSelected = allIds.length > 0 && allIds.every((id) => selectedIds?.has(id))

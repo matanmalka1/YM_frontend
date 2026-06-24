@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Button } from '../primitives/Button'
 import { OverlayPortalProvider } from './OverlayPortalContext'
+import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 export interface ConfirmDialogProps {
   open: boolean
@@ -21,8 +22,8 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   open,
   title,
   message,
-  confirmLabel = 'אישור',
-  cancelLabel = 'ביטול',
+  confirmLabel = GLOBAL_UI_MESSAGES.actions.confirm,
+  cancelLabel = GLOBAL_UI_MESSAGES.actions.cancel,
   confirmVariant = 'primary',
   closeOnBackdrop = true,
   isLoading = false,

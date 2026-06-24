@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/primitives/Badge'
 import { getCreateClientEntityLabels } from '../../constants'
 import { buildCreateClientReviewModel } from '../../utils/createClientFormUtils'
 import { ImpactIcon } from './createClientImpactIcons'
+import { CLIENTS_MESSAGES } from '../../messages'
 
 interface Props {
   values: CreateClientFormValues
@@ -63,10 +64,10 @@ export const CreateClientReviewStep: React.FC<Props> = ({
 
   return (
     <div className="space-y-4">
-      <p className="text-xs text-gray-500">בדוק את הפרטים לפני יצירת הלקוח.</p>
+      <p className="text-xs text-gray-500">{CLIENTS_MESSAGES.createReview.intro}</p>
 
-      <ReviewSection title="זיהוי">
-        <ReviewRow label="סוג ישות" value={entityLabel} />
+      <ReviewSection title={CLIENTS_MESSAGES.createReview.sectionIdentity}>
+        <ReviewRow label={CLIENTS_MESSAGES.createReview.entityType} value={entityLabel} />
         <ReviewRow label={entityLabels.name} value={values.full_name} />
         <ReviewRow label={entityLabels.idNumber} value={values.id_number} />
       </ReviewSection>
@@ -74,27 +75,30 @@ export const CreateClientReviewStep: React.FC<Props> = ({
       <ReviewSection title={entityLabels.contactSection}>
         <ReviewRow label={entityLabels.businessName} value={businessDisplayName} />
         <ReviewRow label={entityLabels.businessOpenedAt} value={formatDate(values.business_opened_at ?? null)} />
-        <ReviewRow label="טלפון" value={values.phone} />
-        <ReviewRow label="אימייל" value={values.email} />
-        <ReviewRow label="כתובת" value={addressLine} />
+        <ReviewRow label={CLIENTS_MESSAGES.createReview.phone} value={values.phone} />
+        <ReviewRow label={CLIENTS_MESSAGES.createReview.email} value={values.email} />
+        <ReviewRow label={CLIENTS_MESSAGES.createReview.address} value={addressLine} />
       </ReviewSection>
 
-      <ReviewSection title="מס ומע״מ">
-        {!isExempt && <ReviewRow label="תדירות דיווח מע״מ" value={vatLabel} />}
-        <ReviewRow label="תדירות מקדמות" value={advanceLabel} />
-        <ReviewRow label="שיעור מקדמות" value={values.advance_rate ? `${values.advance_rate}%` : null} />
-        <ReviewRow label="רואה חשבון" value={advisorLabel} />
+      <ReviewSection title={CLIENTS_MESSAGES.createReview.sectionTax}>
+        {!isExempt && <ReviewRow label={CLIENTS_MESSAGES.createReview.vatFrequency} value={vatLabel} />}
+        <ReviewRow label={CLIENTS_MESSAGES.createReview.advanceFrequency} value={advanceLabel} />
+        <ReviewRow
+          label={CLIENTS_MESSAGES.createReview.advanceRate}
+          value={values.advance_rate ? CLIENTS_MESSAGES.shared.advanceRatePercent(values.advance_rate) : null}
+        />
+        <ReviewRow label={CLIENTS_MESSAGES.createReview.accountant} value={advisorLabel} />
       </ReviewSection>
 
       <div className="rounded-lg border border-primary-200 bg-primary-50/70 p-4">
         <div className="mb-3 flex items-start justify-between gap-3">
           <div>
-            <p className="text-sm font-semibold text-primary-900">מה ייווצר לאחר שמירה?</p>
-            <p className="mt-0.5 text-xs text-primary-700">פריטים חדשים שייווצרו עבור הלקוח</p>
+            <p className="text-sm font-semibold text-primary-900">{CLIENTS_MESSAGES.createReview.impactTitle}</p>
+            <p className="mt-0.5 text-xs text-primary-700">{CLIENTS_MESSAGES.createReview.impactSubtitle}</p>
           </div>
           {impactData && (
             <Badge variant="info" size="xs">
-              {impactTotal} פריטים
+              {CLIENTS_MESSAGES.createReview.impactItemsCount(impactTotal)}
             </Badge>
           )}
         </div>
@@ -105,7 +109,7 @@ export const CreateClientReviewStep: React.FC<Props> = ({
             ))}
           </div>
         ) : impactError ? (
-          <p className="text-sm text-primary-700">לא ניתן לטעון את הפרטים כרגע</p>
+          <p className="text-sm text-primary-700">{CLIENTS_MESSAGES.createReview.impactError}</p>
         ) : impactData ? (
           <>
             <ul className="grid gap-2 sm:grid-cols-2">
@@ -126,7 +130,7 @@ export const CreateClientReviewStep: React.FC<Props> = ({
             </ul>
             {impactData.note && <p className="mt-2 text-xs text-primary-600">{impactData.note}</p>}
             {impactData.years_scope === 2 && (
-              <p className="mt-1 text-xs text-primary-600">ייווצר עבור השנה הנוכחית והשנה הבאה</p>
+              <p className="mt-1 text-xs text-primary-600">{CLIENTS_MESSAGES.createReview.impactTwoYearScope}</p>
             )}
           </>
         ) : null}

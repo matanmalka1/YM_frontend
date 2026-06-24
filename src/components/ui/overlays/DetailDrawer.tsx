@@ -9,11 +9,8 @@ interface DetailDrawerProps {
   subtitle?: React.ReactNode
   onClose: () => void
   children: React.ReactNode
-  /** Optional sticky footer — rendered below the scrollable content area. */
   footer?: React.ReactNode
-  /** When true, closing shows a confirmation prompt before discarding */
   isDirty?: boolean
-  /** Width / layout override forwarded to the drawer panel. */
   className?: string
 }
 

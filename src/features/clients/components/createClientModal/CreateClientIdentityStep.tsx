@@ -16,6 +16,7 @@ import type { ActiveClientSummary, DeletedClientSummary } from '../../api/contra
 import type { CreateClientFormValues } from '../../schemas'
 import { stripNonDigits } from '../../utils/createClientFormUtils'
 import { CLIENT_ROUTES } from '../../api/endpoints'
+import { CLIENTS_MESSAGES } from '../../messages'
 
 interface Props {
   control: Control<CreateClientFormValues>
@@ -56,12 +57,15 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
 
   return (
     <div className="space-y-4">
-      <p className="text-xs text-gray-500">כל השדות בשלב זה חובה.</p>
+      <p className="text-xs text-gray-500">{CLIENTS_MESSAGES.createIdentity.allFieldsRequired}</p>
       <Select
-        label="סוג ישות *"
+        label={CLIENTS_MESSAGES.createIdentity.entityTypeLabel}
         error={errors.entity_type?.message}
         disabled={disabled}
-        options={[{ value: '', label: 'בחר סוג ישות' }, ...CREATE_CLIENT_ENTITY_OPTIONS]}
+        options={[
+          { value: '', label: CLIENTS_MESSAGES.createIdentity.entityTypePlaceholder },
+          ...CREATE_CLIENT_ENTITY_OPTIONS,
+        ]}
         value={entityTypeValue ?? ''}
         {...entityTypeField}
       />
@@ -85,18 +89,18 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
             <UserRoundX className="mt-0.5 h-5 w-5 shrink-0 text-warning-600" />
             <div className="min-w-0 flex-1 space-y-3">
               <div>
-                <p className="font-medium text-warning-950">לקוח זה נמחק בעבר</p>
+                <p className="font-medium text-warning-950">{CLIENTS_MESSAGES.createIdentity.deletedClientTitle}</p>
                 <p className="mt-1 text-sm text-warning-800">
-                  כדי לשמור על ההיסטוריה הקיימת, יש לשחזר את הרשומה במקום לפתוח לקוח כפול.
+                  {CLIENTS_MESSAGES.createIdentity.deletedClientExplanation}
                 </p>
               </div>
               <dl className="grid gap-2 rounded-md border border-warning-200 bg-white/70 p-3 text-sm sm:grid-cols-2">
                 <div>
-                  <dt className="text-warning-700">שם לקוח</dt>
+                  <dt className="text-warning-700">{CLIENTS_MESSAGES.createIdentity.clientNameField}</dt>
                   <dd className="font-medium text-gray-950">{deletedClient.full_name}</dd>
                 </div>
                 <div>
-                  <dt className="text-warning-700">נמחק בתאריך</dt>
+                  <dt className="text-warning-700">{CLIENTS_MESSAGES.createIdentity.deletedAtField}</dt>
                   <dd className="font-medium text-gray-950">{formatDate(deletedClient.deleted_at)}</dd>
                 </div>
               </dl>
@@ -107,18 +111,20 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
                     size="sm"
                     onClick={() => onRestoreDeletedClient(deletedClient.id)}
                     isLoading={isRestoreLoading}
-                    loadingLabel="משחזר לקוח"
+                    loadingLabel={CLIENTS_MESSAGES.createIdentity.restoreLoadingLabel}
                     disabled={disabled}
                   >
                     <RotateCcw className="h-4 w-4" />
-                    שחזר לקוח
+                    {CLIENTS_MESSAGES.createIdentity.restore}
                   </Button>
-                  <span className="text-sm text-warning-800">מספר רשומה: {deletedClient.id}</span>
+                  <span className="text-sm text-warning-800">
+                    {CLIENTS_MESSAGES.createIdentity.recordNumber(deletedClient.id)}
+                  </span>
                 </div>
               ) : (
                 <div className="flex items-start gap-2 rounded-md border border-warning-200 bg-white/70 p-3 text-sm text-warning-800">
                   <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0" />
-                  <p>שחזור לקוח זמין ליועצים בלבד. יש לפנות ליועץ לביצוע השחזור.</p>
+                  <p>{CLIENTS_MESSAGES.createIdentity.advisorOnlyRestore}</p>
                 </div>
               )}
             </div>
@@ -127,7 +133,7 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
       )}
       {activeConflicts.length > 0 && (
         <div className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700">
-          <p className="font-medium mb-1">{idNumberLabel} זה כבר קיים במערכת — לא ניתן לפתוח לקוח כפול.</p>
+          <p className="font-medium mb-1">{CLIENTS_MESSAGES.createIdentity.activeConflict(idNumberLabel)}</p>
           <ul className="space-y-1">
             {activeConflicts.map((c) => (
               <li key={c.id}>

@@ -16,6 +16,8 @@ import { CLIENT_ROUTES } from '../../api/endpoints'
 import { formatDate } from '@/utils/utils'
 import { useBusinessActions } from '../../hooks/useBusinessActions'
 import { useBusinessesForClient } from '@/hooks/useBusinessesForClient'
+import { CLIENTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 const todayIsoDate = () => new Date().toISOString().slice(0, 10)
 
@@ -71,21 +73,21 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
   return (
     <>
       <Card
-        title="עסקים"
+        title={CLIENTS_MESSAGES.businessesCard.title}
         size="compact"
         className="shadow-none"
         actions={
           canEdit ? (
             <Button type="button" variant="ghost" size="sm" icon={<Plus className="h-4 w-4" />} onClick={onAddBusiness}>
-              הוסף עסק
+              {CLIENTS_MESSAGES.businessesCard.addBusiness}
             </Button>
           ) : undefined
         }
       >
         {isLoading ? (
-          <p className="px-1 py-4 text-sm text-gray-500">טוען...</p>
+          <p className="px-1 py-4 text-sm text-gray-500">{GLOBAL_UI_MESSAGES.common.loading}</p>
         ) : businesses.length === 0 ? (
-          <p className="px-1 py-4 text-sm text-gray-500">אין עסקים רשומים</p>
+          <p className="px-1 py-4 text-sm text-gray-500">{CLIENTS_MESSAGES.businessesCard.empty}</p>
         ) : (
           <ul className="divide-y divide-gray-100">
             {businesses.map((biz) => (
@@ -96,8 +98,12 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
                     className="flex min-w-0 items-center justify-between gap-4"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-gray-900">{biz.business_name ?? 'לא הוגדר'}</p>
-                      <p className="mt-1 text-xs font-medium text-gray-500">נפתח בתאריך {formatDate(biz.opened_at)}</p>
+                      <p className="truncate text-sm font-medium text-gray-900">
+                        {biz.business_name ?? CLIENTS_MESSAGES.businessesCard.notDefined}
+                      </p>
+                      <p className="mt-1 text-xs font-medium text-gray-500">
+                        {CLIENTS_MESSAGES.businessesCard.openedAt(formatDate(biz.opened_at))}
+                      </p>
                     </div>
                     <StatusBadge
                       status={biz.status}
@@ -108,31 +114,37 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
                 </div>
 
                 {canEdit && (
-                  <RowActionsMenu ariaLabel={`פעולות לעסק ${biz.business_name ?? biz.id}`}>
-                    <RowActionItem label="עריכה" icon={<Pencil className="h-4 w-4" />} onClick={() => openEdit(biz)} />
+                  <RowActionsMenu
+                    ariaLabel={CLIENTS_MESSAGES.businessesCard.rowActionsAriaLabel(biz.business_name ?? biz.id)}
+                  >
+                    <RowActionItem
+                      label={CLIENTS_MESSAGES.businessesCard.edit}
+                      icon={<Pencil className="h-4 w-4" />}
+                      onClick={() => openEdit(biz)}
+                    />
                     {biz.status !== 'active' && (
                       <RowActionItem
-                        label="העבר לפעיל"
+                        label={CLIENTS_MESSAGES.businessesCard.activate}
                         icon={<Undo2 className="h-4 w-4" />}
                         onClick={() => void updateBusinessStatus(biz.id, 'active')}
                       />
                     )}
                     {biz.status !== 'frozen' && (
                       <RowActionItem
-                        label="הקפא עסק"
+                        label={CLIENTS_MESSAGES.businessesCard.freeze}
                         icon={<Snowflake className="h-4 w-4" />}
                         onClick={() => void updateBusinessStatus(biz.id, 'frozen')}
                       />
                     )}
                     {biz.status !== 'closed' && (
                       <RowActionItem
-                        label="סגור עסק"
+                        label={CLIENTS_MESSAGES.businessesCard.closeBusiness}
                         icon={<Trash2 className="h-4 w-4" />}
                         onClick={() => void updateBusinessStatus(biz.id, 'closed')}
                       />
                     )}
                     <RowActionItem
-                      label="מחק"
+                      label={CLIENTS_MESSAGES.businessesCard.delete}
                       icon={<Trash2 className="h-4 w-4" />}
                       danger
                       onClick={() => setDeleteTarget(biz)}
@@ -147,27 +159,27 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
 
       <Modal
         open={!!editState}
-        title="עריכת עסק"
+        title={CLIENTS_MESSAGES.businessesCard.editModalTitle}
         onClose={() => setEditState(null)}
         footer={
           <ModalFormActions
             onCancel={() => setEditState(null)}
             onSubmit={submitEdit}
             isLoading={isUpdating}
-            submitLabel="שמור"
+            submitLabel={CLIENTS_MESSAGES.businessesCard.save}
           />
         }
       >
         {editState && (
           <div className="space-y-4">
             <Input
-              label="שם עסק"
+              label={CLIENTS_MESSAGES.businessesCard.nameLabel}
               value={editState.name}
               onChange={(e) => setEditState((s) => s && { ...s, name: e.target.value })}
               disabled={isUpdating}
             />
             <Select
-              label="סטטוס"
+              label={CLIENTS_MESSAGES.businessesCard.statusLabel}
               options={BUSINESS_STATUS_OPTIONS}
               value={editState.status}
               onChange={(e) =>
@@ -185,7 +197,7 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
             />
             {editState.status === 'closed' && (
               <Input
-                label="תאריך סגירה"
+                label={CLIENTS_MESSAGES.businessesCard.closeDateLabel}
                 type="date"
                 value={editState.closedAt}
                 onChange={(e) => setEditState((s) => s && { ...s, closedAt: e.target.value })}
@@ -198,10 +210,10 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
 
       <ConfirmDialog
         open={!!deleteTarget}
-        title="מחיקת עסק"
-        message={`האם למחוק את העסק "${deleteTarget?.business_name ?? ''}"? פעולה זו אינה ניתנת לביטול.`}
-        confirmLabel="מחק"
-        cancelLabel="ביטול"
+        title={CLIENTS_MESSAGES.businessesCard.deleteModalTitle}
+        message={CLIENTS_MESSAGES.businessesCard.deleteMessage(deleteTarget?.business_name ?? '')}
+        confirmLabel={CLIENTS_MESSAGES.businessesCard.deleteConfirm}
+        cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
         confirmVariant="danger"
         isLoading={isDeleting}
         onConfirm={() => {

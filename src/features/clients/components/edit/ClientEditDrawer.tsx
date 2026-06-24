@@ -4,6 +4,7 @@ import { DetailDrawer } from '@/components/ui/overlays/DetailDrawer'
 import { ModalFormActions } from '@/components/ui/overlays/ModalFormActions'
 import type { ClientRecordResponse, UpdateClientPayload } from '../../api'
 import { ClientEditForm } from './ClientEditForm'
+import { CLIENTS_MESSAGES } from '../../messages'
 
 interface ClientEditDrawerProps {
   open: boolean
@@ -35,19 +36,19 @@ export const ClientEditDrawer = ({
       open
       onClose={onClose}
       isDirty={isDirty}
-      title="עריכת לקוח"
+      title={CLIENTS_MESSAGES.edit.drawerTitle}
       footer={
         client ? (
           <ModalFormActions
             isLoading={updateLoading}
-            submitLabel="שמור שינויים"
+            submitLabel={CLIENTS_MESSAGES.edit.saveChanges}
             submitType="submit"
             submitForm={formId}
           />
         ) : undefined
       }
     >
-      {isLoading && <Alert variant="info" message="טוען את פרטי הלקוח..." />}
+      {isLoading && <Alert variant="info" message={CLIENTS_MESSAGES.edit.loadingClient} />}
       {error && <Alert variant="error" message={error} />}
       {client && (
         <ClientEditForm

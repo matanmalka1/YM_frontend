@@ -10,6 +10,7 @@ import { formatShekelAmount, formatDate } from '@/utils/utils'
 import { ActionSurfaceButton, ActionSurfaceLink } from '@/components/ui/primitives/ActionSurface'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+import { CLIENTS_MESSAGES } from '../../messages'
 interface Props {
   clientId: number
 }
@@ -90,9 +91,9 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
   const vatPrimary = vatYear ? formatShekelAmount(vatYear.net_vat) : '—'
   const vatStatus = vatYear
     ? vatYear.periods_count === 0
-      ? 'אין דיווחים'
-      : `${vatYear.filed_count}/${vatYear.periods_count} דווחו`
-    : 'אין דיווחים'
+      ? CLIENTS_MESSAGES.statusCard.noReports
+      : CLIENTS_MESSAGES.statusCard.reportedRatio(vatYear.filed_count, vatYear.periods_count)
+    : CLIENTS_MESSAGES.statusCard.noReports
 
   const yearSelector = (
     <Select
@@ -108,7 +109,7 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
     return (
       <section className="w-full max-w-4xl space-y-1.5 rounded-lg border border-gray-200/80 bg-white px-3 py-2.5">
         <div className="flex items-center justify-between gap-3">
-          <h3 className="text-sm font-semibold text-gray-900">סטטוס לקוח</h3>
+          <h3 className="text-sm font-semibold text-gray-900">{CLIENTS_MESSAGES.statusCard.title}</h3>
         </div>
         <div className="grid grid-cols-2 gap-1 md:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -125,66 +126,72 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
 
   const arStatus = annual_report.status
     ? annual_report.form_type
-      ? `טופס ${annual_report.form_type}`
+      ? CLIENTS_MESSAGES.statusCard.annualReportForm(annual_report.form_type)
       : annual_report.status
-    : 'אין דוח'
+    : CLIENTS_MESSAGES.statusCard.noAnnualReport
 
   const arSecondary = annual_report.filing_deadline
-    ? `הגשה: ${formatDate(annual_report.filing_deadline)}`
+    ? CLIENTS_MESSAGES.statusCard.filingDeadline(formatDate(annual_report.filing_deadline))
     : annual_report.refund_due != null
-      ? `החזר: ${formatShekelAmount(annual_report.refund_due)}`
+      ? CLIENTS_MESSAGES.statusCard.refundDue(formatShekelAmount(annual_report.refund_due))
       : annual_report.tax_due != null
-        ? `תשלום: ${formatShekelAmount(annual_report.tax_due)}`
+        ? CLIENTS_MESSAGES.statusCard.taxDue(formatShekelAmount(annual_report.tax_due))
         : '—'
 
   return (
     <section className="w-full max-w-4xl space-y-1.5 rounded-lg border border-gray-200/80 bg-white px-3 py-2.5">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold text-gray-900">סטטוס לקוח — {year}</h3>
+        <h3 className="text-sm font-semibold text-gray-900">{CLIENTS_MESSAGES.statusCard.titleWithYear(year)}</h3>
         {yearSelector}
       </div>
       <div className="grid grid-cols-2 gap-0.5 md:grid-cols-3">
         <Tile
           icon={<Receipt size={14} />}
-          title='מע"מ (לקוח)'
+          title={CLIENTS_MESSAGES.statusCard.vatTitle}
           primary={vatPrimary}
           secondary={vatStatus}
           to={CLIENT_ROUTES.vat(clientId)}
         />
         <Tile
           icon={<FileText size={14} />}
-          title="דוח שנתי"
+          title={CLIENTS_MESSAGES.statusCard.annualReportTitle}
           primary={arStatus}
           secondary={arSecondary}
           to={CLIENT_ROUTES.annualReports(clientId)}
         />
         <Tile
           icon={<CreditCard size={14} />}
-          title="חיובים פתוחים"
+          title={CLIENTS_MESSAGES.statusCard.openChargesTitle}
           primary={formatShekelAmount(charges.total_outstanding)}
-          secondary={`${charges.unpaid_count} חיובים`}
+          secondary={CLIENTS_MESSAGES.statusCard.chargesCount(charges.unpaid_count)}
           to={`/charges?client_record_id=${clientId}`}
         />
         <Tile
           icon={<TrendingUp size={14} />}
-          title="מקדמות"
+          title={CLIENTS_MESSAGES.statusCard.advancesTitle}
           primary={formatShekelAmount(advance_payments.total_paid)}
-          secondary={`${advance_payments.count} תשלומים`}
+          secondary={CLIENTS_MESSAGES.statusCard.paymentsCount(advance_payments.count)}
           to={CLIENT_ROUTES.advancePayments(clientId)}
         />
         <Tile
           icon={<FolderOpen size={14} />}
-          title="קלסרים"
-          primary={firstBusinessId == null ? '—' : `${binders.active_count} פעילים`}
-          secondary={firstBusinessId == null ? 'אין עסקים רשומים' : `${binders.in_office_count} במשרד`}
+          title={CLIENTS_MESSAGES.statusCard.bindersTitle}
+          primary={firstBusinessId == null ? '—' : CLIENTS_MESSAGES.statusCard.bindersActive(binders.active_count)}
+          secondary={
+            firstBusinessId == null
+              ? CLIENTS_MESSAGES.statusCard.noBusinesses
+              : CLIENTS_MESSAGES.statusCard.bindersInOffice(binders.in_office_count)
+          }
           to={`/binders?client_record_id=${clientId}`}
           disabled={firstBusinessId == null}
         />
         <Tile
           icon={<FileCheck size={14} />}
-          title="מסמכים"
+          title={CLIENTS_MESSAGES.statusCard.documentsTitle}
           primary={firstBusinessId == null ? '—' : `${documents.present_count}/${documents.total_count}`}
-          secondary={firstBusinessId == null ? 'אין עסקים רשומים' : 'מסמכים קיימים'}
+          secondary={
+            firstBusinessId == null ? CLIENTS_MESSAGES.statusCard.noBusinesses : CLIENTS_MESSAGES.statusCard.documentsExist
+          }
           to={CLIENT_ROUTES.documents(clientId)}
           disabled={firstBusinessId == null}
         />

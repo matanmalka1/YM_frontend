@@ -13,6 +13,8 @@ import {
   ClientOfficeSection,
   ClientTaxProfileSection,
 } from './ClientEditFormSections'
+import { CLIENTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface ClientEditFormProps {
   client: ClientRecordResponse
@@ -129,10 +131,10 @@ export const ClientEditForm: React.FC<ClientEditFormProps> = ({
     <>
       <ConfirmDialog
         open={!!impactMessage}
-        title="אזהרה: פעולה בלתי הפיכה"
+        title={CLIENTS_MESSAGES.edit.impactWarningTitle}
         message={impactMessage ?? ''}
-        confirmLabel="אישור ושמירה"
-        cancelLabel="ביטול"
+        confirmLabel={CLIENTS_MESSAGES.edit.impactConfirm}
+        cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
         isLoading={isLoading}
         onConfirm={handleConfirm}
         onCancel={handleCancelConfirm}
@@ -168,14 +170,14 @@ export const ClientEditForm: React.FC<ClientEditFormProps> = ({
           <>
             <div className="flex items-center justify-end gap-3 border-t border-gray-200 pt-4">
               <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
-                ביטול
+                {GLOBAL_UI_MESSAGES.actions.cancel}
               </Button>
               <Button type="submit" variant="primary" isLoading={isLoading} disabled={isLoading || !isDirty}>
-                שמור שינויים
+                {CLIENTS_MESSAGES.edit.saveChanges}
               </Button>
             </div>
 
-            {!isDirty && <p className="text-center text-sm text-gray-500">לא בוצעו שינויים בטופס</p>}
+            {!isDirty && <p className="text-center text-sm text-gray-500">{CLIENTS_MESSAGES.edit.noChanges}</p>}
           </>
         )}
       </form>

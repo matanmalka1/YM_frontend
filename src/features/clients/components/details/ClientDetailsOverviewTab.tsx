@@ -36,6 +36,7 @@ import { ClientTasksTab } from '@/features/tasks'
 import type { UpdateClientPayload, ClientRecordResponse } from '../../api'
 import { useFirstBusinessId } from '../../hooks/useFirstBusinessId'
 import { useClientDetailsActions } from '../../hooks/useClientDetailsActions'
+import { CLIENTS_MESSAGES } from '../../messages'
 
 const EDIT_FORM_ID = 'client-edit-form'
 
@@ -137,7 +138,9 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
           />
           <ChargesCreateModal
             open={isAddingCharge}
-            createError={createChargeError ? getErrorMessage(createChargeError, 'שגיאה ביצירת חיוב') : null}
+            createError={
+              createChargeError ? getErrorMessage(createChargeError, CLIENTS_MESSAGES.edit.chargeCreateError) : null
+            }
             createLoading={isCreatingCharge}
             onClose={() => setIsAddingCharge(false)}
             onSubmit={handleCreateCharge}
@@ -174,8 +177,8 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
         <EntityAuditTrailSection
           entityType="client"
           entityId={client.id}
-          title="יומן שינויים"
-          subtitle="פעולות שבוצעו על הלקוח"
+          title={CLIENTS_MESSAGES.edit.auditTitle}
+          subtitle={CLIENTS_MESSAGES.edit.auditSubtitle}
           fieldValueLabels={AUDIT_FIELD_VALUE_LABELS}
         />
       )}
@@ -195,7 +198,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
       {canEditClients && (
         <DetailDrawer
           open={isEditing}
-          title="עריכת פרטי לקוח"
+          title={CLIENTS_MESSAGES.edit.overviewDrawerTitle}
           subtitle={client.full_name}
           onClose={onEditClose}
           isDirty={isEditDirty}
@@ -212,13 +215,13 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
                 className="gap-2 text-negative-600 border-negative-200 hover:bg-negative-50"
               >
                 <Trash2 className="h-4 w-4" />
-                מחק לקוח
+                {CLIENTS_MESSAGES.edit.deleteClient}
               </Button>
               <ModalFormActions
                 cancelVariant="ghost"
                 isLoading={isUpdating}
                 submitForm={EDIT_FORM_ID}
-                submitLabel="שמור שינויים"
+                submitLabel={CLIENTS_MESSAGES.edit.saveChanges}
                 submitType="submit"
                 submitVariant="ghost"
               />

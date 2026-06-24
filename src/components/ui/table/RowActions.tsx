@@ -17,6 +17,7 @@ import { computeDropdownPosition } from '../../../utils/dropdownMenuUtils'
 import { getOverlayPortalOffset, useOverlayPortalContainer } from '../overlays/OverlayPortalContext'
 import { useDismissibleLayer } from '../overlays/useDismissibleLayer'
 import { Tooltip } from '../primitives/Tooltip'
+import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 const DropdownCloseContext = createContext<(() => void) | null>(null)
 
@@ -166,7 +167,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
         onClick={toggle}
         onKeyDown={handleTriggerKeyDown}
         className="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-700"
-        aria-label={ariaLabel ?? 'פעולות'}
+        aria-label={ariaLabel ?? GLOBAL_UI_MESSAGES.common.actions}
         aria-haspopup="menu"
         aria-expanded={open}
         title={title}
@@ -300,7 +301,7 @@ export const RowActionsMenu: React.FC<RowActionsMenuProps> = ({ ariaLabel, child
 
   return (
     <div className="flex justify-center">
-      <DropdownMenu ariaLabel={ariaLabel ?? 'פעולות'} title={title} menuClassName={menuClassName}>
+      <DropdownMenu ariaLabel={ariaLabel ?? GLOBAL_UI_MESSAGES.common.actions} title={title} menuClassName={menuClassName}>
         {isGrouped
           ? visibleGroups.map((group, index) => (
               <Fragment key={group.key ?? index}>

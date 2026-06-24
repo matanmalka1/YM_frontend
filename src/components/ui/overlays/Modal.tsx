@@ -10,7 +10,6 @@ interface ModalProps {
   footer?: React.ReactNode
   onClose: () => void
   className?: string
-  /** When true, closing shows a confirmation prompt before discarding */
   isDirty?: boolean
 }
 

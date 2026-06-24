@@ -11,6 +11,7 @@ import { getChargeTypeLabel } from '@/features/charges'
 import { getChargeStatusLabel } from '@/features/charges'
 import { getBinderLocationStatusLabel } from '@/features/binders'
 import { formatBinderNumber } from '../../../../utils/utils'
+import { CLIENTS_MESSAGES } from '../../messages'
 
 type RelatedItemsSectionProps<T> = {
   title: string
@@ -42,7 +43,7 @@ const RelatedItemsSection = <T,>({
       <h3 className="text-xs font-semibold text-gray-700">{title}</h3>
       {total > 0 && (
         <Link to={allHref} className="text-xs font-medium text-primary-600 hover:underline">
-          הכל ({total})
+          {CLIENTS_MESSAGES.relatedData.showAll(total)}
         </Link>
       )}
     </div>
@@ -139,7 +140,7 @@ export const ClientRelatedData: FC<ClientRelatedDataProps> = ({
         onClick={onCreateBinder}
         className="text-md"
       >
-        הוסף קלסר
+        {CLIENTS_MESSAGES.relatedData.addBinder}
       </Button>
       {canCreateCharge && (
         <Button
@@ -149,14 +150,14 @@ export const ClientRelatedData: FC<ClientRelatedDataProps> = ({
           onClick={onCreateCharge}
           className="text-md"
         >
-          הוסף חיוב
+          {CLIENTS_MESSAGES.relatedData.addCharge}
         </Button>
       )}
     </div>
   )
 
   return (
-    <Card title="נתונים קשורים" actions={actions} size="compact">
+    <Card title={CLIENTS_MESSAGES.relatedData.cardTitle} actions={actions} size="compact">
       <div ref={loadTriggerRef}>
         {!hasRequestedData ? (
           <div className="min-h-[132px]" />
@@ -176,25 +177,25 @@ export const ClientRelatedData: FC<ClientRelatedDataProps> = ({
         ) : (
           <div className="grid gap-3 md:grid-cols-2">
             <RelatedItemsSection
-              title="קלסרים אחרונים"
+              title={CLIENTS_MESSAGES.relatedData.bindersTitle}
               total={bindersTotal}
               allHref={`/binders?client_record_id=${clientId}`}
               items={binders}
-              emptyText="אין קלסרים להצגה"
+              emptyText={CLIENTS_MESSAGES.relatedData.bindersEmpty}
               getKey={(binder) => binder.id}
-              getTitle={(binder) => `קלסר ${formatBinderNumber(binder.binder_number)}`}
+              getTitle={(binder) => CLIENTS_MESSAGES.relatedData.binderTitle(formatBinderNumber(binder.binder_number))}
               getSubtitle={(binder) => getBinderLocationStatusLabel(binder.location_status)}
               getItemHref={(binder) => `/binders?client_record_id=${clientId}&binder_id=${binder.id}`}
             />
             {canViewCharges && (
               <RelatedItemsSection
-                title="חיובים אחרונים"
+                title={CLIENTS_MESSAGES.relatedData.chargesTitle}
                 total={chargesTotal}
                 allHref={`/charges?client_record_id=${clientId}`}
                 items={charges}
-                emptyText="אין חיובים להצגה"
+                emptyText={CLIENTS_MESSAGES.relatedData.chargesEmpty}
                 getKey={(charge) => charge.id}
-                getTitle={(charge) => `חיוב #${charge.id}`}
+                getTitle={(charge) => CLIENTS_MESSAGES.relatedData.chargeTitle(charge.id)}
                 getSubtitle={(charge) => getChargeTypeLabel(charge.charge_type)}
                 getBadge={(charge) => <Badge variant="neutral">{getChargeStatusLabel(charge.status)}</Badge>}
                 getItemHref={() => `/charges?client_record_id=${clientId}`}

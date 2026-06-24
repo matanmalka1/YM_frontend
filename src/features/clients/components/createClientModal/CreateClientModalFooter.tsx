@@ -1,5 +1,7 @@
 import { Button } from '@/components/ui/primitives/Button'
 import { ModalFormActions } from '../../../../components/ui/overlays/ModalFormActions'
+import { CLIENTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface Props {
   isLastStep: boolean
@@ -25,12 +27,12 @@ export const CreateClientModalFooter: React.FC<Props> = ({
   if (isLastStep) {
     return (
       <ModalFormActions
-        cancelLabel="חזרה"
+        cancelLabel={CLIENTS_MESSAGES.createModal.cancelLabel}
         cancelVariant="ghost"
         onCancel={onPrevious}
         onSubmit={onSubmit}
         isLoading={isLoading}
-        submitLabel="צור לקוח"
+        submitLabel={CLIENTS_MESSAGES.createModal.submitLabel}
       />
     )
   }
@@ -38,15 +40,15 @@ export const CreateClientModalFooter: React.FC<Props> = ({
   return (
     <div className="flex items-center justify-end gap-2">
       <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
-        ביטול
+        {GLOBAL_UI_MESSAGES.actions.cancel}
       </Button>
       {stepIndex > 0 && (
         <Button type="button" variant="ghost" onClick={onPrevious} disabled={isLoading}>
-          חזרה
+          {CLIENTS_MESSAGES.createModal.back}
         </Button>
       )}
       <Button type="button" onClick={onNext} disabled={isLoading || nextDisabled}>
-        הבא
+        {CLIENTS_MESSAGES.createModal.next}
       </Button>
     </div>
   )

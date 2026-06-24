@@ -3,6 +3,8 @@ import { Modal } from '../../../../components/ui/overlays/Modal'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { formatDate } from '../../../../utils/utils'
 import type { DeletedClientSummary } from '../../api'
+import { CLIENTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface Props {
   open: boolean
@@ -32,11 +34,11 @@ export const DeletedClientDialog: React.FC<Props> = ({
     <Modal
       open={open}
       onClose={onDismiss}
-      title="נמצאה רשומה קודמת"
+      title={CLIENTS_MESSAGES.deletedClientDialog.title}
       footer={
         <div className="flex items-center justify-end gap-2">
           <Button type="button" variant="outline" onClick={onDismiss} disabled={isLoading}>
-            ביטול
+            {GLOBAL_UI_MESSAGES.actions.cancel}
           </Button>
           <Button
             type="button"
@@ -45,39 +47,42 @@ export const DeletedClientDialog: React.FC<Props> = ({
             isLoading={forceCreateLoading}
             disabled={isLoading}
           >
-            צור לקוח חדש
+            {CLIENTS_MESSAGES.deletedClientDialog.createNew}
           </Button>
           {isAdvisor && (
             <Button type="button" variant="primary" onClick={onRestore} isLoading={restoreLoading} disabled={isLoading}>
-              שחזר לקוח
+              {CLIENTS_MESSAGES.deletedClientDialog.restore}
             </Button>
           )}
         </div>
       }
     >
       <div className="space-y-4">
-        <Alert variant="warning" size="sm" message="לקוח עם מספר זהות זה קיים במערכת אך נמחק. בחר כיצד להמשיך." />
+        <Alert variant="warning" size="sm" message={CLIENTS_MESSAGES.deletedClientDialog.warning} />
 
         <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500">שם</span>
+            <span className="text-gray-500">{CLIENTS_MESSAGES.deletedClientDialog.nameField}</span>
             <span className="font-medium text-gray-900">{deletedClient.full_name}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500">נמחק בתאריך</span>
+            <span className="text-gray-500">{CLIENTS_MESSAGES.deletedClientDialog.deletedAtField}</span>
             <span className="font-medium text-gray-900">{formatDate(deletedClient.deleted_at)}</span>
           </div>
         </div>
 
         <div className="space-y-2 text-sm text-gray-600">
           <p>
-            <span className="font-medium">שחזר לקוח</span> — מחזיר את הרשומה הישנה עם כל ההיסטוריה (מסמכים, דוחות,
-            חיובים).
+            <span className="font-medium">{CLIENTS_MESSAGES.deletedClientDialog.restoreExplanationLead}</span>
+            {CLIENTS_MESSAGES.deletedClientDialog.restoreExplanationRest}
           </p>
           <p>
-            <span className="font-medium">צור לקוח חדש</span> — יוצר רשומה חדשה נקייה, הרשומה הישנה תישאר מחוקה.
+            <span className="font-medium">{CLIENTS_MESSAGES.deletedClientDialog.createExplanationLead}</span>
+            {CLIENTS_MESSAGES.deletedClientDialog.createExplanationRest}
           </p>
-          {!isAdvisor && <p className="text-warning-700">שחזור לקוח זמין ליועצים בלבד. פנה ליועץ לביצוע שחזור.</p>}
+          {!isAdvisor && (
+            <p className="text-warning-700">{CLIENTS_MESSAGES.deletedClientDialog.advisorOnlyNotice}</p>
+          )}
         </div>
       </div>
     </Modal>

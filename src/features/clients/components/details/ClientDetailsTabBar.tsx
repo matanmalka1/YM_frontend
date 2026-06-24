@@ -1,6 +1,7 @@
 import { type FC } from 'react'
 import { SegmentedControl, SegmentedControlItem } from '../../../../components/ui/primitives/SegmentedControl'
 import { CLIENT_DETAILS_TABS, CLIENT_DETAILS_TAB_LABELS, type ActiveClientDetailsTab } from '../../constants'
+import { CLIENTS_MESSAGES } from '../../messages'
 
 type ClientDetailsTabBarProps = {
   activeTab: ActiveClientDetailsTab
@@ -8,7 +9,7 @@ type ClientDetailsTabBarProps = {
 }
 
 export const ClientDetailsTabBar: FC<ClientDetailsTabBarProps> = ({ activeTab, onTabChange }) => (
-  <SegmentedControl variant="underline" aria-label="לשוניות לקוח">
+  <SegmentedControl variant="underline" aria-label={CLIENTS_MESSAGES.details.tabBarAriaLabel}>
     {CLIENT_DETAILS_TABS.map((tab) => {
       const isActive = activeTab === tab
 

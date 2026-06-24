@@ -1,11 +1,12 @@
 import { CREATE_CLIENT_STEPS } from '../../utils/createClientSteps'
+import { CLIENTS_MESSAGES } from '../../messages'
 
 interface Props {
   stepIndex: number
 }
 
 export const CreateClientStepIndicator: React.FC<Props> = ({ stepIndex }) => (
-  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4" aria-label="שלבי יצירת לקוח">
+  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4" aria-label={CLIENTS_MESSAGES.createModal.stepIndicatorAriaLabel}>
     {CREATE_CLIENT_STEPS.map((step, index) => (
       <div
         key={step.key}

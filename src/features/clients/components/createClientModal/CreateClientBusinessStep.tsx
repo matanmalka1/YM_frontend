@@ -3,6 +3,7 @@ import { DatePicker } from '../../../../components/ui/inputs/DatePicker'
 import { Input } from '../../../../components/ui/inputs/Input'
 import type { CreateClientFormValues } from '../../schemas'
 import { stripNonDigits, stripNonPhone } from '../../utils/createClientFormUtils'
+import { CLIENTS_MESSAGES } from '../../messages'
 
 interface Props {
   businessOpenedAtField: ControllerRenderProps<CreateClientFormValues, 'business_opened_at'>
@@ -20,25 +21,33 @@ export const CreateClientBusinessStep: React.FC<Props> = ({
   register,
 }) => (
   <div className="space-y-4">
-    <p className="text-xs text-gray-500">שדות מסומנים בכוכבית חובה.</p>
+    <p className="text-xs text-gray-500">{CLIENTS_MESSAGES.createBusinessStep.requiredFieldsNote}</p>
     <div className="space-y-4 border-t border-gray-200 pt-4">
-      <p className="text-sm font-medium text-gray-700">{isCompany ? 'פרטי חברה ויצירת קשר' : 'פרטי עסק'}</p>
+      <p className="text-sm font-medium text-gray-700">
+        {isCompany
+          ? CLIENTS_MESSAGES.createBusinessStep.companyDetailsHeading
+          : CLIENTS_MESSAGES.createBusinessStep.businessDetailsHeading}
+      </p>
       <div className="grid grid-cols-2 gap-4">
         {!isCompany && (
           <div>
             <Input
-              label="שם עסק"
-              placeholder="לדוגמה: מסעדת ישראל"
+              label={CLIENTS_MESSAGES.createBusinessStep.nameLabel}
+              placeholder={CLIENTS_MESSAGES.createBusinessStep.namePlaceholder}
               error={errors.business_name?.message}
               disabled={disabled}
               {...register('business_name')}
             />
-            <p className="mt-1 text-xs text-gray-400">אם לא יוזן שם עסק, ייעשה שימוש בשם הלקוח.</p>
+            <p className="mt-1 text-xs text-gray-400">{CLIENTS_MESSAGES.createBusinessStep.nameFallbackNote}</p>
           </div>
         )}
         <div className={isCompany ? 'col-span-2' : undefined}>
           <DatePicker
-            label={isCompany ? 'תאריך התאגדות' : 'תאריך פתיחת תיק ברשויות'}
+            label={
+              isCompany
+                ? CLIENTS_MESSAGES.createBusinessStep.companyIncorporationDate
+                : CLIENTS_MESSAGES.createBusinessStep.businessOpenedAtDate
+            }
             error={errors.business_opened_at?.message}
             disabled={disabled}
             value={businessOpenedAtField.value ?? ''}
@@ -50,10 +59,10 @@ export const CreateClientBusinessStep: React.FC<Props> = ({
       </div>
     </div>
     <div className="space-y-4 border-t border-gray-200 pt-4">
-      <p className="text-sm font-medium text-gray-700">פרטי התקשרות</p>
+      <p className="text-sm font-medium text-gray-700">{CLIENTS_MESSAGES.createBusinessStep.contactHeading}</p>
       <div className="grid grid-cols-2 gap-4">
         <Input
-          label="טלפון *"
+          label={CLIENTS_MESSAGES.createBusinessStep.phoneLabel}
           type="tel"
           placeholder="050-1234567"
           error={errors.phone?.message}
@@ -62,7 +71,7 @@ export const CreateClientBusinessStep: React.FC<Props> = ({
           {...register('phone')}
         />
         <Input
-          label="אימייל *"
+          label={CLIENTS_MESSAGES.createBusinessStep.emailLabel}
           type="email"
           placeholder="name@example.com"
           error={errors.email?.message}
@@ -72,16 +81,16 @@ export const CreateClientBusinessStep: React.FC<Props> = ({
       </div>
     </div>
     <div className="space-y-4 border-t border-gray-200 pt-4">
-      <p className="text-sm font-medium text-gray-700">כתובת</p>
+      <p className="text-sm font-medium text-gray-700">{CLIENTS_MESSAGES.createBusinessStep.addressHeading}</p>
       <div className="grid grid-cols-2 gap-4">
         <Input
-          label="רחוב *"
+          label={CLIENTS_MESSAGES.createBusinessStep.streetLabel}
           error={errors.address_street?.message}
           disabled={disabled}
           {...register('address_street')}
         />
         <Input
-          label="מספר בניין *"
+          label={CLIENTS_MESSAGES.createBusinessStep.buildingNumberLabel}
           error={errors.address_building_number?.message}
           disabled={disabled}
           {...register('address_building_number')}
@@ -89,13 +98,13 @@ export const CreateClientBusinessStep: React.FC<Props> = ({
       </div>
       <div className="grid grid-cols-2 gap-4">
         <Input
-          label="דירה"
+          label={CLIENTS_MESSAGES.createBusinessStep.apartmentLabel}
           error={errors.address_apartment?.message}
           disabled={disabled}
           {...register('address_apartment')}
         />
         <Input
-          label="מיקוד"
+          label={CLIENTS_MESSAGES.createBusinessStep.zipCodeLabel}
           placeholder="1234567"
           error={errors.address_zip_code?.message}
           disabled={disabled}
@@ -103,7 +112,12 @@ export const CreateClientBusinessStep: React.FC<Props> = ({
           {...register('address_zip_code')}
         />
       </div>
-      <Input label="עיר *" error={errors.address_city?.message} disabled={disabled} {...register('address_city')} />
+      <Input
+        label={CLIENTS_MESSAGES.createBusinessStep.cityLabel}
+        error={errors.address_city?.message}
+        disabled={disabled}
+        {...register('address_city')}
+      />
     </div>
   </div>
 )

@@ -13,6 +13,7 @@ import {
   useClientsPage,
 } from '@/features/clients'
 import { ImportExportModal } from '@/features/importExport'
+import { CLIENTS_MESSAGES } from '../messages'
 
 export const Clients: React.FC = () => {
   const { status, isEmptyState, headerProps, stats, filters, table, drawers, modals, permissions } = useClientsPage()
@@ -24,7 +25,7 @@ export const Clients: React.FC = () => {
         isEmptyState ? undefined : (
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" onClick={modals.openImportExport}>
-              ייבוא / ייצוא
+              {CLIENTS_MESSAGES.list.importExport}
             </Button>
             {permissions.can.createClients && (
               <Button
@@ -34,7 +35,7 @@ export const Clients: React.FC = () => {
                 iconPosition="end"
                 onClick={modals.openCreate}
               >
-                לקוח חדש
+                {CLIENTS_MESSAGES.list.newClient}
               </Button>
             )}
           </div>
@@ -51,12 +52,16 @@ export const Clients: React.FC = () => {
       loadingMessage={status.loadingMessage}
     >
       {!permissions.can.editClients && (
-        <Alert variant="info" message="צפייה בלבד. יצירה ועריכה של לקוחות זמינה ליועצים בלבד." />
+        <Alert variant="info" message={CLIENTS_MESSAGES.list.viewOnlyNotice} />
       )}
       {!isEmptyState && (
         <>
           <ClientsStatsSection stats={stats.values} />
-          <FilterPanel {...filters} title="סינון לקוחות" subtitle="חיפוש, סטטוס, סוג יישות ורואה חשבון" />
+          <FilterPanel
+            {...filters}
+            title={CLIENTS_MESSAGES.list.filterTitle}
+            subtitle={CLIENTS_MESSAGES.list.filterSubtitle}
+          />
         </>
       )}
       <PaginatedDataTable

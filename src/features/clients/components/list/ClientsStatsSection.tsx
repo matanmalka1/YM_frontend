@@ -1,4 +1,5 @@
 import { StatsCard } from '@/components/ui/layout/StatsCard'
+import { CLIENTS_MESSAGES } from '../../messages'
 
 interface ClientsStatsSectionProps {
   stats: { osek_patur: number; osek_murshe: number; company_ltd: number; employee: number }
@@ -8,30 +9,30 @@ export const ClientsStatsSection = ({ stats }: ClientsStatsSectionProps) => {
   const entityTypeCards = [
     {
       key: 'osek_patur',
-      label: 'עוסק פטור',
+      label: CLIENTS_MESSAGES.stats.osekPaturLabel,
       count: stats.osek_patur,
-      description: 'לקוחות המוגדרים כעוסק פטור',
+      description: CLIENTS_MESSAGES.stats.osekPaturDescription,
       variant: 'green' as const,
     },
     {
       key: 'osek_murshe',
-      label: 'עוסק מורשה',
+      label: CLIENTS_MESSAGES.stats.osekMursheLabel,
       count: stats.osek_murshe,
-      description: 'לקוחות המוגדרים כעוסק מורשה',
+      description: CLIENTS_MESSAGES.stats.osekMursheDescription,
       variant: 'blue' as const,
     },
     {
       key: 'company_ltd',
-      label: 'חברה בע״מ',
+      label: CLIENTS_MESSAGES.stats.companyLtdLabel,
       count: stats.company_ltd,
-      description: 'לקוחות המוגדרים כחברה בע״מ',
+      description: CLIENTS_MESSAGES.stats.companyLtdDescription,
       variant: 'purple' as const,
     },
     {
       key: 'employee',
-      label: 'שכיר',
+      label: CLIENTS_MESSAGES.stats.employeeLabel,
       count: stats.employee,
-      description: 'לקוחות המוגדרים כשכירים',
+      description: CLIENTS_MESSAGES.stats.employeeDescription,
       variant: 'neutral' as const,
     },
   ] as const

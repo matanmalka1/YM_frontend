@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Button } from '../primitives/Button'
 import { useOverlayDismiss } from './useOverlayDismiss'
+import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
 
@@ -22,7 +23,7 @@ interface ModalFormActionsProps {
 
 export const ModalFormActions: React.FC<ModalFormActionsProps> = ({
   cancelDisabled = false,
-  cancelLabel = 'ביטול',
+  cancelLabel = GLOBAL_UI_MESSAGES.actions.cancel,
   cancelVariant = 'outline',
   isLoading = false,
   onCancel,

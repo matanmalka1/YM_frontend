@@ -22,6 +22,7 @@ import {
 import { ClientDetailsTabContent, useClientQuery, useClientMutations } from '@/features/clients'
 import type { ClientRecordResponse } from '../api'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+import { CLIENTS_MESSAGES } from '../messages'
 
 interface ClientDetailsProps {
   initialTab?: ActiveClientDetailsTab
@@ -55,20 +56,20 @@ const buildClientHeader = (client: ClientRecordResponse) => ({
       <span className="flex min-w-0 flex-wrap items-center gap-2">
         <ClientHeaderMetaItem
           icon={<Fingerprint className="h-4 w-4" />}
-          label="ת.ז / ח.פ"
-          value={formatPlainIdentifier(client.id_number, 'לא הוגדר')}
+          label={CLIENTS_MESSAGES.details.metaIdNumber}
+          value={formatPlainIdentifier(client.id_number, CLIENTS_MESSAGES.details.notDefined)}
         />
         {client.id_number_type && (
           <ClientHeaderMetaItem
             icon={<IdCard className="h-4 w-4" />}
-            label="סוג מזהה"
+            label={CLIENTS_MESSAGES.details.metaIdNumberType}
             value={getClientIdNumberTypeLabel(client.id_number_type)}
           />
         )}
         {client.entity_type && (
           <ClientHeaderMetaItem
             icon={<BriefcaseBusiness className="h-4 w-4" />}
-            label="סוג ישות"
+            label={CLIENTS_MESSAGES.details.metaEntityType}
             value={getEntityTypeLabel(client.entity_type)}
           />
         )}
@@ -96,7 +97,7 @@ const ClientHeaderMissingDocuments: FC<{ clientId: number; active: boolean }> = 
   return (
     <div className="flex max-w-full items-center gap-2 rounded-xl border border-warning-200 bg-warning-50 px-3 py-2 text-sm text-warning-950">
       <Badge variant="warning" size="xs" className="shrink-0">
-        חסרים {missingDocuments.length}
+        {CLIENTS_MESSAGES.details.missingCount(missingDocuments.length)}
       </Badge>
 
       <span className="min-w-0 flex-1 truncate text-warning-900">{labels.join(' · ')}</span>
@@ -105,7 +106,7 @@ const ClientHeaderMissingDocuments: FC<{ clientId: number; active: boolean }> = 
         to={`/clients/${clientId}/documents`}
         className="shrink-0 font-semibold text-warning-900 underline-offset-4 hover:underline"
       >
-        מעבר למסמכים
+        {CLIENTS_MESSAGES.details.goToDocuments}
       </Link>
     </div>
   )
@@ -124,15 +125,21 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
   if (!isValidId)
     return (
       <PageContent>
-        <PageHeader title="פרטי לקוח" breadcrumbs={[{ label: 'לקוחות', to: CLIENT_ROUTES.list }]} />
-        <Alert variant="error" message="מזהה לקוח לא תקין" />
+        <PageHeader
+          title={CLIENTS_MESSAGES.details.pageTitle}
+          breadcrumbs={[{ label: CLIENTS_MESSAGES.details.breadcrumbList, to: CLIENT_ROUTES.list }]}
+        />
+        <Alert variant="error" message={CLIENTS_MESSAGES.details.invalidIdError} />
       </PageContent>
     )
 
   const clientHeader = client ? buildClientHeader(client) : null
   const breadcrumbs = [
-    { label: 'לקוחות', to: CLIENT_ROUTES.list },
-    { label: client?.full_name ?? 'פרטי לקוח', to: clientId ? CLIENT_ROUTES.detail(clientId) : CLIENT_ROUTES.list },
+    { label: CLIENTS_MESSAGES.details.breadcrumbList, to: CLIENT_ROUTES.list },
+    {
+      label: client?.full_name ?? CLIENTS_MESSAGES.details.pageTitle,
+      to: clientId ? CLIENT_ROUTES.detail(clientId) : CLIENT_ROUTES.list,
+    },
     ...(initialTab === 'details'
       ? []
       : [
@@ -149,10 +156,10 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
       error={error}
       header={
         <>
-          {!can.editClients && <Alert variant="info" message="צפייה בלבד. עריכת פרטי לקוח זמינה ליועצים בלבד." />}
+          {!can.editClients && <Alert variant="info" message={CLIENTS_MESSAGES.details.viewOnlyNotice} />}
           <PageHeader
             size="md"
-            title={clientHeader?.title ?? client?.full_name ?? 'פרטי לקוח'}
+            title={clientHeader?.title ?? client?.full_name ?? CLIENTS_MESSAGES.details.pageTitle}
             description={
               client && initialTab === 'details' ? (
                 <ClientHeaderMissingDocuments clientId={client.id} active />
@@ -162,7 +169,7 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
               can.editClients && initialTab === 'details' ? (
                 <Button variant="ghost" size="sm" onClick={() => setIsEditingRequested(true)} className="gap-2">
                   <Edit2 className="h-4 w-4" />
-                  ערוך פרטים
+                  {CLIENTS_MESSAGES.details.editDetails}
                 </Button>
               ) : undefined
             }
@@ -170,7 +177,7 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
           />
         </>
       }
-      loadingMessage="טוען פרטי לקוח..."
+      loadingMessage={CLIENTS_MESSAGES.details.loadingMessage}
     >
       {client ? (
         <ClientDetailsTabContent

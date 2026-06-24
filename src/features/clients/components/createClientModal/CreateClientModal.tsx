@@ -13,6 +13,7 @@ import { CreateClientStepIndicator } from './CreateClientStepIndicator'
 import { buildCreateClientPayload } from '../../utils/createClientFormUtils'
 import { CREATE_CLIENT_STEPS } from '../../utils/createClientSteps'
 import { useIdNumberConflict } from '../../hooks/useIdNumberConflict'
+import { CLIENTS_MESSAGES } from '../../messages'
 
 interface Props {
   open: boolean
@@ -127,7 +128,7 @@ export const CreateClientModal: React.FC<Props> = ({
     <Modal
       open={open}
       onClose={handleClose}
-      title="יצירת לקוח חדש"
+      title={CLIENTS_MESSAGES.createModal.title}
       className="max-w-2xl"
       footer={
         <CreateClientModalFooter

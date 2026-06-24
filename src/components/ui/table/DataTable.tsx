@@ -6,6 +6,7 @@ import type { StateCardProps as EmptyStateProps } from '../feedback/StateCard'
 import type { LucideIcon } from 'lucide-react'
 import { Inbox } from 'lucide-react'
 import { TableSkeleton } from './TableSkeleton'
+import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 type ColumnAlign = 'left' | 'center' | 'right'
 
@@ -83,7 +84,7 @@ export const DataTable = <T,>({
   renderFooter,
   onRowClick,
   className,
-  emptyMessage = 'אין נתונים להצגה',
+  emptyMessage = GLOBAL_UI_MESSAGES.common.noData,
   isLoading = false,
   rowClassName,
   stickyHeader = false,

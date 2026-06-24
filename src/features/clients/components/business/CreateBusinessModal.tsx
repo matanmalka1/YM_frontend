@@ -6,6 +6,7 @@ import { Input } from '../../../../components/ui/inputs/Input'
 import { ModalFormActions } from '../../../../components/ui/overlays/ModalFormActions'
 import type { CreateBusinessPayload, ISODateString } from '../../api'
 import { createBusinessSchema, type CreateBusinessFormValues } from '../../schemas'
+import { CLIENTS_MESSAGES } from '../../messages'
 
 interface Props {
   open: boolean
@@ -50,21 +51,26 @@ export const CreateBusinessModal: React.FC<Props> = ({ open, onClose, onSubmit, 
     <Modal
       open={open}
       onClose={handleClose}
-      title="הוספת עסק"
+      title={CLIENTS_MESSAGES.createBusiness.modalTitle}
       footer={
-        <ModalFormActions onCancel={handleClose} onSubmit={onFormSubmit} isLoading={isLoading} submitLabel="הוסף עסק" />
+        <ModalFormActions
+          onCancel={handleClose}
+          onSubmit={onFormSubmit}
+          isLoading={isLoading}
+          submitLabel={CLIENTS_MESSAGES.createBusiness.submitLabel}
+        />
       }
     >
       <form onSubmit={onFormSubmit} className="space-y-4">
         <Input
-          label="שם עסק *"
-          placeholder="לדוגמה: מסעדת ישראל"
+          label={CLIENTS_MESSAGES.createBusiness.nameLabel}
+          placeholder={CLIENTS_MESSAGES.createBusiness.namePlaceholder}
           error={errors.business_name?.message}
           disabled={isLoading}
           {...register('business_name')}
         />
         <DatePicker
-          label="תאריך פתיחת עסק"
+          label={CLIENTS_MESSAGES.createBusiness.openedAtLabel}
           error={errors.opened_at?.message}
           disabled={isLoading}
           value={openedAtField.value ?? ''}
@@ -72,7 +78,7 @@ export const CreateBusinessModal: React.FC<Props> = ({ open, onClose, onSubmit, 
           onBlur={openedAtField.onBlur}
           name={openedAtField.name}
         />
-        <p className="text-xs text-gray-500">* שדות חובה</p>
+        <p className="text-xs text-gray-500">{CLIENTS_MESSAGES.createBusiness.requiredFieldsNote}</p>
       </form>
     </Modal>
   )

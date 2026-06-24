@@ -2,6 +2,7 @@ import { X } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { useEffect, useRef, useState } from 'react'
 import { OverlayPortalProvider } from '../overlays/OverlayPortalContext'
+import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 type OverlayVariant = 'modal' | 'drawer' | 'dialog'
 
@@ -99,7 +100,7 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
                   type="button"
                   onClick={onClose}
                   className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
-                  aria-label="סגירה"
+                  aria-label={GLOBAL_UI_MESSAGES.actions.close}
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -120,7 +121,7 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
     return (
       <dialog
         ref={dialogRef}
-        aria-label={accessibleName ?? 'תיבת דו-שיח'}
+        aria-label={accessibleName ?? GLOBAL_UI_MESSAGES.common.dialog}
         style={style}
         onCancel={handleCancel}
         className="m-auto w-[calc(100%-2rem)] max-w-sm rounded-xl border-none bg-white p-6 shadow-2xl backdrop:bg-black/40"
@@ -152,7 +153,7 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
                   type="button"
                   onClick={onClose}
                   className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
-                  aria-label="סגירה"
+                  aria-label={GLOBAL_UI_MESSAGES.actions.close}
                 >
                   <X className="h-4 w-4" />
                 </button>

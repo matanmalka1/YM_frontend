@@ -6,10 +6,11 @@ import { useClientAuthorityContacts } from '../../hooks/useClientAuthorityContac
 import { useAdvisorOptions } from '@/features/users'
 import { InlineLink } from '@/components/ui/primitives/InlineLink'
 import { DefinitionSectionCard, EMPTY_VALUE } from './ClientInfoSectionParts'
+import { CLIENTS_MESSAGES } from '../../messages'
 
 const TURNOVER_SOURCE_LABELS: Record<string, string> = {
-  reported: 'מחושב מדיווחים',
-  manual: 'הוזן ידנית',
+  reported: CLIENTS_MESSAGES.info.turnoverSourceReported,
+  manual: CLIENTS_MESSAGES.info.turnoverSourceManual,
   none: '',
 }
 
@@ -23,7 +24,7 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client }) => {
 
   const contactItems = [
     {
-      label: 'טלפון',
+      label: CLIENTS_MESSAGES.info.phone,
       value: client.phone ? (
         <InlineLink href={`tel:${client.phone}`}>{formatPhoneNumber(client.phone)}</InlineLink>
       ) : (
@@ -31,49 +32,52 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client }) => {
       ),
     },
     {
-      label: 'אימייל',
+      label: CLIENTS_MESSAGES.info.email,
       value: client.email ? <InlineLink href={`mailto:${client.email}`}>{client.email}</InlineLink> : EMPTY_VALUE,
     },
-    { label: 'רחוב', value: client.address_street || EMPTY_VALUE },
-    { label: 'מספר בניין', value: client.address_building_number || EMPTY_VALUE },
-    { label: 'דירה', value: client.address_apartment || EMPTY_VALUE },
-    { label: 'עיר', value: client.address_city || EMPTY_VALUE },
-    { label: 'מיקוד', value: client.address_zip_code || EMPTY_VALUE },
+    { label: CLIENTS_MESSAGES.info.street, value: client.address_street || EMPTY_VALUE },
+    { label: CLIENTS_MESSAGES.info.buildingNumber, value: client.address_building_number || EMPTY_VALUE },
+    { label: CLIENTS_MESSAGES.info.apartment, value: client.address_apartment || EMPTY_VALUE },
+    { label: CLIENTS_MESSAGES.info.city, value: client.address_city || EMPTY_VALUE },
+    { label: CLIENTS_MESSAGES.info.zipCode, value: client.address_zip_code || EMPTY_VALUE },
   ]
 
   const isOsekPatur = client.entity_type === 'osek_patur'
   const vatReportingLabel = isOsekPatur
-    ? 'פטור - לא רלוונטי לדיווח תקופתי'
+    ? CLIENTS_MESSAGES.info.vatReportingExempt
     : getClientVatReportingLabel(client).replace('—', EMPTY_VALUE)
   const officeClientNumber = formatPlainIdentifier(client.office_client_number, EMPTY_VALUE)
 
   const taxItems = [
     {
-      label: 'תדירות דיווח מע"מ',
+      label: CLIENTS_MESSAGES.info.vatReportingFrequency,
       value: vatReportingLabel,
     },
     ...(isOsekPatur
       ? [
           {
-            label: 'תקרת פטור מע"מ',
+            label: CLIENTS_MESSAGES.info.vatExemptCeiling,
             value: client.vat_exempt_ceiling
-              ? `${formatShekelAmount(client.vat_exempt_ceiling)} (ערך מערכת)`
+              ? CLIENTS_MESSAGES.info.systemValueSuffix(formatShekelAmount(client.vat_exempt_ceiling))
               : EMPTY_VALUE,
           },
         ]
       : []),
     {
-      label: 'אחוז מקדמה',
-      value: client.advance_rate != null ? `${client.advance_rate}%` : 'לא אומת',
+      label: CLIENTS_MESSAGES.info.advanceRate,
+      value:
+        client.advance_rate != null
+          ? CLIENTS_MESSAGES.shared.advanceRatePercent(client.advance_rate)
+          : CLIENTS_MESSAGES.info.advanceRateNotVerified,
     },
     {
-      label: 'תדירות מקדמות מס הכנסה',
+      label: CLIENTS_MESSAGES.info.advancePaymentFrequency,
       value: client.advance_payment_frequency
         ? ADVANCE_PAYMENT_FREQUENCY_LABELS[client.advance_payment_frequency]
         : EMPTY_VALUE,
     },
     {
-      label: 'מחזור שנתי',
+      label: CLIENTS_MESSAGES.info.annualTurnover,
       value:
         !client.annual_turnover || client.annual_turnover.source === 'none' ? (
           EMPTY_VALUE
@@ -85,31 +89,33 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client }) => {
         ),
     },
     {
-      label: 'עדכון מקדמה',
+      label: CLIENTS_MESSAGES.info.advanceUpdate,
       value: client.advance_rate_updated_at ? formatDate(client.advance_rate_updated_at) : EMPTY_VALUE,
     },
   ]
 
   const authorityItems = [
-    { label: 'סניף מע"מ', value: officeByType('vat_branch') ?? EMPTY_VALUE },
-    { label: 'סניף ביטוח לאומי', value: officeByType('national_insurance') ?? EMPTY_VALUE },
-    { label: 'סניף מס הכנסה', value: officeByType('assessing_officer') ?? EMPTY_VALUE },
+    { label: CLIENTS_MESSAGES.info.vatBranch, value: officeByType('vat_branch') ?? EMPTY_VALUE },
+    { label: CLIENTS_MESSAGES.info.nationalInsuranceBranch, value: officeByType('national_insurance') ?? EMPTY_VALUE },
+    { label: CLIENTS_MESSAGES.info.assessingOfficerBranch, value: officeByType('assessing_officer') ?? EMPTY_VALUE },
   ]
 
   const officeItems = [
     {
-      label: 'מספר לקוח במשרד',
+      label: CLIENTS_MESSAGES.info.officeClientNumber,
       value: officeClientNumber,
     },
-    { label: 'מזהה מערכת', value: formatPlainIdentifier(client.id) },
-    { label: 'סטטוס לקוח', value: getClientStatusLabel(client.status) },
+    { label: CLIENTS_MESSAGES.info.systemId, value: formatPlainIdentifier(client.id) },
+    { label: CLIENTS_MESSAGES.info.clientStatus, value: getClientStatusLabel(client.status) },
     {
-      label: 'רואה חשבון מלווה',
-      value: client.accountant_id ? (nameById.get(client.accountant_id) ?? 'לא נמצא שם משתמש') : EMPTY_VALUE,
+      label: CLIENTS_MESSAGES.info.accountant,
+      value: client.accountant_id
+        ? (nameById.get(client.accountant_id) ?? CLIENTS_MESSAGES.info.accountantNameMissing)
+        : EMPTY_VALUE,
     },
-    { label: 'נוצר בתאריך', value: formatDate(client.created_at) },
+    { label: CLIENTS_MESSAGES.info.createdAt, value: formatDate(client.created_at) },
     {
-      label: 'עודכן בתאריך',
+      label: CLIENTS_MESSAGES.info.updatedAt,
       value: client.updated_at ? formatDate(client.updated_at) : EMPTY_VALUE,
     },
   ]
@@ -117,13 +123,13 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client }) => {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-        <DefinitionSectionCard title="פרטי קשר" items={contactItems} columns={2} />
-        <DefinitionSectionCard title="פרופיל מס" items={taxItems} columns={2} />
+        <DefinitionSectionCard title={CLIENTS_MESSAGES.info.sectionContact} items={contactItems} columns={2} />
+        <DefinitionSectionCard title={CLIENTS_MESSAGES.info.sectionTaxProfile} items={taxItems} columns={2} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-        <DefinitionSectionCard title="פרטי משרד" items={officeItems} columns={2} />
-        <DefinitionSectionCard title="רשויות" items={authorityItems} columns={2} />
+        <DefinitionSectionCard title={CLIENTS_MESSAGES.info.sectionOffice} items={officeItems} columns={2} />
+        <DefinitionSectionCard title={CLIENTS_MESSAGES.info.sectionAuthorities} items={authorityItems} columns={2} />
       </div>
     </div>
   )

@@ -9,6 +9,7 @@ import {
   renderStatusBadge,
   type TableCellValue,
 } from './columnRenderers'
+import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 interface ColumnBaseOptions {
   key: string
@@ -127,7 +128,7 @@ export const statusColumn = <T, TStatus extends string>({
 
 export const actionsColumn = <T,>({
   key = 'actions',
-  header = 'פעולות',
+  header = GLOBAL_UI_MESSAGES.common.actions,
   className = 'w-10',
   headerClassName = 'w-10',
   render,

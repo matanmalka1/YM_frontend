@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Card } from '../primitives/Card'
 import { cn, formatCount } from '../../../utils/utils'
+import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 interface PaginationCardProps {
   page: number
@@ -34,7 +35,7 @@ export const PaginationCard: React.FC<PaginationCardProps> = ({
   page,
   totalPages,
   total,
-  label = 'תוצאות',
+  label = GLOBAL_UI_MESSAGES.common.results,
   onPageChange,
 }) => {
   const visiblePages = getVisiblePages(page, totalPages)
@@ -47,14 +48,14 @@ export const PaginationCard: React.FC<PaginationCardProps> = ({
           <span className="mx-2 text-gray-300">|</span>
           עמוד {page} מתוך {totalPages}
         </p>
-        <nav className="flex items-center gap-1" aria-label="פגינציה">
+        <nav className="flex items-center gap-1" aria-label={GLOBAL_UI_MESSAGES.pagination.nav}>
           <button
             type="button"
             className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition-colors hover:border-primary-200 hover:bg-primary-50 hover:text-primary-700 disabled:cursor-not-allowed disabled:opacity-40"
             onClick={() => onPageChange(page - 1)}
             disabled={page <= 1}
             aria-disabled={page <= 1}
-            aria-label="עמוד קודם"
+            aria-label={GLOBAL_UI_MESSAGES.pagination.previousPage}
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -94,7 +95,7 @@ export const PaginationCard: React.FC<PaginationCardProps> = ({
             onClick={() => onPageChange(page + 1)}
             disabled={page >= totalPages}
             aria-disabled={page >= totalPages}
-            aria-label="עמוד הבא"
+            aria-label={GLOBAL_UI_MESSAGES.pagination.nextPage}
           >
             <ChevronLeft className="h-4 w-4" />
           </button>

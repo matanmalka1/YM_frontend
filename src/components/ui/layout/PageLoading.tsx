@@ -1,5 +1,6 @@
 import { cn } from '../../../utils/utils'
 import { TableSkeleton } from '../table/TableSkeleton'
+import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 interface PageLoadingProps {
   message?: string
@@ -9,7 +10,7 @@ interface PageLoadingProps {
 }
 
 export const PageLoading: React.FC<PageLoadingProps> = ({
-  message = 'טוען נתונים...',
+  message = GLOBAL_UI_MESSAGES.common.loadingData,
   rows = 3,
   columns = 4,
   className,

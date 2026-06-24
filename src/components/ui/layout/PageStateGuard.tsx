@@ -1,6 +1,7 @@
 import type { ReactNode, FC } from 'react'
 import { PageLoading } from './PageLoading'
 import { Alert } from '../overlays/Alert'
+import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 interface PageStateGuardProps {
   isLoading: boolean
@@ -14,7 +15,7 @@ export const PageStateGuard: FC<PageStateGuardProps> = ({
   isLoading,
   error,
   header,
-  loadingMessage = 'טוען...',
+  loadingMessage = GLOBAL_UI_MESSAGES.common.loading,
   children,
 }) => {
   return (
