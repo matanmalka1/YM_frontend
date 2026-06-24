@@ -10,6 +10,7 @@ import { useSearchDebounce } from '../../../hooks/useSearchDebounce'
 import type { EventTypeStat } from '../lib/timelineStats'
 import type { TimelineFilterKey } from '../normalize'
 import { TIMELINE_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
+import { TIMELINE_MESSAGES } from '../messages'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -32,13 +33,13 @@ export interface TimelineCommandBarProps {
 }
 
 const FILTER_LABELS: Record<TimelineFilterKey, string> = {
-  all: 'הכל',
-  past: 'עבר',
-  future: 'עתידי',
-  finance: 'כספים',
-  binders: 'קלסרים',
-  documents: 'מסמכים',
-  tax: 'מיסים',
+  all: TIMELINE_MESSAGES.commandBar.filterAll,
+  past: TIMELINE_MESSAGES.commandBar.filterPast,
+  future: TIMELINE_MESSAGES.commandBar.filterFuture,
+  finance: TIMELINE_MESSAGES.commandBar.filterFinance,
+  binders: TIMELINE_MESSAGES.commandBar.filterBinders,
+  documents: TIMELINE_MESSAGES.commandBar.filterDocuments,
+  tax: TIMELINE_MESSAGES.commandBar.filterTax,
 }
 
 const FILTER_ORDER: TimelineFilterKey[] = ['all', 'future', 'finance', 'binders', 'documents', 'tax']
@@ -98,11 +99,13 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
 
         {/* Right controls */}
         <div className="flex items-center gap-3 shrink-0">
-          <span className="hidden sm:block text-xs text-gray-400 whitespace-nowrap">{formatCount(total)} אירועים</span>
+          <span className="hidden sm:block text-xs text-gray-400 whitespace-nowrap">
+            {TIMELINE_MESSAGES.commandBar.eventsCount(formatCount(total))}
+          </span>
 
           {lastUpdated && (
             <span className="hidden md:block text-xs text-gray-400 whitespace-nowrap">
-              עודכן לאחרונה: {lastUpdated}
+              {TIMELINE_MESSAGES.commandBar.lastUpdated(lastUpdated)}
             </span>
           )}
 
@@ -115,7 +118,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
             isLoading={refreshing}
             className="text-gray-600 hover:text-gray-900"
           >
-            <span className="hidden sm:inline">ריענון</span>
+            <span className="hidden sm:inline">{TIMELINE_MESSAGES.commandBar.refresh}</span>
           </Button>
         </div>
       </div>
@@ -124,7 +127,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
       <div className="flex flex-wrap items-center gap-2 px-4 py-2.5">
         <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-500 ml-1">
           <Filter className="h-3 w-3" />
-          סנן:
+          {TIMELINE_MESSAGES.commandBar.filterPrefix}
         </span>
 
         {FILTER_ORDER.map((type) => {
@@ -144,7 +147,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
           onClick={() => onImportantOnlyChange(!importantOnly)}
           icon={<Star className="h-3 w-3" />}
         >
-          חשובים בלבד
+          {TIMELINE_MESSAGES.commandBar.importantOnly}
         </Chip>
 
         {hasActiveFilters && (
@@ -156,7 +159,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
             onClick={onClearFilters}
             className="border border-transparent px-2.5 py-1 text-xs text-negative-600 hover:border-negative-200 hover:bg-negative-50 hover:text-negative-600"
           >
-            נקה
+            {TIMELINE_MESSAGES.commandBar.clearFilters}
           </Button>
         )}
 
@@ -168,7 +171,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
             onClick={onExpandAll}
             className="px-2.5 py-1 text-xs text-gray-600 hover:bg-gray-100"
           >
-            פתח הכל
+            {TIMELINE_MESSAGES.commandBar.expandAll}
           </Button>
           <Button
             type="button"
@@ -177,7 +180,7 @@ export const TimelineCommandBar: React.FC<TimelineCommandBarProps> = ({
             onClick={onCollapseAll}
             className="px-2.5 py-1 text-xs text-gray-600 hover:bg-gray-100"
           >
-            כווץ הכל
+            {TIMELINE_MESSAGES.commandBar.collapseAll}
           </Button>
         </div>
       </div>

@@ -5,6 +5,7 @@ import { cn, formatCurrencyILS } from '@/utils/utils'
 import { getEventColor } from '../constants'
 import { getAnnualReportStatusLabel, getTimelineStatusLabel } from '../labels'
 import { formatTimelineDate, formatTimestamp, getEventIcon } from '../utils'
+import { TIMELINE_MESSAGES } from '../messages'
 
 // ── Metadata sub-components ───────────────────────────────────────────────────
 
@@ -82,36 +83,42 @@ const EventMetadata: React.FC<{ metadata: TimelineEventMetadata; eventType: stri
 
       {amount != null && (
         <MetaRow className="bg-positive-50 border-positive-100">
-          <MetaField label="סכום" value={formatCurrencyILS(Number(amount), { fractionDigits: 2 })} />
+          <MetaField
+            label={TIMELINE_MESSAGES.eventItem.amountLabel}
+            value={formatCurrencyILS(Number(amount), { fractionDigits: 2 })}
+          />
         </MetaRow>
       )}
 
       {external_invoice_id != null && (
         <MetaRow className="bg-warning-50 border-warning-100">
-          <MetaField label="ספק" value={String(provider ?? 'לא ידוע')} />
-          <MetaField label="ID חשבונית" value={String(external_invoice_id)} />
+          <MetaField
+            label={TIMELINE_MESSAGES.eventItem.providerLabel}
+            value={String(provider ?? TIMELINE_MESSAGES.eventItem.unknownProvider)}
+          />
+          <MetaField label={TIMELINE_MESSAGES.eventItem.invoiceIdLabel} value={String(external_invoice_id)} />
         </MetaRow>
       )}
 
       {eventType === 'annual_report_status_changed' && (from_status || to_status || tax_year || form_type || note) && (
         <MetaRow className="bg-primary-50 border-primary-100">
-          {tax_year != null && <MetaField label="שנת מס" value={String(tax_year)} />}
-          {form_type && <MetaField label="טופס" value={form_type} />}
+          {tax_year != null && <MetaField label={TIMELINE_MESSAGES.eventItem.taxYearLabel} value={String(tax_year)} />}
+          {form_type && <MetaField label={TIMELINE_MESSAGES.eventItem.formLabel} value={form_type} />}
           {from_status && to_status && (
             <MetaField
-              label="מעבר סטטוס"
+              label={TIMELINE_MESSAGES.eventItem.statusTransitionLabel}
               value={`${getAnnualReportStatusLabel(from_status)} ← ${getAnnualReportStatusLabel(to_status)}`}
             />
           )}
-          {note && <MetaField label="הערה" value={note} />}
+          {note && <MetaField label={TIMELINE_MESSAGES.eventItem.noteLabel} value={note} />}
         </MetaRow>
       )}
 
       {SIGNATURE_EVENT_TYPES.has(eventType) && (signer_name || reason || notes) && (
         <MetaRow className="bg-info-50 border-info-100">
-          {signer_name && <MetaField label="חותם" value={signer_name} />}
-          {reason && <MetaField label="סיבת דחייה" value={reason} />}
-          {notes && <MetaField label="הערות" value={notes} />}
+          {signer_name && <MetaField label={TIMELINE_MESSAGES.eventItem.signerLabel} value={signer_name} />}
+          {reason && <MetaField label={TIMELINE_MESSAGES.eventItem.rejectionReasonLabel} value={reason} />}
+          {notes && <MetaField label={TIMELINE_MESSAGES.eventItem.notesLabel} value={notes} />}
         </MetaRow>
       )}
     </>
@@ -131,14 +138,14 @@ const RelatedIds: React.FC<{
       {binderId != null && (
         <IconLabel
           icon={<FileText className="h-3 w-3" />}
-          label={`קלסר #${binderId}`}
+          label={TIMELINE_MESSAGES.eventItem.binderLabel(binderId)}
           className="bg-slate-50 text-slate-600 border-slate-200"
         />
       )}
       {chargeId != null && (
         <IconLabel
           icon={<CreditCard className="h-3 w-3" />}
-          label={`חיוב #${chargeId}`}
+          label={TIMELINE_MESSAGES.eventItem.chargeLabel(chargeId)}
           className="bg-warning-50 text-warning-700 border-warning-200"
         />
       )}

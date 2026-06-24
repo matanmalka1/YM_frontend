@@ -7,6 +7,7 @@ import { PaginationCard } from '../../../components/ui/table/PaginationCard'
 import { getTotalPages } from '../../../utils/paginationUtils'
 import { PageLoading } from '../../../components/ui/layout/PageLoading'
 import { Alert } from '../../../components/ui/overlays/Alert'
+import { TIMELINE_MESSAGES } from '../messages'
 
 interface ClientTimelineTabProps {
   clientId: string | undefined
@@ -50,7 +51,7 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
   }
   const expandedDateKeys = overrideKeys ?? defaultExpandedKeys
 
-  if (loading) return <PageLoading message="טוען ציר זמן..." />
+  if (loading) return <PageLoading message={TIMELINE_MESSAGES.tab.loadingMessage} />
   if (error) return <Alert variant="error" message={error} />
 
   const totalPages = getTotalPages(total, pageSize)
@@ -95,7 +96,13 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
       />
 
       {totalPages > 1 && (
-        <PaginationCard page={page} totalPages={totalPages} total={total} label="אירועים" onPageChange={setPage} />
+        <PaginationCard
+          page={page}
+          totalPages={totalPages}
+          total={total}
+          label={TIMELINE_MESSAGES.tab.paginationLabel}
+          onPageChange={setPage}
+        />
       )}
     </div>
   )

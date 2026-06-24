@@ -6,6 +6,7 @@ import { ActionSurfaceButton } from '../../../components/ui/primitives/ActionSur
 import { StateCard } from '../../../components/ui/feedback'
 import { cn } from '../../../utils/utils'
 import { groupTimelineEventsByDate } from '../lib/timelineGroups'
+import { TIMELINE_MESSAGES } from '../messages'
 
 // ── Empty state ───────────────────────────────────────────────────────────────
 
@@ -18,11 +19,11 @@ const EmptyTimeline: React.FC<EmptyTimelineProps> = ({ hasActiveFilters, onClear
   hasActiveFilters ? (
     <StateCard
       icon={Inbox}
-      message="אין אירועים התואמים לסינון"
-      action={onClearFilters ? { label: 'נקה סינון', onClick: onClearFilters } : undefined}
+      message={TIMELINE_MESSAGES.card.emptyFiltered}
+      action={onClearFilters ? { label: TIMELINE_MESSAGES.card.clearFilterAction, onClick: onClearFilters } : undefined}
     />
   ) : (
-    <StateCard icon={Inbox} title="אין אירועים בציר הזמן" message="אירועים חדשים יופיעו כאן לאחר פעילות לקוח" />
+    <StateCard icon={Inbox} title={TIMELINE_MESSAGES.card.emptyTitle} message={TIMELINE_MESSAGES.card.emptyMessage} />
   )
 
 // ── Date group header ─────────────────────────────────────────────────────────
