@@ -11,9 +11,15 @@ import { useState } from 'react'
 import { ANNUAL_REPORTS_TAX_YEAR_DESC_PARAMS } from '../constants/reportConstants'
 import { STATUS_LABELS } from '../api/utils'
 import type { AnnualReportStatus } from '../api/contracts'
-import { ALL_STATUSES_OPTION, ALL_YEARS_OPTION } from '@/constants/filterOptions.constants'
+import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
+
+// All-years uses an explicit sentinel (not '') so an empty `year` param unambiguously means
+// "uninitialized" → apply the default tax year. This keeps re-navigating to /tax/reports (which
+// drops the query string) from silently falling into all-years mode instead of the default view.
+const ALL_YEARS_VALUE = 'all'
+const ALL_YEARS_OPTION = { value: ALL_YEARS_VALUE, label: 'כל השנים' } as const
 
 const STATUS_OPTIONS = [
   ALL_STATUSES_OPTION,
@@ -62,20 +68,25 @@ export const useAnnualReportsPage = () => {
   })
   const defaultTaxYear = defaultTaxYearData?.tax_year
 
+  // Re-apply the default tax year whenever `year` is empty — including when navigating to
+  // /tax/reports again drops the query string. `year` is in the deps (not just defaultTaxYear,
+  // which is cached and never changes) so this fires on every reset; the ALL_YEARS_VALUE sentinel
+  // means an explicit all-years selection is not empty and is left untouched.
   useEffect(() => {
     if (defaultTaxYear == null) return
     if (!year) setFilter('year', String(defaultTaxYear), false)
-  }, [defaultTaxYear]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [defaultTaxYear, year]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const selectedTaxYear = year ? Number(year) : undefined
-  const allYearsMode = !year
+  const allYearsMode = year === ALL_YEARS_VALUE
+  const isInitializing = !year
+  const selectedTaxYear = allYearsMode || isInitializing ? undefined : Number(year)
 
   const apiFilters = {
     client_record_id: clientRecordId ? Number(clientRecordId) : undefined,
     status: status || undefined,
   }
 
-  const season = useSeasonDashboard(selectedTaxYear, !allYearsMode && !defaultTaxYearPending, apiFilters)
+  const season = useSeasonDashboard(selectedTaxYear, selectedTaxYear != null && !defaultTaxYearPending, apiFilters)
 
   const {
     data: allReportsData,
@@ -109,7 +120,8 @@ export const useAnnualReportsPage = () => {
     [allYearsMode, allReportsData?.items, season.reports],
   )
 
-  const isLoading = defaultTaxYearPending || (allYearsMode ? allReportsPending : season.isLoading)
+  const isLoading =
+    defaultTaxYearPending || isInitializing || (allYearsMode ? allReportsPending : season.isLoading)
   const error = defaultTaxYearError
     ? ANNUAL_REPORTS_ERROR_MESSAGES.reports.taxYearLoad
     : allYearsMode
@@ -126,7 +138,7 @@ export const useAnnualReportsPage = () => {
   return {
     status: { isLoading, error },
     headerProps: {
-      title: `דוחות שנתיים לשנת המס ${taxYearLabel}`,
+      title: allYearsMode ? 'דוחות שנתיים — כל השנים' : `דוחות שנתיים לשנת המס ${taxYearLabel}`,
       description: filingSeasonYear ? `עונת הגשה ${filingSeasonYear}` : 'ניהול ומעקב אחר דוחות שנתיים',
       taxYear,
     },
@@ -145,9 +157,13 @@ export const useAnnualReportsPage = () => {
       emptyState: {
         icon: FileText,
         variant: 'illustration' as const,
-        title: `עדיין אין דוחות שנתיים לשנת המס ${taxYearLabel}`,
-        message: taxYear ? `לחץ על "דוח שנתי ${taxYear}" כדי להתחיל` : 'בחר שנת מס כדי להתחיל',
-        action: taxYear ? { label: `דוח שנתי ${taxYear}`, onClick: openCreate } : undefined,
+        title: allYearsMode ? 'לא נמצאו דוחות שנתיים' : `עדיין אין דוחות שנתיים לשנת המס ${taxYearLabel}`,
+        message: allYearsMode
+          ? 'לא נוצרו עדיין דוחות שנתיים עבור אף שנת מס'
+          : taxYear
+            ? `לחץ על "דוח שנתי ${taxYear}" כדי להתחיל`
+            : 'בחר שנת מס כדי להתחיל',
+        action: !allYearsMode && taxYear ? { label: `דוח שנתי ${taxYear}`, onClick: openCreate } : undefined,
       },
     },
     banner: { overdue: season.overdue, onSelect: openReport },
