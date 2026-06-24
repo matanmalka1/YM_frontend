@@ -251,7 +251,10 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
           const existing = await vatReportsApi.lookup(values.client_record_id, period)
           if (existing) {
             toast.info(BINDERS_MESSAGES.receive.existingVatReport, {
-              action: { label: BINDERS_MESSAGES.receive.openVatReport, onClick: () => navigate(`/tax/vat/${existing.id}`) },
+              action: {
+                label: BINDERS_MESSAGES.receive.openVatReport,
+                onClick: () => navigate(`/tax/vat/${existing.id}`),
+              },
             })
           } else {
             toast.info(BINDERS_MESSAGES.receive.missingVatReport, {

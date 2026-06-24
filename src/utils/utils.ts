@@ -133,7 +133,6 @@ export const formatPercent = (
 
 export const formatAdvanceRatePercent = (rate: number | string): string => `${rate}%`
 
-
 export const formatBinderNumber = (binderNumber: string | null | undefined): string => {
   if (!binderNumber) return EMPTY_VALUE
   return binderNumber

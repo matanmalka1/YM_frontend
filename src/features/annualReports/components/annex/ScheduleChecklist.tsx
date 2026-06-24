@@ -52,7 +52,11 @@ export const ScheduleChecklist: React.FC<ScheduleChecklistProps> = ({
   return (
     <Card
       title={ANNEX_TEXT.requiredSchedules}
-      subtitle={allDone ? ANNEX_TEXT.allSchedulesComplete : ANNUAL_REPORTS_MESSAGES.scheduleChecklist.completionSummary(completed, schedules.length)}
+      subtitle={
+        allDone
+          ? ANNEX_TEXT.allSchedulesComplete
+          : ANNUAL_REPORTS_MESSAGES.scheduleChecklist.completionSummary(completed, schedules.length)
+      }
     >
       <ul className="space-y-2">
         {schedules.map((entry) => {

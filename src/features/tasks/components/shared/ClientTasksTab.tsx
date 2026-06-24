@@ -101,7 +101,10 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
         hasFailures: result.failed.length > 0,
       })
     } catch (error) {
-      setFeedback({ message: getErrorMessage(error, TASKS_ERROR_MESSAGES.clientTab.bulkCompleteFailed), hasFailures: true })
+      setFeedback({
+        message: getErrorMessage(error, TASKS_ERROR_MESSAGES.clientTab.bulkCompleteFailed),
+        hasFailures: true,
+      })
     }
   }
   const handleBulkAssign = async (targetAssigneeId: number | null) => {
@@ -121,7 +124,10 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
         hasFailures: result.failed.length > 0,
       })
     } catch (error) {
-      setFeedback({ message: getErrorMessage(error, TASKS_ERROR_MESSAGES.clientTab.bulkAssignFailed), hasFailures: true })
+      setFeedback({
+        message: getErrorMessage(error, TASKS_ERROR_MESSAGES.clientTab.bulkAssignFailed),
+        hasFailures: true,
+      })
     }
   }
 

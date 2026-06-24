@@ -43,7 +43,11 @@ export const AmendReportModal = ({
         onChange={(e) => onReasonChange(e.target.value)}
         placeholder={ANNUAL_REPORTS_MESSAGES.amendModal.reasonPlaceholder(AMEND_REASON_MIN_LENGTH)}
       />
-      {showValidation && <p className="mt-1 text-xs text-negative-500">{ANNUAL_REPORTS_ERROR_MESSAGES.amend.minLength(AMEND_REASON_MIN_LENGTH)}</p>}
+      {showValidation && (
+        <p className="mt-1 text-xs text-negative-500">
+          {ANNUAL_REPORTS_ERROR_MESSAGES.amend.minLength(AMEND_REASON_MIN_LENGTH)}
+        </p>
+      )}
     </Modal>
   )
 }

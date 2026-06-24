@@ -36,16 +36,29 @@ export const AnnualReportStatsSection: React.FC<Props> = ({ report }) => {
       key: 'final-balance',
       title: SUMMARY_CARD_META.finalBalance.title,
       value: fmt(finalBalance),
-      description: finalBalance > 0 ? ANNUAL_REPORTS_MESSAGES.statsSection.balanceDuePayment : finalBalance < 0 ? ANNUAL_REPORTS_MESSAGES.statsSection.balanceDueRefund : ANNUAL_REPORTS_MESSAGES.statsSection.balanced,
+      description:
+        finalBalance > 0
+          ? ANNUAL_REPORTS_MESSAGES.statsSection.balanceDuePayment
+          : finalBalance < 0
+            ? ANNUAL_REPORTS_MESSAGES.statsSection.balanceDueRefund
+            : ANNUAL_REPORTS_MESSAGES.statsSection.balanced,
       icon: SUMMARY_CARD_META.finalBalance.icon,
       variant: finalBalance < 0 ? 'green' : finalBalance > 0 ? 'red' : 'neutral',
       trend: undefined,
     },
     {
       key: 'annual-tax',
-      title: taxAfterCredits > 0 ? ANNUAL_REPORTS_MESSAGES.statsSection.calculatedTax : taxAfterCredits < 0 ? ANNUAL_REPORTS_MESSAGES.statsSection.calculatedRefund : ANNUAL_REPORTS_MESSAGES.statsSection.annualTax,
+      title:
+        taxAfterCredits > 0
+          ? ANNUAL_REPORTS_MESSAGES.statsSection.calculatedTax
+          : taxAfterCredits < 0
+            ? ANNUAL_REPORTS_MESSAGES.statsSection.calculatedRefund
+            : ANNUAL_REPORTS_MESSAGES.statsSection.annualTax,
       value: fmt(Math.abs(taxAfterCredits)),
-      description: taxAfterCredits !== 0 ? ANNUAL_REPORTS_MESSAGES.statsSection.beforeAdvancesOffset : ANNUAL_REPORTS_MESSAGES.statsSection.notCalculated,
+      description:
+        taxAfterCredits !== 0
+          ? ANNUAL_REPORTS_MESSAGES.statsSection.beforeAdvancesOffset
+          : ANNUAL_REPORTS_MESSAGES.statsSection.notCalculated,
       icon: SUMMARY_CARD_META.annualTax.icon,
       variant: taxAfterCredits > 0 ? 'red' : taxAfterCredits < 0 ? 'green' : 'neutral',
       trend: {
@@ -60,7 +73,10 @@ export const AnnualReportStatsSection: React.FC<Props> = ({ report }) => {
       description: undefined,
       icon: SUMMARY_CARD_META.netProfit.icon,
       variant: SUMMARY_CARD_META.netProfit.variant,
-      trend: { value: profitMargin, label: ANNUAL_REPORTS_MESSAGES.statsSection.profitMarginTrend(formatPercent(profitMargin)) },
+      trend: {
+        value: profitMargin,
+        label: ANNUAL_REPORTS_MESSAGES.statsSection.profitMarginTrend(formatPercent(profitMargin)),
+      },
     },
     {
       key: 'gross-income',

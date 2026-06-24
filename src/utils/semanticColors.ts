@@ -9,7 +9,7 @@ type StatToneClasses = {
   strip: string
 }
 
-export const semanticBadgeClasses: Record<SemanticTone, string> = {
+const semanticBadgeClasses: Record<SemanticTone, string> = {
   neutral: 'bg-gray-100 text-gray-800',
   info: 'bg-info-100 text-info-800',
   positive: 'bg-positive-100 text-positive-800',
@@ -17,7 +17,7 @@ export const semanticBadgeClasses: Record<SemanticTone, string> = {
   negative: 'bg-negative-100 text-negative-800',
 }
 
-export const semanticSignalBadgeClasses: Record<SemanticTone, string> = {
+const semanticSignalBadgeClasses: Record<SemanticTone, string> = {
   neutral: 'bg-gray-50 text-gray-600 ring-1 ring-gray-200',
   info: 'bg-info-50 text-info-700 ring-1 ring-info-200',
   positive: 'bg-positive-50 text-positive-700 ring-1 ring-positive-200',
@@ -41,7 +41,7 @@ export const semanticDotClasses: Record<SemanticTone, string> = {
   negative: 'bg-negative-500',
 }
 
-export const semanticSoftSignalBadgeClasses: Record<SemanticTone, string> = {
+const semanticSoftSignalBadgeClasses: Record<SemanticTone, string> = {
   neutral: 'bg-gray-50 text-gray-600',
   info: 'bg-info-50 text-info-700',
   positive: 'bg-positive-50 text-positive-700',

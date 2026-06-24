@@ -50,7 +50,9 @@ export const BinderDocumentsSection: React.FC<BinderDocumentsSectionProps> = ({ 
       {isLoading ? (
         <p className="text-sm text-gray-400">{BINDERS_MESSAGES.documents.loading}</p>
       ) : error ? (
-        <p className="text-sm text-negative-600">{getErrorMessage(error, BINDERS_ERROR_MESSAGES.documents.loadError)}</p>
+        <p className="text-sm text-negative-600">
+          {getErrorMessage(error, BINDERS_ERROR_MESSAGES.documents.loadError)}
+        </p>
       ) : documents.length === 0 ? (
         <p className="text-sm text-gray-500">{BINDERS_MESSAGES.documents.empty}</p>
       ) : (

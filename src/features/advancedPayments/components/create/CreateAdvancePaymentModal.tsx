@@ -156,7 +156,9 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
         ))}
         {liveCalculated != null && (
           <div>
-            <div className="text-xs text-gray-500 mb-1">{ADVANCED_PAYMENTS_MESSAGES.createModal.calculatedAmountLabel}</div>
+            <div className="text-xs text-gray-500 mb-1">
+              {ADVANCED_PAYMENTS_MESSAGES.createModal.calculatedAmountLabel}
+            </div>
             <div className="text-sm font-medium text-gray-800">{formatShekelAmount(liveCalculated)}</div>
           </div>
         )}

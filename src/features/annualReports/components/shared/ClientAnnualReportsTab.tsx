@@ -42,14 +42,18 @@ const AnnualReportStatusBanner: React.FC<{
         </div>
         <div className="min-w-0 flex-1 text-right">
           <p className={cn('text-base font-bold', submitted ? 'text-positive-700' : 'text-warning-700')}>
-            {submitted ? ANNUAL_REPORTS_MESSAGES.clientTab.submittedTitle(selectedYear) : ANNUAL_REPORTS_MESSAGES.clientTab.notSubmittedTitle(selectedYear)}
+            {submitted
+              ? ANNUAL_REPORTS_MESSAGES.clientTab.submittedTitle(selectedYear)
+              : ANNUAL_REPORTS_MESSAGES.clientTab.notSubmittedTitle(selectedYear)}
           </p>
           <p className="mt-1 text-sm font-medium text-gray-500">
             {submitted
               ? ANNUAL_REPORTS_MESSAGES.clientTab.submittedAtNote(formatDate(report?.submitted_at ?? null))
               : ANNUAL_REPORTS_MESSAGES.clientTab.filingDeadlineNote(formatDate(report?.filing_deadline ?? null))}
           </p>
-          <p className="mt-1 text-xs font-semibold text-gray-500">{ANNUAL_REPORTS_MESSAGES.clientTab.statusPrefix(statusLabel)}</p>
+          <p className="mt-1 text-xs font-semibold text-gray-500">
+            {ANNUAL_REPORTS_MESSAGES.clientTab.statusPrefix(statusLabel)}
+          </p>
         </div>
       </div>
     </div>

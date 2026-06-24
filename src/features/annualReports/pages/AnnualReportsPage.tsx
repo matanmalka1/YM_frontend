@@ -33,14 +33,20 @@ export const AnnualReportsPage: React.FC = () => {
             onClick={modals.openCreate}
             disabled={!headerProps.taxYear}
           >
-            {headerProps.taxYear ? ANNUAL_REPORTS_MESSAGES.page.newReportButton(headerProps.taxYear) : ANNUAL_REPORTS_MESSAGES.page.newReportButtonFallback}
+            {headerProps.taxYear
+              ? ANNUAL_REPORTS_MESSAGES.page.newReportButton(headerProps.taxYear)
+              : ANNUAL_REPORTS_MESSAGES.page.newReportButtonFallback}
           </Button>
         }
       />
 
       {banner.overdue.length > 0 && <OverdueBanner overdue={banner.overdue} onSelect={banner.onSelect} />}
 
-      <FilterPanel {...filters} title={ANNUAL_REPORTS_MESSAGES.page.filterTitle} subtitle={ANNUAL_REPORTS_MESSAGES.page.filterSubtitle} />
+      <FilterPanel
+        {...filters}
+        title={ANNUAL_REPORTS_MESSAGES.page.filterTitle}
+        subtitle={ANNUAL_REPORTS_MESSAGES.page.filterSubtitle}
+      />
 
       {status.isLoading && <PageLoading message={ANNUAL_REPORTS_MESSAGES.page.loadingSeason} />}
       {status.error && <Alert variant="error" message={status.error} />}
@@ -50,7 +56,9 @@ export const AnnualReportsPage: React.FC = () => {
           <SeasonSummaryCards summary={stats.summary} />
           <SeasonProgressBar summary={stats.summary} />
           <div>
-            <h2 className="mb-3 text-lg font-semibold text-gray-900">{ANNUAL_REPORTS_MESSAGES.page.allReportsTitle(table.taxYear)}</h2>
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">
+              {ANNUAL_REPORTS_MESSAGES.page.allReportsTitle(table.taxYear)}
+            </h2>
             <SeasonReportsTable
               reports={table.reports}
               isLoading={table.isLoading}

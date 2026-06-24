@@ -42,9 +42,13 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
         {form.prefillSource === 'vat_pending' && (
           <Alert variant="warning" size="sm" message={ADVANCED_PAYMENTS_MESSAGES.editableSections.vatPendingAlert} />
         )}
-        {form.prefillSource === 'none' && <p className="text-xs text-gray-400">{ADVANCED_PAYMENTS_MESSAGES.editableSections.noVatReportNote}</p>}
+        {form.prefillSource === 'none' && (
+          <p className="text-xs text-gray-400">{ADVANCED_PAYMENTS_MESSAGES.editableSections.noVatReportNote}</p>
+        )}
         <div>
-          <div className="text-xs text-gray-500 mb-1">{ADVANCED_PAYMENTS_MESSAGES.editableSections.calculatedAmountLabel}</div>
+          <div className="text-xs text-gray-500 mb-1">
+            {ADVANCED_PAYMENTS_MESSAGES.editableSections.calculatedAmountLabel}
+          </div>
           <div className="text-sm font-medium text-gray-800">
             {form.liveCalculated != null ? formatShekelAmount(form.liveCalculated) : '—'}
           </div>
@@ -57,7 +61,9 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
           onChange={(e) => form.setOverrideAmount(e.target.value)}
         />
         <div>
-          <div className="text-xs text-gray-500 mb-1">{ADVANCED_PAYMENTS_MESSAGES.editableSections.finalAmountLabel}</div>
+          <div className="text-xs text-gray-500 mb-1">
+            {ADVANCED_PAYMENTS_MESSAGES.editableSections.finalAmountLabel}
+          </div>
           <div className="text-sm font-semibold text-gray-900">
             {form.liveExpected != null ? formatShekelAmount(form.liveExpected) : '—'}
           </div>
@@ -87,9 +93,16 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
             label={ADVANCED_PAYMENTS_MESSAGES.editableSections.paymentMethodLabel}
             value={form.paymentMethod}
             onChange={(e) => form.setPaymentMethod(e.target.value)}
-            options={[{ value: '', label: ADVANCED_PAYMENTS_MESSAGES.editableSections.noMethodOption }, ...ADVANCE_PAYMENT_METHOD_OPTIONS]}
+            options={[
+              { value: '', label: ADVANCED_PAYMENTS_MESSAGES.editableSections.noMethodOption },
+              ...ADVANCE_PAYMENT_METHOD_OPTIONS,
+            ]}
           />
-          <DatePicker label={ADVANCED_PAYMENTS_MESSAGES.editableSections.paidAtLabel} value={form.paidAt} onChange={form.setPaidAt} />
+          <DatePicker
+            label={ADVANCED_PAYMENTS_MESSAGES.editableSections.paidAtLabel}
+            value={form.paidAt}
+            onChange={form.setPaidAt}
+          />
         </div>
         <Textarea
           label={ADVANCED_PAYMENTS_MESSAGES.editableSections.notesLabel}

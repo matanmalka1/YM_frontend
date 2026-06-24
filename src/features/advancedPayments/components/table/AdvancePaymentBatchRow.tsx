@@ -19,13 +19,33 @@ interface AdvancePaymentBatchRowProps {
 const getBatchSummary = (batch: AdvancePaymentDueDateGroup): PeriodSummaryMetric[] => {
   const summary: PeriodSummaryMetric[] = [
     { label: ADVANCED_PAYMENTS_MESSAGES.batchRow.clientsLabel, value: batch.client_count },
-    { label: ADVANCED_PAYMENTS_MESSAGES.batchRow.pendingLabel, value: batch.pending_count, tone: batch.pending_count > 0 ? 'warning' : 'muted' },
-    { label: ADVANCED_PAYMENTS_MESSAGES.batchRow.paidLabel, value: batch.paid_count, tone: batch.paid_count > 0 ? 'positive' : 'muted' },
-    { label: ADVANCED_PAYMENTS_MESSAGES.batchRow.unpaidLabel, value: batch.not_paid_count, tone: batch.not_paid_count > 0 ? 'warning' : 'muted' },
-    { label: ADVANCED_PAYMENTS_MESSAGES.batchRow.overdueLabel, value: batch.overdue_count, tone: batch.overdue_count > 0 ? 'negative' : 'muted' },
+    {
+      label: ADVANCED_PAYMENTS_MESSAGES.batchRow.pendingLabel,
+      value: batch.pending_count,
+      tone: batch.pending_count > 0 ? 'warning' : 'muted',
+    },
+    {
+      label: ADVANCED_PAYMENTS_MESSAGES.batchRow.paidLabel,
+      value: batch.paid_count,
+      tone: batch.paid_count > 0 ? 'positive' : 'muted',
+    },
+    {
+      label: ADVANCED_PAYMENTS_MESSAGES.batchRow.unpaidLabel,
+      value: batch.not_paid_count,
+      tone: batch.not_paid_count > 0 ? 'warning' : 'muted',
+    },
+    {
+      label: ADVANCED_PAYMENTS_MESSAGES.batchRow.overdueLabel,
+      value: batch.overdue_count,
+      tone: batch.overdue_count > 0 ? 'negative' : 'muted',
+    },
   ]
   if (batch.missing_turnover_count > 0) {
-    summary.push({ label: ADVANCED_PAYMENTS_MESSAGES.batchRow.missingTurnoverLabel, value: batch.missing_turnover_count, tone: 'warning' })
+    summary.push({
+      label: ADVANCED_PAYMENTS_MESSAGES.batchRow.missingTurnoverLabel,
+      value: batch.missing_turnover_count,
+      tone: 'warning',
+    })
   }
   return summary
 }

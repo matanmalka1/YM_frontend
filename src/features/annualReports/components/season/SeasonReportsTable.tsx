@@ -65,7 +65,9 @@ const columns: Column<AnnualReportListItem>[] = [
     key: 'client_name',
     header: ANNUAL_REPORTS_MESSAGES.season.clientHeader,
     render: (r) => (
-      <span className="text-sm font-medium text-gray-900">{r.client_name ?? ANNUAL_REPORTS_MESSAGES.season.clientFallbackName(r.client_record_id)}</span>
+      <span className="text-sm font-medium text-gray-900">
+        {r.client_name ?? ANNUAL_REPORTS_MESSAGES.season.clientFallbackName(r.client_record_id)}
+      </span>
     ),
   },
   {
@@ -114,7 +116,11 @@ export const SeasonReportsTable: React.FC<SeasonReportsTableProps> = ({ reports,
     getRowKey={(r) => r.id}
     isLoading={isLoading}
     onRowClick={onSelect}
-    emptyMessage={taxYear ? ANNUAL_REPORTS_MESSAGES.season.noReportsForYear(taxYear) : ANNUAL_REPORTS_MESSAGES.season.noReportsThisYear}
+    emptyMessage={
+      taxYear
+        ? ANNUAL_REPORTS_MESSAGES.season.noReportsForYear(taxYear)
+        : ANNUAL_REPORTS_MESSAGES.season.noReportsThisYear
+    }
     rowClassName={(r) => {
       const days = daysUntil(r.filing_deadline)
       const overdue = days !== null && days < 0 && !TERMINAL_STATUSES.has(r.status)

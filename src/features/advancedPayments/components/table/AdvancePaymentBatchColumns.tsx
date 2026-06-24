@@ -147,7 +147,11 @@ export const buildAdvancePaymentBatchColumns = ({
     headerClassName: 'w-10',
     render: (row) => (
       <RowActionsMenu ariaLabel={ADVANCED_PAYMENTS_MESSAGES.batchColumns.rowActionsAriaLabel(row.id)}>
-        <RowActionItem label={ADVANCED_PAYMENTS_MESSAGES.batchColumns.updatePaymentAction} icon={<Edit className="h-3.5 w-3.5" />} onClick={() => onRowClick(row)} />
+        <RowActionItem
+          label={ADVANCED_PAYMENTS_MESSAGES.batchColumns.updatePaymentAction}
+          icon={<Edit className="h-3.5 w-3.5" />}
+          onClick={() => onRowClick(row)}
+        />
         <RowActionItem
           label={ADVANCED_PAYMENTS_MESSAGES.batchColumns.goToClientAction}
           icon={<ExternalLink className="h-3.5 w-3.5" />}

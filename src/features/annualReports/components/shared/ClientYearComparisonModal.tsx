@@ -21,8 +21,14 @@ interface MetricRow {
 const ROWS: MetricRow[] = [
   { label: ANNUAL_REPORTS_MESSAGES.yearComparisonModal.statusLabel, render: (r) => getStatusLabel(r.status) },
   { label: ANNUAL_REPORTS_MESSAGES.yearComparisonModal.taxDueLabel, render: (r) => formatShekelAmount(r.tax_due) },
-  { label: ANNUAL_REPORTS_MESSAGES.yearComparisonModal.refundDueLabel, render: (r) => formatShekelAmount(r.refund_due) },
-  { label: ANNUAL_REPORTS_MESSAGES.yearComparisonModal.assessmentAmountLabel, render: (r) => formatShekelAmount(r.assessment_amount) },
+  {
+    label: ANNUAL_REPORTS_MESSAGES.yearComparisonModal.refundDueLabel,
+    render: (r) => formatShekelAmount(r.refund_due),
+  },
+  {
+    label: ANNUAL_REPORTS_MESSAGES.yearComparisonModal.assessmentAmountLabel,
+    render: (r) => formatShekelAmount(r.assessment_amount),
+  },
 ]
 
 export const ClientYearComparisonModal: React.FC<Props> = ({ open, onClose, reports }) => {

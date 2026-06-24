@@ -37,8 +37,18 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
   const panel = useTaxCalculationPanel(reportId)
   const { data } = panel
 
-  if (panel.isLoading) return <p className="py-8 text-center text-sm text-gray-400">{ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.calculating}</p>
-  if (panel.isError || !data) return <p className="py-8 text-center text-sm text-negative-500">{ANNUAL_REPORTS_ERROR_MESSAGES.taxCalculation.loadError}</p>
+  if (panel.isLoading)
+    return (
+      <p className="py-8 text-center text-sm text-gray-400">
+        {ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.calculating}
+      </p>
+    )
+  if (panel.isError || !data)
+    return (
+      <p className="py-8 text-center text-sm text-negative-500">
+        {ANNUAL_REPORTS_ERROR_MESSAGES.taxCalculation.loadError}
+      </p>
+    )
 
   const totalLiability = data.total_liability == null ? null : Number(data.total_liability)
   const totalCredits = getTotalCredits(data)
@@ -72,12 +82,30 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <SectionCard title={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.incomeTaxSectionTitle}>
-          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.taxableIncome} value={formatCurrencyILS(data.taxable_income)} />
-          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.pensionDeduction} value={formatCurrencyILS(data.pension_deduction)} muted />
-          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.taxBeforeCredits} value={formatCurrencyILS(data.tax_before_credits)} />
-          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.creditPointsValue} value={formatCurrencyILS(data.credit_points_value)} muted />
+          <Row
+            label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.taxableIncome}
+            value={formatCurrencyILS(data.taxable_income)}
+          />
+          <Row
+            label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.pensionDeduction}
+            value={formatCurrencyILS(data.pension_deduction)}
+            muted
+          />
+          <Row
+            label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.taxBeforeCredits}
+            value={formatCurrencyILS(data.tax_before_credits)}
+          />
+          <Row
+            label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.creditPointsValue}
+            value={formatCurrencyILS(data.credit_points_value)}
+            muted
+          />
           {Number(data.donation_credit) > 0 && (
-            <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.donationCredit} value={formatCurrencyILS(data.donation_credit)} muted />
+            <Row
+              label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.donationCredit}
+              value={formatCurrencyILS(data.donation_credit)}
+              muted
+            />
           )}
           <Row
             label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.effectiveRate}
@@ -91,9 +119,20 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
           />
         </SectionCard>
         <SectionCard title={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.nationalInsuranceSectionTitle}>
-          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.insuredIncome} value={formatCurrencyILS(data.net_profit)} />
-          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.rateUpToCeiling} value={formatCurrencyILS(data.national_insurance.base_amount)} muted />
-          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.rateAboveCeiling} value={formatCurrencyILS(data.national_insurance.high_amount)} muted />
+          <Row
+            label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.insuredIncome}
+            value={formatCurrencyILS(data.net_profit)}
+          />
+          <Row
+            label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.rateUpToCeiling}
+            value={formatCurrencyILS(data.national_insurance.base_amount)}
+            muted
+          />
+          <Row
+            label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.rateAboveCeiling}
+            value={formatCurrencyILS(data.national_insurance.high_amount)}
+            muted
+          />
           <Row
             label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.totalNationalInsurance}
             value={formatCurrencyILS(data.national_insurance.total)}
@@ -104,7 +143,10 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
 
       <div className="rounded-xl border border-gray-200 bg-gray-50 px-5 py-1 shadow-sm">
         <dl className="divide-y divide-gray-100">
-          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.netProfit} value={formatCurrencyILS(data.net_profit)} />
+          <Row
+            label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.netProfit}
+            value={formatCurrencyILS(data.net_profit)}
+          />
           {totalLiability !== null && (
             <Row
               label={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.totalLiability}

@@ -273,7 +273,7 @@ export const TaxCalendarSettingsPage = () => {
       {summaryQuery.isError && !hasInvalidRange ? (
         <Alert
           variant="error"
-            message={getErrorMessage(summaryQuery.error, TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.load.summary)}
+          message={getErrorMessage(summaryQuery.error, TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.load.summary)}
         />
       ) : null}
 

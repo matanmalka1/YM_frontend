@@ -13,11 +13,7 @@ import { cn, formatDate, formatPlainIdentifier, getErrorMessage, getReportingPer
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { useTaxCalendarGroupItems } from '../../hooks/useTaxCalendarGroupItems'
 import { PAGE_SIZE_MD as ITEM_PAGE_SIZE } from '@/constants/pagination.constants'
-import {
-  TAX_CALENDAR_OBLIGATION_LABELS,
-  type TaxCalendarGroup,
-  type TaxCalendarGroupItem,
-} from '../../api'
+import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarGroup, type TaxCalendarGroupItem } from '../../api'
 import { TAX_CALENDAR_SOURCE_TYPE_LABELS } from '../../constants'
 import { TAX_CALENDAR_MESSAGES } from '../../messages'
 import { TAX_CALENDAR_ERROR_MESSAGES } from '../../errorMessages'

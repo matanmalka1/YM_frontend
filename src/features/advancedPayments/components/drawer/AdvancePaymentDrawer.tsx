@@ -53,19 +53,27 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
 
   if (!model) return null
 
-  const timingStatusLabel = model.paidLate ? ADVANCED_PAYMENTS_MESSAGES.drawer.paidLateLabel : model.timingStatus === 'overdue' ? ADVANCED_PAYMENTS_MESSAGES.drawer.overdueLabel : null
+  const timingStatusLabel = model.paidLate
+    ? ADVANCED_PAYMENTS_MESSAGES.drawer.paidLateLabel
+    : model.timingStatus === 'overdue'
+      ? ADVANCED_PAYMENTS_MESSAGES.drawer.overdueLabel
+      : null
   const timingStatusClass = model.paidLate ? 'text-warning-600' : 'text-negative-600'
 
   const advanceRateDisplay = formatAdvanceRate(model.advanceRate)
   const subtitle = [
     model.clientDisplayName,
-    model.officeClientNumber != null ? ADVANCED_PAYMENTS_MESSAGES.drawer.clientNumberPrefix(model.officeClientNumber) : null,
+    model.officeClientNumber != null
+      ? ADVANCED_PAYMENTS_MESSAGES.drawer.clientNumberPrefix(model.officeClientNumber)
+      : null,
   ]
     .filter(Boolean)
     .join(' · ')
   const contextItems = [
     ...(model.idNumber ? [{ label: ADVANCED_PAYMENTS_MESSAGES.drawer.idNumberLabel, value: model.idNumber }] : []),
-    ...(advanceRateDisplay ? [{ label: ADVANCED_PAYMENTS_MESSAGES.drawer.advanceRateLabel, value: advanceRateDisplay }] : []),
+    ...(advanceRateDisplay
+      ? [{ label: ADVANCED_PAYMENTS_MESSAGES.drawer.advanceRateLabel, value: advanceRateDisplay }]
+      : []),
   ]
 
   const turnoverLabel =
@@ -75,7 +83,9 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
         ? ADVANCED_PAYMENTS_MESSAGES.drawer.liveTurnoverSuffix(formatShekelAmount(model.liveTurnover))
         : null
 
-  const title = ADVANCED_PAYMENTS_MESSAGES.drawer.title(getAdvancePaymentMonthLabel(model.period, model.periodMonthsCount))
+  const title = ADVANCED_PAYMENTS_MESSAGES.drawer.title(
+    getAdvancePaymentMonthLabel(model.period, model.periodMonthsCount),
+  )
 
   return (
     <DetailDrawer
@@ -109,10 +119,17 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
         )}
 
         <DrawerSection title={ADVANCED_PAYMENTS_MESSAGES.drawer.periodSectionTitle}>
-          <DrawerField label={ADVANCED_PAYMENTS_MESSAGES.drawer.dueDateLabel} value={formatDate(model.dueDateEffective ?? model.dueDate)} />
+          <DrawerField
+            label={ADVANCED_PAYMENTS_MESSAGES.drawer.dueDateLabel}
+            value={formatDate(model.dueDateEffective ?? model.dueDate)}
+          />
           <DrawerField
             label={ADVANCED_PAYMENTS_MESSAGES.drawer.periodTurnoverLabel}
-            value={turnoverLabel ?? <span className="text-gray-400 text-xs">{ADVANCED_PAYMENTS_MESSAGES.drawer.vatPendingNote}</span>}
+            value={
+              turnoverLabel ?? (
+                <span className="text-gray-400 text-xs">{ADVANCED_PAYMENTS_MESSAGES.drawer.vatPendingNote}</span>
+              )
+            }
           />
           {timingStatusLabel && (
             <DrawerField

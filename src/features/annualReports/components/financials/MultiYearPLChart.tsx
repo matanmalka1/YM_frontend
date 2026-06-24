@@ -52,7 +52,9 @@ export const MultiYearPLChart: React.FC<MultiYearPLChartProps> = ({ clientId, cu
 
   return (
     <div>
-      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">{ANNUAL_REPORTS_MESSAGES.chart.trendTitle}</p>
+      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+        {ANNUAL_REPORTS_MESSAGES.chart.trendTitle}
+      </p>
       <ResponsiveContainer width="100%" height={200}>
         <LineChart data={chartData} margin={CHART_MARGIN}>
           <XAxis dataKey={ANNUAL_REPORTS_MESSAGES.chart.yearAxisKey} tick={{ fontSize: 11 }} />

@@ -53,7 +53,12 @@ export const CreateReportModal: React.FC<CreateReportModalProps> = ({ open, onCl
       title={ANNUAL_REPORTS_MESSAGES.createModal.title}
       onClose={handleClose}
       footer={
-        <ModalFormActions onCancel={handleClose} onSubmit={onSubmit} isLoading={isSubmitting} submitLabel={ANNUAL_REPORTS_MESSAGES.createModal.submitLabel} />
+        <ModalFormActions
+          onCancel={handleClose}
+          onSubmit={onSubmit}
+          isLoading={isSubmitting}
+          submitLabel={ANNUAL_REPORTS_MESSAGES.createModal.submitLabel}
+        />
       }
     >
       <form onSubmit={onSubmit} className="space-y-4">

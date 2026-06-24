@@ -82,7 +82,12 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
             onClick={() => onSaveEdit(line.id)}
             disabled={isUpdating}
           />
-          <RowActionButton label={GLOBAL_UI_MESSAGES.actions.cancel} icon={<X className={TABLE_ICON_CLASS} />} size="sm" onClick={onCancelEdit} />
+          <RowActionButton
+            label={GLOBAL_UI_MESSAGES.actions.cancel}
+            icon={<X className={TABLE_ICON_CLASS} />}
+            size="sm"
+            onClick={onCancelEdit}
+          />
           <RowActionButton
             label={ANNUAL_REPORTS_MESSAGES.annexDataTable.deleteLine}
             icon={<Trash2 className={TABLE_ICON_CLASS} />}

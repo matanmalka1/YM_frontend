@@ -14,8 +14,18 @@ export const AnnualReportFinancialStatsSection: React.FC<AnnualReportFinancialSt
   taxableIncome,
 }) => {
   const statCards = [
-    { key: 'income', title: ANNUAL_REPORTS_MESSAGES.financialStats.totalIncome, value: fmt(totalIncome), variant: 'green' as const },
-    { key: 'expenses', title: ANNUAL_REPORTS_MESSAGES.financialStats.totalExpenses, value: fmt(totalExpenses), variant: 'red' as const },
+    {
+      key: 'income',
+      title: ANNUAL_REPORTS_MESSAGES.financialStats.totalIncome,
+      value: fmt(totalIncome),
+      variant: 'green' as const,
+    },
+    {
+      key: 'expenses',
+      title: ANNUAL_REPORTS_MESSAGES.financialStats.totalExpenses,
+      value: fmt(totalExpenses),
+      variant: 'red' as const,
+    },
     {
       key: 'taxable-income',
       title: ANNUAL_REPORTS_MESSAGES.financialStats.taxableIncome,

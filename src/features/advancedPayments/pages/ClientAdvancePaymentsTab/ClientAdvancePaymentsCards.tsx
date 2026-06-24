@@ -55,13 +55,24 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
         const balance = Math.max(expected - paid, 0)
         const turnover = row.turnover_amount ?? row.live_turnover
         const hasTurnover = turnover !== null && turnover !== undefined
-        const turnoverSource = row.turnover_amount ? ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverManual : row.live_turnover ? ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverFromVat : ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverMissing
-        const turnoverLabel = row.missing_turnover ? ADVANCED_PAYMENTS_MESSAGES.clientCards.missingTurnoverLabel : ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverLabelTemplate(turnoverSource)
+        const turnoverSource = row.turnover_amount
+          ? ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverManual
+          : row.live_turnover
+            ? ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverFromVat
+            : ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverMissing
+        const turnoverLabel = row.missing_turnover
+          ? ADVANCED_PAYMENTS_MESSAGES.clientCards.missingTurnoverLabel
+          : ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverLabelTemplate(turnoverSource)
         const isPaid = row.status === 'paid'
 
         const detailItems: DefinitionItem[] = [
-          { label: ADVANCED_PAYMENTS_MESSAGES.clientCards.dueDateLabel, value: formatDate(row.due_date_effective ?? row.due_date) },
-          ...(row.paid_at ? [{ label: ADVANCED_PAYMENTS_MESSAGES.clientCards.paidAtLabel, value: formatDate(row.paid_at) }] : []),
+          {
+            label: ADVANCED_PAYMENTS_MESSAGES.clientCards.dueDateLabel,
+            value: formatDate(row.due_date_effective ?? row.due_date),
+          },
+          ...(row.paid_at
+            ? [{ label: ADVANCED_PAYMENTS_MESSAGES.clientCards.paidAtLabel, value: formatDate(row.paid_at) }]
+            : []),
           { label: ADVANCED_PAYMENTS_MESSAGES.clientCards.paidLabel, value: formatShekelAmount(paid) },
           {
             label: ADVANCED_PAYMENTS_MESSAGES.clientCards.balanceLabel,
@@ -104,7 +115,9 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
               </div>
 
               <div>
-                <div className="text-xs text-gray-400 mb-0.5">{ADVANCED_PAYMENTS_MESSAGES.clientCards.expectedLabel}</div>
+                <div className="text-xs text-gray-400 mb-0.5">
+                  {ADVANCED_PAYMENTS_MESSAGES.clientCards.expectedLabel}
+                </div>
                 <div className="text-2xl font-bold text-positive-700">{formatShekelAmount(expected)}</div>
               </div>
 
@@ -121,7 +134,9 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
                 onClick={() => onRowClick(row)}
                 className="mt-auto"
               >
-                {isPaid ? ADVANCED_PAYMENTS_MESSAGES.clientCards.viewDetails : ADVANCED_PAYMENTS_MESSAGES.clientCards.updatePayment}
+                {isPaid
+                  ? ADVANCED_PAYMENTS_MESSAGES.clientCards.viewDetails
+                  : ADVANCED_PAYMENTS_MESSAGES.clientCards.updatePayment}
               </Button>
             </div>
           </Card>

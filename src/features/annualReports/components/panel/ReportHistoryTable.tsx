@@ -72,7 +72,11 @@ export const ReportHistoryTable: React.FC<Props> = ({ clientId, currentReportId,
           header: '',
           render: (r) => (
             <RowActionsMenu ariaLabel={ANNUAL_REPORTS_MESSAGES.reportHistoryTable.rowActionsAriaLabel(r.id)}>
-              <RowActionItem label={GLOBAL_UI_MESSAGES.actions.view} onClick={() => onSelect?.(r.id)} icon={<Eye className="h-4 w-4" />} />
+              <RowActionItem
+                label={GLOBAL_UI_MESSAGES.actions.view}
+                onClick={() => onSelect?.(r.id)}
+                icon={<Eye className="h-4 w-4" />}
+              />
             </RowActionsMenu>
           ),
         },

@@ -37,7 +37,12 @@ export const AdvancePaymentBatchesList = ({
   <MonthlyAccordionList
     isLoading={isLoading}
     isEmpty={!isLoading && batches.length === 0}
-    emptyState={{ message: year === null ? ADVANCED_PAYMENTS_MESSAGES.batchesList.emptyNoYear : ADVANCED_PAYMENTS_MESSAGES.batchesList.emptyWithYear(year) }}
+    emptyState={{
+      message:
+        year === null
+          ? ADVANCED_PAYMENTS_MESSAGES.batchesList.emptyNoYear
+          : ADVANCED_PAYMENTS_MESSAGES.batchesList.emptyWithYear(year),
+    }}
     skeletonCols={11}
   >
     {displayBatches.map((batch) => {

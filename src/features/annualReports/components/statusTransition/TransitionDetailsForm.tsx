@@ -49,8 +49,18 @@ export const TransitionDetailsForm = ({
             value={form.assessmentAmount}
             onChange={onFieldChange('assessmentAmount')}
           />
-          <Input label={ANNUAL_REPORTS_MESSAGES.transitionDetailsForm.refundDueLabel} type="number" value={form.refundDue} onChange={onFieldChange('refundDue')} />
-          <Input label={ANNUAL_REPORTS_MESSAGES.transitionDetailsForm.taxDueLabel} type="number" value={form.taxDue} onChange={onFieldChange('taxDue')} />
+          <Input
+            label={ANNUAL_REPORTS_MESSAGES.transitionDetailsForm.refundDueLabel}
+            type="number"
+            value={form.refundDue}
+            onChange={onFieldChange('refundDue')}
+          />
+          <Input
+            label={ANNUAL_REPORTS_MESSAGES.transitionDetailsForm.taxDueLabel}
+            type="number"
+            value={form.taxDue}
+            onChange={onFieldChange('taxDue')}
+          />
         </div>
       )}
 

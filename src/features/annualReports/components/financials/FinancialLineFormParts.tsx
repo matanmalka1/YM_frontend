@@ -194,7 +194,11 @@ export const FinancialAddFormShell: React.FC<FinancialAddFormShellProps> = ({
       <div className={INLINE_ADD_FORM_CLASS}>
         {children}
         <FinancialFormError error={error} />
-        <FinancialFormActions isSubmitting={isSubmitting} submitLabel={GLOBAL_UI_MESSAGES.actions.add} onCancel={onCancel} />
+        <FinancialFormActions
+          isSubmitting={isSubmitting}
+          submitLabel={GLOBAL_UI_MESSAGES.actions.add}
+          onCancel={onCancel}
+        />
       </div>
     </form>
   )

@@ -14,7 +14,13 @@ export const TaxBracketsTable: React.FC<Props> = ({ brackets }) => {
   const lastIndex = brackets.length - 1
 
   const columns: Column<BracketBreakdownItem>[] = [
-    { key: 'rate', header: ANNUAL_REPORTS_MESSAGES.bracketsTable.rateHeader, align: 'right', render: (b) => fmtRate(b.rate), className: 'text-gray-900' },
+    {
+      key: 'rate',
+      header: ANNUAL_REPORTS_MESSAGES.bracketsTable.rateHeader,
+      align: 'right',
+      render: (b) => fmtRate(b.rate),
+      className: 'text-gray-900',
+    },
     {
       key: 'range',
       header: ANNUAL_REPORTS_MESSAGES.bracketsTable.rangeHeader,
@@ -43,7 +49,9 @@ export const TaxBracketsTable: React.FC<Props> = ({ brackets }) => {
 
   return (
     <div className="mt-3">
-      <p className="mb-1.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">{ANNUAL_REPORTS_MESSAGES.bracketsTable.sectionTitle}</p>
+      <p className="mb-1.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+        {ANNUAL_REPORTS_MESSAGES.bracketsTable.sectionTitle}
+      </p>
       <DataTable
         data={brackets}
         columns={columns}

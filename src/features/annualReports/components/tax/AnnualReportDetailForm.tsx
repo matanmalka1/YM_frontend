@@ -79,7 +79,12 @@ export const AnnualReportDetailForm: React.FC<AnnualReportDetailFormProps> = ({
         />
       </div>
 
-      <Textarea label={ANNUAL_REPORTS_MESSAGES.detailForm.internalNotesLabel} rows={3} error={errors.internal_notes?.message} {...register('internal_notes')} />
+      <Textarea
+        label={ANNUAL_REPORTS_MESSAGES.detailForm.internalNotesLabel}
+        rows={3}
+        error={errors.internal_notes?.message}
+        {...register('internal_notes')}
+      />
 
       <div className="flex justify-end">
         <Button type="submit" isLoading={isSaving}>

@@ -12,7 +12,11 @@ export const SeasonProgressBar: React.FC<SeasonProgressBarProps> = ({ summary })
   const total = summary.total || 1
 
   return (
-    <Card variant="elevated" title={ANNUAL_REPORTS_MESSAGES.season.progressTitle} subtitle={ANNUAL_REPORTS_MESSAGES.season.progressSubtitle(summary.tax_year)}>
+    <Card
+      variant="elevated"
+      title={ANNUAL_REPORTS_MESSAGES.season.progressTitle}
+      subtitle={ANNUAL_REPORTS_MESSAGES.season.progressSubtitle(summary.tax_year)}
+    >
       {/* Stacked progress bar */}
       <div className="mb-6 h-5 w-full overflow-hidden rounded-full bg-gray-100 flex">
         {SEASON_PROGRESS_STAGES.map((stage) => {

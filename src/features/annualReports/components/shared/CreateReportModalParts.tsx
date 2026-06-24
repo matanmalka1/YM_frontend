@@ -13,7 +13,9 @@ interface FinancialFieldsProps {
 
 export const FinancialFields = ({ register }: FinancialFieldsProps) => (
   <div>
-    <p className="mb-2 text-sm font-medium text-gray-700">{ANNUAL_REPORTS_MESSAGES.createModalParts.initialIncomeNote}</p>
+    <p className="mb-2 text-sm font-medium text-gray-700">
+      {ANNUAL_REPORTS_MESSAGES.createModalParts.initialIncomeNote}
+    </p>
     <div className="grid grid-cols-2 gap-3">
       <Input
         label={ANNUAL_REPORTS_MESSAGES.createModalParts.grossIncome}
@@ -22,7 +24,13 @@ export const FinancialFields = ({ register }: FinancialFieldsProps) => (
         endElement={currencySuffix}
         {...register('gross_income' as never)}
       />
-      <Input label={ANNUAL_REPORTS_MESSAGES.createModalParts.expenses} type="number" min={0} endElement={currencySuffix} {...register('expenses' as never)} />
+      <Input
+        label={ANNUAL_REPORTS_MESSAGES.createModalParts.expenses}
+        type="number"
+        min={0}
+        endElement={currencySuffix}
+        {...register('expenses' as never)}
+      />
       <Input
         label={ANNUAL_REPORTS_MESSAGES.createModalParts.advancesPaid}
         type="number"
@@ -31,7 +39,13 @@ export const FinancialFields = ({ register }: FinancialFieldsProps) => (
         {...register('advances_paid' as never)}
       />
       <div>
-        <Input label={ANNUAL_REPORTS_MESSAGES.createModalParts.creditPoints} type="number" min={0} step={0.25} {...register('credit_points' as never)} />
+        <Input
+          label={ANNUAL_REPORTS_MESSAGES.createModalParts.creditPoints}
+          type="number"
+          min={0}
+          step={0.25}
+          {...register('credit_points' as never)}
+        />
         <p className="mt-1 text-xs text-gray-500">{ANNUAL_REPORTS_MESSAGES.createModalParts.creditPointsNote}</p>
       </div>
     </div>
@@ -70,7 +84,9 @@ const PreviewValue = ({ label, value }: { label: string; value: number }) => (
 
 export const RequiredAppendices = ({ register }: FinancialFieldsProps) => (
   <div>
-    <p className="mb-2 text-sm font-medium text-gray-700">{ANNUAL_REPORTS_MESSAGES.createModalParts.requiredAppendicesNote}</p>
+    <p className="mb-2 text-sm font-medium text-gray-700">
+      {ANNUAL_REPORTS_MESSAGES.createModalParts.requiredAppendicesNote}
+    </p>
     <div className="space-y-2 rounded-lg border border-gray-200 p-3">
       {FLAG_FIELDS.map(({ name, label }) => (
         <Checkbox key={name} label={label} {...register(name as never)} />

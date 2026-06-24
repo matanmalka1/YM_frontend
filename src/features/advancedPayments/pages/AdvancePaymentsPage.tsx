@@ -51,7 +51,11 @@ export const AdvancePayments: React.FC = () => {
         overdueCount={stats.workflowStats.overdueCount}
       />
 
-      <FilterPanel {...filters} title={ADVANCED_PAYMENTS_MESSAGES.page.filterTitle} subtitle={ADVANCED_PAYMENTS_MESSAGES.page.filterSubtitle} />
+      <FilterPanel
+        {...filters}
+        title={ADVANCED_PAYMENTS_MESSAGES.page.filterTitle}
+        subtitle={ADVANCED_PAYMENTS_MESSAGES.page.filterSubtitle}
+      />
 
       <AdvancePaymentBatchesList isLoading={status.isLoading} {...table} />
 

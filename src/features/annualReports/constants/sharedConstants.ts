@@ -25,12 +25,12 @@ export const DEADLINE_TYPE_OPTIONS = [
 ]
 
 /** Short table-cell labels for a report deadline type (distinct from the long form-select copy above). */
-export const DEADLINE_TYPE_LABELS: Record<string, string> = {
+const DEADLINE_TYPE_LABELS: Record<string, string> = {
   standard: 'רגיל',
   extended: 'מוארך',
   custom: 'מותאם אישית',
 }
-export const UNKNOWN_DEADLINE_TYPE_LABEL = 'סוג מועד לא ידוע'
+const UNKNOWN_DEADLINE_TYPE_LABEL = 'סוג מועד לא ידוע'
 export const getDeadlineTypeLabel = (type: string | null | undefined): string =>
   (type && DEADLINE_TYPE_LABELS[type]) || UNKNOWN_DEADLINE_TYPE_LABEL
 

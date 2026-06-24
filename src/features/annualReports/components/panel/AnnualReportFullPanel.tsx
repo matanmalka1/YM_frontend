@@ -45,7 +45,11 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
   } = useAnnualReportDetailPage(reportId, backPath)
 
   if (isLoading) {
-    return <div className="flex flex-1 items-center justify-center py-24 text-sm text-gray-400">{ANNUAL_REPORTS_MESSAGES.fullPanel.loading}</div>
+    return (
+      <div className="flex flex-1 items-center justify-center py-24 text-sm text-gray-400">
+        {ANNUAL_REPORTS_MESSAGES.fullPanel.loading}
+      </div>
+    )
   }
 
   if (error || !report) {

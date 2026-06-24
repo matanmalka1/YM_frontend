@@ -48,7 +48,11 @@ export const FilingTimelineTab: React.FC<Props> = ({ reports }) => {
         </Card>
       </div>
 
-      <Card title={ANNUAL_REPORTS_MESSAGES.filingTimelineTab.eventHistoryTitle} icon={<CalendarCheck className="h-4 w-4 text-gray-400" />} size="compact">
+      <Card
+        title={ANNUAL_REPORTS_MESSAGES.filingTimelineTab.eventHistoryTitle}
+        icon={<CalendarCheck className="h-4 w-4 text-gray-400" />}
+        size="compact"
+      >
         {timelineEvents.length === 0 ? (
           <p className="py-4 text-center text-sm text-gray-400">{ANNUAL_REPORTS_MESSAGES.filingTimelineTab.noEvents}</p>
         ) : (

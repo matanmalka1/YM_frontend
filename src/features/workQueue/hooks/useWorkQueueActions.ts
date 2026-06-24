@@ -129,7 +129,10 @@ export const useWorkQueueActions = () => {
         qc.setQueryData(queryKey, data)
       })
       toast.error(WORK_QUEUE_ERROR_MESSAGES.actions.failure, {
-        description: getErrorMessage(err, err instanceof Error ? err.message : WORK_QUEUE_ERROR_MESSAGES.actions.failure),
+        description: getErrorMessage(
+          err,
+          err instanceof Error ? err.message : WORK_QUEUE_ERROR_MESSAGES.actions.failure,
+        ),
       })
       void qc.invalidateQueries({ queryKey: workQueueQK.all })
     },

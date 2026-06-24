@@ -71,7 +71,9 @@ export const SigningStatus: React.FC<SigningStatusProps> = ({ state, status, tit
       }
       body={
         body ??
-        (status === 'expired' ? SIGNING_ERROR_MESSAGES.status.expiredBody : SIGNING_ERROR_MESSAGES.status.unavailableBody)
+        (status === 'expired'
+          ? SIGNING_ERROR_MESSAGES.status.expiredBody
+          : SIGNING_ERROR_MESSAGES.status.unavailableBody)
       }
     />
   )

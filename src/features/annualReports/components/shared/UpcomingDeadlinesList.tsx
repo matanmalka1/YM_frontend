@@ -38,7 +38,11 @@ export const UpcomingDeadlinesList: React.FC<Props> = ({ reports }) => {
     )
 
   return (
-    <Card title={ANNUAL_REPORTS_MESSAGES.upcomingDeadlines.title} icon={<CalendarClock className="h-4 w-4 text-gray-400" />} size="compact">
+    <Card
+      title={ANNUAL_REPORTS_MESSAGES.upcomingDeadlines.title}
+      icon={<CalendarClock className="h-4 w-4 text-gray-400" />}
+      size="compact"
+    >
       {upcoming.length === 0 ? (
         <InlineState icon={CalendarCheck} title={ANNUAL_REPORTS_MESSAGES.upcomingDeadlines.empty} />
       ) : (

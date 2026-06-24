@@ -76,7 +76,7 @@ export const CHARGE_TYPE_OPTIONS_WITH_ALL: { value: string; label: string }[] = 
 
 const _currentYear = new Date().getFullYear()
 
-export const CHARGE_PERIOD_ALL_LABEL = 'כל התקופות'
+const CHARGE_PERIOD_ALL_LABEL = 'כל התקופות'
 export const CHARGE_PERIOD_NONE_LABEL = 'ללא תקופה'
 
 export const CHARGE_PERIOD_OPTIONS: { value: string; label: string }[] = [
