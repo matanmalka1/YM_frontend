@@ -1,22 +1,22 @@
 import { z } from 'zod'
 import { USER_ROLE_VALUES } from './constants'
 import { passwordSchema } from '@/utils/passwordSchema'
-import { USERS_MESSAGES } from './messages'
+import { USERS_ERROR_MESSAGES } from './errorMessages'
 
 // ── Shared field validators ────────────────────────────────────────────────────
 
 const fullNameField = z
   .string()
   .trim()
-  .min(2, USERS_MESSAGES.form.fullNameMin)
-  .max(50, USERS_MESSAGES.form.fullNameMax)
+  .min(2, USERS_ERROR_MESSAGES.form.fullNameMin)
+  .max(50, USERS_ERROR_MESSAGES.form.fullNameMax)
 
-const emailField = z.string().trim().email(USERS_MESSAGES.form.invalidEmail)
+const emailField = z.string().trim().email(USERS_ERROR_MESSAGES.form.invalidEmail)
 
 const phoneField = z
   .string()
   .trim()
-  .regex(/^0\d{1,2}-?\d{7}$/, USERS_MESSAGES.form.invalidPhone)
+  .regex(/^0\d{1,2}-?\d{7}$/, USERS_ERROR_MESSAGES.form.invalidPhone)
   .optional()
   .or(z.literal(''))
 
@@ -49,7 +49,7 @@ export const resetPasswordSchema = z
     confirm_password: z.string(),
   })
   .refine((data) => data.new_password === data.confirm_password, {
-    message: USERS_MESSAGES.form.passwordsMismatch,
+    message: USERS_ERROR_MESSAGES.form.passwordsMismatch,
     path: ['confirm_password'],
   })
 

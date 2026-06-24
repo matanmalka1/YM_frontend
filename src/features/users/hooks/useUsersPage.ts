@@ -13,6 +13,7 @@ import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 import { USER_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { USERS_MESSAGES } from '../messages'
+import { USERS_ERROR_MESSAGES } from '../errorMessages'
 
 const USERS_FILTER_FIELDS = [
   {
@@ -79,7 +80,7 @@ export const useUsersPage = () => {
       toast.success(USERS_MESSAGES.mutations.created)
       await invalidateUsers(queryClient)
     },
-    onError: (err) => showErrorToast(err, USERS_MESSAGES.mutations.createError),
+    onError: (err) => showErrorToast(err, USERS_ERROR_MESSAGES.mutations.createError),
   })
 
   const updateMutation = useMutation({
@@ -89,7 +90,7 @@ export const useUsersPage = () => {
       toast.success(USERS_MESSAGES.mutations.updated)
       await invalidateUsers(queryClient)
     },
-    onError: (err) => showErrorToast(err, USERS_MESSAGES.mutations.updateError),
+    onError: (err) => showErrorToast(err, USERS_ERROR_MESSAGES.mutations.updateError),
   })
 
   const toggleActiveMutation = useMutation({
@@ -99,14 +100,14 @@ export const useUsersPage = () => {
       toast.success(isActive ? USERS_MESSAGES.mutations.deactivated : USERS_MESSAGES.mutations.activated)
       await invalidateUsers(queryClient)
     },
-    onError: (err) => showErrorToast(err, USERS_MESSAGES.mutations.statusError),
+    onError: (err) => showErrorToast(err, USERS_ERROR_MESSAGES.mutations.statusError),
   })
 
   const resetPasswordMutation = useMutation({
     mutationFn: ({ userId, newPassword }: { userId: number; newPassword: string }) =>
       usersApi.resetPassword(userId, { new_password: newPassword }),
     onSuccess: () => toast.success(USERS_MESSAGES.mutations.passwordReset),
-    onError: (err) => showErrorToast(err, USERS_MESSAGES.mutations.passwordResetError),
+    onError: (err) => showErrorToast(err, USERS_ERROR_MESSAGES.mutations.passwordResetError),
   })
 
   // ── Actions ──────────────────────────────────────────────────────────────────
@@ -161,7 +162,7 @@ export const useUsersPage = () => {
     status: {
       isLoading: listPending,
       isFetching: listFetching,
-      error: listError ? getErrorMessage(listError, USERS_MESSAGES.page.loadError) : null,
+      error: listError ? getErrorMessage(listError, USERS_ERROR_MESSAGES.page.loadError) : null,
       loadingMessage: USERS_MESSAGES.page.loadingUsers,
     },
     headerProps: {

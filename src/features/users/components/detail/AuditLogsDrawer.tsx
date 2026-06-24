@@ -12,6 +12,7 @@ import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 import type { ListAuditLogsParams } from '../../api'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { USERS_MESSAGES } from '../../messages'
+import { USERS_ERROR_MESSAGES } from '../../errorMessages'
 
 const auditActionLabel: Record<string, string> = USERS_MESSAGES.auditLog.actionLabels
 
@@ -78,7 +79,7 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
         </div>
       )}
 
-      {isError && <p className="text-sm text-negative-600">{USERS_MESSAGES.auditLog.loadError}</p>}
+      {isError && <p className="text-sm text-negative-600">{USERS_ERROR_MESSAGES.auditLog.loadError}</p>}
 
       {!isPending && !isError && logs.length === 0 && (
         <p className="text-sm text-gray-500">{USERS_MESSAGES.auditLog.empty}</p>
