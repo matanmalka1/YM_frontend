@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getErrorMessage } from '@/utils/utils'
 import { useMutationWithToast } from '@/hooks/useMutationWithToast'
 import { PAGE_SIZE_MD } from '@/constants/pagination.constants'
+import { NOTES_ERROR_MESSAGES } from '../errorMessages'
 
 const PAGE_PARAMS = { page: 1, page_size: PAGE_SIZE_MD }
 
@@ -38,21 +39,21 @@ export const useNotesResource = <TNote>({
   const createMutation = useMutationWithToast({
     mutationFn: create,
     successMessage: 'הערה נוספה בהצלחה',
-    errorMessage: 'שגיאה בהוספת הערה',
+    errorMessage: NOTES_ERROR_MESSAGES.create,
     invalidateKeys: [queryKey],
   })
 
   const updateMutation = useMutationWithToast({
     mutationFn: ({ noteId, note }: { noteId: number; note: string }) => update(noteId, note),
     successMessage: 'הערה עודכנה בהצלחה',
-    errorMessage: 'שגיאה בעדכון הערה',
+    errorMessage: NOTES_ERROR_MESSAGES.update,
     invalidateKeys: [queryKey],
   })
 
   const deleteMutation = useMutationWithToast({
     mutationFn: remove,
     successMessage: 'הערה נמחקה בהצלחה',
-    errorMessage: 'שגיאה במחיקת הערה',
+    errorMessage: NOTES_ERROR_MESSAGES.delete,
     invalidateKeys: [queryKey],
   })
 
@@ -60,7 +61,7 @@ export const useNotesResource = <TNote>({
     notes: listData?.items ?? [],
     total: listData?.total ?? 0,
     isLoading: listLoading,
-    error: listError ? getErrorMessage(listError, 'שגיאה בטעינת הערות') : null,
+    error: listError ? getErrorMessage(listError, NOTES_ERROR_MESSAGES.load) : null,
     addNote: (note: string) => createMutation.mutateAsync(note),
     isAdding: createMutation.isPending,
     updateNote: (noteId: number, note: string) => updateMutation.mutateAsync({ noteId, note }),
