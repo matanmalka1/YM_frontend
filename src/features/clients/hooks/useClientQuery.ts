@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { clientsApi, clientsQK, type ClientRecordResponse } from '../api'
 import { getErrorMessage, isPositiveInt } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
+import { CLIENTS_ERROR_MESSAGES } from '../errorMessages'
 
 type UseClientQueryParams = { clientId: number | null }
 
@@ -28,7 +29,7 @@ export const useClientQuery = ({ clientId }: UseClientQueryParams): UseClientQue
     client: data ?? null,
     isValidId,
     isLoading: isPending && isValidId,
-    error: error ? getErrorMessage(error, 'שגיאה בטעינת פרטי לקוח') : null,
+    error: error ? getErrorMessage(error, CLIENTS_ERROR_MESSAGES.client.detailLoad) : null,
     can,
   }
 }

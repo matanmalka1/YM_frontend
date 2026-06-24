@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { clientsApi, clientsQK, type UpdateClientPayload } from '../api'
 import { showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
+import { CLIENTS_ERROR_MESSAGES } from '../errorMessages'
 
 type UseClientMutationsResult = {
   updateClient: (payload: UpdateClientPayload) => Promise<void>
@@ -22,7 +23,7 @@ export const useClientMutations = (clientId: number): UseClientMutationsResult =
       queryClient.setQueryData(clientsQK.detail(clientId), updated)
       await queryClient.invalidateQueries({ queryKey: clientsQK.lists() })
     },
-    onError: (err) => showErrorToast(err, 'שגיאה בעדכון פרטי לקוח'),
+    onError: (err) => showErrorToast(err, CLIENTS_ERROR_MESSAGES.client.detailsUpdate),
   })
 
   const deleteMutation = useMutation({
@@ -33,7 +34,7 @@ export const useClientMutations = (clientId: number): UseClientMutationsResult =
       await queryClient.invalidateQueries({ queryKey: clientsQK.lists() })
       navigate('/clients')
     },
-    onError: (err) => showErrorToast(err, 'שגיאה במחיקת לקוח'),
+    onError: (err) => showErrorToast(err, CLIENTS_ERROR_MESSAGES.client.delete),
   })
 
   return {
