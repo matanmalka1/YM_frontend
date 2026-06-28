@@ -4,7 +4,7 @@ import { LayoutDashboard, ClipboardList, ArrowUpCircle, Clock } from 'lucide-rea
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { SegmentedControl, SegmentedControlItem } from '@/components/ui/primitives/SegmentedControl'
-import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
+import { TableSkeleton } from '@/components/ui/table'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { VatInvoiceTab } from '../components/detail/VatInvoiceTab'
 import { VatSummaryTab } from '../components/detail/VatSummaryTab'

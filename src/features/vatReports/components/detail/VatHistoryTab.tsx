@@ -24,7 +24,7 @@ export const VatHistoryTab: React.FC<VatHistoryTabProps> = ({ workItemId }) => {
       total={total}
       isFetching={isFetching}
       onPageChange={setPage}
-      detailsClassName="text-gray-500 text-xs max-w-xs truncate"
+      detailsTruncate
     />
   )
 }

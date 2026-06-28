@@ -1,5 +1,5 @@
 import { AlertTriangle } from 'lucide-react'
-import { dateColumn, monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
+import { dateColumn, EmptyCell, monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
 import type { VatWorkItemListItem } from '../../api'
 import { getVatWorkItemStatusLabel } from '../../constants/vatConstants'
 import { formatClientOfficeId, formatDate } from '@/utils/utils'
@@ -81,7 +81,7 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
     header: VAT_MESSAGES.columns.dueDate,
     render: (item) => {
       const displayDeadline = item.extended_deadline ?? item.submission_deadline
-      if (!displayDeadline) return <span className="text-gray-400">—</span>
+      if (!displayDeadline) return <EmptyCell />
       const filed = isFiled(item.status)
       const overdue = item.is_overdue && !filed
       const cls = overdue

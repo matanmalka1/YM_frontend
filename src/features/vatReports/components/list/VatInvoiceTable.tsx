@@ -3,8 +3,7 @@ import { Pencil, Receipt, Trash2 } from 'lucide-react'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { InlineState } from '@/components/ui/feedback'
-import { DataTable, type Column } from '@/components/ui/table/DataTable'
-import { RowActionItem, RowActionSeparator, RowActionsMenu } from '@/components/ui/table'
+import { actionsColumn, DataTable, dateColumn, dateTimeColumn, moneyColumn, monoColumn, textColumn, RowActionItem, RowActionSeparator, RowActionsMenu, type Column } from '@/components/ui/table'
 import {
   formatVatAmount,
   getVatDeductionRateClass,
@@ -21,7 +20,6 @@ import {
   type VatDocumentTypeValue,
   type VatRateTypeValue,
 } from '../../constants/vatConstants'
-import { formatDate, formatDateTime } from '@/utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { useDeleteInvoice, useUpdateInvoice } from '../../hooks/useVatInvoiceMutations'
 import { VatInvoiceEditRow } from './VatInvoiceEditRow'
@@ -70,7 +68,8 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
     {
       key: 'number',
       header: VAT_MESSAGES.invoices.number,
-      className: `border-r-2 ${accentBorder} font-mono tabular-nums text-gray-700`,
+      kind: 'mono',
+      className: `border-r-2 ${accentBorder}`,
       render: (inv) => (
         <>
           {getVatInvoiceDisplayNumber(inv)}
@@ -85,24 +84,23 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
         </>
       ),
     },
-    {
+    dateColumn({
       key: 'date',
       header: VAT_MESSAGES.invoices.date,
-      className: 'tabular-nums text-gray-600',
-      render: (inv) => formatDate(inv.invoice_date),
-    },
-    {
+      getValue: (inv) => inv.invoice_date,
+    }),
+    textColumn({
       key: 'counterparty_name',
       header: VAT_MESSAGES.invoices.counterparty,
-      className: 'font-semibold text-gray-900',
-      render: (inv) => inv.counterparty_name,
-    },
-    {
+      tone: 'strong',
+      getValue: (inv) => inv.counterparty_name,
+    }),
+    monoColumn({
       key: 'counterparty_id',
       header: VAT_MESSAGES.invoices.counterpartyId,
-      className: 'whitespace-nowrap font-mono tabular-nums text-gray-700',
-      render: (inv) => inv.counterparty_id ?? <span className="text-gray-400">—</span>,
-    },
+      className: 'whitespace-nowrap',
+      getValue: (inv) => inv.counterparty_id,
+    }),
     {
       key: 'document_type',
       header: VAT_MESSAGES.invoices.documentType,
@@ -153,46 +151,44 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
         </span>
       ),
     },
-    {
+    moneyColumn({
       key: 'net_amount',
       header: VAT_MESSAGES.invoices.netAmount,
-      className: 'font-mono tabular-nums text-gray-700',
-      render: (inv) => formatVatAmount(inv.net_amount),
-    },
-    {
+      getValue: (inv) => formatVatAmount(inv.net_amount),
+    }),
+    moneyColumn({
       key: 'vat_amount',
       header: VAT_MESSAGES.invoices.vatAmount,
-      className: 'font-mono tabular-nums text-gray-700',
-      render: (inv) => formatVatAmount(inv.vat_amount),
-    },
+      getValue: (inv) => formatVatAmount(inv.vat_amount),
+    }),
     ...(isExpense
       ? ([
           {
             key: 'deductible_vat',
             header: VAT_MESSAGES.invoices.deductibleVat,
-            className: `font-mono tabular-nums font-semibold ${semanticMonoToneClasses.positive}`,
+            kind: 'money',
+            tone: 'success',
             render: (inv) => formatVatAmount(Number(inv.vat_amount) * Number(inv.deduction_rate)),
           },
         ] as Column<Invoice>[])
       : []),
-    {
+    monoColumn({
       key: 'created_by',
       header: VAT_MESSAGES.invoices.createdBy,
-      className: 'font-mono tabular-nums text-gray-500',
-      render: (inv) => `#${inv.created_by}`,
-    },
-    {
+      tone: 'muted',
+      getValue: (inv) => `#${inv.created_by}`,
+    }),
+    dateTimeColumn({
       key: 'created_at',
       header: VAT_MESSAGES.invoices.createdAt,
-      className: 'whitespace-nowrap tabular-nums text-gray-500',
-      render: (inv) => formatDateTime(inv.created_at),
-    },
+      className: 'whitespace-nowrap',
+      getValue: (inv) => inv.created_at,
+    }),
     ...(canEdit
       ? ([
-          {
+          actionsColumn({
             key: '__actions',
             header: '',
-            headerClassName: 'w-16',
             render: (inv) => (
               <RowActionsMenu ariaLabel={VAT_MESSAGES.invoices.rowActionsAriaLabel(getVatInvoiceActionLabel(inv))}>
                 <RowActionItem
@@ -211,7 +207,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
                 />
               </RowActionsMenu>
             ),
-          },
+          }),
         ] as Column<Invoice>[])
       : []),
   ]
