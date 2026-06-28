@@ -1,6 +1,6 @@
-import type { Column } from './DataTable'
-import { Checkbox } from '../primitives/Checkbox'
-import { GLOBAL_UI_MESSAGES } from '../../../messages'
+import type { Column } from '../core/tableTypes'
+import { Checkbox } from '../../primitives/Checkbox'
+import { GLOBAL_UI_MESSAGES } from '../../../../messages'
 
 interface BuildSelectionColumnParams<T> {
   allIds: number[]
@@ -27,8 +27,7 @@ export const buildSelectionColumn = <T,>({
   return {
     key: 'select',
     header: '',
-    headerClassName: 'w-10',
-    className: 'w-10',
+    kind: 'selection',
     headerRender: () => (
       <Checkbox
         checked={allSelected}

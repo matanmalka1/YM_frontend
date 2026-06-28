@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 import { ChevronDown, Inbox } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Card } from '@/components/ui/primitives/Card'
-import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
+import { TableSkeleton } from '../core/TableSkeleton'
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { cn } from '@/utils/utils'
 

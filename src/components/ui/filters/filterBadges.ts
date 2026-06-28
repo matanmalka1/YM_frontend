@@ -1,5 +1,5 @@
 import { formatDate } from '@/utils/utils'
-import type { FilterBadge } from '@/components/ui/table/ActiveFilterBadges'
+import type { FilterBadge } from '@/components/ui/table'
 import type { FilterFieldDef } from './types'
 
 type ValuesMap = Record<string, unknown>

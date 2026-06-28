@@ -1,5 +1,5 @@
 import { cn } from '../../../utils/utils'
-import { TableSkeleton } from '../table/TableSkeleton'
+import { TableSkeleton } from '../table'
 import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 interface PageLoadingProps {

@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { Card } from '../primitives/Card'
-import { cn, formatCount } from '../../../utils/utils'
-import { GLOBAL_UI_MESSAGES } from '../../../messages'
+import { Card } from '../../primitives/Card'
+import { cn, formatCount } from '../../../../utils/utils'
+import { GLOBAL_UI_MESSAGES } from '../../../../messages'
 
 interface PaginationCardProps {
   page: number

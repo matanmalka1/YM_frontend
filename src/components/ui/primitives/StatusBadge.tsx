@@ -3,23 +3,23 @@ import { makeVariantGetter } from '@/utils/labels'
 
 export type StatusBadgeVariantMap = Record<string, BadgeVariant>
 
-interface StatusBadgeProps {
-  status: string
-  getLabel: (status: string) => string
+interface StatusBadgeProps<TStatus extends string> {
+  status: TStatus
+  getLabel: (status: TStatus) => string
   variantMap: StatusBadgeVariantMap
   defaultVariant?: BadgeVariant
   size?: BadgeSize
   className?: string
 }
 
-export const StatusBadge: React.FC<StatusBadgeProps> = ({
+export const StatusBadge = <TStatus extends string>({
   status,
   getLabel,
   variantMap,
   defaultVariant = 'neutral',
   size,
   className,
-}) => {
+}: StatusBadgeProps<TStatus>) => {
   const label = getLabel(status)
   const variant = makeVariantGetter(variantMap, defaultVariant)(status)
   return (

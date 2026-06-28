@@ -20,9 +20,10 @@ The shared table column kit keeps repeated table cell rendering consistent witho
 
 It provides small, domain-agnostic column factories for common rendering patterns:
 
-- muted text with empty fallback
-- mono/tabular values
-- dates
+- default, muted, strong, and semantic text tones
+- mono/tabular ID values
+- number and money values
+- date and date-time values
 - status badges
 - row actions
 
@@ -34,7 +35,10 @@ Only generic column factories that can be used by any feature:
 
 - `textColumn`
 - `monoColumn`
+- `numberColumn`
+- `moneyColumn`
 - `dateColumn`
+- `dateTimeColumn`
 - `statusColumn`
 - `actionsColumn`
 
@@ -92,6 +96,28 @@ Do not add:
 
 Do not introduce `domainColumns.tsx` until there is proven duplication across multiple features that cannot be handled cleanly by `commonColumns.tsx`.
 
+## Canonical Style Ownership
+
+`DataTable` owns table visual design: container chrome, header style, row/cell padding, default text colour, numeric rhythm, alignment, hover, selected/semantic row states, loading, empty, compact density, and pagination adjacency through `PaginatedDataTable`.
+
+Feature columns describe intent with:
+
+- `kind`: `text`, `mono`, `number`, `money`, `date`, `dateTime`, `status`, `actions`, or `selection`
+- `tone`: `default`, `muted`, `strong`, `danger`, `warning`, or `success`
+- `align`, `truncate`, `wrap`, and `verticalAlign`
+- `getRowVariant`: `primarySoft`, `warningSoft`, `dangerSoft`, or `muted`
+
+Do not use column `className`, `headerClassName`, or table `rowClassName` for default colour, font weight, tabular numbers, padding, alignment, hover, row background state, or per-column width/height tuning. Use them only for layout that the semantic API cannot express, such as a domain accent border, `whitespace-nowrap`, or `break-words`.
+
+In a custom `render` whose cell can collapse to "no value", return `<EmptyCell />` instead of hand-rolling `<span className="text-gray-400">—</span>`. The `kind`-based helpers (`textColumn`, `dateColumn`, …) already emit it for empty `getValue` results.
+
+## Surfaces And Density
+
+- `surface="card"`: normal page table; default.
+- `surface="embedded"`: table inside another card, modal, drawer, or section; same typography and row behaviour, lighter outer chrome.
+- `surface="bare"`: only for truly nested/editing tables already inside a visible container. Do not use it for page-level list tables.
+- `density="compact"`: smaller row height for nested/editing tables only. It does not create a separate visual style.
+
 ## Current Examples
 
 Clients:
@@ -117,8 +143,4 @@ VAT:
 - update/filed timestamps currently use `textColumn` with existing date-time formatting
 - period, net VAT, deadline warning, and workflow actions remain custom
 
-## Current Limitation
-
-`dateColumn` is date-only and uses the existing `formatDate` utility.
-
-There is no `dateTimeColumn` yet. Use `textColumn` with explicit feature-side formatting when a table needs date-time display.
+`dateColumn` is date-only and uses the existing `formatDate` utility. `dateTimeColumn` uses `formatDateTime`.

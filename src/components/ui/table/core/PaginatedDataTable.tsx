@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
-import { Alert } from '../overlays/Alert'
+import { Alert } from '../../overlays/Alert'
 import { DataTable, type DataTableProps } from './DataTable'
-import { getTotalPages } from '../../../utils/paginationUtils'
-import { PaginationCard } from './PaginationCard'
+import { getTotalPages } from '../../../../utils/paginationUtils'
+import { PaginationCard } from '../toolbar/PaginationCard'
 
 type BasePaginatedDataTableProps<T> = Pick<
   DataTableProps<T>,
@@ -16,6 +16,7 @@ type BasePaginatedDataTableProps<T> = Pick<
   | 'maxHeight'
   | 'onRetry'
   | 'onRowClick'
+  | 'getRowVariant'
   | 'rowClassName'
   | 'stickyHeader'
   | 'surface'
@@ -52,6 +53,7 @@ export const PaginatedDataTable = <T,>({
   onPageChange,
   onRetry,
   onRowClick,
+  getRowVariant,
   page,
   pageSize,
   renderEmpty,
@@ -85,6 +87,7 @@ export const PaginatedDataTable = <T,>({
           getRowKey={getRowKey}
           onRetry={onRetry}
           onRowClick={onRowClick}
+          getRowVariant={getRowVariant}
           className={className}
           emptyMessage={emptyMessage}
           isLoading={isLoading}

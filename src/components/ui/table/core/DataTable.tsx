@@ -1,39 +1,24 @@
 import { Fragment, type KeyboardEvent, type ReactNode } from 'react'
-import { Card } from '../primitives/Card'
-import { cn } from '../../../utils/utils'
-import { StateCard } from '../feedback/StateCard'
-import type { StateCardProps as EmptyStateProps } from '../feedback/StateCard'
+import { Card } from '../../primitives/Card'
+import { cn } from '../../../../utils/utils'
+import { StateCard } from '../../feedback/StateCard'
+import type { StateCardProps as EmptyStateProps } from '../../feedback/StateCard'
 import type { LucideIcon } from 'lucide-react'
 import { Inbox } from 'lucide-react'
 import { TableSkeleton } from './TableSkeleton'
-import { GLOBAL_UI_MESSAGES } from '../../../messages'
-import { Alert } from '../overlays/Alert'
+import { GLOBAL_UI_MESSAGES } from '../../../../messages'
+import { Alert } from '../../overlays/Alert'
+import type { Column, TableSurface, TableDensity, TableRowVariant } from './tableTypes'
+import { getAlignClass, getCellClass, getRowVariantClass } from './tableStyles'
 
-type ColumnAlign = 'left' | 'center' | 'right'
-
-const ALIGN_CLASS: Record<ColumnAlign, string> = {
-  left: 'text-left',
-  center: 'text-center',
-  right: 'text-right',
-}
-
-export interface Column<T> {
-  key: string
-  header: string
-  headerRender?: () => ReactNode
-  render: (item: T, index: number) => ReactNode
-  /** Rendered in place of `render` for the row whose key === `editingRowKey` (inline edit). */
-  editRender?: (item: T, index: number) => ReactNode
-  className?: string
-  headerClassName?: string
-  dir?: 'ltr' | 'rtl'
-  align?: ColumnAlign
-  headerAlign?: ColumnAlign
-  /** Allow long content to wrap instead of forcing horizontal scroll. */
-  wrap?: boolean
-  /** Footer cell content for this column. When any column sets it, a totals <tfoot> is rendered. */
-  footer?: ReactNode
-}
+export type {
+  Column,
+  ColumnAlign,
+  TableColumnKind,
+  TableCellTone,
+  TableRowVariant,
+  TableVerticalAlign,
+} from './tableTypes'
 
 export interface DataTableProps<T> {
   data: T[]
@@ -55,6 +40,7 @@ export interface DataTableProps<T> {
   isLoading?: boolean
   onRetry?: () => void
   rowClassName?: (item: T, index: number) => string
+  getRowVariant?: (item: T, index: number) => TableRowVariant | undefined
   stickyHeader?: boolean
   /**
    * Max height of the scroll area. Required for stickyHeader to work — the
@@ -68,14 +54,8 @@ export interface DataTableProps<T> {
   }
   /** Classes applied to the totals <tfoot> (rendered only when a column defines `footer`). */
   footerClassName?: string
-  /**
-   * `card` (default) wraps in a Card; `embedded` is a bordered box for use inside
-   * another Card; `bare` is chrome-less (no border/bg) for compact sub-tables nested
-   * on a tinted surface (e.g. an accordion detail strip).
-   */
-  surface?: 'card' | 'embedded' | 'bare'
-  /** `compact` tightens padding + text for dense / nested tables. */
-  density?: 'default' | 'compact'
+  surface?: TableSurface
+  density?: TableDensity
 }
 
 export const DataTable = <T,>({
@@ -92,6 +72,7 @@ export const DataTable = <T,>({
   isLoading = false,
   onRetry,
   rowClassName,
+  getRowVariant,
   stickyHeader = false,
   maxHeight,
   emptyState,
@@ -104,6 +85,11 @@ export const DataTable = <T,>({
   const headerCellClass = isCompact ? 'px-3 py-1.5 text-xs' : 'px-3 py-2 text-2xs'
   const bodyCellClass = isCompact ? 'px-3 py-1.5 text-xs' : 'px-3 py-2 text-sm'
   const hasFooter = columns.some((column) => column.footer !== undefined)
+  const cellClass = (column: Column<T>): string => getCellClass(column, bodyCellClass)
+
+  const cellContent = (node: ReactNode, column: Column<T>): ReactNode =>
+    column.dir ? <span dir={column.dir}>{node}</span> : node
+
   const handleRowKeyDown = (event: KeyboardEvent<HTMLTableRowElement>, item: T) => {
     if (!onRowClick) return
 
@@ -125,7 +111,15 @@ export const DataTable = <T,>({
   }
 
   if (isLoading) {
-    return <TableSkeleton rows={5} columns={Math.max(columns.length, 1)} className={className} />
+    return (
+      <TableSkeleton
+        rows={5}
+        columns={Math.max(columns.length, 1)}
+        className={className}
+        surface={surface}
+        density={density}
+      />
+    )
   }
 
   if (error && data.length === 0) {
@@ -161,7 +155,7 @@ export const DataTable = <T,>({
                   'font-semibold uppercase tracking-wider text-gray-500',
                   'first:ps-5 last:pe-5',
                   stickyHeader && 'border-b border-gray-200 bg-gray-50/90 backdrop-blur-sm',
-                  ALIGN_CLASS[column.headerAlign ?? column.align ?? 'center'],
+                  getAlignClass(column),
                   column.headerClassName,
                 )}
               >
@@ -173,6 +167,7 @@ export const DataTable = <T,>({
         <tbody className={cn('divide-y divide-gray-200', !isBare && 'bg-white')}>
           {data.map((item, index) => {
             const isRowEditing = editingRowKey != null && editingRowKey === getRowKey(item)
+            const rowVariant = getRowVariant?.(item, index)
             if (isRowEditing && renderEditRow) {
               return <Fragment key={getRowKey(item)}>{renderEditRow(item)}</Fragment>
             }
@@ -184,6 +179,7 @@ export const DataTable = <T,>({
                   onRowClick &&
                     'cursor-pointer hover:bg-primary-50/60 active:bg-primary-50/80 hover:shadow-[inset_-3px_0_0_0_var(--color-primary-400)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset',
                   !onRowClick && 'hover:bg-gray-50/80',
+                  rowVariant && getRowVariantClass(rowVariant),
                   rowClassName?.(item, index),
                 )}
                 onClick={() => onRowClick?.(item)}
@@ -192,18 +188,10 @@ export const DataTable = <T,>({
                 role={onRowClick ? 'button' : undefined}
               >
                 {columns.map((column) => (
-                  <td
-                    key={column.key}
-                    dir={column.dir}
-                    className={cn(
-                      bodyCellClass,
-                      'align-middle text-gray-700 first:ps-5 last:pe-5',
-                      column.wrap ? 'whitespace-normal' : 'whitespace-nowrap',
-                      ALIGN_CLASS[column.align ?? 'center'],
-                      column.className,
-                    )}
-                  >
-                    {isRowEditing && column.editRender ? column.editRender(item, index) : column.render(item, index)}
+                  <td key={column.key} className={cellClass(column)}>
+                    {isRowEditing && column.editRender
+                      ? column.editRender(item, index)
+                      : cellContent(column.render(item, index), column)}
                   </td>
                 ))}
               </tr>
@@ -217,18 +205,8 @@ export const DataTable = <T,>({
             ) : (
               <tr>
                 {columns.map((column) => (
-                  <td
-                    key={column.key}
-                    dir={column.dir}
-                    className={cn(
-                      bodyCellClass,
-                      'align-middle first:ps-5 last:pe-5',
-                      column.wrap ? 'whitespace-normal' : 'whitespace-nowrap',
-                      ALIGN_CLASS[column.align ?? 'center'],
-                      column.className,
-                    )}
-                  >
-                    {column.footer}
+                  <td key={column.key} className={cellClass(column)}>
+                    {cellContent(column.footer, column)}
                   </td>
                 ))}
               </tr>
