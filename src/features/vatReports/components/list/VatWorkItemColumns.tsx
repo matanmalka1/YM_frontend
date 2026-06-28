@@ -58,7 +58,7 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
       return (
         <span
           dir="ltr"
-          className={`inline-flex items-center gap-1 font-mono text-sm font-semibold tabular-nums ${
+          className={`relative inline-flex items-center justify-end font-mono text-sm font-semibold tabular-nums ${
             Number(amount) === 0
               ? 'text-gray-400'
               : Number(amount) > 0
@@ -66,12 +66,12 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
                 : semanticMonoToneClasses.positive
           }`}
         >
-          {formatVatAmount(amount)}
           {item.is_overridden && (
-            <Badge variant="warning" size="xs">
+            <Badge variant="warning" size="xs" className="absolute right-full top-1/2 mr-1 -translate-y-1/2">
               {VAT_MESSAGES.columns.overrideBadge}
             </Badge>
           )}
+          {formatVatAmount(amount)}
         </span>
       )
     },
