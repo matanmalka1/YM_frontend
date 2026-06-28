@@ -5,6 +5,7 @@ import { BriefcaseBusiness, Edit2, Fingerprint, IdCard } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageContent } from '@/components/layout/PageContent'
 import { Alert } from '@/components/ui/overlays/Alert'
+import { AlertBanner } from '@/components/ui/overlays/AlertBanner'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { MetaItem, MetaStrip } from '@/components/ui/layout'
 import { Badge } from '@/components/ui/primitives/Badge'
@@ -73,20 +74,20 @@ const ClientHeaderMissingDocuments: FC<{ clientId: number; active: boolean }> = 
   const labels = missingDocuments.map((documentType) => DOC_TYPE_LABELS[documentType] ?? documentType)
 
   return (
-    <div className="flex max-w-full items-center gap-2 rounded-xl border border-warning-200 bg-warning-50 px-3 py-2 text-sm text-warning-950">
-      <Badge variant="warning" size="xs" className="shrink-0">
-        {CLIENTS_MESSAGES.details.missingCount(missingDocuments.length)}
-      </Badge>
-
-      <span className="min-w-0 flex-1 truncate text-warning-900">{labels.join(' · ')}</span>
-
-      <Link
-        to={`/clients/${clientId}/documents`}
-        className="shrink-0 font-semibold text-warning-900 underline-offset-4 hover:underline"
-      >
-        {CLIENTS_MESSAGES.details.goToDocuments}
-      </Link>
-    </div>
+    <AlertBanner tone="warning">
+      <span className="flex min-w-0 items-center gap-2">
+        <Badge variant="warning" size="xs" className="shrink-0">
+          {CLIENTS_MESSAGES.details.missingCount(missingDocuments.length)}
+        </Badge>
+        <span className="min-w-0 flex-1 truncate">{labels.join(' · ')}</span>
+        <Link
+          to={`/clients/${clientId}/documents`}
+          className="shrink-0 font-semibold underline-offset-4 hover:underline"
+        >
+          {CLIENTS_MESSAGES.details.goToDocuments}
+        </Link>
+      </span>
+    </AlertBanner>
   )
 }
 

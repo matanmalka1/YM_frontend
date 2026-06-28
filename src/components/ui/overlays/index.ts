@@ -1,4 +1,5 @@
 export * from './Alert'
+export * from './AlertBanner'
 export * from './ConfirmDialog'
 export * from './DetailDrawer'
 export * from './Modal'

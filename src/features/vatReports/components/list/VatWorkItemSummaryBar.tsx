@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Clock, Info, AlertTriangle } from 'lucide-react'
+import { Clock, Info } from 'lucide-react'
 import { formatDate } from '@/utils/utils'
+import { AlertBanner } from '@/components/ui/overlays/AlertBanner'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Card } from '@/components/ui/primitives/Card'
 import { useRole } from '@/hooks/useRole'
@@ -14,28 +15,6 @@ import { VatFileModal } from '../form/VatFileModal'
 import { isFiled } from '../../utils/vatHelpers'
 import type { VatWorkItemSummaryBarProps } from '../../types'
 import { VAT_MESSAGES } from '../../messages'
-
-type AlertTone = 'warning' | 'negative'
-
-const ALERT_CLASSES: Record<AlertTone, { wrap: string; Icon: typeof AlertTriangle }> = {
-  warning: { wrap: 'border-warning-200 bg-warning-50 text-warning-800', Icon: AlertTriangle },
-  negative: { wrap: 'border-negative-200 bg-negative-50 text-negative-800', Icon: AlertTriangle },
-}
-
-const AlertBanner: React.FC<{
-  tone: AlertTone
-  icon?: typeof AlertTriangle
-  children: React.ReactNode
-}> = ({ tone, icon: IconOverride, children }) => {
-  const { wrap, Icon } = ALERT_CLASSES[tone]
-  const FinalIcon = IconOverride ?? Icon
-  return (
-    <div className={`flex items-start gap-2 rounded-lg border px-3 py-2 text-sm ${wrap}`}>
-      <FinalIcon className="mt-0.5 h-4 w-4 shrink-0 opacity-70" />
-      <span>{children}</span>
-    </div>
-  )
-}
 
 export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({
   workItem,
