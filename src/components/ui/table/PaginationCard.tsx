@@ -41,8 +41,8 @@ export const PaginationCard: React.FC<PaginationCardProps> = ({
   const visiblePages = getVisiblePages(page, totalPages)
 
   return (
-    <Card className="mt-4">
-      <div className="flex flex-col gap-4 text-sm md:flex-row md:items-center md:justify-between">
+    <Card className="mt-4" size="compact" bodyClassName="px-5 py-2.5">
+      <div className="flex flex-col gap-2 text-sm md:flex-row md:items-center md:justify-between">
         <p className="text-gray-600">
           <span className="font-semibold text-gray-900">{formatCount(total)}</span> {label}
           <span className="mx-2 text-gray-300">|</span>
@@ -51,7 +51,7 @@ export const PaginationCard: React.FC<PaginationCardProps> = ({
         <nav className="flex items-center gap-1" aria-label={GLOBAL_UI_MESSAGES.pagination.nav}>
           <button
             type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition-colors hover:border-primary-200 hover:bg-primary-50 hover:text-primary-700 disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition-colors hover:border-primary-200 hover:bg-primary-50 hover:text-primary-700 disabled:cursor-not-allowed disabled:opacity-40"
             onClick={() => onPageChange(page - 1)}
             disabled={page <= 1}
             aria-disabled={page <= 1}
@@ -64,7 +64,7 @@ export const PaginationCard: React.FC<PaginationCardProps> = ({
               visiblePage === 'ellipsis' ? (
                 <span
                   key={`ellipsis-${index}`}
-                  className="inline-flex h-9 w-9 items-center justify-center text-gray-400"
+                  className="inline-flex h-8 w-8 items-center justify-center text-gray-400"
                   aria-hidden="true"
                 >
                   ...
@@ -74,7 +74,7 @@ export const PaginationCard: React.FC<PaginationCardProps> = ({
                   key={visiblePage}
                   type="button"
                   className={cn(
-                    'inline-flex h-9 w-9 items-center justify-center rounded-md font-semibold tabular-nums',
+                    'inline-flex h-8 w-8 items-center justify-center rounded-md font-semibold tabular-nums',
                     visiblePage === page
                       ? 'bg-primary-600 text-white shadow-sm'
                       : 'border border-transparent text-gray-600 hover:border-gray-200 hover:bg-gray-50 hover:text-gray-900',
@@ -91,7 +91,7 @@ export const PaginationCard: React.FC<PaginationCardProps> = ({
           </div>
           <button
             type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition-colors hover:border-primary-200 hover:bg-primary-50 hover:text-primary-700 disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition-colors hover:border-primary-200 hover:bg-primary-50 hover:text-primary-700 disabled:cursor-not-allowed disabled:opacity-40"
             onClick={() => onPageChange(page + 1)}
             disabled={page >= totalPages}
             aria-disabled={page >= totalPages}
