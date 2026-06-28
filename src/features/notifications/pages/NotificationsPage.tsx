@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/primitives/Button'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
 import { SendNotificationModal } from '../components/form/SendNotificationModal'
-import { NotificationDetailDrawer } from '../components/detail/NotificationDetailDrawer'
+import { NotificationDetailDrawer } from '../components/drawer/NotificationDetailDrawer'
 import { useNotificationsPage } from '../hooks/useNotificationsPage'
 import { NOTIFICATIONS_MESSAGES } from '../messages'
 

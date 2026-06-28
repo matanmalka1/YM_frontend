@@ -2,7 +2,8 @@ import { Send } from 'lucide-react'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { DetailDrawer } from '@/components/ui/overlays/DetailDrawer'
-import { DrawerField, DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
+import { DefinitionList } from '@/components/ui/layout/DefinitionList'
+import { DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import { formatDateTime } from '@/utils/utils'
 import type { NotificationDetail } from '../../api'
 import { NOTIFICATION_STATUS_LABELS } from '../../constants'
@@ -55,16 +56,18 @@ export const NotificationDetailDrawer = ({
     {notification && (
       <div className="space-y-4">
         <DrawerSection title={NOTIFICATIONS_MESSAGES.detail.sectionDetails}>
-          <DrawerField label={NOTIFICATIONS_MESSAGES.detail.type} value={getTriggerLabel(notification)} />
-          <DrawerField label={NOTIFICATIONS_MESSAGES.detail.domain} value={getDomainLabel(notification.domain_label)} />
-          <DrawerField
-            label={NOTIFICATIONS_MESSAGES.detail.client}
-            value={notification.client_name ?? `#${notification.client_record_id}`}
-          />
-          <DrawerField label={NOTIFICATIONS_MESSAGES.detail.recipient} value={notification.recipient ?? '—'} />
-          <DrawerField
-            label={NOTIFICATIONS_MESSAGES.detail.status}
-            value={NOTIFICATION_STATUS_LABELS[notification.status]}
+          <DefinitionList
+            layout="stacked"
+            items={[
+              { label: NOTIFICATIONS_MESSAGES.detail.type, value: getTriggerLabel(notification) },
+              { label: NOTIFICATIONS_MESSAGES.detail.domain, value: getDomainLabel(notification.domain_label) },
+              {
+                label: NOTIFICATIONS_MESSAGES.detail.client,
+                value: notification.client_name ?? `#${notification.client_record_id}`,
+              },
+              { label: NOTIFICATIONS_MESSAGES.detail.recipient, value: notification.recipient ?? '—' },
+              { label: NOTIFICATIONS_MESSAGES.detail.status, value: NOTIFICATION_STATUS_LABELS[notification.status] },
+            ]}
           />
         </DrawerSection>
         <DrawerSection title={NOTIFICATIONS_MESSAGES.detail.sectionContent}>

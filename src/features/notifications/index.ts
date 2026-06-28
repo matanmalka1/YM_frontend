@@ -1,4 +1,4 @@
-export { NotificationDrawer } from './components/detail/NotificationDrawer'
+export { NotificationDrawer } from './components/drawer/NotificationDrawer'
 
 export { NotificationsTab } from './components/shared/NotificationsTab'
 export { NotificationsPage } from './pages/NotificationsPage'
