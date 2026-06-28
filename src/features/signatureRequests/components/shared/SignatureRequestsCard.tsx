@@ -8,7 +8,7 @@ import { SkeletonBlock } from '../../../../components/ui/primitives/SkeletonBloc
 import { PaginationCard } from '../../../../components/ui/table/PaginationCard'
 import { getTotalPages } from '../../../../utils/paginationUtils'
 import { SignatureRequestRow } from '../list/SignatureRequestRow'
-import { SignatureRequestAuditDrawer } from '../detail/SignatureRequestAuditDrawer'
+import { SignatureRequestAuditDrawer } from '../drawer/SignatureRequestAuditDrawer'
 import { CreateSignatureRequestModal } from '../form/CreateSignatureRequestModal'
 import { SendNotificationModal, type NotificationTrigger } from '@/features/notifications'
 import { useClientSignatureRequests } from '../../hooks/useClientSignatureRequests'

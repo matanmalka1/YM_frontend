@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { signatureRequestsApi, signatureRequestsQK } from '../../api'
 import { DetailDrawer } from '../../../../components/ui/overlays/DetailDrawer'
-import { DrawerField, DrawerSection } from '../../../../components/ui/overlays/DrawerPrimitives'
+import { DefinitionList } from '../../../../components/ui/layout/DefinitionList'
+import { DrawerSection } from '../../../../components/ui/overlays/DrawerPrimitives'
 import { SkeletonBlock } from '../../../../components/ui/primitives/SkeletonBlock'
 import { Timeline, TimelineEntry } from '@/components/ui/feedback/Timeline'
 import { StatusBadge } from '../../../../components/ui/primitives/StatusBadge'
@@ -49,45 +50,49 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
       {data && (
         <>
           <DrawerSection title={SIGNATURE_REQUESTS_MESSAGES.audit.requestDetails}>
-            <DrawerField
-              label={SIGNATURE_REQUESTS_MESSAGES.fields.status}
-              value={
-                <StatusBadge
-                  status={data.status}
-                  getLabel={getSignatureRequestStatusLabel}
-                  variantMap={signatureRequestStatusVariants}
-                />
-              }
+            <DefinitionList
+              layout="stacked"
+              items={[
+                {
+                  label: SIGNATURE_REQUESTS_MESSAGES.fields.status,
+                  value: (
+                    <StatusBadge
+                      status={data.status}
+                      getLabel={getSignatureRequestStatusLabel}
+                      variantMap={signatureRequestStatusVariants}
+                    />
+                  ),
+                },
+                { label: SIGNATURE_REQUESTS_MESSAGES.fields.signer, value: data.signer_name },
+                ...(data.signer_email
+                  ? [{ label: SIGNATURE_REQUESTS_MESSAGES.fields.signerEmail, value: data.signer_email }]
+                  : []),
+                ...(data.signer_phone
+                  ? [
+                      {
+                        label: SIGNATURE_REQUESTS_MESSAGES.fields.signerPhone,
+                        value: formatPhoneNumber(data.signer_phone),
+                      },
+                    ]
+                  : []),
+                { label: SIGNATURE_REQUESTS_MESSAGES.fields.createdAt, value: formatDateTime(data.created_at) },
+                ...(data.updated_at
+                  ? [{ label: SIGNATURE_REQUESTS_MESSAGES.fields.updatedAt, value: formatDateTime(data.updated_at) }]
+                  : []),
+                ...(data.sent_at
+                  ? [{ label: SIGNATURE_REQUESTS_MESSAGES.fields.sentAt, value: formatDateTime(data.sent_at) }]
+                  : []),
+                ...(data.expires_at
+                  ? [{ label: SIGNATURE_REQUESTS_MESSAGES.fields.expiresAt, value: formatDate(data.expires_at) }]
+                  : []),
+                ...(data.signed_at
+                  ? [{ label: SIGNATURE_REQUESTS_MESSAGES.fields.signedAt, value: formatDateTime(data.signed_at) }]
+                  : []),
+                ...(data.decline_reason
+                  ? [{ label: SIGNATURE_REQUESTS_MESSAGES.fields.declineReason, value: data.decline_reason }]
+                  : []),
+              ]}
             />
-            <DrawerField label={SIGNATURE_REQUESTS_MESSAGES.fields.signer} value={data.signer_name} />
-            {data.signer_email && (
-              <DrawerField label={SIGNATURE_REQUESTS_MESSAGES.fields.signerEmail} value={data.signer_email} />
-            )}
-            {data.signer_phone && (
-              <DrawerField
-                label={SIGNATURE_REQUESTS_MESSAGES.fields.signerPhone}
-                value={formatPhoneNumber(data.signer_phone)}
-              />
-            )}
-            <DrawerField label={SIGNATURE_REQUESTS_MESSAGES.fields.createdAt} value={formatDateTime(data.created_at)} />
-            {data.updated_at && (
-              <DrawerField
-                label={SIGNATURE_REQUESTS_MESSAGES.fields.updatedAt}
-                value={formatDateTime(data.updated_at)}
-              />
-            )}
-            {data.sent_at && (
-              <DrawerField label={SIGNATURE_REQUESTS_MESSAGES.fields.sentAt} value={formatDateTime(data.sent_at)} />
-            )}
-            {data.expires_at && (
-              <DrawerField label={SIGNATURE_REQUESTS_MESSAGES.fields.expiresAt} value={formatDate(data.expires_at)} />
-            )}
-            {data.signed_at && (
-              <DrawerField label={SIGNATURE_REQUESTS_MESSAGES.fields.signedAt} value={formatDateTime(data.signed_at)} />
-            )}
-            {data.decline_reason && (
-              <DrawerField label={SIGNATURE_REQUESTS_MESSAGES.fields.declineReason} value={data.decline_reason} />
-            )}
           </DrawerSection>
 
           <DrawerSection title={SIGNATURE_REQUESTS_MESSAGES.audit.activityHistory}>

@@ -16,7 +16,7 @@ import { usePendingSignatureRequests } from '../../hooks/usePendingSignatureRequ
 import { useSignatureRequestActions } from '../../hooks/useSignatureRequestActions'
 import { signatureRequestStatusVariants, useSignatureRequestSigningUrls } from '../../utils'
 import { CreateSignatureRequestModal } from '../form/CreateSignatureRequestModal'
-import { SignatureRequestAuditDrawer } from '../detail/SignatureRequestAuditDrawer'
+import { SignatureRequestAuditDrawer } from '../drawer/SignatureRequestAuditDrawer'
 import { SignatureRequestRowActions } from '../list/SignatureRequestRowActions'
 import { SIGNATURE_REQUESTS_MESSAGES } from '../../messages'
 import { SIGNATURE_REQUESTS_ERROR_MESSAGES } from '../../errorMessages'
