@@ -132,7 +132,12 @@ export interface VatWorkItemsCreateModalProps {
 
 export interface VatWorkItemSummaryBarProps {
   workItem: VatWorkItemResponse
+  filedBanner?: VatFiledBannerProps | null
   onFilingPendingChange?: (isPending: boolean) => void
+}
+
+export interface VatWorkItemMetaStripProps {
+  workItem: VatWorkItemResponse
 }
 
 export interface ColumnOpts {

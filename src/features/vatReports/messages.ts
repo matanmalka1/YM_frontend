@@ -70,6 +70,7 @@ export const VAT_MESSAGES = {
     tabHistory: 'היסטוריה',
     binderLabel: (binderNumber: string) => `קלסר ${binderNumber}`,
     assigneeLabel: 'מטפל:',
+    deadlineLabel: 'הגשה עד:',
     overriddenFinalAmount: 'סכום מע"מ סופי (עוקף)',
     categoryBreakdownTitle: 'פירוט לפי קטגוריה',
     categoryNonDeductibleNote: 'קטגוריות אלו אינן מזכות בניכוי מע"מ לפי הנתונים שהוזנו.',

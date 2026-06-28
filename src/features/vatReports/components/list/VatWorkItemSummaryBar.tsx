@@ -7,6 +7,7 @@ import { useRole } from '@/hooks/useRole'
 import { useVatWorkItemActions } from '../../hooks/useVatWorkItemActions'
 import { VAT_DEADLINE_WARNING_DAYS } from '../../constants/vatConstants'
 import { VatProgressBar } from '../shared/VatProgressBar'
+import { VatFiledBanner } from '../shared/VatFiledBanner'
 import { VatActionButtons } from '../shared/VatActionButtons'
 import { VatSendBackForm } from '../form/VatSendBackForm'
 import { VatFileModal } from '../form/VatFileModal'
@@ -36,7 +37,11 @@ const AlertBanner: React.FC<{
   )
 }
 
-export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ workItem, onFilingPendingChange }) => {
+export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({
+  workItem,
+  filedBanner,
+  onFilingPendingChange,
+}) => {
   const { isAdvisor } = useRole()
   const { handleMaterialsComplete, handleReadyForReview, handleSendBack, isLoading, isCoolingDown } =
     useVatWorkItemActions(workItem.id)
@@ -46,19 +51,22 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
 
   return (
     <Card size="compact" disablePadding className="shadow-sm" bodyClassName="p-4 space-y-3">
+      {filed && filedBanner && <VatFiledBanner {...filedBanner} />}
+
       {workItem.status === 'pending_materials' && workItem.pending_materials_note && (
         <AlertBanner tone="warning" icon={Info}>
           {workItem.pending_materials_note}
         </AlertBanner>
       )}
 
-      {workItem.is_overdue && (workItem.extended_deadline ?? workItem.submission_deadline) && (
+      {!filed && workItem.is_overdue && (workItem.extended_deadline ?? workItem.submission_deadline) && (
         <AlertBanner tone="negative">
           {VAT_MESSAGES.summary.overdueDeadline(formatDate(workItem.extended_deadline ?? workItem.submission_deadline))}
         </AlertBanner>
       )}
 
-      {!workItem.is_overdue &&
+      {!filed &&
+        !workItem.is_overdue &&
         workItem.days_until_deadline != null &&
         workItem.days_until_deadline <= VAT_DEADLINE_WARNING_DAYS && (
           <AlertBanner tone="warning" icon={Clock}>

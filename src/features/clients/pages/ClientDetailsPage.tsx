@@ -6,6 +6,7 @@ import { PageHeader } from '@/components/layout/PageHeader'
 import { PageContent } from '@/components/layout/PageContent'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
+import { MetaItem, MetaStrip } from '@/components/ui/layout'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
 import { formatPlainIdentifier } from '@/utils/utils'
@@ -29,56 +30,32 @@ interface ClientDetailsProps {
   initialTab?: ActiveClientDetailsTab
 }
 
-const ClientHeaderMetaItem: FC<{ icon: React.ReactNode; label: string; value: React.ReactNode }> = ({
-  icon,
-  label,
-  value,
-}) => (
-  <span className="inline-flex min-w-[136px] items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm">
-    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-gray-50 text-gray-500">
-      {icon}
-    </span>
-    <span className="min-w-0 text-right leading-tight">
-      <span className="block text-2xs font-semibold text-gray-400">{label}</span>
-      <span className="block truncate text-sm font-bold text-gray-900">{value}</span>
-    </span>
+const buildClientTitle = (client: ClientRecordResponse) => (
+  <span className="flex min-w-0 flex-wrap items-center gap-2">
+    <span className="truncate">{client.full_name}</span>
+    <Badge variant={getClientStatusBadgeVariant(client.status)} size="md">
+      {getClientStatusLabel(client.status)}
+    </Badge>
   </span>
 )
 
-const buildClientHeader = (client: ClientRecordResponse) => ({
-  title: (
-    <span className="flex min-w-0 flex-col gap-3">
-      <span className="flex min-w-0 flex-wrap items-center gap-2">
-        <span className="truncate">{client.full_name}</span>
-        <Badge variant={getClientStatusBadgeVariant(client.status)} size="md">
-          {getClientStatusLabel(client.status)}
-        </Badge>
-      </span>
-      <span className="flex min-w-0 flex-wrap items-center gap-2">
-        <ClientHeaderMetaItem
-          icon={<Fingerprint className="h-4 w-4" />}
-          label={CLIENTS_MESSAGES.details.metaIdNumber}
-          value={formatPlainIdentifier(client.id_number, CLIENTS_MESSAGES.details.notDefined)}
-        />
-        {client.id_number_type && (
-          <ClientHeaderMetaItem
-            icon={<IdCard className="h-4 w-4" />}
-            label={CLIENTS_MESSAGES.details.metaIdNumberType}
-            value={getClientIdNumberTypeLabel(client.id_number_type)}
-          />
-        )}
-        {client.entity_type && (
-          <ClientHeaderMetaItem
-            icon={<BriefcaseBusiness className="h-4 w-4" />}
-            label={CLIENTS_MESSAGES.details.metaEntityType}
-            value={getEntityTypeLabel(client.entity_type)}
-          />
-        )}
-      </span>
-    </span>
-  ),
-  description: undefined,
-})
+const ClientHeaderMeta: FC<{ client: ClientRecordResponse }> = ({ client }) => (
+  <MetaStrip>
+    <MetaItem icon={<Fingerprint className="h-4 w-4" />} label={CLIENTS_MESSAGES.details.metaIdNumber}>
+      {formatPlainIdentifier(client.id_number, CLIENTS_MESSAGES.details.notDefined)}
+    </MetaItem>
+    {client.id_number_type && (
+      <MetaItem icon={<IdCard className="h-4 w-4" />} label={CLIENTS_MESSAGES.details.metaIdNumberType}>
+        {getClientIdNumberTypeLabel(client.id_number_type)}
+      </MetaItem>
+    )}
+    {client.entity_type && (
+      <MetaItem icon={<BriefcaseBusiness className="h-4 w-4" />} label={CLIENTS_MESSAGES.details.metaEntityType}>
+        {getEntityTypeLabel(client.entity_type)}
+      </MetaItem>
+    )}
+  </MetaStrip>
+)
 const ClientHeaderMissingDocuments: FC<{ clientId: number; active: boolean }> = ({ clientId, active }) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: documentsQK.clientSignals(clientId),
@@ -134,7 +111,6 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
       </PageContent>
     )
 
-  const clientHeader = client ? buildClientHeader(client) : null
   const breadcrumbs = [
     { label: CLIENTS_MESSAGES.details.breadcrumbList, to: CLIENT_ROUTES.list },
     {
@@ -160,7 +136,7 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
           {!can.editClients && <Alert variant="info" message={CLIENTS_MESSAGES.details.viewOnlyNotice} />}
           <PageHeader
             size="md"
-            title={clientHeader?.title ?? client?.full_name ?? CLIENTS_MESSAGES.details.pageTitle}
+            title={client ? buildClientTitle(client) : CLIENTS_MESSAGES.details.pageTitle}
             description={
               client && initialTab === 'details' ? (
                 <ClientHeaderMissingDocuments clientId={client.id} active />
@@ -176,6 +152,7 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
             }
             breadcrumbs={breadcrumbs}
           />
+          {client && <ClientHeaderMeta client={client} />}
         </>
       }
       loadingMessage={CLIENTS_MESSAGES.details.loadingMessage}

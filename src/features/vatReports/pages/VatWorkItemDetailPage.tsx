@@ -2,13 +2,15 @@ import { useParams, Navigate } from 'react-router-dom'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { SegmentedControl, SegmentedControlItem } from '@/components/ui/primitives/SegmentedControl'
+import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { TableSkeleton } from '@/components/ui/table'
 import { VatInvoiceTab } from '../components/detail/VatInvoiceTab'
 import { VatSummaryTab } from '../components/detail/VatSummaryTab'
 import { VatWorkItemHeaderActions } from '../components/detail/VatWorkItemHeaderActions'
+import { VatWorkItemMetaStrip } from '../components/detail/VatWorkItemMetaStrip'
 import { VatHistoryTab } from '../components/detail/VatHistoryTab'
 import { VatWorkItemSummaryBar } from '../components/list/VatWorkItemSummaryBar'
-import { VatFiledBanner } from '../components/shared/VatFiledBanner'
+import { getVatWorkItemStatusLabel, VAT_STATUS_BADGE_VARIANTS } from '../constants/vatConstants'
 import { useVatWorkItemDetailPage } from '../hooks/useVatWorkItemDetailPage'
 import { VAT_MESSAGES } from '../messages'
 
@@ -27,11 +29,31 @@ const VatDetailContent: React.FC<{ workItemId: number }> = ({ workItemId }) => {
   if (status.error || !workItem || !headerProps) return <Alert variant="error" message={status.error ?? ''} />
 
   return (
-    <div className="space-y-4">
-      <PageHeader {...headerProps} actions={<VatWorkItemHeaderActions workItem={workItem} />} />
-      <VatWorkItemSummaryBar workItem={workItem} onFilingPendingChange={filing.setPending} />
+    <div className="space-y-5">
+      <div className="space-y-3">
+        <PageHeader
+          {...headerProps}
+          title={
+            <span className="flex flex-wrap items-center gap-3">
+              <span>{headerProps.title}</span>
+              <StatusBadge
+                status={workItem.status}
+                getLabel={getVatWorkItemStatusLabel}
+                variantMap={VAT_STATUS_BADGE_VARIANTS}
+                size="sm"
+              />
+            </span>
+          }
+          actions={<VatWorkItemHeaderActions workItem={workItem} />}
+        />
+        <VatWorkItemMetaStrip workItem={workItem} />
+      </div>
 
-      {filedBanner && <VatFiledBanner {...filedBanner} />}
+      <VatWorkItemSummaryBar
+        workItem={workItem}
+        filedBanner={filedBanner}
+        onFilingPendingChange={filing.setPending}
+      />
 
       <SegmentedControl variant="tabBar" aria-label={VAT_MESSAGES.detail.tabsAriaLabel}>
         {tabs.map(({ key, label, icon: Icon, badge }) => (
