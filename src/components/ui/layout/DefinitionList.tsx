@@ -11,7 +11,7 @@ export interface DefinitionListProps {
   columns?: 1 | 2 | 3 | 4
   /**
    * grid   — label above value in a responsive grid (DescriptionList style)
-   * stacked — label + value as a horizontal row with border (DrawerField style)
+   * stacked — label + value as a horizontal row with a divider border (drawer detail style)
    */
   layout?: 'grid' | 'stacked'
   /** Rendered when an item's value is null/undefined/empty-string (default: "—"). */

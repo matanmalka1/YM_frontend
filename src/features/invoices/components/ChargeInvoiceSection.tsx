@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { InlineLink } from '@/components/ui/primitives/InlineLink'
-import { DrawerField, DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
+import { DefinitionList } from '@/components/ui/layout/DefinitionList'
+import { DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import { Input } from '@/components/ui/inputs'
 import { formatDateTime } from '@/utils/utils'
 import {
@@ -49,33 +50,41 @@ export const ChargeInvoiceSection: React.FC<ChargeInvoiceSectionProps> = ({ char
   return (
     <DrawerSection title={INVOICES_MESSAGES.section.title}>
       {isLoadingInvoice && (
-        <DrawerField label={INVOICES_MESSAGES.section.status} value={INVOICES_MESSAGES.section.loadingDetails} />
+        <DefinitionList
+          layout="stacked"
+          items={[{ label: INVOICES_MESSAGES.section.status, value: INVOICES_MESSAGES.section.loadingDetails }]}
+        />
       )}
       {invoiceError && <Alert variant="warning" message={invoiceError} />}
 
       {!isLoadingInvoice && invoice && (
-        <>
-          <DrawerField label={INVOICES_MESSAGES.section.provider} value={invoice.provider} />
-          <DrawerField label={INVOICES_MESSAGES.section.externalId} value={invoice.external_invoice_id} />
-          <DrawerField label={INVOICES_MESSAGES.section.issuedAt} value={formatDateTime(invoice.issued_at)} />
-          <DrawerField label={INVOICES_MESSAGES.section.attachedAt} value={formatDateTime(invoice.created_at)} />
-          {invoice.document_url && (
-            <DrawerField
-              label={INVOICES_MESSAGES.section.document}
-              value={
-                <InlineLink
-                  href={invoice.document_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={(event) => event.stopPropagation()}
-                  icon={<ExternalLink className="h-3.5 w-3.5" />}
-                >
-                  {INVOICES_MESSAGES.section.openDocument}
-                </InlineLink>
-              }
-            />
-          )}
-        </>
+        <DefinitionList
+          layout="stacked"
+          items={[
+            { label: INVOICES_MESSAGES.section.provider, value: invoice.provider },
+            { label: INVOICES_MESSAGES.section.externalId, value: invoice.external_invoice_id },
+            { label: INVOICES_MESSAGES.section.issuedAt, value: formatDateTime(invoice.issued_at) },
+            { label: INVOICES_MESSAGES.section.attachedAt, value: formatDateTime(invoice.created_at) },
+            ...(invoice.document_url
+              ? [
+                  {
+                    label: INVOICES_MESSAGES.section.document,
+                    value: (
+                      <InlineLink
+                        href={invoice.document_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={(event) => event.stopPropagation()}
+                        icon={<ExternalLink className="h-3.5 w-3.5" />}
+                      >
+                        {INVOICES_MESSAGES.section.openDocument}
+                      </InlineLink>
+                    ),
+                  },
+                ]
+              : []),
+          ]}
+        />
       )}
 
       {!isLoadingInvoice && !invoice && (
