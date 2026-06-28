@@ -189,6 +189,7 @@ export const DataTable = <T,>({
                 onClick={() => onRowClick?.(item)}
                 onKeyDown={(event) => handleRowKeyDown(event, item)}
                 tabIndex={onRowClick ? 0 : undefined}
+                role={onRowClick ? 'button' : undefined}
               >
                 {columns.map((column) => (
                   <td

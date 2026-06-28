@@ -74,7 +74,7 @@ export const Alert: React.FC<AlertProps> = ({
         c.container,
         className,
       )}
-      role="alert"
+      role={variant === 'error' || variant === 'warning' ? 'alert' : 'status'}
     >
       <div className={cn('shrink-0', isSmall ? 'rounded-md p-1' : 'rounded-lg p-2', c.iconBg)}>
         <Icon className={cn(isSmall ? 'h-4 w-4' : 'h-5 w-5', c.icon)} />

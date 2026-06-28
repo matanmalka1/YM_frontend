@@ -106,7 +106,7 @@ export const GroupedPeriodRow = memo(
             ))}
           </span>
 
-          <span className="mr-auto inline-flex items-center gap-2 text-sm font-semibold text-primary-700 max-lg:mr-0">
+          <span className="ms-auto inline-flex items-center gap-2 text-sm font-semibold text-primary-700 max-lg:ms-0">
             <span>{open ? closeLabel : ctaLabel}</span>
             {open ? <ChevronDown className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
           </span>

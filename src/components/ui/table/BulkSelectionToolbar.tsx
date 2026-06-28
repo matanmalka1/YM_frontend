@@ -32,7 +32,7 @@ export const BulkSelectionToolbar: React.FC<BulkSelectionToolbarProps> = ({
 
       <div className="flex flex-wrap items-center gap-2">{children}</div>
 
-      <div className="mr-auto">
+      <div className="ms-auto">
         <button
           type="button"
           onClick={onClear}
