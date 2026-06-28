@@ -3,12 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ExternalLink, FileText, Inbox } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { StateCard } from '@/components/ui/feedback/StateCard'
-import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
-import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
-import { RowActionItem, RowActionsMenu } from '@/components/ui/table'
-import { type Column } from '@/components/ui/table/DataTable'
-import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
-import { formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
+import { TableSkeleton, actionsColumn, monoColumn, PaginatedDataTable, RowActionItem, RowActionsMenu, textColumn, GroupedPeriodRow, formatRelativeDueLabel, type Column, type PeriodSummaryMetric } from '@/components/ui/table'
 import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
 import { cn, formatDate, formatPlainIdentifier, getErrorMessage, getReportingPeriodLabelWithYear } from '@/utils/utils'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
@@ -124,28 +119,25 @@ const GroupItemsRows = ({
         </Link>
       ),
     },
-    {
+    monoColumn({
       key: 'office',
       header: TAX_CALENDAR_MESSAGES.item.clientNumber,
-      render: (item) => formatPlainIdentifier(item.office_client_number),
-      className: 'font-mono tabular-nums text-gray-700',
-    },
-    {
+      getValue: (item) => formatPlainIdentifier(item.office_client_number),
+    }),
+    textColumn({
       key: 'type',
       header: TAX_CALENDAR_MESSAGES.item.recordType,
-      render: (item) => TAX_CALENDAR_SOURCE_TYPE_LABELS[item.source_type],
-      className: 'text-gray-700',
-    },
+      getValue: (item) => TAX_CALENDAR_SOURCE_TYPE_LABELS[item.source_type],
+    }),
     {
       key: 'state',
       header: TAX_CALENDAR_MESSAGES.item.status,
+      kind: 'status',
       render: (item) => <Badge variant={getStateVariant(item)}>{getStateLabel(item)}</Badge>,
     },
-    {
+    actionsColumn({
       key: 'action',
       header: '',
-      className: 'w-10',
-      headerClassName: 'w-10',
       render: (item) => (
         <RowActionsMenu
           ariaLabel={TAX_CALENDAR_MESSAGES.item.rowActionsAriaLabel(
@@ -164,7 +156,7 @@ const GroupItemsRows = ({
           />
         </RowActionsMenu>
       ),
-    },
+    }),
   ]
 
   return (

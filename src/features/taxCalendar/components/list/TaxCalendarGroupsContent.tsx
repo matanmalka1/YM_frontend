@@ -1,5 +1,5 @@
 import { Alert } from '@/components/ui/overlays/Alert'
-import { PaginationCard } from '@/components/ui/table/PaginationCard'
+import { PaginationCard } from '@/components/ui/table'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { getErrorMessage } from '@/utils/utils'
 import type { TaxCalendarGroup } from '../../api'
