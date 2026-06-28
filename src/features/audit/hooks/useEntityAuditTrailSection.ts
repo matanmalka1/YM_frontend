@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
 import { usersApi, usersQK } from '@/features/users'
@@ -18,7 +18,7 @@ import { useEntityAuditTrail } from './useEntityAuditTrail'
 type AuditTrailFilters = Omit<EntityAuditTrailParams, 'page' | 'page_size'>
 
 export const useEntityAuditTrailSection = (entityType: EntityAuditType, entityId: number) => {
-  const { getParam, setFilter, setFilters } = useSearchParamFilters()
+  const { getParam, setFilters } = useSearchParamFilters()
 
   const keys = useMemo(() => {
     const keyPrefix = `${entityType}_${entityId}_audit_`
@@ -27,33 +27,36 @@ export const useEntityAuditTrailSection = (entityType: EntityAuditType, entityId
       userId: `${keyPrefix}user_id`,
       createdAfter: `${keyPrefix}created_after`,
       createdBefore: `${keyPrefix}created_before`,
-      page: `${keyPrefix}page`,
     }
   }, [entityId, entityType])
 
+  const [page, setPage] = useState(0)
   const action = getParam(keys.action)
   const userId = getParam(keys.userId)
   const userIdValue = parsePositiveInt(userId, 0)
   const selectedUserId = userIdValue ? String(userIdValue) : ''
   const createdAfter = getParam(keys.createdAfter)
   const createdBefore = getParam(keys.createdBefore)
-  const page = parsePositiveInt(getParam(keys.page), 1) - 1
 
-  const handleFilterChange = (key: string, value: string) => setFilters({ [key]: value, [keys.page]: '' }, false)
+  const handleFilterChange = (key: string, value: string) => {
+    setPage(0)
+    setFilters({ [key]: value }, false)
+  }
 
-  const handleFilterReset = () =>
+  const handleFilterReset = () => {
+    setPage(0)
     setFilters(
       {
         [keys.action]: '',
         [keys.userId]: '',
         [keys.createdAfter]: '',
         [keys.createdBefore]: '',
-        [keys.page]: '',
       },
       false,
     )
+  }
 
-  const handlePageChange = (nextPage: number) => setFilter(keys.page, String(nextPage + 1), false)
+  const handlePageChange = (nextPage: number) => setPage(nextPage)
 
   const { isAdvisor } = useRole()
 
@@ -84,8 +87,8 @@ export const useEntityAuditTrailSection = (entityType: EntityAuditType, entityId
 
   useEffect(() => {
     if (query.isPending || page <= maxPage) return
-    setFilter(keys.page, maxPage === 0 ? '' : String(maxPage + 1), false)
-  }, [keys.page, maxPage, page, query.isPending, setFilter])
+    setPage(maxPage)
+  }, [maxPage, page, query.isPending])
 
   const userOptions = useMemo(() => {
     const auditActors = new Map<number, string>()
@@ -131,8 +134,7 @@ export const useEntityAuditTrailSection = (entityType: EntityAuditType, entityId
     hasActiveFilters: Boolean(selectedAction || selectedUserId || createdAfter || createdBefore),
     items: query.items,
     total: query.total,
-    totalPages,
-    maxPage,
+    pageSize: AUDIT_PAGE_SIZE,
     safePage,
     isError: query.isError,
     isFetching: query.isFetching,
