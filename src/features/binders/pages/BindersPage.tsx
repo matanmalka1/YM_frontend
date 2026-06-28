@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/primitives/Button'
-import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
+import { PaginatedDataTable } from '@/components/ui/table'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { DetailDrawer } from '@/components/ui/overlays/DetailDrawer'

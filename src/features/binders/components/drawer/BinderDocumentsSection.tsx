@@ -4,7 +4,7 @@ import { Download, Eye, FileText } from 'lucide-react'
 import { Card } from '@/components/ui/primitives/Card'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
-import { PaginationCard } from '@/components/ui/table/PaginationCard'
+import { PaginationCard } from '@/components/ui/table'
 import {
   documentsApi,
   documentsQK,

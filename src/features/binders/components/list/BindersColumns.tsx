@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { actionsColumn, monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
+import { actionsColumn, EmptyCell, monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
 import { MonoValue } from '@/components/ui/primitives/MonoValue'
 import type { BinderResponse } from '../../types'
 import {
@@ -85,17 +85,19 @@ export const buildBindersColumns = ({
     getLabel: getBinderCapacityStatusLabel,
     variantMap: BINDER_CAPACITY_STATUS_VARIANTS,
   }),
-  textColumn({
+  {
     key: 'period_start',
     header: BINDERS_MESSAGES.columns.period,
-    valueClassName: 'text-gray-600 tabular-nums',
-    getValue: (binder) => {
-      if (!binder.period_start && !binder.period_end) return <span className="text-gray-400">—</span>
+    kind: 'number',
+    tone: 'muted',
+    align: 'start',
+    render: (binder) => {
+      if (!binder.period_start && !binder.period_end) return <EmptyCell />
       const start = formatMonthYear(binder.period_start)
       const end = binder.period_end ? formatMonthYear(binder.period_end) : BINDERS_MESSAGES.period.active
       return `${start} - ${end}`
     },
-  }),
+  },
   {
     key: 'days_in_office',
     header: BINDERS_MESSAGES.columns.daysInOffice,
