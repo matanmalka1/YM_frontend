@@ -18,7 +18,7 @@ export const VatWorkItemsStatsSection = ({ stats }: VatWorkItemsStatsSectionProp
       title: VAT_MESSAGES.stats.pendingTitle,
       value: stats.pending,
       icon: Hourglass,
-      variant: 'orange' as const,
+      variant: 'warning' as const,
       description: VAT_MESSAGES.stats.pendingDescription,
     },
     {
@@ -26,7 +26,7 @@ export const VatWorkItemsStatsSection = ({ stats }: VatWorkItemsStatsSectionProp
       title: VAT_MESSAGES.stats.typingTitle,
       value: stats.typing,
       icon: Clock,
-      variant: 'blue' as const,
+      variant: 'info' as const,
       description: VAT_MESSAGES.stats.typingDescription,
     },
     {
@@ -34,7 +34,7 @@ export const VatWorkItemsStatsSection = ({ stats }: VatWorkItemsStatsSectionProp
       title: VAT_MESSAGES.stats.reviewTitle,
       value: stats.review,
       icon: FileText,
-      variant: 'orange' as const,
+      variant: 'warning' as const,
       description: VAT_MESSAGES.stats.reviewDescription,
     },
     {
@@ -42,7 +42,7 @@ export const VatWorkItemsStatsSection = ({ stats }: VatWorkItemsStatsSectionProp
       title: VAT_MESSAGES.stats.filedTitle,
       value: stats.filed,
       icon: CheckCircle2,
-      variant: 'green' as const,
+      variant: 'positive' as const,
       description: VAT_MESSAGES.stats.filedDescription,
     },
   ] as const

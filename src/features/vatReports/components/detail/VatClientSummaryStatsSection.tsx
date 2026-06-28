@@ -16,7 +16,7 @@ export const VatClientSummaryStatsSection = ({ annual }: VatClientSummaryStatsSe
       title: VAT_MESSAGES.clientSummary.filedPeriods,
       value: VAT_MESSAGES.clientSummary.filedPeriodsValue(annual.filed_count, annual.periods_count),
       icon: CheckCircle2,
-      variant: 'green' as const,
+      variant: 'positive' as const,
     },
     {
       key: 'output-vat',
@@ -37,7 +37,7 @@ export const VatClientSummaryStatsSection = ({ annual }: VatClientSummaryStatsSe
       title: VAT_MESSAGES.clientSummary.netVatPayable,
       value: formatVatAmount(annual.net_vat),
       icon: WalletCards,
-      variant: Number(annual.net_vat) >= 0 ? ('red' as const) : ('green' as const),
+      variant: Number(annual.net_vat) >= 0 ? ('negative' as const) : ('positive' as const),
     },
     {
       key: 'average-vat',

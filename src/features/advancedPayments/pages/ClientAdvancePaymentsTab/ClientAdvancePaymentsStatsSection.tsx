@@ -28,14 +28,14 @@ export const ClientAdvancePaymentsStatsSection: React.FC<ClientAdvancePaymentsSt
       title: ADVANCED_PAYMENTS_MESSAGES.clientStats.totalExpectedTitle,
       value: data ? formatShekelAmount(data.total_expected) : '—',
       icon: BarChart2,
-      variant: 'blue' as const,
+      variant: 'info' as const,
     },
     {
       key: 'total-paid',
       title: ADVANCED_PAYMENTS_MESSAGES.clientStats.totalPaidTitle,
       value: data ? formatShekelAmount(data.total_paid) : '—',
       icon: Wallet,
-      variant: 'green' as const,
+      variant: 'positive' as const,
     },
     {
       key: 'collection-rate',
@@ -49,7 +49,7 @@ export const ClientAdvancePaymentsStatsSection: React.FC<ClientAdvancePaymentsSt
       title: ADVANCED_PAYMENTS_MESSAGES.clientStats.overdueTitle,
       value: data?.overdue_count ?? 0,
       icon: AlertCircle,
-      variant: data && data.overdue_count > 0 ? ('red' as const) : ('neutral' as const),
+      variant: data && data.overdue_count > 0 ? ('negative' as const) : ('neutral' as const),
     },
   ]
 

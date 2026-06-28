@@ -21,7 +21,7 @@ export const AdvancePaymentsStatsSection: React.FC<AdvancePaymentsStatsSectionPr
       title: ADVANCED_PAYMENTS_MESSAGES.stats.dueThisMonthTitle,
       value: dueThisMonthCount,
       icon: CalendarClock,
-      variant: 'blue' as const,
+      variant: 'info' as const,
       description: ADVANCED_PAYMENTS_MESSAGES.stats.dueThisMonthDescription,
     },
     {
@@ -29,7 +29,7 @@ export const AdvancePaymentsStatsSection: React.FC<AdvancePaymentsStatsSectionPr
       title: ADVANCED_PAYMENTS_MESSAGES.stats.pendingTitle,
       value: pendingCount,
       icon: ListChecks,
-      variant: 'orange' as const,
+      variant: 'warning' as const,
       description: ADVANCED_PAYMENTS_MESSAGES.stats.pendingDescription,
     },
     {
@@ -37,7 +37,7 @@ export const AdvancePaymentsStatsSection: React.FC<AdvancePaymentsStatsSectionPr
       title: ADVANCED_PAYMENTS_MESSAGES.stats.missingTurnoverTitle,
       value: missingTurnoverCount,
       icon: AlertTriangle,
-      variant: 'orange' as const,
+      variant: 'warning' as const,
       description: ADVANCED_PAYMENTS_MESSAGES.stats.missingTurnoverDescription,
     },
     {
@@ -45,7 +45,7 @@ export const AdvancePaymentsStatsSection: React.FC<AdvancePaymentsStatsSectionPr
       title: ADVANCED_PAYMENTS_MESSAGES.stats.overdueTitle,
       value: overdueCount,
       icon: Clock,
-      variant: 'red' as const,
+      variant: 'negative' as const,
       description: ADVANCED_PAYMENTS_MESSAGES.stats.overdueDescription,
     },
   ] as const

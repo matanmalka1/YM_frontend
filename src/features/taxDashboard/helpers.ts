@@ -30,7 +30,7 @@ export const buildTaxSubmissionStats = (data: TaxSubmissionWidgetResponse): TaxS
       title: TAX_SUBMISSION_STAT_TITLES.submitted,
       value: data.reports_submitted,
       icon: CheckCircle2,
-      variant: 'green',
+      variant: 'positive',
       filterValue: TAX_SUBMISSION_FILTERS.submitted,
     },
     {
@@ -38,7 +38,7 @@ export const buildTaxSubmissionStats = (data: TaxSubmissionWidgetResponse): TaxS
       title: TAX_SUBMISSION_STAT_TITLES.inProgress,
       value: data.reports_in_progress,
       icon: Clock,
-      variant: 'blue',
+      variant: 'info',
       filterValue: TAX_SUBMISSION_FILTERS.inProgress,
     },
     {
@@ -46,7 +46,7 @@ export const buildTaxSubmissionStats = (data: TaxSubmissionWidgetResponse): TaxS
       title: TAX_SUBMISSION_STAT_TITLES.notStarted,
       value: data.reports_not_started,
       icon: XCircle,
-      variant: 'red',
+      variant: 'negative',
     },
     {
       key: 'completion',
@@ -63,7 +63,7 @@ export const buildTaxSubmissionStats = (data: TaxSubmissionWidgetResponse): TaxS
       title: TAX_SUBMISSION_STAT_TITLES.refund,
       value: formatShekelAmount(totalRefundDue),
       icon: Banknote,
-      variant: 'green',
+      variant: 'positive',
     })
   }
 
@@ -73,7 +73,7 @@ export const buildTaxSubmissionStats = (data: TaxSubmissionWidgetResponse): TaxS
       title: TAX_SUBMISSION_STAT_TITLES.taxDue,
       value: formatShekelAmount(totalTaxDue),
       icon: Banknote,
-      variant: 'red',
+      variant: 'negative',
     })
   }
 

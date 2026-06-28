@@ -43,7 +43,7 @@ export const AnnualReportStatsSection: React.FC<Props> = ({ report }) => {
             ? ANNUAL_REPORTS_MESSAGES.statsSection.balanceDueRefund
             : ANNUAL_REPORTS_MESSAGES.statsSection.balanced,
       icon: SUMMARY_CARD_META.finalBalance.icon,
-      variant: finalBalance < 0 ? 'green' : finalBalance > 0 ? 'red' : 'neutral',
+      variant: finalBalance < 0 ? 'positive' : finalBalance > 0 ? 'negative' : 'neutral',
       trend: undefined,
     },
     {
@@ -60,7 +60,7 @@ export const AnnualReportStatsSection: React.FC<Props> = ({ report }) => {
           ? ANNUAL_REPORTS_MESSAGES.statsSection.beforeAdvancesOffset
           : ANNUAL_REPORTS_MESSAGES.statsSection.notCalculated,
       icon: SUMMARY_CARD_META.annualTax.icon,
-      variant: taxAfterCredits > 0 ? 'red' : taxAfterCredits < 0 ? 'green' : 'neutral',
+      variant: taxAfterCredits > 0 ? 'negative' : taxAfterCredits < 0 ? 'positive' : 'neutral',
       trend: {
         value: totalIncome > 0 ? -(Math.abs(taxAfterCredits) / totalIncome) * 100 : 0,
         label: ANNUAL_REPORTS_MESSAGES.statsSection.ofIncomeShort,

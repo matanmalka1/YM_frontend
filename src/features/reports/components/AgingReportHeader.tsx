@@ -21,7 +21,7 @@ export const AgingReportHeader: React.FC<AgingReportHeaderProps> = ({ data }) =>
     {
       title: REPORTS_MESSAGES.aging.buckets.current,
       amount: data.summary.total_current,
-      variant: "blue" as const,
+      variant: "info" as const,
     },
     {
       title: REPORTS_MESSAGES.aging.buckets.days30,
@@ -31,12 +31,12 @@ export const AgingReportHeader: React.FC<AgingReportHeaderProps> = ({ data }) =>
     {
       title: REPORTS_MESSAGES.aging.buckets.days60,
       amount: data.summary.total_60_days,
-      variant: "green" as const,
+      variant: "positive" as const,
     },
     {
       title: REPORTS_MESSAGES.aging.buckets.days90Plus,
       amount: data.summary.total_90_plus,
-      variant: "red" as const,
+      variant: "negative" as const,
     },
   ];
   const statCards = [
@@ -45,7 +45,7 @@ export const AgingReportHeader: React.FC<AgingReportHeaderProps> = ({ data }) =>
       title: REPORTS_MESSAGES.aging.totalDebts,
       value: formatILS(data.total_outstanding),
       icon: DollarSign,
-      variant: 'blue' as const,
+      variant: 'info' as const,
       description: REPORTS_MESSAGES.aging.openBalanceClients(data.summary.total_clients),
     },
     ...buckets.map((bucket) => ({

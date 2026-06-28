@@ -19,7 +19,7 @@ export const WorkQueueStatsSection: React.FC<WorkQueueStatsSectionProps> = ({ su
     () => [
       {
         icon: AlertTriangle,
-        variant: 'red' as const,
+        variant: 'negative' as const,
         count: summary?.overdue ?? 0,
         label: WORK_QUEUE_MESSAGES.stats.overdue,
         description: WORK_QUEUE_MESSAGES.stats.overdueDescription,
@@ -27,7 +27,7 @@ export const WorkQueueStatsSection: React.FC<WorkQueueStatsSectionProps> = ({ su
       },
       {
         icon: Clock,
-        variant: 'orange' as const,
+        variant: 'warning' as const,
         count: summary?.approaching ?? 0,
         label: WORK_QUEUE_MESSAGES.stats.approaching(APPROACHING_DAYS),
         description: WORK_QUEUE_MESSAGES.stats.approachingDescription,
@@ -35,7 +35,7 @@ export const WorkQueueStatsSection: React.FC<WorkQueueStatsSectionProps> = ({ su
       },
       {
         icon: Clock,
-        variant: 'orange' as const,
+        variant: 'warning' as const,
         count: summary?.important ?? 0,
         label: WORK_QUEUE_MESSAGES.stats.important(APPROACHING_DAYS + 1, IMPORTANT_DAYS),
         description: WORK_QUEUE_MESSAGES.stats.importantDescription,
@@ -43,7 +43,7 @@ export const WorkQueueStatsSection: React.FC<WorkQueueStatsSectionProps> = ({ su
       },
       {
         icon: Calendar,
-        variant: 'blue' as const,
+        variant: 'info' as const,
         count: summary?.upcoming ?? 0,
         label: WORK_QUEUE_MESSAGES.stats.upcoming(IMPORTANT_DAYS + 1),
         description: WORK_QUEUE_MESSAGES.stats.upcomingDescription,

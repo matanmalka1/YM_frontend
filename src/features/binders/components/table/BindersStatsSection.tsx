@@ -15,7 +15,7 @@ export const BindersStatsSection = ({ counters, countersLoading = false }: Binde
       label: BINDERS_MESSAGES.stats.totalLabel,
       count: counters.total,
       icon: FolderKanban,
-      variant: 'blue' as const,
+      variant: 'info' as const,
       description: BINDERS_MESSAGES.stats.totalDescription,
     },
     {
@@ -23,7 +23,7 @@ export const BindersStatsSection = ({ counters, countersLoading = false }: Binde
       label: BINDERS_MESSAGES.stats.inOfficeLabel,
       count: counters.location_in_office,
       icon: Archive,
-      variant: 'orange' as const,
+      variant: 'warning' as const,
       description: BINDERS_MESSAGES.stats.inOfficeDescription,
     },
     {
@@ -31,7 +31,7 @@ export const BindersStatsSection = ({ counters, countersLoading = false }: Binde
       label: BINDERS_MESSAGES.stats.readyLabel,
       count: counters.location_ready_for_handover,
       icon: CheckCircle2,
-      variant: 'green' as const,
+      variant: 'positive' as const,
       description: BINDERS_MESSAGES.stats.readyDescription,
     },
     {

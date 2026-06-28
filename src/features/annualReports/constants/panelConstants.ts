@@ -37,7 +37,7 @@ export const SUMMARY_CARD_META = {
   advancesPaid: { title: 'מקדמות ששולמו', icon: PiggyBank },
   finalBalance: { title: 'יתרה סופית', icon: PiggyBank },
   annualTax: { title: 'מס שנתי', icon: TrendingDown },
-  netProfit: { title: 'רווח נקי', icon: TrendingUp, variant: 'green' },
+  netProfit: { title: 'רווח נקי', icon: TrendingUp, variant: 'positive' },
   grossIncome: { title: 'הכנסות ברוטו', icon: Banknote, variant: 'neutral' },
 } as const
 

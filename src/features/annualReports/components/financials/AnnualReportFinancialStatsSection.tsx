@@ -18,19 +18,19 @@ export const AnnualReportFinancialStatsSection: React.FC<AnnualReportFinancialSt
       key: 'income',
       title: ANNUAL_REPORTS_MESSAGES.financialStats.totalIncome,
       value: fmt(totalIncome),
-      variant: 'green' as const,
+      variant: 'positive' as const,
     },
     {
       key: 'expenses',
       title: ANNUAL_REPORTS_MESSAGES.financialStats.totalExpenses,
       value: fmt(totalExpenses),
-      variant: 'red' as const,
+      variant: 'negative' as const,
     },
     {
       key: 'taxable-income',
       title: ANNUAL_REPORTS_MESSAGES.financialStats.taxableIncome,
       value: fmt(taxableIncome),
-      variant: taxableIncome >= 0 ? ('blue' as const) : ('red' as const),
+      variant: taxableIncome >= 0 ? ('info' as const) : ('negative' as const),
     },
   ]
 

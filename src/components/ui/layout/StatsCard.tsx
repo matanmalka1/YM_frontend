@@ -4,7 +4,7 @@ import { cn, formatCount, formatPercent } from '../../../utils/utils'
 import { semanticStatToneClasses } from '@/utils/semanticColors'
 import { ProgressBar, type ProgressTone } from '../primitives/ProgressBar'
 
-type StatVariant = 'blue' | 'green' | 'red' | 'orange' | 'purple' | 'neutral'
+type StatVariant = 'info' | 'positive' | 'negative' | 'warning' | 'purple' | 'neutral'
 
 export interface StatsCardProps {
   title: string
@@ -40,19 +40,19 @@ const STAT_VARIANTS: Record<
     progressTrack?: string
   }
 > = {
-  blue: {
+  info: {
     ...semanticStatToneClasses.info,
     progressTone: 'info',
   },
-  green: {
+  positive: {
     ...semanticStatToneClasses.positive,
     progressTone: 'positive',
   },
-  red: {
+  negative: {
     ...semanticStatToneClasses.negative,
     progressTone: 'negative',
   },
-  orange: {
+  warning: {
     ...semanticStatToneClasses.warning,
     progressTone: 'warning',
   },

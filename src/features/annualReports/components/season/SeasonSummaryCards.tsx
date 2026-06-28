@@ -19,7 +19,7 @@ export const SeasonSummaryCards: React.FC<SeasonSummaryCardsProps> = ({ summary 
       value: total,
       description: ANNUAL_REPORTS_MESSAGES.season.progressSubtitle(summary.tax_year),
       icon: Users,
-      variant: 'blue' as const,
+      variant: 'info' as const,
       progress: undefined,
     },
     {
@@ -28,7 +28,7 @@ export const SeasonSummaryCards: React.FC<SeasonSummaryCardsProps> = ({ summary 
       value: done,
       description: ANNUAL_REPORTS_MESSAGES.season.filingPercentNote(formatPercent(completionRate)),
       icon: CheckCircle2,
-      variant: 'green' as const,
+      variant: 'positive' as const,
       progress: completionRate,
     },
     {
@@ -37,7 +37,7 @@ export const SeasonSummaryCards: React.FC<SeasonSummaryCardsProps> = ({ summary 
       value: summary.overdue_count,
       description: ANNUAL_REPORTS_MESSAGES.season.overdueNote,
       icon: AlertTriangle,
-      variant: summary.overdue_count > 0 ? ('red' as const) : ('neutral' as const),
+      variant: summary.overdue_count > 0 ? ('negative' as const) : ('neutral' as const),
       progress: undefined,
     },
   ]

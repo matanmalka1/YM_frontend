@@ -12,14 +12,14 @@ export const ClientsStatsSection = ({ stats }: ClientsStatsSectionProps) => {
       label: CLIENTS_MESSAGES.stats.osekPaturLabel,
       count: stats.osek_patur,
       description: CLIENTS_MESSAGES.stats.osekPaturDescription,
-      variant: 'green' as const,
+      variant: 'positive' as const,
     },
     {
       key: 'osek_murshe',
       label: CLIENTS_MESSAGES.stats.osekMursheLabel,
       count: stats.osek_murshe,
       description: CLIENTS_MESSAGES.stats.osekMursheDescription,
-      variant: 'blue' as const,
+      variant: 'info' as const,
     },
     {
       key: 'company_ltd',

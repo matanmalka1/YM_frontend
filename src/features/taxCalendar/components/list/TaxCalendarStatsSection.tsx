@@ -23,7 +23,7 @@ export const TaxCalendarStatsSection = ({
             label: TAX_CALENDAR_MESSAGES.stats.groups,
             value: summary.groups,
             icon: CalendarDays,
-            variant: 'blue' as const,
+            variant: 'info' as const,
             description: TAX_CALENDAR_MESSAGES.stats.groupsDescription,
           },
         ]
@@ -33,7 +33,7 @@ export const TaxCalendarStatsSection = ({
       label: linkedLabel,
       value: summary.linked,
       icon: CalendarDays,
-      variant: 'blue' as const,
+      variant: 'info' as const,
       description: TAX_CALENDAR_MESSAGES.stats.linkedDescription,
     },
     {
@@ -41,7 +41,7 @@ export const TaxCalendarStatsSection = ({
       label: TAX_CALENDAR_MESSAGES.status.open,
       value: summary.open,
       icon: Clock,
-      variant: 'orange' as const,
+      variant: 'warning' as const,
       description: TAX_CALENDAR_MESSAGES.stats.openDescription,
     },
     {
@@ -49,7 +49,7 @@ export const TaxCalendarStatsSection = ({
       label: TAX_CALENDAR_MESSAGES.status.overdue,
       value: summary.overdue,
       icon: AlertTriangle,
-      variant: 'red' as const,
+      variant: 'negative' as const,
       description: TAX_CALENDAR_MESSAGES.stats.overdueDescription,
     },
     {
@@ -57,7 +57,7 @@ export const TaxCalendarStatsSection = ({
       label: TAX_CALENDAR_MESSAGES.status.done,
       value: summary.done,
       icon: CheckCircle2,
-      variant: 'green' as const,
+      variant: 'positive' as const,
       description: TAX_CALENDAR_MESSAGES.stats.doneDescription,
     },
   ]
