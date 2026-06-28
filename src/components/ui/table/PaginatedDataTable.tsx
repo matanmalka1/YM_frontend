@@ -13,6 +13,7 @@ type BasePaginatedDataTableProps<T> = Pick<
   | 'emptyMessage'
   | 'emptyState'
   | 'getRowKey'
+  | 'maxHeight'
   | 'onRowClick'
   | 'rowClassName'
   | 'stickyHeader'
@@ -26,10 +27,8 @@ export interface PaginatedDataTableProps<T> extends BasePaginatedDataTableProps<
   isFetching?: boolean
   label?: string
   onPageChange: (page: number) => void
-  onPageSizeChange?: (pageSize: number) => void
   page: number
   pageSize: number
-  pageSizeOptions?: number[]
   /** Custom empty render, used in place of DataTable's emptyState when there are no rows. Lets callers branch on multiple empty variants. */
   renderEmpty?: () => ReactNode
   showPagination?: boolean
@@ -48,6 +47,7 @@ export const PaginatedDataTable = <T,>({
   isLoading = false,
   isFetching = false,
   label,
+  maxHeight,
   onPageChange,
   onRowClick,
   page,
@@ -86,6 +86,7 @@ export const PaginatedDataTable = <T,>({
           rowClassName={rowClassName}
           emptyState={emptyState}
           stickyHeader={stickyHeader}
+          maxHeight={maxHeight}
           surface={surface}
           density={density}
         />

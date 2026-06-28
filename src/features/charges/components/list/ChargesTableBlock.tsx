@@ -22,7 +22,6 @@ interface ChargesTableBlockProps {
   onCreateCharge: () => void
   onOpenCharge: (chargeId: number) => void
   onPageChange: (page: number) => void
-  onPageSizeChange?: (pageSize: number) => void
 }
 
 export const ChargesTableBlock = ({
@@ -41,7 +40,6 @@ export const ChargesTableBlock = ({
   onCreateCharge,
   onOpenCharge,
   onPageChange,
-  onPageSizeChange,
 }: ChargesTableBlockProps) => (
   <>
     {!isAdvisor && <Alert variant="info" message={CHARGES_MESSAGES.list.viewOnly} />}
@@ -67,7 +65,6 @@ export const ChargesTableBlock = ({
       total={total}
       label={CHARGES_MESSAGES.list.title}
       onPageChange={onPageChange}
-      onPageSizeChange={onPageSizeChange}
       rowClassName={(charge) => getChargeRowClassName(charge.status)}
       emptyMessage={CHARGES_MESSAGES.list.empty}
       emptyState={getChargesEmptyState(isAdvisor, onCreateCharge)}

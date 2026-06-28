@@ -186,7 +186,6 @@ export const useClientsPage = () => {
         pageSize: filters.page_size,
         total,
         onPageChange: setPage,
-        onPageSizeChange: (size: number) => handleFilterChange('page_size', String(size)),
       },
       emptyState: {
         isEmpty: clientItems.length === 0,

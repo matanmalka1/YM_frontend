@@ -27,15 +27,10 @@ export const AuthorityContactFormFields: React.FC<AuthorityContactFormFieldsProp
     <>
       <Select
         label={AUTHORITY_CONTACT_FIELD_LABELS.contactType}
+        options={AUTHORITY_CONTACT_TYPE_OPTIONS}
         error={errors.contact_type?.message}
         {...register('contact_type')}
-      >
-        {AUTHORITY_CONTACT_TYPE_OPTIONS.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </Select>
+      />
       <Input
         label={AUTHORITY_CONTACT_FIELD_LABELS.name}
         placeholder={placeholders.name}

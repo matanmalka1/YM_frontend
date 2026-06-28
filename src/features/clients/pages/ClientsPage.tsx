@@ -71,7 +71,6 @@ export const Clients: React.FC = () => {
         pageSize={table.pagination.pageSize}
         total={table.pagination.total}
         onPageChange={table.pagination.onPageChange}
-        onPageSizeChange={table.pagination.onPageSizeChange}
         emptyState={{
           icon: table.emptyState.icon,
           variant: table.emptyState.variant,

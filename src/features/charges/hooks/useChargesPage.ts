@@ -141,7 +141,6 @@ export const useChargesPage = () => {
         pageSize: filters.page_size,
         total,
         onPageChange: setPage,
-        onPageSizeChange: (pageSize: number) => setFilter('page_size', String(pageSize)),
       },
       selection: {
         selectedCount: selectedIds.size,

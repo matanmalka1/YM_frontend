@@ -66,7 +66,6 @@ export const Charges: React.FC = () => {
         onCreateCharge={table.onCreateCharge}
         onOpenCharge={table.onOpenCharge}
         onPageChange={table.pagination.onPageChange}
-        onPageSizeChange={table.pagination.onPageSizeChange}
       />
 
       <ChargeDetailDrawer {...drawers.detail} />

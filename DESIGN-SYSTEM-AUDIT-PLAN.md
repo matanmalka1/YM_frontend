@@ -114,12 +114,12 @@ Batch: **1** safe now · **2** additive-prop + opportunistic reuse · **3** need
 - **DECIDED: FULL RENAME** (see Batch 3 follow-up for exact mapping + grep).
 - **Callers (~16 helpers passing `variant: 'blue' as const` etc.):** every `*StatsSection.tsx` / stats helper, e.g. `features/clients/components/list/ClientsStatsSection.tsx`, `charges/.../ChargesStatsSection.tsx`, `workQueue/.../WorkQueueStatsSection.tsx`, `annualReports/.../*StatsSection.tsx`, `taxDashboard/helpers.ts`, `binders/.../BindersStatsSection.tsx`, `advancedPayments/.../*StatsSection.tsx`, `reports/components/AgingReportHeader.tsx`, etc. (full set: 16 files via `<StatsCard>`).
 
-### F12 — `PaginatedDataTable` page-size props are dead · 🔴 Batch 3
+### F12 — `PaginatedDataTable` page-size props are dead · ✅ completed
 
-- **Problem:** Callers wire `onPageSizeChange`/`pageSizeOptions`, but `PaginationCard` renders **no** page-size selector, and the props aren't forwarded → handler never fires. `maxHeight` also dropped from the DataTable Pick.
+- **Problem:** Callers wired `onPageSizeChange`/`pageSizeOptions`, but `PaginationCard` rendered **no** page-size selector, and the props weren't forwarded → handler never fired. `maxHeight` also dropped from the DataTable Pick.
 - **Root cause:** `PaginatedDataTable.tsx:7-18,27,30` declares props; `PaginationCard.tsx` has no selector.
-- **DECIDED: REMOVE dead props** (see Batch 3 follow-up).
-- **Callers wiring the dead handler:** `features/clients/hooks/useClientsPage.ts:188` + `clients/pages/ClientsPage.tsx:75`; `charges/components/list/ChargesTableBlock.tsx:24,43,69` + `charges/hooks/useChargesPage.ts:146` + `charges/pages/ChargesPage.tsx:68`; `users/pages/UsersPage.tsx:67` + `users/hooks/useUsersPage.ts:162`.
+- **Resolution:** Removed dead `onPageSizeChange`/`pageSizeOptions` from `PaginatedDataTable` and unwired Clients/Charges/Users callers. Added `maxHeight` to the DataTable `Pick`. No behavior change; the selector never rendered.
+- **Completed in code:** `components/ui/table/PaginatedDataTable.tsx`; `features/clients/{hooks/useClientsPage.ts,pages/ClientsPage.tsx}`; `features/charges/{hooks/useChargesPage.ts,pages/ChargesPage.tsx,components/list/ChargesTableBlock.tsx}`; `features/users/{hooks/useUsersPage.ts,pages/UsersPage.tsx}`.
 
 ### F13 — `StatusBadge` drops Badge's `dot`/`ring`/`onClick` · 🟡 Batch 3
 
@@ -189,7 +189,6 @@ Batch: **1** safe now · **2** additive-prop + opportunistic reuse · **3** need
 These are API-surface / taste changes. When ready, open a fresh plan covering the items below. Decisions already made by the user are locked in — carry them into that plan verbatim:
 
 - **F11 — StatsCard variant → semantic tones: FULL RENAME (locked).** Change `StatVariant` to `info|positive|negative|warning|purple|neutral` (map blue→info, green→positive, red→negative, orange→warning; keep `purple` = sanctioned violet accent, `neutral`). Then migrate **all ~16** stat-section helpers' `variant: '<color>' as const` literals to the tone names. Grep entry point: `grep -rn "variant: '" features/**/+*StatsSection*` and every `<StatsCard>` caller listed in F11. Update memory `reference_design_system_source_of_truth` if naming convention is documented.
-- **F12 — PaginatedDataTable dead props: REMOVE (locked).** Delete `onPageSizeChange`/`pageSizeOptions` from `PaginatedDataTable` props; unwire the 3 features (clients/charges/users — exact lines in F12). Add `maxHeight` to the DataTable `Pick` while there. No behavior change (selector never rendered).
 - **F10 — Button:** add `xs` size; consider `iconOnly` (3 text-xs faker call sites in F10; icon-only is broad).
 - **F13 — StatusBadge:** forward `dot`/`ring`/`onClick` (~13 callers, additive).
 - **F14 — Tooltip/Alert:** widen `text`/`message` to `ReactNode`; add Tooltip `placement`; decouple `Alert.onRetry` styling from red.

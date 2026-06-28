@@ -60,7 +60,6 @@ export const Users: React.FC = () => {
         pageSize={table.pagination.pageSize}
         total={table.pagination.total}
         onPageChange={table.pagination.onPageChange}
-        onPageSizeChange={table.pagination.onPageSizeChange}
         emptyState={{
           title: table.emptyState.title,
           message: table.emptyState.message,
