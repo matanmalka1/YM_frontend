@@ -20,6 +20,7 @@ interface SelectDropdownProps {
   size?: 'xs' | 'sm' | 'md'
   error?: boolean
   placeholder?: string
+  menuWidth?: 'trigger' | 'content'
   className?: string
   name?: string
   id?: string
@@ -56,6 +57,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   size = 'md',
   error = false,
   placeholder = 'בחר...',
+  menuWidth = 'trigger',
   className,
   name,
   id,
@@ -223,6 +225,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   const portalOffset = getOverlayPortalOffset(portalContainer)
   const portalRect = portalContainer?.getBoundingClientRect()
   const viewportBottomToPortalBottom = portalRect ? window.innerHeight - portalRect.bottom : 0
+  const fitMenuToContent = menuWidth === 'content'
 
   return (
     <>
@@ -265,8 +268,13 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
               position: 'fixed',
               top: placement.above ? undefined : placement.top + 4 - portalOffset.top,
               bottom: placement.above ? placement.bottom + 4 - viewportBottomToPortalBottom : undefined,
-              left: placement.left - portalOffset.left,
-              width: placement.width,
+              left: placement.left + (fitMenuToContent ? placement.width : 0) - portalOffset.left,
+              width: fitMenuToContent ? 'max-content' : placement.width,
+              minWidth: placement.width,
+              maxWidth: fitMenuToContent
+                ? Math.max(placement.width, placement.left + placement.width - portalOffset.left - 16)
+                : undefined,
+              transform: fitMenuToContent ? 'translateX(-100%)' : undefined,
               zIndex: 9999,
             }}
             className="pointer-events-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg overflow-auto max-h-60 overscroll-contain"
@@ -292,7 +300,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
                 role="option"
                 aria-selected={currentValue === String(opt.value)}
               >
-                <span className="flex-1 truncate">{opt.label}</span>
+                <span className={cn('flex-1', fitMenuToContent ? 'whitespace-nowrap' : 'truncate')}>{opt.label}</span>
                 {currentValue === String(opt.value) && (
                   <Check className={cn('shrink-0 text-primary-500', iconSizeClasses[size])} />
                 )}

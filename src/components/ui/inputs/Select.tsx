@@ -14,6 +14,7 @@ interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>
   size?: 'xs' | 'sm' | 'md'
   options: SelectOption[]
   placeholder?: string
+  menuWidth?: 'trigger' | 'content'
   fieldClassName?: string
 }
 
@@ -25,6 +26,7 @@ export const Select: React.FC<SelectProps> = ({
   fieldClassName,
   options,
   placeholder,
+  menuWidth,
   value,
   onChange,
   onBlur,
@@ -49,6 +51,7 @@ export const Select: React.FC<SelectProps> = ({
           name={name}
           error={Boolean(error)}
           placeholder={placeholder}
+          menuWidth={menuWidth}
           className={className}
           aria-describedby={describedBy}
         />

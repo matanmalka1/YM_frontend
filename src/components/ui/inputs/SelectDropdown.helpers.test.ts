@@ -11,10 +11,19 @@ const options: SelectDropdownOption[] = [
 ]
 
 describe('SelectDropdown helpers', () => {
-  it('uses the placeholder only when the current value is empty', () => {
+  it('uses the placeholder when the current value is empty and no empty option exists', () => {
     expect(getSelectDropdownDisplay(options, '', 'בחר...')).toEqual({
       label: 'בחר...',
       isPlaceholder: true,
+    })
+  })
+
+  it('uses the explicit empty option label instead of the placeholder', () => {
+    expect(
+      getSelectDropdownDisplay([{ value: '', label: 'כל העסקים' }, ...options], '', 'בחר...'),
+    ).toEqual({
+      label: 'כל העסקים',
+      isPlaceholder: false,
     })
   })
 

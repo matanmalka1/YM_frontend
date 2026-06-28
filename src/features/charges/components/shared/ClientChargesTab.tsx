@@ -87,6 +87,8 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
               onChange={(e) => setSelectedBusinessId(e.target.value ? Number(e.target.value) : null)}
               options={businessOptions}
               disabled={businessesLoading}
+              fieldClassName="w-48 max-w-[60vw]"
+              menuWidth="content"
             />
           )}
           {isAdvisor && (

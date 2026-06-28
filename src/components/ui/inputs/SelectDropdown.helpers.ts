@@ -14,14 +14,18 @@ export const getSelectDropdownDisplay = (
   currentValue: string,
   placeholder: string,
 ): SelectDropdownDisplay => {
+  const selectedOption = options.find((option) => String(option.value) === currentValue)
+
+  if (selectedOption) {
+    return { label: selectedOption.label, isPlaceholder: false }
+  }
+
   if (!currentValue) {
     return { label: placeholder, isPlaceholder: true }
   }
 
-  const selectedOption = options.find((option) => String(option.value) === currentValue)
-
   return {
-    label: selectedOption?.label ?? currentValue,
+    label: currentValue,
     isPlaceholder: false,
   }
 }
