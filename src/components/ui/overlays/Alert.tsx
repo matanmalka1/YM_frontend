@@ -3,7 +3,7 @@ import type { LucideIcon } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 
 interface AlertProps {
-  message: string
+  message: React.ReactNode
   variant?: 'warning' | 'info' | 'error' | 'success' | 'neutral'
   size?: 'sm' | 'md'
   /** Replaces the variant's default icon while retaining its semantic palette. */
@@ -20,6 +20,7 @@ const config = {
     icon: 'text-orange-600',
     text: 'text-orange-900',
     iconBg: 'bg-orange-100',
+    retry: 'border-orange-200 text-orange-700 hover:bg-orange-50',
     Icon: AlertTriangle,
   },
   info: {
@@ -27,6 +28,7 @@ const config = {
     icon: 'text-primary-600',
     text: 'text-primary-900',
     iconBg: 'bg-primary-100',
+    retry: 'border-primary-200 text-primary-700 hover:bg-primary-50',
     Icon: Info,
   },
   error: {
@@ -34,6 +36,7 @@ const config = {
     icon: 'text-negative-600',
     text: 'text-negative-800',
     iconBg: 'bg-negative-100',
+    retry: 'border-negative-200 text-negative-600 hover:bg-negative-50',
     Icon: AlertCircle,
   },
   success: {
@@ -41,6 +44,7 @@ const config = {
     icon: 'text-positive-700',
     text: 'text-positive-800',
     iconBg: 'bg-positive-100',
+    retry: 'border-positive-200 text-positive-700 hover:bg-positive-50',
     Icon: CheckCircle,
   },
   neutral: {
@@ -48,6 +52,7 @@ const config = {
     icon: 'text-gray-500',
     text: 'text-gray-600',
     iconBg: 'bg-gray-100',
+    retry: 'border-gray-200 text-gray-600 hover:bg-gray-50',
     Icon: Info,
   },
 }
@@ -88,7 +93,10 @@ export const Alert: React.FC<AlertProps> = ({
         <button
           type="button"
           onClick={onRetry}
-          className="flex shrink-0 items-center gap-1.5 rounded-md border border-negative-200 bg-white px-3 py-1.5 text-xs font-medium text-negative-600 transition-colors hover:bg-negative-50"
+          className={cn(
+            'flex shrink-0 items-center gap-1.5 rounded-md border bg-white px-3 py-1.5 text-xs font-medium transition-colors',
+            c.retry,
+          )}
         >
           <RotateCcw className="h-3.5 w-3.5" />
           נסה שנית

@@ -13,7 +13,7 @@ import { cn } from '../../../utils/utils'
 import { getOverlayPortalOffset, useOverlayPortalContainer } from '../overlays/OverlayPortalContext'
 
 interface TooltipProps {
-  text: string
+  text: ReactNode
   children: ReactNode
   className?: string
 }
