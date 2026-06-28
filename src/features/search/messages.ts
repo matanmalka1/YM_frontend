@@ -11,7 +11,6 @@ export const SEARCH_MESSAGES = {
     emptyTitle: 'לא נמצאו תוצאות',
     emptyMessage: 'נסה להרחיב את קריטריוני החיפוש או לאפס את הפילטרים',
     resetSearch: 'איפוס חיפוש',
-    foundResultsPrefix: 'נמצאו',
     emptyResults: 'אין תוצאות',
   },
   columns: {

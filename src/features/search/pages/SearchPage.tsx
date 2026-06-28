@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { useSearchDebounce } from '@/hooks/useSearchDebounce'
-import { formatCount } from '@/utils/utils'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { Search as SearchIcon, FileSearch } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
@@ -19,7 +18,6 @@ import { SEARCH_ADVANCED_FILTER_KEYS } from '../types'
 import type { SearchResult } from '../api'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 import { SEARCH_MESSAGES } from '../messages'
-import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 export const Search: React.FC = () => {
   const { error, filters, hasAnyFilter, handleFilterChange, handleReset, loading, results, documents, total } =
@@ -85,14 +83,6 @@ export const Search: React.FC = () => {
 
       {(loading || results.length > 0) && (
         <>
-          {!loading && (
-            <p className="px-1 text-sm text-gray-500">
-              {SEARCH_MESSAGES.page.foundResultsPrefix}{' '}
-              <strong className="text-gray-900">{formatCount(total + documents.length)}</strong>{' '}
-              {GLOBAL_UI_MESSAGES.common.results}
-            </p>
-          )}
-
           <DataTable<SearchResult>
             data={results}
             columns={searchColumns}

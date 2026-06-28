@@ -310,7 +310,7 @@ export const SelectedClientDisplay: React.FC<SelectedClientDisplayProps> = ({
     <div
       className={cn(
         'flex items-center gap-2 rounded-lg border border-primary-200 bg-primary-50 px-3',
-        size === 'sm' ? 'h-8 py-1.5' : 'py-3',
+        size === 'sm' ? 'h-8 py-1.5' : 'h-9 py-2',
       )}
     >
       <span className="flex-1 text-sm font-medium text-primary-900">{name}</span>
