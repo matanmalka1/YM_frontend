@@ -9,6 +9,22 @@ import {
   VAT_TYPES,
 } from './constants'
 
+/** Optional/nullable numeric string that must be >= 0 (and <= `max` when given). */
+const optionalNonNegativeNumberString = (message: string, max?: number) =>
+  z
+    .string()
+    .trim()
+    .optional()
+    .nullable()
+    .refine(
+      (v) => {
+        if (!v) return true
+        const n = parseFloat(v)
+        return !isNaN(n) && n >= 0 && (max == null || n <= max)
+      },
+      { message },
+    )
+
 export const createBusinessSchema = z.object({
   business_name: z.string().trim().min(1, 'יש להזין שם עסק').max(100, 'שם עסק ארוך מדי'),
   opened_at: z.string().optional().nullable(),
@@ -37,19 +53,7 @@ export const createClientSchema = z
       .enum(ADVANCE_PAYMENT_FREQUENCY_VALUES, { message: 'יש לציין תדירות מקדמות' })
       .nullable()
       .optional(),
-    advance_rate: z
-      .string()
-      .trim()
-      .optional()
-      .nullable()
-      .refine(
-        (v) => {
-          if (!v) return true
-          const n = parseFloat(v)
-          return !isNaN(n) && n >= 0 && n <= 100
-        },
-        { message: 'שיעור מקדמות חייב להיות בין 0 ל-100' },
-      ),
+    advance_rate: optionalNonNegativeNumberString('שיעור מקדמות חייב להיות בין 0 ל-100', 100),
     accountant_id: z.string().trim().optional().or(z.literal('')),
     business_name: z.string().trim().max(100, 'שם עסק ארוך מדי').optional().or(z.literal('')),
     business_opened_at: z.string().optional().nullable(),
@@ -138,19 +142,7 @@ export const clientEditSchema = z.object({
   vat_reporting_frequency: z.enum(VAT_TYPES).nullable().optional(),
   advance_payment_frequency: z.enum(ADVANCE_PAYMENT_FREQUENCY_VALUES).nullable().optional(),
   advance_rate: z.string().optional().nullable(),
-  annual_revenue: z
-    .string()
-    .trim()
-    .optional()
-    .nullable()
-    .refine(
-      (v) => {
-        if (!v) return true
-        const n = parseFloat(v)
-        return !isNaN(n) && n >= 0
-      },
-      { message: 'מחזור שנתי חייב להיות מספר חיובי' },
-    ),
+  annual_revenue: optionalNonNegativeNumberString('מחזור שנתי חייב להיות מספר חיובי'),
   accountant_id: z.string().trim().optional().nullable(),
 })
 
