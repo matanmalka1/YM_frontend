@@ -1,7 +1,6 @@
-import type { Column } from '@/components/ui/table/DataTable'
-import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
+import { PaginatedDataTable, type Column } from '@/components/ui/table'
 import { Alert } from '@/components/ui/overlays/Alert'
-import { getChargeRowClassName, getChargesEmptyState } from '../../utils/chargeHelpers'
+import { getChargeRowVariant, getChargesEmptyState } from '../../utils/chargeHelpers'
 import type { BulkChargeActionPayload, ChargeListItem } from '../../api'
 import { ChargeBulkToolbar } from './ChargeBulkToolbar'
 import { CHARGES_MESSAGES } from '../../messages'
@@ -65,7 +64,7 @@ export const ChargesTableBlock = ({
       total={total}
       label={CHARGES_MESSAGES.list.title}
       onPageChange={onPageChange}
-      rowClassName={(charge) => getChargeRowClassName(charge.status)}
+      getRowVariant={(charge) => getChargeRowVariant(charge.status)}
       emptyMessage={CHARGES_MESSAGES.list.empty}
       emptyState={getChargesEmptyState(isAdvisor, onCreateCharge)}
     />

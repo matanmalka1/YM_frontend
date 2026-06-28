@@ -1,4 +1,4 @@
-import type { DataTableProps } from '@/components/ui/table'
+import type { DataTableProps, TableRowVariant } from '@/components/ui/table'
 import { formatCurrencyILS, parsePositiveInt } from '@/utils/utils'
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 import { toOptionalNumber, toOptionalString } from '@/utils/filters'
@@ -45,10 +45,10 @@ export const runChargeActionRequest = (chargeId: number, action: ChargeAction, r
 export const getChargeStatusStatDisplay = (stat: ChargeStatusStat, isAdvisor: boolean): string =>
   isAdvisor ? formatCurrencyILS(stat.amount, { compact: true, fractionDigits: 2 }) : String(stat.count)
 
-export const getChargeRowClassName = (status: string): string => {
-  if (status === 'canceled') return 'text-gray-400'
-  if (status === 'issued') return 'bg-primary-50/20'
-  return ''
+export const getChargeRowVariant = (status: string): TableRowVariant | undefined => {
+  if (status === 'canceled') return 'muted'
+  if (status === 'issued') return 'primarySoft'
+  return undefined
 }
 
 export const getChargesEmptyState = (
