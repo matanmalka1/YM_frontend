@@ -185,7 +185,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
         <div className="flex gap-2 justify-end">
           {step === 'preview' && (
             <Button type="button" variant="ghost" disabled={isSending} onClick={() => setStep('compose')}>
-              {NOTIFICATIONS_MESSAGES.actions.back}
+              {GLOBAL_UI_MESSAGES.actions.back}
             </Button>
           )}
           <Button type="button" variant="ghost" disabled={isPreviewing || isSending} onClick={onClose}>
@@ -198,11 +198,11 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
               disabled={isPreviewing || !!blockedReason}
               onClick={() => void handlePreview()}
             >
-              {NOTIFICATIONS_MESSAGES.actions.preview}
+              {GLOBAL_UI_MESSAGES.actions.preview}
             </Button>
           ) : (
             <Button type="button" isLoading={isSending} disabled={isSending} onClick={() => void handleSend()}>
-              {NOTIFICATIONS_MESSAGES.actions.send}
+              {GLOBAL_UI_MESSAGES.actions.send}
             </Button>
           )}
         </div>

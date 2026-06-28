@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { ArrowLeft, CheckCircle2, ClipboardCheck, Eye, ListChecks, Lock, RotateCcw, Trash2, Unlock } from 'lucide-react'
 import { RowActionItem, RowActionSeparator, RowActionsMenu } from '@/components/ui/table'
 import { hasBinderAction } from '../../utils'
@@ -45,7 +46,7 @@ export const BinderRowActions: React.FC<BinderRowActionsProps> = ({
   return (
     <RowActionsMenu ariaLabel={BINDERS_MESSAGES.rowActions.ariaLabel(binder.id)}>
       <RowActionItem
-        label={BINDERS_MESSAGES.actions.viewDetails}
+        label={GLOBAL_UI_MESSAGES.actions.viewDetails}
         onClick={onOpenDetail}
         icon={<Eye className="h-4 w-4" />}
         disabled={disabled}

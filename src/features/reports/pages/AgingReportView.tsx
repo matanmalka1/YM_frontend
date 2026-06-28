@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { FileDown, FileSpreadsheet } from "lucide-react";
 import { Button } from "../../../components/ui/primitives/Button";
 import { PageStateGuard } from "../../../components/ui/layout/PageStateGuard";
@@ -69,7 +70,7 @@ export const AgingReportView: React.FC<AgingReportViewProps> = ({ embedded = fal
               page={page}
               totalPages={totalPages}
               total={data.total}
-              label={REPORTS_MESSAGES.common.clients}
+              label={GLOBAL_UI_MESSAGES.common.clients}
               onPageChange={setPage}
             />
           )}

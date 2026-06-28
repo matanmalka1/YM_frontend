@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import { Input } from '@/components/ui/inputs/Input'
@@ -84,7 +85,7 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
         </div>
         <div className="space-y-3">
           <Select
-            label={ADVANCED_PAYMENTS_MESSAGES.editableSections.statusLabel}
+            label={GLOBAL_UI_MESSAGES.common.status}
             value={form.status}
             onChange={(e) => form.setStatus(e.target.value)}
             options={ADVANCE_PAYMENT_STATUS_OPTIONS}
@@ -105,7 +106,7 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
           />
         </div>
         <Textarea
-          label={ADVANCED_PAYMENTS_MESSAGES.editableSections.notesLabel}
+          label={GLOBAL_UI_MESSAGES.common.notes}
           id="advance-payment-notes"
           rows={3}
           value={form.notes}

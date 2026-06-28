@@ -179,7 +179,7 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
               disabled={isUpdating}
             />
             <Select
-              label={CLIENTS_MESSAGES.businessesCard.statusLabel}
+              label={GLOBAL_UI_MESSAGES.common.status}
               options={BUSINESS_STATUS_OPTIONS}
               value={editState.status}
               onChange={(e) =>

@@ -1,7 +1,10 @@
 import { formatCurrencyILS, MONTH_NAMES } from '../../../utils/utils'
 import type { ChargeListItem } from '../api'
 import { CHARGE_PERIOD_PATTERN } from '../constants'
+import { CHARGES_MESSAGES } from '../messages'
 import type { BackendAction } from '@/lib/actions/types'
+
+type ChargeBusiness = { id: number; business_name?: string | null }
 
 const hasChargeAction = (actions: BackendAction[] | null | undefined, key: string): boolean =>
   actions?.some((action) => action.key === key) ?? false
@@ -61,3 +64,6 @@ export const getChargeAmountText = (charge: ChargeListItem): string => {
 
 export const getChargeClientLabel = (charge: ChargeListItem): string =>
   charge.client_name ?? `לקוח #${charge.client_record_id}`
+
+export const getChargeBusinessLabel = (business: ChargeBusiness): string =>
+  business.business_name ?? CHARGES_MESSAGES.create.businessName(business.id)

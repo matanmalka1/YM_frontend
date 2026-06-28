@@ -74,7 +74,7 @@ export const CorrespondenceModal: React.FC<CorrespondenceModalProps> = ({
             {GLOBAL_UI_MESSAGES.actions.cancel}
           </Button>
           <Button type="button" isLoading={isCreating} disabled={isCreating} onClick={submit}>
-            {existing ? CORRESPONDENCE_MESSAGES.modal.updateButton : CORRESPONDENCE_MESSAGES.modal.addButton}
+            {existing ? CORRESPONDENCE_MESSAGES.modal.updateButton : GLOBAL_UI_MESSAGES.actions.add}
           </Button>
         </div>
       }
@@ -132,7 +132,7 @@ export const CorrespondenceModal: React.FC<CorrespondenceModalProps> = ({
         )}
 
         <Textarea
-          label={CORRESPONDENCE_MESSAGES.modal.notesLabel}
+          label={GLOBAL_UI_MESSAGES.common.notes}
           rows={3}
           placeholder={CORRESPONDENCE_MESSAGES.modal.notesPlaceholder}
           {...register('notes')}

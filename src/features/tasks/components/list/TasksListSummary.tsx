@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { ListChecks } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Card } from '@/components/ui/primitives/Card'
@@ -40,7 +41,7 @@ export const TasksListSummary: React.FC<TasksListSummaryProps> = ({ total, visib
       </div>
       <div className="mt-3 grid grid-cols-3 gap-1.5 text-2xs">
         <TaskFocusPill
-          label={TASKS_MESSAGES.summary.status}
+          label={GLOBAL_UI_MESSAGES.common.status}
           value={featuredTask ? taskStatusLabels[featuredTask.status] : '—'}
         />
         <TaskFocusPill

@@ -35,7 +35,7 @@ export const ChargeRowActions: React.FC<ChargeRowActionsProps> = ({
   return (
     <RowActionsMenu ariaLabel={CHARGES_MESSAGES.actions.chargeActionsAria(chargeId)}>
       <RowActionItem
-        label={CHARGES_MESSAGES.actions.viewDetails}
+        label={GLOBAL_UI_MESSAGES.actions.viewDetails}
         onClick={onOpenDetail}
         icon={<Eye className="h-4 w-4" />}
         disabled={disabled}

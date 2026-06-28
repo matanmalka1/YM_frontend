@@ -18,7 +18,6 @@ export const SIGNATURE_REQUESTS_MESSAGES = {
     message: 'האם לבטל את בקשת החתימה? פעולה זו אינה הפיכה.',
   },
   fields: {
-    status: 'סטטוס',
     signer: 'חותם',
     signerEmail: 'דוא"ל',
     signerPhone: 'טלפון',
@@ -43,7 +42,6 @@ export const SIGNATURE_REQUESTS_MESSAGES = {
     noActiveRequests: 'אין בקשות חתימה פעילות',
     clientOfficeNumber: "מס' לקוח",
     request: 'בקשה',
-    client: 'לקוח',
     clientReference: (clientId: number) => `לקוח #${clientId}`,
   },
   card: {

@@ -312,7 +312,7 @@ export const useVatWorkItemsPage = () => {
         open: deleteTarget !== null,
         title: VAT_MESSAGES.deleteWorkItem.title,
         message: VAT_ERROR_MESSAGES.deleteWorkItem.message,
-        confirmLabel: VAT_MESSAGES.deleteWorkItem.confirm,
+        confirmLabel: GLOBAL_UI_MESSAGES.actions.delete,
         cancelLabel: GLOBAL_UI_MESSAGES.actions.cancel,
         confirmVariant: 'danger' as const,
         isLoading: isDeleting,

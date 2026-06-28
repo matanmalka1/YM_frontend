@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import {
   actionsColumn,
   buildSelectionColumn,
@@ -58,7 +59,7 @@ export const buildClientColumns = ({
     }),
     statusColumn({
       key: 'status',
-      header: CLIENTS_MESSAGES.columns.status,
+      header: GLOBAL_UI_MESSAGES.common.status,
       getStatus: (client) => client.status,
       getLabel: getClientStatusLabel,
       variantMap: CLIENT_STATUS_BADGE_VARIANTS,

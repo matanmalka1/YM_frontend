@@ -12,18 +12,14 @@ export const NOTES_MESSAGES = {
   },
   composer: {
     placeholder: 'הזן הערה...',
-    saveButton: 'שמור',
   },
   row: {
     editTitle: 'ערוך',
-    deleteTitle: 'מחק',
   },
   card: {
-    title: 'הערות',
     notesCount: (total: number) => `${total} הערות`,
     emptyTitle: 'אין הערות עדיין',
     deleteModalTitle: 'מחיקת הערה',
     deleteMessage: 'האם למחוק את ההערה? פעולה זו אינה הפיכה.',
-    deleteConfirm: 'מחק',
   },
 } as const

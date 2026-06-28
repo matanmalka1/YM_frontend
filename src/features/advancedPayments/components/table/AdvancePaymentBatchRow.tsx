@@ -1,4 +1,10 @@
-import { GroupedPeriodRow, formatDueDateLabel, formatRelativeDueLabel, type PeriodSummaryMetric } from '@/components/ui/table'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
+import {
+  GroupedPeriodRow,
+  formatDueDateLabel,
+  formatRelativeDueLabel,
+  type PeriodSummaryMetric,
+} from '@/components/ui/table'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
 import { getIncludedPeriodLabel } from '../../utils/advancePaymentComponentUtils'
 import { AdvancePaymentBatchContent } from './AdvancePaymentBatchContent'
@@ -17,7 +23,7 @@ interface AdvancePaymentBatchRowProps {
 
 const getBatchSummary = (batch: AdvancePaymentDueDateGroup): PeriodSummaryMetric[] => {
   const summary: PeriodSummaryMetric[] = [
-    { label: ADVANCED_PAYMENTS_MESSAGES.batchRow.clientsLabel, value: batch.client_count },
+    { label: GLOBAL_UI_MESSAGES.common.clients, value: batch.client_count },
     {
       label: ADVANCED_PAYMENTS_MESSAGES.batchRow.pendingLabel,
       value: batch.pending_count,

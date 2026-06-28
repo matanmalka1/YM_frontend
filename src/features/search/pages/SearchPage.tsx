@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useRef, useState } from 'react'
 import { useSearchDebounce } from '@/hooks/useSearchDebounce'
 import { getTotalPages } from '@/utils/paginationUtils'
@@ -38,7 +39,7 @@ export const Search: React.FC = () => {
 
   return (
     <PageContent>
-      <PageHeader title={SEARCH_MESSAGES.page.title} description={SEARCH_MESSAGES.page.description} />
+      <PageHeader title={GLOBAL_UI_MESSAGES.common.search} description={SEARCH_MESSAGES.page.description} />
 
       <ToolbarContainer>
         <div className="space-y-3">
@@ -88,7 +89,7 @@ export const Search: React.FC = () => {
             columns={searchColumns}
             getRowKey={(r) => `${r.result_type}-${r.client_record_id}-${r.binder_id ?? 'none'}`}
             isLoading={loading}
-            emptyMessage={SEARCH_MESSAGES.page.emptyResults}
+            emptyMessage={GLOBAL_UI_MESSAGES.common.noResults}
           />
 
           {!loading && total > 0 && (

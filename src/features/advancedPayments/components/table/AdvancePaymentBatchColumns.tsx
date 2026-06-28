@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { AlertTriangle, Edit, ExternalLink } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import {
@@ -118,7 +119,7 @@ export const buildAdvancePaymentBatchColumns = ({
   }),
   statusColumn({
     key: 'status',
-    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.statusHeader,
+    header: GLOBAL_UI_MESSAGES.common.status,
     getStatus: (row) => row.status,
     getLabel: getAdvancePaymentStatusLabel,
     variantMap: ADVANCE_PAYMENT_STATUS_VARIANTS,

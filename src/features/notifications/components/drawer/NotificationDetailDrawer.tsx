@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { Send } from 'lucide-react'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
@@ -55,18 +56,18 @@ export const NotificationDetailDrawer = ({
     {error ? <Alert variant="error" message={NOTIFICATIONS_ERROR_MESSAGES.detail.loadError} /> : null}
     {notification && (
       <div className="space-y-4">
-        <DrawerSection title={NOTIFICATIONS_MESSAGES.detail.sectionDetails}>
+        <DrawerSection title={GLOBAL_UI_MESSAGES.common.details}>
           <DefinitionList
             layout="stacked"
             items={[
               { label: NOTIFICATIONS_MESSAGES.detail.type, value: getTriggerLabel(notification) },
               { label: NOTIFICATIONS_MESSAGES.detail.domain, value: getDomainLabel(notification.domain_label) },
               {
-                label: NOTIFICATIONS_MESSAGES.detail.client,
+                label: GLOBAL_UI_MESSAGES.common.client,
                 value: notification.client_name ?? `#${notification.client_record_id}`,
               },
               { label: NOTIFICATIONS_MESSAGES.detail.recipient, value: notification.recipient ?? '—' },
-              { label: NOTIFICATIONS_MESSAGES.detail.status, value: NOTIFICATION_STATUS_LABELS[notification.status] },
+              { label: GLOBAL_UI_MESSAGES.common.status, value: NOTIFICATION_STATUS_LABELS[notification.status] },
             ]}
           />
         </DrawerSection>

@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { DefinitionList } from '@/components/ui/layout/DefinitionList'
 import { DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import { formatShekelAmount, formatDate } from '@/utils/utils'
@@ -47,7 +48,7 @@ export const AdvancePaymentDetailsPanel: React.FC<AdvancePaymentDetailsPanelProp
           label: ADVANCED_PAYMENTS_MESSAGES.readonlySections.paidAtLabel,
           value: model.paidAt ? formatDate(model.paidAt) : null,
         },
-        { label: ADVANCED_PAYMENTS_MESSAGES.readonlySections.notesLabel, value: model.notes },
+        { label: GLOBAL_UI_MESSAGES.common.notes, value: model.notes },
       ]}
     />
   </DrawerSection>

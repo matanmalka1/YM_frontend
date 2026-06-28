@@ -4,7 +4,6 @@
  */
 export const VAT_MESSAGES = {
   actions: {
-    add: 'הוסף',
     openVatReport: 'פתח דוח',
     openNewVatReport: 'פתיחת דוח מע״מ',
     newVatReport: 'דוח מע״מ חדש',
@@ -17,9 +16,6 @@ export const VAT_MESSAGES = {
     confirmMaterialsReceived: 'אשר קבלת חומרים',
     readyForReview: 'שלח לבדיקה',
     deleteWorkItem: 'מחק תיק',
-    edit: 'עריכה',
-    delete: 'מחק',
-    save: 'שמור',
     documentsReminder: 'תזכורת מסמכים',
     openClients: 'פתח לקוחות',
   },
@@ -139,7 +135,6 @@ export const VAT_MESSAGES = {
     noMatchingWorkItems: 'לא נמצאו תיקים התואמים לסינון',
     noWorkItemsInPeriod: 'אין תיקים בתקופה זו',
     workItemsPaginationLabel: 'תיקים',
-    clientsMetric: 'לקוחות',
     pendingMetric: 'ממתינים',
     filedMetric: 'הוגשו',
     notFiledMetric: 'לא הוגשו',
@@ -150,11 +145,9 @@ export const VAT_MESSAGES = {
   },
   columns: {
     officeClientNumber: "מס' לקוח",
-    client: 'לקוח',
     vatItemId: (id: number) => `פריט מע״מ #${id}`,
     idNumber: 'ת.ז / ח.פ',
     reportingPeriod: 'תקופת דיווח',
-    status: 'סטטוס',
     netVat: 'מע"מ נטו',
     overrideBadge: 'עוקף',
     dueDate: 'מועד הגשה',
@@ -165,7 +158,6 @@ export const VAT_MESSAGES = {
     emptyTitle: 'אין חשבוניות עדיין',
     number: 'מספר',
     exceptional: 'חריגה',
-    date: 'תאריך',
     counterparty: 'ספק / לקוח',
     counterpartyId: 'ח.פ / ע.מ',
     documentType: 'סוג מסמך',
@@ -195,7 +187,6 @@ export const VAT_MESSAGES = {
   },
   deleteWorkItem: {
     title: 'מחיקת תיק מע"מ',
-    confirm: 'מחק',
   },
   stats: {
     pendingTitle: 'ממתין לחומרים',

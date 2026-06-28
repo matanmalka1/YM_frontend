@@ -1,4 +1,12 @@
-import { dateTimeColumn, monoColumn, textColumn, PaginatedDataTable, type Column, type DataTableProps } from '@/components/ui/table'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
+import {
+  dateTimeColumn,
+  monoColumn,
+  textColumn,
+  PaginatedDataTable,
+  type Column,
+  type DataTableProps,
+} from '@/components/ui/table'
 import { AUDIT_MESSAGES } from '../messages'
 
 type AuditTrailTableEntry = {
@@ -39,7 +47,7 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
   const columns: Column<TEntry>[] = [
     dateTimeColumn({
       key: 'performed_at',
-      header: AUDIT_MESSAGES.table.columnDate,
+      header: GLOBAL_UI_MESSAGES.common.date,
       getValue: (entry) => entry.performed_at,
     }),
     textColumn({
@@ -50,7 +58,7 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
     }),
     textColumn({
       key: 'details',
-      header: AUDIT_MESSAGES.table.columnDetails,
+      header: GLOBAL_UI_MESSAGES.common.details,
       wrap: true,
       truncate: detailsTruncate,
       tone: 'muted',

@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { Modal } from '../../../../components/ui/overlays/Modal'
 import { DataTable, textColumn, type Column } from '../../../../components/ui/table'
 import { getStatusLabel } from '../../api/utils'
@@ -19,7 +20,7 @@ interface MetricRow {
 // Pivot: rows are metrics, columns are years. DataTable iterates these as its
 // `data`; the year columns are computed per-report below.
 const ROWS: MetricRow[] = [
-  { label: ANNUAL_REPORTS_MESSAGES.yearComparisonModal.statusLabel, render: (r) => getStatusLabel(r.status) },
+  { label: GLOBAL_UI_MESSAGES.common.status, render: (r) => getStatusLabel(r.status) },
   { label: ANNUAL_REPORTS_MESSAGES.yearComparisonModal.taxDueLabel, render: (r) => formatShekelAmount(r.tax_due) },
   {
     label: ANNUAL_REPORTS_MESSAGES.yearComparisonModal.refundDueLabel,

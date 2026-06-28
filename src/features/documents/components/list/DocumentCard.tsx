@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { Calendar, Download, Eye, FileText, History, Pencil, RefreshCw, Trash2 } from 'lucide-react'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import { Button } from '../../../../components/ui/primitives/Button'
@@ -75,9 +76,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
           )}
           {isAdvisor && (
             <RowActionItem
-              label={
-                deletingId === doc.id ? DOCUMENTS_MESSAGES.card.deletingLabel : DOCUMENTS_MESSAGES.card.deleteLabel
-              }
+              label={deletingId === doc.id ? DOCUMENTS_MESSAGES.card.deletingLabel : GLOBAL_UI_MESSAGES.actions.delete}
               onClick={() => onDelete(doc.id)}
               icon={<Trash2 className="h-4 w-4" />}
               danger

@@ -19,7 +19,6 @@ export const TIMELINE_MESSAGES = {
     noteLabel: 'הערה',
     signerLabel: 'חותם',
     rejectionReasonLabel: 'סיבת דחייה',
-    notesLabel: 'הערות',
     binderLabel: (id: number) => `קלסר #${id}`,
     chargeLabel: (id: number) => `חיוב #${id}`,
   },
@@ -30,9 +29,7 @@ export const TIMELINE_MESSAGES = {
     emptyMessage: 'אירועים חדשים יופיעו כאן לאחר פעילות לקוח',
   },
   filterPanel: {
-    title: 'סינון',
     subtitle: 'חיפוש וסינון אירועים בציר הזמן',
-    searchLabel: 'חיפוש',
     eventTypeLabel: 'סוג אירוע',
     importanceLabel: 'חשיבות',
     filterFinance: 'כספים',
@@ -42,7 +39,5 @@ export const TIMELINE_MESSAGES = {
     eventsCount: (count: string) => `${count} אירועים`,
     lastUpdated: (date: string) => `עודכן לאחרונה: ${date}`,
     importantOnly: 'חשובים בלבד',
-    expandAll: 'פתח הכל',
-    collapseAll: 'כווץ הכל',
   },
 } as const

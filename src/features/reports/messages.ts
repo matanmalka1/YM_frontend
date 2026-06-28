@@ -5,8 +5,6 @@
 export const REPORTS_MESSAGES = {
   common: {
     loadingReport: 'טוען דוח...',
-    clients: 'לקוחות',
-    client: 'לקוח',
     days: (count: number | string) => `${count} ימים`,
   },
   actions: {

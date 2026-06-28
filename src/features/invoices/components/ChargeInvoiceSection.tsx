@@ -52,7 +52,7 @@ export const ChargeInvoiceSection: React.FC<ChargeInvoiceSectionProps> = ({ char
       {isLoadingInvoice && (
         <DefinitionList
           layout="stacked"
-          items={[{ label: INVOICES_MESSAGES.section.status, value: INVOICES_MESSAGES.section.loadingDetails }]}
+          items={[{ label: GLOBAL_UI_MESSAGES.common.status, value: INVOICES_MESSAGES.section.loadingDetails }]}
         />
       )}
       {invoiceError && <Alert variant="warning" message={invoiceError} />}

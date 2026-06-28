@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useQuery } from '@tanstack/react-query'
 import { signatureRequestsApi, signatureRequestsQK } from '../../api'
 import { DetailDrawer } from '../../../../components/ui/overlays/DetailDrawer'
@@ -54,7 +55,7 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
               layout="stacked"
               items={[
                 {
-                  label: SIGNATURE_REQUESTS_MESSAGES.fields.status,
+                  label: GLOBAL_UI_MESSAGES.common.status,
                   value: (
                     <StatusBadge
                       status={data.status}

@@ -256,7 +256,7 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
       )}
 
       <Textarea
-        label={BINDERS_MESSAGES.receive.notes}
+        label={GLOBAL_UI_MESSAGES.common.notes}
         rows={3}
         placeholder={BINDERS_MESSAGES.receive.notesPlaceholder}
         {...register('notes')}

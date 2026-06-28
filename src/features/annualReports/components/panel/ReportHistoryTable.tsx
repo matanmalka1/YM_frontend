@@ -66,7 +66,7 @@ export const ReportHistoryTable: React.FC<Props> = ({ clientId, currentReportId,
         }),
         {
           key: 'status',
-          header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.statusHeader,
+          header: GLOBAL_UI_MESSAGES.common.status,
           kind: 'status',
           render: (r) => <Badge variant={getStatusVariant(r.status)}>{getStatusLabel(r.status)}</Badge>,
         },

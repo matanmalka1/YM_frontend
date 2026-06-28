@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import type { UseFormRegister, FieldErrors } from 'react-hook-form'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { Input } from '@/components/ui/inputs/Input'
@@ -44,7 +45,7 @@ export const TaskDetailsFields: React.FC<TaskDetailsFieldsProps> = ({
       {...register('title')}
     />
     <Textarea
-      label={TASKS_MESSAGES.form.detailsLabel}
+      label={GLOBAL_UI_MESSAGES.common.details}
       error={errors.description?.message}
       disabled={readonly}
       rows={4}

@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useEffect, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
@@ -159,7 +160,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
     },
     {
       key: 'status',
-      header: TASKS_MESSAGES.columns.status,
+      header: GLOBAL_UI_MESSAGES.common.status,
       render: (task) => (
         <Badge variant={getTaskStatusBadgeVariant(task.status)} size="sm">
           {taskStatusLabels[task.status]}

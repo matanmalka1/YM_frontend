@@ -5,9 +5,7 @@
  */
 export const AUDIT_MESSAGES = {
   table: {
-    columnDate: 'תאריך',
     columnAction: 'פעולה',
-    columnDetails: 'פרטים',
     columnPerformedBy: 'בוצע ע"י',
   },
   section: {

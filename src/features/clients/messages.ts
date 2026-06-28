@@ -19,7 +19,6 @@ export const CLIENTS_MESSAGES = {
     idNumber: 'ת.ז / ח.פ',
     entityType: 'סוג ישות',
     activeBinderNumber: 'מס׳ קלסר פעיל',
-    status: 'סטטוס',
     phone: 'טלפון',
     email: 'אימייל',
     createdAt: 'נוצר',
@@ -42,7 +41,6 @@ export const CLIENTS_MESSAGES = {
   },
   details: {
     pageTitle: 'פרטי לקוח',
-    breadcrumbList: 'לקוחות',
     viewOnlyNotice: 'צפייה בלבד. עריכת פרטי לקוח זמינה ליועצים בלבד.',
     editDetails: 'ערוך פרטים',
     loadingMessage: 'טוען פרטי לקוח...',
@@ -123,7 +121,6 @@ export const CLIENTS_MESSAGES = {
     closeBusiness: 'סגור עסק',
     editModalTitle: 'עריכת עסק',
     nameLabel: 'שם עסק',
-    statusLabel: 'סטטוס',
     closeDateLabel: 'תאריך סגירה',
     deleteModalTitle: 'מחיקת עסק',
     deleteMessage: (name: string) => `האם למחוק את העסק "${name}"? פעולה זו אינה ניתנת לביטול.`,

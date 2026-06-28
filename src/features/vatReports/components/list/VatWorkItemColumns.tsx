@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { AlertTriangle } from 'lucide-react'
 import { dateColumn, EmptyCell, monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
 import type { VatWorkItemListItem } from '../../api'
@@ -20,7 +21,7 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
   }),
   {
     key: 'client_id',
-    header: VAT_MESSAGES.columns.client,
+    header: GLOBAL_UI_MESSAGES.common.client,
     render: (item) => {
       const name = item.client_name ?? formatClientOfficeId(item.office_client_number)
       const showPeriod = opts.duplicateClientIds?.has(item.client_record_id)
@@ -45,7 +46,7 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
   }),
   statusColumn({
     key: 'status',
-    header: VAT_MESSAGES.columns.status,
+    header: GLOBAL_UI_MESSAGES.common.status,
     getStatus: (item) => item.status,
     getLabel: getVatWorkItemStatusLabel,
     variantMap: VAT_STATUS_BADGE_VARIANTS,

@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { GroupSection } from "../../../components/ui/primitives/GroupSection";
 import { Badge } from "../../../components/ui/primitives/Badge";
 import {
@@ -21,7 +22,7 @@ interface Props {
 const clientColumns: Column<AnnualReportClientEntry>[] = [
   textColumn({
     key: "client_name",
-    header: REPORTS_MESSAGES.common.client,
+    header: GLOBAL_UI_MESSAGES.common.client,
     tone: "strong",
     getValue: (r) => r.client_name,
   }),
@@ -64,7 +65,7 @@ export const AnnualReportStatusTable: React.FC<Props> = ({ statuses }) => (
         key={group.status}
         label={<Badge variant={getStatusVariant(group.status)}>{getStatusLabel(group.status)}</Badge>}
         count={group.count}
-        countLabel={REPORTS_MESSAGES.common.clients}
+        countLabel={GLOBAL_UI_MESSAGES.common.clients}
       >
         <DataTable
           data={group.clients}

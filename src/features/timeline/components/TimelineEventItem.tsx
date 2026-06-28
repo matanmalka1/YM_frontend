@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { CreditCard, FileText } from 'lucide-react'
 import type { TimelineEventMetadata } from '../api'
 import type { NormalizedTimelineEvent } from '../normalize'
@@ -118,7 +119,7 @@ const EventMetadata: React.FC<{ metadata: TimelineEventMetadata; eventType: stri
         <MetaRow className="bg-info-50 border-info-100">
           {signer_name && <MetaField label={TIMELINE_MESSAGES.eventItem.signerLabel} value={signer_name} />}
           {reason && <MetaField label={TIMELINE_MESSAGES.eventItem.rejectionReasonLabel} value={reason} />}
-          {notes && <MetaField label={TIMELINE_MESSAGES.eventItem.notesLabel} value={notes} />}
+          {notes && <MetaField label={GLOBAL_UI_MESSAGES.common.notes} value={notes} />}
         </MetaRow>
       )}
     </>

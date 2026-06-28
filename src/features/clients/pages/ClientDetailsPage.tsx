@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { type FC, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -106,14 +107,14 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
       <PageContent>
         <PageHeader
           title={CLIENTS_MESSAGES.details.pageTitle}
-          breadcrumbs={[{ label: CLIENTS_MESSAGES.details.breadcrumbList, to: CLIENT_ROUTES.list }]}
+          breadcrumbs={[{ label: GLOBAL_UI_MESSAGES.common.clients, to: CLIENT_ROUTES.list }]}
         />
         <Alert variant="error" message={CLIENTS_ERROR_MESSAGES.details.invalidId} />
       </PageContent>
     )
 
   const breadcrumbs = [
-    { label: CLIENTS_MESSAGES.details.breadcrumbList, to: CLIENT_ROUTES.list },
+    { label: GLOBAL_UI_MESSAGES.common.clients, to: CLIENT_ROUTES.list },
     {
       label: client?.full_name ?? CLIENTS_MESSAGES.details.pageTitle,
       to: clientId ? CLIENT_ROUTES.detail(clientId) : CLIENT_ROUTES.list,

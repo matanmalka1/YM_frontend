@@ -28,7 +28,7 @@ export const DocumentPreviewModal: React.FC<DocumentPreviewModalProps> = ({
     <OverlayContainer
       open={open}
       variant="modal"
-      title={filename ?? DOCUMENTS_MESSAGES.preview.defaultTitle}
+      title={filename ?? GLOBAL_UI_MESSAGES.actions.preview}
       onClose={onClose}
       className="max-w-4xl w-full"
       footer={

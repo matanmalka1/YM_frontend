@@ -9,6 +9,7 @@ import { ChargeDetailDrawer } from '../drawer/ChargeDetailDrawer'
 import { ChargesCreateModal } from '../form/ChargesCreateModal'
 import { ChargesStatsSection } from '../list/ChargesStatsSection'
 import { ChargesTableBlock } from '../list/ChargesTableBlock'
+import { getChargeBusinessLabel } from '../../utils/chargeUtils'
 import { CHARGES_MESSAGES } from '../../messages'
 
 interface ClientChargesTabProps {
@@ -66,10 +67,7 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
   const businessOptions = useMemo(
     () => [
       { value: '', label: CHARGES_MESSAGES.list.allBusinesses },
-      ...businesses.map((b) => ({
-        value: String(b.id),
-        label: b.business_name ?? CHARGES_MESSAGES.create.businessName(b.id),
-      })),
+      ...businesses.map((b) => ({ value: String(b.id), label: getChargeBusinessLabel(b) })),
     ],
     [businesses],
   )
@@ -134,12 +132,7 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
         onSubmit={submitCreate}
         initialClient={{ id: clientId, name: clientName }}
         initialBusiness={
-          selectedBusiness
-            ? {
-                id: selectedBusiness.id,
-                name: selectedBusiness.business_name ?? CHARGES_MESSAGES.create.businessName(selectedBusiness.id),
-              }
-            : null
+          selectedBusiness ? { id: selectedBusiness.id, name: getChargeBusinessLabel(selectedBusiness) } : null
         }
         businesses={businesses}
       />

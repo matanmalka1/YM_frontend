@@ -98,7 +98,7 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
             className="gap-1.5 text-negative-600 border-negative-200 hover:bg-negative-50 shrink-0"
           >
             <Trash2 className="h-3.5 w-3.5" />
-            {CHARGES_MESSAGES.actions.delete}
+            {GLOBAL_UI_MESSAGES.actions.delete}
           </Button>
         )}
       </div>
@@ -172,12 +172,12 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
 
         {charge && (
           <>
-            <DrawerSection title={CHARGES_MESSAGES.detail.details}>
+            <DrawerSection title={GLOBAL_UI_MESSAGES.common.details}>
               <DefinitionList
                 layout="stacked"
                 items={[
                   {
-                    label: CHARGES_MESSAGES.detail.client,
+                    label: GLOBAL_UI_MESSAGES.common.client,
                     value: (
                       <Link
                         to={`/clients/${charge.client_record_id}`}

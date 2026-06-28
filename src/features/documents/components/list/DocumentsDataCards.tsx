@@ -230,7 +230,7 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
               type="submit"
               form={EDIT_FORM_ID}
               isLoading={editDoc ? updatingId === editDoc.id : false}
-              loadingLabel={DOCUMENTS_MESSAGES.list.saving}
+              loadingLabel={GLOBAL_UI_MESSAGES.common.saving}
               className="gap-2 shrink-0"
             >
               {DOCUMENTS_MESSAGES.list.saveLabel}
@@ -247,7 +247,7 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
         open={confirmDeleteId !== null}
         title={DOCUMENTS_MESSAGES.list.deleteModalTitle}
         message={DOCUMENTS_MESSAGES.list.deleteMessage}
-        confirmLabel={DOCUMENTS_MESSAGES.list.deleteConfirm}
+        confirmLabel={GLOBAL_UI_MESSAGES.actions.delete}
         cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
         confirmVariant="danger"
         onConfirm={handleConfirmDelete}

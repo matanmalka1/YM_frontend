@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { DataTable, dateColumn, monoColumn, textColumn, type Column } from '../../../../components/ui/table'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import type { AnnualReportListItem } from '../../api'
@@ -61,7 +62,7 @@ const columns: Column<AnnualReportListItem>[] = [
   },
   textColumn({
     key: 'client_name',
-    header: ANNUAL_REPORTS_MESSAGES.season.clientHeader,
+    header: GLOBAL_UI_MESSAGES.common.client,
     tone: 'strong',
     getValue: (r) => r.client_name ?? ANNUAL_REPORTS_MESSAGES.season.clientFallbackName(r.client_record_id),
   }),
@@ -84,7 +85,7 @@ const columns: Column<AnnualReportListItem>[] = [
   },
   {
     key: 'status',
-    header: ANNUAL_REPORTS_MESSAGES.season.statusHeader,
+    header: GLOBAL_UI_MESSAGES.common.status,
     kind: 'status',
     render: (r) => <Badge variant={getStatusVariant(r.status)}>{getStatusLabel(r.status)}</Badge>,
   },

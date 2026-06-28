@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
 import { DOCUMENT_TYPE_OPTIONS, SEARCH_PLACEHOLDER, TAX_YEAR_OPTIONS } from '../../constants'
@@ -7,7 +8,7 @@ const DOCUMENT_FILTER_FIELDS = [
   {
     type: 'search',
     key: 'search',
-    label: DOCUMENTS_MESSAGES.list.searchFilterLabel,
+    label: GLOBAL_UI_MESSAGES.common.search,
     placeholder: SEARCH_PLACEHOLDER,
   },
   {

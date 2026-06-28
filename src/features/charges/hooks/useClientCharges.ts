@@ -82,14 +82,6 @@ export const useClientCharges = (clientId: number) => {
     [clientId, createMutation, isAdvisor],
   )
 
-  const handleStatusChange = useCallback(
-    (nextStatus: string) => {
-      setFilter('status', nextStatus, true)
-      clearSelection()
-    },
-    [clearSelection, setFilter],
-  )
-
   const setSelectedBusinessId = useCallback(
     (id: number | null) => setFilter('business_id', id != null ? String(id) : '', false),
     [setFilter],
@@ -122,8 +114,6 @@ export const useClientCharges = (clientId: number) => {
     runAction,
     runBulkAction,
     submitCreate,
-    handleStatusChange,
     setPage: setUrlPage,
-    currentStatus: status,
   }
 }

@@ -3,7 +3,19 @@ import { Pencil, Receipt, Trash2 } from 'lucide-react'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { InlineState } from '@/components/ui/feedback'
-import { actionsColumn, DataTable, dateColumn, dateTimeColumn, moneyColumn, monoColumn, textColumn, RowActionItem, RowActionSeparator, RowActionsMenu, type Column } from '@/components/ui/table'
+import {
+  actionsColumn,
+  DataTable,
+  dateColumn,
+  dateTimeColumn,
+  moneyColumn,
+  monoColumn,
+  textColumn,
+  RowActionItem,
+  RowActionSeparator,
+  RowActionsMenu,
+  type Column,
+} from '@/components/ui/table'
 import {
   formatVatAmount,
   getVatDeductionRateClass,
@@ -86,7 +98,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
     },
     dateColumn({
       key: 'date',
-      header: VAT_MESSAGES.invoices.date,
+      header: GLOBAL_UI_MESSAGES.common.date,
       getValue: (inv) => inv.invoice_date,
     }),
     textColumn({
@@ -192,14 +204,14 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
             render: (inv) => (
               <RowActionsMenu ariaLabel={VAT_MESSAGES.invoices.rowActionsAriaLabel(getVatInvoiceActionLabel(inv))}>
                 <RowActionItem
-                  label={VAT_MESSAGES.actions.edit}
+                  label={GLOBAL_UI_MESSAGES.actions.edit}
                   onClick={() => setEditingId(inv.id)}
                   disabled={editingId !== null}
                   icon={<Pencil className="h-4 w-4" />}
                 />
                 <RowActionSeparator />
                 <RowActionItem
-                  label={VAT_MESSAGES.actions.delete}
+                  label={GLOBAL_UI_MESSAGES.actions.delete}
                   onClick={() => setConfirmId(inv.id)}
                   disabled={editingId !== null}
                   icon={<Trash2 className="h-4 w-4" />}
@@ -259,7 +271,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
         open={confirmId !== null}
         title={VAT_MESSAGES.invoices.deleteTitle}
         message={VAT_MESSAGES.invoices.deleteMessage}
-        confirmLabel={VAT_MESSAGES.actions.delete}
+        confirmLabel={GLOBAL_UI_MESSAGES.actions.delete}
         cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
         confirmVariant="danger"
         isLoading={isDeleting}

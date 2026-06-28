@@ -10,7 +10,6 @@ export const SIGNING_MESSAGES = {
   confirmApprove: {
     title: 'אישור חתימה',
     message: (title: string) => `האם אתה/ת בטוח/ה שברצונך לחתום על "${title}"?`,
-    back: 'חזרה',
     submit: 'כן, אני חותם/ת',
   },
   confirmDecline: {

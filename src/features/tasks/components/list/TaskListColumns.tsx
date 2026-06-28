@@ -52,7 +52,7 @@ export const buildTaskListColumns = ({
   },
   {
     key: 'status',
-    header: TASKS_MESSAGES.columns.status,
+    header: GLOBAL_UI_MESSAGES.common.status,
     render: (task) => (
       <Badge variant={getTaskStatusBadgeVariant(task.status)} size="sm" dot={taskStatusDotClass[task.status]} ring>
         {taskStatusLabels[task.status]}

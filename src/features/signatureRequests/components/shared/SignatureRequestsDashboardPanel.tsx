@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AlertCircle, FileSignature, Plus } from 'lucide-react'
@@ -70,7 +71,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
       },
       {
         key: 'client',
-        header: SIGNATURE_REQUESTS_MESSAGES.dashboard.client,
+        header: GLOBAL_UI_MESSAGES.common.client,
         render: (req: SignatureRequestResponse) => {
           const entry = req.business_id != null ? businessLookup[req.business_id] : undefined
           const name =
@@ -90,7 +91,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
       },
       {
         key: 'status',
-        header: SIGNATURE_REQUESTS_MESSAGES.fields.status,
+        header: GLOBAL_UI_MESSAGES.common.status,
         render: (req: SignatureRequestResponse) => (
           <StatusBadge
             status={req.status}

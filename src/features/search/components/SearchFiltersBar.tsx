@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { RotateCcw, SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-react'
 import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
@@ -62,7 +63,7 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
               onQueryChange={handleClientQueryChange}
               onSelect={handleSelectClient}
               onClear={handleClearClient}
-              label={SEARCH_MESSAGES.filters.client}
+              label={GLOBAL_UI_MESSAGES.common.client}
             />
             <Input
               label={SEARCH_MESSAGES.filters.idNumber}

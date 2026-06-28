@@ -31,7 +31,7 @@ export const AmendReportModal = ({
             {GLOBAL_UI_MESSAGES.actions.cancel}
           </Button>
           <Button type="button" variant="primary" onClick={onSubmit} isLoading={isPending} disabled={!isReasonValid}>
-            {ANNUAL_REPORTS_MESSAGES.amendModal.submit}
+            {GLOBAL_UI_MESSAGES.actions.send}
           </Button>
         </div>
       }

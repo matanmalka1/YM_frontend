@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { DataTable, type Column } from '@/components/ui/table';
 import { formatClientOfficeId, formatPercent } from "../../../utils/utils";
 import type { AdvancePaymentReportItem, AdvancePaymentReportResponse } from "../api";
@@ -16,7 +17,7 @@ const getClientNumberLabel = (r: AdvancePaymentReportItem) => {
 const columns: Column<AdvancePaymentReportItem>[] = [
   {
     key: "client_name",
-    header: REPORTS_MESSAGES.common.client,
+    header: GLOBAL_UI_MESSAGES.common.client,
     render: (r) => (
       <div className="min-w-0">
         <div className="font-medium text-gray-900">{r.client_name}</div>

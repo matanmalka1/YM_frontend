@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import {
   actionsColumn,
   buildSelectionColumn,
@@ -49,7 +50,7 @@ export const buildChargeColumns = ({
     }),
     {
       key: 'client_record_id',
-      header: CHARGES_MESSAGES.columns.client,
+      header: GLOBAL_UI_MESSAGES.common.client,
       render: (charge) => <ChargeClientCell charge={charge} />,
     },
     textColumn({
@@ -64,7 +65,7 @@ export const buildChargeColumns = ({
     }),
     statusColumn({
       key: 'status',
-      header: CHARGES_MESSAGES.columns.status,
+      header: GLOBAL_UI_MESSAGES.common.status,
       getStatus: (charge) => charge.status,
       getLabel: getChargeStatusLabel,
       variantMap: chargeStatusVariants,

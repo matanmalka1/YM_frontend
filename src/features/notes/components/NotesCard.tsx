@@ -93,7 +93,7 @@ const NoteComposer = ({ value, onChange, onSave, onCancel, isLoading, initialTag
             isLoading={isLoading}
             disabled={!value.trim()}
           >
-            {NOTES_MESSAGES.composer.saveButton}
+            {GLOBAL_UI_MESSAGES.actions.save}
           </Button>
         </div>
         <div className="flex items-center gap-1">
@@ -163,7 +163,7 @@ const NoteRow = ({ note, isDeleting, onEdit, onDelete }: NoteRowProps) => {
             onClick={() => onDelete(note.id)}
             disabled={isDeleting}
             className="h-8 w-8 px-0 text-gray-500 hover:text-negative-600"
-            title={NOTES_MESSAGES.row.deleteTitle}
+            title={GLOBAL_UI_MESSAGES.actions.delete}
           />
         </div>
       </div>
@@ -201,7 +201,10 @@ export const NotesCard = ({ canEdit, ...target }: NotesCardProps) => {
 
   return (
     <>
-      <Card title={NOTES_MESSAGES.card.title} subtitle={total > 0 ? NOTES_MESSAGES.card.notesCount(total) : undefined}>
+      <Card
+        title={GLOBAL_UI_MESSAGES.common.notes}
+        subtitle={total > 0 ? NOTES_MESSAGES.card.notesCount(total) : undefined}
+      >
         {error && <Alert variant="error" message={error} />}
 
         {canEdit && (
@@ -257,7 +260,7 @@ export const NotesCard = ({ canEdit, ...target }: NotesCardProps) => {
         open={confirmDeleteId !== null}
         title={NOTES_MESSAGES.card.deleteModalTitle}
         message={NOTES_MESSAGES.card.deleteMessage}
-        confirmLabel={NOTES_MESSAGES.card.deleteConfirm}
+        confirmLabel={GLOBAL_UI_MESSAGES.actions.delete}
         cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
         confirmVariant="danger"
         isLoading={deletingId === confirmDeleteId}

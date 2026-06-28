@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { Pencil, KeyRound, UserX, UserCheck } from 'lucide-react'
 import { RowActionGroup, RowActionItem, RowActionsMenu } from '@/components/ui/table'
 import type { UserResponse } from '../../api'
@@ -24,7 +25,7 @@ export const UserRowActions: React.FC<UserRowActionsProps> = ({
     <RowActionsMenu ariaLabel={USERS_MESSAGES.rowActions.ariaLabel(user.full_name)}>
       <RowActionGroup>
         <RowActionItem
-          label={USERS_MESSAGES.rowActions.edit}
+          label={GLOBAL_UI_MESSAGES.actions.edit}
           onClick={() => onEdit(user)}
           icon={<Pencil className="h-4 w-4" />}
         />

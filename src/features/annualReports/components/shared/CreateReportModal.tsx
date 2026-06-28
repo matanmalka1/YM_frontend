@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useEffect } from 'react'
 import { ClientPickerField, createClientIdPickerHandlers, useClientPickerState } from '@/components/shared/client'
 import { Input, Textarea } from '@/components/ui/inputs'
@@ -115,7 +116,7 @@ export const CreateReportModal: React.FC<CreateReportModalProps> = ({ open, onCl
         <TaxPreview preview={preview} />
         <RequiredAppendices register={register} />
 
-        <Textarea label={ANNUAL_REPORTS_MESSAGES.createModal.notesLabel} rows={2} {...register('notes')} />
+        <Textarea label={GLOBAL_UI_MESSAGES.common.notes} rows={2} {...register('notes')} />
       </form>
     </Modal>
   )

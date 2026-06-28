@@ -166,7 +166,7 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
             onKeyDown={handleEscapeKeyDown}
             disabled={isSaving}
             className="p-1 text-positive-600 hover:bg-positive-50 hover:text-positive-600"
-            aria-label={VAT_MESSAGES.actions.save}
+            aria-label={GLOBAL_UI_MESSAGES.actions.save}
           />
           <Button
             type="button"

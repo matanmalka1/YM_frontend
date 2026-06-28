@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { DefinitionList } from '@/components/ui/layout/DefinitionList'
 import { DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import { Link } from 'react-router-dom'
@@ -27,7 +28,7 @@ export const BinderDetailsPanel: React.FC<BinderDetailsPanelProps> = ({ binder }
           items={[
             { label: BINDERS_MESSAGES.details.binderNumber, value: formatBinderNumber(binder.binder_number) },
             {
-              label: BINDERS_MESSAGES.details.client,
+              label: GLOBAL_UI_MESSAGES.common.client,
               value: (
                 <Link to={`/clients/${binder.client_record_id}`} className="text-primary-600 hover:underline">
                   {binder.client_name ?? BINDERS_MESSAGES.details.clientFallback(binder.client_record_id)}

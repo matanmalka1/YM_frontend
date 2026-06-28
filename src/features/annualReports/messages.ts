@@ -116,7 +116,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
     refundDueHeader: 'החזר מס',
     taxDueHeader: 'חבות מס',
     submittedAtHeader: 'תאריך הגשה',
-    statusHeader: 'סטטוס',
     rowActionsAriaLabel: (id: number) => `פעולות לדוח ${id}`,
   },
   reportMetaGrid: {
@@ -134,11 +133,9 @@ export const ANNUAL_REPORTS_MESSAGES = {
     overdueDays: (days: number) => `באיחור ${days} ימים`,
     daysRemaining: (days: number) => `${days} ימים נותרו`,
     officeNumberHeader: "מס' לקוח",
-    clientHeader: 'לקוח',
     clientFallbackName: (id: number) => `לקוח #${id}`,
     idNumberHeader: 'ת.ז / ח.פ',
     typeFormHeader: 'סוג / טופס',
-    statusHeader: 'סטטוס',
     filingDeadlineHeader: 'מועד הגשה',
     deadlineTypeHeader: 'סוג מועד',
     submittedAtHeader: 'הוגש ב',
@@ -166,7 +163,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
   },
   yearComparisonModal: {
     title: 'השוואה בין שנים',
-    statusLabel: 'סטטוס',
     taxDueLabel: 'חבות מס',
     refundDueLabel: 'החזר מס',
     assessmentAmountLabel: 'סכום שומה',
@@ -181,7 +177,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
     deadlineTypeLabel: 'סוג מועד',
     submissionMethodLabel: 'שיטת הגשה',
     extensionReasonLabel: 'סיבת הארכה',
-    notesLabel: 'הערות',
   },
   createModalParts: {
     initialIncomeNote: 'נתוני הכנסות ראשוניים (לתצוגה בלבד)',
@@ -221,7 +216,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
   },
   amendModal: {
     title: 'תיקון דוח',
-    submit: 'שלח',
     reasonLabel: 'סיבת תיקון *',
     reasonPlaceholder: (minLength: number) => `תאר את סיבת התיקון (לפחות ${minLength} תווים)...`,
   },

@@ -78,192 +78,192 @@ export const buildWorkQueueColumns = ({
 }: BuildColumnsParams) =>
   (
     [
-    {
-      key: 'type',
-      header: WORK_QUEUE_MESSAGES.columns.type,
-      render: (item: WorkQueueItem) =>
-        item.source_type === 'task' ? (
-          <Badge variant="neutral" icon={<ClipboardCheck className="h-3 w-3" />}>
-            {item.type_label ?? typeLabel(item.source_type)}
-          </Badge>
-        ) : (
-          <Badge variant="neutral" className="inline-flex items-center justify-center whitespace-nowrap">
-            {item.type_label ?? typeLabel(item.source_type)}
-          </Badge>
-        ),
-    },
-    {
-      key: 'client',
-      header: WORK_QUEUE_MESSAGES.columns.client,
-      render: (item: WorkQueueItem) =>
-        item.client_record_id != null ? (
-          <Link
-            to={`/clients/${item.client_record_id}`}
-            className="inline-flex max-w-44 flex-col text-center text-sm text-primary-600 hover:underline"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <span className="truncate">{item.client_name ?? WORK_QUEUE_MESSAGES.columns.clientProfile}</span>
-            {item.office_client_number != null && (
-              <span className="text-xs text-gray-500">{item.office_client_number}</span>
-            )}
-          </Link>
-        ) : (
-          <EmptyCell />
-        ),
-    },
-    {
-      key: 'title',
-      header: WORK_QUEUE_MESSAGES.columns.title,
-      wrap: true,
-      render: (item: WorkQueueItem) => (
-        <div className="space-y-1 text-start">
-          <div className="font-medium text-gray-900">{item.title}</div>
-          {item.description && <div className="text-xs text-gray-500">{item.description}</div>}
-          {item.source_type === 'task' && item.source_summary && (
-            <div className="text-xs text-gray-500">
-              {WORK_QUEUE_MESSAGES.columns.sourcePrefix(item.source_summary.label)}
-            </div>
-          )}
-        </div>
-      ),
-    },
-    dateColumn({
-      key: 'due_date',
-      header: WORK_QUEUE_MESSAGES.columns.dueDate,
-      getValue: (item: WorkQueueItem) => item.due_date,
-    }),
-    {
-      key: 'urgency',
-      header: WORK_QUEUE_MESSAGES.columns.urgency,
-      kind: 'status',
-      render: (item: WorkQueueItem) => (
-        <Badge variant={getWorkQueueUrgencyVariant(item.urgency)}>{workQueueUrgencyLabels[item.urgency]}</Badge>
-      ),
-    },
-    {
-      key: 'task_meta',
-      header: WORK_QUEUE_MESSAGES.columns.taskMeta,
-      render: (item: WorkQueueItem) => {
-        const priorityKey = taskPriority(item)
-        const priority = taskPriorityLabel(item)
-        const assignedRole = assignedRoleLabel(item)
-        if (!priority && !assignedRole) return <EmptyCell />
-        return (
-          <div className="flex flex-wrap justify-center gap-1">
-            {priority && <Badge variant={priorityKey === 'urgent' ? 'negative' : 'neutral'}>{priority}</Badge>}
-            {assignedRole && <Badge variant="info">{assignedRole}</Badge>}
-          </div>
-        )
-      },
-    },
-    {
-      key: 'status',
-      header: WORK_QUEUE_MESSAGES.columns.status,
-      tone: 'muted',
-      render: (item: WorkQueueItem) => item.status_label ?? '—',
-    },
-    {
-      key: 'linked_tasks',
-      header: WORK_QUEUE_MESSAGES.columns.linkedTasks,
-      wrap: true,
-      render: (item: WorkQueueItem) => {
-        const count = item.linked_tasks_count
-        if (!count) return <EmptyCell />
-        return (
-          <div className="space-y-1">
-            <Badge variant="info">
-              {count === 1 ? WORK_QUEUE_MESSAGES.columns.linkedTask : WORK_QUEUE_MESSAGES.columns.taskCount(count)}
+      {
+        key: 'type',
+        header: WORK_QUEUE_MESSAGES.columns.type,
+        render: (item: WorkQueueItem) =>
+          item.source_type === 'task' ? (
+            <Badge variant="neutral" icon={<ClipboardCheck className="h-3 w-3" />}>
+              {item.type_label ?? typeLabel(item.source_type)}
             </Badge>
-            {item.linked_tasks.slice(0, 2).map((task) => (
-              <div key={task.id} className="max-w-40 truncate text-xs text-gray-500">
-                {task.title}
-              </div>
-            ))}
-          </div>
-        )
+          ) : (
+            <Badge variant="neutral" className="inline-flex items-center justify-center whitespace-nowrap">
+              {item.type_label ?? typeLabel(item.source_type)}
+            </Badge>
+          ),
       },
-    },
-    {
-      key: 'warnings',
-      header: WORK_QUEUE_MESSAGES.columns.warnings,
-      wrap: true,
-      render: (item: WorkQueueItem) =>
-        item.warnings.length ? (
-          <div className="flex max-w-44 flex-wrap justify-center gap-1">
-            {item.warnings.map((warning) => (
-              <Badge key={warning.key} variant={warningVariant(warning)}>
-                {warning.label}
-              </Badge>
-            ))}
-          </div>
-        ) : (
-          <EmptyCell />
-        ),
-    },
-    actionsColumn({
-      key: 'actions',
-      header: GLOBAL_UI_MESSAGES.common.actions,
-      render: (item: WorkQueueItem) => {
-        const actions = item.available_actions
-        const isUnlinkedTask =
-          item.source_type === 'task' &&
-          metadataValue(item, 'source_domain') == null &&
-          metadataValue(item, 'source_id') == null
-        if (actions.length === 0 && !isUnlinkedTask) return <EmptyCell />
-        const [primary, ...secondary] = actions
-        const primaryKey = primary ? `${item.id}:${primary.key}` : ''
-        const tooltipText =
-          primary?.disabled && primary.disabled_reason
-            ? primary.disabled_reason
-            : item.source_type === 'task' && item.description
-              ? item.description
-              : undefined
-        const linkAction: WorkQueueAction = {
-          key: 'link_task_to_source',
-          label: WORK_QUEUE_MESSAGES.columns.linkToItem,
-          type: 'modal',
-        }
-        const secondaryActions = isUnlinkedTask ? [linkAction, ...secondary] : secondary
-        const primaryBtn = primary ? (
-          <Button
-            variant={actionVariant(primary)}
-            size="sm"
-            className="whitespace-nowrap"
-            disabled={primary.disabled || activeActionKey === primaryKey}
-            isLoading={activeActionKey === primaryKey}
-            onClick={(event) => {
-              event.stopPropagation()
-              onAction(item, primary, event.currentTarget)
-            }}
-          >
-            {primary.label}
-          </Button>
-        ) : null
-        return (
-          <div className="flex items-center justify-center gap-2">
-            {primaryBtn && tooltipText ? <Tooltip text={tooltipText}>{primaryBtn}</Tooltip> : primaryBtn}
-            {secondaryActions.length > 0 && (
-              <RowActionsMenu menuClassName="w-50">
-                {secondaryActions.map((action) => {
-                  const key = `${item.id}:${action.key}`
-                  return (
-                    <RowActionItem
-                      key={action.key}
-                      label={activeActionKey === key ? WORK_QUEUE_MESSAGES.columns.actionRunning : action.label}
-                      icon={activeActionKey === key ? <Spinner size="sm" /> : actionIcon(action)}
-                      danger={action.variant === 'danger'}
-                      disabled={action.disabled || activeActionKey === key}
-                      tooltip={action.disabled_reason ?? undefined}
-                      onClick={(event) => onAction(item, action, event?.currentTarget ?? null)}
-                    />
-                  )
-                })}
-              </RowActionsMenu>
+      {
+        key: 'client',
+        header: GLOBAL_UI_MESSAGES.common.client,
+        render: (item: WorkQueueItem) =>
+          item.client_record_id != null ? (
+            <Link
+              to={`/clients/${item.client_record_id}`}
+              className="inline-flex max-w-44 flex-col text-center text-sm text-primary-600 hover:underline"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <span className="truncate">{item.client_name ?? WORK_QUEUE_MESSAGES.columns.clientProfile}</span>
+              {item.office_client_number != null && (
+                <span className="text-xs text-gray-500">{item.office_client_number}</span>
+              )}
+            </Link>
+          ) : (
+            <EmptyCell />
+          ),
+      },
+      {
+        key: 'title',
+        header: WORK_QUEUE_MESSAGES.columns.title,
+        wrap: true,
+        render: (item: WorkQueueItem) => (
+          <div className="space-y-1 text-start">
+            <div className="font-medium text-gray-900">{item.title}</div>
+            {item.description && <div className="text-xs text-gray-500">{item.description}</div>}
+            {item.source_type === 'task' && item.source_summary && (
+              <div className="text-xs text-gray-500">
+                {WORK_QUEUE_MESSAGES.columns.sourcePrefix(item.source_summary.label)}
+              </div>
             )}
           </div>
-        )
+        ),
       },
-    }),
+      dateColumn({
+        key: 'due_date',
+        header: WORK_QUEUE_MESSAGES.columns.dueDate,
+        getValue: (item: WorkQueueItem) => item.due_date,
+      }),
+      {
+        key: 'urgency',
+        header: WORK_QUEUE_MESSAGES.columns.urgency,
+        kind: 'status',
+        render: (item: WorkQueueItem) => (
+          <Badge variant={getWorkQueueUrgencyVariant(item.urgency)}>{workQueueUrgencyLabels[item.urgency]}</Badge>
+        ),
+      },
+      {
+        key: 'task_meta',
+        header: WORK_QUEUE_MESSAGES.columns.taskMeta,
+        render: (item: WorkQueueItem) => {
+          const priorityKey = taskPriority(item)
+          const priority = taskPriorityLabel(item)
+          const assignedRole = assignedRoleLabel(item)
+          if (!priority && !assignedRole) return <EmptyCell />
+          return (
+            <div className="flex flex-wrap justify-center gap-1">
+              {priority && <Badge variant={priorityKey === 'urgent' ? 'negative' : 'neutral'}>{priority}</Badge>}
+              {assignedRole && <Badge variant="info">{assignedRole}</Badge>}
+            </div>
+          )
+        },
+      },
+      {
+        key: 'status',
+        header: GLOBAL_UI_MESSAGES.common.status,
+        tone: 'muted',
+        render: (item: WorkQueueItem) => item.status_label ?? '—',
+      },
+      {
+        key: 'linked_tasks',
+        header: WORK_QUEUE_MESSAGES.columns.linkedTasks,
+        wrap: true,
+        render: (item: WorkQueueItem) => {
+          const count = item.linked_tasks_count
+          if (!count) return <EmptyCell />
+          return (
+            <div className="space-y-1">
+              <Badge variant="info">
+                {count === 1 ? WORK_QUEUE_MESSAGES.columns.linkedTask : WORK_QUEUE_MESSAGES.columns.taskCount(count)}
+              </Badge>
+              {item.linked_tasks.slice(0, 2).map((task) => (
+                <div key={task.id} className="max-w-40 truncate text-xs text-gray-500">
+                  {task.title}
+                </div>
+              ))}
+            </div>
+          )
+        },
+      },
+      {
+        key: 'warnings',
+        header: WORK_QUEUE_MESSAGES.columns.warnings,
+        wrap: true,
+        render: (item: WorkQueueItem) =>
+          item.warnings.length ? (
+            <div className="flex max-w-44 flex-wrap justify-center gap-1">
+              {item.warnings.map((warning) => (
+                <Badge key={warning.key} variant={warningVariant(warning)}>
+                  {warning.label}
+                </Badge>
+              ))}
+            </div>
+          ) : (
+            <EmptyCell />
+          ),
+      },
+      actionsColumn({
+        key: 'actions',
+        header: GLOBAL_UI_MESSAGES.common.actions,
+        render: (item: WorkQueueItem) => {
+          const actions = item.available_actions
+          const isUnlinkedTask =
+            item.source_type === 'task' &&
+            metadataValue(item, 'source_domain') == null &&
+            metadataValue(item, 'source_id') == null
+          if (actions.length === 0 && !isUnlinkedTask) return <EmptyCell />
+          const [primary, ...secondary] = actions
+          const primaryKey = primary ? `${item.id}:${primary.key}` : ''
+          const tooltipText =
+            primary?.disabled && primary.disabled_reason
+              ? primary.disabled_reason
+              : item.source_type === 'task' && item.description
+                ? item.description
+                : undefined
+          const linkAction: WorkQueueAction = {
+            key: 'link_task_to_source',
+            label: WORK_QUEUE_MESSAGES.columns.linkToItem,
+            type: 'modal',
+          }
+          const secondaryActions = isUnlinkedTask ? [linkAction, ...secondary] : secondary
+          const primaryBtn = primary ? (
+            <Button
+              variant={actionVariant(primary)}
+              size="sm"
+              className="whitespace-nowrap"
+              disabled={primary.disabled || activeActionKey === primaryKey}
+              isLoading={activeActionKey === primaryKey}
+              onClick={(event) => {
+                event.stopPropagation()
+                onAction(item, primary, event.currentTarget)
+              }}
+            >
+              {primary.label}
+            </Button>
+          ) : null
+          return (
+            <div className="flex items-center justify-center gap-2">
+              {primaryBtn && tooltipText ? <Tooltip text={tooltipText}>{primaryBtn}</Tooltip> : primaryBtn}
+              {secondaryActions.length > 0 && (
+                <RowActionsMenu menuClassName="w-50">
+                  {secondaryActions.map((action) => {
+                    const key = `${item.id}:${action.key}`
+                    return (
+                      <RowActionItem
+                        key={action.key}
+                        label={activeActionKey === key ? WORK_QUEUE_MESSAGES.columns.actionRunning : action.label}
+                        icon={activeActionKey === key ? <Spinner size="sm" /> : actionIcon(action)}
+                        danger={action.variant === 'danger'}
+                        disabled={action.disabled || activeActionKey === key}
+                        tooltip={action.disabled_reason ?? undefined}
+                        onClick={(event) => onAction(item, action, event?.currentTarget ?? null)}
+                      />
+                    )
+                  })}
+                </RowActionsMenu>
+              )}
+            </div>
+          )
+        },
+      }),
     ] satisfies Column<WorkQueueItem>[]
   ).filter((column) => {
     if (column.key === 'linked_tasks') return showLinkedTasks

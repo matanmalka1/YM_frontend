@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import type { Breadcrumb } from '@/components/layout/PageHeader'
 import type { DefinitionItem } from '@/components/ui/layout/DefinitionList'
 import { CLIENT_ROUTES, type BusinessResponse, type ClientRecordResponse } from '@/features/clients'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { formatClientOfficeId, formatDate } from '@/utils/utils'
 import { BUSINESS_DETAILS_COPY, getBusinessStatusLabel } from '../constants'
 
@@ -33,7 +34,7 @@ export const buildBusinessBreadcrumbs = ({
   clientName: string
   businessName: string
 }): Breadcrumb[] => [
-  { label: BUSINESS_DETAILS_COPY.clientsListLabel, to: CLIENT_ROUTES.list },
+  { label: GLOBAL_UI_MESSAGES.common.clients, to: CLIENT_ROUTES.list },
   { label: clientName, to: CLIENT_ROUTES.detail(clientId) },
   {
     label: businessName,
@@ -50,7 +51,7 @@ export const buildBusinessSummaryItems = (
     value: formatClientOfficeId(business.id),
   },
   {
-    label: BUSINESS_DETAILS_COPY.clientLabel,
+    label: GLOBAL_UI_MESSAGES.common.client,
     value: client ? (
       <Link to={CLIENT_ROUTES.detail(client.id)} className="text-primary-600 hover:underline">
         {client.full_name}
@@ -64,7 +65,7 @@ export const buildBusinessSummaryItems = (
     value: business.business_name ?? BUSINESS_DETAILS_COPY.emptyValue,
   },
   {
-    label: BUSINESS_DETAILS_COPY.statusLabel,
+    label: GLOBAL_UI_MESSAGES.common.status,
     value: getBusinessStatusLabel(business.status),
   },
   {

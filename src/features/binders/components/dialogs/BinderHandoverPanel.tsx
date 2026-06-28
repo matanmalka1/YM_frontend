@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
@@ -141,7 +142,7 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
       </div>
 
       <Textarea
-        label={BINDERS_MESSAGES.receive.notes}
+        label={GLOBAL_UI_MESSAGES.common.notes}
         rows={3}
         value={notes}
         onChange={(event) => setNotes(event.target.value)}

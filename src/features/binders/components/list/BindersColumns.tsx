@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { Link } from 'react-router-dom'
 import { actionsColumn, EmptyCell, monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
 import { MonoValue } from '@/components/ui/primitives/MonoValue'
@@ -58,7 +59,7 @@ export const buildBindersColumns = ({
   }),
   textColumn({
     key: 'client_name',
-    header: BINDERS_MESSAGES.columns.client,
+    header: GLOBAL_UI_MESSAGES.common.client,
     getValue: (binder) => renderClientCell(binder),
   }),
   monoColumn({

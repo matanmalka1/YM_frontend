@@ -52,7 +52,7 @@ const WORK_QUEUE_FILTER_FIELDS: FilterFieldDef[] = [
   {
     type: 'search',
     key: WORK_QUEUE_FILTER_PARAM_KEYS.search,
-    label: WORK_QUEUE_MESSAGES.filters.search,
+    label: GLOBAL_UI_MESSAGES.common.search,
     placeholder: WORK_QUEUE_SEARCH_PLACEHOLDER,
   },
   {
@@ -200,7 +200,7 @@ export const useWorkQueuePage = () => {
         isFiltered: true,
         icon: CheckSquare,
         variant: 'default' as const,
-        title: WORK_QUEUE_MESSAGES.page.emptyFilteredTitle,
+        title: GLOBAL_UI_MESSAGES.common.noResults,
         message: WORK_QUEUE_MESSAGES.page.emptyFilteredMessage,
       }
     : {

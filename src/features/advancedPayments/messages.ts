@@ -14,7 +14,6 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     overrideAmountLabel: 'סכום עקיפה',
     paymentMethodLabel: 'שיטת תשלום',
     paidAtLabel: 'תאריך ביצוע',
-    notesLabel: 'הערות',
   },
   drawerFooter: {
     deleteAriaLabel: 'מחק מקדמה',
@@ -50,11 +49,9 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     finalAmountLabel: 'סכום סופי',
     paymentSectionTitle: 'עדכון תשלום',
     paidAmountLabel: 'סכום שולם',
-    statusLabel: 'סטטוס',
     paymentMethodLabel: 'שיטת תשלום',
     noMethodOption: 'ללא',
     paidAtLabel: 'תאריך ביצוע תשלום',
-    notesLabel: 'הערות',
     notesPlaceholder: 'הערות...',
   },
   batchColumns: {
@@ -68,20 +65,17 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     paidHeader: 'שולם',
     balanceHeader: 'יתרה',
     advanceRateHeader: 'אחוז מקדמה',
-    statusHeader: 'סטטוס',
     rowActionsAriaLabel: (id: number) => `פעולות למקדמה ${id}`,
     updatePaymentAction: 'עדכן תשלום',
     goToClientAction: 'עבור ללקוח',
   },
   batchContent: {
-    emptyMessage: 'אין תוצאות',
     paginationLabel: 'מקדמות',
   },
   batchRow: {
     typeLabel: 'מקדמות',
     dueDatePrefix: 'לתשלום עד',
     ctaLabel: 'פתח לקוחות',
-    clientsLabel: 'לקוחות',
     pendingLabel: 'ממתינים',
     paidLabel: 'שולם',
     unpaidLabel: 'לא שולם',
@@ -125,7 +119,6 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     filterSubtitle: 'לקוח, שנה, סטטוס ותקופה',
   },
   clientTab: {
-    statusFilterLabel: 'סטטוס',
     yearFilterLabel: 'שנה',
     paginationLabel: 'מקדמות',
   },

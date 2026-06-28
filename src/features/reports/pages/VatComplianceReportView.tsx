@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { type VatComplianceItem, type StalePendingItem } from "../api";
 import { useVatComplianceReport } from "../hooks/useVatComplianceReport";
 import { PageHeader } from "../../../components/layout/PageHeader";
@@ -33,7 +34,7 @@ const numericCell = (value: number) => <span className="text-gray-700 tabular-nu
 const buildComplianceColumns = (year?: number): Column<VatComplianceItem>[] => [
   {
     key: "client",
-    header: REPORTS_MESSAGES.common.client,
+    header: GLOBAL_UI_MESSAGES.common.client,
     render: (item) => {
       const disambiguation = getComplianceDisambiguation(item, year);
       return (
@@ -76,7 +77,7 @@ const ComplianceTable = ({ items, year }: { items: VatComplianceItem[]; year?: n
 const STALE_PENDING_COLUMNS: Column<StalePendingItem>[] = [
   {
     key: "client",
-    header: REPORTS_MESSAGES.common.client,
+    header: GLOBAL_UI_MESSAGES.common.client,
     render: (item) => <span className="font-semibold text-gray-900">{item.client_name}</span>,
   },
   {

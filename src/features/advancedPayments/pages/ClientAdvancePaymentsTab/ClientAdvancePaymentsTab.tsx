@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
 import { getOperationalYearOptions, getOperationalTaxYear } from '@/constants/periodOptions.constants'
@@ -22,7 +23,7 @@ const CLIENT_ADVANCE_PAYMENTS_FILTER_FIELDS: FilterFieldDef[] = [
   {
     type: 'toggle',
     key: 'status_filter',
-    label: ADVANCED_PAYMENTS_MESSAGES.clientTab.statusFilterLabel,
+    label: GLOBAL_UI_MESSAGES.common.status,
     options: ADVANCE_PAYMENT_STATUS_OPTIONS,
   },
   {

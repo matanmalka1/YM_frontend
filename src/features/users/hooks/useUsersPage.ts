@@ -25,7 +25,7 @@ const USERS_FILTER_FIELDS = [
   {
     type: 'select' as const,
     key: 'is_active',
-    label: USERS_MESSAGES.filters.statusLabel,
+    label: GLOBAL_UI_MESSAGES.common.status,
     options: [
       { value: '', label: USERS_MESSAGES.filters.allUsers },
       { value: 'true', label: USERS_MESSAGES.filters.activeOnly },

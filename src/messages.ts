@@ -1,7 +1,7 @@
 /**
- * Centralized Hebrew UI strings shared across generic, cross-cutting components
- * (overlays, tables, layout primitives). Feature-specific copy stays in each
- * feature; this catalog holds only strings reused by shared/ui building blocks.
+ * Centralized Hebrew UI strings shared across features and generic, cross-cutting
+ * components (overlays, tables, layout primitives). Feature-specific copy stays
+ * in each feature catalog.
  */
 export const GLOBAL_UI_MESSAGES = {
   actions: {
@@ -13,9 +13,15 @@ export const GLOBAL_UI_MESSAGES = {
     add: 'הוסף',
     edit: 'עריכה',
     view: 'צפה',
+    open: 'פתח',
+    send: 'שלח',
+    preview: 'תצוגה מקדימה',
+    viewDetails: 'צפייה בפרטים',
     retry: 'נסה שוב',
     back: 'חזרה',
     next: 'הבא',
+    expandAll: 'פתח הכל',
+    collapseAll: 'כווץ הכל',
     clearSelection: 'נקה בחירה',
     selectAll: 'בחר הכל',
   },
@@ -27,6 +33,7 @@ export const GLOBAL_UI_MESSAGES = {
     noData: 'אין נתונים להצגה',
     noResults: 'אין תוצאות',
     results: 'תוצאות',
+    search: 'חיפוש',
     status: 'סטטוס',
     client: 'לקוח',
     clients: 'לקוחות',
@@ -42,6 +49,7 @@ export const GLOBAL_UI_MESSAGES = {
     pageSummary: (page: number, total: number) => `עמוד ${page} מתוך ${total}`,
   },
   filters: {
+    title: 'סינון',
     active: 'מסננים פעילים',
     clearAll: 'נקה הכל',
     removeFilter: 'הסר סינון',

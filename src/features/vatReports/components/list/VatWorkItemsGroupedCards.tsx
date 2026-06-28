@@ -1,6 +1,17 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { Inbox } from 'lucide-react'
-import { TableSkeleton, PaginationCard, DataTable, MonthlyAccordionList, GroupedPeriodRow, formatDueDateLabel, formatRelativeDueLabel, type Column, type PeriodSummaryMetric } from '@/components/ui/table'
+import {
+  TableSkeleton,
+  PaginationCard,
+  DataTable,
+  MonthlyAccordionList,
+  GroupedPeriodRow,
+  formatDueDateLabel,
+  formatRelativeDueLabel,
+  type Column,
+  type PeriodSummaryMetric,
+} from '@/components/ui/table'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
@@ -116,7 +127,7 @@ export const VatWorkItemsGroupedCards = ({
         const periodMonthsCount = group.period_type === 'bimonthly' ? 2 : 1
         const isCurrentPeriod = isCurrentReportingPeriod(group.period, periodMonthsCount)
         const metrics: PeriodSummaryMetric[] = [
-          { label: VAT_MESSAGES.list.clientsMetric, value: group.total_count },
+          { label: GLOBAL_UI_MESSAGES.common.clients, value: group.total_count },
           {
             label: VAT_MESSAGES.list.pendingMetric,
             value: group.pending_count,

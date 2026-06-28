@@ -18,7 +18,6 @@ export const USERS_MESSAGES = {
   },
   filters: {
     searchLabel: 'חיפוש משתמש',
-    statusLabel: 'סטטוס',
     allUsers: 'כל המשתמשים',
     activeOnly: 'פעילים בלבד',
     inactive: 'לא פעילים',
@@ -66,7 +65,6 @@ export const USERS_MESSAGES = {
     fullName: 'שם מלא',
     email: 'אימייל',
     role: 'תפקיד',
-    status: 'סטטוס',
     active: 'פעיל',
     inactive: 'מושבת',
     lastLogin: 'כניסה אחרונה',
@@ -74,7 +72,6 @@ export const USERS_MESSAGES = {
   },
   rowActions: {
     ariaLabel: (name: string) => `פעולות למשתמש ${name}`,
-    edit: 'עריכה',
     resetPassword: 'איפוס סיסמה',
     deactivate: 'השבתה',
     activate: 'הפעלה',

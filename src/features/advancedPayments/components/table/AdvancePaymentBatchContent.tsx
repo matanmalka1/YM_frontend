@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useMemo } from 'react'
 import { PaginatedDataTable } from '@/components/ui/table'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
@@ -36,7 +37,7 @@ export const AdvancePaymentBatchContent = ({
       onRowClick={onRowClick}
       isLoading={content.isLoading}
       isFetching={content.isFetching}
-      emptyMessage={ADVANCED_PAYMENTS_MESSAGES.batchContent.emptyMessage}
+      emptyMessage={GLOBAL_UI_MESSAGES.common.noResults}
       getRowVariant={(row) => (row.timing_status === 'overdue' ? 'dangerSoft' : undefined)}
       page={content.page}
       pageSize={ADVANCE_PAYMENT_BATCH_PAGE_SIZE}

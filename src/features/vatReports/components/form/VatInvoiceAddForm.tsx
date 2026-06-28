@@ -178,7 +178,7 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({
             <span className={`text-xs font-medium ${deductionRateHint.className}`}>{deductionRateHint.label}</span>
           )}
           <Button type="submit" variant="ghost" size="sm" icon={<Plus className="h-3.5 w-3.5" />} isLoading={isAdding}>
-            {VAT_MESSAGES.actions.add}
+            {GLOBAL_UI_MESSAGES.actions.add}
           </Button>
           {onCancel && (
             <Button type="button" variant="ghost" size="sm" onClick={onCancel}>

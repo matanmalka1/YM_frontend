@@ -6,7 +6,6 @@ export const TASKS_MESSAGES = {
   actions: {
     newTask: 'משימה חדשה',
     close: 'סגור',
-    save: 'שמור',
     createTask: 'צור משימה',
     saveLink: 'שמור קישור',
     linkToItem: 'קשר לפריט',
@@ -30,7 +29,6 @@ export const TASKS_MESSAGES = {
   form: {
     unconfigured: 'לא מוגדר',
     titleLabel: 'כותרת *',
-    detailsLabel: 'פרטים',
     priorityLabel: 'עדיפות',
     dueDateLabel: 'תאריך יעד',
     assignedUserLabel: 'שיוך למשתמש',
@@ -55,7 +53,6 @@ export const TASKS_MESSAGES = {
     taskLabel: 'משימה',
     linkWorkItemTitle: 'פריט עבודה לקישור',
     linkWorkItemHelp: 'בחר לקוח ואז פריט פתוח שעדיין אין לו משימה.',
-    client: 'לקוח',
     clientSearchHelp: 'הקלד לפחות 2 תווים כדי לחפש לקוח',
     itemToLink: 'פריט לקישור',
     chooseItem: 'בחר פריט...',
@@ -85,7 +82,6 @@ export const TASKS_MESSAGES = {
   columns: {
     title: 'כותרת',
     taskId: (id: number) => `משימה #${id}`,
-    status: 'סטטוס',
     priority: 'עדיפות',
     dueDate: 'תאריך יעד',
     rowActionsAriaLabel: (id: number) => `פעולות למשימה ${id}`,
@@ -103,7 +99,6 @@ export const TASKS_MESSAGES = {
     visibleCount: (visible: number, total: number) => `מוצגות ${visible} מתוך ${total} משימות לפי הסינון הנוכחי`,
     currentFocus: 'מיקוד נוכחי',
     noTask: 'אין משימות להצגה',
-    status: 'סטטוס',
     priority: 'עדיפות',
     target: 'יעד',
   },

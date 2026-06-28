@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { FileText, ExternalLink } from 'lucide-react'
 import { Input } from '../../../components/ui/inputs/Input'
 import {
@@ -28,7 +29,7 @@ const DOCUMENT_COLUMNS: Column<DocumentSearchResult>[] = [
   }),
   textColumn({
     key: 'client',
-    header: SEARCH_MESSAGES.columns.client,
+    header: GLOBAL_UI_MESSAGES.common.client,
     tone: 'strong',
     getValue: (doc) => doc.client_name,
   }),
@@ -54,9 +55,9 @@ const DOCUMENT_COLUMNS: Column<DocumentSearchResult>[] = [
     render: (doc) => (
       <RowActionsMenu ariaLabel={SEARCH_MESSAGES.actions.details}>
         <RowActionLink
-        href={`/clients/${doc.client_record_id}/documents`}
-        label={SEARCH_MESSAGES.actions.details}
-        icon={<ExternalLink className="h-3 w-3" />}
+          href={`/clients/${doc.client_record_id}/documents`}
+          label={SEARCH_MESSAGES.actions.details}
+          icon={<ExternalLink className="h-3 w-3" />}
         />
       </RowActionsMenu>
     ),

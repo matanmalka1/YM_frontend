@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { format } from 'date-fns'
@@ -252,7 +253,7 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
           if (existing) {
             toast.info(BINDERS_MESSAGES.receive.existingVatReport, {
               action: {
-                label: BINDERS_MESSAGES.receive.openVatReport,
+                label: GLOBAL_UI_MESSAGES.actions.open,
                 onClick: () => navigate(`/tax/vat/${existing.id}`),
               },
             })

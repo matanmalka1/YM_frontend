@@ -4,7 +4,6 @@
 export const INVOICES_MESSAGES = {
   section: {
     title: 'חשבונית',
-    status: 'סטטוס',
     loadingDetails: 'טוען פרטי חשבונית...',
     provider: 'ספק',
     externalId: 'מזהה חיצוני',

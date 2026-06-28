@@ -200,7 +200,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
           isLinkMode
             ? TASKS_MESSAGES.actions.saveLink
             : mode === 'edit'
-              ? TASKS_MESSAGES.actions.save
+              ? GLOBAL_UI_MESSAGES.actions.save
               : TASKS_MESSAGES.actions.createTask
         }
         submitDisabled={isLinkMode ? hasExistingSource || !pendingSource : false}

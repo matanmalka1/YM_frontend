@@ -5,6 +5,7 @@ import { PageContent } from '@/components/layout/PageContent'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { useRole } from '@/hooks/useRole'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useBusinessDetails } from '../hooks/useBusinessDetails'
 import { BusinessDetailsCard } from '../components/BusinessDetailsCard'
 import { BUSINESS_DETAILS_COPY } from '../constants'
@@ -33,7 +34,7 @@ export const BusinessDetails: FC = () => {
   }
 
   const businessDisplayName = formatBusinessDisplayName(business)
-  const clientName = client?.full_name ?? BUSINESS_DETAILS_COPY.clientFallback
+  const clientName = client?.full_name ?? GLOBAL_UI_MESSAGES.common.client
 
   return (
     <PageStateGuard

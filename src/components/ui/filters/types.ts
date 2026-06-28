@@ -5,6 +5,8 @@ export interface SearchFieldDef<TValues extends Record<string, unknown> = Record
   key: FilterKey<TValues>
   label: string
   placeholder?: string
+  /** Span both columns of the panel grid (default: half width). */
+  fullWidth?: boolean
 }
 
 interface SelectFieldDef<TValues extends Record<string, unknown> = Record<string, unknown>> {
@@ -23,6 +25,8 @@ interface ToggleFieldDef<TValues extends Record<string, unknown> = Record<string
   label: string
   /** Multi-select: active values are stored comma-joined in values[key]. */
   options: { value: string; label: string }[]
+  /** Span both columns of the panel grid (default: half width). */
+  fullWidth?: boolean
 }
 
 interface DateFieldDef<TValues extends Record<string, unknown> = Record<string, unknown>> {

@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { CheckCircle2, ShieldCheck, XCircle } from 'lucide-react'
 import type { SignerViewResponse } from '@/features/signatureRequests'
 import { Alert } from '../../../components/ui/overlays/Alert'
@@ -50,7 +51,7 @@ export const SigningForm: React.FC<SigningFormProps> = ({
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={onBack} className="flex-1" disabled={isApproving}>
-            {SIGNING_MESSAGES.confirmApprove.back}
+            {GLOBAL_UI_MESSAGES.actions.back}
           </Button>
           <Button variant="primary" size="md" isLoading={isApproving} onClick={onConfirmApprove} className="flex-[2]">
             {SIGNING_MESSAGES.confirmApprove.submit}
@@ -79,7 +80,7 @@ export const SigningForm: React.FC<SigningFormProps> = ({
         />
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={onBack} className="flex-1" disabled={isDeclining}>
-            {SIGNING_MESSAGES.confirmApprove.back}
+            {GLOBAL_UI_MESSAGES.actions.back}
           </Button>
           <Button
             variant="outline"

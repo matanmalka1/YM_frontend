@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { clientsApi, clientsQK } from '@/features/clients'
@@ -9,7 +10,7 @@ import { CHARGES_MESSAGES } from '../messages'
 
 const FIELDS: FilterFieldDef[] = [
   { type: 'client-picker', idKey: 'client_record_id', nameKey: 'client_name' },
-  { type: 'select', key: 'status', label: CHARGES_MESSAGES.filters.status, options: CHARGE_STATUS_OPTIONS },
+  { type: 'select', key: 'status', label: GLOBAL_UI_MESSAGES.common.status, options: CHARGE_STATUS_OPTIONS },
   { type: 'select', key: 'charge_type', label: CHARGES_MESSAGES.filters.type, options: CHARGE_TYPE_OPTIONS_WITH_ALL },
   { type: 'select', key: 'period', label: CHARGES_MESSAGES.filters.period, options: CHARGE_PERIOD_OPTIONS },
   {

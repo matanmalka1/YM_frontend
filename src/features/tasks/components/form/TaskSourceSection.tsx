@@ -144,14 +144,14 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
           name={selectedClientName}
           officeClientNumber={selectedClientOfficeNumber}
           onClear={onClientClear}
-          label={TASKS_MESSAGES.source.client}
+          label={GLOBAL_UI_MESSAGES.common.client}
         />
       ) : (
         <ClientSearchInput
           value={clientSearch}
           onChange={onClientSearchChange}
           onSelect={(c) => onClientSelect(c.id, c.name, c.office_client_number)}
-          label={TASKS_MESSAGES.source.client}
+          label={GLOBAL_UI_MESSAGES.common.client}
           helperText={TASKS_MESSAGES.source.clientSearchHelp}
         />
       )}

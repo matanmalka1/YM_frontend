@@ -15,6 +15,7 @@ import {
   type ChargeCreateFormValues,
 } from '../../schemas'
 import { buildChargePeriodOptions } from '../../utils/chargeHelpers'
+import { getChargeBusinessLabel } from '../../utils/chargeUtils'
 import { CHARGES_MESSAGES } from '../../messages'
 
 interface ChargesCreateModalProps {
@@ -74,10 +75,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
     }
 
     const [business] = businesses
-    return {
-      id: business.id,
-      name: business.business_name ?? CHARGES_MESSAGES.create.businessName(business.id),
-    }
+    return { id: business.id, name: getChargeBusinessLabel(business) }
   }, [businesses, initialBusiness])
 
   // Pre-select client when modal opens
@@ -106,10 +104,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
   const businessOptions = useMemo(
     () => [
       { value: '', label: CHARGES_MESSAGES.create.noBusiness },
-      ...businesses.map((b) => ({
-        value: String(b.id),
-        label: b.business_name ?? CHARGES_MESSAGES.create.businessName(b.id),
-      })),
+      ...businesses.map((b) => ({ value: String(b.id), label: getChargeBusinessLabel(b) })),
     ],
     [businesses],
   )

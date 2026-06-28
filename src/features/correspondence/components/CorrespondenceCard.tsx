@@ -118,7 +118,7 @@ export const CorrespondenceCard = ({ businessId, clientId }: CorrespondenceCardP
         open={confirmDeleteId !== null}
         title={CORRESPONDENCE_MESSAGES.card.deleteModalTitle}
         message={CORRESPONDENCE_MESSAGES.card.deleteMessage}
-        confirmLabel={CORRESPONDENCE_MESSAGES.card.deleteConfirm}
+        confirmLabel={GLOBAL_UI_MESSAGES.actions.delete}
         cancelLabel={GLOBAL_UI_MESSAGES.actions.cancel}
         confirmVariant="danger"
         isLoading={deletingId === confirmDeleteId}

@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import { actionsColumn, dateTimeColumn, textColumn, type Column } from '../../../../components/ui/table'
 import type { UserResponse } from '../../api'
@@ -36,7 +37,7 @@ export const buildUserColumns = ({
   },
   {
     key: 'is_active',
-    header: USERS_MESSAGES.columns.status,
+    header: GLOBAL_UI_MESSAGES.common.status,
     render: (user) => (
       <Badge variant={user.is_active ? 'positive' : 'negative'}>
         {user.is_active ? USERS_MESSAGES.columns.active : USERS_MESSAGES.columns.inactive}

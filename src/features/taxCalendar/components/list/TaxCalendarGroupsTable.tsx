@@ -3,7 +3,19 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ExternalLink, FileText, Inbox } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { StateCard } from '@/components/ui/feedback/StateCard'
-import { TableSkeleton, actionsColumn, monoColumn, PaginatedDataTable, RowActionItem, RowActionsMenu, textColumn, GroupedPeriodRow, formatRelativeDueLabel, type Column, type PeriodSummaryMetric } from '@/components/ui/table'
+import {
+  TableSkeleton,
+  actionsColumn,
+  monoColumn,
+  PaginatedDataTable,
+  RowActionItem,
+  RowActionsMenu,
+  textColumn,
+  GroupedPeriodRow,
+  formatRelativeDueLabel,
+  type Column,
+  type PeriodSummaryMetric,
+} from '@/components/ui/table'
 import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
 import { cn, formatDate, formatPlainIdentifier, getErrorMessage, getReportingPeriodLabelWithYear } from '@/utils/utils'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
@@ -109,7 +121,7 @@ const GroupItemsRows = ({
   const columns: Column<TaxCalendarGroupItem>[] = [
     {
       key: 'client',
-      header: TAX_CALENDAR_MESSAGES.item.client,
+      header: GLOBAL_UI_MESSAGES.common.client,
       render: (item) => (
         <Link
           className="block max-w-[240px] truncate font-semibold text-gray-900 hover:text-info-600 hover:underline"
@@ -145,7 +157,7 @@ const GroupItemsRows = ({
           )}
         >
           <RowActionItem
-            label={TAX_CALENDAR_MESSAGES.item.openAction}
+            label={GLOBAL_UI_MESSAGES.actions.open}
             icon={<FileText className="h-3.5 w-3.5" />}
             onClick={() => navigate(getItemPath(item))}
           />

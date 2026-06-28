@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { actionsColumn, monoColumn, textColumn, type Column } from '../../../components/ui/table'
 import type { SearchResult } from '../api'
 import { getResultColor, getResultIcon, getResultLabel } from '../utils/searchResultMeta'
@@ -25,7 +26,7 @@ export const searchColumns: Column<SearchResult>[] = [
   },
   textColumn({
     key: 'client',
-    header: SEARCH_MESSAGES.columns.client,
+    header: GLOBAL_UI_MESSAGES.common.client,
     tone: 'strong',
     getValue: (result) => result.client_name,
   }),
