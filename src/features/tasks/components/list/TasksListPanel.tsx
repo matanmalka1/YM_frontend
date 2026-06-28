@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { ListChecks } from 'lucide-react'
-import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
+import { PaginatedDataTable } from '@/components/ui/table'
 import { Alert } from '@/components/ui/overlays/Alert'
 import type { Task } from '../../api/contracts'
 import { TASKS_PAGE_SIZE } from '../../constants/pageConstants'
