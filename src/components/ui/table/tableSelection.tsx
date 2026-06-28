@@ -1,4 +1,5 @@
 import type { Column } from './DataTable'
+import { Checkbox } from '../primitives/Checkbox'
 import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 interface BuildSelectionColumnParams<T> {
@@ -29,28 +30,22 @@ export const buildSelectionColumn = <T,>({
     headerClassName: 'w-10',
     className: 'w-10',
     headerRender: () => (
-      <input
-        type="checkbox"
+      <Checkbox
         checked={allSelected}
-        ref={(element) => {
-          if (element) {
-            element.indeterminate = someSelected
-          }
-        }}
+        indeterminate={someSelected}
         onChange={() => onToggleAll?.(allIds)}
-        className="h-4 w-4 cursor-pointer rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+        className="cursor-pointer"
         aria-label={selectAllAriaLabel}
       />
     ),
     render: (item) => {
       const id = getId(item)
       return (
-        <input
-          type="checkbox"
+        <Checkbox
           checked={selectedIds?.has(id) ?? false}
           onChange={() => onToggleSelect(id)}
           onClick={(event) => event.stopPropagation()}
-          className="h-4 w-4 cursor-pointer rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+          className="cursor-pointer"
           aria-label={getItemAriaLabel(item)}
         />
       )

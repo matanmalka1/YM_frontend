@@ -1,3 +1,5 @@
+import { forwardRef, useImperativeHandle, useRef } from 'react'
+
 import { cn } from '../../../utils/utils'
 
 interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
@@ -6,6 +8,7 @@ interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>
   size?: 'sm' | 'md'
   containerClassName?: string
   inputClassName?: string
+  indeterminate?: boolean
 }
 
 const checkboxSizeClasses = {
@@ -18,18 +21,28 @@ const labelSizeClasses = {
   md: 'text-sm',
 }
 
-export const Checkbox: React.FC<CheckboxProps> = ({
+export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(({
   label,
   description,
   size = 'md',
   className,
   containerClassName,
   inputClassName,
+  indeterminate = false,
   ...props
-}) => {
+}, forwardedRef) => {
+  const innerRef = useRef<HTMLInputElement>(null)
+  useImperativeHandle(forwardedRef, () => innerRef.current as HTMLInputElement)
+  const setIndeterminate = (element: HTMLInputElement | null) => {
+    innerRef.current = element
+    if (element) {
+      element.indeterminate = indeterminate
+    }
+  }
   const hasLabel = Boolean(label) || Boolean(description)
   const checkbox = (
     <input
+      ref={setIndeterminate}
       type="checkbox"
       className={cn(
         'rounded border-gray-300 text-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-1',
@@ -56,6 +69,6 @@ export const Checkbox: React.FC<CheckboxProps> = ({
       </span>
     </label>
   )
-}
+})
 
 Checkbox.displayName = 'Checkbox'
