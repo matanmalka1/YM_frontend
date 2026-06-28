@@ -1,8 +1,7 @@
 import { Badge } from '../../../../components/ui/primitives/Badge'
-import { actionsColumn, textColumn, type Column } from '../../../../components/ui/table'
+import { actionsColumn, dateTimeColumn, textColumn, type Column } from '../../../../components/ui/table'
 import type { UserResponse } from '../../api'
 import { getRoleLabel } from '../../constants'
-import { formatDateTime } from '../../../../utils/utils'
 import { UserRowActions } from './UserRowActions'
 import { USERS_MESSAGES } from '../../messages'
 
@@ -22,7 +21,7 @@ export const buildUserColumns = ({
   textColumn({
     key: 'full_name',
     header: USERS_MESSAGES.columns.fullName,
-    valueClassName: 'font-semibold text-gray-900',
+    tone: 'strong',
     getValue: (user) => user.full_name,
   }),
   textColumn({
@@ -44,17 +43,15 @@ export const buildUserColumns = ({
       </Badge>
     ),
   },
-  textColumn({
+  dateTimeColumn({
     key: 'last_login_at',
     header: USERS_MESSAGES.columns.lastLogin,
-    valueClassName: 'tabular-nums',
-    getValue: (user) => formatDateTime(user.last_login_at),
+    getValue: (user) => user.last_login_at,
   }),
-  textColumn({
+  dateTimeColumn({
     key: 'created_at',
     header: USERS_MESSAGES.columns.createdAt,
-    valueClassName: 'tabular-nums',
-    getValue: (user) => formatDateTime(user.created_at),
+    getValue: (user) => user.created_at,
   }),
   actionsColumn({
     header: '',
