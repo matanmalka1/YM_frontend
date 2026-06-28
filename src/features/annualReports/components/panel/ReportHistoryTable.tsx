@@ -1,12 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { Eye } from 'lucide-react'
 import { annualReportsApi, annualReportsQK, type AnnualReportListItem } from '../../api'
-import { DataTable } from '../../../../components/ui/table/DataTable'
+import { actionsColumn, DataTable, dateColumn, moneyColumn, RowActionItem, RowActionsMenu } from '@/components/ui/table'
 import { Badge } from '../../../../components/ui/primitives/Badge'
-import { RowActionItem, RowActionsMenu } from '@/components/ui/table'
 import { getStatusLabel, getStatusVariant } from '../../api'
-import { formatCurrencyILS as fmt, formatDate } from '../../../../utils/utils'
-import { semanticMonoToneClasses } from '@/utils/semanticColors'
+import { formatCurrencyILS as fmt } from '../../../../utils/utils'
 import { sortReportsByTaxYearDesc } from '../../utils/panelHelpers'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../../constants/reportConstants'
@@ -35,39 +33,44 @@ export const ReportHistoryTable: React.FC<Props> = ({ clientId, currentReportId,
       isLoading={isLoading}
       getRowKey={(r) => r.id}
       emptyMessage={ANNUAL_REPORTS_MESSAGES.reportHistoryTable.emptyMessage}
-      rowClassName={(r) => (r.id === currentReportId ? 'bg-primary-50' : '')}
+      getRowVariant={(r) => (r.id === currentReportId ? 'primarySoft' : undefined)}
       columns={[
         {
           key: 'tax_year',
           header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.yearHeader,
-          render: (r) => <span className="font-semibold text-gray-900">{r.tax_year}</span>,
+          kind: 'number',
+          tone: 'strong',
+          render: (r) => r.tax_year,
         },
-        {
+        moneyColumn({
           key: 'assessment_amount',
           header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.assessmentHeader,
-          render: (r) => <span className="text-gray-700">{fmt(r.assessment_amount)}</span>,
-        },
-        {
+          getValue: (r) => fmt(r.assessment_amount),
+        }),
+        moneyColumn({
           key: 'refund_due',
           header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.refundDueHeader,
-          render: (r) => <span className={semanticMonoToneClasses.positive}>{fmt(r.refund_due)}</span>,
-        },
-        {
+          tone: 'success',
+          getValue: (r) => fmt(r.refund_due),
+        }),
+        moneyColumn({
           key: 'tax_due',
           header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.taxDueHeader,
-          render: (r) => <span className={semanticMonoToneClasses.negative}>{fmt(r.tax_due)}</span>,
-        },
-        {
+          tone: 'danger',
+          getValue: (r) => fmt(r.tax_due),
+        }),
+        dateColumn({
           key: 'submitted_at',
           header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.submittedAtHeader,
-          render: (r) => <span className="text-gray-500 text-xs">{formatDate(r.submitted_at) ?? '—'}</span>,
-        },
+          getValue: (r) => r.submitted_at,
+        }),
         {
           key: 'status',
           header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.statusHeader,
+          kind: 'status',
           render: (r) => <Badge variant={getStatusVariant(r.status)}>{getStatusLabel(r.status)}</Badge>,
         },
-        {
+        actionsColumn({
           key: 'actions',
           header: '',
           render: (r) => (
@@ -79,7 +82,7 @@ export const ReportHistoryTable: React.FC<Props> = ({ clientId, currentReportId,
               />
             </RowActionsMenu>
           ),
-        },
+        }),
       ]}
     />
   )

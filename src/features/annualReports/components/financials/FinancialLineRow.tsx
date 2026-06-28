@@ -1,6 +1,6 @@
 import { Paperclip, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
-import { RowActionButton } from '../../../../components/ui/table/RowActions'
+import { RowActionButton } from '@/components/ui/table'
 import { formatCurrencyILS } from '@/utils/utils'
 import { documentsApi } from '@/features/documents'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'

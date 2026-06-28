@@ -1,4 +1,4 @@
-import { DataTable, type Column } from '../../../../components/ui/table/DataTable'
+import { DataTable, dateColumn, monoColumn, textColumn, type Column } from '../../../../components/ui/table'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import type { AnnualReportListItem } from '../../api'
 import { getStatusLabel, getStatusVariant, getClientTypeLabel } from '../../api'
@@ -55,28 +55,21 @@ const columns: Column<AnnualReportListItem>[] = [
   {
     key: 'office_client_number',
     header: ANNUAL_REPORTS_MESSAGES.season.officeNumberHeader,
-    render: (r) => (
-      <span className="font-mono tabular-nums text-gray-700">{formatClientOfficeId(r.office_client_number)}</span>
-    ),
+    kind: 'mono',
+    dir: 'ltr',
+    render: (r) => formatClientOfficeId(r.office_client_number),
   },
-  {
+  textColumn({
     key: 'client_name',
     header: ANNUAL_REPORTS_MESSAGES.season.clientHeader,
-    render: (r) => (
-      <span className="font-semibold text-gray-900">
-        {r.client_name ?? ANNUAL_REPORTS_MESSAGES.season.clientFallbackName(r.client_record_id)}
-      </span>
-    ),
-  },
-  {
+    tone: 'strong',
+    getValue: (r) => r.client_name ?? ANNUAL_REPORTS_MESSAGES.season.clientFallbackName(r.client_record_id),
+  }),
+  monoColumn({
     key: 'client_id_number',
     header: ANNUAL_REPORTS_MESSAGES.season.idNumberHeader,
-    render: (r) => (
-      <span className="font-mono tabular-nums text-gray-700">
-        {r.client_id_number ?? <span className="text-gray-400">—</span>}
-      </span>
-    ),
-  },
+    getValue: (r) => r.client_id_number,
+  }),
   {
     key: 'client_type',
     header: ANNUAL_REPORTS_MESSAGES.season.typeFormHeader,
@@ -92,6 +85,7 @@ const columns: Column<AnnualReportListItem>[] = [
   {
     key: 'status',
     header: ANNUAL_REPORTS_MESSAGES.season.statusHeader,
+    kind: 'status',
     render: (r) => <Badge variant={getStatusVariant(r.status)}>{getStatusLabel(r.status)}</Badge>,
   },
   {
@@ -104,11 +98,11 @@ const columns: Column<AnnualReportListItem>[] = [
     header: ANNUAL_REPORTS_MESSAGES.season.deadlineTypeHeader,
     render: (r) => getDeadlineTypeLabel(r.deadline_type),
   },
-  {
+  dateColumn({
     key: 'submitted_at',
     header: ANNUAL_REPORTS_MESSAGES.season.submittedAtHeader,
-    render: (r) => <span className="tabular-nums text-gray-600">{formatDate(r.submitted_at)}</span>,
-  },
+    getValue: (r) => r.submitted_at,
+  }),
 ]
 
 export const SeasonReportsTable: React.FC<SeasonReportsTableProps> = ({ reports, isLoading, taxYear, onSelect }) => (
@@ -123,10 +117,10 @@ export const SeasonReportsTable: React.FC<SeasonReportsTableProps> = ({ reports,
         ? ANNUAL_REPORTS_MESSAGES.season.noReportsForYear(taxYear)
         : ANNUAL_REPORTS_MESSAGES.season.noReportsThisYear
     }
-    rowClassName={(r) => {
+    getRowVariant={(r) => {
       const days = daysUntil(r.filing_deadline)
       const overdue = days !== null && days < 0 && !TERMINAL_STATUSES.has(r.status)
-      return cn(overdue && 'bg-negative-50/40')
+      return overdue ? 'dangerSoft' : undefined
     }}
   />
 )

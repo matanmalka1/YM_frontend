@@ -1,7 +1,7 @@
 import { Check, Pencil, Trash2, X } from 'lucide-react'
 import type { FieldErrors, UseFormRegister } from 'react-hook-form'
-import { DataTable, type Column } from '../../../../components/ui/table/DataTable'
-import { RowActionButton } from '../../../../components/ui/table/RowActions'
+import { actionsColumn, DataTable, type Column } from '../../../../components/ui/table'
+import { RowActionButton } from '@/components/ui/table'
 import type { AnnexDataLine } from '../../api'
 import type { FieldDef } from '../../constants/annexConstants'
 import { ANNEX_TEXT, TABLE_ICON_CLASS } from '../../constants/annexTextConstants'
@@ -43,12 +43,12 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
       (field): Column<AnnexDataLine> => ({
         key: field.key,
         header: field.label,
-        className: 'align-top text-gray-700',
+        verticalAlign: 'top',
         render: (line) => getLineFieldValue(line, field.key),
         editRender: () => <AnnexFieldInput field={field} register={register} errors={errors} />,
       }),
     ),
-    {
+    actionsColumn({
       key: '__actions',
       header: '',
       render: (line) => (
@@ -96,7 +96,7 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
           />
         </div>
       ),
-    },
+    }),
   ]
 
   return (

@@ -1,5 +1,5 @@
 import { Modal } from '../../../../components/ui/overlays/Modal'
-import { DataTable, type Column } from '../../../../components/ui/table/DataTable'
+import { DataTable, textColumn, type Column } from '../../../../components/ui/table'
 import { getStatusLabel } from '../../api/utils'
 import type { AnnualReportListItem } from '../../api/contracts'
 import { formatShekelAmount } from '@/utils/utils'
@@ -35,13 +35,12 @@ export const ClientYearComparisonModal: React.FC<Props> = ({ open, onClose, repo
   const sorted = reports.toSorted((a, b) => b.tax_year - a.tax_year)
 
   const columns: Column<MetricRow>[] = [
-    {
+    textColumn({
       key: 'label',
       header: '',
-      render: (m) => m.label,
-      className: 'font-semibold text-gray-900',
-      headerClassName: 'w-32',
-    },
+      tone: 'strong',
+      getValue: (m) => m.label,
+    }),
     ...sorted.map(
       (r): Column<MetricRow> => ({
         key: `year-${r.id}`,

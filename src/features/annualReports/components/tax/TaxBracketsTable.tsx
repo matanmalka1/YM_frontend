@@ -1,5 +1,5 @@
 import type { BracketBreakdownItem } from '../../api'
-import { DataTable, type Column } from '@/components/ui/table/DataTable'
+import { DataTable, moneyColumn, numberColumn, type Column } from '@/components/ui/table'
 import { formatCurrencyILS as fmt } from '@/utils/utils'
 import { fmtRange, fmtRate } from '../../utils/taxHelpers'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
@@ -17,30 +17,24 @@ export const TaxBracketsTable: React.FC<Props> = ({ brackets }) => {
     {
       key: 'rate',
       header: ANNUAL_REPORTS_MESSAGES.bracketsTable.rateHeader,
+      kind: 'number',
       render: (b) => fmtRate(b.rate),
-      className: 'text-gray-700',
     },
-    {
+    numberColumn({
       key: 'range',
       header: ANNUAL_REPORTS_MESSAGES.bracketsTable.rangeHeader,
-      dir: 'ltr',
-      render: (b) => fmtRange(b.from_amount, b.to_amount),
-      className: 'tabular-nums text-gray-700',
-    },
-    {
+      getValue: (b) => fmtRange(b.from_amount, b.to_amount),
+    }),
+    moneyColumn({
       key: 'taxable',
       header: ANNUAL_REPORTS_MESSAGES.bracketsTable.taxableInBracketHeader,
-      dir: 'ltr',
-      render: (b) => fmt(b.taxable_in_bracket),
-      className: 'tabular-nums text-gray-700',
-    },
-    {
+      getValue: (b) => fmt(b.taxable_in_bracket),
+    }),
+    moneyColumn({
       key: 'tax',
       header: ANNUAL_REPORTS_MESSAGES.bracketsTable.taxInBracketHeader,
-      dir: 'ltr',
-      render: (b) => fmt(b.tax_in_bracket),
-      className: 'tabular-nums text-gray-700',
-    },
+      getValue: (b) => fmt(b.tax_in_bracket),
+    }),
   ]
 
   return (
@@ -52,7 +46,7 @@ export const TaxBracketsTable: React.FC<Props> = ({ brackets }) => {
         data={brackets}
         columns={columns}
         getRowKey={(b) => b.rate}
-        rowClassName={(_, i) => (i === lastIndex ? 'bg-warning-50 font-semibold' : '')}
+        getRowVariant={(_, i) => (i === lastIndex ? 'warningSoft' : undefined)}
         surface="embedded"
       />
     </div>
