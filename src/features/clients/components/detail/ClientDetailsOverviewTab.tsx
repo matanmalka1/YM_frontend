@@ -79,8 +79,6 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
   const [isEditDirty, setIsEditDirty] = useState(false)
   const [isAddingBusiness, setIsAddingBusiness] = useState(false)
   const [isAddingCharge, setIsAddingCharge] = useState(false)
-  // Store which client the related data was requested for and derive the flag, so it
-  // resets itself when the client changes — no prop-sync effect needed.
   const [relatedDataLoadedForId, setRelatedDataLoadedForId] = useState<number | null>(null)
   const shouldLoadRelatedData = relatedDataLoadedForId === client.id
 
@@ -111,12 +109,14 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
       {activeTab === 'details' && (
         <>
           <ClientInfoSection client={client} />
-          <ClientStatusCard clientId={client.id} />
-          <ClientBusinessesCard
-            clientId={client.id}
-            canEdit={canEditClients}
-            onAddBusiness={() => setIsAddingBusiness(true)}
-          />
+          <div className="grid items-start gap-6 lg:grid-cols-2">
+            <ClientStatusCard clientId={client.id} />
+            <ClientBusinessesCard
+              clientId={client.id}
+              canEdit={canEditClients}
+              onAddBusiness={() => setIsAddingBusiness(true)}
+            />
+          </div>
           <ClientRelatedData
             clientId={client.id}
             binders={binders}

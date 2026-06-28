@@ -15,7 +15,7 @@ import type { BusinessResponse } from '@/features/clients'
 import { UPLOAD_FORM_ID } from '../../constants'
 import { filterDocuments, getCountLabel } from '../../utils/documentsDataCardsUtils'
 import { useDocumentCardActions } from '../../hooks/useDocumentCardActions'
-import { DocumentsDataCardsToolbar } from './DocumentsDataCardsToolbar'
+import { DocumentsFilterPanel } from './DocumentsFilterPanel'
 import { StateCard } from '../../../../components/ui/feedback/StateCard'
 import { DOCUMENTS_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
@@ -112,7 +112,7 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
         </Button>
       </div>
 
-      <DocumentsDataCardsToolbar
+      <DocumentsFilterPanel
         search={search}
         onSearchChange={setSearch}
         filterType={filterType}

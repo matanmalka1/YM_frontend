@@ -8,6 +8,7 @@ import { vatReportsApi, vatReportsQK } from '@/features/vatReports'
 import { useFirstBusinessId } from '../../hooks/useFirstBusinessId'
 import { formatShekelAmount, formatDate } from '@/utils/utils'
 import { ActionSurfaceButton, ActionSurfaceLink } from '@/components/ui/primitives/ActionSurface'
+import { Card } from '@/components/ui/primitives/Card'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { CLIENTS_MESSAGES } from '../../messages'
@@ -107,16 +108,13 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
 
   if (isLoading) {
     return (
-      <section className="w-full max-w-4xl space-y-1.5 rounded-lg border border-gray-200/80 bg-white px-3 py-2.5">
-        <div className="flex items-center justify-between gap-3">
-          <h3 className="text-sm font-semibold text-gray-900">{CLIENTS_MESSAGES.statusCard.title}</h3>
-        </div>
+      <Card title={CLIENTS_MESSAGES.statusCard.title} size="compact" className="shadow-none">
         <div className="grid grid-cols-2 gap-1 md:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <SkeletonBlock key={i} width="w-full" height="h-10" rounded="md" />
           ))}
         </div>
-      </section>
+      </Card>
     )
   }
 
@@ -139,11 +137,12 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
         : '—'
 
   return (
-    <section className="w-full max-w-4xl space-y-1.5 rounded-lg border border-gray-200/80 bg-white px-3 py-2.5">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold text-gray-900">{CLIENTS_MESSAGES.statusCard.titleWithYear(year)}</h3>
-        {yearSelector}
-      </div>
+    <Card
+      title={CLIENTS_MESSAGES.statusCard.titleWithYear(year)}
+      actions={yearSelector}
+      size="compact"
+      className="shadow-none"
+    >
       <div className="grid grid-cols-2 gap-0.5 md:grid-cols-3">
         <Tile
           icon={<Receipt size={14} />}
@@ -198,6 +197,6 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
           disabled={firstBusinessId == null}
         />
       </div>
-    </section>
+    </Card>
   )
 }

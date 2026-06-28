@@ -52,6 +52,11 @@ export const DOCUMENTS_MESSAGES = {
   list: {
     sectionTitle: (countLabel: string) => `מסמכים (${countLabel})`,
     uploadButton: 'העלאת מסמך',
+    filterTitle: 'סינון מסמכים',
+    filterSubtitle: 'חיפוש, סוג מסמך ושנת מס',
+    searchFilterLabel: 'חיפוש',
+    documentTypeFilterLabel: 'סוג מסמך',
+    taxYearFilterLabel: 'שנת מס',
     noResultsMessage: 'לא נמצאו מסמכים מתאימים לחיפוש',
     emptyMessage: 'עדיין לא הועלו מסמכים ללקוח זה',
     firstUploadAction: 'העלאת מסמך ראשון',
