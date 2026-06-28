@@ -1,6 +1,4 @@
-import { type Column, type DataTableProps } from '@/components/ui/table/DataTable'
-import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
-import { cn, formatDateTime } from '@/utils/utils'
+import { dateTimeColumn, monoColumn, textColumn, PaginatedDataTable, type Column, type DataTableProps } from '@/components/ui/table'
 import { AUDIT_MESSAGES } from '../messages'
 
 type AuditTrailTableEntry = {
@@ -22,7 +20,7 @@ type AuditTrailTableProps<TEntry extends AuditTrailTableEntry> = {
   isFetching: boolean
   /** Receives the zero-based next page. */
   onPageChange: (page: number) => void
-  detailsClassName?: string
+  detailsTruncate?: boolean
   surface?: DataTableProps<TEntry>['surface']
 }
 
@@ -35,35 +33,35 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
   total,
   isFetching,
   onPageChange,
-  detailsClassName = 'text-xs text-gray-500',
+  detailsTruncate = false,
   surface = 'embedded',
 }: AuditTrailTableProps<TEntry>) => {
   const columns: Column<TEntry>[] = [
-    {
+    dateTimeColumn({
       key: 'performed_at',
       header: AUDIT_MESSAGES.table.columnDate,
-      className: 'w-36 text-gray-600 tabular-nums',
-      render: (entry) => formatDateTime(entry.performed_at),
-    },
-    {
+      getValue: (entry) => entry.performed_at,
+    }),
+    textColumn({
       key: 'action',
       header: AUDIT_MESSAGES.table.columnAction,
-      className: 'w-24 font-semibold text-gray-900',
-      render: (entry) => actionLabels[entry.action] ?? entry.action,
-    },
-    {
+      tone: 'strong',
+      getValue: (entry) => actionLabels[entry.action] ?? entry.action,
+    }),
+    textColumn({
       key: 'details',
       header: AUDIT_MESSAGES.table.columnDetails,
       wrap: true,
-      className: cn('min-w-48 break-words', detailsClassName),
-      render: (entry) => formatDetails(entry),
-    },
-    {
+      truncate: detailsTruncate,
+      tone: 'muted',
+      className: 'break-words',
+      getValue: (entry) => formatDetails(entry),
+    }),
+    monoColumn({
       key: 'performed_by',
       header: AUDIT_MESSAGES.table.columnPerformedBy,
-      className: 'w-24 font-mono text-gray-700 tabular-nums',
-      render: (entry) => entry.performed_by_name ?? `#${entry.performed_by}`,
-    },
+      getValue: (entry) => entry.performed_by_name ?? `#${entry.performed_by}`,
+    }),
   ]
 
   return (
