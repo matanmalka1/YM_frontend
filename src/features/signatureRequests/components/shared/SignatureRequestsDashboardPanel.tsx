@@ -8,7 +8,7 @@ import { InlineState } from '@/components/ui/feedback'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
-import { DataTable } from '@/components/ui/table/DataTable'
+import { actionsColumn, DataTable, dateColumn } from '@/components/ui/table'
 import { getSignatureRequestStatusLabel, getSignatureRequestTypeLabel } from '@/features/signatureRequests'
 import { cn, formatClientOfficeId, formatDate, showErrorToast } from '@/utils/utils'
 import type { SignatureRequestResponse } from '../../api'
@@ -99,18 +99,14 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
           />
         ),
       },
-      {
+      dateColumn({
         key: 'created_at',
         header: SIGNATURE_REQUESTS_MESSAGES.fields.createdAt,
-        render: (req: SignatureRequestResponse) => (
-          <span className="tabular-nums text-gray-500">{formatDate(req.created_at)}</span>
-        ),
-      },
-      {
+        getValue: (req: SignatureRequestResponse) => req.created_at,
+      }),
+      actionsColumn({
         key: 'actions',
         header: '',
-        headerClassName: 'w-10',
-        className: 'w-10',
         render: (req: SignatureRequestResponse) => (
           <SignatureRequestRowActions
             request={req}
@@ -123,7 +119,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
             copySuccessMessage={null}
           />
         ),
-      },
+      }),
     ],
     [businessLookup, isCanceling, signingUrls],
   )
