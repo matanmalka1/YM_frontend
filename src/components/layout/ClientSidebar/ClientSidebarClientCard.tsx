@@ -17,16 +17,16 @@ export const ClientSidebarClientCard: React.FC<ClientSidebarClientCardProps> = (
     onClick={onNavigate}
     className={({ isActive }) =>
       cn(
-        'focus-ring group block rounded-2xl border p-3 text-right transition',
+        'focus-ring group block rounded-xl border p-2.5 text-right transition',
         isActive
           ? 'border-primary-200 bg-primary-50/80 shadow-sm'
           : 'border-gray-200/80 bg-white hover:border-gray-300 hover:bg-gray-50/70 hover:shadow-sm',
       )
     }
   >
-    <div className="flex items-start justify-between gap-3">
+    <div className="flex items-start justify-between gap-2">
       <div className="min-w-0">
-        <span className="block truncate text-sm font-semibold text-gray-950" title={client.displayName}>
+        <span className="block truncate text-xs font-semibold text-gray-950" title={client.displayName}>
           {client.displayName}
         </span>
       </div>
@@ -35,18 +35,18 @@ export const ClientSidebarClientCard: React.FC<ClientSidebarClientCardProps> = (
       </Badge>
     </div>
 
-    <div className="mt-3 flex flex-wrap gap-1.5">
-      <Badge variant="neutral" size="2xs" icon={<Building2 className="h-3 w-3" />}>
+    <div className="mt-2 flex flex-wrap gap-1">
+      <Badge variant="neutral" size="2xs" icon={<Building2 className="h-2.5 w-2.5" />}>
         {getEntityLabel(client)}
       </Badge>
-      <Badge variant="neutral" size="2xs" icon={<ReceiptText className="h-3 w-3" />}>
+      <Badge variant="neutral" size="2xs" icon={<ReceiptText className="h-2.5 w-2.5" />}>
         מע״מ {getVatLabel(client)}
       </Badge>
     </div>
 
-    <div className="mt-3 space-y-1.5 border-t border-gray-100 pt-2.5 text-xs">
-      <span className="flex min-w-0 items-center gap-2 text-gray-500">
-        <Phone className="h-3.5 w-3.5 shrink-0" />
+    <div className="mt-2 space-y-1 border-t border-gray-100 pt-2 text-2xs">
+      <span className="flex min-w-0 items-center gap-1.5 text-gray-500">
+        <Phone className="h-3 w-3 shrink-0" />
         {client.phone ? (
           <bdi dir="ltr" className="truncate text-gray-700">
             {formatPhoneNumber(client.phone)}
@@ -55,8 +55,8 @@ export const ClientSidebarClientCard: React.FC<ClientSidebarClientCardProps> = (
           <span className="text-gray-400">לא הוזן טלפון</span>
         )}
       </span>
-      <span className="flex min-w-0 items-center gap-2 text-gray-500">
-        <Mail className="h-3.5 w-3.5 shrink-0" />
+      <span className="flex min-w-0 items-center gap-1.5 text-gray-500">
+        <Mail className="h-3 w-3 shrink-0" />
         {client.email ? (
           <bdi dir="ltr" className="truncate text-left text-gray-700" title={client.email}>
             {client.email}

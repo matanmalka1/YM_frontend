@@ -13,8 +13,8 @@ export const NotificationBell: React.FC = () => {
       <Button
         variant="outline"
         shape="square"
-        size="lg"
-        icon={<Bell className="h-[18px] w-[18px]" />}
+        size="md"
+        icon={<Bell className="h-4 w-4" />}
         onClick={openDrawer}
         className="relative border-gray-200 text-gray-500 shadow-sm hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900"
         aria-label="התראות"

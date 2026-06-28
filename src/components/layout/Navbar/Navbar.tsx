@@ -43,7 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   }
 
   return (
-    <header className="z-10 flex h-14 shrink-0 items-center gap-2 border-b border-gray-200/80 bg-white px-2 md:px-3">
+    <header className="z-10 flex h-14 shrink-0 items-center gap-1.5 border-b border-gray-200/80 bg-white px-2 md:px-3">
       <NavbarPrimaryNav items={visibleItems} />
       <div className="hidden shrink-0 items-center border-r border-gray-100 pr-2 md:flex">
         <Badge variant="neutral" size="sm" className="tabular-nums" suppressHydrationWarning>
@@ -56,8 +56,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           type="button"
           variant="outline"
           shape="square"
-          size="lg"
-          icon={<Users className="h-[18px] w-[18px]" />}
+          size="md"
+          icon={<Users className="h-4 w-4" />}
           onClick={onOpenClientSidebar}
           className="md:hidden"
           aria-label="רשימת לקוחות"
@@ -66,15 +66,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           type="button"
           variant={sidebarOpen ? 'outline' : 'secondary'}
           shape="square"
-          size="lg"
-          icon={<PanelRight className="h-[18px] w-[18px]" />}
+          size="md"
+          icon={<PanelRight className="h-4 w-4" />}
           onClick={onToggleSidebar}
           className="hidden md:inline-flex"
           aria-label={sidebarOpen ? 'סגירת רשימת לקוחות' : 'פתיחת רשימת לקוחות'}
           aria-pressed={sidebarOpen}
         />
         <form onSubmit={handleSearchSubmit} role="search" className="hidden md:block">
-          <div className="w-44">
+          <div className="w-36">
             <Input
               type="search"
               value={searchValue}

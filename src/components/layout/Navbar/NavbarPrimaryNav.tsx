@@ -34,11 +34,11 @@ export const NavbarPrimaryNav: React.FC<NavbarPrimaryNavProps> = ({ items }) => 
         }
       })
 
-      let usedWidth = 8 // p-1 padding both sides
+      let usedWidth = 4 // p-0.5 padding both sides
       let firstHidden = visibleNavItems.length
       for (let index = 0; index < visibleNavItems.length; index++) {
         const itemWidth = (cachedWidths.current[index] ?? 80) + 2 // gap-0.5
-        const reserveMore = alwaysShowMore || index < visibleNavItems.length - 1 ? 88 : 0
+        const reserveMore = alwaysShowMore || index < visibleNavItems.length - 1 ? 64 : 0
         if (usedWidth + itemWidth + reserveMore > nav.clientWidth) {
           firstHidden = index
           break
@@ -62,7 +62,7 @@ export const NavbarPrimaryNav: React.FC<NavbarPrimaryNavProps> = ({ items }) => 
   return (
     <div className="flex min-w-0 flex-1 items-center">
       <nav ref={navRef} className="min-w-0 flex-1 overflow-hidden" aria-label="ניווט ראשי">
-        <ul className="flex items-center gap-0.5 rounded-xl bg-gray-50 p-1">
+        <ul className="flex items-center gap-0.5 rounded-xl bg-gray-50 p-0.5">
           {visibleNavItems.map((item, index) => {
             const hidden = hiddenCount > 0 && index >= visibleNavItems.length - hiddenCount
             return (
@@ -78,7 +78,7 @@ export const NavbarPrimaryNav: React.FC<NavbarPrimaryNavProps> = ({ items }) => 
                   end={item.end}
                   className={({ isActive }) =>
                     cn(
-                      'focus-ring inline-flex h-9 items-center whitespace-nowrap rounded-nav border px-3 text-sm font-medium transition',
+                      'focus-ring inline-flex h-8 items-center whitespace-nowrap rounded-nav border px-2.5 text-[13px] font-medium transition',
                       isActive
                         ? 'border-gray-200 bg-white font-semibold text-gray-950 shadow-sm'
                         : 'border-transparent text-gray-600 hover:bg-white/80 hover:text-gray-950',

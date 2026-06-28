@@ -81,13 +81,14 @@ export const NavbarMoreMenu: React.FC<NavbarMoreMenuProps> = ({ groups }) => {
   }
 
   return (
-    <div className="relative mr-1 shrink-0 rounded-xl bg-gray-50 p-1">
+    <div className="relative mr-1 shrink-0 rounded-xl bg-gray-50 p-0.5">
       <Button
         ref={buttonRef}
         type="button"
         variant={hasActiveItem ? 'secondary' : 'ghost'}
-        size="sm"
-        icon={<ChevronDown className={cn('h-4 w-4 transition-transform', open && 'rotate-180')} />}
+        size="xs"
+        className="text-[13px]"
+        icon={<ChevronDown className={cn('h-3.5 w-3.5 transition-transform', open && 'rotate-180')} />}
         iconPosition="end"
         onClick={() => setOpen((isOpen) => !isOpen)}
         onKeyDown={(event) => {
