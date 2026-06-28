@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { DefinitionList } from '@/components/ui/layout/DefinitionList'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { DetailDrawer } from '@/components/ui/overlays/DetailDrawer'
-import { DrawerField, DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
+import { DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import type { UpdateAdvancePaymentPayload } from '../../api/contracts'
 import { formatShekelAmount, formatDate } from '@/utils/utils'
 import { getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
@@ -14,7 +14,7 @@ import {
 import { useAdvancePaymentDrawerForm } from '../../hooks/useAdvancePaymentDrawerForm'
 import { AdvancePaymentDrawerFooter } from './AdvancePaymentDrawerFooter'
 import { AdvancePaymentEditableSections } from './AdvancePaymentEditableSections'
-import { AdvancePaymentReadonlySections } from './AdvancePaymentReadonlySections'
+import { AdvancePaymentDetailsPanel } from './AdvancePaymentDetailsPanel'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 interface AdvancePaymentDrawerProps {
@@ -119,27 +119,32 @@ export const AdvancePaymentDrawer: React.FC<AdvancePaymentDrawerProps> = ({
         )}
 
         <DrawerSection title={ADVANCED_PAYMENTS_MESSAGES.drawer.periodSectionTitle}>
-          <DrawerField
-            label={ADVANCED_PAYMENTS_MESSAGES.drawer.dueDateLabel}
-            value={formatDate(model.dueDateEffective ?? model.dueDate)}
+          <DefinitionList
+            layout="stacked"
+            items={[
+              {
+                label: ADVANCED_PAYMENTS_MESSAGES.drawer.dueDateLabel,
+                value: formatDate(model.dueDateEffective ?? model.dueDate),
+              },
+              {
+                label: ADVANCED_PAYMENTS_MESSAGES.drawer.periodTurnoverLabel,
+                value: turnoverLabel ?? (
+                  <span className="text-gray-400 text-xs">{ADVANCED_PAYMENTS_MESSAGES.drawer.vatPendingNote}</span>
+                ),
+              },
+              ...(timingStatusLabel
+                ? [
+                    {
+                      label: ADVANCED_PAYMENTS_MESSAGES.drawer.timingStatusLabel,
+                      value: <span className={`${timingStatusClass} text-xs font-medium`}>{timingStatusLabel}</span>,
+                    },
+                  ]
+                : []),
+            ]}
           />
-          <DrawerField
-            label={ADVANCED_PAYMENTS_MESSAGES.drawer.periodTurnoverLabel}
-            value={
-              turnoverLabel ?? (
-                <span className="text-gray-400 text-xs">{ADVANCED_PAYMENTS_MESSAGES.drawer.vatPendingNote}</span>
-              )
-            }
-          />
-          {timingStatusLabel && (
-            <DrawerField
-              label={ADVANCED_PAYMENTS_MESSAGES.drawer.timingStatusLabel}
-              value={<span className={`${timingStatusClass} text-xs font-medium`}>{timingStatusLabel}</span>}
-            />
-          )}
         </DrawerSection>
 
-        {canEdit ? <AdvancePaymentEditableSections form={form} /> : <AdvancePaymentReadonlySections model={model} />}
+        {canEdit ? <AdvancePaymentEditableSections form={form} /> : <AdvancePaymentDetailsPanel model={model} />}
       </div>
     </DetailDrawer>
   )
