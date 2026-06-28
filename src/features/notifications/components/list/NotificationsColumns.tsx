@@ -1,8 +1,6 @@
 import { Eye, Send } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
-import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
-import type { Column } from '@/components/ui/table'
-import { formatDateTime } from '@/utils/utils'
+import { actionsColumn, dateTimeColumn, RowActionItem, RowActionsMenu, textColumn, type Column } from '@/components/ui/table'
 import { TRIGGER_LABELS, type NotificationItem } from '../../api'
 import { NOTIFICATION_DOMAIN_LABELS, NOTIFICATION_STATUS_LABELS, getNotificationStatusVariant } from '../../constants'
 import { NOTIFICATIONS_MESSAGES } from '../../messages'
@@ -29,11 +27,11 @@ export const buildNotificationColumns = ({
   onView,
   onSend,
 }: BuildNotificationColumnsParams): Column<NotificationItem>[] => [
-  {
+  dateTimeColumn({
     key: 'created_at',
     header: NOTIFICATIONS_MESSAGES.columns.date,
-    render: (item) => formatDateTime(item.created_at),
-  },
+    getValue: (item) => item.created_at,
+  }),
   {
     key: 'trigger',
     header: NOTIFICATIONS_MESSAGES.columns.type,
@@ -44,26 +42,28 @@ export const buildNotificationColumns = ({
       </div>
     ),
   },
-  {
+  textColumn({
     key: 'client',
     header: NOTIFICATIONS_MESSAGES.columns.client,
-    render: (item) => item.client_name ?? `#${item.client_record_id}`,
-  },
+    getValue: (item) => item.client_name ?? `#${item.client_record_id}`,
+  }),
   {
     key: 'status',
     header: NOTIFICATIONS_MESSAGES.columns.status,
+    kind: 'status',
     render: (item) => (
       <Badge variant={getNotificationStatusVariant(item.status)} size="sm">
         {NOTIFICATION_STATUS_LABELS[item.status]}
       </Badge>
     ),
   },
-  {
+  textColumn({
     key: 'recipient',
     header: NOTIFICATIONS_MESSAGES.columns.recipient,
-    render: (item) => <span className="text-sm text-gray-600">{item.recipient ?? '—'}</span>,
-  },
-  {
+    tone: 'muted',
+    getValue: (item) => item.recipient,
+  }),
+  actionsColumn({
     key: 'actions',
     header: '',
     render: (item) => (
@@ -82,5 +82,5 @@ export const buildNotificationColumns = ({
         )}
       </RowActionsMenu>
     ),
-  },
+  }),
 ]
