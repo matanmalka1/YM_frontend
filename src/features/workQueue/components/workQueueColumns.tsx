@@ -4,8 +4,7 @@ import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
 import { Spinner } from '@/components/ui/primitives/Spinner'
 import { Tooltip } from '@/components/ui/primitives/Tooltip'
-import { RowActionItem, RowActionsMenu } from '@/components/ui/table/RowActions'
-import { formatDate } from '@/utils/utils'
+import { RowActionItem, RowActionsMenu, actionsColumn, dateColumn, EmptyCell, type Column } from '@/components/ui/table'
 import { taskPriorityLabels, taskRoleLabels } from '@/features/tasks'
 import type { WorkQueueAction, WorkQueueItem, WorkQueueSourceType, WorkQueueWarning } from '../api/contracts'
 import { getWorkQueueUrgencyVariant, workQueueSourceTypeLabels, workQueueUrgencyLabels } from '../constants'
@@ -77,12 +76,11 @@ export const buildWorkQueueColumns = ({
   showLinkedTasks,
   showWarnings,
 }: BuildColumnsParams) =>
-  [
+  (
+    [
     {
       key: 'type',
       header: WORK_QUEUE_MESSAGES.columns.type,
-      headerClassName: 'w-28',
-      className: 'w-28',
       render: (item: WorkQueueItem) =>
         item.source_type === 'task' ? (
           <Badge variant="neutral" icon={<ClipboardCheck className="h-3 w-3" />}>
@@ -97,8 +95,6 @@ export const buildWorkQueueColumns = ({
     {
       key: 'client',
       header: WORK_QUEUE_MESSAGES.columns.client,
-      headerClassName: 'w-48',
-      className: 'w-48',
       render: (item: WorkQueueItem) =>
         item.client_record_id != null ? (
           <Link
@@ -112,14 +108,13 @@ export const buildWorkQueueColumns = ({
             )}
           </Link>
         ) : (
-          <span className="text-sm text-gray-400">—</span>
+          <EmptyCell />
         ),
     },
     {
       key: 'title',
       header: WORK_QUEUE_MESSAGES.columns.title,
-      headerClassName: 'min-w-64 w-[28rem] text-start',
-      className: 'min-w-64 max-w-[30rem] whitespace-normal text-start',
+      wrap: true,
       render: (item: WorkQueueItem) => (
         <div className="space-y-1 text-start">
           <div className="font-medium text-gray-900">{item.title}</div>
@@ -132,20 +127,15 @@ export const buildWorkQueueColumns = ({
         </div>
       ),
     },
-    {
+    dateColumn({
       key: 'due_date',
       header: WORK_QUEUE_MESSAGES.columns.dueDate,
-      headerClassName: 'w-32',
-      className: 'w-32',
-      render: (item: WorkQueueItem) => (
-        <span className="text-sm tabular-nums text-gray-700">{formatDate(item.due_date)}</span>
-      ),
-    },
+      getValue: (item: WorkQueueItem) => item.due_date,
+    }),
     {
       key: 'urgency',
       header: WORK_QUEUE_MESSAGES.columns.urgency,
-      headerClassName: 'w-28',
-      className: 'w-28',
+      kind: 'status',
       render: (item: WorkQueueItem) => (
         <Badge variant={getWorkQueueUrgencyVariant(item.urgency)}>{workQueueUrgencyLabels[item.urgency]}</Badge>
       ),
@@ -153,13 +143,11 @@ export const buildWorkQueueColumns = ({
     {
       key: 'task_meta',
       header: WORK_QUEUE_MESSAGES.columns.taskMeta,
-      headerClassName: 'w-36',
-      className: 'w-36',
       render: (item: WorkQueueItem) => {
         const priorityKey = taskPriority(item)
         const priority = taskPriorityLabel(item)
         const assignedRole = assignedRoleLabel(item)
-        if (!priority && !assignedRole) return <span className="text-sm text-gray-400">—</span>
+        if (!priority && !assignedRole) return <EmptyCell />
         return (
           <div className="flex flex-wrap justify-center gap-1">
             {priority && <Badge variant={priorityKey === 'urgent' ? 'negative' : 'neutral'}>{priority}</Badge>}
@@ -171,18 +159,16 @@ export const buildWorkQueueColumns = ({
     {
       key: 'status',
       header: WORK_QUEUE_MESSAGES.columns.status,
-      headerClassName: 'w-28',
-      className: 'w-28',
-      render: (item: WorkQueueItem) => <span className="text-sm text-gray-600">{item.status_label ?? '—'}</span>,
+      tone: 'muted',
+      render: (item: WorkQueueItem) => item.status_label ?? '—',
     },
     {
       key: 'linked_tasks',
       header: WORK_QUEUE_MESSAGES.columns.linkedTasks,
-      headerClassName: 'w-40',
-      className: 'w-40 whitespace-normal',
+      wrap: true,
       render: (item: WorkQueueItem) => {
         const count = item.linked_tasks_count
-        if (!count) return <span className="text-sm text-gray-400">—</span>
+        if (!count) return <EmptyCell />
         return (
           <div className="space-y-1">
             <Badge variant="info">
@@ -200,8 +186,7 @@ export const buildWorkQueueColumns = ({
     {
       key: 'warnings',
       header: WORK_QUEUE_MESSAGES.columns.warnings,
-      headerClassName: 'w-44',
-      className: 'w-44 whitespace-normal',
+      wrap: true,
       render: (item: WorkQueueItem) =>
         item.warnings.length ? (
           <div className="flex max-w-44 flex-wrap justify-center gap-1">
@@ -212,21 +197,19 @@ export const buildWorkQueueColumns = ({
             ))}
           </div>
         ) : (
-          <span className="text-sm text-gray-400">—</span>
+          <EmptyCell />
         ),
     },
-    {
+    actionsColumn({
       key: 'actions',
       header: GLOBAL_UI_MESSAGES.common.actions,
-      headerClassName: 'w-36',
-      className: 'w-36',
       render: (item: WorkQueueItem) => {
         const actions = item.available_actions
         const isUnlinkedTask =
           item.source_type === 'task' &&
           metadataValue(item, 'source_domain') == null &&
           metadataValue(item, 'source_id') == null
-        if (actions.length === 0 && !isUnlinkedTask) return <span className="text-sm text-gray-400">—</span>
+        if (actions.length === 0 && !isUnlinkedTask) return <EmptyCell />
         const [primary, ...secondary] = actions
         const primaryKey = primary ? `${item.id}:${primary.key}` : ''
         const tooltipText =
@@ -280,8 +263,9 @@ export const buildWorkQueueColumns = ({
           </div>
         )
       },
-    },
-  ].filter((column) => {
+    }),
+    ] satisfies Column<WorkQueueItem>[]
+  ).filter((column) => {
     if (column.key === 'linked_tasks') return showLinkedTasks
     if (column.key === 'warnings') return showWarnings
     return true
