@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import { X } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { OverlayPortalProvider } from '../overlays/OverlayPortalContext'
@@ -31,11 +32,15 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
   className,
 }) => {
   const { dialogRef, portalHostRef, portalHost } = useModalDialog(open)
+  const titleId = useId()
 
   if (!open) return null
 
   const style = zIndex ? { zIndex } : undefined
-  const accessibleName = typeof title === 'string' ? title : undefined
+  // For modal/drawer the visible heading is the accessible name (works for any
+  // ReactNode); fall back to a string title only when no heading is rendered.
+  const stringTitle = typeof title === 'string' ? title : undefined
+  const labelledBy = title ? titleId : undefined
 
   // The `dialog` variant is a forced choice: Escape must not dismiss it.
   const handleCancel = (event: React.SyntheticEvent<HTMLDialogElement>) => {
@@ -54,7 +59,8 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
       // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
       <dialog
         ref={dialogRef}
-        aria-label={accessibleName}
+        aria-labelledby={labelledBy}
+        aria-label={labelledBy ? undefined : stringTitle}
         style={style}
         onCancel={handleCancel}
         onClick={handleBackdropClick}
@@ -70,7 +76,7 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
           {title && (
             <div className="flex shrink-0 items-start justify-between border-b border-gray-100 px-6 py-4" dir="rtl">
               <div>
-                <h3 className="text-base font-semibold text-gray-900">{title}</h3>
+                <h3 id={titleId} className="text-base font-semibold text-gray-900">{title}</h3>
                 {subtitle && <p className="mt-0.5 text-sm text-gray-500">{subtitle}</p>}
               </div>
               {onClose && (
@@ -99,7 +105,7 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
     return (
       <dialog
         ref={dialogRef}
-        aria-label={accessibleName ?? GLOBAL_UI_MESSAGES.common.dialog}
+        aria-label={stringTitle ?? GLOBAL_UI_MESSAGES.common.dialog}
         style={style}
         onCancel={handleCancel}
         className="m-auto w-[calc(100%-2rem)] max-w-sm rounded-xl border-none bg-white p-6 shadow-2xl backdrop:bg-black/40"
@@ -116,7 +122,8 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
   return (
     <dialog
       ref={dialogRef}
-      aria-label={accessibleName}
+      aria-labelledby={labelledBy}
+      aria-label={labelledBy ? undefined : stringTitle}
       style={style}
       onCancel={handleCancel}
       className="m-auto flex max-h-[92vh] w-[calc(100%-2rem)] max-w-xl flex-col border-none bg-transparent p-0 backdrop:bg-black/30"
@@ -125,7 +132,7 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
         <div dir="rtl" className={cn('flex max-h-[92vh] w-full flex-col rounded-xl bg-white shadow-xl', className)}>
           {title && (
             <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-6 py-4">
-              <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+              <h3 id={titleId} className="text-lg font-semibold text-gray-900">{title}</h3>
               {onClose && (
                 <button
                   type="button"
