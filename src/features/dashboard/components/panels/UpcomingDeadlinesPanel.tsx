@@ -53,7 +53,7 @@ const UpcomingDeadlineRow = ({ group }: { group: TaxCalendarGroup }) => {
       </div>
 
       <div className="min-w-0 py-4 text-center">
-        <p className="text-base font-bold tabular-nums text-slate-900">{formatDate(group.effective_due_date_min)}</p>
+        <p className="text-md font-bold tabular-nums text-slate-900">{formatDate(group.effective_due_date_min)}</p>
         <p className="mt-1 text-xs font-semibold text-slate-400">({weekday})</p>
         <p className="mt-2 truncate text-sm font-bold text-slate-900">{formatObligationTitle(group)}</p>
         <p className="mt-1 truncate text-sm text-slate-400">

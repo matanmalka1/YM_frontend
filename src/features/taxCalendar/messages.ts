@@ -56,6 +56,8 @@ export const TAX_CALENDAR_MESSAGES = {
     status: 'מצב',
     action: 'פעולה',
     openAction: 'פתח',
+    goToClientAction: 'עבור ללקוח',
+    rowActionsAriaLabel: (clientName: string) => `פעולות עבור ${clientName}`,
     clientName: (id: number) => `לקוח #${id}`,
   },
   group: {

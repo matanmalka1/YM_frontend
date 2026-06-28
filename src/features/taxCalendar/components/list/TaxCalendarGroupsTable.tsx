@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Inbox } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { ExternalLink, FileText, Inbox } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { TableSkeleton } from '@/components/ui/table/TableSkeleton'
 import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
+import { RowActionItem, RowActionsMenu } from '@/components/ui/table'
 import { type Column } from '@/components/ui/table/DataTable'
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/table/GroupedPeriodRow'
 import { formatRelativeDueLabel } from '@/components/ui/table/groupedPeriodRow.utils'
@@ -12,7 +13,7 @@ import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
 import { cn, formatDate, formatPlainIdentifier, getErrorMessage, getReportingPeriodLabelWithYear } from '@/utils/utils'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { useTaxCalendarGroupItems } from '../../hooks/useTaxCalendarGroupItems'
-import { PAGE_SIZE_MD as ITEM_PAGE_SIZE } from '@/constants/pagination.constants'
+import { PAGE_SIZE_SM as ITEM_PAGE_SIZE } from '@/constants/pagination.constants'
 import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarGroup, type TaxCalendarGroupItem } from '../../api'
 import { TAX_CALENDAR_SOURCE_TYPE_LABELS } from '../../constants'
 import { TAX_CALENDAR_MESSAGES } from '../../messages'
@@ -75,6 +76,7 @@ const GroupItemsRows = ({
   clientSearchText: string
   clientRecordId?: number
 }) => {
+  const navigate = useNavigate()
   const [page, setPage] = useState(1)
   useEffect(() => {
     setPage(1)
@@ -116,7 +118,7 @@ const GroupItemsRows = ({
       align: 'right',
       render: (item) => (
         <Link
-          className="block max-w-[240px] truncate font-medium text-primary-700 hover:text-primary-900"
+          className="block max-w-[240px] truncate font-medium text-gray-900 hover:text-info-600 hover:underline"
           to={`/clients/${item.client_record_id}`}
         >
           {item.client_name ?? TAX_CALENDAR_MESSAGES.item.clientName(item.client_record_id)}
@@ -145,32 +147,43 @@ const GroupItemsRows = ({
     },
     {
       key: 'action',
-      header: TAX_CALENDAR_MESSAGES.item.action,
+      header: '',
       align: 'right',
+      className: 'w-10',
+      headerClassName: 'w-10',
       render: (item) => (
-        <Link className="font-medium text-primary-700 hover:text-primary-900" to={getItemPath(item)}>
-          {TAX_CALENDAR_MESSAGES.item.openAction}
-        </Link>
+        <RowActionsMenu
+          ariaLabel={TAX_CALENDAR_MESSAGES.item.rowActionsAriaLabel(
+            item.client_name ?? TAX_CALENDAR_MESSAGES.item.clientName(item.client_record_id),
+          )}
+        >
+          <RowActionItem
+            label={TAX_CALENDAR_MESSAGES.item.openAction}
+            icon={<FileText className="h-3.5 w-3.5" />}
+            onClick={() => navigate(getItemPath(item))}
+          />
+          <RowActionItem
+            label={TAX_CALENDAR_MESSAGES.item.goToClientAction}
+            icon={<ExternalLink className="h-3.5 w-3.5" />}
+            onClick={() => navigate(`/clients/${item.client_record_id}`)}
+          />
+        </RowActionsMenu>
       ),
     },
   ]
 
   return (
-    <div className="bg-gray-50/70 px-2 py-2">
-      <PaginatedDataTable
-        data={items}
-        columns={columns}
-        getRowKey={(item) => `${item.source_type}-${item.source_id}`}
-        surface="bare"
-        density="compact"
-        page={page}
-        pageSize={ITEM_PAGE_SIZE}
-        total={data?.total ?? 0}
-        label={TAX_CALENDAR_MESSAGES.list.records}
-        onPageChange={setPage}
-        showPagination={Boolean(data && data.total > ITEM_PAGE_SIZE)}
-      />
-    </div>
+    <PaginatedDataTable
+      data={items}
+      columns={columns}
+      getRowKey={(item) => `${item.source_type}-${item.source_id}`}
+      page={page}
+      pageSize={ITEM_PAGE_SIZE}
+      total={data?.total ?? 0}
+      label={TAX_CALENDAR_MESSAGES.list.records}
+      onPageChange={setPage}
+      showPagination={Boolean(data && data.total > ITEM_PAGE_SIZE)}
+    />
   )
 }
 
