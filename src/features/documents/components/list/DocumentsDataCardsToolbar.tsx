@@ -1,5 +1,5 @@
 import { Search } from 'lucide-react'
-import { ActiveFilterBadges } from '../../../../components/ui/table/ActiveFilterBadges'
+import { ActiveFilterBadges } from '@/components/ui/table'
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
 import { DOCUMENT_TYPE_OPTIONS, SEARCH_PLACEHOLDER, TAX_YEAR_OPTIONS } from '../../constants'

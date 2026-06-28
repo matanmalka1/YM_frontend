@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Alert } from '../../../../components/ui/overlays/Alert'
-import { TableSkeleton } from '../../../../components/ui/table/TableSkeleton'
-import { PaginationCard } from '../../../../components/ui/table/PaginationCard'
+import { TableSkeleton, PaginationCard } from '@/components/ui/table'
 import { DocumentsDataCards } from '../list/DocumentsDataCards'
 import { useClientDocumentsTab } from '../../hooks/useClientDocumentsTab'
 import { DOCUMENTS_MESSAGES } from '../../messages'
