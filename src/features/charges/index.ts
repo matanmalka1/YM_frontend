@@ -3,7 +3,7 @@ export { chargesApi, chargesQK } from './api'
 
 export { ChargesCreateModal } from './components/form/ChargesCreateModal'
 export { ClientChargesTab } from './components/shared/ClientChargesTab'
-export { ChargeDetailDrawer } from './components/detail/ChargeDetailDrawer'
+export { ChargeDetailDrawer } from './components/drawer/ChargeDetailDrawer'
 export { ChargesStatsSection } from './components/list/ChargesStatsSection'
 export { ChargesTableBlock } from './components/list/ChargesTableBlock'
 export { useChargesPage } from './hooks/useChargesPage'

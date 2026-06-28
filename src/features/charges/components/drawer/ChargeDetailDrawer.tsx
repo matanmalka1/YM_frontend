@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Bell, Trash2 } from 'lucide-react'
 import { DetailDrawer } from '../../../../components/ui/overlays/DetailDrawer'
-import { DrawerField, DrawerSection } from '../../../../components/ui/overlays/DrawerPrimitives'
+import { DefinitionList } from '../../../../components/ui/layout/DefinitionList'
+import { DrawerSection } from '../../../../components/ui/overlays/DrawerPrimitives'
 import { Textarea } from '../../../../components/ui/inputs/Textarea'
 import { Alert } from '../../../../components/ui/overlays/Alert'
 import { Button } from '../../../../components/ui/primitives/Button'
@@ -172,45 +173,52 @@ export const ChargeDetailDrawer: React.FC<ChargeDetailDrawerProps> = ({ chargeId
         {charge && (
           <>
             <DrawerSection title={CHARGES_MESSAGES.detail.details}>
-              <DrawerField
-                label={CHARGES_MESSAGES.detail.client}
-                value={
-                  <Link
-                    to={`/clients/${charge.client_record_id}`}
-                    className="text-primary-600 hover:underline"
-                    onClick={onClose}
-                  >
-                    {clientLabel}
-                  </Link>
-                }
+              <DefinitionList
+                layout="stacked"
+                items={[
+                  {
+                    label: CHARGES_MESSAGES.detail.client,
+                    value: (
+                      <Link
+                        to={`/clients/${charge.client_record_id}`}
+                        className="text-primary-600 hover:underline"
+                        onClick={onClose}
+                      >
+                        {clientLabel}
+                      </Link>
+                    ),
+                  },
+                  { label: CHARGES_MESSAGES.detail.type, value: getChargeTypeLabel(charge.charge_type) },
+                  ...(charge.amount != null
+                    ? [
+                        {
+                          label: CHARGES_MESSAGES.detail.amount,
+                          value: <span className="font-semibold text-gray-900">{getChargeAmountText(charge)}</span>,
+                        },
+                      ]
+                    : []),
+                  {
+                    label: CHARGES_MESSAGES.detail.period,
+                    value: getChargePeriodLabel(charge.period, charge.months_covered),
+                  },
+                  ...(charge.description
+                    ? [{ label: CHARGES_MESSAGES.detail.description, value: charge.description }]
+                    : []),
+                  ...(charge.annual_report_id
+                    ? [{ label: CHARGES_MESSAGES.detail.annualReport, value: `#${charge.annual_report_id}` }]
+                    : []),
+                  { label: CHARGES_MESSAGES.detail.created, value: formatDateTime(charge.created_at) },
+                  ...(charge.updated_at
+                    ? [{ label: CHARGES_MESSAGES.detail.updated, value: formatDateTime(charge.updated_at) }]
+                    : []),
+                  { label: CHARGES_MESSAGES.detail.issued, value: formatDateTime(charge.issued_at) },
+                  { label: CHARGES_MESSAGES.detail.paid, value: formatDateTime(charge.paid_at) },
+                  { label: CHARGES_MESSAGES.detail.canceled, value: formatDateTime(charge.canceled_at) },
+                  ...(charge.cancellation_reason
+                    ? [{ label: CHARGES_MESSAGES.detail.cancellationReason, value: charge.cancellation_reason }]
+                    : []),
+                ]}
               />
-              <DrawerField label={CHARGES_MESSAGES.detail.type} value={getChargeTypeLabel(charge.charge_type)} />
-              {charge.amount != null && (
-                <DrawerField
-                  label={CHARGES_MESSAGES.detail.amount}
-                  value={<span className="font-semibold text-gray-900">{getChargeAmountText(charge)}</span>}
-                />
-              )}
-              <DrawerField
-                label={CHARGES_MESSAGES.detail.period}
-                value={getChargePeriodLabel(charge.period, charge.months_covered)}
-              />
-              {charge.description && (
-                <DrawerField label={CHARGES_MESSAGES.detail.description} value={charge.description} />
-              )}
-              {charge.annual_report_id && (
-                <DrawerField label={CHARGES_MESSAGES.detail.annualReport} value={`#${charge.annual_report_id}`} />
-              )}
-              <DrawerField label={CHARGES_MESSAGES.detail.created} value={formatDateTime(charge.created_at)} />
-              {charge.updated_at && (
-                <DrawerField label={CHARGES_MESSAGES.detail.updated} value={formatDateTime(charge.updated_at)} />
-              )}
-              <DrawerField label={CHARGES_MESSAGES.detail.issued} value={formatDateTime(charge.issued_at)} />
-              <DrawerField label={CHARGES_MESSAGES.detail.paid} value={formatDateTime(charge.paid_at)} />
-              <DrawerField label={CHARGES_MESSAGES.detail.canceled} value={formatDateTime(charge.canceled_at)} />
-              {charge.cancellation_reason && (
-                <DrawerField label={CHARGES_MESSAGES.detail.cancellationReason} value={charge.cancellation_reason} />
-              )}
             </DrawerSection>
 
             <ChargeInvoiceSection chargeId={charge.id} chargeStatus={charge.status} canAttach={isAdvisor} />
