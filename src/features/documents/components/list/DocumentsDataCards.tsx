@@ -106,20 +106,26 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-3">
         <h3 className="text-base font-semibold text-gray-900">{DOCUMENTS_MESSAGES.list.sectionTitle(countLabel)}</h3>
-        <Button variant="ghost" size="sm" onClick={() => setUploadOpen(true)} className="gap-1.5 shrink-0">
-          <Plus className="h-4 w-4" />
-          {DOCUMENTS_MESSAGES.list.uploadButton}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setUploadOpen(true)}
+            icon={<Plus className="h-4 w-4" />}
+            className="shrink-0"
+          >
+            {DOCUMENTS_MESSAGES.list.uploadButton}
+          </Button>
+          <DocumentsFilterPanel
+            search={search}
+            onSearchChange={setSearch}
+            filterType={filterType}
+            onFilterTypeChange={setFilterType}
+            taxYear={taxYear}
+            onTaxYearChange={onTaxYearChange}
+          />
+        </div>
       </div>
-
-      <DocumentsFilterPanel
-        search={search}
-        onSearchChange={setSearch}
-        filterType={filterType}
-        onFilterTypeChange={setFilterType}
-        taxYear={taxYear}
-        onTaxYearChange={onTaxYearChange}
-      />
 
       {filteredDocuments.length === 0 ? (
         documents.length > 0 ? (
