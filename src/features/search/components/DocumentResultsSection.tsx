@@ -1,68 +1,66 @@
 import { FileText, ExternalLink } from 'lucide-react'
-import { Link } from 'react-router-dom'
 import { Input } from '../../../components/ui/inputs/Input'
-import { DataTable, type Column } from '@/components/ui/table/DataTable'
+import {
+  actionsColumn,
+  DataTable,
+  monoColumn,
+  numberColumn,
+  RowActionLink,
+  RowActionsMenu,
+  textColumn,
+  type Column,
+} from '@/components/ui/table'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { DOC_TYPE_LABELS } from '@/features/documents'
 import type { DocumentSearchResult } from '../api'
 import type { SearchFilters } from '../types'
-import { cn, formatClientOfficeId } from '../../../utils/utils'
+import { formatClientOfficeId } from '../../../utils/utils'
 import { DOCUMENT_FILENAME_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 import { SEARCH_MESSAGES } from '../messages'
 
 const DOCUMENT_SEARCH_LIMIT = 50
 
 const DOCUMENT_COLUMNS: Column<DocumentSearchResult>[] = [
-  {
+  monoColumn({
     key: 'office',
     header: SEARCH_MESSAGES.columns.officeNumber,
-    render: (doc) => (
-      <span className="font-mono text-gray-700 tabular-nums">{formatClientOfficeId(doc.office_client_number)}</span>
-    ),
-  },
-  {
+    getValue: (doc) => formatClientOfficeId(doc.office_client_number),
+  }),
+  textColumn({
     key: 'client',
     header: SEARCH_MESSAGES.columns.client,
-    render: (doc) => <span className="font-semibold text-gray-900">{doc.client_name}</span>,
-  },
-  {
+    tone: 'strong',
+    getValue: (doc) => doc.client_name,
+  }),
+  textColumn({
     key: 'type',
     header: SEARCH_MESSAGES.documents.type,
-    render: (doc) => DOC_TYPE_LABELS[doc.document_type] ?? SEARCH_MESSAGES.documents.unknownType,
-  },
-  {
+    getValue: (doc) => DOC_TYPE_LABELS[doc.document_type] ?? SEARCH_MESSAGES.documents.unknownType,
+  }),
+  monoColumn({
     key: 'filename',
     header: SEARCH_MESSAGES.filters.filename,
-    className: 'max-w-xs truncate',
-    render: (doc) => (
-      <span className="font-mono text-gray-700">
-        {doc.original_filename ?? <span className="text-gray-400">—</span>}
-      </span>
-    ),
-  },
-  {
+    truncate: true,
+    getValue: (doc) => doc.original_filename,
+  }),
+  numberColumn({
     key: 'taxYear',
     header: SEARCH_MESSAGES.documents.taxYear,
-    render: (doc) => doc.tax_year ?? <span className="text-gray-400">—</span>,
-  },
-  {
+    getValue: (doc) => doc.tax_year,
+  }),
+  actionsColumn({
     key: 'action',
     header: '',
     render: (doc) => (
-      <Link
-        to={`/clients/${doc.client_record_id}/documents`}
-        className={cn(
-          'inline-flex items-center gap-1.5 rounded-lg',
-          'border border-gray-200 bg-white px-2.5 py-1.5 text-xs font-medium',
-          'text-gray-600 shadow-sm transition-all duration-200',
-          'hover:border-purple-400 hover:bg-purple-50 hover:text-purple-800 hover:shadow-md',
-        )}
-      >
-        <ExternalLink className="h-3 w-3" />
-        {SEARCH_MESSAGES.actions.details}
-      </Link>
+      <RowActionsMenu ariaLabel={SEARCH_MESSAGES.actions.details}>
+        <RowActionLink
+        href={`/clients/${doc.client_record_id}/documents`}
+        label={SEARCH_MESSAGES.actions.details}
+        icon={<ExternalLink className="h-3 w-3" />}
+        />
+      </RowActionsMenu>
     ),
-  },
+  }),
 ]
 
 interface DocumentResultsSectionProps {

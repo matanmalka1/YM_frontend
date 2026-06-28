@@ -14,7 +14,6 @@ export const searchColumns: Column<SearchResult>[] = [
   {
     key: 'type',
     header: SEARCH_MESSAGES.columns.type,
-    headerClassName: 'w-28',
     render: (result) => (
       <div className="flex items-center gap-2">
         <div className={cn('rounded-lg p-1.5', getResultColor(result.result_type))}>
@@ -27,21 +26,17 @@ export const searchColumns: Column<SearchResult>[] = [
   textColumn({
     key: 'client',
     header: SEARCH_MESSAGES.columns.client,
-    valueClassName: 'font-semibold text-gray-900',
+    tone: 'strong',
     getValue: (result) => result.client_name,
   }),
   monoColumn({
     key: 'id_number',
     header: SEARCH_MESSAGES.columns.idNumber,
-    valueClassName: 'text-gray-700',
-    emptyValue: <span className="text-gray-400">—</span>,
     getValue: (result) => result.id_number,
   }),
   monoColumn({
     key: 'binder_number',
     header: SEARCH_MESSAGES.columns.binderNumber,
-    valueClassName: 'text-gray-700',
-    emptyValue: <span className="text-gray-400">—</span>,
     getValue: (result) => (result.binder_number ? formatBinderNumber(result.binder_number) : null),
   }),
   actionsColumn({

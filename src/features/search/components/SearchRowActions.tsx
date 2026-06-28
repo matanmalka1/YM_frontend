@@ -2,7 +2,7 @@ import { ExternalLink } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import type { SearchResult } from '../api'
 import { toQueryParams } from '../../../api/queryParams'
-import { RowActionButton } from '@/components/ui/table'
+import { EmptyCell, RowActionButton } from '@/components/ui/table'
 import { SEARCH_MESSAGES } from '../messages'
 
 const buildDetailUrl = (result: SearchResult): string | null => {
@@ -22,7 +22,7 @@ export const SearchRowActions: React.FC<SearchRowActionsProps> = ({ result }) =>
   const navigate = useNavigate()
   const url = buildDetailUrl(result)
 
-  if (!url) return <span className="text-sm text-gray-300">—</span>
+  if (!url) return <EmptyCell />
 
   return (
     <RowActionButton
