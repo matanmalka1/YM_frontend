@@ -1,28 +1,10 @@
-import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { CreditCard, FileText } from 'lucide-react'
-import type { TimelineEventMetadata } from '../api'
 import type { NormalizedTimelineEvent } from '../normalize'
-import { cn, formatCurrencyILS } from '@/utils/utils'
+import { cn } from '@/utils/utils'
 import { getEventColor } from '../constants'
-import { getAnnualReportStatusLabel, getTimelineStatusLabel } from '../labels'
 import { formatTimelineDate, formatTimestamp, getEventIcon } from '../utils'
 import { TIMELINE_MESSAGES } from '../messages'
-
-// ── Metadata sub-components ───────────────────────────────────────────────────
-
-interface MetaRowProps {
-  className?: string
-  children: React.ReactNode
-}
-const MetaRow: React.FC<MetaRowProps> = ({ className, children }) => (
-  <div className={cn('text-xs text-gray-600 rounded px-2 py-1 border', className)}>{children}</div>
-)
-
-const MetaField: React.FC<{ label: string; value: string }> = ({ label, value }) => (
-  <div>
-    <span className="font-medium">{label}:</span> {value}
-  </div>
-)
+import { TimelineMetadata } from './TimelineMetadata'
 
 const IconLabel: React.FC<{ icon: React.ReactNode; label: string; className?: string }> = ({
   icon,
@@ -34,97 +16,6 @@ const IconLabel: React.FC<{ icon: React.ReactNode; label: string; className?: st
     <span>{label}</span>
   </span>
 )
-
-// ── Status transition ─────────────────────────────────────────────────────────
-
-const StatusTransition: React.FC<{ oldStatus: string; newStatus: string }> = ({ oldStatus, newStatus }) => (
-  <MetaRow className="bg-slate-50 border-slate-100 flex items-center gap-2">
-    <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-medium text-3xs">
-      {getTimelineStatusLabel(oldStatus)}
-    </span>
-    <span className="text-slate-400">←</span>
-    <span className="px-1.5 py-0.5 rounded bg-positive-100 text-positive-700 font-medium text-3xs">
-      {getTimelineStatusLabel(newStatus)}
-    </span>
-  </MetaRow>
-)
-
-// ── Metadata panel ────────────────────────────────────────────────────────────
-
-const SIGNATURE_EVENT_TYPES = new Set([
-  'signature_request_sent',
-  'signature_request_signed',
-  'signature_request_declined',
-  'signature_request_canceled',
-  'signature_request_expired',
-])
-
-const EventMetadata: React.FC<{ metadata: TimelineEventMetadata; eventType: string }> = ({ metadata, eventType }) => {
-  const {
-    old_value,
-    new_value,
-    amount,
-    provider,
-    external_invoice_id,
-    tax_year,
-    form_type,
-    from_status,
-    to_status,
-    note,
-    signer_name,
-    reason,
-    notes,
-  } = metadata
-
-  return (
-    <>
-      {eventType !== 'binder_lifecycle_change' && old_value && new_value && (
-        <StatusTransition oldStatus={String(old_value)} newStatus={String(new_value)} />
-      )}
-
-      {amount != null && (
-        <MetaRow className="bg-positive-50 border-positive-100">
-          <MetaField
-            label={TIMELINE_MESSAGES.eventItem.amountLabel}
-            value={formatCurrencyILS(Number(amount), { fractionDigits: 2 })}
-          />
-        </MetaRow>
-      )}
-
-      {external_invoice_id != null && (
-        <MetaRow className="bg-warning-50 border-warning-100">
-          <MetaField
-            label={TIMELINE_MESSAGES.eventItem.providerLabel}
-            value={String(provider ?? TIMELINE_MESSAGES.eventItem.unknownProvider)}
-          />
-          <MetaField label={TIMELINE_MESSAGES.eventItem.invoiceIdLabel} value={String(external_invoice_id)} />
-        </MetaRow>
-      )}
-
-      {eventType === 'annual_report_status_changed' && (from_status || to_status || tax_year || form_type || note) && (
-        <MetaRow className="bg-primary-50 border-primary-100">
-          {tax_year != null && <MetaField label={TIMELINE_MESSAGES.eventItem.taxYearLabel} value={String(tax_year)} />}
-          {form_type && <MetaField label={TIMELINE_MESSAGES.eventItem.formLabel} value={form_type} />}
-          {from_status && to_status && (
-            <MetaField
-              label={TIMELINE_MESSAGES.eventItem.statusTransitionLabel}
-              value={`${getAnnualReportStatusLabel(from_status)} ← ${getAnnualReportStatusLabel(to_status)}`}
-            />
-          )}
-          {note && <MetaField label={TIMELINE_MESSAGES.eventItem.noteLabel} value={note} />}
-        </MetaRow>
-      )}
-
-      {SIGNATURE_EVENT_TYPES.has(eventType) && (signer_name || reason || notes) && (
-        <MetaRow className="bg-info-50 border-info-100">
-          {signer_name && <MetaField label={TIMELINE_MESSAGES.eventItem.signerLabel} value={signer_name} />}
-          {reason && <MetaField label={TIMELINE_MESSAGES.eventItem.rejectionReasonLabel} value={reason} />}
-          {notes && <MetaField label={GLOBAL_UI_MESSAGES.common.notes} value={notes} />}
-        </MetaRow>
-      )}
-    </>
-  )
-}
 
 // ── Related IDs ───────────────────────────────────────────────────────────────
 
@@ -211,7 +102,7 @@ export const TimelineEventItem: React.FC<TimelineEventItemProps> = ({ timelineEv
 
         <RelatedIds binderId={ev.binder_id} chargeId={ev.charge_id} relatedEntity={ev.relatedEntity} />
 
-        {ev.metadata && <EventMetadata metadata={ev.metadata} eventType={ev.event_type} />}
+        {ev.metadata && <TimelineMetadata metadata={ev.metadata} eventType={ev.event_type} />}
       </div>
     </li>
   )

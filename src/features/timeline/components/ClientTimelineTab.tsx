@@ -57,8 +57,9 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
       return next
     })
 
-  const expandAll = () => setOverrideKeys(new Set(timelineGroups.map((g) => g.date)))
-  const collapseAll = () => setOverrideKeys(new Set())
+  const allExpanded = timelineGroups.length > 0 && expandedDateKeys.size === timelineGroups.length
+  const toggleExpandAll = () =>
+    setOverrideKeys(allExpanded ? new Set() : new Set(timelineGroups.map((g) => g.date)))
 
   return (
     <div className="space-y-4">
@@ -72,8 +73,8 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
         importantOnly={filters.importantOnly}
         onImportantOnlyChange={filters.setImportantOnly}
         onClearFilters={filters.clearFilters}
-        onExpandAll={expandAll}
-        onCollapseAll={collapseAll}
+        allExpanded={allExpanded}
+        onToggleExpandAll={toggleExpandAll}
       />
 
       <TimelineCard

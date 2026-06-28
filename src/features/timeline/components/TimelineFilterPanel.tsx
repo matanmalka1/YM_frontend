@@ -47,8 +47,8 @@ interface TimelineFilterPanelProps {
   importantOnly: boolean
   onImportantOnlyChange: (value: boolean) => void
   onClearFilters: () => void
-  onExpandAll: () => void
-  onCollapseAll: () => void
+  allExpanded: boolean
+  onToggleExpandAll: () => void
 }
 
 export const TimelineFilterPanel: React.FC<TimelineFilterPanelProps> = ({
@@ -61,8 +61,8 @@ export const TimelineFilterPanel: React.FC<TimelineFilterPanelProps> = ({
   importantOnly,
   onImportantOnlyChange,
   onClearFilters,
-  onExpandAll,
-  onCollapseAll,
+  allExpanded,
+  onToggleExpandAll,
 }) => {
   const lastUpdated = lastEventTimestamp ? format(parseISO(lastEventTimestamp), 'd MMM HH:mm', { locale: he }) : null
 
@@ -88,19 +88,16 @@ export const TimelineFilterPanel: React.FC<TimelineFilterPanelProps> = ({
           type="button"
           variant="ghost"
           size="sm"
-          icon={<ChevronsUpDown className="h-4 w-4" aria-hidden="true" />}
-          onClick={onExpandAll}
+          icon={
+            allExpanded ? (
+              <ChevronsDownUp className="h-4 w-4" aria-hidden="true" />
+            ) : (
+              <ChevronsUpDown className="h-4 w-4" aria-hidden="true" />
+            )
+          }
+          onClick={onToggleExpandAll}
         >
-          {GLOBAL_UI_MESSAGES.actions.expandAll}
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          icon={<ChevronsDownUp className="h-4 w-4" aria-hidden="true" />}
-          onClick={onCollapseAll}
-        >
-          {GLOBAL_UI_MESSAGES.actions.collapseAll}
+          {allExpanded ? GLOBAL_UI_MESSAGES.actions.collapseAll : GLOBAL_UI_MESSAGES.actions.expandAll}
         </Button>
         <FilterPanel
           fields={TIMELINE_FILTER_FIELDS}

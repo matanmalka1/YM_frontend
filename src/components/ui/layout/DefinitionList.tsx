@@ -10,10 +10,11 @@ export interface DefinitionListProps {
   items: DefinitionItem[]
   columns?: 1 | 2 | 3 | 4
   /**
-   * grid   — label above value in a responsive grid (DescriptionList style)
+   * grid    — label above value in a responsive grid (DescriptionList style)
    * stacked — label + value as a horizontal row with a divider border (drawer detail style)
+   * inline  — compact "label value" pairs sharing a baseline that wrap (metadata strip style)
    */
-  layout?: 'grid' | 'stacked'
+  layout?: 'grid' | 'stacked' | 'inline'
   /** Rendered when an item's value is null/undefined/empty-string (default: "—"). */
   emptyValue?: React.ReactNode
   /** Extra classes applied to every value (<dd>) cell. */
@@ -39,6 +40,24 @@ export const DefinitionList: React.FC<DefinitionListProps> = ({
   valueClassName,
   className,
 }) => {
+  if (layout === 'inline') {
+    return (
+      <dl className={cn('flex flex-wrap items-baseline gap-x-5 gap-y-1.5', className)}>
+        {items.map((item, index) => (
+          <div
+            key={`${item.label}-${index}`}
+            className={cn('flex min-w-0 items-baseline gap-1.5 text-xs', item.fullWidth && 'basis-full')}
+          >
+            <dt className="shrink-0 text-gray-400">{item.label}</dt>
+            <dd className={cn('min-w-0 break-words font-medium text-gray-700', valueClassName)}>
+              {isEmpty(item.value) ? emptyValue : item.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    )
+  }
+
   if (layout === 'stacked') {
     return (
       <dl className={className}>
