@@ -49,7 +49,6 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
         values={filters.values}
         onChange={filters.onChange}
         onReset={filters.onReset}
-        gridClass="grid-cols-1 sm:grid-cols-2"
       />
 
       <ClientAdvancePaymentsCards {...table} />

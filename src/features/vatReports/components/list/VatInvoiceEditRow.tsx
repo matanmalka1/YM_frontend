@@ -1,4 +1,4 @@
-import { useForm, Controller, type SubmitHandler } from 'react-hook-form'
+import { useForm, useWatch, Controller, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, X } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
@@ -56,8 +56,8 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
     if (ok) onCancel()
   }
 
-  const selectedCategory = invoice.expense_category ?? EXPENSE_CATEGORIES[0]
-  const catColor = selectedCategory ? CATEGORY_COLORS[selectedCategory] : ''
+  const watchedCategory = useWatch({ control, name: 'expense_category' }) ?? EXPENSE_CATEGORIES[0]
+  const catColor = watchedCategory ? CATEGORY_COLORS[watchedCategory] : ''
   const handleEscapeKeyDown: React.KeyboardEventHandler<HTMLElement> = (e) => {
     if (e.key === 'Escape') {
       e.preventDefault()

@@ -3,7 +3,7 @@ import { cn } from '../../../utils/utils'
 import { SectionHeader } from '../layout/SectionHeader'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode
+  children?: React.ReactNode
   className?: string
   title?: string
   subtitle?: string
@@ -60,12 +60,12 @@ export const Card: React.FC<CardProps> = ({
       {...rest}
     >
       {(title || subtitle || actions || icon) && (
-        <div className={cn(headerPadding, 'border-b border-gray-100')}>
+        <div className={cn(headerPadding, children != null && 'border-b border-gray-100')}>
           <SectionHeader title={title} subtitle={subtitle} actions={actions} icon={icon} size="sm" />
         </div>
       )}
 
-      <div className={cn(!disablePadding && bodyPadding, bodyClassName)}>{children}</div>
+      {children != null && <div className={cn(!disablePadding && bodyPadding, bodyClassName)}>{children}</div>}
 
       {footer && <div className={cn(footerPadding, 'border-t border-gray-100 bg-gray-50/60')}>{footer}</div>}
     </div>
