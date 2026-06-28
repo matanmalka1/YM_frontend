@@ -5,7 +5,7 @@ import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
 import { NUMERIC_MONTH_OPTIONS, getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import type { BinderResponse } from '../../types'
-import { BinderHandoverPanel } from '../sections/BinderHandoverPanel'
+import { BinderHandoverPanel } from './BinderHandoverPanel'
 import { BINDERS_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 

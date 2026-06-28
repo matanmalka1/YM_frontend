@@ -2,7 +2,7 @@
 export { bindersApi, bindersQK } from './api'
 export { BinderDetailDrawer } from './components/drawer/BinderDetailDrawer'
 
-export { BindersStatsSection } from './components/table/BindersStatsSection'
+export { BindersStatsSection } from './components/list/BindersStatsSection'
 export { useBindersPage } from './hooks/useBindersPage'
 
 export { Binders } from './pages/BindersPage'
