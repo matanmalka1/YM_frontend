@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { format, parse, parseISO, isValid } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '../../../utils/utils'
-import { FormField } from './FormField'
+import { FormField, type FormFieldControlProps } from './FormField'
 import { DatePickerCalendar } from './DatePickerCalendar'
 import { getOverlayPortalOffset, useOverlayPortalContainer } from '../overlays/OverlayPortalContext'
 import { useDismissibleLayer } from '../overlays/useDismissibleLayer'
@@ -21,6 +21,7 @@ const parseValue = (raw: string): Date | undefined => {
 }
 
 export interface DatePickerProps {
+  id?: string
   label?: string
   error?: string
   value?: string
@@ -31,11 +32,15 @@ export interface DatePickerProps {
   name?: string
   maxDate?: Date
   compact?: boolean
-  noWrapper?: boolean
+  fieldClassName?: string
   usePortal?: boolean
+  'aria-describedby'?: string
+  'aria-label'?: string
+  'aria-labelledby'?: string
 }
 
 export const DatePicker: React.FC<DatePickerProps> = ({
+  id,
   label,
   error,
   value,
@@ -43,10 +48,14 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   onBlur,
   onKeyDown,
   disabled,
+  name,
   maxDate,
   compact = false,
-  noWrapper = false,
+  fieldClassName,
   usePortal = true,
+  'aria-describedby': ariaDescribedBy,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
 }) => {
   const [open, setOpen] = useState(false)
   // Derive the visible-open state instead of force-closing in an effect when `disabled` flips.
@@ -149,37 +158,47 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     />
   )
 
-  const picker = (
-    <div ref={usePortal ? undefined : containerRef} className="relative">
-      <button
-        ref={triggerRef}
-        type="button"
-        disabled={disabled}
-        aria-haspopup="dialog"
-        aria-expanded={isOpen}
-        onClick={handleOpen}
-        onKeyDown={onKeyDown}
-        className={cn(
-          'w-full flex items-center justify-between rounded-lg border shadow-sm text-sm transition-all bg-white text-right',
-          compact ? 'px-2 py-1 h-7 text-xs' : 'h-9 px-3 py-2',
-          error ? 'border-negative-500' : 'border-gray-300',
-          isOpen && 'border-primary-500 ring-2 ring-primary-500',
-          disabled && 'bg-gray-50 cursor-not-allowed text-gray-400',
-          !disabled && 'hover:border-gray-400',
-        )}
-      >
-        <span className={cn('flex-1 text-right', !displayValue && 'text-gray-400')}>{displayValue || 'בחר תאריך'}</span>
-        <CalendarIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
-      </button>
+  const renderPicker = (controlProps: FormFieldControlProps) => {
+    const describedBy = [ariaDescribedBy, controlProps['aria-describedby']].filter(Boolean).join(' ') || undefined
 
-      {isOpen && (usePortal && portalContainer ? createPortal(calendar, portalContainer) : calendar)}
-    </div>
-  )
+    return (
+      <div ref={usePortal ? undefined : containerRef} className="relative">
+        <button
+          ref={triggerRef}
+          type="button"
+          id={controlProps.id}
+          name={name}
+          disabled={disabled}
+          aria-haspopup="dialog"
+          aria-expanded={isOpen}
+          aria-describedby={describedBy}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          onClick={handleOpen}
+          onKeyDown={onKeyDown}
+          className={cn(
+            'w-full flex items-center justify-between rounded-lg border shadow-sm text-sm transition-all bg-white text-right',
+            compact ? 'px-2 py-1 h-7 text-xs' : 'h-9 px-3 py-2',
+            error ? 'border-negative-500' : 'border-gray-300',
+            isOpen && 'border-primary-500 ring-2 ring-primary-500',
+            disabled && 'bg-gray-50 cursor-not-allowed text-gray-400',
+            !disabled && 'hover:border-gray-400',
+          )}
+        >
+          <span className={cn('flex-1 text-right', !displayValue && 'text-gray-400')}>
+            {displayValue || 'בחר תאריך'}
+          </span>
+          <CalendarIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
+        </button>
 
-  if (noWrapper) return picker
+        {isOpen && (usePortal && portalContainer ? createPortal(calendar, portalContainer) : calendar)}
+      </div>
+    )
+  }
+
   return (
-    <FormField label={label} error={error} className="w-full">
-      {picker}
+    <FormField id={id} label={label} error={error} className={cn('w-full', fieldClassName)}>
+      {renderPicker}
     </FormField>
   )
 }

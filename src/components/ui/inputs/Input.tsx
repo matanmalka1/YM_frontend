@@ -6,6 +6,7 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   label?: string
   error?: string
   size?: 'xs' | 'sm' | 'md'
+  fieldClassName?: string
   labelClassName?: string
   startIcon?: React.ReactNode
   endIcon?: React.ReactNode
@@ -29,12 +30,16 @@ export const Input = ({
   label,
   error,
   size = 'md',
+  fieldClassName,
   labelClassName,
   className,
   startIcon,
   endIcon,
   endElement,
   ref,
+  id,
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
   ...props
 }: InputProps) => {
   const hasStart = Boolean(startIcon)
@@ -42,36 +47,53 @@ export const Input = ({
   const padding = inputIconPadding[size]
 
   return (
-    <FormField label={label} error={error} labelClassName={labelClassName} className="w-full">
-      <div className="relative">
-        {startIcon && (
-          <span className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-gray-400">
-            {startIcon}
-          </span>
-        )}
+    <FormField
+      id={id}
+      label={label}
+      error={error}
+      labelClassName={labelClassName}
+      className={cn('w-full', fieldClassName)}
+    >
+      {(controlProps) => {
+        const describedBy = [ariaDescribedBy, controlProps['aria-describedby']].filter(Boolean).join(' ') || undefined
 
-        <input
-          ref={ref}
-          className={cn(
-            'w-full rounded-lg border shadow-sm transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500',
-            inputSizeClasses[size],
-            error ? 'border-negative-500' : 'border-gray-300',
-            props.disabled ? 'bg-gray-50 cursor-not-allowed' : 'bg-white',
-            hasStart ? padding.start : padding.defaultStart,
-            hasEnd ? padding.end : padding.defaultEnd,
-            className,
-          )}
-          {...props}
-        />
+        return (
+          <div className="relative">
+            {startIcon && (
+              <span className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-gray-400">
+                {startIcon}
+              </span>
+            )}
 
-        {endElement ? (
-          <span className="absolute end-2 top-1/2 -translate-y-1/2">{endElement}</span>
-        ) : (
-          endIcon && (
-            <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-gray-400">{endIcon}</span>
-          )
-        )}
-      </div>
+            <input
+              ref={ref}
+              id={controlProps.id}
+              aria-describedby={describedBy}
+              aria-invalid={controlProps['aria-invalid'] ?? ariaInvalid}
+              className={cn(
+                'w-full rounded-lg border shadow-sm transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500',
+                inputSizeClasses[size],
+                error ? 'border-negative-500' : 'border-gray-300',
+                props.disabled ? 'bg-gray-50 cursor-not-allowed' : 'bg-white',
+                hasStart ? padding.start : padding.defaultStart,
+                hasEnd ? padding.end : padding.defaultEnd,
+                className,
+              )}
+              {...props}
+            />
+
+            {endElement ? (
+              <span className="absolute end-2 top-1/2 -translate-y-1/2">{endElement}</span>
+            ) : (
+              endIcon && (
+                <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  {endIcon}
+                </span>
+              )
+            )}
+          </div>
+        )
+      }}
     </FormField>
   )
 }

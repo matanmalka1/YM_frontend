@@ -2,7 +2,6 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
-import { FormField } from '@/components/ui/inputs/FormField'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
@@ -58,35 +57,33 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({
     >
       <div className="flex flex-wrap items-end gap-x-3 gap-y-3">
         {/* Required: amount */}
-        <FormField
+        <Input
+          {...register('gross_amount')}
           label={VAT_MESSAGES.form.grossAmountLabel}
           error={errors.gross_amount?.message}
-          className="w-36 shrink-0"
-        >
-          <Input
-            {...register('gross_amount')}
-            placeholder="0.00"
-            dir="ltr"
-            inputMode="decimal"
-            autoFocus={!isExpense}
-            onKeyDown={(e) => blockNonNumericKey(e, true)}
-          />
-        </FormField>
+          fieldClassName="w-36 shrink-0"
+          placeholder="0.00"
+          dir="ltr"
+          inputMode="decimal"
+          autoFocus={!isExpense}
+          onKeyDown={(e) => blockNonNumericKey(e, true)}
+        />
 
         {/* Required: date */}
-        <FormField
-          label={VAT_MESSAGES.form.invoiceDateLabel}
-          error={errors.invoice_date?.message}
-          className="w-36 shrink-0"
-        >
-          <Controller
-            control={control}
-            name="invoice_date"
-            render={({ field }) => (
-              <DatePicker value={field.value} onChange={field.onChange} onBlur={field.onBlur} noWrapper />
-            )}
-          />
-        </FormField>
+        <Controller
+          control={control}
+          name="invoice_date"
+          render={({ field }) => (
+            <DatePicker
+              label={VAT_MESSAGES.form.invoiceDateLabel}
+              error={errors.invoice_date?.message}
+              fieldClassName="w-36 shrink-0"
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+            />
+          )}
+        />
 
         {/* VAT type */}
         <Controller
@@ -146,30 +143,33 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({
         )}
 
         {/* Optional: invoice number */}
-        <FormField label={VAT_MESSAGES.form.invoiceNumberLabel} className="w-36 shrink-0">
-          <Input {...register('invoice_number')} placeholder={VAT_MESSAGES.form.optionalPlaceholder} />
-        </FormField>
+        <Input
+          {...register('invoice_number')}
+          label={VAT_MESSAGES.form.invoiceNumberLabel}
+          fieldClassName="w-36 shrink-0"
+          placeholder={VAT_MESSAGES.form.optionalPlaceholder}
+        />
 
         {/* Optional: counterparty name */}
-        <FormField label={VAT_MESSAGES.form.counterpartyNameLabel} className="w-44 shrink-0">
-          <Input {...register('counterparty_name')} placeholder={VAT_MESSAGES.form.optionalPlaceholder} />
-        </FormField>
+        <Input
+          {...register('counterparty_name')}
+          label={VAT_MESSAGES.form.counterpartyNameLabel}
+          fieldClassName="w-44 shrink-0"
+          placeholder={VAT_MESSAGES.form.optionalPlaceholder}
+        />
 
         {/* Conditional: counterparty ID (tax invoice expense only) */}
         {requiresCounterpartyId && (
-          <FormField
+          <Input
+            {...register('counterparty_id')}
             label={VAT_MESSAGES.form.counterpartyIdLabel}
             error={errors.counterparty_id?.message}
-            className="w-36 shrink-0"
-          >
-            <Input
-              {...register('counterparty_id')}
-              placeholder={VAT_MESSAGES.form.counterpartyIdPlaceholder}
-              dir="ltr"
-              inputMode="numeric"
-              onKeyDown={(e) => blockNonNumericKey(e)}
-            />
-          </FormField>
+            fieldClassName="w-36 shrink-0"
+            placeholder={VAT_MESSAGES.form.counterpartyIdPlaceholder}
+            dir="ltr"
+            inputMode="numeric"
+            onKeyDown={(e) => blockNonNumericKey(e)}
+          />
         )}
 
         {/* Deduction rate hint inline with submit */}

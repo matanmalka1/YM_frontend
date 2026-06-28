@@ -31,20 +31,28 @@ export const Select: React.FC<SelectProps> = ({
   disabled,
   name,
   id,
+  'aria-describedby': ariaDescribedBy,
 }) => (
-  <FormField label={label} error={error} className={cn('w-full', fieldClassName)}>
-    <SelectDropdown
-      id={id}
-      value={value}
-      onChange={onChange}
-      onBlur={onBlur}
-      options={options}
-      disabled={disabled}
-      size={size}
-      name={name}
-      error={Boolean(error)}
-      placeholder={placeholder}
-      className={className}
-    />
+  <FormField id={id} label={label} error={error} className={cn('w-full', fieldClassName)}>
+    {(controlProps) => {
+      const describedBy = [ariaDescribedBy, controlProps['aria-describedby']].filter(Boolean).join(' ') || undefined
+
+      return (
+        <SelectDropdown
+          id={controlProps.id}
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur}
+          options={options}
+          disabled={disabled}
+          size={size}
+          name={name}
+          error={Boolean(error)}
+          placeholder={placeholder}
+          className={className}
+          aria-describedby={describedBy}
+        />
+      )
+    }}
   </FormField>
 )

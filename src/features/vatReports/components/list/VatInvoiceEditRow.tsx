@@ -81,7 +81,6 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
               onBlur={field.onBlur}
               onKeyDown={handleEscapeKeyDown}
               compact
-              noWrapper
               usePortal
             />
           )}

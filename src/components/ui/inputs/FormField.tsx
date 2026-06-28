@@ -1,24 +1,29 @@
-import { cloneElement, isValidElement, useId, type ReactElement } from 'react'
+import { useId, type ReactNode } from 'react'
 import { cn } from '../../../utils/utils'
 
+export interface FormFieldControlProps {
+  id: string
+  'aria-invalid'?: true
+  'aria-describedby'?: string
+}
+
 interface FormFieldProps {
+  id?: string
   label?: string
   error?: string
-  children: ReactElement<{ id?: string; 'aria-invalid'?: boolean; 'aria-describedby'?: string }>
+  children: (controlProps: FormFieldControlProps) => ReactNode
   className?: string
   labelClassName?: string
 }
 
-export const FormField: React.FC<FormFieldProps> = ({ label, error, children, className, labelClassName }) => {
+export const FormField: React.FC<FormFieldProps> = ({ id, label, error, children, className, labelClassName }) => {
   const generatedId = useId()
-  const controlId = children.props.id ?? generatedId
+  const controlId = id ?? generatedId
   const errorId = `${controlId}-error`
-  const child = isValidElement(children)
-    ? cloneElement(children, {
-        id: controlId,
-        ...(error ? { 'aria-invalid': true, 'aria-describedby': errorId } : {}),
-      })
-    : children
+  const controlProps: FormFieldControlProps = {
+    id: controlId,
+    ...(error ? { 'aria-invalid': true, 'aria-describedby': errorId } : {}),
+  }
 
   return (
     <div className={cn('space-y-1', className)}>
@@ -27,7 +32,7 @@ export const FormField: React.FC<FormFieldProps> = ({ label, error, children, cl
           {label}
         </label>
       )}
-      {child}
+      {children(controlProps)}
       {error && (
         <p id={errorId} className="text-xs text-negative-600">
           {error}

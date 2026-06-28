@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { ClientPickerField, createClientIdPickerHandlers, useClientPickerState } from '@/components/shared/client'
 import { MONTHS_COVERED_OPTIONS } from '@/constants/periodOptions.constants'
-import { FormField, Input, Select } from '@/components/ui/inputs'
+import { Input, Select } from '@/components/ui/inputs'
 import { Modal, ModalFormActions } from '@/components/ui/overlays'
 import type { BusinessResponse } from '@/features/clients'
 import type { CreateChargePayload } from '../../api'
@@ -181,9 +181,7 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
 
           {businesses.length === 1 && selectedSingleBusiness && (
             <div className="col-span-2">
-              <FormField label={CHARGES_MESSAGES.create.business}>
-                <Input value={selectedSingleBusiness.name} readOnly disabled />
-              </FormField>
+              <Input label={CHARGES_MESSAGES.create.business} value={selectedSingleBusiness.name} readOnly disabled />
             </div>
           )}
 

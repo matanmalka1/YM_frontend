@@ -19,13 +19,16 @@ interface SelectDropdownProps {
   options: SelectOption[]
   disabled?: boolean
   size?: 'xs' | 'sm' | 'md'
-  /** Apply error styling (negative border + aria-invalid). */
+  /** Apply error styling (negative border). */
   error?: boolean
   /** Placeholder shown when no option is selected (default: "בחר..."). */
   placeholder?: string
   className?: string
   name?: string
   id?: string
+  'aria-describedby'?: string
+  'aria-label'?: string
+  'aria-labelledby'?: string
 }
 
 const triggerSizeClasses = {
@@ -59,6 +62,9 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   className,
   name,
   id,
+  'aria-describedby': ariaDescribedBy,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
 }) => {
   const [open, setOpen] = useState(false)
   const [internalValue, setInternalValue] = useState<string>('')
@@ -227,6 +233,9 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
         dir="rtl"
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-describedby={ariaDescribedBy}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
       >
         <span className={cn('flex-1 truncate text-right', !currentValue ? 'text-gray-400' : 'text-gray-800')}>
           {selectedLabel}
