@@ -37,7 +37,7 @@ export const buildClientColumns = ({
     textColumn({
       key: 'full_name',
       header: CLIENTS_MESSAGES.columns.fullName,
-      valueClassName: 'font-semibold text-gray-900',
+      tone: 'strong',
       getValue: (client) => client.full_name,
     }),
     monoColumn({
@@ -54,7 +54,7 @@ export const buildClientColumns = ({
       key: 'active_binder_number',
       header: CLIENTS_MESSAGES.columns.activeBinderNumber,
       getValue: (client) => client.active_binder_number,
-      emptyValue: <span className="text-gray-400 text-sm">{CLIENTS_MESSAGES.columns.noOpenBinder}</span>,
+      emptyValue: CLIENTS_MESSAGES.columns.noOpenBinder,
     }),
     statusColumn({
       key: 'status',
