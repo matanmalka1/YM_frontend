@@ -1,27 +1,24 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useId } from 'react'
 import { createPortal } from 'react-dom'
 import { Check, ChevronDown } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { getOverlayPortalOffset, useOverlayPortalContainer } from '../overlays/OverlayPortalContext'
 import { useDismissibleLayer } from '../overlays/useDismissibleLayer'
-
-interface SelectOption {
-  value: string
-  label: string
-  disabled?: boolean
-}
+import {
+  getSelectDropdownDisplay,
+  getSelectDropdownOptionId,
+  type SelectDropdownOption,
+} from './SelectDropdown.helpers'
 
 interface SelectDropdownProps {
   value?: string | number | readonly string[]
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
   onBlur?: React.FocusEventHandler<HTMLSelectElement>
   onKeyDown?: React.KeyboardEventHandler<HTMLButtonElement>
-  options: SelectOption[]
+  options: SelectDropdownOption[]
   disabled?: boolean
   size?: 'xs' | 'sm' | 'md'
-  /** Apply error styling (negative border). */
   error?: boolean
-  /** Placeholder shown when no option is selected (default: "בחר..."). */
   placeholder?: string
   className?: string
   name?: string
@@ -81,8 +78,11 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   const triggerRef = useRef<HTMLButtonElement>(null)
   const portalRef = useRef<HTMLDivElement>(null)
   const portalContainer = useOverlayPortalContainer()
+  const generatedId = useId()
   const isControlled = value !== undefined
   const currentValue = isControlled ? String(value ?? '') : internalValue
+  const triggerId = id ?? `select-dropdown-${generatedId}`
+  const listboxId = `${triggerId}-listbox`
 
   useDismissibleLayer({
     open,
@@ -92,7 +92,11 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
     closeOnEscape: true,
   })
 
-  const selectedLabel = options.find((o) => String(o.value) === currentValue)?.label ?? placeholder
+  const selectedDisplay = getSelectDropdownDisplay(options, currentValue, placeholder)
+  const highlightedOptionId =
+    open && highlightedIndex >= 0 && options[highlightedIndex]
+      ? getSelectDropdownOptionId(listboxId, highlightedIndex)
+      : undefined
 
   const updateCoords = () => {
     const rect = triggerRef.current?.getBoundingClientRect()
@@ -225,20 +229,28 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
       <button
         ref={triggerRef}
         type="button"
-        id={id}
+        id={triggerId}
         onClick={toggle}
         onKeyDown={handleTriggerKeyDown}
         disabled={disabled}
         className={triggerClass}
         dir="rtl"
+        role="combobox"
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-controls={open ? listboxId : undefined}
+        aria-activedescendant={highlightedOptionId}
         aria-describedby={ariaDescribedBy}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
       >
-        <span className={cn('flex-1 truncate text-right', !currentValue ? 'text-gray-400' : 'text-gray-800')}>
-          {selectedLabel}
+        <span
+          className={cn(
+            'flex-1 truncate text-right',
+            selectedDisplay.isPlaceholder ? 'text-gray-400' : 'text-gray-800',
+          )}
+        >
+          {selectedDisplay.label}
         </span>
         <ChevronDown className={cn('shrink-0 text-gray-400', iconSizeClasses[size])} />
       </button>
@@ -259,10 +271,13 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
             }}
             className="pointer-events-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg overflow-auto max-h-60 overscroll-contain"
             role="listbox"
+            id={listboxId}
+            aria-labelledby={triggerId}
           >
             {options.map((opt, index) => (
               <button
                 key={opt.value}
+                id={getSelectDropdownOptionId(listboxId, index)}
                 type="button"
                 disabled={opt.disabled}
                 onClick={() => select(opt.value)}
