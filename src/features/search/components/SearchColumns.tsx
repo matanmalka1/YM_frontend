@@ -9,7 +9,6 @@ export const searchColumns: Column<SearchResult>[] = [
   monoColumn({
     key: 'office_client_number',
     header: SEARCH_MESSAGES.columns.officeNumber,
-    valueClassName: 'text-xs text-gray-400',
     getValue: (result) => formatClientOfficeId(result.office_client_number),
   }),
   {
@@ -35,14 +34,14 @@ export const searchColumns: Column<SearchResult>[] = [
     key: 'id_number',
     header: SEARCH_MESSAGES.columns.idNumber,
     valueClassName: 'text-gray-700',
-    emptyValue: <span className="text-gray-300">—</span>,
+    emptyValue: <span className="text-gray-400">—</span>,
     getValue: (result) => result.id_number,
   }),
   monoColumn({
     key: 'binder_number',
     header: SEARCH_MESSAGES.columns.binderNumber,
-    valueClassName: 'font-semibold text-gray-800',
-    emptyValue: <span className="text-gray-300">—</span>,
+    valueClassName: 'text-gray-700',
+    emptyValue: <span className="text-gray-400">—</span>,
     getValue: (result) => (result.binder_number ? formatBinderNumber(result.binder_number) : null),
   }),
   actionsColumn({

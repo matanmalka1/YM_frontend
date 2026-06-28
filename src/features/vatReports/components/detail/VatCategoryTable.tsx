@@ -22,14 +22,12 @@ export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({
     {
       key: 'category',
       header: VAT_MESSAGES.categoryTable.category,
-      align: 'right',
-      render: (row) => <span className="font-medium text-gray-900">{row.label}</span>,
+      render: (row) => <span className="font-semibold text-gray-900">{row.label}</span>,
       footer: VAT_MESSAGES.categoryTable.total,
     },
     {
       key: 'rate',
       header: VAT_MESSAGES.categoryTable.deductionPercent,
-      align: 'right',
       className: 'font-mono tabular-nums',
       render: (row) => (
         <span className={getVatDeductionRateClass(row.deductionRate)}>
@@ -41,23 +39,20 @@ export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({
     {
       key: 'gross',
       header: VAT_MESSAGES.categoryTable.grossExpense,
-      align: 'right',
       className: 'font-mono tabular-nums',
-      render: (row) => <span className="text-gray-600">{formatVatAmount(row.netAmount + row.grossVat)}</span>,
+      render: (row) => <span className="text-gray-700">{formatVatAmount(row.netAmount + row.grossVat)}</span>,
       footer: formatVatAmount(totalGrossAmount),
     },
     {
       key: 'invoiceVat',
       header: VAT_MESSAGES.categoryTable.invoiceVat,
-      align: 'right',
       className: 'font-mono tabular-nums',
-      render: (row) => <span className="text-gray-600">{formatVatAmount(row.grossVat)}</span>,
+      render: (row) => <span className="text-gray-700">{formatVatAmount(row.grossVat)}</span>,
       footer: formatVatAmount(totalGrossVat),
     },
     {
       key: 'deductible',
       header: VAT_MESSAGES.categoryTable.deductibleVat,
-      align: 'right',
       className: 'font-mono tabular-nums',
       render: (row) => (
         <span className={cn('font-bold', VAT_DEDUCTIBLE_ACCENT)}>{formatVatAmount(row.deductibleVat)}</span>

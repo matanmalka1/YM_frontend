@@ -17,7 +17,7 @@ const renderClientCell = (binder: BinderResponse) => (
     <Link
       to={`/clients/${binder.client_record_id}`}
       onClick={(e) => e.stopPropagation()}
-      className="text-sm font-semibold text-gray-900 hover:text-primary-700 hover:underline"
+      className="font-semibold text-gray-900 hover:text-primary-700 hover:underline"
     >
       {binder.client_name ?? `#${binder.client_record_id}`}
     </Link>
@@ -69,7 +69,6 @@ export const buildBindersColumns = ({
   monoColumn({
     key: 'binder_number',
     header: BINDERS_MESSAGES.columns.binderNumber,
-    valueClassName: 'font-semibold text-gray-700',
     getValue: (binder) => formatBinderNumber(binder.binder_number),
   }),
   statusColumn({

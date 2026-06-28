@@ -135,7 +135,6 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
     {
       key: 'selection',
       header: '',
-      align: 'center',
       headerRender: () => (
         <Checkbox
           aria-label={TASKS_MESSAGES.clientTab.selectAllOpen}
@@ -157,8 +156,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
     {
       key: 'title',
       header: TASKS_MESSAGES.columns.title,
-      align: 'right',
-      render: (task) => <span className="font-medium text-gray-900">{task.title}</span>,
+      render: (task) => <span className="font-semibold text-gray-900">{task.title}</span>,
       wrap: true,
     },
     {

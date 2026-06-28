@@ -17,33 +17,29 @@ export const TaxBracketsTable: React.FC<Props> = ({ brackets }) => {
     {
       key: 'rate',
       header: ANNUAL_REPORTS_MESSAGES.bracketsTable.rateHeader,
-      align: 'right',
       render: (b) => fmtRate(b.rate),
-      className: 'text-gray-900',
+      className: 'text-gray-700',
     },
     {
       key: 'range',
       header: ANNUAL_REPORTS_MESSAGES.bracketsTable.rangeHeader,
-      align: 'right',
       dir: 'ltr',
       render: (b) => fmtRange(b.from_amount, b.to_amount),
-      className: 'tabular-nums text-gray-600',
+      className: 'tabular-nums text-gray-700',
     },
     {
       key: 'taxable',
       header: ANNUAL_REPORTS_MESSAGES.bracketsTable.taxableInBracketHeader,
-      align: 'right',
       dir: 'ltr',
       render: (b) => fmt(b.taxable_in_bracket),
-      className: 'tabular-nums text-gray-900',
+      className: 'tabular-nums text-gray-700',
     },
     {
       key: 'tax',
       header: ANNUAL_REPORTS_MESSAGES.bracketsTable.taxInBracketHeader,
-      align: 'right',
       dir: 'ltr',
       render: (b) => fmt(b.tax_in_bracket),
-      className: 'tabular-nums text-gray-900',
+      className: 'tabular-nums text-gray-700',
     },
   ]
 

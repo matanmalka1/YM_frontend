@@ -19,15 +19,13 @@ export const buildAdvancePaymentBatchColumns = ({
   {
     key: 'office_client_number',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.officeNumberHeader,
-    align: 'right',
-    className: 'w-16 tabular-nums text-gray-400',
+    className: 'w-16 font-mono tabular-nums text-gray-700',
     headerClassName: 'w-16',
     render: (row) => formatClientOfficeId(row.office_client_number),
   },
   {
     key: 'business_name',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.clientNameHeader,
-    align: 'right',
     wrap: true,
     className: 'w-48',
     headerClassName: 'w-48',
@@ -35,7 +33,7 @@ export const buildAdvancePaymentBatchColumns = ({
       <>
         <Link
           to={`/clients/${row.client_record_id}/advance-payments`}
-          className="block text-sm font-medium leading-snug text-gray-900 hover:text-info-600 hover:underline"
+          className="block font-semibold leading-snug text-gray-900 hover:text-info-600 hover:underline"
           onClick={(event) => event.stopPropagation()}
         >
           {row.business_name}
@@ -52,8 +50,7 @@ export const buildAdvancePaymentBatchColumns = ({
   {
     key: 'period',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.periodHeader,
-    align: 'right',
-    className: 'w-28 text-gray-600',
+    className: 'w-28 text-gray-700',
     headerClassName: 'w-28',
     render: (row) =>
       `${getAdvancePaymentMonthLabel(row.period, row.period_months_count)} ${row.period.substring(0, 4)}`,
@@ -61,14 +58,13 @@ export const buildAdvancePaymentBatchColumns = ({
   {
     key: 'due_date',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.dueDateHeader,
-    align: 'right',
     className: 'w-24 tabular-nums',
     headerClassName: 'w-24',
     render: (row) => {
       const isOverdue = row.timing_status === 'overdue'
       const dueDate = row.due_date_effective ?? row.due_date
       return (
-        <span className={isOverdue ? 'font-medium text-negative-600' : 'text-gray-500'}>{formatDate(dueDate)}</span>
+        <span className={isOverdue ? 'font-medium text-negative-600' : 'text-gray-600'}>{formatDate(dueDate)}</span>
       )
     },
   },
@@ -84,14 +80,14 @@ export const buildAdvancePaymentBatchColumns = ({
       ) : row.live_turnover ? (
         <span className="italic text-gray-400">{formatShekelAmount(row.live_turnover)}</span>
       ) : (
-        <span className="text-gray-500">—</span>
+        <span className="text-gray-400">—</span>
       ),
   },
   {
     key: 'expected_amount',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.expectedHeader,
     dir: 'ltr',
-    className: 'w-20 font-semibold tabular-nums text-gray-800',
+    className: 'w-20 font-semibold tabular-nums text-gray-900',
     headerClassName: 'w-20',
     render: (row) => formatShekelAmount(row.expected_amount),
   },
@@ -111,7 +107,7 @@ export const buildAdvancePaymentBatchColumns = ({
     headerClassName: 'w-20',
     render: (row) =>
       row.delta == null ? (
-        <span className="text-gray-500">—</span>
+        <span className="text-gray-400">—</span>
       ) : Number(row.delta) > 0 ? (
         <span className="font-semibold text-negative-600">{formatShekelAmount(row.delta)}</span>
       ) : (
@@ -128,7 +124,7 @@ export const buildAdvancePaymentBatchColumns = ({
       row.advance_rate != null ? (
         formatPercent(row.advance_rate, { fractionDigits: 2 })
       ) : (
-        <span className="text-gray-500">—</span>
+        <span className="text-gray-400">—</span>
       ),
   },
   statusColumn({

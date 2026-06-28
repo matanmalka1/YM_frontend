@@ -42,21 +42,18 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
     {
       key: 'performed_at',
       header: AUDIT_MESSAGES.table.columnDate,
-      align: 'right',
-      className: 'w-36 text-gray-500 tabular-nums',
+      className: 'w-36 text-gray-600 tabular-nums',
       render: (entry) => formatDateTime(entry.performed_at),
     },
     {
       key: 'action',
       header: AUDIT_MESSAGES.table.columnAction,
-      align: 'right',
-      className: 'w-24 font-medium text-gray-800',
+      className: 'w-24 font-semibold text-gray-900',
       render: (entry) => actionLabels[entry.action] ?? entry.action,
     },
     {
       key: 'details',
       header: AUDIT_MESSAGES.table.columnDetails,
-      align: 'right',
       wrap: true,
       className: cn('min-w-48 break-words', detailsClassName),
       render: (entry) => formatDetails(entry),
@@ -64,8 +61,7 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
     {
       key: 'performed_by',
       header: AUDIT_MESSAGES.table.columnPerformedBy,
-      align: 'right',
-      className: 'w-24 font-mono text-xs text-gray-400',
+      className: 'w-24 font-mono text-gray-700 tabular-nums',
       render: (entry) => entry.performed_by_name ?? `#${entry.performed_by}`,
     },
   ]

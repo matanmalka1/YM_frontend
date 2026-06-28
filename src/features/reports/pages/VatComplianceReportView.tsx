@@ -35,7 +35,6 @@ const buildComplianceColumns = (year?: number): Column<VatComplianceItem>[] => [
   {
     key: "client",
     header: REPORTS_MESSAGES.common.client,
-    align: "right",
     render: (item) => {
       const disambiguation = getComplianceDisambiguation(item, year);
       return (
@@ -46,15 +45,14 @@ const buildComplianceColumns = (year?: number): Column<VatComplianceItem>[] => [
       );
     },
   },
-  { key: "expected", header: REPORTS_MESSAGES.vatCompliance.expectedPeriods, align: "right", render: (item) => numericCell(item.periods_expected) },
-  { key: "filed", header: REPORTS_MESSAGES.vatCompliance.filed, align: "right", render: (item) => numericCell(item.periods_filed) },
-  { key: "open", header: REPORTS_MESSAGES.vatCompliance.open, align: "right", render: (item) => numericCell(item.periods_open) },
-  { key: "onTime", header: REPORTS_MESSAGES.vatCompliance.onTime, align: "right", render: (item) => numericCell(item.on_time_count) },
-  { key: "late", header: REPORTS_MESSAGES.vatCompliance.late, align: "right", render: (item) => numericCell(item.late_count) },
+  { key: "expected", header: REPORTS_MESSAGES.vatCompliance.expectedPeriods, render: (item) => numericCell(item.periods_expected) },
+  { key: "filed", header: REPORTS_MESSAGES.vatCompliance.filed, render: (item) => numericCell(item.periods_filed) },
+  { key: "open", header: REPORTS_MESSAGES.vatCompliance.open, render: (item) => numericCell(item.periods_open) },
+  { key: "onTime", header: REPORTS_MESSAGES.vatCompliance.onTime, render: (item) => numericCell(item.on_time_count) },
+  { key: "late", header: REPORTS_MESSAGES.vatCompliance.late, render: (item) => numericCell(item.late_count) },
   {
     key: "rate",
     header: REPORTS_MESSAGES.vatCompliance.compliance,
-    align: "right",
     render: (item) => (
       <Badge variant={complianceBadgeVariant(item.compliance_rate)}>
         {formatPercent(item.compliance_rate)}
@@ -80,19 +78,16 @@ const STALE_PENDING_COLUMNS: Column<StalePendingItem>[] = [
   {
     key: "client",
     header: REPORTS_MESSAGES.common.client,
-    align: "right",
     render: (item) => <span className="font-semibold text-gray-900">{item.client_name}</span>,
   },
   {
     key: "period",
     header: REPORTS_MESSAGES.vatCompliance.period,
-    align: "right",
     render: (item) => <span className="text-gray-700 tabular-nums">{item.period}</span>,
   },
   {
     key: "days",
     header: REPORTS_MESSAGES.vatCompliance.pendingDays,
-    align: "right",
     render: (item) => <Badge variant="negative">{REPORTS_MESSAGES.common.days(item.days_pending)}</Badge>,
   },
 ];

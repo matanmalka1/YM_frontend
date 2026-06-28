@@ -16,50 +16,38 @@ const DOCUMENT_COLUMNS: Column<DocumentSearchResult>[] = [
   {
     key: 'office',
     header: SEARCH_MESSAGES.columns.officeNumber,
-    align: 'right',
     render: (doc) => (
-      <span className="font-mono text-sm text-gray-500 tabular-nums">
-        {formatClientOfficeId(doc.office_client_number)}
-      </span>
+      <span className="font-mono text-gray-700 tabular-nums">{formatClientOfficeId(doc.office_client_number)}</span>
     ),
   },
   {
     key: 'client',
     header: SEARCH_MESSAGES.columns.client,
-    align: 'right',
-    render: (doc) => <span className="text-gray-700">{doc.client_name}</span>,
+    render: (doc) => <span className="font-semibold text-gray-900">{doc.client_name}</span>,
   },
   {
     key: 'type',
     header: SEARCH_MESSAGES.documents.type,
-    align: 'right',
-    render: (doc) => (
-      <span className="font-medium text-gray-800">
-        {DOC_TYPE_LABELS[doc.document_type] ?? SEARCH_MESSAGES.documents.unknownType}
-      </span>
-    ),
+    render: (doc) => DOC_TYPE_LABELS[doc.document_type] ?? SEARCH_MESSAGES.documents.unknownType,
   },
   {
     key: 'filename',
     header: SEARCH_MESSAGES.filters.filename,
-    align: 'right',
     className: 'max-w-xs truncate',
     render: (doc) => (
-      <span className="font-mono text-xs text-gray-600">
-        {doc.original_filename ?? <span className="text-gray-300">—</span>}
+      <span className="font-mono text-gray-700">
+        {doc.original_filename ?? <span className="text-gray-400">—</span>}
       </span>
     ),
   },
   {
     key: 'taxYear',
     header: SEARCH_MESSAGES.documents.taxYear,
-    align: 'right',
-    render: (doc) => <span className="text-gray-600">{doc.tax_year ?? <span className="text-gray-300">—</span>}</span>,
+    render: (doc) => doc.tax_year ?? <span className="text-gray-400">—</span>,
   },
   {
     key: 'action',
     header: '',
-    align: 'right',
     render: (doc) => (
       <Link
         to={`/clients/${doc.client_record_id}/documents`}

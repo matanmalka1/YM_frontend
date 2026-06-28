@@ -1,5 +1,5 @@
 import { AlertTriangle } from 'lucide-react'
-import { monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
+import { dateColumn, monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
 import type { VatWorkItemListItem } from '../../api'
 import { getVatWorkItemStatusLabel } from '../../constants/vatConstants'
 import { formatClientOfficeId, formatDate } from '@/utils/utils'
@@ -21,18 +21,14 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
   {
     key: 'client_id',
     header: VAT_MESSAGES.columns.client,
-    headerClassName: 'text-center',
-    className: 'text-center',
     render: (item) => {
       const name = item.client_name ?? formatClientOfficeId(item.office_client_number)
       const showPeriod = opts.duplicateClientIds?.has(item.client_record_id)
 
       return (
-        <span className="mx-auto block max-w-[220px] text-center">
+        <span className="mx-auto block max-w-[220px]">
           <span className="block truncate font-semibold text-gray-900">{name}</span>
-          {showPeriod && (
-            <span className="block text-xs font-medium text-gray-500">{VAT_MESSAGES.columns.vatItemId(item.id)}</span>
-          )}
+          {showPeriod && <span className="block text-xs text-gray-500">{VAT_MESSAGES.columns.vatItemId(item.id)}</span>}
         </span>
       )
     },
@@ -50,8 +46,6 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
   statusColumn({
     key: 'status',
     header: VAT_MESSAGES.columns.status,
-    headerClassName: 'text-center',
-    className: 'text-center',
     getStatus: (item) => item.status,
     getLabel: getVatWorkItemStatusLabel,
     variantMap: VAT_STATUS_BADGE_VARIANTS,
@@ -87,7 +81,7 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
     header: VAT_MESSAGES.columns.dueDate,
     render: (item) => {
       const displayDeadline = item.extended_deadline ?? item.submission_deadline
-      if (!displayDeadline) return <span className="text-gray-400 text-sm">—</span>
+      if (!displayDeadline) return <span className="text-gray-400">—</span>
       const filed = isFiled(item.status)
       const overdue = item.is_overdue && !filed
       const cls = overdue
@@ -103,17 +97,15 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
       )
     },
   },
-  textColumn({
+  dateColumn({
     key: 'updated_at',
     header: VAT_MESSAGES.columns.updatedAt,
-    valueClassName: 'text-gray-400 tabular-nums',
-    getValue: (item) => formatDate(item.updated_at),
+    getValue: (item) => item.updated_at,
   }),
-  textColumn({
+  dateColumn({
     key: 'filed_at',
     header: VAT_MESSAGES.columns.filedAt,
-    valueClassName: 'tabular-nums',
-    getValue: (item) => (item.filed_at ? formatDate(item.filed_at) : null),
+    getValue: (item) => item.filed_at,
   }),
   {
     key: 'actions',

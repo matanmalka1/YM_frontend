@@ -38,17 +38,14 @@ export const ClientYearComparisonModal: React.FC<Props> = ({ open, onClose, repo
     {
       key: 'label',
       header: '',
-      align: 'right',
       render: (m) => m.label,
-      className: 'font-medium text-gray-700',
+      className: 'font-semibold text-gray-900',
       headerClassName: 'w-32',
     },
     ...sorted.map(
       (r): Column<MetricRow> => ({
         key: `year-${r.id}`,
         header: String(r.tax_year),
-        align: 'center',
-        headerAlign: 'center',
         render: (m) => m.render(r),
       }),
     ),

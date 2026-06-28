@@ -43,7 +43,6 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
       (field): Column<AnnexDataLine> => ({
         key: field.key,
         header: field.label,
-        align: 'right',
         className: 'align-top text-gray-700',
         render: (line) => getLineFieldValue(line, field.key),
         editRender: () => <AnnexFieldInput field={field} register={register} errors={errors} />,
@@ -52,7 +51,6 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
     {
       key: '__actions',
       header: '',
-      align: 'right',
       render: (line) => (
         <div className="flex items-center gap-1">
           <RowActionButton

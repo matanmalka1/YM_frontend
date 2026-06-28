@@ -125,7 +125,7 @@ const rulesColumns: Column<TaxCalendarDeadlineRule>[] = [
   {
     key: 'rule_type',
     header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.ruleType,
-    render: (rule) => <span className="font-medium text-gray-900">{getRuleTypeLabel(rule.rule_type)}</span>,
+    render: (rule) => <span className="font-semibold text-gray-900">{getRuleTypeLabel(rule.rule_type)}</span>,
   },
   {
     key: 'due_day_of_month',

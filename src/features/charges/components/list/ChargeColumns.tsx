@@ -106,7 +106,6 @@ export const buildChargeColumns = ({
       header: CHARGES_MESSAGES.columns.created,
       headerClassName: 'w-24',
       className: 'w-24',
-      valueClassName: 'text-gray-500',
       getValue: (charge) => charge.created_at,
     }),
     actionsColumn({

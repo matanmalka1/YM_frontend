@@ -32,22 +32,22 @@ export const buildNotificationColumns = ({
   {
     key: 'created_at',
     header: NOTIFICATIONS_MESSAGES.columns.date,
-    render: (item) => <span className="text-sm text-gray-700">{formatDateTime(item.created_at)}</span>,
+    render: (item) => formatDateTime(item.created_at),
   },
   {
     key: 'trigger',
     header: NOTIFICATIONS_MESSAGES.columns.type,
     render: (item) => (
       <div className="min-w-0 text-right">
-        <div className="text-sm font-medium text-gray-900">{getTriggerLabel(item)}</div>
-        <div className="text-xs text-gray-400">{getDomainLabel(item.domain_label)}</div>
+        <div className="font-semibold text-gray-900">{getTriggerLabel(item)}</div>
+        <div className="text-xs text-gray-500">{getDomainLabel(item.domain_label)}</div>
       </div>
     ),
   },
   {
     key: 'client',
     header: NOTIFICATIONS_MESSAGES.columns.client,
-    render: (item) => <span className="text-sm text-gray-700">{item.client_name ?? `#${item.client_record_id}`}</span>,
+    render: (item) => item.client_name ?? `#${item.client_record_id}`,
   },
   {
     key: 'status',
@@ -66,7 +66,6 @@ export const buildNotificationColumns = ({
   {
     key: 'actions',
     header: '',
-    align: 'center',
     render: (item) => (
       <RowActionsMenu ariaLabel={NOTIFICATIONS_MESSAGES.columns.rowActionsAriaLabel}>
         <RowActionItem

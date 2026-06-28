@@ -115,10 +115,9 @@ const GroupItemsRows = ({
     {
       key: 'client',
       header: TAX_CALENDAR_MESSAGES.item.client,
-      align: 'right',
       render: (item) => (
         <Link
-          className="block max-w-[240px] truncate font-medium text-gray-900 hover:text-info-600 hover:underline"
+          className="block max-w-[240px] truncate font-semibold text-gray-900 hover:text-info-600 hover:underline"
           to={`/clients/${item.client_record_id}`}
         >
           {item.client_name ?? TAX_CALENDAR_MESSAGES.item.clientName(item.client_record_id)}
@@ -128,27 +127,23 @@ const GroupItemsRows = ({
     {
       key: 'office',
       header: TAX_CALENDAR_MESSAGES.item.clientNumber,
-      align: 'right',
       render: (item) => formatPlainIdentifier(item.office_client_number),
-      className: 'font-mono tabular-nums text-gray-600',
+      className: 'font-mono tabular-nums text-gray-700',
     },
     {
       key: 'type',
       header: TAX_CALENDAR_MESSAGES.item.recordType,
-      align: 'right',
       render: (item) => TAX_CALENDAR_SOURCE_TYPE_LABELS[item.source_type],
-      className: 'text-gray-600',
+      className: 'text-gray-700',
     },
     {
       key: 'state',
       header: TAX_CALENDAR_MESSAGES.item.status,
-      align: 'right',
       render: (item) => <Badge variant={getStateVariant(item)}>{getStateLabel(item)}</Badge>,
     },
     {
       key: 'action',
       header: '',
-      align: 'right',
       className: 'w-10',
       headerClassName: 'w-10',
       render: (item) => (

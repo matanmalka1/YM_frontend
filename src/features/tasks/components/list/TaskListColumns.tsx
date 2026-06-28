@@ -32,7 +32,6 @@ export const buildTaskListColumns = ({
   {
     key: 'title',
     header: TASKS_MESSAGES.columns.title,
-    align: 'right',
     wrap: true,
     render: (task) => (
       <div className="min-w-48 space-y-1">

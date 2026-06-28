@@ -24,14 +24,14 @@ const DeadlineCell: React.FC<{ report: AnnualReportListItem }> = ({ report }) =>
 
   return (
     <div className="flex flex-col gap-0.5">
-      <span className={cn('text-sm', overdue && semanticMonoToneClasses.negative)}>
+      <span className={cn('tabular-nums', overdue ? semanticMonoToneClasses.negative : 'text-gray-600')}>
         {formatDate(report.filing_deadline)}
       </span>
       {days !== null && !isTerminal && (
         <span
           className={cn(
             'inline-flex items-center gap-1 text-xs',
-            days < 0 ? 'text-negative-500' : days <= 14 ? 'text-warning-500' : 'text-gray-400',
+            days < 0 ? 'text-negative-500' : days <= 14 ? 'text-warning-500' : 'text-gray-500',
           )}
         >
           {days < 0 ? (
@@ -56,16 +56,14 @@ const columns: Column<AnnualReportListItem>[] = [
     key: 'office_client_number',
     header: ANNUAL_REPORTS_MESSAGES.season.officeNumberHeader,
     render: (r) => (
-      <span className="font-mono text-sm text-gray-500 tabular-nums">
-        {formatClientOfficeId(r.office_client_number)}
-      </span>
+      <span className="font-mono tabular-nums text-gray-700">{formatClientOfficeId(r.office_client_number)}</span>
     ),
   },
   {
     key: 'client_name',
     header: ANNUAL_REPORTS_MESSAGES.season.clientHeader,
     render: (r) => (
-      <span className="text-sm font-medium text-gray-900">
+      <span className="font-semibold text-gray-900">
         {r.client_name ?? ANNUAL_REPORTS_MESSAGES.season.clientFallbackName(r.client_record_id)}
       </span>
     ),
@@ -73,14 +71,18 @@ const columns: Column<AnnualReportListItem>[] = [
   {
     key: 'client_id_number',
     header: ANNUAL_REPORTS_MESSAGES.season.idNumberHeader,
-    render: (r) => <span className="font-mono text-sm text-gray-500 tabular-nums">{r.client_id_number ?? '—'}</span>,
+    render: (r) => (
+      <span className="font-mono tabular-nums text-gray-700">
+        {r.client_id_number ?? <span className="text-gray-400">—</span>}
+      </span>
+    ),
   },
   {
     key: 'client_type',
     header: ANNUAL_REPORTS_MESSAGES.season.typeFormHeader,
     render: (r) => (
       <div className="flex flex-col gap-0.5">
-        <span className="text-sm text-gray-700">{getClientTypeLabel(r.client_type)}</span>
+        <span>{getClientTypeLabel(r.client_type)}</span>
         <Badge variant="neutral" className="w-fit font-mono">
           {r.form_type}
         </Badge>
@@ -100,12 +102,12 @@ const columns: Column<AnnualReportListItem>[] = [
   {
     key: 'deadline_type',
     header: ANNUAL_REPORTS_MESSAGES.season.deadlineTypeHeader,
-    render: (r) => <span className="text-sm text-gray-500">{getDeadlineTypeLabel(r.deadline_type)}</span>,
+    render: (r) => getDeadlineTypeLabel(r.deadline_type),
   },
   {
     key: 'submitted_at',
     header: ANNUAL_REPORTS_MESSAGES.season.submittedAtHeader,
-    render: (r) => <span className="text-sm text-gray-500 tabular-nums">{formatDate(r.submitted_at)}</span>,
+    render: (r) => <span className="tabular-nums text-gray-600">{formatDate(r.submitted_at)}</span>,
   },
 ]
 
