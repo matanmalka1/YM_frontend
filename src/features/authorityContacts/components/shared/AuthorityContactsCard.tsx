@@ -1,5 +1,5 @@
 import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
-import { PaginationCard } from '../../../../components/ui/table/PaginationCard'
+import { PaginationCard } from '@/components/ui/table'
 import { useAuthorityContacts } from '../../hooks/useAuthorityContacts'
 import { useAuthorityContactsCardState } from '../../hooks/useAuthorityContactsCardState'
 import { AuthorityContactModal } from '../form/AuthorityContactModal'
