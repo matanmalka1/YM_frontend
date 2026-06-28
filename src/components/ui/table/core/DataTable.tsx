@@ -146,7 +146,7 @@ export const DataTable = <T,>({
     <div className={cn('overflow-x-auto', stickyHeader && cn('overflow-y-auto', heightClass))}>
       <table className="w-full border-collapse">
         <thead className={cn(stickyHeader && 'sticky top-0 z-20')}>
-          <tr className={cn('border-b border-gray-200 text-right', !isBare && 'bg-gray-50/80')}>
+          <tr className={cn('border-b border-gray-200 text-right', !isBare && 'bg-gray-100')}>
             {columns.map((column) => (
               <th
                 key={column.key}
@@ -154,7 +154,7 @@ export const DataTable = <T,>({
                   headerCellClass,
                   'font-semibold uppercase tracking-wider text-gray-500',
                   'first:ps-5 last:pe-5',
-                  stickyHeader && 'border-b border-gray-200 bg-gray-50/90 backdrop-blur-sm',
+                  stickyHeader && 'border-b border-gray-200 bg-gray-100/95 backdrop-blur-sm',
                   getAlignClass(column),
                   column.headerClassName,
                 )}
@@ -226,7 +226,7 @@ export const DataTable = <T,>({
   }
 
   return (
-    <Card disablePadding className={cn('overflow-hidden', className)}>
+    <Card disablePadding radius="lg" className={cn('overflow-hidden', className)}>
       {table}
     </Card>
   )

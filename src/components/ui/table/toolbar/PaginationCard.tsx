@@ -41,7 +41,7 @@ export const PaginationCard: React.FC<PaginationCardProps> = ({
   const visiblePages = getVisiblePages(page, totalPages)
 
   return (
-    <Card className="mt-4" size="compact" bodyClassName="px-5 py-2.5">
+    <Card className="mt-4" radius="lg" size="compact" bodyClassName="px-5 py-2.5">
       <div className="flex flex-col gap-2 text-sm md:flex-row md:items-center md:justify-between">
         <p className="text-gray-600">
           <span className="font-semibold text-gray-900">{formatCount(total)}</span> {label}
