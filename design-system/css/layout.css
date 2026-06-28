@@ -180,7 +180,7 @@ section {
   line-height: 1.55;
 }
 .sec-head p code {
-  font-family: ui-monospace, monospace;
+  font-family: 'Heebo', system-ui, sans-serif;
   font-size: 12px;
   background: var(--gray-100);
   padding: 1px 6px;

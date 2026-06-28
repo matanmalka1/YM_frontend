@@ -25,9 +25,9 @@ body {
 .num {
   font-variant-numeric: tabular-nums;
 }
-/* .mono mirrors the app's `font-mono`: true monospace for digits/IDs; Hebrew → Heebo */
+/* .mono mirrors the app's `font-mono`: Heebo with tabular numerals */
 .mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace, 'Heebo';
+  font-family: 'Heebo', system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
   font-weight: 500;
 }

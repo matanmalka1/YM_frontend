@@ -1001,7 +1001,7 @@ tbody td:last-child {
   color: var(--gray-800);
 }
 .spec-name code {
-  font-family: ui-monospace, monospace;
+  font-family: 'Heebo', system-ui, sans-serif;
   font-size: 12px;
   color: var(--primary-700);
 }
@@ -1027,7 +1027,7 @@ tbody td:last-child {
   gap: 6px;
 }
 .prop {
-  font-family: ui-monospace, monospace;
+  font-family: 'Heebo', system-ui, sans-serif;
   font-size: 11px;
   padding: 2px 7px;
   border-radius: var(--r-sm);
@@ -1048,7 +1048,7 @@ tbody td:last-child {
   gap: 8px;
 }
 .caption {
-  font-family: ui-monospace, monospace;
+  font-family: 'Heebo', system-ui, sans-serif;
   font-size: 11px;
   color: var(--gray-400);
 }
@@ -1219,9 +1219,9 @@ tbody td:last-child {
   cursor: pointer;
 }
 
-/* --- MonoValue (monospace tabular numeric, tone) ------------------------ */
+/* --- MonoValue (Heebo tabular numeric, tone) ---------------------------- */
 .mono-val {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace, 'Heebo';
+  font-family: 'Heebo', system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
   font-size: 14px;
   font-weight: 500;
@@ -2273,7 +2273,7 @@ tbody td:last-child {
   max-width: 380px;
 }
 .error-screen .es-code {
-  font-family: monospace;
+  font-family: 'Heebo', system-ui, sans-serif;
   font-size: 12px;
   color: var(--negative-600);
   background: var(--surface);

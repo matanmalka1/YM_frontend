@@ -120,10 +120,9 @@ body {
 }
 
 @theme {
-  /* font-mono = true monospace for tabular data, invoice numbers, hashes and
-     IDs. Latin glyphs/digits render monospace; Hebrew falls through to Heebo.
-     (Sans/display intentionally use Tailwind defaults + body/--font-display.) */
-  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, monospace, 'Heebo';
+  /* font-mono uses the single app font family; pair with tabular-nums for
+     amounts, counts, dates, invoice numbers, hashes and IDs. */
+  --font-mono: 'Heebo', sans-serif;
 
   /* Sub-xs absolute sizes for uppercase table headers, eyebrows, and dense
      metadata. Pinned in px (not rem) so they stay fixed regardless of root scale. */
