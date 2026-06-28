@@ -3,7 +3,7 @@ import { Alert } from '@/components/ui/overlays/Alert'
 import { DetailDrawer } from '@/components/ui/overlays/DetailDrawer'
 import { ModalFormActions } from '@/components/ui/overlays/ModalFormActions'
 import type { ClientRecordResponse, UpdateClientPayload } from '../../api'
-import { ClientEditForm } from './ClientEditForm'
+import { ClientEditForm } from '../form/ClientEditForm'
 import { CLIENTS_MESSAGES } from '../../messages'
 
 interface ClientEditDrawerProps {
