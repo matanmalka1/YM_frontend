@@ -31,6 +31,7 @@ export interface DatePickerProps {
   disabled?: boolean
   name?: string
   maxDate?: Date
+  minDate?: Date
   compact?: boolean
   fieldClassName?: string
   usePortal?: boolean
@@ -50,6 +51,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   disabled,
   name,
   maxDate,
+  minDate,
   compact = false,
   fieldClassName,
   usePortal = true,
@@ -93,7 +95,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       // Seed the visible month as we open — to the selected date, or today (capped at maxDate)
       // when there's no value. Done here instead of syncing from `value` via an effect.
       const base = selected ?? new Date()
-      setMonthState(maxDate && base > maxDate ? maxDate : base)
+      const clamped = maxDate && base > maxDate ? maxDate : minDate && base < minDate ? minDate : base
+      setMonthState(clamped)
       if (usePortal) {
         const pos = computeDropdownPos()
         if (pos) setDropdownPos(pos)
@@ -144,6 +147,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       onMonthChange={setMonthState}
       onSelect={handleSelect}
       maxDate={maxDate}
+      minDate={minDate}
       containerRef={usePortal ? containerRef : undefined}
       className={usePortal ? 'pointer-events-auto fixed z-[9999]' : 'absolute z-50 mt-1 end-0'}
       style={

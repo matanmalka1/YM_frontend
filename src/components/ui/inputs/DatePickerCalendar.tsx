@@ -1,4 +1,4 @@
-import { DayPicker } from 'react-day-picker'
+import { DayPicker, type Matcher } from 'react-day-picker'
 import { setMonth, setYear, getMonth, getYear, addMonths, subMonths } from 'date-fns'
 import { he } from 'date-fns/locale'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -15,6 +15,7 @@ interface DatePickerCalendarProps {
   onMonthChange: (month: Date) => void
   onSelect: (day: Date | undefined) => void
   maxDate?: Date
+  minDate?: Date
   containerRef?: React.RefObject<HTMLDivElement | null>
   className?: string
   style?: React.CSSProperties
@@ -26,10 +27,12 @@ export const DatePickerCalendar: React.FC<DatePickerCalendarProps> = ({
   onMonthChange,
   onSelect,
   maxDate,
+  minDate,
   containerRef,
   className,
   style,
 }) => {
+  const disabledDays: Matcher[] = [...(maxDate ? [{ after: maxDate }] : []), ...(minDate ? [{ before: minDate }] : [])]
   const monthOptions = MONTH_NAMES.map((label, i) => ({ label, value: i }))
   const yearOptions = Array.from({ length: END_YEAR - START_YEAR + 1 }, (_, i) => ({
     label: String(START_YEAR + i),
@@ -77,7 +80,7 @@ export const DatePickerCalendar: React.FC<DatePickerCalendarProps> = ({
           onSelect={onSelect}
           month={month}
           onMonthChange={onMonthChange}
-          disabled={maxDate ? { after: maxDate } : undefined}
+          disabled={disabledDays.length ? disabledDays : undefined}
           locale={he}
           dir="rtl"
           hideNavigation
