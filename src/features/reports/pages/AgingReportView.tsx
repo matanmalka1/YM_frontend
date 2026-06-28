@@ -3,7 +3,7 @@ import { Button } from "../../../components/ui/primitives/Button";
 import { PageStateGuard } from "../../../components/ui/layout/PageStateGuard";
 import { PageHeader } from "../../../components/layout/PageHeader";
 import { DatePicker } from "../../../components/ui/inputs/DatePicker";
-import { PaginationCard } from "../../../components/ui/table/PaginationCard";
+import { PaginationCard } from '@/components/ui/table';
 import { AgingReportHeader } from "../components/AgingReportHeader";
 import { AgingReportCards } from "../components/AgingReportCards";
 import { useAgingReport } from "../hooks/useAgingReport";

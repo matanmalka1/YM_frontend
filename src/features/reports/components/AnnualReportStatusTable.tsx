@@ -1,12 +1,17 @@
 import { GroupSection } from "../../../components/ui/primitives/GroupSection";
 import { Badge } from "../../../components/ui/primitives/Badge";
-import { DataTable, type Column } from "../../../components/ui/table/DataTable";
+import {
+  DataTable,
+  dateColumn,
+  EmptyCell,
+  textColumn,
+  type Column,
+} from "../../../components/ui/table";
 import type { AnnualReportClientEntry, AnnualReportStatusGroup } from "../api";
 import {
   getStatusLabel,
   getStatusVariant,
 } from "@/features/annualReports";
-import { formatDate } from "../../../utils/utils";
 import { REPORTS_MESSAGES } from "../messages";
 
 interface Props {
@@ -14,41 +19,35 @@ interface Props {
 }
 
 const clientColumns: Column<AnnualReportClientEntry>[] = [
-  {
+  textColumn({
     key: "client_name",
     header: REPORTS_MESSAGES.common.client,
-    render: (r) => (
-      <span className="font-semibold text-gray-900">{r.client_name}</span>
-    ),
-  },
-  {
+    tone: "strong",
+    getValue: (r) => r.client_name,
+  }),
+  textColumn({
     key: "form_type",
     header: REPORTS_MESSAGES.annualStatus.form,
-    render: (r) => r.form_type ?? <span className="text-gray-400">—</span>,
-  },
-  {
+    getValue: (r) => r.form_type,
+  }),
+  dateColumn({
     key: "filing_deadline",
     header: REPORTS_MESSAGES.annualStatus.filingDeadline,
-    render: (r) =>
-      r.filing_deadline ? (
-        <span className="tabular-nums text-gray-600">{formatDate(r.filing_deadline)}</span>
-      ) : (
-        <span className="text-gray-400">—</span>
-      ),
-  },
+    getValue: (r) => r.filing_deadline,
+  }),
   {
     key: "days_until_deadline",
     header: REPORTS_MESSAGES.annualStatus.daysUntilDeadline,
+    kind: "number",
     render: (r) => {
-      if (r.days_until_deadline === null)
-        return <span className="text-gray-400">—</span>;
+      if (r.days_until_deadline === null) return <EmptyCell />;
       const d = r.days_until_deadline;
       const cls =
         d < 0
           ? "text-negative-600 font-semibold"
           : d <= 14
             ? "text-warning-600 font-semibold"
-            : "text-gray-700";
+            : undefined;
       return (
         <span className={cls}>
           {d < 0 ? REPORTS_MESSAGES.annualStatus.overdueDays(Math.abs(d)) : REPORTS_MESSAGES.common.days(d)}

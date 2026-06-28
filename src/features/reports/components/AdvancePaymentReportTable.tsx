@@ -1,4 +1,4 @@
-import { DataTable, type Column } from "../../../components/ui/table/DataTable";
+import { DataTable, type Column } from '@/components/ui/table';
 import { formatClientOfficeId, formatPercent } from "../../../utils/utils";
 import type { AdvancePaymentReportItem, AdvancePaymentReportResponse } from "../api";
 import { formatILS, toReportNumber } from "../utils";
