@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { Button } from '../primitives/Button'
 import { OverlayPortalProvider } from './OverlayPortalContext'
+import { useModalDialog } from './useModalDialog'
 import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 export interface ConfirmDialogProps {
@@ -32,30 +33,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onCancel,
   children,
 }) => {
-  const dialogRef = useRef<HTMLDialogElement>(null)
-  const portalHostRef = useRef<HTMLDivElement>(null)
-  const [portalHost, setPortalHost] = useState<HTMLElement | null>(null)
-
-  // Open modally so the browser provides the focus trap, Escape dismissal, and
-  // ::backdrop. We keep `open` as the single source of truth: Escape is routed
-  // back through onCancel (preventDefault stops the native close), and the
-  // dialog unmounts when the parent flips `open` to false.
-  useEffect(() => {
-    const dialog = dialogRef.current
-    if (!open || !dialog) return
-
-    if (!dialog.open) dialog.showModal()
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-
-    return () => {
-      document.body.style.overflow = previousOverflow
-    }
-  }, [open])
-
-  useEffect(() => {
-    setPortalHost(open ? portalHostRef.current : null)
-  }, [open])
+  const { dialogRef, portalHostRef, portalHost } = useModalDialog(open)
 
   if (!open) return null
 

@@ -1,7 +1,7 @@
 import { X } from 'lucide-react'
 import { cn } from '../../../utils/utils'
-import { useEffect, useRef, useState } from 'react'
 import { OverlayPortalProvider } from '../overlays/OverlayPortalContext'
+import { useModalDialog } from '../overlays/useModalDialog'
 import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 type OverlayVariant = 'modal' | 'drawer' | 'dialog'
@@ -30,29 +30,7 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
   children,
   className,
 }) => {
-  const dialogRef = useRef<HTMLDialogElement>(null)
-  const portalHostRef = useRef<HTMLDivElement>(null)
-  const [portalHost, setPortalHost] = useState<HTMLElement | null>(null)
-
-  // Open modally so the browser provides the focus trap, scroll inert-ing,
-  // Escape dismissal, focus restoration, and ::backdrop. `open` stays the single
-  // source of truth: the dialog unmounts when the parent flips it to false.
-  useEffect(() => {
-    const dialog = dialogRef.current
-    if (!open || !dialog) return
-
-    if (!dialog.open) dialog.showModal()
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-
-    return () => {
-      document.body.style.overflow = previousOverflow
-    }
-  }, [open])
-
-  useEffect(() => {
-    setPortalHost(open ? portalHostRef.current : null)
-  }, [open])
+  const { dialogRef, portalHostRef, portalHost } = useModalDialog(open)
 
   if (!open) return null
 
