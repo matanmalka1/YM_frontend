@@ -33,9 +33,7 @@ export const toChargesListParams = (filters: ChargesFilters): ChargesListParams 
 
 export const buildChargePeriodOptions = (monthsCovered: number) => [
   { value: '', label: CHARGE_PERIOD_NONE_LABEL },
-  ...getMonthlyPeriodOptions(CHARGE_PERIOD_YEAR_SPAN, (period) =>
-    getChargePeriodLabel(period, monthsCovered),
-  ),
+  ...getMonthlyPeriodOptions(CHARGE_PERIOD_YEAR_SPAN, (period) => getChargePeriodLabel(period, monthsCovered)),
 ]
 
 export const runChargeActionRequest = (chargeId: number, action: ChargeAction, reason?: string) => {

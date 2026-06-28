@@ -69,8 +69,7 @@ export const buildFilterBadges = (
         badges.push({
           key: field.idKey,
           label: `לקוח: ${name ?? `#${id}`}`,
-          onRemove: () =>
-            onMultiChange(nameKey ? { [field.idKey]: '', [nameKey]: '' } : { [field.idKey]: '' }),
+          onRemove: () => onMultiChange(nameKey ? { [field.idKey]: '', [nameKey]: '' } : { [field.idKey]: '' }),
         })
     }
   }

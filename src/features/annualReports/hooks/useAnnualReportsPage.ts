@@ -120,8 +120,7 @@ export const useAnnualReportsPage = () => {
     [allYearsMode, allReportsData?.items, season.reports],
   )
 
-  const isLoading =
-    defaultTaxYearPending || isInitializing || (allYearsMode ? allReportsPending : season.isLoading)
+  const isLoading = defaultTaxYearPending || isInitializing || (allYearsMode ? allReportsPending : season.isLoading)
   const error = defaultTaxYearError
     ? ANNUAL_REPORTS_ERROR_MESSAGES.reports.taxYearLoad
     : allYearsMode

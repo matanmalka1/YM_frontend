@@ -71,8 +71,7 @@ const getPeriodLabel = (names: typeof MONTH_NAMES, period: string, periodMonthsC
  */
 export const getMonthlyPeriodOptions = (
   yearSpan: number,
-  formatLabel: (period: string) => string = (period) =>
-    getReportingPeriodLabelWithYear(period, 1, null),
+  formatLabel: (period: string) => string = (period) => getReportingPeriodLabelWithYear(period, 1, null),
 ): { value: string; label: string }[] => {
   const currentYear = new Date().getFullYear()
   return Array.from({ length: yearSpan * 2 + 1 }, (_, i) => currentYear - yearSpan + i).flatMap((year) =>
