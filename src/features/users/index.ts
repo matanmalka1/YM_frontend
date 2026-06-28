@@ -1,6 +1,6 @@
 // Public surface of the users feature
 export { usersApi, usersQK } from './api'
-export { AuditLogsDrawer } from './components/detail/AuditLogsDrawer'
+export { AuditLogsDrawer } from './components/drawer/AuditLogsDrawer'
 export { CreateUserModal } from './components/form/CreateUserModal'
 export { EditUserModal } from './components/form/EditUserModal'
 export { ResetPasswordModal } from './components/form/ResetPasswordModal'
