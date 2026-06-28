@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { PaginatedDataTable } from '@/components/ui/table/PaginatedDataTable'
+import { PaginatedDataTable } from '@/components/ui/table'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
 import { ADVANCE_PAYMENT_BATCH_PAGE_SIZE, useAdvancePaymentBatchRows } from '../../hooks/useAdvancePaymentBatchRows'
 import { buildAdvancePaymentBatchColumns } from './AdvancePaymentBatchColumns'
@@ -37,7 +37,7 @@ export const AdvancePaymentBatchContent = ({
       isLoading={content.isLoading}
       isFetching={content.isFetching}
       emptyMessage={ADVANCED_PAYMENTS_MESSAGES.batchContent.emptyMessage}
-      rowClassName={(row) => (row.timing_status === 'overdue' ? 'bg-negative-50/30 hover:bg-negative-50/60' : '')}
+      getRowVariant={(row) => (row.timing_status === 'overdue' ? 'dangerSoft' : undefined)}
       page={content.page}
       pageSize={ADVANCE_PAYMENT_BATCH_PAGE_SIZE}
       total={content.total}

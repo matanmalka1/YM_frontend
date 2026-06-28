@@ -8,7 +8,7 @@ import { ClientAdvancePaymentsCards } from './ClientAdvancePaymentsCards'
 import { ClientAdvancePaymentsStatsSection } from './ClientAdvancePaymentsStatsSection'
 import { AdvancePaymentDrawer } from '../../components/drawer/AdvancePaymentDrawer'
 import { CreateAdvancePaymentModal } from '../../components/create/CreateAdvancePaymentModal'
-import { PaginationCard } from '@/components/ui/table/PaginationCard'
+import { PaginationCard } from '@/components/ui/table'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 interface ClientAdvancePaymentsTabProps {

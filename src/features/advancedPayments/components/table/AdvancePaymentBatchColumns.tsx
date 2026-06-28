@@ -1,6 +1,17 @@
 import { AlertTriangle, Edit, ExternalLink } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { RowActionItem, RowActionsMenu, statusColumn, type Column } from '@/components/ui/table'
+import {
+  actionsColumn,
+  EmptyCell,
+  moneyColumn,
+  monoColumn,
+  numberColumn,
+  RowActionItem,
+  RowActionsMenu,
+  statusColumn,
+  textColumn,
+  type Column,
+} from '@/components/ui/table'
 import { formatClientOfficeId, formatDate, formatPercent, formatShekelAmount } from '@/utils/utils'
 import type { AdvancePaymentOverviewRow } from '../../api/contracts'
 import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
@@ -16,19 +27,15 @@ export const buildAdvancePaymentBatchColumns = ({
   onRowClick,
   onNavigateToClient,
 }: AdvancePaymentBatchColumnOpts): Column<AdvancePaymentOverviewRow>[] => [
-  {
+  monoColumn({
     key: 'office_client_number',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.officeNumberHeader,
-    className: 'w-16 font-mono tabular-nums text-gray-700',
-    headerClassName: 'w-16',
-    render: (row) => formatClientOfficeId(row.office_client_number),
-  },
+    getValue: (row) => formatClientOfficeId(row.office_client_number),
+  }),
   {
     key: 'business_name',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.clientNameHeader,
     wrap: true,
-    className: 'w-48',
-    headerClassName: 'w-48',
     render: (row) => (
       <>
         <Link
@@ -47,100 +54,78 @@ export const buildAdvancePaymentBatchColumns = ({
       </>
     ),
   },
-  {
+  textColumn({
     key: 'period',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.periodHeader,
-    className: 'w-28 text-gray-700',
-    headerClassName: 'w-28',
-    render: (row) =>
+    getValue: (row) =>
       `${getAdvancePaymentMonthLabel(row.period, row.period_months_count)} ${row.period.substring(0, 4)}`,
-  },
+  }),
   {
     key: 'due_date',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.dueDateHeader,
-    className: 'w-24 tabular-nums',
-    headerClassName: 'w-24',
+    kind: 'date',
     render: (row) => {
       const isOverdue = row.timing_status === 'overdue'
       const dueDate = row.due_date_effective ?? row.due_date
-      return (
-        <span className={isOverdue ? 'font-medium text-negative-600' : 'text-gray-600'}>{formatDate(dueDate)}</span>
-      )
+      return <span className={isOverdue ? 'font-medium text-negative-600' : undefined}>{formatDate(dueDate)}</span>
     },
   },
   {
     key: 'turnover',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.turnoverHeader,
     dir: 'ltr',
-    className: 'w-24 tabular-nums',
-    headerClassName: 'w-24',
+    kind: 'money',
     render: (row) =>
       row.turnover_amount ? (
-        <span className="text-gray-700">{formatShekelAmount(row.turnover_amount)}</span>
+        formatShekelAmount(row.turnover_amount)
       ) : row.live_turnover ? (
         <span className="italic text-gray-400">{formatShekelAmount(row.live_turnover)}</span>
       ) : (
-        <span className="text-gray-400">—</span>
+        <EmptyCell />
       ),
   },
-  {
+  moneyColumn({
     key: 'expected_amount',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.expectedHeader,
-    dir: 'ltr',
-    className: 'w-20 font-semibold tabular-nums text-gray-900',
-    headerClassName: 'w-20',
-    render: (row) => formatShekelAmount(row.expected_amount),
-  },
-  {
+    tone: 'strong',
+    getValue: (row) => formatShekelAmount(row.expected_amount),
+  }),
+  moneyColumn({
     key: 'paid_amount',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.paidHeader,
-    dir: 'ltr',
-    className: 'w-20 tabular-nums text-gray-600',
-    headerClassName: 'w-20',
-    render: (row) => formatShekelAmount(row.paid_amount),
-  },
+    tone: 'muted',
+    getValue: (row) => formatShekelAmount(row.paid_amount),
+  }),
   {
     key: 'delta',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.balanceHeader,
     dir: 'ltr',
-    className: 'w-20 tabular-nums',
-    headerClassName: 'w-20',
+    kind: 'money',
     render: (row) =>
       row.delta == null ? (
-        <span className="text-gray-400">—</span>
+        <EmptyCell />
       ) : Number(row.delta) > 0 ? (
         <span className="font-semibold text-negative-600">{formatShekelAmount(row.delta)}</span>
       ) : (
         <span className="text-gray-500">{formatShekelAmount(row.delta)}</span>
       ),
   },
-  {
+  numberColumn({
     key: 'advance_rate',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.advanceRateHeader,
-    dir: 'ltr',
-    className: 'w-20 tabular-nums text-gray-600',
-    headerClassName: 'w-20',
-    render: (row) =>
-      row.advance_rate != null ? (
-        formatPercent(row.advance_rate, { fractionDigits: 2 })
-      ) : (
-        <span className="text-gray-400">—</span>
-      ),
-  },
+    tone: 'muted',
+    getValue: (row) => (row.advance_rate != null ? formatPercent(row.advance_rate, { fractionDigits: 2 }) : null),
+  }),
   statusColumn({
     key: 'status',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.statusHeader,
-    className: 'w-24',
-    headerClassName: 'w-24',
     getStatus: (row) => row.status,
     getLabel: getAdvancePaymentStatusLabel,
     variantMap: ADVANCE_PAYMENT_STATUS_VARIANTS,
   }),
-  {
+  actionsColumn({
     key: 'actions',
     header: '',
-    className: 'w-10',
-    headerClassName: 'w-10',
     render: (row) => (
       <RowActionsMenu ariaLabel={ADVANCED_PAYMENTS_MESSAGES.batchColumns.rowActionsAriaLabel(row.id)}>
         <RowActionItem
@@ -155,5 +140,5 @@ export const buildAdvancePaymentBatchColumns = ({
         />
       </RowActionsMenu>
     ),
-  },
+  }),
 ]
