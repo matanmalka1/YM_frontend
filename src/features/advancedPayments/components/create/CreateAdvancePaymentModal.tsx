@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, type Control, type FieldErrors } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Modal } from '@/components/ui/overlays/Modal'
 import { Input } from '@/components/ui/inputs/Input'
@@ -24,6 +24,32 @@ import {
 import { formatShekelAmount } from '@/utils/utils'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
+
+type NumberFieldName = 'turnover_amount' | 'advance_rate' | 'override_amount' | 'paid_amount'
+
+interface NumberFieldProps {
+  name: NumberFieldName
+  label: string
+  control: Control<CreateAdvancePaymentFormValues>
+  errors: FieldErrors<CreateAdvancePaymentFormValues>
+}
+
+const NumberField: React.FC<NumberFieldProps> = ({ name, label, control, errors }) => (
+  <Controller
+    name={name}
+    control={control}
+    render={({ field }) => (
+      <Input
+        label={label}
+        type="number"
+        min={0}
+        value={field.value ?? ''}
+        onChange={(e) => field.onChange(toNumberOrNull(e.target.value))}
+        error={errors[name]?.message}
+      />
+    )}
+  />
+)
 
 interface CreateAdvancePaymentModalProps {
   open: boolean
@@ -138,21 +164,7 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
             { name: 'advance_rate', label: ADVANCED_PAYMENTS_MESSAGES.createModal.advanceRateLabel },
           ] as const
         ).map(({ name, label }) => (
-          <Controller
-            key={name}
-            name={name}
-            control={control}
-            render={({ field }) => (
-              <Input
-                label={label}
-                type="number"
-                min={0}
-                value={field.value ?? ''}
-                onChange={(e) => field.onChange(toNumberOrNull(e.target.value))}
-                error={errors[name]?.message}
-              />
-            )}
-          />
+          <NumberField key={name} name={name} label={label} control={control} errors={errors} />
         ))}
         {liveCalculated != null && (
           <div>
@@ -168,21 +180,7 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
             { name: 'paid_amount', label: ADVANCED_PAYMENTS_MESSAGES.createModal.paidAmountLabel },
           ] as const
         ).map(({ name, label }) => (
-          <Controller
-            key={name}
-            name={name}
-            control={control}
-            render={({ field }) => (
-              <Input
-                label={label}
-                type="number"
-                min={0}
-                value={field.value ?? ''}
-                onChange={(e) => field.onChange(toNumberOrNull(e.target.value))}
-                error={errors[name]?.message}
-              />
-            )}
-          />
+          <NumberField key={name} name={name} label={label} control={control} errors={errors} />
         ))}
         <Textarea
           label={ADVANCED_PAYMENTS_MESSAGES.createModal.notesLabel}

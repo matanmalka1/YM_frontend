@@ -3,7 +3,7 @@ import { Bell } from 'lucide-react'
 import { FIRST_PAGE, PAGE_SIZE_25 } from '@/constants/pagination.constants'
 import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
-import { useActiveUserOptions } from '@/features/users'
+import { useActiveUserFilterOptions } from '@/features/users'
 
 import {
   CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS,
@@ -58,20 +58,9 @@ export const useNotificationsPage = () => {
   }
 
   const { data, isPending, isFetching, error } = useNotifications(params)
-  const usersQuery = useActiveUserOptions()
+  const { options: userOptions, isPending: usersPending } = useActiveUserFilterOptions()
   const items = data?.items ?? []
   const total = data?.total ?? 0
-
-  const userOptions = useMemo(
-    () => [
-      { value: '', label: 'כל המשתמשים' },
-      ...(usersQuery.data?.items ?? []).map((user) => ({
-        value: String(user.id),
-        label: user.full_name,
-      })),
-    ],
-    [usersQuery.data?.items],
-  )
 
   const openSendModal = useCallback((client?: SelectedClientFilter | null) => {
     setSendClient(client ?? null)
@@ -105,10 +94,10 @@ export const useNotificationsPage = () => {
         key: 'triggered_by',
         label: 'נשלח על ידי',
         options: userOptions,
-        disabled: usersQuery.isPending,
+        disabled: usersPending,
       },
     ],
-    [userOptions, usersQuery.isPending],
+    [userOptions, usersPending],
   )
 
   const filterValues = {

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getErrorMessage } from '@/utils/utils'
-import { useActiveUserOptions } from '@/features/users'
+import { useActiveUserFilterOptions } from '@/features/users'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
 import { tasksApi } from '../api/tasks.api'
 import { tasksQK } from '../api/queryKeys'
@@ -22,7 +22,7 @@ import { TASKS_ERROR_MESSAGES } from '../errorMessages'
 export const useTasksPage = () => {
   const filters = useTaskFilters()
   const actions = useTaskActions()
-  const usersQuery = useActiveUserOptions()
+  const { options: userOptions } = useActiveUserFilterOptions()
 
   const tasksQuery = useTasks(filters.listParams)
 
@@ -34,14 +34,6 @@ export const useTasksPage = () => {
 
   const tasks = tasksQuery.data?.items ?? []
   const total = tasksQuery.data?.total ?? 0
-
-  const userOptions = useMemo(
-    () => [
-      { value: '', label: 'כל המשתמשים' },
-      ...(usersQuery.data?.items ?? []).map((user) => ({ value: String(user.id), label: user.full_name })),
-    ],
-    [usersQuery.data?.items],
-  )
 
   const confirmCopy = actions.pendingConfirm ? TASK_CONFIRM_COPY[actions.pendingConfirm.action] : null
 
