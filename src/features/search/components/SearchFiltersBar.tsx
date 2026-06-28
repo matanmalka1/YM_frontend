@@ -117,10 +117,9 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
               <Button
                 type="button"
                 variant="ghost"
-                size="sm"
+                size="xs"
                 icon={<RotateCcw className="h-3.5 w-3.5" />}
                 onClick={onReset}
-                className="text-xs"
               >
                 {SEARCH_MESSAGES.filters.resetAll}
               </Button>

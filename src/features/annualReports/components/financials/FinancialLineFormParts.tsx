@@ -21,10 +21,10 @@ const AddLineTriggerButton: React.FC<AddLineTriggerButtonProps> = ({ label, onCl
   <Button
     type="button"
     variant="ghost"
-    size="sm"
+    size="xs"
     icon={<Plus className="h-3.5 w-3.5" />}
     onClick={onClick}
-    className="mt-1 text-xs"
+    className="mt-1"
   >
     {label}
   </Button>

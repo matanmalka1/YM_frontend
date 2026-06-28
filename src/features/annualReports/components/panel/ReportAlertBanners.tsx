@@ -46,10 +46,10 @@ const Banner: React.FC<BannerItem> = ({ variant, icon, message, cta }) => (
     {cta && (
       <Button
         variant="outline"
-        size="sm"
+        size="xs"
         icon={<Send className="h-3 w-3" />}
         onClick={cta.onClick}
-        className="shrink-0 text-xs"
+        className="shrink-0"
       >
         {cta.label}
       </Button>

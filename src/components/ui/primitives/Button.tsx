@@ -13,7 +13,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     | 'linkPositive'
     | 'linkWarning'
     | 'text'
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'xs' | 'sm' | 'md' | 'lg'
   /** `pill` (default) for text buttons; `square` for icon-only chrome (rounded-xl, equal h/w). */
   shape?: 'pill' | 'square'
   /** Icon element rendered alongside (or, for `shape="square"`, instead of) the label. */
@@ -44,12 +44,14 @@ const variants = {
 const textLikeVariants = new Set<ButtonProps['variant']>(['link', 'linkPrimary', 'linkPositive', 'linkWarning', 'text'])
 
 const sizes = {
+  xs: 'px-2.5 py-1 text-xs',
   sm: 'px-3 py-1.5 text-sm',
   md: 'px-4 py-2 text-sm',
   lg: 'px-5 py-2.5 text-sm',
 }
 
 const squareSizes = {
+  xs: 'h-7 w-7 p-0',
   sm: 'h-8 w-8 p-0',
   md: 'h-9 w-9 p-0',
   lg: 'h-10 w-10 p-0',
