@@ -87,7 +87,7 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
             />
           )}
 
-          {!isLoading && items.length > 0 && (
+          {!isLoading && !error && items.length > 0 && (
             <div className="space-y-2">
               {items.map((req) => (
                 <SignatureRequestRow

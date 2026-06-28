@@ -221,9 +221,11 @@ export const NotesCard = ({ canEdit, ...target }: NotesCardProps) => {
 
         {isLoading && <p className="py-4 text-center text-sm text-gray-500">{GLOBAL_UI_MESSAGES.common.loading}</p>}
 
-        {!isLoading && notes.length === 0 && <InlineState icon={StickyNote} title={NOTES_MESSAGES.card.emptyTitle} />}
+        {!isLoading && !error && notes.length === 0 && (
+          <InlineState icon={StickyNote} title={NOTES_MESSAGES.card.emptyTitle} />
+        )}
 
-        {!isLoading && notes.length > 0 && (
+        {!isLoading && !error && notes.length > 0 && (
           <ul className="space-y-3">
             {notes.map((note) =>
               editing?.id === note.id ? (

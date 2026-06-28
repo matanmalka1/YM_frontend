@@ -32,24 +32,28 @@ export const TaxCalendarGroupsContent = ({
   onPageChange,
 }: TaxCalendarGroupsContentProps) => (
   <>
-    {error ? <Alert variant="error" message={getErrorMessage(error, errorFallback)} /> : null}
+    {error ? (
+      <Alert variant="error" message={getErrorMessage(error, errorFallback)} />
+    ) : (
+      <>
+        <TaxCalendarGroupsTable
+          groups={groups}
+          isLoading={isLoading}
+          clientRecordId={clientRecordId}
+          clientSearchText={clientSearchText}
+        />
 
-    <TaxCalendarGroupsTable
-      groups={groups}
-      isLoading={isLoading}
-      clientRecordId={clientRecordId}
-      clientSearchText={clientSearchText}
-    />
-
-    {!isLoading && total > pageSize ? (
-      <PaginationCard
-        page={page}
-        totalPages={getTotalPages(total, pageSize)}
-        total={total}
-        label={TAX_CALENDAR_MESSAGES.list.groups}
-        onPageChange={onPageChange}
-      />
-    ) : null}
+        {!isLoading && total > pageSize ? (
+          <PaginationCard
+            page={page}
+            totalPages={getTotalPages(total, pageSize)}
+            total={total}
+            label={TAX_CALENDAR_MESSAGES.list.groups}
+            onPageChange={onPageChange}
+          />
+        ) : null}
+      </>
+    )}
   </>
 )
 

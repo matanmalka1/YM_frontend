@@ -312,17 +312,18 @@ export const TaxCalendarSettingsPage = () => {
             variant="error"
             message={getErrorMessage(rulesQuery.error, TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.load.rules)}
           />
-        ) : null}
-        <DataTable
-          data={rules}
-          columns={rulesColumns}
-          getRowKey={(rule) => rule.id}
-          isLoading={rulesQuery.isPending}
-          emptyState={{
-            title: TAX_CALENDAR_SETTINGS_MESSAGES.emptyStates.noRulesTitle,
-            message: TAX_CALENDAR_SETTINGS_MESSAGES.emptyStates.noRulesMessage,
-          }}
-        />
+        ) : (
+          <DataTable
+            data={rules}
+            columns={rulesColumns}
+            getRowKey={(rule) => rule.id}
+            isLoading={rulesQuery.isPending}
+            emptyState={{
+              title: TAX_CALENDAR_SETTINGS_MESSAGES.emptyStates.noRulesTitle,
+              message: TAX_CALENDAR_SETTINGS_MESSAGES.emptyStates.noRulesMessage,
+            }}
+          />
+        )}
       </section>
 
       <section className="space-y-3">
@@ -334,8 +335,7 @@ export const TaxCalendarSettingsPage = () => {
             variant="error"
             message={getErrorMessage(entriesQuery.error, TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.load.entries)}
           />
-        ) : null}
-        {entriesQuery.isPending || entryGroups.length === 0 ? (
+        ) : entriesQuery.isPending || entryGroups.length === 0 ? (
           <DataTable
             data={[]}
             columns={groupedEntriesColumns}

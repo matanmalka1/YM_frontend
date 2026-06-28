@@ -55,7 +55,7 @@ export const DashboardPage: React.FC = () => {
       {denied && <Alert variant="warning" message={DASHBOARD_COPY.permissionDenied} />}
       {dashboard.status === 'error' && !denied && <Alert variant="error" message={dashboard.message} />}
 
-      {dashboard.status === 'loading' ? (
+      {dashboard.status === 'error' && !denied ? null : dashboard.status === 'loading' ? (
         <DashboardStatsSkeleton />
       ) : emptyState?.is_empty ? (
         <DashboardOnboardingEmptyState />

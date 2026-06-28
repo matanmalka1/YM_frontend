@@ -78,7 +78,7 @@ export const CorrespondenceCard = ({ businessId, clientId }: CorrespondenceCardP
 
         {isLoading && <p className="py-4 text-center text-sm text-gray-500">{GLOBAL_UI_MESSAGES.common.loading}</p>}
 
-        {!isLoading && entries.length === 0 && (
+        {!isLoading && !error && entries.length === 0 && (
           <StateCard
             icon={MessageSquare}
             message={CORRESPONDENCE_MESSAGES.card.emptyMessage}
@@ -87,7 +87,7 @@ export const CorrespondenceCard = ({ businessId, clientId }: CorrespondenceCardP
           />
         )}
 
-        {!isLoading && entries.length > 0 && (
+        {!isLoading && !error && entries.length > 0 && (
           <div className="relative mt-2">
             <div className="absolute right-[18px] top-0 bottom-0 w-px bg-gray-200" />
             <ul className="space-y-1">

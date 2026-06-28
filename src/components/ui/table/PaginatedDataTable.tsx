@@ -14,6 +14,7 @@ type BasePaginatedDataTableProps<T> = Pick<
   | 'emptyState'
   | 'getRowKey'
   | 'maxHeight'
+  | 'onRetry'
   | 'onRowClick'
   | 'rowClassName'
   | 'stickyHeader'
@@ -49,6 +50,7 @@ export const PaginatedDataTable = <T,>({
   label,
   maxHeight,
   onPageChange,
+  onRetry,
   onRowClick,
   page,
   pageSize,
@@ -63,22 +65,25 @@ export const PaginatedDataTable = <T,>({
 }: PaginatedDataTableProps<T>) => {
   const shouldShowPagination = showPagination ?? (!isLoading && total > 0 && data.length > 0)
   const isEmpty = !isLoading && data.length === 0
+  const shouldShowErrorOnly = Boolean(error) && isEmpty
   // While a background refetch holds an empty list, suppress every empty state
   // (custom renderEmpty AND DataTable's own) so the page doesn't flash empty between pages.
   const suppressEmpty = isFetching && isEmpty
-  const showCustomEmpty = Boolean(renderEmpty) && isEmpty && !suppressEmpty
+  const showCustomEmpty = Boolean(renderEmpty) && isEmpty && !suppressEmpty && !shouldShowErrorOnly
 
   return (
     <>
-      {error && <Alert variant="error" message={error} />}
+      {error && <Alert variant="error" message={error} onRetry={onRetry} />}
       {summary}
       {showCustomEmpty ? (
         renderEmpty?.()
-      ) : suppressEmpty ? null : (
+      ) : suppressEmpty || shouldShowErrorOnly ? null : (
         <DataTable
           data={data}
           columns={columns}
+          error={error}
           getRowKey={getRowKey}
+          onRetry={onRetry}
           onRowClick={onRowClick}
           className={className}
           emptyMessage={emptyMessage}

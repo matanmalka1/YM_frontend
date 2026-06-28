@@ -7,6 +7,7 @@ import type { LucideIcon } from 'lucide-react'
 import { Inbox } from 'lucide-react'
 import { TableSkeleton } from './TableSkeleton'
 import { GLOBAL_UI_MESSAGES } from '../../../messages'
+import { Alert } from '../overlays/Alert'
 
 type ColumnAlign = 'left' | 'center' | 'right'
 
@@ -49,8 +50,10 @@ export interface DataTableProps<T> {
   renderFooter?: () => ReactNode
   onRowClick?: (item: T) => void
   className?: string
+  error?: string | null
   emptyMessage?: string
   isLoading?: boolean
+  onRetry?: () => void
   rowClassName?: (item: T, index: number) => string
   stickyHeader?: boolean
   /**
@@ -84,8 +87,10 @@ export const DataTable = <T,>({
   renderFooter,
   onRowClick,
   className,
+  error,
   emptyMessage = GLOBAL_UI_MESSAGES.common.noData,
   isLoading = false,
+  onRetry,
   rowClassName,
   stickyHeader = false,
   maxHeight,
@@ -121,6 +126,10 @@ export const DataTable = <T,>({
 
   if (isLoading) {
     return <TableSkeleton rows={5} columns={Math.max(columns.length, 1)} className={className} />
+  }
+
+  if (error && data.length === 0) {
+    return <Alert variant="error" message={error} onRetry={onRetry} className={className} />
   }
 
   if (data.length === 0) {
