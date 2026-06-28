@@ -1,6 +1,7 @@
 import { cn } from '../../../utils/utils'
 import { Badge } from '../primitives/Badge'
 import { Button } from '../primitives/Button'
+import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 export interface FilterBadge {
   key: string
@@ -23,7 +24,9 @@ export const ActiveFilterBadges: React.FC<Props> = ({ badges, onReset, withDivid
         withDivider && 'border-t border-gray-100 pt-3',
       )}
     >
-      {withDivider && <span className="text-2xs font-medium text-gray-400">מסננים פעילים</span>}
+      {withDivider && (
+        <span className="text-2xs font-medium text-gray-400">{GLOBAL_UI_MESSAGES.filters.active}</span>
+      )}
       {badges.map((b) => (
         <Badge key={b.key} removable onRemove={b.onRemove}>
           {b.label}
@@ -31,7 +34,7 @@ export const ActiveFilterBadges: React.FC<Props> = ({ badges, onReset, withDivid
       ))}
       {onReset && (
         <Button type="button" variant="link" size="sm" className="text-2xs" onClick={onReset}>
-          נקה הכל
+          {GLOBAL_UI_MESSAGES.filters.clearAll}
         </Button>
       )}
     </div>

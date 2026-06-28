@@ -41,4 +41,9 @@ export const GLOBAL_UI_MESSAGES = {
     nextPage: 'עמוד הבא',
     pageSummary: (page: number, total: number) => `עמוד ${page} מתוך ${total}`,
   },
+  filters: {
+    active: 'מסננים פעילים',
+    clearAll: 'נקה הכל',
+    removeFilter: 'הסר סינון',
+  },
 } as const

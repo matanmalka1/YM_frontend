@@ -7,6 +7,7 @@ import {
   badgeSoftSignalVariantClasses,
   type BadgeVariant,
 } from '@/utils/semanticColors'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 export type { BadgeVariant }
 export type BadgeSize = '3xs' | '2xs' | 'xs' | 'sm' | 'md'
@@ -24,7 +25,7 @@ interface BadgeProps {
   /** Shows X remove button (active-filter pill mode) */
   removable?: boolean
   onRemove?: () => void
-  /** Accessible label for the remove button (default: "הסר סינון") */
+  /** Accessible label for the remove button (default: filters.removeFilter) */
   removeLabel?: string
   onClick?: React.MouseEventHandler<HTMLSpanElement>
   onKeyDown?: React.KeyboardEventHandler<HTMLSpanElement>
@@ -81,7 +82,7 @@ export const Badge: React.FC<BadgeProps> = ({
   ring,
   removable,
   onRemove,
-  removeLabel = 'הסר סינון',
+  removeLabel = GLOBAL_UI_MESSAGES.filters.removeFilter,
   onClick,
   onKeyDown,
   className,
