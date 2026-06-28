@@ -6,12 +6,18 @@ import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import type { TimelineEvent } from '../api'
 import { normalizeTimelineEvents, type NormalizedTimelineEvent, type TimelineFilterKey } from '../normalize'
-import { buildTimelineFilterStats, type EventTypeStat } from '../lib/timelineStats'
 import { TIMELINE_ERROR_MESSAGES } from '../errorMessages'
 
-export type { EventTypeStat }
+const GROUP_FILTERS = ['finance', 'binders', 'documents', 'tax'] as const satisfies readonly TimelineFilterKey[]
+type TimelineGroupFilter = (typeof GROUP_FILTERS)[number]
 
-const FILTER_GROUP_TO_EVENT_TYPES: Record<string, string[]> = {
+const isTimelineGroupFilter = (value: string): value is TimelineGroupFilter =>
+  GROUP_FILTERS.some((filter) => filter === value)
+
+const parseTypeFilters = (value: string | null): TimelineGroupFilter[] =>
+  value?.split(',').filter(isTimelineGroupFilter) ?? []
+
+const FILTER_GROUP_TO_EVENT_TYPES: Record<TimelineGroupFilter, string[]> = {
   finance: ['charge_created', 'charge_issued', 'charge_paid', 'invoice_attached'],
   binders: ['binder_received', 'binder_handed_over', 'binder_lifecycle_change'],
   documents: [
@@ -34,20 +40,20 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
   const searchTerm = getParam('search')
   const importantOnly = searchParams.get('important_only') === 'true'
   const rawTypeFilters = searchParams.get('type_filters')
-  const typeFilters: TimelineFilterKey[] = rawTypeFilters ? (rawTypeFilters.split(',') as TimelineFilterKey[]) : ['all']
+  const typeFilters = parseTypeFilters(rawTypeFilters)
 
   const clientIdNumber = Number(clientId ?? 0)
   const hasValidClient = isPositiveInt(clientIdNumber)
 
   // ── Resolve event_type list to send to backend ─────────────────────────────
 
-  const hasGroupedFilter = typeFilters.length > 0 && !typeFilters.includes('all')
+  const hasGroupedFilter = typeFilters.length > 0
   // Keyed on the raw param string (a stable primitive) so the resolved array keeps a
   // steady identity across renders — safe to use directly in the query-params deps below.
   const eventTypeParam = useMemo<string[] | undefined>(() => {
-    const keys: TimelineFilterKey[] = rawTypeFilters ? (rawTypeFilters.split(',') as TimelineFilterKey[]) : ['all']
-    if (keys.length === 0 || keys.includes('all')) return undefined
-    return keys.flatMap((key) => FILTER_GROUP_TO_EVENT_TYPES[key] ?? [])
+    const keys = parseTypeFilters(rawTypeFilters)
+    if (keys.length === 0) return undefined
+    return keys.flatMap((key) => FILTER_GROUP_TO_EVENT_TYPES[key])
   }, [rawTypeFilters])
 
   // ── Query ──────────────────────────────────────────────────────────────────
@@ -66,8 +72,6 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
     data: timelineData,
     error: timelineError,
     isPending: timelinePending,
-    isRefetching: timelineRefetching,
-    refetch: timelineRefetch,
   } = useQuery({
     enabled: hasValidClient,
     queryKey: timelineQK.clientEvents(clientIdNumber, timelineParams),
@@ -88,8 +92,6 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
     )
   }, [historicalEvents])
 
-  const eventTypeStats = useMemo<EventTypeStat[]>(() => buildTimelineFilterStats(historicalEvents), [historicalEvents])
-
   const hasActiveFilters = hasGroupedFilter || searchTerm.trim().length > 0 || importantOnly
 
   // ── Navigation helpers ─────────────────────────────────────────────────────
@@ -102,22 +104,7 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
 
   const setImportantOnly = (value: boolean) => setFilter('important_only', value ? 'true' : '')
 
-  const toggleTypeFilter = (type: TimelineFilterKey) => {
-    const current = searchParams.get('type_filters')
-    const currentFilters: TimelineFilterKey[] = current ? (current.split(',') as TimelineFilterKey[]) : ['all']
-
-    let updated: TimelineFilterKey[]
-    if (type === 'all') {
-      updated = ['all']
-    } else {
-      const withoutAll = currentFilters.filter((item) => item !== 'all')
-      updated = withoutAll.includes(type) ? withoutAll.filter((item) => item !== type) : [...withoutAll, type]
-      if (updated.length === 0) updated = ['all']
-    }
-
-    const nextValue = updated.length === 1 && updated[0] === 'all' ? '' : updated.join(',')
-    setFilter('type_filters', nextValue)
-  }
+  const setTypeFilters = (value: string) => setFilter('type_filters', parseTypeFilters(value).join(','))
 
   const clearFilters = () => setFilters({ search: '', important_only: '', type_filters: '' })
 
@@ -133,8 +120,6 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
 
   return {
     loading: timelinePending,
-    refreshing: timelineRefetching,
-    refresh: () => timelineRefetch(),
     error,
 
     page,
@@ -143,13 +128,11 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
     setPage,
 
     filteredEvents: historicalEvents as NormalizedTimelineEvent[],
-    eventTypeStats,
-
     filters: {
       searchTerm,
       setSearchTerm,
       typeFilters,
-      toggleTypeFilter,
+      setTypeFilters,
       importantOnly,
       setImportantOnly,
       clearFilters,

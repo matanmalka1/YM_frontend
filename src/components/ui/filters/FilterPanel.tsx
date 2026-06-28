@@ -82,7 +82,15 @@ interface FilterFieldProps {
 const FilterField: React.FC<FilterFieldProps> = ({ field, values, size, onChange, onMultiChange }) => {
   switch (field.type) {
     case 'search':
-      return <SearchFilter field={field} size={size} externalValue={values[field.key] ?? ''} onChange={onChange} />
+      return (
+        <SearchFilter
+          field={field}
+          size={size}
+          externalValue={values[field.key] ?? ''}
+          onChange={onChange}
+          fieldClassName={cn(field.fullWidth && 'sm:col-span-2')}
+        />
+      )
     case 'select': {
       const v = values[field.key] ?? ''
       const isActive = v !== '' && v !== (field.defaultValue ?? '')
@@ -102,7 +110,7 @@ const FilterField: React.FC<FilterFieldProps> = ({ field, values, size, onChange
       const raw = values[field.key] ?? ''
       const selected = raw ? raw.split(',') : []
       return (
-        <div className="space-y-1">
+        <div className={cn('space-y-1', field.fullWidth && 'sm:col-span-2')}>
           <span className="block text-sm font-medium text-gray-700">{field.label}</span>
           <div className="flex flex-wrap gap-1.5">
             {field.options.map((opt) => {

@@ -8,17 +8,19 @@ interface Props {
   externalValue: string
   onChange: (key: string, value: string) => void
   size?: 'xs' | 'sm' | 'md'
+  fieldClassName?: string
 }
 
 // Controlled via `externalValue`: useSearchDebounce syncs the local draft back to it,
 // so a parent reset (values[key] -> '') clears the input — no imperative handle needed.
-export const SearchFilter = ({ field, externalValue, onChange, size = 'md' }: Props) => {
+export const SearchFilter = ({ field, externalValue, onChange, size = 'md', fieldClassName }: Props) => {
   const [draft, setDraft] = useSearchDebounce(externalValue, (v) => onChange(field.key, v))
 
   return (
     <Input
       label={field.label}
       size={size}
+      fieldClassName={fieldClassName}
       value={draft}
       onChange={(e) => setDraft(e.target.value)}
       placeholder={field.placeholder}

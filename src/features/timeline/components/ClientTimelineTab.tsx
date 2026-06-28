@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 import { useClientTimelinePage } from '../hooks/useClientTimelinePage'
-import { TimelineCommandBar } from './TimelineCommandBar'
+import { TimelineFilterPanel } from './TimelineFilterPanel'
 import { TimelineCard } from './TimelineCard'
 import { groupTimelineEventsByDate, getDefaultOpenTimelineGroups } from '../lib/timelineGroups'
 import { PaginationCard } from '@/components/ui/table'
@@ -18,14 +18,11 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
     error,
     filteredEvents,
     loading,
-    refreshing,
     page,
     pageSize,
     setPage,
     total,
-    refresh,
     filters,
-    eventTypeStats,
     summary: { lastEventTimestamp },
   } = useClientTimelinePage(clientId)
 
@@ -39,10 +36,6 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
         : getDefaultOpenTimelineGroups(timelineGroups),
     [timelineGroups, filters.hasActiveFilters],
   )
-
-  // User toggles override the default; the override resets whenever the default
-  // changes (filters/groups/page) — render-time reset, the sanctioned alternative
-  // to a prop-sync effect. https://react.dev/learn/you-might-not-need-an-effect
   const [overrideKeys, setOverrideKeys] = useState<Set<string> | null>(null)
   const seenDefaultRef = useRef(defaultExpandedKeys)
   if (seenDefaultRef.current !== defaultExpandedKeys) {
@@ -69,22 +62,18 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
 
   return (
     <div className="space-y-4">
-      <TimelineCommandBar
+      <TimelineFilterPanel
         total={total}
-        hasActiveFilters={filters.hasActiveFilters}
         lastEventTimestamp={lastEventTimestamp}
-        refreshing={refreshing}
-        onRefresh={refresh}
         searchTerm={filters.searchTerm}
         onSearchChange={filters.setSearchTerm}
         typeFilters={filters.typeFilters}
-        onToggleTypeFilter={filters.toggleTypeFilter}
+        onTypeFiltersChange={filters.setTypeFilters}
         importantOnly={filters.importantOnly}
         onImportantOnlyChange={filters.setImportantOnly}
         onClearFilters={filters.clearFilters}
         onExpandAll={expandAll}
         onCollapseAll={collapseAll}
-        eventTypeStats={eventTypeStats}
       />
 
       <TimelineCard
