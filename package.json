@@ -71,7 +71,6 @@
   "knip": {
     "ignore": [
       "design-system/**",
-      "unused-components/**",
       "src/types/generated.ts",
       "vitest.shims.d.ts"
     ],

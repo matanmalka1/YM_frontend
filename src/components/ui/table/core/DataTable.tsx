@@ -11,14 +11,7 @@ import { Alert } from '../../overlays/Alert'
 import type { Column, TableSurface, TableDensity, TableRowVariant } from './tableTypes'
 import { getAlignClass, getCellClass, getRowVariantClass } from './tableStyles'
 
-export type {
-  Column,
-  ColumnAlign,
-  TableColumnKind,
-  TableCellTone,
-  TableRowVariant,
-  TableVerticalAlign,
-} from './tableTypes'
+export type { Column, TableRowVariant } from './tableTypes'
 
 export interface DataTableProps<T> {
   data: T[]

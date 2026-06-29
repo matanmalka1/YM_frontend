@@ -35,7 +35,7 @@ export type TableCellTone = 'default' | 'muted' | 'strong' | 'danger' | 'warning
 
 export type TableRowVariant = 'primarySoft' | 'warningSoft' | 'dangerSoft' | 'muted'
 
-export type TableVerticalAlign = 'middle' | 'top'
+type TableVerticalAlign = 'middle' | 'top'
 
 export interface Column<T> {
   key: string

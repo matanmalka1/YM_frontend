@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
 /** Canonical "no value" glyph. Lives here so there is one source for the dash. */
-export const EMPTY_CELL_VALUE = '—'
+const EMPTY_CELL_VALUE = '—'
 
 /**
  * Canonical empty-cell placeholder. Use in any custom `render` whose cell collapses

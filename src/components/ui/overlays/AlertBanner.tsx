@@ -2,7 +2,7 @@ import { AlertTriangle } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 
-export type AlertBannerTone = 'warning' | 'negative'
+type AlertBannerTone = 'warning' | 'negative'
 
 const toneClasses: Record<AlertBannerTone, string> = {
   warning: 'border-warning-200 bg-warning-50 text-warning-800',
