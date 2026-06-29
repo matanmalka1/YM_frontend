@@ -1,7 +1,18 @@
-import type { EntityAuditLogEntry } from '../api'
 import { AUDIT_FIELD_LABELS } from '../constants'
 
 export type FieldValueLabels = Partial<Record<string, Record<string, string>>>
+
+/**
+ * Minimal structural input for the diff formatter — old_value/new_value are JSON
+ * values (dict | list | scalar | null), not strings. Decoupled from the full
+ * EntityAuditLogEntry so non-audit callers (e.g. the timeline) can reuse it.
+ */
+export interface AuditDiffInput {
+  old_value: unknown
+  new_value: unknown
+  action: string
+  note?: string | null
+}
 
 export const EMPTY_FIELD_VALUE_LABELS: FieldValueLabels = {}
 
@@ -15,15 +26,6 @@ const stringifyCompact = (value: unknown): string => {
     return shorten(JSON.stringify(value))
   } catch {
     return '—'
-  }
-}
-
-const parseAuditValue = (value: string | null): unknown => {
-  if (!value) return null
-  try {
-    return JSON.parse(value)
-  } catch {
-    return undefined
   }
 }
 
@@ -77,16 +79,9 @@ export const makeAuditFormatter = (labels: FieldValueLabels) => {
     return null
   }
 
-  return (entry: EntityAuditLogEntry): string => {
-    const oldParsed = parseAuditValue(entry.old_value)
-    const newParsed = parseAuditValue(entry.new_value)
-    const parseFailed = oldParsed === undefined || newParsed === undefined
-    const parsedText = parseFailed ? null : formatParsedDiff(oldParsed, newParsed)
-    const rawText = [entry.old_value, entry.new_value]
-      .filter(Boolean)
-      .map((value) => shorten(value ?? ''))
-      .join(' → ')
-    const details = parseFailed ? rawText : parsedText
+  return (entry: AuditDiffInput): string => {
+    // old_value / new_value are already JSON values (dict | list | null) — no parsing.
+    const details = formatParsedDiff(entry.old_value, entry.new_value)
 
     const fallbackDetails =
       {

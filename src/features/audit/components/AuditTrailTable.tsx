@@ -12,10 +12,16 @@ import { AUDIT_MESSAGES } from '../messages'
 type AuditTrailTableEntry = {
   id: number
   performed_at: string
-  performed_by: number
+  performed_by: number | null
   performed_by_name?: string | null
+  /** Immutable actor snapshot (generic EntityAuditLog rows); absent on legacy per-domain shapes. */
+  actor_display_name?: string | null
   action: string
 }
+
+// Prefer the immutable snapshot, then the live-join name, then the id, then a dash.
+const actorLabel = (entry: AuditTrailTableEntry): string =>
+  entry.actor_display_name ?? entry.performed_by_name ?? (entry.performed_by != null ? `#${entry.performed_by}` : '—')
 
 type AuditTrailTableProps<TEntry extends AuditTrailTableEntry> = {
   items: TEntry[]
@@ -68,7 +74,7 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
     monoColumn({
       key: 'performed_by',
       header: AUDIT_MESSAGES.table.columnPerformedBy,
-      getValue: (entry) => entry.performed_by_name ?? `#${entry.performed_by}`,
+      getValue: (entry) => actorLabel(entry),
     }),
   ]
 

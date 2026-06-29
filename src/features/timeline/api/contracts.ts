@@ -29,10 +29,12 @@ export interface TimelineEventMetadata {
   signer_name?: string | null
   reason?: string | null
   notes?: string | null
-  // client record change (audit-sourced; rendered via the audit formatter)
+  // client record change (audit-sourced; rendered via the audit formatter).
+  // change_old/change_new are EntityAuditLog JSON snapshots (dict | list | scalar | null),
+  // no longer strings, since EntityAuditLog.old_value/new_value became JSONB in Phase 1.
   change_action?: string | null
-  change_old?: string | null
-  change_new?: string | null
+  change_old?: unknown
+  change_new?: unknown
   performed_by_name?: string | null
   [key: string]: unknown
 }

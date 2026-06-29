@@ -2,20 +2,25 @@ import { z } from 'zod'
 
 export type EntityAuditType = 'client' | 'business' | 'charge' | 'annual_report'
 
+// old_value / new_value / metadata_json are JSON objects (dict | list | null) —
+// the backend stores them as JSONB and no longer json.dumps them into strings.
+const auditJsonValueSchema = z.union([z.record(z.string(), z.unknown()), z.array(z.unknown())]).nullable()
+
 const entityAuditLogEntrySchema = z.object({
   id: z.number(),
   entity_type: z.string(),
   entity_id: z.number(),
-  performed_by: z.number(),
+  performed_by: z.number().nullable(),
   performed_by_name: z.string().nullable(),
+  actor_type: z.string(),
+  actor_display_name: z.string().nullable(),
   action: z.string(),
-  old_value: z.string().nullable(),
-  new_value: z.string().nullable(),
+  old_value: auditJsonValueSchema,
+  new_value: auditJsonValueSchema,
+  metadata_json: auditJsonValueSchema,
   note: z.string().nullable(),
   performed_at: z.string(),
 })
-
-export type EntityAuditLogEntry = z.infer<typeof entityAuditLogEntrySchema>
 
 export interface EntityAuditTrailParams {
   page?: number

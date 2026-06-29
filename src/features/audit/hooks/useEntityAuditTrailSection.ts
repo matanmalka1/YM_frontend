@@ -93,6 +93,9 @@ export const useEntityAuditTrailSection = (entityType: EntityAuditType, entityId
   const userOptions = useMemo(() => {
     const auditActors = new Map<number, string>()
     for (const entry of query.items) {
+      // performed_by is null for system / external-signer rows — skip; they are
+      // identified by actor_display_name, not a users.id, and aren't filterable.
+      if (entry.performed_by == null) continue
       auditActors.set(entry.performed_by, entry.performed_by_name ?? `#${entry.performed_by}`)
     }
     for (const user of usersData?.items ?? []) {

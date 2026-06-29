@@ -3,7 +3,7 @@ import {
   AUDIT_ACTION_LABELS,
   EMPTY_FIELD_VALUE_LABELS,
   makeAuditFormatter,
-  type EntityAuditLogEntry,
+  type AuditDiffInput,
 } from '@/features/audit'
 import type { TimelineEvent, TimelineEventMetadata } from './api'
 import { getTimelineStatusLabel } from './labels'
@@ -91,17 +91,11 @@ const getRelatedEntity = (event: TimelineEvent): string | null => {
 // to the standalone audit trail — no field/value formatting duplicated here.
 const formatAuditDiff = makeAuditFormatter(EMPTY_FIELD_VALUE_LABELS)
 
-const toAuditEntry = (event: TimelineEvent): EntityAuditLogEntry => ({
-  id: 0,
-  entity_type: String(event.metadata?.entity_type ?? ''),
-  entity_id: Number(event.metadata?.entity_id ?? 0),
-  performed_by: 0,
-  performed_by_name: event.metadata?.performed_by_name ?? null,
+const toAuditEntry = (event: TimelineEvent): AuditDiffInput => ({
   action: String(event.metadata?.change_action ?? ''),
   old_value: event.metadata?.change_old ?? null,
   new_value: event.metadata?.change_new ?? null,
   note: event.metadata?.note ?? null,
-  performed_at: event.timestamp,
 })
 
 const buildTitle = (event: TimelineEvent): string => {
