@@ -5605,15 +5605,36 @@ export interface components {
       /** Entity Id */
       entity_id: number
       /** Performed By */
-      performed_by: number
+      performed_by?: number | null
       /** Performed By Name */
       performed_by_name?: string | null
+      /** Actor Type */
+      actor_type: string
+      /** Actor Display Name */
+      actor_display_name?: string | null
       /** Action */
       action: string
       /** Old Value */
-      old_value?: string | null
+      old_value?:
+        | {
+            [key: string]: unknown
+          }
+        | unknown[]
+        | null
       /** New Value */
-      new_value?: string | null
+      new_value?:
+        | {
+            [key: string]: unknown
+          }
+        | unknown[]
+        | null
+      /** Metadata Json */
+      metadata_json?:
+        | {
+            [key: string]: unknown
+          }
+        | unknown[]
+        | null
       /** Note */
       note?: string | null
       /**
@@ -7740,8 +7761,12 @@ export interface components {
       action: components['schemas']['AuditAction']
       /** Actor User Id */
       actor_user_id?: number | null
+      /** Actor Display Name */
+      actor_display_name?: string | null
       /** Target User Id */
       target_user_id?: number | null
+      /** Target Display Name */
+      target_display_name?: string | null
       /** Email */
       email?: string | null
       status: components['schemas']['AuditStatus']
