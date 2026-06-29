@@ -8,7 +8,13 @@ import type { TimelineEvent } from '../api'
 import { normalizeTimelineEvents, type NormalizedTimelineEvent, type TimelineFilterKey } from '../normalize'
 import { TIMELINE_ERROR_MESSAGES } from '../errorMessages'
 
-const GROUP_FILTERS = ['finance', 'binders', 'documents', 'tax'] as const satisfies readonly TimelineFilterKey[]
+const GROUP_FILTERS = [
+  'finance',
+  'binders',
+  'documents',
+  'tax',
+  'changes',
+] as const satisfies readonly TimelineFilterKey[]
 type TimelineGroupFilter = (typeof GROUP_FILTERS)[number]
 
 const isTimelineGroupFilter = (value: string): value is TimelineGroupFilter =>
@@ -18,7 +24,7 @@ const parseTypeFilters = (value: string | null): TimelineGroupFilter[] =>
   value?.split(',').filter(isTimelineGroupFilter) ?? []
 
 const FILTER_GROUP_TO_EVENT_TYPES: Record<TimelineGroupFilter, string[]> = {
-  finance: ['charge_created', 'charge_issued', 'charge_paid', 'invoice_attached'],
+  finance: ['charge_created', 'charge_issued', 'charge_paid', 'invoice_attached', 'charge_changed'],
   binders: ['binder_received', 'binder_handed_over', 'binder_lifecycle_change'],
   documents: [
     'document_uploaded',
@@ -28,7 +34,8 @@ const FILTER_GROUP_TO_EVENT_TYPES: Record<TimelineGroupFilter, string[]> = {
     'signature_request_canceled',
     'signature_request_expired',
   ],
-  tax: ['annual_report_status_changed'],
+  tax: ['annual_report_status_changed', 'annual_report_changed'],
+  changes: ['client_record_changed', 'business_changed', 'charge_changed', 'annual_report_changed'],
 }
 
 // ── Hook ──────────────────────────────────────────────────────────────────────
@@ -41,6 +48,8 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
   const importantOnly = searchParams.get('important_only') === 'true'
   const rawTypeFilters = searchParams.get('type_filters')
   const typeFilters = parseTypeFilters(rawTypeFilters)
+  const dateFrom = getParam('date_from')
+  const dateTo = getParam('date_to')
 
   const clientIdNumber = Number(clientId ?? 0)
   const hasValidClient = isPositiveInt(clientIdNumber)
@@ -64,8 +73,10 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
       search: searchTerm || undefined,
       event_type: eventTypeParam,
       important_only: importantOnly || undefined,
+      date_from: dateFrom || undefined,
+      date_to: dateTo || undefined,
     }),
-    [page, searchTerm, importantOnly, eventTypeParam],
+    [page, searchTerm, importantOnly, eventTypeParam, dateFrom, dateTo],
   )
 
   const {
@@ -92,7 +103,8 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
     )
   }, [historicalEvents])
 
-  const hasActiveFilters = hasGroupedFilter || searchTerm.trim().length > 0 || importantOnly
+  const hasActiveFilters =
+    hasGroupedFilter || searchTerm.trim().length > 0 || importantOnly || Boolean(dateFrom) || Boolean(dateTo)
 
   // ── Navigation helpers ─────────────────────────────────────────────────────
 
@@ -106,7 +118,10 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
 
   const setTypeFilters = (value: string) => setFilter('type_filters', parseTypeFilters(value).join(','))
 
-  const clearFilters = () => setFilters({ search: '', important_only: '', type_filters: '' })
+  const setDateRange = (key: 'date_from' | 'date_to', value: string) => setFilter(key, value)
+
+  const clearFilters = () =>
+    setFilters({ search: '', important_only: '', type_filters: '', date_from: '', date_to: '' })
 
   // ── Error ──────────────────────────────────────────────────────────────────
 
@@ -135,6 +150,9 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
       setTypeFilters,
       importantOnly,
       setImportantOnly,
+      dateFrom,
+      dateTo,
+      setDateRange,
       clearFilters,
       hasActiveFilters,
     },

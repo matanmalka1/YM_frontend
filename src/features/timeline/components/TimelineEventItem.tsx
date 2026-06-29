@@ -61,7 +61,7 @@ interface TimelineEventItemProps {
 }
 
 export const TimelineEventItem: React.FC<TimelineEventItemProps> = ({ timelineEvent: ev, isLast }) => {
-  const colors = getEventColor(ev.event_type)
+  const colors = getEventColor()
   const displayDate = ev.isDateOnly ? formatTimelineDate(ev.displayTimestamp) : formatTimestamp(ev.displayTimestamp)
   const isQuiet = ev.importance === 'quiet'
 

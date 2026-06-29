@@ -20,7 +20,6 @@ export type ActiveClientDetailsTab =
   | 'communication'
   | 'notifications'
   | 'notes'
-  | 'history'
   | 'tasks'
 export type ClientIdNumberType = Exclude<ClientRecordResponse['id_number_type'], null>
 export type ClientSortBy = 'full_name' | 'created_at' | 'status' | 'entity_type'
@@ -46,14 +45,13 @@ export const CLIENT_DETAILS_TABS: ActiveClientDetailsTab[] = [
   'communication',
   'notifications',
   'notes',
-  'history',
   'tasks',
 ]
 
 export const CLIENT_DETAILS_TAB_LABELS: Record<ActiveClientDetailsTab, string> = {
   details: 'סקירה כללית',
   documents: 'מסמכים',
-  timeline: 'ציר זמן',
+  timeline: 'ציר זמן ושינויים',
   charges: 'חיובים',
   vat: 'מע"מ (לקוח)',
   'tax-calendar': 'מועדי מס',
@@ -62,7 +60,6 @@ export const CLIENT_DETAILS_TAB_LABELS: Record<ActiveClientDetailsTab, string> =
   communication: 'תקשורת',
   notifications: 'התראות',
   notes: 'הערות',
-  history: 'יומן שינויים',
   tasks: 'משימות',
 }
 

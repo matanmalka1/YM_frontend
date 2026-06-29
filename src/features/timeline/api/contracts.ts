@@ -29,6 +29,11 @@ export interface TimelineEventMetadata {
   signer_name?: string | null
   reason?: string | null
   notes?: string | null
+  // client record change (audit-sourced; rendered via the audit formatter)
+  change_action?: string | null
+  change_old?: string | null
+  change_new?: string | null
+  performed_by_name?: string | null
   [key: string]: unknown
 }
 
@@ -58,4 +63,6 @@ export interface TimelineParams {
   search?: string
   event_type?: string[]
   important_only?: boolean
+  date_from?: string
+  date_to?: string
 }

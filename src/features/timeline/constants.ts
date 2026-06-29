@@ -36,36 +36,10 @@ const makeColor = (tone: SemanticTone): EventColorConfig => {
   }
 }
 
-// ── Event color map ───────────────────────────────────────────────────────────
+// ── Unified event color ───────────────────────────────────────────────────────
+// Every event type shares one accent so the rail reads as a single calm feed;
+// quiet vs strong importance is the only per-event visual variance.
 
-const EVENT_COLOR_MAP: Record<string, SemanticTone> = {
-  binder_received: 'primary',
-  binder_handed_over: 'positive',
-  binder_lifecycle_change: 'info',
-  invoice_attached: 'info',
-  charge_created: 'warning',
-  charge_issued: 'warning',
-  charge_paid: 'positive',
-  annual_report_status_changed: 'primary',
-  client_created: 'primary',
-  document_uploaded: 'positive',
-  signature_request_sent: 'info',
-  signature_request_signed: 'positive',
-  signature_request_declined: 'negative',
-  signature_request_canceled: 'slate',
-  signature_request_expired: 'warning',
-}
+const UNIFIED_EVENT_COLOR: EventColorConfig = makeColor('primary')
 
-const DEFAULT_EVENT_COLOR: EventColorConfig = makeColor('slate')
-
-// Lazily computed cache so we build each config only once
-const colorCache = new Map<string, EventColorConfig>()
-
-export const getEventColor = (eventType: string): EventColorConfig => {
-  if (colorCache.has(eventType)) return colorCache.get(eventType)!
-
-  const token = EVENT_COLOR_MAP[eventType]
-  const config = token ? makeColor(token) : DEFAULT_EVENT_COLOR
-  colorCache.set(eventType, config)
-  return config
-}
+export const getEventColor = (): EventColorConfig => UNIFIED_EVENT_COLOR

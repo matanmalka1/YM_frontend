@@ -1,9 +1,23 @@
 import { parseISO } from 'date-fns'
+import {
+  AUDIT_ACTION_LABELS,
+  EMPTY_FIELD_VALUE_LABELS,
+  makeAuditFormatter,
+  type EntityAuditLogEntry,
+} from '@/features/audit'
 import type { TimelineEvent, TimelineEventMetadata } from './api'
 import { getTimelineStatusLabel } from './labels'
 import { getEventTypeLabel } from './utils'
 
-export type TimelineFilterKey = 'all' | 'past' | 'future' | 'finance' | 'binders' | 'documents' | 'tax'
+export type TimelineFilterKey =
+  | 'all'
+  | 'past'
+  | 'future'
+  | 'finance'
+  | 'binders'
+  | 'documents'
+  | 'tax'
+  | 'changes'
 
 export interface NormalizedTimelineEvent extends TimelineEvent {
   title: string
@@ -25,12 +39,24 @@ const FILTER_BY_EVENT_TYPE: Record<string, TimelineFilterKey[]> = {
   binder_lifecycle_change: ['past', 'binders'],
   document_uploaded: ['past', 'documents'],
   annual_report_status_changed: ['past', 'tax'],
+  annual_report_changed: ['past', 'tax', 'changes'],
+  charge_changed: ['past', 'finance', 'changes'],
+  business_changed: ['past', 'changes'],
+  client_record_changed: ['past', 'changes'],
   signature_request_sent: ['past', 'documents'],
   signature_request_signed: ['past', 'documents'],
   signature_request_declined: ['past', 'documents'],
   signature_request_canceled: ['past', 'documents'],
   signature_request_expired: ['past', 'documents'],
 }
+
+// Audit-sourced change events — rendered from raw audit fields in metadata.
+const CHANGE_EVENT_TYPES = new Set([
+  'client_record_changed',
+  'business_changed',
+  'charge_changed',
+  'annual_report_changed',
+])
 
 const STRONG_EVENTS = new Set([
   'charge_created',
@@ -69,6 +95,23 @@ const getRelatedEntity = (event: TimelineEvent): string | null => {
   return null
 }
 
+// Reuse the audit feature's diff formatter so record changes render identically
+// to the standalone audit trail — no field/value formatting duplicated here.
+const formatAuditDiff = makeAuditFormatter(EMPTY_FIELD_VALUE_LABELS)
+
+const toAuditEntry = (event: TimelineEvent): EntityAuditLogEntry => ({
+  id: 0,
+  entity_type: String(event.metadata?.entity_type ?? ''),
+  entity_id: Number(event.metadata?.entity_id ?? 0),
+  performed_by: 0,
+  performed_by_name: event.metadata?.performed_by_name ?? null,
+  action: String(event.metadata?.change_action ?? ''),
+  old_value: event.metadata?.change_old ?? null,
+  new_value: event.metadata?.change_new ?? null,
+  note: event.metadata?.note ?? null,
+  performed_at: event.timestamp,
+})
+
 const buildTitle = (event: TimelineEvent): string => {
   if (event.event_type === 'annual_report_status_changed') {
     const { tax_year, form_type } = event.metadata ?? {}
@@ -88,6 +131,16 @@ const buildSecondary = (event: TimelineEvent): string | null => {
     const oldLabel = getTimelineStatusLabel(String(event.metadata?.old_value ?? ''))
     const newLabel = getTimelineStatusLabel(String(event.metadata?.new_value ?? ''))
     return `${oldLabel} ← ${newLabel}`
+  }
+
+  if (CHANGE_EVENT_TYPES.has(event.event_type)) {
+    const action = String(event.metadata?.change_action ?? '')
+    const performer = event.metadata?.performed_by_name
+    return (
+      [AUDIT_ACTION_LABELS[action], performer ? `ע״י ${performer}` : null, formatAuditDiff(toAuditEntry(event))]
+        .filter(Boolean)
+        .join(' · ') || null
+    )
   }
 
   return event.description || null

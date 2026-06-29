@@ -1,13 +1,7 @@
 import { type FC, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getErrorMessage } from '@/utils/utils'
-import {
-  ADVANCE_PAYMENT_FREQUENCY_LABELS,
-  CLIENT_STATUS_LABELS,
-  ENTITY_TYPE_LABELS,
-  type ActiveClientDetailsTab,
-  VAT_TYPE_LABELS,
-} from '../../constants'
+import { type ActiveClientDetailsTab } from '../../constants'
 import { Trash2 } from 'lucide-react'
 import { DetailDrawer } from '../../../../components/ui/overlays/DetailDrawer'
 import { ModalFormActions } from '../../../../components/ui/overlays/ModalFormActions'
@@ -27,7 +21,6 @@ import { ClientTimelineTab } from '@/features/timeline'
 import { ClientAnnualReportsTab } from '@/features/annualReports'
 import { ClientAdvancePaymentsTab } from '@/features/advancedPayments'
 import { ClientDocumentsTab } from '@/features/documents'
-import { EntityAuditTrailSection, type FieldValueLabels } from '@/features/audit'
 import { NotesCard } from '@/features/notes'
 import { NotificationsTab } from '@/features/notifications'
 import { ClientTaxCalendarTab } from '@/features/taxCalendar'
@@ -40,14 +33,6 @@ import { CLIENTS_MESSAGES } from '../../messages'
 import { CLIENTS_ERROR_MESSAGES } from '../../errorMessages'
 
 const EDIT_FORM_ID = 'client-edit-form'
-
-const AUDIT_FIELD_VALUE_LABELS: FieldValueLabels = {
-  entity_type: ENTITY_TYPE_LABELS,
-  client_type: ENTITY_TYPE_LABELS,
-  status: CLIENT_STATUS_LABELS,
-  vat_reporting_frequency: VAT_TYPE_LABELS,
-  advance_payment_frequency: ADVANCE_PAYMENT_FREQUENCY_LABELS,
-}
 
 export type ClientDetailsOverviewTabProps = {
   client: ClientRecordResponse
@@ -174,15 +159,6 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
       {activeTab === 'annual-reports' && <ClientAnnualReportsTab clientId={client.id} />}
       {activeTab === 'notifications' && <NotificationsTab clientRecordId={client.id} />}
       {activeTab === 'notes' && <NotesCard scope="client" clientId={client.id} canEdit={canEditClients} />}
-      {activeTab === 'history' && (
-        <EntityAuditTrailSection
-          entityType="client"
-          entityId={client.id}
-          title={CLIENTS_MESSAGES.edit.auditTitle}
-          subtitle={CLIENTS_MESSAGES.edit.auditSubtitle}
-          fieldValueLabels={AUDIT_FIELD_VALUE_LABELS}
-        />
-      )}
       {activeTab === 'tasks' && <ClientTasksTab clientRecordId={client.id} />}
 
       <DeleteClientModal

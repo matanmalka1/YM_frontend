@@ -27,7 +27,15 @@ const TIMELINE_FILTER_FIELDS = [
       { value: 'binders', label: TIMELINE_MESSAGES.filterPanel.filterBinders },
       { value: 'documents', label: TIMELINE_MESSAGES.filterPanel.filterDocuments },
       { value: 'tax', label: TIMELINE_MESSAGES.filterPanel.filterTax },
+      { value: 'changes', label: TIMELINE_MESSAGES.filterPanel.filterChanges },
     ],
+  },
+  {
+    type: 'date-range',
+    fromKey: 'date_from',
+    toKey: 'date_to',
+    fromLabel: TIMELINE_MESSAGES.filterPanel.dateFromLabel,
+    toLabel: TIMELINE_MESSAGES.filterPanel.dateToLabel,
   },
   {
     type: 'toggle',
@@ -46,6 +54,9 @@ interface TimelineFilterPanelProps {
   onTypeFiltersChange: (value: string) => void
   importantOnly: boolean
   onImportantOnlyChange: (value: boolean) => void
+  dateFrom: string
+  dateTo: string
+  onDateRangeChange: (key: 'date_from' | 'date_to', value: string) => void
   onClearFilters: () => void
   allExpanded: boolean
   onToggleExpandAll: () => void
@@ -60,6 +71,9 @@ export const TimelineFilterPanel: React.FC<TimelineFilterPanelProps> = ({
   onTypeFiltersChange,
   importantOnly,
   onImportantOnlyChange,
+  dateFrom,
+  dateTo,
+  onDateRangeChange,
   onClearFilters,
   allExpanded,
   onToggleExpandAll,
@@ -70,6 +84,7 @@ export const TimelineFilterPanel: React.FC<TimelineFilterPanelProps> = ({
     if (key === 'search') return onSearchChange(value)
     if (key === 'type_filters') return onTypeFiltersChange(value)
     if (key === 'important_only') return onImportantOnlyChange(value === 'true')
+    if (key === 'date_from' || key === 'date_to') return onDateRangeChange(key, value)
   }
 
   return (
@@ -105,6 +120,8 @@ export const TimelineFilterPanel: React.FC<TimelineFilterPanelProps> = ({
             search: searchTerm,
             type_filters: typeFilters.join(','),
             important_only: importantOnly ? 'true' : '',
+            date_from: dateFrom,
+            date_to: dateTo,
           }}
           onChange={handleChange}
           onReset={onClearFilters}
