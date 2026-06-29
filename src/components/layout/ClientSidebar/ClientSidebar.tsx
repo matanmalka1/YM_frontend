@@ -186,7 +186,10 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
             </SegmentedControl>
           </div>
 
-          <nav className="min-h-0 flex-1 overflow-y-auto px-2.5 py-2.5" aria-label={CLIENT_SIDEBAR_TEXT.sidebarAriaLabel}>
+          <nav
+            className="min-h-0 flex-1 overflow-y-auto px-2.5 py-2.5"
+            aria-label={CLIENT_SIDEBAR_TEXT.sidebarAriaLabel}
+          >
             {isLoading ? (
               <div className="space-y-2" aria-label={CLIENT_SIDEBAR_TEXT.loadingClientsLabel}>
                 {Array.from({ length: 4 }, (_, index) => (

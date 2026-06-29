@@ -24,9 +24,7 @@ export const ActiveFilterBadges: React.FC<Props> = ({ badges, onReset, withDivid
         withDivider && 'border-t border-gray-100 pt-3',
       )}
     >
-      {withDivider && (
-        <span className="text-2xs font-medium text-gray-400">{GLOBAL_UI_MESSAGES.filters.active}</span>
-      )}
+      {withDivider && <span className="text-2xs font-medium text-gray-400">{GLOBAL_UI_MESSAGES.filters.active}</span>}
       {badges.map((b) => (
         <Badge key={b.key} removable onRemove={b.onRemove}>
           {b.label}

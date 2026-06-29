@@ -49,11 +49,7 @@ const VatDetailContent: React.FC<{ workItemId: number }> = ({ workItemId }) => {
         <VatWorkItemMetaStrip workItem={workItem} />
       </div>
 
-      <VatWorkItemSummaryBar
-        workItem={workItem}
-        filedBanner={filedBanner}
-        onFilingPendingChange={filing.setPending}
-      />
+      <VatWorkItemSummaryBar workItem={workItem} filedBanner={filedBanner} onFilingPendingChange={filing.setPending} />
 
       <SegmentedControl variant="tabBar" aria-label={VAT_MESSAGES.detail.tabsAriaLabel}>
         {tabs.map(({ key, label, icon: Icon, badge }) => (

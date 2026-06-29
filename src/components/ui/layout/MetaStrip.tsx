@@ -6,9 +6,7 @@ import { cn } from '../../../utils/utils'
  * primary actions stay visually dominant. Shared across feature detail headers.
  */
 export const MetaStrip: React.FC<React.PropsWithChildren<{ className?: string }>> = ({ children, className }) => (
-  <div className={cn('flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-gray-500', className)}>
-    {children}
-  </div>
+  <div className={cn('flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-gray-500', className)}>{children}</div>
 )
 
 MetaStrip.displayName = 'MetaStrip'

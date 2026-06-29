@@ -29,9 +29,7 @@ export const OpenChargesCard = ({ count, amountIls }: OpenChargesCardProps) => {
         </span>
       </div>
 
-      <p className="font-bold tabular-nums text-xl leading-none text-slate-900">
-        {amountIls ?? formatShekelAmount(0)}
-      </p>
+      <p className="font-bold tabular-nums text-xl leading-none text-slate-900">{amountIls ?? formatShekelAmount(0)}</p>
       <p className="mt-2 text-sm text-slate-500">
         {DASHBOARD_MESSAGES.openCharges.pendingCollection(formatCount(count))}
       </p>

@@ -57,7 +57,10 @@ export const TimelineMetadata: React.FC<TimelineMetadataProps> = ({ metadata, ev
     items.push({
       label: labels.statusTransitionLabel,
       value: (
-        <StatusTransition from={getTimelineStatusLabel(String(old_value))} to={getTimelineStatusLabel(String(new_value))} />
+        <StatusTransition
+          from={getTimelineStatusLabel(String(old_value))}
+          to={getTimelineStatusLabel(String(new_value))}
+        />
       ),
     })
   }
@@ -65,7 +68,13 @@ export const TimelineMetadata: React.FC<TimelineMetadataProps> = ({ metadata, ev
   if (amount != null) {
     items.push({
       label: labels.amountLabel,
-      value: <MonoValue value={formatCurrencyILS(Number(amount), { fractionDigits: 2 })} tone="positive" className="text-xs" />,
+      value: (
+        <MonoValue
+          value={formatCurrencyILS(Number(amount), { fractionDigits: 2 })}
+          tone="positive"
+          className="text-xs"
+        />
+      ),
     })
   }
 
@@ -88,7 +97,9 @@ export const TimelineMetadata: React.FC<TimelineMetadataProps> = ({ metadata, ev
     if (from_status && to_status) {
       items.push({
         label: labels.statusTransitionLabel,
-        value: <StatusTransition from={getAnnualReportStatusLabel(from_status)} to={getAnnualReportStatusLabel(to_status)} />,
+        value: (
+          <StatusTransition from={getAnnualReportStatusLabel(from_status)} to={getAnnualReportStatusLabel(to_status)} />
+        ),
       })
     }
     if (note) items.push({ label: labels.noteLabel, value: note, fullWidth: true })

@@ -76,7 +76,9 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
           {title && (
             <div className="flex shrink-0 items-start justify-between border-b border-gray-100 px-6 py-4" dir="rtl">
               <div>
-                <h3 id={titleId} className="text-base font-semibold text-gray-900">{title}</h3>
+                <h3 id={titleId} className="text-base font-semibold text-gray-900">
+                  {title}
+                </h3>
                 {subtitle && <p className="mt-0.5 text-sm text-gray-500">{subtitle}</p>}
               </div>
               {onClose && (
@@ -132,7 +134,9 @@ export const OverlayContainer: React.FC<OverlayContainerProps> = ({
         <div dir="rtl" className={cn('flex max-h-[92vh] w-full flex-col rounded-xl bg-white shadow-xl', className)}>
           {title && (
             <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-6 py-4">
-              <h3 id={titleId} className="text-lg font-semibold text-gray-900">{title}</h3>
+              <h3 id={titleId} className="text-lg font-semibold text-gray-900">
+                {title}
+              </h3>
               {onClose && (
                 <button
                   type="button"

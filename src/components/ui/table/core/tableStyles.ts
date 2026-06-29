@@ -5,13 +5,7 @@
  * lifecycle, keyboard nav, and markup.
  */
 import { cn } from '../../../../utils/utils'
-import type {
-  Column,
-  ColumnAlign,
-  TableCellTone,
-  TableColumnKind,
-  TableRowVariant,
-} from './tableTypes'
+import type { Column, ColumnAlign, TableCellTone, TableColumnKind, TableRowVariant } from './tableTypes'
 
 const ALIGN_CLASS: Record<ColumnAlign, string> = {
   start: 'text-start',
@@ -47,16 +41,16 @@ const ROW_VARIANT_CLASS: Record<TableRowVariant, string> = {
   muted: 'bg-gray-50 hover:bg-gray-100/80',
 }
 
-const getColumnKind = <T,>(column: Column<T>): TableColumnKind => column.kind ?? 'text'
+const getColumnKind = <T>(column: Column<T>): TableColumnKind => column.kind ?? 'text'
 
-const getColumnTone = <T,>(column: Column<T>): TableCellTone => {
+const getColumnTone = <T>(column: Column<T>): TableCellTone => {
   if (column.tone) return column.tone
   const kind = getColumnKind(column)
   if (kind === 'date' || kind === 'dateTime') return 'muted'
   return 'default'
 }
 
-const getDefaultAlign = <T,>(column: Column<T>): ColumnAlign => {
+const getDefaultAlign = <T>(column: Column<T>): ColumnAlign => {
   const kind = getColumnKind(column)
   if (kind === 'actions' || kind === 'selection' || kind === 'status') return 'center'
   if (kind === 'number' || kind === 'money') return 'end'
@@ -64,11 +58,10 @@ const getDefaultAlign = <T,>(column: Column<T>): ColumnAlign => {
 }
 
 /** Text-alignment class, used by both header and body cells. */
-export const getAlignClass = <T,>(column: Column<T>): string =>
-  ALIGN_CLASS[column.align ?? getDefaultAlign(column)]
+export const getAlignClass = <T>(column: Column<T>): string => ALIGN_CLASS[column.align ?? getDefaultAlign(column)]
 
 /** Full body/footer cell class. `bodyCellClass` carries the surface padding/text-size. */
-export const getCellClass = <T,>(column: Column<T>, bodyCellClass: string): string =>
+export const getCellClass = <T>(column: Column<T>, bodyCellClass: string): string =>
   cn(
     bodyCellClass,
     'first:ps-5 last:pe-5',

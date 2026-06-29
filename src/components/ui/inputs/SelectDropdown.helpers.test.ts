@@ -19,9 +19,7 @@ describe('SelectDropdown helpers', () => {
   })
 
   it('uses the explicit empty option label instead of the placeholder', () => {
-    expect(
-      getSelectDropdownDisplay([{ value: '', label: 'כל העסקים' }, ...options], '', 'בחר...'),
-    ).toEqual({
+    expect(getSelectDropdownDisplay([{ value: '', label: 'כל העסקים' }, ...options], '', 'בחר...')).toEqual({
       label: 'כל העסקים',
       isPlaceholder: false,
     })
