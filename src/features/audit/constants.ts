@@ -150,6 +150,8 @@ export const AUDIT_FIELD_LABELS: Record<string, string> = {
   internal_notes: 'הערות פנימיות',
   line_number: 'מספר שורה',
   notes: 'הערות',
+  other_credits: 'זיכויים אחרים',
+  pension_contribution: 'הפקדות פנסיה',
   schedule: 'נספח',
   annual_revenue: 'מחזור שנתי',
   advance_rate_updated_at: 'תאריך עדכון שיעור מקדמות',

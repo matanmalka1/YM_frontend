@@ -1,5 +1,20 @@
 import type { TimelineBinderStatus } from './api/contracts'
-import { BINDER_CAPACITY_STATUS_LABELS, BINDER_LOCATION_STATUS_LABELS } from '@/features/binders'
+import type { FieldValueLabels } from '@/features/audit'
+// eslint-disable-next-line no-restricted-imports -- avoid the binders feature barrel here; it loads timeline-adjacent drawer components.
+import { BINDER_CAPACITY_STATUS_LABELS, BINDER_LOCATION_STATUS_LABELS } from '@/features/binders/constants'
+// eslint-disable-next-line no-restricted-imports -- avoid the clients feature barrel here; it imports timeline detail components.
+import {
+  ADVANCE_PAYMENT_FREQUENCY_LABELS,
+  CLIENT_STATUS_LABELS,
+  ENTITY_TYPE_LABELS,
+  VAT_TYPE_LABELS,
+} from '@/features/clients/constants'
+// eslint-disable-next-line no-restricted-imports -- avoid the annualReports feature barrel here; it imports timeline query keys.
+import { STATUS_LABELS as ANNUAL_REPORT_STATUS_LABELS } from '@/features/annualReports/api/utils'
+// eslint-disable-next-line no-restricted-imports -- avoid the annualReports feature barrel here; it imports timeline query keys.
+import { CLIENT_TYPE_LABELS as ANNUAL_REPORT_CLIENT_TYPE_LABELS } from '@/features/annualReports/constants/panelConstants'
+// eslint-disable-next-line no-restricted-imports -- keep timeline label reuse scoped to charge constants, not the full feature barrel.
+import { CHARGE_STATUS_LABELS, CHARGE_TYPE_LABELS } from '@/features/charges/constants'
 
 const BINDER_LIFECYCLE_LABEL_MAP: Record<TimelineBinderStatus, string> = {
   null: 'חדש',
@@ -18,6 +33,22 @@ const ANNUAL_REPORT_STATUS_LABEL_MAP: Record<string, string> = {
   submitted: 'הוגש',
   closed: 'נסגר',
   canceled: 'בוטל',
+}
+
+const STATUS_FIELD_VALUE_LABELS = {
+  ...CLIENT_STATUS_LABELS,
+  ...CHARGE_STATUS_LABELS,
+  ...ANNUAL_REPORT_STATUS_LABELS,
+}
+
+export const TIMELINE_AUDIT_FIELD_VALUE_LABELS: FieldValueLabels = {
+  advance_payment_frequency: ADVANCE_PAYMENT_FREQUENCY_LABELS,
+  charge_type: CHARGE_TYPE_LABELS,
+  client_type: ANNUAL_REPORT_CLIENT_TYPE_LABELS,
+  entity_type: ENTITY_TYPE_LABELS,
+  status: STATUS_FIELD_VALUE_LABELS,
+  type: ENTITY_TYPE_LABELS,
+  vat_reporting_frequency: VAT_TYPE_LABELS,
 }
 
 export const getTimelineStatusLabel = (status: string): string =>

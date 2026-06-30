@@ -92,7 +92,7 @@ export const ENTITY_TYPE_OPTIONS = ENTITY_TYPES.map((type) => ({
 
 export const CLIENT_STATUSES = ['active', 'frozen', 'closed'] as const satisfies readonly ClientStatus[]
 
-const CLIENT_STATUS_LABELS: Record<ClientStatus, string> = {
+export const CLIENT_STATUS_LABELS: Record<ClientStatus, string> = {
   active: 'פעיל',
   frozen: 'מוקפא',
   closed: 'סגור',

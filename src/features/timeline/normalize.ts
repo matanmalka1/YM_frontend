@@ -1,12 +1,7 @@
 import { parseISO } from 'date-fns'
-import {
-  AUDIT_ACTION_LABELS,
-  EMPTY_FIELD_VALUE_LABELS,
-  makeAuditFormatter,
-  type AuditDiffInput,
-} from '@/features/audit'
+import { AUDIT_ACTION_LABELS, makeAuditFormatter, type AuditDiffInput } from '@/features/audit'
 import type { TimelineEvent, TimelineEventMetadata } from './api'
-import { getTimelineStatusLabel } from './labels'
+import { getTimelineStatusLabel, TIMELINE_AUDIT_FIELD_VALUE_LABELS } from './labels'
 import { getEventTypeLabel } from './utils'
 
 export type TimelineFilterKey = 'all' | 'past' | 'future' | 'finance' | 'binders' | 'documents' | 'tax' | 'changes'
@@ -89,7 +84,7 @@ const getRelatedEntity = (event: TimelineEvent): string | null => {
 
 // Reuse the audit feature's diff formatter so record changes render identically
 // to the standalone audit trail — no field/value formatting duplicated here.
-const formatAuditDiff = makeAuditFormatter(EMPTY_FIELD_VALUE_LABELS)
+const formatAuditDiff = makeAuditFormatter(TIMELINE_AUDIT_FIELD_VALUE_LABELS)
 
 const toAuditEntry = (event: TimelineEvent): AuditDiffInput => ({
   action: String(event.metadata?.change_action ?? ''),
