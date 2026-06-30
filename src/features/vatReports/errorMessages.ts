@@ -12,6 +12,7 @@ export const VAT_ERROR_MESSAGES = {
   },
   detail: {
     loadingWorkItemError: 'שגיאה בטעינת תיק מע"מ',
+    loadingHistoryError: 'שגיאה בטעינת היסטוריית מע"מ',
     createWorkItemError: 'שגיאה ביצירת תיק המע״מ',
     loadClientVatError: 'שגיאה בטעינת נתוני מע״מ. אנא נסה שוב מאוחר יותר.',
   },

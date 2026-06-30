@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react'
+import { AlertTriangle } from 'lucide-react'
+import { InlineState } from '@/components/ui/feedback'
 import {
   AuditTrailTable,
   AUDIT_ACTION_LABELS,
@@ -14,6 +16,7 @@ import {
 } from '../../constants/vatConstants'
 import type { VatHistoryTabProps } from '../../types'
 import { VAT_MESSAGES } from '../../messages'
+import { VAT_ERROR_MESSAGES } from '../../errorMessages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 const vatStatusLabels: Record<string, string> = Object.fromEntries(
@@ -27,10 +30,25 @@ const vatFieldValueLabels: FieldValueLabels = {
 
 export const VatHistoryTab: React.FC<VatHistoryTabProps> = ({ workItemId }) => {
   const [page, setPage] = useState(0)
-  const { items, total, isFetching, isPending } = useEntityAuditTrail('vat_work_item', workItemId, page, PAGE_SIZE_SM)
+  const { items, total, isFetching, isPending, isError, refetch } = useEntityAuditTrail(
+    'vat_work_item',
+    workItemId,
+    page,
+    PAGE_SIZE_SM,
+  )
   const formatDetails = useMemo(() => makeAuditFormatter(vatFieldValueLabels), [])
 
   if (isPending) return <p className="py-8 text-center text-sm text-gray-400">{GLOBAL_UI_MESSAGES.common.loading}</p>
+  if (isError) {
+    return (
+      <InlineState
+        variant="error"
+        icon={AlertTriangle}
+        title={VAT_ERROR_MESSAGES.detail.loadingHistoryError}
+        action={{ label: GLOBAL_UI_MESSAGES.actions.retry, onClick: () => refetch() }}
+      />
+    )
+  }
   if (total === 0) return <p className="py-8 text-center text-sm text-gray-400">{VAT_MESSAGES.history.empty}</p>
 
   return (
