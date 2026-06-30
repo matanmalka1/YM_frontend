@@ -35,6 +35,15 @@ const ANNUAL_REPORT_VERB_LABELS: Record<string, string> = {
   annex_line_deleted: 'נמחקה שורת נספח',
 }
 
+const BINDER_VERB_LABELS: Record<string, string> = {
+  material_received: 'התקבל חומר',
+  marked_full: 'סומן כמלא',
+  reopened: 'נפתח מחדש',
+  marked_ready_for_handover: 'סומן כמוכן למסירה',
+  reverted_ready: 'בוטלה מוכנות למסירה',
+  handed_over: 'נמסר ללקוח',
+}
+
 const CLIENT_VERB_LABELS: Record<string, string> = {
   entity_type_changed: 'שינוי סוג ישות',
 }
@@ -50,6 +59,17 @@ const VAT_INVOICE_VERBS = ['created', 'updated', 'amount_changed', 'deleted']
 
 const CLIENT_LIKE_VERBS = ['created', 'updated', 'deleted', 'restored']
 
+const BINDER_VERBS = [
+  'created',
+  'material_received',
+  'marked_full',
+  'reopened',
+  'marked_ready_for_handover',
+  'reverted_ready',
+  'handed_over',
+]
+const BINDER_INTAKE_VERBS = ['updated']
+
 export const AUDIT_ACTIONS_BY_ENTITY_TYPE: Record<EntityAuditType, string[]> = {
   client: [...CLIENT_LIKE_VERBS, ...Object.keys(CLIENT_VERB_LABELS)].map((v) => auditAction('client', v)),
   business: CLIENT_LIKE_VERBS.map((v) => auditAction('business', v)),
@@ -59,6 +79,8 @@ export const AUDIT_ACTIONS_BY_ENTITY_TYPE: Record<EntityAuditType, string[]> = {
   ),
   vat_work_item: VAT_WORK_ITEM_VERBS.map((v) => auditAction('vat_work_item', v)),
   vat_invoice: VAT_INVOICE_VERBS.map((v) => auditAction('vat_invoice', v)),
+  binder: BINDER_VERBS.map((v) => auditAction('binder', v)),
+  binder_intake: BINDER_INTAKE_VERBS.map((v) => auditAction('binder_intake', v)),
 }
 
 const buildActionLabels = (): Record<string, string> => {
@@ -68,7 +90,8 @@ const buildActionLabels = (): Record<string, string> => {
     CLIENT_VERB_LABELS[verb] ??
     CHARGE_VERB_LABELS[verb] ??
     ANNUAL_REPORT_VERB_LABELS[verb] ??
-    VAT_VERB_LABELS[verb]
+    VAT_VERB_LABELS[verb] ??
+    BINDER_VERB_LABELS[verb]
   for (const actions of Object.values(AUDIT_ACTIONS_BY_ENTITY_TYPE)) {
     for (const action of actions) {
       const verb = action.split('.').slice(1).join('.')
@@ -140,4 +163,10 @@ export const AUDIT_FIELD_LABELS: Record<string, string> = {
   number: 'מספר',
   vat_amount: 'סכום מע"מ',
   vat_work_item_id: 'דיווח מע"מ',
+  location_status: 'מיקום קלסר',
+  capacity_status: 'קיבולת קלסר',
+  field_name: 'שדה',
+  value: 'ערך',
+  intake_id: 'אירוע קבלה',
+  binder_id: 'קלסר',
 }

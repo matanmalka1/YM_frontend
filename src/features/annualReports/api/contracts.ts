@@ -147,15 +147,12 @@ export interface AnnualReportFull {
   created_by: number
   available_transitions?: AnnualReportStatus[]
   schedules?: ScheduleEntry[]
-  status_audit?: AnnualReportAuditEntry[]
-  // user-entered deduction inputs (stay flat)
   pension_contribution?: string | null
   donation_amount?: string | null
   other_credits?: string | null
   client_approved_at?: string | null
   internal_notes?: string | null
   amendment_reason?: string | null
-  // computed financial/tax outputs (grouped)
   tax_calculation?: AnnualReportTaxCalculation | null
 }
 
@@ -182,18 +179,6 @@ export interface ScheduleEntry {
   completed_at: string | null
   completed_by: number | null
 }
-
-export interface AnnualReportAuditEntry {
-  id: number
-  annual_report_id: number
-  from_status: AnnualReportStatus | null
-  to_status: AnnualReportStatus
-  changed_by: number
-  note: string | null
-  occurred_at: string
-}
-
-export type AnnualReportAuditPagedResponse = PaginatedResponse<AnnualReportAuditEntry>
 
 export interface SeasonSummary {
   tax_year: number

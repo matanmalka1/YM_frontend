@@ -5,7 +5,6 @@ export const annualReportsQK = {
   ...createQueryKeys(['tax', 'annual-reports'] as const),
   reportCharges: (reportId: number, page: number, pageSize: number) =>
     ['tax', 'annual-reports', 'charges', reportId, { page, page_size: pageSize }] as const,
-  audit: (id: number | string) => ['tax', 'annual-reports', 'audit', id] as const,
   seasonSummary: (taxYear: number) => ['tax', 'annual-reports', 'season', taxYear, 'summary'] as const,
   seasonList: (taxYear: number) => ['tax', 'annual-reports', 'season', taxYear, 'list'] as const,
   defaultTaxYear: ['tax', 'annual-reports', 'default-tax-year'] as const,
