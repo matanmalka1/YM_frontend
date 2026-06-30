@@ -6770,28 +6770,48 @@ export interface components {
       /** Correction Note */
       correction_note: string
     }
-    /** SignatureAuditEventResponse */
-    SignatureAuditEventResponse: {
+    /** SignatureRequestAuditItemResponse */
+    SignatureRequestAuditItemResponse: {
       /** Id */
       id: number
-      /** Event Type */
-      event_type: string
+      /** Action */
+      action: string
       /** Actor Type */
       actor_type: string
-      /** Actor Id */
-      actor_id?: number | null
-      /** Actor Name */
-      actor_name?: string | null
-      /** Ip Address */
-      ip_address?: string | null
-      /** Notes */
-      notes?: string | null
+      /** Actor Display Name */
+      actor_display_name?: string | null
       /**
-       * Occurred At
+       * Performed At
        * Format: date-time
        * @example 2026-01-02T03:04:05Z
        */
-      occurred_at: string
+      performed_at: string
+      /** Note */
+      note?: string | null
+      /** Client Record Id */
+      client_record_id?: number | null
+      /** Signer Name */
+      signer_name?: string | null
+      /** Signer Email */
+      signer_email?: string | null
+      /** Business Id */
+      business_id?: number | null
+      /** Annual Report Id */
+      annual_report_id?: number | null
+      /** Document Id */
+      document_id?: number | null
+      /** Ip Address */
+      ip_address?: string | null
+      /** User Agent */
+      user_agent?: string | null
+      /** Content Hash */
+      content_hash?: string | null
+      /** Content Hash Missing */
+      content_hash_missing?: boolean | null
+      /** Signed Document Key */
+      signed_document_key?: string | null
+      /** Reason */
+      reason?: string | null
     }
     /** SignatureRequestCreateRequest */
     SignatureRequestCreateRequest: {
@@ -7035,7 +7055,7 @@ export interface components {
        * Audit Trail
        * @default []
        */
-      audit_trail: components['schemas']['SignatureAuditEventResponse'][]
+      audit_trail: components['schemas']['SignatureRequestAuditItemResponse'][]
     }
     /** SignerDeclineRequest */
     SignerDeclineRequest: {

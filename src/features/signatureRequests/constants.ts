@@ -1,23 +1,54 @@
 import { makeLabelGetter } from '@/utils/labels'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
-import type { SignatureRequestStatus, SignatureRequestType } from './api'
+import type {
+  SignatureRequestAuditAction,
+  SignatureRequestAuditActorType,
+  SignatureRequestStatus,
+  SignatureRequestType,
+} from './api'
 
-export const SIGNATURE_REQUEST_EVENT_TYPE_LABELS = {
-  created: 'נוצרה',
-  sent: 'נשלחה',
-  viewed: 'נצפתה',
-  signed: 'נחתמה',
-  annual_report_signed: 'דוח שנתי נחתם',
-  declined: 'נדחתה',
-  canceled: 'בוטלה',
-  expired: 'פגה תוקף',
-} as const
+const SIGNATURE_REQUEST_AUDIT_ACTIONS = [
+  'signature_request.created',
+  'signature_request.sent',
+  'signature_request.viewed',
+  'signature_request.signed',
+  'signature_request.declined',
+  'signature_request.canceled',
+  'signature_request.expired',
+  'signature_request.annual_report_signed',
+] as const satisfies readonly SignatureRequestAuditAction[]
 
-export const SIGNATURE_REQUEST_ACTOR_TYPE_LABELS = {
-  advisor: 'יועץ',
-  secretary: 'מזכירה',
-  signer: 'חותם',
+const SIGNATURE_REQUEST_ACTION_LABELS: Record<SignatureRequestAuditAction, string> = {
+  'signature_request.created': 'נוצרה',
+  'signature_request.sent': 'נשלחה',
+  'signature_request.viewed': 'נצפתה',
+  'signature_request.signed': 'נחתמה',
+  'signature_request.annual_report_signed': 'דוח שנתי נחתם',
+  'signature_request.declined': 'נדחתה',
+  'signature_request.canceled': 'בוטלה',
+  'signature_request.expired': 'פגה תוקף',
+}
+
+const SIGNATURE_REQUEST_AUDIT_ACTION_SET = new Set<string>(SIGNATURE_REQUEST_AUDIT_ACTIONS)
+
+const isSignatureRequestAuditAction = (action: string): action is SignatureRequestAuditAction =>
+  SIGNATURE_REQUEST_AUDIT_ACTION_SET.has(action)
+
+export const getSignatureRequestAuditActionLabel = (action: string): string =>
+  isSignatureRequestAuditAction(action) ? SIGNATURE_REQUEST_ACTION_LABELS[action] : action
+
+export const SIGNATURE_REQUEST_ACTOR_TYPE_LABELS: Record<SignatureRequestAuditActorType, string> = {
+  user: 'משתמש',
+  external_signer: 'חותם',
   system: 'מערכת',
+}
+
+export const SIGNATURE_REQUEST_AUDIT_FIELD_LABELS = {
+  ipAddress: 'IP',
+  userAgent: 'User-Agent',
+  contentHash: 'SHA-256',
+  contentHashMissing: 'לא זמין',
+  signedDocument: 'מסמך חתום',
 } as const
 
 /** @auditContract Read by the backend enum-sync audit. */

@@ -10,7 +10,8 @@ import { StatusBadge } from '../../../../components/ui/primitives/StatusBadge'
 import { formatDate, formatDateTime, formatPhoneNumber } from '../../../../utils/utils'
 import {
   SIGNATURE_REQUEST_ACTOR_TYPE_LABELS,
-  SIGNATURE_REQUEST_EVENT_TYPE_LABELS,
+  SIGNATURE_REQUEST_AUDIT_FIELD_LABELS,
+  getSignatureRequestAuditActionLabel,
   getSignatureRequestTypeLabel,
   getSignatureRequestStatusLabel,
 } from '../../constants'
@@ -20,6 +21,11 @@ import { SIGNATURE_REQUESTS_MESSAGES } from '../../messages'
 interface Props {
   requestId: number | null
   onClose: () => void
+}
+
+interface AuditMetadataItem {
+  label: string
+  value: string
 }
 
 export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClose }) => {
@@ -32,6 +38,27 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
   })
 
   const events = data?.audit_trail ?? []
+  const auditMetadataItems = (event: (typeof events)[number]): AuditMetadataItem[] => {
+    const items: Array<AuditMetadataItem | null> = [
+      event.signer_email ? { label: SIGNATURE_REQUESTS_MESSAGES.fields.signerEmail, value: event.signer_email } : null,
+      event.ip_address ? { label: SIGNATURE_REQUEST_AUDIT_FIELD_LABELS.ipAddress, value: event.ip_address } : null,
+      event.user_agent ? { label: SIGNATURE_REQUEST_AUDIT_FIELD_LABELS.userAgent, value: event.user_agent } : null,
+      event.content_hash
+        ? { label: SIGNATURE_REQUEST_AUDIT_FIELD_LABELS.contentHash, value: event.content_hash }
+        : null,
+      event.content_hash_missing
+        ? {
+            label: SIGNATURE_REQUEST_AUDIT_FIELD_LABELS.contentHash,
+            value: SIGNATURE_REQUEST_AUDIT_FIELD_LABELS.contentHashMissing,
+          }
+        : null,
+      event.signed_document_key
+        ? { label: SIGNATURE_REQUEST_AUDIT_FIELD_LABELS.signedDocument, value: event.signed_document_key }
+        : null,
+      event.reason ? { label: SIGNATURE_REQUESTS_MESSAGES.fields.declineReason, value: event.reason } : null,
+    ]
+    return items.filter((item): item is AuditMetadataItem => item != null)
+  }
 
   return (
     <DetailDrawer
@@ -101,25 +128,34 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
               <p className="py-3 text-sm text-gray-400">{SIGNATURE_REQUESTS_MESSAGES.audit.noEvents}</p>
             )}
             <Timeline>
-              {events.map((event) => (
-                <TimelineEntry key={event.id}>
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-medium text-gray-800">
-                      {SIGNATURE_REQUEST_EVENT_TYPE_LABELS[
-                        event.event_type as keyof typeof SIGNATURE_REQUEST_EVENT_TYPE_LABELS
-                      ] ?? event.event_type}
-                    </span>
-                    <span className="text-xs text-gray-400">{formatDateTime(event.occurred_at)}</span>
-                  </div>
-                  <div className="mt-0.5 text-xs text-gray-500">
-                    {SIGNATURE_REQUEST_ACTOR_TYPE_LABELS[
-                      event.actor_type as keyof typeof SIGNATURE_REQUEST_ACTOR_TYPE_LABELS
-                    ] ?? event.actor_type}
-                    {event.actor_name ? ` — ${event.actor_name}` : ''}
-                    {event.notes ? ` · ${event.notes}` : ''}
-                  </div>
-                </TimelineEntry>
-              ))}
+              {events.map((event) => {
+                const metadataItems = auditMetadataItems(event)
+                return (
+                  <TimelineEntry key={event.id}>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-sm font-medium text-gray-800">
+                        {getSignatureRequestAuditActionLabel(event.action)}
+                      </span>
+                      <span className="text-xs text-gray-400">{formatDateTime(event.performed_at)}</span>
+                    </div>
+                    <div className="mt-0.5 text-xs text-gray-500">
+                      {SIGNATURE_REQUEST_ACTOR_TYPE_LABELS[event.actor_type] ?? event.actor_type}
+                      {event.actor_display_name ? ` — ${event.actor_display_name}` : ''}
+                      {event.note ? ` · ${event.note}` : ''}
+                    </div>
+                    {metadataItems.length > 0 && (
+                      <dl className="mt-2 grid gap-1 text-xs text-gray-500">
+                        {metadataItems.map((item) => (
+                          <div key={`${event.id}-${item.label}`} className="grid grid-cols-[7rem_1fr] gap-2">
+                            <dt className="text-gray-400">{item.label}</dt>
+                            <dd className="break-words">{item.value}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    )}
+                  </TimelineEntry>
+                )
+              })}
             </Timeline>
           </DrawerSection>
         </>

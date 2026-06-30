@@ -39,19 +39,41 @@ export interface SignatureRequestResponse {
   signed_document_key: string | null
 }
 
-interface AuditEvent {
+export type SignatureRequestAuditAction =
+  | 'signature_request.created'
+  | 'signature_request.sent'
+  | 'signature_request.viewed'
+  | 'signature_request.signed'
+  | 'signature_request.declined'
+  | 'signature_request.canceled'
+  | 'signature_request.expired'
+  | 'signature_request.annual_report_signed'
+
+export type SignatureRequestAuditActorType = 'user' | 'external_signer' | 'system'
+
+interface SignatureRequestAuditItem {
   id: number
-  event_type: string
-  actor_type: string
-  actor_id: number | null
-  actor_name: string | null
+  action: string
+  actor_type: SignatureRequestAuditActorType
+  actor_display_name: string | null
+  performed_at: string
+  note: string | null
+  client_record_id: number | null
+  signer_name: string | null
+  signer_email: string | null
+  business_id: number | null
+  annual_report_id: number | null
+  document_id: number | null
   ip_address: string | null
-  notes: string | null
-  occurred_at: string
+  user_agent: string | null
+  content_hash: string | null
+  content_hash_missing: boolean | null
+  signed_document_key: string | null
+  reason: string | null
 }
 
 export interface SignatureRequestWithAudit extends SignatureRequestResponse {
-  audit_trail: AuditEvent[]
+  audit_trail: SignatureRequestAuditItem[]
 }
 
 export interface CreateSignatureRequestPayload {
