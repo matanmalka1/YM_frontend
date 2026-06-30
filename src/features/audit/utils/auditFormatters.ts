@@ -83,12 +83,14 @@ export const makeAuditFormatter = (labels: FieldValueLabels) => {
     // old_value / new_value are already JSON values (dict | list | null) — no parsing.
     const details = formatParsedDiff(entry.old_value, entry.new_value)
 
+    // action is namespaced `<entity_type>.<verb>`; the fallback keys off the verb.
+    const verb = entry.action.split('.').slice(1).join('.') || entry.action
     const fallbackDetails =
       {
         created: 'ללא פרטים נוספים',
         deleted: 'ללא פרטים נוספים',
         restored: 'ללא פרטים נוספים',
-      }[entry.action] ?? '—'
+      }[verb] ?? '—'
 
     return [details || fallbackDetails, entry.note].filter(Boolean).join('; ')
   }

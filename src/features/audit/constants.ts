@@ -5,51 +5,67 @@ export const AUDIT_PAGE_SIZE = PAGE_SIZE_MD
 
 export const AUDIT_USERS_LIST_PARAMS = { page: 1, page_size: PAGE_SIZE_MAX } as const
 
-export const AUDIT_ACTION_LABELS: Record<string, string> = {
+// Persisted action values are namespaced `<entity_type>.<verb>` (backend §7/§6).
+const auditAction = (entityType: EntityAuditType, verb: string): string => `${entityType}.${verb}`
+
+const GENERIC_VERB_LABELS: Record<string, string> = {
   created: 'נוצר',
   updated: 'עודכן',
   deleted: 'נמחק',
   restored: 'שוחזר',
   status_changed: 'שינוי סטטוס',
+}
+
+const CHARGE_VERB_LABELS: Record<string, string> = {
   issued: 'הונפק',
   paid: 'שולם',
   canceled: 'בוטל',
-  income_added: 'נוספה הכנסה',
-  income_updated: 'עודכנה הכנסה',
-  income_deleted: 'נמחקה הכנסה',
-  expense_added: 'נוספה הוצאה',
-  expense_updated: 'עודכנה הוצאה',
-  expense_deleted: 'נמחקה הוצאה',
-  annual_report_detail_updated: 'עודכנו פרטי דוח',
-  annual_report_deadline_updated: 'עודכן מועד הגשה',
+}
+
+const ANNUAL_REPORT_VERB_LABELS: Record<string, string> = {
+  deadline_updated: 'עודכן מועד הגשה',
+  income_line_added: 'נוספה הכנסה',
+  income_line_updated: 'עודכנה הכנסה',
+  income_line_deleted: 'נמחקה הכנסה',
+  expense_line_added: 'נוספה הוצאה',
+  expense_line_updated: 'עודכנה הוצאה',
+  expense_line_deleted: 'נמחקה הוצאה',
   annex_line_added: 'נוספה שורת נספח',
   annex_line_updated: 'עודכנה שורת נספח',
   annex_line_deleted: 'נמחקה שורת נספח',
 }
 
-export const AUDIT_ACTIONS_BY_ENTITY_TYPE: Record<EntityAuditType, string[]> = {
-  client: ['created', 'updated', 'deleted', 'restored'],
-  business: ['created', 'updated', 'deleted', 'restored'],
-  charge: ['created', 'updated', 'deleted', 'restored', 'issued', 'paid', 'canceled'],
-  annual_report: [
-    'created',
-    'updated',
-    'deleted',
-    'restored',
-    'status_changed',
-    'annual_report_detail_updated',
-    'annual_report_deadline_updated',
-    'annex_line_added',
-    'annex_line_updated',
-    'annex_line_deleted',
-    'income_added',
-    'income_updated',
-    'income_deleted',
-    'expense_added',
-    'expense_updated',
-    'expense_deleted',
-  ],
+const CLIENT_VERB_LABELS: Record<string, string> = {
+  entity_type_changed: 'שינוי סוג ישות',
 }
+
+const CLIENT_LIKE_VERBS = ['created', 'updated', 'deleted', 'restored']
+
+export const AUDIT_ACTIONS_BY_ENTITY_TYPE: Record<EntityAuditType, string[]> = {
+  client: [...CLIENT_LIKE_VERBS, ...Object.keys(CLIENT_VERB_LABELS)].map((v) => auditAction('client', v)),
+  business: CLIENT_LIKE_VERBS.map((v) => auditAction('business', v)),
+  charge: [...CLIENT_LIKE_VERBS, ...Object.keys(CHARGE_VERB_LABELS)].map((v) => auditAction('charge', v)),
+  annual_report: [...CLIENT_LIKE_VERBS, 'status_changed', ...Object.keys(ANNUAL_REPORT_VERB_LABELS)].map((v) =>
+    auditAction('annual_report', v),
+  ),
+}
+
+const buildActionLabels = (): Record<string, string> => {
+  const labels: Record<string, string> = {}
+  const verbLabel = (verb: string): string | undefined =>
+    GENERIC_VERB_LABELS[verb] ?? CLIENT_VERB_LABELS[verb] ?? CHARGE_VERB_LABELS[verb] ?? ANNUAL_REPORT_VERB_LABELS[verb]
+  for (const actions of Object.values(AUDIT_ACTIONS_BY_ENTITY_TYPE)) {
+    for (const action of actions) {
+      const verb = action.split('.').slice(1).join('.')
+      const label = verbLabel(verb)
+      if (label) labels[action] = label
+    }
+  }
+  return labels
+}
+
+// Keyed by the full namespaced action (the value used in the table and filters).
+export const AUDIT_ACTION_LABELS: Record<string, string> = buildActionLabels()
 
 export const AUDIT_FIELD_LABELS: Record<string, string> = {
   full_name: 'שם לקוח',

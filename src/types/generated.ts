@@ -5654,6 +5654,8 @@ export interface components {
       page_size: number
       /** Total */
       total: number
+      /** Entity Deleted */
+      entity_deleted: boolean
     }
     /** EntityNoteCreateRequest */
     EntityNoteCreateRequest: {
@@ -16853,6 +16855,8 @@ export interface operations {
         search?: string | null
         event_type?: string[] | null
         important_only?: boolean
+        date_from?: string | null
+        date_to?: string | null
       }
       header?: never
       path: {

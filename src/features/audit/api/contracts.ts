@@ -36,6 +36,8 @@ export const entityAuditTrailResponseSchema = z.object({
   total: z.number(),
   page: z.number(),
   page_size: z.number(),
+  // True when the audited entity is soft- or hard-deleted; history stays readable.
+  entity_deleted: z.boolean(),
 })
 
 export type EntityAuditTrailResponse = z.infer<typeof entityAuditTrailResponseSchema>
