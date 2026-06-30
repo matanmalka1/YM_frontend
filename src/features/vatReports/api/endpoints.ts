@@ -11,7 +11,6 @@ export const VAT_ENDPOINTS = {
   vatWorkItemReadyForReview: (id: number | string) => `/vat/work-items/${id}/ready-for-review`,
   vatWorkItemSendBack: (id: number | string) => `/vat/work-items/${id}/send-back`,
   vatWorkItemFile: (id: number | string) => `/vat/work-items/${id}/file`,
-  vatWorkItemAudit: (id: number | string) => `/vat/work-items/${id}/audit`,
   vatWorkItemStatusSummary: '/vat/work-items/status-summary',
   vatClientSummary: (clientId: number | string) => `/vat/clients/${clientId}/summary`,
   vatClientExport: (clientId: number | string) => `/vat/clients/${clientId}/export`,

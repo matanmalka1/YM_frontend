@@ -21,7 +21,6 @@ import type {
   VatInvoiceListResponse,
   CreateVatInvoicePayload,
   UpdateVatInvoicePayload,
-  VatAuditTrailResponse,
   VatClientSummaryResponse,
   FileVatReturnPayload,
 } from './contracts'
@@ -117,16 +116,6 @@ export const vatReportsApi = {
 
   deleteInvoice: async (id: number, invoiceId: number): Promise<void> => {
     await api.delete(VAT_ENDPOINTS.vatWorkItemInvoiceById(id, invoiceId))
-  },
-
-  getAuditTrail: async (
-    id: number,
-    params: { page?: number; page_size?: number } = {},
-  ): Promise<VatAuditTrailResponse> => {
-    const response = await api.get<VatAuditTrailResponse>(VAT_ENDPOINTS.vatWorkItemAudit(id), {
-      params: toQueryParams(params),
-    })
-    return response.data
   },
 
   listByClient: async (clientId: number, params: VatClientWorkItemsParams = {}): Promise<VatWorkItemListResponse> => {

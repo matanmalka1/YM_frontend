@@ -2872,23 +2872,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v1/vat/work-items/{item_id}/audit': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Get Audit Trail */
-    get: operations['get_audit_trail_api_v1_vat_work_items__item_id__audit_get']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/api/v1/vat/clients/{client_record_id}/summary': {
     parameters: {
       query?: never
@@ -7903,42 +7886,6 @@ export interface components {
       periods_count: number
       /** Filed Count */
       filed_count: number
-    }
-    /** VatAuditLogResponse */
-    VatAuditLogResponse: {
-      /** Id */
-      id: number
-      /** Work Item Id */
-      work_item_id: number
-      /** Performed By */
-      performed_by: number
-      /** Performed By Name */
-      performed_by_name?: string | null
-      /** Action */
-      action: string
-      /** Old Value */
-      old_value?: string | null
-      /** New Value */
-      new_value?: string | null
-      /** Note */
-      note?: string | null
-      /**
-       * Performed At
-       * Format: date-time
-       * @example 2026-01-02T03:04:05Z
-       */
-      performed_at: string
-    }
-    /** VatAuditTrailResponse */
-    VatAuditTrailResponse: {
-      /** Items */
-      items: components['schemas']['VatAuditLogResponse'][]
-      /** Page */
-      page: number
-      /** Page Size */
-      page_size: number
-      /** Total */
-      total: number
     }
     /** VatAutoPopulateExpenseBreakdownItem */
     VatAutoPopulateExpenseBreakdownItem: {
@@ -20039,67 +19986,6 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['VatWorkItemListResponse']
-        }
-      }
-      /** @description Authentication required */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Resource not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HTTPValidationError']
-        }
-      }
-    }
-  }
-  get_audit_trail_api_v1_vat_work_items__item_id__audit_get: {
-    parameters: {
-      query?: {
-        page?: number
-        page_size?: number
-      }
-      header?: never
-      path: {
-        item_id: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['VatAuditTrailResponse']
         }
       }
       /** @description Authentication required */

@@ -11,7 +11,6 @@ export type {
   VatInvoiceResponse,
   CreateVatInvoicePayload,
   UpdateVatInvoicePayload,
-  VatAuditLogResponse,
   VatPeriodRow,
   VatAnnualSummary,
   FileVatReturnPayload,

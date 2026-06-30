@@ -1,4 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query'
+import { auditQK } from '@/features/audit'
 import type { VatWorkItemResponse } from '../api'
 import { vatReportsQK } from '../api/queryKeys'
 
@@ -34,7 +35,7 @@ export const invalidateVatWorkItem = async (
       ? queryClient.invalidateQueries({ queryKey: vatReportsQK.invoices(workItemId) })
       : Promise.resolve(),
     workItemId && includeAudit
-      ? queryClient.invalidateQueries({ queryKey: vatReportsQK.auditRoot(workItemId) })
+      ? queryClient.invalidateQueries({ queryKey: auditQK.entityRoot('vat_work_item', workItemId) })
       : Promise.resolve(),
     resolvedClientRecordId
       ? queryClient.invalidateQueries({

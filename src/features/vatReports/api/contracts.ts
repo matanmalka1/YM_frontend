@@ -199,25 +199,6 @@ export interface UpdateVatInvoicePayload {
   document_type?: string | null
 }
 
-export interface VatAuditLogResponse {
-  id: number
-  work_item_id: number
-  performed_by: number
-  performed_by_name?: string | null
-  action: string
-  old_value: string | null
-  new_value: string | null
-  note: string | null
-  performed_at: string
-}
-
-export interface VatAuditTrailResponse {
-  items: VatAuditLogResponse[]
-  total: number
-  page: number
-  page_size: number
-}
-
 export interface VatPeriodRow {
   work_item_id: number
   period: string

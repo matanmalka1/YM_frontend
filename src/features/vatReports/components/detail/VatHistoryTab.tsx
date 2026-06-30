@@ -1,15 +1,34 @@
-import { useState } from 'react'
-import { AuditTrailTable } from '@/features/audit'
-import { ACTION_LABELS, PAGE_SIZE } from '../../constants/historyConstants'
-import { formatVatHistoryDetails } from '../../utils/history'
-import { useVatHistory } from '../../hooks/useVatHistory'
+import { useMemo, useState } from 'react'
+import {
+  AuditTrailTable,
+  AUDIT_ACTION_LABELS,
+  makeAuditFormatter,
+  useEntityAuditTrail,
+  type FieldValueLabels,
+} from '@/features/audit'
+import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
+import {
+  getVatWorkItemStatusLabel,
+  VAT_FILING_METHOD_LABELS,
+  VAT_WORK_ITEM_STATUS_VALUES,
+} from '../../constants/vatConstants'
 import type { VatHistoryTabProps } from '../../types'
 import { VAT_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 
+const vatStatusLabels: Record<string, string> = Object.fromEntries(
+  VAT_WORK_ITEM_STATUS_VALUES.map((status) => [status, getVatWorkItemStatusLabel(status)]),
+)
+
+const vatFieldValueLabels: FieldValueLabels = {
+  status: vatStatusLabels,
+  submission_method: VAT_FILING_METHOD_LABELS,
+}
+
 export const VatHistoryTab: React.FC<VatHistoryTabProps> = ({ workItemId }) => {
   const [page, setPage] = useState(0)
-  const { items, total, isFetching, isPending } = useVatHistory(workItemId, page, PAGE_SIZE)
+  const { items, total, isFetching, isPending } = useEntityAuditTrail('vat_work_item', workItemId, page, PAGE_SIZE_SM)
+  const formatDetails = useMemo(() => makeAuditFormatter(vatFieldValueLabels), [])
 
   if (isPending) return <p className="py-8 text-center text-sm text-gray-400">{GLOBAL_UI_MESSAGES.common.loading}</p>
   if (total === 0) return <p className="py-8 text-center text-sm text-gray-400">{VAT_MESSAGES.history.empty}</p>
@@ -17,10 +36,10 @@ export const VatHistoryTab: React.FC<VatHistoryTabProps> = ({ workItemId }) => {
   return (
     <AuditTrailTable
       items={items}
-      actionLabels={ACTION_LABELS}
-      formatDetails={formatVatHistoryDetails}
+      actionLabels={AUDIT_ACTION_LABELS}
+      formatDetails={formatDetails}
       page={page}
-      pageSize={PAGE_SIZE}
+      pageSize={PAGE_SIZE_SM}
       total={total}
       isFetching={isFetching}
       onPageChange={setPage}

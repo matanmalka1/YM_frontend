@@ -1,6 +1,8 @@
 export { EntityAuditTrailSection } from './components/EntityAuditTrailSection'
 export type { FieldValueLabels } from './components/EntityAuditTrailSection'
 export { AuditTrailTable } from './components/AuditTrailTable'
+export { useEntityAuditTrail } from './hooks/useEntityAuditTrail'
 export { makeAuditFormatter, EMPTY_FIELD_VALUE_LABELS } from './utils/auditFormatters'
 export type { AuditDiffInput } from './utils/auditFormatters'
 export { AUDIT_ACTION_LABELS } from './constants'
+export { auditQK } from './api'

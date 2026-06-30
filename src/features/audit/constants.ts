@@ -39,6 +39,15 @@ const CLIENT_VERB_LABELS: Record<string, string> = {
   entity_type_changed: 'שינוי סוג ישות',
 }
 
+const VAT_VERB_LABELS: Record<string, string> = {
+  filed: 'הוגש',
+  amount_overridden: 'עקיפת סכום מע"מ',
+  amount_changed: 'שינוי סכום',
+}
+
+const VAT_WORK_ITEM_VERBS = ['created', 'status_changed', 'filed', 'amount_overridden', 'updated', 'deleted']
+const VAT_INVOICE_VERBS = ['created', 'updated', 'amount_changed', 'deleted']
+
 const CLIENT_LIKE_VERBS = ['created', 'updated', 'deleted', 'restored']
 
 export const AUDIT_ACTIONS_BY_ENTITY_TYPE: Record<EntityAuditType, string[]> = {
@@ -48,12 +57,18 @@ export const AUDIT_ACTIONS_BY_ENTITY_TYPE: Record<EntityAuditType, string[]> = {
   annual_report: [...CLIENT_LIKE_VERBS, 'status_changed', ...Object.keys(ANNUAL_REPORT_VERB_LABELS)].map((v) =>
     auditAction('annual_report', v),
   ),
+  vat_work_item: VAT_WORK_ITEM_VERBS.map((v) => auditAction('vat_work_item', v)),
+  vat_invoice: VAT_INVOICE_VERBS.map((v) => auditAction('vat_invoice', v)),
 }
 
 const buildActionLabels = (): Record<string, string> => {
   const labels: Record<string, string> = {}
   const verbLabel = (verb: string): string | undefined =>
-    GENERIC_VERB_LABELS[verb] ?? CLIENT_VERB_LABELS[verb] ?? CHARGE_VERB_LABELS[verb] ?? ANNUAL_REPORT_VERB_LABELS[verb]
+    GENERIC_VERB_LABELS[verb] ??
+    CLIENT_VERB_LABELS[verb] ??
+    CHARGE_VERB_LABELS[verb] ??
+    ANNUAL_REPORT_VERB_LABELS[verb] ??
+    VAT_VERB_LABELS[verb]
   for (const actions of Object.values(AUDIT_ACTIONS_BY_ENTITY_TYPE)) {
     for (const action of actions) {
       const verb = action.split('.').slice(1).join('.')
@@ -115,4 +130,14 @@ export const AUDIT_FIELD_LABELS: Record<string, string> = {
   schedule: 'נספח',
   annual_revenue: 'מחזור שנתי',
   advance_rate_updated_at: 'תאריך עדכון שיעור מקדמות',
+  final_vat_amount: 'סכום מע"מ סופי',
+  submission_method: 'אופן הגשה',
+  is_overridden: 'עקיפת סכום',
+  assigned_to: 'משויך ל',
+  pending_materials_note: 'הערת חומרים חסרים',
+  invoice_id: 'מזהה חשבונית',
+  type: 'סוג',
+  number: 'מספר',
+  vat_amount: 'סכום מע"מ',
+  vat_work_item_id: 'דיווח מע"מ',
 }

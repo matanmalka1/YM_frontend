@@ -7,8 +7,6 @@ export const vatReportsQK = {
     ['tax', 'vat-work-items', 'period-options', clientId, year ?? null] as const,
   forClient: (clientId: number) => ['tax', 'vat-work-items', 'client', clientId] as const,
   invoices: (id: number) => ['tax', 'vat-work-items', 'invoices', id] as const,
-  auditRoot: (id: number) => ['tax', 'vat-work-items', 'audit', id] as const,
-  audit: (id: number, params?: object) => ['tax', 'vat-work-items', 'audit', id, params ?? null] as const,
   clientSummaryRoot: (clientId: number) => ['tax', 'vat-work-items', 'client-summary', clientId] as const,
   clientSummary: (clientId: number, params?: { period_year_after?: number; period_year_before?: number }) =>
     ['tax', 'vat-work-items', 'client-summary', clientId, params ?? null] as const,
