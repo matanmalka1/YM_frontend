@@ -24,7 +24,7 @@ export const OverdueBanner: React.FC<OverdueBannerProps> = ({ overdue, onSelect 
 
   return (
     <div
-      className="rounded-xl border border-negative-200 bg-gradient-to-r from-negative-50 to-negative-100 shadow-sm"
+      className="rounded-xl border border-negative-200/80 bg-gradient-to-r from-negative-50 to-rose-50 shadow-sm"
       role="alert"
       aria-live="polite"
       aria-atomic="true"
