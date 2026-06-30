@@ -13,6 +13,7 @@ export const useSeasonDashboard = (taxYear?: number, enabled = true, filters?: S
   const {
     data: summaryData,
     isPending: summaryPending,
+    isFetching: summaryFetching,
     error: summaryError,
   } = useQuery({
     enabled,
@@ -44,6 +45,9 @@ export const useSeasonDashboard = (taxYear?: number, enabled = true, filters?: S
 
   return {
     summary: summaryData ?? null,
+    // Surfaced so the KPI cards can show a placeholder while the summary refetches,
+    // preventing a stale total from sitting next to a freshly refetched report list.
+    isSummaryFetching: summaryFetching,
     reports: reportsData?.items ?? [],
     overdue: overdueData ?? [],
     isLoading: summaryPending || reportsPending,

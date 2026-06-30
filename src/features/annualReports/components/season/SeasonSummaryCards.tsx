@@ -6,9 +6,12 @@ import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface SeasonSummaryCardsProps {
   summary: SeasonSummary
+  // True while the summary query refetches. Shows a placeholder so a stale total
+  // never sits beside a freshly refetched report list.
+  isFetching?: boolean
 }
 
-export const SeasonSummaryCards: React.FC<SeasonSummaryCardsProps> = ({ summary }) => {
+export const SeasonSummaryCards: React.FC<SeasonSummaryCardsProps> = ({ summary, isFetching = false }) => {
   const done = summary.submitted + summary.closed
   const total = Math.max(0, summary.total)
   const completionRate = Number(summary.completion_rate)
@@ -53,6 +56,7 @@ export const SeasonSummaryCards: React.FC<SeasonSummaryCardsProps> = ({ summary 
           icon={card.icon}
           variant={card.variant}
           progress={card.progress}
+          loading={isFetching}
         />
       ))}
     </div>

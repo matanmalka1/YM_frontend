@@ -141,7 +141,7 @@ export const useAnnualReportsPage = () => {
       description: filingSeasonYear ? `עונת הגשה ${filingSeasonYear}` : 'ניהול ומעקב אחר דוחות שנתיים',
       taxYear,
     },
-    stats: { summary: season.summary },
+    stats: { summary: season.summary, isFetching: season.isSummaryFetching },
     filters: {
       fields: filterFields,
       values: filters,
