@@ -1,7 +1,13 @@
 // Public surface of the clients feature — only import from this barrel externally
 export { clientsApi, clientsQK } from './api'
 export { CLIENT_ENDPOINTS, CLIENT_ROUTES } from './api/endpoints'
-export { CLIENT_STATUS_OPTIONS, ENTITY_TYPE_OPTIONS, getVatTypeLabel } from './constants'
+export {
+  CLIENT_STATUS_OPTIONS,
+  CLIENT_STATUS_BADGE_VARIANTS,
+  ENTITY_TYPE_OPTIONS,
+  getClientStatusLabel,
+  getVatTypeLabel,
+} from './constants'
 
 export { ClientEditDrawer } from './components/drawer/ClientEditDrawer'
 

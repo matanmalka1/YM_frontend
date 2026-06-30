@@ -1,9 +1,10 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
-import { actionsColumn, monoColumn, textColumn, type Column } from '../../../components/ui/table'
+import { actionsColumn, monoColumn, statusColumn, textColumn, type Column } from '../../../components/ui/table'
 import type { SearchResult } from '../api'
 import { getResultIcon, getResultLabel, getResultVariant } from '../utils/searchResultMeta'
 import { SearchRowActions } from './SearchRowActions'
 import { Badge } from '@/components/ui/primitives/Badge'
+import { CLIENT_STATUS_BADGE_VARIANTS, getClientStatusLabel } from '@/features/clients'
 import { formatBinderNumber, formatClientOfficeId } from '@/utils/utils'
 import { SEARCH_MESSAGES } from '../messages'
 
@@ -29,6 +30,14 @@ export const searchColumns: Column<SearchResult>[] = [
     header: GLOBAL_UI_MESSAGES.common.client,
     tone: 'strong',
     getValue: (result) => result.client_name,
+  }),
+  statusColumn({
+    key: 'client_status',
+    header: GLOBAL_UI_MESSAGES.common.status,
+    headerClassName: 'w-px whitespace-nowrap',
+    getStatus: (result) => result.client_status ?? '',
+    getLabel: getClientStatusLabel,
+    variantMap: CLIENT_STATUS_BADGE_VARIANTS,
   }),
   monoColumn({
     key: 'id_number',
