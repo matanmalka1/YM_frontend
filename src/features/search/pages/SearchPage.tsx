@@ -42,16 +42,18 @@ export const Search: React.FC = () => {
       <PageHeader title={GLOBAL_UI_MESSAGES.common.search} description={SEARCH_MESSAGES.page.description} />
 
       <ToolbarContainer>
-        <div className="space-y-3">
-          <Input
-            ref={inputRef}
-            type="text"
-            value={queryDraft}
-            onChange={(e) => setQueryDraft(e.target.value)}
-            placeholder={GLOBAL_SEARCH_PLACEHOLDER}
-            startIcon={<SearchIcon className="h-4 w-4" />}
-            autoFocus
-          />
+        <div className="flex flex-wrap items-start gap-2">
+          <div className="min-w-[200px] flex-1">
+            <Input
+              ref={inputRef}
+              type="text"
+              value={queryDraft}
+              onChange={(e) => setQueryDraft(e.target.value)}
+              placeholder={GLOBAL_SEARCH_PLACEHOLDER}
+              startIcon={<SearchIcon className="h-4 w-4" />}
+              autoFocus
+            />
+          </div>
           <SearchFiltersBar
             filters={filters}
             onFilterChange={handleFilterChange}
@@ -92,7 +94,7 @@ export const Search: React.FC = () => {
             emptyMessage={GLOBAL_UI_MESSAGES.common.noResults}
           />
 
-          {!loading && total > 0 && (
+          {!loading && totalPages > 1 && (
             <PaginationCard
               page={filters.page}
               totalPages={totalPages}

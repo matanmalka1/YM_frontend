@@ -36,14 +36,14 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
       : null)
 
   return (
-    <div>
+    <div className="contents">
       <Button
         type="button"
         variant="ghost"
         size="sm"
         icon={<SlidersHorizontal className="h-4 w-4" />}
         onClick={onToggle}
-        className="text-gray-600 hover:text-gray-900"
+        className="shrink-0 text-gray-600 hover:text-gray-900"
       >
         {SEARCH_MESSAGES.filters.advanced}
         {advancedCount > 0 && (
@@ -55,7 +55,7 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
       </Button>
 
       {isOpen && (
-        <div className="mt-3 space-y-4 border-t border-gray-100 pt-4">
+        <div className="mt-3 w-full space-y-4 border-t border-gray-100 pt-4">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <ClientPickerField
               selectedClient={activeClient}

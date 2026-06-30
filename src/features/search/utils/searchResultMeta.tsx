@@ -1,16 +1,17 @@
 import { User, FileText } from 'lucide-react'
 import { getResultTypeLabel } from '../../../constants/filterOptions.constants'
+import type { BadgeVariant } from '@/utils/semanticColors'
 
 export const getResultIcon = (resultType: string) => {
-  if (resultType === 'binder') return <FileText className="h-4 w-4" />
-  if (resultType === 'client') return <User className="h-4 w-4" />
+  if (resultType === 'binder') return <FileText className="h-3.5 w-3.5" />
+  if (resultType === 'client') return <User className="h-3.5 w-3.5" />
   return null
 }
 
-export const getResultColor = (resultType: string) => {
-  if (resultType === 'binder') return 'text-primary-600 bg-primary-50'
-  if (resultType === 'client') return 'text-positive-700 bg-positive-50'
-  return 'text-gray-600 bg-gray-50'
+export const getResultVariant = (resultType: string): BadgeVariant => {
+  if (resultType === 'binder') return 'primary'
+  if (resultType === 'client') return 'positive'
+  return 'neutral'
 }
 
 export const getResultLabel = (resultType: string) => getResultTypeLabel(resultType)
