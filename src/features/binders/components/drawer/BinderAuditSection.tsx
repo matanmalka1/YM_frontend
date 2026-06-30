@@ -1,87 +1,21 @@
-import { useQuery } from '@tanstack/react-query'
-import { Clock, ArrowRight } from 'lucide-react'
-import { formatAuditTimestamp } from '@/utils/utils'
-import { Card } from '@/components/ui/primitives/Card'
-import { Badge } from '@/components/ui/primitives/Badge'
-import { Timeline, TimelineEntry } from '@/components/ui/feedback/Timeline'
-import { bindersApi, bindersQK } from '../../api'
-import {
-  getBinderCapacityStatusVariant,
-  getBinderCapacityStatusLabel,
-  getBinderLocationStatusVariant,
-  getBinderLocationStatusLabel,
-  isBinderCapacityStatus,
-  isBinderLocationStatus,
-} from '../../constants'
-import { staggerDelay } from '@/utils/animation'
+import { EntityAuditTrailSection, type FieldValueLabels } from '@/features/audit'
+import { BINDER_LOCATION_STATUS_LABELS, BINDER_CAPACITY_STATUS_LABELS } from '../../constants'
 import { BINDERS_MESSAGES } from '../../messages'
+
+const AUDIT_FIELD_VALUE_LABELS: FieldValueLabels = {
+  location_status: BINDER_LOCATION_STATUS_LABELS,
+  capacity_status: BINDER_CAPACITY_STATUS_LABELS,
+}
 
 interface BinderAuditSectionProps {
   binderId: number
 }
 
-const getAuditBadge = (fieldName: string, value: string) => {
-  if (fieldName === 'capacity_status') {
-    return {
-      label: getBinderCapacityStatusLabel(value),
-      variant: isBinderCapacityStatus(value) ? getBinderCapacityStatusVariant(value) : 'neutral',
-    }
-  }
-  return {
-    label: getBinderLocationStatusLabel(value),
-    variant: isBinderLocationStatus(value) ? getBinderLocationStatusVariant(value) : 'neutral',
-  }
-}
-
-export const BinderAuditSection: React.FC<BinderAuditSectionProps> = ({ binderId }) => {
-  const { data, isLoading } = useQuery({
-    queryKey: bindersQK.audit(binderId),
-    queryFn: () => bindersApi.getAudit(binderId),
-  })
-
-  const audit = data?.audit ?? []
-
-  if (isLoading) return null
-
-  return (
-    <Card
-      title={BINDERS_MESSAGES.audit.title}
-      subtitle={audit.length ? BINDERS_MESSAGES.audit.changesCount(audit.length) : undefined}
-    >
-      {audit.length === 0 ? (
-        <p className="text-sm text-gray-500">{BINDERS_MESSAGES.audit.empty}</p>
-      ) : (
-        <Timeline>
-          {[...audit].reverse().map((entry, index) => {
-            const oldBadge = entry.old_value ? getAuditBadge(entry.field_name, entry.old_value) : null
-            const newBadge = getAuditBadge(entry.field_name, entry.new_value)
-            return (
-              <TimelineEntry key={`${entry.changed_at}-${entry.field_name}`} animationDelay={staggerDelay(index, 40)}>
-                <div className="mb-1 flex flex-wrap items-center gap-1.5 text-sm">
-                  {entry.old_value && (
-                    <>
-                      <Badge variant={oldBadge?.variant ?? 'neutral'}>{oldBadge?.label}</Badge>
-                      <ArrowRight className="h-3 w-3 text-gray-400" />
-                    </>
-                  )}
-                  <Badge variant={newBadge.variant}>{newBadge.label}</Badge>
-                </div>
-
-                <div className="flex items-center justify-end gap-1 text-xs text-gray-500">
-                  {entry.changed_by_name && <span className="text-gray-600">{entry.changed_by_name}</span>}
-                  {entry.changed_by_name && <span>·</span>}
-                  <Clock className="h-3 w-3" />
-                  {formatAuditTimestamp(entry.changed_at)}
-                </div>
-
-                {entry.notes && (
-                  <p className="mt-1.5 text-xs text-gray-600 border-t border-gray-100 pt-1.5">{entry.notes}</p>
-                )}
-              </TimelineEntry>
-            )
-          })}
-        </Timeline>
-      )}
-    </Card>
-  )
-}
+export const BinderAuditSection: React.FC<BinderAuditSectionProps> = ({ binderId }) => (
+  <EntityAuditTrailSection
+    entityType="binder"
+    entityId={binderId}
+    title={BINDERS_MESSAGES.audit.title}
+    fieldValueLabels={AUDIT_FIELD_VALUE_LABELS}
+  />
+)

@@ -746,23 +746,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v1/annual-reports/{report_id}/audit': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Get Report Audit */
-    get: operations['get_report_audit_api_v1_annual_reports__report_id__audit_get']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/api/v1/clients/{client_record_id}/annual-reports': {
     parameters: {
       query?: never
@@ -1628,23 +1611,6 @@ export interface paths {
      * @description Soft-delete a binder (ADVISOR only).
      */
     delete: operations['delete_binder_api_v1_binders__binder_id__delete']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/v1/binders/{binder_id}/audit': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Get Binder Audit */
-    get: operations['get_binder_audit_api_v1_binders__binder_id__audit_get']
-    put?: never
-    post?: never
-    delete?: never
     options?: never
     head?: never
     patch?: never
@@ -3700,36 +3666,6 @@ export interface components {
       /** On Time Count */
       on_time_count: number
     }
-    /** AnnualReportAuditEntry */
-    AnnualReportAuditEntry: {
-      /** Id */
-      id: number
-      /** Annual Report Id */
-      annual_report_id: number
-      from_status?: components['schemas']['AnnualReportStatus'] | null
-      to_status: components['schemas']['AnnualReportStatus']
-      /** Changed By */
-      changed_by: number
-      /** Note */
-      note?: string | null
-      /**
-       * Occurred At
-       * Format: date-time
-       * @example 2026-01-02T03:04:05Z
-       */
-      occurred_at: string
-    }
-    /** AnnualReportAuditListResponse */
-    AnnualReportAuditListResponse: {
-      /** Items */
-      items: components['schemas']['AnnualReportAuditEntry'][]
-      /** Page */
-      page: number
-      /** Page Size */
-      page_size: number
-      /** Total */
-      total: number
-    }
     /** AnnualReportCard */
     AnnualReportCard: {
       /** Status */
@@ -3863,11 +3799,6 @@ export interface components {
        * @default []
        */
       schedules: components['schemas']['ScheduleEntryResponse'][]
-      /**
-       * Status Audit
-       * @default []
-       */
-      status_audit: components['schemas']['AnnualReportAuditEntry'][]
       /** Pension Contribution */
       pension_contribution?: string | null
       /** Donation Amount */
@@ -4290,40 +4221,6 @@ export interface components {
       email?: string | null
       /** Notes */
       notes?: string | null
-    }
-    /** BinderAuditEntry */
-    BinderAuditEntry: {
-      /** Field Name */
-      field_name: string
-      /** Old Value */
-      old_value: string
-      /** New Value */
-      new_value: string
-      /** Changed By User Id */
-      changed_by_user_id: number
-      /** Changed By Name */
-      changed_by_name?: string | null
-      /**
-       * Changed At
-       * Format: date-time
-       * @example 2026-01-02T03:04:05Z
-       */
-      changed_at: string
-      /** Notes */
-      notes?: string | null
-    }
-    /** BinderAuditResponse */
-    BinderAuditResponse: {
-      /** Binder Id */
-      binder_id: number
-      /** Audit */
-      audit: components['schemas']['BinderAuditEntry'][]
-      /** Total */
-      total: number
-      /** Page */
-      page: number
-      /** Page Size */
-      page_size: number
     }
     /**
      * BinderCapacityStatus
@@ -11642,67 +11539,6 @@ export interface operations {
       }
     }
   }
-  get_report_audit_api_v1_annual_reports__report_id__audit_get: {
-    parameters: {
-      query?: {
-        page?: number
-        page_size?: number
-      }
-      header?: never
-      path: {
-        report_id: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['AnnualReportAuditListResponse']
-        }
-      }
-      /** @description Authentication required */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Resource not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HTTPValidationError']
-        }
-      }
-    }
-  }
   list_client_reports_api_v1_clients__client_record_id__annual_reports_get: {
     parameters: {
       query?: {
@@ -14925,67 +14761,6 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
-      }
-      /** @description Authentication required */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Resource not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HTTPValidationError']
-        }
-      }
-    }
-  }
-  get_binder_audit_api_v1_binders__binder_id__audit_get: {
-    parameters: {
-      query?: {
-        page?: number
-        page_size?: number
-      }
-      header?: never
-      path: {
-        binder_id: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BinderAuditResponse']
-        }
       }
       /** @description Authentication required */
       401: {

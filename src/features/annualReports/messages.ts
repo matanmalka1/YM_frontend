@@ -95,17 +95,12 @@ export const ANNUAL_REPORTS_MESSAGES = {
     notReady: (issuesCount: number) => `הדוח אינו מוכן להגשה (${issuesCount} בעיות)`,
     completionLabel: 'אחוז השלמת מוכנות',
   },
-  statusAudit: {
-    empty: 'אין רשומות היסטוריה',
-    changedBy: (userId: number) => `משתמש #${userId}`,
-  },
   scheduleChecklist: {
     completionSummary: (completed: number, total: number) => `${completed}/${total} הושלמו`,
     completedAt: (date: string) => `הושלם: ${date}`,
   },
   timelineSection: {
     reportHistoryTitle: 'היסטוריית דוחות',
-    statusHistoryTitle: 'היסטוריית סטטוסים',
     auditTitle: 'יומן שינויים',
     auditSubtitle: 'שינויים שבוצעו בדוח השנתי',
   },

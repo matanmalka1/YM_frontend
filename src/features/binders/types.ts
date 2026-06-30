@@ -47,24 +47,6 @@ export interface BinderListCounters {
   capacity_full: number
 }
 
-interface BinderAuditEntry {
-  field_name: 'location_status' | 'capacity_status'
-  old_value: string
-  new_value: string
-  changed_by_user_id: number
-  changed_by_name?: string | null
-  changed_at: string
-  notes?: string | null
-}
-
-export interface BinderAuditResponse {
-  binder_id: number
-  audit: BinderAuditEntry[]
-  total: number
-  page: number
-  page_size: number
-}
-
 export interface ListBindersParams {
   location_status?: BinderLocationStatus
   capacity_status?: BinderCapacityStatus

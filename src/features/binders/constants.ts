@@ -1,4 +1,4 @@
-import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
+import { makeLabelGetter } from '@/utils/labels'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 
@@ -85,13 +85,11 @@ export const BINDER_LOCATION_STATUS_VARIANTS: Record<BinderLocationStatus, Badge
   ready_for_handover: 'positive',
   handed_over: 'neutral',
 }
-export const getBinderLocationStatusVariant = makeVariantGetter(BINDER_LOCATION_STATUS_VARIANTS)
 
 export const BINDER_CAPACITY_STATUS_VARIANTS: Record<BinderCapacityStatus, BadgeVariant> = {
   open: 'positive',
   full: 'warning',
 }
-export const getBinderCapacityStatusVariant = makeVariantGetter(BINDER_CAPACITY_STATUS_VARIANTS)
 
 export const BINDER_TYPE_OPTIONS: { value: string; label: string; disabled?: true }[] = [
   { value: '', label: 'בחר סוג חומר...', disabled: true },

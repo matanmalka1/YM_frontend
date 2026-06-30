@@ -10,7 +10,6 @@ import type {
   CreateAnnualReportPayload,
   ReportDetailResponse,
   ScheduleEntry,
-  AnnualReportAuditPagedResponse,
   AnnexDataPagedResponse,
   AnnexDataLine,
   AnnexDataAddPayload,
@@ -75,11 +74,6 @@ export const annualReportsApi = {
     const response = await api.post<ScheduleEntry>(ANNUAL_REPORT_ENDPOINTS.completeSchedules(reportId), {
       schedule,
     })
-    return response.data
-  },
-
-  getAudit: async (reportId: number): Promise<AnnualReportAuditPagedResponse> => {
-    const response = await api.get<AnnualReportAuditPagedResponse>(ANNUAL_REPORT_ENDPOINTS.audit(reportId))
     return response.data
   },
 

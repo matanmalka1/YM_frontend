@@ -159,10 +159,6 @@ export const formatDateTime = (value: string | null | undefined): string => {
   return formatSafeDate(value, 'dd/MM/yyyy HH:mm')
 }
 
-export const formatAuditTimestamp = (value: string | null | undefined): string => {
-  return formatSafeDate(value, 'd MMM yyyy HH:mm')
-}
-
 export const formatHebrewDate = (d: Date): string => format(d, 'EEEE, d בMMMM', { locale: he })
 
 export const formatWeekday = (value: string | null | undefined): string => {

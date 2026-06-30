@@ -22,7 +22,6 @@ export type {
   ExpenseCategoryType,
   ReportDetailResponse,
   ScheduleEntry,
-  AnnualReportAuditEntry,
   SeasonSummary,
   CreateAnnualReportPayload,
   StatusTransitionPayload,

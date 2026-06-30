@@ -1,6 +1,14 @@
 import { z } from 'zod'
 
-export type EntityAuditType = 'client' | 'business' | 'charge' | 'annual_report' | 'vat_work_item' | 'vat_invoice'
+export type EntityAuditType =
+  | 'client'
+  | 'business'
+  | 'charge'
+  | 'annual_report'
+  | 'vat_work_item'
+  | 'vat_invoice'
+  | 'binder'
+  | 'binder_intake'
 
 // old_value / new_value / metadata_json are JSON objects (dict | list | null) —
 // the backend stores them as JSONB and no longer json.dumps them into strings.
