@@ -10,8 +10,8 @@ export type { BinderDetailResponse } from './api'
 
 export {
   getBinderLocationStatusLabel,
-  BINDER_LOCATION_STATUS_LABELS,
-  BINDER_CAPACITY_STATUS_LABELS,
+  
+  
   BINDER_LOCATION_STATUS_OPTIONS,
   BINDER_CAPACITY_STATUS_OPTIONS,
 } from './constants'
