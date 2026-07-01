@@ -3,7 +3,7 @@ import { ChevronDown, ChevronUp, BarChart3 } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { Card } from '../../../../components/ui/primitives/Card'
 import { ReportAlertBanners } from './ReportAlertBanners'
-import { AnnualReportStatsSection } from './AnnualReportStatsSection'
+import { AnnualReportSummaryStrip } from './AnnualReportSummaryStrip'
 import { ReportMetaGrid } from './ReportMetaGrid'
 import { AnnualReportDetailForm } from '../tax/AnnualReportDetailForm'
 import { AnnualPLSummary } from '../financials/AnnualPLSummary'
@@ -36,7 +36,7 @@ export const AnnualReportOverviewSection: React.FC<Props> = ({
     <div className="space-y-6">
       <ReportAlertBanners report={report} advances={advances} />
 
-      <AnnualReportStatsSection report={report} />
+      <AnnualReportSummaryStrip report={report} />
 
       {/* Meta + detail form */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

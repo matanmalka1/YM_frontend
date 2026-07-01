@@ -8,7 +8,7 @@ export interface DefinitionItem {
 
 export interface DefinitionListProps {
   items: DefinitionItem[]
-  columns?: 1 | 2 | 3 | 4
+  columns?: 1 | 2 | 3 | 4 | 5
   /**
    * grid    — label above value in a responsive grid (DescriptionList style)
    * stacked — label + value as a horizontal row with a divider border (drawer detail style)
@@ -30,6 +30,7 @@ const gridCols = {
   2: 'grid-cols-1 md:grid-cols-2',
   3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
   4: 'grid-cols-2 md:grid-cols-4',
+  5: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-5',
 }
 
 export const DefinitionList: React.FC<DefinitionListProps> = ({

@@ -1,16 +1,5 @@
 import type { ComponentType } from 'react'
-import {
-  Banknote,
-  CalendarClock,
-  Files,
-  LayoutDashboard,
-  PiggyBank,
-  Receipt,
-  Scale,
-  Scissors,
-  TrendingDown,
-  TrendingUp,
-} from 'lucide-react'
+import { CalendarClock, Files, LayoutDashboard, Scale, Scissors, TrendingUp } from 'lucide-react'
 import type { SectionKey } from '../types'
 
 type IconComponent = ComponentType<{ size?: number; className?: string }>
@@ -32,15 +21,6 @@ export const CLIENT_TYPE_LABELS = {
   partnership: 'שותף בשותפות (1301)',
   control_holder: 'בעל שליטה (1301)',
   exempt_dealer: 'עוסק פטור (1301)',
-} as const
-
-export const SUMMARY_CARD_META = {
-  recognizedExpenses: { title: 'הוצאות', icon: Receipt, variant: 'purple' },
-  advancesPaid: { title: 'מקדמות ששולמו', icon: PiggyBank },
-  finalBalance: { title: 'יתרה סופית', icon: PiggyBank },
-  annualTax: { title: 'מס שנתי', icon: TrendingDown },
-  netProfit: { title: 'רווח נקי', icon: TrendingUp, variant: 'positive' },
-  grossIncome: { title: 'הכנסות ברוטו', icon: Banknote, variant: 'neutral' },
 } as const
 
 export const ALERT_WINDOW_DAYS = 60
