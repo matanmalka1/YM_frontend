@@ -10,13 +10,18 @@ export const getInputType = (type: FieldDef['type']) => {
 }
 
 const isPercentField = (field: FieldDef): boolean =>
-  field.key.includes('rate') || field.label.includes('%') || field.label.includes('שיעור')
+  field.key.includes('rate') ||
+  field.key.includes('percentage') ||
+  field.label.includes('%') ||
+  field.label.includes('שיעור')
+
+const COUNT_FIELD_KEY_HINTS = ['points', 'quantity', 'units', 'days', 'year']
+
+const isCountField = (field: FieldDef): boolean =>
+  field.label.includes('נקודות') || COUNT_FIELD_KEY_HINTS.some((hint) => field.key.includes(hint))
 
 const isMoneyField = (field: FieldDef): boolean =>
-  field.type === 'number' &&
-  !isPercentField(field) &&
-  !field.key.includes('points') &&
-  !field.label.includes('נקודות')
+  field.type === 'number' && !isPercentField(field) && !isCountField(field)
 
 const getRawLineFieldValue = (line: AnnexDataLine, key: string): unknown => (line.data as Record<string, unknown>)[key]
 

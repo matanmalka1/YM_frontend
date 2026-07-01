@@ -41,29 +41,25 @@ export const AnnualReportsPage: React.FC = () => {
 
       {banner.overdue.length > 0 && <OverdueBanner overdue={banner.overdue} onSelect={banner.onSelect} />}
 
-      <FilterPanel
-        {...filters}
-        title={ANNUAL_REPORTS_MESSAGES.page.filterTitle}
-        subtitle={ANNUAL_REPORTS_MESSAGES.page.filterSubtitle}
-      />
-
       {status.isLoading && <PageLoading message={ANNUAL_REPORTS_MESSAGES.page.loadingSeason} />}
       {status.error && <Alert variant="error" message={status.error} />}
 
       {!status.isLoading && !status.error && stats.summary && (
         <>
           <SeasonProgressBar summary={stats.summary} />
-          <div>
-            <h2 className="mb-3 text-lg font-semibold text-gray-900">
-              {ANNUAL_REPORTS_MESSAGES.page.allReportsTitle(table.taxYear)}
-            </h2>
+          
+              <FilterPanel
+                {...filters}
+                title={ANNUAL_REPORTS_MESSAGES.page.filterTitle}
+                subtitle={ANNUAL_REPORTS_MESSAGES.page.filterSubtitle}
+              />
+          
             <SeasonReportsTable
               reports={table.reports}
               isLoading={table.isLoading}
               taxYear={table.taxYear}
               onSelect={table.onSelect}
             />
-          </div>
         </>
       )}
 
