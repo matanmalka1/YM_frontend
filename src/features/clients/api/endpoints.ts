@@ -22,6 +22,8 @@ export const CLIENT_ROUTES = {
   taxCalendar: (clientId: number | string) => `/clients/${clientId}/tax-calendar`,
   advancePayments: (clientId: number | string) => `/clients/${clientId}/advance-payments`,
   annualReports: (clientId: number | string) => `/clients/${clientId}/annual-reports`,
+  annualReportDetail: (clientId: number | string, reportId: number | string) =>
+    `/clients/${clientId}/annual-reports/${reportId}`,
   documents: (clientId: number | string) => `/clients/${clientId}/documents`,
   communication: (clientId: number | string) => `/clients/${clientId}/communication`,
   businessDetail: (clientId: number | string, businessId: number | string) =>

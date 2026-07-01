@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react'
 import { DrawerSection } from '../../../../components/ui/overlays/DrawerPrimitives'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
-import { formatCurrencyILS as fmt, formatPercent } from '@/utils/utils'
+import { formatCurrencyILS, formatPercent } from '@/utils/utils'
 import { FINANCIAL_MESSAGES } from '../../constants/financialConstants'
 import { useAnnualPLSummary } from '../../hooks/useAnnualPLSummary'
 import { toProgressValue } from '../../utils/financialHelpers'
@@ -36,7 +36,7 @@ const WaterfallRow: React.FC<WaterfallRowProps> = ({ label, value, isSubtract, i
   >
     <span className={isSubtract ? semanticMonoToneClasses.negative : ''}>{label}</span>
     <span className={isSubtract ? semanticMonoToneClasses.negative : highlight ? 'text-warning-700' : ''}>
-      {fmt(value)}
+      {formatCurrencyILS(value)}
     </span>
   </div>
 )

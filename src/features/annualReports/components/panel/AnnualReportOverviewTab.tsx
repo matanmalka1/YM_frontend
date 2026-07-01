@@ -21,7 +21,7 @@ interface Props {
   submitRef?: React.RefObject<(() => void) | null>
 }
 
-export const AnnualReportOverviewSection: React.FC<Props> = ({
+export const AnnualReportOverviewTab: React.FC<Props> = ({
   report,
   detail,
   advances,
@@ -81,4 +81,4 @@ export const AnnualReportOverviewSection: React.FC<Props> = ({
   )
 }
 
-AnnualReportOverviewSection.displayName = 'AnnualReportOverviewSection'
+AnnualReportOverviewTab.displayName = 'AnnualReportOverviewTab'

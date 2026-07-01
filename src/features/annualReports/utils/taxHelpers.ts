@@ -1,4 +1,4 @@
-import { formatCurrencyILS as fmt, formatPercent } from '@/utils/utils'
+import { formatCurrencyILS, formatPercent } from '@/utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import {
   CREDIT_POINT_VALUE_BY_YEAR,
@@ -46,7 +46,7 @@ export const getLiabilityTone = (liability: number | null) => {
 export const fmtRate = (rate: string | number) => formatPercent(rate, { isRatio: true, fractionDigits: 0 })
 
 export const fmtRange = (from: string | number, to: string | number | null) =>
-  to === null ? `מעל ${fmt(from)}` : `${fmt(from)} – ${fmt(to)}`
+  to === null ? `מעל ${formatCurrencyILS(from)}` : `${formatCurrencyILS(from)} – ${formatCurrencyILS(to)}`
 
 export const getRecognitionTone = (recognitionRate: string | number) =>
   Number(recognitionRate) < 100 ? semanticMonoToneClasses.warning : ''
@@ -59,7 +59,7 @@ export const buildCreditRows = (detail: AnnualReportFull, taxYear: number): Cred
   const rows: CreditRow[] = [
     {
       label: 'נקודות זיכוי בסיסיות',
-      description: `${creditPoints} נקודות × ${fmt(cpv)}`,
+      description: `${creditPoints} נקודות × ${formatCurrencyILS(cpv)}`,
       amount: creditPoints * cpv,
     },
   ]
@@ -85,7 +85,7 @@ export const buildCreditRows = (detail: AnnualReportFull, taxYear: number): Cred
   if (tuitionCredit > 0) {
     rows.push({
       label: 'שכר לימוד (ילדים)',
-      description: `${fmt(cpv)}/שנה`,
+      description: `${formatCurrencyILS(cpv)}/שנה`,
       amount: tuitionCredit,
     })
   }

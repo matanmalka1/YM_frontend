@@ -92,7 +92,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
     completedAt: (date: string) => `הושלם: ${date}`,
   },
   timelineSection: {
-    reportHistoryTitle: 'היסטוריית דוחות',
     auditTitle: 'יומן שינויים',
     auditSubtitle: 'שינויים שבוצעו בדוח השנתי',
   },
@@ -104,6 +103,7 @@ export const ANNUAL_REPORTS_MESSAGES = {
     taxDueHeader: 'חבות מס',
     submittedAtHeader: 'תאריך הגשה',
     rowActionsAriaLabel: (id: number) => `פעולות לדוח ${id}`,
+    currentReportActionLabel: 'דוח נוכחי',
   },
   reportMetaGrid: {
     taxYear: 'שנת מס',
@@ -134,18 +134,10 @@ export const ANNUAL_REPORTS_MESSAGES = {
     overdueNote: 'חרגו ממועד הגשה',
   },
   clientTab: {
-    noReportExists: 'לא קיים דוח',
     loading: 'טוען דוחות שנתיים...',
-    yearsAriaLabel: 'שנות מס לדוחות שנתיים',
-    submittedTitle: (year: number) => `דוח שנתי ${year} הוגש בהצלחה`,
-    notSubmittedTitle: (year: number) => `דוח שנתי ${year} עדיין לא הוגש`,
-    submittedAtNote: (date: string) => `תאריך הגשה: ${date}`,
-    filingDeadlineNote: (date: string) => `מועד הגשה: ${date}`,
-    statusPrefix: (status: string) => `סטטוס: ${status}`,
     compareYears: 'השוואה בין שנים',
     newReport: 'דוח חדש',
-    noReportForYear: (year: number) => `אין דוח לשנת מס ${year}`,
-    createNewReport: 'צור דוח חדש',
+    reportHistoryTitle: 'היסטוריית דוחות',
   },
   yearComparisonModal: {
     title: 'השוואה בין שנים',
@@ -235,7 +227,7 @@ export const ANNUAL_REPORTS_MESSAGES = {
     taxInBracketHeader: 'מס במדרגה',
     sectionTitle: 'פירוט מדרגות מס',
   },
-  taxCalculationPanel: {
+  taxCalculationTab: {
     calculating: 'מחשב מס...',
     taxBeforeCredits: 'מס לפני זיכויים',
     taxCredits: 'זיכויי מס',

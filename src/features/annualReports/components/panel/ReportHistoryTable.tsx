@@ -1,10 +1,11 @@
+import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Eye } from 'lucide-react'
 import { annualReportsApi, annualReportsQK, type AnnualReportListItem } from '../../api'
 import { actionsColumn, DataTable, dateColumn, moneyColumn, RowActionItem, RowActionsMenu } from '@/components/ui/table'
-import { Badge } from '../../../../components/ui/primitives/Badge'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { getStatusLabel, getStatusVariant } from '../../api'
-import { formatCurrencyILS as fmt } from '../../../../utils/utils'
+import { formatCurrencyILS } from '@/utils/utils'
 import { sortReportsByTaxYearDesc } from '../../utils/panelHelpers'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../../constants/reportConstants'
@@ -25,65 +26,76 @@ export const ReportHistoryTable: React.FC<Props> = ({ clientId, currentReportId,
     enabled: !!clientId,
   })
 
-  const sorted = sortReportsByTaxYearDesc(reports)
+  const sortedReports = useMemo(() => sortReportsByTaxYearDesc(reports), [reports])
+
+  const columns = useMemo(
+    () => [
+      {
+        key: 'tax_year',
+        header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.yearHeader,
+        kind: 'number' as const,
+        tone: 'strong' as const,
+        render: (r: AnnualReportListItem) => r.tax_year,
+      },
+      moneyColumn<AnnualReportListItem>({
+        key: 'assessment_amount',
+        header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.assessmentHeader,
+        getValue: (r) => (r.assessment_amount == null ? null : formatCurrencyILS(r.assessment_amount)),
+      }),
+      moneyColumn<AnnualReportListItem>({
+        key: 'refund_due',
+        header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.refundDueHeader,
+        tone: 'success',
+        getValue: (r) => (r.refund_due == null ? null : formatCurrencyILS(r.refund_due)),
+      }),
+      moneyColumn<AnnualReportListItem>({
+        key: 'tax_due',
+        header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.taxDueHeader,
+        tone: 'danger',
+        getValue: (r) => (r.tax_due == null ? null : formatCurrencyILS(r.tax_due)),
+      }),
+      dateColumn<AnnualReportListItem>({
+        key: 'submitted_at',
+        header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.submittedAtHeader,
+        getValue: (r) => r.submitted_at,
+      }),
+      {
+        key: 'status',
+        header: GLOBAL_UI_MESSAGES.common.status,
+        kind: 'status' as const,
+        render: (r: AnnualReportListItem) => (
+          <Badge variant={getStatusVariant(r.status)}>{getStatusLabel(r.status)}</Badge>
+        ),
+      },
+      actionsColumn<AnnualReportListItem>({
+        key: 'actions',
+        header: '',
+        render: (r) => {
+          const isCurrent = r.id === currentReportId
+          return (
+            <RowActionsMenu ariaLabel={ANNUAL_REPORTS_MESSAGES.reportHistoryTable.rowActionsAriaLabel(r.id)}>
+              <RowActionItem
+                label={isCurrent ? ANNUAL_REPORTS_MESSAGES.reportHistoryTable.currentReportActionLabel : GLOBAL_UI_MESSAGES.actions.view}
+                onClick={() => onSelect?.(r.id)}
+                icon={<Eye className="h-4 w-4" />}
+                disabled={isCurrent}
+              />
+            </RowActionsMenu>
+          )
+        },
+      }),
+    ],
+    [currentReportId, onSelect],
+  )
 
   return (
     <DataTable<AnnualReportListItem>
-      data={sorted}
+      data={sortedReports}
       isLoading={isLoading}
       getRowKey={(r) => r.id}
       emptyMessage={ANNUAL_REPORTS_MESSAGES.reportHistoryTable.emptyMessage}
       getRowVariant={(r) => (r.id === currentReportId ? 'primarySoft' : undefined)}
-      columns={[
-        {
-          key: 'tax_year',
-          header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.yearHeader,
-          kind: 'number',
-          tone: 'strong',
-          render: (r) => r.tax_year,
-        },
-        moneyColumn({
-          key: 'assessment_amount',
-          header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.assessmentHeader,
-          getValue: (r) => fmt(r.assessment_amount),
-        }),
-        moneyColumn({
-          key: 'refund_due',
-          header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.refundDueHeader,
-          tone: 'success',
-          getValue: (r) => fmt(r.refund_due),
-        }),
-        moneyColumn({
-          key: 'tax_due',
-          header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.taxDueHeader,
-          tone: 'danger',
-          getValue: (r) => fmt(r.tax_due),
-        }),
-        dateColumn({
-          key: 'submitted_at',
-          header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.submittedAtHeader,
-          getValue: (r) => r.submitted_at,
-        }),
-        {
-          key: 'status',
-          header: GLOBAL_UI_MESSAGES.common.status,
-          kind: 'status',
-          render: (r) => <Badge variant={getStatusVariant(r.status)}>{getStatusLabel(r.status)}</Badge>,
-        },
-        actionsColumn({
-          key: 'actions',
-          header: '',
-          render: (r) => (
-            <RowActionsMenu ariaLabel={ANNUAL_REPORTS_MESSAGES.reportHistoryTable.rowActionsAriaLabel(r.id)}>
-              <RowActionItem
-                label={GLOBAL_UI_MESSAGES.actions.view}
-                onClick={() => onSelect?.(r.id)}
-                icon={<Eye className="h-4 w-4" />}
-              />
-            </RowActionsMenu>
-          ),
-        }),
-      ]}
+      columns={columns}
     />
   )
 }

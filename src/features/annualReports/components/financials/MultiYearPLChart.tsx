@@ -1,7 +1,7 @@
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { annualReportFinancialsApi, annualReportsApi, annualReportsQK, annualReportTaxApi } from '../../api'
-import { formatCurrencyILS as fmt } from '../../../../utils/utils'
+import { formatCurrencyILS } from '../../../../utils/utils'
 import { CHART_LINES, CHART_MARGIN, TREND_REPORT_LIMIT } from '../../constants/financialConstants'
 import { buildTrendChartRows } from '../../utils/financialHelpers'
 import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../../constants/reportConstants'
@@ -64,7 +64,7 @@ export const MultiYearPLChart: React.FC<MultiYearPLChartProps> = ({ clientId, cu
             width={52}
           />
           <Tooltip
-            formatter={(value) => fmt(Number(value))}
+            formatter={(value) => formatCurrencyILS(Number(value))}
             labelFormatter={(label) => ANNUAL_REPORTS_MESSAGES.chart.yearTooltipLabel(label)}
           />
           <Legend wrapperStyle={{ fontSize: 11 }} />

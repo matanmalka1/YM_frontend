@@ -1,12 +1,12 @@
 import type { MutableRefObject } from 'react'
 import type { SectionKey, AnnualReportDetail } from '../../types'
 import type { ReportDetailResponse, AnnualReportScheduleKey } from '../../api'
-import { AnnualReportOverviewSection } from './AnnualReportOverviewSection'
-import { IncomeExpensePanel } from '../financials/IncomeExpensePanel'
-import { TaxCalculationPanel } from '../tax/TaxCalculationPanel'
+import { AnnualReportOverviewTab } from './AnnualReportOverviewTab'
+import { IncomeExpenseTab } from '../financials/IncomeExpenseTab'
+import { TaxCalculationTab } from '../tax/TaxCalculationTab'
 import { DeductionsTab } from '../tax/DeductionsTab'
 import { AnnualReportAnnexesTab } from '../annex/AnnualReportAnnexesTab'
-import { AnnualReportTimelineSection } from './AnnualReportTimelineSection'
+import { AnnualReportTimelineTab } from './AnnualReportTimelineTab'
 
 interface AnnualReportSectionContentProps {
   reportId: number
@@ -36,7 +36,7 @@ export const AnnualReportSectionContent = ({
   switch (activeSection) {
     case 'overview':
       return (
-        <AnnualReportOverviewSection
+        <AnnualReportOverviewTab
           report={report}
           detail={report}
           onDetailSave={updateDetail}
@@ -46,9 +46,9 @@ export const AnnualReportSectionContent = ({
         />
       )
     case 'financials':
-      return <IncomeExpensePanel reportId={reportId} clientRecordId={report.client_record_id} />
+      return <IncomeExpenseTab reportId={reportId} clientRecordId={report.client_record_id} />
     case 'tax':
-      return <TaxCalculationPanel reportId={reportId} />
+      return <TaxCalculationTab reportId={reportId} />
     case 'deductions':
       return <DeductionsTab reportId={reportId} taxYear={report.tax_year} />
     case 'annex':
@@ -63,7 +63,7 @@ export const AnnualReportSectionContent = ({
         />
       )
     case 'timeline':
-      return <AnnualReportTimelineSection report={report} />
+      return <AnnualReportTimelineTab report={report} />
   }
 }
 

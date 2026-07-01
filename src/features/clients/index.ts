@@ -20,6 +20,7 @@ export { useClientMutations } from './hooks/useClientMutations'
 export { useClientsPage } from './hooks/useClientsPage'
 
 export { ClientDetails } from './pages/ClientDetailsPage'
+export { ClientAnnualReportDetail } from './pages/ClientAnnualReportDetailPage'
 export { Clients } from './pages/ClientsPage'
 export { extractClientErrorCode } from './utils/clientErrors'
 export type {

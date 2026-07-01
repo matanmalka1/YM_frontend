@@ -7,7 +7,7 @@ import { annualReportsApi, annualReportsQK, annualReportTaxApi } from '../api'
 import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 import { toReportDetailsPayload, toTaxInputValues, toTaxResultPayload } from '../utils/taxHelpers'
 
-export const useTaxCalculationPanel = (reportId: number) => {
+export const useTaxCalculationTab = (reportId: number) => {
   const queryClient = useQueryClient()
   const { isAdvisor } = useRole()
   const [pension, setPension] = useState('')

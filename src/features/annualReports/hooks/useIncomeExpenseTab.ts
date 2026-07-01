@@ -17,7 +17,7 @@ import { useIncomeExpenseMutations } from './useIncomeExpenseMutations'
 
 type EditingLine = { type: 'income' | 'expense'; id: number } | null
 
-export const useIncomeExpensePanel = (reportId: number) => {
+export const useIncomeExpenseTab = (reportId: number) => {
   const queryClient = useQueryClient()
   const { isAdvisor } = useRole()
   const [editingLine, setEditingLine] = useState<EditingLine>(null)

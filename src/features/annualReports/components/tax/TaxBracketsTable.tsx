@@ -1,6 +1,6 @@
 import type { BracketBreakdownItem } from '../../api'
 import { DataTable, moneyColumn, numberColumn, type Column } from '@/components/ui/table'
-import { formatCurrencyILS as fmt } from '@/utils/utils'
+import { formatCurrencyILS } from '@/utils/utils'
 import { fmtRange, fmtRate } from '../../utils/taxHelpers'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
@@ -28,12 +28,12 @@ export const TaxBracketsTable: React.FC<Props> = ({ brackets }) => {
     moneyColumn({
       key: 'taxable',
       header: ANNUAL_REPORTS_MESSAGES.bracketsTable.taxableInBracketHeader,
-      getValue: (b) => fmt(b.taxable_in_bracket),
+      getValue: (b) => formatCurrencyILS(b.taxable_in_bracket),
     }),
     moneyColumn({
       key: 'tax',
       header: ANNUAL_REPORTS_MESSAGES.bracketsTable.taxInBracketHeader,
-      getValue: (b) => fmt(b.tax_in_bracket),
+      getValue: (b) => formatCurrencyILS(b.tax_in_bracket),
     }),
   ]
 

@@ -3,6 +3,7 @@ export { annualReportsApi, annualReportSeasonApi, annualReportsQK, getStatusLabe
 export { SeasonProgressBar } from './components/season/SeasonProgressBar'
 export { SeasonReportsTable } from './components/season/SeasonReportsTable'
 export { ClientAnnualReportsTab } from './components/shared/ClientAnnualReportsTab'
+export { AnnualReportFullPanel } from './components/panel/AnnualReportFullPanel'
 export { CreateReportModal } from './components/shared/CreateReportModal'
 export { OverdueBanner } from './components/shared/OverdueBanner'
 export { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from './constants/reportConstants'

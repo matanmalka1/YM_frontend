@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { Alert } from '../../../../components/ui/overlays/Alert'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { MonoValue } from '../../../../components/ui/primitives/MonoValue'
-import { formatCurrencyILS as fmt } from '../../../../utils/utils'
+import { formatCurrencyILS } from '../../../../utils/utils'
 import { CATEGORY_LABELS as VAT_CATEGORY_LABELS } from '../../../vatReports'
 import type { VatAutoPopulateResponse } from '../../api'
 import {
@@ -67,11 +67,11 @@ export const AnnualReportVatAutoPopulateResultPanel: React.FC<AnnualReportVatAut
             ) : null}
             <ResultMetric
               label={ANNUAL_REPORTS_MESSAGES.vatAutoPopulate.totalIncome}
-              value={fmt(result.income_total)}
+              value={formatCurrencyILS(result.income_total)}
             />
             <ResultMetric
               label={ANNUAL_REPORTS_MESSAGES.vatAutoPopulate.totalExpense}
-              value={fmt(result.expense_total)}
+              value={formatCurrencyILS(result.expense_total)}
             />
           </div>
           {onDismiss && (
@@ -101,7 +101,7 @@ export const AnnualReportVatAutoPopulateResultPanel: React.FC<AnnualReportVatAut
                     <span className="text-gray-500">·</span>
                     <span className="text-gray-700">{VAT_AUTO_POPULATE_SKIPPED_REASON_LABELS[item.reason]}</span>
                     <span className="mr-auto font-mono font-semibold tabular-nums text-warning-800">
-                      {fmt(item.amount)}
+                      {formatCurrencyILS(item.amount)}
                     </span>
                   </div>
                   <p className="mt-1 text-gray-500">
@@ -125,13 +125,15 @@ export const AnnualReportVatAutoPopulateResultPanel: React.FC<AnnualReportVatAut
               <div key={item.annual_category} className="rounded-md border border-gray-100 p-2">
                 <div className="flex items-center justify-between gap-3 text-xs">
                   <span className="font-semibold text-gray-800">{getAnnualExpenseLabel(item.annual_category)}</span>
-                  <span className="font-mono font-semibold tabular-nums text-gray-700">{fmt(item.amount)}</span>
+                  <span className="font-mono font-semibold tabular-nums text-gray-700">
+                    {formatCurrencyILS(item.amount)}
+                  </span>
                 </div>
                 <div className="mt-2 grid gap-1 sm:grid-cols-2">
                   {Object.entries(item.source_vat_categories).map(([category, amount]) => (
                     <div key={`${item.annual_category}-${category}`} className="flex justify-between gap-2 text-xs">
                       <span className="text-gray-500">{getVatCategoryLabel(category)}</span>
-                      <MonoValue value={fmt(amount)} tone="neutral" className="text-xs" />
+                      <MonoValue value={formatCurrencyILS(amount)} tone="neutral" className="text-xs" />
                     </div>
                   ))}
                 </div>

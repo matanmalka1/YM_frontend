@@ -3,7 +3,7 @@ import { useAnnualReportDetailPage } from '../../hooks/useAnnualReportDetailPage
 import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
 import { StatusTransitionPanel } from '../statusTransition/StatusTransitionPanelRoot'
 import { AnnualReportSectionContent } from './AnnualReportSectionContent'
-import { PageHeader } from '../../../../components/layout/PageHeader'
+import { PageHeader, type Breadcrumb } from '../../../../components/layout/PageHeader'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { SegmentedControl, SegmentedControlItem } from '../../../../components/ui/primitives/SegmentedControl'
 import { PANEL_NAV_ITEMS } from '../../constants/panelConstants'
@@ -15,9 +15,15 @@ import { GLOBAL_UI_MESSAGES } from '@/messages'
 interface AnnualReportFullPanelProps {
   reportId: number
   backPath?: string
+  /**
+   * Leading breadcrumbs rendered before the report crumb. Defaults to the
+   * standalone tax-reports list; the client tab passes its own client-scoped
+   * chain (לקוחות › client › דוחות שנתיים) so the report stays nested in context.
+   */
+  leadingBreadcrumbs?: Breadcrumb[]
 }
 
-export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: AnnualReportFullPanelProps) => {
+export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports', leadingBreadcrumbs }: AnnualReportFullPanelProps) => {
   const {
     report,
     isLoading,
@@ -68,8 +74,8 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
           title={ANNUAL_REPORTS_MESSAGES.fullPanel.title(report.tax_year)}
           description={getClientLabel(report)}
           breadcrumbs={[
-            { label: ANNUAL_REPORTS_MESSAGES.fullPanel.breadcrumbList, to: backPath },
-            { label: ANNUAL_REPORTS_MESSAGES.fullPanel.breadcrumbReport(report.tax_year), to: '#' },
+            ...(leadingBreadcrumbs ?? [{ label: ANNUAL_REPORTS_MESSAGES.fullPanel.breadcrumbList, to: backPath }]),
+            { label: ANNUAL_REPORTS_MESSAGES.fullPanel.breadcrumbReport(report.tax_year) },
           ]}
           actions={
             <>

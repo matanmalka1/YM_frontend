@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { cn, formatCurrencyILS as fmt } from '@/utils/utils'
+import { cn, formatCurrencyILS } from '@/utils/utils'
 import { Card } from '@/components/ui/primitives/Card'
 
 interface AnnualReportFinancialSectionProps {
@@ -31,7 +31,7 @@ export const AnnualReportFinancialSection: React.FC<AnnualReportFinancialSection
     <div className={cn('flex items-center gap-2 border-b border-gray-100 px-5 py-3', headerClassName)}>
       {icon}
       <h4 className={cn('text-sm font-semibold', titleClassName)}>{title}</h4>
-      <span className={cn('mr-auto text-xs font-medium', totalClassName)}>{fmt(total)}</span>
+      <span className={cn('mr-auto text-xs font-medium', totalClassName)}>{formatCurrencyILS(total)}</span>
     </div>
     <div className="divide-y divide-gray-50 px-1">
       {isEmpty ? <p className="px-4 py-6 text-center text-sm text-gray-400">{emptyMessage}</p> : null}

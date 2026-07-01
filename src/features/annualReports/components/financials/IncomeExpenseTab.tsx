@@ -6,19 +6,19 @@ import { AnnualReportVatAutoPopulateResultPanel } from './AnnualReportVatAutoPop
 import { LineRow } from './FinancialLineRow'
 import { INCOME_LABELS, EXPENSE_LABELS } from '../../constants/reportConstants'
 import { AddExpenseLineForm } from './AddExpenseLineForm'
-import { useIncomeExpensePanel } from '../../hooks/useIncomeExpensePanel'
+import { useIncomeExpenseTab } from '../../hooks/useIncomeExpenseTab'
 import { EditIncomeLineForm } from './EditIncomeLineForm'
 import { EditExpenseLineForm } from './EditExpenseLineForm'
 import { FINANCIAL_MESSAGES } from '../../constants/financialConstants'
 import { normalizeExpenseDescription } from '../../utils/financialHelpers'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
-interface IncomeExpensePanelProps {
+interface IncomeExpenseTabProps {
   reportId: number
   clientRecordId: number
 }
-export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId, clientRecordId }) => {
-  const panel = useIncomeExpensePanel(reportId)
+export const IncomeExpenseTab: React.FC<IncomeExpenseTabProps> = ({ reportId, clientRecordId }) => {
+  const panel = useIncomeExpenseTab(reportId)
 
   if (panel.isLoading) {
     return <p className="py-8 text-center text-sm text-gray-400">{FINANCIAL_MESSAGES.loadingFinancials}</p>
@@ -124,4 +124,4 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
   )
 }
 
-IncomeExpensePanel.displayName = 'IncomeExpensePanel'
+IncomeExpenseTab.displayName = 'IncomeExpenseTab'

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { annualReportsApi, annualReportsQK } from '../../api'
-import { formatCurrencyILS as fmt } from '@/utils/utils'
+import { formatCurrencyILS } from '@/utils/utils'
 import { buildCreditRows, sumCreditRows } from '../../utils/taxHelpers'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
@@ -33,13 +33,13 @@ export const TaxCreditsPanel: React.FC<Props> = ({ reportId, taxYear }) => {
               <p className="text-sm font-medium text-gray-800">{r.label}</p>
               <p className="text-xs text-gray-400">{r.description}</p>
             </div>
-            <span className="text-sm font-semibold text-info-700">{fmt(r.amount)}</span>
+            <span className="text-sm font-semibold text-info-700">{formatCurrencyILS(r.amount)}</span>
           </div>
         ))}
       </div>
       <div className="border-t border-gray-200 bg-gray-50 px-4 py-3 flex justify-between">
         <span className="text-sm font-semibold text-gray-700">{ANNUAL_REPORTS_MESSAGES.creditsPanel.total}</span>
-        <span className="text-sm font-bold text-info-800">{fmt(total)}</span>
+        <span className="text-sm font-bold text-info-800">{formatCurrencyILS(total)}</span>
       </div>
     </div>
   )

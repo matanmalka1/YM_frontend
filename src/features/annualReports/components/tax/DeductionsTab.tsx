@@ -3,7 +3,7 @@ import { MoreHorizontal, Scissors } from 'lucide-react'
 import { annualReportFinancialsApi, annualReportsQK } from '../../api'
 import { TaxCreditsPanel } from './TaxCreditsPanel'
 import { EXPENSE_LABELS } from '../../constants/reportConstants'
-import { cn, formatCurrencyILS as fmt } from '../../../../utils/utils'
+import { cn, formatCurrencyILS } from '../../../../utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { CATEGORY_ICONS } from '../../constants/taxConstants'
 import { getRecognitionTone } from '../../utils/taxHelpers'
@@ -36,7 +36,9 @@ export const DeductionsTab: React.FC<Props> = ({ reportId, taxYear }) => {
           icon={<Scissors className="h-4 w-4 text-negative-500" />}
           actions={
             expenses.length > 0 ? (
-              <span className={cn('text-sm font-bold', semanticMonoToneClasses.negative)}>{fmt(totalRecognized)}</span>
+              <span className={cn('text-sm font-bold', semanticMonoToneClasses.negative)}>
+                {formatCurrencyILS(totalRecognized)}
+              </span>
             ) : undefined
           }
           size="compact"
@@ -66,7 +68,7 @@ export const DeductionsTab: React.FC<Props> = ({ reportId, taxYear }) => {
                     </div>
                   </div>
                   <span className={cn('text-sm font-semibold', semanticMonoToneClasses.negative)}>
-                    {fmt(e.recognized_amount)}
+                    {formatCurrencyILS(e.recognized_amount)}
                   </span>
                 </div>
               )

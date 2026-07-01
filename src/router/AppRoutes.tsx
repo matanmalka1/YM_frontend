@@ -9,7 +9,7 @@ import { AnnualReportDetail, AnnualReportsPage } from '../features/annualReports
 import { AdvancePayments } from '../features/advancedPayments'
 import { Binders } from '../features/binders'
 import { Charges } from '../features/charges'
-import { ClientDetails, Clients } from '../features/clients'
+import { ClientAnnualReportDetail, ClientDetails, Clients } from '../features/clients'
 import { BusinessDetails } from '../features/businesses'
 import { DashboardPage } from '../features/dashboard'
 import { Navbar } from '../components/layout/Navbar/Navbar'
@@ -158,6 +158,7 @@ export const AppRoutes: React.FC = () => {
               element={<ClientDetails initialTab="advance-payments" />}
             />
             <Route path="clients/:clientId/annual-reports" element={<ClientDetails initialTab="annual-reports" />} />
+            <Route path="clients/:clientId/annual-reports/:reportId" element={<ClientAnnualReportDetail />} />
             <Route path="clients/:clientId/communication" element={<ClientDetails initialTab="communication" />} />
             <Route path="clients/:clientId/notifications" element={<ClientDetails initialTab="notifications" />} />
             <Route path="clients/:clientId/notes" element={<ClientDetails initialTab="notes" />} />

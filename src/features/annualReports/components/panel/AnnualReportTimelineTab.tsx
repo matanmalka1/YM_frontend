@@ -1,9 +1,6 @@
-import { useNavigate } from 'react-router-dom'
 import { EntityAuditTrailSection, type FieldValueLabels } from '@/features/audit'
 import { STATUS_LABELS } from '../../api'
 import { CLIENT_TYPE_LABELS } from '../../constants/panelConstants'
-import { Card } from '../../../../components/ui/primitives/Card'
-import { ReportHistoryTable } from './ReportHistoryTable'
 import type { AnnualReportDetail } from '../../types'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
@@ -12,23 +9,13 @@ const AUDIT_FIELD_VALUE_LABELS: FieldValueLabels = {
   status: STATUS_LABELS,
 }
 
-interface AnnualReportTimelineSectionProps {
+interface AnnualReportTimelineTabProps {
   report: AnnualReportDetail
 }
 
-export const AnnualReportTimelineSection = ({ report }: AnnualReportTimelineSectionProps) => {
-  const navigate = useNavigate()
-
+export const AnnualReportTimelineTab = ({ report }: AnnualReportTimelineTabProps) => {
   return (
     <div className="space-y-6">
-      <Card title={ANNUAL_REPORTS_MESSAGES.timelineSection.reportHistoryTitle} size="compact">
-        <ReportHistoryTable
-          clientId={report.client_record_id}
-          currentReportId={report.id}
-          onSelect={(reportId) => navigate(`/tax/reports/${reportId}`, { state: { from: '/tax/reports' } })}
-        />
-      </Card>
-
       <EntityAuditTrailSection
         entityType="annual_report"
         entityId={report.id}
@@ -40,4 +27,4 @@ export const AnnualReportTimelineSection = ({ report }: AnnualReportTimelineSect
   )
 }
 
-AnnualReportTimelineSection.displayName = 'AnnualReportTimelineSection'
+AnnualReportTimelineTab.displayName = 'AnnualReportTimelineTab'
