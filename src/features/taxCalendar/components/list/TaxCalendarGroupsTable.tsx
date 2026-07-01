@@ -17,12 +17,21 @@ import {
   type PeriodSummaryMetric,
 } from '@/components/ui/table'
 import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
-import { cn, formatDate, formatPlainIdentifier, getErrorMessage, getReportingPeriodLabelWithYear } from '@/utils/utils'
+import { cn, formatDate, formatPlainIdentifier, getErrorMessage } from '@/utils/utils'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { useTaxCalendarGroupItems } from '../../hooks/useTaxCalendarGroupItems'
 import { PAGE_SIZE_SM as ITEM_PAGE_SIZE } from '@/constants/pagination.constants'
-import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarGroup, type TaxCalendarGroupItem } from '../../api'
-import { TAX_CALENDAR_SOURCE_TYPE_LABELS } from '../../constants'
+import { type TaxCalendarGroup, type TaxCalendarGroupItem } from '../../api'
+import {
+  formatTaxCalendarEffectiveDueDateRange,
+  formatTaxCalendarGroupTitle,
+  getTaxCalendarGroupDueDatePrefix,
+  getTaxCalendarItemPath,
+  getTaxCalendarItemStateLabel,
+  getTaxCalendarItemStateVariant,
+  getTaxCalendarSourceTypeLabel,
+  hasTaxCalendarGroupOverride,
+} from '../../helpers'
 import { TAX_CALENDAR_MESSAGES } from '../../messages'
 import { TAX_CALENDAR_ERROR_MESSAGES } from '../../errorMessages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
@@ -33,46 +42,6 @@ interface TaxCalendarGroupsTableProps {
   clientSearchText?: string
   clientRecordId?: number
 }
-
-const formatGroupTitle = (group: TaxCalendarGroup): string => {
-  const obligationLabel = TAX_CALENDAR_OBLIGATION_LABELS[group.obligation_type]
-  const periodLabel = getReportingPeriodLabelWithYear(group.period, group.period_months_count, group.tax_year)
-  return `${obligationLabel} · ${periodLabel}`
-}
-
-const formatEffectiveDueDateRange = (group: TaxCalendarGroup): string => {
-  if (group.effective_due_date_min !== group.effective_due_date_max) {
-    return `${formatDate(group.effective_due_date_min)}–${formatDate(group.effective_due_date_max)}`
-  }
-  return formatDate(group.effective_due_date_min)
-}
-
-const hasGroupOverride = (group: TaxCalendarGroup): boolean =>
-  group.effective_due_date_min !== group.regulatory_due_date ||
-  group.effective_due_date_max !== group.regulatory_due_date
-
-const getItemPath = (item: TaxCalendarGroupItem): string => {
-  if (item.source_type === 'vat_work_item') return `/tax/vat/${item.source_id}`
-  if (item.source_type === 'annual_report') return `/tax/reports/${item.source_id}`
-  return `/clients/${item.client_record_id}/advance-payments`
-}
-
-const getStateLabel = (item: TaxCalendarGroupItem): string => {
-  if (item.done) return TAX_CALENDAR_MESSAGES.item.done
-  if (item.overdue) return TAX_CALENDAR_MESSAGES.item.overdue
-  return TAX_CALENDAR_MESSAGES.item.open
-}
-
-const getStateVariant = (item: TaxCalendarGroupItem): 'positive' | 'warning' | 'negative' => {
-  if (item.done) return 'positive'
-  if (item.overdue) return 'negative'
-  return 'warning'
-}
-
-const getDueDatePrefix = (group: TaxCalendarGroup): string =>
-  group.obligation_type === 'advance_payment'
-    ? TAX_CALENDAR_MESSAGES.item.paymentDue
-    : TAX_CALENDAR_MESSAGES.item.reportingDue
 
 const GroupItemsRows = ({
   group,
@@ -139,13 +108,15 @@ const GroupItemsRows = ({
     textColumn({
       key: 'type',
       header: TAX_CALENDAR_MESSAGES.item.recordType,
-      getValue: (item) => TAX_CALENDAR_SOURCE_TYPE_LABELS[item.source_type],
+      getValue: getTaxCalendarSourceTypeLabel,
     }),
     {
       key: 'state',
       header: TAX_CALENDAR_MESSAGES.item.status,
       kind: 'status',
-      render: (item) => <Badge variant={getStateVariant(item)}>{getStateLabel(item)}</Badge>,
+      render: (item) => (
+        <Badge variant={getTaxCalendarItemStateVariant(item)}>{getTaxCalendarItemStateLabel(item)}</Badge>
+      ),
     },
     actionsColumn({
       key: 'action',
@@ -159,7 +130,7 @@ const GroupItemsRows = ({
           <RowActionItem
             label={GLOBAL_UI_MESSAGES.actions.open}
             icon={<FileText className="h-3.5 w-3.5" />}
-            onClick={() => navigate(getItemPath(item))}
+            onClick={() => navigate(getTaxCalendarItemPath(item))}
           />
           <RowActionItem
             label={TAX_CALENDAR_MESSAGES.item.goToClientAction}
@@ -236,13 +207,13 @@ export const TaxCalendarGroupsTable = ({
         return (
           <GroupedPeriodRow
             key={group.tax_calendar_entry_id}
-            typeLabel={formatGroupTitle(group)}
-            primaryLabel={`${getDueDatePrefix(group)}: ${formatEffectiveDueDateRange(group)}`}
+            typeLabel={formatTaxCalendarGroupTitle(group)}
+            primaryLabel={`${getTaxCalendarGroupDueDatePrefix(group)}: ${formatTaxCalendarEffectiveDueDateRange(group)}`}
             secondaryLabel={
-              hasGroupOverride(group)
+              hasTaxCalendarGroupOverride(group)
                 ? TAX_CALENDAR_MESSAGES.group.officialAndEffectiveDue(
                     formatDate(group.regulatory_due_date),
-                    formatEffectiveDueDateRange(group),
+                    formatTaxCalendarEffectiveDueDateRange(group),
                   )
                 : TAX_CALENDAR_MESSAGES.group.officialDue(formatDate(group.regulatory_due_date))
             }

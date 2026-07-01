@@ -44,11 +44,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
     editLine: 'עריכת שורה',
     deleteLine: 'מחיקת שורה',
   },
-  financialStats: {
-    totalIncome: 'סה"כ הכנסות',
-    totalExpenses: 'סה"כ הוצאות',
-    taxableIncome: 'הכנסה חייבת',
-  },
   chart: {
     yearAxisKey: 'שנה',
     trendTitle: 'מגמה רב-שנתית',
@@ -72,11 +67,11 @@ export const ANNUAL_REPORTS_MESSAGES = {
   },
   overviewSection: {
     detailsCardTitle: 'פרטי הדוח',
-    updateDataCardTitle: 'עדכון נתונים',
+    updateDataCardTitle: 'אישור והערות פנימיות',
     plSummaryTitle: 'סיכום רווח והפסד',
   },
   statsSection: {
-    recognizedExpensesNote: (amount: string) => `מוכר למס ${amount}`,
+    grossExpensesNote: (amount: string) => `סה"כ ${amount}`,
     balanceDuePayment: 'לתשלום לאחר מקדמות',
     balanceDueRefund: 'החזר צפוי לאחר מקדמות',
     balanced: 'מאוזן',
@@ -125,6 +120,8 @@ export const ANNUAL_REPORTS_MESSAGES = {
   season: {
     progressTitle: 'התקדמות עונת הגשה',
     progressSubtitle: (year: number) => `שנת מס ${year}`,
+    totalReportsBadge: (total: number) => `${total} דוחות`,
+    overdueReportsBadge: (count: number) => `${count} באיחור`,
     overdueDays: (days: number) => `באיחור ${days} ימים`,
     daysRemaining: (days: number) => `${days} ימים נותרו`,
     officeNumberHeader: "מס' לקוח",
@@ -136,9 +133,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
     submittedAtHeader: 'הוגש ב',
     noReportsForYear: (year: number) => `עדיין אין דוחות שנתיים לשנת המס ${year}`,
     noReportsThisYear: 'אין דוחות לשנה זו',
-    totalReports: 'סה״כ דוחות',
-    submittedOrClosed: 'הוגשו / הסתיימו',
-    filingPercentNote: (percentLabel: string) => `${percentLabel} אחוז הגשה`,
     overdue: 'באיחור',
     overdueNote: 'חרגו ממועד הגשה',
   },
@@ -187,11 +181,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
     refundSuffix: ' (החזר)',
     requiredAppendicesNote: 'נספחים נדרשים',
   },
-  filingTimelineTab: {
-    filingStatusTitle: 'סטטוס הגשות',
-    eventHistoryTitle: 'היסטוריית אירועים',
-    noEvents: 'אין אירועים להצגה',
-  },
   overdueBanner: {
     oneReportOverdue: 'דוח אחד חרג ממועד ההגשה',
     multipleReportsOverdue: (count: number) => `${count} דוחות חרגו ממועד ההגשה`,
@@ -204,11 +193,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
     showMoreAriaLabel: (count: number) => `הצג ${count} דוחות נוספים שחרגו ממועד ההגשה`,
     daysUnit: (days: number) => `${days} ימים`,
   },
-  upcomingDeadlines: {
-    title: 'מועדי הגשה קרובים',
-    empty: 'אין מועדי הגשה ממתינים',
-    nameYearSeparator: (name: string, year: number) => `${name} — ${year}`,
-  },
   amendModal: {
     title: 'תיקון דוח',
     reasonLabel: 'סיבת תיקון *',
@@ -220,6 +204,7 @@ export const ANNUAL_REPORTS_MESSAGES = {
     readinessCheck: 'בדיקת מוכנות להגשה',
     currentStatus: 'סטטוס נוכחי:',
     amendReport: 'תיקון דוח',
+    changeStatus: 'שנה סטטוס',
   },
   transitionDetailsForm: {
     noteLabel: 'הערה (אופציונלי)',
@@ -239,7 +224,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
   detailForm: {
     clientApprovedAtLabel: 'תאריך אישור לקוח',
     internalNotesLabel: 'הערות פנימיות',
-    save: 'שמור פרטים',
   },
   deductionsTab: {
     loading: 'טוען ניכויים...',

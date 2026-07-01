@@ -2,6 +2,7 @@ import type { ComponentType } from 'react'
 import {
   Banknote,
   CalendarClock,
+  Files,
   LayoutDashboard,
   PiggyBank,
   Receipt,
@@ -19,6 +20,7 @@ export const PANEL_NAV_ITEMS: { key: SectionKey; icon: IconComponent; label: str
   { key: 'financials', icon: TrendingUp, label: 'הכנסות והוצאות' },
   { key: 'tax', icon: Scale, label: 'חישוב מס' },
   { key: 'deductions', icon: Scissors, label: 'ניכויים' },
+  { key: 'annex', icon: Files, label: 'נספחים' },
   { key: 'timeline', icon: CalendarClock, label: 'ציר זמן' },
 ]
 

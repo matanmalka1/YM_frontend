@@ -7,16 +7,20 @@ export const ANNEX_TEXT = {
   cancel: 'ביטול',
   chooseSchedule: 'בחר נספח...',
   complete: 'סמן הושלם',
+  completeStatus: 'הושלם',
+  openStatus: 'פתוח',
   empty: 'אין נספחים נדרשים לדוח זה',
   notesPlaceholder: 'הערות (אופציונלי)',
   requiredSchedules: 'נספחים נדרשים',
+  required: 'נדרש',
   save: 'שמור',
   schedules: 'נספחים',
   loading: 'טוען...',
-  close: 'סגור',
+  noLines: 'אין עדיין שורות לנספח הזה',
+  close: 'כווץ',
   expandData: 'פרוס נתונים',
   editLine: 'עריכת שורה',
 } as const
 
-export const FIELD_INPUT_CLASS = 'py-1 text-xs'
+export const FIELD_INPUT_CLASS = 'w-full min-w-0 text-xs'
 export const TABLE_ICON_CLASS = 'h-3.5 w-3.5'

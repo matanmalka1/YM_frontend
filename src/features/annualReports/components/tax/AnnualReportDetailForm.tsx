@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '../../../../components/ui/primitives/Button'
 import { DatePicker } from '../../../../components/ui/inputs/DatePicker'
 import { Textarea } from '../../../../components/ui/inputs/Textarea'
 import type { AnnualReportDetail } from '../../types'
@@ -11,7 +10,6 @@ import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 interface AnnualReportDetailFormProps {
   detail: AnnualReportDetail | null
   onSave: (data: Partial<AnnualReportDetail>) => void
-  isSaving: boolean
   onDirtyChange?: (dirty: boolean) => void
   submitRef?: React.RefObject<(() => void) | null>
 }
@@ -25,7 +23,6 @@ const toFormValues = (detail: AnnualReportDetail | null): AnnualReportDetailForm
 export const AnnualReportDetailForm: React.FC<AnnualReportDetailFormProps> = ({
   detail,
   onSave,
-  isSaving,
   onDirtyChange,
   submitRef,
 }) => {
@@ -63,21 +60,19 @@ export const AnnualReportDetailForm: React.FC<AnnualReportDetailFormProps> = ({
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Controller
-          control={control}
-          name="client_approved_at"
-          render={({ field }) => (
-            <DatePicker
-              label={ANNUAL_REPORTS_MESSAGES.detailForm.clientApprovedAtLabel}
-              error={errors.client_approved_at?.message}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-            />
-          )}
-        />
-      </div>
+      <Controller
+        control={control}
+        name="client_approved_at"
+        render={({ field }) => (
+          <DatePicker
+            label={ANNUAL_REPORTS_MESSAGES.detailForm.clientApprovedAtLabel}
+            error={errors.client_approved_at?.message}
+            value={field.value}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+          />
+        )}
+      />
 
       <Textarea
         label={ANNUAL_REPORTS_MESSAGES.detailForm.internalNotesLabel}
@@ -85,12 +80,6 @@ export const AnnualReportDetailForm: React.FC<AnnualReportDetailFormProps> = ({
         error={errors.internal_notes?.message}
         {...register('internal_notes')}
       />
-
-      <div className="flex justify-end">
-        <Button type="submit" isLoading={isSaving}>
-          {ANNUAL_REPORTS_MESSAGES.detailForm.save}
-        </Button>
-      </div>
     </form>
   )
 }

@@ -11,7 +11,6 @@ import {
   OverdueBanner,
   SeasonProgressBar,
   SeasonReportsTable,
-  SeasonSummaryCards,
   useAnnualReportsPage,
 } from '@/features/annualReports'
 import { ANNUAL_REPORTS_MESSAGES } from '@/features/annualReports/messages'
@@ -53,7 +52,6 @@ export const AnnualReportsPage: React.FC = () => {
 
       {!status.isLoading && !status.error && stats.summary && (
         <>
-          <SeasonSummaryCards summary={stats.summary} isFetching={stats.isFetching} />
           <SeasonProgressBar summary={stats.summary} />
           <div>
             <h2 className="mb-3 text-lg font-semibold text-gray-900">

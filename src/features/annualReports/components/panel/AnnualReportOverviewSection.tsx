@@ -6,24 +6,16 @@ import { ReportAlertBanners } from './ReportAlertBanners'
 import { AnnualReportStatsSection } from './AnnualReportStatsSection'
 import { ReportMetaGrid } from './ReportMetaGrid'
 import { AnnualReportDetailForm } from '../tax/AnnualReportDetailForm'
-import { ScheduleChecklist } from '../annex/ScheduleChecklist'
 import { AnnualPLSummary } from '../financials/AnnualPLSummary'
 import type { AnnualReportDetail } from '../../types'
-import type { AnnualReportFull, AnnualReportScheduleKey, ScheduleEntry } from '../../api'
+import type { AnnualReportFull } from '../../api'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface Props {
   report: AnnualReportFull
   detail: AnnualReportDetail | null
   advances?: { balance_type: 'due' | 'refund' | 'zero'; final_balance: number }
-  schedules: ScheduleEntry[]
   onDetailSave: (data: Partial<AnnualReportDetail>) => void
-  isSaving: boolean
-  onScheduleComplete: (schedule: AnnualReportScheduleKey) => void
-  onScheduleAdd: (schedule: AnnualReportScheduleKey, notes?: string) => void
-  isScheduleLoading: boolean
-  isScheduleAdding: boolean
-  completingKey?: AnnualReportScheduleKey | null
   clientId: number
   onDirtyChange?: (dirty: boolean) => void
   submitRef?: React.RefObject<(() => void) | null>
@@ -33,14 +25,7 @@ export const AnnualReportOverviewSection: React.FC<Props> = ({
   report,
   detail,
   advances,
-  schedules,
   onDetailSave,
-  isSaving,
-  onScheduleComplete,
-  onScheduleAdd,
-  isScheduleLoading,
-  isScheduleAdding,
-  completingKey,
   clientId,
   onDirtyChange,
   submitRef,
@@ -62,22 +47,11 @@ export const AnnualReportOverviewSection: React.FC<Props> = ({
           <AnnualReportDetailForm
             detail={detail}
             onSave={onDetailSave}
-            isSaving={isSaving}
             onDirtyChange={onDirtyChange}
             submitRef={submitRef}
           />
         </Card>
       </div>
-
-      <ScheduleChecklist
-        reportId={report.id}
-        schedules={schedules}
-        onComplete={onScheduleComplete}
-        onAdd={onScheduleAdd}
-        isLoading={isScheduleLoading}
-        isAdding={isScheduleAdding}
-        completingKey={completingKey}
-      />
 
       {/* P&L collapsible */}
       <Card size="compact" disablePadding className="shadow-sm">

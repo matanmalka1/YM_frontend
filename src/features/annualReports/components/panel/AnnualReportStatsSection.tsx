@@ -21,16 +21,16 @@ export const AnnualReportStatsSection: React.FC<Props> = ({ report }) => {
   const taxAfterCredits = Number(tc?.tax_after_credits ?? 0)
   const finalBalance = Number(tc?.final_balance ?? 0)
   const profitMargin = totalIncome > 0 ? (netProfit / totalIncome) * 100 : 0
-  const expenseRatio = totalIncome > 0 ? (grossExpenses / totalIncome) * 100 : 0
+  const recognizedExpenseRatio = totalIncome > 0 ? (recognizedExpenses / totalIncome) * 100 : 0
   const statCards: StatCardConfig[] = [
     {
       key: 'recognized-expenses',
       title: SUMMARY_CARD_META.recognizedExpenses.title,
-      value: fmt(grossExpenses),
-      description: ANNUAL_REPORTS_MESSAGES.statsSection.recognizedExpensesNote(fmt(recognizedExpenses)),
+      value: fmt(recognizedExpenses),
+      description: ANNUAL_REPORTS_MESSAGES.statsSection.grossExpensesNote(fmt(grossExpenses)),
       icon: SUMMARY_CARD_META.recognizedExpenses.icon,
       variant: SUMMARY_CARD_META.recognizedExpenses.variant,
-      trend: { value: expenseRatio, label: ANNUAL_REPORTS_MESSAGES.statsSection.incomeTrendLabel },
+      trend: { value: recognizedExpenseRatio, label: ANNUAL_REPORTS_MESSAGES.statsSection.incomeTrendLabel },
     },
     {
       key: 'final-balance',

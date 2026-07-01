@@ -44,47 +44,26 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
         key: field.key,
         header: field.label,
         verticalAlign: 'top',
-        render: (line) => getLineFieldValue(line, field.key),
-        editRender: () => <AnnexFieldInput field={field} register={register} errors={errors} />,
+        className: field.type === 'text' ? undefined : 'w-36',
+        render: (line) => (
+          <span className={field.type === 'text' ? 'text-gray-700' : 'font-mono text-gray-800'} dir="auto">
+            {getLineFieldValue(line, field)}
+          </span>
+        ),
       }),
     ),
     actionsColumn({
       key: '__actions',
       header: '',
+      className: 'w-24',
       render: (line) => (
-        <div className="flex items-center gap-1">
+        <div className="flex items-center justify-end gap-1">
           <RowActionButton
             label={ANNEX_TEXT.editLine}
             icon={<Pencil className={TABLE_ICON_CLASS} />}
             tone="info"
             size="sm"
             onClick={() => onStartEdit(line)}
-          />
-          <RowActionButton
-            label={ANNUAL_REPORTS_MESSAGES.annexDataTable.deleteLine}
-            icon={<Trash2 className={TABLE_ICON_CLASS} />}
-            tone="danger"
-            size="sm"
-            onClick={() => onDelete(line.id)}
-            disabled={isDeleting}
-          />
-        </div>
-      ),
-      editRender: (line) => (
-        <div className="flex items-center gap-1">
-          <RowActionButton
-            label={ANNUAL_REPORTS_MESSAGES.annexDataTable.saveLine}
-            icon={<Check className={TABLE_ICON_CLASS} />}
-            tone="positive"
-            size="sm"
-            onClick={() => onSaveEdit(line.id)}
-            disabled={isUpdating}
-          />
-          <RowActionButton
-            label={GLOBAL_UI_MESSAGES.actions.cancel}
-            icon={<X className={TABLE_ICON_CLASS} />}
-            size="sm"
-            onClick={onCancelEdit}
           />
           <RowActionButton
             label={ANNUAL_REPORTS_MESSAGES.annexDataTable.deleteLine}
@@ -105,6 +84,41 @@ export const AnnexDataTable: React.FC<AnnexDataTableProps> = ({
       columns={columns}
       getRowKey={(line) => line.id}
       editingRowKey={editingLineId}
+      renderEditRow={(line) => (
+        <tr className="bg-info-50/40">
+          {fields.map((field) => (
+            <td key={field.key} className="px-3 py-2 align-top">
+              <AnnexFieldInput field={field} register={register} errors={errors} />
+            </td>
+          ))}
+          <td className="px-3 py-2 align-top">
+            <div className="flex items-center justify-end gap-1">
+              <RowActionButton
+                label={ANNUAL_REPORTS_MESSAGES.annexDataTable.saveLine}
+                icon={<Check className={TABLE_ICON_CLASS} />}
+                tone="positive"
+                size="sm"
+                onClick={() => onSaveEdit(line.id)}
+                disabled={isUpdating}
+              />
+              <RowActionButton
+                label={GLOBAL_UI_MESSAGES.actions.cancel}
+                icon={<X className={TABLE_ICON_CLASS} />}
+                size="sm"
+                onClick={onCancelEdit}
+              />
+              <RowActionButton
+                label={ANNUAL_REPORTS_MESSAGES.annexDataTable.deleteLine}
+                icon={<Trash2 className={TABLE_ICON_CLASS} />}
+                tone="danger"
+                size="sm"
+                onClick={() => onDelete(line.id)}
+                disabled={isDeleting}
+              />
+            </div>
+          </td>
+        </tr>
+      )}
       surface="bare"
       density="compact"
     />

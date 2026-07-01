@@ -5,6 +5,7 @@ import { AnnualReportOverviewSection } from './AnnualReportOverviewSection'
 import { IncomeExpensePanel } from '../financials/IncomeExpensePanel'
 import { TaxCalculationPanel } from '../tax/TaxCalculationPanel'
 import { DeductionsTab } from '../tax/DeductionsTab'
+import { AnnualReportAnnexesTab } from '../annex/AnnualReportAnnexesTab'
 import { AnnualReportTimelineSection } from './AnnualReportTimelineSection'
 
 interface AnnualReportSectionContentProps {
@@ -12,7 +13,6 @@ interface AnnualReportSectionContentProps {
   activeSection: SectionKey
   report: AnnualReportDetail
   updateDetail: (payload: Partial<ReportDetailResponse>) => void
-  isUpdating: boolean
   completeSchedule: (schedule: AnnualReportScheduleKey) => void
   addSchedule: (schedule: AnnualReportScheduleKey, notes?: string) => void
   isCompletingSchedule: boolean
@@ -26,7 +26,6 @@ export const AnnualReportSectionContent = ({
   activeSection,
   report,
   updateDetail,
-  isUpdating,
   completeSchedule,
   addSchedule,
   isCompletingSchedule,
@@ -40,13 +39,7 @@ export const AnnualReportSectionContent = ({
         <AnnualReportOverviewSection
           report={report}
           detail={report}
-          schedules={report.schedules ?? []}
           onDetailSave={updateDetail}
-          isSaving={isUpdating}
-          onScheduleComplete={completeSchedule}
-          onScheduleAdd={addSchedule}
-          isScheduleLoading={isCompletingSchedule}
-          isScheduleAdding={isAddingSchedule}
           clientId={report.client_record_id}
           onDirtyChange={setIsDirty}
           submitRef={submitRef}
@@ -58,6 +51,17 @@ export const AnnualReportSectionContent = ({
       return <TaxCalculationPanel reportId={reportId} />
     case 'deductions':
       return <DeductionsTab reportId={reportId} taxYear={report.tax_year} />
+    case 'annex':
+      return (
+        <AnnualReportAnnexesTab
+          reportId={report.id}
+          schedules={report.schedules ?? []}
+          onScheduleComplete={completeSchedule}
+          onScheduleAdd={addSchedule}
+          isScheduleLoading={isCompletingSchedule}
+          isScheduleAdding={isAddingSchedule}
+        />
+      )
     case 'timeline':
       return <AnnualReportTimelineSection report={report} />
   }

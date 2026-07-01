@@ -1,10 +1,10 @@
 import { ArrowUpCircle, ArrowDownCircle } from 'lucide-react'
 import { AnnualReportAddIncomeLineForm } from './AnnualReportAddIncomeLineForm'
 import { AnnualReportFinancialSection } from './AnnualReportFinancialSection'
-import { AnnualReportFinancialStatsSection } from './AnnualReportFinancialStatsSection'
 import { AnnualReportVatAutoPopulateControls } from './AnnualReportVatAutoPopulateControls'
 import { AnnualReportVatAutoPopulateResultPanel } from './AnnualReportVatAutoPopulateResultPanel'
-import { LineRow, INCOME_LABELS, EXPENSE_LABELS } from '../../constants/reportConstants'
+import { LineRow } from './FinancialLineRow'
+import { INCOME_LABELS, EXPENSE_LABELS } from '../../constants/reportConstants'
 import { AddExpenseLineForm } from './AddExpenseLineForm'
 import { useIncomeExpensePanel } from '../../hooks/useIncomeExpensePanel'
 import { EditIncomeLineForm } from './EditIncomeLineForm'
@@ -40,14 +40,6 @@ export const IncomeExpensePanel: React.FC<IncomeExpensePanelProps> = ({ reportId
           onDismiss={panel.clearAutoPopulateResult}
         />
       )}
-      {panel.hasLines && !panel.autoPopulateResult && (
-        <AnnualReportFinancialStatsSection
-          totalIncome={panel.totals.income}
-          totalExpenses={panel.totals.expenses}
-          taxableIncome={panel.totals.taxableIncome}
-        />
-      )}
-
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <AnnualReportFinancialSection
           icon={<ArrowUpCircle className="h-4 w-4 text-positive-600" />}

@@ -12,7 +12,7 @@ type StageKey =
 
 export const CURRENT_YEAR = new Date().getFullYear()
 
-export type SectionKey = 'overview' | 'financials' | 'tax' | 'deductions' | 'timeline'
+export type SectionKey = 'overview' | 'financials' | 'tax' | 'deductions' | 'annex' | 'timeline'
 
 export interface AnnualReportDetail extends AnnualReportFull {
   client_approved_at: string | null

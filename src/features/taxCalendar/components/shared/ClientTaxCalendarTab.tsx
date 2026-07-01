@@ -8,10 +8,14 @@ import {
 } from '../../utils'
 import { type TaxCalendarGroupsParams } from '../../api'
 import { TaxCalendarFiltersBar } from '../list/TaxCalendarFiltersBar'
-import { TaxCalendarGroupsContent } from '../list/TaxCalendarGroupsContent'
 import { TaxCalendarStatsSection } from '../list/TaxCalendarStatsSection'
+import { ClientTaxCalendarList } from './ClientTaxCalendarList'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { DetailTabPanel } from '@/components/ui/layout'
+import { Alert } from '@/components/ui/overlays/Alert'
+import { PaginationCard } from '@/components/ui/table'
+import { getTotalPages } from '@/utils/paginationUtils'
+import { getErrorMessage } from '@/utils/utils'
 import { TAX_CALENDAR_MESSAGES } from '../../messages'
 import { TAX_CALENDAR_ERROR_MESSAGES } from '../../errorMessages'
 
@@ -36,9 +40,10 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
     [clientId, endYear, obligationType, page, startYear, status],
   )
 
-  const groupsQuery = useTaxCalendarGroups(params)
-  const groups = useMemo(() => groupsQuery.data?.items ?? [], [groupsQuery.data])
-  const groupsSummary = groupsQuery.data?.summary
+  const { data, isPending, error } = useTaxCalendarGroups(params)
+  const groups = useMemo(() => data?.items ?? [], [data])
+  const groupsSummary = data?.summary
+  const total = data?.total ?? 0
 
   const resetAllFilters = () => resetFilters(taxCalendarYearResetDefaults())
 
@@ -66,17 +71,23 @@ export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }
         />
       }
     >
-      <TaxCalendarGroupsContent
-        groups={groups}
-        isLoading={groupsQuery.isPending}
-        error={groupsQuery.error}
-        errorFallback={TAX_CALENDAR_ERROR_MESSAGES.clientTab.load}
-        clientRecordId={clientId}
-        page={page}
-        pageSize={TAX_CALENDAR_GROUP_PAGE_SIZE}
-        total={groupsQuery.data?.total ?? 0}
-        onPageChange={setUrlPage}
-      />
+      {error ? (
+        <Alert variant="error" message={getErrorMessage(error, TAX_CALENDAR_ERROR_MESSAGES.clientTab.load)} />
+      ) : (
+        <>
+          <ClientTaxCalendarList groups={groups} isLoading={isPending} clientRecordId={clientId} />
+
+          {!isPending && total > TAX_CALENDAR_GROUP_PAGE_SIZE ? (
+            <PaginationCard
+              page={page}
+              totalPages={getTotalPages(total, TAX_CALENDAR_GROUP_PAGE_SIZE)}
+              total={total}
+              label={TAX_CALENDAR_MESSAGES.clientTab.linkedLabel}
+              onPageChange={setUrlPage}
+            />
+          ) : null}
+        </>
+      )}
     </DetailTabPanel>
   )
 }

@@ -31,6 +31,8 @@ export const TAX_CALENDAR_MESSAGES = {
     title: 'מועדי מס',
     subtitle: 'חובות ומועדים המקושרים ללקוח זה',
     linkedLabel: 'מועדים',
+    listAriaLabel: 'רשימת מועדי מס ללקוח',
+    openUnavailable: 'לא נמצאה רשומה מקושרת לפתיחה',
   },
   stats: {
     groups: 'סה״כ קבוצות',
@@ -63,6 +65,7 @@ export const TAX_CALENDAR_MESSAGES = {
     open: 'פתוחים',
     overdue: 'באיחור',
     done: 'הושלמו',
+    currentMonth: 'חודש נוכחי',
     officialDue: (date: string) => `מועד רשמי: ${date}`,
     officialAndEffectiveDue: (officialDate: string, effectiveDate: string) =>
       `מועד רשמי: ${officialDate} · מועד אפקטיבי: ${effectiveDate}`,

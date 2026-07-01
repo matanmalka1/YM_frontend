@@ -1,4 +1,5 @@
 import { Card } from '../../../../components/ui/primitives/Card'
+import { Badge } from '../../../../components/ui/primitives/Badge'
 import type { SeasonSummary } from '../../api'
 import { SEASON_PROGRESS_STAGES } from '../../api'
 import { cn } from '../../../../utils/utils'
@@ -16,6 +17,16 @@ export const SeasonProgressBar: React.FC<SeasonProgressBarProps> = ({ summary })
       variant="elevated"
       title={ANNUAL_REPORTS_MESSAGES.season.progressTitle}
       subtitle={ANNUAL_REPORTS_MESSAGES.season.progressSubtitle(summary.tax_year)}
+      actions={
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <Badge variant="info" size="sm">
+            {ANNUAL_REPORTS_MESSAGES.season.totalReportsBadge(summary.total)}
+          </Badge>
+          <Badge variant={summary.overdue_count > 0 ? 'negative' : 'neutral'} size="sm">
+            {ANNUAL_REPORTS_MESSAGES.season.overdueReportsBadge(summary.overdue_count)}
+          </Badge>
+        </div>
+      }
     >
       {/* Stacked progress bar */}
       <div className="mb-6 h-5 w-full overflow-hidden rounded-full bg-gray-100 flex">

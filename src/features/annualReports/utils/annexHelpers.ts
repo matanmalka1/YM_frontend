@@ -1,6 +1,7 @@
 import type { AnnualReportScheduleKey, AnnexDataLine, ScheduleEntry } from '../api'
 import { getScheduleLabel } from '../api'
 import { ALL_SCHEDULES, type FieldDef } from '../constants/annexConstants'
+import { formatCount, formatDate, formatShekelAmount } from '@/utils/utils'
 
 export const getInputType = (type: FieldDef['type']) => {
   if (type === 'date') return 'date'
@@ -8,8 +9,31 @@ export const getInputType = (type: FieldDef['type']) => {
   return 'text'
 }
 
-export const getLineFieldValue = (line: AnnexDataLine, key: string) =>
-  String((line.data as Record<string, unknown>)[key] ?? '')
+const isPercentField = (field: FieldDef): boolean =>
+  field.key.includes('rate') || field.label.includes('%') || field.label.includes('שיעור')
+
+const isMoneyField = (field: FieldDef): boolean =>
+  field.type === 'number' &&
+  !isPercentField(field) &&
+  !field.key.includes('points') &&
+  !field.label.includes('נקודות')
+
+const getRawLineFieldValue = (line: AnnexDataLine, key: string): unknown => (line.data as Record<string, unknown>)[key]
+
+const toDisplayScalar = (value: unknown): string | number | null => {
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return null
+}
+
+export const getLineFieldValue = (line: AnnexDataLine, field: FieldDef): string => {
+  const value = toDisplayScalar(getRawLineFieldValue(line, field.key))
+  if (value == null || value === '') return '—'
+  if (field.type === 'date') return formatDate(String(value))
+  if (isPercentField(field)) return `${formatCount(value)}%`
+  if (isMoneyField(field)) return formatShekelAmount(value)
+  if (field.type === 'number') return formatCount(value)
+  return String(value)
+}
 
 export const getAvailableSchedules = (schedules: ScheduleEntry[]) => {
   const existing = new Set(schedules.map((entry) => entry.schedule))
@@ -23,10 +47,5 @@ export const buildScheduleOptions = (available: AnnualReportScheduleKey[], place
 
 export const getCompletedCount = (schedules: ScheduleEntry[]) =>
   schedules.filter((schedule) => schedule.is_complete).length
-
-export const toggleExpandedSchedule = (expanded: Record<string, boolean>, key: AnnualReportScheduleKey) => ({
-  ...expanded,
-  [key]: !expanded[key],
-})
 
 export const normalizeNotes = (notes: string) => notes.trim() || undefined

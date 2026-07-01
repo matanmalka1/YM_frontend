@@ -42,5 +42,4 @@ export const EXTENSION_REASON_OPTIONS = [
   { value: 'war_situation', label: 'מצב ביטחוני' },
 ]
 
-export const WARNING_DEADLINE_DAYS = 14
 export const OVERDUE_PREVIEW_LIMIT = 3

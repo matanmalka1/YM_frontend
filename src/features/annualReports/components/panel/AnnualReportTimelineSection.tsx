@@ -1,5 +1,5 @@
+import { useNavigate } from 'react-router-dom'
 import { EntityAuditTrailSection, type FieldValueLabels } from '@/features/audit'
-import { FilingTimelineTab } from '../shared/FilingTimelineTab'
 import { STATUS_LABELS } from '../../api'
 import { CLIENT_TYPE_LABELS } from '../../constants/panelConstants'
 import { Card } from '../../../../components/ui/primitives/Card'
@@ -17,12 +17,16 @@ interface AnnualReportTimelineSectionProps {
 }
 
 export const AnnualReportTimelineSection = ({ report }: AnnualReportTimelineSectionProps) => {
+  const navigate = useNavigate()
+
   return (
     <div className="space-y-6">
-      <FilingTimelineTab reports={[report]} />
-
       <Card title={ANNUAL_REPORTS_MESSAGES.timelineSection.reportHistoryTitle} size="compact">
-        <ReportHistoryTable clientId={report.client_record_id} currentReportId={report.id} />
+        <ReportHistoryTable
+          clientId={report.client_record_id}
+          currentReportId={report.id}
+          onSelect={(reportId) => navigate(`/tax/reports/${reportId}`, { state: { from: '/tax/reports' } })}
+        />
       </Card>
 
       <EntityAuditTrailSection

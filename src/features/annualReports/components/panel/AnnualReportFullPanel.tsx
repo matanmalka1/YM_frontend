@@ -1,7 +1,7 @@
 import { Download, Trash2, Save } from 'lucide-react'
 import { useAnnualReportDetailPage } from '../../hooks/useAnnualReportDetailPage'
 import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
-import { AnnualReportSidebarStatus } from './AnnualReportSidebarStatus'
+import { StatusTransitionPanel } from '../statusTransition/StatusTransitionPanelRoot'
 import { AnnualReportSectionContent } from './AnnualReportSectionContent'
 import { PageHeader } from '../../../../components/layout/PageHeader'
 import { Button } from '../../../../components/ui/primitives/Button'
@@ -33,6 +33,7 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
     submitRef,
     isUpdating,
     isDeleting,
+    isTransitioning,
     completeSchedule,
     addSchedule,
     isCompletingSchedule,
@@ -74,7 +75,7 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
             <>
               {isAdvisor && (
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   size="sm"
                   icon={<Download className="h-4 w-4" />}
                   onClick={handleExportPdf}
@@ -84,14 +85,20 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
                 </Button>
               )}
               <Button
-                variant="ghost"
+                variant="danger"
+                size="sm"
                 icon={<Trash2 size={14} />}
                 onClick={() => setShowDeleteConfirm(true)}
-                className="border-negative-300 text-negative-600 hover:bg-negative-50"
               >
                 {ANNUAL_REPORTS_MESSAGES.fullPanel.deleteReport}
               </Button>
-              <Button variant="ghost" icon={<Save size={14} />} onClick={handleSave} disabled={!isDirty || isUpdating}>
+              <Button
+                variant="primary"
+                size="sm"
+                icon={<Save size={14} />}
+                onClick={handleSave}
+                disabled={!isDirty || isUpdating}
+              >
                 {isUpdating ? GLOBAL_UI_MESSAGES.common.saving : GLOBAL_UI_MESSAGES.actions.save}
               </Button>
             </>
@@ -113,24 +120,18 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports' }: A
           ))}
         </SegmentedControl>
 
-        {/* Status strip */}
-        <div className="mt-3 rounded-xl border border-gray-200 bg-gray-50">
-          <AnnualReportSidebarStatus
-            report={report}
-            detail={null}
-            availableActions={[]}
-            onTransition={handleTransition}
-          />
+        {/* Compact status bar — consistent across all tabs */}
+        <div className="mt-3">
+          <StatusTransitionPanel report={report} onTransition={handleTransition} isLoading={isTransitioning} />
         </div>
 
-        {/* Section content */}
+        {/* Section content — full width */}
         <div className="mt-6">
           <AnnualReportSectionContent
             reportId={reportId}
             activeSection={activeSection}
             report={report}
             updateDetail={updateDetail}
-            isUpdating={isUpdating}
             completeSchedule={completeSchedule}
             addSchedule={addSchedule}
             isCompletingSchedule={isCompletingSchedule}

@@ -1,5 +1,7 @@
+import { Gift, Scale, TrendingDown } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { Card } from '../../../../components/ui/primitives/Card'
+import { StatsCard } from '../../../../components/ui/layout/StatsCard'
 import { cn, formatCurrencyILS, formatPercent } from '../../../../utils/utils'
 import { useTaxCalculationPanel } from '../../hooks/useTaxCalculationPanel'
 import { TaxBracketsTable } from './TaxBracketsTable'
@@ -55,19 +57,25 @@ export const TaxCalculationPanel: React.FC<Props> = ({ reportId }) => {
 
   return (
     <div className="space-y-5">
-      <div className="grid grid-cols-3 gap-3">
-        <div className="rounded-xl border border-negative-100 bg-negative-50 p-4 text-center">
-          <p className="text-xs text-gray-500 mb-1">{ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.taxBeforeCredits}</p>
-          <p className="text-xl font-bold text-negative-700">{formatCurrencyILS(data.tax_before_credits)}</p>
-        </div>
-        <div className="rounded-xl border border-info-100 bg-info-50 p-4 text-center">
-          <p className="text-xs text-gray-500 mb-1">{ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.taxCredits}</p>
-          <p className="text-xl font-bold text-info-700">{formatCurrencyILS(totalCredits)}</p>
-        </div>
-        <div className="rounded-xl border border-positive-100 bg-positive-50 p-4 text-center">
-          <p className="text-xs text-gray-500 mb-1">{ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.finalTaxDue}</p>
-          <p className="text-xl font-bold text-positive-700">{formatCurrencyILS(data.tax_after_credits)}</p>
-        </div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <StatsCard
+          title={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.taxBeforeCredits}
+          value={formatCurrencyILS(data.tax_before_credits)}
+          icon={TrendingDown}
+          variant="negative"
+        />
+        <StatsCard
+          title={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.taxCredits}
+          value={formatCurrencyILS(totalCredits)}
+          icon={Gift}
+          variant="info"
+        />
+        <StatsCard
+          title={ANNUAL_REPORTS_MESSAGES.taxCalculationPanel.finalTaxDue}
+          value={formatCurrencyILS(data.tax_after_credits)}
+          icon={Scale}
+          variant="positive"
+        />
       </div>
 
       <TaxCalculatorInputs

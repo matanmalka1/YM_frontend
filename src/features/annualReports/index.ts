@@ -2,7 +2,6 @@
 export { annualReportsApi, annualReportSeasonApi, annualReportsQK, getStatusLabel, getStatusVariant } from './api'
 export { SeasonProgressBar } from './components/season/SeasonProgressBar'
 export { SeasonReportsTable } from './components/season/SeasonReportsTable'
-export { SeasonSummaryCards } from './components/season/SeasonSummaryCards'
 export { ClientAnnualReportsTab } from './components/shared/ClientAnnualReportsTab'
 export { CreateReportModal } from './components/shared/CreateReportModal'
 export { OverdueBanner } from './components/shared/OverdueBanner'

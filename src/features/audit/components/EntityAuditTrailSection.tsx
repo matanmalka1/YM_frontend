@@ -4,6 +4,7 @@ import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { Card } from '@/components/ui/primitives/Card'
 import { InlineState } from '@/components/ui/feedback'
 import { Spinner } from '@/components/ui/primitives/Spinner'
+import { cn } from '@/utils/utils'
 import { AUDIT_ACTION_LABELS } from '../constants'
 import type { EntityAuditType } from '../api'
 import { useEntityAuditTrailSection } from '../hooks/useEntityAuditTrailSection'
@@ -88,15 +89,19 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
 
   return (
     <div className="space-y-3">
-      <Card title={title} subtitle={subtitle} className={cardClassName} />
-      <Card className={cardClassName}>
-        <FilterPanel
-          fields={auditTrail.filterFields}
-          values={auditTrail.filterValues}
-          onChange={auditTrail.handleFilterChange}
-          onReset={auditTrail.handleFilterReset}
-        />
-      </Card>
+      <Card
+        title={title}
+        subtitle={subtitle}
+        className={cn(cardClassName, 'overflow-visible')}
+        actions={
+          <FilterPanel
+            fields={auditTrail.filterFields}
+            values={auditTrail.filterValues}
+            onChange={auditTrail.handleFilterChange}
+            onReset={auditTrail.handleFilterReset}
+          />
+        }
+      />
       {renderBody()}
     </div>
   )
