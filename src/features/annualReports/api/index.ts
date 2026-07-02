@@ -11,6 +11,7 @@ export {
   getAllowedTransitions,
   getClientTypeLabel,
   getScheduleLabel,
+  SCHEDULE_LABELS,
   SEASON_PROGRESS_STAGES,
 } from './utils'
 export type {

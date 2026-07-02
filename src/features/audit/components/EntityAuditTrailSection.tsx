@@ -21,7 +21,10 @@ type EntityAuditTrailSectionProps = {
   subtitle?: string
   compact?: boolean
   fieldValueLabels?: FieldValueLabels
+  nestedFieldLabels?: Record<string, string>
 }
+
+const EMPTY_NESTED_FIELD_LABELS: Record<string, string> = {}
 
 export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = ({
   entityType,
@@ -30,8 +33,12 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
   subtitle = AUDIT_MESSAGES.section.defaultSubtitle,
   compact = false,
   fieldValueLabels = EMPTY_FIELD_VALUE_LABELS,
+  nestedFieldLabels = EMPTY_NESTED_FIELD_LABELS,
 }) => {
-  const formatAuditDetails = useMemo(() => makeAuditFormatter(fieldValueLabels), [fieldValueLabels])
+  const formatAuditDetails = useMemo(
+    () => makeAuditFormatter(fieldValueLabels, nestedFieldLabels),
+    [fieldValueLabels, nestedFieldLabels],
+  )
   const auditTrail = useEntityAuditTrailSection(entityType, entityId)
   const cardClassName = compact ? 'shadow-none rounded-lg' : 'shadow-sm'
 

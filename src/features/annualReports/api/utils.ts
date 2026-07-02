@@ -49,7 +49,7 @@ export const getClientTypeLabel = (type: string): string => (clientTypeLabels as
 
 // ── Schedule labels ────────────────────────────────────────────────────────
 
-const scheduleLabels: Record<AnnualReportScheduleKey, string> = {
+export const SCHEDULE_LABELS: Record<AnnualReportScheduleKey, string> = {
   schedule_a: 'נספח א — הכנסה מעסק',
   schedule_b: 'נספח ב — שכירות',
   schedule_gimmel: 'נספח ג — רווח הון מניירות ערך',
@@ -67,7 +67,7 @@ const scheduleLabels: Record<AnnualReportScheduleKey, string> = {
   form_858: 'טופס 858 — יחידות השתתפות בשותפות נפט',
 }
 
-export const getScheduleLabel = (key: string): string => (scheduleLabels as Record<string, string>)[key] ?? key
+export const getScheduleLabel = (key: string): string => (SCHEDULE_LABELS as Record<string, string>)[key] ?? key
 
 // ── Season progress helpers ────────────────────────────────────────────────
 

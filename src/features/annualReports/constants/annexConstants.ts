@@ -106,6 +106,11 @@ export const SCHEDULE_FIELDS: Record<AnnualReportScheduleKey, FieldDef[]> = {
   ],
 }
 
+/** Flattened annex field-key → Hebrew label, across all schedules (for nested `data` rendering). */
+export const ANNEX_FIELD_LABELS: Record<string, string> = Object.fromEntries(
+  Object.values(SCHEDULE_FIELDS).flatMap((fields) => fields.map((f) => [f.key, f.label])),
+)
+
 export const ALL_SCHEDULES: AnnualReportScheduleKey[] = [
   'schedule_a',
   'schedule_b',

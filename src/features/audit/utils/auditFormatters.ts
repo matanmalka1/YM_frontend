@@ -37,13 +37,19 @@ const unwrapScalarPayload = (value: unknown): unknown => {
   return value
 }
 
-const formatFieldLabel = (key: string): string => AUDIT_FIELD_LABELS[key] ?? key
+export const makeAuditFormatter = (labels: FieldValueLabels, nestedFieldLabels: Record<string, string> = {}) => {
+  const formatFieldLabel = (key: string): string => AUDIT_FIELD_LABELS[key] ?? nestedFieldLabels[key] ?? key
 
-export const makeAuditFormatter = (labels: FieldValueLabels) => {
+  const formatNestedRecord = (record: Record<string, unknown>): string =>
+    Object.entries(record)
+      .map(([key, value]) => `${formatFieldLabel(key)}: ${formatValue(value, key)}`)
+      .join(', ')
+
   const formatValue = (value: unknown, field: string | null = null): string => {
     if (value === null || value === undefined) return '—'
     if (typeof value === 'string') return translateValue(field, value, labels)
     if (typeof value === 'number' || typeof value === 'boolean') return String(value)
+    if (isRecord(value)) return `{ ${shorten(formatNestedRecord(value))} }`
     return stringifyCompact(value)
   }
 
