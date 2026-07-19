@@ -75,7 +75,11 @@ export const ReportHistoryTable: React.FC<Props> = ({ clientId, currentReportId,
           return (
             <RowActionsMenu ariaLabel={ANNUAL_REPORTS_MESSAGES.reportHistoryTable.rowActionsAriaLabel(r.id)}>
               <RowActionItem
-                label={isCurrent ? ANNUAL_REPORTS_MESSAGES.reportHistoryTable.currentReportActionLabel : GLOBAL_UI_MESSAGES.actions.view}
+                label={
+                  isCurrent
+                    ? ANNUAL_REPORTS_MESSAGES.reportHistoryTable.currentReportActionLabel
+                    : GLOBAL_UI_MESSAGES.actions.view
+                }
                 onClick={() => onSelect?.(r.id)}
                 icon={<Eye className="h-4 w-4" />}
                 disabled={isCurrent}

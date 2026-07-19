@@ -47,19 +47,19 @@ export const AnnualReportsPage: React.FC = () => {
       {!status.isLoading && !status.error && stats.summary && (
         <>
           <SeasonProgressBar summary={stats.summary} />
-          
-              <FilterPanel
-                {...filters}
-                title={ANNUAL_REPORTS_MESSAGES.page.filterTitle}
-                subtitle={ANNUAL_REPORTS_MESSAGES.page.filterSubtitle}
-              />
-          
-            <SeasonReportsTable
-              reports={table.reports}
-              isLoading={table.isLoading}
-              taxYear={table.taxYear}
-              onSelect={table.onSelect}
-            />
+
+          <FilterPanel
+            {...filters}
+            title={ANNUAL_REPORTS_MESSAGES.page.filterTitle}
+            subtitle={ANNUAL_REPORTS_MESSAGES.page.filterSubtitle}
+          />
+
+          <SeasonReportsTable
+            reports={table.reports}
+            isLoading={table.isLoading}
+            taxYear={table.taxYear}
+            onSelect={table.onSelect}
+          />
         </>
       )}
 

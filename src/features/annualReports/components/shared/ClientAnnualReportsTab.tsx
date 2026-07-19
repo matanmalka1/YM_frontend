@@ -46,7 +46,7 @@ export const ClientAnnualReportsTab: React.FC<ClientAnnualReportsTabProps> = ({ 
         </Button>
       </div>
 
-        <ReportHistoryTable clientId={clientId} currentReportId={-1} onSelect={openReportById} />
+      <ReportHistoryTable clientId={clientId} currentReportId={-1} onSelect={openReportById} />
 
       <ClientYearComparisonModal
         open={canCompareYears && showComparison}

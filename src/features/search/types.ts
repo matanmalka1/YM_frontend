@@ -14,6 +14,11 @@ export interface SearchFilters {
 
 export interface SearchFiltersBarProps {
   filters: SearchFilters
+  hydratedClient: {
+    id: number
+    name: string
+    office_client_number: number | null
+  } | null
   onFilterChange: (name: keyof SearchFilters, value: string) => void
   onReset?: () => void
   isOpen: boolean

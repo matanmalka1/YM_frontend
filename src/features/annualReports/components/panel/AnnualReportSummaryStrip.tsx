@@ -21,9 +21,7 @@ export const AnnualReportSummaryStrip: React.FC<Props> = ({ report }) => (
       className="text-center"
       items={getReportSummaryItems(report).map((item) => ({
         label: item.label,
-        value: (
-          <span className={cn('font-bold tabular-nums', semanticMonoToneClasses[item.tone])}>{item.value}</span>
-        ),
+        value: <span className={cn('font-bold tabular-nums', semanticMonoToneClasses[item.tone])}>{item.value}</span>,
       }))}
     />
   </Card>

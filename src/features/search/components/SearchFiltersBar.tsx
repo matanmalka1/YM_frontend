@@ -18,6 +18,7 @@ const withEmptyOption = (label: string, options: { value: string; label: string 
 
 export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
   filters,
+  hydratedClient,
   onFilterChange,
   onReset,
   isOpen,
@@ -30,7 +31,8 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
       onClear: () => onFilterChange('client_record_id', ''),
     })
   const activeClient =
-    selectedClient ??
+    (selectedClient && String(selectedClient.id) === filters.client_record_id ? selectedClient : null) ??
+    hydratedClient ??
     (filters.client_record_id
       ? { id: Number(filters.client_record_id), name: SEARCH_MESSAGES.filters.clientFallback(filters.client_record_id) }
       : null)

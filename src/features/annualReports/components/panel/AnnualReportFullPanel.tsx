@@ -23,7 +23,11 @@ interface AnnualReportFullPanelProps {
   leadingBreadcrumbs?: Breadcrumb[]
 }
 
-export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports', leadingBreadcrumbs }: AnnualReportFullPanelProps) => {
+export const AnnualReportFullPanel = ({
+  reportId,
+  backPath = '/tax/reports',
+  leadingBreadcrumbs,
+}: AnnualReportFullPanelProps) => {
   const {
     report,
     isLoading,
@@ -90,12 +94,7 @@ export const AnnualReportFullPanel = ({ reportId, backPath = '/tax/reports', lea
                   {ANNUAL_REPORTS_MESSAGES.fullPanel.downloadDraft}
                 </Button>
               )}
-              <Button
-                variant="danger"
-                size="sm"
-                icon={<Trash2 size={14} />}
-                onClick={() => setShowDeleteConfirm(true)}
-              >
+              <Button variant="danger" size="sm" icon={<Trash2 size={14} />} onClick={() => setShowDeleteConfirm(true)}>
                 {ANNUAL_REPORTS_MESSAGES.fullPanel.deleteReport}
               </Button>
               <Button

@@ -41,9 +41,7 @@ export const TaxCalculationTab: React.FC<Props> = ({ reportId }) => {
 
   if (panel.isLoading)
     return (
-      <p className="py-8 text-center text-sm text-gray-400">
-        {ANNUAL_REPORTS_MESSAGES.taxCalculationTab.calculating}
-      </p>
+      <p className="py-8 text-center text-sm text-gray-400">{ANNUAL_REPORTS_MESSAGES.taxCalculationTab.calculating}</p>
     )
   if (panel.isError || !data)
     return (
@@ -62,9 +60,17 @@ export const TaxCalculationTab: React.FC<Props> = ({ reportId }) => {
           columns={3}
           className="text-center"
           items={[
-            { label: ANNUAL_REPORTS_MESSAGES.taxCalculationTab.taxBeforeCredits, value: data.tax_before_credits, tone: 'negative' as const },
+            {
+              label: ANNUAL_REPORTS_MESSAGES.taxCalculationTab.taxBeforeCredits,
+              value: data.tax_before_credits,
+              tone: 'negative' as const,
+            },
             { label: ANNUAL_REPORTS_MESSAGES.taxCalculationTab.taxCredits, value: totalCredits, tone: 'info' as const },
-            { label: ANNUAL_REPORTS_MESSAGES.taxCalculationTab.finalTaxDue, value: data.tax_after_credits, tone: 'positive' as const },
+            {
+              label: ANNUAL_REPORTS_MESSAGES.taxCalculationTab.finalTaxDue,
+              value: data.tax_after_credits,
+              tone: 'positive' as const,
+            },
           ].map((item) => ({
             label: item.label,
             value: (
@@ -149,10 +155,7 @@ export const TaxCalculationTab: React.FC<Props> = ({ reportId }) => {
 
       <div className="rounded-xl border border-gray-200 bg-gray-50 px-5 py-1 shadow-sm">
         <dl className="divide-y divide-gray-100">
-          <Row
-            label={ANNUAL_REPORTS_MESSAGES.taxCalculationTab.netProfit}
-            value={formatCurrencyILS(data.net_profit)}
-          />
+          <Row label={ANNUAL_REPORTS_MESSAGES.taxCalculationTab.netProfit} value={formatCurrencyILS(data.net_profit)} />
           {totalLiability !== null && (
             <Row
               label={ANNUAL_REPORTS_MESSAGES.taxCalculationTab.totalLiability}

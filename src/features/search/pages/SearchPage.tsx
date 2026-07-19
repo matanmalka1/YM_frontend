@@ -21,8 +21,18 @@ import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 import { SEARCH_MESSAGES } from '../messages'
 
 export const Search: React.FC = () => {
-  const { error, filters, hasAnyFilter, handleFilterChange, handleReset, loading, results, documents, total } =
-    useSearchPage()
+  const {
+    error,
+    filters,
+    hasAnyFilter,
+    handleFilterChange,
+    handleReset,
+    hydratedClient,
+    loading,
+    results,
+    documents,
+    total,
+  } = useSearchPage()
   const inputRef = useRef<HTMLInputElement>(null)
   const [queryDraft, setQueryDraft] = useSearchDebounce(filters.search, (v) => handleFilterChange('search', v))
 
@@ -56,6 +66,7 @@ export const Search: React.FC = () => {
           </div>
           <SearchFiltersBar
             filters={filters}
+            hydratedClient={hydratedClient}
             onFilterChange={handleFilterChange}
             onReset={handleResetAll}
             isOpen={filtersOpen}

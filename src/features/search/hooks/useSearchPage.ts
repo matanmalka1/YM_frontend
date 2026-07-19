@@ -6,6 +6,7 @@ import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFilters } from '../types'
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 import { SEARCH_ERROR_MESSAGES } from '../errorMessages'
+import { useClientQuery } from '@/features/clients'
 
 export const useSearchPage = () => {
   const { searchParams, getParam, getPage, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
@@ -23,6 +24,15 @@ export const useSearchPage = () => {
     page: getPage(),
     page_size: parsePositiveInt(searchParams.get('page_size'), PAGE_SIZE_SM),
   }
+  const clientRecordId = parsePositiveInt(filters.client_record_id, 0) || null
+  const { client: hydratedClientRecord } = useClientQuery({ clientId: clientRecordId })
+  const hydratedClient = hydratedClientRecord
+    ? {
+        id: hydratedClientRecord.id,
+        name: hydratedClientRecord.full_name,
+        office_client_number: hydratedClientRecord.office_client_number,
+      }
+    : null
 
   const hasAnyFilter = Boolean(filters.search) || SEARCH_ADVANCED_FILTER_KEYS.some((k) => Boolean(filters[k]))
 
@@ -35,7 +45,7 @@ export const useSearchPage = () => {
     queryFn: () =>
       searchApi.search({
         search: filters.search || undefined,
-        client_record_id: parsePositiveInt(filters.client_record_id, 0) || undefined,
+        client_record_id: clientRecordId ?? undefined,
         id_number: filters.id_number || undefined,
         binder_number: filters.binder_number || undefined,
         client_status: filters.client_status || undefined,
@@ -65,6 +75,7 @@ export const useSearchPage = () => {
   return {
     error: searchError ? getErrorMessage(searchError, SEARCH_ERROR_MESSAGES.page.loadError) : null,
     filters,
+    hydratedClient,
     hasAnyFilter,
     handleFilterChange,
     handleReset,
