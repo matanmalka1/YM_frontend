@@ -64,8 +64,7 @@ const getOfficeClientNumber = (row: AdvancePaymentDrawerRow) =>
 
 const getIdNumber = (row: AdvancePaymentDrawerRow) => ('id_number' in row ? (row.id_number ?? null) : null)
 
-const getClientName = (row: AdvancePaymentDrawerRow) =>
-  'client_name' in row ? (row.client_name ?? null) : null
+const getClientName = (row: AdvancePaymentDrawerRow) => ('client_name' in row ? (row.client_name ?? null) : null)
 
 const getPaidAt = (row: AdvancePaymentDrawerRow) => ('paid_at' in row ? row.paid_at : null)
 
