@@ -43,9 +43,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
 
       - name: Generate TypeScript types
-        run: npx --yes openapi-typescript openapi.json -o frontend/src/types/generated.ts
+        working-directory: frontend
+        run: npx openapi-typescript ../openapi.json -o src/types/generated.ts && npx prettier --write src/types/generated.ts
 
       - name: Check for drift
         working-directory: frontend
