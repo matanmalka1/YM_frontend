@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { useRole } from '@/hooks/useRole'
@@ -32,6 +32,18 @@ export const useClientAdvancePaymentsTab = ({
 
   const [modalOpen, setModalOpen] = useState(false)
   const [drawerRow, setDrawerRow] = useState<AdvancePaymentRow | null>(null)
+  const deepLinkPaymentId = parsePositiveInt(getParam('advance_payment_id'), 0) || null
+  const { data: deepLinkRow } = useQuery({
+    queryKey: advancedPaymentsQK.detail(clientRecordId, deepLinkPaymentId ?? 0),
+    queryFn: () => advancePaymentsApi.getById(clientRecordId, deepLinkPaymentId!),
+    enabled: deepLinkPaymentId !== null,
+  })
+  const activeDrawerRow = drawerRow ?? deepLinkRow ?? null
+
+  const closeDrawer = () => {
+    setDrawerRow(null)
+    if (deepLinkPaymentId !== null) setFilter('advance_payment_id', '', false)
+  }
 
   const year = parsePositiveInt(searchParams.get('year'), getOperationalTaxYear())
   const page = getPage()
@@ -50,8 +62,8 @@ export const useClientAdvancePaymentsTab = ({
     advancePaymentFrequency === 'bimonthly' ? 2 : advancePaymentFrequency === 'monthly' ? 1 : null
   const displayFrequency: 1 | 2 | null = rows.length > 0 ? rows[0].period_months_count : generationFrequency
 
-  const invalidateClientYear = () =>
-    queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.clientYear(clientRecordId, year) })
+  const invalidateClientYear = (taxYear = year) =>
+    queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.clientYear(clientRecordId, taxYear) })
 
   const generateMutation = useMutation({
     mutationFn: (periodMonthsCount: 1 | 2) =>
@@ -66,10 +78,11 @@ export const useClientAdvancePaymentsTab = ({
   const updateMutation = useMutation({
     mutationFn: ({ id, payload }: { id: number; payload: UpdateAdvancePaymentPayload }) =>
       advancePaymentsApi.update(clientRecordId, id, payload),
-    onSuccess: () => {
+    onSuccess: (updatedPayment) => {
       toast.success('מקדמה עודכנה בהצלחה')
-      void invalidateClientYear()
-      setDrawerRow(null)
+      queryClient.setQueryData(advancedPaymentsQK.detail(clientRecordId, updatedPayment.id), updatedPayment)
+      void invalidateClientYear(Number(updatedPayment.period.slice(0, 4)))
+      closeDrawer()
     },
     onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.update),
   })
@@ -88,8 +101,9 @@ export const useClientAdvancePaymentsTab = ({
 
   const handleDelete = async (id: number) => {
     await deleteRow(id)
+    queryClient.removeQueries({ queryKey: advancedPaymentsQK.detail(clientRecordId, id) })
     toast.success('מקדמה נמחקה בהצלחה')
-    setDrawerRow(null)
+    closeDrawer()
   }
 
   const handleCreate = async (...args: Parameters<typeof create>) => {
@@ -128,7 +142,10 @@ export const useClientAdvancePaymentsTab = ({
     table: {
       rows,
       isLoading,
-      onRowClick: (row: AdvancePaymentRow) => setDrawerRow(row),
+      onRowClick: (row: AdvancePaymentRow) => {
+        if (deepLinkPaymentId !== null) setFilter('advance_payment_id', '', false)
+        setDrawerRow(row)
+      },
     },
     pagination: {
       page,
@@ -137,12 +154,12 @@ export const useClientAdvancePaymentsTab = ({
       onPageChange: setPage,
     },
     drawer: {
-      row: drawerRow,
-      open: drawerRow !== null,
+      row: activeDrawerRow,
+      open: activeDrawerRow !== null,
       isUpdating: updateMutation.isPending,
       isDeleting: isDeletingId !== null,
       canEdit: isAdvisor,
-      onClose: () => setDrawerRow(null),
+      onClose: closeDrawer,
       onSave: handleSave,
       onDelete: isAdvisor ? handleDelete : undefined,
       clientName,

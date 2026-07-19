@@ -37,6 +37,10 @@ describe('advancedPaymentsQK', () => {
     expect(listKey.slice(0, clientYearKey.length)).toEqual(clientYearKey)
   })
 
+  it('scopes a detail key by both client and payment id', () => {
+    expect(advancedPaymentsQK.detail(12, 34)).toEqual(['tax', 'advance-payments', 'detail', 12, 34])
+  })
+
   it('normalizes overview params with every response-changing input', () => {
     expect(
       advancedPaymentsQK.overview({

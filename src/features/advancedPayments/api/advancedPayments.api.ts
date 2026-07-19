@@ -33,6 +33,13 @@ export const advancePaymentsApi = {
     return response.data
   },
 
+  getById: async (clientRecordId: number, id: number): Promise<AdvancePaymentRow> => {
+    const response = await api.get<AdvancePaymentRow>(
+      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientRecordId, id),
+    )
+    return response.data
+  },
+
   update: async (
     clientRecordId: number,
     id: number,
