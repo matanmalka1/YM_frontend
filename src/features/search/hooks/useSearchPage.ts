@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { searchApi, searchQK } from '../api'
 import { getErrorMessage, parsePositiveInt } from '../../../utils/utils'
@@ -8,6 +8,11 @@ import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 import { SEARCH_ERROR_MESSAGES } from '../errorMessages'
 import { useClientQuery } from '@/features/clients'
 import type { OperationalSearchResults } from '../api/contracts'
+import { useSearchDebounce } from '@/hooks/useSearchDebounce'
+import { getTotalPages } from '@/utils/paginationUtils'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { SEARCH_MESSAGES } from '../messages'
+import { searchColumns } from '../components/SearchColumns'
 
 const EMPTY_OPERATIONAL_RESULTS: OperationalSearchResults = {
   tasks: { items: [], total: 0 },
@@ -48,6 +53,7 @@ export const useSearchPage = () => {
   const {
     data: searchData,
     error: searchError,
+    isFetching: searchFetching,
     isPending: searchPending,
   } = useQuery({
     queryKey: searchQK.results(filters),
@@ -81,17 +87,83 @@ export const useSearchPage = () => {
     resetFilters()
   }, [resetFilters])
 
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [queryDraft, setQueryDraft] = useSearchDebounce(filters.search, (value) => handleFilterChange('search', value))
+  const hasAdvancedFilter = SEARCH_ADVANCED_FILTER_KEYS.some((key) => Boolean(filters[key]))
+  const [advancedFiltersOpen, setAdvancedFiltersOpen] = useState(hasAdvancedFilter)
+
+  const handleResetAll = useCallback(() => {
+    handleReset()
+    setAdvancedFiltersOpen(false)
+    inputRef.current?.focus()
+  }, [handleReset])
+
+  const error = searchError ? getErrorMessage(searchError, SEARCH_ERROR_MESSAGES.page.loadError) : null
+  const loading = hasAnyFilter ? searchPending : false
+  const operational = searchData?.operational ?? EMPTY_OPERATIONAL_RESULTS
+  const results = searchData?.results ?? []
+  const documents = searchData?.documents ?? []
+  const total = searchData?.total ?? 0
+  const operationalTotal = Object.values(operational).reduce((sum, group) => sum + group.total, 0)
+  const totalPages = getTotalPages(total, filters.page_size)
+
   return {
-    error: searchError ? getErrorMessage(searchError, SEARCH_ERROR_MESSAGES.page.loadError) : null,
-    filters,
-    hydratedClient,
-    hasAnyFilter,
-    handleFilterChange,
-    handleReset,
-    loading: hasAnyFilter ? searchPending : false,
-    operational: searchData?.operational ?? EMPTY_OPERATIONAL_RESULTS,
-    results: searchData?.results ?? [],
-    documents: searchData?.documents ?? [],
-    total: searchData?.total ?? 0,
+    status: {
+      isLoading: loading,
+      isFetching: hasAnyFilter ? searchFetching : false,
+      error,
+    },
+    headerProps: {
+      title: GLOBAL_UI_MESSAGES.common.search,
+      description: SEARCH_MESSAGES.page.description,
+    },
+    clientSummary: {
+      clientId: hydratedClient?.id ?? null,
+    },
+    toolbar: {
+      inputRef,
+      queryDraft,
+      onQueryDraftChange: setQueryDraft,
+      filters,
+      hydratedClient,
+      onFilterChange: handleFilterChange,
+      onReset: handleResetAll,
+      advancedFiltersOpen,
+      onToggleAdvancedFilters: () => setAdvancedFiltersOpen((open) => !open),
+    },
+    results: {
+      prompt: {
+        visible: !loading && !error && !hasAnyFilter,
+      },
+      emptyState: {
+        visible:
+          !loading &&
+          !error &&
+          hasAnyFilter &&
+          results.length === 0 &&
+          documents.length === 0 &&
+          operationalTotal === 0,
+        onReset: handleResetAll,
+      },
+      operational: {
+        visible: !loading,
+        data: operational,
+      },
+      table: {
+        visible: loading || results.length > 0,
+        data: results,
+        columns: searchColumns,
+        page: filters.page,
+        totalPages,
+        total,
+        onPageChange: setUrlPage,
+      },
+      documents: {
+        visible: !loading,
+        data: documents,
+        filenameFilter: filters.filename,
+        onFilterChange: handleFilterChange,
+      },
+    },
   }
 }
