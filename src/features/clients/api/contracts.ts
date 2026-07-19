@@ -253,6 +253,10 @@ interface DocumentsCard {
   present_count: number
 }
 
+interface TasksCard {
+  open_count: number
+}
+
 export interface BusinessStatusCardResponse {
   client_id: number
   year: number
@@ -262,4 +266,5 @@ export interface BusinessStatusCardResponse {
   advance_payments: AdvancePaymentsCard
   binders: BindersCard
   documents: DocumentsCard
+  tasks: TasksCard
 }

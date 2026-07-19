@@ -108,6 +108,9 @@ export const CLIENTS_MESSAGES = {
     noBusinesses: 'אין עסקים רשומים',
     documentsTitle: 'מסמכים',
     documentsExist: 'מסמכים קיימים',
+    tasksTitle: 'משימות',
+    openTasks: (count: number) => `${count} פתוחות`,
+    tasksSecondary: 'משימות הקשורות ללקוח',
   },
   businessesCard: {
     title: 'עסקים',

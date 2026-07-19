@@ -25,6 +25,7 @@ export const CLIENT_ROUTES = {
   annualReportDetail: (clientId: number | string, reportId: number | string) =>
     `/clients/${clientId}/annual-reports/${reportId}`,
   documents: (clientId: number | string) => `/clients/${clientId}/documents`,
+  tasks: (clientId: number | string) => `/clients/${clientId}/tasks`,
   communication: (clientId: number | string) => `/clients/${clientId}/communication`,
   businessDetail: (clientId: number | string, businessId: number | string) =>
     `/clients/${clientId}/businesses/${businessId}`,
