@@ -1,5 +1,5 @@
 export interface SearchResult {
-  result_type: string
+  result_type: 'client' | 'binder'
   client_record_id: number
   office_client_number?: number | null
   client_name: string

@@ -4,7 +4,7 @@
  */
 export const SEARCH_MESSAGES = {
   page: {
-    description: 'חיפוש גלובלי על פני לקוחות, קלסרים ומסמכים',
+    description: 'חיפוש גלובלי של לקוחות, קלסרים, מסמכים ופריטים תפעוליים',
     promptTitle: 'מה תרצה למצוא?',
     promptMessage: 'הקלד שם לקוח, מספר קלסר, או השתמש בפילטרים המתקדמים',
     emptyTitle: 'לא נמצאו תוצאות',
@@ -36,6 +36,8 @@ export const SEARCH_MESSAGES = {
   },
   actions: {
     details: 'פירוט',
+    clientDetails: 'פתיחת הלקוח',
+    binderDetails: 'פתיחת הקלסר',
   },
   documents: {
     type: 'סוג מסמך',
