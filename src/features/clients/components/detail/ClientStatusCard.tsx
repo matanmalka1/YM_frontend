@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { FileText, Receipt, CreditCard, TrendingUp, FolderOpen, FileCheck } from 'lucide-react'
+import { FileText, Receipt, CreditCard, TrendingUp, FolderOpen, FileCheck, ListTodo } from 'lucide-react'
 import { Select } from '@/components/ui/inputs/Select'
 import { clientsApi, clientsQK } from '../../api'
 import { CLIENT_ROUTES } from '../../api/endpoints'
@@ -120,7 +120,7 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
 
   if (!data) return null
 
-  const { annual_report, charges, advance_payments, binders, documents, year } = data
+  const { annual_report, charges, advance_payments, binders, documents, tasks, year } = data
 
   const arStatus = annual_report.status
     ? annual_report.form_type
@@ -143,7 +143,7 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
       size="compact"
       className="shadow-none"
     >
-      <div className="grid grid-cols-2 gap-0.5 md:grid-cols-3">
+      <div className="grid grid-cols-2 gap-0.5 lg:grid-cols-4">
         <Tile
           icon={<Receipt size={14} />}
           title={CLIENTS_MESSAGES.statusCard.vatTitle}
@@ -195,6 +195,13 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
           }
           to={CLIENT_ROUTES.documents(clientId)}
           disabled={firstBusinessId == null}
+        />
+        <Tile
+          icon={<ListTodo size={14} />}
+          title={CLIENTS_MESSAGES.statusCard.tasksTitle}
+          primary={CLIENTS_MESSAGES.statusCard.openTasks(tasks.open_count)}
+          secondary={CLIENTS_MESSAGES.statusCard.tasksSecondary}
+          to={CLIENT_ROUTES.tasks(clientId)}
         />
       </div>
     </Card>

@@ -5195,6 +5195,7 @@ export interface components {
       advance_payments: components['schemas']['AdvancePaymentsCard']
       binders: components['schemas']['BindersCard']
       documents: components['schemas']['DocumentsCard']
+      tasks: components['schemas']['TasksCard']
     }
     /**
      * ClientTimelineResponse
@@ -7269,6 +7270,11 @@ export interface components {
       action_payload?: {
         [key: string]: unknown
       } | null
+    }
+    /** TasksCard */
+    TasksCard: {
+      /** Open Count */
+      open_count: number
     }
     /** TaxCalculationResponse */
     TaxCalculationResponse: {
