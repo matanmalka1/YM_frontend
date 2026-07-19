@@ -1,24 +1,24 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { Alert } from '@/components/ui/overlays/Alert'
-import { DrawerSection } from '@/components/ui/overlays/DrawerPrimitives'
 import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
 import { Textarea } from '@/components/ui/inputs/Textarea'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { Button } from '@/components/ui/primitives/Button'
+import { Card } from '@/components/ui/primitives/Card'
 import { ADVANCE_PAYMENT_STATUS_OPTIONS, ADVANCE_PAYMENT_METHOD_OPTIONS } from '../../constants'
 import { formatShekelAmount } from '@/utils/utils'
-import type { AdvancePaymentDrawerForm } from '../../hooks/useAdvancePaymentDrawerForm'
+import type { AdvancePaymentDetailForm } from '../../hooks/useAdvancePaymentDetailForm'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 interface AdvancePaymentEditableSectionsProps {
-  form: AdvancePaymentDrawerForm
+  form: AdvancePaymentDetailForm
 }
 
 export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSectionsProps> = ({ form }) => (
   <>
-    <DrawerSection title={ADVANCED_PAYMENTS_MESSAGES.editableSections.calculationSectionTitle}>
-      <div className="py-4 space-y-3">
+    <Card title={ADVANCED_PAYMENTS_MESSAGES.editableSections.calculationSectionTitle} size="compact" variant="outlined">
+      <div className="space-y-3">
         <div className="flex items-end gap-2">
           <div className="flex-1">
             <Input
@@ -70,10 +70,10 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
           </div>
         </div>
       </div>
-    </DrawerSection>
+    </Card>
 
-    <DrawerSection title={ADVANCED_PAYMENTS_MESSAGES.editableSections.paymentSectionTitle}>
-      <div className="py-4 space-y-4">
+    <Card title={ADVANCED_PAYMENTS_MESSAGES.editableSections.paymentSectionTitle} size="compact" variant="outlined">
+      <div className="space-y-4">
         <div className="space-y-3">
           <Input
             label={ADVANCED_PAYMENTS_MESSAGES.editableSections.paidAmountLabel}
@@ -114,7 +114,7 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
           placeholder={ADVANCED_PAYMENTS_MESSAGES.editableSections.notesPlaceholder}
         />
       </div>
-    </DrawerSection>
+    </Card>
   </>
 )
 

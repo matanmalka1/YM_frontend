@@ -4,12 +4,7 @@ import type { AdvancePaymentStatus, CreateAdvancePaymentPayload } from '../api/c
 import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
-
-interface UpdatePayload {
-  id: number
-  paid_amount?: string
-  status?: AdvancePaymentStatus
-}
+import { useAdvancePaymentMutations } from './useAdvancePaymentMutations'
 
 export const useAdvancePayments = (
   clientRecordId: number,
@@ -39,14 +34,7 @@ export const useAdvancePayments = (
     retry: false,
   })
 
-  const updateMutation = useMutation({
-    mutationFn: ({ id, ...payload }: UpdatePayload) => advancePaymentsApi.update(clientRecordId, id, payload),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: qk })
-      void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
-    },
-    onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.update),
-  })
+  const paymentMutations = useAdvancePaymentMutations({ clientRecordId })
 
   const createMutation = useMutation({
     mutationFn: (payload: CreateAdvancePaymentPayload) => advancePaymentsApi.create(clientRecordId, payload),
@@ -56,20 +44,9 @@ export const useAdvancePayments = (
     onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.create),
   })
 
-  const deleteMutation = useMutation({
-    mutationFn: (id: number) => advancePaymentsApi.delete(clientRecordId, id),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: qk })
-      void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
-    },
-    onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.delete),
-  })
-
   const rows = enabled ? (listData?.items ?? []) : []
   const totalExpected = rows.reduce((sum, row) => sum + Number(row.expected_amount ?? 0), 0)
   const totalPaid = rows.reduce((sum, row) => sum + Number(row.paid_amount ?? 0), 0)
-
-  const updatingId = updateMutation.isPending ? (updateMutation.variables?.id ?? null) : null
 
   return {
     rows,
@@ -82,12 +59,12 @@ export const useAdvancePayments = (
     totalPaid,
     total: listData?.total ?? 0,
     updateRow: (id: number, paid_amount: string | null, status?: AdvancePaymentStatus) =>
-      updateMutation.mutateAsync({ id, paid_amount: paid_amount ?? '0', status }),
-    isUpdating: updateMutation.isPending,
-    updatingId,
+      paymentMutations.updatePayment({ id, payload: { paid_amount: paid_amount ?? '0', status } }),
+    isUpdating: paymentMutations.isUpdating,
+    updatingId: paymentMutations.updatingId,
     create: createMutation.mutateAsync,
     isCreating: createMutation.isPending,
-    deleteRow: (id: number) => deleteMutation.mutateAsync(id),
-    isDeletingId: deleteMutation.isPending ? (deleteMutation.variables ?? null) : null,
+    deleteRow: paymentMutations.deletePayment,
+    isDeletingId: paymentMutations.deletingId,
   }
 }

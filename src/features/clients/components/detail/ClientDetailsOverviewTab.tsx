@@ -148,14 +148,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
       {activeTab === 'charges' && <ClientChargesTab clientId={client.id} clientName={client.full_name} />}
       {activeTab === 'vat' && <VatClientSummaryPanel clientId={client.id} />}
       {activeTab === 'tax-calendar' && <ClientTaxCalendarTab clientId={client.id} />}
-      {activeTab === 'advance-payments' && (
-        <ClientAdvancePaymentsTab
-          clientRecordId={client.id}
-          clientName={client.full_name}
-          clientIdNumber={client.id_number}
-          officeClientNumber={client.office_client_number}
-        />
-      )}
+      {activeTab === 'advance-payments' && <ClientAdvancePaymentsTab clientRecordId={client.id} />}
       {activeTab === 'annual-reports' && <ClientAnnualReportsTab clientId={client.id} />}
       {activeTab === 'notifications' && <NotificationsTab clientRecordId={client.id} />}
       {activeTab === 'notes' && <NotesCard scope="client" clientId={client.id} canEdit={canEditClients} />}

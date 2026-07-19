@@ -1,6 +1,5 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { AlertTriangle, Edit, ExternalLink } from 'lucide-react'
-import { Link } from 'react-router-dom'
 import {
   actionsColumn,
   EmptyCell,
@@ -39,13 +38,7 @@ export const buildAdvancePaymentBatchColumns = ({
     wrap: true,
     render: (row) => (
       <>
-        <Link
-          to={`/clients/${row.client_record_id}/advance-payments`}
-          className="block font-semibold leading-snug text-gray-900 hover:text-info-600 hover:underline"
-          onClick={(event) => event.stopPropagation()}
-        >
-          {row.client_name}
-        </Link>
+        <span className="block font-semibold leading-snug text-gray-900">{row.client_name}</span>
         {row.missing_turnover && (
           <span className="mt-0.5 inline-flex items-center gap-1 rounded border border-warning-200 bg-warning-50 px-1.5 py-0.5 text-xs font-semibold text-warning-700">
             <AlertTriangle className="h-2.5 w-2.5" />

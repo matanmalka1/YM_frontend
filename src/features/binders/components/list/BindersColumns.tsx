@@ -1,5 +1,4 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
-import { Link } from 'react-router-dom'
 import { actionsColumn, EmptyCell, monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
 import { MonoValue } from '@/components/ui/primitives/MonoValue'
 import type { BinderResponse } from '../../types'
@@ -15,13 +14,7 @@ import { BINDERS_MESSAGES } from '../../messages'
 
 const renderClientCell = (binder: BinderResponse) => (
   <span className="flex flex-col gap-0.5">
-    <Link
-      to={`/clients/${binder.client_record_id}`}
-      onClick={(e) => e.stopPropagation()}
-      className="font-semibold text-gray-900 hover:text-primary-700 hover:underline"
-    >
-      {binder.client_name ?? `#${binder.client_record_id}`}
-    </Link>
+    <span className="font-semibold text-gray-900">{binder.client_name ?? `#${binder.client_record_id}`}</span>
   </span>
 )
 

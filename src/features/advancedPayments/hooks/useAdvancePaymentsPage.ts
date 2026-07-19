@@ -1,16 +1,12 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
-import { parsePositiveInt, showErrorToast } from '@/utils/utils'
-import { toast } from '@/utils/toast'
-import { advancePaymentsApi, advancedPaymentsQK } from '../api'
-import type { AdvancePaymentOverviewRow, AdvancePaymentStatus, UpdateAdvancePaymentPayload } from '../api/contracts'
+import { parsePositiveInt } from '@/utils/utils'
+import type { AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../api/contracts'
 import { isAdvancePaymentStatus, ADVANCE_PAYMENTS_FILTER_FIELDS } from '../constants'
-import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
 import { useAdvancePaymentBatches } from './useAdvancePaymentBatches'
 import {
   getAdvancePaymentBatchKey,
@@ -21,7 +17,6 @@ import {
 export const useAdvancePaymentsPage = () => {
   const { searchParams, getParam, setFilter, setFilters, resetFilters } = useSearchParamFilters()
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
   const { isAdvisor } = useRole()
   const today = new Date()
   const todayYear = today.getFullYear()
@@ -41,7 +36,6 @@ export const useAdvancePaymentsPage = () => {
   const clientRecordId = parsedClientRecordId > 0 ? parsedClientRecordId : undefined
   const periodFilter: 1 | 2 | null = filters.period === '1' ? 1 : filters.period === '2' ? 2 : null
   const statusFilter = normalizedStatus
-  const [drawerRow, setDrawerRow] = useState<AdvancePaymentOverviewRow | null>(null)
   const [createOpen, setCreateOpen] = useState(false)
   const [generateOpen, setGenerateOpen] = useState(false)
   const { batches, isLoading } = useAdvancePaymentBatches(year, clientRecordId)
@@ -56,43 +50,16 @@ export const useAdvancePaymentsPage = () => {
     [currentReportingMonth, todayYear, displayBatches],
   )
 
-  const updateMutation = useMutation({
-    mutationFn: ({
-      clientRecordId: rowClientRecordId,
-      id,
-      payload,
-    }: {
-      clientRecordId: number
-      id: number
-      payload: UpdateAdvancePaymentPayload
-    }) => advancePaymentsApi.update(rowClientRecordId, id, payload),
-    onSuccess: async () => {
-      toast.success('מקדמה עודכנה')
-      await queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
-      setDrawerRow(null)
-    },
-    onError: (error) => showErrorToast(error, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.update),
-  })
-
   const changeFilter = (key: string, value: string) => {
     setFilter(key, value, key !== 'year')
   }
 
   const openRow = (row: AdvancePaymentOverviewRow) => {
-    if (isAdvisor) {
-      setDrawerRow(row)
-      return
-    }
-    navigate(`/clients/${row.client_record_id}/advance-payments`)
+    navigate(`/clients/${row.client_record_id}/advance-payments/${row.id}`)
   }
 
   const navigateToClient = (clientRecordId: number) => {
     navigate(`/clients/${clientRecordId}/advance-payments`)
-  }
-
-  const saveRow = async (id: number, payload: UpdateAdvancePaymentPayload) => {
-    if (!drawerRow) return
-    await updateMutation.mutateAsync({ clientRecordId: drawerRow.client_record_id, id, payload })
   }
 
   return {
@@ -128,16 +95,6 @@ export const useAdvancePaymentsPage = () => {
       currentReportingMonth,
       onRowClick: openRow,
       onNavigateToClient: navigateToClient,
-    },
-    drawers: {
-      payment: {
-        row: drawerRow,
-        open: drawerRow !== null,
-        isUpdating: updateMutation.isPending,
-        canEdit: isAdvisor,
-        onClose: () => setDrawerRow(null),
-        onSave: saveRow,
-      },
     },
     modals: {
       create: {

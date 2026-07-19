@@ -15,14 +15,20 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     paymentMethodLabel: 'שיטת תשלום',
     paidAtLabel: 'תאריך ביצוע',
   },
-  drawerFooter: {
+  detailActions: {
     deleteAriaLabel: 'מחק מקדמה',
     deleteTitle: 'מחק מקדמה',
     deleteModalTitle: 'מחיקת מקדמה',
     deleteModalMessage: 'האם למחוק מקדמה זו?',
     deleteConfirm: 'כן, מחק',
   },
-  drawer: {
+  detail: {
+    fallbackTitle: 'מקדמה',
+    expectedStatTitle: 'סכום צפוי',
+    paidStatTitle: 'שולם',
+    balanceStatTitle: 'יתרה לתשלום',
+    turnoverStatTitle: 'מחזור לתקופה',
+    contextSectionTitle: 'פרטי לקוח ותקופה',
     paidLateLabel: 'שולם באיחור',
     overdueLabel: 'באיחור',
     idNumberLabel: 'ת.ז / ח.פ',

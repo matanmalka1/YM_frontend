@@ -4,6 +4,7 @@ export const ADVANCED_PAYMENTS_ERROR_MESSAGES = {
     update: 'שגיאה בעדכון מקדמה',
     delete: 'שגיאה במחיקת מקדמה',
     listLoad: 'שגיאה בטעינת מקדמות',
+    detailLoad: 'שגיאה בטעינת מקדמה',
     vatPrefill: 'טעינת מחזור ממע״מ נכשלה',
     alreadyExists: 'מקדמה לחודש זה כבר קיימת',
     paidAmountInvalid: 'סכום ששולם חייב להיות מספר תקין שאינו שלילי',

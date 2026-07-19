@@ -5,14 +5,13 @@ import { Button } from '@/components/ui/primitives/Button'
 import { AdvancePaymentsStatsSection } from '../components/stats/AdvancePaymentsStatsSection'
 import { AdvancePaymentBatchesList } from '../components/table/AdvancePaymentBatchesList'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
-import { AdvancePaymentDrawer } from '../components/drawer/AdvancePaymentDrawer'
 import { CreateAdvancePaymentFlow } from '../components/create/CreateAdvancePaymentFlow'
 import { GenerateScheduleModal } from '../components/create/GenerateScheduleModal'
 import { useAdvancePaymentsPage } from '../hooks/useAdvancePaymentsPage'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../messages'
 
 export const AdvancePayments: React.FC = () => {
-  const { status, headerProps, permissions, stats, filters, table, drawers, modals } = useAdvancePaymentsPage()
+  const { status, headerProps, permissions, stats, filters, table, modals } = useAdvancePaymentsPage()
 
   return (
     <PageContent>
@@ -58,8 +57,6 @@ export const AdvancePayments: React.FC = () => {
       />
 
       <AdvancePaymentBatchesList isLoading={status.isLoading} {...table} />
-
-      <AdvancePaymentDrawer key={drawers.payment.row?.id ?? 'empty'} {...drawers.payment} />
 
       <CreateAdvancePaymentFlow {...modals.create} />
 

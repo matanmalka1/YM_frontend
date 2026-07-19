@@ -1,23 +1,21 @@
 import { useState } from 'react'
-import type { PrefillTurnoverResponse, UpdateAdvancePaymentPayload } from '../api/contracts'
+import type { AdvancePaymentRow, PrefillTurnoverResponse, UpdateAdvancePaymentPayload } from '../api/contracts'
 import { advancePaymentsApi } from '../api'
 import { toast } from '@/utils/toast'
 import { showErrorToast } from '@/utils/utils'
 import { isAdvancePaymentMethod, isAdvancePaymentStatus } from '../constants'
 import { calcAdvanceAmount, toEditableAmount, toStringOrNull } from '../utils/advancePaymentComponentUtils'
-import type { AdvancePaymentDrawerModel } from '../utils/advancePaymentDrawerModel'
 import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
 
 // `null` = idle (no prefill attempted yet); the rest mirror the API contract.
 type PrefillSource = PrefillTurnoverResponse['source'] | null
 
-interface UseAdvancePaymentDrawerFormArgs {
-  model: AdvancePaymentDrawerModel | null
-  onSave: (id: number, payload: UpdateAdvancePaymentPayload) => Promise<void>
-  onClose: () => void
+interface UseAdvancePaymentDetailFormArgs {
+  payment: AdvancePaymentRow
+  onSave: (payload: UpdateAdvancePaymentPayload) => Promise<void>
 }
 
-export interface AdvancePaymentDrawerForm {
+export interface AdvancePaymentDetailForm {
   paidAmount: string
   setPaidAmount: (value: string) => void
   status: string
@@ -43,32 +41,31 @@ export interface AdvancePaymentDrawerForm {
   handleSave: () => Promise<void>
 }
 
-export const useAdvancePaymentDrawerForm = ({
-  model,
+export const useAdvancePaymentDetailForm = ({
+  payment,
   onSave,
-  onClose,
-}: UseAdvancePaymentDrawerFormArgs): AdvancePaymentDrawerForm => {
-  // Seeded once from the source row. The consumer keys this component by row id
-  // (`key={row.id}`), so switching rows remounts the hook with fresh state — no
-  // prop→state sync effect, and parent refetches (fresh `model` object, same id)
-  // never wipe in-progress edits.
-  const [paidAmount, setPaidAmount] = useState(() => (model ? toEditableAmount(model.paidAmount) : ''))
-  const [status, setStatus] = useState<string>(() => model?.status ?? '')
-  const [paymentMethod, setPaymentMethod] = useState<string>(() => model?.paymentMethod ?? '')
-  const [paidAt, setPaidAt] = useState(() => (model?.paidAt ? model.paidAt.split('T')[0] : ''))
-  const [notes, setNotes] = useState(() => model?.notes ?? '')
-  const [turnoverAmount, setTurnoverAmount] = useState(() => (model ? toEditableAmount(model.turnoverAmount) : ''))
-  const [overrideAmount, setOverrideAmount] = useState(() => (model ? toEditableAmount(model.overrideAmount) : ''))
+}: UseAdvancePaymentDetailFormArgs): AdvancePaymentDetailForm => {
+  // Seeded once from the loaded payment. The consumer keys this component by
+  // payment id, so opening another payment remounts the hook with fresh state —
+  // no prop→state sync effect, and refetches (fresh object, same id) never wipe
+  // in-progress edits.
+  const [paidAmount, setPaidAmount] = useState(() => toEditableAmount(payment.paid_amount))
+  const [status, setStatus] = useState<string>(() => payment.status)
+  const [paymentMethod, setPaymentMethod] = useState<string>(() => payment.payment_method ?? '')
+  const [paidAt, setPaidAt] = useState(() => (payment.paid_at ? payment.paid_at.split('T')[0] : ''))
+  const [notes, setNotes] = useState(() => payment.notes ?? '')
+  const [turnoverAmount, setTurnoverAmount] = useState(() => toEditableAmount(payment.turnover_amount))
+  const [overrideAmount, setOverrideAmount] = useState(() => toEditableAmount(payment.override_amount))
   const [prefillSource, setPrefillSource] = useState<PrefillSource>(null)
   const [isPrefilling, setIsPrefilling] = useState(false)
 
-  // baseline values derived from the source row
-  const baselinePaidAmount = model ? toEditableAmount(model.paidAmount) : ''
-  const baselinePaymentMethod = model?.paymentMethod ?? ''
-  const baselinePaidAt = model?.paidAt ? model.paidAt.split('T')[0] : ''
-  const baselineNotes = model?.notes ?? ''
-  const baselineTurnover = model ? toEditableAmount(model.turnoverAmount) : ''
-  const baselineOverride = model ? toEditableAmount(model.overrideAmount) : ''
+  // baseline values derived from the loaded payment
+  const baselinePaidAmount = toEditableAmount(payment.paid_amount)
+  const baselinePaymentMethod = payment.payment_method ?? ''
+  const baselinePaidAt = payment.paid_at ? payment.paid_at.split('T')[0] : ''
+  const baselineNotes = payment.notes ?? ''
+  const baselineTurnover = toEditableAmount(payment.turnover_amount)
+  const baselineOverride = toEditableAmount(payment.override_amount)
 
   // normalized form values
   const normalizedPaidAmount = paidAmount.trim()
@@ -78,9 +75,9 @@ export const useAdvancePaymentDrawerForm = ({
 
   // live calculation
   const numT = Number(turnoverAmount)
-  const numR = Number(model?.advanceRate)
+  const numR = Number(payment.advance_rate)
   const liveCalculated =
-    turnoverAmount !== '' && model?.advanceRate != null && Number.isFinite(numT) && Number.isFinite(numR)
+    turnoverAmount !== '' && payment.advance_rate != null && Number.isFinite(numT) && Number.isFinite(numR)
       ? calcAdvanceAmount(numT, numR)
       : null
   const liveExpected = overrideAmount !== '' ? overrideAmount : liveCalculated
@@ -89,7 +86,7 @@ export const useAdvancePaymentDrawerForm = ({
 
   const isDirty =
     baselinePaidAmount !== paidAmount ||
-    model?.status !== status ||
+    payment.status !== status ||
     baselinePaymentMethod !== paymentMethod ||
     baselinePaidAt !== paidAt ||
     baselineNotes !== notes ||
@@ -97,13 +94,12 @@ export const useAdvancePaymentDrawerForm = ({
     baselineOverride !== overrideAmount
 
   const handlePrefill = async () => {
-    if (!model) return
     setIsPrefilling(true)
     try {
       const result = await advancePaymentsApi.getPrefillTurnover(
-        model.clientRecordId,
-        model.period,
-        model.periodMonthsCount,
+        payment.client_record_id,
+        payment.period,
+        payment.period_months_count,
       )
       setPrefillSource(result.source)
       if (result.source !== 'none' && result.turnover_amount != null) {
@@ -117,7 +113,6 @@ export const useAdvancePaymentDrawerForm = ({
   }
 
   const handleSave = async () => {
-    if (!model) return
     const payload: UpdateAdvancePaymentPayload = {}
     const paidAmountPayload = normalizedPaidAmount === '' ? '0' : normalizedPaidAmount
     const numericPaid = Number(paidAmountPayload)
@@ -142,7 +137,7 @@ export const useAdvancePaymentDrawerForm = ({
       toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.paymentMethodInvalid)
       return
     }
-    const effectiveExpected = liveExpected != null ? Number(liveExpected) : Number(model.expectedAmount ?? 0)
+    const effectiveExpected = liveExpected != null ? Number(liveExpected) : Number(payment.expected_amount ?? 0)
     if (
       status === 'paid' &&
       Number.isFinite(effectiveExpected) &&
@@ -154,7 +149,7 @@ export const useAdvancePaymentDrawerForm = ({
     }
 
     if (paidAmount !== baselinePaidAmount) payload.paid_amount = paidAmountPayload
-    if (status !== model.status) payload.status = status
+    if (status !== payment.status) payload.status = status
     if (paymentMethod !== baselinePaymentMethod)
       payload.payment_method = normalizedPaymentMethod === '' ? null : normalizedPaymentMethod
     if (paidAt !== baselinePaidAt) payload.paid_at = normalizedPaidAt || null
@@ -162,8 +157,8 @@ export const useAdvancePaymentDrawerForm = ({
     if (turnoverAmount !== baselineTurnover) payload.turnover_amount = toStringOrNull(turnoverAmount)
     if (overrideAmount !== baselineOverride) payload.override_amount = toStringOrNull(overrideAmount)
 
-    if (Object.keys(payload).length === 0) return onClose()
-    await onSave(model.id, payload)
+    if (Object.keys(payload).length === 0) return
+    await onSave(payload)
   }
 
   return {

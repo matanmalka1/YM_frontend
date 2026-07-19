@@ -7,16 +7,12 @@ import { useClientAdvancePaymentsTab } from '../../hooks/useClientAdvancePayment
 import { ClientAdvancePaymentsHeader } from './ClientAdvancePaymentsHeader'
 import { ClientAdvancePaymentsCards } from './ClientAdvancePaymentsCards'
 import { ClientAdvancePaymentsStatsSection } from './ClientAdvancePaymentsStatsSection'
-import { AdvancePaymentDrawer } from '../../components/drawer/AdvancePaymentDrawer'
 import { CreateAdvancePaymentModal } from '../../components/create/CreateAdvancePaymentModal'
 import { PaginationCard } from '@/components/ui/table'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 interface ClientAdvancePaymentsTabProps {
   clientRecordId: number
-  clientName?: string | null
-  clientIdNumber?: string | null
-  officeClientNumber?: number | null
 }
 
 const CLIENT_ADVANCE_PAYMENTS_FILTER_FIELDS: FilterFieldDef[] = [
@@ -36,8 +32,7 @@ const CLIENT_ADVANCE_PAYMENTS_FILTER_FIELDS: FilterFieldDef[] = [
 ]
 
 export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> = (props) => {
-  const { permissions, header, filters, kpi, table, pagination, drawer, createModal } =
-    useClientAdvancePaymentsTab(props)
+  const { permissions, header, filters, kpi, table, pagination, createModal } = useClientAdvancePaymentsTab(props)
 
   return (
     <div className="space-y-6">
@@ -63,8 +58,6 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
           onPageChange={pagination.onPageChange}
         />
       )}
-
-      <AdvancePaymentDrawer key={drawer.row?.id ?? 'empty'} {...drawer} />
 
       {permissions.isAdvisor && <CreateAdvancePaymentModal {...createModal} />}
     </div>
