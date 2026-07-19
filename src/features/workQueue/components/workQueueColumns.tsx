@@ -99,12 +99,12 @@ export const buildWorkQueueColumns = ({
           item.client_record_id != null ? (
             <Link
               to={`/clients/${item.client_record_id}`}
-              className="inline-flex max-w-44 flex-col text-center text-sm text-primary-600 hover:underline"
+              className="block max-w-44 text-sm text-primary-600 hover:underline"
               onClick={(e) => e.stopPropagation()}
             >
-              <span className="truncate">{item.client_name ?? WORK_QUEUE_MESSAGES.columns.clientProfile}</span>
+              <span className="block truncate">{item.client_name ?? WORK_QUEUE_MESSAGES.columns.clientProfile}</span>
               {item.office_client_number != null && (
-                <span className="text-xs text-gray-500">{item.office_client_number}</span>
+                <span className="block text-xs text-gray-500">{item.office_client_number}</span>
               )}
             </Link>
           ) : (
