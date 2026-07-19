@@ -19,10 +19,12 @@ export const TasksPage: React.FC = () => {
         description={TASKS_MESSAGES.page.description}
         actions={
           <Button
+            variant="primary"
             size="sm"
             icon={<Plus className="h-4 w-4" aria-hidden="true" />}
+            iconPosition="end"
             onClick={page.openCreateModal}
-            className="shrink-0 rounded-xl"
+            className="shrink-0"
           >
             {TASKS_MESSAGES.actions.newTask}
           </Button>

@@ -21,25 +21,25 @@ export const AgingReportView: React.FC<AgingReportViewProps> = ({ embedded = fal
   const actions = (
     <div className="flex gap-2">
       <Button
-        variant="outline"
+        variant="primary"
         size="sm"
+        icon={<FileSpreadsheet className="h-4 w-4" />}
+        iconPosition="end"
         onClick={() => handleExport("excel")}
         isLoading={exporting === "excel"}
         disabled={exporting !== null}
-        className="gap-2"
       >
-        <FileSpreadsheet className="h-4 w-4" />
         Excel
       </Button>
       <Button
-        variant="outline"
+        variant="primary"
         size="sm"
+        icon={<FileDown className="h-4 w-4" />}
+        iconPosition="end"
         onClick={() => handleExport("pdf")}
         isLoading={exporting === "pdf"}
         disabled={exporting !== null}
-        className="gap-2"
       >
-        <FileDown className="h-4 w-4" />
         PDF
       </Button>
     </div>

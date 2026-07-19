@@ -34,7 +34,14 @@ export const AuthorityContactsListCard: React.FC<AuthorityContactsListCardProps>
     title={AUTHORITY_CONTACT_TEXT.cardTitle}
     subtitle={getAuthorityContactsSubtitle(total)}
     actions={
-      <Button type="button" variant="primary" size="sm" icon={<Plus className="h-4 w-4" />} onClick={onCreate}>
+      <Button
+        type="button"
+        variant="primary"
+        size="sm"
+        icon={<Plus className="h-4 w-4" />}
+        iconPosition="end"
+        onClick={onCreate}
+      >
         {AUTHORITY_CONTACT_TEXT.addButton}
       </Button>
     }

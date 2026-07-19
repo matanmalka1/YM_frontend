@@ -69,10 +69,10 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
             <>
               {onDelete && (
                 <Button
-                  variant="ghost"
+                  variant="danger"
                   size="sm"
                   icon={<Trash2 className="h-4 w-4" />}
-                  className="text-gray-400 hover:text-negative-600 hover:bg-negative-50"
+                  iconPosition="end"
                   onClick={() => setConfirmDelete(true)}
                   disabled={isUpdating || isDeleting}
                   aria-label={ADVANCED_PAYMENTS_MESSAGES.detailActions.deleteAriaLabel}

@@ -24,14 +24,14 @@ export const Clients: React.FC = () => {
       actions={
         isEmptyState ? undefined : (
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={modals.openImportExport}>
+            <Button variant="primary" size="sm" onClick={modals.openImportExport}>
               {CLIENTS_MESSAGES.list.importExport}
             </Button>
             {permissions.can.createClients && (
               <Button
-                variant="ghost"
+                variant="primary"
                 size="sm"
-                icon={<Plus className="h-3.5 w-3.5" />}
+                icon={<Plus className="h-4 w-4" />}
                 iconPosition="end"
                 onClick={modals.openCreate}
               >

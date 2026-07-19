@@ -27,11 +27,11 @@ export const Users: React.FC = () => {
       {...headerProps}
       actions={
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={modals.openAuditLogs}>
+          <Button variant="primary" size="sm" onClick={modals.openAuditLogs}>
             {USERS_MESSAGES.page.auditLog}
           </Button>
           <Button
-            variant="ghost"
+            variant="primary"
             size="sm"
             icon={<Plus className="h-4 w-4" />}
             iconPosition="end"

@@ -22,9 +22,10 @@ export const VatWorkItemHeaderActions: React.FC<VatWorkItemHeaderActionsProps> =
       <div className="flex flex-wrap items-center justify-end gap-2">
         <VatExportButtons clientId={workItem.client_record_id} period={workItem.period} />
         <Button
-          variant="outline"
+          variant="primary"
           size="sm"
-          icon={<Bell className="h-3.5 w-3.5" />}
+          icon={<Bell className="h-4 w-4" />}
+          iconPosition="end"
           onClick={() => setShowNotificationModal(true)}
         >
           {VAT_MESSAGES.actions.documentsReminder}

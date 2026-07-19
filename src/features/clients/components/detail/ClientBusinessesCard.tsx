@@ -78,7 +78,14 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
         className="shadow-none"
         actions={
           canEdit ? (
-            <Button type="button" variant="ghost" size="sm" icon={<Plus className="h-4 w-4" />} onClick={onAddBusiness}>
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              icon={<Plus className="h-4 w-4" />}
+              iconPosition="end"
+              onClick={onAddBusiness}
+            >
               {CLIENTS_MESSAGES.businessesCard.addBusiness}
             </Button>
           ) : undefined

@@ -134,21 +134,21 @@ export const ClientRelatedData: FC<ClientRelatedDataProps> = ({
   const actions = (
     <div className="flex flex-wrap items-center gap-2">
       <Button
-        variant="ghost"
+        variant="primary"
         size="sm"
-        icon={<Plus className="h-3.5 w-3.5" />}
+        icon={<Plus className="h-4 w-4" />}
+        iconPosition="end"
         onClick={onCreateBinder}
-        className="text-md"
       >
         {CLIENTS_MESSAGES.relatedData.addBinder}
       </Button>
       {canCreateCharge && (
         <Button
-          variant="ghost"
+          variant="primary"
           size="sm"
-          icon={<Plus className="h-3.5 w-3.5" />}
+          icon={<Plus className="h-4 w-4" />}
+          iconPosition="end"
           onClick={onCreateCharge}
-          className="text-md"
         >
           {CLIENTS_MESSAGES.relatedData.addCharge}
         </Button>

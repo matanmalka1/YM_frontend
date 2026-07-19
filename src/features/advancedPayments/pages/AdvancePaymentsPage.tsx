@@ -21,7 +21,7 @@ export const AdvancePayments: React.FC = () => {
           permissions.isAdvisor ? (
             <div className="flex items-center gap-2">
               <Button
-                variant="ghost"
+                variant="primary"
                 size="sm"
                 icon={<Calendar className="h-4 w-4" />}
                 iconPosition="end"
@@ -30,7 +30,7 @@ export const AdvancePayments: React.FC = () => {
                 {ADVANCED_PAYMENTS_MESSAGES.page.createYearlySchedule}
               </Button>
               <Button
-                variant="ghost"
+                variant="primary"
                 size="sm"
                 icon={<PlusCircle className="h-4 w-4" />}
                 iconPosition="end"

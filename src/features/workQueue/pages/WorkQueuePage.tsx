@@ -19,8 +19,8 @@ export const WorkQueuePage: React.FC = () => {
       actions={
         <Button
           size="sm"
-          variant="ghost"
-          icon={<Plus className="h-3.5 w-3.5" />}
+          variant="primary"
+          icon={<Plus className="h-4 w-4" />}
           iconPosition="end"
           data-work-queue-focus-fallback="true"
           onClick={modals.openCreateTask}

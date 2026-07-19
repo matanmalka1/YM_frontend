@@ -146,8 +146,13 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
             }
             actions={
               can.editClients && initialTab === 'details' ? (
-                <Button variant="ghost" size="sm" onClick={() => setIsEditingRequested(true)} className="gap-2">
-                  <Edit2 className="h-4 w-4" />
+                <Button
+                  variant="primary"
+                  size="sm"
+                  icon={<Edit2 className="h-4 w-4" />}
+                  iconPosition="end"
+                  onClick={() => setIsEditingRequested(true)}
+                >
                   {CLIENTS_MESSAGES.details.editDetails}
                 </Button>
               ) : undefined

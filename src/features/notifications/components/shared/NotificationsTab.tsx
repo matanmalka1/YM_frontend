@@ -34,9 +34,10 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
         isAdvisor && clientRecordId != null ? (
           <Button
             type="button"
-            variant="outline"
+            variant="primary"
             size="sm"
             icon={<Send className="h-4 w-4" />}
+            iconPosition="end"
             onClick={() => setSendOpen(true)}
           >
             {NOTIFICATIONS_MESSAGES.actions.sendMessageShort}

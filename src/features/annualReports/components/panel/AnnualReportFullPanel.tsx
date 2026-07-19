@@ -85,22 +85,30 @@ export const AnnualReportFullPanel = ({
             <>
               {isAdvisor && (
                 <Button
-                  variant="outline"
+                  variant="primary"
                   size="sm"
                   icon={<Download className="h-4 w-4" />}
+                  iconPosition="end"
                   onClick={handleExportPdf}
                   isLoading={isExportingPdf}
                 >
                   {ANNUAL_REPORTS_MESSAGES.fullPanel.downloadDraft}
                 </Button>
               )}
-              <Button variant="danger" size="sm" icon={<Trash2 size={14} />} onClick={() => setShowDeleteConfirm(true)}>
+              <Button
+                variant="danger"
+                size="sm"
+                icon={<Trash2 className="h-4 w-4" />}
+                iconPosition="end"
+                onClick={() => setShowDeleteConfirm(true)}
+              >
                 {ANNUAL_REPORTS_MESSAGES.fullPanel.deleteReport}
               </Button>
               <Button
                 variant="primary"
                 size="sm"
-                icon={<Save size={14} />}
+                icon={<Save className="h-4 w-4" />}
+                iconPosition="end"
                 onClick={handleSave}
                 disabled={!isDirty || isUpdating}
               >
