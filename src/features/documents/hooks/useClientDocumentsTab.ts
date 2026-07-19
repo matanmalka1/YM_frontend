@@ -8,6 +8,8 @@ import {
   type UpdateDocumentPayload,
 } from '../api'
 import { useBusinessesForClient } from '@/hooks/useBusinessesForClient'
+import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
+import { parsePositiveInt } from '@/utils/utils'
 import { getErrorMessage } from '../../../utils/utils'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { useDocumentUpload } from './useDocumentUpload'
@@ -19,6 +21,17 @@ import { DOCUMENTS_ERROR_MESSAGES } from '../errorMessages'
 export const useClientDocumentsTab = (clientId: number, taxYear?: number | null) => {
   const queryClient = useQueryClient()
   const [page, setPage] = useState(1)
+  const { searchParams } = useSearchParamFilters()
+
+  // `document_id` opens one document straight from a deep link (search results, shared
+  // links). It is loaded on its own so it is reachable even when the current tax-year
+  // filter or page would not have listed it.
+  const focusedDocumentId = parsePositiveInt(searchParams.get('document_id'), 0) || null
+  const { data: focusedDocument } = useQuery({
+    enabled: clientId > 0 && focusedDocumentId !== null,
+    queryKey: documentsQK.clientDetail(clientId, focusedDocumentId ?? 0),
+    queryFn: () => documentsApi.getById(clientId, focusedDocumentId as number),
+  })
   const { businesses, isLoading: businessesLoading } = useBusinessesForClient({ clientId })
 
   const {
@@ -76,8 +89,14 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
   const totalPages = getTotalPages(total, PAGE_SIZE)
   const errorSource = documentsError ?? signalsError
 
+  // A deep-linked document is pinned to the top when this page would not have shown it.
+  const listed = documentsData?.items ?? []
+  const documents =
+    focusedDocument && !listed.some((doc) => doc.id === focusedDocument.id) ? [focusedDocument, ...listed] : listed
+
   return {
-    documents: documentsData?.items ?? [],
+    documents,
+    focusedDocumentId,
     signals: signalsData ?? { client_record_id: clientId, missing_documents: [] },
     loading: documentsPending || signalsPending,
     error: errorSource ? getErrorMessage(errorSource, DOCUMENTS_ERROR_MESSAGES.load) : null,

@@ -1,29 +1,45 @@
 import { useCallback, useRef, useState } from 'react'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { searchApi, searchQK } from '../api'
-import { getErrorMessage, parsePositiveInt } from '../../../utils/utils'
-import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
+import { getErrorMessage, parsePositiveInt } from '@/utils/utils'
+import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFilters } from '../types'
-import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
+import { PAGE_SIZE_SM, PAGE_SIZE_MD } from '@/constants/pagination.constants'
 import { SEARCH_ERROR_MESSAGES } from '../errorMessages'
-import { useClientQuery } from '@/features/clients'
-import type { OperationalSearchResults } from '../api/contracts'
+import { useFilterClient } from '@/features/clients'
+import type { SearchItem, SearchItemGroups, SearchItemType } from '../api/contracts'
 import { useSearchDebounce } from '@/hooks/useSearchDebounce'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { SEARCH_MESSAGES } from '../messages'
-import { searchColumns } from '../components/SearchColumns'
+import { SEARCH_GROUP_ORDER, SEARCH_GROUP_TYPES } from '../constants'
+import type { SearchFeedChip } from '../components/SearchItemFeed'
 
-const EMPTY_OPERATIONAL_RESULTS: OperationalSearchResults = {
-  tasks: { items: [], total: 0 },
-  vat_work_items: { items: [], total: 0 },
-  annual_reports: { items: [], total: 0 },
-  charges: { items: [], total: 0 },
-  advance_payments: { items: [], total: 0 },
+const EMPTY_GROUP = { items: [], total: 0 }
+const EMPTY_GROUPS: SearchItemGroups = {
+  binders: EMPTY_GROUP,
+  documents: EMPTY_GROUP,
+  vat_work_items: EMPTY_GROUP,
+  annual_reports: EMPTY_GROUP,
+  advance_payments: EMPTY_GROUP,
+  charges: EMPTY_GROUP,
+  tasks: EMPTY_GROUP,
+  notifications: EMPTY_GROUP,
 }
 
+const isSearchItemType = (value: string): value is SearchItemType =>
+  Object.values(SEARCH_GROUP_TYPES).some((type) => type === value)
+
 export const useSearchPage = () => {
-  const { searchParams, getParam, getPage, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
+  const {
+    searchParams,
+    getParam,
+    getPage,
+    setFilter,
+    setFilters,
+    setPage: setUrlPage,
+    resetFilters,
+  } = useSearchParamFilters()
 
   const filters: SearchFilters = {
     search: getParam('search'),
@@ -34,29 +50,32 @@ export const useSearchPage = () => {
     entity_type: getParam('entity_type'),
     binder_location_status: getParam('binder_location_status'),
     binder_capacity_status: getParam('binder_capacity_status'),
-    filename: getParam('filename'),
     page: getPage(),
     page_size: parsePositiveInt(searchParams.get('page_size'), PAGE_SIZE_SM),
   }
+  const rawType = getParam('type')
+  const activeType = isSearchItemType(rawType) ? rawType : null
+
   const clientRecordId = parsePositiveInt(filters.client_record_id, 0) || null
-  const { client: hydratedClientRecord } = useClientQuery({ clientId: clientRecordId })
-  const hydratedClient = hydratedClientRecord
-    ? {
-        id: hydratedClientRecord.id,
-        name: hydratedClientRecord.full_name,
-        office_client_number: hydratedClientRecord.office_client_number,
-      }
-    : null
+  const hydratedClient = useFilterClient(clientRecordId)
 
   const hasAnyFilter = Boolean(filters.search) || SEARCH_ADVANCED_FILTER_KEYS.some((k) => Boolean(filters[k]))
 
+  const handleFilterChange = useCallback(
+    (name: keyof SearchFilters, value: string) => {
+      if (name === 'page') setUrlPage(Number(value))
+      else setFilter(name, String(value))
+    },
+    [setFilter, setUrlPage],
+  )
+
   const {
-    data: searchData,
+    data,
     error: searchError,
-    isFetching: searchFetching,
     isPending: searchPending,
+    isFetching: searchFetching,
   } = useQuery({
-    queryKey: searchQK.results(filters),
+    queryKey: searchQK.clients(filters),
     queryFn: () =>
       searchApi.search({
         search: filters.search || undefined,
@@ -67,7 +86,6 @@ export const useSearchPage = () => {
         entity_type: filters.entity_type || undefined,
         binder_location_status: filters.binder_location_status || undefined,
         binder_capacity_status: filters.binder_capacity_status || undefined,
-        filename: filters.filename || undefined,
         page: filters.page,
         page_size: filters.page_size,
       }),
@@ -75,56 +93,101 @@ export const useSearchPage = () => {
     placeholderData: keepPreviousData,
   })
 
-  const handleFilterChange = useCallback(
-    (name: keyof SearchFilters, value: string) => {
-      if (name === 'page') setUrlPage(Number(value))
-      else setFilter(name, String(value))
-    },
-    [setFilter, setUrlPage],
-  )
+  // `keepPreviousData` keeps the last response alive even once the query is disabled, so a
+  // reset that clears every filter would otherwise leave the previous client's feed on
+  // screen underneath the "nothing searched yet" prompt.
+  const searchData = hasAnyFilter ? data : undefined
 
-  const handleReset = useCallback(() => {
-    resetFilters()
-  }, [resetFilters])
+  const groups = searchData?.items ?? EMPTY_GROUPS
+  const clientMatches = searchData?.clients
+  // The backend auto-selects a single match; the feed belongs to whichever client that is.
+  const selectedClientId = clientRecordId ?? (clientMatches?.total === 1 ? (clientMatches.items[0]?.id ?? null) : null)
+
+  const {
+    data: expandedData,
+    error: expandedError,
+    isPending: expandedPending,
+  } = useQuery({
+    queryKey: searchQK.items({
+      client_record_id: selectedClientId ?? 0,
+      result_type: activeType ?? 'task',
+      page: filters.page,
+      page_size: PAGE_SIZE_MD,
+    }),
+    queryFn: () =>
+      searchApi.listItems({
+        client_record_id: selectedClientId as number,
+        result_type: activeType as SearchItemType,
+        page: filters.page,
+        page_size: PAGE_SIZE_MD,
+      }),
+    enabled: selectedClientId !== null && activeType !== null,
+    placeholderData: keepPreviousData,
+  })
 
   const inputRef = useRef<HTMLInputElement>(null)
+  // Every free-text filter is URL-backed, so each needs a local draft with a debounced
+  // commit — otherwise each keystroke writes history and refires the request.
   const [queryDraft, setQueryDraft] = useSearchDebounce(filters.search, (value) => handleFilterChange('search', value))
+  const [idNumberDraft, setIdNumberDraft] = useSearchDebounce(filters.id_number, (value) =>
+    handleFilterChange('id_number', value),
+  )
+  const [binderNumberDraft, setBinderNumberDraft] = useSearchDebounce(filters.binder_number, (value) =>
+    handleFilterChange('binder_number', value),
+  )
   const hasAdvancedFilter = SEARCH_ADVANCED_FILTER_KEYS.some((key) => Boolean(filters[key]))
   const [advancedFiltersOpen, setAdvancedFiltersOpen] = useState(hasAdvancedFilter)
 
   const handleResetAll = useCallback(() => {
-    handleReset()
+    resetFilters()
     setAdvancedFiltersOpen(false)
     inputRef.current?.focus()
-  }, [handleReset])
+  }, [resetFilters])
 
-  const error = searchError ? getErrorMessage(searchError, SEARCH_ERROR_MESSAGES.page.loadError) : null
-  const loading = hasAnyFilter ? searchPending : false
-  const operational = searchData?.operational ?? EMPTY_OPERATIONAL_RESULTS
-  const results = searchData?.results ?? []
-  const documents = searchData?.documents ?? []
-  const total = searchData?.total ?? 0
-  const operationalTotal = Object.values(operational).reduce((sum, group) => sum + group.total, 0)
-  const totalPages = getTotalPages(total, filters.page_size)
+  // Selecting a client or a type restarts paging: both change what is being listed.
+  const handleSelectClient = useCallback(
+    (id: number) => setFilters({ client_record_id: String(id), page: '1' }),
+    [setFilters],
+  )
+  const handleClearClient = useCallback(() => setFilters({ client_record_id: '', type: '', page: '1' }), [setFilters])
+  const handleTypeChange = useCallback(
+    (type: SearchItemType | null) => setFilters({ type: type ?? '', page: '1' }),
+    [setFilters],
+  )
+
+  const chips: SearchFeedChip[] = SEARCH_GROUP_ORDER.filter((key) => groups[key].total > 0).map((key) => ({
+    type: SEARCH_GROUP_TYPES[key],
+    count: groups[key].total,
+  }))
+  const previewItems: SearchItem[] = SEARCH_GROUP_ORDER.flatMap((key) => groups[key].items)
+
+  const error = searchError || expandedError
+  const loading = hasAnyFilter && searchPending
+  const expandedLoading = activeType !== null && selectedClientId !== null && expandedPending
+  const showClientChooser = !loading && selectedClientId === null && (clientMatches?.total ?? 0) > 0
+  const showFeed = !loading && selectedClientId !== null
 
   return {
     status: {
       isLoading: loading,
-      isFetching: hasAnyFilter ? searchFetching : false,
-      error,
+      // True while a *newer* result is in flight and stale rows are still displayed —
+      // `isPending` stays false in that window because of `keepPreviousData`.
+      isFetching: hasAnyFilter && searchFetching && !loading,
+      error: error ? getErrorMessage(error, SEARCH_ERROR_MESSAGES.page.loadError) : null,
     },
     headerProps: {
       title: GLOBAL_UI_MESSAGES.common.search,
       description: SEARCH_MESSAGES.page.description,
-    },
-    clientSummary: {
-      clientId: hydratedClient?.id ?? null,
     },
     toolbar: {
       inputRef,
       queryDraft,
       onQueryDraftChange: setQueryDraft,
       filters,
+      textDrafts: {
+        id_number: { value: idNumberDraft, onChange: setIdNumberDraft },
+        binder_number: { value: binderNumberDraft, onChange: setBinderNumberDraft },
+      },
       hydratedClient,
       onFilterChange: handleFilterChange,
       onReset: handleResetAll,
@@ -132,37 +195,40 @@ export const useSearchPage = () => {
       onToggleAdvancedFilters: () => setAdvancedFiltersOpen((open) => !open),
     },
     results: {
-      prompt: {
-        visible: !loading && !error && !hasAnyFilter,
-      },
+      prompt: { visible: !loading && !error && !hasAnyFilter },
       emptyState: {
-        visible:
-          !loading &&
-          !error &&
-          hasAnyFilter &&
-          results.length === 0 &&
-          documents.length === 0 &&
-          operationalTotal === 0,
+        visible: !loading && !error && hasAnyFilter && (clientMatches?.total ?? 0) === 0,
         onReset: handleResetAll,
       },
-      operational: {
-        visible: !loading,
-        data: operational,
+      selectedClient: {
+        // Both paths land here: an explicit pick filters the list to that client, and an
+        // auto-selected single match is the only row in it.
+        visible: showFeed,
+        client: clientMatches?.items[0] ?? null,
+        onChange: clientRecordId !== null ? handleClearClient : null,
       },
-      table: {
-        visible: loading || results.length > 0,
-        data: results,
-        columns: searchColumns,
-        page: filters.page,
-        totalPages,
-        total,
-        onPageChange: setUrlPage,
+      clientMatches: {
+        visible: showClientChooser,
+        data: clientMatches?.items ?? [],
+        total: clientMatches?.total ?? 0,
+        onSelect: handleSelectClient,
       },
-      documents: {
-        visible: !loading,
-        data: documents,
-        filenameFilter: filters.filename,
-        onFilterChange: handleFilterChange,
+      feed: {
+        visible: showFeed,
+        chips,
+        activeType,
+        onTypeChange: handleTypeChange,
+        items: activeType ? (expandedData?.items ?? []) : previewItems,
+        isLoading: expandedLoading,
+        pagination:
+          activeType && expandedData
+            ? {
+                page: expandedData.page,
+                totalPages: getTotalPages(expandedData.total, expandedData.page_size),
+                total: expandedData.total,
+                onPageChange: setUrlPage,
+              }
+            : null,
       },
     },
   }

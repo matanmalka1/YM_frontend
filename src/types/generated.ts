@@ -2104,9 +2104,29 @@ export interface paths {
     }
     /**
      * Search
-     * @description Unified search for clients and binders.
+     * @description Resolve the term to clients, and preview the selected client's items by type.
      */
     get: operations['search_api_v1_search_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/search/items': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Items
+     * @description One client's items of a single type, paginated — an expanded preview group.
+     */
+    get: operations['list_items_api_v1_search_items_get']
     put?: never
     post?: never
     delete?: never
@@ -5420,30 +5440,6 @@ export interface components {
      */
     DocumentScope: 'client' | 'business'
     /**
-     * DocumentSearchResult
-     * @description Single document search result.
-     */
-    DocumentSearchResult: {
-      /** Id */
-      id: number
-      /** Client Record Id */
-      client_record_id: number
-      /** Office Client Number */
-      office_client_number?: number | null
-      /** Client Name */
-      client_name: string
-      /** Business Id */
-      business_id?: number | null
-      /** Business Name */
-      business_name?: string | null
-      /** Document Type */
-      document_type: string
-      /** Original Filename */
-      original_filename?: string | null
-      /** Tax Year */
-      tax_year?: number | null
-    }
-    /**
      * DocumentStatus
      * @enum {string}
      */
@@ -6338,56 +6334,34 @@ export interface components {
      * @enum {string}
      */
     ObligationType: 'vat' | 'advance_payment' | 'annual_report' | 'national_insurance'
-    /** OperationalSearchGroup */
-    OperationalSearchGroup: {
-      /** Items */
-      items?: components['schemas']['OperationalSearchItem'][]
-      /**
-       * Total
-       * @default 0
-       */
-      total: number
-    }
-    /** OperationalSearchItem */
-    OperationalSearchItem: {
-      /**
-       * Result Type
-       * @enum {string}
-       */
-      result_type: 'task' | 'vat_work_item' | 'annual_report' | 'charge' | 'advance_payment'
-      /** Id */
-      id: number
-      /** Client Record Id */
-      client_record_id: number
-      /** Office Client Number */
-      office_client_number: number
-      /** Client Name */
-      client_name: string
-      /** Title */
-      title: string
-      /** Detail */
-      detail?: string | null
-      /** Status */
-      status: string
-      /** Amount */
-      amount?: string | null
-      /** Href */
-      href: string
-    }
-    /** OperationalSearchResults */
-    OperationalSearchResults: {
-      tasks?: components['schemas']['OperationalSearchGroup']
-      vat_work_items?: components['schemas']['OperationalSearchGroup']
-      annual_reports?: components['schemas']['OperationalSearchGroup']
-      charges?: components['schemas']['OperationalSearchGroup']
-      advance_payments?: components['schemas']['OperationalSearchGroup']
-    }
     /** OperationalSignalsResponse */
     OperationalSignalsResponse: {
       /** Client Record Id */
       client_record_id: number
       /** Missing Documents */
       missing_documents: components['schemas']['PermanentDocumentType'][]
+    }
+    /** PaginatedResponse[SearchClientMatch] */
+    PaginatedResponse_SearchClientMatch_: {
+      /** Items */
+      items: components['schemas']['SearchClientMatch'][]
+      /** Page */
+      page: number
+      /** Page Size */
+      page_size: number
+      /** Total */
+      total: number
+    }
+    /** PaginatedResponse[SearchItem] */
+    PaginatedResponse_SearchItem_: {
+      /** Items */
+      items: components['schemas']['SearchItem'][]
+      /** Page */
+      page: number
+      /** Page Size */
+      page_size: number
+      /** Total */
+      total: number
     }
     /** PasswordResetRequest */
     PasswordResetRequest: {
@@ -6734,46 +6708,105 @@ export interface components {
       completed_by?: number | null
     }
     /**
-     * SearchResponse
-     * @description Search results response.
+     * SearchClientMatch
+     * @description A client the typed term resolved to, offered for selection.
      */
-    SearchResponse: {
-      /** Results */
-      results: components['schemas']['SearchResult'][]
-      /** Documents */
-      documents?: components['schemas']['DocumentSearchResult'][]
-      operational?: components['schemas']['OperationalSearchResults']
-      /** Page */
-      page: number
-      /** Page Size */
-      page_size: number
-      /** Total */
-      total: number
+    SearchClientMatch: {
+      /** Id */
+      id: number
+      /** Office Client Number */
+      office_client_number?: number | null
+      /** Name */
+      name: string
+      /** Id Number */
+      id_number?: string | null
+      /** Status */
+      status: string
+      /** Matched Binder Numbers */
+      matched_binder_numbers?: string[]
+      /** Href */
+      href: string
     }
     /**
-     * SearchResult
-     * @description Single search result.
+     * SearchItem
+     * @description One item belonging to the selected client, in the one shape every type shares.
+     *
+     *     `status` is nullable because documents carry no work status; their type is shown
+     *     in its place. `amount` is set only by the money-carrying types. `occurred_on` is the
+     *     date the row is anchored to (due date, upload date, issue date), so a mixed feed can
+     *     be read chronologically.
      */
-    SearchResult: {
-      /**
-       * Result Type
-       * @enum {string}
-       */
-      result_type: 'client' | 'binder'
+    SearchItem: {
+      result_type: components['schemas']['SearchItemType']
+      /** Id */
+      id: number
       /** Client Record Id */
       client_record_id: number
       /** Office Client Number */
       office_client_number?: number | null
       /** Client Name */
       client_name: string
-      /** Id Number */
-      id_number?: string | null
-      /** Client Status */
-      client_status?: string | null
-      /** Binder Id */
-      binder_id?: number | null
-      /** Binder Number */
-      binder_number?: string | null
+      /** Title */
+      title: string
+      /** Detail */
+      detail?: string | null
+      /** Status */
+      status?: string | null
+      /** Amount */
+      amount?: string | null
+      /** Occurred On */
+      occurred_on?: string | null
+      /** Href */
+      href: string
+    }
+    /**
+     * SearchItemGroup
+     * @description Preview rows for one type plus the exact total behind them.
+     */
+    SearchItemGroup: {
+      /** Items */
+      items?: components['schemas']['SearchItem'][]
+      /**
+       * Total
+       * @default 0
+       */
+      total: number
+    }
+    /** SearchItemGroups */
+    SearchItemGroups: {
+      binders?: components['schemas']['SearchItemGroup']
+      documents?: components['schemas']['SearchItemGroup']
+      vat_work_items?: components['schemas']['SearchItemGroup']
+      annual_reports?: components['schemas']['SearchItemGroup']
+      advance_payments?: components['schemas']['SearchItemGroup']
+      charges?: components['schemas']['SearchItemGroup']
+      tasks?: components['schemas']['SearchItemGroup']
+      notifications?: components['schemas']['SearchItemGroup']
+    }
+    /**
+     * SearchItemType
+     * @description Entity types that appear as rows in a client's item feed.
+     *
+     *     Deliberately excludes `client`: the client is the feed's subject, not a row in it.
+     *     Every member is also a `LinkedEntity`, which owns the route each row links to.
+     * @enum {string}
+     */
+    SearchItemType:
+      | 'binder'
+      | 'document'
+      | 'vat_work_item'
+      | 'annual_report'
+      | 'advance_payment'
+      | 'charge'
+      | 'task'
+      | 'notification'
+    /**
+     * SearchResponse
+     * @description Both search phases in one payload: which client, then everything of that client.
+     */
+    SearchResponse: {
+      clients: components['schemas']['PaginatedResponse_SearchClientMatch_']
+      items?: components['schemas']['SearchItemGroups']
     }
     /** SeasonSummaryResponse */
     SeasonSummaryResponse: {
@@ -16715,7 +16748,6 @@ export interface operations {
         entity_type?: components['schemas']['EntityType'] | null
         binder_location_status?: components['schemas']['BinderLocationStatus'] | null
         binder_capacity_status?: components['schemas']['BinderCapacityStatus'] | null
-        filename?: string | null
         page?: number
         page_size?: number
       }
@@ -16732,6 +16764,58 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['SearchResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  list_items_api_v1_search_items_get: {
+    parameters: {
+      query: {
+        client_record_id: number
+        result_type: components['schemas']['SearchItemType']
+        page?: number
+        page_size?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PaginatedResponse_SearchItem_']
         }
       }
       /** @description Authentication required */

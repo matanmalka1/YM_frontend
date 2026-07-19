@@ -6,18 +6,14 @@ import { Button } from '../../../components/ui/primitives/Button'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { ClientPickerField, useClientPickerState } from '@/components/shared/client'
 import { CLIENT_STATUS_OPTIONS, ENTITY_TYPE_OPTIONS } from '@/features/clients'
-import { DOCUMENT_FILENAME_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
+import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION } from '@/constants/filterOptions.constants'
 import { BINDER_CAPACITY_STATUS_OPTIONS, BINDER_LOCATION_STATUS_OPTIONS } from '../../binders'
 import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFiltersBarProps } from '../types'
 import { SEARCH_MESSAGES } from '../messages'
 
-const withEmptyOption = (label: string, options: { value: string; label: string }[]) => [
-  { value: '', label },
-  ...options,
-]
-
 export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
   filters,
+  textDrafts,
   hydratedClient,
   onFilterChange,
   onReset,
@@ -70,47 +66,40 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
             <Input
               label={SEARCH_MESSAGES.filters.idNumber}
               type="text"
-              value={filters.id_number}
-              onChange={(e) => onFilterChange('id_number', e.target.value)}
+              value={textDrafts.id_number.value}
+              onChange={(e) => textDrafts.id_number.onChange(e.target.value)}
               placeholder={SEARCH_MESSAGES.filters.idNumberPlaceholder}
             />
             <Input
               label={SEARCH_MESSAGES.filters.binderNumber}
               type="text"
-              value={filters.binder_number}
-              onChange={(e) => onFilterChange('binder_number', e.target.value)}
+              value={textDrafts.binder_number.value}
+              onChange={(e) => textDrafts.binder_number.onChange(e.target.value)}
               placeholder={SEARCH_MESSAGES.filters.binderNumberPlaceholder}
             />
             <Select
               label={SEARCH_MESSAGES.filters.clientStatus}
               value={filters.client_status}
               onChange={(e) => onFilterChange('client_status', e.target.value)}
-              options={withEmptyOption(SEARCH_MESSAGES.filters.allStatuses, CLIENT_STATUS_OPTIONS)}
+              options={[ALL_STATUSES_OPTION, ...CLIENT_STATUS_OPTIONS]}
             />
             <Select
               label={SEARCH_MESSAGES.filters.entityType}
               value={filters.entity_type}
               onChange={(e) => onFilterChange('entity_type', e.target.value)}
-              options={withEmptyOption(SEARCH_MESSAGES.filters.allTypes, ENTITY_TYPE_OPTIONS)}
+              options={[ALL_TYPES_OPTION, ...ENTITY_TYPE_OPTIONS]}
             />
             <Select
               label={SEARCH_MESSAGES.filters.binderLocation}
               value={filters.binder_location_status}
               onChange={(e) => onFilterChange('binder_location_status', e.target.value)}
-              options={withEmptyOption(SEARCH_MESSAGES.filters.allStatuses, BINDER_LOCATION_STATUS_OPTIONS)}
+              options={[ALL_STATUSES_OPTION, ...BINDER_LOCATION_STATUS_OPTIONS]}
             />
             <Select
               label={SEARCH_MESSAGES.filters.binderCapacity}
               value={filters.binder_capacity_status}
               onChange={(e) => onFilterChange('binder_capacity_status', e.target.value)}
               options={BINDER_CAPACITY_STATUS_OPTIONS}
-            />
-            <Input
-              label={SEARCH_MESSAGES.filters.filename}
-              type="text"
-              value={filters.filename}
-              onChange={(e) => onFilterChange('filename', e.target.value)}
-              placeholder={DOCUMENT_FILENAME_SEARCH_PLACEHOLDER}
             />
           </div>
 

@@ -3,6 +3,7 @@ import { Bell } from 'lucide-react'
 import { FIRST_PAGE, PAGE_SIZE_25 } from '@/constants/pagination.constants'
 import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
+import { parsePositiveInt } from '@/utils/utils'
 import { useActiveUserFilterOptions } from '@/features/users'
 
 import {
@@ -41,7 +42,11 @@ export const useNotificationsPage = () => {
   const clientRecordId = getParam('client_record_id')
   const clientName = getParam('client_name')
 
-  const [selectedId, setSelectedId] = useState<number | null>(null)
+  // `notification_id` opens one notification straight from a deep link (search results,
+  // shared links) without depending on the filters or page it happens to fall under.
+  const [selectedId, setSelectedId] = useState<number | null>(
+    parsePositiveInt(searchParams.get('notification_id'), 0) || null,
+  )
   const { data: selected, isPending: selectedLoading, error: selectedError } = useNotificationDetail(selectedId)
   const [sendOpen, setSendOpen] = useState(false)
   const [sendClient, setSendClient] = useState<SelectedClientFilter | null>(null)

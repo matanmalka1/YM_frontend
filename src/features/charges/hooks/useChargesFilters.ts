@@ -1,8 +1,6 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { clientsApi, clientsQK } from '@/features/clients'
-import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
+import { useFilterClient } from '@/features/clients'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
 import { CHARGE_STATUS_OPTIONS, CHARGE_TYPE_OPTIONS_WITH_ALL, CHARGE_PERIOD_OPTIONS } from '../constants'
 import type { ChargesFilters } from '../types'
@@ -40,14 +38,9 @@ export const useChargesFilters = ({ filters, onFilterChange, onReset }: UseCharg
   const urlClientId = filters.client_record_id ? Number(filters.client_record_id) : null
   const pickedMatchesFilter = picked != null && picked.id === filters.client_record_id
 
-  const { data: urlClient } = useQuery({
-    queryKey: clientsQK.detail(urlClientId ?? 0),
-    queryFn: () => clientsApi.getById(urlClientId!),
-    enabled: urlClientId != null && !pickedMatchesFilter,
-    staleTime: QUERY_STALE_TIME.medium,
-  })
+  const urlClient = useFilterClient(urlClientId, { skip: pickedMatchesFilter })
 
-  const clientName = !filters.client_record_id ? '' : pickedMatchesFilter ? picked!.name : (urlClient?.full_name ?? '')
+  const clientName = !filters.client_record_id ? '' : pickedMatchesFilter ? picked!.name : (urlClient?.name ?? '')
 
   return {
     fields: FIELDS,

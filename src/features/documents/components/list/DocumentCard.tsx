@@ -4,7 +4,7 @@ import { Badge } from '../../../../components/ui/primitives/Badge'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { Card } from '../../../../components/ui/primitives/Card'
 import { RowActionGroup, RowActionsMenu, RowActionItem } from '@/components/ui/table'
-import { formatDate } from '../../../../utils/utils'
+import { cn, formatDate } from '../../../../utils/utils'
 import { DOC_TYPE_LABELS } from '../../constants'
 import type { PermanentDocumentResponse } from '../../api'
 import { DOCUMENTS_MESSAGES } from '../../messages'
@@ -22,6 +22,7 @@ interface DocumentCardProps {
   onDelete: (id: number) => void
   onToggleVersions: (id: number) => void
   onEdit: (doc: PermanentDocumentResponse) => void
+  isFocused?: boolean
 }
 
 export const DocumentCard: React.FC<DocumentCardProps> = ({
@@ -37,8 +38,13 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
   onDelete,
   onToggleVersions,
   onEdit,
+  isFocused = false,
 }) => (
-  <Card size="compact" bodyClassName="flex flex-col gap-2 text-xs">
+  <Card
+    size="compact"
+    bodyClassName="flex flex-col gap-2 text-xs"
+    className={cn(isFocused && 'ring-2 ring-primary-500')}
+  >
     <div className="flex items-start justify-between gap-2">
       <span className="text-xs font-semibold text-gray-900 leading-snug">
         {DOC_TYPE_LABELS[doc.document_type] ?? doc.document_type}

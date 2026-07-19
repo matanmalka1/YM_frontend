@@ -3,4 +3,5 @@ export { ClientAdvancePaymentsTab } from './pages/ClientAdvancePaymentsTab/Clien
 export { CreateAdvancePaymentModal } from './components/create/CreateAdvancePaymentModal'
 export { AdvancePayments } from './pages/AdvancePaymentsPage'
 export { advancePaymentsApi, advancedPaymentsQK } from './api'
+export { getAdvancePaymentStatusLabel } from './constants'
 export type { CreateAdvancePaymentPayload } from './api'

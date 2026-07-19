@@ -22,9 +22,6 @@ export const BINDER_NUMBER_SEARCH_PLACEHOLDER = 'חיפוש לפי מספר קל
 /** Document search by file name and document type. */
 export const DOCUMENT_SEARCH_PLACEHOLDER = 'חיפוש לפי שם קובץ או סוג מסמך'
 
-/** Document search by file name only. */
-export const DOCUMENT_FILENAME_SEARCH_PLACEHOLDER = 'חיפוש לפי שם קובץ'
-
 /** User search by name or email address. */
 export const USER_SEARCH_PLACEHOLDER = 'חיפוש לפי שם או כתובת מייל'
 

@@ -1,5 +1,5 @@
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
-import { makeVariantGetter } from '@/utils/labels'
+import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
 import {
   NOTIFICATION_STATUS_VALUES,
   NOTIFICATION_TRIGGER_VALUES,
@@ -29,6 +29,8 @@ export const NOTIFICATION_STATUS_LABELS: Record<NotificationStatus, string> = {
   failed: 'נכשלה',
   skipped: 'דולגה',
 }
+
+export const getNotificationStatusLabel = makeLabelGetter(NOTIFICATION_STATUS_LABELS)
 
 export const getNotificationStatusVariant = makeVariantGetter({
   pending: 'info',

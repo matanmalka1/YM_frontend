@@ -11,6 +11,7 @@ interface SearchToolbarProps {
   queryDraft: string
   onQueryDraftChange: (value: string) => void
   filters: SearchFilters
+  textDrafts: SearchFiltersBarProps['textDrafts']
   hydratedClient: SearchFiltersBarProps['hydratedClient']
   onFilterChange: SearchFiltersBarProps['onFilterChange']
   onReset: () => void
@@ -23,6 +24,7 @@ export const SearchToolbar: React.FC<SearchToolbarProps> = ({
   queryDraft,
   onQueryDraftChange,
   filters,
+  textDrafts,
   hydratedClient,
   onFilterChange,
   onReset,
@@ -44,6 +46,7 @@ export const SearchToolbar: React.FC<SearchToolbarProps> = ({
       </div>
       <SearchFiltersBar
         filters={filters}
+        textDrafts={textDrafts}
         hydratedClient={hydratedClient}
         onFilterChange={onFilterChange}
         onReset={onReset}

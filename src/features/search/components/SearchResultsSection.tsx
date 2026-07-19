@@ -1,108 +1,91 @@
 import { FileSearch, Search as SearchIcon } from 'lucide-react'
-import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { StateCard } from '@/components/ui/feedback/StateCard'
-import { DataTable, PaginationCard, type Column } from '@/components/ui/table'
-import type { DocumentSearchResult, SearchResult } from '../api'
-import type { OperationalSearchResults } from '../api/contracts'
-import type { SearchFilters } from '../types'
+import { PageLoading } from '@/components/ui/layout/PageLoading'
+import { cn } from '@/utils/utils'
+import type { SearchClientMatch } from '../api/contracts'
 import { SEARCH_MESSAGES } from '../messages'
-import { DocumentResultsSection } from './DocumentResultsSection'
-import { OperationalResultsSection } from './OperationalResultsSection'
+import { SearchClientMatches } from './SearchClientMatches'
+import { SearchItemFeed } from './SearchItemFeed'
+import { SearchSelectedClient } from './SearchSelectedClient'
 
 interface SearchResultsSectionProps {
   status: {
     isLoading: boolean
+    isFetching: boolean
     error: string | null
   }
-  prompt: {
+  prompt: { visible: boolean }
+  emptyState: { visible: boolean; onReset: () => void }
+  clientMatches: {
     visible: boolean
-  }
-  emptyState: {
-    visible: boolean
-    onReset: () => void
-  }
-  operational: {
-    visible: boolean
-    data: OperationalSearchResults
-  }
-  table: {
-    visible: boolean
-    data: SearchResult[]
-    columns: Column<SearchResult>[]
-    page: number
-    totalPages: number
+    data: SearchClientMatch[]
     total: number
-    onPageChange: (page: number) => void
+    onSelect: (clientRecordId: number) => void
   }
-  documents: {
+  selectedClient: {
     visible: boolean
-    data: DocumentSearchResult[]
-    filenameFilter: string
-    onFilterChange: (name: keyof SearchFilters, value: string) => void
+    client: SearchClientMatch | null
+    onChange: (() => void) | null
   }
+  feed: React.ComponentProps<typeof SearchItemFeed> & { visible: boolean }
 }
 
 export const SearchResultsSection: React.FC<SearchResultsSectionProps> = ({
   status,
   prompt,
   emptyState,
-  operational,
-  table,
-  documents,
-}) => (
-  <>
-    {status.error && <Alert variant="error" message={status.error} />}
+  clientMatches,
+  selectedClient,
+  feed,
+}) => {
+  const { visible: feedVisible, ...feedProps } = feed
 
-    {prompt.visible && (
-      <StateCard
-        icon={SearchIcon}
-        title={SEARCH_MESSAGES.page.promptTitle}
-        message={SEARCH_MESSAGES.page.promptMessage}
-        variant="illustration"
-      />
-    )}
+  return (
+    <>
+      {status.error && <Alert variant="error" message={status.error} />}
+      {status.isLoading && <PageLoading />}
 
-    {emptyState.visible && (
-      <StateCard
-        icon={FileSearch}
-        title={SEARCH_MESSAGES.page.emptyTitle}
-        message={SEARCH_MESSAGES.page.emptyMessage}
-        action={{ label: SEARCH_MESSAGES.page.resetSearch, onClick: emptyState.onReset }}
-      />
-    )}
-
-    {operational.visible && <OperationalResultsSection operational={operational.data} />}
-
-    {table.visible && (
-      <>
-        <DataTable<SearchResult>
-          data={table.data}
-          columns={table.columns}
-          getRowKey={(result) => `${result.result_type}-${result.client_record_id}-${result.binder_id ?? 'none'}`}
-          isLoading={status.isLoading}
-          emptyMessage={GLOBAL_UI_MESSAGES.common.noResults}
+      {prompt.visible && (
+        <StateCard
+          icon={SearchIcon}
+          title={SEARCH_MESSAGES.page.promptTitle}
+          message={SEARCH_MESSAGES.page.promptMessage}
+          variant="illustration"
         />
+      )}
 
-        {!status.isLoading && table.totalPages > 1 && (
-          <PaginationCard
-            page={table.page}
-            totalPages={table.totalPages}
-            total={table.total}
-            onPageChange={table.onPageChange}
+      {emptyState.visible && (
+        <StateCard
+          icon={FileSearch}
+          title={SEARCH_MESSAGES.page.emptyTitle}
+          message={SEARCH_MESSAGES.page.emptyMessage}
+          action={{ label: SEARCH_MESSAGES.page.resetSearch, onClick: emptyState.onReset }}
+        />
+      )}
+
+      {/* Rows already on screen are stale while a newer query runs — dim them rather than
+          swapping in a skeleton, so the layout does not jump on every keystroke. */}
+      <div
+        aria-busy={status.isFetching}
+        className={cn('space-y-4 transition-opacity', status.isFetching && 'pointer-events-none opacity-50')}
+      >
+        {clientMatches.visible && (
+          <SearchClientMatches
+            clients={clientMatches.data}
+            total={clientMatches.total}
+            onSelect={clientMatches.onSelect}
           />
         )}
-      </>
-    )}
 
-    {documents.visible && (
-      <DocumentResultsSection
-        documents={documents.data}
-        filenameFilter={documents.filenameFilter}
-        onFilenameChange={documents.onFilterChange}
-      />
-    )}
-  </>
-)
+        {selectedClient.visible && selectedClient.client && (
+          <SearchSelectedClient client={selectedClient.client} onChange={selectedClient.onChange} />
+        )}
+
+        {feedVisible && <SearchItemFeed {...feedProps} />}
+      </div>
+    </>
+  )
+}
 
 SearchResultsSection.displayName = 'SearchResultsSection'

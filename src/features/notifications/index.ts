@@ -6,3 +6,4 @@ export { SendNotificationModal } from './components/form/SendNotificationModal'
 export { useNotificationBell } from './hooks/useNotificationBell'
 
 export type { NotificationTrigger, NotificationDetail } from './api'
+export { getNotificationStatusLabel } from './constants'

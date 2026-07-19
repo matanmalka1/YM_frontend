@@ -1,3 +1,5 @@
+import { makeLabelGetter } from '@/utils/labels'
+
 export const taskStatusValues = ['open', 'done', 'canceled'] as const
 export type TaskStatus = (typeof taskStatusValues)[number]
 export const taskPriorityValues = ['low', 'normal', 'high', 'urgent'] as const
@@ -7,6 +9,8 @@ export const taskStatusLabels: Record<TaskStatus, string> = {
   done: 'הושלמה',
   canceled: 'בוטלה',
 }
+
+export const getTaskStatusLabel = makeLabelGetter(taskStatusLabels)
 
 export const taskPriorityLabels: Record<string, string> = {
   low: 'נמוכה',

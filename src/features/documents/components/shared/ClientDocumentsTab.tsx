@@ -14,6 +14,7 @@ export const ClientDocumentsTab: React.FC<ClientDocumentsTabProps> = ({ clientId
 
   const {
     documents,
+    focusedDocumentId,
     signals,
     loading,
     error,
@@ -38,6 +39,7 @@ export const ClientDocumentsTab: React.FC<ClientDocumentsTabProps> = ({ clientId
     <>
       <DocumentsDataCards
         documents={documents}
+        focusedDocumentId={focusedDocumentId}
         signals={signals}
         taxYear={taxYear}
         onTaxYearChange={(year) => {

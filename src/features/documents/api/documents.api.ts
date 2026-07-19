@@ -31,6 +31,11 @@ export const documentsApi = {
     return response.data
   },
 
+  getById: async (clientId: number, documentId: number): Promise<PermanentDocumentResponse> => {
+    const response = await api.get<PermanentDocumentResponse>(DOCUMENT_ENDPOINTS.documentDetail(clientId, documentId))
+    return response.data
+  },
+
   getSignalsByClient: async (clientId: number): Promise<OperationalSignalsResponse> => {
     const response = await api.get<OperationalSignalsResponse>(DOCUMENT_ENDPOINTS.documentSignalsByClient(clientId))
     return response.data

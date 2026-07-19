@@ -33,10 +33,13 @@ interface DocumentsDataCardsProps {
   onDelete: (id: number) => Promise<void>
   onReplace: (id: number, file: File) => Promise<void>
   onUpdate: (id: number, payload: UpdateDocumentPayload) => Promise<void>
+  /** Deep-linked document, highlighted so it is findable among the cards. */
+  focusedDocumentId: number | null
 }
 
 export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
   documents,
+  focusedDocumentId,
   taxYear,
   onTaxYearChange,
   businesses,
@@ -143,6 +146,7 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
             <DocumentCard
               key={doc.id}
               doc={doc}
+              isFocused={doc.id === focusedDocumentId}
               isAdvisor={isAdvisor}
               canEditReplace={canEditReplace}
               downloadingId={downloadingId}
