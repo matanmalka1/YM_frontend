@@ -45,4 +45,10 @@ export const SEARCH_MESSAGES = {
     displayedFirst: (limit: number) => `מוצגים ${limit} ראשונים`,
     empty: 'לא נמצאו מסמכים',
   },
+  operational: {
+    title: 'פריטים קשורים',
+    sectionLabel: 'תוצאות תפעוליות',
+    resultCount: (count: number) => `${count} תוצאות`,
+    moreResults: (count: number) => `ועוד ${count} תוצאות`,
+  },
 } as const

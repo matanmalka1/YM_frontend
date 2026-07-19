@@ -6342,6 +6342,50 @@ export interface components {
      * @enum {string}
      */
     ObligationType: 'vat' | 'advance_payment' | 'annual_report' | 'national_insurance'
+    /** OperationalSearchGroup */
+    OperationalSearchGroup: {
+      /** Items */
+      items?: components['schemas']['OperationalSearchItem'][]
+      /**
+       * Total
+       * @default 0
+       */
+      total: number
+    }
+    /** OperationalSearchItem */
+    OperationalSearchItem: {
+      /**
+       * Result Type
+       * @enum {string}
+       */
+      result_type: 'task' | 'vat_work_item' | 'annual_report' | 'charge' | 'advance_payment'
+      /** Id */
+      id: number
+      /** Client Record Id */
+      client_record_id: number
+      /** Office Client Number */
+      office_client_number: number
+      /** Client Name */
+      client_name: string
+      /** Title */
+      title: string
+      /** Detail */
+      detail?: string | null
+      /** Status */
+      status: string
+      /** Amount */
+      amount?: string | null
+      /** Href */
+      href: string
+    }
+    /** OperationalSearchResults */
+    OperationalSearchResults: {
+      tasks?: components['schemas']['OperationalSearchGroup']
+      vat_work_items?: components['schemas']['OperationalSearchGroup']
+      annual_reports?: components['schemas']['OperationalSearchGroup']
+      charges?: components['schemas']['OperationalSearchGroup']
+      advance_payments?: components['schemas']['OperationalSearchGroup']
+    }
     /** OperationalSignalsResponse */
     OperationalSignalsResponse: {
       /** Client Record Id */
@@ -6702,6 +6746,7 @@ export interface components {
       results: components['schemas']['SearchResult'][]
       /** Documents */
       documents?: components['schemas']['DocumentSearchResult'][]
+      operational?: components['schemas']['OperationalSearchResults']
       /** Page */
       page: number
       /** Page Size */
@@ -6714,8 +6759,11 @@ export interface components {
      * @description Single search result.
      */
     SearchResult: {
-      /** Result Type */
-      result_type: string
+      /**
+       * Result Type
+       * @enum {string}
+       */
+      result_type: 'client' | 'binder'
       /** Client Record Id */
       client_record_id: number
       /** Office Client Number */

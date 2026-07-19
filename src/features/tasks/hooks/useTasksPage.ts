@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getErrorMessage } from '@/utils/utils'
+import { getErrorMessage, parsePositiveInt } from '@/utils/utils'
 import { useActiveUserFilterOptions } from '@/features/users'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
 import { tasksApi } from '../api/tasks.api'
@@ -18,10 +18,13 @@ import { useTaskActions } from './useTaskActions'
 import { useTaskFilters } from './useTaskFilters'
 import { useTasks } from './useTasks'
 import { TASKS_ERROR_MESSAGES } from '../errorMessages'
+import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 
 export const useTasksPage = () => {
   const filters = useTaskFilters()
-  const actions = useTaskActions()
+  const { getParam, setFilter } = useSearchParamFilters()
+  const initialViewTaskId = parsePositiveInt(getParam('task_id'), 0) || null
+  const actions = useTaskActions(initialViewTaskId)
   const { options: userOptions } = useActiveUserFilterOptions()
 
   const tasksQuery = useTasks(filters.listParams)
@@ -104,7 +107,10 @@ export const useTasksPage = () => {
     openCreateModal: actions.openCreateModal,
     openViewModal: actions.openViewModal,
     openEditModal: actions.openEditModal,
-    closeModal: actions.closeModal,
+    closeModal: () => {
+      actions.closeModal()
+      setFilter('task_id', '', false)
+    },
     submitModal: actions.submitModal,
     completeTask: actions.completeTask,
     cancelTask: actions.cancelTask,

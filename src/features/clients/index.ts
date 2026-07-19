@@ -13,6 +13,7 @@ export { ClientEditDrawer } from './components/drawer/ClientEditDrawer'
 
 export { ClientsStatsSection } from './components/list/ClientsStatsSection'
 export { ClientDetailsTabContent } from './components/detail/ClientDetailsTabContent'
+export { ClientStatusCard } from './components/detail/ClientStatusCard'
 export { CreateClientModal } from './components/form/CreateClientModal'
 export { DeletedClientDialog } from './components/dialogs/DeletedClientDialog'
 export { useClientQuery } from './hooks/useClientQuery'
