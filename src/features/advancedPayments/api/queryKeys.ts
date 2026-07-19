@@ -25,6 +25,7 @@ export const advancedPaymentsQK = {
     [...advancedPaymentsQK.lists(), 'client', clientRecordId, 'year', year] as const,
   list: (params: ListAdvancePaymentsParams) =>
     [...advancedPaymentsQK.clientYear(params.client_record_id, params.year), normalizeListParams(params)] as const,
+  detail: (clientRecordId: number, id: number) => [...advancedPaymentsQK.all, 'detail', clientRecordId, id] as const,
   overviews: () => [...advancedPaymentsQK.all, 'overview'] as const,
   overview: (params: ListAdvancePaymentsOverviewParams) =>
     [...advancedPaymentsQK.overviews(), normalizeOverviewParams(params)] as const,

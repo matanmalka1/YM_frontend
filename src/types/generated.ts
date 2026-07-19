@@ -2351,7 +2351,8 @@ export interface paths {
       path?: never
       cookie?: never
     }
-    get?: never
+    /** Get Advance Payment */
+    get: operations['get_advance_payment_api_v1_clients__client_record_id__advance_payments__payment_id__get']
     put?: never
     post?: never
     /** Delete Advance Payment */
@@ -17788,6 +17789,65 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['AnnualKPIResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  get_advance_payment_api_v1_clients__client_record_id__advance_payments__payment_id__get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        client_record_id: number
+        payment_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AdvancePaymentRow']
         }
       }
       /** @description Authentication required */
