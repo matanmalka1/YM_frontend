@@ -19,6 +19,8 @@ import { SEARCH_ADVANCED_FILTER_KEYS } from '../types'
 import type { SearchResult } from '../api'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 import { SEARCH_MESSAGES } from '../messages'
+import { ClientStatusCard } from '@/features/clients'
+import { OperationalResultsSection } from '../components/OperationalResultsSection'
 
 export const Search: React.FC = () => {
   const {
@@ -29,6 +31,7 @@ export const Search: React.FC = () => {
     handleReset,
     hydratedClient,
     loading,
+    operational,
     results,
     documents,
     total,
@@ -40,6 +43,7 @@ export const Search: React.FC = () => {
   const [filtersOpen, setFiltersOpen] = useState(hasAdvancedFilter)
 
   const totalPages = getTotalPages(total, PAGE_SIZE)
+  const operationalTotal = Object.values(operational).reduce((sum, group) => sum + group.total, 0)
 
   const handleResetAll = () => {
     handleReset()
@@ -75,6 +79,8 @@ export const Search: React.FC = () => {
         </div>
       </ToolbarContainer>
 
+      {hydratedClient && <ClientStatusCard clientId={hydratedClient.id} />}
+
       {error && <Alert variant="error" message={error} />}
 
       {!loading && !error && !hasAnyFilter && (
@@ -86,14 +92,21 @@ export const Search: React.FC = () => {
         />
       )}
 
-      {!loading && !error && hasAnyFilter && results.length === 0 && documents.length === 0 && (
-        <StateCard
-          icon={FileSearch}
-          title={SEARCH_MESSAGES.page.emptyTitle}
-          message={SEARCH_MESSAGES.page.emptyMessage}
-          action={{ label: SEARCH_MESSAGES.page.resetSearch, onClick: handleResetAll }}
-        />
-      )}
+      {!loading &&
+        !error &&
+        hasAnyFilter &&
+        results.length === 0 &&
+        documents.length === 0 &&
+        operationalTotal === 0 && (
+          <StateCard
+            icon={FileSearch}
+            title={SEARCH_MESSAGES.page.emptyTitle}
+            message={SEARCH_MESSAGES.page.emptyMessage}
+            action={{ label: SEARCH_MESSAGES.page.resetSearch, onClick: handleResetAll }}
+          />
+        )}
+
+      {!loading && <OperationalResultsSection operational={operational} />}
 
       {(loading || results.length > 0) && (
         <>

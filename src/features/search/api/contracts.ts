@@ -21,9 +21,38 @@ export interface DocumentSearchResult {
   tax_year: number | null
 }
 
+export type OperationalSearchResultType = 'task' | 'vat_work_item' | 'annual_report' | 'charge' | 'advance_payment'
+
+export interface OperationalSearchItem {
+  result_type: OperationalSearchResultType
+  id: number
+  client_record_id: number
+  office_client_number: number
+  client_name: string
+  title: string
+  detail: string | null
+  status: string
+  amount: string | null
+  href: string
+}
+
+export interface OperationalSearchGroup {
+  items: OperationalSearchItem[]
+  total: number
+}
+
+export interface OperationalSearchResults {
+  tasks: OperationalSearchGroup
+  vat_work_items: OperationalSearchGroup
+  annual_reports: OperationalSearchGroup
+  charges: OperationalSearchGroup
+  advance_payments: OperationalSearchGroup
+}
+
 export interface SearchResponse {
   results: SearchResult[]
   documents: DocumentSearchResult[]
+  operational: OperationalSearchResults
   page: number
   page_size: number
   total: number

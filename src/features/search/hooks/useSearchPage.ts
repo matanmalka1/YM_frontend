@@ -7,6 +7,15 @@ import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFilters } from '../types'
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 import { SEARCH_ERROR_MESSAGES } from '../errorMessages'
 import { useClientQuery } from '@/features/clients'
+import type { OperationalSearchResults } from '../api/contracts'
+
+const EMPTY_OPERATIONAL_RESULTS: OperationalSearchResults = {
+  tasks: { items: [], total: 0 },
+  vat_work_items: { items: [], total: 0 },
+  annual_reports: { items: [], total: 0 },
+  charges: { items: [], total: 0 },
+  advance_payments: { items: [], total: 0 },
+}
 
 export const useSearchPage = () => {
   const { searchParams, getParam, getPage, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
@@ -80,6 +89,7 @@ export const useSearchPage = () => {
     handleFilterChange,
     handleReset,
     loading: hasAnyFilter ? searchPending : false,
+    operational: searchData?.operational ?? EMPTY_OPERATIONAL_RESULTS,
     results: searchData?.results ?? [],
     documents: searchData?.documents ?? [],
     total: searchData?.total ?? 0,
