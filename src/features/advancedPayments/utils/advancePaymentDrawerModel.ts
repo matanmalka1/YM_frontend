@@ -64,6 +64,9 @@ const getOfficeClientNumber = (row: AdvancePaymentDrawerRow) =>
 
 const getIdNumber = (row: AdvancePaymentDrawerRow) => ('id_number' in row ? (row.id_number ?? null) : null)
 
+const getClientName = (row: AdvancePaymentDrawerRow) =>
+  'client_name' in row ? (row.client_name ?? null) : null
+
 const getPaidAt = (row: AdvancePaymentDrawerRow) => ('paid_at' in row ? row.paid_at : null)
 
 const getNotes = (row: AdvancePaymentDrawerRow) => ('notes' in row ? row.notes : null)
@@ -82,7 +85,7 @@ export const toAdvancePaymentDrawerModel = (
   period: row.period,
   periodMonthsCount: row.period_months_count,
 
-  clientDisplayName: context.clientName ?? row.business_name ?? null,
+  clientDisplayName: context.clientName ?? getClientName(row) ?? null,
   officeClientNumber: getOfficeClientNumber(row) ?? context.officeClientNumber ?? null,
   idNumber: getIdNumber(row) ?? context.clientIdNumber ?? null,
   advanceRate: row.advance_rate,

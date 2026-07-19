@@ -3259,8 +3259,8 @@ export interface components {
       client_record_id: number
       /** Office Client Number */
       office_client_number?: number | null
-      /** Business Name */
-      business_name: string
+      /** Client Name */
+      client_name: string
       /** Id Number */
       id_number?: string | null
       /** Period */
@@ -3354,8 +3354,6 @@ export interface components {
       id: number
       /** Client Record Id */
       client_record_id: number
-      /** Business Name */
-      business_name?: string | null
       /** Period */
       period: string
       /** Period Months Count */

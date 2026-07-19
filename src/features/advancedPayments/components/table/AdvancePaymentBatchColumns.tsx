@@ -34,7 +34,7 @@ export const buildAdvancePaymentBatchColumns = ({
     getValue: (row) => formatClientOfficeId(row.office_client_number),
   }),
   {
-    key: 'business_name',
+    key: 'client_name',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.clientNameHeader,
     wrap: true,
     render: (row) => (
@@ -44,7 +44,7 @@ export const buildAdvancePaymentBatchColumns = ({
           className="block font-semibold leading-snug text-gray-900 hover:text-info-600 hover:underline"
           onClick={(event) => event.stopPropagation()}
         >
-          {row.business_name}
+          {row.client_name}
         </Link>
         {row.missing_turnover && (
           <span className="mt-0.5 inline-flex items-center gap-1 rounded border border-warning-200 bg-warning-50 px-1.5 py-0.5 text-xs font-semibold text-warning-700">

@@ -5,7 +5,6 @@ export type AdvancePaymentMethod = 'bank_transfer' | 'credit_card' | 'check' | '
 export interface AdvancePaymentRow {
   id: number
   client_record_id: number
-  business_name?: string | null
   period: string
   period_months_count: 1 | 2
   expected_amount: string
@@ -73,7 +72,7 @@ export interface AdvancePaymentOverviewRow {
   id: number
   client_record_id: number
   office_client_number?: number | null
-  business_name: string
+  client_name: string
   id_number?: string | null
   period: string
   period_months_count: 1 | 2
