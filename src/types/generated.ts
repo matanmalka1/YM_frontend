@@ -3727,8 +3727,6 @@ export interface components {
       client_name?: string | null
       /** Client Id Number */
       client_id_number?: string | null
-      /** Business Name */
-      business_name?: string | null
       /** Tax Year */
       tax_year: number
       client_type: components['schemas']['ClientAnnualFilingType']
@@ -3887,8 +3885,6 @@ export interface components {
       client_name?: string | null
       /** Client Id Number */
       client_id_number?: string | null
-      /** Business Name */
-      business_name?: string | null
       /** Tax Year */
       tax_year: number
       client_type: components['schemas']['ClientAnnualFilingType']
