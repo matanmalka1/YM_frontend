@@ -118,7 +118,6 @@ const ClientTaxCalendarRow = ({ group, isOpening, errorMessage, isMissing, onOpe
           variant="ghost"
           size="sm"
           icon={<ChevronLeft className="h-4 w-4" />}
-          iconPosition="end"
           isLoading={isOpening}
           loadingLabel={GLOBAL_UI_MESSAGES.common.loading}
           onClick={() => void onOpen(group.tax_calendar_entry_id)}

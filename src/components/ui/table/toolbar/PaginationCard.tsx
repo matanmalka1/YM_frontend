@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Button } from '../../primitives/Button'
 import { Card } from '../../primitives/Card'
-import { cn, formatCount } from '../../../../utils/utils'
+import { formatCount } from '../../../../utils/utils'
 import { GLOBAL_UI_MESSAGES } from '../../../../messages'
 
 interface PaginationCardProps {
@@ -49,16 +50,16 @@ export const PaginationCard: React.FC<PaginationCardProps> = ({
           עמוד {page} מתוך {totalPages}
         </p>
         <nav className="flex items-center gap-1" aria-label={GLOBAL_UI_MESSAGES.pagination.nav}>
-          <button
-            type="button"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition-colors hover:border-primary-200 hover:bg-primary-50 hover:text-primary-700 disabled:cursor-not-allowed disabled:opacity-40"
+          <Button
+            variant="outline"
+            shape="square"
+            size="sm"
+            icon={<ChevronRight className="h-4 w-4" />}
             onClick={() => onPageChange(page - 1)}
             disabled={page <= 1}
             aria-disabled={page <= 1}
             aria-label={GLOBAL_UI_MESSAGES.pagination.previousPage}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
+          />
           <div className="flex items-center gap-1 px-1">
             {visiblePages.map((visiblePage, index) =>
               visiblePage === 'ellipsis' ? (
@@ -70,35 +71,31 @@ export const PaginationCard: React.FC<PaginationCardProps> = ({
                   ...
                 </span>
               ) : (
-                <button
+                <Button
                   key={visiblePage}
-                  type="button"
-                  className={cn(
-                    'inline-flex h-8 w-8 items-center justify-center rounded-md font-semibold tabular-nums',
-                    visiblePage === page
-                      ? 'bg-primary-600 text-white shadow-sm'
-                      : 'border border-transparent text-gray-600 hover:border-gray-200 hover:bg-gray-50 hover:text-gray-900',
-                  )}
+                  variant={visiblePage === page ? 'primary' : 'ghost'}
+                  shape="square"
+                  size="sm"
+                  className="font-semibold tabular-nums"
                   onClick={() => onPageChange(visiblePage)}
-                  disabled={visiblePage === page}
                   aria-current={visiblePage === page ? 'page' : undefined}
                   aria-label={`עמוד ${visiblePage}`}
                 >
                   {visiblePage}
-                </button>
+                </Button>
               ),
             )}
           </div>
-          <button
-            type="button"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition-colors hover:border-primary-200 hover:bg-primary-50 hover:text-primary-700 disabled:cursor-not-allowed disabled:opacity-40"
+          <Button
+            variant="outline"
+            shape="square"
+            size="sm"
+            icon={<ChevronLeft className="h-4 w-4" />}
             onClick={() => onPageChange(page + 1)}
             disabled={page >= totalPages}
             aria-disabled={page >= totalPages}
             aria-label={GLOBAL_UI_MESSAGES.pagination.nextPage}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
+          />
         </nav>
       </div>
     </Card>

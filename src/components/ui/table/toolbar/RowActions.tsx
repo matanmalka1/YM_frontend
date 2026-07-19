@@ -11,11 +11,12 @@ import {
   useState,
 } from 'react'
 import { createPortal } from 'react-dom'
-import { MoreHorizontal } from 'lucide-react'
+import { EllipsisVertical } from 'lucide-react'
 import { cn } from '../../../../utils/utils'
 import { computeDropdownPosition } from '../../../../utils/dropdownMenuUtils'
 import { getOverlayPortalOffset, useOverlayPortalContainer } from '../../overlays/OverlayPortalContext'
 import { useDismissibleLayer } from '../../overlays/useDismissibleLayer'
+import { Button } from '../../primitives/Button'
 import { Tooltip } from '../../primitives/Tooltip'
 import { GLOBAL_UI_MESSAGES } from '../../../../messages'
 
@@ -161,19 +162,19 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
 
   return (
     <>
-      <button
+      <Button
         ref={triggerRef}
-        type="button"
+        variant="outline"
+        shape="square"
+        size="sm"
         onClick={toggle}
         onKeyDown={handleTriggerKeyDown}
-        className="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-700"
+        icon={<EllipsisVertical className="h-4 w-4" />}
         aria-label={ariaLabel ?? GLOBAL_UI_MESSAGES.common.actions}
         aria-haspopup="menu"
         aria-expanded={open}
         title={title}
-      >
-        <MoreHorizontal className="h-4 w-4" />
-      </button>
+      />
 
       {open &&
         portalContainer &&

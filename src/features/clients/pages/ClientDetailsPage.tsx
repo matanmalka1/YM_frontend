@@ -150,7 +150,6 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
                   variant="primary"
                   size="sm"
                   icon={<Edit2 className="h-4 w-4" />}
-                  iconPosition="end"
                   onClick={() => setIsEditingRequested(true)}
                 >
                   {CLIENTS_MESSAGES.details.editDetails}

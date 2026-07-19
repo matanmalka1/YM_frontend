@@ -185,7 +185,6 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
           variant="primary"
           size="sm"
           icon={<Plus className="h-4 w-4" aria-hidden="true" />}
-          iconPosition="end"
           onClick={() => {
             createTask.reset()
             setCreateOpen(true)

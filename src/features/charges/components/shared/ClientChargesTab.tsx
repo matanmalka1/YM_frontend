@@ -96,7 +96,6 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
               variant="primary"
               size="sm"
               icon={<Plus className="h-4 w-4" />}
-              iconPosition="end"
               onClick={() => setShowCreateModal(true)}
               className="whitespace-nowrap"
             >

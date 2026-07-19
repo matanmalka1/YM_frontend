@@ -84,7 +84,6 @@ export const ForgotPassword: React.FC = () => {
           <Button
             type="submit"
             icon={<Send className="h-4 w-4" />}
-            iconPosition="end"
             isLoading={isSubmitting}
             loadingLabel={AUTH_MESSAGES.forgotPassword.loading}
             fullWidth

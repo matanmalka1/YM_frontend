@@ -81,7 +81,6 @@ const VatCard: React.FC<VatCardProps> = ({ title, tone, onNavigate, children }) 
             variant={classes.buttonVariant}
             size="sm"
             icon={<ChevronLeft className="h-4 w-4" />}
-            iconPosition="end"
             onClick={onNavigate}
             aria-label={VAT_MESSAGES.actions.goToDetails}
           >

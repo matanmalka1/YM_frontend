@@ -83,7 +83,6 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
               variant="primary"
               size="sm"
               icon={<Plus className="h-4 w-4" />}
-              iconPosition="end"
               onClick={onAddBusiness}
             >
               {CLIENTS_MESSAGES.businessesCard.addBusiness}

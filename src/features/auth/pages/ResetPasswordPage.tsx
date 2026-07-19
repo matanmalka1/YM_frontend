@@ -131,7 +131,6 @@ export const ResetPassword: React.FC = () => {
           <Button
             type="submit"
             icon={<Save className="h-4 w-4" />}
-            iconPosition="end"
             isLoading={isSubmitting}
             loadingLabel={AUTH_MESSAGES.resetPassword.loading}
             fullWidth

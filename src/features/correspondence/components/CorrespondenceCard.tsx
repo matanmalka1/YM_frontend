@@ -68,7 +68,6 @@ export const CorrespondenceCard = ({ businessId, clientId }: CorrespondenceCardP
             variant="primary"
             size="sm"
             icon={<Plus className="h-4 w-4" />}
-            iconPosition="end"
             onClick={() => setModalOpen(true)}
           >
             {CORRESPONDENCE_MESSAGES.card.addRecordButton}

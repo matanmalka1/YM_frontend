@@ -49,13 +49,7 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
         title={SIGNATURE_REQUESTS_MESSAGES.card.title(total)}
         actions={
           canManage ? (
-            <Button
-              variant="primary"
-              size="sm"
-              icon={<Plus className="h-4 w-4" />}
-              iconPosition="end"
-              onClick={() => setShowCreate(true)}
-            >
+            <Button variant="primary" size="sm" icon={<Plus className="h-4 w-4" />} onClick={() => setShowCreate(true)}>
               {SIGNATURE_REQUESTS_MESSAGES.actions.newRequest}
             </Button>
           ) : undefined

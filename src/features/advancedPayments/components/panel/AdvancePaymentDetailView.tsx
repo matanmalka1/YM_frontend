@@ -72,7 +72,6 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
                   variant="danger"
                   size="sm"
                   icon={<Trash2 className="h-4 w-4" />}
-                  iconPosition="end"
                   onClick={() => setConfirmDelete(true)}
                   disabled={isUpdating || isDeleting}
                   aria-label={ADVANCED_PAYMENTS_MESSAGES.detailActions.deleteAriaLabel}

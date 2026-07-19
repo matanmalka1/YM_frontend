@@ -17,13 +17,7 @@ export const NotificationsPage: React.FC = () => {
       {...headerProps}
       actions={
         permissions.isAdvisor ? (
-          <Button
-            variant="primary"
-            size="sm"
-            icon={<Plus className="h-4 w-4" />}
-            iconPosition="end"
-            onClick={() => modals.openSend()}
-          >
+          <Button variant="primary" size="sm" icon={<Plus className="h-4 w-4" />} onClick={() => modals.openSend()}>
             {NOTIFICATIONS_MESSAGES.actions.sendMessage}
           </Button>
         ) : undefined

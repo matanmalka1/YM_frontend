@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/utils/utils'
 import { Badge } from './Badge'
+import { Button } from './Button'
 
 interface GroupSectionProps {
   label: ReactNode
@@ -40,15 +41,16 @@ export const GroupSection = ({
           {meta && <span className="flex flex-wrap items-center gap-1.5">{meta}</span>}
         </div>
         {collapsible && (
-          <button
-            type="button"
+          <Button
+            variant="outline"
+            shape="square"
+            size="sm"
+            className="flex-shrink-0"
             aria-expanded={expanded}
             onClick={() => setExpanded((v) => !v)}
-            className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+            icon={<ChevronDown className={cn('h-4 w-4 transition-transform', !expanded && '-rotate-90')} />}
             aria-label={expanded ? 'קפל' : 'פתח'}
-          >
-            <ChevronDown className={cn('h-4 w-4 transition-transform', !expanded && '-rotate-90')} />
-          </button>
+          />
         )}
       </header>
       {expanded && <div>{children}</div>}

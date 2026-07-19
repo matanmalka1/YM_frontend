@@ -24,7 +24,6 @@ export const AgingReportView: React.FC<AgingReportViewProps> = ({ embedded = fal
         variant="primary"
         size="sm"
         icon={<FileSpreadsheet className="h-4 w-4" />}
-        iconPosition="end"
         onClick={() => handleExport("excel")}
         isLoading={exporting === "excel"}
         disabled={exporting !== null}
@@ -35,7 +34,6 @@ export const AgingReportView: React.FC<AgingReportViewProps> = ({ embedded = fal
         variant="primary"
         size="sm"
         icon={<FileDown className="h-4 w-4" />}
-        iconPosition="end"
         onClick={() => handleExport("pdf")}
         isLoading={exporting === "pdf"}
         disabled={exporting !== null}

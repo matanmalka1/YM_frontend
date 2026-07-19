@@ -28,13 +28,7 @@ export const Clients: React.FC = () => {
               {CLIENTS_MESSAGES.list.importExport}
             </Button>
             {permissions.can.createClients && (
-              <Button
-                variant="primary"
-                size="sm"
-                icon={<Plus className="h-4 w-4" />}
-                iconPosition="end"
-                onClick={modals.openCreate}
-              >
+              <Button variant="primary" size="sm" icon={<Plus className="h-4 w-4" />} onClick={modals.openCreate}>
                 {CLIENTS_MESSAGES.list.newClient}
               </Button>
             )}

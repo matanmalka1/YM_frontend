@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { MoreHorizontal, Scissors } from 'lucide-react'
+import { EllipsisVertical, Scissors } from 'lucide-react'
 import { annualReportFinancialsApi, annualReportsQK } from '../../api'
 import { TaxCreditsPanel } from './TaxCreditsPanel'
 import { EXPENSE_LABELS } from '../../constants/reportConstants'
@@ -51,7 +51,7 @@ export const DeductionsTab: React.FC<Props> = ({ reportId, taxYear }) => {
               </p>
             )}
             {expenses.map((e) => {
-              const Icon = CATEGORY_ICONS[e.category] ?? MoreHorizontal
+              const Icon = CATEGORY_ICONS[e.category] ?? EllipsisVertical
               return (
                 <div key={e.id} className="flex items-center justify-between px-5 py-3">
                   <div className="flex items-center gap-3">

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { Loader2, X } from 'lucide-react'
-import { cn } from '../../../../utils/utils'
+import { X } from 'lucide-react'
+import { Button } from '../../primitives/Button'
 import { Divider } from '../../primitives/Divider'
 import { GLOBAL_UI_MESSAGES } from '../../../../messages'
 
@@ -33,15 +33,9 @@ export const BulkSelectionToolbar: React.FC<BulkSelectionToolbarProps> = ({
       <div className="flex flex-wrap items-center gap-2">{children}</div>
 
       <div className="ms-auto">
-        <button
-          type="button"
-          onClick={onClear}
-          disabled={loading}
-          className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors duration-150 disabled:opacity-40"
-        >
-          <X className="h-3 w-3" />
+        <Button variant="ghost" size="xs" icon={<X className="h-3 w-3" />} onClick={onClear} disabled={loading}>
           {clearLabel}
-        </button>
+        </Button>
       </div>
     </div>
 
@@ -64,18 +58,13 @@ export const BulkSelectionActionButton: React.FC<BulkSelectionActionButtonProps>
   onClick,
   variant = 'default',
 }) => (
-  <button
-    type="button"
+  <Button
+    variant={variant === 'danger' ? 'danger' : 'outline'}
+    size="xs"
     onClick={onClick}
     disabled={disabled}
-    className={cn(
-      'inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed',
-      variant === 'danger'
-        ? 'border-negative-200 bg-white text-negative-600 hover:bg-negative-50 hover:border-negative-300 active:bg-negative-100'
-        : 'border-primary-200 bg-white text-primary-700 hover:bg-primary-50 hover:border-primary-300 active:bg-primary-100',
-    )}
+    isLoading={loading}
   >
-    {loading && <Loader2 className="h-3 w-3 animate-spin" />}
     {label}
-  </button>
+  </Button>
 )

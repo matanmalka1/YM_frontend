@@ -17,13 +17,7 @@ export const Binders: React.FC = () => {
     <PageHeader
       {...headerProps}
       actions={
-        <Button
-          variant="primary"
-          size="sm"
-          icon={<Plus className="h-4 w-4" />}
-          iconPosition="end"
-          onClick={drawers.openReceive}
-        >
+        <Button variant="primary" size="sm" icon={<Plus className="h-4 w-4" />} onClick={drawers.openReceive}>
           {BINDERS_MESSAGES.actions.intake}
         </Button>
       }

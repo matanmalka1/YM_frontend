@@ -1,9 +1,7 @@
 import type { ReactNode } from 'react'
-import { Button } from '../primitives/Button'
+import { Button, type ButtonVariant } from '../primitives/Button'
 import { useOverlayDismiss } from './useOverlayDismiss'
 import { GLOBAL_UI_MESSAGES } from '../../../messages'
-
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
 
 interface ModalFormActionsProps {
   cancelDisabled?: boolean

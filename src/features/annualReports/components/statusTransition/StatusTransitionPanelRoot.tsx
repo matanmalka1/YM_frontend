@@ -58,7 +58,6 @@ export const StatusTransitionPanel = ({ report, onTransition, isLoading }: Statu
                 variant="outline"
                 size="sm"
                 icon={expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
-                iconPosition="end"
                 onClick={() => setExpanded((prev) => !prev)}
               >
                 {msg.changeStatus}

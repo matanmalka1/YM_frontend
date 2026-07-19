@@ -89,7 +89,6 @@ export const NavbarMoreMenu: React.FC<NavbarMoreMenuProps> = ({ groups }) => {
         size="xs"
         className="text-[13px]"
         icon={<ChevronDown className={cn('h-3.5 w-3.5 transition-transform', open && 'rotate-180')} />}
-        iconPosition="end"
         onClick={() => setOpen((isOpen) => !isOpen)}
         onKeyDown={(event) => {
           if (event.key === 'ArrowDown') {

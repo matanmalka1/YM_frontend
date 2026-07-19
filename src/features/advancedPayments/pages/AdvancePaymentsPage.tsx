@@ -20,22 +20,10 @@ export const AdvancePayments: React.FC = () => {
         actions={
           permissions.isAdvisor ? (
             <div className="flex items-center gap-2">
-              <Button
-                variant="primary"
-                size="sm"
-                icon={<Calendar className="h-4 w-4" />}
-                iconPosition="end"
-                onClick={modals.openGenerate}
-              >
+              <Button variant="primary" size="sm" icon={<Calendar className="h-4 w-4" />} onClick={modals.openGenerate}>
                 {ADVANCED_PAYMENTS_MESSAGES.page.createYearlySchedule}
               </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                icon={<PlusCircle className="h-4 w-4" />}
-                iconPosition="end"
-                onClick={modals.openCreate}
-              >
+              <Button variant="primary" size="sm" icon={<PlusCircle className="h-4 w-4" />} onClick={modals.openCreate}>
                 {ADVANCED_PAYMENTS_MESSAGES.page.addPayment}
               </Button>
             </div>

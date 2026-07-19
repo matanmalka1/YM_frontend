@@ -22,7 +22,6 @@ export const TasksPage: React.FC = () => {
             variant="primary"
             size="sm"
             icon={<Plus className="h-4 w-4" aria-hidden="true" />}
-            iconPosition="end"
             onClick={page.openCreateModal}
             className="shrink-0"
           >

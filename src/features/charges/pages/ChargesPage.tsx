@@ -22,13 +22,7 @@ export const Charges: React.FC = () => {
       actions={
         <div className="flex items-center gap-2">
           {permissions.isAdvisor && (
-            <Button
-              variant="primary"
-              size="sm"
-              icon={<Plus className="h-4 w-4" />}
-              iconPosition="end"
-              onClick={table.onCreateCharge}
-            >
+            <Button variant="primary" size="sm" icon={<Plus className="h-4 w-4" />} onClick={table.onCreateCharge}>
               {CHARGES_MESSAGES.list.newCharge}
             </Button>
           )}

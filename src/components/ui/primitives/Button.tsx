@@ -1,24 +1,30 @@
 import { cn } from '../../../utils/utils'
 import { Tooltip } from './Tooltip'
 
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'outline'
+  | 'ghost'
+  | 'danger'
+  | 'link'
+  | 'linkPrimary'
+  | 'linkPositive'
+  | 'linkWarning'
+  | 'text'
+
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?:
-    | 'primary'
-    | 'secondary'
-    | 'outline'
-    | 'ghost'
-    | 'danger'
-    | 'link'
-    | 'linkPrimary'
-    | 'linkPositive'
-    | 'linkWarning'
-    | 'text'
+  variant?: ButtonVariant
   size?: 'xs' | 'sm' | 'md' | 'lg'
   /** `pill` (default) for text buttons; `square` for icon-only chrome (rounded-xl, equal h/w). */
   shape?: 'pill' | 'square'
   /** Icon element rendered alongside (or, for `shape="square"`, instead of) the label. */
   icon?: React.ReactNode
-  /** Logical side the icon sits on relative to the label. Defaults to `start`. */
+  /**
+   * Logical side the icon sits on relative to the label. Defaults to `end`, which in this
+   * RTL app renders the icon on the visual left of the label. Pass `start` only for the rare
+   * button whose icon must trail the label.
+   */
   iconPosition?: 'start' | 'end'
   isLoading?: boolean
   loadingLabel?: string
@@ -41,7 +47,7 @@ const variants = {
   text: 'text-gray-950 hover:text-primary-700 active:text-primary-800',
 }
 
-const textLikeVariants = new Set<ButtonProps['variant']>(['link', 'linkPrimary', 'linkPositive', 'linkWarning', 'text'])
+const textLikeVariants = new Set<ButtonVariant>(['link', 'linkPrimary', 'linkPositive', 'linkWarning', 'text'])
 
 const sizes = {
   xs: 'px-2.5 py-1 text-xs',
@@ -64,7 +70,7 @@ export const Button: React.FC<ButtonProps> = ({
   size = 'md',
   shape = 'pill',
   icon,
-  iconPosition = 'start',
+  iconPosition = 'end',
   isLoading,
   loadingLabel,
   disabled,

@@ -30,13 +30,7 @@ export const Users: React.FC = () => {
           <Button variant="primary" size="sm" onClick={modals.openAuditLogs}>
             {USERS_MESSAGES.page.auditLog}
           </Button>
-          <Button
-            variant="primary"
-            size="sm"
-            icon={<Plus className="h-4 w-4" />}
-            iconPosition="end"
-            onClick={modals.openCreate}
-          >
+          <Button variant="primary" size="sm" icon={<Plus className="h-4 w-4" />} onClick={modals.openCreate}>
             {USERS_MESSAGES.page.newUser}
           </Button>
         </div>

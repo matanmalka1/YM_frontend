@@ -25,7 +25,6 @@ export const VatWorkItemHeaderActions: React.FC<VatWorkItemHeaderActionsProps> =
           variant="primary"
           size="sm"
           icon={<Bell className="h-4 w-4" />}
-          iconPosition="end"
           onClick={() => setShowNotificationModal(true)}
         >
           {VAT_MESSAGES.actions.documentsReminder}

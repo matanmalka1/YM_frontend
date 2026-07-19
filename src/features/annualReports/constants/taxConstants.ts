@@ -6,7 +6,7 @@ import {
   GraduationCap,
   Landmark,
   Megaphone,
-  MoreHorizontal,
+  EllipsisVertical,
   Plane,
   Shield,
   Smartphone,
@@ -36,5 +36,5 @@ export const CATEGORY_ICONS: Record<string, ComponentType<{ className?: string }
   travel: Plane,
   training: GraduationCap,
   bank_fees: Landmark,
-  other: MoreHorizontal,
+  other: EllipsisVertical,
 }

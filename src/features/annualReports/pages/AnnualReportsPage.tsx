@@ -28,7 +28,6 @@ export const AnnualReportsPage: React.FC = () => {
             variant="primary"
             size="sm"
             icon={<Plus className="h-4 w-4" />}
-            iconPosition="end"
             onClick={modals.openCreate}
             disabled={!headerProps.taxYear}
           >
