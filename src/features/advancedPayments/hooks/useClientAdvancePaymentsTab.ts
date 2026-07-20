@@ -64,7 +64,7 @@ export const useClientAdvancePaymentsTab = ({ clientRecordId }: UseClientAdvance
   // this command writes to every row it is given, so nothing invisible is included.
   const readyToSnapshotIds = rows
     .filter(
-      (row) => row.turnover_amount == null && row.available_turnover?.source === 'vat_filed',
+      (row) => row.turnover_amount == null && row.status !== 'paid' && row.available_turnover?.source === 'vat_filed',
     )
     .map((row) => row.id)
 

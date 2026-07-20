@@ -155,6 +155,7 @@ export interface BulkRefreshTurnoverResponse {
   refreshed: number
   skipped_no_vat: number
   skipped_not_filed: number
+  skipped_paid: number
 }
 
 export interface GenerateScheduleResponse {

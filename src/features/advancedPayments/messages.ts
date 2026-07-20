@@ -43,11 +43,12 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     bulkAvailable: (count: number) => `ל-${count} מקדמות יש דוח מע״מ מוגש שטרם קובע`,
     bulkButton: (count: number) => `קבע מחזור ל-${count} מקדמות`,
     /** Skips are reported by reason: each one calls for a different follow-up. */
-    bulkResult: ({ refreshed, skipped_no_vat, skipped_not_filed }: BulkRefreshTurnoverResponse) =>
+    bulkResult: ({ refreshed, skipped_no_vat, skipped_not_filed, skipped_paid }: BulkRefreshTurnoverResponse) =>
       [
         `${refreshed} מקדמות קובעו`,
         skipped_no_vat > 0 ? `${skipped_no_vat} ללא דוח מע״מ` : null,
         skipped_not_filed > 0 ? `${skipped_not_filed} ממתינות להגשת הדוח` : null,
+        skipped_paid > 0 ? `${skipped_paid} כבר שולמו` : null,
       ]
         .filter(Boolean)
         .join(' · '),
