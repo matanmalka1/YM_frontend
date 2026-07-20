@@ -1,6 +1,9 @@
+import { useId } from 'react'
 import { useWatch, type Control, type FieldErrors, type UseFormRegister } from 'react-hook-form'
+import { CircleHelp } from 'lucide-react'
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
+import { Tooltip } from '@/components/ui/primitives/Tooltip'
 import { ADVANCE_PAYMENT_FREQUENCY_OPTIONS, CREATE_CLIENT_VAT_OPTIONS } from '../../constants'
 import type { ClientCreationImpactResponse } from '../../api/contracts'
 import type { CreateClientFormValues } from '../../schemas'
@@ -38,6 +41,7 @@ export const CreateClientTaxStep: React.FC<Props> = ({
   register,
   showVatFrequency,
 }) => {
+  const advanceRateInputId = useId()
   const vatFrequencyValue = useWatch({ control, name: 'vat_reporting_frequency' })
   const advancePaymentFrequencyValue = useWatch({ control, name: 'advance_payment_frequency' })
   const accountantValue = useWatch({ control, name: 'accountant_id' })
@@ -88,11 +92,26 @@ export const CreateClientTaxStep: React.FC<Props> = ({
             <p className="mt-1 text-xs text-gray-400">{CLIENTS_MESSAGES.createTax.vatExemptCeilingDerivedNote}</p>
           </div>
         )}
-        <div className={isExempt ? undefined : 'col-span-1 max-w-[75%]'}>
+        <div className={isExempt ? undefined : 'col-span-2 sm:col-span-1 sm:max-w-[75%]'}>
+          <div className="mb-1 flex items-center gap-1">
+            <label htmlFor={advanceRateInputId} className="block whitespace-nowrap text-sm font-medium text-gray-700">
+              {CLIENTS_MESSAGES.createTax.advanceRateLabel}
+            </label>
+            <Tooltip text={CLIENTS_MESSAGES.createTax.advanceRateHelp}>
+              <button
+                type="button"
+                aria-label={CLIENTS_MESSAGES.createTax.advanceRateHelpAriaLabel}
+                className="focus-ring inline-flex h-5 w-5 items-center justify-center rounded-full text-gray-400 hover:text-gray-600"
+              >
+                <CircleHelp aria-hidden="true" className="h-4 w-4" />
+              </button>
+            </Tooltip>
+          </div>
           <Input
-            label={CLIENTS_MESSAGES.createTax.advanceRateLabel}
-            labelClassName="whitespace-nowrap"
+            id={advanceRateInputId}
             placeholder={CLIENTS_MESSAGES.createTax.advanceRatePlaceholder}
+            inputMode="decimal"
+            endElement={<span className="text-sm text-gray-400">%</span>}
             error={errors.advance_rate?.message}
             disabled={disabled}
             onInput={stripNonDecimal}
