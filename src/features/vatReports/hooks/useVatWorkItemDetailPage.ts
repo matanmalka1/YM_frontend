@@ -1,4 +1,5 @@
 import { LayoutDashboard, ClipboardList, ArrowUpCircle, Clock } from 'lucide-react'
+import type { Breadcrumb } from '@/components/layout/PageHeader'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { useVatWorkItemPage } from './useVatWorkItemPage'
 import { isFiled } from '../utils/vatHelpers'
@@ -20,7 +21,7 @@ interface VatDetailTab {
   badge?: number
 }
 
-export const useVatWorkItemDetailPage = (workItemId: number) => {
+export const useVatWorkItemDetailPage = (workItemId: number, leadingBreadcrumbs?: Breadcrumb[]) => {
   const { searchParams, setSearchParams } = useSearchParamFilters()
   const { workItem, invoices, isLoading, isError } = useVatWorkItemPage(workItemId)
 
@@ -43,7 +44,7 @@ export const useVatWorkItemDetailPage = (workItemId: number) => {
   const headerProps = workItem
     ? {
         breadcrumbs: [
-          { label: VAT_MESSAGES.detail.breadcrumbList, to: '/tax/vat' },
+          ...(leadingBreadcrumbs ?? [{ label: VAT_MESSAGES.detail.breadcrumbList, to: '/tax/vat' }]),
           { label: VAT_MESSAGES.detail.breadcrumbCurrent },
         ],
         title: `${getVatClientTitle(workItem.client_name, workItem.client_record_id)} · ${formatVatPeriodTitle(workItem.period, workItem.period_type)}`,

@@ -23,7 +23,17 @@ export const hasTaxCalendarGroupOverride = (group: TaxCalendarGroup): boolean =>
 export const getTaxCalendarItemPath = (item: TaxCalendarGroupItem): string => {
   if (item.source_type === 'vat_work_item') return `/tax/vat/${item.source_id}`
   if (item.source_type === 'annual_report') return `/tax/reports/${item.source_id}`
-  return `/clients/${item.client_record_id}/advance-payments`
+  return `/tax/advance-payments/${item.client_record_id}/${item.source_id}`
+}
+
+export const getClientTaxCalendarItemPath = (item: TaxCalendarGroupItem): string => {
+  if (item.source_type === 'vat_work_item') {
+    return `/clients/${item.client_record_id}/vat/${item.source_id}`
+  }
+  if (item.source_type === 'annual_report') {
+    return `/clients/${item.client_record_id}/annual-reports/${item.source_id}`
+  }
+  return `/clients/${item.client_record_id}/advance-payments/${item.source_id}`
 }
 
 export const getTaxCalendarItemStateLabel = (item: TaxCalendarGroupItem): string => {

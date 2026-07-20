@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { getErrorMessage } from '@/utils/utils'
 import { taxCalendarApi, taxCalendarQK } from '../api'
-import { getTaxCalendarItemPath } from '../helpers'
+import { getClientTaxCalendarItemPath } from '../helpers'
 import { TAX_CALENDAR_ERROR_MESSAGES } from '../errorMessages'
 
 const ITEM_LOOKUP_PAGE_SIZE = 1
@@ -39,7 +39,7 @@ export const useOpenClientTaxCalendarItem = (clientRecordId: number) => {
           setMissingEntryId(taxCalendarEntryId)
           return
         }
-        navigate(getTaxCalendarItemPath(item))
+        navigate(getClientTaxCalendarItemPath(item))
       } catch (error) {
         setErrorEntryId(taxCalendarEntryId)
         setErrorMessage(getErrorMessage(error, TAX_CALENDAR_ERROR_MESSAGES.clientTab.itemOpen))

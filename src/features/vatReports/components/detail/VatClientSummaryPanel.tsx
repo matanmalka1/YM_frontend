@@ -67,7 +67,7 @@ export const VatClientSummaryPanel = ({ clientId }: VatClientSummaryPanelProps) 
 
   const handleRowClick = (row: VatPeriodRow) => {
     if (!canOpenVatPeriodRow(row)) return
-    navigate(`/tax/vat/${row.work_item_id}`)
+    navigate(`/clients/${clientId}/vat/${row.work_item_id}`)
   }
 
   return (

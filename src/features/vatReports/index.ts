@@ -7,6 +7,7 @@ export { VatWorkItemsGroupedCards } from './components/list/VatWorkItemsGroupedC
 export { useVatWorkItemsPage } from './hooks/useVatWorkItemsPage'
 
 export { VatWorkItemDetail } from './pages/VatWorkItemDetailPage'
+export { VatWorkItemFullPanel } from './components/detail/VatWorkItemFullPanel'
 export { VatWorkItems } from './pages/VatWorkItemsPage'
 export { VatClientSummaryPanel } from './components/detail/VatClientSummaryPanel'
 export { getVatWorkItemStatusLabel, getVatWorkItemStatusVariant, CATEGORY_LABELS } from './constants/vatConstants'

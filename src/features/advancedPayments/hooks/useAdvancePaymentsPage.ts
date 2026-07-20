@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
@@ -16,6 +16,7 @@ import {
 
 export const useAdvancePaymentsPage = () => {
   const { searchParams, getParam, setFilter, setFilters, resetFilters } = useSearchParamFilters()
+  const location = useLocation()
   const navigate = useNavigate()
   const { isAdvisor } = useRole()
   const today = new Date()
@@ -52,7 +53,13 @@ export const useAdvancePaymentsPage = () => {
   }
 
   const openRow = (row: AdvancePaymentOverviewRow) => {
-    navigate(`/clients/${row.client_record_id}/advance-payments/${row.id}`)
+    navigate(`/tax/advance-payments/${row.client_record_id}/${row.id}${location.search}`, {
+      state: {
+        clientName: row.client_name,
+        idNumber: row.id_number,
+        officeClientNumber: row.office_client_number,
+      },
+    })
   }
 
   const navigateToClient = (clientRecordId: number) => {

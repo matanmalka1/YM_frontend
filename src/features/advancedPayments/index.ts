@@ -2,6 +2,7 @@
 export { ClientAdvancePaymentsTab } from './pages/ClientAdvancePaymentsTab/ClientAdvancePaymentsTab'
 export { CreateAdvancePaymentModal } from './components/create/CreateAdvancePaymentModal'
 export { AdvancePaymentFullPanel } from './components/panel/AdvancePaymentFullPanel'
+export { AdvancePaymentDetail } from './pages/AdvancePaymentDetailPage'
 export { AdvancePayments } from './pages/AdvancePaymentsPage'
 export { advancePaymentsApi, advancedPaymentsQK } from './api'
 export { getAdvancePaymentStatusLabel } from './constants'

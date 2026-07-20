@@ -6,7 +6,7 @@ import { selectIsAuthenticated } from '../store/auth.selectors'
 import type { UserRole } from '@/types'
 import { ForgotPassword, Login, ResetPassword } from '../features/auth'
 import { AnnualReportDetail, AnnualReportsPage } from '../features/annualReports'
-import { AdvancePayments } from '../features/advancedPayments'
+import { AdvancePaymentDetail, AdvancePayments } from '../features/advancedPayments'
 import { Binders } from '../features/binders'
 import { ChargeDetail, Charges } from '../features/charges'
 import {
@@ -14,6 +14,7 @@ import {
   ClientAnnualReportDetail,
   ClientChargeDetail,
   ClientDetails,
+  ClientVatWorkItemDetail,
   Clients,
 } from '../features/clients'
 import { BusinessDetails } from '../features/businesses'
@@ -159,6 +160,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="clients/:clientId/charges" element={<ClientDetails initialTab="charges" />} />
             <Route path="clients/:clientId/charges/:chargeId" element={<ClientChargeDetail />} />
             <Route path="clients/:clientId/vat" element={<ClientDetails initialTab="vat" />} />
+            <Route path="clients/:clientId/vat/:workItemId" element={<ClientVatWorkItemDetail />} />
             <Route path="clients/:clientId/tax-calendar" element={<ClientDetails initialTab="tax-calendar" />} />
             <Route
               path="clients/:clientId/advance-payments"
@@ -182,6 +184,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="tax/reports/:reportId" element={<AnnualReportDetail />} />
             <Route path="tax/calendar" element={<TaxCalendarGroupsPage />} />
             <Route path="tax/advance-payments" element={<AdvancePayments />} />
+            <Route path="tax/advance-payments/:clientId/:paymentId" element={<AdvancePaymentDetail />} />
             <Route path="tax/vat" element={<VatWorkItems />} />
             <Route path="tax/vat/:id" element={<VatWorkItemDetail />} />
             <Route path="tax/vat-compliance" element={<Navigate to="/reports/vat-compliance" replace />} />
