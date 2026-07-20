@@ -12,6 +12,24 @@ export type VatWorkItemStatus =
   | 'filed'
   | 'canceled'
 
+export interface VatExpenseCategoryBreakdown {
+  category: string
+  label: string
+  deduction_rate: string
+  net_amount: string
+  gross_vat: string
+  deductible_vat: string
+}
+
+export interface VatBreakdown {
+  income_net: string
+  total_output_vat: string
+  expenses: VatExpenseCategoryBreakdown[]
+  total_expense_net: string
+  total_gross_vat: string
+  total_input_vat: string
+}
+
 export interface VatWorkItemResponse {
   id: number
   client_record_id: number
@@ -49,6 +67,7 @@ export interface VatWorkItemResponse {
   days_until_deadline: number | null
   is_overdue: boolean | null
   available_actions?: BackendAction[]
+  breakdown: VatBreakdown
 }
 
 // Thin DTO for VAT work-item list/table rows. Mirrors backend VatWorkItemListItem.

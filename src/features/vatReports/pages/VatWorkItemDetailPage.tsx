@@ -67,7 +67,7 @@ const VatDetailContent: React.FC<{ workItemId: number }> = ({ workItemId }) => {
       </SegmentedControl>
 
       <div>
-        {activeTab === 'summary' && <VatSummaryTab workItem={workItem} invoices={invoices} />}
+        {activeTab === 'summary' && <VatSummaryTab workItem={workItem} />}
         {activeTab === 'income' && (
           <VatInvoiceTab
             invoiceType="income"

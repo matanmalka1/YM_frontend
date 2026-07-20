@@ -6,9 +6,9 @@ import type {
   VatWorkItemStatus,
   VatWorkItemResponse,
   VatWorkItemListItem,
+  VatExpenseCategoryBreakdown,
 } from './api'
 import type { VatPeriodTypeFilter } from './constants/vatConstants'
-import type { ExpenseCategoryRow } from './utils/vatBreakdown'
 
 export interface VatWorkItemsFilters {
   status: VatWorkItemStatus | ''
@@ -31,10 +31,10 @@ export interface VatExportButtonsProps {
 }
 
 export interface VatCategoryTableProps {
-  rows: ExpenseCategoryRow[]
-  totalExpenseNet: number
-  totalGrossVat: number
-  totalInputVat: number
+  rows: VatExpenseCategoryBreakdown[]
+  totalExpenseNet: string
+  totalGrossVat: string
+  totalInputVat: string
 }
 
 export interface VatFiledBannerProps {
@@ -98,7 +98,6 @@ export interface VatProgressBarProps {
 
 export interface VatSummaryTabProps {
   workItem: VatWorkItemResponse
-  invoices: VatInvoiceResponse[]
 }
 
 export interface VatInvoiceTableProps {

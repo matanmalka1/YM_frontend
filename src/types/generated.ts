@@ -7975,6 +7975,41 @@ export interface components {
       reason: 'zero_total' | 'negative_total' | 'negative_source_contribution'
       annual_category?: components['schemas']['ExpenseCategoryType'] | null
     }
+    /** VatBreakdownResponse */
+    VatBreakdownResponse: {
+      /**
+       * Income Net
+       * Format: decimal
+       * @example 123.45
+       */
+      income_net: string
+      /**
+       * Total Output Vat
+       * Format: decimal
+       * @example 123.45
+       */
+      total_output_vat: string
+      /** Expenses */
+      expenses: components['schemas']['VatExpenseCategoryBreakdownResponse'][]
+      /**
+       * Total Expense Net
+       * Format: decimal
+       * @example 123.45
+       */
+      total_expense_net: string
+      /**
+       * Total Gross Vat
+       * Format: decimal
+       * @example 123.45
+       */
+      total_gross_vat: string
+      /**
+       * Total Input Vat
+       * Format: decimal
+       * @example 123.45
+       */
+      total_input_vat: string
+    }
     /** VatClientSummaryResponse */
     VatClientSummaryResponse: {
       /** Client Record Id */
@@ -8078,6 +8113,37 @@ export interface components {
       monthly: components['schemas']['VatDashboardPeriodStat']
       bimonthly: components['schemas']['VatDashboardPeriodStat']
       advance_payments: components['schemas']['AdvancePaymentDashboardStats']
+    }
+    /** VatExpenseCategoryBreakdownResponse */
+    VatExpenseCategoryBreakdownResponse: {
+      /** Category */
+      category: string
+      /** Label */
+      label: string
+      /**
+       * Deduction Rate
+       * Format: decimal
+       * @example 123.45
+       */
+      deduction_rate: string
+      /**
+       * Net Amount
+       * Format: decimal
+       * @example 123.45
+       */
+      net_amount: string
+      /**
+       * Gross Vat
+       * Format: decimal
+       * @example 123.45
+       */
+      gross_vat: string
+      /**
+       * Deductible Vat
+       * Format: decimal
+       * @example 123.45
+       */
+      deductible_vat: string
     }
     /** VatGroupPeriod */
     VatGroupPeriod: {
@@ -8550,6 +8616,7 @@ export interface components {
       is_overdue?: boolean | null
       /** Available Actions */
       available_actions?: components['schemas']['ActionDescriptor'][]
+      breakdown: components['schemas']['VatBreakdownResponse']
     }
     /**
      * VatWorkItemStatus

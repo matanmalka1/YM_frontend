@@ -5,15 +5,15 @@ import { Card } from '@/components/ui/primitives/Card'
 import { cn } from '@/utils/utils'
 import { semanticStatToneClasses } from '@/utils/semanticColors'
 import { formatVatAmount } from '../../utils/vatHelpers'
-import type { VatBreakdownData } from '../../utils/vatBreakdown'
+import type { VatBreakdown } from '../../api'
 import { VAT_MESSAGES } from '../../messages'
 
 interface VatOutputCardProps {
-  data: VatBreakdownData
+  data: VatBreakdown
   onNavigate?: () => void
 }
 interface VatInputCardProps {
-  data: VatBreakdownData
+  data: VatBreakdown
   onNavigate?: () => void
 }
 
@@ -98,7 +98,7 @@ const VatCard: React.FC<VatCardProps> = ({ title, tone, onNavigate, children }) 
 export const VatOutputCard: React.FC<VatOutputCardProps> = ({ data, onNavigate }) => (
   <VatCard title={VAT_MESSAGES.breakdown.outputTitle} tone="positive" onNavigate={onNavigate}>
     <div className="space-y-2 text-sm">
-      <VatAmountRow label={VAT_MESSAGES.breakdown.totalIncomeNet} value={formatVatAmount(data.totalIncomeNet)} />
+      <VatAmountRow label={VAT_MESSAGES.breakdown.totalIncomeNet} value={formatVatAmount(data.income_net)} />
       <VatAmountRow
         label={VAT_MESSAGES.breakdown.vatRate}
         value={VAT_MESSAGES.breakdown.systemRate}
@@ -107,7 +107,7 @@ export const VatOutputCard: React.FC<VatOutputCardProps> = ({ data, onNavigate }
     </div>
     <VatTotalRow
       label={VAT_MESSAGES.breakdown.outputVat}
-      value={formatVatAmount(data.totalOutputVat)}
+      value={formatVatAmount(data.total_output_vat)}
       tone="positive"
       className="mt-4"
     />
@@ -120,33 +120,33 @@ VatOutputCard.displayName = 'VatOutputCard'
 
 export const VatInputCard: React.FC<VatInputCardProps> = ({ data, onNavigate }) => (
   <VatCard title={VAT_MESSAGES.breakdown.inputTitle} tone="warning" onNavigate={onNavigate}>
-    {data.totalExpenseNet > 0 && data.totalInputVat === 0 && (
+    {Number(data.total_expense_net) > 0 && Number(data.total_input_vat) === 0 && (
       <Alert variant="neutral" size="sm" message={VAT_MESSAGES.breakdown.nonDeductibleExpenseNote} className="mb-3" />
     )}
     <div className="space-y-1.5 text-sm">
-      {data.expenseRows.map((row) => (
+      {data.expenses.map((row) => (
         <VatAmountRow
-          key={row.categoryKey}
+          key={`${row.category}-${row.deduction_rate}`}
           label={
             <>
               {row.label}
-              {row.deductionRate < 1 && row.deductionRate > 0 && (
-                <span className="mr-1 text-xs text-gray-400">({Math.round(row.deductionRate * 100)}%)</span>
+              {Number(row.deduction_rate) < 1 && Number(row.deduction_rate) > 0 && (
+                <span className="mr-1 text-xs text-gray-400">({Math.round(Number(row.deduction_rate) * 100)}%)</span>
               )}
             </>
           }
-          value={formatVatAmount(row.deductibleVat)}
+          value={formatVatAmount(row.deductible_vat)}
           valueClassName="text-warning-700"
         />
       ))}
     </div>
     <div className="mt-3 space-y-1.5 border-t border-gray-100 pt-3 text-sm">
-      <VatAmountRow label={VAT_MESSAGES.breakdown.totalExpenseNet} value={formatVatAmount(data.totalExpenseNet)} />
-      <VatAmountRow label={VAT_MESSAGES.breakdown.invoiceVat} value={formatVatAmount(data.totalGrossVat)} />
+      <VatAmountRow label={VAT_MESSAGES.breakdown.totalExpenseNet} value={formatVatAmount(data.total_expense_net)} />
+      <VatAmountRow label={VAT_MESSAGES.breakdown.invoiceVat} value={formatVatAmount(data.total_gross_vat)} />
     </div>
     <VatTotalRow
       label={VAT_MESSAGES.breakdown.deductibleInputVat}
-      value={formatVatAmount(data.totalInputVat)}
+      value={formatVatAmount(data.total_input_vat)}
       tone="warning"
       className="mt-3"
     />

@@ -1,15 +1,14 @@
 import { AlertTriangle } from 'lucide-react'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
-import { computeVatBreakdown } from '../../utils/vatBreakdown'
 import { VatOutputCard, VatInputCard } from './VatBreakdownCards'
 import { VatCategoryTable } from './VatCategoryTable'
 import { formatVatAmount } from '../../utils/vatHelpers'
 import type { VatSummaryTabProps } from '../../types'
 import { VAT_MESSAGES } from '../../messages'
 
-export const VatSummaryTab: React.FC<VatSummaryTabProps> = ({ workItem, invoices }) => {
+export const VatSummaryTab: React.FC<VatSummaryTabProps> = ({ workItem }) => {
   const { setSearchParams } = useSearchParamFilters()
-  const data = computeVatBreakdown(invoices, workItem.total_output_vat, workItem.total_input_vat)
+  const data = workItem.breakdown
 
   return (
     <div className="space-y-4">
@@ -31,10 +30,10 @@ export const VatSummaryTab: React.FC<VatSummaryTabProps> = ({ workItem, invoices
       </div>
 
       <VatCategoryTable
-        rows={data.expenseRows}
-        totalExpenseNet={data.totalExpenseNet}
-        totalGrossVat={data.totalGrossVat}
-        totalInputVat={data.totalInputVat}
+        rows={data.expenses}
+        totalExpenseNet={data.total_expense_net}
+        totalGrossVat={data.total_gross_vat}
+        totalInputVat={data.total_input_vat}
       />
     </div>
   )
