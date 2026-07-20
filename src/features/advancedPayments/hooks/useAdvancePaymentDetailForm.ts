@@ -1,14 +1,9 @@
 import { useState } from 'react'
-import type { AdvancePaymentRow, PrefillTurnoverResponse, UpdateAdvancePaymentPayload } from '../api/contracts'
-import { advancePaymentsApi } from '../api'
+import type { AdvancePaymentRow, UpdateAdvancePaymentPayload } from '../api/contracts'
 import { toast } from '@/utils/toast'
-import { showErrorToast } from '@/utils/utils'
 import { isAdvancePaymentMethod } from '../constants'
 import { calcAdvanceAmount, toEditableAmount, toStringOrNull } from '../utils/advancePaymentComponentUtils'
 import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
-
-// `null` = idle (no prefill attempted yet); the rest mirror the API contract.
-type PrefillSource = PrefillTurnoverResponse['source'] | null
 
 interface UseAdvancePaymentDetailFormArgs {
   payment: AdvancePaymentRow
@@ -33,9 +28,6 @@ export interface AdvancePaymentDetailForm {
   liveCalculated: string | null
   liveExpected: string | null
 
-  prefillSource: PrefillSource
-  isPrefilling: boolean
-  handlePrefill: () => Promise<void>
   handleSave: () => Promise<void>
 }
 
@@ -53,8 +45,6 @@ export const useAdvancePaymentDetailForm = ({
   const [notes, setNotes] = useState(() => payment.notes ?? '')
   const [turnoverAmount, setTurnoverAmount] = useState(() => toEditableAmount(payment.turnover_amount))
   const [overrideAmount, setOverrideAmount] = useState(() => toEditableAmount(payment.override_amount))
-  const [prefillSource, setPrefillSource] = useState<PrefillSource>(null)
-  const [isPrefilling, setIsPrefilling] = useState(false)
 
   // baseline values derived from the loaded payment
   const baselinePaidAmount = toEditableAmount(payment.paid_amount)
@@ -86,25 +76,6 @@ export const useAdvancePaymentDetailForm = ({
     baselineNotes !== notes ||
     baselineTurnover !== turnoverAmount ||
     baselineOverride !== overrideAmount
-
-  const handlePrefill = async () => {
-    setIsPrefilling(true)
-    try {
-      const result = await advancePaymentsApi.getPrefillTurnover(
-        payment.client_record_id,
-        payment.period,
-        payment.period_months_count,
-      )
-      setPrefillSource(result.source)
-      if (result.source !== 'none' && result.turnover_amount != null) {
-        setTurnoverAmount(result.turnover_amount)
-      }
-    } catch (err) {
-      showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.vatPrefill)
-    } finally {
-      setIsPrefilling(false)
-    }
-  }
 
   const handleSave = async () => {
     const payload: UpdateAdvancePaymentPayload = {}
@@ -147,9 +118,6 @@ export const useAdvancePaymentDetailForm = ({
     isDirty,
     liveCalculated,
     liveExpected,
-    prefillSource,
-    isPrefilling,
-    handlePrefill,
     handleSave,
   }
 }

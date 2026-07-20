@@ -12,7 +12,6 @@ export const AdvancePaymentSummaryStrip: React.FC<AdvancePaymentSummaryStripProp
   const expected = Number(payment.expected_amount ?? 0)
   const paid = Number(payment.paid_amount ?? 0)
   const balance = Math.max(expected - paid, 0)
-  const turnover = payment.turnover_amount ?? payment.live_turnover
 
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -34,11 +33,13 @@ export const AdvancePaymentSummaryStrip: React.FC<AdvancePaymentSummaryStripProp
         icon={Coins}
         variant={balance > 0 ? 'negative' : 'neutral'}
       />
+      {/* Only the stored turnover. An available-but-unsnapshotted VAT figure is
+          surfaced as an action in the calculation card, never as a stat value. */}
       <StatsCard
         title={ADVANCED_PAYMENTS_MESSAGES.detail.turnoverStatTitle}
-        value={turnover != null ? formatShekelAmount(turnover) : '—'}
+        value={payment.turnover_amount != null ? formatShekelAmount(payment.turnover_amount) : '—'}
         icon={TrendingUp}
-        variant={payment.missing_turnover ? 'warning' : 'purple'}
+        variant={payment.turnover_amount == null ? 'warning' : 'purple'}
       />
     </div>
   )

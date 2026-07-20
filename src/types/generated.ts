@@ -2331,17 +2331,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v1/clients/{client_record_id}/advance-payments/prefill-turnover': {
+  '/api/v1/clients/{client_record_id}/advance-payments/refresh-turnover': {
     parameters: {
       query?: never
       header?: never
       path?: never
       cookie?: never
     }
-    /** Get Prefill Turnover */
-    get: operations['get_prefill_turnover_api_v1_clients__client_record_id__advance_payments_prefill_turnover_get']
+    get?: never
     put?: never
-    post?: never
+    /**
+     * Refresh Advance Payment Turnover Bulk
+     * @description Snapshot every listed period that has a fully filed VAT return.
+     *
+     *     Not atomic: periods that cannot be snapshotted are counted, not raised, so
+     *     one period without a return does not block its neighbours.
+     */
+    post: operations['refresh_advance_payment_turnover_bulk_api_v1_clients__client_record_id__advance_payments_refresh_turnover_post']
     delete?: never
     options?: never
     head?: never
@@ -2382,6 +2388,23 @@ export interface paths {
     head?: never
     /** Update Advance Payment */
     patch: operations['update_advance_payment_api_v1_clients__client_record_id__advance_payments__payment_id__patch']
+    trace?: never
+  }
+  '/api/v1/clients/{client_record_id}/advance-payments/{payment_id}/refresh-turnover': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Refresh Advance Payment Turnover */
+    post: operations['refresh_advance_payment_turnover_api_v1_clients__client_record_id__advance_payments__payment_id__refresh_turnover_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
     trace?: never
   }
   '/api/v1/advance-payments/overview': {
@@ -3312,6 +3335,9 @@ export interface components {
       payment_method?: components['schemas']['PaymentMethod'] | null
       /** Turnover Amount */
       turnover_amount?: string | null
+      turnover_source?: components['schemas']['TurnoverSource'] | null
+      /** Turnover Snapshot At */
+      turnover_snapshot_at?: string | null
       /**
        * Calculated Amount
        * Format: decimal
@@ -3320,8 +3346,7 @@ export interface components {
       calculated_amount: string
       /** Override Amount */
       override_amount?: string | null
-      /** Live Turnover */
-      live_turnover?: string | null
+      available_turnover?: components['schemas']['AvailableTurnover'] | null
       /**
        * Missing Turnover
        * @default false
@@ -3409,6 +3434,9 @@ export interface components {
       notes?: string | null
       /** Turnover Amount */
       turnover_amount?: string | null
+      turnover_source?: components['schemas']['TurnoverSource'] | null
+      /** Turnover Snapshot At */
+      turnover_snapshot_at?: string | null
       /** Advance Rate */
       advance_rate?: string | null
       /**
@@ -3419,8 +3447,7 @@ export interface components {
       calculated_amount: string
       /** Override Amount */
       override_amount?: string | null
-      /** Live Turnover */
-      live_turnover?: string | null
+      available_turnover?: components['schemas']['AvailableTurnover'] | null
       /**
        * Missing Turnover
        * @default false
@@ -4238,6 +4265,27 @@ export interface components {
       notes?: string | null
     }
     /**
+     * AvailableTurnover
+     * @description VAT turnover this period *could* be snapshotted from.
+     *
+     *     Not the payment's turnover. It is a discovery signal for an action the
+     *     advisor has not taken yet, and it feeds no amount on the record: only the
+     *     stored ``turnover_amount`` drives ``calculated_amount``/``expected_amount``.
+     */
+    AvailableTurnover: {
+      /**
+       * Amount
+       * Format: decimal
+       * @example 123.45
+       */
+      amount: string
+      /**
+       * Source
+       * @enum {string}
+       */
+      source: 'vat_filed' | 'vat_pending'
+    }
+    /**
      * BinderCapacityStatus
      * @enum {string}
      */
@@ -4633,6 +4681,28 @@ export interface components {
       id: number
       /** Error */
       error: string
+    }
+    /**
+     * BulkRefreshTurnoverRequest
+     * @description Explicit ids only: the caller states exactly which periods it is writing to.
+     *
+     *     There is deliberately no filter-based form — a filter can match rows the
+     *     advisor never saw, and this command writes to every row it matches.
+     */
+    BulkRefreshTurnoverRequest: {
+      /** Payment Ids */
+      payment_ids: number[]
+    }
+    /** BulkRefreshTurnoverResponse */
+    BulkRefreshTurnoverResponse: {
+      /** Refreshed */
+      refreshed: number
+      /** Skipped No Vat */
+      skipped_no_vat: number
+      /** Skipped Not Filed */
+      skipped_not_filed: number
+      /** Skipped Paid */
+      skipped_paid: number
     }
     /**
      * BusinessCreateRequest
@@ -6485,22 +6555,6 @@ export interface components {
       /** Tax Year */
       tax_year?: number | null
     }
-    /** PrefillTurnoverResponse */
-    PrefillTurnoverResponse: {
-      /** Period */
-      period: string
-      /** Period Months Count */
-      period_months_count: number
-      /** Turnover Amount */
-      turnover_amount?: string | null
-      /** Vat Work Item Id */
-      vat_work_item_id?: number | null
-      /**
-       * Source
-       * @enum {string}
-       */
-      source: 'vat_filed' | 'vat_pending' | 'none'
-    }
     /**
      * PrimaryAnnualReportForm
      * @description Primary ITA annual-return forms handled by this domain.
@@ -6544,6 +6598,15 @@ export interface components {
        * @default bearer
        */
       token_type: string
+    }
+    /** RefreshTurnoverRequest */
+    RefreshTurnoverRequest: {
+      /**
+       * Confirm Pending
+       * @description אשר קיבוע מחזור מדוח מע״מ שטרם הוגש
+       * @default false
+       */
+      confirm_pending: boolean
     }
     /**
      * ReminderActionType
@@ -7752,6 +7815,12 @@ export interface components {
         [key: string]: unknown
       }
     }
+    /**
+     * TurnoverSource
+     * @description Where ``turnover_amount`` was snapshotted from.
+     * @enum {string}
+     */
+    TurnoverSource: 'manual' | 'vat_filed' | 'vat_pending'
     /** UserAuditLogListResponse */
     UserAuditLogListResponse: {
       /** Items */
@@ -18003,19 +18072,20 @@ export interface operations {
       }
     }
   }
-  get_prefill_turnover_api_v1_clients__client_record_id__advance_payments_prefill_turnover_get: {
+  refresh_advance_payment_turnover_bulk_api_v1_clients__client_record_id__advance_payments_refresh_turnover_post: {
     parameters: {
-      query: {
-        period: string
-        period_months_count: number
-      }
+      query?: never
       header?: never
       path: {
         client_record_id: number
       }
       cookie?: never
     }
-    requestBody?: never
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['BulkRefreshTurnoverRequest']
+      }
+    }
     responses: {
       /** @description Successful Response */
       200: {
@@ -18023,7 +18093,16 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['PrefillTurnoverResponse']
+          'application/json': components['schemas']['BulkRefreshTurnoverResponse']
+        }
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Authentication required */
@@ -18272,6 +18351,78 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  refresh_advance_payment_turnover_api_v1_clients__client_record_id__advance_payments__payment_id__refresh_turnover_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        client_record_id: number
+        payment_id: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RefreshTurnoverRequest']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AdvancePaymentRow']
         }
       }
       /** @description Authentication required */

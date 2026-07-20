@@ -3,12 +3,59 @@
  * strings (cancel, loading, generic actions) stay in GLOBAL_UI_MESSAGES;
  * everything here is advancedPayments-domain copy. Grouped by the area that renders it.
  */
+import { formatDateTime } from '@/utils/utils'
+import type { AvailableTurnover, BulkRefreshTurnoverResponse, TurnoverSource } from './api/contracts'
+
+const TURNOVER_SOURCE_LABELS: Record<TurnoverSource, string> = {
+  manual: 'הוזן ידנית',
+  vat_filed: 'מקובע מדוח מע״מ מוגש',
+  vat_pending: 'מקובע מדוח מע״מ שטרם הוגש',
+}
+
+/** Same distinction, short enough to sit inside a list value. */
+const TURNOVER_SOURCE_SHORT_LABELS: Record<TurnoverSource, string> = {
+  manual: 'מוזן ידנית',
+  vat_filed: 'ממע״מ',
+  vat_pending: 'ממע״מ בהכנה',
+}
+
+/** What a period could be snapshotted from, before anyone pressed the button. */
+const AVAILABLE_TURNOVER_LABELS: Record<AvailableTurnover['source'], string> = {
+  vat_filed: 'דוח מע״מ הוגש',
+  vat_pending: 'דוח מע״מ בהכנה',
+}
+
 export const ADVANCED_PAYMENTS_MESSAGES = {
+  turnoverRefresh: {
+    success: 'המחזור קובע מדוח המע״מ',
+    provenance: (source: TurnoverSource, snapshotAt: string | null): string =>
+      snapshotAt ? `${TURNOVER_SOURCE_LABELS[source]} · ${formatDateTime(snapshotAt)}` : TURNOVER_SOURCE_LABELS[source],
+    confirmTitle: 'דוח המע״מ טרם הוגש',
+    confirmMessage:
+      'המחזור לתקופה זו מגיע מדוח מע״מ שטרם הוגש, והוא עשוי להשתנות. הקיבוע יישאר על הסכום הנוכחי גם אם הדוח ישתנה.',
+    confirmLabel: 'קבע בכל זאת',
+    /** Reads as an offer, not as the period's turnover. */
+    available: (source: AvailableTurnover['source'], amount: string) =>
+      `${AVAILABLE_TURNOVER_LABELS[source]} · ${amount}`,
+    availableBadge: 'ניתן לקיבוע',
+    /** Field label that names the provenance of a held turnover. */
+    turnoverLabel: (source: TurnoverSource) => `מחזור (${TURNOVER_SOURCE_SHORT_LABELS[source]})`,
+    bulkAvailable: (count: number) => `ל-${count} מקדמות יש דוח מע״מ מוגש שטרם קובע`,
+    bulkButton: (count: number) => `קבע מחזור ל-${count} מקדמות`,
+    /** Skips are reported by reason: each one calls for a different follow-up. */
+    bulkResult: ({ refreshed, skipped_no_vat, skipped_not_filed }: BulkRefreshTurnoverResponse) =>
+      [
+        `${refreshed} מקדמות קובעו`,
+        skipped_no_vat > 0 ? `${skipped_no_vat} ללא דוח מע״מ` : null,
+        skipped_not_filed > 0 ? `${skipped_not_filed} ממתינות להגשת הדוח` : null,
+      ]
+        .filter(Boolean)
+        .join(' · '),
+  },
   readonlySections: {
     sectionTitle: 'פרטי תשלום',
     paidAmountLabel: 'סכום שולם',
     expectedAmountLabel: 'סכום צפוי',
-    turnoverAmountLabel: 'מחזור מוזן',
     advanceRateLabel: 'אחוז מקדמה',
     calculatedAmountLabel: 'סכום מחושב',
     overrideAmountLabel: 'סכום עקיפה',
@@ -33,23 +80,22 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     overdueLabel: 'באיחור',
     idNumberLabel: 'ת.ז / ח.פ',
     advanceRateLabel: 'שיעור מקדמה',
-    liveTurnoverSuffix: (amount: string) => `${amount} (מחזור חי מדוח מע"מ)`,
-    manualTurnoverSuffix: (amount: string) => `${amount} (מוזן)`,
+    turnoverWithSource: (amount: string, source: TurnoverSource) =>
+      `${amount} (${TURNOVER_SOURCE_SHORT_LABELS[source]})`,
     title: (period: string) => `מקדמה - ${period}`,
     clientNumberPrefix: (num: number) => `מס׳ לקוח ${num}`,
     missingTurnoverAlert: 'חסר מחזור לתקופה — לא ניתן לחשב מקדמה מדויקת',
     periodSectionTitle: 'פרטי תקופה',
     dueDateLabel: 'תאריך יעד',
     periodTurnoverLabel: 'מחזור לתקופה',
-    vatPendingNote: 'דוח מע״מ טרם הוגש',
+    noVatReportNote: 'אין דוח מע״מ לתקופה',
     timingStatusLabel: 'סטטוס עמידה',
   },
   editableSections: {
     calculationSectionTitle: 'חישוב מקדמה',
     periodTurnoverLabel: 'מחזור לתקופה',
-    prefillButton: 'מלא ממע״מ',
+    refreshTurnoverButton: 'קבע לפי מע״מ',
     vatPendingAlert: 'מבוסס על דוח מע״מ שטרם הוגש',
-    noVatReportNote: 'לא נמצא דוח מע״מ לתקופה זו',
     calculatedAmountLabel: 'סכום מחושב',
     overrideAmountLabel: 'סכום עקיפה (אופציונלי)',
     finalAmountLabel: 'סכום סופי',
@@ -130,11 +176,7 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
   },
   clientCards: {
     empty: 'אין מקדמות להצגה',
-    turnoverManual: 'מחזור מוזן',
-    turnoverFromVat: 'נגזר ממע״מ',
-    turnoverMissing: 'חסר',
     missingTurnoverLabel: 'חסר מחזור',
-    turnoverLabelTemplate: (source: string) => `מחזור (${source})`,
     dueDateLabel: 'לתשלום עד',
     paidAtLabel: 'שולם ב',
     paidLabel: 'שולם',

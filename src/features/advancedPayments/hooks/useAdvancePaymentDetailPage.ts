@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import type { Breadcrumb } from '@/components/layout/PageHeader'
@@ -42,12 +43,20 @@ export const useAdvancePaymentDetailPage = ({
     queryFn: () => advancePaymentsApi.getById(clientRecordId, paymentId),
   })
 
+  const [pendingVatConfirm, setPendingVatConfirm] = useState(false)
+
   const paymentMutations = useAdvancePaymentMutations({
     clientRecordId,
     onUpdateSuccess: (updatedPayment) => {
       toast.success('מקדמה עודכנה בהצלחה')
       queryClient.setQueryData(advancedPaymentsQK.detail(clientRecordId, updatedPayment.id), updatedPayment)
     },
+    onRefreshTurnoverSuccess: (updatedPayment) => {
+      setPendingVatConfirm(false)
+      toast.success(ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.success)
+      queryClient.setQueryData(advancedPaymentsQK.detail(clientRecordId, updatedPayment.id), updatedPayment)
+    },
+    onRefreshTurnoverNotFiled: () => setPendingVatConfirm(true),
     onDeleteSuccess: (deletedPaymentId) => {
       toast.success('מקדמה נמחקה בהצלחה')
       queryClient.removeQueries({ queryKey: advancedPaymentsQK.detail(clientRecordId, deletedPaymentId) })
@@ -86,6 +95,19 @@ export const useAdvancePaymentDetailPage = ({
         await paymentMutations.updatePayment({ id: paymentId, payload })
       },
       onDelete: isAdvisor ? async () => void (await paymentMutations.deletePayment(paymentId)) : undefined,
+    },
+    turnoverRefresh: {
+      isRefreshing: paymentMutations.isRefreshingTurnover,
+      // mutateAsync rejects on the 409 the confirm dialog handles; the mutation's
+      // onError owns every outcome, so the rejection is deliberately swallowed.
+      onRefresh: async () => {
+        await paymentMutations.refreshTurnover({ id: paymentId, confirmPending: false }).catch(() => undefined)
+      },
+      isConfirmingPending: pendingVatConfirm,
+      onConfirmPending: async () => {
+        await paymentMutations.refreshTurnover({ id: paymentId, confirmPending: true }).catch(() => undefined)
+      },
+      onCancelPending: () => setPendingVatConfirm(false),
     },
   }
 }

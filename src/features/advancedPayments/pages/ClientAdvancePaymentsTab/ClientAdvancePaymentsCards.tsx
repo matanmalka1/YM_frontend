@@ -53,16 +53,12 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
         const expected = Number(row.expected_amount ?? 0)
         const paid = Number(row.paid_amount ?? 0)
         const balance = Math.max(expected - paid, 0)
-        const turnover = row.turnover_amount ?? row.live_turnover
-        const hasTurnover = turnover !== null && turnover !== undefined
-        const turnoverSource = row.turnover_amount
-          ? ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverManual
-          : row.live_turnover
-            ? ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverFromVat
-            : ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverMissing
-        const turnoverLabel = row.missing_turnover
-          ? ADVANCED_PAYMENTS_MESSAGES.clientCards.missingTurnoverLabel
-          : ADVANCED_PAYMENTS_MESSAGES.clientCards.turnoverLabelTemplate(turnoverSource)
+        // The turnover row states what the payment holds; an available-but-
+        // unsnapshotted VAT figure gets its own line below it, never this value.
+        const turnoverLabel =
+          row.turnover_amount != null && row.turnover_source != null
+            ? ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.turnoverLabel(row.turnover_source)
+            : ADVANCED_PAYMENTS_MESSAGES.clientCards.missingTurnoverLabel
         const isPaid = row.status === 'paid'
 
         const detailItems: DefinitionItem[] = [
@@ -85,12 +81,28 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
           {
             label: turnoverLabel,
             value: (
-              <span className={row.missing_turnover ? 'text-negative-600' : undefined}>
-                {hasTurnover ? formatShekelAmount(Number(turnover)) : '—'}
+              <span className={row.turnover_amount == null ? 'text-negative-600' : undefined}>
+                {row.turnover_amount != null ? formatShekelAmount(Number(row.turnover_amount)) : '—'}
               </span>
             ),
             fullWidth: true,
           },
+          ...(row.turnover_amount == null && row.available_turnover != null
+            ? [
+                {
+                  label: ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.availableBadge,
+                  value: (
+                    <span className="text-info-700">
+                      {ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.available(
+                        row.available_turnover.source,
+                        formatShekelAmount(Number(row.available_turnover.amount)),
+                      )}
+                    </span>
+                  ),
+                  fullWidth: true,
+                },
+              ]
+            : []),
         ]
 
         return (

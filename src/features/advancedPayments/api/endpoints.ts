@@ -5,8 +5,10 @@ export const ADVANCE_PAYMENT_ENDPOINTS = {
   clientAdvancePaymentsKPI: (clientRecordId: number | string) => `/clients/${clientRecordId}/advance-payments/kpi`,
   clientAdvancePaymentsGenerate: (clientRecordId: number | string) =>
     `/clients/${clientRecordId}/advance-payments/generate`,
-  clientAdvancePaymentPrefillTurnover: (clientRecordId: number | string) =>
-    `/clients/${clientRecordId}/advance-payments/prefill-turnover`,
+  clientAdvancePaymentRefreshTurnover: (clientRecordId: number | string, id: number | string) =>
+    `/clients/${clientRecordId}/advance-payments/${id}/refresh-turnover`,
+  clientAdvancePaymentsRefreshTurnover: (clientRecordId: number | string) =>
+    `/clients/${clientRecordId}/advance-payments/refresh-turnover`,
   advancePaymentsOverview: '/advance-payments/overview',
   advancePaymentsBatches: '/advance-payments/overview/batches',
 } as const

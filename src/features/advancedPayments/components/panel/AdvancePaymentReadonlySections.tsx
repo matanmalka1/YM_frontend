@@ -24,7 +24,12 @@ export const AdvancePaymentReadonlySections: React.FC<AdvancePaymentReadonlySect
           value: formatShekelAmount(payment.expected_amount),
         },
         {
-          label: ADVANCED_PAYMENTS_MESSAGES.readonlySections.turnoverAmountLabel,
+          // Labelled by actual provenance: a VAT-sourced figure must not read
+          // as "מחזור מוזן" just because this view cannot edit it.
+          label:
+            payment.turnover_source != null
+              ? ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.turnoverLabel(payment.turnover_source)
+              : ADVANCED_PAYMENTS_MESSAGES.detail.periodTurnoverLabel,
           value: payment.turnover_amount != null ? formatShekelAmount(payment.turnover_amount) : null,
         },
         {

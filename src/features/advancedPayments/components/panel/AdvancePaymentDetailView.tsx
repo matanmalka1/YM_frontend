@@ -26,6 +26,13 @@ interface AdvancePaymentDetailViewProps {
   isDeleting: boolean
   onSave: (payload: UpdateAdvancePaymentPayload) => Promise<void>
   onDelete?: () => Promise<void>
+  turnoverRefresh: {
+    isRefreshing: boolean
+    onRefresh: () => Promise<void>
+    isConfirmingPending: boolean
+    onConfirmPending: () => Promise<void>
+    onCancelPending: () => void
+  }
 }
 
 /**
@@ -44,6 +51,7 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
   isDeleting,
   onSave,
   onDelete,
+  turnoverRefresh,
 }) => {
   const form = useAdvancePaymentDetailForm({ payment, onSave })
   const [confirmDelete, setConfirmDelete] = useState(false)
@@ -102,7 +110,12 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         <div className="space-y-5 lg:col-span-2">
           {canEdit ? (
-            <AdvancePaymentEditableSections form={form} />
+            <AdvancePaymentEditableSections
+              form={form}
+              payment={payment}
+              isRefreshingTurnover={turnoverRefresh.isRefreshing}
+              onRefreshTurnover={turnoverRefresh.onRefresh}
+            />
           ) : (
             <AdvancePaymentReadonlySections payment={payment} />
           )}
@@ -110,6 +123,16 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
 
         <AdvancePaymentContextCard payment={payment} clientIdNumber={clientIdNumber} />
       </div>
+
+      <ConfirmDialog
+        open={turnoverRefresh.isConfirmingPending}
+        title={ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.confirmTitle}
+        message={ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.confirmMessage}
+        confirmLabel={ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.confirmLabel}
+        isLoading={turnoverRefresh.isRefreshing}
+        onConfirm={turnoverRefresh.onConfirmPending}
+        onCancel={turnoverRefresh.onCancelPending}
+      />
 
       {onDelete && (
         <ConfirmDialog

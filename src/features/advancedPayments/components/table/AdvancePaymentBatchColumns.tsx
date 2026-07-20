@@ -1,5 +1,5 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
-import { AlertTriangle, Edit, ExternalLink } from 'lucide-react'
+import { AlertTriangle, Edit, ExternalLink, Info } from 'lucide-react'
 import {
   actionsColumn,
   EmptyCell,
@@ -45,6 +45,12 @@ export const buildAdvancePaymentBatchColumns = ({
             {ADVANCED_PAYMENTS_MESSAGES.batchColumns.missingTurnoverBadge}
           </span>
         )}
+        {row.turnover_amount == null && row.available_turnover != null && (
+          <span className="mt-0.5 inline-flex items-center gap-1 rounded border border-info-200 bg-info-50 px-1.5 py-0.5 text-xs font-semibold text-info-700">
+            <Info className="h-2.5 w-2.5" />
+            {ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.availableBadge}
+          </span>
+        )}
       </>
     ),
   },
@@ -69,14 +75,9 @@ export const buildAdvancePaymentBatchColumns = ({
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.turnoverHeader,
     dir: 'ltr',
     kind: 'money',
-    render: (row) =>
-      row.turnover_amount ? (
-        formatShekelAmount(row.turnover_amount)
-      ) : row.live_turnover ? (
-        <span className="italic text-gray-400">{formatShekelAmount(row.live_turnover)}</span>
-      ) : (
-        <EmptyCell />
-      ),
+    // The money cell shows only what the payment holds. An available VAT figure
+    // is a pending action, so it renders as a badge in the client column instead.
+    render: (row) => (row.turnover_amount ? formatShekelAmount(row.turnover_amount) : <EmptyCell />),
   },
   moneyColumn({
     key: 'expected_amount',

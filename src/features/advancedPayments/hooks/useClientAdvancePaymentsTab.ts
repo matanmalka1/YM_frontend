@@ -13,6 +13,7 @@ import { isAdvancePaymentStatus } from '../constants'
 import { useAdvancePayments } from './useAdvancePayments'
 import { useAdvanceRateInsights } from './useAdvanceRateInsights'
 import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
+import { ADVANCED_PAYMENTS_MESSAGES } from '../messages'
 
 interface UseClientAdvancePaymentsTabArgs {
   clientRecordId: number
@@ -59,6 +60,23 @@ export const useClientAdvancePaymentsTab = ({ clientRecordId }: UseClientAdvance
     generateMutation.mutate(generationFrequency)
   }
 
+  // Ids come from the rows actually on screen, never from a server-side filter:
+  // this command writes to every row it is given, so nothing invisible is included.
+  const readyToSnapshotIds = rows
+    .filter(
+      (row) => row.turnover_amount == null && row.available_turnover?.source === 'vat_filed',
+    )
+    .map((row) => row.id)
+
+  const refreshTurnoverBulkMutation = useMutation({
+    mutationFn: (paymentIds: number[]) => advancePaymentsApi.refreshTurnoverBulk(clientRecordId, paymentIds),
+    onSuccess: (data) => {
+      toast.success(ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.bulkResult(data))
+      void invalidateClientYear()
+    },
+    onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.turnoverRefresh),
+  })
+
   const handleCreate = async (...args: Parameters<typeof create>) => {
     try {
       const result = await create(...args)
@@ -85,6 +103,9 @@ export const useClientAdvancePaymentsTab = ({ clientRecordId }: UseClientAdvance
       generationFrequency,
       isGenerating: generateMutation.isPending,
       advanceRate,
+      readyToSnapshotCount: readyToSnapshotIds.length,
+      isRefreshingTurnover: refreshTurnoverBulkMutation.isPending,
+      onRefreshTurnoverBulk: () => refreshTurnoverBulkMutation.mutate(readyToSnapshotIds),
     },
     filters: {
       values: { status_filter: statusFilter.join(','), year: String(year) },

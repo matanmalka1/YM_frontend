@@ -11,7 +11,7 @@ import type {
   AdvancePaymentOverviewResponse,
   AnnualKPIResponse,
   MonthBatchSummary,
-  PrefillTurnoverResponse,
+  BulkRefreshTurnoverResponse,
   GenerateScheduleResponse,
 } from './contracts'
 
@@ -83,14 +83,22 @@ export const advancePaymentsApi = {
     return response.data
   },
 
-  getPrefillTurnover: async (
+  refreshTurnoverBulk: async (clientRecordId: number, paymentIds: number[]): Promise<BulkRefreshTurnoverResponse> => {
+    const response = await api.post<BulkRefreshTurnoverResponse>(
+      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentsRefreshTurnover(clientRecordId),
+      { payment_ids: paymentIds },
+    )
+    return response.data
+  },
+
+  refreshTurnover: async (
     clientRecordId: number,
-    period: string,
-    periodMonthsCount: 1 | 2,
-  ): Promise<PrefillTurnoverResponse> => {
-    const response = await api.get<PrefillTurnoverResponse>(
-      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentPrefillTurnover(clientRecordId),
-      { params: toQueryParams({ period, period_months_count: periodMonthsCount }) },
+    paymentId: number,
+    confirmPending = false,
+  ): Promise<AdvancePaymentRow> => {
+    const response = await api.post<AdvancePaymentRow>(
+      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentRefreshTurnover(clientRecordId, paymentId),
+      { confirm_pending: confirmPending },
     )
     return response.data
   },

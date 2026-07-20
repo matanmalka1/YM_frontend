@@ -18,10 +18,12 @@ export interface AdvancePaymentRow {
   notes: string | null
   delta: string
   turnover_amount: string | null
+  turnover_source: TurnoverSource | null
+  turnover_snapshot_at: string | null
   advance_rate: string | null
   calculated_amount: string
   override_amount: string | null
-  live_turnover: string | null
+  available_turnover: AvailableTurnover | null
   missing_turnover: boolean
   timing_status: AdvancePaymentTimingStatus
   paid_late: boolean
@@ -59,12 +61,16 @@ export interface UpdateAdvancePaymentPayload {
   notes?: string | null
 }
 
-export interface PrefillTurnoverResponse {
-  period: string
-  period_months_count: 1 | 2
-  turnover_amount: string | null
-  vat_work_item_id: number | null
-  source: 'vat_filed' | 'vat_pending' | 'none'
+export type TurnoverSource = 'manual' | 'vat_filed' | 'vat_pending'
+
+/**
+ * VAT turnover a period *could* be snapshotted from — not the payment's turnover.
+ * It drives no amount on the record; it exists to surface an action not yet taken,
+ * so it must never be rendered in the same slot as `turnover_amount`.
+ */
+export interface AvailableTurnover {
+  amount: string
+  source: Extract<TurnoverSource, 'vat_filed' | 'vat_pending'>
 }
 
 export interface AdvancePaymentOverviewRow {
@@ -84,9 +90,11 @@ export interface AdvancePaymentOverviewRow {
   due_date_effective?: string | null
   payment_method: AdvancePaymentMethod | null
   turnover_amount: string | null
+  turnover_source: TurnoverSource | null
+  turnover_snapshot_at: string | null
   calculated_amount: string
   override_amount: string | null
-  live_turnover: string | null
+  available_turnover: AvailableTurnover | null
   missing_turnover: boolean
   advance_rate: string | null
 }
@@ -141,6 +149,12 @@ export interface AnnualKPIResponse {
   collection_rate: string
   overdue_count: number
   on_time_count: number
+}
+
+export interface BulkRefreshTurnoverResponse {
+  refreshed: number
+  skipped_no_vat: number
+  skipped_not_filed: number
 }
 
 export interface GenerateScheduleResponse {

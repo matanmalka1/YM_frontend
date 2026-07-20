@@ -1,3 +1,4 @@
+import { Info } from 'lucide-react'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Input } from '@/components/ui/inputs/Input'
@@ -8,14 +9,23 @@ import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
 import { ADVANCE_PAYMENT_METHOD_OPTIONS } from '../../constants'
 import { formatShekelAmount } from '@/utils/utils'
+import type { AdvancePaymentRow } from '../../api/contracts'
 import type { AdvancePaymentDetailForm } from '../../hooks/useAdvancePaymentDetailForm'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 interface AdvancePaymentEditableSectionsProps {
   form: AdvancePaymentDetailForm
+  payment: AdvancePaymentRow
+  isRefreshingTurnover: boolean
+  onRefreshTurnover: () => Promise<void>
 }
 
-export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSectionsProps> = ({ form }) => (
+export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSectionsProps> = ({
+  form,
+  payment,
+  isRefreshingTurnover,
+  onRefreshTurnover,
+}) => (
   <>
     <Card title={ADVANCED_PAYMENTS_MESSAGES.editableSections.calculationSectionTitle} size="compact" variant="outlined">
       <div className="space-y-3">
@@ -33,18 +43,33 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
             type="button"
             variant="outline"
             size="sm"
-            isLoading={form.isPrefilling}
-            onClick={form.handlePrefill}
+            isLoading={isRefreshingTurnover}
+            onClick={onRefreshTurnover}
             className="mb-0.5 whitespace-nowrap"
           >
-            {ADVANCED_PAYMENTS_MESSAGES.editableSections.prefillButton}
+            {ADVANCED_PAYMENTS_MESSAGES.editableSections.refreshTurnoverButton}
           </Button>
         </div>
-        {form.prefillSource === 'vat_pending' && (
+        {payment.turnover_source != null && (
+          <p className="text-xs text-gray-500">
+            {ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.provenance(
+              payment.turnover_source,
+              payment.turnover_snapshot_at,
+            )}
+          </p>
+        )}
+        {payment.turnover_source === 'vat_pending' && (
           <Alert variant="warning" size="sm" message={ADVANCED_PAYMENTS_MESSAGES.editableSections.vatPendingAlert} />
         )}
-        {form.prefillSource === 'none' && (
-          <p className="text-xs text-gray-400">{ADVANCED_PAYMENTS_MESSAGES.editableSections.noVatReportNote}</p>
+        {/* Sits outside the field: an offer to snapshot, not the period's turnover. */}
+        {payment.turnover_amount == null && payment.available_turnover != null && (
+          <p className="flex items-center gap-1.5 rounded-lg border border-info-200 bg-info-50 px-2.5 py-1.5 text-xs text-info-700">
+            <Info className="h-3.5 w-3.5 shrink-0" />
+            {ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.available(
+              payment.available_turnover.source,
+              formatShekelAmount(payment.available_turnover.amount),
+            )}
+          </p>
         )}
         <div>
           <div className="text-xs text-gray-500 mb-1">

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PlusCircle, Calendar } from 'lucide-react'
+import { PlusCircle, Calendar, Info } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { Divider } from '@/components/ui/primitives/Divider'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
@@ -17,6 +17,10 @@ interface ClientAdvancePaymentsHeaderProps {
   generationFrequency: 1 | 2 | null
   isGenerating?: boolean
   advanceRate?: number | null
+  /** Rows on screen whose VAT return is filed and not yet snapshotted. */
+  readyToSnapshotCount: number
+  isRefreshingTurnover: boolean
+  onRefreshTurnoverBulk: () => void
 }
 
 export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderProps> = ({
@@ -28,6 +32,9 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
   generationFrequency,
   isGenerating,
   advanceRate,
+  readyToSnapshotCount,
+  isRefreshingTurnover,
+  onRefreshTurnoverBulk,
 }) => {
   const [confirmGenerate, setConfirmGenerate] = useState(false)
 
@@ -88,6 +95,26 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
           </>
         )}
       </div>
+
+      {/* Appears only when there is something to snapshot; the count states
+          exactly how many rows the click will write to. */}
+      {isAdvisor && readyToSnapshotCount > 0 && (
+        <div className="flex items-center gap-2 rounded-xl border border-info-200 bg-info-50 px-3 py-2">
+          <Info className="h-4 w-4 shrink-0 text-info-600" />
+          <span className="flex-1 text-sm text-info-800">
+            {ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.bulkAvailable(readyToSnapshotCount)}
+          </span>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            isLoading={isRefreshingTurnover}
+            onClick={onRefreshTurnoverBulk}
+          >
+            {ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.bulkButton(readyToSnapshotCount)}
+          </Button>
+        </div>
+      )}
 
       {advanceRate != null && (
         <p className="text-sm text-gray-500">{ADVANCED_PAYMENTS_MESSAGES.clientHeader.advanceRateNote(advanceRate)}</p>

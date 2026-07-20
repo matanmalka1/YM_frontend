@@ -25,7 +25,7 @@ export const AdvancePaymentFullPanel: React.FC<AdvancePaymentFullPanelProps> = (
   backPath,
   leadingBreadcrumbs,
 }) => {
-  const { status, headerProps, permissions, payment, actions } = useAdvancePaymentDetailPage({
+  const { status, headerProps, permissions, payment, actions, turnoverRefresh } = useAdvancePaymentDetailPage({
     clientRecordId,
     paymentId,
     clientName,
@@ -50,6 +50,7 @@ export const AdvancePaymentFullPanel: React.FC<AdvancePaymentFullPanelProps> = (
       isDeleting={actions.isDeleting}
       onSave={actions.onSave}
       onDelete={actions.onDelete}
+      turnoverRefresh={turnoverRefresh}
     />
   )
 }

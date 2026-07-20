@@ -9,6 +9,9 @@ import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION, ALL_YEARS_URL_OPTION } from '@/c
 import type { AdvancePaymentMethod, AdvancePaymentStatus } from './api/contracts'
 import { ADVANCED_PAYMENTS_MESSAGES } from './messages'
 
+/** Backend signals a decision point, not a failure — see useAdvancePaymentMutations. */
+export const ADVANCE_PAYMENT_VAT_NOT_FILED_CODE = 'ADVANCE_PAYMENT.VAT_NOT_FILED'
+
 const ADVANCE_PAYMENT_STATUS_VALUES = ['pending', 'paid', 'partial'] as const satisfies readonly AdvancePaymentStatus[]
 const ADVANCE_PAYMENT_STATUS_VALUE_SET = new Set<string>(ADVANCE_PAYMENT_STATUS_VALUES)
 const ADVANCE_PAYMENT_STATUS_LABELS: Record<AdvancePaymentStatus, string> = {
