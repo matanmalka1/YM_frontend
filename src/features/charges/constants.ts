@@ -47,6 +47,7 @@ export const CHARGE_TYPE_LABELS: Record<ChargeTypeValue, string> = {
 export const getChargeTypeLabel = makeLabelGetter(CHARGE_TYPE_LABELS)
 
 export const CHARGE_CREATE_FORM_ID = 'charges-create-form'
+export const CHARGE_EDIT_FORM_ID = 'charges-edit-form'
 export const CHARGE_CANCEL_REASON_PLACEHOLDER = CHARGES_MESSAGES.detail.cancelReasonPlaceholder
 export const CHARGE_PERIOD_YEAR_SPAN = 1
 

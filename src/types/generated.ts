@@ -1688,6 +1688,25 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/charges/{charge_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get Charge */
+    get: operations['get_charge_api_v1_charges__charge_id__get']
+    put?: never
+    post?: never
+    /** Delete Charge */
+    delete: operations['delete_charge_api_v1_charges__charge_id__delete']
+    options?: never
+    head?: never
+    /** Update Charge */
+    patch: operations['update_charge_api_v1_charges__charge_id__patch']
+    trace?: never
+  }
   '/api/v1/charges/{charge_id}/issue': {
     parameters: {
       query?: never
@@ -1734,24 +1753,6 @@ export interface paths {
     /** Cancel Charge */
     post: operations['cancel_charge_api_v1_charges__charge_id__cancel_post']
     delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/v1/charges/{charge_id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Get Charge */
-    get: operations['get_charge_api_v1_charges__charge_id__get']
-    put?: never
-    post?: never
-    /** Delete Charge */
-    delete: operations['delete_charge_api_v1_charges__charge_id__delete']
     options?: never
     head?: never
     patch?: never
@@ -4909,6 +4910,26 @@ export interface components {
       | 'representation_fee'
       | 'consultation_fee'
       | 'other'
+    /**
+     * ChargeUpdateRequest
+     * @description Partial update for a draft charge.
+     *
+     *     Routes pass ``model_dump(exclude_unset=True)`` so an omitted field is left
+     *     untouched, while an explicit ``business_id: null`` clears the business scope.
+     */
+    ChargeUpdateRequest: {
+      /** Business Id */
+      business_id?: number | null
+      /** Amount */
+      amount?: string | null
+      charge_type?: components['schemas']['ChargeType'] | null
+      /** Period */
+      period?: string | null
+      /** Months Covered */
+      months_covered?: number | null
+      /** Description */
+      description?: string | null
+    }
     /** ChargesCard */
     ChargesCard: {
       /**
@@ -15222,6 +15243,191 @@ export interface operations {
       }
     }
   }
+  get_charge_api_v1_charges__charge_id__get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        charge_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ChargeResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  delete_charge_api_v1_charges__charge_id__delete: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        charge_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  update_charge_api_v1_charges__charge_id__patch: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        charge_id: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ChargeUpdateRequest']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ChargeResponse']
+        }
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
   issue_charge_api_v1_charges__charge_id__issue_post: {
     parameters: {
       query?: never
@@ -15400,120 +15606,6 @@ export interface operations {
       }
       /** @description Conflict */
       409: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HTTPValidationError']
-        }
-      }
-    }
-  }
-  get_charge_api_v1_charges__charge_id__get: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        charge_id: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ChargeResponse']
-        }
-      }
-      /** @description Authentication required */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Resource not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HTTPValidationError']
-        }
-      }
-    }
-  }
-  delete_charge_api_v1_charges__charge_id__delete: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        charge_id: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Successful Response */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Authentication required */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Resource not found */
-      404: {
         headers: {
           [name: string]: unknown
         }

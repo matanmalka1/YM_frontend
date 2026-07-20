@@ -1,5 +1,6 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
 import { chargesApi, chargesQK, type CreateChargePayload, type ChargeListItem } from '../api'
 import { getErrorMessage } from '../../../utils/utils'
@@ -15,8 +16,10 @@ import { useChargeCreateMutation } from './useChargeCreateMutation'
 import { useChargesFilters } from './useChargesFilters'
 import { CHARGES_MESSAGES } from '../messages'
 import { CHARGES_ERROR_MESSAGES } from '../errorMessages'
+import { CHARGE_ROUTES } from '../api/endpoints'
 
 export const useChargesPage = () => {
+  const navigate = useNavigate()
   const { searchParams, setFilter, setPage, resetFilters, setSearchParams } = useSearchParamFilters()
 
   const filters = getChargesFilters(searchParams)
@@ -48,7 +51,6 @@ export const useChargesPage = () => {
     selectedIds,
   })
 
-  const [selectedChargeId, setSelectedChargeId] = useState<number | null>(null)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [notificationContext, setNotificationContext] = useState<{
     charge: ChargeListItem
@@ -62,20 +64,6 @@ export const useChargesPage = () => {
     (charge: ChargeListItem, trigger: NotificationTrigger) => setNotificationContext({ charge, trigger }),
     [],
   )
-
-  const closeChargeDetail = useCallback(() => {
-    setSelectedChargeId(null)
-    setFilter('charge_id', '', false)
-  }, [setFilter])
-
-  // Deep-link: ?charge_id=<positive int> opens the detail drawer.
-  const chargeIdParam = searchParams.get('charge_id')
-  useEffect(() => {
-    const chargeId = Number(chargeIdParam)
-    if (Number.isInteger(chargeId) && chargeId > 0) {
-      setSelectedChargeId(chargeId)
-    }
-  }, [chargeIdParam])
 
   // Deep-link: ?create=1 auto-opens the create modal (advisor only) then strips the param.
   useEffect(() => {
@@ -93,14 +81,24 @@ export const useChargesPage = () => {
         isAdvisor,
         actionLoadingId,
         runAction,
-        onOpenDetail: setSelectedChargeId,
+        onOpenDetail: (chargeId) => navigate(CHARGE_ROUTES.detail(chargeId)),
         selectedIds,
         onToggleSelect: toggleSelect,
         onToggleAll: toggleSelectAll,
         allIds,
         onSendNotification: openNotification,
       }),
-    [isAdvisor, actionLoadingId, runAction, selectedIds, toggleSelect, toggleSelectAll, allIds, openNotification],
+    [
+      isAdvisor,
+      actionLoadingId,
+      runAction,
+      selectedIds,
+      toggleSelect,
+      toggleSelectAll,
+      allIds,
+      openNotification,
+      navigate,
+    ],
   )
 
   const submitCreate = async (payload: CreateChargePayload): Promise<boolean> => {
@@ -148,14 +146,8 @@ export const useChargesPage = () => {
         onBulkAction: runBulkAction,
         onClearSelection: clearSelection,
       },
-      onOpenCharge: setSelectedChargeId,
+      onOpenCharge: (chargeId: number) => navigate(CHARGE_ROUTES.detail(chargeId)),
       onCreateCharge: openCreate,
-    },
-    drawers: {
-      detail: {
-        chargeId: selectedChargeId,
-        onClose: closeChargeDetail,
-      },
     },
     modals: {
       createProps: {

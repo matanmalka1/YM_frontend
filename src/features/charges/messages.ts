@@ -64,6 +64,14 @@ export const CHARGES_MESSAGES = {
     noBusiness: 'ללא שיוך עסקי',
     businessName: (id: number) => `עסק #${id}`,
   },
+  edit: {
+    title: (id: number) => `עריכת חיוב #${id}`,
+    submit: 'שמירת שינויים',
+    action: 'עריכת חיוב',
+    description: 'תיאור',
+    descriptionPlaceholder: 'תיאור חופשי (אופציונלי)',
+    draftOnlyHint: 'ניתן לערוך חיוב במצב טיוטה בלבד.',
+  },
   detail: {
     cancelTitle: 'ביטול חיוב',
     cancelMessage: (id: number) => `האם לבטל את חיוב #${id}?`,
@@ -103,6 +111,7 @@ export const CHARGES_MESSAGES = {
     actionSuccess: 'פעולת חיוב בוצעה בהצלחה',
     deleted: 'החיוב נמחק בהצלחה',
     created: 'חיוב נוצר בהצלחה',
+    updated: 'החיוב עודכן בהצלחה',
     bulkSuccess: (count: number) => `${count} חיובים עודכנו בהצלחה`,
   },
   validation: {

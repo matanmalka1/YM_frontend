@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { workQueueQK } from '@/features/workQueue/api'
-import { chargesApi, chargesQK } from '../api'
+import { chargesApi, chargesQK, type UpdateChargePayload } from '../api'
 import { toast } from '../../../utils/toast'
-import { getHttpStatus, isPositiveInt, showErrorToast } from '../../../utils/utils'
+import { getErrorMessage, getHttpStatus, isPositiveInt, showErrorToast } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
 import { runChargeActionRequest } from '../utils/chargeHelpers'
 import type { ChargeAction } from '../types'
@@ -18,7 +18,11 @@ export const useChargeDetailsPage = (chargeId: string | undefined) => {
   const hasValidChargeId = isPositiveInt(chargeIdNumber)
   const { isAdvisor, isSecretary } = useRole()
 
-  const { data: chargeData, error: chargeError } = useQuery({
+  const {
+    data: chargeData,
+    error: chargeError,
+    isPending,
+  } = useQuery({
     enabled: hasValidChargeId,
     queryKey: chargesQK.detail(chargeIdNumber),
     queryFn: () => chargesApi.getById(chargeIdNumber),
@@ -36,6 +40,17 @@ export const useChargeDetailsPage = (chargeId: string | undefined) => {
         queryClient.invalidateQueries({ queryKey: chargesQK.detail(chargeIdNumber) }),
         queryClient.invalidateQueries({ queryKey: chargesQK.lists() }),
         queryClient.invalidateQueries({ queryKey: workQueueQK.all }),
+      ])
+    },
+  })
+
+  const updateMutation = useMutation({
+    mutationFn: (payload: UpdateChargePayload) => chargesApi.update(chargeIdNumber, payload),
+    onSuccess: async () => {
+      toast.success(CHARGES_MESSAGES.feedback.updated)
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: chargesQK.detail(chargeIdNumber) }),
+        queryClient.invalidateQueries({ queryKey: chargesQK.lists() }),
       ])
     },
   })
@@ -63,13 +78,30 @@ export const useChargeDetailsPage = (chargeId: string | undefined) => {
     }
   }
 
+  const updateCharge = async (payload: UpdateChargePayload) => {
+    try {
+      await updateMutation.mutateAsync(payload)
+      return true
+    } catch {
+      // Error surfaces inline in the edit modal via updateError.
+      return false
+    }
+  }
+
   return {
     actionLoading: actionMutation.isPending,
     charge: chargeData ?? null,
+    error: chargeError && !queryDenied ? getErrorMessage(chargeError, CHARGES_ERROR_MESSAGES.detail.load) : null,
+    isLoading: isPending,
     denied: denied || queryDenied,
     runAction,
     deleteCharge: () => deleteMutation.mutateAsync(),
     isDeleting: deleteMutation.isPending,
+    updateCharge,
+    isUpdating: updateMutation.isPending,
+    updateError: updateMutation.error
+      ? getErrorMessage(updateMutation.error, CHARGES_ERROR_MESSAGES.mutations.update)
+      : null,
     isAdvisor: isAdvisor || isSecretary,
   }
 }

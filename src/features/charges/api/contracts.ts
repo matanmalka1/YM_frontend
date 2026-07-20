@@ -92,6 +92,17 @@ export interface CreateChargePayload {
   annual_report_id?: number | null
 }
 
+// Partial update for a draft charge (PATCH /charges/{id}). Omitted keys are left
+// untouched by the backend; an explicit business_id: null clears the scope.
+export interface UpdateChargePayload {
+  business_id?: number | null
+  amount?: string
+  charge_type?: CreateChargePayload['charge_type']
+  period?: string | null
+  months_covered?: number
+  description?: string | null
+}
+
 export interface BulkChargeActionPayload {
   charge_ids: number[]
   action: 'issue' | 'mark-paid' | 'cancel'

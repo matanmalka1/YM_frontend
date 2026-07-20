@@ -6,3 +6,9 @@ export const CHARGE_ENDPOINTS = {
   chargeCancel: (chargeId: number | string) => `/charges/${chargeId}/cancel`,
   chargesBulkAction: '/charges/bulk-action',
 } as const
+
+export const CHARGE_ROUTES = {
+  list: '/charges',
+  detail: (chargeId: number | string) => `/charges/${chargeId}`,
+  clientDetail: (clientId: number | string, chargeId: number | string) => `/clients/${clientId}/charges/${chargeId}`,
+} as const

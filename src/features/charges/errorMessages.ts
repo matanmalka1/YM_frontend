@@ -1,8 +1,10 @@
 export const CHARGES_ERROR_MESSAGES = {
   list: { load: 'שגיאה בטעינת רשימת חיובים' },
   client: { load: 'שגיאה בטעינת חיובי הלקוח' },
+  detail: { load: 'שגיאה בטעינת פרטי החיוב' },
   mutations: {
     create: 'שגיאה ביצירת חיוב',
+    update: 'שגיאה בעדכון חיוב',
     delete: 'שגיאה במחיקת חיוב',
     action: 'שגיאה בביצוע פעולה',
     chargeAction: 'שגיאה בביצוע פעולת חיוב',

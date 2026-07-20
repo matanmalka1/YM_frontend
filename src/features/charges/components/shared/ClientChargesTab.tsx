@@ -1,16 +1,17 @@
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { DetailTabPanel } from '@/components/ui/layout'
 import { Select } from '@/components/ui/inputs'
 import { useClientCharges } from '../../hooks/useClientCharges'
 import { buildChargeColumns } from '../list/ChargeColumns'
-import { ChargeDetailDrawer } from '../drawer/ChargeDetailDrawer'
 import { ChargesCreateModal } from '../form/ChargesCreateModal'
 import { ChargesStatsSection } from '../list/ChargesStatsSection'
 import { ChargesTableBlock } from '../list/ChargesTableBlock'
 import { getChargeBusinessLabel } from '../../utils/chargeUtils'
 import { CHARGES_MESSAGES } from '../../messages'
+import { CHARGE_ROUTES } from '../../api/endpoints'
 
 interface ClientChargesTabProps {
   clientId: number
@@ -18,7 +19,7 @@ interface ClientChargesTabProps {
 }
 
 export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, clientName }) => {
-  const [selectedChargeId, setSelectedChargeId] = useState<number | null>(null)
+  const navigate = useNavigate()
   const [showCreateModal, setShowCreateModal] = useState(false)
 
   const {
@@ -55,13 +56,13 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
         isAdvisor,
         actionLoadingId,
         runAction,
-        onOpenDetail: setSelectedChargeId,
+        onOpenDetail: (chargeId) => navigate(CHARGE_ROUTES.clientDetail(clientId, chargeId)),
         selectedIds,
         onToggleSelect: toggleSelect,
         onToggleAll: toggleSelectAll,
         allIds,
       }),
-    [actionLoadingId, allIds, isAdvisor, runAction, selectedIds, toggleSelect, toggleSelectAll],
+    [actionLoadingId, allIds, clientId, isAdvisor, navigate, runAction, selectedIds, toggleSelect, toggleSelectAll],
   )
 
   const businessOptions = useMemo(
@@ -120,11 +121,10 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
         onBulkAction={runBulkAction}
         onClearSelection={clearSelection}
         onCreateCharge={() => setShowCreateModal(true)}
-        onOpenCharge={setSelectedChargeId}
+        onOpenCharge={(chargeId) => navigate(CHARGE_ROUTES.clientDetail(clientId, chargeId))}
         onPageChange={setPage}
       />
 
-      <ChargeDetailDrawer chargeId={selectedChargeId} onClose={() => setSelectedChargeId(null)} />
       <ChargesCreateModal
         open={showCreateModal}
         createError={createError}

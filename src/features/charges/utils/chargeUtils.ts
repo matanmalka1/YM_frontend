@@ -21,6 +21,9 @@ export const canCancel = (actions: BackendAction[] | null | undefined): boolean 
 export const canDeleteCharge = (actions: BackendAction[] | null | undefined): boolean =>
   hasChargeAction(actions, 'delete_charge')
 
+export const canEditCharge = (actions: BackendAction[] | null | undefined): boolean =>
+  hasChargeAction(actions, 'edit_charge')
+
 export const getChargePeriodLabel = (period: string | null, monthsCovered: number | null): string => {
   if (!period) return '—'
 

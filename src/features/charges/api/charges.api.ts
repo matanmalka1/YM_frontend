@@ -7,6 +7,7 @@ import type {
   ChargesListResponse,
   ChargesListParams,
   CreateChargePayload,
+  UpdateChargePayload,
   BulkChargeActionPayload,
   BulkChargeActionResult,
 } from './contracts'
@@ -26,6 +27,11 @@ export const chargesApi = {
 
   create: async (payload: CreateChargePayload): Promise<ChargeResponse> => {
     const response = await api.post<ChargeResponse>(CHARGE_ENDPOINTS.charges, payload)
+    return response.data
+  },
+
+  update: async (chargeId: number, payload: UpdateChargePayload): Promise<ChargeResponse> => {
+    const response = await api.patch<ChargeResponse>(CHARGE_ENDPOINTS.chargeById(chargeId), payload)
     return response.data
   },
 

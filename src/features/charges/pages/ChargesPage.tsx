@@ -3,18 +3,12 @@ import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
 import { Button } from '@/components/ui/primitives/Button'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
-import {
-  ChargesCreateModal,
-  ChargeDetailDrawer,
-  ChargesStatsSection,
-  ChargesTableBlock,
-  useChargesPage,
-} from '@/features/charges'
+import { ChargesCreateModal, ChargesStatsSection, ChargesTableBlock, useChargesPage } from '@/features/charges'
 import { SendNotificationModal } from '@/features/notifications'
 import { CHARGES_MESSAGES } from '../messages'
 
 export const Charges: React.FC = () => {
-  const { status, headerProps, stats, filters, table, drawers, modals, permissions } = useChargesPage()
+  const { status, headerProps, stats, filters, table, modals, permissions } = useChargesPage()
 
   const header = (
     <PageHeader
@@ -61,8 +55,6 @@ export const Charges: React.FC = () => {
         onOpenCharge={table.onOpenCharge}
         onPageChange={table.pagination.onPageChange}
       />
-
-      <ChargeDetailDrawer {...drawers.detail} />
 
       {modals.notificationProps && <SendNotificationModal {...modals.notificationProps} />}
 

@@ -22,6 +22,7 @@ export { useClientsPage } from './hooks/useClientsPage'
 
 export { ClientDetails } from './pages/ClientDetailsPage'
 export { ClientAdvancePaymentDetail } from './pages/ClientAdvancePaymentDetailPage'
+export { ClientChargeDetail } from './pages/ClientChargeDetailPage'
 export { ClientAnnualReportDetail } from './pages/ClientAnnualReportDetailPage'
 export { Clients } from './pages/ClientsPage'
 export { extractClientErrorCode } from './utils/clientErrors'

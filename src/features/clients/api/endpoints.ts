@@ -18,6 +18,7 @@ export const CLIENT_ROUTES = {
     tab === 'details' ? `/clients/${clientId}` : `/clients/${clientId}/${tab}`,
   timeline: (clientId: number | string) => `/clients/${clientId}/timeline`,
   charges: (clientId: number | string) => `/clients/${clientId}/charges`,
+  chargeDetail: (clientId: number | string, chargeId: number | string) => `/clients/${clientId}/charges/${chargeId}`,
   vat: (clientId: number | string) => `/clients/${clientId}/vat`,
   taxCalendar: (clientId: number | string) => `/clients/${clientId}/tax-calendar`,
   advancePayments: (clientId: number | string) => `/clients/${clientId}/advance-payments`,

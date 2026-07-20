@@ -8,8 +8,14 @@ import { ForgotPassword, Login, ResetPassword } from '../features/auth'
 import { AnnualReportDetail, AnnualReportsPage } from '../features/annualReports'
 import { AdvancePayments } from '../features/advancedPayments'
 import { Binders } from '../features/binders'
-import { Charges } from '../features/charges'
-import { ClientAdvancePaymentDetail, ClientAnnualReportDetail, ClientDetails, Clients } from '../features/clients'
+import { ChargeDetail, Charges } from '../features/charges'
+import {
+  ClientAdvancePaymentDetail,
+  ClientAnnualReportDetail,
+  ClientChargeDetail,
+  ClientDetails,
+  Clients,
+} from '../features/clients'
 import { BusinessDetails } from '../features/businesses'
 import { DashboardPage } from '../features/dashboard'
 import { Navbar } from '../components/layout/Navbar/Navbar'
@@ -151,6 +157,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="clients/:clientId/documents" element={<ClientDetails initialTab="documents" />} />
             <Route path="clients/:clientId/timeline" element={<ClientDetails initialTab="timeline" />} />
             <Route path="clients/:clientId/charges" element={<ClientDetails initialTab="charges" />} />
+            <Route path="clients/:clientId/charges/:chargeId" element={<ClientChargeDetail />} />
             <Route path="clients/:clientId/vat" element={<ClientDetails initialTab="vat" />} />
             <Route path="clients/:clientId/tax-calendar" element={<ClientDetails initialTab="tax-calendar" />} />
             <Route
@@ -167,6 +174,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="clients/:clientId/businesses/:businessId" element={<BusinessDetails />} />
             <Route path="search" element={<Search />} />
             <Route path="charges" element={<Charges />} />
+            <Route path="charges/:chargeId" element={<ChargeDetail />} />
             <Route path="notifications" element={<NotificationsPage />} />
             <Route path="tax" element={<Navigate to="/tax/calendar" replace />} />
             <Route path="tax/dashboard" element={<TaxDashboardPage />} />
