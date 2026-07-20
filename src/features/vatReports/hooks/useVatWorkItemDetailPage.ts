@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { LayoutDashboard, ClipboardList, ArrowUpCircle, Clock } from 'lucide-react'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { useVatWorkItemPage } from './useVatWorkItemPage'
@@ -23,7 +22,6 @@ interface VatDetailTab {
 
 export const useVatWorkItemDetailPage = (workItemId: number) => {
   const { searchParams, setSearchParams } = useSearchParamFilters()
-  const [isFilingPending, setIsFilingPending] = useState(false)
   const { workItem, invoices, isLoading, isError } = useVatWorkItemPage(workItemId)
 
   const requestedTab = searchParams.get('tab')
@@ -74,6 +72,5 @@ export const useVatWorkItemDetailPage = (workItemId: number) => {
     tabs,
     activeTab,
     setTab,
-    filing: { isPending: isFilingPending, setPending: setIsFilingPending },
   }
 }

@@ -1,40 +1,37 @@
-import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { useMutationWithToast } from '@/hooks/useMutationWithToast'
 import { vatReportsApi } from '../api'
-import { vatReportsQK } from '../api/queryKeys'
-import { toast } from '@/utils/toast'
-import { showErrorToast } from '@/utils/utils'
+import { vatMutationKeys } from '../api/mutationKeys'
 import { invalidateVatWorkItem } from './useVatInvalidation'
-import type { FileVatReturnPayload } from '../api'
+import type { FileVatReturnPayload, VatWorkItemResponse } from '../api'
 import { VAT_MESSAGES } from '../messages'
 import { VAT_ERROR_MESSAGES } from '../errorMessages'
 
 export const useFileVatReturn = (workItemId: number) => {
   const queryClient = useQueryClient()
-  const [isLoading, setIsLoading] = useState(false)
 
-  const fileVatReturn = async (payload: FileVatReturnPayload): Promise<boolean> => {
-    setIsLoading(true)
-    try {
-      const workItem = await vatReportsApi.fileVatReturn(workItemId, payload)
-      toast.success(VAT_MESSAGES.mutations.filingSuccess)
-      queryClient.setQueryData(vatReportsQK.detail(workItemId), (prev: unknown) => {
-        if (!prev || typeof prev !== 'object') return prev
-        return { ...(prev as object), status: 'filed' }
-      })
-      await invalidateVatWorkItem(queryClient, {
+  const mutation = useMutationWithToast<VatWorkItemResponse, FileVatReturnPayload>({
+    mutationKey: vatMutationKeys.lifecycle(workItemId),
+    mutationFn: (payload: FileVatReturnPayload) => vatReportsApi.fileVatReturn(workItemId, payload),
+    successMessage: VAT_MESSAGES.mutations.filingSuccess,
+    errorMessage: VAT_ERROR_MESSAGES.mutations.filingError,
+    onSuccess: (workItem) =>
+      invalidateVatWorkItem(queryClient, {
         workItemId,
         clientRecordId: workItem.client_record_id,
         includeAudit: true,
-      })
+      }),
+  })
+
+  // Resolves false on failure so the modal stays open with the entered filing details.
+  const fileVatReturn = async (payload: FileVatReturnPayload): Promise<boolean> => {
+    try {
+      await mutation.mutateAsync(payload)
       return true
-    } catch (err) {
-      showErrorToast(err, VAT_ERROR_MESSAGES.mutations.filingError)
+    } catch {
       return false
-    } finally {
-      setIsLoading(false)
     }
   }
 
-  return { fileVatReturn, isLoading }
+  return { fileVatReturn, isLoading: mutation.isPending }
 }

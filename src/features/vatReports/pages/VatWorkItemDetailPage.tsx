@@ -15,7 +15,7 @@ import { useVatWorkItemDetailPage } from '../hooks/useVatWorkItemDetailPage'
 import { VAT_MESSAGES } from '../messages'
 
 const VatDetailContent: React.FC<{ workItemId: number }> = ({ workItemId }) => {
-  const { status, workItem, invoices, headerProps, filedBanner, tabs, activeTab, setTab, filing } =
+  const { status, workItem, invoices, headerProps, filedBanner, tabs, activeTab, setTab } =
     useVatWorkItemDetailPage(workItemId)
 
   if (status.isLoading) {
@@ -49,7 +49,7 @@ const VatDetailContent: React.FC<{ workItemId: number }> = ({ workItemId }) => {
         <VatWorkItemMetaStrip workItem={workItem} />
       </div>
 
-      <VatWorkItemSummaryBar workItem={workItem} filedBanner={filedBanner} onFilingPendingChange={filing.setPending} />
+      <VatWorkItemSummaryBar workItem={workItem} filedBanner={filedBanner} />
 
       <SegmentedControl variant="tabBar" aria-label={VAT_MESSAGES.detail.tabsAriaLabel}>
         {tabs.map(({ key, label, icon: Icon, badge }) => (
@@ -69,22 +69,10 @@ const VatDetailContent: React.FC<{ workItemId: number }> = ({ workItemId }) => {
       <div>
         {activeTab === 'summary' && <VatSummaryTab workItem={workItem} />}
         {activeTab === 'income' && (
-          <VatInvoiceTab
-            invoiceType="income"
-            workItemId={workItem.id}
-            workItem={workItem}
-            invoices={invoices}
-            isFilingPending={filing.isPending}
-          />
+          <VatInvoiceTab invoiceType="income" workItemId={workItem.id} workItem={workItem} invoices={invoices} />
         )}
         {activeTab === 'expense' && (
-          <VatInvoiceTab
-            invoiceType="expense"
-            workItemId={workItem.id}
-            workItem={workItem}
-            invoices={invoices}
-            isFilingPending={filing.isPending}
-          />
+          <VatInvoiceTab invoiceType="expense" workItemId={workItem.id} workItem={workItem} invoices={invoices} />
         )}
         {activeTab === 'history' && <VatHistoryTab workItemId={workItem.id} />}
       </div>

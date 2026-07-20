@@ -20,17 +20,9 @@ interface VatFileModalProps {
   open: boolean
   workItemId: number
   onClose: () => void
-  onFilingStart?: () => void
-  onFilingEnd?: () => void
 }
 
-export const VatFileModal: React.FC<VatFileModalProps> = ({
-  open,
-  workItemId,
-  onClose,
-  onFilingStart,
-  onFilingEnd,
-}) => {
+export const VatFileModal: React.FC<VatFileModalProps> = ({ open, workItemId, onClose }) => {
   const { fileVatReturn, isLoading } = useFileVatReturn(workItemId)
   const {
     formState: { errors, isDirty },
@@ -57,10 +49,7 @@ export const VatFileModal: React.FC<VatFileModalProps> = ({
   }
 
   const submitForm = handleSubmit(async (values) => {
-    onFilingStart?.()
-    const ok = await fileVatReturn(toFileVatReturnPayload(values))
-    onFilingEnd?.()
-    if (ok) handleClose()
+    if (await fileVatReturn(toFileVatReturnPayload(values))) handleClose()
   })
 
   return (

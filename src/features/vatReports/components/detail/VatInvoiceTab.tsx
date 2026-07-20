@@ -5,21 +5,17 @@ import { Select } from '@/components/ui/inputs/Select'
 import { canMutateVatInvoices } from '../../utils/vatHelpers'
 import { isClientClosed } from '@/utils/clientStatus'
 import { useAddInvoice } from '../../hooks/useVatInvoiceMutations'
+import { useVatLifecyclePending } from '../../hooks/useVatLifecyclePending'
 import { VAT_EXPENSE_CATEGORY_FILTER_OPTIONS } from '../../constants/vatConstants'
 import { VatInvoiceTable } from '../list/VatInvoiceTable'
 import { VatInvoiceAddForm } from '../form/VatInvoiceAddForm'
 import type { VatInvoiceTabProps } from '../../types'
 import { VAT_MESSAGES } from '../../messages'
 
-export const VatInvoiceTab: React.FC<VatInvoiceTabProps> = ({
-  invoiceType,
-  workItemId,
-  workItem,
-  invoices,
-  isFilingPending,
-}) => {
+export const VatInvoiceTab: React.FC<VatInvoiceTabProps> = ({ invoiceType, workItemId, workItem, invoices }) => {
+  const isLifecyclePending = useVatLifecyclePending(workItemId)
   const canEdit =
-    canMutateVatInvoices(workItem.available_actions) && !isClientClosed(workItem.client_status) && !isFilingPending
+    canMutateVatInvoices(workItem.available_actions) && !isClientClosed(workItem.client_status) && !isLifecyclePending
   const { addInvoice, isAdding } = useAddInvoice(workItemId)
   const [categoryFilter, setCategoryFilter] = useState('')
 

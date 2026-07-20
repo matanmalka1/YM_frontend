@@ -7,20 +7,20 @@ import { VAT_MESSAGES } from '../../messages'
 
 export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
   workItem,
-  isAdvisor,
   isLoading,
-  disabled = false,
   onMaterialsComplete,
   onReadyForReview,
   onFile,
   onSendBack,
 }) => {
-  const actionsDisabled = isClientClosed(workItem.client_status) || disabled
+  const actionsDisabled = isClientClosed(workItem.client_status) || isLoading
+  // available_actions is already role-filtered by the backend: filing and send-back are
+  // omitted for non-advisors. Re-checking the role here would be a second, drifting source.
   const actions = workItem.available_actions
   const showMaterialsComplete = canMarkMaterialsComplete(actions)
   const showReadyForReview = canMarkReadyForReview(actions)
-  const showFile = isAdvisor && canFile(actions)
-  const showSendBack = isAdvisor && canSendBack(actions)
+  const showFile = canFile(actions)
+  const showSendBack = canSendBack(actions)
 
   if (!showMaterialsComplete && !showReadyForReview && !showFile && !showSendBack) return null
 

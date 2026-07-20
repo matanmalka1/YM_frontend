@@ -56,14 +56,11 @@ export interface VatInvoiceTabProps {
   workItemId: number
   workItem: VatWorkItemResponse
   invoices: VatInvoiceResponse[]
-  isFilingPending?: boolean
 }
 
 export interface VatActionButtonsProps {
   workItem: VatWorkItemResponse
-  isAdvisor: boolean
   isLoading: boolean
-  disabled?: boolean
   onMaterialsComplete: () => void
   onReadyForReview: () => void
   onFile: () => void
@@ -132,7 +129,6 @@ export interface VatWorkItemsCreateModalProps {
 export interface VatWorkItemSummaryBarProps {
   workItem: VatWorkItemResponse
   filedBanner?: VatFiledBannerProps | null
-  onFilingPendingChange?: (isPending: boolean) => void
 }
 
 export interface VatWorkItemMetaStripProps {

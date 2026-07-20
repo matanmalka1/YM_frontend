@@ -4,8 +4,8 @@ import { formatDate } from '@/utils/utils'
 import { AlertBanner } from '@/components/ui/overlays/AlertBanner'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Card } from '@/components/ui/primitives/Card'
-import { useRole } from '@/hooks/useRole'
 import { useVatWorkItemActions } from '../../hooks/useVatWorkItemActions'
+import { useVatLifecyclePending } from '../../hooks/useVatLifecyclePending'
 import { VAT_DEADLINE_WARNING_DAYS } from '../../constants/vatConstants'
 import { VatProgressBar } from '../shared/VatProgressBar'
 import { VatFiledBanner } from '../shared/VatFiledBanner'
@@ -16,14 +16,9 @@ import { isFiled } from '../../utils/vatHelpers'
 import type { VatWorkItemSummaryBarProps } from '../../types'
 import { VAT_MESSAGES } from '../../messages'
 
-export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({
-  workItem,
-  filedBanner,
-  onFilingPendingChange,
-}) => {
-  const { isAdvisor } = useRole()
-  const { handleMaterialsComplete, handleReadyForReview, handleSendBack, isLoading, isCoolingDown } =
-    useVatWorkItemActions(workItem.id)
+export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ workItem, filedBanner }) => {
+  const { handleMaterialsComplete, handleReadyForReview, handleSendBack } = useVatWorkItemActions(workItem.id)
+  const isPending = useVatLifecyclePending(workItem.id)
   const [showSendBack, setShowSendBack] = useState(false)
   const [showFileModal, setShowFileModal] = useState(false)
   const filed = isFiled(workItem.status)
@@ -74,20 +69,17 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({
             <div className="w-full">
               <p className="mb-2 text-sm font-medium text-warning-700">{VAT_MESSAGES.summary.sendBackNoteTitle}</p>
               <VatSendBackForm
-                loading={isLoading}
+                loading={isPending}
                 onCancel={() => setShowSendBack(false)}
                 onSubmit={async (note) => {
-                  await handleSendBack(note)
-                  setShowSendBack(false)
+                  if (await handleSendBack(note)) setShowSendBack(false)
                 }}
               />
             </div>
           ) : (
             <VatActionButtons
               workItem={workItem}
-              isAdvisor={isAdvisor}
-              isLoading={isLoading}
-              disabled={isCoolingDown}
+              isLoading={isPending}
               onMaterialsComplete={handleMaterialsComplete}
               onReadyForReview={handleReadyForReview}
               onFile={() => setShowFileModal(true)}
@@ -97,13 +89,7 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({
         </div>
       )}
 
-      <VatFileModal
-        open={showFileModal}
-        workItemId={workItem.id}
-        onClose={() => setShowFileModal(false)}
-        onFilingStart={() => onFilingPendingChange?.(true)}
-        onFilingEnd={() => onFilingPendingChange?.(false)}
-      />
+      <VatFileModal open={showFileModal} workItemId={workItem.id} onClose={() => setShowFileModal(false)} />
     </Card>
   )
 }
