@@ -3460,7 +3460,6 @@ export interface components {
       paid_amount?: string | null
       /** Expected Amount */
       expected_amount?: string | null
-      status?: components['schemas']['AdvancePaymentStatus'] | null
       /** Paid At */
       paid_at?: string | null
       payment_method?: components['schemas']['PaymentMethod'] | null
@@ -6068,6 +6067,11 @@ export interface components {
        * @default 0
        */
       not_paid_count: number
+      /**
+       * Due This Month Count
+       * @default 0
+       */
+      due_this_month_count: number
       /** Total Expected */
       total_expected?: string | null
       /** Total Paid */

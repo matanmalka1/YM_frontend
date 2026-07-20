@@ -54,7 +54,6 @@ export interface UpdateAdvancePaymentPayload {
   expected_amount?: string | null
   turnover_amount?: string | null
   override_amount?: string | null
-  status?: AdvancePaymentStatus | null
   paid_at?: string | null
   payment_method?: AdvancePaymentMethod | null
   notes?: string | null
@@ -126,6 +125,7 @@ export interface MonthBatchSummary {
   pending_count: number
   paid_count: number
   not_paid_count: number
+  due_this_month_count: number
   total_expected: string | null
   total_paid: string | null
   collection_rate: string

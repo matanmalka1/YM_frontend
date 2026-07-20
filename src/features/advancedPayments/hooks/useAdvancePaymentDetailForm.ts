@@ -3,7 +3,7 @@ import type { AdvancePaymentRow, PrefillTurnoverResponse, UpdateAdvancePaymentPa
 import { advancePaymentsApi } from '../api'
 import { toast } from '@/utils/toast'
 import { showErrorToast } from '@/utils/utils'
-import { isAdvancePaymentMethod, isAdvancePaymentStatus } from '../constants'
+import { isAdvancePaymentMethod } from '../constants'
 import { calcAdvanceAmount, toEditableAmount, toStringOrNull } from '../utils/advancePaymentComponentUtils'
 import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
 
@@ -18,8 +18,6 @@ interface UseAdvancePaymentDetailFormArgs {
 export interface AdvancePaymentDetailForm {
   paidAmount: string
   setPaidAmount: (value: string) => void
-  status: string
-  setStatus: (value: string) => void
   paymentMethod: string
   setPaymentMethod: (value: string) => void
   paidAt: string
@@ -50,7 +48,6 @@ export const useAdvancePaymentDetailForm = ({
   // no prop→state sync effect, and refetches (fresh object, same id) never wipe
   // in-progress edits.
   const [paidAmount, setPaidAmount] = useState(() => toEditableAmount(payment.paid_amount))
-  const [status, setStatus] = useState<string>(() => payment.status)
   const [paymentMethod, setPaymentMethod] = useState<string>(() => payment.payment_method ?? '')
   const [paidAt, setPaidAt] = useState(() => (payment.paid_at ? payment.paid_at.split('T')[0] : ''))
   const [notes, setNotes] = useState(() => payment.notes ?? '')
@@ -82,11 +79,8 @@ export const useAdvancePaymentDetailForm = ({
       : null
   const liveExpected = overrideAmount !== '' ? overrideAmount : liveCalculated
 
-  const isPaymentStatus = status === 'paid' || status === 'partial'
-
   const isDirty =
     baselinePaidAmount !== paidAmount ||
-    payment.status !== status ||
     baselinePaymentMethod !== paymentMethod ||
     baselinePaidAt !== paidAt ||
     baselineNotes !== notes ||
@@ -121,35 +115,11 @@ export const useAdvancePaymentDetailForm = ({
       toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.paidAmountInvalid)
       return
     }
-    if (isPaymentStatus && numericPaid <= 0) {
-      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.paidAmountRequired)
-      return
-    }
-    if (isPaymentStatus && normalizedPaidAt === '') {
-      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.paidAtRequired)
-      return
-    }
-    if (!isAdvancePaymentStatus(status)) {
-      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.paymentStatusInvalid)
-      return
-    }
     if (normalizedPaymentMethod !== '' && !isAdvancePaymentMethod(normalizedPaymentMethod)) {
       toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.paymentMethodInvalid)
       return
     }
-    const effectiveExpected = liveExpected != null ? Number(liveExpected) : Number(payment.expected_amount ?? 0)
-    if (
-      status === 'paid' &&
-      Number.isFinite(effectiveExpected) &&
-      effectiveExpected > 0 &&
-      numericPaid < effectiveExpected
-    ) {
-      toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.partialPaymentRequired)
-      return
-    }
-
     if (paidAmount !== baselinePaidAmount) payload.paid_amount = paidAmountPayload
-    if (status !== payment.status) payload.status = status
     if (paymentMethod !== baselinePaymentMethod)
       payload.payment_method = normalizedPaymentMethod === '' ? null : normalizedPaymentMethod
     if (paidAt !== baselinePaidAt) payload.paid_at = normalizedPaidAt || null
@@ -164,8 +134,6 @@ export const useAdvancePaymentDetailForm = ({
   return {
     paidAmount,
     setPaidAmount,
-    status,
-    setStatus,
     paymentMethod,
     setPaymentMethod,
     paidAt,

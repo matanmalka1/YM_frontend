@@ -58,8 +58,6 @@ export const useAdvancePayments = (
     totalExpected,
     totalPaid,
     total: listData?.total ?? 0,
-    updateRow: (id: number, paid_amount: string | null, status?: AdvancePaymentStatus) =>
-      paymentMutations.updatePayment({ id, payload: { paid_amount: paid_amount ?? '0', status } }),
     isUpdating: paymentMutations.isUpdating,
     updatingId: paymentMutations.updatingId,
     create: createMutation.mutateAsync,

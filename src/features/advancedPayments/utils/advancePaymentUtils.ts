@@ -1,5 +1,4 @@
 import type { AdvancePaymentDueDateGroup } from '../api/contracts'
-import { reportingPeriodIncludesMonth } from '@/utils/reportingPeriod'
 
 export const getAdvancePaymentBatchKey = (batch: AdvancePaymentDueDateGroup): string =>
   batch.due_date ?? `${batch.year}-${String(batch.month).padStart(2, '0')}-${batch.period_months_count}`
@@ -42,6 +41,7 @@ export const mergeAdvancePaymentBatches = (
       pending_count: existing.pending_count + batch.pending_count,
       overdue_count: existing.overdue_count + batch.overdue_count,
       missing_turnover_count: existing.missing_turnover_count + batch.missing_turnover_count,
+      due_this_month_count: existing.due_this_month_count + batch.due_this_month_count,
       total_expected: String(totalExpected),
       total_paid: String(totalPaid),
       collection_rate: calculateCollectionRate(totalPaid, totalExpected),
@@ -55,17 +55,10 @@ export const mergeAdvancePaymentBatches = (
   })
 }
 
-export const getAdvancePaymentWorkflowStats = (
-  batches: AdvancePaymentDueDateGroup[],
-  currentYear: number,
-  currentMonth: number,
-) =>
+export const getAdvancePaymentWorkflowStats = (batches: AdvancePaymentDueDateGroup[]) =>
   batches.reduce(
     (stats, batch) => {
-      if (reportingPeriodIncludesMonth(batch.year, batch.month, batch.period_months_count, currentYear, currentMonth)) {
-        stats.dueThisMonthCount += safeCount(batch.not_paid_count)
-      }
-
+      stats.dueThisMonthCount += safeCount(batch.due_this_month_count)
       stats.pendingCount += safeCount(batch.pending_count)
       stats.missingTurnoverCount += safeCount(batch.missing_turnover_count)
       stats.overdueCount += safeCount(batch.overdue_count)

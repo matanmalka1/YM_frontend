@@ -17,6 +17,7 @@ const createBatch = (overrides: Partial<AdvancePaymentDueDateGroup> = {}): Advan
   pending_count: 0,
   paid_count: 0,
   not_paid_count: 1,
+  due_this_month_count: 0,
   total_expected: '100',
   total_paid: '0',
   collection_rate: '0',
@@ -33,6 +34,7 @@ describe('advancePaymentUtils', () => {
         pending_count: 1,
         overdue_count: 1,
         missing_turnover_count: 1,
+        due_this_month_count: 2,
         total_expected: '250',
         total_paid: '50',
       }),
@@ -46,6 +48,7 @@ describe('advancePaymentUtils', () => {
       pending_count: 1,
       overdue_count: 1,
       missing_turnover_count: 1,
+      due_this_month_count: 2,
       total_expected: '350',
       total_paid: '50',
       collection_rate: '14.29',
@@ -87,14 +90,16 @@ describe('advancePaymentUtils', () => {
   })
 
   it('calculates current-period and workflow counters', () => {
-    const stats = getAdvancePaymentWorkflowStats(
-      [
-        createBatch({ pending_count: 2, overdue_count: 1, missing_turnover_count: 3, not_paid_count: 4 }),
-        createBatch({ month: 3, due_date: '2026-04-15', pending_count: 1, not_paid_count: 5 }),
-      ],
-      2026,
-      1,
-    )
+    const stats = getAdvancePaymentWorkflowStats([
+      createBatch({
+        pending_count: 2,
+        overdue_count: 1,
+        missing_turnover_count: 3,
+        not_paid_count: 4,
+        due_this_month_count: 4,
+      }),
+      createBatch({ month: 3, due_date: '2026-04-15', pending_count: 1, not_paid_count: 5 }),
+    ])
 
     expect(stats).toEqual({
       dueThisMonthCount: 4,

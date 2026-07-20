@@ -45,10 +45,7 @@ export const useAdvancePaymentsPage = () => {
     getAdvancePaymentBatchKey,
     (batch) => batch.due_date ?? null,
   )
-  const workflowStats = useMemo(
-    () => getAdvancePaymentWorkflowStats(displayBatches, todayYear, currentReportingMonth),
-    [currentReportingMonth, todayYear, displayBatches],
-  )
+  const workflowStats = useMemo(() => getAdvancePaymentWorkflowStats(displayBatches), [displayBatches])
 
   const changeFilter = (key: string, value: string) => {
     setFilter(key, value, key !== 'year')

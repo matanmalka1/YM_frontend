@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/inputs/Textarea'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
-import { ADVANCE_PAYMENT_STATUS_OPTIONS, ADVANCE_PAYMENT_METHOD_OPTIONS } from '../../constants'
+import { ADVANCE_PAYMENT_METHOD_OPTIONS } from '../../constants'
 import { formatShekelAmount } from '@/utils/utils'
 import type { AdvancePaymentDetailForm } from '../../hooks/useAdvancePaymentDetailForm'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
@@ -84,12 +84,6 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
           />
         </div>
         <div className="space-y-3">
-          <Select
-            label={GLOBAL_UI_MESSAGES.common.status}
-            value={form.status}
-            onChange={(e) => form.setStatus(e.target.value)}
-            options={ADVANCE_PAYMENT_STATUS_OPTIONS}
-          />
           <Select
             label={ADVANCED_PAYMENTS_MESSAGES.editableSections.paymentMethodLabel}
             value={form.paymentMethod}
