@@ -25,13 +25,7 @@ export const ChargeActionButtons = ({
 }: ChargeActionButtonsProps) => (
   <div className="flex flex-wrap items-center gap-2">
     {canEditCharge(actions) && (
-      <Button
-        size={size}
-        variant="outline"
-        icon={<Pencil className="h-4 w-4" />}
-        disabled={disabled}
-        onClick={onEdit}
-      >
+      <Button size={size} variant="outline" icon={<Pencil className="h-4 w-4" />} disabled={disabled} onClick={onEdit}>
         {CHARGES_MESSAGES.edit.action}
       </Button>
     )}

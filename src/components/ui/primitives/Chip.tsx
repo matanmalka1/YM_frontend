@@ -46,7 +46,7 @@ const idleToneClasses: Record<ChipTone, string> = {
 const iconToneClasses: Record<ChipTone, { selected: string; idle: string }> = {
   neutral: { selected: 'text-gray-500', idle: 'text-gray-400' },
   primary: { selected: 'text-primary-600', idle: 'text-gray-400' },
-  warning: { selected: 'fill-amber-500 text-warning-500', idle: 'text-gray-400' },
+  warning: { selected: 'fill-warning-500 text-warning-500', idle: 'text-gray-400' },
   orange: { selected: 'text-orange-500', idle: 'text-gray-400' },
   purple: { selected: 'text-purple-500', idle: 'text-gray-400' },
   rose: { selected: 'text-rose-500', idle: 'text-gray-400' },

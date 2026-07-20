@@ -132,7 +132,7 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
         </div>
       )}
       {activeConflicts.length > 0 && (
-        <div className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700">
+        <div className="rounded-lg border border-negative-300 bg-negative-50 p-3 text-sm text-negative-700">
           <p className="font-medium mb-1">{CLIENTS_MESSAGES.createIdentity.activeConflict(idNumberLabel)}</p>
           <ul className="space-y-1">
             {activeConflicts.map((c) => (

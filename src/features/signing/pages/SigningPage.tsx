@@ -34,7 +34,7 @@ export const SigningPage: React.FC = () => {
   const terminalState = TERMINAL_STATES.find((state) => state === effectiveState)
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-slate-50 via-primary-50/30 to-indigo-50 p-4">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-slate-50 via-primary-50/30 to-info-50 p-4">
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-600 shadow-md">
           <FileSignature className="h-7 w-7 text-white" />

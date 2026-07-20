@@ -17,7 +17,7 @@ export const CreateClientStepIndicator: React.FC<Props> = ({ stepIndex }) => (
           index === stepIndex
             ? 'border-primary-600 bg-primary-50 text-primary-700'
             : index < stepIndex
-              ? 'border-green-200 bg-green-50 text-green-700'
+              ? 'border-positive-200 bg-positive-50 text-positive-700'
               : 'border-gray-200 bg-gray-50 text-gray-500'
         }`}
       >

@@ -6,6 +6,7 @@
 //   1. Circular dependency detection (all .ts/.tsx in src/)
 //   2. UI purity: src/components/ui/ files cannot import from api/ or @tanstack/react-query
 //   3. [--strict] Feature barrel enforcement: cross-feature imports must go through index.ts
+//   4. Design-token drift: no raw Tailwind color families that have a semantic ramp in index.css
 
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { resolve, relative, dirname, extname } from 'node:path'
@@ -160,6 +161,48 @@ if (STRICT) {
       }
     }
   }
+}
+
+// ── Check 4: Design-token drift ───────────────────────────────────────────────
+// Raw Tailwind color families that duplicate a semantic ramp in index.css @theme.
+// gray (surfaces) and slate (text) are the two intentional neutral roles — not listed.
+// Hues with no semantic ramp (orange/purple/violet/rose/…) are free-standing accents — not listed.
+const SEMANTIC_EQUIVALENT = {
+  blue: 'primary',
+  indigo: 'info',
+  emerald: 'positive',
+  green: 'positive',
+  amber: 'warning',
+  yellow: 'warning',
+  red: 'negative',
+}
+
+// Files whose raw hues are deliberate, documented exceptions.
+const TOKEN_DRIFT_EXEMPT = [
+  // Categorical chart palette — spans hues on purpose, never expresses status.
+  'features/vatReports/constants/visualizationTokens.ts',
+  // Two-hue gradient stops: the second stop must differ from the semantic first stop.
+  'components/ui/overlays/Alert.tsx',
+]
+
+const COLOR_UTIL_RE = new RegExp(
+  `\\b(?:text|bg|border|ring|from|to|via|fill|stroke|divide|decoration|outline|accent|caret|placeholder)-(${Object.keys(
+    SEMANTIC_EQUIVALENT,
+  ).join('|')})-\\d{2,3}\\b`,
+  'g',
+)
+
+for (const file of files) {
+  const rel = relative(SRC, file)
+  if (TOKEN_DRIFT_EXEMPT.includes(rel)) continue
+  const lines = readFileSync(file, 'utf8').split('\n')
+  lines.forEach((line, i) => {
+    if (line.includes('arch-check-disable')) return
+    for (const m of line.matchAll(COLOR_UTIL_RE)) {
+      exitCode = 1
+      violations.push(`TOKEN_DRIFT: ${rel}:${i + 1} uses "${m[0]}" — use the ${SEMANTIC_EQUIVALENT[m[1]]} ramp instead`)
+    }
+  })
 }
 
 // ── Report ────────────────────────────────────────────────────────────────────

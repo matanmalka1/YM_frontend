@@ -229,7 +229,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
               onChange={(event) => handleTriggerChange(event.target.value)}
               disabled={disableTriggerChange}
             />
-            {blockedReason && <p className="text-sm text-red-600 font-medium">{blockedReason}</p>}
+            {blockedReason && <p className="text-sm text-negative-600 font-medium">{blockedReason}</p>}
           </>
         )}
 

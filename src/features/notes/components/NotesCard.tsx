@@ -128,7 +128,7 @@ const NoteRow = ({ note, isDeleting, onEdit, onDelete }: NoteRowProps) => {
   return (
     <li className="flex items-start gap-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
       {initials && (
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-900">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-positive-100 text-sm font-bold text-positive-900">
           {initials}
         </div>
       )}
