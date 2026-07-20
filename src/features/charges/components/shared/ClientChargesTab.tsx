@@ -82,7 +82,7 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
       subtitle={CHARGES_MESSAGES.list.clientTabSubtitle}
       actions={
         <div className="flex items-center gap-2">
-          {businesses.length > 1 && (
+          {businesses.length > 0 && (
             <Select
               value={selectedBusinessId != null ? String(selectedBusinessId) : ''}
               onChange={(e) => setSelectedBusinessId(e.target.value ? Number(e.target.value) : null)}

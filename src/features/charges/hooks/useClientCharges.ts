@@ -22,12 +22,7 @@ export const useClientCharges = (clientId: number) => {
   const rawBusinessId = searchParams.get('business_id')
   const selectedBusinessId = rawBusinessId ? Number(rawBusinessId) : null
 
-  const { businesses, isLoading: businessesLoading } = useBusinessesForClient({
-    clientId,
-    onAutoSelect: (business) => {
-      if (!rawBusinessId) setFilter('business_id', String(business.id), false)
-    },
-  })
+  const { businesses, isLoading: businessesLoading } = useBusinessesForClient({ clientId })
 
   const listParams = useMemo(
     () => ({
