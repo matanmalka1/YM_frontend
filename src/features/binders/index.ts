@@ -10,6 +10,9 @@ export type { BinderDetailResponse } from './api'
 
 export {
   getBinderLocationStatusLabel,
+  isBinderCapacityStatus,
+  isBinderLocationStatus,
   BINDER_LOCATION_STATUS_OPTIONS,
   BINDER_CAPACITY_STATUS_OPTIONS,
 } from './constants'
+export type { BinderCapacityStatus, BinderLocationStatus } from './constants'

@@ -1,12 +1,7 @@
-export type SearchItemType =
-  | 'binder'
-  | 'document'
-  | 'vat_work_item'
-  | 'annual_report'
-  | 'advance_payment'
-  | 'charge'
-  | 'task'
-  | 'notification'
+import type { BinderCapacityStatus, BinderLocationStatus } from '@/features/binders'
+import type { ClientStatus, EntityType } from '@/features/clients'
+
+export type SearchItemType = 'binder' | 'document' | 'vat_work_item' | 'annual_report' | 'advance_payment' | 'charge' | 'task' | 'notification'
 
 export interface SearchClientMatch {
   id: number
@@ -48,7 +43,7 @@ export type SearchItemGroupKey =
 
 export type SearchItemGroups = Record<SearchItemGroupKey, SearchItemGroup>
 
-interface PaginatedClientMatches {
+export interface PaginatedClientMatches {
   items: SearchClientMatch[]
   page: number
   page_size: number
@@ -65,10 +60,11 @@ export interface SearchParams {
   client_record_id?: number
   id_number?: string
   binder_number?: string
-  client_status?: string
-  entity_type?: string
-  binder_location_status?: string
-  binder_capacity_status?: string
+  /** Enum-backed: only values the API accepts reach here — see `utils/searchUrlValues`. */
+  client_status?: ClientStatus
+  entity_type?: EntityType
+  binder_location_status?: BinderLocationStatus
+  binder_capacity_status?: BinderCapacityStatus
   page?: number
   page_size?: number
 }

@@ -7,6 +7,8 @@ export {
   ENTITY_TYPE_OPTIONS,
   getClientStatusLabel,
   getVatTypeLabel,
+  parseClientStatus,
+  parseEntityType,
 } from './constants'
 
 export { ClientEditDrawer } from './components/drawer/ClientEditDrawer'
@@ -27,11 +29,5 @@ export { ClientAnnualReportDetail } from './pages/ClientAnnualReportDetailPage'
 export { ClientVatWorkItemDetail } from './pages/ClientVatWorkItemDetailPage'
 export { Clients } from './pages/ClientsPage'
 export { extractClientErrorCode } from './utils/clientErrors'
-export type {
-  ClientRecordResponse,
-  ClientRecordListItem,
-  ClientSidebarResponse,
-  UpdateClientPayload,
-  BusinessResponse,
-  BusinessStatus,
-} from './api'
+export type { ClientStatus, EntityType } from './api/contracts'
+export type { ClientRecordResponse, ClientRecordListItem, ClientSidebarResponse, UpdateClientPayload, BusinessResponse, BusinessStatus } from './api'

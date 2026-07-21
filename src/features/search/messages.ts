@@ -42,7 +42,7 @@ export const SEARCH_MESSAGES = {
     binderNumber: 'מספר קלסר',
     binderNumberPlaceholder: 'לדוגמה: 100020/1',
     clientStatus: 'סטטוס לקוח',
-    entityType: 'סוג עסק',
+    entityType: 'סוג יישות',
     binderLocation: 'מיקום קלסר',
     binderCapacity: 'קיבולת קלסר',
     activeFilters: (count: number) => `${count} פילטרים פעילים`,

@@ -4,6 +4,7 @@ import { PaginationCard } from '@/components/ui/table'
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { TableSkeleton } from '@/components/ui/table'
 import type { SearchItem, SearchItemType } from '../api/contracts'
+import type { SearchPagination } from '../types'
 import { SEARCH_MESSAGES } from '../messages'
 import { SearchItemRow } from './SearchItemRow'
 
@@ -12,38 +13,22 @@ export interface SearchFeedChip {
   count: number
 }
 
-interface SearchFeedPagination {
-  page: number
-  totalPages: number
-  total: number
-  onPageChange: (page: number) => void
-}
-
 interface SearchItemFeedProps {
   chips: SearchFeedChip[]
   activeType: SearchItemType | null
   onTypeChange: (type: SearchItemType | null) => void
   items: SearchItem[]
   isLoading: boolean
-  pagination: SearchFeedPagination | null
+  pagination: SearchPagination | null
 }
 
 /**
  * Every item of the selected client, in one uniform list. Picking a type chip swaps the
  * mixed preview for that type's full, paginated list.
  */
-export const SearchItemFeed: React.FC<SearchItemFeedProps> = ({
-  chips,
-  activeType,
-  onTypeChange,
-  items,
-  isLoading,
-  pagination,
-}) => {
+export const SearchItemFeed: React.FC<SearchItemFeedProps> = ({ chips, activeType, onTypeChange, items, isLoading, pagination }) => {
   if (chips.length === 0) {
-    return (
-      <StateCard icon={Inbox} title={SEARCH_MESSAGES.feed.emptyTitle} message={SEARCH_MESSAGES.feed.emptyMessage} />
-    )
+    return <StateCard icon={Inbox} title={SEARCH_MESSAGES.feed.emptyTitle} message={SEARCH_MESSAGES.feed.emptyMessage} />
   }
 
   return (
@@ -70,12 +55,7 @@ export const SearchItemFeed: React.FC<SearchItemFeedProps> = ({
       )}
 
       {pagination && !isLoading && pagination.totalPages > 1 && (
-        <PaginationCard
-          page={pagination.page}
-          totalPages={pagination.totalPages}
-          total={pagination.total}
-          onPageChange={pagination.onPageChange}
-        />
+        <PaginationCard page={pagination.page} totalPages={pagination.totalPages} total={pagination.total} onPageChange={pagination.onPageChange} />
       )}
     </section>
   )

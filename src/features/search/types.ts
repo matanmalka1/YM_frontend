@@ -1,16 +1,29 @@
 import type { ClientPickerValue } from '@/components/shared/client'
+import type { SearchEnumFilters } from './utils/searchUrlValues'
 
-export interface SearchFilters {
+/**
+ * The page's filter state, already parsed out of the URL. The enum-backed fields carry only
+ * values the API accepts — an unsupported one from a hand-edited URL or an old bookmark reads
+ * as `''` ("all") rather than being passed on.
+ */
+export interface SearchFilters extends SearchEnumFilters {
   search: string
   client_record_id: string
   id_number: string
   binder_number: string
-  client_status: string
-  entity_type: string
-  binder_location_status: string
-  binder_capacity_status: string
   page: number
   page_size: number
+}
+
+/**
+ * Paging state for one of the page's two lists — the client matches, or the expanded feed group.
+ * The two never appear together, so both drive the same `page` param.
+ */
+export interface SearchPagination {
+  page: number
+  totalPages: number
+  total: number
+  onPageChange: (page: number) => void
 }
 
 /** A URL-backed text filter typed into an input: local draft value + debounced commit. */

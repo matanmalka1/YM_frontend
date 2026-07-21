@@ -17,75 +17,49 @@ interface SearchResultsSectionProps {
   }
   prompt: { visible: boolean }
   emptyState: { visible: boolean; onReset: () => void }
-  clientMatches: {
-    visible: boolean
-    data: SearchClientMatch[]
-    total: number
-    onSelect: (clientRecordId: number) => void
-  }
-  selectedClient: {
-    visible: boolean
-    client: SearchClientMatch | null
+  clientMatches: React.ComponentProps<typeof SearchClientMatches> & { visible: boolean }
+  /**
+   * The resolved client and its feed, or nothing. One slot, because a feed is a client's
+   * records: it may not appear without the client it belongs to, nor beside the empty state.
+   */
+  selected: {
+    client: SearchClientMatch
     onChange: (() => void) | null
-  }
-  feed: React.ComponentProps<typeof SearchItemFeed> & { visible: boolean }
+    feed: React.ComponentProps<typeof SearchItemFeed>
+  } | null
 }
 
-export const SearchResultsSection: React.FC<SearchResultsSectionProps> = ({
-  status,
-  prompt,
-  emptyState,
-  clientMatches,
-  selectedClient,
-  feed,
-}) => {
-  const { visible: feedVisible, ...feedProps } = feed
+export const SearchResultsSection: React.FC<SearchResultsSectionProps> = ({ status, prompt, emptyState, clientMatches, selected }) => (
+  <>
+    {status.error && <Alert variant="error" message={status.error} />}
+    {status.isLoading && <PageLoading />}
 
-  return (
-    <>
-      {status.error && <Alert variant="error" message={status.error} />}
-      {status.isLoading && <PageLoading />}
+    {prompt.visible && (
+      <StateCard icon={SearchIcon} title={SEARCH_MESSAGES.page.promptTitle} message={SEARCH_MESSAGES.page.promptMessage} variant="illustration" />
+    )}
 
-      {prompt.visible && (
-        <StateCard
-          icon={SearchIcon}
-          title={SEARCH_MESSAGES.page.promptTitle}
-          message={SEARCH_MESSAGES.page.promptMessage}
-          variant="illustration"
-        />
-      )}
+    {emptyState.visible && (
+      <StateCard
+        icon={FileSearch}
+        title={SEARCH_MESSAGES.page.emptyTitle}
+        message={SEARCH_MESSAGES.page.emptyMessage}
+        action={{ label: SEARCH_MESSAGES.page.resetSearch, onClick: emptyState.onReset }}
+      />
+    )}
 
-      {emptyState.visible && (
-        <StateCard
-          icon={FileSearch}
-          title={SEARCH_MESSAGES.page.emptyTitle}
-          message={SEARCH_MESSAGES.page.emptyMessage}
-          action={{ label: SEARCH_MESSAGES.page.resetSearch, onClick: emptyState.onReset }}
-        />
-      )}
-
-      {/* Rows already on screen are stale while a newer query runs — dim them rather than
+    {/* Rows already on screen are stale while a newer query runs — dim them rather than
           swapping in a skeleton, so the layout does not jump on every keystroke. */}
-      <div
-        aria-busy={status.isFetching}
-        className={cn('space-y-4 transition-opacity', status.isFetching && 'pointer-events-none opacity-50')}
-      >
-        {clientMatches.visible && (
-          <SearchClientMatches
-            clients={clientMatches.data}
-            total={clientMatches.total}
-            onSelect={clientMatches.onSelect}
-          />
-        )}
+    <div aria-busy={status.isFetching} className={cn('space-y-4 transition-opacity', status.isFetching && 'pointer-events-none opacity-50')}>
+      {clientMatches.visible && <SearchClientMatches {...clientMatches} />}
 
-        {selectedClient.visible && selectedClient.client && (
-          <SearchSelectedClient client={selectedClient.client} onChange={selectedClient.onChange} />
-        )}
-
-        {feedVisible && <SearchItemFeed {...feedProps} />}
-      </div>
-    </>
-  )
-}
+      {selected && (
+        <>
+          <SearchSelectedClient client={selected.client} onChange={selected.onChange} />
+          <SearchItemFeed {...selected.feed} />
+        </>
+      )}
+    </div>
+  </>
+)
 
 SearchResultsSection.displayName = 'SearchResultsSection'

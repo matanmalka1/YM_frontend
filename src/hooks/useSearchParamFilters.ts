@@ -16,6 +16,24 @@ interface SearchParamFilters {
   setSearchParams: SetURLSearchParams
 }
 
+/**
+ * The URL a set of filter writes produces, as a value. Kept pure so a page's filter and
+ * selection transitions can be verified without a router, and so every writer below goes
+ * through one place rather than cloning and mutating params of its own.
+ */
+export const nextFilterParams = (current: URLSearchParams, updates: Record<string, string>, resetPage = true): URLSearchParams => {
+  const next = new URLSearchParams(current)
+  for (const [key, value] of Object.entries(updates)) {
+    if (value) next.set(key, value)
+    else next.delete(key)
+  }
+  if (resetPage) next.set('page', '1')
+  return next
+}
+
+/** The URL a reset produces: nothing but the given defaults, back on page one. */
+export const resetFilterParams = (defaults: Record<string, string> = {}): URLSearchParams => nextFilterParams(new URLSearchParams(), defaults)
+
 export const useSearchParamFilters = (): SearchParamFilters => {
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -26,46 +44,40 @@ export const useSearchParamFilters = (): SearchParamFilters => {
     [setSearchParams],
   )
 
-  const setFilter = (key: string, value: string, resetPage = true) => {
-    const next = new URLSearchParams(searchParams)
-    if (value) next.set(key, value)
-    else next.delete(key)
-    if (resetPage) next.set('page', '1')
-    setStableSearchParams(next)
-  }
+  // All four writers are memoized on the current params: a page that normalizes its URL from an
+  // effect needs them to be stable between renders, or the effect re-runs on every render.
+  const setFilter = useCallback(
+    (key: string, value: string, resetPage = true) => {
+      setStableSearchParams(nextFilterParams(searchParams, { [key]: value }, resetPage))
+    },
+    [searchParams, setStableSearchParams],
+  )
 
-  const setFilters = (updates: Record<string, string>, resetPage = true) => {
-    const next = new URLSearchParams(searchParams)
-    for (const [k, v] of Object.entries(updates)) {
-      if (v) next.set(k, v)
-      else next.delete(k)
-    }
-    if (resetPage) next.set('page', '1')
-    setStableSearchParams(next)
-  }
+  const setFilters = useCallback(
+    (updates: Record<string, string>, resetPage = true) => {
+      setStableSearchParams(nextFilterParams(searchParams, updates, resetPage))
+    },
+    [searchParams, setStableSearchParams],
+  )
 
-  const setPage = (page: number) => {
-    const next = new URLSearchParams(searchParams)
-    next.set('page', String(page))
-    setStableSearchParams(next)
-  }
+  const setPage = useCallback(
+    (page: number) => {
+      setStableSearchParams(nextFilterParams(searchParams, { page: String(page) }, false))
+    },
+    [searchParams, setStableSearchParams],
+  )
 
-  const resetFilters = (defaults: Record<string, string> = {}) => {
-    const next = new URLSearchParams()
-    for (const [k, v] of Object.entries(defaults)) {
-      if (v) next.set(k, v)
-    }
-    next.set('page', '1')
-    setStableSearchParams(next)
-  }
+  const resetFilters = useCallback(
+    (defaults: Record<string, string> = {}) => {
+      setStableSearchParams(resetFilterParams(defaults))
+    },
+    [setStableSearchParams],
+  )
 
   const getParam = useCallback((key: string): string => searchParams.get(key) ?? '', [searchParams])
 
   /** Reads the global `page` param only. Do not use for namespaced page params (e.g. audit trail). */
-  const getPage = useCallback(
-    (defaultPage = 1): number => parsePositiveInt(searchParams.get('page'), defaultPage),
-    [searchParams],
-  )
+  const getPage = useCallback((defaultPage = 1): number => parsePositiveInt(searchParams.get('page'), defaultPage), [searchParams])
 
   return {
     searchParams,
