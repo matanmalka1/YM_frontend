@@ -134,6 +134,8 @@ export const ANNUAL_REPORTS_MESSAGES = {
     overdueNote: 'חרגו ממועד הגשה',
   },
   clientTab: {
+    title: 'דוחות שנתיים',
+    subtitle: 'היסטוריית הדוחות השנתיים של הלקוח',
     loading: 'טוען דוחות שנתיים...',
     compareYears: 'השוואה בין שנים',
     newReport: 'דוח חדש',

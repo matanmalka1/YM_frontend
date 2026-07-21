@@ -16,14 +16,18 @@ import { ALL_PERIODS_OPTION } from '@/constants/filterOptions.constants'
 import { BINDER_NUMBER_SEARCH_PLACEHOLDER, CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 import { BINDERS_ERROR_MESSAGES } from '../errorMessages'
 
-const buildBindersFilterFields = () => [
-  {
-    type: 'client-picker' as const,
-    idKey: 'client_record_id',
-    nameKey: 'client_name',
-    label: 'לקוח',
-    placeholder: CLIENT_SEARCH_PLACEHOLDER,
-  },
+const buildBindersFilterFields = (includeClientPicker: boolean) => [
+  ...(includeClientPicker
+    ? [
+        {
+          type: 'client-picker' as const,
+          idKey: 'client_record_id',
+          nameKey: 'client_name',
+          label: 'לקוח',
+          placeholder: CLIENT_SEARCH_PLACEHOLDER,
+        },
+      ]
+    : []),
   {
     type: 'search' as const,
     key: 'binder_number',
@@ -40,14 +44,19 @@ const buildBindersFilterFields = () => [
   },
 ]
 
-export const useBindersPage = () => {
+interface UseBindersPageOptions {
+  /** Pins the list to one client (client-details tab): overrides any URL client filter and drops the client-picker field. */
+  pinnedClient?: { id: number; name: string }
+}
+
+export const useBindersPage = ({ pinnedClient }: UseBindersPageOptions = {}) => {
   const { filters, setPage, handleFilterChange, handleMultiFilterChange, handleReset } = useBindersFilters()
 
   const listParams = useMemo<ListBindersParams>(
     () => ({
       location_status: filters.location_status || undefined,
       capacity_status: filters.capacity_status || undefined,
-      client_record_id: filters.client_record_id,
+      client_record_id: pinnedClient?.id ?? filters.client_record_id,
       binder_number: filters.binder_number || undefined,
       year: filters.year ? Number(filters.year) : undefined,
       page: filters.page,
@@ -65,6 +74,7 @@ export const useBindersPage = () => {
       filters.page_size,
       filters.sort_by,
       filters.year,
+      pinnedClient?.id,
     ],
   )
 
@@ -98,7 +108,10 @@ export const useBindersPage = () => {
 
   const counters = bindersData?.counters ?? lastCountersRef.current
 
-  const { deepLinkBinderId, selectedBinder, handleSelectBinder, handleCloseDrawer } = useBinderSelection(pageItems)
+  const { deepLinkBinderId, selectedBinder, handleSelectBinder, handleCloseDrawer } = useBinderSelection(
+    pageItems,
+    pinnedClient?.id,
+  )
 
   const mutations = useBinderMutations(handleCloseDrawer)
   const { actionLoadingId, receiveMaterial, markFull, reopenCapacity, revertReadyForHandover } = mutations
@@ -115,7 +128,7 @@ export const useBindersPage = () => {
   // Receive-material drawer ownership (moved into the hook in Wave 0B).
   const [receiveOpen, setReceiveOpen] = useState(false)
   const openReceive = () => setReceiveOpen(true)
-  const receiveDrawer = useReceiveBinderDrawer({ onSuccess: () => setReceiveOpen(false) })
+  const receiveDrawer = useReceiveBinderDrawer({ onSuccess: () => setReceiveOpen(false), initialClient: pinnedClient ?? null })
   const closeReceive = () => {
     receiveDrawer.handleReset()
     setReceiveOpen(false)
@@ -125,6 +138,7 @@ export const useBindersPage = () => {
     () =>
       buildGlobalBinderColumns({
         actionLoadingId,
+        includeClientColumns: !pinnedClient,
         onReceiveMaterial: (id) => void receiveMaterial(id),
         onMarkFull: (id) => void markFull(id),
         onReopenCapacity: (id) => void reopenCapacity(id),
@@ -142,16 +156,25 @@ export const useBindersPage = () => {
         onOpenDetail: (id) => handleSelectBinder({ id }),
         onDelete: dialogs.openDeleteDialog,
       }),
-    [actionLoadingId, pageItems, dialogs, receiveMaterial, markFull, reopenCapacity, revertReadyForHandover, handleSelectBinder],
+    [
+      actionLoadingId,
+      pageItems,
+      dialogs,
+      receiveMaterial,
+      markFull,
+      reopenCapacity,
+      revertReadyForHandover,
+      handleSelectBinder,
+      pinnedClient,
+    ],
   )
 
-  const filterFields = useMemo(() => buildBindersFilterFields(), [])
+  const filterFields = useMemo(() => buildBindersFilterFields(!pinnedClient), [pinnedClient])
 
   const isFiltered = Boolean(
     filters.location_status ||
     filters.capacity_status ||
-    filters.client_record_id ||
-    filters.client_name ||
+    (!pinnedClient && (filters.client_record_id || filters.client_name)) ||
     filters.binder_number ||
     filters.year,
   )

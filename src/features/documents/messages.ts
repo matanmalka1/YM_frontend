@@ -7,6 +7,10 @@ export const DOCUMENTS_MESSAGES = {
   shared: {
     paginationLabel: 'מסמכים',
   },
+  clientTab: {
+    title: 'מסמכים',
+    subtitle: 'מסמכים המקושרים ללקוח זה',
+  },
   form: {
     fileNameLabel: 'שם קובץ',
     documentTypeLabel: 'סוג מסמך',
@@ -41,14 +45,12 @@ export const DOCUMENTS_MESSAGES = {
     replacingLabel: 'מחליף...',
     replaceFileLabel: 'החלף קובץ',
     deletingLabel: 'מוחק...',
-    noTaxYear: 'ללא שנת מס',
     previewAriaLabel: 'צפייה במסמך',
     previewLabel: 'צפייה',
     downloadAriaLabel: 'הורדת מסמך',
     downloadLabel: 'הורדה',
   },
   list: {
-    sectionTitle: (countLabel: string) => `מסמכים (${countLabel})`,
     uploadButton: 'העלאת מסמך',
     filterTitle: 'סינון מסמכים',
     filterSubtitle: 'חיפוש, סוג מסמך ושנת מס',

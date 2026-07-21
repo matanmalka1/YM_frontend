@@ -1,4 +1,4 @@
-import type { ListNotificationsParams, NotificationSummaryParams } from './contracts'
+import type { ListNotificationsParams } from './contracts'
 
 export const notificationsQK = {
   all: ['notifications'] as const,
@@ -6,6 +6,4 @@ export const notificationsQK = {
   list: (params: ListNotificationsParams = {}) => [...notificationsQK.lists(), params] as const,
   details: () => [...notificationsQK.all, 'detail'] as const,
   detail: (notificationId: number) => [...notificationsQK.details(), notificationId] as const,
-  summaries: () => [...notificationsQK.all, 'summary'] as const,
-  summary: (params: NotificationSummaryParams = {}) => [...notificationsQK.summaries(), params] as const,
 } as const

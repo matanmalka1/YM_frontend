@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Pencil, Trash2, X, Check, StickyNote } from 'lucide-react'
 import { Card } from '@/components/ui/primitives/Card'
+import { DetailTabPanel } from '@/components/ui/layout'
 import { Button } from '@/components/ui/primitives/Button'
 import { Chip, ChipLabel } from '@/components/ui/primitives/Chip'
 import { Alert } from '@/components/ui/overlays/Alert'
@@ -193,57 +194,69 @@ export const NotesCard = ({ canEdit, ...target }: NotesCardProps) => {
     setEditText('')
   }
 
+  const content = (
+    <>
+      {error && <Alert variant="error" message={error} />}
+
+      {canEdit && (
+        <div className="mb-5">
+          <NoteComposer
+            value={addText}
+            onChange={setAddText}
+            onSave={async (text) => {
+              await addNote(text)
+              setAddText('')
+            }}
+            onCancel={() => setAddText('')}
+            isLoading={isAdding}
+          />
+        </div>
+      )}
+
+      {isLoading && <p className="py-4 text-center text-sm text-gray-500">{GLOBAL_UI_MESSAGES.common.loading}</p>}
+
+      {!isLoading && !error && notes.length === 0 && <InlineState icon={StickyNote} title={NOTES_MESSAGES.card.emptyTitle} />}
+
+      {!isLoading && !error && notes.length > 0 && (
+        <ul className="space-y-3">
+          {notes.map((note) =>
+            editing?.id === note.id ? (
+              <li key={note.id}>
+                <NoteComposer
+                  value={editText}
+                  onChange={setEditText}
+                  onSave={handleEditSave}
+                  onCancel={handleEditCancel}
+                  isLoading={isUpdating}
+                  initialTag={parseNote(note.note).tag}
+                />
+              </li>
+            ) : (
+              <NoteRow
+                key={note.id}
+                note={note}
+                isDeleting={deletingId === note.id}
+                onEdit={handleEditStart}
+                onDelete={(id) => setConfirmDeleteId(id)}
+              />
+            ),
+          )}
+        </ul>
+      )}
+    </>
+  )
+
   return (
     <>
-      <Card title={GLOBAL_UI_MESSAGES.common.notes} subtitle={total > 0 ? NOTES_MESSAGES.card.notesCount(total) : undefined}>
-        {error && <Alert variant="error" message={error} />}
-
-        {canEdit && (
-          <div className="mb-5">
-            <NoteComposer
-              value={addText}
-              onChange={setAddText}
-              onSave={async (text) => {
-                await addNote(text)
-                setAddText('')
-              }}
-              onCancel={() => setAddText('')}
-              isLoading={isAdding}
-            />
-          </div>
-        )}
-
-        {isLoading && <p className="py-4 text-center text-sm text-gray-500">{GLOBAL_UI_MESSAGES.common.loading}</p>}
-
-        {!isLoading && !error && notes.length === 0 && <InlineState icon={StickyNote} title={NOTES_MESSAGES.card.emptyTitle} />}
-
-        {!isLoading && !error && notes.length > 0 && (
-          <ul className="space-y-3">
-            {notes.map((note) =>
-              editing?.id === note.id ? (
-                <li key={note.id}>
-                  <NoteComposer
-                    value={editText}
-                    onChange={setEditText}
-                    onSave={handleEditSave}
-                    onCancel={handleEditCancel}
-                    isLoading={isUpdating}
-                    initialTag={parseNote(note.note).tag}
-                  />
-                </li>
-              ) : (
-                <NoteRow
-                  key={note.id}
-                  note={note}
-                  isDeleting={deletingId === note.id}
-                  onEdit={handleEditStart}
-                  onDelete={(id) => setConfirmDeleteId(id)}
-                />
-              ),
-            )}
-          </ul>
-        )}
-      </Card>
+      {target.scope === 'client' ? (
+        <DetailTabPanel title={NOTES_MESSAGES.clientTab.title} subtitle={NOTES_MESSAGES.clientTab.subtitle(total)}>
+          {content}
+        </DetailTabPanel>
+      ) : (
+        <Card title={GLOBAL_UI_MESSAGES.common.notes} subtitle={total > 0 ? NOTES_MESSAGES.card.notesCount(total) : undefined}>
+          {content}
+        </Card>
+      )}
 
       <ConfirmDialog
         open={confirmDeleteId !== null}

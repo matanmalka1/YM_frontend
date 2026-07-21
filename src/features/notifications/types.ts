@@ -5,6 +5,6 @@ export interface NotificationDrawerProps {
 }
 
 export interface NotificationsTabProps {
-  clientRecordId?: number
-  businessId?: number
+  clientRecordId: number
+  clientName: string
 }

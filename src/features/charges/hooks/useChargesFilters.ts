@@ -1,13 +1,14 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useState } from 'react'
 import { useFilterClient } from '@/features/clients'
+import type { BusinessResponse } from '@/features/clients'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
 import { CHARGE_STATUS_OPTIONS, CHARGE_TYPE_OPTIONS_WITH_ALL, CHARGE_PERIOD_OPTIONS } from '../constants'
+import { getChargeBusinessLabel } from '../utils/chargeUtils'
 import type { ChargesFilters } from '../types'
 import { CHARGES_MESSAGES } from '../messages'
 
-const FIELDS: FilterFieldDef[] = [
-  { type: 'client-picker', idKey: 'client_record_id', nameKey: 'client_name' },
+const COMMON_FIELDS: FilterFieldDef[] = [
   { type: 'select', key: 'status', label: GLOBAL_UI_MESSAGES.common.status, options: CHARGE_STATUS_OPTIONS },
   { type: 'select', key: 'charge_type', label: CHARGES_MESSAGES.filters.type, options: CHARGE_TYPE_OPTIONS_WITH_ALL },
   { type: 'select', key: 'period', label: CHARGES_MESSAGES.filters.period, options: CHARGE_PERIOD_OPTIONS },
@@ -20,10 +21,20 @@ const FIELDS: FilterFieldDef[] = [
   },
 ]
 
+const FIELDS: FilterFieldDef[] = [{ type: 'client-picker', idKey: 'client_record_id', nameKey: 'client_name' }, ...COMMON_FIELDS]
+
+interface PinnedBusinessFilter {
+  businesses: BusinessResponse[]
+  businessesLoading: boolean
+  selectedBusinessId: number | null
+}
+
 interface UseChargesFiltersArgs {
   filters: ChargesFilters
   onFilterChange: (key: string, value: string) => void
   onReset: () => void
+  /** Client-details tab: replaces the client-picker with a business filter for the pinned client. */
+  pinnedBusinessFilter?: PinnedBusinessFilter
 }
 
 /**
@@ -32,21 +43,50 @@ interface UseChargesFiltersArgs {
  * different client (e.g. after a reset + deep-link), and the name is resolved
  * from the URL id when the filter arrived via a deep link (no name in params).
  */
-export const useChargesFilters = ({ filters, onFilterChange, onReset }: UseChargesFiltersArgs) => {
+export const useChargesFilters = ({ filters, onFilterChange, onReset, pinnedBusinessFilter }: UseChargesFiltersArgs) => {
   const [picked, setPicked] = useState<{ id: string; name: string } | null>(null)
 
-  const urlClientId = filters.client_record_id ? Number(filters.client_record_id) : null
+  const urlClientId = !pinnedBusinessFilter && filters.client_record_id ? Number(filters.client_record_id) : null
   const pickedMatchesFilter = picked != null && picked.id === filters.client_record_id
 
   const urlClient = useFilterClient(urlClientId, { skip: pickedMatchesFilter })
 
   const clientName = !filters.client_record_id ? '' : pickedMatchesFilter ? picked!.name : (urlClient?.name ?? '')
 
+  const fields: FilterFieldDef[] = pinnedBusinessFilter
+    ? [
+        ...(pinnedBusinessFilter.businesses.length > 0
+          ? [
+              {
+                type: 'select' as const,
+                key: 'business_id',
+                label: CHARGES_MESSAGES.filters.business,
+                disabled: pinnedBusinessFilter.businessesLoading,
+                options: [
+                  { value: '', label: CHARGES_MESSAGES.list.allBusinesses },
+                  ...pinnedBusinessFilter.businesses.map((business) => ({
+                    value: String(business.id),
+                    label: getChargeBusinessLabel(business),
+                  })),
+                ],
+              },
+            ]
+          : []),
+        ...COMMON_FIELDS,
+      ]
+    : FIELDS
+
   return {
-    fields: FIELDS,
+    fields,
     values: {
-      client_record_id: filters.client_record_id ?? '',
-      client_name: clientName,
+      ...(pinnedBusinessFilter
+        ? {
+            business_id: pinnedBusinessFilter.selectedBusinessId != null ? String(pinnedBusinessFilter.selectedBusinessId) : '',
+          }
+        : {
+            client_record_id: filters.client_record_id ?? '',
+            client_name: clientName,
+          }),
       status: filters.status ?? '',
       charge_type: filters.charge_type ?? '',
       period: filters.period ?? '',

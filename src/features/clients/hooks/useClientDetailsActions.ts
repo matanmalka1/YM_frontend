@@ -2,26 +2,25 @@ import { useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { clientsApi, clientsQK } from '../api'
 import type { CreateBusinessPayload } from '../api'
-import { chargesApi, chargesQK, useChargeCreateMutation } from '@/features/charges'
-import type { CreateChargePayload } from '@/features/charges'
+import { chargesApi, chargesQK } from '@/features/charges'
 import { bindersApi, bindersQK } from '@/features/binders'
 import { useMutationWithToast } from '@/hooks/useMutationWithToast'
 import { CLIENTS_ERROR_MESSAGES } from '../errorMessages'
 
-const RELATED_PAGE_SIZE = 5
+const RELATED_COUNT_PAGE_SIZE = 1
 
-export const useClientDetailsActions = (clientId: number, activeTab: string, shouldLoadRelatedData: boolean) => {
-  const shouldFetchRelatedData = activeTab === 'details' && shouldLoadRelatedData
+export const useClientDetailsActions = (clientId: number, activeTab: string) => {
+  const shouldFetchRelatedData = activeTab === 'details'
 
   const { data: relatedBindersData, isFetching: relatedBindersFetching } = useQuery({
-    queryKey: bindersQK.forClientPage(clientId, 1, RELATED_PAGE_SIZE),
-    queryFn: () => bindersApi.listClientBinders(clientId, { page: 1, page_size: RELATED_PAGE_SIZE }),
+    queryKey: bindersQK.forClientPage(clientId, 1, RELATED_COUNT_PAGE_SIZE),
+    queryFn: () => bindersApi.listClientBinders(clientId, { page: 1, page_size: RELATED_COUNT_PAGE_SIZE }),
     enabled: shouldFetchRelatedData,
   })
 
   const { data: relatedChargesData, isFetching: relatedChargesFetching } = useQuery({
-    queryKey: chargesQK.forClientPage(clientId, 1, RELATED_PAGE_SIZE),
-    queryFn: () => chargesApi.list({ client_record_id: clientId, page: 1, page_size: RELATED_PAGE_SIZE }),
+    queryKey: chargesQK.forClientPage(clientId, 1, RELATED_COUNT_PAGE_SIZE),
+    queryFn: () => chargesApi.list({ client_record_id: clientId, page: 1, page_size: RELATED_COUNT_PAGE_SIZE }),
     enabled: shouldFetchRelatedData,
   })
 
@@ -32,8 +31,6 @@ export const useClientDetailsActions = (clientId: number, activeTab: string, sho
     invalidateKeys: [clientsQK.businessesAll(clientId), clientsQK.businesses(clientId)],
   })
 
-  const createChargeMutation = useChargeCreateMutation([chargesQK.forClientPage(clientId, 1, RELATED_PAGE_SIZE)])
-
   const handleCreateBusiness = useCallback(
     async (payload: CreateBusinessPayload): Promise<void> => {
       await createBusinessMutation.mutateAsync(payload)
@@ -41,28 +38,11 @@ export const useClientDetailsActions = (clientId: number, activeTab: string, sho
     [createBusinessMutation],
   )
 
-  const handleCreateCharge = useCallback(
-    async (payload: CreateChargePayload): Promise<boolean> => {
-      try {
-        await createChargeMutation.mutateAsync(payload)
-        return true
-      } catch {
-        return false
-      }
-    },
-    [createChargeMutation],
-  )
-
   return {
-    binders: relatedBindersData?.items ?? [],
     bindersTotal: relatedBindersData?.total ?? 0,
-    charges: relatedChargesData?.items ?? [],
     chargesTotal: relatedChargesData?.total ?? 0,
     isFetchingRelatedData: relatedBindersFetching || relatedChargesFetching,
     handleCreateBusiness,
     isCreatingBusiness: createBusinessMutation.isPending,
-    handleCreateCharge,
-    isCreatingCharge: createChargeMutation.isPending,
-    createChargeError: createChargeMutation.error,
   }
 }

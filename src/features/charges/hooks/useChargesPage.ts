@@ -2,13 +2,15 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
+import { useBusinessesForClient } from '../../../hooks/useBusinessesForClient'
 import { chargesApi, chargesQK, type CreateChargePayload, type ChargeListItem } from '../api'
-import { getErrorMessage } from '../../../utils/utils'
+import { getErrorMessage, parsePositiveInt } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
 import { toast } from '../../../utils/toast'
 import { useTableSelection } from '../../../hooks/useTableSelection'
 import { DEFAULT_CHARGE_LIST_STATS } from '../constants'
 import { getChargesFilters, toChargesListParams } from '../utils/chargeHelpers'
+import { getChargeBusinessLabel } from '../utils/chargeUtils'
 import { buildChargeColumns } from '../components/list/ChargeColumns'
 import type { NotificationTrigger } from '@/features/notifications'
 import { useChargeActions } from './useChargeActions'
@@ -18,13 +20,35 @@ import { CHARGES_MESSAGES } from '../messages'
 import { CHARGES_ERROR_MESSAGES } from '../errorMessages'
 import { CHARGE_ROUTES } from '../api/endpoints'
 
-export const useChargesPage = () => {
+interface UseChargesPageOptions {
+  /** Pins the list to one client (client-details tab): overrides any URL client filter, swaps the client-picker for a business filter. */
+  pinnedClient?: { id: number; name: string }
+}
+
+export const useChargesPage = ({ pinnedClient }: UseChargesPageOptions = {}) => {
   const navigate = useNavigate()
   const { searchParams, setFilter, setPage, resetFilters, setSearchParams } = useSearchParamFilters()
 
   const filters = getChargesFilters(searchParams)
-  const apiParams = toChargesListParams(filters)
-  const filterBar = useChargesFilters({ filters, onFilterChange: setFilter, onReset: resetFilters })
+  const { businesses, isLoading: businessesLoading } = useBusinessesForClient({
+    clientId: pinnedClient?.id,
+    enabled: Boolean(pinnedClient),
+  })
+  const rawBusinessId = searchParams.get('business_id')
+  const parsedBusinessId = pinnedClient ? parsePositiveInt(rawBusinessId, 0) : 0
+  const businessFilterId =
+    parsedBusinessId > 0 && businesses.some((business) => business.id === parsedBusinessId) ? parsedBusinessId : null
+
+  const apiParams = {
+    ...toChargesListParams(filters),
+    ...(pinnedClient ? { client_record_id: pinnedClient.id, business_id: businessFilterId ?? undefined } : {}),
+  }
+  const filterBar = useChargesFilters({
+    filters,
+    onFilterChange: setFilter,
+    onReset: resetFilters,
+    pinnedBusinessFilter: pinnedClient ? { businesses, businessesLoading, selectedBusinessId: businessFilterId } : undefined,
+  })
 
   const {
     data: listData,
@@ -79,16 +103,29 @@ export const useChargesPage = () => {
     () =>
       buildChargeColumns({
         isAdvisor,
+        includeClientColumns: !pinnedClient,
         actionLoadingId,
         runAction,
-        onOpenDetail: (chargeId) => navigate(CHARGE_ROUTES.detail(chargeId)),
+        onOpenDetail: (chargeId) =>
+          navigate(pinnedClient ? CHARGE_ROUTES.clientDetail(pinnedClient.id, chargeId) : CHARGE_ROUTES.detail(chargeId)),
         selectedIds,
         onToggleSelect: toggleSelect,
         onToggleAll: toggleSelectAll,
         allIds,
         onSendNotification: openNotification,
       }),
-    [isAdvisor, actionLoadingId, runAction, selectedIds, toggleSelect, toggleSelectAll, allIds, openNotification, navigate],
+    [
+      isAdvisor,
+      actionLoadingId,
+      runAction,
+      selectedIds,
+      toggleSelect,
+      toggleSelectAll,
+      allIds,
+      openNotification,
+      navigate,
+      pinnedClient,
+    ],
   )
 
   const submitCreate = async (payload: CreateChargePayload): Promise<boolean> => {
@@ -98,7 +135,7 @@ export const useChargesPage = () => {
     }
 
     try {
-      await createMutation.mutateAsync(payload)
+      await createMutation.mutateAsync(pinnedClient ? { ...payload, client_record_id: pinnedClient.id } : payload)
       return true
     } catch {
       return false
@@ -136,7 +173,8 @@ export const useChargesPage = () => {
         onBulkAction: runBulkAction,
         onClearSelection: clearSelection,
       },
-      onOpenCharge: (chargeId: number) => navigate(CHARGE_ROUTES.detail(chargeId)),
+      onOpenCharge: (chargeId: number) =>
+        navigate(pinnedClient ? CHARGE_ROUTES.clientDetail(pinnedClient.id, chargeId) : CHARGE_ROUTES.detail(chargeId)),
       onCreateCharge: openCreate,
     },
     modals: {
@@ -146,6 +184,16 @@ export const useChargesPage = () => {
         createLoading: createMutation.isPending,
         onClose: closeCreate,
         onSubmit: submitCreate,
+        ...(pinnedClient
+          ? {
+              initialClient: pinnedClient,
+              businesses,
+              initialBusiness: (() => {
+                const selected = businesses.find((business) => business.id === businessFilterId)
+                return selected ? { id: selected.id, name: getChargeBusinessLabel(selected) } : null
+              })(),
+            }
+          : {}),
       },
       notificationProps: notificationContext
         ? {

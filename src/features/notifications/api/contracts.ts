@@ -114,19 +114,6 @@ export interface NotificationListResponse {
   page_size: number
 }
 
-export interface NotificationSummaryResponse {
-  pending: number
-  sent: number
-  failed: number
-  skipped: number
-  total: number
-}
-
-export interface NotificationSummaryParams {
-  client_record_id?: number
-  business_id?: number
-}
-
 export interface ListNotificationsParams {
   client_record_id?: number
   business_id?: number

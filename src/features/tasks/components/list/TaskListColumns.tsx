@@ -1,6 +1,7 @@
 import { CalendarClock, CheckCircle2, Eye, Pencil, Trash2, XCircle } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
+import { Checkbox } from '@/components/ui/primitives/Checkbox'
 import { RowActionItem, RowActionsMenu, type Column } from '@/components/ui/table'
 import { workQueueSourceTypeLabels } from '@/features/workQueue'
 import type { WorkQueueSourceType } from '@/features/workQueue'
@@ -11,8 +12,18 @@ import { formatTaskDueDate, isTaskTerminal } from '../../utils/taskFormatters'
 import { TASKS_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 
+export interface TaskSelectionConfig {
+  selectedIds: Set<number>
+  selectableCount: number
+  disabled: boolean
+  onToggle: (task: Task) => void
+  onToggleAll: () => void
+}
+
 interface TaskColumnActions {
   isActionBusy: boolean
+  /** Bulk-selection checkbox column (client-details tab only). */
+  selection?: TaskSelectionConfig
   onView: (taskId: number) => void
   onEdit: (taskId: number) => void
   onComplete: (taskId: number) => void
@@ -22,12 +33,38 @@ interface TaskColumnActions {
 
 export const buildTaskListColumns = ({
   isActionBusy,
+  selection,
   onView,
   onEdit,
   onComplete,
   onCancel,
   onDelete,
 }: TaskColumnActions): Array<Column<Task>> => [
+  ...(selection
+    ? [
+        {
+          key: 'selection',
+          header: '',
+          headerRender: () => (
+            <Checkbox
+              aria-label={TASKS_MESSAGES.clientTab.selectAllOpen}
+              checked={selection.selectableCount > 0 && selection.selectedIds.size === selection.selectableCount}
+              onChange={selection.onToggleAll}
+              disabled={selection.disabled || selection.selectableCount === 0}
+            />
+          ),
+          render: (task) => (
+            <Checkbox
+              aria-label={TASKS_MESSAGES.clientTab.selectTask(task.title)}
+              checked={selection.selectedIds.has(task.id)}
+              onChange={() => selection.onToggle(task)}
+              disabled={selection.disabled || isTaskTerminal(task.status)}
+              title={isTaskTerminal(task.status) ? TASKS_MESSAGES.clientTab.terminalBulkTitle : undefined}
+            />
+          ),
+        } satisfies Column<Task>,
+      ]
+    : []),
   {
     key: 'title',
     header: TASKS_MESSAGES.columns.title,

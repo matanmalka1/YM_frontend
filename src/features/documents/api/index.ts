@@ -3,7 +3,6 @@ export { documentsQK } from './queryKeys'
 export type {
   PermanentDocumentResponse,
   PermanentDocumentListResponse,
-  OperationalSignalsResponse,
   UploadDocumentPayload,
   UpdateDocumentPayload,
 } from './contracts'

@@ -28,7 +28,6 @@ export const useSendNotification = () => {
     mutationFn: ({ payload, idempotencyKey }: NotificationSendVariables) => notificationsApi.send(payload, idempotencyKey),
     onSuccess: (result: NotificationResult) => {
       void queryClient.invalidateQueries({ queryKey: notificationsQK.lists() })
-      void queryClient.invalidateQueries({ queryKey: notificationsQK.summaries() })
       if (result.status === 'sent') {
         toast.success(NOTIFICATIONS_MESSAGES.form.sendSuccess)
       } else if (result.status === 'skipped') {

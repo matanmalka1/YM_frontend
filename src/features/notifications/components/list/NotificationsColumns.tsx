@@ -19,12 +19,15 @@ export const getDomainLabel = (domain: string | null | undefined) => {
 
 interface BuildNotificationColumnsParams {
   isAdvisor: boolean
+  /** false on the client-details tab — the page already is the client. */
+  includeClientColumn: boolean
   onView: (id: number) => void
   onSend: (client: { id: number; name: string }) => void
 }
 
 export const buildNotificationColumns = ({
   isAdvisor,
+  includeClientColumn,
   onView,
   onSend,
 }: BuildNotificationColumnsParams): Column<NotificationItem>[] => [
@@ -43,11 +46,15 @@ export const buildNotificationColumns = ({
       </div>
     ),
   },
-  textColumn({
-    key: 'client',
-    header: GLOBAL_UI_MESSAGES.common.client,
-    getValue: (item) => item.client_name ?? `#${item.client_record_id}`,
-  }),
+  ...(includeClientColumn
+    ? [
+        textColumn<NotificationItem>({
+          key: 'client',
+          header: GLOBAL_UI_MESSAGES.common.client,
+          getValue: (item) => item.client_name ?? `#${item.client_record_id}`,
+        }),
+      ]
+    : []),
   {
     key: 'status',
     header: GLOBAL_UI_MESSAGES.common.status,

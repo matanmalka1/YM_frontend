@@ -1,28 +1,22 @@
-import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useEffect, useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
-import { TaskModal } from '../form/TaskModal'
-import { tasksApi } from '../../api/tasks.api'
-import { tasksQK } from '../../api/queryKeys'
-import { useBulkAssignTasks } from '../../hooks/useBulkAssignTasks'
-import { useBulkCompleteTasks } from '../../hooks/useBulkCompleteTasks'
-import { useClientTasks } from '../../hooks/useClientTasks'
-import { taskPriorityLabels, taskStatusLabels } from '../../constants/labels'
-import { formatTaskDueDate, isTaskTerminal } from '../../utils/taskFormatters'
-import { getTaskStatusBadgeVariant } from '../../utils/taskDisplay'
-import { useActiveUserOptions } from '@/features/users'
 import { Alert } from '@/components/ui/overlays/Alert'
+import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { DetailTabPanel } from '@/components/ui/layout'
+import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { Select } from '@/components/ui/inputs'
-import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
-import { Checkbox } from '@/components/ui/primitives/Checkbox'
-import { BulkSelectionActionButton, BulkSelectionToolbar, PaginatedDataTable, type Column } from '@/components/ui/table'
-import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
+import { BulkSelectionActionButton, BulkSelectionToolbar } from '@/components/ui/table'
 import { randomUUID } from '@/utils/random'
 import { getErrorMessage } from '@/utils/utils'
-import type { Task, TaskCreateRequest } from '../../api/contracts'
+import { useActiveUserOptions } from '@/features/users'
+import { TaskModal } from '../form/TaskModal'
+import { TasksListPanel } from '../list/TasksListPanel'
+import { useBulkAssignTasks } from '../../hooks/useBulkAssignTasks'
+import { useBulkCompleteTasks } from '../../hooks/useBulkCompleteTasks'
+import { useTasksPage } from '../../hooks/useTasksPage'
+import { isTaskTerminal } from '../../utils/taskFormatters'
+import type { Task } from '../../api/contracts'
 import { TASKS_MESSAGES } from '../../messages'
 import { TASKS_ERROR_MESSAGES } from '../../errorMessages'
 
@@ -35,39 +29,25 @@ interface Feedback {
   hasFailures: boolean
 }
 
-const EMPTY_TASKS: Task[] = []
-
 export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }) => {
-  const queryClient = useQueryClient()
+  const page = useTasksPage({ pinnedClientId: clientRecordId })
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set())
   const [assigneeId, setAssigneeId] = useState('')
   const [feedback, setFeedback] = useState<Feedback | null>(null)
-  const [page, setPage] = useState(1)
-  const [createOpen, setCreateOpen] = useState(false)
-  const { data, isLoading, isFetching, isError, refetch } = useClientTasks(clientRecordId, {
-    page,
-    page_size: PAGE_SIZE,
-  })
   const bulkComplete = useBulkCompleteTasks()
   const bulkAssign = useBulkAssignTasks()
   const usersQuery = useActiveUserOptions()
-  const createTask = useMutation({
-    mutationFn: (payload: TaskCreateRequest) => tasksApi.create(payload),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: tasksQK.all })
-      setCreateOpen(false)
-    },
-  })
 
-  const tasks = data?.items ?? EMPTY_TASKS
-  const selectableTasks = tasks.filter((task) => !isTaskTerminal(task.status))
+  const selectableTasks = page.tasks.filter((task) => !isTaskTerminal(task.status))
   const isBulkLoading = bulkComplete.isPending || bulkAssign.isPending
 
+  // Clear selection whenever the client or the active filters change, so a bulk action
+  // can never target rows that are no longer shown.
+  const filterSignature = JSON.stringify(page.filterBar.values)
   useEffect(() => {
     setSelectedIds(new Set())
     setFeedback(null)
-    setPage(1)
-  }, [clientRecordId])
+  }, [clientRecordId, filterSignature])
 
   const toggleAll = () => {
     setSelectedIds((current) =>
@@ -85,7 +65,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
   }
   const clearSelection = () => setSelectedIds(new Set())
   const handlePageChange = (nextPage: number) => {
-    setPage(nextPage)
+    page.setPage(nextPage)
     clearSelection()
   }
   const handleBulkComplete = async () => {
@@ -130,66 +110,28 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
     }
   }
 
-  const columns: Array<Column<Task>> = [
-    {
-      key: 'selection',
-      header: '',
-      headerRender: () => (
-        <Checkbox
-          aria-label={TASKS_MESSAGES.clientTab.selectAllOpen}
-          checked={selectableTasks.length > 0 && selectedIds.size === selectableTasks.length}
-          onChange={toggleAll}
-          disabled={isBulkLoading || selectableTasks.length === 0}
-        />
-      ),
-      render: (task) => (
-        <Checkbox
-          aria-label={TASKS_MESSAGES.clientTab.selectTask(task.title)}
-          checked={selectedIds.has(task.id)}
-          onChange={() => toggleOne(task)}
-          disabled={isBulkLoading || isTaskTerminal(task.status)}
-          title={isTaskTerminal(task.status) ? TASKS_MESSAGES.clientTab.terminalBulkTitle : undefined}
-        />
-      ),
-    },
-    {
-      key: 'title',
-      header: TASKS_MESSAGES.columns.title,
-      render: (task) => <span className="font-semibold text-gray-900">{task.title}</span>,
-      wrap: true,
-    },
-    {
-      key: 'status',
-      header: GLOBAL_UI_MESSAGES.common.status,
-      render: (task) => (
-        <Badge variant={getTaskStatusBadgeVariant(task.status)} size="sm">
-          {taskStatusLabels[task.status]}
-        </Badge>
-      ),
-    },
-    { key: 'priority', header: TASKS_MESSAGES.columns.priority, render: (task) => taskPriorityLabels[task.priority] },
-    { key: 'dueDate', header: TASKS_MESSAGES.columns.dueDate, render: (task) => formatTaskDueDate(task.due_date) },
-  ]
-
   const userOptions = (usersQuery.data?.items ?? []).map((user) => ({ value: String(user.id), label: user.full_name }))
-  const createError = createTask.isError ? getErrorMessage(createTask.error, TASKS_ERROR_MESSAGES.clientTab.createError) : null
 
   return (
     <DetailTabPanel
       title={TASKS_MESSAGES.clientTab.title}
       subtitle={TASKS_MESSAGES.clientTab.subtitle}
       actions={
-        <Button
-          variant="primary"
-          size="sm"
-          icon={<Plus className="h-4 w-4" aria-hidden="true" />}
-          onClick={() => {
-            createTask.reset()
-            setCreateOpen(true)
-          }}
-        >
-          {TASKS_MESSAGES.actions.newTask}
-        </Button>
+        <div className="flex items-center gap-2">
+          <FilterPanel
+            {...page.filterBar}
+            title={TASKS_MESSAGES.page.filterTitle}
+            subtitle={TASKS_MESSAGES.page.filterSubtitle}
+          />
+          <Button
+            variant="primary"
+            size="sm"
+            icon={<Plus className="h-4 w-4" aria-hidden="true" />}
+            onClick={page.openCreateModal}
+          >
+            {TASKS_MESSAGES.actions.newTask}
+          </Button>
+        </div>
       }
     >
       {feedback ? (
@@ -231,47 +173,59 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
           </div>
         </BulkSelectionToolbar>
       ) : null}
-      {isError ? (
-        <Alert variant="error" message={TASKS_ERROR_MESSAGES.clientTab.loadError} onRetry={() => void refetch()} />
-      ) : (
-        <PaginatedDataTable
-          columns={columns}
-          data={tasks}
-          getRowKey={(task) => task.id}
-          isLoading={isLoading}
-          isFetching={isFetching}
-          page={page}
-          pageSize={PAGE_SIZE}
-          total={data?.total ?? 0}
-          label={TASKS_MESSAGES.list.label}
-          onPageChange={handlePageChange}
-          showPagination={(data?.total ?? 0) > PAGE_SIZE}
-          emptyState={{
-            title: TASKS_MESSAGES.clientTab.emptyTitle,
-            message: TASKS_MESSAGES.clientTab.emptyMessage,
-            action: {
-              label: TASKS_MESSAGES.actions.newTask,
-              onClick: () => {
-                createTask.reset()
-                setCreateOpen(true)
-              },
-            },
-          }}
+      <TasksListPanel
+        tasks={page.tasks}
+        isLoading={page.isLoading}
+        isFetching={page.isFetching}
+        error={page.listError}
+        hasFilters={page.hasFilters}
+        page={page.page}
+        total={page.total}
+        isActionBusy={page.isActionBusy}
+        selection={{
+          selectedIds,
+          selectableCount: selectableTasks.length,
+          disabled: isBulkLoading,
+          onToggle: toggleOne,
+          onToggleAll: toggleAll,
+        }}
+        emptyState={{
+          title: TASKS_MESSAGES.clientTab.emptyTitle,
+          message: TASKS_MESSAGES.clientTab.emptyMessage,
+          action: { label: TASKS_MESSAGES.actions.newTask, onClick: page.openCreateModal },
+        }}
+        onView={page.openViewModal}
+        onEdit={page.openEditModal}
+        onComplete={page.completeTask}
+        onCancel={page.cancelTask}
+        onDelete={page.deleteTask}
+        onPageChange={handlePageChange}
+        onRetry={() => void page.retryList()}
+      />
+
+      {page.modal !== null && (
+        <TaskModal
+          key={`${page.modal.mode}-${page.modalTask?.id ?? 'new'}`}
+          mode={page.modal.mode}
+          task={page.modalTask}
+          clientRecordId={clientRecordId}
+          isLoading={page.isModalLoading}
+          error={page.actionError}
+          onSubmit={page.submitModal}
+          onClose={page.closeModal}
         />
       )}
-      {createOpen ? (
-        <TaskModal
-          mode="create"
-          clientRecordId={clientRecordId}
-          isLoading={createTask.isPending}
-          error={createError}
-          onSubmit={(data) => createTask.mutate(data as TaskCreateRequest)}
-          onClose={() => {
-            createTask.reset()
-            setCreateOpen(false)
-          }}
-        />
-      ) : null}
+
+      <ConfirmDialog
+        open={page.confirmDialog.open}
+        title={page.confirmDialog.title}
+        message={page.confirmDialog.message}
+        confirmLabel={page.confirmDialog.confirmLabel}
+        confirmVariant="danger"
+        isLoading={page.confirmDialog.isLoading}
+        onConfirm={page.confirmDialog.onConfirm}
+        onCancel={page.confirmDialog.onCancel}
+      />
     </DetailTabPanel>
   )
 }

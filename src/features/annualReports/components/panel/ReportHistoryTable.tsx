@@ -14,7 +14,7 @@ import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface Props {
   clientId: number
-  currentReportId: number
+  currentReportId?: number
   onSelect?: (reportId: number) => void
 }
 

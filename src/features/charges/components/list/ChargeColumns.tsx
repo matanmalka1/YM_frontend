@@ -21,6 +21,8 @@ import { CHARGES_MESSAGES } from '../../messages'
 
 interface BuildChargeColumnsParams {
   isAdvisor: boolean
+  /** false on the client-details tab — the page already is the client. */
+  includeClientColumns: boolean
   actionLoadingId: number | null
   runAction: (chargeId: number, action: ChargeAction) => Promise<void>
   onOpenDetail: (chargeId: number) => void
@@ -33,6 +35,7 @@ interface BuildChargeColumnsParams {
 
 export const buildChargeColumns = ({
   isAdvisor,
+  includeClientColumns,
   actionLoadingId,
   runAction,
   onOpenDetail,
@@ -42,7 +45,7 @@ export const buildChargeColumns = ({
   allIds = [],
   onSendNotification,
 }: BuildChargeColumnsParams): Column<ChargeListItem>[] => {
-  const dataColumns: Column<ChargeListItem>[] = [
+  const clientIdentityColumns: Column<ChargeListItem>[] = [
     monoColumn({
       key: 'office_client_number',
       header: CHARGES_MESSAGES.columns.clientNumber,
@@ -53,6 +56,10 @@ export const buildChargeColumns = ({
       header: GLOBAL_UI_MESSAGES.common.client,
       render: (charge) => <ChargeClientCell charge={charge} />,
     },
+  ]
+
+  const dataColumns: Column<ChargeListItem>[] = [
+    ...(includeClientColumns ? clientIdentityColumns : []),
     textColumn({
       key: 'charge_type',
       header: CHARGES_MESSAGES.columns.type,

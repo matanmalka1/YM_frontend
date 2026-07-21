@@ -5,7 +5,8 @@ import { TimelineCard } from './TimelineCard'
 import { groupTimelineEventsByDate, getDefaultOpenTimelineGroups } from '../lib/timelineGroups'
 import { PaginationCard } from '@/components/ui/table'
 import { getTotalPages } from '../../../utils/paginationUtils'
-import { PageLoading } from '../../../components/ui/layout/PageLoading'
+import { DetailTabPanel } from '@/components/ui/layout'
+import { SkeletonBlock } from '../../../components/ui/primitives/SkeletonBlock'
 import { Alert } from '../../../components/ui/overlays/Alert'
 import { TIMELINE_MESSAGES } from '../messages'
 
@@ -41,9 +42,6 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
   }
   const expandedDateKeys = overrideKeys ?? defaultExpandedKeys
 
-  if (loading) return <PageLoading message={TIMELINE_MESSAGES.tab.loadingMessage} />
-  if (error) return <Alert variant="error" message={error} />
-
   const totalPages = getTotalPages(total, pageSize)
 
   const toggleDate = (date: string) =>
@@ -58,42 +56,58 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
   const toggleExpandAll = () => setOverrideKeys(allExpanded ? new Set() : new Set(timelineGroups.map((g) => g.date)))
 
   return (
-    <div className="space-y-4">
-      <TimelineFilterPanel
-        total={total}
-        lastEventTimestamp={lastEventTimestamp}
-        searchTerm={filters.searchTerm}
-        onSearchChange={filters.setSearchTerm}
-        typeFilters={filters.typeFilters}
-        onTypeFiltersChange={filters.setTypeFilters}
-        importantOnly={filters.importantOnly}
-        onImportantOnlyChange={filters.setImportantOnly}
-        dateFrom={filters.dateFrom}
-        dateTo={filters.dateTo}
-        onDateRangeChange={filters.setDateRange}
-        onClearFilters={filters.clearFilters}
-        allExpanded={allExpanded}
-        onToggleExpandAll={toggleExpandAll}
-      />
-
-      <TimelineCard
-        events={filteredEvents}
-        expandedDateKeys={expandedDateKeys}
-        onToggleDate={toggleDate}
-        hasActiveFilters={filters.hasActiveFilters}
-        onClearFilters={filters.clearFilters}
-      />
-
-      {totalPages > 1 && (
-        <PaginationCard
-          page={page}
-          totalPages={totalPages}
+    <DetailTabPanel
+      title={TIMELINE_MESSAGES.clientTab.title}
+      subtitle={TIMELINE_MESSAGES.clientTab.subtitle}
+      filters={
+        <TimelineFilterPanel
           total={total}
-          label={TIMELINE_MESSAGES.tab.paginationLabel}
-          onPageChange={setPage}
+          lastEventTimestamp={lastEventTimestamp}
+          searchTerm={filters.searchTerm}
+          onSearchChange={filters.setSearchTerm}
+          typeFilters={filters.typeFilters}
+          onTypeFiltersChange={filters.setTypeFilters}
+          importantOnly={filters.importantOnly}
+          onImportantOnlyChange={filters.setImportantOnly}
+          dateFrom={filters.dateFrom}
+          dateTo={filters.dateTo}
+          onDateRangeChange={filters.setDateRange}
+          onClearFilters={filters.clearFilters}
+          allExpanded={allExpanded}
+          onToggleExpandAll={toggleExpandAll}
         />
+      }
+    >
+      {error ? (
+        <Alert variant="error" message={error} />
+      ) : loading ? (
+        <div className="space-y-3" aria-label={TIMELINE_MESSAGES.tab.loadingMessage}>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <SkeletonBlock key={i} height="h-16" width="w-full" rounded="xl" shimmer />
+          ))}
+        </div>
+      ) : (
+        <>
+          <TimelineCard
+            events={filteredEvents}
+            expandedDateKeys={expandedDateKeys}
+            onToggleDate={toggleDate}
+            hasActiveFilters={filters.hasActiveFilters}
+            onClearFilters={filters.clearFilters}
+          />
+
+          {totalPages > 1 && (
+            <PaginationCard
+              page={page}
+              totalPages={totalPages}
+              total={total}
+              label={TIMELINE_MESSAGES.tab.paginationLabel}
+              onPageChange={setPage}
+            />
+          )}
+        </>
       )}
-    </div>
+    </DetailTabPanel>
   )
 }
 

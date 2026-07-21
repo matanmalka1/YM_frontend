@@ -9,9 +9,9 @@ import { toCreateCorrespondencePayload, toUpdateCorrespondencePayload } from '..
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { CORRESPONDENCE_ERROR_MESSAGES } from '../errorMessages'
 
-export const useCorrespondence = (businessId: number | undefined, clientId?: number, loadContacts = false) => {
+export const useCorrespondence = (clientId?: number, loadContacts = false) => {
   const resolvedClientId = clientId ?? 0
-  const listParams = { ...CORRESPONDENCE_LIST_PARAMS, business_id: businessId }
+  const listParams = CORRESPONDENCE_LIST_PARAMS
   const queryKey = [...correspondenceQK.forClient(resolvedClientId), listParams]
 
   const {
@@ -34,7 +34,7 @@ export const useCorrespondence = (businessId: number | undefined, clientId?: num
 
   const createMutation = useMutationWithToast({
     mutationFn: (values: CorrespondenceFormValues) =>
-      correspondenceApi.create(resolvedClientId, toCreateCorrespondencePayload(values, businessId)),
+      correspondenceApi.create(resolvedClientId, toCreateCorrespondencePayload(values)),
     successMessage: 'רשומת התכתבות נוספה בהצלחה',
     errorMessage: CORRESPONDENCE_ERROR_MESSAGES.create,
     invalidateKeys: [queryKey],
@@ -42,7 +42,7 @@ export const useCorrespondence = (businessId: number | undefined, clientId?: num
 
   const updateMutation = useMutationWithToast({
     mutationFn: ({ id, values }: { id: number; values: CorrespondenceFormValues }) =>
-      correspondenceApi.update(resolvedClientId, id, toUpdateCorrespondencePayload(values, businessId)),
+      correspondenceApi.update(resolvedClientId, id, toUpdateCorrespondencePayload(values)),
     successMessage: 'רשומת התכתבות עודכנה בהצלחה',
     errorMessage: CORRESPONDENCE_ERROR_MESSAGES.update,
     invalidateKeys: [queryKey],

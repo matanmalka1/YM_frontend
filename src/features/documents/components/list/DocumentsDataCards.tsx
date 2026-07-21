@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { FileText, Plus } from 'lucide-react'
+import { FileText } from 'lucide-react'
 import { Modal } from '../../../../components/ui/overlays/Modal'
 import { HiddenFileInput } from '../../../../components/ui/inputs/HiddenFileInput'
 import { Button } from '../../../../components/ui/primitives/Button'
@@ -8,23 +8,23 @@ import { DocumentsUploadCard, type DocumentUploadSubmitPayload } from '../form/D
 import { DocumentVersionsPanel } from '../detail/DocumentVersionsPanel'
 import { DocumentPreviewModal } from '../detail/DocumentPreviewModal'
 import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
-import type { OperationalSignalsResponse, PermanentDocumentResponse, UpdateDocumentPayload } from '../../api'
+import type { PermanentDocumentResponse, UpdateDocumentPayload } from '../../api'
 import { DocumentEditCard, EDIT_FORM_ID } from '../form/DocumentEditCard'
 import { useAuthStore } from '../../../../store/auth.store'
 import type { BusinessResponse } from '@/features/clients'
 import { UPLOAD_FORM_ID } from '../../constants'
-import { filterDocuments, getCountLabel } from '../../utils/documentsDataCardsUtils'
 import { useDocumentCardActions } from '../../hooks/useDocumentCardActions'
-import { DocumentsFilterPanel } from './DocumentsFilterPanel'
 import { StateCard } from '../../../../components/ui/feedback/StateCard'
 import { DOCUMENTS_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface DocumentsDataCardsProps {
+  /** Documents to render — already filtered by the owning tab. */
   documents: PermanentDocumentResponse[]
-  signals: OperationalSignalsResponse
+  /** Whether the client has any documents at all (pre-filter), to split empty vs no-results. */
+  hasDocuments: boolean
+  /** Seeds the upload modal's initial tax year from the active filter. */
   taxYear: number | null
-  onTaxYearChange: (year: number | null) => void
   businesses: BusinessResponse[]
   businessesLoading: boolean
   submitUpload: (payload: DocumentUploadSubmitPayload) => Promise<boolean>
@@ -35,13 +35,17 @@ interface DocumentsDataCardsProps {
   onUpdate: (id: number, payload: UpdateDocumentPayload) => Promise<void>
   /** Deep-linked document, highlighted so it is findable among the cards. */
   focusedDocumentId: number | null
+  /** Upload-modal open state is owned by the tab so its header action can drive it. */
+  uploadOpen: boolean
+  onOpenUpload: () => void
+  onCloseUpload: () => void
 }
 
 export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
   documents,
+  hasDocuments,
   focusedDocumentId,
   taxYear,
-  onTaxYearChange,
   businesses,
   businessesLoading,
   submitUpload,
@@ -50,16 +54,16 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
   onDelete,
   onReplace,
   onUpdate,
+  uploadOpen,
+  onOpenUpload,
+  onCloseUpload,
 }) => {
   const role = useAuthStore((s) => s.user?.role)
   const isAdvisor = role === 'advisor'
   const canEditReplace = role === 'advisor' || role === 'secretary'
 
-  const [uploadOpen, setUploadOpen] = useState(false)
   const [uploadCanSubmit, setUploadCanSubmit] = useState(false)
   const [expandedVersionsId, setExpandedVersionsId] = useState<number | null>(null)
-  const [search, setSearch] = useState('')
-  const [filterType, setFilterType] = useState('')
 
   const {
     confirmDeleteId,
@@ -85,61 +89,34 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
   } = useDocumentCardActions({ onDelete, onReplace, onUpdate })
 
   const closeUploadModal = () => {
-    setUploadOpen(false)
     setUploadCanSubmit(false)
+    onCloseUpload()
   }
 
   const handleToggleVersions = (id: number) => {
     setExpandedVersionsId((prev) => (prev === id ? null : id))
   }
 
-  const filteredDocuments = useMemo(() => filterDocuments(documents, search, filterType), [documents, filterType, search])
-
   const expandedDoc = useMemo(
     () => (expandedVersionsId !== null ? documents.find((d) => d.id === expandedVersionsId) : null),
     [documents, expandedVersionsId],
   )
 
-  const countLabel = getCountLabel(filteredDocuments.length, documents.length)
-
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-3">
-        <h3 className="text-base font-semibold text-gray-900">{DOCUMENTS_MESSAGES.list.sectionTitle(countLabel)}</h3>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setUploadOpen(true)}
-            icon={<Plus className="h-4 w-4" />}
-            className="shrink-0"
-          >
-            {DOCUMENTS_MESSAGES.list.uploadButton}
-          </Button>
-          <DocumentsFilterPanel
-            search={search}
-            onSearchChange={setSearch}
-            filterType={filterType}
-            onFilterTypeChange={setFilterType}
-            taxYear={taxYear}
-            onTaxYearChange={onTaxYearChange}
-          />
-        </div>
-      </div>
-
-      {filteredDocuments.length === 0 ? (
-        documents.length > 0 ? (
+      {documents.length === 0 ? (
+        hasDocuments ? (
           <StateCard icon={FileText} message={DOCUMENTS_MESSAGES.list.noResultsMessage} />
         ) : (
           <StateCard
             icon={FileText}
             message={DOCUMENTS_MESSAGES.list.emptyMessage}
-            action={{ label: DOCUMENTS_MESSAGES.list.firstUploadAction, onClick: () => setUploadOpen(true) }}
+            action={{ label: DOCUMENTS_MESSAGES.list.firstUploadAction, onClick: onOpenUpload }}
           />
         )
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredDocuments.map((doc) => (
+          {documents.map((doc) => (
             <DocumentCard
               key={doc.id}
               doc={doc}

@@ -11,7 +11,6 @@ import {
   type TaskListParams,
   type TaskListResponse,
   type TaskBulkActionResponse,
-  type ClientTaskListParams,
 } from './contracts'
 
 const toSearchParams = (params?: TaskListParams): URLSearchParams | undefined => {
@@ -54,13 +53,6 @@ export const tasksApi = {
 
   delete: async (id: number): Promise<void> => {
     await api.delete(TASKS_ENDPOINTS.delete(id))
-  },
-
-  listClientTasks: async (clientRecordId: number, params?: ClientTaskListParams): Promise<TaskListResponse> => {
-    const response = await api.get<TaskListResponse>(TASKS_ENDPOINTS.clientTasks(clientRecordId), {
-      params: params ? toQueryParams(params) : undefined,
-    })
-    return taskListResponseSchema.parse(response.data)
   },
 
   bulkComplete: async (taskIds: number[], idempotencyKey: string): Promise<TaskBulkActionResponse> => {

@@ -170,6 +170,8 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     filterSubtitle: 'לקוח, שנה, סטטוס ותקופה',
   },
   clientTab: {
+    title: 'מקדמות',
+    subtitle: 'מקדמות המס המקושרות ללקוח זה',
     yearFilterLabel: 'שנה',
     paginationLabel: 'מקדמות',
   },

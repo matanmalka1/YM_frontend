@@ -7,7 +7,6 @@ export { BindersStatsSection } from './components/list/BindersStatsSection'
 export { useBindersPage } from './hooks/useBindersPage'
 
 export { Binders } from './pages/BindersPage'
-export type { BinderDetailResponse } from './api'
 
 export {
   getBinderLocationStatusLabel,

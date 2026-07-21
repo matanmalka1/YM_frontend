@@ -2,7 +2,7 @@ import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { TASK_FILTER_PARAM_KEYS, type TaskFilterParamKey } from '../constants/pageConstants'
 import { buildTaskListParams, getTaskFiltersFromSearchParams, hasTaskFilters } from '../utils/taskFilters'
 
-export const useTaskFilters = () => {
+export const useTaskFilters = (clientRecordId?: number) => {
   const { searchParams, getPage, setFilter, setFilters, setPage } = useSearchParamFilters()
   const page = getPage()
   const filters = getTaskFiltersFromSearchParams(searchParams)
@@ -19,7 +19,7 @@ export const useTaskFilters = () => {
     page,
     filters,
     hasFilters: hasTaskFilters(filters),
-    listParams: buildTaskListParams(page, filters),
+    listParams: buildTaskListParams(page, filters, clientRecordId),
     setPage,
     handleFilterChange,
     resetFilters: resetTaskFilters,

@@ -1,4 +1,7 @@
+import { PlusCircle } from 'lucide-react'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { Button } from '@/components/ui/primitives/Button'
+import { DetailTabPanel } from '@/components/ui/layout'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
 import { getOperationalYearOptions, getOperationalTaxYear } from '@/constants/periodOptions.constants'
@@ -32,20 +35,30 @@ const CLIENT_ADVANCE_PAYMENTS_FILTER_FIELDS: FilterFieldDef[] = [
 ]
 
 export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> = (props) => {
-  const { permissions, header, filters, kpi, table, pagination, createModal } = useClientAdvancePaymentsTab(props)
+  const { permissions, onOpenCreate, toolbar, filters, kpi, table, pagination, createModal } = useClientAdvancePaymentsTab(props)
 
   return (
-    <div className="space-y-6">
-      <ClientAdvancePaymentsHeader {...header} />
-
-      <ClientAdvancePaymentsStatsSection {...kpi} />
-
-      <FilterPanel
-        fields={CLIENT_ADVANCE_PAYMENTS_FILTER_FIELDS}
-        values={filters.values}
-        onChange={filters.onChange}
-        onReset={filters.onReset}
-      />
+    <DetailTabPanel
+      title={ADVANCED_PAYMENTS_MESSAGES.clientTab.title}
+      subtitle={ADVANCED_PAYMENTS_MESSAGES.clientTab.subtitle}
+      actions={
+        permissions.isAdvisor && (
+          <Button variant="primary" size="sm" icon={<PlusCircle className="h-4 w-4" />} onClick={onOpenCreate}>
+            {ADVANCED_PAYMENTS_MESSAGES.clientHeader.addPayment}
+          </Button>
+        )
+      }
+      summary={<ClientAdvancePaymentsStatsSection {...kpi} />}
+      filters={
+        <FilterPanel
+          fields={CLIENT_ADVANCE_PAYMENTS_FILTER_FIELDS}
+          values={filters.values}
+          onChange={filters.onChange}
+          onReset={filters.onReset}
+        />
+      }
+    >
+      <ClientAdvancePaymentsHeader {...toolbar} />
 
       <ClientAdvancePaymentsCards {...table} />
 
@@ -60,6 +73,6 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
       )}
 
       {permissions.isAdvisor && <CreateAdvancePaymentModal {...createModal} />}
-    </div>
+    </DetailTabPanel>
   )
 }

@@ -1,6 +1,4 @@
-import { type FC, useCallback, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getErrorMessage } from '@/utils/utils'
+import { type FC, useState } from 'react'
 import { type ActiveClientDetailsTab } from '../../constants'
 import { Trash2 } from 'lucide-react'
 import { DetailDrawer } from '../../../../components/ui/overlays/DetailDrawer'
@@ -16,7 +14,7 @@ import { ClientBusinessesCard } from './ClientBusinessesCard'
 import { ClientRelatedData } from './ClientRelatedData'
 import { CreateBusinessModal } from '../form/CreateBusinessModal'
 import { ClientEditForm } from '../form/ClientEditForm'
-import { ChargesCreateModal, ClientChargesTab } from '@/features/charges'
+import { ClientChargesTab } from '@/features/charges'
 import { ClientTimelineTab } from '@/features/timeline'
 import { ClientAnnualReportsTab } from '@/features/annualReports'
 import { ClientAdvancePaymentsTab } from '@/features/advancedPayments'
@@ -28,10 +26,8 @@ import { ClientTaxCalendarTab } from '@/features/taxCalendar'
 import { VatClientSummaryPanel } from '@/features/vatReports'
 import { ClientTasksTab } from '@/features/tasks'
 import type { UpdateClientPayload, ClientRecordResponse } from '../../api'
-import { useFirstBusinessId } from '../../hooks/useFirstBusinessId'
 import { useClientDetailsActions } from '../../hooks/useClientDetailsActions'
 import { CLIENTS_MESSAGES } from '../../messages'
-import { CLIENTS_ERROR_MESSAGES } from '../../errorMessages'
 
 const EDIT_FORM_ID = 'client-edit-form'
 
@@ -59,36 +55,14 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
   isEditing,
   onEditClose,
 }) => {
-  const { id: firstBusinessId } = useFirstBusinessId(client.id, activeTab === 'communication')
-  const navigate = useNavigate()
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false)
   const [isEditDirty, setIsEditDirty] = useState(false)
   const [isAddingBusiness, setIsAddingBusiness] = useState(false)
-  const [isAddingCharge, setIsAddingCharge] = useState(false)
-  const [relatedDataLoadedForId, setRelatedDataLoadedForId] = useState<number | null>(null)
-  const shouldLoadRelatedData = relatedDataLoadedForId === client.id
 
-  const requestRelatedDataLoad = useCallback(() => {
-    setRelatedDataLoadedForId(client.id)
-  }, [client.id])
-
-  const openCreateCharge = useCallback(() => {
-    setRelatedDataLoadedForId(client.id)
-    setIsAddingCharge(true)
-  }, [client.id])
-
-  const {
-    binders,
-    bindersTotal,
-    charges,
-    chargesTotal,
-    isFetchingRelatedData,
-    handleCreateBusiness,
-    isCreatingBusiness,
-    handleCreateCharge,
-    isCreatingCharge,
-    createChargeError,
-  } = useClientDetailsActions(client.id, activeTab, shouldLoadRelatedData)
+  const { bindersTotal, chargesTotal, isFetchingRelatedData, handleCreateBusiness, isCreatingBusiness } = useClientDetailsActions(
+    client.id,
+    activeTab,
+  )
 
   return (
     <div className="space-y-6">
@@ -101,17 +75,9 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
           </div>
           <ClientRelatedData
             clientId={client.id}
-            binders={binders}
             bindersTotal={bindersTotal}
-            charges={charges}
             chargesTotal={chargesTotal}
-            hasRequestedData={shouldLoadRelatedData}
             isFetching={isFetchingRelatedData}
-            canViewCharges={true}
-            canCreateCharge={canEditClients}
-            onCreateCharge={openCreateCharge}
-            onCreateBinder={() => navigate(`/binders?client_record_id=${client.id}`)}
-            onRequestLoad={requestRelatedDataLoad}
           />
           <CreateBusinessModal
             open={isAddingBusiness}
@@ -119,34 +85,26 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
             onSubmit={handleCreateBusiness}
             isLoading={isCreatingBusiness}
           />
-          <ChargesCreateModal
-            open={isAddingCharge}
-            createError={createChargeError ? getErrorMessage(createChargeError, CLIENTS_ERROR_MESSAGES.charges.create) : null}
-            createLoading={isCreatingCharge}
-            onClose={() => setIsAddingCharge(false)}
-            onSubmit={handleCreateCharge}
-            initialClient={{ id: client.id, name: client.full_name }}
-          />
         </>
       )}
 
       {activeTab === 'communication' && (
         <div className="space-y-6">
           <AuthorityContactsCard clientId={client.id} />
-          <CorrespondenceCard businessId={firstBusinessId ?? undefined} clientId={client.id} />
-          <SignatureRequestsCard client={client} businessId={firstBusinessId ?? undefined} canManage={canEditClients} />
+          <CorrespondenceCard clientId={client.id} />
+          <SignatureRequestsCard client={client} canManage={canEditClients} />
         </div>
       )}
 
       {activeTab === 'timeline' && <ClientTimelineTab clientId={String(client.id)} />}
       {activeTab === 'documents' && <ClientDocumentsTab clientId={client.id} />}
-      {activeTab === 'binders' && <ClientBindersTab clientId={client.id} />}
+      {activeTab === 'binders' && <ClientBindersTab clientId={client.id} clientName={client.full_name} />}
       {activeTab === 'charges' && <ClientChargesTab clientId={client.id} clientName={client.full_name} />}
       {activeTab === 'vat' && <VatClientSummaryPanel clientId={client.id} />}
       {activeTab === 'tax-calendar' && <ClientTaxCalendarTab clientId={client.id} />}
       {activeTab === 'advance-payments' && <ClientAdvancePaymentsTab clientRecordId={client.id} />}
       {activeTab === 'annual-reports' && <ClientAnnualReportsTab clientId={client.id} />}
-      {activeTab === 'notifications' && <NotificationsTab clientRecordId={client.id} />}
+      {activeTab === 'notifications' && <NotificationsTab clientRecordId={client.id} clientName={client.full_name} />}
       {activeTab === 'notes' && <NotesCard scope="client" clientId={client.id} canEdit={canEditClients} />}
       {activeTab === 'tasks' && <ClientTasksTab clientRecordId={client.id} />}
 

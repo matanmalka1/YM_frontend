@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { PlusCircle, Calendar, Info } from 'lucide-react'
+import { Calendar, Info } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
-import { Divider } from '@/components/ui/primitives/Divider'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { ADVANCE_PAYMENT_FREQUENCY_PREFIX, ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT } from '../../constants'
 import { getMonthsCoveredLabel } from '@/constants/periodOptions.constants'
@@ -11,7 +10,6 @@ import { GLOBAL_UI_MESSAGES } from '@/messages'
 interface ClientAdvancePaymentsHeaderProps {
   isAdvisor: boolean
   year: number
-  onOpenCreate: () => void
   onGenerateSchedule: () => void
   displayFrequency: 1 | 2 | null
   generationFrequency: 1 | 2 | null
@@ -26,7 +24,6 @@ interface ClientAdvancePaymentsHeaderProps {
 export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderProps> = ({
   isAdvisor,
   year,
-  onOpenCreate,
   onGenerateSchedule,
   displayFrequency,
   generationFrequency,
@@ -43,10 +40,6 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
       <div className="flex flex-wrap items-center gap-3">
         {isAdvisor && (
           <>
-            <Button type="button" icon={<PlusCircle className="h-4 w-4" />} onClick={onOpenCreate}>
-              {ADVANCED_PAYMENTS_MESSAGES.clientHeader.addPayment}
-            </Button>
-            <Divider orientation="vertical" className="h-8 hidden sm:block" />
             <div className="flex items-center bg-gray-100 rounded-xl p-1">
               <span className="px-3 py-1.5 text-sm text-gray-500">
                 {displayFrequency != null ? (

@@ -3,6 +3,8 @@
  * (cancel, loading) stay in GLOBAL_UI_MESSAGES;
  * everything here is notes-domain copy. Grouped by area.
  */
+const formatNotesCount = (total: number) => `${total} הערות`
+
 export const NOTES_MESSAGES = {
   tags: {
     reminder: 'תזכורת',
@@ -16,8 +18,12 @@ export const NOTES_MESSAGES = {
   row: {
     editTitle: 'ערוך',
   },
+  clientTab: {
+    title: 'הערות',
+    subtitle: formatNotesCount,
+  },
   card: {
-    notesCount: (total: number) => `${total} הערות`,
+    notesCount: formatNotesCount,
     emptyTitle: 'אין הערות עדיין',
     deleteModalTitle: 'מחיקת הערה',
     deleteMessage: 'האם למחוק את ההערה? פעולה זו אינה הפיכה.',

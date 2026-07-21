@@ -4,6 +4,10 @@
  * everything here is timeline-domain copy. Grouped by area.
  */
 export const TIMELINE_MESSAGES = {
+  clientTab: {
+    title: 'ציר זמן',
+    subtitle: 'פעילות ואירועים המקושרים ללקוח זה',
+  },
   tab: {
     loadingMessage: 'טוען ציר זמן...',
     paginationLabel: 'אירועים',

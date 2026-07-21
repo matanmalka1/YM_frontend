@@ -1305,23 +1305,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v1/clients/{client_record_id}/tasks': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** List Client Tasks */
-    get: operations['list_client_tasks_api_v1_clients__client_record_id__tasks_get']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/api/v1/clients/{client_record_id}/businesses': {
     parameters: {
       query?: never
@@ -13695,72 +13678,6 @@ export interface operations {
       }
     }
   }
-  list_client_tasks_api_v1_clients__client_record_id__tasks_get: {
-    parameters: {
-      query?: {
-        status?: components['schemas']['TaskStatus'] | null
-        assigned_to_user_id?: number | null
-        source_domain?: components['schemas']['WorkQueueSourceType'] | null
-        due_before?: string | null
-        due_after?: string | null
-        page?: number
-        page_size?: number
-      }
-      header?: never
-      path: {
-        client_record_id: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['TaskListResponse']
-        }
-      }
-      /** @description Authentication required */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Resource not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HTTPValidationError']
-        }
-      }
-    }
-  }
   list_client_businesses_api_v1_clients__client_record_id__businesses_get: {
     parameters: {
       query?: {
@@ -21035,6 +20952,7 @@ export interface operations {
   list_tasks_api_v1_tasks_get: {
     parameters: {
       query?: {
+        client_record_id?: number | null
         status?: components['schemas']['TaskStatus'] | null
         priority?: components['schemas']['TaskPriority'] | null
         assigned_to_user_id?: number | null

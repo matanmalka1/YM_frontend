@@ -1,12 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-  documentsApi,
-  documentsQK,
-  type OperationalSignalsResponse,
-  type PermanentDocumentListResponse,
-  type UpdateDocumentPayload,
-} from '../api'
+import { documentsApi, documentsQK, type PermanentDocumentListResponse, type UpdateDocumentPayload } from '../api'
 import { useBusinessesForClient } from '@/hooks/useBusinessesForClient'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { parsePositiveInt } from '@/utils/utils'
@@ -49,16 +43,6 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
       }),
   })
 
-  const {
-    data: signalsData,
-    isPending: signalsPending,
-    error: signalsError,
-  } = useQuery<OperationalSignalsResponse>({
-    enabled: clientId > 0,
-    queryKey: documentsQK.clientSignals(clientId),
-    queryFn: () => documentsApi.getSignalsByClient(clientId),
-  })
-
   const { submitUpload, uploadError, uploading } = useDocumentUpload()
 
   const invalidateDocs = () => {
@@ -87,7 +71,6 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
 
   const total = documentsData?.total ?? 0
   const totalPages = getTotalPages(total, PAGE_SIZE)
-  const errorSource = documentsError ?? signalsError
 
   // A deep-linked document is pinned to the top when this page would not have shown it.
   const listed = documentsData?.items ?? []
@@ -97,9 +80,8 @@ export const useClientDocumentsTab = (clientId: number, taxYear?: number | null)
   return {
     documents,
     focusedDocumentId,
-    signals: signalsData ?? { client_record_id: clientId, missing_documents: [] },
-    loading: documentsPending || signalsPending,
-    error: errorSource ? getErrorMessage(errorSource, DOCUMENTS_ERROR_MESSAGES.load) : null,
+    loading: documentsPending,
+    error: documentsError ? getErrorMessage(documentsError, DOCUMENTS_ERROR_MESSAGES.load) : null,
     businesses,
     businessesLoading,
     submitUpload: (payload: {

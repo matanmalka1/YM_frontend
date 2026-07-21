@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 import { ListChecks } from 'lucide-react'
-import { PaginatedDataTable } from '@/components/ui/table'
+import { PaginatedDataTable, type DataTableProps } from '@/components/ui/table'
 import { Alert } from '@/components/ui/overlays/Alert'
 import type { Task } from '../../api/contracts'
 import { TASKS_PAGE_SIZE } from '../../constants/pageConstants'
-import { buildTaskListColumns } from './TaskListColumns'
+import { buildTaskListColumns, type TaskSelectionConfig } from './TaskListColumns'
 import { TASKS_MESSAGES } from '../../messages'
 
 interface TasksListPanelProps {
@@ -16,6 +16,8 @@ interface TasksListPanelProps {
   page: number
   total: number
   isActionBusy: boolean
+  selection?: TaskSelectionConfig
+  emptyState?: DataTableProps<Task>['emptyState']
   onView: (taskId: number) => void
   onEdit: (taskId: number) => void
   onComplete: (taskId: number) => void
@@ -34,6 +36,8 @@ export const TasksListPanel: React.FC<TasksListPanelProps> = ({
   page,
   total,
   isActionBusy,
+  selection,
+  emptyState,
   onView,
   onEdit,
   onComplete,
@@ -43,8 +47,8 @@ export const TasksListPanel: React.FC<TasksListPanelProps> = ({
   onRetry,
 }) => {
   const columns = useMemo(
-    () => buildTaskListColumns({ isActionBusy, onView, onEdit, onComplete, onCancel, onDelete }),
-    [isActionBusy, onView, onEdit, onComplete, onCancel, onDelete],
+    () => buildTaskListColumns({ isActionBusy, selection, onView, onEdit, onComplete, onCancel, onDelete }),
+    [isActionBusy, selection, onView, onEdit, onComplete, onCancel, onDelete],
   )
   return (
     <section aria-label={TASKS_MESSAGES.list.ariaLabel}>
@@ -62,11 +66,13 @@ export const TasksListPanel: React.FC<TasksListPanelProps> = ({
           total={total}
           label={TASKS_MESSAGES.list.label}
           onPageChange={onPageChange}
-          emptyState={{
-            icon: ListChecks,
-            title: hasFilters ? TASKS_MESSAGES.list.emptyFilteredTitle : TASKS_MESSAGES.list.emptyTitle,
-            message: hasFilters ? TASKS_MESSAGES.list.emptyFilteredMessage : TASKS_MESSAGES.list.emptyMessage,
-          }}
+          emptyState={
+            emptyState ?? {
+              icon: ListChecks,
+              title: hasFilters ? TASKS_MESSAGES.list.emptyFilteredTitle : TASKS_MESSAGES.list.emptyTitle,
+              message: hasFilters ? TASKS_MESSAGES.list.emptyFilteredMessage : TASKS_MESSAGES.list.emptyMessage,
+            }
+          }
         />
       )}
     </section>

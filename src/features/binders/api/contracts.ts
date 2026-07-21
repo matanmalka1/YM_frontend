@@ -2,7 +2,7 @@ import type { BinderCapacityStatus, BinderLocationStatus, BinderResponse } from 
 import type { NotificationDetail } from '@/features/notifications'
 import type { PaginatedResponse } from '@/types'
 
-export interface BinderDetailResponse {
+interface BinderDetailResponse {
   id: number
   client_record_id: number
   office_client_number?: number | null

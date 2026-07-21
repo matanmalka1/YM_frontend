@@ -91,10 +91,10 @@ export const useClientAdvancePaymentsTab = ({ clientRecordId }: UseClientAdvance
 
   return {
     permissions: { isAdvisor },
-    header: {
+    onOpenCreate: () => setModalOpen(true),
+    toolbar: {
       isAdvisor,
       year,
-      onOpenCreate: () => setModalOpen(true),
       onGenerateSchedule: handleGenerateSchedule,
       displayFrequency,
       generationFrequency,

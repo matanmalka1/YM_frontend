@@ -3,6 +3,7 @@ import { Calendar, Download, Eye, FileText, History, Pencil, RefreshCw, Trash2 }
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { Card } from '../../../../components/ui/primitives/Card'
+import { Tooltip } from '../../../../components/ui/primitives/Tooltip'
 import { RowActionGroup, RowActionsMenu, RowActionItem } from '@/components/ui/table'
 import { cn, formatDate } from '../../../../utils/utils'
 import { DOC_TYPE_LABELS } from '../../constants'
@@ -97,41 +98,38 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
     </Button>
 
     <div className="flex items-center justify-between gap-2 border-t border-gray-100 pt-2">
-      {doc.tax_year ? (
-        <Badge variant="info">{doc.tax_year}</Badge>
-      ) : (
-        <span className="text-xs text-gray-400">{DOCUMENTS_MESSAGES.card.noTaxYear}</span>
-      )}
-      <div className="flex items-center gap-1 text-xs text-gray-400">
-        <Calendar className="h-3 w-3 shrink-0" />
-        <span>{formatDate(doc.uploaded_at)}</span>
+      <div className="flex items-center gap-2">
+        {doc.tax_year && <Badge variant="info">{doc.tax_year}</Badge>}
+        <div className="flex items-center gap-1 text-xs text-gray-400">
+          <Calendar className="h-3 w-3 shrink-0" />
+          <span>{formatDate(doc.uploaded_at)}</span>
+        </div>
       </div>
-    </div>
-
-    <div className="flex items-center gap-2 border-t border-gray-100 pt-2">
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        icon={<Eye className="h-3.5 w-3.5" />}
-        onClick={() => onPreview(doc)}
-        fullWidth
-        aria-label={DOCUMENTS_MESSAGES.card.previewAriaLabel}
-      >
-        {DOCUMENTS_MESSAGES.card.previewLabel}
-      </Button>
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        icon={<Download className="h-3.5 w-3.5" />}
-        isLoading={downloadingId === doc.id}
-        onClick={() => onDownload(doc)}
-        fullWidth
-        aria-label={DOCUMENTS_MESSAGES.card.downloadAriaLabel}
-      >
-        {DOCUMENTS_MESSAGES.card.downloadLabel}
-      </Button>
+      <div className="flex items-center gap-1">
+        <Tooltip text={DOCUMENTS_MESSAGES.card.previewLabel}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            shape="square"
+            icon={<Eye className="h-4 w-4" />}
+            onClick={() => onPreview(doc)}
+            aria-label={DOCUMENTS_MESSAGES.card.previewAriaLabel}
+          />
+        </Tooltip>
+        <Tooltip text={DOCUMENTS_MESSAGES.card.downloadLabel}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            shape="square"
+            icon={<Download className="h-4 w-4" />}
+            isLoading={downloadingId === doc.id}
+            onClick={() => onDownload(doc)}
+            aria-label={DOCUMENTS_MESSAGES.card.downloadAriaLabel}
+          />
+        </Tooltip>
+      </div>
     </div>
   </Card>
 )

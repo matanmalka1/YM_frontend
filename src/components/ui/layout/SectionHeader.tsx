@@ -41,31 +41,31 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   border = 'none',
   className,
 }) => {
-  const TitleTag = (headingLevel ? `h${headingLevel}` : defaultTitleTag[size]) as
-    | 'h1'
-    | 'h2'
-    | 'h3'
-    | 'p'
+  const TitleTag = (headingLevel ? `h${headingLevel}` : defaultTitleTag[size]) as 'h1' | 'h2' | 'h3' | 'p'
   return (
-  <div
-    className={cn('flex items-start justify-between gap-4', border === 'bottom' && 'border-b border-gray-100/80 pb-3', className)}
-  >
-    <div className={cn(icon && 'flex items-center gap-2')}>
-      {icon && <span className="shrink-0">{icon}</span>}
-      {title != null && <TitleTag className={titleClasses[size]}>{title}</TitleTag>}
-      {subtitle && (
-        <div
-          className={cn(
-            'text-gray-600',
-            size === 'lg' ? 'mt-1.5 text-base md:text-lg max-w-3xl leading-relaxed' : 'mt-1 text-sm',
-          )}
-        >
-          {subtitle}
-        </div>
+    <div
+      className={cn(
+        'flex items-start justify-between gap-4',
+        border === 'bottom' && 'border-b border-gray-100/80 pb-3',
+        className,
       )}
+    >
+      <div className={cn(icon && 'flex items-center gap-2')}>
+        {icon && <span className="shrink-0">{icon}</span>}
+        {title != null && <TitleTag className={titleClasses[size]}>{title}</TitleTag>}
+        {subtitle && (
+          <div
+            className={cn(
+              'text-gray-600',
+              size === 'lg' ? 'mt-1.5 text-base md:text-lg max-w-3xl leading-relaxed' : 'mt-1 text-sm',
+            )}
+          >
+            {subtitle}
+          </div>
+        )}
+      </div>
+      {actions && <div className="shrink-0">{actions}</div>}
     </div>
-    {actions && <div className="shrink-0">{actions}</div>}
-  </div>
   )
 }
 

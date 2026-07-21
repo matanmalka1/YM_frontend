@@ -26,7 +26,12 @@ type SelectedClientFilter = {
   name: string
 }
 
-export const useNotificationsPage = () => {
+interface UseNotificationsPageOptions {
+  /** Pins the list to one client (client-details tab): overrides any URL client filter and drops the client-picker field. */
+  pinnedClient?: { id: number; name: string }
+}
+
+export const useNotificationsPage = ({ pinnedClient }: UseNotificationsPageOptions = {}) => {
   const { isAdvisor } = useRole()
   const { searchParams, getParam, getPage, setFilter, setFilters, setPage: setUrlPage } = useSearchParamFilters()
 
@@ -46,13 +51,17 @@ export const useNotificationsPage = () => {
   // shared links) without depending on the filters or page it happens to fall under.
   const [selectedId, setSelectedId] = useState<number | null>(parsePositiveInt(searchParams.get('notification_id'), 0) || null)
   const { data: selected, isPending: selectedLoading, error: selectedError } = useNotificationDetail(selectedId)
+  // Context isolation: the loaded notification is validated against the pinned client.
+  // A legitimate same-client deep link opens as normal; a foreign one is loaded but
+  // never surfaced (drawer stays closed, send never targets the foreign client).
+  const isForeignSelected = pinnedClient != null && selected != null && selected.client_record_id !== pinnedClient.id
   const [sendOpen, setSendOpen] = useState(false)
   const [sendClient, setSendClient] = useState<SelectedClientFilter | null>(null)
 
   const params: ListNotificationsParams = {
     page,
     page_size: pageSize,
-    client_record_id: clientRecordId ? Number(clientRecordId) : undefined,
+    client_record_id: pinnedClient?.id ?? (clientRecordId ? Number(clientRecordId) : undefined),
     trigger,
     status,
     created_after: dateFrom ? `${dateFrom}T00:00:00` : undefined,
@@ -76,13 +85,16 @@ export const useNotificationsPage = () => {
   }, [])
 
   const columns = useMemo(
-    () => buildNotificationColumns({ isAdvisor, onView: setSelectedId, onSend: openSendModal }),
-    [isAdvisor, openSendModal],
+    () =>
+      buildNotificationColumns({ isAdvisor, includeClientColumn: !pinnedClient, onView: setSelectedId, onSend: openSendModal }),
+    [isAdvisor, pinnedClient, openSendModal],
   )
 
   const filterFields = useMemo(
     () => [
-      { type: 'client-picker' as const, idKey: 'client_record_id', nameKey: 'client_name', label: 'לקוח' },
+      ...(pinnedClient
+        ? []
+        : [{ type: 'client-picker' as const, idKey: 'client_record_id', nameKey: 'client_name', label: 'לקוח' }]),
       { type: 'select' as const, key: 'trigger', label: 'סוג הודעה', options: NOTIFICATION_TRIGGER_OPTIONS },
       { type: 'select' as const, key: 'status', label: 'סטטוס', options: NOTIFICATION_STATUS_OPTIONS },
       {
@@ -100,7 +112,7 @@ export const useNotificationsPage = () => {
         disabled: usersPending,
       },
     ],
-    [userOptions, usersPending],
+    [pinnedClient, userOptions, usersPending],
   )
 
   const filterValues = {
@@ -162,18 +174,20 @@ export const useNotificationsPage = () => {
     },
     drawers: {
       detail: {
-        open: selectedId !== null,
-        notification: selected,
+        open: selectedId !== null && !isForeignSelected,
+        notification: isForeignSelected ? undefined : selected,
         isLoading: selectedId !== null && selectedLoading,
         error: selectedError,
         onClose: () => setSelectedId(null),
         onSend:
-          selected && isAdvisor
+          selected && !isForeignSelected && isAdvisor
             ? () =>
-                openSendModal({
-                  id: selected.client_record_id,
-                  name: selected.client_name ?? `#${selected.client_record_id}`,
-                })
+                openSendModal(
+                  pinnedClient ?? {
+                    id: selected.client_record_id,
+                    name: selected.client_name ?? `#${selected.client_record_id}`,
+                  },
+                )
             : undefined,
       },
     },
@@ -182,7 +196,7 @@ export const useNotificationsPage = () => {
       sendProps: {
         open: sendOpen,
         onClose: closeSendModal,
-        clientRecordId: sendClient?.id,
+        clientRecordId: sendClient?.id ?? pinnedClient?.id,
         allowedTriggers: CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS,
       },
     },

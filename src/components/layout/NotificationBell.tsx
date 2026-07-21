@@ -17,8 +17,8 @@ export const NotificationBell: React.FC = () => {
         icon={<Bell className="h-4 w-4" />}
         onClick={openDrawer}
         className="relative border-gray-200 text-gray-500 shadow-sm hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900"
-        aria-label="התראות"
-        tooltip="התראות"
+        aria-label="הודעות"
+        tooltip="הודעות"
       />
       <NotificationDrawer open={drawerOpen} onClose={closeDrawer} clientRecordId={clientRecordId} />
     </>

@@ -2,7 +2,6 @@ import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { actionsColumn, EmptyCell, monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
 import { MonoValue } from '@/components/ui/primitives/MonoValue'
 import type { BinderResponse } from '../../types'
-import type { BinderDetailResponse } from '../../api'
 import {
   BINDER_CAPACITY_STATUS_VARIANTS,
   BINDER_LOCATION_STATUS_VARIANTS,
@@ -13,20 +12,13 @@ import { formatBinderNumber, formatClientOfficeId, formatMonthYear } from '@/uti
 import { BinderRowActions } from './BinderRowActions'
 import { BINDERS_MESSAGES } from '../../messages'
 
-/** Structural subset shared by `BinderResponse` (global list) and `BinderDetailResponse` (client list). */
-type BinderBaseRow = Pick<
-  BinderResponse,
-  'binder_number' | 'period_start' | 'period_end' | 'location_status' | 'capacity_status' | 'days_in_office'
->
-
 const renderClientCell = (binder: BinderResponse) => (
   <span className="flex flex-col gap-0.5">
     <span className="font-semibold text-gray-900">{binder.client_name ?? `#${binder.client_record_id}`}</span>
   </span>
 )
 
-/** Binder-identity columns shared by the global `/binders` table and the client-scoped tab. */
-const buildBinderBaseColumns = <T extends BinderBaseRow>(): Column<T>[] => [
+const buildBinderBaseColumns = (): Column<BinderResponse>[] => [
   monoColumn({
     key: 'binder_number',
     header: BINDERS_MESSAGES.columns.binderNumber,
@@ -70,6 +62,8 @@ const buildBinderBaseColumns = <T extends BinderBaseRow>(): Column<T>[] => [
 
 interface BuildGlobalBinderColumnsParams {
   actionLoadingId: number | null
+  /** false on the client-details tab — the page already is the client, so client-identity columns are omitted. */
+  includeClientColumns: boolean
   onReceiveMaterial: (binderId: number) => void
   onMarkFull: (binderId: number) => void
   onReopenCapacity: (binderId: number) => void
@@ -84,6 +78,7 @@ interface BuildGlobalBinderColumnsParams {
 
 export const buildGlobalBinderColumns = ({
   actionLoadingId,
+  includeClientColumns,
   onReceiveMaterial,
   onMarkFull,
   onReopenCapacity,
@@ -95,22 +90,26 @@ export const buildGlobalBinderColumns = ({
   onOpenDetail,
   onDelete,
 }: BuildGlobalBinderColumnsParams): Column<BinderResponse>[] => [
-  monoColumn({
-    key: 'office_client_number',
-    header: BINDERS_MESSAGES.columns.officeClientNumber,
-    getValue: (binder) => formatClientOfficeId(binder.office_client_number),
-  }),
-  textColumn({
-    key: 'client_name',
-    header: GLOBAL_UI_MESSAGES.common.client,
-    getValue: (binder) => renderClientCell(binder),
-  }),
-  monoColumn({
-    key: 'client_id_number',
-    header: BINDERS_MESSAGES.columns.idNumber,
-    getValue: (binder) => binder.client_id_number,
-  }),
-  ...buildBinderBaseColumns<BinderResponse>(),
+  ...(includeClientColumns
+    ? [
+        monoColumn<BinderResponse>({
+          key: 'office_client_number',
+          header: BINDERS_MESSAGES.columns.officeClientNumber,
+          getValue: (binder) => formatClientOfficeId(binder.office_client_number),
+        }),
+        textColumn<BinderResponse>({
+          key: 'client_name',
+          header: GLOBAL_UI_MESSAGES.common.client,
+          getValue: (binder) => renderClientCell(binder),
+        }),
+        monoColumn<BinderResponse>({
+          key: 'client_id_number',
+          header: BINDERS_MESSAGES.columns.idNumber,
+          getValue: (binder) => binder.client_id_number,
+        }),
+      ]
+    : []),
+  ...buildBinderBaseColumns(),
   actionsColumn({
     key: 'actions',
     header: '',
@@ -132,10 +131,3 @@ export const buildGlobalBinderColumns = ({
     ),
   }),
 ]
-
-/**
- * Client-details tab columns: the shared base only. The page is the client, so the
- * client-identity columns are omitted; row actions are omitted because the client
- * endpoint's `BinderDetailResponse` carries no `available_actions`.
- */
-export const buildClientBinderColumns = (): Column<BinderDetailResponse>[] => buildBinderBaseColumns<BinderDetailResponse>()

@@ -28,9 +28,10 @@ export const getTaskFiltersFromSearchParams = (searchParams: URLSearchParams): T
 
 export const hasTaskFilters = (filters: TasksFilterValues): boolean => Object.values(filters).some(Boolean)
 
-export const buildTaskListParams = (page: number, filters: TasksFilterValues): TaskListParams => ({
+export const buildTaskListParams = (page: number, filters: TasksFilterValues, clientRecordId?: number): TaskListParams => ({
   page,
   page_size: TASKS_PAGE_SIZE,
+  ...(clientRecordId ? { client_record_id: clientRecordId } : {}),
   ...(filters.status ? { status: filters.status } : {}),
   ...(filters.priority ? { priority: filters.priority } : {}),
   ...(filters.assignedRole ? { assigned_role: filters.assignedRole } : {}),

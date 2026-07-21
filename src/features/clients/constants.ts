@@ -61,7 +61,7 @@ export const CLIENT_DETAILS_TAB_LABELS: Record<ActiveClientDetailsTab, string> =
   'advance-payments': 'מקדמות',
   'annual-reports': 'דוחות שנתיים',
   communication: 'תקשורת',
-  notifications: 'התראות',
+  notifications: 'הודעות',
   notes: 'הערות',
   tasks: 'משימות',
 }

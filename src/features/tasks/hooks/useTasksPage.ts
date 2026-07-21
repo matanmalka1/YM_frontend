@@ -20,8 +20,13 @@ import { useTasks } from './useTasks'
 import { TASKS_ERROR_MESSAGES } from '../errorMessages'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 
-export const useTasksPage = () => {
-  const filters = useTaskFilters()
+interface UseTasksPageOptions {
+  /** Pins the list to one client (client-details tab): the list query is scoped to this client. */
+  pinnedClientId?: number
+}
+
+export const useTasksPage = ({ pinnedClientId }: UseTasksPageOptions = {}) => {
+  const filters = useTaskFilters(pinnedClientId)
   const { getParam, setFilter } = useSearchParamFilters()
   const initialViewTaskId = parsePositiveInt(getParam('task_id'), 0) || null
   const actions = useTaskActions(initialViewTaskId)
@@ -37,6 +42,15 @@ export const useTasksPage = () => {
 
   const tasks = tasksQuery.data?.items ?? []
   const total = tasksQuery.data?.total ?? 0
+
+  // Context isolation: a task opened from the ?task_id deep link is loaded, then its
+  // client is validated against the pinned client. A legitimate same-client link opens
+  // as normal; a foreign task is loaded but never surfaced (no modal, no actions).
+  const loadedModalTask = actions.modal?.mode !== 'create' ? (editTaskData ?? null) : null
+  const isForeignModalTask =
+    pinnedClientId != null && loadedModalTask != null && loadedModalTask.client_record_id !== pinnedClientId
+  const modal = isForeignModalTask ? null : actions.modal
+  const modalTask = isForeignModalTask ? null : loadedModalTask
 
   const confirmCopy = actions.pendingConfirm ? TASK_CONFIRM_COPY[actions.pendingConfirm.action] : null
 
@@ -90,9 +104,9 @@ export const useTasksPage = () => {
     retryList: tasksQuery.refetch,
     actionError: actions.actionError,
     isActionBusy: actions.isActionBusy,
-    modal: actions.modal,
-    modalTask: actions.modal?.mode !== 'create' ? (editTaskData ?? null) : null,
-    isModalLoading: actions.isModalSaving || (actions.modal !== null && actions.modal.mode !== 'create' && editTaskLoading),
+    modal,
+    modalTask,
+    isModalLoading: actions.isModalSaving || (modal !== null && modal.mode !== 'create' && editTaskLoading),
     confirmDialog: {
       open: Boolean(actions.pendingConfirm && confirmCopy),
       title: confirmCopy?.title ?? '',

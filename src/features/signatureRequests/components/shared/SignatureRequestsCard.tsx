@@ -20,11 +20,10 @@ import { SIGNATURE_REQUESTS_MESSAGES } from '../../messages'
 
 interface Props {
   client: ClientRecordResponse
-  businessId: number | null | undefined
   canManage: boolean
 }
 
-export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, canManage }) => {
+export const SignatureRequestsCard: React.FC<Props> = ({ client, canManage }) => {
   const [showCreate, setShowCreate] = useState(false)
   const [auditRequestId, setAuditRequestId] = useState<number | null>(null)
   const [page, setPage] = useState(1)
@@ -127,7 +126,6 @@ export const SignatureRequestsCard: React.FC<Props> = ({ client, businessId, can
       <CreateSignatureRequestModal
         open={showCreate}
         clientId={client.id}
-        businessId={businessId ?? undefined}
         signerName={client.full_name}
         signerEmail={client.email ?? undefined}
         signerPhone={client.phone ?? undefined}

@@ -5,6 +5,7 @@ import { NotificationBell } from '../NotificationBell'
 import { Input } from '@/components/ui/inputs/Input'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
+import { Tooltip } from '@/components/ui/primitives/Tooltip'
 import { useAuthStore } from '@/store/auth.store'
 import { formatHebrewDate } from '@/utils/utils'
 import { NAV_GROUPS } from './Navbar.constants'
@@ -57,17 +58,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenClientSidebar, clientSideb
           className="md:hidden"
           aria-label="רשימת לקוחות"
         />
-        <Button
-          type="button"
-          variant={sidebarOpen ? 'outline' : 'secondary'}
-          shape="square"
-          size="md"
-          icon={<PanelRight className="h-4 w-4" />}
-          onClick={onToggleSidebar}
-          className="hidden md:inline-flex"
-          aria-label={sidebarOpen ? 'סגירת רשימת לקוחות' : 'פתיחת רשימת לקוחות'}
-          aria-pressed={sidebarOpen}
-        />
+        <Tooltip text={sidebarOpen ? 'סגירת רשימת לקוחות' : 'פתיחת רשימת לקוחות'}>
+          <Button
+            type="button"
+            variant={sidebarOpen ? 'outline' : 'secondary'}
+            shape="square"
+            size="md"
+            icon={<PanelRight className="h-4 w-4" />}
+            onClick={onToggleSidebar}
+            className="hidden md:inline-flex"
+            aria-label={sidebarOpen ? 'סגירת רשימת לקוחות' : 'פתיחת רשימת לקוחות'}
+            aria-pressed={sidebarOpen}
+          />
+        </Tooltip>
         <form onSubmit={handleSearchSubmit} role="search" className="hidden md:block">
           <div className="w-36">
             <Input

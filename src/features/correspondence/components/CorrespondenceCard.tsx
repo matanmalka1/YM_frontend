@@ -14,11 +14,10 @@ import { CORRESPONDENCE_MESSAGES } from '../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface CorrespondenceCardProps {
-  businessId: number | undefined
-  clientId?: number
+  clientId: number
 }
 
-export const CorrespondenceCard = ({ businessId, clientId }: CorrespondenceCardProps) => {
+export const CorrespondenceCard = ({ clientId }: CorrespondenceCardProps) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState<CorrespondenceEntry | null>(null)
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null)
@@ -35,7 +34,7 @@ export const CorrespondenceCard = ({ businessId, clientId }: CorrespondenceCardP
     deleteEntry,
     deletingId,
     contacts,
-  } = useCorrespondence(businessId, clientId, modalOpen)
+  } = useCorrespondence(clientId, modalOpen)
 
   const handleSubmit = async (data: CorrespondenceFormValues) => {
     if (editing) {

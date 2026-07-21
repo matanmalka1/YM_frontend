@@ -23,6 +23,7 @@ export const CHARGES_MESSAGES = {
   },
   filters: {
     type: 'סוג חיוב',
+    business: 'עסק',
     period: 'תקופה',
     issuedFrom: 'הונפק מתאריך',
     issuedTo: 'הונפק עד תאריך',

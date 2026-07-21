@@ -88,17 +88,8 @@ export const taskBulkActionResponseSchema = z.object({
 })
 export type TaskBulkActionResponse = z.infer<typeof taskBulkActionResponseSchema>
 
-export interface ClientTaskListParams {
-  status?: TaskStatus
-  assigned_to_user_id?: number
-  source_domain?: string
-  due_before?: string
-  due_after?: string
-  page?: number
-  page_size?: number
-}
-
 export interface TaskListParams {
+  client_record_id?: number
   status?: TaskStatus
   priority?: TaskPriority
   assigned_to_user_id?: number

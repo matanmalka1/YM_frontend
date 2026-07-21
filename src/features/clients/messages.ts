@@ -130,15 +130,9 @@ export const CLIENTS_MESSAGES = {
   },
   relatedData: {
     cardTitle: 'נתונים קשורים',
-    addBinder: 'הוסף קלסר',
-    addCharge: 'הוסף חיוב',
-    showAll: (total: number) => `הכל (${total})`,
-    bindersTitle: 'קלסרים אחרונים',
-    bindersEmpty: 'אין קלסרים להצגה',
-    binderTitle: (binderNumber: string) => `קלסר ${binderNumber}`,
-    chargesTitle: 'חיובים אחרונים',
-    chargesEmpty: 'אין חיובים להצגה',
-    chargeTitle: (id: number) => `חיוב #${id}`,
+    bindersLabel: 'קלסרים',
+    chargesLabel: 'חיובים',
+    viewTab: 'מעבר ללשונית',
   },
   createBusiness: {
     modalTitle: 'הוספת עסק',

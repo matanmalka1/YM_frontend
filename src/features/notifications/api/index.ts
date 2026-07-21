@@ -5,7 +5,6 @@ export type {
   NotificationStatus,
   NotificationItem,
   ListNotificationsParams,
-  NotificationSummaryParams,
   NotificationPreviewRequest,
   NotificationSendVariables,
   NotificationResult,

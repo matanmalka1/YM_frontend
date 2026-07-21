@@ -175,9 +175,9 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
   const annualReports: AnnualReportListItem[] = annualReportsData ?? []
 
   const resetState = () => {
-    form.reset(getDefaultValues())
-    setClientQuery('')
-    setSelectedClient(null)
+    form.reset(initialClient ? { ...getDefaultValues(), client_record_id: initialClient.id } : getDefaultValues())
+    setClientQuery(initialClient?.name ?? '')
+    setSelectedClient(initialClient ? { id: initialClient.id, name: initialClient.name } : null)
   }
 
   const mutation = useMutation({

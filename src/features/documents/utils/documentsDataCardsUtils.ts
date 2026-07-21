@@ -21,9 +21,6 @@ export const filterDocuments = (documents: PermanentDocumentResponse[], searchTe
     return matchesDocumentSearch(doc, searchTerm)
   })
 
-export const getCountLabel = (filteredCount: number, totalCount: number) =>
-  filteredCount !== totalCount ? `${filteredCount}/${totalCount}` : `${totalCount}`
-
 export const getBusinessOptions = (businesses: BusinessResponse[]) => [
   { value: '', label: GENERAL_CLIENT_DOCUMENT_LABEL },
   ...businesses.map((business) => ({
