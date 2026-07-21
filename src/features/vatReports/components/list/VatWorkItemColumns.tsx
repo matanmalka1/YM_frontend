@@ -1,5 +1,5 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
-import { AlertTriangle } from 'lucide-react'
+import { PencilLine } from 'lucide-react'
 import { dateColumn, EmptyCell, monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
 import type { VatWorkItemListItem } from '../../api'
 import { getVatWorkItemStatusLabel } from '../../constants/vatConstants'
@@ -8,7 +8,7 @@ import { VAT_DEADLINE_WARNING_DAYS, VAT_STATUS_BADGE_VARIANTS } from '../../cons
 import { formatVatAmount, isFiled } from '../../utils/vatHelpers'
 import { VatWorkItemRowActions } from './VatWorkItemRowActions'
 import type { ColumnOpts } from '../../types'
-import { Badge } from '@/components/ui/primitives/Badge'
+import { Tooltip } from '@/components/ui/primitives/Tooltip'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { formatVatPeriodTitle } from '../../utils/viewHelpers'
 import { VAT_MESSAGES } from '../../messages'
@@ -59,7 +59,7 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
       return (
         <span
           dir="ltr"
-          className={`relative inline-flex items-center justify-end font-mono text-sm font-semibold tabular-nums ${
+          className={`inline-flex items-center justify-end gap-1 font-mono text-sm font-semibold tabular-nums ${
             Number(amount) === 0
               ? 'text-gray-400'
               : Number(amount) > 0
@@ -68,9 +68,9 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
           }`}
         >
           {item.is_overridden && (
-            <Badge variant="warning" size="xs" className="absolute right-full top-1/2 mr-1 -translate-y-1/2">
-              {VAT_MESSAGES.columns.overrideBadge}
-            </Badge>
+            <Tooltip text={VAT_MESSAGES.columns.overrideTooltip}>
+              <PencilLine className="h-3.5 w-3.5 shrink-0 text-gray-400" aria-label={VAT_MESSAGES.columns.overrideTooltip} />
+            </Tooltip>
           )}
           {formatVatAmount(amount)}
         </span>
@@ -92,8 +92,13 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
           : 'text-gray-600'
       return (
         <span className={`font-mono text-sm tabular-nums inline-flex items-center gap-1 ${cls}`}>
-          {overdue && <AlertTriangle className="h-3.5 w-3.5" />}
-          {formatDate(displayDeadline)}
+          {overdue ? (
+            <Tooltip text={VAT_MESSAGES.columns.overdueTooltip}>
+              <span>{formatDate(displayDeadline)}</span>
+            </Tooltip>
+          ) : (
+            formatDate(displayDeadline)
+          )}
         </span>
       )
     },
