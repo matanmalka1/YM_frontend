@@ -87,14 +87,18 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
             {urgency.label}
           </Badge>
         </div>
-        <div className="mt-0.5 flex items-center gap-1.5 text-xs text-slate-400">
-          {item.client_name && <span className="font-medium text-slate-500 truncate max-w-[120px]">{item.client_name}</span>}
-          {item.client_name && <span>·</span>}
-          <span>{source.label}</span>
+        <div className="mt-0.5 flex min-w-0 items-center gap-1.5 text-xs text-slate-400">
+          {item.client_name && (
+            <span title={item.client_name} className="max-w-[55%] shrink-0 truncate font-medium text-slate-500">
+              {item.client_name}
+            </span>
+          )}
+          {item.client_name && <span className="shrink-0">·</span>}
+          <span className="shrink-0 whitespace-nowrap">{source.label}</span>
           {item.reason && (
             <>
-              <span>·</span>
-              <span className="truncate">{item.reason}</span>
+              <span className="shrink-0">·</span>
+              <span className="min-w-0 truncate">{item.reason}</span>
             </>
           )}
         </div>
