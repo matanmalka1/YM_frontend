@@ -1,6 +1,7 @@
 import { FileSearch, Search as SearchIcon } from 'lucide-react'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { StateCard } from '@/components/ui/feedback/StateCard'
+import { Card } from '@/components/ui/primitives/Card'
 import { PageLoading } from '@/components/ui/layout/PageLoading'
 import { cn } from '@/utils/utils'
 import { SEARCH_MESSAGES } from '../messages'
@@ -36,12 +37,25 @@ export const SearchResultsSection: React.FC<SearchResultsSectionProps> = ({
     {status.isLoading && <PageLoading />}
 
     {prompt.visible && (
-      <StateCard
-        icon={SearchIcon}
-        title={SEARCH_MESSAGES.page.promptTitle}
-        message={SEARCH_MESSAGES.page.promptMessage}
-        variant="illustration"
-      />
+      <div className="space-y-4">
+        <StateCard
+          icon={SearchIcon}
+          title={SEARCH_MESSAGES.page.promptTitle}
+          message={SEARCH_MESSAGES.page.promptMessage}
+          variant="illustration"
+        />
+        <Card title={SEARCH_MESSAGES.page.hintsTitle} size="compact">
+          <dl className="grid gap-x-8 gap-y-2 sm:grid-cols-2">
+            {SEARCH_MESSAGES.hints.map(({ label, hint }) => (
+              <div key={label} className="flex gap-2 text-sm">
+                <dt className="shrink-0 font-medium text-gray-900">{label}:</dt>
+                <dd className="text-gray-600">{hint}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-3 text-xs text-gray-500">{SEARCH_MESSAGES.page.hintsNote}</p>
+        </Card>
+      </div>
     )}
 
     {emptyState.visible && (
