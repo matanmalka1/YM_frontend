@@ -11,6 +11,7 @@ export const TURNOVER_SOURCE_LABELS: Record<string, string> = {
 export type ActiveClientDetailsTab =
   | 'details'
   | 'documents'
+  | 'binders'
   | 'timeline'
   | 'charges'
   | 'vat'
@@ -36,6 +37,7 @@ export const CLIENT_ID_NUMBER_TYPES = [
 export const CLIENT_DETAILS_TABS: ActiveClientDetailsTab[] = [
   'details',
   'documents',
+  'binders',
   'timeline',
   'charges',
   'vat',
@@ -51,6 +53,7 @@ export const CLIENT_DETAILS_TABS: ActiveClientDetailsTab[] = [
 export const CLIENT_DETAILS_TAB_LABELS: Record<ActiveClientDetailsTab, string> = {
   details: 'סקירה כללית',
   documents: 'מסמכים',
+  binders: 'קלסרים',
   timeline: 'ציר זמן ושינויים',
   charges: 'חיובים',
   vat: 'מע"מ (לקוח)',

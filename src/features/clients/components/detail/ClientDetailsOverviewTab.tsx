@@ -20,6 +20,7 @@ import { ChargesCreateModal, ClientChargesTab } from '@/features/charges'
 import { ClientTimelineTab } from '@/features/timeline'
 import { ClientAnnualReportsTab } from '@/features/annualReports'
 import { ClientAdvancePaymentsTab } from '@/features/advancedPayments'
+import { ClientBindersTab } from '@/features/binders'
 import { ClientDocumentsTab } from '@/features/documents'
 import { NotesCard } from '@/features/notes'
 import { NotificationsTab } from '@/features/notifications'
@@ -139,6 +140,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
 
       {activeTab === 'timeline' && <ClientTimelineTab clientId={String(client.id)} />}
       {activeTab === 'documents' && <ClientDocumentsTab clientId={client.id} />}
+      {activeTab === 'binders' && <ClientBindersTab clientId={client.id} />}
       {activeTab === 'charges' && <ClientChargesTab clientId={client.id} clientName={client.full_name} />}
       {activeTab === 'vat' && <VatClientSummaryPanel clientId={client.id} />}
       {activeTab === 'tax-calendar' && <ClientTaxCalendarTab clientId={client.id} />}

@@ -2,6 +2,7 @@ import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { actionsColumn, EmptyCell, monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
 import { MonoValue } from '@/components/ui/primitives/MonoValue'
 import type { BinderResponse } from '../../types'
+import type { BinderDetailResponse } from '../../api'
 import {
   BINDER_CAPACITY_STATUS_VARIANTS,
   BINDER_LOCATION_STATUS_VARIANTS,
@@ -12,54 +13,20 @@ import { formatBinderNumber, formatClientOfficeId, formatMonthYear } from '@/uti
 import { BinderRowActions } from './BinderRowActions'
 import { BINDERS_MESSAGES } from '../../messages'
 
+/** Structural subset shared by `BinderResponse` (global list) and `BinderDetailResponse` (client list). */
+type BinderBaseRow = Pick<
+  BinderResponse,
+  'binder_number' | 'period_start' | 'period_end' | 'location_status' | 'capacity_status' | 'days_in_office'
+>
+
 const renderClientCell = (binder: BinderResponse) => (
   <span className="flex flex-col gap-0.5">
     <span className="font-semibold text-gray-900">{binder.client_name ?? `#${binder.client_record_id}`}</span>
   </span>
 )
 
-interface BuildBindersColumnsParams {
-  actionLoadingId: number | null
-  onReceiveMaterial: (binderId: number) => void
-  onMarkFull: (binderId: number) => void
-  onReopenCapacity: (binderId: number) => void
-  onMarkReadyForHandover: (binderId: number) => void
-  onMarkReadyForHandoverBulk: (binderId: number) => void
-  onRevertReadyForHandover: (binderId: number) => void
-  onHandoverToClient: (binderId: number) => void
-  onHandoverToClientBulk: (binderId: number) => void
-  onOpenDetail: (binderId: number) => void
-  onDelete: (binderId: number) => void
-}
-
-export const buildBindersColumns = ({
-  actionLoadingId,
-  onReceiveMaterial,
-  onMarkFull,
-  onReopenCapacity,
-  onMarkReadyForHandover,
-  onMarkReadyForHandoverBulk,
-  onRevertReadyForHandover,
-  onHandoverToClient,
-  onHandoverToClientBulk,
-  onOpenDetail,
-  onDelete,
-}: BuildBindersColumnsParams): Column<BinderResponse>[] => [
-  monoColumn({
-    key: 'office_client_number',
-    header: BINDERS_MESSAGES.columns.officeClientNumber,
-    getValue: (binder) => formatClientOfficeId(binder.office_client_number),
-  }),
-  textColumn({
-    key: 'client_name',
-    header: GLOBAL_UI_MESSAGES.common.client,
-    getValue: (binder) => renderClientCell(binder),
-  }),
-  monoColumn({
-    key: 'client_id_number',
-    header: BINDERS_MESSAGES.columns.idNumber,
-    getValue: (binder) => binder.client_id_number,
-  }),
+/** Binder-identity columns shared by the global `/binders` table and the client-scoped tab. */
+const buildBinderBaseColumns = <T extends BinderBaseRow>(): Column<T>[] => [
   monoColumn({
     key: 'binder_number',
     header: BINDERS_MESSAGES.columns.binderNumber,
@@ -99,6 +66,51 @@ export const buildBindersColumns = ({
       <MonoValue value={binder.days_in_office} format="days" isInactive={binder.location_status === 'handed_over'} />
     ),
   },
+]
+
+interface BuildGlobalBinderColumnsParams {
+  actionLoadingId: number | null
+  onReceiveMaterial: (binderId: number) => void
+  onMarkFull: (binderId: number) => void
+  onReopenCapacity: (binderId: number) => void
+  onMarkReadyForHandover: (binderId: number) => void
+  onMarkReadyForHandoverBulk: (binderId: number) => void
+  onRevertReadyForHandover: (binderId: number) => void
+  onHandoverToClient: (binderId: number) => void
+  onHandoverToClientBulk: (binderId: number) => void
+  onOpenDetail: (binderId: number) => void
+  onDelete: (binderId: number) => void
+}
+
+export const buildGlobalBinderColumns = ({
+  actionLoadingId,
+  onReceiveMaterial,
+  onMarkFull,
+  onReopenCapacity,
+  onMarkReadyForHandover,
+  onMarkReadyForHandoverBulk,
+  onRevertReadyForHandover,
+  onHandoverToClient,
+  onHandoverToClientBulk,
+  onOpenDetail,
+  onDelete,
+}: BuildGlobalBinderColumnsParams): Column<BinderResponse>[] => [
+  monoColumn({
+    key: 'office_client_number',
+    header: BINDERS_MESSAGES.columns.officeClientNumber,
+    getValue: (binder) => formatClientOfficeId(binder.office_client_number),
+  }),
+  textColumn({
+    key: 'client_name',
+    header: GLOBAL_UI_MESSAGES.common.client,
+    getValue: (binder) => renderClientCell(binder),
+  }),
+  monoColumn({
+    key: 'client_id_number',
+    header: BINDERS_MESSAGES.columns.idNumber,
+    getValue: (binder) => binder.client_id_number,
+  }),
+  ...buildBinderBaseColumns<BinderResponse>(),
   actionsColumn({
     key: 'actions',
     header: '',
@@ -120,3 +132,10 @@ export const buildBindersColumns = ({
     ),
   }),
 ]
+
+/**
+ * Client-details tab columns: the shared base only. The page is the client, so the
+ * client-identity columns are omitted; row actions are omitted because the client
+ * endpoint's `BinderDetailResponse` carries no `available_actions`.
+ */
+export const buildClientBinderColumns = (): Column<BinderDetailResponse>[] => buildBinderBaseColumns<BinderDetailResponse>()
