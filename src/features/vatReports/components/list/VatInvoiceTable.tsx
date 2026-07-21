@@ -61,10 +61,6 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
   const totalVat = invoices.reduce((s, i) => s + Number(i.vat_amount ?? 0), 0)
   const totalDeductibleVat = invoices.reduce((s, i) => s + Number(i.vat_amount ?? 0) * Number(i.deduction_rate ?? 0), 0)
 
-  // base cols: מספר תאריך ספק ח.פ סוגמסמך סוגעסקה %הכרה נטו מעמ נוצרעי נוצרב = 11
-  // expense adds: קטגוריה + מעמלניכוי = +2 · canEdit adds: actions = +1
-  const totalCols = 11 + (isExpense ? 2 : 0) + (canEdit ? 1 : 0)
-
   if (invoices.length === 0) {
     return (
       <InlineState
@@ -82,6 +78,14 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
       header: VAT_MESSAGES.invoices.number,
       kind: 'mono',
       className: `border-r-2 ${accentBorder}`,
+      footer: (
+        <span className="inline-flex items-center gap-2 font-sans">
+          <span className="font-semibold text-gray-500">{VAT_MESSAGES.categoryTable.total}</span>
+          <Badge variant="neutral" size="xs" className="bg-gray-200 px-2 font-bold text-gray-600">
+            {invoices.length}
+          </Badge>
+        </span>
+      ),
       render: (inv) => (
         <>
           {getVatInvoiceDisplayNumber(inv)}
@@ -163,11 +167,13 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
       key: 'net_amount',
       header: VAT_MESSAGES.invoices.netAmount,
       getValue: (inv) => formatVatAmount(inv.net_amount),
+      footer: <span className="font-mono font-bold text-gray-900">{formatVatAmount(totalNet)}</span>,
     }),
     moneyColumn({
       key: 'vat_amount',
       header: VAT_MESSAGES.invoices.vatAmount,
       getValue: (inv) => formatVatAmount(inv.vat_amount),
+      footer: <span className="font-mono font-semibold text-gray-700">{formatVatAmount(totalVat)}</span>,
     }),
     ...(isExpense
       ? ([
@@ -177,6 +183,11 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
             kind: 'money',
             tone: 'success',
             render: (inv) => formatVatAmount(Number(inv.vat_amount) * Number(inv.deduction_rate)),
+            footer: (
+              <span className={`font-mono font-bold ${semanticMonoToneClasses.positive}`}>
+                {formatVatAmount(totalDeductibleVat)}
+              </span>
+            ),
           },
         ] as Column<Invoice>[])
       : []),
@@ -228,7 +239,6 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
         getRowKey={(inv) => inv.id}
         editingRowKey={editingId}
         surface="embedded"
-        density="compact"
         footerClassName="border-t-2 border-gray-200 bg-gray-50"
         renderEditRow={(inv) => (
           <VatInvoiceEditRow
@@ -239,26 +249,6 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
             onCancel={() => setEditingId(null)}
             isSaving={isUpdating}
           />
-        )}
-        renderFooter={() => (
-          <tr>
-            <td colSpan={totalCols - (canEdit ? 3 : 2)} className="px-3 py-2 text-right">
-              <span className="inline-flex items-center gap-2">
-                <span className="text-xs font-semibold text-gray-500">{VAT_MESSAGES.categoryTable.total}</span>
-                <Badge variant="neutral" size="xs" className="bg-gray-200 px-2 font-bold text-gray-600">
-                  {invoices.length}
-                </Badge>
-              </span>
-            </td>
-            <td className="px-3 py-2 font-mono tabular-nums font-bold text-gray-900">{formatVatAmount(totalNet)}</td>
-            <td className="px-3 py-2 font-mono tabular-nums font-semibold text-gray-700">{formatVatAmount(totalVat)}</td>
-            {isExpense && (
-              <td className={`px-3 py-2 font-mono tabular-nums font-bold ${semanticMonoToneClasses.positive}`}>
-                {formatVatAmount(totalDeductibleVat)}
-              </td>
-            )}
-            <td colSpan={canEdit ? 3 : 2} />
-          </tr>
         )}
       />
       <ConfirmDialog
