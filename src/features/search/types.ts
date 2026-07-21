@@ -27,7 +27,7 @@ export interface SearchFiltersBarProps {
   }
   hydratedClient: ClientPickerValue | null
   onFilterChange: (name: keyof SearchFilters, value: string) => void
-  onReset?: () => void
+  onReset: () => void
   isOpen: boolean
   onToggle: () => void
 }

@@ -6828,12 +6828,6 @@ export interface components {
       result_type: components['schemas']['SearchItemType']
       /** Id */
       id: number
-      /** Client Record Id */
-      client_record_id: number
-      /** Office Client Number */
-      office_client_number?: number | null
-      /** Client Name */
-      client_name: string
       /** Title */
       title: string
       /** Detail */

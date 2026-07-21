@@ -103,7 +103,7 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
             />
           </div>
 
-          {advancedCount > 0 && onReset && (
+          {advancedCount > 0 && (
             <div className="flex items-center justify-between border-t border-gray-100 pt-2">
               <span className="text-xs text-gray-500">{SEARCH_MESSAGES.filters.activeFilters(advancedCount)}</span>
               <Button

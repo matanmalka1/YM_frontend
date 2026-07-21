@@ -21,9 +21,6 @@ export interface SearchClientMatch {
 export interface SearchItem {
   result_type: SearchItemType
   id: number
-  client_record_id: number
-  office_client_number?: number | null
-  client_name: string
   title: string
   detail: string | null
   /** Null for documents, which carry no work status. */
