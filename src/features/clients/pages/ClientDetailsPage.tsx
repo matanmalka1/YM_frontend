@@ -133,27 +133,29 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
       header={
         <>
           {!can.editClients && <Alert variant="info" message={CLIENTS_MESSAGES.details.viewOnlyNotice} />}
-          <PageHeader
-            size="md"
-            title={client ? buildClientTitle(client) : CLIENTS_MESSAGES.details.pageTitle}
-            description={
-              client && initialTab === 'details' ? <ClientHeaderMissingDocuments clientId={client.id} active /> : undefined
-            }
-            actions={
-              can.editClients && initialTab === 'details' ? (
-                <Button
-                  variant="primary"
-                  size="sm"
-                  icon={<Edit2 className="h-4 w-4" />}
-                  onClick={() => setIsEditingRequested(true)}
-                >
-                  {CLIENTS_MESSAGES.details.editDetails}
-                </Button>
-              ) : undefined
-            }
-            breadcrumbs={breadcrumbs}
-          />
-          {client && <ClientHeaderMeta client={client} />}
+          <div className="space-y-3">
+            <PageHeader
+              size="md"
+              title={client ? buildClientTitle(client) : CLIENTS_MESSAGES.details.pageTitle}
+              description={
+                client && initialTab === 'details' ? <ClientHeaderMissingDocuments clientId={client.id} active /> : undefined
+              }
+              actions={
+                can.editClients && initialTab === 'details' ? (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    icon={<Edit2 className="h-4 w-4" />}
+                    onClick={() => setIsEditingRequested(true)}
+                  >
+                    {CLIENTS_MESSAGES.details.editDetails}
+                  </Button>
+                ) : undefined
+              }
+              breadcrumbs={breadcrumbs}
+            />
+            {client && <ClientHeaderMeta client={client} />}
+          </div>
         </>
       }
       loadingMessage={CLIENTS_MESSAGES.details.loadingMessage}

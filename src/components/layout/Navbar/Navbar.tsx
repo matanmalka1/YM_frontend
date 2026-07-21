@@ -80,6 +80,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenClientSidebar, clientSideb
               placeholder="חיפוש..."
               aria-label="חיפוש"
               startIcon={<Search className="h-4 w-4" />}
+              className="rounded-full"
             />
           </div>
         </form>
