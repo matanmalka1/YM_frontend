@@ -142,16 +142,7 @@ export const useBindersPage = () => {
         onOpenDetail: (id) => handleSelectBinder({ id }),
         onDelete: dialogs.openDeleteDialog,
       }),
-    [
-      actionLoadingId,
-      pageItems,
-      dialogs,
-      receiveMaterial,
-      markFull,
-      reopenCapacity,
-      revertReadyForHandover,
-      handleSelectBinder,
-    ],
+    [actionLoadingId, pageItems, dialogs, receiveMaterial, markFull, reopenCapacity, revertReadyForHandover, handleSelectBinder],
   )
 
   const filterFields = useMemo(() => buildBindersFilterFields(), [])
@@ -258,17 +249,11 @@ export const useBindersPage = () => {
         onReceiveMaterial: selectedBinder ? () => void receiveMaterial(selectedBinder.id) : undefined,
         onMarkFull: selectedBinder ? () => void markFull(selectedBinder.id) : undefined,
         onReopenCapacity: selectedBinder ? () => void reopenCapacity(selectedBinder.id) : undefined,
-        onMarkReadyForHandover: selectedBinder
-          ? () => dialogs.openReadyForHandoverDialog(selectedBinder.id)
-          : undefined,
-        onMarkReadyForHandoverBulk: selectedBinder
-          ? () => dialogs.openBulkReadyForHandoverDialog(selectedBinder)
-          : undefined,
+        onMarkReadyForHandover: selectedBinder ? () => dialogs.openReadyForHandoverDialog(selectedBinder.id) : undefined,
+        onMarkReadyForHandoverBulk: selectedBinder ? () => dialogs.openBulkReadyForHandoverDialog(selectedBinder) : undefined,
         onRevertReadyForHandover: selectedBinder ? () => void revertReadyForHandover(selectedBinder.id) : undefined,
         onHandoverToClient: selectedBinder ? () => dialogs.openHandoverToClientDialog(selectedBinder.id) : undefined,
-        onHandoverToClientBulk: selectedBinder
-          ? () => dialogs.openHandoverToClientBulkDialog(selectedBinder)
-          : undefined,
+        onHandoverToClientBulk: selectedBinder ? () => dialogs.openHandoverToClientBulkDialog(selectedBinder) : undefined,
         onDelete: selectedBinder ? () => dialogs.openDeleteDialog(selectedBinder.id) : undefined,
       },
       receive: {

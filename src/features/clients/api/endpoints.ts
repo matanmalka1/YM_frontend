@@ -14,8 +14,7 @@ export const CLIENT_ENDPOINTS = {
 export const CLIENT_ROUTES = {
   list: '/clients',
   detail: (clientId: number | string) => `/clients/${clientId}`,
-  tab: (clientId: number | string, tab: string) =>
-    tab === 'details' ? `/clients/${clientId}` : `/clients/${clientId}/${tab}`,
+  tab: (clientId: number | string, tab: string) => (tab === 'details' ? `/clients/${clientId}` : `/clients/${clientId}/${tab}`),
   timeline: (clientId: number | string) => `/clients/${clientId}/timeline`,
   charges: (clientId: number | string) => `/clients/${clientId}/charges`,
   chargeDetail: (clientId: number | string, chargeId: number | string) => `/clients/${clientId}/charges/${chargeId}`,
@@ -26,11 +25,9 @@ export const CLIENT_ROUTES = {
   advancePaymentDetail: (clientId: number | string, paymentId: number | string) =>
     `/clients/${clientId}/advance-payments/${paymentId}`,
   annualReports: (clientId: number | string) => `/clients/${clientId}/annual-reports`,
-  annualReportDetail: (clientId: number | string, reportId: number | string) =>
-    `/clients/${clientId}/annual-reports/${reportId}`,
+  annualReportDetail: (clientId: number | string, reportId: number | string) => `/clients/${clientId}/annual-reports/${reportId}`,
   documents: (clientId: number | string) => `/clients/${clientId}/documents`,
   tasks: (clientId: number | string) => `/clients/${clientId}/tasks`,
   communication: (clientId: number | string) => `/clients/${clientId}/communication`,
-  businessDetail: (clientId: number | string, businessId: number | string) =>
-    `/clients/${clientId}/businesses/${businessId}`,
+  businessDetail: (clientId: number | string, businessId: number | string) => `/clients/${clientId}/businesses/${businessId}`,
 } as const

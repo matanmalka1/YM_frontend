@@ -1,7 +1,6 @@
 export const documentsQK = {
   clientList: (clientId: number) => ['documents', 'client', clientId, 'list'] as const,
-  clientDetail: (clientId: number, documentId: number) =>
-    ['documents', 'client', clientId, 'detail', documentId] as const,
+  clientDetail: (clientId: number, documentId: number) => ['documents', 'client', clientId, 'detail', documentId] as const,
   clientSignals: (clientId: number) => ['documents', 'client', clientId, 'signals'] as const,
   binderRoot: ['documents', 'binder'] as const,
   versions: (clientId: number, docType: string, taxYear?: number) =>

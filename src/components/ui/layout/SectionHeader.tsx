@@ -27,11 +27,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   className,
 }) => (
   <div
-    className={cn(
-      'flex items-start justify-between gap-4',
-      border === 'bottom' && 'border-b border-gray-100/80 pb-3',
-      className,
-    )}
+    className={cn('flex items-start justify-between gap-4', border === 'bottom' && 'border-b border-gray-100/80 pb-3', className)}
   >
     <div className={cn(icon && 'flex items-center gap-2')}>
       {icon && <span className="shrink-0">{icon}</span>}

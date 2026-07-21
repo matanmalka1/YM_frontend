@@ -90,12 +90,8 @@ export const TimelineFilterPanel: React.FC<TimelineFilterPanelProps> = ({
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
       <div className="min-w-0">
-        <p className="text-sm font-medium text-gray-700">
-          {TIMELINE_MESSAGES.filterPanel.eventsCount(formatCount(total))}
-        </p>
-        {lastUpdated ? (
-          <p className="text-xs text-gray-500">{TIMELINE_MESSAGES.filterPanel.lastUpdated(lastUpdated)}</p>
-        ) : null}
+        <p className="text-sm font-medium text-gray-700">{TIMELINE_MESSAGES.filterPanel.eventsCount(formatCount(total))}</p>
+        {lastUpdated ? <p className="text-xs text-gray-500">{TIMELINE_MESSAGES.filterPanel.lastUpdated(lastUpdated)}</p> : null}
       </div>
 
       <div className="flex flex-wrap items-center justify-end gap-1.5">

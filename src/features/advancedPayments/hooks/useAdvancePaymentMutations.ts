@@ -34,8 +34,7 @@ export const useAdvancePaymentMutations = ({
   const queryClient = useQueryClient()
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, payload }: UpdateAdvancePaymentVariables) =>
-      advancePaymentsApi.update(clientRecordId, id, payload),
+    mutationFn: ({ id, payload }: UpdateAdvancePaymentVariables) => advancePaymentsApi.update(clientRecordId, id, payload),
     onSuccess: (payment) => {
       onUpdateSuccess?.(payment)
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })

@@ -20,12 +20,7 @@ interface NavbarProps {
   onToggleSidebar: () => void
 }
 
-export const Navbar: React.FC<NavbarProps> = ({
-  onOpenClientSidebar,
-  clientSidebarTriggerRef,
-  sidebarOpen,
-  onToggleSidebar,
-}) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenClientSidebar, clientSidebarTriggerRef, sidebarOpen, onToggleSidebar }) => {
   const [searchValue, setSearchValue] = useState('')
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)

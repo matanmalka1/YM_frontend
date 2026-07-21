@@ -24,8 +24,5 @@ export type AnnexFormValues = Record<string, unknown>
 export const buildEmptyFormValues = (schedule: AnnualReportScheduleKey): AnnexFormValues =>
   Object.fromEntries(SCHEDULE_FIELDS[schedule].map((f) => [f.key, '']))
 
-export const mapLineToFormValues = (
-  schedule: AnnualReportScheduleKey,
-  data: Record<string, unknown>,
-): AnnexFormValues =>
+export const mapLineToFormValues = (schedule: AnnualReportScheduleKey, data: Record<string, unknown>): AnnexFormValues =>
   Object.fromEntries(SCHEDULE_FIELDS[schedule].map((f) => [f.key, data[f.key] == null ? '' : String(data[f.key])]))

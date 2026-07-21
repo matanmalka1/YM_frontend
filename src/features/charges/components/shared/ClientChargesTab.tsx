@@ -73,8 +73,7 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
     [businesses],
   )
 
-  const selectedBusiness =
-    selectedBusinessId != null ? (businesses.find((b) => b.id === selectedBusinessId) ?? null) : null
+  const selectedBusiness = selectedBusinessId != null ? (businesses.find((b) => b.id === selectedBusinessId) ?? null) : null
 
   return (
     <DetailTabPanel
@@ -132,9 +131,7 @@ export const ClientChargesTab: React.FC<ClientChargesTabProps> = ({ clientId, cl
         onClose={() => setShowCreateModal(false)}
         onSubmit={submitCreate}
         initialClient={{ id: clientId, name: clientName }}
-        initialBusiness={
-          selectedBusiness ? { id: selectedBusiness.id, name: getChargeBusinessLabel(selectedBusiness) } : null
-        }
+        initialBusiness={selectedBusiness ? { id: selectedBusiness.id, name: getChargeBusinessLabel(selectedBusiness) } : null}
         businesses={businesses}
       />
     </DetailTabPanel>

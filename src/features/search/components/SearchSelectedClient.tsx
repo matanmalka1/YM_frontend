@@ -22,12 +22,7 @@ export const SearchSelectedClient: React.FC<SearchSelectedClientProps> = ({ clie
     <InlineLink href={client.href} className="text-base font-semibold text-gray-900">
       {client.name}
     </InlineLink>
-    <StatusBadge
-      status={client.status}
-      getLabel={getClientStatusLabel}
-      variantMap={CLIENT_STATUS_BADGE_VARIANTS}
-      size="2xs"
-    />
+    <StatusBadge status={client.status} getLabel={getClientStatusLabel} variantMap={CLIENT_STATUS_BADGE_VARIANTS} size="2xs" />
     <span className="text-xs text-gray-500">
       {SEARCH_MESSAGES.clients.officeNumber} {formatClientOfficeId(client.office_client_number)}
       {client.id_number ? ` · ${SEARCH_MESSAGES.clients.idNumber} ${client.id_number}` : ''}

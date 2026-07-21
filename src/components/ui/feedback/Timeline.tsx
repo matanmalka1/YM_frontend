@@ -25,14 +25,9 @@ interface TimelineEntryProps {
 }
 
 export const TimelineEntry: React.FC<TimelineEntryProps> = ({ children, animationDelay, className }) => (
-  <li
-    className={cn('relative pr-10 animate-fade-in', className)}
-    style={animationDelay ? { animationDelay } : undefined}
-  >
+  <li className={cn('relative pr-10 animate-fade-in', className)} style={animationDelay ? { animationDelay } : undefined}>
     <div className="absolute right-2.5 top-1.5 h-3 w-3 rounded-full bg-primary-500 ring-2 ring-white" />
-    <div className="rounded-lg border border-gray-100 bg-white p-3 shadow-sm hover:shadow-md transition-shadow">
-      {children}
-    </div>
+    <div className="rounded-lg border border-gray-100 bg-white p-3 shadow-sm hover:shadow-md transition-shadow">{children}</div>
   </li>
 )
 

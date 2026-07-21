@@ -15,18 +15,12 @@ export const formatVatPeriodTitle = (period: string, periodType: VatType): strin
 export const formatVatPeriodLabel = (period: string, isBimonthly: boolean): string =>
   formatVatPeriodTitle(period, isBimonthly ? 'bimonthly' : 'monthly')
 
-export const getClientSummaryRowsForYear = (
-  rows: VatPeriodRow[] | undefined,
-  year: number | undefined,
-): VatPeriodRow[] => {
+export const getClientSummaryRowsForYear = (rows: VatPeriodRow[] | undefined, year: number | undefined): VatPeriodRow[] => {
   if (year === undefined) return []
-  return (rows ?? [])
-    .filter((row) => row.period.startsWith(String(year)))
-    .sort((a, b) => a.period.localeCompare(b.period))
+  return (rows ?? []).filter((row) => row.period.startsWith(String(year))).sort((a, b) => a.period.localeCompare(b.period))
 }
 
-export const canOpenVatPeriodRow = (row: VatPeriodRow): boolean =>
-  Number.isInteger(row.work_item_id) && row.work_item_id > 0
+export const canOpenVatPeriodRow = (row: VatPeriodRow): boolean => Number.isInteger(row.work_item_id) && row.work_item_id > 0
 
 export const getVatClientTitle = (name: string | null, clientRecordId: number): string =>
   name ?? `לקוח ${formatClientOfficeId(clientRecordId)}`

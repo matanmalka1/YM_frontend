@@ -72,9 +72,7 @@ export const EntityAuditTrailSection: React.FC<EntityAuditTrailSectionProps> = (
         <Card className={cardClassName}>
           <InlineState
             icon={History}
-            title={
-              auditTrail.hasActiveFilters ? AUDIT_MESSAGES.section.emptyFiltered : AUDIT_MESSAGES.section.emptyDefault
-            }
+            title={auditTrail.hasActiveFilters ? AUDIT_MESSAGES.section.emptyFiltered : AUDIT_MESSAGES.section.emptyDefault}
           />
         </Card>
       )

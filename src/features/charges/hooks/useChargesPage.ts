@@ -88,17 +88,7 @@ export const useChargesPage = () => {
         allIds,
         onSendNotification: openNotification,
       }),
-    [
-      isAdvisor,
-      actionLoadingId,
-      runAction,
-      selectedIds,
-      toggleSelect,
-      toggleSelectAll,
-      allIds,
-      openNotification,
-      navigate,
-    ],
+    [isAdvisor, actionLoadingId, runAction, selectedIds, toggleSelect, toggleSelectAll, allIds, openNotification, navigate],
   )
 
   const submitCreate = async (payload: CreateChargePayload): Promise<boolean> => {
@@ -152,9 +142,7 @@ export const useChargesPage = () => {
     modals: {
       createProps: {
         open: showCreateModal,
-        createError: createMutation.error
-          ? getErrorMessage(createMutation.error, CHARGES_ERROR_MESSAGES.mutations.create)
-          : null,
+        createError: createMutation.error ? getErrorMessage(createMutation.error, CHARGES_ERROR_MESSAGES.mutations.create) : null,
         createLoading: createMutation.isPending,
         onClose: closeCreate,
         onSubmit: submitCreate,

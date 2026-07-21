@@ -19,9 +19,7 @@ export const mergeAdvancePaymentBatches = (
 ): AdvancePaymentDueDateGroup[] => {
   const canonicalBatches = batches.filter((batch) => batch.period_months_count !== 2 || batch.month % 2 === 1)
   const filteredBatches =
-    periodFilter === null
-      ? canonicalBatches
-      : canonicalBatches.filter((batch) => batch.period_months_count === periodFilter)
+    periodFilter === null ? canonicalBatches : canonicalBatches.filter((batch) => batch.period_months_count === periodFilter)
   const batchesByKey = new Map<string, AdvancePaymentDueDateGroup>()
 
   for (const batch of filteredBatches) {

@@ -40,19 +40,31 @@ export const SearchClientMatches: React.FC<SearchClientMatchesProps> = ({ client
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <span className="truncate text-sm font-semibold text-gray-900">{client.name}</span>
-              <StatusBadge status={client.status} getLabel={getClientStatusLabel} variantMap={CLIENT_STATUS_BADGE_VARIANTS} size="2xs" />
+              <StatusBadge
+                status={client.status}
+                getLabel={getClientStatusLabel}
+                variantMap={CLIENT_STATUS_BADGE_VARIANTS}
+                size="2xs"
+              />
             </div>
             <p className="mt-0.5 truncate text-xs text-gray-500">
               {SEARCH_MESSAGES.clients.officeNumber} {formatClientOfficeId(client.office_client_number)}
               {client.id_number ? ` · ${SEARCH_MESSAGES.clients.idNumber} ${client.id_number}` : ''}
-              {client.matched_binder_numbers.length > 0 ? ` · ${SEARCH_MESSAGES.clients.matchedBinders(client.matched_binder_numbers)}` : ''}
+              {client.matched_binder_numbers.length > 0
+                ? ` · ${SEARCH_MESSAGES.clients.matchedBinders(client.matched_binder_numbers)}`
+                : ''}
             </p>
           </div>
         </ActionSurfaceButton>
       ))}
     </Card>
     {pagination && pagination.totalPages > 1 && (
-      <PaginationCard page={pagination.page} totalPages={pagination.totalPages} total={pagination.total} onPageChange={pagination.onPageChange} />
+      <PaginationCard
+        page={pagination.page}
+        totalPages={pagination.totalPages}
+        total={pagination.total}
+        onPageChange={pagination.onPageChange}
+      />
     )}
   </>
 )

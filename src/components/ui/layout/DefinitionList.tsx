@@ -80,10 +80,7 @@ export const DefinitionList: React.FC<DefinitionListProps> = ({
   return (
     <dl className={cn('grid gap-4', gridCols[columns], className)}>
       {items.map((item, index) => (
-        <div
-          key={`${item.label}-${index}`}
-          className={cn('space-y-1', item.fullWidth && columns > 1 && 'col-span-full')}
-        >
+        <div key={`${item.label}-${index}`} className={cn('space-y-1', item.fullWidth && columns > 1 && 'col-span-full')}>
           <dt className="text-xs font-medium text-gray-500">{item.label}</dt>
           <dd className={cn('text-sm font-medium text-gray-900', valueClassName)}>
             {isEmpty(item.value) ? emptyValue : item.value}

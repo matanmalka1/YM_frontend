@@ -56,9 +56,7 @@ export const BinderDetailDrawer: React.FC<BinderDetailDrawerProps> = ({
     }
   >
     {!binder && (
-      <div className="flex items-center justify-center py-12 text-sm text-gray-400">
-        {GLOBAL_UI_MESSAGES.common.loading}
-      </div>
+      <div className="flex items-center justify-center py-12 text-sm text-gray-400">{GLOBAL_UI_MESSAGES.common.loading}</div>
     )}
     {binder && (
       <>
@@ -78,11 +76,7 @@ export const BinderDetailDrawer: React.FC<BinderDetailDrawerProps> = ({
             size="sm"
           />
         </div>
-        <BinderIntakesSection
-          binderId={binder.id}
-          clientId={binder.client_record_id}
-          onNavigateToAnnualReport={onClose}
-        />
+        <BinderIntakesSection binderId={binder.id} clientId={binder.client_record_id} onNavigateToAnnualReport={onClose} />
         <BinderDocumentsSection binderId={binder.id} />
         <BinderAuditSection binderId={binder.id} />
       </>

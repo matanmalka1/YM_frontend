@@ -207,9 +207,7 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
         notes: values.notes ?? null,
         materials: selectedTypes.map((materialType) => {
           const monthStart =
-            ANNUAL_BINDER_TYPES.has(materialType) || !PERIODIC_BINDER_TYPES.has(materialType)
-              ? 1
-              : values.period_month_start
+            ANNUAL_BINDER_TYPES.has(materialType) || !PERIODIC_BINDER_TYPES.has(materialType) ? 1 : values.period_month_start
           const monthEnd =
             ANNUAL_BINDER_TYPES.has(materialType) || !PERIODIC_BINDER_TYPES.has(materialType)
               ? 12
@@ -234,9 +232,7 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
     },
     onSuccess: async (result, values) => {
       toast.success(
-        result.is_new_binder
-          ? BINDERS_MESSAGES.receive.newBinderReceived
-          : BINDERS_MESSAGES.receive.materialAddedToExisting,
+        result.is_new_binder ? BINDERS_MESSAGES.receive.newBinderReceived : BINDERS_MESSAGES.receive.materialAddedToExisting,
       )
       await queryClient.invalidateQueries({ queryKey: bindersQK.all })
 
@@ -282,12 +278,7 @@ export const useReceiveBinderDrawer = (opts: UseReceiveBinderDrawerOptions = {})
     },
   })
 
-  const handleClientSelect = (client: {
-    id: number
-    name: string
-    id_number: string
-    client_status?: string | null
-  }) => {
+  const handleClientSelect = (client: { id: number; name: string; id_number: string; client_status?: string | null }) => {
     setSelectedClient({ id: client.id, name: client.name, client_status: client.client_status })
     setClientQuery(client.name)
     form.setValue('client_record_id', client.id, { shouldValidate: true })

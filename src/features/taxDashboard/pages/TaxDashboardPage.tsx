@@ -10,10 +10,7 @@ export const TaxDashboardPage: React.FC = () => {
   const { currentYear, submissions, isLoading, hasError } = useTaxDashboard()
 
   const header = (
-    <PageHeader
-      title={TAX_DASHBOARD_MESSAGES.page.title}
-      description={TAX_DASHBOARD_MESSAGES.page.description(currentYear)}
-    />
+    <PageHeader title={TAX_DASHBOARD_MESSAGES.page.title} description={TAX_DASHBOARD_MESSAGES.page.description(currentYear)} />
   )
 
   return (

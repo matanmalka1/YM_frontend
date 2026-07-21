@@ -9,20 +9,15 @@ type ChargeBusiness = { id: number; business_name?: string | null }
 const hasChargeAction = (actions: BackendAction[] | null | undefined, key: string): boolean =>
   actions?.some((action) => action.key === key) ?? false
 
-export const canIssue = (actions: BackendAction[] | null | undefined): boolean =>
-  hasChargeAction(actions, 'issue_charge')
+export const canIssue = (actions: BackendAction[] | null | undefined): boolean => hasChargeAction(actions, 'issue_charge')
 
-export const canMarkPaid = (actions: BackendAction[] | null | undefined): boolean =>
-  hasChargeAction(actions, 'mark_paid')
+export const canMarkPaid = (actions: BackendAction[] | null | undefined): boolean => hasChargeAction(actions, 'mark_paid')
 
-export const canCancel = (actions: BackendAction[] | null | undefined): boolean =>
-  hasChargeAction(actions, 'cancel_charge')
+export const canCancel = (actions: BackendAction[] | null | undefined): boolean => hasChargeAction(actions, 'cancel_charge')
 
-export const canDeleteCharge = (actions: BackendAction[] | null | undefined): boolean =>
-  hasChargeAction(actions, 'delete_charge')
+export const canDeleteCharge = (actions: BackendAction[] | null | undefined): boolean => hasChargeAction(actions, 'delete_charge')
 
-export const canEditCharge = (actions: BackendAction[] | null | undefined): boolean =>
-  hasChargeAction(actions, 'edit_charge')
+export const canEditCharge = (actions: BackendAction[] | null | undefined): boolean => hasChargeAction(actions, 'edit_charge')
 
 export const getChargePeriodLabel = (period: string | null, monthsCovered: number | null): string => {
   if (!period) return '—'
@@ -65,8 +60,7 @@ export const getChargeAmountText = (charge: ChargeListItem): string => {
   return formatCurrencyILS(charge.amount, { compact: true, fractionDigits: 2 })
 }
 
-export const getChargeClientLabel = (charge: ChargeListItem): string =>
-  charge.client_name ?? `לקוח #${charge.client_record_id}`
+export const getChargeClientLabel = (charge: ChargeListItem): string => charge.client_name ?? `לקוח #${charge.client_record_id}`
 
 export const getChargeBusinessLabel = (business: ChargeBusiness): string =>
   business.business_name ?? CHARGES_MESSAGES.create.businessName(business.id)

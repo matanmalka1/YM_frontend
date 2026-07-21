@@ -16,13 +16,7 @@ interface ResetPasswordModalProps {
   isLoading?: boolean
 }
 
-export const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
-  open,
-  user,
-  onClose,
-  onSubmit,
-  isLoading = false,
-}) => {
+export const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({ open, user, onClose, onSubmit, isLoading = false }) => {
   const {
     register,
     handleSubmit,

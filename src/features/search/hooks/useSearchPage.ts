@@ -13,7 +13,12 @@ import { getTotalPages } from '@/utils/paginationUtils'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { SEARCH_MESSAGES } from '../messages'
 import { SEARCH_GROUP_ORDER, SEARCH_GROUP_TYPES } from '../constants'
-import { clientSelectionUpdate, isResolutionFilterKey, resolutionFilterUpdate, resolveSelectedClient } from '../utils/searchSelection'
+import {
+  clientSelectionUpdate,
+  isResolutionFilterKey,
+  resolutionFilterUpdate,
+  resolveSelectedClient,
+} from '../utils/searchSelection'
 import { parseSearchEnumFilters } from '../utils/searchUrlValues'
 import type { SearchFeedChip } from '../components/SearchItemFeed'
 
@@ -29,7 +34,8 @@ const EMPTY_GROUPS: SearchItemGroups = {
   notifications: EMPTY_GROUP,
 }
 
-const isSearchItemType = (value: string): value is SearchItemType => Object.values(SEARCH_GROUP_TYPES).some((type) => type === value)
+const isSearchItemType = (value: string): value is SearchItemType =>
+  Object.values(SEARCH_GROUP_TYPES).some((type) => type === value)
 
 export const useSearchPage = () => {
   const { searchParams, getParam, getPage, setFilter, setFilters, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
@@ -155,13 +161,19 @@ export const useSearchPage = () => {
   // Every free-text filter is URL-backed, so each needs a local draft with a debounced
   // commit — otherwise each keystroke writes history and refires the request.
   const [queryDraft, setQueryDraft] = useSearchDebounce(filters.search, (value) => handleFilterChange('search', value))
-  const [idNumberDraft, setIdNumberDraft] = useSearchDebounce(filters.id_number, (value) => handleFilterChange('id_number', value))
-  const [binderNumberDraft, setBinderNumberDraft] = useSearchDebounce(filters.binder_number, (value) => handleFilterChange('binder_number', value))
+  const [idNumberDraft, setIdNumberDraft] = useSearchDebounce(filters.id_number, (value) =>
+    handleFilterChange('id_number', value),
+  )
+  const [binderNumberDraft, setBinderNumberDraft] = useSearchDebounce(filters.binder_number, (value) =>
+    handleFilterChange('binder_number', value),
+  )
   // A typed change is committed only after the debounce, so between the keystroke and the request
   // the rows on screen answer the previous term. That window counts as fetching, or the stale
   // results read as an answer to what was just typed.
   const hasPendingTextEdit =
-    queryDraft.trim() !== filters.search || idNumberDraft.trim() !== filters.id_number || binderNumberDraft.trim() !== filters.binder_number
+    queryDraft.trim() !== filters.search ||
+    idNumberDraft.trim() !== filters.id_number ||
+    binderNumberDraft.trim() !== filters.binder_number
   const hasAdvancedFilter = SEARCH_ADVANCED_FILTER_KEYS.some((key) => Boolean(filters[key]))
   const [advancedFiltersOpen, setAdvancedFiltersOpen] = useState(hasAdvancedFilter)
 

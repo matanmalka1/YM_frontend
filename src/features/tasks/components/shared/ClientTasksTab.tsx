@@ -172,9 +172,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
   ]
 
   const userOptions = (usersQuery.data?.items ?? []).map((user) => ({ value: String(user.id), label: user.full_name }))
-  const createError = createTask.isError
-    ? getErrorMessage(createTask.error, TASKS_ERROR_MESSAGES.clientTab.createError)
-    : null
+  const createError = createTask.isError ? getErrorMessage(createTask.error, TASKS_ERROR_MESSAGES.clientTab.createError) : null
 
   return (
     <DetailTabPanel

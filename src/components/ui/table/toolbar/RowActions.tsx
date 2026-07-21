@@ -1,15 +1,5 @@
 import type { AnchorHTMLAttributes } from 'react'
-import {
-  Children,
-  Fragment,
-  createContext,
-  isValidElement,
-  use,
-  useCallback,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react'
+import { Children, Fragment, createContext, isValidElement, use, useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { EllipsisVertical } from 'lucide-react'
 import { cn } from '../../../../utils/utils'
@@ -68,11 +58,7 @@ const DropdownMenu = ({ ariaLabel, children, title, menuClassName }: DropdownMen
 
     const activeIndex = target ? items.indexOf(target) : -1
     const nextIndex =
-      activeIndex < 0
-        ? direction === 1
-          ? 0
-          : items.length - 1
-        : (activeIndex + direction + items.length) % items.length
+      activeIndex < 0 ? (direction === 1 ? 0 : items.length - 1) : (activeIndex + direction + items.length) % items.length
     items[nextIndex]?.focus()
   }
 
@@ -302,11 +288,7 @@ export const RowActionsMenu: React.FC<RowActionsMenuProps> = ({ ariaLabel, child
 
   return (
     <div className="flex justify-center">
-      <DropdownMenu
-        ariaLabel={ariaLabel ?? GLOBAL_UI_MESSAGES.common.actions}
-        title={title}
-        menuClassName={menuClassName}
-      >
+      <DropdownMenu ariaLabel={ariaLabel ?? GLOBAL_UI_MESSAGES.common.actions} title={title} menuClassName={menuClassName}>
         {isGrouped
           ? visibleGroups.map((group, index) => (
               <Fragment key={group.key ?? index}>
@@ -339,9 +321,7 @@ export const RowActionLink: React.FC<RowActionLinkProps> = ({ href, label, icon,
     href={href}
     role="menuitem"
     tabIndex={-1}
-    className={
-      className ?? 'block w-full px-3 py-2 text-right text-sm text-gray-700 transition-colors hover:bg-gray-50'
-    }
+    className={className ?? 'block w-full px-3 py-2 text-right text-sm text-gray-700 transition-colors hover:bg-gray-50'}
     onClick={(event) => {
       event.stopPropagation()
       onClick?.(event)

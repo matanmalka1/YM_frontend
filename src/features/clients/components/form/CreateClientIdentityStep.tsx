@@ -1,11 +1,5 @@
 import { RotateCcw, ShieldAlert, UserRoundX } from 'lucide-react'
-import {
-  useWatch,
-  type Control,
-  type FieldErrors,
-  type UseFormClearErrors,
-  type UseFormRegister,
-} from 'react-hook-form'
+import { useWatch, type Control, type FieldErrors, type UseFormClearErrors, type UseFormRegister } from 'react-hook-form'
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
 import { Button } from '../../../../components/ui/primitives/Button'
@@ -62,19 +56,11 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
         label={CLIENTS_MESSAGES.createIdentity.entityTypeLabel}
         error={errors.entity_type?.message}
         disabled={disabled}
-        options={[
-          { value: '', label: CLIENTS_MESSAGES.createIdentity.entityTypePlaceholder },
-          ...CREATE_CLIENT_ENTITY_OPTIONS,
-        ]}
+        options={[{ value: '', label: CLIENTS_MESSAGES.createIdentity.entityTypePlaceholder }, ...CREATE_CLIENT_ENTITY_OPTIONS]}
         value={entityTypeValue ?? ''}
         {...entityTypeField}
       />
-      <Input
-        label={`${nameLabel} *`}
-        error={errors.full_name?.message}
-        disabled={disabled}
-        {...register('full_name')}
-      />
+      <Input label={`${nameLabel} *`} error={errors.full_name?.message} disabled={disabled} {...register('full_name')} />
       <Input
         label={`${idNumberLabel} *`}
         placeholder={idNumberPlaceholder}
@@ -90,9 +76,7 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
             <div className="min-w-0 flex-1 space-y-3">
               <div>
                 <p className="font-medium text-warning-950">{CLIENTS_MESSAGES.createIdentity.deletedClientTitle}</p>
-                <p className="mt-1 text-sm text-warning-800">
-                  {CLIENTS_MESSAGES.createIdentity.deletedClientExplanation}
-                </p>
+                <p className="mt-1 text-sm text-warning-800">{CLIENTS_MESSAGES.createIdentity.deletedClientExplanation}</p>
               </div>
               <dl className="grid gap-2 rounded-md border border-warning-200 bg-white/70 p-3 text-sm sm:grid-cols-2">
                 <div>

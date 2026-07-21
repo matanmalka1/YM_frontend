@@ -9,10 +9,7 @@ import type {
 } from './contracts'
 
 export const authorityContactsApi = {
-  createAuthorityContact: async (
-    clientId: number,
-    payload: AuthorityContactCreatePayload,
-  ): Promise<AuthorityContactResponse> => {
+  createAuthorityContact: async (clientId: number, payload: AuthorityContactCreatePayload): Promise<AuthorityContactResponse> => {
     const response = await api.post<AuthorityContactResponse>(
       AUTHORITY_CONTACT_ENDPOINTS.clientAuthorityContacts(clientId),
       payload,

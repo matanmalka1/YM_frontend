@@ -59,10 +59,7 @@ export const CreateClientTaxStep: React.FC<Props> = ({
           label={CLIENTS_MESSAGES.createTax.vatFrequencyLabel}
           error={errors.vat_reporting_frequency?.message}
           disabled={disabled}
-          options={[
-            { value: '', label: CLIENTS_MESSAGES.createTax.vatFrequencyPlaceholder },
-            ...CREATE_CLIENT_VAT_OPTIONS,
-          ]}
+          options={[{ value: '', label: CLIENTS_MESSAGES.createTax.vatFrequencyPlaceholder }, ...CREATE_CLIENT_VAT_OPTIONS]}
           value={vatFrequencyValue ?? ''}
           {...register('vat_reporting_frequency')}
         />

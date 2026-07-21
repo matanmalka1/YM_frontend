@@ -1,10 +1,6 @@
 import { makeLabelGetter } from '@/utils/labels'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
-import {
-  getOperationalTaxYear,
-  getOperationalYearOptions,
-  MONTHS_COVERED_OPTIONS,
-} from '@/constants/periodOptions.constants'
+import { getOperationalTaxYear, getOperationalYearOptions, MONTHS_COVERED_OPTIONS } from '@/constants/periodOptions.constants'
 import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION, ALL_YEARS_URL_OPTION } from '@/constants/filterOptions.constants'
 import type { AdvancePaymentMethod, AdvancePaymentStatus } from './api/contracts'
 import { ADVANCED_PAYMENTS_MESSAGES } from './messages'
@@ -52,16 +48,24 @@ export const isAdvancePaymentStatus = (value: string): value is AdvancePaymentSt
 export const isAdvancePaymentMethod = (value: string): value is AdvancePaymentMethod =>
   ADVANCE_PAYMENT_METHOD_VALUE_SET.has(value)
 
-export const ADVANCE_PAYMENT_STATUS_OPTIONS: { value: AdvancePaymentStatus; label: string }[] =
-  ADVANCE_PAYMENT_STATUS_VALUES.map((status) => ({ value: status, label: ADVANCE_PAYMENT_STATUS_LABELS[status] }))
+export const ADVANCE_PAYMENT_STATUS_OPTIONS: { value: AdvancePaymentStatus; label: string }[] = ADVANCE_PAYMENT_STATUS_VALUES.map(
+  (status) => ({
+    value: status,
+    label: ADVANCE_PAYMENT_STATUS_LABELS[status],
+  }),
+)
 
 const ADVANCE_PAYMENT_STATUS_OPTIONS_WITH_ALL: {
   value: AdvancePaymentStatus | ''
   label: string
 }[] = [ALL_STATUSES_OPTION, ...ADVANCE_PAYMENT_STATUS_OPTIONS]
 
-export const ADVANCE_PAYMENT_METHOD_OPTIONS: { value: AdvancePaymentMethod; label: string }[] =
-  ADVANCE_PAYMENT_METHOD_VALUES.map((method) => ({ value: method, label: ADVANCE_PAYMENT_METHOD_LABELS[method] }))
+export const ADVANCE_PAYMENT_METHOD_OPTIONS: { value: AdvancePaymentMethod; label: string }[] = ADVANCE_PAYMENT_METHOD_VALUES.map(
+  (method) => ({
+    value: method,
+    label: ADVANCE_PAYMENT_METHOD_LABELS[method],
+  }),
+)
 
 export const ADVANCE_PAYMENT_FREQUENCY_OPTIONS = MONTHS_COVERED_OPTIONS
 

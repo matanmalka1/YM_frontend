@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { AdvancePaymentDueDateGroup } from '../api/contracts'
-import {
-  getAdvancePaymentBatchKey,
-  getAdvancePaymentWorkflowStats,
-  mergeAdvancePaymentBatches,
-} from './advancePaymentUtils'
+import { getAdvancePaymentBatchKey, getAdvancePaymentWorkflowStats, mergeAdvancePaymentBatches } from './advancePaymentUtils'
 
 const createBatch = (overrides: Partial<AdvancePaymentDueDateGroup> = {}): AdvancePaymentDueDateGroup => ({
   year: 2026,

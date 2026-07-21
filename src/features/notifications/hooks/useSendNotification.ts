@@ -25,8 +25,7 @@ export const useSendNotification = () => {
   const queryClient = useQueryClient()
 
   const mutation = useMutation({
-    mutationFn: ({ payload, idempotencyKey }: NotificationSendVariables) =>
-      notificationsApi.send(payload, idempotencyKey),
+    mutationFn: ({ payload, idempotencyKey }: NotificationSendVariables) => notificationsApi.send(payload, idempotencyKey),
     onSuccess: (result: NotificationResult) => {
       void queryClient.invalidateQueries({ queryKey: notificationsQK.lists() })
       void queryClient.invalidateQueries({ queryKey: notificationsQK.summaries() })

@@ -52,9 +52,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
         key: 'office_client_number',
         header: SIGNATURE_REQUESTS_MESSAGES.dashboard.clientOfficeNumber,
         render: (req: SignatureRequestResponse) => (
-          <span className="font-mono text-sm text-gray-500 tabular-nums">
-            {formatClientOfficeId(req.office_client_number)}
-          </span>
+          <span className="font-mono text-sm text-gray-500 tabular-nums">{formatClientOfficeId(req.office_client_number)}</span>
         ),
       },
       {
@@ -75,9 +73,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
         render: (req: SignatureRequestResponse) => {
           const entry = req.business_id != null ? businessLookup[req.business_id] : undefined
           const name =
-            entry?.name ??
-            req.business_name ??
-            SIGNATURE_REQUESTS_MESSAGES.dashboard.clientReference(req.client_record_id)
+            entry?.name ?? req.business_name ?? SIGNATURE_REQUESTS_MESSAGES.dashboard.clientReference(req.client_record_id)
           return (
             <Link
               to={`/clients/${req.client_record_id}`}

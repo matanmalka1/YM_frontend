@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import {
-  getSelectDropdownDisplay,
-  getSelectDropdownOptionId,
-  type SelectDropdownOption,
-} from './SelectDropdown.helpers'
+import { getSelectDropdownDisplay, getSelectDropdownOptionId, type SelectDropdownOption } from './SelectDropdown.helpers'
 
 const options: SelectDropdownOption[] = [
   { value: 'active', label: 'פעיל' },

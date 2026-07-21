@@ -42,10 +42,7 @@ export const buildBusinessBreadcrumbs = ({
   },
 ]
 
-export const buildBusinessSummaryItems = (
-  business: BusinessResponse,
-  client: ClientRecordResponse | null,
-): DefinitionItem[] => [
+export const buildBusinessSummaryItems = (business: BusinessResponse, client: ClientRecordResponse | null): DefinitionItem[] => [
   {
     label: BUSINESS_DETAILS_COPY.systemIdLabel,
     value: formatClientOfficeId(business.id),

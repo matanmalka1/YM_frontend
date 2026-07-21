@@ -79,9 +79,7 @@ export const GroupedPeriodRow = memo(
             <span className="flex flex-wrap items-center gap-2">
               <span className="text-sm font-semibold text-gray-900">{typeLabel}</span>
               {isCurrentPeriod && (
-                <span className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-semibold text-primary-700">
-                  חודש נוכחי
-                </span>
+                <span className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-semibold text-primary-700">חודש נוכחי</span>
               )}
             </span>
             <span className="truncate text-base font-bold text-gray-950">{primaryLabel}</span>
@@ -94,10 +92,7 @@ export const GroupedPeriodRow = memo(
 
           <span className="flex min-w-0 items-center gap-x-4 overflow-hidden max-lg:flex-wrap max-lg:gap-y-1.5">
             {metrics.map((metric) => (
-              <span
-                key={`${metric.label}-${metric.value}`}
-                className="inline-flex shrink-0 items-baseline gap-1 text-sm"
-              >
+              <span key={`${metric.label}-${metric.value}`} className="inline-flex shrink-0 items-baseline gap-1 text-sm">
                 <span className={cn('font-semibold tabular-nums', metricToneClass[metric.tone ?? 'default'])}>
                   {metric.value}
                 </span>

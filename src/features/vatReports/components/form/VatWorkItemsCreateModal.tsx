@@ -48,17 +48,11 @@ export const VatWorkItemsCreateModal: React.FC<VatWorkItemsCreateModalProps> = (
     resetPeriodField()
   }, [clearErrors, resetPeriodField, setValue])
 
-  const {
-    clientQuery,
-    selectedClient,
-    handleSelectClient,
-    handleClearClient,
-    handleClientQueryChange,
-    resetClientPicker,
-  } = useClientPickerState({
-    onSelect: resetPeriodField,
-    onClear: resetClientSelection,
-  })
+  const { clientQuery, selectedClient, handleSelectClient, handleClearClient, handleClientQueryChange, resetClientPicker } =
+    useClientPickerState({
+      onSelect: resetPeriodField,
+      onClear: resetClientSelection,
+    })
 
   const clientIdValue = watch('client_id')
   const periodValue = watch('period')

@@ -51,10 +51,7 @@ export const getChargeRowVariant = (status: string): TableRowVariant | undefined
   return undefined
 }
 
-export const getChargesEmptyState = (
-  isAdvisor: boolean,
-  onCreate: () => void,
-): DataTableProps<unknown>['emptyState'] => ({
+export const getChargesEmptyState = (isAdvisor: boolean, onCreate: () => void): DataTableProps<unknown>['emptyState'] => ({
   title: CHARGES_MESSAGES.list.emptyTitle,
   message: isAdvisor ? CHARGES_MESSAGES.list.emptyForAdvisor : CHARGES_MESSAGES.list.emptyFiltered,
   action: isAdvisor ? { label: CHARGES_MESSAGES.list.newCharge, onClick: onCreate } : undefined,

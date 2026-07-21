@@ -26,12 +26,7 @@ export const NotificationsPage: React.FC = () => {
   )
 
   return (
-    <PageStateGuard
-      isLoading={status.isLoading}
-      error={status.error}
-      header={header}
-      loadingMessage={status.loadingMessage}
-    >
+    <PageStateGuard isLoading={status.isLoading} error={status.error} header={header} loadingMessage={status.loadingMessage}>
       <FilterPanel
         {...filters}
         title={NOTIFICATIONS_MESSAGES.page.filterTitle}

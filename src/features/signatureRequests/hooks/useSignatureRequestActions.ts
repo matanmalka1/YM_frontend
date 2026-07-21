@@ -49,8 +49,7 @@ export const useSignatureRequestActions = (clientId?: number) => {
     create: (payload: CreateSignatureRequestPayload) => createMutation.mutateAsync(payload),
     isCreating: createMutation.isPending,
 
-    cancel: (clientRecordId: number, id: number, reason?: string) =>
-      cancelMutation.mutateAsync({ clientRecordId, id, reason }),
+    cancel: (clientRecordId: number, id: number, reason?: string) => cancelMutation.mutateAsync({ clientRecordId, id, reason }),
     isCanceling: cancelMutation.isPending,
   }
 }

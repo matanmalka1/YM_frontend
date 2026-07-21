@@ -80,9 +80,7 @@ const GroupItemsRows = ({
   if (items.length === 0) {
     return (
       <div className="py-4 text-center text-sm text-gray-400">
-        {clientSearchText.trim()
-          ? TAX_CALENDAR_MESSAGES.list.noMatchingClients
-          : TAX_CALENDAR_MESSAGES.list.noLinkedRecords}
+        {clientSearchText.trim() ? TAX_CALENDAR_MESSAGES.list.noMatchingClients : TAX_CALENDAR_MESSAGES.list.noLinkedRecords}
       </div>
     )
   }
@@ -114,9 +112,7 @@ const GroupItemsRows = ({
       key: 'state',
       header: TAX_CALENDAR_MESSAGES.item.status,
       kind: 'status',
-      render: (item) => (
-        <Badge variant={getTaxCalendarItemStateVariant(item)}>{getTaxCalendarItemStateLabel(item)}</Badge>
-      ),
+      render: (item) => <Badge variant={getTaxCalendarItemStateVariant(item)}>{getTaxCalendarItemStateLabel(item)}</Badge>,
     },
     actionsColumn({
       key: 'action',

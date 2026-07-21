@@ -112,9 +112,7 @@ export const useWorkQueueActions = () => {
       if (!removesTask) return {}
       await qc.cancelQueries({ queryKey: workQueueQK.all })
       const previousLists = qc.getQueriesData<WorkQueueListResponse>({ queryKey: workQueueQK.lists })
-      qc.setQueriesData<WorkQueueListResponse>({ queryKey: workQueueQK.lists }, (old) =>
-        optimisticallyRemoveTask(old, taskId),
-      )
+      qc.setQueriesData<WorkQueueListResponse>({ queryKey: workQueueQK.lists }, (old) => optimisticallyRemoveTask(old, taskId))
       return { previousLists }
     },
     onSuccess: async (_data, variables) => {
@@ -129,10 +127,7 @@ export const useWorkQueueActions = () => {
         qc.setQueryData(queryKey, data)
       })
       toast.error(WORK_QUEUE_ERROR_MESSAGES.actions.failure, {
-        description: getErrorMessage(
-          err,
-          err instanceof Error ? err.message : WORK_QUEUE_ERROR_MESSAGES.actions.failure,
-        ),
+        description: getErrorMessage(err, err instanceof Error ? err.message : WORK_QUEUE_ERROR_MESSAGES.actions.failure),
       })
       void qc.invalidateQueries({ queryKey: workQueueQK.all })
     },
@@ -218,8 +213,7 @@ export const useWorkQueueActions = () => {
         return
       }
       setTaskModal({
-        mode:
-          isTaskActionKey(action.key, 'continue_task') || isTaskActionKey(action.key, 'edit_task') ? 'edit' : 'view',
+        mode: isTaskActionKey(action.key, 'continue_task') || isTaskActionKey(action.key, 'edit_task') ? 'edit' : 'view',
         taskId,
         source: linkedTaskSourceContext(item),
       })

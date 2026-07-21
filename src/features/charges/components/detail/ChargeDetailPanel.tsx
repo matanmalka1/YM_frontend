@@ -27,12 +27,7 @@ import {
 import { CHARGES_ERROR_MESSAGES } from '../../errorMessages'
 import { useChargeDetailsPage } from '../../hooks/useChargeDetailsPage'
 import { CHARGES_MESSAGES } from '../../messages'
-import {
-  canDeleteCharge,
-  getChargeAmountText,
-  getChargeClientLabel,
-  getChargePeriodLabel,
-} from '../../utils/chargeUtils'
+import { canDeleteCharge, getChargeAmountText, getChargeClientLabel, getChargePeriodLabel } from '../../utils/chargeUtils'
 import { ChargeEditModal } from '../form/ChargeEditModal'
 import { ChargeActionButtons } from './ChargeActionButtons'
 
@@ -80,18 +75,14 @@ export const ChargeDetailPanel = ({ chargeId, leadingBreadcrumbs, onDeleted }: C
     { label: CHARGES_MESSAGES.detail.type, value: getChargeTypeLabel(charge.charge_type) },
     { label: CHARGES_MESSAGES.detail.period, value: getChargePeriodLabel(charge.period, charge.months_covered) },
     ...(charge.description ? [{ label: CHARGES_MESSAGES.detail.description, value: charge.description }] : []),
-    ...(charge.annual_report_id
-      ? [{ label: CHARGES_MESSAGES.detail.annualReport, value: `#${charge.annual_report_id}` }]
-      : []),
+    ...(charge.annual_report_id ? [{ label: CHARGES_MESSAGES.detail.annualReport, value: `#${charge.annual_report_id}` }] : []),
     ...(charge.cancellation_reason
       ? [{ label: CHARGES_MESSAGES.detail.cancellationReason, value: charge.cancellation_reason }]
       : []),
   ]
   const dates = [
     { label: CHARGES_MESSAGES.detail.created, value: formatDateTime(charge.created_at) },
-    ...(charge.updated_at
-      ? [{ label: CHARGES_MESSAGES.detail.updated, value: formatDateTime(charge.updated_at) }]
-      : []),
+    ...(charge.updated_at ? [{ label: CHARGES_MESSAGES.detail.updated, value: formatDateTime(charge.updated_at) }] : []),
     { label: CHARGES_MESSAGES.detail.issued, value: formatDateTime(charge.issued_at) },
     { label: CHARGES_MESSAGES.detail.paid, value: formatDateTime(charge.paid_at) },
     { label: CHARGES_MESSAGES.detail.canceled, value: formatDateTime(charge.canceled_at) },

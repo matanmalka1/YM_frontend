@@ -11,11 +11,7 @@ export const TaxCalendarGroupsPage = () => {
     <div className="space-y-4">
       <PageHeader {...headerProps} />
 
-      <TaxCalendarStatsSection
-        summary={stats.summary}
-        linkedLabel={stats.linkedLabel}
-        showGroupsCount={stats.showGroupsCount}
-      />
+      <TaxCalendarStatsSection summary={stats.summary} linkedLabel={stats.linkedLabel} showGroupsCount={stats.showGroupsCount} />
 
       <TaxCalendarFiltersBar
         startYear={filters.startYear}

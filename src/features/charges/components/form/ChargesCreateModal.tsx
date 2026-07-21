@@ -8,12 +8,7 @@ import { Modal, ModalFormActions } from '@/components/ui/overlays'
 import type { BusinessResponse } from '@/features/clients'
 import type { CreateChargePayload } from '../../api'
 import { CHARGE_CREATE_FORM_ID, CHARGE_TYPE_OPTIONS } from '../../constants'
-import {
-  chargeCreateDefaultValues,
-  chargeCreateSchema,
-  toCreateChargePayload,
-  type ChargeCreateFormValues,
-} from '../../schemas'
+import { chargeCreateDefaultValues, chargeCreateSchema, toCreateChargePayload, type ChargeCreateFormValues } from '../../schemas'
 import { buildChargePeriodOptions } from '../../utils/chargeHelpers'
 import { getChargeBusinessLabel } from '../../utils/chargeUtils'
 import { CHARGES_MESSAGES } from '../../messages'
@@ -54,16 +49,8 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
     resolver: zodResolver(chargeCreateSchema),
   })
 
-  const {
-    clientQuery,
-    selectedClient,
-    handleSelectClient,
-    handleClearClient,
-    handleClientQueryChange,
-    resetClientPicker,
-  } = useClientPickerState(
-    createClientIdPickerHandlers((value, options) => setValue('client_record_id', value, options)),
-  )
+  const { clientQuery, selectedClient, handleSelectClient, handleClearClient, handleClientQueryChange, resetClientPicker } =
+    useClientPickerState(createClientIdPickerHandlers((value, options) => setValue('client_record_id', value, options)))
 
   const selectedSingleBusiness = useMemo(() => {
     if (initialBusiness) {

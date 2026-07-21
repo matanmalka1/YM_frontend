@@ -43,13 +43,7 @@ const ReviewSection: React.FC<SectionProps> = ({ title, children }) => (
   </div>
 )
 
-export const CreateClientReviewStep: React.FC<Props> = ({
-  values,
-  advisorOptions,
-  impactData,
-  impactLoading,
-  impactError,
-}) => {
+export const CreateClientReviewStep: React.FC<Props> = ({ values, advisorOptions, impactData, impactLoading, impactError }) => {
   const {
     isCompany,
     isExempt,

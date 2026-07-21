@@ -6,12 +6,7 @@ import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { parsePositiveInt } from '@/utils/utils'
-import {
-  AUDIT_ACTION_LABELS,
-  AUDIT_ACTIONS_BY_ENTITY_TYPE,
-  AUDIT_PAGE_SIZE,
-  AUDIT_USERS_LIST_PARAMS,
-} from '../constants'
+import { AUDIT_ACTION_LABELS, AUDIT_ACTIONS_BY_ENTITY_TYPE, AUDIT_PAGE_SIZE, AUDIT_USERS_LIST_PARAMS } from '../constants'
 import type { EntityAuditTrailParams, EntityAuditType } from '../api'
 import { useEntityAuditTrail } from './useEntityAuditTrail'
 
@@ -105,10 +100,7 @@ export const useEntityAuditTrailSection = (entityType: EntityAuditType, entityId
       auditActors.set(userIdValue, `#${userIdValue}`)
     }
 
-    return [
-      { value: '', label: 'כל המשתמשים' },
-      ...Array.from(auditActors, ([id, label]) => ({ value: String(id), label })),
-    ]
+    return [{ value: '', label: 'כל המשתמשים' }, ...Array.from(auditActors, ([id, label]) => ({ value: String(id), label }))]
   }, [query.items, userIdValue, usersData?.items])
 
   const filterFields: FilterFieldDef[] = [

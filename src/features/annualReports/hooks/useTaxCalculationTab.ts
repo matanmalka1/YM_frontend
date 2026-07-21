@@ -52,8 +52,7 @@ export const useTaxCalculationTab = (reportId: number) => {
       toast.success('חישוב המס נשמר בהצלחה')
       await queryClient.invalidateQueries({ queryKey: annualReportsQK.readiness(reportId) })
     },
-    onError: (error) =>
-      toast.error(getErrorMessage(error, ANNUAL_REPORTS_ERROR_MESSAGES.taxCalculation.calculationSave)),
+    onError: (error) => toast.error(getErrorMessage(error, ANNUAL_REPORTS_ERROR_MESSAGES.taxCalculation.calculationSave)),
   })
 
   const initializeInputs = () => {

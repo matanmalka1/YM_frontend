@@ -8,13 +8,7 @@ export type BinderLocationStatus = (typeof BINDER_LOCATION_STATUS_VALUES)[number
 const BINDER_CAPACITY_STATUS_VALUES = ['open', 'full'] as const
 export type BinderCapacityStatus = (typeof BINDER_CAPACITY_STATUS_VALUES)[number]
 
-const BINDER_SORT_BY_VALUES = [
-  'period_start',
-  'days_in_office',
-  'location_status',
-  'capacity_status',
-  'client_name',
-] as const
+const BINDER_SORT_BY_VALUES = ['period_start', 'days_in_office', 'location_status', 'capacity_status', 'client_name'] as const
 export type BinderSortBy = (typeof BINDER_SORT_BY_VALUES)[number]
 
 const BINDER_SORT_ORDER_VALUES = ['asc', 'desc'] as const

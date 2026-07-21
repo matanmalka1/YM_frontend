@@ -13,9 +13,7 @@ const getMutationError = (error: unknown, fallback: string): string => getErrorM
 
 export const useTaskActions = (initialViewTaskId: number | null = null) => {
   const qc = useQueryClient()
-  const [modal, setModal] = useState<TaskModalState>(
-    initialViewTaskId ? { mode: 'view', taskId: initialViewTaskId } : null,
-  )
+  const [modal, setModal] = useState<TaskModalState>(initialViewTaskId ? { mode: 'view', taskId: initialViewTaskId } : null)
   const [pendingConfirm, setPendingConfirm] = useState<TaskConfirmState | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
 

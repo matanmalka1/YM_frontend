@@ -127,9 +127,7 @@ export const NavbarMoreMenu: React.FC<NavbarMoreMenuProps> = ({ groups }) => {
                     onClick={() => setOpen(false)}
                     className={cn(
                       'focus-ring flex items-center justify-between gap-3 rounded-xl px-2.5 py-2 text-sm transition',
-                      active
-                        ? 'bg-gray-100 font-semibold text-gray-950'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-950',
+                      active ? 'bg-gray-100 font-semibold text-gray-950' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-950',
                     )}
                     role="menuitem"
                   >

@@ -20,14 +20,12 @@ export const canMarkReadyForReview = (actions: BackendAction[] | null | undefine
 
 export const canSendBack = (actions: BackendAction[] | null | undefined): boolean => hasVatAction(actions, 'send_back')
 
-export const canFile = (actions: BackendAction[] | null | undefined): boolean =>
-  hasVatAction(actions, 'file_vat_return')
+export const canFile = (actions: BackendAction[] | null | undefined): boolean => hasVatAction(actions, 'file_vat_return')
 
 export const isFiled = (status: VatWorkItemStatus): boolean => status === 'filed'
 
 const MISSING_INVOICE_NUMBER_LABEL = 'לא צוין'
-const GENERATED_INVOICE_NUMBER_PATTERN =
-  /^(?:\d{4}-\d{2}-(?:income|expense)|(?:income|expense)-\d{4}-\d{2})-[a-f0-9]{8}$/i
+const GENERATED_INVOICE_NUMBER_PATTERN = /^(?:\d{4}-\d{2}-(?:income|expense)|(?:income|expense)-\d{4}-\d{2})-[a-f0-9]{8}$/i
 
 export const isGeneratedVatInvoiceNumber = (invoice: Pick<VatInvoiceResponse, 'invoice_number'>): boolean =>
   GENERATED_INVOICE_NUMBER_PATTERN.test(invoice.invoice_number.trim())
@@ -40,9 +38,7 @@ export const getVatInvoiceDisplayNumber = (invoice: Pick<VatInvoiceResponse, 'in
 
 export const getVatInvoiceActionLabel = (invoice: Pick<VatInvoiceResponse, 'id' | 'invoice_number'>): string => {
   const displayNumber = getVatInvoiceDisplayNumber(invoice)
-  return displayNumber === MISSING_INVOICE_NUMBER_LABEL
-    ? `חשבונית ללא מספר (#${invoice.id})`
-    : `חשבונית ${displayNumber}`
+  return displayNumber === MISSING_INVOICE_NUMBER_LABEL ? `חשבונית ללא מספר (#${invoice.id})` : `חשבונית ${displayNumber}`
 }
 
 export const formatVatAmount = (amount: string | number | null | undefined): string =>

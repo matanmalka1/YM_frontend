@@ -37,10 +37,9 @@ export const useStatusTransitionPanel = (
     onError: (error) => showErrorToast(error, ANNUAL_REPORTS_ERROR_MESSAGES.statusTransition.amend),
   })
 
-  const setField =
-    (field: keyof TransitionForm) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      setForm((current) => ({ ...current, [field]: event.target.value }))
-    }
+  const setField = (field: keyof TransitionForm) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setForm((current) => ({ ...current, [field]: event.target.value }))
+  }
 
   const select = (status: (typeof allowed)[number]) => {
     setSelected((current) => (current === status ? null : status))

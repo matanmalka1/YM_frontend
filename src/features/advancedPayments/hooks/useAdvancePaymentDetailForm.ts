@@ -31,10 +31,7 @@ export interface AdvancePaymentDetailForm {
   handleSave: () => Promise<void>
 }
 
-export const useAdvancePaymentDetailForm = ({
-  payment,
-  onSave,
-}: UseAdvancePaymentDetailFormArgs): AdvancePaymentDetailForm => {
+export const useAdvancePaymentDetailForm = ({ payment, onSave }: UseAdvancePaymentDetailFormArgs): AdvancePaymentDetailForm => {
   // Seeded once from the loaded payment. The consumer keys this component by
   // payment id, so opening another payment remounts the hook with fresh state —
   // no prop→state sync effect, and refetches (fresh object, same id) never wipe

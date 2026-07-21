@@ -71,13 +71,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           </div>
 
           <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row">
-            <Button
-              variant="secondary"
-              fullWidth
-              autoFocus={confirmVariant === 'danger'}
-              disabled={isLoading}
-              onClick={onCancel}
-            >
+            <Button variant="secondary" fullWidth autoFocus={confirmVariant === 'danger'} disabled={isLoading} onClick={onCancel}>
               {cancelLabel}
             </Button>
             <Button

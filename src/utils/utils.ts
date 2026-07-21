@@ -113,10 +113,7 @@ type PercentFormatOptions = {
   isRatio?: boolean
 }
 
-export const formatPercent = (
-  value: string | number | null | undefined,
-  options: PercentFormatOptions = {},
-): string => {
+export const formatPercent = (value: string | number | null | undefined, options: PercentFormatOptions = {}): string => {
   const numeric = toNumberOrNull(value)
   if (numeric === null) return options.fallback ?? EMPTY_VALUE
 

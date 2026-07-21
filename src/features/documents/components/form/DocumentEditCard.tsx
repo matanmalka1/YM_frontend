@@ -17,12 +17,7 @@ interface DocumentEditCardProps {
   onSubmit: (payload: UpdateDocumentPayload) => Promise<void>
 }
 
-export const DocumentEditCard: React.FC<DocumentEditCardProps> = ({
-  doc,
-  formId = EDIT_FORM_ID,
-  editError,
-  onSubmit,
-}) => {
+export const DocumentEditCard: React.FC<DocumentEditCardProps> = ({ doc, formId = EDIT_FORM_ID, editError, onSubmit }) => {
   const {
     formState: { errors },
     handleSubmit,

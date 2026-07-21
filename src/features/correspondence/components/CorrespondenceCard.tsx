@@ -79,12 +79,7 @@ export const CorrespondenceCard = ({ businessId, clientId }: CorrespondenceCardP
         {isLoading && <p className="py-4 text-center text-sm text-gray-500">{GLOBAL_UI_MESSAGES.common.loading}</p>}
 
         {!isLoading && !error && entries.length === 0 && (
-          <StateCard
-            icon={MessageSquare}
-            message={CORRESPONDENCE_MESSAGES.card.emptyMessage}
-            size="compact"
-            variant="minimal"
-          />
+          <StateCard icon={MessageSquare} message={CORRESPONDENCE_MESSAGES.card.emptyMessage} size="compact" variant="minimal" />
         )}
 
         {!isLoading && !error && entries.length > 0 && (

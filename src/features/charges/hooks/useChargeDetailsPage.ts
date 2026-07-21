@@ -99,9 +99,7 @@ export const useChargeDetailsPage = (chargeId: string | undefined) => {
     isDeleting: deleteMutation.isPending,
     updateCharge,
     isUpdating: updateMutation.isPending,
-    updateError: updateMutation.error
-      ? getErrorMessage(updateMutation.error, CHARGES_ERROR_MESSAGES.mutations.update)
-      : null,
+    updateError: updateMutation.error ? getErrorMessage(updateMutation.error, CHARGES_ERROR_MESSAGES.mutations.update) : null,
     isAdvisor: isAdvisor || isSecretary,
   }
 }

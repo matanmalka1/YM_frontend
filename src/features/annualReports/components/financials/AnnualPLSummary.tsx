@@ -54,22 +54,10 @@ export const AnnualPLSummary: React.FC<Props> = ({ reportId, clientId }) => {
       <div className="space-y-4 py-2">
         <div className="space-y-0.5">
           <WaterfallRow label={ANNUAL_REPORTS_MESSAGES.plSummary.grossIncome} value={summary.grossIncome} />
-          <WaterfallRow
-            label={ANNUAL_REPORTS_MESSAGES.plSummary.expensesDeduction}
-            value={summary.expenses}
-            isSubtract
-          />
-          <WaterfallRow
-            label={ANNUAL_REPORTS_MESSAGES.plSummary.profitBeforeTax}
-            value={summary.profitBeforeTax}
-            isResult
-          />
+          <WaterfallRow label={ANNUAL_REPORTS_MESSAGES.plSummary.expensesDeduction} value={summary.expenses} isSubtract />
+          <WaterfallRow label={ANNUAL_REPORTS_MESSAGES.plSummary.profitBeforeTax} value={summary.profitBeforeTax} isResult />
           <WaterfallRow label={ANNUAL_REPORTS_MESSAGES.plSummary.taxDeduction} value={summary.taxAmount} isSubtract />
-          <WaterfallRow
-            label={ANNUAL_REPORTS_MESSAGES.plSummary.netProfitAfterTax}
-            value={summary.netProfitAfterTax}
-            highlight
-          />
+          <WaterfallRow label={ANNUAL_REPORTS_MESSAGES.plSummary.netProfitAfterTax} value={summary.netProfitAfterTax} highlight />
         </div>
 
         <div>

@@ -58,11 +58,7 @@ export const MultiYearPLChart: React.FC<MultiYearPLChartProps> = ({ clientId, cu
       <ResponsiveContainer width="100%" height={200}>
         <LineChart data={chartData} margin={CHART_MARGIN}>
           <XAxis dataKey={ANNUAL_REPORTS_MESSAGES.chart.yearAxisKey} tick={{ fontSize: 11 }} />
-          <YAxis
-            tickFormatter={(value) => `₪${(Number(value) / 1000).toFixed(0)}K`}
-            tick={{ fontSize: 10 }}
-            width={52}
-          />
+          <YAxis tickFormatter={(value) => `₪${(Number(value) / 1000).toFixed(0)}K`} tick={{ fontSize: 10 }} width={52} />
           <Tooltip
             formatter={(value) => formatCurrencyILS(Number(value))}
             labelFormatter={(label) => ANNUAL_REPORTS_MESSAGES.chart.yearTooltipLabel(label)}

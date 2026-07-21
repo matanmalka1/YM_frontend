@@ -199,21 +199,14 @@ export const StatsCard: React.FC<StatsCardProps> = ({
 
           {trend && trendConfig && (
             <div className="mt-3 flex flex-row-reverse items-center gap-2 text-sm">
-              <span
-                className={cn(
-                  'inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-medium',
-                  trendConfig.className,
-                )}
-              >
+              <span className={cn('inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-medium', trendConfig.className)}>
                 {trendConfig.icon} {formatPercent(Math.abs(trend.value))}
               </span>
               <span className="text-gray-500">{trend.label}</span>
             </div>
           )}
 
-          {actionLabel && (
-            <p className={cn('text-xs font-medium text-gray-500', compact ? 'mt-2' : 'mt-3')}>{actionLabel}</p>
-          )}
+          {actionLabel && <p className={cn('text-xs font-medium text-gray-500', compact ? 'mt-2' : 'mt-3')}>{actionLabel}</p>}
         </div>
       </div>
     </div>

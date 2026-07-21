@@ -44,12 +44,7 @@ export const ChargesTableBlock = ({
     {!isAdvisor && <Alert variant="info" message={CHARGES_MESSAGES.list.viewOnly} />}
 
     {isAdvisor && selectedCount > 0 && (
-      <ChargeBulkToolbar
-        selectedCount={selectedCount}
-        loading={bulkLoading}
-        onAction={onBulkAction}
-        onClear={onClearSelection}
-      />
+      <ChargeBulkToolbar selectedCount={selectedCount} loading={bulkLoading} onAction={onBulkAction} onClear={onClearSelection} />
     )}
 
     <PaginatedDataTable

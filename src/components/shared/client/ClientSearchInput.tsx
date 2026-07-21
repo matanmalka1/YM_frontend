@@ -220,9 +220,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
         role="combobox"
         aria-expanded={open}
         aria-controls={listboxId}
-        aria-activedescendant={
-          highlightedIndex >= 0 ? `${listboxId}-option-${results[highlightedIndex]?.id}` : undefined
-        }
+        aria-activedescendant={highlightedIndex >= 0 ? `${listboxId}-option-${results[highlightedIndex]?.id}` : undefined}
         startIcon={<Search className="h-4 w-4" />}
         endElement={
           loading ? (

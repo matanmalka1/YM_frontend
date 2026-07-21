@@ -46,10 +46,7 @@ export const notesApi = {
     noteId: number,
     payload: UpdateNotePayload,
   ): Promise<EntityNote> => {
-    const response = await api.patch<EntityNote>(
-      NOTES_ENDPOINTS.businessNoteById(clientId, businessId, noteId),
-      payload,
-    )
+    const response = await api.patch<EntityNote>(NOTES_ENDPOINTS.businessNoteById(clientId, businessId, noteId), payload)
     return response.data
   },
 

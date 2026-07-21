@@ -44,10 +44,8 @@ export const useIncomeExpenseTab = (reportId: number) => {
       await queryClient.invalidateQueries({ queryKey: annualReportsQK.financials(reportId) })
       setShowForceConfirm(false)
       setAutoPopulateResult(result)
-      const incomeText =
-        result.income_lines_created === 1 ? 'שורת הכנסה אחת' : `${result.income_lines_created} שורות הכנסה`
-      const expenseText =
-        result.expense_lines_created === 1 ? 'שורת הוצאה אחת' : `${result.expense_lines_created} שורות הוצאה`
+      const incomeText = result.income_lines_created === 1 ? 'שורת הכנסה אחת' : `${result.income_lines_created} שורות הכנסה`
+      const expenseText = result.expense_lines_created === 1 ? 'שורת הוצאה אחת' : `${result.expense_lines_created} שורות הוצאה`
       toast.success(`נוצרו ${incomeText} ו-${expenseText} מנתוני מע"מ`)
     },
     onError: (error) => {

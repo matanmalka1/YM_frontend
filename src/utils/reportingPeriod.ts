@@ -36,11 +36,5 @@ export const isCurrentReportingPeriod = (
   const match = REPORTING_PERIOD_PATTERN.exec(period)
   if (!match) return false
 
-  return reportingPeriodIncludesMonth(
-    Number(match[1]),
-    Number(match[2]),
-    monthsCount,
-    now.getFullYear(),
-    now.getMonth() + 1,
-  )
+  return reportingPeriodIncludesMonth(Number(match[1]), Number(match[2]), monthsCount, now.getFullYear(), now.getMonth() + 1)
 }

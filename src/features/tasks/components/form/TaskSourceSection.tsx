@@ -71,9 +71,7 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
           <div className="mt-0.5 text-xs text-primary-700">{TASKS_MESSAGES.source.clientLabel(source.client_name)}</div>
         )}
         {linkedCount > 0 && (
-          <div className="mt-2 text-xs font-medium text-orange-800">
-            {TASKS_MESSAGES.source.existingLinkedTasks(linkedCount)}
-          </div>
+          <div className="mt-2 text-xs font-medium text-orange-800">{TASKS_MESSAGES.source.existingLinkedTasks(linkedCount)}</div>
         )}
         {source.linked_tasks?.length ? (
           <ul className="mt-2 list-inside list-disc text-xs text-primary-800">

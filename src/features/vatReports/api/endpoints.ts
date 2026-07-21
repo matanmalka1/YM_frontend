@@ -6,8 +6,7 @@ export const VAT_ENDPOINTS = {
   vatPeriodOptions: (clientId: number | string) => `/vat/clients/${clientId}/period-options`,
   vatWorkItemMaterialsComplete: (id: number | string) => `/vat/work-items/${id}/materials-complete`,
   vatWorkItemInvoices: (id: number | string) => `/vat/work-items/${id}/invoices`,
-  vatWorkItemInvoiceById: (id: number | string, invoiceId: number | string) =>
-    `/vat/work-items/${id}/invoices/${invoiceId}`,
+  vatWorkItemInvoiceById: (id: number | string, invoiceId: number | string) => `/vat/work-items/${id}/invoices/${invoiceId}`,
   vatWorkItemReadyForReview: (id: number | string) => `/vat/work-items/${id}/ready-for-review`,
   vatWorkItemSendBack: (id: number | string) => `/vat/work-items/${id}/send-back`,
   vatWorkItemFile: (id: number | string) => `/vat/work-items/${id}/file`,

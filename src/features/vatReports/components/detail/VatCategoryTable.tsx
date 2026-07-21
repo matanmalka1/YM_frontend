@@ -7,12 +7,7 @@ import type { VatExpenseCategoryBreakdown } from '../../api'
 import { VAT_DEDUCTIBLE_ACCENT } from '../../constants/visualizationTokens'
 import { VAT_MESSAGES } from '../../messages'
 
-export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({
-  rows,
-  totalExpenseNet,
-  totalGrossVat,
-  totalInputVat,
-}) => {
+export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({ rows, totalExpenseNet, totalGrossVat, totalInputVat }) => {
   if (!rows?.length) return null
 
   const totalGrossAmount = Number(totalExpenseNet) + Number(totalGrossVat)
@@ -31,9 +26,7 @@ export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({
       header: VAT_MESSAGES.categoryTable.deductionPercent,
       kind: 'number',
       render: (row) => (
-        <span className={getVatDeductionRateClass(row.deduction_rate)}>
-          {getVatDeductionRateLabel(row.deduction_rate)}
-        </span>
+        <span className={getVatDeductionRateClass(row.deduction_rate)}>{getVatDeductionRateLabel(row.deduction_rate)}</span>
       ),
       footer: null,
     },
@@ -53,9 +46,7 @@ export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({
       key: 'deductible',
       header: VAT_MESSAGES.categoryTable.deductibleVat,
       kind: 'money',
-      render: (row) => (
-        <span className={cn('font-bold', VAT_DEDUCTIBLE_ACCENT)}>{formatVatAmount(row.deductible_vat)}</span>
-      ),
+      render: (row) => <span className={cn('font-bold', VAT_DEDUCTIBLE_ACCENT)}>{formatVatAmount(row.deductible_vat)}</span>,
       footer: (
         <span className={cn('underline decoration-2 underline-offset-4', VAT_DEDUCTIBLE_ACCENT)}>
           {formatVatAmount(totalInputVat)}
@@ -66,12 +57,8 @@ export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({
 
   return (
     <section className="space-y-3">
-      <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400">
-        {VAT_MESSAGES.detail.categoryBreakdownTitle}
-      </h3>
-      {showNonDeductibleNote && (
-        <Alert variant="neutral" size="sm" message={VAT_MESSAGES.detail.categoryNonDeductibleNote} />
-      )}
+      <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400">{VAT_MESSAGES.detail.categoryBreakdownTitle}</h3>
+      {showNonDeductibleNote && <Alert variant="neutral" size="sm" message={VAT_MESSAGES.detail.categoryNonDeductibleNote} />}
 
       <DataTable
         data={rows}

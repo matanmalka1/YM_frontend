@@ -44,13 +44,7 @@ const Banner: React.FC<BannerItem> = ({ variant, icon, message, cta }) => (
       <p className="text-sm leading-snug">{message}</p>
     </div>
     {cta && (
-      <Button
-        variant="outline"
-        size="xs"
-        icon={<Send className="h-3 w-3" />}
-        onClick={cta.onClick}
-        className="shrink-0"
-      >
+      <Button variant="outline" size="xs" icon={<Send className="h-3 w-3" />} onClick={cta.onClick} className="shrink-0">
         {cta.label}
       </Button>
     )}

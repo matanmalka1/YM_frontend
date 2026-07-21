@@ -1,10 +1,6 @@
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import { Select } from '@/components/ui/inputs/Select'
-import {
-  BIMONTHLY_START_MONTH_VALUES,
-  MONTH_OPTIONS,
-  getOperationalYearOptions,
-} from '@/constants/periodOptions.constants'
+import { BIMONTHLY_START_MONTH_VALUES, MONTH_OPTIONS, getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import type { ReceiveBinderFormValues } from '../../schemas'
 import { PERIODIC_BINDER_TYPES, type BinderTypeValue } from '../../constants'
 import { BINDERS_MESSAGES } from '../../messages'
@@ -36,10 +32,7 @@ export const BinderPeriodFields: React.FC<BinderPeriodFieldsProps> = ({ form, ma
           <Select
             label={BINDERS_MESSAGES.period.reportingYear}
             error={errors.period_year?.message}
-            options={[
-              { value: '', label: BINDERS_MESSAGES.period.chooseYear, disabled: true },
-              ...getOperationalYearOptions(),
-            ]}
+            options={[{ value: '', label: BINDERS_MESSAGES.period.chooseYear, disabled: true }, ...getOperationalYearOptions()]}
             value={field.value ? String(field.value) : ''}
             onChange={(event) => field.onChange(event.target.value ? Number(event.target.value) : undefined)}
             onBlur={field.onBlur}

@@ -59,10 +59,7 @@ export const clientsApi = {
     return response.data
   },
 
-  listBusinessesForClient: async (
-    clientId: number,
-    params?: ListClientBusinessesParams,
-  ): Promise<ClientBusinessesResponse> => {
+  listBusinessesForClient: async (clientId: number, params?: ListClientBusinessesParams): Promise<ClientBusinessesResponse> => {
     const response = await api.get<ClientBusinessesResponse>(
       BUSINESS_ENDPOINTS.clientBusinesses(clientId),
       params ? { params: toQueryParams(params) } : undefined,
@@ -147,11 +144,7 @@ export const clientsApi = {
     return response.data
   },
 
-  updateBusiness: async (
-    clientId: number,
-    businessId: number,
-    payload: UpdateBusinessPayload,
-  ): Promise<BusinessResponse> => {
+  updateBusiness: async (clientId: number, businessId: number, payload: UpdateBusinessPayload): Promise<BusinessResponse> => {
     const response = await api.patch<BusinessResponse>(BUSINESS_ENDPOINTS.businessById(clientId, businessId), payload)
     return response.data
   },

@@ -63,8 +63,6 @@ export const getEventIcon = (eventType: string): ReactNode =>
 
 export const formatTimestamp = (timestamp: string): string => format(parseISO(timestamp), 'HH:mm', { locale: he })
 
-export const formatTimelineDate = (timestamp: string): string =>
-  format(parseISO(timestamp), 'd MMMM yyyy', { locale: he })
+export const formatTimelineDate = (timestamp: string): string => format(parseISO(timestamp), 'd MMMM yyyy', { locale: he })
 
-export const formatDateHeading = (timestamp: string): string =>
-  format(parseISO(timestamp), 'EEEE, d MMMM yyyy', { locale: he })
+export const formatDateHeading = (timestamp: string): string => format(parseISO(timestamp), 'EEEE, d MMMM yyyy', { locale: he })

@@ -99,9 +99,7 @@ export const useClientCharges = (clientId: number) => {
     selectedIds,
     actionLoadingId,
     bulkLoading,
-    createError: createMutation.error
-      ? getErrorMessage(createMutation.error, CHARGES_ERROR_MESSAGES.mutations.create)
-      : null,
+    createError: createMutation.error ? getErrorMessage(createMutation.error, CHARGES_ERROR_MESSAGES.mutations.create) : null,
     createLoading: createMutation.isPending,
     toggleSelect,
     toggleSelectAll,

@@ -25,19 +25,10 @@ export const Binders: React.FC = () => {
   )
 
   return (
-    <PageStateGuard
-      isLoading={status.isLoading}
-      error={status.error}
-      header={header}
-      loadingMessage={status.loadingMessage}
-    >
+    <PageStateGuard isLoading={status.isLoading} error={status.error} header={header} loadingMessage={status.loadingMessage}>
       <BindersStatsSection counters={stats.counters} countersLoading={stats.countersLoading} />
 
-      <FilterPanel
-        {...filters}
-        title={BINDERS_MESSAGES.page.filterTitle}
-        subtitle={BINDERS_MESSAGES.page.filterSubtitle}
-      />
+      <FilterPanel {...filters} title={BINDERS_MESSAGES.page.filterTitle} subtitle={BINDERS_MESSAGES.page.filterSubtitle} />
 
       <PaginatedDataTable
         data={table.data}

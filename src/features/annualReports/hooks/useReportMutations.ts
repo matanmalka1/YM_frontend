@@ -50,8 +50,7 @@ export const useReportMutations = (reportId: number | null, onDeleted?: () => vo
   })
 
   const updateMutation = useMutation({
-    mutationFn: (payload: Partial<ReportDetailResponse>) =>
-      annualReportsApi.patchReportDetails(reportId as number, payload),
+    mutationFn: (payload: Partial<ReportDetailResponse>) => annualReportsApi.patchReportDetails(reportId as number, payload),
     onSuccess: (updated) => {
       toast.success('דוח עודכן בהצלחה')
       if (qk) {

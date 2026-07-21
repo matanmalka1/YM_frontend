@@ -1,14 +1,7 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { Eye, Send } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
-import {
-  actionsColumn,
-  dateTimeColumn,
-  RowActionItem,
-  RowActionsMenu,
-  textColumn,
-  type Column,
-} from '@/components/ui/table'
+import { actionsColumn, dateTimeColumn, RowActionItem, RowActionsMenu, textColumn, type Column } from '@/components/ui/table'
 import { TRIGGER_LABELS, type NotificationItem } from '../../api'
 import { NOTIFICATION_DOMAIN_LABELS, NOTIFICATION_STATUS_LABELS, getNotificationStatusVariant } from '../../constants'
 import { NOTIFICATIONS_MESSAGES } from '../../messages'

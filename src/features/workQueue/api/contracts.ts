@@ -94,10 +94,7 @@ const genericWorkQueueItemSchema = baseWorkQueueItemSchema.extend({
   source_type: nonAdvanceSourceTypeSchema,
 })
 
-const workQueueItemSchema = z.discriminatedUnion('source_type', [
-  advancePaymentWorkQueueItemSchema,
-  genericWorkQueueItemSchema,
-])
+const workQueueItemSchema = z.discriminatedUnion('source_type', [advancePaymentWorkQueueItemSchema, genericWorkQueueItemSchema])
 
 export type WorkQueueItem = z.infer<typeof workQueueItemSchema>
 export type WorkQueueAction = z.infer<typeof workQueueActionSchema>

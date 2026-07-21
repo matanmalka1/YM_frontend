@@ -51,8 +51,7 @@ const parseYearInput = (value: string, label: string): { value: number | null; e
   if (!trimmed) return { value: null, error: TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.validation.required(label) }
 
   const parsed = Number(trimmed)
-  if (!Number.isInteger(parsed))
-    return { value: null, error: TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.validation.invalidYear(label) }
+  if (!Number.isInteger(parsed)) return { value: null, error: TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.validation.invalidYear(label) }
   if (parsed < MIN_YEAR || parsed > MAX_YEAR) {
     return { value: null, error: TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.validation.yearRange(label, MIN_YEAR, MAX_YEAR) }
   }
@@ -69,9 +68,7 @@ const translateWarning = (warning: string): string => {
   }
 
   const fallbackWarning =
-    /^Year (\d+) uses fallback DeadlineRule dates because official tax calendar registry data is missing\.$/.exec(
-      warning,
-    )
+    /^Year (\d+) uses fallback DeadlineRule dates because official tax calendar registry data is missing\.$/.exec(warning)
   if (fallbackWarning) {
     return TAX_CALENDAR_SETTINGS_MESSAGES.warnings.fallbackDates(fallbackWarning[1])
   }
@@ -108,8 +105,7 @@ const groupEntries = (entries: TaxCalendarSettingsEntry[]): EntryGroup[] => {
   return Array.from(groups.values())
     .sort(
       (a, b) =>
-        a.taxYear - b.taxYear ||
-        getObligationLabel(a.obligationType).localeCompare(getObligationLabel(b.obligationType), 'he'),
+        a.taxYear - b.taxYear || getObligationLabel(a.obligationType).localeCompare(getObligationLabel(b.obligationType), 'he'),
     )
     .map((group) => ({
       ...group,
@@ -172,10 +168,7 @@ export const TaxCalendarSettingsPage = () => {
   const [endYear, setEndYear] = useState(String(currentYear))
   const yearOptions = useMemo(getYearOptions, [])
 
-  const startYearState = useMemo(
-    () => parseYearInput(startYear, TAX_CALENDAR_SETTINGS_MESSAGES.labels.startYear),
-    [startYear],
-  )
+  const startYearState = useMemo(() => parseYearInput(startYear, TAX_CALENDAR_SETTINGS_MESSAGES.labels.startYear), [startYear])
   const endYearState = useMemo(() => parseYearInput(endYear, TAX_CALENDAR_SETTINGS_MESSAGES.labels.endYear), [endYear])
   const hasInvalidRange =
     startYearState.value !== null && endYearState.value !== null && startYearState.value > endYearState.value
@@ -271,10 +264,7 @@ export const TaxCalendarSettingsPage = () => {
       ) : null}
 
       {summaryQuery.isError && !hasInvalidRange ? (
-        <Alert
-          variant="error"
-          message={getErrorMessage(summaryQuery.error, TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.load.summary)}
-        />
+        <Alert variant="error" message={getErrorMessage(summaryQuery.error, TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.load.summary)} />
       ) : null}
 
       <TaxCalendarSettingsStatsSection
@@ -304,14 +294,9 @@ export const TaxCalendarSettingsPage = () => {
       ) : null}
 
       <section className="space-y-3">
-        <h2 className="text-base font-semibold text-gray-900">
-          {TAX_CALENDAR_SETTINGS_MESSAGES.labels.deadlineRulesTitle}
-        </h2>
+        <h2 className="text-base font-semibold text-gray-900">{TAX_CALENDAR_SETTINGS_MESSAGES.labels.deadlineRulesTitle}</h2>
         {rulesQuery.isError ? (
-          <Alert
-            variant="error"
-            message={getErrorMessage(rulesQuery.error, TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.load.rules)}
-          />
+          <Alert variant="error" message={getErrorMessage(rulesQuery.error, TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.load.rules)} />
         ) : (
           <DataTable
             data={rules}
@@ -327,9 +312,7 @@ export const TaxCalendarSettingsPage = () => {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-base font-semibold text-gray-900">
-          {TAX_CALENDAR_SETTINGS_MESSAGES.labels.calendarEntriesTitle}
-        </h2>
+        <h2 className="text-base font-semibold text-gray-900">{TAX_CALENDAR_SETTINGS_MESSAGES.labels.calendarEntriesTitle}</h2>
         {entriesQuery.isError ? (
           <Alert
             variant="error"
@@ -358,9 +341,7 @@ export const TaxCalendarSettingsPage = () => {
                   .map((group) => (
                     <div key={group.key} className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <h4 className="text-sm font-medium text-gray-900">
-                          {getObligationLabel(group.obligationType)}
-                        </h4>
+                        <h4 className="text-sm font-medium text-gray-900">{getObligationLabel(group.obligationType)}</h4>
                         <span className="text-xs font-medium text-gray-500">
                           {TAX_CALENDAR_SETTINGS_MESSAGES.labels.entriesCount(formatCount(group.entries.length))}
                         </span>

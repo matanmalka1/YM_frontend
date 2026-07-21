@@ -31,19 +31,10 @@ export const WorkQueuePage: React.FC = () => {
   )
 
   return (
-    <PageStateGuard
-      isLoading={status.isLoading}
-      error={status.error}
-      header={header}
-      loadingMessage={status.loadingMessage}
-    >
+    <PageStateGuard isLoading={status.isLoading} error={status.error} header={header} loadingMessage={status.loadingMessage}>
       <WorkQueueStatsSection {...stats} />
 
-      <FilterPanel
-        {...filters}
-        title={WORK_QUEUE_MESSAGES.page.filterTitle}
-        subtitle={WORK_QUEUE_MESSAGES.page.filterSubtitle}
-      />
+      <FilterPanel {...filters} title={WORK_QUEUE_MESSAGES.page.filterTitle} subtitle={WORK_QUEUE_MESSAGES.page.filterSubtitle} />
 
       <PaginatedDataTable
         data={table.data}

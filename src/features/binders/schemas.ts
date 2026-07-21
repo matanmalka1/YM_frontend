@@ -25,10 +25,7 @@ export const receiveBinderSchema = z
     received_at: z
       .string()
       .min(1, BINDERS_ERROR_MESSAGES.validation.receivedAtRequired)
-      .refine(
-        (value) => value <= format(new Date(), 'yyyy-MM-dd'),
-        BINDERS_ERROR_MESSAGES.validation.futureDateNotAllowed,
-      ),
+      .refine((value) => value <= format(new Date(), 'yyyy-MM-dd'), BINDERS_ERROR_MESSAGES.validation.futureDateNotAllowed),
     open_new_binder: z.boolean().optional(),
     notes: z.string().optional().nullable(),
   })

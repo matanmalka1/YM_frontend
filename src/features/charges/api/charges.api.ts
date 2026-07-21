@@ -46,10 +46,7 @@ export const chargesApi = {
   },
 
   cancel: async (chargeId: number, reason?: string): Promise<ChargeResponse> => {
-    const response = await api.post<ChargeResponse>(
-      CHARGE_ENDPOINTS.chargeCancel(chargeId),
-      reason ? { reason } : undefined,
-    )
+    const response = await api.post<ChargeResponse>(CHARGE_ENDPOINTS.chargeCancel(chargeId), reason ? { reason } : undefined)
     return response.data
   },
 

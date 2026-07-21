@@ -88,17 +88,12 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
             readyBinders.map((binder) => {
               const checked = selectedIds.includes(binder.id)
               return (
-                <div
-                  key={binder.id}
-                  className="flex items-start gap-3 rounded-lg border border-gray-200 bg-white px-3 py-2"
-                >
+                <div key={binder.id} className="flex items-start gap-3 rounded-lg border border-gray-200 bg-white px-3 py-2">
                   <Checkbox
                     id={`handover-binder-${binder.id}`}
                     checked={checked}
                     onChange={() =>
-                      setSelectedIds((current) =>
-                        checked ? current.filter((id) => id !== binder.id) : [...current, binder.id],
-                      )
+                      setSelectedIds((current) => (checked ? current.filter((id) => id !== binder.id) : [...current, binder.id]))
                     }
                     inputClassName="mt-0.5"
                   />

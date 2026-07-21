@@ -1,10 +1,8 @@
-import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { RotateCcw, SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-react'
 import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
 import { Button } from '../../../components/ui/primitives/Button'
 import { Badge } from '@/components/ui/primitives/Badge'
-import { ClientPickerField, useClientPickerState } from '@/components/shared/client'
 import { CLIENT_STATUS_OPTIONS, ENTITY_TYPE_OPTIONS } from '@/features/clients'
 import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION } from '@/constants/filterOptions.constants'
 import { BINDER_CAPACITY_STATUS_OPTIONS, BINDER_LOCATION_STATUS_OPTIONS } from '../../binders'
@@ -17,23 +15,12 @@ const ADVANCED_FILTERS_PANEL_ID = 'search-advanced-filters'
 export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
   filters,
   textDrafts,
-  hydratedClient,
   onFilterChange,
   onReset,
   isOpen,
   onToggle,
 }) => {
   const advancedCount = SEARCH_ADVANCED_FILTER_KEYS.filter((k) => Boolean(filters[k])).length
-  const { clientQuery, selectedClient, handleSelectClient, handleClearClient, handleClientQueryChange } = useClientPickerState({
-    onSelect: (client) => onFilterChange('client_record_id', String(client.id)),
-    onClear: () => onFilterChange('client_record_id', ''),
-  })
-  const activeClient =
-    (selectedClient && String(selectedClient.id) === filters.client_record_id ? selectedClient : null) ??
-    hydratedClient ??
-    (filters.client_record_id
-      ? { id: Number(filters.client_record_id), name: SEARCH_MESSAGES.filters.clientFallback(filters.client_record_id) }
-      : null)
 
   return (
     <div className="contents">
@@ -59,21 +46,6 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
       {/* Rendered while collapsed too, so `aria-controls` always points at a real element. */}
       <div id={ADVANCED_FILTERS_PANEL_ID} hidden={!isOpen} className="mt-3 w-full space-y-4 border-t border-gray-100 pt-4">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <ClientPickerField
-            selectedClient={activeClient}
-            clientQuery={clientQuery}
-            onQueryChange={handleClientQueryChange}
-            onSelect={handleSelectClient}
-            onClear={handleClearClient}
-            label={GLOBAL_UI_MESSAGES.common.client}
-          />
-          <Input
-            label={SEARCH_MESSAGES.filters.idNumber}
-            type="text"
-            value={textDrafts.id_number.value}
-            onChange={(e) => textDrafts.id_number.onChange(e.target.value)}
-            placeholder={SEARCH_MESSAGES.filters.idNumberPlaceholder}
-          />
           <Input
             label={SEARCH_MESSAGES.filters.binderNumber}
             type="text"

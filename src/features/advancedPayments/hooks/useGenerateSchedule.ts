@@ -24,8 +24,7 @@ export const useGenerateSchedule = (year: number) => {
           : null
 
   const mutation = useMutation({
-    mutationFn: (periodMonthsCount: 1 | 2) =>
-      advancePaymentsApi.generateSchedule(clientRecordId, year, periodMonthsCount),
+    mutationFn: (periodMonthsCount: 1 | 2) => advancePaymentsApi.generateSchedule(clientRecordId, year, periodMonthsCount),
     onSuccess: (data) => {
       toast.success(data.created > 0 ? `נוצרו ${data.created} מקדמות, דולגו ${data.skipped}` : 'לא נוצרו מקדמות חדשות')
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })

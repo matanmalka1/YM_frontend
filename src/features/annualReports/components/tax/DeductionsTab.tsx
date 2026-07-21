@@ -21,8 +21,7 @@ export const DeductionsTab: React.FC<Props> = ({ reportId, taxYear }) => {
     queryFn: () => annualReportFinancialsApi.getFinancials(reportId),
   })
 
-  if (isLoading)
-    return <p className="py-8 text-center text-sm text-gray-400">{ANNUAL_REPORTS_MESSAGES.deductionsTab.loading}</p>
+  if (isLoading) return <p className="py-8 text-center text-sm text-gray-400">{ANNUAL_REPORTS_MESSAGES.deductionsTab.loading}</p>
 
   const expenses = data?.expense_lines ?? []
   const totalRecognized = expenses.reduce((s, e) => s + Number(e.recognized_amount), 0)
@@ -46,9 +45,7 @@ export const DeductionsTab: React.FC<Props> = ({ reportId, taxYear }) => {
         >
           <div className="divide-y divide-gray-50">
             {expenses.length === 0 && (
-              <p className="px-5 py-8 text-center text-sm text-gray-400">
-                {ANNUAL_REPORTS_MESSAGES.deductionsTab.empty}
-              </p>
+              <p className="px-5 py-8 text-center text-sm text-gray-400">{ANNUAL_REPORTS_MESSAGES.deductionsTab.empty}</p>
             )}
             {expenses.map((e) => {
               const Icon = CATEGORY_ICONS[e.category] ?? EllipsisVertical

@@ -27,7 +27,8 @@ const matches = (items: SearchClientMatch[], total = items.length): PaginatedCli
 })
 
 /** The URL a transition produces, as the page writes it: one atomic `setFilters` call. */
-const urlAfter = (current: string, updates: Record<string, string>) => nextFilterParams(new URLSearchParams(current), updates).toString()
+const urlAfter = (current: string, updates: Record<string, string>) =>
+  nextFilterParams(new URLSearchParams(current), updates).toString()
 
 describe('resolveSelectedClient', () => {
   it('selects the single client the filters resolved to', () => {
@@ -82,7 +83,9 @@ describe('client selection transitions', () => {
 
 describe('resolution filter transitions', () => {
   it('changing the term clears the selection, its type and its page in one write', () => {
-    const url = new URLSearchParams(urlAfter('search=רפאל&client_record_id=7&type=task&page=4&page_size=20', resolutionFilterUpdate('search', 'משה')))
+    const url = new URLSearchParams(
+      urlAfter('search=רפאל&client_record_id=7&type=task&page=4&page_size=20', resolutionFilterUpdate('search', 'משה')),
+    )
 
     expect(url.get('search')).toBe('משה')
     expect(url.has('client_record_id')).toBe(false)
@@ -92,7 +95,9 @@ describe('resolution filter transitions', () => {
   })
 
   it('changing an advanced filter clears the selection too', () => {
-    const url = new URLSearchParams(urlAfter('search=רפאל&client_record_id=7&type=task', resolutionFilterUpdate('client_status', 'frozen')))
+    const url = new URLSearchParams(
+      urlAfter('search=רפאל&client_record_id=7&type=task', resolutionFilterUpdate('client_status', 'frozen')),
+    )
 
     expect(url.get('client_status')).toBe('frozen')
     expect(url.has('client_record_id')).toBe(false)

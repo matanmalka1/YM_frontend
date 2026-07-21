@@ -56,9 +56,7 @@ export const bindersApi = {
   },
 
   markReadyForHandover: async (binderId: number): Promise<BinderReadyForHandoverResponse> => {
-    const response = await api.post<BinderReadyForHandoverResponse>(
-      BINDER_ENDPOINTS.binderMarkReadyForHandover(binderId),
-    )
+    const response = await api.post<BinderReadyForHandoverResponse>(BINDER_ENDPOINTS.binderMarkReadyForHandover(binderId))
     return response.data
   },
 
@@ -82,13 +80,8 @@ export const bindersApi = {
     return response.data
   },
 
-  handoverToClientBulk: async (
-    payload: BinderHandoverToClientBulkPayload,
-  ): Promise<BinderHandoverToClientBulkResponse> => {
-    const response = await api.post<BinderHandoverToClientBulkResponse>(
-      BINDER_ENDPOINTS.binderHandoverToClientBulk,
-      payload,
-    )
+  handoverToClientBulk: async (payload: BinderHandoverToClientBulkPayload): Promise<BinderHandoverToClientBulkResponse> => {
+    const response = await api.post<BinderHandoverToClientBulkResponse>(BINDER_ENDPOINTS.binderHandoverToClientBulk, payload)
     return response.data
   },
 
@@ -99,10 +92,7 @@ export const bindersApi = {
     return response.data
   },
 
-  listClientBinders: async (
-    clientId: number,
-    params: ListOperationalBindersParams,
-  ): Promise<BinderListResponseExtended> => {
+  listClientBinders: async (clientId: number, params: ListOperationalBindersParams): Promise<BinderListResponseExtended> => {
     const response = await api.get<BinderListResponseExtended>(BINDER_ENDPOINTS.clientBinders(clientId), {
       params: toQueryParams(params),
     })

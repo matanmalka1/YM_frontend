@@ -22,8 +22,7 @@ export const useBusinessActions = (clientId: number) => {
   })
 
   return {
-    updateBusiness: (businessId: number, payload: UpdateBusinessPayload) =>
-      updateMutation.mutateAsync({ businessId, payload }),
+    updateBusiness: (businessId: number, payload: UpdateBusinessPayload) => updateMutation.mutateAsync({ businessId, payload }),
     isUpdating: updateMutation.isPending,
     deleteBusiness: (businessId: number) => deleteMutation.mutate(businessId),
     isDeleting: deleteMutation.isPending,

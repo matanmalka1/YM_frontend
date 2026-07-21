@@ -84,8 +84,7 @@ export const useUsersPage = () => {
   })
 
   const updateMutation = useMutation({
-    mutationFn: ({ userId, payload }: { userId: number; payload: UpdateUserPayload }) =>
-      usersApi.update(userId, payload),
+    mutationFn: ({ userId, payload }: { userId: number; payload: UpdateUserPayload }) => usersApi.update(userId, payload),
     onSuccess: async () => {
       toast.success(USERS_MESSAGES.mutations.updated)
       await invalidateUsers(queryClient)
@@ -221,9 +220,7 @@ export const useUsersPage = () => {
       },
       toggleActiveProps: {
         open: Boolean(pendingToggle),
-        title: pendingToggle?.is_active
-          ? USERS_MESSAGES.toggleActive.deactivateTitle
-          : USERS_MESSAGES.toggleActive.activateTitle,
+        title: pendingToggle?.is_active ? USERS_MESSAGES.toggleActive.deactivateTitle : USERS_MESSAGES.toggleActive.activateTitle,
         message: pendingToggle?.is_active
           ? USERS_MESSAGES.toggleActive.deactivateMessage(pendingToggle?.full_name)
           : USERS_MESSAGES.toggleActive.activateMessage(pendingToggle?.full_name ?? ''),

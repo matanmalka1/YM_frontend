@@ -70,10 +70,7 @@ export const CHARGE_TYPE_OPTIONS: { value: string; label: string }[] = CHARGE_TY
   label: CHARGE_TYPE_LABELS[value],
 }))
 
-export const CHARGE_TYPE_OPTIONS_WITH_ALL: { value: string; label: string }[] = [
-  ALL_TYPES_OPTION,
-  ...CHARGE_TYPE_OPTIONS,
-]
+export const CHARGE_TYPE_OPTIONS_WITH_ALL: { value: string; label: string }[] = [ALL_TYPES_OPTION, ...CHARGE_TYPE_OPTIONS]
 
 export const CHARGE_PERIOD_NONE_LABEL = NO_PERIOD_LABEL
 

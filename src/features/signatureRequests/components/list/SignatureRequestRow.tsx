@@ -74,8 +74,7 @@ export const SignatureRequestRow: React.FC<SignatureRequestRowProps> = ({
             />
           </div>
           <p className="mt-0.5 text-xs text-gray-500">
-            {getSignatureRequestTypeLabel(request.request_type)} · {request.signer_name} ·{' '}
-            {formatDate(request.created_at)}
+            {getSignatureRequestTypeLabel(request.request_type)} · {request.signer_name} · {formatDate(request.created_at)}
           </p>
         </div>
 
@@ -104,9 +103,7 @@ export const SignatureRequestRow: React.FC<SignatureRequestRowProps> = ({
       {/* Expanded details */}
       {expanded && (
         <div className="space-y-2 border-t border-gray-100 bg-gray-50/60 px-4 pb-4 pt-3">
-          {request.description && (
-            <FieldRow label={SIGNATURE_REQUESTS_MESSAGES.fields.description} value={request.description} />
-          )}
+          {request.description && <FieldRow label={SIGNATURE_REQUESTS_MESSAGES.fields.description} value={request.description} />}
           {request.signer_email && (
             <FieldRow label={SIGNATURE_REQUESTS_MESSAGES.fields.signerEmail} value={request.signer_email} />
           )}

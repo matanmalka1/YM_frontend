@@ -30,12 +30,7 @@ interface UseClientsFiltersArgs {
  * Builds the clients FilterPanel slot. Owns the advisor-options query (only fetched
  * when the accountant filter is visible) and the accountant active-filter badge.
  */
-export const useClientsFilters = ({
-  filters,
-  onFilterChange,
-  onReset,
-  showAccountantFilter = false,
-}: UseClientsFiltersArgs) => {
+export const useClientsFilters = ({ filters, onFilterChange, onReset, showAccountantFilter = false }: UseClientsFiltersArgs) => {
   const { options: advisorOptions } = useAdvisorOptions(showAccountantFilter)
   const activeAccountantId = filters.accountant_id ? String(filters.accountant_id) : ''
 

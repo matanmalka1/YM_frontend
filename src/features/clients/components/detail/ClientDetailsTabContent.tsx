@@ -10,10 +10,7 @@ type ClientDetailsTabContentProps = {
   overviewProps: Omit<ClientDetailsOverviewTabProps, 'activeTab'>
 }
 
-export const ClientDetailsTabContent: FC<ClientDetailsTabContentProps> = ({
-  initialTab = 'details',
-  overviewProps,
-}) => {
+export const ClientDetailsTabContent: FC<ClientDetailsTabContentProps> = ({ initialTab = 'details', overviewProps }) => {
   const navigate = useNavigate()
   const { clientId } = useParams<{ clientId: string }>()
 

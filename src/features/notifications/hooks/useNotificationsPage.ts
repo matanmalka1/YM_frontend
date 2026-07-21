@@ -44,9 +44,7 @@ export const useNotificationsPage = () => {
 
   // `notification_id` opens one notification straight from a deep link (search results,
   // shared links) without depending on the filters or page it happens to fall under.
-  const [selectedId, setSelectedId] = useState<number | null>(
-    parsePositiveInt(searchParams.get('notification_id'), 0) || null,
-  )
+  const [selectedId, setSelectedId] = useState<number | null>(parsePositiveInt(searchParams.get('notification_id'), 0) || null)
   const { data: selected, isPending: selectedLoading, error: selectedError } = useNotificationDetail(selectedId)
   const [sendOpen, setSendOpen] = useState(false)
   const [sendClient, setSendClient] = useState<SelectedClientFilter | null>(null)

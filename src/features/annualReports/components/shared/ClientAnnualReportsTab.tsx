@@ -32,12 +32,7 @@ export const ClientAnnualReportsTab: React.FC<ClientAnnualReportsTabProps> = ({ 
     <>
       <div className="flex justify-end mb-2 gap-2">
         {canCompareYears && (
-          <Button
-            variant="ghost"
-            size="sm"
-            icon={<BarChart2 className="h-4 w-4" />}
-            onClick={() => setShowComparison(true)}
-          >
+          <Button variant="ghost" size="sm" icon={<BarChart2 className="h-4 w-4" />} onClick={() => setShowComparison(true)}>
             {ANNUAL_REPORTS_MESSAGES.clientTab.compareYears}
           </Button>
         )}

@@ -40,13 +40,7 @@ export const ClientsStatsSection = ({ stats }: ClientsStatsSectionProps) => {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
       {entityTypeCards.map((card) => (
-        <StatsCard
-          key={card.key}
-          title={card.label}
-          value={card.count}
-          description={card.description}
-          variant={card.variant}
-        />
+        <StatsCard key={card.key} title={card.label} value={card.count} description={card.description} variant={card.variant} />
       ))}
     </div>
   )

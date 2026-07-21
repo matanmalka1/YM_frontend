@@ -23,10 +23,7 @@ export const correspondenceApi = {
   },
 
   update: async (clientId: number, id: number, payload: UpdateCorrespondencePayload): Promise<CorrespondenceEntry> => {
-    const response = await api.patch<CorrespondenceEntry>(
-      CORRESPONDENCE_ENDPOINTS.correspondenceById(clientId, id),
-      payload,
-    )
+    const response = await api.patch<CorrespondenceEntry>(CORRESPONDENCE_ENDPOINTS.correspondenceById(clientId, id), payload)
     return response.data
   },
 

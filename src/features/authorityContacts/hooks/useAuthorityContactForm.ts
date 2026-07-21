@@ -10,11 +10,7 @@ import { AUTHORITY_CONTACT_TEXT } from '../constants'
 import { AUTHORITY_CONTACTS_ERROR_MESSAGES } from '../errorMessages'
 import { toAuthorityContactFormValues, toAuthorityContactPayload } from '../helpers'
 
-export const useAuthorityContactForm = (
-  clientId: number,
-  onSuccess: () => void,
-  existing?: AuthorityContactResponse | null,
-) => {
+export const useAuthorityContactForm = (clientId: number, onSuccess: () => void, existing?: AuthorityContactResponse | null) => {
   const queryClient = useQueryClient()
   const qk = authorityContactsQK.forClient(clientId)
 

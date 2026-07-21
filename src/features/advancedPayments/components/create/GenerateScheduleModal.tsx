@@ -40,9 +40,7 @@ export const GenerateScheduleModal: React.FC<Props> = ({ open, year, onClose }) 
           <Button
             variant="primary"
             isLoading={isPending}
-            disabled={
-              picker.selectedClient === null || isProfileLoading || isProfileError || frequency == null || isPending
-            }
+            disabled={picker.selectedClient === null || isProfileLoading || isProfileError || frequency == null || isPending}
             onClick={handleConfirm}
           >
             {ADVANCED_PAYMENTS_MESSAGES.generateScheduleModal.createButton}

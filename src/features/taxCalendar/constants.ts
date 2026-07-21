@@ -1,8 +1,4 @@
-import {
-  TAX_CALENDAR_OBLIGATION_LABELS,
-  type TaxCalendarObligationType,
-  type TaxCalendarGroupItemSourceType,
-} from './api'
+import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarObligationType, type TaxCalendarGroupItemSourceType } from './api'
 import { TAX_CALENDAR_MESSAGES } from './messages'
 
 export const TAX_CALENDAR_OBLIGATION_TYPES = [

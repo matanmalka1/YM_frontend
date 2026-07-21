@@ -54,9 +54,7 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
             <Badge variant="warning" size="xs" className="font-semibold">
               {VAT_MESSAGES.summary.overriddenAmount}
             </Badge>
-            {workItem.override_justification && (
-              <span className="text-warning-700">{workItem.override_justification}</span>
-            )}
+            {workItem.override_justification && <span className="text-warning-700">{workItem.override_justification}</span>}
           </div>
         </AlertBanner>
       )}

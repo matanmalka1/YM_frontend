@@ -8,12 +8,7 @@ import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
 import { Timeline, TimelineEntry } from '@/components/ui/feedback/Timeline'
 import { bindersApi, bindersQK } from '../../api'
-import {
-  ANNUAL_REPORTS_COMPLETE_LIST_PARAMS,
-  annualReportsApi,
-  annualReportsQK,
-  getStatusLabel,
-} from '@/features/annualReports'
+import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS, annualReportsApi, annualReportsQK, getStatusLabel } from '@/features/annualReports'
 import { clientsApi, clientsQK } from '@/features/clients'
 import { vatReportsApi, vatReportsQK } from '@/features/vatReports'
 import { getVatWorkItemStatusVariant } from '@/features/vatReports'
@@ -25,10 +20,7 @@ import { formatStructuredBinderPeriod, toBinderPeriodValue } from '../../utils'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { BINDERS_MESSAGES } from '../../messages'
 
-const VatStatusBadge: React.FC<{ material: BinderIntakeMaterialResponse; clientId: number }> = ({
-  material,
-  clientId,
-}) => {
+const VatStatusBadge: React.FC<{ material: BinderIntakeMaterialResponse; clientId: number }> = ({ material, clientId }) => {
   const period =
     material.period_year && material.period_month_start && material.period_month_end
       ? toBinderPeriodValue(material.period_year, material.period_month_start, material.period_month_end)
@@ -56,11 +48,7 @@ interface BinderIntakesSectionProps {
   onNavigateToAnnualReport?: () => void
 }
 
-export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({
-  binderId,
-  clientId,
-  onNavigateToAnnualReport,
-}) => {
+export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({ binderId, clientId, onNavigateToAnnualReport }) => {
   const navigate = useNavigate()
   const { data, isLoading } = useQuery({
     queryKey: bindersQK.intakes(binderId),
@@ -151,9 +139,7 @@ export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({
                         )}
                         {period && (
                           <div className="flex items-center gap-1">
-                            <span className="text-gray-400 w-20 shrink-0">
-                              {BINDERS_MESSAGES.intakes.reportingPeriod}
-                            </span>
+                            <span className="text-gray-400 w-20 shrink-0">{BINDERS_MESSAGES.intakes.reportingPeriod}</span>
                             <span className="text-gray-700">{period}</span>
                           </div>
                         )}
@@ -175,9 +161,7 @@ export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({
                 </div>
               )}
 
-              {intake.notes && (
-                <p className="mt-1.5 text-xs text-gray-600 border-t border-gray-100 pt-1.5">{intake.notes}</p>
-              )}
+              {intake.notes && <p className="mt-1.5 text-xs text-gray-600 border-t border-gray-100 pt-1.5">{intake.notes}</p>}
             </TimelineEntry>
           ))}
         </Timeline>

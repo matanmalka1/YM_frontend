@@ -161,14 +161,7 @@ const FilterField: React.FC<FilterFieldProps> = ({ field, values, size, onChange
         </>
       )
     case 'client-picker':
-      return (
-        <ClientPickerFilter
-          field={field}
-          values={values}
-          onMultiChange={onMultiChange}
-          size={size === 'md' ? 'md' : 'sm'}
-        />
-      )
+      return <ClientPickerFilter field={field} values={values} onMultiChange={onMultiChange} size={size === 'md' ? 'md' : 'sm'} />
     default:
       return null
   }

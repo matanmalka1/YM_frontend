@@ -1,10 +1,6 @@
 import { formatCurrencyILS, formatPercent } from '@/utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
-import {
-  CREDIT_POINT_VALUE_BY_YEAR,
-  DEFAULT_CREDIT_POINT_VALUE,
-  PENSION_DEDUCTION_RATE,
-} from '../constants/taxConstants'
+import { CREDIT_POINT_VALUE_BY_YEAR, DEFAULT_CREDIT_POINT_VALUE, PENSION_DEDUCTION_RATE } from '../constants/taxConstants'
 import type { AnnualReportFull } from '../api'
 
 export interface CreditRow {
@@ -26,9 +22,7 @@ export const toReportDetailsPayload = (pension: string, otherCredits: string) =>
 })
 
 export const toTaxResultPayload = (liability: number) =>
-  liability > 0
-    ? { tax_due: String(liability), refund_due: null }
-    : { tax_due: null, refund_due: String(Math.abs(liability)) }
+  liability > 0 ? { tax_due: String(liability), refund_due: null } : { tax_due: null, refund_due: String(Math.abs(liability)) }
 
 const getCreditPointValue = (taxYear: number) => CREDIT_POINT_VALUE_BY_YEAR[taxYear] ?? DEFAULT_CREDIT_POINT_VALUE
 

@@ -8,6 +8,5 @@ export const DOCUMENT_ENDPOINTS = {
   documentDetail: (clientId: number | string, id: number | string) => `/documents/client/${clientId}/${id}`,
   documentDelete: (clientId: number | string, id: number | string) => `/documents/client/${clientId}/${id}`,
   documentReplace: (clientId: number | string, id: number | string) => `/documents/client/${clientId}/${id}/replace`,
-  documentDownloadUrl: (clientId: number | string, id: number | string) =>
-    `/documents/client/${clientId}/${id}/download-url`,
+  documentDownloadUrl: (clientId: number | string, id: number | string) => `/documents/client/${clientId}/${id}/download-url`,
 } as const

@@ -40,8 +40,7 @@ export const BinderRowActions: React.FC<BinderRowActionsProps> = ({
   const canMarkReady = hasBinderAction(binder, 'mark_ready_for_handover')
   const canRevertReady = hasBinderAction(binder, 'revert_ready_for_handover')
   const canHandover = hasBinderAction(binder, 'handover_to_client')
-  const hasActions =
-    canReceiveMaterial || canMarkFull || canReopenCapacity || canMarkReady || canRevertReady || canHandover
+  const hasActions = canReceiveMaterial || canMarkFull || canReopenCapacity || canMarkReady || canRevertReady || canHandover
 
   return (
     <RowActionsMenu ariaLabel={BINDERS_MESSAGES.rowActions.ariaLabel(binder.id)}>

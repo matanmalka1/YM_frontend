@@ -17,8 +17,7 @@ export const formatTaxCalendarEffectiveDueDateRange = (group: TaxCalendarGroup):
 }
 
 export const hasTaxCalendarGroupOverride = (group: TaxCalendarGroup): boolean =>
-  group.effective_due_date_min !== group.regulatory_due_date ||
-  group.effective_due_date_max !== group.regulatory_due_date
+  group.effective_due_date_min !== group.regulatory_due_date || group.effective_due_date_max !== group.regulatory_due_date
 
 export const getTaxCalendarItemPath = (item: TaxCalendarGroupItem): string => {
   if (item.source_type === 'vat_work_item') return `/tax/vat/${item.source_id}`
@@ -61,9 +60,7 @@ export const getTaxCalendarGroupStateVariant = (group: TaxCalendarGroup): 'posit
 }
 
 export const getTaxCalendarGroupDueDatePrefix = (group: TaxCalendarGroup): string =>
-  group.obligation_type === 'advance_payment'
-    ? TAX_CALENDAR_MESSAGES.item.paymentDue
-    : TAX_CALENDAR_MESSAGES.item.reportingDue
+  group.obligation_type === 'advance_payment' ? TAX_CALENDAR_MESSAGES.item.paymentDue : TAX_CALENDAR_MESSAGES.item.reportingDue
 
 export const getTaxCalendarSourceTypeLabel = (item: TaxCalendarGroupItem): string =>
   TAX_CALENDAR_SOURCE_TYPE_LABELS[item.source_type]

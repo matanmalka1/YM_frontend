@@ -33,9 +33,7 @@ const UpcomingDeadlineRow = ({ group }: { group: TaxCalendarGroup }) => {
   const weekday = formatWeekday(group.effective_due_date_min)
   const Icon = group.obligation_type === 'vat' ? CalendarDays : Landmark
   const countLabel =
-    group.obligation_type === 'advance_payment'
-      ? DASHBOARD_MESSAGES.deadlines.payments
-      : DASHBOARD_MESSAGES.deadlines.reports
+    group.obligation_type === 'advance_payment' ? DASHBOARD_MESSAGES.deadlines.payments : DASHBOARD_MESSAGES.deadlines.reports
   const iconClassName =
     group.obligation_type !== 'vat'
       ? 'bg-positive-50 text-positive-600'

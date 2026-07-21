@@ -77,10 +77,7 @@ export const annualReportsApi = {
     return response.data
   },
 
-  patchReportDetails: async (
-    reportId: number,
-    payload: Partial<ReportDetailResponse>,
-  ): Promise<ReportDetailResponse> => {
+  patchReportDetails: async (reportId: number, payload: Partial<ReportDetailResponse>): Promise<ReportDetailResponse> => {
     const response = await api.patch<ReportDetailResponse>(ANNUAL_REPORT_ENDPOINTS.details(reportId), payload)
     return response.data
   },
@@ -109,10 +106,7 @@ export const annualReportsApi = {
     lineId: number,
     payload: AnnexDataAddPayload,
   ): Promise<AnnexDataLine> => {
-    const response = await api.patch<AnnexDataLine>(
-      ANNUAL_REPORT_ENDPOINTS.annexLine(reportId, schedule, lineId),
-      payload,
-    )
+    const response = await api.patch<AnnexDataLine>(ANNUAL_REPORT_ENDPOINTS.annexLine(reportId, schedule, lineId), payload)
     return response.data
   },
 
@@ -120,9 +114,7 @@ export const annualReportsApi = {
     await api.delete(ANNUAL_REPORT_ENDPOINTS.annexLine(reportId, schedule, lineId))
   },
 
-  taxPreview: async (
-    payload: TaxPreviewParams,
-  ): Promise<{ net_profit: string; estimated_tax: string; balance: string }> => {
+  taxPreview: async (payload: TaxPreviewParams): Promise<{ net_profit: string; estimated_tax: string; balance: string }> => {
     const response = await api.post<{ net_profit: string; estimated_tax: string; balance: string }>(
       ANNUAL_REPORT_ENDPOINTS.taxPreview,
       payload,

@@ -29,13 +29,24 @@ interface SearchResultsSectionProps {
   } | null
 }
 
-export const SearchResultsSection: React.FC<SearchResultsSectionProps> = ({ status, prompt, emptyState, clientMatches, selected }) => (
+export const SearchResultsSection: React.FC<SearchResultsSectionProps> = ({
+  status,
+  prompt,
+  emptyState,
+  clientMatches,
+  selected,
+}) => (
   <>
     {status.error && <Alert variant="error" message={status.error} />}
     {status.isLoading && <PageLoading />}
 
     {prompt.visible && (
-      <StateCard icon={SearchIcon} title={SEARCH_MESSAGES.page.promptTitle} message={SEARCH_MESSAGES.page.promptMessage} variant="illustration" />
+      <StateCard
+        icon={SearchIcon}
+        title={SEARCH_MESSAGES.page.promptTitle}
+        message={SEARCH_MESSAGES.page.promptMessage}
+        variant="illustration"
+      />
     )}
 
     {emptyState.visible && (
@@ -49,7 +60,10 @@ export const SearchResultsSection: React.FC<SearchResultsSectionProps> = ({ stat
 
     {/* Rows already on screen are stale while a newer query runs — dim them rather than
           swapping in a skeleton, so the layout does not jump on every keystroke. */}
-    <div aria-busy={status.isFetching} className={cn('space-y-4 transition-opacity', status.isFetching && 'pointer-events-none opacity-50')}>
+    <div
+      aria-busy={status.isFetching}
+      className={cn('space-y-4 transition-opacity', status.isFetching && 'pointer-events-none opacity-50')}
+    >
       {clientMatches.visible && <SearchClientMatches {...clientMatches} />}
 
       {selected && (

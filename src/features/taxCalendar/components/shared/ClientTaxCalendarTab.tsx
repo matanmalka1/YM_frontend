@@ -26,11 +26,7 @@ interface ClientTaxCalendarTabProps {
 export const ClientTaxCalendarTab: FC<ClientTaxCalendarTabProps> = ({ clientId }) => {
   const { searchParams, getParam, getPage, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
 
-  const { startYear, endYear, obligationType, status, page } = readTaxCalendarCommonFilters(
-    searchParams,
-    getParam,
-    getPage,
-  )
+  const { startYear, endYear, obligationType, status, page } = readTaxCalendarCommonFilters(searchParams, getParam, getPage)
 
   const params = useMemo<TaxCalendarGroupsParams>(
     () => ({

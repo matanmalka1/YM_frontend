@@ -26,11 +26,7 @@ export const TaxSubmissionStats = ({ data, activeFilter, onFilter }: TaxSubmissi
             value={value}
             icon={icon}
             variant={variant}
-            onClick={
-              isFilterable && onFilter
-                ? () => onFilter(getNextTaxSubmissionFilter(activeFilter, filterValue))
-                : undefined
-            }
+            onClick={isFilterable && onFilter ? () => onFilter(getNextTaxSubmissionFilter(activeFilter, filterValue)) : undefined}
             selected={isSelected}
           />
         )

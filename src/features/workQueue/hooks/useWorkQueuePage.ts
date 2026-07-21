@@ -124,8 +124,7 @@ export const useWorkQueuePage = () => {
   }, [requestError])
 
   const handleFilterChange = (key: WorkQueueFilterParamKey, value: string) => setFilter(key, value, true)
-  const handleMultiFilterChange = (updates: Partial<Record<WorkQueueFilterParamKey, string>>) =>
-    setFilters(updates, true)
+  const handleMultiFilterChange = (updates: Partial<Record<WorkQueueFilterParamKey, string>>) => setFilters(updates, true)
   const setPage = (nextPage: number) => setUrlPage(nextPage)
 
   const clearFilters = useCallback(() => {

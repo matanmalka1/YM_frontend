@@ -25,10 +25,9 @@ export const signatureRequestsApi = {
     clientId: number,
     params?: { page?: number; page_size?: number; status?: string },
   ): Promise<SignatureRequestListResponse> => {
-    const response = await api.get<SignatureRequestListResponse>(
-      SIGNATURE_REQUEST_ENDPOINTS.clientSignatureRequests(clientId),
-      { params },
-    )
+    const response = await api.get<SignatureRequestListResponse>(SIGNATURE_REQUEST_ENDPOINTS.clientSignatureRequests(clientId), {
+      params,
+    })
     return response.data
   },
 
@@ -47,10 +46,7 @@ export const signatureRequestsApi = {
   // ── Mutations ────────────────────────────────────────────────────────────
 
   create: async (payload: CreateSignatureRequestPayload): Promise<CreateSignatureRequestResponse> => {
-    const response = await api.post<CreateSignatureRequestResponse>(
-      SIGNATURE_REQUEST_ENDPOINTS.signatureRequests,
-      payload,
-    )
+    const response = await api.post<CreateSignatureRequestResponse>(SIGNATURE_REQUEST_ENDPOINTS.signatureRequests, payload)
     return response.data
   },
 
@@ -88,10 +84,7 @@ export const signerApi = {
   },
 
   decline: async (token: string, payload?: SignerDeclinePayload): Promise<SignerViewResponse> => {
-    const response = await publicApi.post<SignerViewResponse>(
-      SIGNATURE_REQUEST_ENDPOINTS.signerDecline(token),
-      payload ?? {},
-    )
+    const response = await publicApi.post<SignerViewResponse>(SIGNATURE_REQUEST_ENDPOINTS.signerDecline(token), payload ?? {})
     return response.data
   },
 }

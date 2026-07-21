@@ -45,9 +45,7 @@ export const SearchItemRow: React.FC<{ item: SearchItem }> = ({ item }) => {
         <span className="shrink-0 text-sm font-medium tabular-nums">{formatShekelAmount(item.amount)}</span>
       )}
       {item.occurred_on && (
-        <span className="w-20 shrink-0 text-left text-xs text-gray-400 tabular-nums">
-          {formatDate(item.occurred_on)}
-        </span>
+        <span className="w-20 shrink-0 text-left text-xs text-gray-400 tabular-nums">{formatDate(item.occurred_on)}</span>
       )}
     </ActionSurfaceLink>
   )

@@ -93,10 +93,7 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
     setExpandedVersionsId((prev) => (prev === id ? null : id))
   }
 
-  const filteredDocuments = useMemo(
-    () => filterDocuments(documents, search, filterType),
-    [documents, filterType, search],
-  )
+  const filteredDocuments = useMemo(() => filterDocuments(documents, search, filterType), [documents, filterType, search])
 
   const expandedDoc = useMemo(
     () => (expandedVersionsId !== null ? documents.find((d) => d.id === expandedVersionsId) : null),
@@ -206,11 +203,7 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
         />
       </Modal>
 
-      <HiddenFileInput
-        ref={fileInputRef}
-        aria-label={DOCUMENTS_MESSAGES.form.uploadFileAriaLabel}
-        onChange={handleFileChange}
-      />
+      <HiddenFileInput ref={fileInputRef} aria-label={DOCUMENTS_MESSAGES.form.uploadFileAriaLabel} onChange={handleFileChange} />
 
       <DocumentPreviewModal
         open={previewDoc !== null}
@@ -242,9 +235,7 @@ export const DocumentsDataCards: React.FC<DocumentsDataCardsProps> = ({
           </div>
         }
       >
-        {editDoc && (
-          <DocumentEditCard doc={editDoc} formId={EDIT_FORM_ID} editError={editError} onSubmit={handleEditSubmit} />
-        )}
+        {editDoc && <DocumentEditCard doc={editDoc} formId={EDIT_FORM_ID} editError={editError} onSubmit={handleEditSubmit} />}
       </Modal>
 
       <ConfirmDialog

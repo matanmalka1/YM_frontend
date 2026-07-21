@@ -8,20 +8,12 @@ import type { TimelineEvent } from '../api'
 import { normalizeTimelineEvents, type NormalizedTimelineEvent, type TimelineFilterKey } from '../normalize'
 import { TIMELINE_ERROR_MESSAGES } from '../errorMessages'
 
-const GROUP_FILTERS = [
-  'finance',
-  'binders',
-  'documents',
-  'tax',
-  'changes',
-] as const satisfies readonly TimelineFilterKey[]
+const GROUP_FILTERS = ['finance', 'binders', 'documents', 'tax', 'changes'] as const satisfies readonly TimelineFilterKey[]
 type TimelineGroupFilter = (typeof GROUP_FILTERS)[number]
 
-const isTimelineGroupFilter = (value: string): value is TimelineGroupFilter =>
-  GROUP_FILTERS.some((filter) => filter === value)
+const isTimelineGroupFilter = (value: string): value is TimelineGroupFilter => GROUP_FILTERS.some((filter) => filter === value)
 
-const parseTypeFilters = (value: string | null): TimelineGroupFilter[] =>
-  value?.split(',').filter(isTimelineGroupFilter) ?? []
+const parseTypeFilters = (value: string | null): TimelineGroupFilter[] => value?.split(',').filter(isTimelineGroupFilter) ?? []
 
 const FILTER_GROUP_TO_EVENT_TYPES: Record<TimelineGroupFilter, string[]> = {
   finance: ['charge_created', 'charge_issued', 'charge_paid', 'invoice_attached', 'charge_changed'],
@@ -120,8 +112,7 @@ export const useClientTimelinePage = (clientId: string | undefined) => {
 
   const setDateRange = (key: 'date_from' | 'date_to', value: string) => setFilter(key, value)
 
-  const clearFilters = () =>
-    setFilters({ search: '', important_only: '', type_filters: '', date_from: '', date_to: '' })
+  const clearFilters = () => setFilters({ search: '', important_only: '', type_filters: '', date_from: '', date_to: '' })
 
   // ── Error ──────────────────────────────────────────────────────────────────
 

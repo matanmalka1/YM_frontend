@@ -34,9 +34,7 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
   onCancel,
   isSaving,
 }) => {
-  const counterpartyIdType = isCounterpartyIdType(invoice.counterparty_id_type)
-    ? invoice.counterparty_id_type
-    : undefined
+  const counterpartyIdType = isCounterpartyIdType(invoice.counterparty_id_type) ? invoice.counterparty_id_type : undefined
 
   const { register, handleSubmit, control } = useForm<VatInvoiceEditValues>({
     resolver: zodResolver(vatInvoiceEditSchema),

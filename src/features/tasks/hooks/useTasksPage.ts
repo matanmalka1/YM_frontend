@@ -92,8 +92,7 @@ export const useTasksPage = () => {
     isActionBusy: actions.isActionBusy,
     modal: actions.modal,
     modalTask: actions.modal?.mode !== 'create' ? (editTaskData ?? null) : null,
-    isModalLoading:
-      actions.isModalSaving || (actions.modal !== null && actions.modal.mode !== 'create' && editTaskLoading),
+    isModalLoading: actions.isModalSaving || (actions.modal !== null && actions.modal.mode !== 'create' && editTaskLoading),
     confirmDialog: {
       open: Boolean(actions.pendingConfirm && confirmCopy),
       title: confirmCopy?.title ?? '',

@@ -51,12 +51,7 @@ const CLIENT_SIDEBAR_TEXT = {
   logoutAriaLabel: 'התנתקות',
 } as const
 
-export const ClientSidebar: React.FC<ClientSidebarProps> = ({
-  mobileOpen,
-  onMobileClose,
-  mobileTriggerRef,
-  desktopOpen,
-}) => {
+export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobileClose, mobileTriggerRef, desktopOpen }) => {
   const [searchValue, setSearchValue] = useState('')
   const [debouncedSearch] = useDebounce(searchValue, 350)
   const [groupMode, setGroupMode] = useState<GroupMode>('entity')
@@ -148,9 +143,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
                   <Users className="h-3.5 w-3.5" />
                 </span>
                 <div>
-                  <p className="text-xs font-semibold leading-tight text-gray-900">
-                    {GLOBAL_UI_MESSAGES.common.clients}
-                  </p>
+                  <p className="text-xs font-semibold leading-tight text-gray-900">{GLOBAL_UI_MESSAGES.common.clients}</p>
                   <p className="mt-0.5 text-2xs leading-tight text-gray-500">
                     <span className="tabular-nums">{formatCount(hasSearch ? clients.length : total)}</span>{' '}
                     {hasSearch ? GLOBAL_UI_MESSAGES.common.results : CLIENT_SIDEBAR_TEXT.listCountLabel}
@@ -186,10 +179,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({
             </SegmentedControl>
           </div>
 
-          <nav
-            className="min-h-0 flex-1 overflow-y-auto px-2.5 py-2.5"
-            aria-label={CLIENT_SIDEBAR_TEXT.sidebarAriaLabel}
-          >
+          <nav className="min-h-0 flex-1 overflow-y-auto px-2.5 py-2.5" aria-label={CLIENT_SIDEBAR_TEXT.sidebarAriaLabel}>
             {isLoading ? (
               <div className="space-y-2" aria-label={CLIENT_SIDEBAR_TEXT.loadingClientsLabel}>
                 {Array.from({ length: 4 }, (_, index) => (

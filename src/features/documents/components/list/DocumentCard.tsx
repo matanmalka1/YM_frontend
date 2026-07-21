@@ -40,11 +40,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
   onEdit,
   isFocused = false,
 }) => (
-  <Card
-    size="compact"
-    bodyClassName="flex flex-col gap-2 text-xs"
-    className={cn(isFocused && 'ring-2 ring-primary-500')}
-  >
+  <Card size="compact" bodyClassName="flex flex-col gap-2 text-xs" className={cn(isFocused && 'ring-2 ring-primary-500')}>
     <div className="flex items-start justify-between gap-2">
       <span className="text-xs font-semibold text-gray-900 leading-snug">
         {DOC_TYPE_LABELS[doc.document_type] ?? doc.document_type}
@@ -70,11 +66,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
           )}
           {canEditReplace && (
             <RowActionItem
-              label={
-                replacingId === doc.id
-                  ? DOCUMENTS_MESSAGES.card.replacingLabel
-                  : DOCUMENTS_MESSAGES.card.replaceFileLabel
-              }
+              label={replacingId === doc.id ? DOCUMENTS_MESSAGES.card.replacingLabel : DOCUMENTS_MESSAGES.card.replaceFileLabel}
               onClick={() => onReplace(doc.id)}
               icon={<RefreshCw className="h-4 w-4" />}
               disabled={replacingId === doc.id}

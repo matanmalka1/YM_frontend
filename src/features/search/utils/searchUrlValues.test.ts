@@ -44,7 +44,9 @@ describe('parseSearchEnumFilters', () => {
   })
 
   it('reports every unsupported value, so one write can clean them all', () => {
-    const { invalidKeys } = parseSearchEnumFilters(raw({ client_status: 'bogus', binder_capacity_status: 'archived', entity_type: 'osek_patur' }))
+    const { invalidKeys } = parseSearchEnumFilters(
+      raw({ client_status: 'bogus', binder_capacity_status: 'archived', entity_type: 'osek_patur' }),
+    )
 
     expect(invalidKeys).toEqual(['client_status', 'binder_capacity_status'])
   })

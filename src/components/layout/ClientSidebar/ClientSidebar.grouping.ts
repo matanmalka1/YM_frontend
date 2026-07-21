@@ -38,7 +38,5 @@ export const groupClients = (clients: ClientSidebarItem[], groupMode: GroupMode)
     groups.set(key, { key, label, clients: [client] })
   })
 
-  return Array.from(groups.values()).sort(
-    (a, b) => b.clients.length - a.clients.length || a.label.localeCompare(b.label, 'he'),
-  )
+  return Array.from(groups.values()).sort((a, b) => b.clients.length - a.clients.length || a.label.localeCompare(b.label, 'he'))
 }

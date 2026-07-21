@@ -80,9 +80,7 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
 
       {isError && <p className="text-sm text-negative-600">{USERS_ERROR_MESSAGES.auditLog.loadError}</p>}
 
-      {!isPending && !isError && logs.length === 0 && (
-        <p className="text-sm text-gray-500">{USERS_MESSAGES.auditLog.empty}</p>
-      )}
+      {!isPending && !isError && logs.length === 0 && <p className="text-sm text-gray-500">{USERS_MESSAGES.auditLog.empty}</p>}
 
       {!isPending && !isError && logs.length > 0 && (
         <div className="space-y-3">
@@ -98,12 +96,8 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
                       {log.status === 'success' ? USERS_MESSAGES.auditLog.success : USERS_MESSAGES.auditLog.failure}
                     </Badge>
                   </div>
-                  {log.email && (
-                    <p className="text-xs text-gray-500">{USERS_MESSAGES.auditLog.emailPrefix(log.email)}</p>
-                  )}
-                  {log.reason && (
-                    <p className="text-xs text-gray-500">{USERS_MESSAGES.auditLog.reasonPrefix(log.reason)}</p>
-                  )}
+                  {log.email && <p className="text-xs text-gray-500">{USERS_MESSAGES.auditLog.emailPrefix(log.email)}</p>}
+                  {log.reason && <p className="text-xs text-gray-500">{USERS_MESSAGES.auditLog.reasonPrefix(log.reason)}</p>}
                   <p className="text-xs text-gray-400">{formatDateTime(log.created_at)}</p>
                 </div>
               </TimelineEntry>

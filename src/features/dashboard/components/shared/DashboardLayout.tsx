@@ -44,9 +44,7 @@ export const DashboardSectionHeader = ({
   <div className={cn('flex items-center justify-between gap-4', className)}>
     <div className="flex min-w-0 items-center gap-3">
       {Icon && (
-        <span
-          className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl', getToneClasses(tone).iconBg)}
-        >
+        <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl', getToneClasses(tone).iconBg)}>
           <Icon className="h-4 w-4" />
         </span>
       )}

@@ -43,16 +43,11 @@ export const BinderDocumentsSection: React.FC<BinderDocumentsSectionProps> = ({ 
   const totalPages = getTotalPages(total, PAGE_SIZE)
 
   return (
-    <Card
-      title={BINDERS_MESSAGES.documents.title}
-      subtitle={total ? BINDERS_MESSAGES.documents.count(total) : undefined}
-    >
+    <Card title={BINDERS_MESSAGES.documents.title} subtitle={total ? BINDERS_MESSAGES.documents.count(total) : undefined}>
       {isLoading ? (
         <p className="text-sm text-gray-400">{BINDERS_MESSAGES.documents.loading}</p>
       ) : error ? (
-        <p className="text-sm text-negative-600">
-          {getErrorMessage(error, BINDERS_ERROR_MESSAGES.documents.loadError)}
-        </p>
+        <p className="text-sm text-negative-600">{getErrorMessage(error, BINDERS_ERROR_MESSAGES.documents.loadError)}</p>
       ) : documents.length === 0 ? (
         <p className="text-sm text-gray-500">{BINDERS_MESSAGES.documents.empty}</p>
       ) : (

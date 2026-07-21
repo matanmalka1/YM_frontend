@@ -17,11 +17,7 @@ const EMPTY_SUMMARY: TaxCalendarGroupsSummary = { groups: 0, linked: 0, open: 0,
 export const useTaxCalendarGroupsPage = () => {
   const { searchParams, getParam, getPage, setFilter, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
 
-  const { startYear, endYear, obligationType, status, page } = readTaxCalendarCommonFilters(
-    searchParams,
-    getParam,
-    getPage,
-  )
+  const { startYear, endYear, obligationType, status, page } = readTaxCalendarCommonFilters(searchParams, getParam, getPage)
   const includeEmpty = searchParams.get('include_empty') === 'true'
   const clientSearchText = getParam('client_search')
 

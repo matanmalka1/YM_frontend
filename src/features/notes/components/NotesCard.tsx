@@ -98,13 +98,7 @@ const NoteComposer = ({ value, onChange, onSave, onCancel, isLoading, initialTag
         </div>
         <div className="flex items-center gap-1">
           {NOTE_TAGS.map((tag) => (
-            <Chip
-              key={tag.key}
-              tone={tag.tone}
-              size="xs"
-              selected={selectedTag === tag.key}
-              onClick={() => toggleTag(tag.key)}
-            >
+            <Chip key={tag.key} tone={tag.tone} size="xs" selected={selectedTag === tag.key} onClick={() => toggleTag(tag.key)}>
               {tag.label}
             </Chip>
           ))}
@@ -201,10 +195,7 @@ export const NotesCard = ({ canEdit, ...target }: NotesCardProps) => {
 
   return (
     <>
-      <Card
-        title={GLOBAL_UI_MESSAGES.common.notes}
-        subtitle={total > 0 ? NOTES_MESSAGES.card.notesCount(total) : undefined}
-      >
+      <Card title={GLOBAL_UI_MESSAGES.common.notes} subtitle={total > 0 ? NOTES_MESSAGES.card.notesCount(total) : undefined}>
         {error && <Alert variant="error" message={error} />}
 
         {canEdit && (
@@ -224,9 +215,7 @@ export const NotesCard = ({ canEdit, ...target }: NotesCardProps) => {
 
         {isLoading && <p className="py-4 text-center text-sm text-gray-500">{GLOBAL_UI_MESSAGES.common.loading}</p>}
 
-        {!isLoading && !error && notes.length === 0 && (
-          <InlineState icon={StickyNote} title={NOTES_MESSAGES.card.emptyTitle} />
-        )}
+        {!isLoading && !error && notes.length === 0 && <InlineState icon={StickyNote} title={NOTES_MESSAGES.card.emptyTitle} />}
 
         {!isLoading && !error && notes.length > 0 && (
           <ul className="space-y-3">

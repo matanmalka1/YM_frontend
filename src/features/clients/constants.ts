@@ -63,12 +63,7 @@ export const CLIENT_DETAILS_TAB_LABELS: Record<ActiveClientDetailsTab, string> =
   tasks: 'משימות',
 }
 
-export const ENTITY_TYPES = [
-  'osek_patur',
-  'osek_murshe',
-  'company_ltd',
-  'employee',
-] as const satisfies readonly EntityType[]
+export const ENTITY_TYPES = ['osek_patur', 'osek_murshe', 'company_ltd', 'employee'] as const satisfies readonly EntityType[]
 
 export const CREATE_ENTITY_TYPES = ['osek_patur', 'osek_murshe', 'company_ltd'] as const
 export type CreateEntityType = (typeof CREATE_ENTITY_TYPES)[number]
@@ -128,10 +123,7 @@ export const CREATE_CLIENT_ENTITY_OPTIONS = CREATE_ENTITY_TYPES.map((type) => ({
 }))
 export const CREATE_CLIENT_VAT_OPTIONS = VAT_REPORTING_FREQUENCY_OPTIONS.filter((option) => option.value !== 'exempt')
 
-export const ADVANCE_PAYMENT_FREQUENCY_VALUES = [
-  'monthly',
-  'bimonthly',
-] as const satisfies readonly AdvancePaymentFrequency[]
+export const ADVANCE_PAYMENT_FREQUENCY_VALUES = ['monthly', 'bimonthly'] as const satisfies readonly AdvancePaymentFrequency[]
 
 export const ADVANCE_PAYMENT_FREQUENCY_LABELS: Record<AdvancePaymentFrequency, string> = {
   monthly: 'חודשי',
@@ -143,12 +135,7 @@ export const ADVANCE_PAYMENT_FREQUENCY_OPTIONS = ADVANCE_PAYMENT_FREQUENCY_VALUE
   label: ADVANCE_PAYMENT_FREQUENCY_LABELS[v],
 }))
 
-const CLIENT_SORT_BY_VALUES = [
-  'full_name',
-  'created_at',
-  'status',
-  'entity_type',
-] as const satisfies readonly ClientSortBy[]
+const CLIENT_SORT_BY_VALUES = ['full_name', 'created_at', 'status', 'entity_type'] as const satisfies readonly ClientSortBy[]
 
 const CLIENT_SORT_ORDER_VALUES = ['asc', 'desc'] as const satisfies readonly ClientSortOrder[]
 

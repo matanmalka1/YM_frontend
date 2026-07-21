@@ -6,12 +6,7 @@ import { showErrorToast } from '@/utils/utils'
 import { annualReportsApi, annualReportsQK, type AnnualReportScheduleKey } from '../api'
 import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 import { SCHEDULE_FIELDS } from '../constants/annexConstants'
-import {
-  buildAnnexSchema,
-  buildEmptyFormValues,
-  mapLineToFormValues,
-  type AnnexFormValues,
-} from '../constants/annexSchema'
+import { buildAnnexSchema, buildEmptyFormValues, mapLineToFormValues, type AnnexFormValues } from '../constants/annexSchema'
 
 export const useAnnexDataPanel = (reportId: number, schedule: AnnualReportScheduleKey) => {
   const queryClient = useQueryClient()

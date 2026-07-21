@@ -21,8 +21,7 @@ export const useChargeActions = ({ clearSelection, canAct, selectedIds }: UseCha
   const [bulkLoading, setBulkLoading] = useState(false)
 
   const actionMutation = useMutation({
-    mutationFn: ({ action, chargeId }: { action: ChargeAction; chargeId: number }) =>
-      runChargeActionRequest(chargeId, action),
+    mutationFn: ({ action, chargeId }: { action: ChargeAction; chargeId: number }) => runChargeActionRequest(chargeId, action),
     onSuccess: async () => {
       toast.success(CHARGES_MESSAGES.feedback.actionSuccess)
       await Promise.all([

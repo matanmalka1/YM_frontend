@@ -78,13 +78,7 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
         className="shadow-none"
         actions={
           canEdit ? (
-            <Button
-              type="button"
-              variant="primary"
-              size="sm"
-              icon={<Plus className="h-4 w-4" />}
-              onClick={onAddBusiness}
-            >
+            <Button type="button" variant="primary" size="sm" icon={<Plus className="h-4 w-4" />} onClick={onAddBusiness}>
               {CLIENTS_MESSAGES.businessesCard.addBusiness}
             </Button>
           ) : undefined
@@ -120,9 +114,7 @@ export const ClientBusinessesCard: React.FC<Props> = ({ clientId, canEdit, onAdd
                 </div>
 
                 {canEdit && (
-                  <RowActionsMenu
-                    ariaLabel={CLIENTS_MESSAGES.businessesCard.rowActionsAriaLabel(biz.business_name ?? biz.id)}
-                  >
+                  <RowActionsMenu ariaLabel={CLIENTS_MESSAGES.businessesCard.rowActionsAriaLabel(biz.business_name ?? biz.id)}>
                     <RowActionItem
                       label={GLOBAL_UI_MESSAGES.actions.edit}
                       icon={<Pencil className="h-4 w-4" />}

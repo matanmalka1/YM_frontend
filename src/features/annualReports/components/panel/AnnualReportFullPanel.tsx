@@ -94,12 +94,7 @@ export const AnnualReportFullPanel = ({
                   {ANNUAL_REPORTS_MESSAGES.fullPanel.downloadDraft}
                 </Button>
               )}
-              <Button
-                variant="danger"
-                size="sm"
-                icon={<Trash2 className="h-4 w-4" />}
-                onClick={() => setShowDeleteConfirm(true)}
-              >
+              <Button variant="danger" size="sm" icon={<Trash2 className="h-4 w-4" />} onClick={() => setShowDeleteConfirm(true)}>
                 {ANNUAL_REPORTS_MESSAGES.fullPanel.deleteReport}
               </Button>
               <Button

@@ -52,10 +52,7 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
         </div>
         {payment.turnover_source != null && (
           <p className="text-xs text-gray-500">
-            {ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.provenance(
-              payment.turnover_source,
-              payment.turnover_snapshot_at,
-            )}
+            {ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.provenance(payment.turnover_source, payment.turnover_snapshot_at)}
           </p>
         )}
         {payment.turnover_source === 'vat_pending' && (
@@ -72,9 +69,7 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
           </p>
         )}
         <div>
-          <div className="text-xs text-gray-500 mb-1">
-            {ADVANCED_PAYMENTS_MESSAGES.editableSections.calculatedAmountLabel}
-          </div>
+          <div className="text-xs text-gray-500 mb-1">{ADVANCED_PAYMENTS_MESSAGES.editableSections.calculatedAmountLabel}</div>
           <div className="text-sm font-medium text-gray-800">
             {form.liveCalculated != null ? formatShekelAmount(form.liveCalculated) : '—'}
           </div>
@@ -87,9 +82,7 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
           onChange={(e) => form.setOverrideAmount(e.target.value)}
         />
         <div>
-          <div className="text-xs text-gray-500 mb-1">
-            {ADVANCED_PAYMENTS_MESSAGES.editableSections.finalAmountLabel}
-          </div>
+          <div className="text-xs text-gray-500 mb-1">{ADVANCED_PAYMENTS_MESSAGES.editableSections.finalAmountLabel}</div>
           <div className="text-sm font-semibold text-gray-900">
             {form.liveExpected != null ? formatShekelAmount(form.liveExpected) : '—'}
           </div>

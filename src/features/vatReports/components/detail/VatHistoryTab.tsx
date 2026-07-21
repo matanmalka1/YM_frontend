@@ -9,11 +9,7 @@ import {
   type FieldValueLabels,
 } from '@/features/audit'
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
-import {
-  getVatWorkItemStatusLabel,
-  VAT_FILING_METHOD_LABELS,
-  VAT_WORK_ITEM_STATUS_VALUES,
-} from '../../constants/vatConstants'
+import { getVatWorkItemStatusLabel, VAT_FILING_METHOD_LABELS, VAT_WORK_ITEM_STATUS_VALUES } from '../../constants/vatConstants'
 import type { VatHistoryTabProps } from '../../types'
 import { VAT_MESSAGES } from '../../messages'
 import { VAT_ERROR_MESSAGES } from '../../errorMessages'

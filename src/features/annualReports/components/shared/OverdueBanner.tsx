@@ -48,9 +48,7 @@ export const OverdueBanner: React.FC<OverdueBannerProps> = ({ overdue, onSelect 
           size="sm"
           onClick={() => setExpanded((v) => !v)}
           className="shrink-0 p-1.5 text-negative-700 hover:bg-negative-100 hover:text-negative-700"
-          aria-label={
-            expanded ? ANNUAL_REPORTS_MESSAGES.overdueBanner.collapse : ANNUAL_REPORTS_MESSAGES.overdueBanner.expand
-          }
+          aria-label={expanded ? ANNUAL_REPORTS_MESSAGES.overdueBanner.collapse : ANNUAL_REPORTS_MESSAGES.overdueBanner.expand}
           aria-expanded={expanded}
         >
           {expanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}

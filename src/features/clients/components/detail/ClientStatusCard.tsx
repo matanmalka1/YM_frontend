@@ -137,12 +137,7 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
         : '—'
 
   return (
-    <Card
-      title={CLIENTS_MESSAGES.statusCard.titleWithYear(year)}
-      actions={yearSelector}
-      size="compact"
-      className="shadow-none"
-    >
+    <Card title={CLIENTS_MESSAGES.statusCard.titleWithYear(year)} actions={yearSelector} size="compact" className="shadow-none">
       <div className="grid grid-cols-2 gap-0.5 lg:grid-cols-4">
         <Tile
           icon={<Receipt size={14} />}
@@ -189,9 +184,7 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
           title={CLIENTS_MESSAGES.statusCard.documentsTitle}
           primary={firstBusinessId == null ? '—' : `${documents.present_count}/${documents.total_count}`}
           secondary={
-            firstBusinessId == null
-              ? CLIENTS_MESSAGES.statusCard.noBusinesses
-              : CLIENTS_MESSAGES.statusCard.documentsExist
+            firstBusinessId == null ? CLIENTS_MESSAGES.statusCard.noBusinesses : CLIENTS_MESSAGES.statusCard.documentsExist
           }
           to={CLIENT_ROUTES.documents(clientId)}
           disabled={firstBusinessId == null}

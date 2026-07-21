@@ -3,8 +3,7 @@ export const ADVANCE_PAYMENT_ENDPOINTS = {
   clientAdvancePaymentById: (clientRecordId: number | string, id: number | string) =>
     `/clients/${clientRecordId}/advance-payments/${id}`,
   clientAdvancePaymentsKPI: (clientRecordId: number | string) => `/clients/${clientRecordId}/advance-payments/kpi`,
-  clientAdvancePaymentsGenerate: (clientRecordId: number | string) =>
-    `/clients/${clientRecordId}/advance-payments/generate`,
+  clientAdvancePaymentsGenerate: (clientRecordId: number | string) => `/clients/${clientRecordId}/advance-payments/generate`,
   clientAdvancePaymentRefreshTurnover: (clientRecordId: number | string, id: number | string) =>
     `/clients/${clientRecordId}/advance-payments/${id}/refresh-turnover`,
   clientAdvancePaymentsRefreshTurnover: (clientRecordId: number | string) =>

@@ -100,12 +100,7 @@ export const statusColumn = <T, TStatus extends string>({
   ...options,
   kind: 'status',
   render: (item, index) => (
-    <StatusBadge
-      status={getStatus(item, index)}
-      getLabel={getLabel}
-      variantMap={variantMap}
-      defaultVariant={defaultVariant}
-    />
+    <StatusBadge status={getStatus(item, index)} getLabel={getLabel} variantMap={variantMap} defaultVariant={defaultVariant} />
   ),
 })
 

@@ -13,9 +13,7 @@ interface FinancialFieldsProps {
 
 export const FinancialFields = ({ register }: FinancialFieldsProps) => (
   <div>
-    <p className="mb-2 text-sm font-medium text-gray-700">
-      {ANNUAL_REPORTS_MESSAGES.createModalParts.initialIncomeNote}
-    </p>
+    <p className="mb-2 text-sm font-medium text-gray-700">{ANNUAL_REPORTS_MESSAGES.createModalParts.initialIncomeNote}</p>
     <div className="grid grid-cols-2 gap-3">
       <Input
         label={ANNUAL_REPORTS_MESSAGES.createModalParts.grossIncome}
@@ -84,9 +82,7 @@ const PreviewValue = ({ label, value }: { label: string; value: number }) => (
 
 export const RequiredAppendices = ({ register }: FinancialFieldsProps) => (
   <div>
-    <p className="mb-2 text-sm font-medium text-gray-700">
-      {ANNUAL_REPORTS_MESSAGES.createModalParts.requiredAppendicesNote}
-    </p>
+    <p className="mb-2 text-sm font-medium text-gray-700">{ANNUAL_REPORTS_MESSAGES.createModalParts.requiredAppendicesNote}</p>
     <div className="space-y-2 rounded-lg border border-gray-200 p-3">
       {FLAG_FIELDS.map(({ name, label }) => (
         <Checkbox key={name} label={label} {...register(name as never)} />

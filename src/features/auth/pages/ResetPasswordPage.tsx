@@ -30,12 +30,7 @@ export const ResetPassword: React.FC = () => {
     return (
       <AuthPageShell title={AUTH_MESSAGES.resetPassword.title}>
         <div className="space-y-5">
-          <Alert
-            variant="error"
-            size="sm"
-            message={AUTH_ERROR_MESSAGES.resetPassword.invalidLink}
-            className="rounded-xl"
-          />
+          <Alert variant="error" size="sm" message={AUTH_ERROR_MESSAGES.resetPassword.invalidLink} className="rounded-xl" />
           <Button
             type="button"
             fullWidth
@@ -140,10 +135,7 @@ export const ResetPassword: React.FC = () => {
           </Button>
 
           <div className="text-center">
-            <Link
-              to="/forgot-password"
-              className="text-sm font-medium text-slate-500 transition-colors hover:text-slate-900"
-            >
+            <Link to="/forgot-password" className="text-sm font-medium text-slate-500 transition-colors hover:text-slate-900">
               {AUTH_MESSAGES.common.sendNewLink}
             </Link>
           </div>

@@ -87,11 +87,7 @@ export const CorrespondenceModal: React.FC<CorrespondenceModalProps> = ({
           {...register('correspondence_type')}
         />
 
-        <Input
-          label={CORRESPONDENCE_MESSAGES.modal.subjectLabel}
-          error={errors.subject?.message}
-          {...register('subject')}
-        />
+        <Input label={CORRESPONDENCE_MESSAGES.modal.subjectLabel} error={errors.subject?.message} {...register('subject')} />
 
         <Controller
           name="occurred_at"

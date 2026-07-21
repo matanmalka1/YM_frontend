@@ -135,17 +135,13 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
                     onChange={(event) => {
                       const nextType = option.value as ReceiveBinderFormValues['binder_types'][number]
                       field.onChange(
-                        event.target.checked
-                          ? [...selectedTypes, nextType]
-                          : selectedTypes.filter((type) => type !== nextType),
+                        event.target.checked ? [...selectedTypes, nextType] : selectedTypes.filter((type) => type !== nextType),
                       )
                     }}
                   />
                 ))}
               </div>
-              {errors.binder_types?.message && (
-                <p className="text-xs text-negative-600">{errors.binder_types.message}</p>
-              )}
+              {errors.binder_types?.message && <p className="text-xs text-negative-600">{errors.binder_types.message}</p>}
             </div>
           )
         }}

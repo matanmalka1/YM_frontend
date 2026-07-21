@@ -40,9 +40,7 @@ export const DocumentPreviewModal: React.FC<DocumentPreviewModalProps> = ({
       }
     >
       {!url ? (
-        <div className="flex items-center justify-center py-16 text-sm text-gray-400">
-          {GLOBAL_UI_MESSAGES.common.loading}
-        </div>
+        <div className="flex items-center justify-center py-16 text-sm text-gray-400">{GLOBAL_UI_MESSAGES.common.loading}</div>
       ) : isPdf ? (
         // No `sandbox`: Chrome's built-in PDF viewer requires both allow-scripts
         // and allow-same-origin to render, and that pair defeats the sandbox

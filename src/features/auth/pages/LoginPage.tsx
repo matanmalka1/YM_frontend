@@ -55,9 +55,7 @@ export const Login: React.FC = () => {
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 text-white">
               <span className="text-sm font-black tracking-tight">{AUTH_MESSAGES.login.mobileLogoLetter}</span>
             </div>
-            <span className="text-lg font-bold text-slate-900 tracking-tight">
-              {AUTH_MESSAGES.login.mobileLogoName}
-            </span>
+            <span className="text-lg font-bold text-slate-900 tracking-tight">{AUTH_MESSAGES.login.mobileLogoName}</span>
           </div>
 
           {/* Heading */}
@@ -93,10 +91,7 @@ export const Login: React.FC = () => {
             />
 
             <div className="flex justify-start">
-              <Link
-                to="/forgot-password"
-                className="text-sm font-medium text-slate-500 transition-colors hover:text-slate-900"
-              >
+              <Link to="/forgot-password" className="text-sm font-medium text-slate-500 transition-colors hover:text-slate-900">
                 {AUTH_MESSAGES.login.forgotPassword}
               </Link>
             </div>
@@ -155,9 +150,7 @@ export const Login: React.FC = () => {
 
         {/* Large watermark */}
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 flex items-end justify-center overflow-hidden pb-0">
-          <span className="select-none text-[200px] font-black leading-none tracking-tighter text-white/[0.03]">
-            YM
-          </span>
+          <span className="select-none text-[200px] font-black leading-none tracking-tighter text-white/[0.03]">YM</span>
         </div>
 
         {/* Top: logo */}

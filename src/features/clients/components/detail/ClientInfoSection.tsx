@@ -1,11 +1,5 @@
 import { type FC } from 'react'
-import {
-  formatAdvanceRatePercent,
-  formatDate,
-  formatPhoneNumber,
-  formatPlainIdentifier,
-  formatShekelAmount,
-} from '@/utils/utils'
+import { formatAdvanceRatePercent, formatDate, formatPhoneNumber, formatPlainIdentifier, formatShekelAmount } from '@/utils/utils'
 import type { ClientRecordResponse } from '../../api'
 import {
   ADVANCE_PAYMENT_FREQUENCY_LABELS,
@@ -30,11 +24,7 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client }) => {
   const contactItems = [
     {
       label: CLIENTS_MESSAGES.info.phone,
-      value: client.phone ? (
-        <InlineLink href={`tel:${client.phone}`}>{formatPhoneNumber(client.phone)}</InlineLink>
-      ) : (
-        EMPTY_VALUE
-      ),
+      value: client.phone ? <InlineLink href={`tel:${client.phone}`}>{formatPhoneNumber(client.phone)}</InlineLink> : EMPTY_VALUE,
     },
     {
       label: CLIENTS_MESSAGES.info.email,
@@ -77,9 +67,7 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client }) => {
     },
     {
       label: CLIENTS_MESSAGES.info.advancePaymentFrequency,
-      value: client.advance_payment_frequency
-        ? ADVANCE_PAYMENT_FREQUENCY_LABELS[client.advance_payment_frequency]
-        : EMPTY_VALUE,
+      value: client.advance_payment_frequency ? ADVANCE_PAYMENT_FREQUENCY_LABELS[client.advance_payment_frequency] : EMPTY_VALUE,
     },
     {
       label: CLIENTS_MESSAGES.info.annualTurnover,

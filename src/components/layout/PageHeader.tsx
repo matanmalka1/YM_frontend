@@ -19,14 +19,7 @@ export interface PageHeaderProps {
   density?: 'compact' | 'comfortable'
 }
 
-export const PageHeader = ({
-  title,
-  description,
-  breadcrumbs,
-  actions,
-  size,
-  density = 'compact',
-}: PageHeaderProps) => (
+export const PageHeader = ({ title, description, breadcrumbs, actions, size, density = 'compact' }: PageHeaderProps) => (
   <header className={cn('animate-fade-in', density === 'compact' ? 'space-y-2' : 'space-y-4')}>
     {breadcrumbs?.length ? (
       <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm animate-slide-in">
@@ -42,10 +35,7 @@ export const PageHeader = ({
                   {crumb.label}
                 </span>
               ) : (
-                <Link
-                  to={crumb.to}
-                  className="font-medium text-gray-600 transition-colors duration-200 hover:text-primary-600"
-                >
+                <Link to={crumb.to} className="font-medium text-gray-600 transition-colors duration-200 hover:text-primary-600">
                   {crumb.label}
                 </Link>
               )}

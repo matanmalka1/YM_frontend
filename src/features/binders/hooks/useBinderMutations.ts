@@ -12,10 +12,7 @@ export const useBinderMutations = (onDeleteSuccess: () => void) => {
     onSuccess: onDeleteSuccess,
   })
 
-  const markReadyForHandoverMutation = useMutationWithToast<
-    Awaited<ReturnType<typeof bindersApi.markReadyForHandover>>,
-    number
-  >({
+  const markReadyForHandoverMutation = useMutationWithToast<Awaited<ReturnType<typeof bindersApi.markReadyForHandover>>, number>({
     mutationFn: (binderId) => bindersApi.markReadyForHandover(binderId),
     successMessage: BINDERS_MESSAGES.mutations.markReadySuccess,
     errorMessage: BINDERS_ERROR_MESSAGES.mutations.markReadyError,

@@ -35,10 +35,7 @@ export const IncomeExpenseTab: React.FC<IncomeExpenseTabProps> = ({ reportId, cl
         />
       )}
       {panel.autoPopulateResult && (
-        <AnnualReportVatAutoPopulateResultPanel
-          result={panel.autoPopulateResult}
-          onDismiss={panel.clearAutoPopulateResult}
-        />
+        <AnnualReportVatAutoPopulateResultPanel result={panel.autoPopulateResult} onDismiss={panel.clearAutoPopulateResult} />
       )}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <AnnualReportFinancialSection

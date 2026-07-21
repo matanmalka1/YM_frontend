@@ -43,9 +43,7 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
       event.signer_email ? { label: SIGNATURE_REQUESTS_MESSAGES.fields.signerEmail, value: event.signer_email } : null,
       event.ip_address ? { label: SIGNATURE_REQUEST_AUDIT_FIELD_LABELS.ipAddress, value: event.ip_address } : null,
       event.user_agent ? { label: SIGNATURE_REQUEST_AUDIT_FIELD_LABELS.userAgent, value: event.user_agent } : null,
-      event.content_hash
-        ? { label: SIGNATURE_REQUEST_AUDIT_FIELD_LABELS.contentHash, value: event.content_hash }
-        : null,
+      event.content_hash ? { label: SIGNATURE_REQUEST_AUDIT_FIELD_LABELS.contentHash, value: event.content_hash } : null,
       event.content_hash_missing
         ? {
             label: SIGNATURE_REQUEST_AUDIT_FIELD_LABELS.contentHash,
@@ -124,9 +122,7 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
           </DrawerSection>
 
           <DrawerSection title={SIGNATURE_REQUESTS_MESSAGES.audit.activityHistory}>
-            {events.length === 0 && (
-              <p className="py-3 text-sm text-gray-400">{SIGNATURE_REQUESTS_MESSAGES.audit.noEvents}</p>
-            )}
+            {events.length === 0 && <p className="py-3 text-sm text-gray-400">{SIGNATURE_REQUESTS_MESSAGES.audit.noEvents}</p>}
             <Timeline>
               {events.map((event) => {
                 const metadataItems = auditMetadataItems(event)

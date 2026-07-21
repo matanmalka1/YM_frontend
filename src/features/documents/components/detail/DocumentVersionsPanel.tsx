@@ -46,9 +46,7 @@ export const DocumentVersionsPanel: React.FC<DocumentVersionsPanelProps> = ({ cl
                 {v.original_filename}
               </span>
             )}
-            {v.file_size_bytes != null && (
-              <span className="text-gray-400 shrink-0">{formatFileSize(v.file_size_bytes)}</span>
-            )}
+            {v.file_size_bytes != null && <span className="text-gray-400 shrink-0">{formatFileSize(v.file_size_bytes)}</span>}
           </li>
         ))}
       </ul>

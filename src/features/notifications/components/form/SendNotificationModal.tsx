@@ -48,8 +48,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
   const { sendAsync, isSending } = useSendNotification()
 
   const availableTriggers = useMemo<readonly NotificationTrigger[]>(() => {
-    const base =
-      allowedTriggers && allowedTriggers.length > 0 ? allowedTriggers : CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS
+    const base = allowedTriggers && allowedTriggers.length > 0 ? allowedTriggers : CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS
     if (initialTrigger && !base.includes(initialTrigger)) {
       return [initialTrigger, ...base]
     }
@@ -68,14 +67,8 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
   const [blockedReason, setBlockedReason] = useState<string | undefined>()
   const [warnings, setWarnings] = useState<string[]>([])
 
-  const {
-    clientQuery,
-    selectedClient,
-    handleSelectClient,
-    handleClearClient,
-    handleClientQueryChange,
-    resetClientPicker,
-  } = useClientPickerState()
+  const { clientQuery, selectedClient, handleSelectClient, handleClearClient, handleClientQueryChange, resetClientPicker } =
+    useClientPickerState()
 
   const resolvedClientRecordId = clientRecordId ?? selectedClient?.id
 

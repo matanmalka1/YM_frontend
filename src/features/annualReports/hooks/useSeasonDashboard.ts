@@ -18,8 +18,7 @@ export const useSeasonDashboard = (taxYear?: number, enabled = true, filters?: S
   } = useQuery({
     enabled,
     queryKey: taxYear ? annualReportsQK.seasonSummary(taxYear) : annualReportsQK.activeSeasonSummary,
-    queryFn: () =>
-      taxYear ? annualReportSeasonApi.getSeasonSummary(taxYear) : annualReportSeasonApi.getActiveSeasonSummary(),
+    queryFn: () => (taxYear ? annualReportSeasonApi.getSeasonSummary(taxYear) : annualReportSeasonApi.getActiveSeasonSummary()),
   })
 
   const {
@@ -28,9 +27,7 @@ export const useSeasonDashboard = (taxYear?: number, enabled = true, filters?: S
     error: reportsError,
   } = useQuery({
     enabled,
-    queryKey: taxYear
-      ? [...annualReportsQK.seasonList(taxYear), filters]
-      : [...annualReportsQK.activeSeasonList, filters],
+    queryKey: taxYear ? [...annualReportsQK.seasonList(taxYear), filters] : [...annualReportsQK.activeSeasonList, filters],
     queryFn: () =>
       taxYear
         ? annualReportSeasonApi.listSeasonReports(taxYear, { ...ANNUAL_REPORTS_COMPLETE_LIST_PARAMS, ...filters })

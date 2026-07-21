@@ -40,13 +40,7 @@ export const DeletedClientDialog: React.FC<Props> = ({
           <Button type="button" variant="outline" onClick={onDismiss} disabled={isLoading}>
             {GLOBAL_UI_MESSAGES.actions.cancel}
           </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onForceCreate}
-            isLoading={forceCreateLoading}
-            disabled={isLoading}
-          >
+          <Button type="button" variant="outline" onClick={onForceCreate} isLoading={forceCreateLoading} disabled={isLoading}>
             {CLIENTS_MESSAGES.deletedClientDialog.createNew}
           </Button>
           {isAdvisor && (

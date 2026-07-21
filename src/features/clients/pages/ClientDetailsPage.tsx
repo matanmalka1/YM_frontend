@@ -81,10 +81,7 @@ const ClientHeaderMissingDocuments: FC<{ clientId: number; active: boolean }> = 
           {CLIENTS_MESSAGES.details.missingCount(missingDocuments.length)}
         </Badge>
         <span className="min-w-0 flex-1 truncate">{labels.join(' · ')}</span>
-        <Link
-          to={`/clients/${clientId}/documents`}
-          className="shrink-0 font-semibold underline-offset-4 hover:underline"
-        >
+        <Link to={`/clients/${clientId}/documents`} className="shrink-0 font-semibold underline-offset-4 hover:underline">
           {CLIENTS_MESSAGES.details.goToDocuments}
         </Link>
       </span>
@@ -140,9 +137,7 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
             size="md"
             title={client ? buildClientTitle(client) : CLIENTS_MESSAGES.details.pageTitle}
             description={
-              client && initialTab === 'details' ? (
-                <ClientHeaderMissingDocuments clientId={client.id} active />
-              ) : undefined
+              client && initialTab === 'details' ? <ClientHeaderMissingDocuments clientId={client.id} active /> : undefined
             }
             actions={
               can.editClients && initialTab === 'details' ? (

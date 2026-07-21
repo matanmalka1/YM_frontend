@@ -58,9 +58,7 @@ export const LineRow: React.FC<LineRowProps> = ({
             className="p-0 text-primary-500 hover:text-primary-700 hover:bg-transparent"
             title={supportingDocumentFilename ?? ANNUAL_REPORTS_MESSAGES.financialLineRow.attachedDocument}
           >
-            <span className="text-xs">
-              {supportingDocumentFilename ?? ANNUAL_REPORTS_MESSAGES.financialLineRow.document}
-            </span>
+            <span className="text-xs">{supportingDocumentFilename ?? ANNUAL_REPORTS_MESSAGES.financialLineRow.document}</span>
           </Button>
         ) : supportingDocumentRef ? (
           <span className="flex items-center gap-0.5 text-xs text-gray-500" title={supportingDocumentRef}>

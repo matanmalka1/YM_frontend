@@ -20,16 +20,7 @@ export type TableDensity = 'default' | 'compact'
 
 export type ColumnAlign = 'start' | 'center' | 'end'
 
-export type TableColumnKind =
-  | 'text'
-  | 'mono'
-  | 'number'
-  | 'money'
-  | 'date'
-  | 'dateTime'
-  | 'status'
-  | 'actions'
-  | 'selection'
+export type TableColumnKind = 'text' | 'mono' | 'number' | 'money' | 'date' | 'dateTime' | 'status' | 'actions' | 'selection'
 
 export type TableCellTone = 'default' | 'muted' | 'strong' | 'danger' | 'warning' | 'success'
 

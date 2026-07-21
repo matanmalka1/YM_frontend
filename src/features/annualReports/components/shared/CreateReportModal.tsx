@@ -27,14 +27,8 @@ export const CreateReportModal: React.FC<CreateReportModalProps> = ({ open, onCl
     setValue,
     formState: { errors },
   } = form
-  const {
-    clientQuery,
-    selectedClient,
-    handleSelectClient,
-    handleClearClient,
-    handleClientQueryChange,
-    resetClientPicker,
-  } = useClientPickerState(createClientIdPickerHandlers((value, options) => setValue('client_id', value, options)))
+  const { clientQuery, selectedClient, handleSelectClient, handleClearClient, handleClientQueryChange, resetClientPicker } =
+    useClientPickerState(createClientIdPickerHandlers((value, options) => setValue('client_id', value, options)))
 
   useEffect(() => {
     if (open) return

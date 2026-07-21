@@ -56,8 +56,7 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
 
   const dueDateLabel = isFiled && row.filed_at ? formatDate(row.filed_at) : formatDate(row.submission_deadline)
 
-  const dueDateRowLabel =
-    isFiled && row.filed_at ? VAT_MESSAGES.periodCard.filedAtLabel : VAT_MESSAGES.periodCard.dueDateLabel
+  const dueDateRowLabel = isFiled && row.filed_at ? VAT_MESSAGES.periodCard.filedAtLabel : VAT_MESSAGES.periodCard.dueDateLabel
 
   const daysToDue = isFiled ? null : getDaysToDueLabel(row.days_until_deadline)
 
@@ -121,13 +120,7 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
         </div>
 
         {/* Action */}
-        <Button
-          fullWidth
-          icon={<FileText className="h-4 w-4" />}
-          onClick={onOpen}
-          disabled={disabled}
-          className="mt-auto"
-        >
+        <Button fullWidth icon={<FileText className="h-4 w-4" />} onClick={onOpen} disabled={disabled} className="mt-auto">
           {VAT_MESSAGES.actions.openVatReport}
         </Button>
       </div>

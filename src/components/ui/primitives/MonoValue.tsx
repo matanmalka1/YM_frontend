@@ -33,12 +33,7 @@ export const MonoValue: React.FC<MonoValueProps> = ({ value, tone = 'neutral', f
 
   return (
     <span
-      className={cn(
-        'font-mono text-sm tabular-nums',
-        format !== 'days' && 'font-medium',
-        toneClass[resolvedTone],
-        className,
-      )}
+      className={cn('font-mono text-sm tabular-nums', format !== 'days' && 'font-medium', toneClass[resolvedTone], className)}
     >
       {value}
     </span>

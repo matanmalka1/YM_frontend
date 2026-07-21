@@ -34,8 +34,7 @@ export const useTaxCalendarSettings = (params: TaxCalendarSettingsYearRangeParam
 
   const bootstrapMutation = useMutationWithToast({
     mutationFn: (payload: TaxCalendarBootstrapPayload) => taxCalendarSettingsApi.bootstrap(payload),
-    successMessage: (result) =>
-      `יומן המס אותחל: ${result.entries_created} רשומות נוצרו, ${result.entries_skipped} רשומות דולגו.`,
+    successMessage: (result) => `יומן המס אותחל: ${result.entries_created} רשומות נוצרו, ${result.entries_skipped} רשומות דולגו.`,
     errorMessage: TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.bootstrap,
     invalidateKeys: [taxCalendarSettingsQK.all],
   })

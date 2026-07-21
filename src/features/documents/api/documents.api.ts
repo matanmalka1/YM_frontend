@@ -15,10 +15,7 @@ import type {
 export const documentsApi = {
   // ── Queries ──────────────────────────────────────────────────────────────
 
-  listByClient: async (
-    clientId: number,
-    params?: ListDocumentsByClientParams,
-  ): Promise<PermanentDocumentListResponse> => {
+  listByClient: async (clientId: number, params?: ListDocumentsByClientParams): Promise<PermanentDocumentListResponse> => {
     const response = await api.get<PermanentDocumentListResponse>(
       DOCUMENT_ENDPOINTS.documentsByClient(clientId),
       params ? { params: toQueryParams(params) } : undefined,
@@ -56,10 +53,7 @@ export const documentsApi = {
     return response.data
   },
 
-  listByBinder: async (
-    binderId: number,
-    params?: ListDocumentsByBinderParams,
-  ): Promise<PermanentDocumentListResponse> => {
+  listByBinder: async (binderId: number, params?: ListDocumentsByBinderParams): Promise<PermanentDocumentListResponse> => {
     const response = await api.get<PermanentDocumentListResponse>(
       DOCUMENT_ENDPOINTS.documentsByBinder(binderId),
       params ? { params: toQueryParams(params) } : undefined,
@@ -93,28 +87,17 @@ export const documentsApi = {
     await api.delete(DOCUMENT_ENDPOINTS.documentDelete(clientId, id))
   },
 
-  updateDocument: async (
-    clientId: number,
-    id: number,
-    payload: UpdateDocumentPayload,
-  ): Promise<PermanentDocumentResponse> => {
-    const response = await api.patch<PermanentDocumentResponse>(
-      DOCUMENT_ENDPOINTS.documentDetail(clientId, id),
-      payload,
-    )
+  updateDocument: async (clientId: number, id: number, payload: UpdateDocumentPayload): Promise<PermanentDocumentResponse> => {
+    const response = await api.patch<PermanentDocumentResponse>(DOCUMENT_ENDPOINTS.documentDetail(clientId, id), payload)
     return response.data
   },
 
   replaceDocument: async (clientId: number, id: number, file: File): Promise<PermanentDocumentResponse> => {
     const formData = new FormData()
     formData.append('file', file)
-    const response = await api.put<PermanentDocumentResponse>(
-      DOCUMENT_ENDPOINTS.documentReplace(clientId, id),
-      formData,
-      {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      },
-    )
+    const response = await api.put<PermanentDocumentResponse>(DOCUMENT_ENDPOINTS.documentReplace(clientId, id), formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
     return response.data
   },
 }

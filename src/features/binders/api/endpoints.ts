@@ -11,8 +11,7 @@ export const BINDER_ENDPOINTS = {
   binderHandoverToClientBulk: '/binders/handover-to-client-bulk',
   binderReceive: '/binders/receive',
   binderIntakes: (binderId: number | string) => `/binders/${binderId}/intakes`,
-  binderIntakeById: (binderId: number | string, intakeId: number | string) =>
-    `/binders/${binderId}/intakes/${intakeId}`,
+  binderIntakeById: (binderId: number | string, intakeId: number | string) => `/binders/${binderId}/intakes/${intakeId}`,
   bindersOpen: '/binders/open',
   clientBinders: (clientId: number | string) => `/clients/${clientId}/binders`,
 } as const

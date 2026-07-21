@@ -18,10 +18,7 @@ export const AdvancePaymentContextCard: React.FC<AdvancePaymentContextCardProps>
   // Context lists what the payment holds. An available VAT figure is not held.
   const turnoverLabel =
     payment.turnover_amount != null && payment.turnover_source != null
-      ? ADVANCED_PAYMENTS_MESSAGES.detail.turnoverWithSource(
-          formatShekelAmount(payment.turnover_amount),
-          payment.turnover_source,
-        )
+      ? ADVANCED_PAYMENTS_MESSAGES.detail.turnoverWithSource(formatShekelAmount(payment.turnover_amount), payment.turnover_source)
       : null
 
   const timingStatusLabel = payment.paid_late
@@ -36,9 +33,7 @@ export const AdvancePaymentContextCard: React.FC<AdvancePaymentContextCardProps>
       <DefinitionList
         layout="stacked"
         items={[
-          ...(clientIdNumber
-            ? [{ label: ADVANCED_PAYMENTS_MESSAGES.detail.idNumberLabel, value: clientIdNumber }]
-            : []),
+          ...(clientIdNumber ? [{ label: ADVANCED_PAYMENTS_MESSAGES.detail.idNumberLabel, value: clientIdNumber }] : []),
           ...(advanceRateDisplay
             ? [{ label: ADVANCED_PAYMENTS_MESSAGES.detail.advanceRateLabel, value: advanceRateDisplay }]
             : []),

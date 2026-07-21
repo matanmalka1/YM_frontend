@@ -43,10 +43,7 @@ export const annualReportFinancialsApi = {
     lineId: number,
     payload: Partial<ExpenseLinePayload>,
   ): Promise<ExpenseLineResponse> => {
-    const response = await api.patch<ExpenseLineResponse>(
-      ANNUAL_REPORT_ENDPOINTS.expenseLine(reportId, lineId),
-      payload,
-    )
+    const response = await api.patch<ExpenseLineResponse>(ANNUAL_REPORT_ENDPOINTS.expenseLine(reportId, lineId), payload)
     return response.data
   },
 
@@ -55,9 +52,7 @@ export const annualReportFinancialsApi = {
   },
 
   autoPopulate: async (reportId: number, force = false): Promise<VatAutoPopulateResponse> => {
-    const response = await api.post<VatAutoPopulateResponse>(
-      `${ANNUAL_REPORT_ENDPOINTS.autoPopulate(reportId)}?force=${force}`,
-    )
+    const response = await api.post<VatAutoPopulateResponse>(`${ANNUAL_REPORT_ENDPOINTS.autoPopulate(reportId)}?force=${force}`)
     return response.data
   },
 }

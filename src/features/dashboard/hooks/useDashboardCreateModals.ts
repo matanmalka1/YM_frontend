@@ -54,10 +54,7 @@ export const useDashboardCreateModals = () => {
       setAdvancePaymentClientId(null)
       setActiveCreateModal(null)
       advancePaymentClientPicker.resetClientPicker()
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all }),
-        invalidateDashboardData(),
-      ])
+      await Promise.all([queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all }), invalidateDashboardData()])
     },
     onError: (err) => showErrorToast(err, DASHBOARD_ERROR_MESSAGES.advancePaymentCreate),
   })
@@ -152,8 +149,6 @@ export const useDashboardCreateModals = () => {
     chargeCreateError: chargeCreateMutation.error
       ? getErrorMessage(chargeCreateMutation.error, DASHBOARD_ERROR_MESSAGES.chargeCreate)
       : null,
-    vatCreateError: vatCreateMutation.error
-      ? getErrorMessage(vatCreateMutation.error, DASHBOARD_ERROR_MESSAGES.vatCreate)
-      : null,
+    vatCreateError: vatCreateMutation.error ? getErrorMessage(vatCreateMutation.error, DASHBOARD_ERROR_MESSAGES.vatCreate) : null,
   }
 }

@@ -13,22 +13,11 @@ import { DASHBOARD_MESSAGES } from '../../messages'
 
 /* ── shared ring + legend primitives ──────────────────────────────── */
 
-const DonutRing = ({
-  pct,
-  size = 100,
-  stroke = 10,
-  color,
-}: {
-  pct: number
-  size?: number
-  stroke?: number
-  color?: string
-}) => {
+const DonutRing = ({ pct, size = 100, stroke = 10, color }: { pct: number; size?: number; stroke?: number; color?: string }) => {
   const r = (size - stroke) / 2
   const circ = 2 * Math.PI * r
   const fill =
-    color ??
-    (pct >= 80 ? 'var(--color-positive-500)' : pct >= 40 ? 'var(--color-primary-600)' : 'var(--color-warning-500)')
+    color ?? (pct >= 80 ? 'var(--color-positive-500)' : pct >= 40 ? 'var(--color-primary-600)' : 'var(--color-warning-500)')
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0" aria-hidden="true">
       <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--color-chart-track)" strokeWidth={stroke} />
@@ -83,15 +72,7 @@ const RingLegend = ({ items }: { items: LegendItem[] }) => (
   </ul>
 )
 
-const SlideFooter = ({
-  left,
-  right,
-  warn,
-}: {
-  left: React.ReactNode
-  right?: React.ReactNode
-  warn?: React.ReactNode
-}) => (
+const SlideFooter = ({ left, right, warn }: { left: React.ReactNode; right?: React.ReactNode; warn?: React.ReactNode }) => (
   <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 text-2xs font-medium text-slate-500">
     <span className="tabular-nums">{left}</span>
     {warn ?? (right && <span className="tabular-nums">{right}</span>)}
@@ -231,9 +212,7 @@ export const SeasonInsightsCarousel = ({ vatStats }: SeasonInsightsCarouselProps
     <DashboardPanel>
       {/* header */}
       <div className="flex items-center justify-between gap-2 px-5 pb-3 pt-4">
-        <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">
-          {SLIDE_DEFS[slide].label}
-        </span>
+        <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">{SLIDE_DEFS[slide].label}</span>
         <div className="flex items-center gap-1">
           <CarouselDots items={SLIDE_DEFS} activeIndex={slide} onSelect={goTo} />
           <Button

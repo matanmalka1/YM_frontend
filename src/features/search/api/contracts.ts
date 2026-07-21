@@ -1,7 +1,15 @@
 import type { BinderCapacityStatus, BinderLocationStatus } from '@/features/binders'
 import type { ClientStatus, EntityType } from '@/features/clients'
 
-export type SearchItemType = 'binder' | 'document' | 'vat_work_item' | 'annual_report' | 'advance_payment' | 'charge' | 'task' | 'notification'
+export type SearchItemType =
+  | 'binder'
+  | 'document'
+  | 'vat_work_item'
+  | 'annual_report'
+  | 'advance_payment'
+  | 'charge'
+  | 'task'
+  | 'notification'
 
 export interface SearchClientMatch {
   id: number

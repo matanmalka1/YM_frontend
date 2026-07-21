@@ -5,13 +5,7 @@ import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { PaginatedDataTable } from '@/components/ui/table'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
-import {
-  ClientEditDrawer,
-  ClientsStatsSection,
-  CreateClientModal,
-  DeletedClientDialog,
-  useClientsPage,
-} from '@/features/clients'
+import { ClientEditDrawer, ClientsStatsSection, CreateClientModal, DeletedClientDialog, useClientsPage } from '@/features/clients'
 import { ImportExportModal } from '@/features/importExport'
 import { CLIENTS_MESSAGES } from '../messages'
 
@@ -39,21 +33,12 @@ export const Clients: React.FC = () => {
   )
 
   return (
-    <PageStateGuard
-      isLoading={status.isLoading}
-      error={status.error}
-      header={header}
-      loadingMessage={status.loadingMessage}
-    >
+    <PageStateGuard isLoading={status.isLoading} error={status.error} header={header} loadingMessage={status.loadingMessage}>
       {!permissions.can.editClients && <Alert variant="info" message={CLIENTS_MESSAGES.list.viewOnlyNotice} />}
       {!isEmptyState && (
         <>
           <ClientsStatsSection stats={stats.values} />
-          <FilterPanel
-            {...filters}
-            title={CLIENTS_MESSAGES.list.filterTitle}
-            subtitle={CLIENTS_MESSAGES.list.filterSubtitle}
-          />
+          <FilterPanel {...filters} title={CLIENTS_MESSAGES.list.filterTitle} subtitle={CLIENTS_MESSAGES.list.filterSubtitle} />
         </>
       )}
       <PaginatedDataTable

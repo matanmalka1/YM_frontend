@@ -24,14 +24,8 @@ export const annualReportTaxApi = {
     return response.data
   },
 
-  saveTaxCalculation: async (
-    reportId: number,
-    payload: TaxCalculationSaveRequest,
-  ): Promise<TaxCalculationSaveResponse> => {
-    const response = await api.post<TaxCalculationSaveResponse>(
-      ANNUAL_REPORT_ENDPOINTS.saveTaxCalculation(reportId),
-      payload,
-    )
+  saveTaxCalculation: async (reportId: number, payload: TaxCalculationSaveRequest): Promise<TaxCalculationSaveResponse> => {
+    const response = await api.post<TaxCalculationSaveResponse>(ANNUAL_REPORT_ENDPOINTS.saveTaxCalculation(reportId), payload)
     return response.data
   },
 }

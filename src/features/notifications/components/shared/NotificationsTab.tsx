@@ -32,13 +32,7 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
       subtitle={NOTIFICATIONS_MESSAGES.tab.subtitle}
       actions={
         isAdvisor && clientRecordId != null ? (
-          <Button
-            type="button"
-            variant="primary"
-            size="sm"
-            icon={<Send className="h-4 w-4" />}
-            onClick={() => setSendOpen(true)}
-          >
+          <Button type="button" variant="primary" size="sm" icon={<Send className="h-4 w-4" />} onClick={() => setSendOpen(true)}>
             {NOTIFICATIONS_MESSAGES.actions.sendMessageShort}
           </Button>
         ) : null

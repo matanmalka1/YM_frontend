@@ -38,12 +38,7 @@ export const TaskDetailsFields: React.FC<TaskDetailsFieldsProps> = ({
   onRoleChange,
 }) => (
   <>
-    <Input
-      label={TASKS_MESSAGES.form.titleLabel}
-      error={errors.title?.message}
-      disabled={readonly}
-      {...register('title')}
-    />
+    <Input label={TASKS_MESSAGES.form.titleLabel} error={errors.title?.message} disabled={readonly} {...register('title')} />
     <Textarea
       label={GLOBAL_UI_MESSAGES.common.details}
       error={errors.description?.message}
@@ -52,12 +47,7 @@ export const TaskDetailsFields: React.FC<TaskDetailsFieldsProps> = ({
       {...register('description')}
     />
     <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-      <Select
-        label={TASKS_MESSAGES.form.priorityLabel}
-        options={priorityOptions}
-        disabled={readonly}
-        {...register('priority')}
-      />
+      <Select label={TASKS_MESSAGES.form.priorityLabel} options={priorityOptions} disabled={readonly} {...register('priority')} />
       <DatePicker
         label={TASKS_MESSAGES.form.dueDateLabel}
         value={values.dueDate}

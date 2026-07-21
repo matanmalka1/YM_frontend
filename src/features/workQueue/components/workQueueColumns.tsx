@@ -29,8 +29,7 @@ const actionIcon = (action: WorkQueueAction) => {
   return <Play className="h-4 w-4" />
 }
 
-const actionVariant = (action: WorkQueueAction): 'ghost' | 'danger' =>
-  action.variant === 'danger' ? 'danger' : 'ghost'
+const actionVariant = (action: WorkQueueAction): 'ghost' | 'danger' => (action.variant === 'danger' ? 'danger' : 'ghost')
 
 const metadataValue = (item: WorkQueueItem, key: string): unknown =>
   item.metadata && typeof item.metadata === 'object' ? (item.metadata as Record<string, unknown>)[key] : undefined
@@ -70,12 +69,7 @@ interface BuildColumnsParams {
   showWarnings: boolean
 }
 
-export const buildWorkQueueColumns = ({
-  activeActionKey,
-  onAction,
-  showLinkedTasks,
-  showWarnings,
-}: BuildColumnsParams) =>
+export const buildWorkQueueColumns = ({ activeActionKey, onAction, showLinkedTasks, showWarnings }: BuildColumnsParams) =>
   (
     [
       {
@@ -120,9 +114,7 @@ export const buildWorkQueueColumns = ({
             <div className="font-medium text-gray-900">{item.title}</div>
             {item.description && <div className="text-xs text-gray-500">{item.description}</div>}
             {item.source_type === 'task' && item.source_summary && (
-              <div className="text-xs text-gray-500">
-                {WORK_QUEUE_MESSAGES.columns.sourcePrefix(item.source_summary.label)}
-              </div>
+              <div className="text-xs text-gray-500">{WORK_QUEUE_MESSAGES.columns.sourcePrefix(item.source_summary.label)}</div>
             )}
           </div>
         ),

@@ -1,13 +1,4 @@
-import {
-  cloneElement,
-  isValidElement,
-  useCallback,
-  useId,
-  useLayoutEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from 'react'
+import { cloneElement, isValidElement, useCallback, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '../../../utils/utils'
 import { getOverlayPortalOffset, useOverlayPortalContainer } from '../overlays/OverlayPortalContext'
@@ -52,9 +43,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ text, children, className }) =
     const preferredTop = triggerRect.top - tooltipRect.height - TRIGGER_GAP
     const fallbackTop = triggerRect.bottom + TRIGGER_GAP
     const top =
-      preferredTop >= VIEWPORT_GAP
-        ? preferredTop
-        : Math.min(fallbackTop, viewportHeight - tooltipRect.height - VIEWPORT_GAP)
+      preferredTop >= VIEWPORT_GAP ? preferredTop : Math.min(fallbackTop, viewportHeight - tooltipRect.height - VIEWPORT_GAP)
     const centeredLeft = triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2
     const left = Math.min(Math.max(centeredLeft, VIEWPORT_GAP), viewportWidth - tooltipRect.width - VIEWPORT_GAP)
 

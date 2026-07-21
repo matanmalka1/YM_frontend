@@ -90,9 +90,7 @@ export const ChargeInvoiceSection: React.FC<ChargeInvoiceSectionProps> = ({ char
       {!isLoadingInvoice && !invoice && (
         <div className="space-y-3">
           <p className="text-sm text-gray-500">
-            {chargeStatus === 'issued'
-              ? INVOICES_MESSAGES.section.noInvoice
-              : INVOICES_MESSAGES.section.attachIssuedOnly}
+            {chargeStatus === 'issued' ? INVOICES_MESSAGES.section.noInvoice : INVOICES_MESSAGES.section.attachIssuedOnly}
           </p>
 
           {canShowAttachForm && !showForm && (
@@ -130,13 +128,7 @@ export const ChargeInvoiceSection: React.FC<ChargeInvoiceSectionProps> = ({ char
                 <Button type="submit" size="sm" isLoading={isAttaching}>
                   {INVOICES_MESSAGES.section.save}
                 </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setShowForm(false)}
-                  disabled={isAttaching}
-                >
+                <Button type="button" variant="secondary" size="sm" onClick={() => setShowForm(false)} disabled={isAttaching}>
                   {GLOBAL_UI_MESSAGES.actions.cancel}
                 </Button>
               </div>

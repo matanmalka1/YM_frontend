@@ -6,11 +6,7 @@ import { Input } from '@/components/ui/inputs/Input'
 import { Button } from '@/components/ui/primitives/Button'
 import { Select } from '@/components/ui/inputs/Select'
 import { Textarea } from '@/components/ui/inputs/Textarea'
-import {
-  createAdvancePaymentSchema,
-  CREATE_ADVANCE_PAYMENT_DEFAULTS,
-  type CreateAdvancePaymentFormValues,
-} from '../../schemas'
+import { createAdvancePaymentSchema, CREATE_ADVANCE_PAYMENT_DEFAULTS, type CreateAdvancePaymentFormValues } from '../../schemas'
 import { ADVANCE_PAYMENT_FREQUENCY_OPTIONS } from '../../constants'
 import type { CreateAdvancePaymentPayload } from '../../api/contracts'
 import {
@@ -168,9 +164,7 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
         ))}
         {liveCalculated != null && (
           <div>
-            <div className="text-xs text-gray-500 mb-1">
-              {ADVANCED_PAYMENTS_MESSAGES.createModal.calculatedAmountLabel}
-            </div>
+            <div className="text-xs text-gray-500 mb-1">{ADVANCED_PAYMENTS_MESSAGES.createModal.calculatedAmountLabel}</div>
             <div className="text-sm font-medium text-gray-800">{formatShekelAmount(liveCalculated)}</div>
           </div>
         )}

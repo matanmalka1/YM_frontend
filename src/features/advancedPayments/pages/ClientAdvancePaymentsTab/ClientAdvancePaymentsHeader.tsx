@@ -67,9 +67,7 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
                 disabled={generationFrequency == null}
                 isLoading={isGenerating}
                 loadingLabel={ADVANCED_PAYMENTS_MESSAGES.clientHeader.loadingLabel}
-                tooltip={
-                  generationFrequency == null ? ADVANCED_PAYMENTS_MESSAGES.clientHeader.noFrequencyTooltip : undefined
-                }
+                tooltip={generationFrequency == null ? ADVANCED_PAYMENTS_MESSAGES.clientHeader.noFrequencyTooltip : undefined}
                 className="rounded-lg text-gray-700 hover:bg-white hover:shadow-sm"
               >
                 {ADVANCED_PAYMENTS_MESSAGES.clientHeader.createYearlySchedule}
@@ -104,13 +102,7 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
           <span className="flex-1 text-sm text-info-800">
             {ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.bulkAvailable(readyToSnapshotCount)}
           </span>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            isLoading={isRefreshingTurnover}
-            onClick={onRefreshTurnoverBulk}
-          >
+          <Button type="button" variant="outline" size="sm" isLoading={isRefreshingTurnover} onClick={onRefreshTurnoverBulk}>
             {ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.bulkButton(readyToSnapshotCount)}
           </Button>
         </div>

@@ -1,14 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
-import {
-  Briefcase,
-  CheckCircle2,
-  ClipboardList,
-  ReceiptText,
-  ShieldAlert,
-  Table2,
-  TriangleAlert,
-  Wallet,
-} from 'lucide-react'
+import { Briefcase, CheckCircle2, ClipboardList, ReceiptText, ShieldAlert, Table2, TriangleAlert, Wallet } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn, formatCurrencyILS, formatDate } from '@/utils/utils'
 import { semanticDotClasses, semanticStatToneClasses } from '@/utils/semanticColors'
@@ -97,9 +88,7 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
           </Badge>
         </div>
         <div className="mt-0.5 flex items-center gap-1.5 text-xs text-slate-400">
-          {item.client_name && (
-            <span className="font-medium text-slate-500 truncate max-w-[120px]">{item.client_name}</span>
-          )}
+          {item.client_name && <span className="font-medium text-slate-500 truncate max-w-[120px]">{item.client_name}</span>}
           {item.client_name && <span>·</span>}
           <span>{source.label}</span>
           {item.reason && (
@@ -117,12 +106,8 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
             {formatCurrencyILS(item.amount, { maximumFractionDigits: 2 })}
           </span>
         )}
-        {item.due_date && (
-          <span className="text-xs font-medium tabular-nums text-slate-500">{formatDate(item.due_date)}</span>
-        )}
-        <span className={cn('text-2xs font-semibold tabular-nums', urgency.delta)}>
-          {dueDateLabel(item.days_delta)}
-        </span>
+        {item.due_date && <span className="text-xs font-medium tabular-nums text-slate-500">{formatDate(item.due_date)}</span>}
+        <span className={cn('text-2xs font-semibold tabular-nums', urgency.delta)}>{dueDateLabel(item.days_delta)}</span>
       </div>
     </Link>
   )

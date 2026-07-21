@@ -32,11 +32,7 @@ export const TasksPage: React.FC = () => {
       {!page.isLoading && !page.listError ? (
         <TasksListSummary total={page.total} visibleCount={page.visibleCount} featuredTask={page.featuredTask} />
       ) : null}
-      <FilterPanel
-        {...page.filterBar}
-        title={TASKS_MESSAGES.page.filterTitle}
-        subtitle={TASKS_MESSAGES.page.filterSubtitle}
-      />
+      <FilterPanel {...page.filterBar} title={TASKS_MESSAGES.page.filterTitle} subtitle={TASKS_MESSAGES.page.filterSubtitle} />
       <TasksListPanel
         tasks={page.tasks}
         isLoading={page.isLoading}

@@ -128,8 +128,7 @@ export const useClientsPage = () => {
   const createClient = async (payload: CreateClientPayload): Promise<void> => {
     await createMutation.mutateAsync(payload)
   }
-  const updateClient = (clientId: number, payload: UpdateClientPayload) =>
-    updateMutation.mutateAsync({ clientId, payload })
+  const updateClient = (clientId: number, payload: UpdateClientPayload) => updateMutation.mutateAsync({ clientId, payload })
 
   const openCreate = useCallback(() => setShowCreateModal(true), [])
   const openImportExport = useCallback(() => setShowImportExport(true), [])
@@ -204,8 +203,7 @@ export const useClientsPage = () => {
           : hasActiveFilters
             ? { label: 'איפוס סינון', onClick: handleReset }
             : undefined,
-        secondaryAction:
-          isEmptyState && can.createClients ? { label: 'ייבוא לקוחות', onClick: openImportExport } : undefined,
+        secondaryAction: isEmptyState && can.createClients ? { label: 'ייבוא לקוחות', onClick: openImportExport } : undefined,
       },
     },
     drawers: {

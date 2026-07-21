@@ -189,8 +189,7 @@ components:
       hover: '{colors.negative-700}',
       active: '{colors.negative-800}',
     }
-  button-link:
-    { textColor: '{colors.gray-600}', decoration: underline, rounded: '{rounded.sm}', hover: '{colors.gray-900}' }
+  button-link: { textColor: '{colors.gray-600}', decoration: underline, rounded: '{rounded.sm}', hover: '{colors.gray-900}' }
   button-link-family: # text-like variants (rounded-sm, underline-offset-2, no padding box)
     {
       linkPrimary: 'text {colors.primary-700} hover primary-800',
@@ -253,8 +252,7 @@ components:
         padding: '8px 12px',
       }
     rowDivider: '1px {colors.gray-200}' # divide-y
-    cell:
-      { padding: '8px 12px', font: 'text-sm', textColor: '{colors.gray-700}', edgePadding: 'first ps-5 / last pe-5' }
+    cell: { padding: '8px 12px', font: 'text-sm', textColor: '{colors.gray-700}', edgePadding: 'first ps-5 / last pe-5' }
     rowHoverClickable: 'bg {colors.primary-50} (/60) + inset -3px {colors.primary-400} bar'
     rowHoverStatic: 'bg {colors.gray-50} (/80)'
   modal:

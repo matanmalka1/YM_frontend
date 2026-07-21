@@ -41,11 +41,7 @@ export const useAdvancePaymentsPage = () => {
   const [generateOpen, setGenerateOpen] = useState(false)
   const { batches, isLoading } = useAdvancePaymentBatches(year, clientRecordId)
   const displayBatches = useMemo(() => mergeAdvancePaymentBatches(batches, periodFilter), [batches, periodFilter])
-  const defaultOpenBatchKey = useDefaultOpenGroup(
-    displayBatches,
-    getAdvancePaymentBatchKey,
-    (batch) => batch.due_date ?? null,
-  )
+  const defaultOpenBatchKey = useDefaultOpenGroup(displayBatches, getAdvancePaymentBatchKey, (batch) => batch.due_date ?? null)
   const workflowStats = useMemo(() => getAdvancePaymentWorkflowStats(displayBatches), [displayBatches])
 
   const changeFilter = (key: string, value: string) => {

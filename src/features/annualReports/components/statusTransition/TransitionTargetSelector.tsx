@@ -7,11 +7,7 @@ export const TransitionTargetSelector = ({ allowed, selected, onSelect }: Transi
   return (
     <div>
       <p className="mb-2 text-xs font-medium text-gray-500">{ANNUAL_REPORTS_MESSAGES.transitionTargetSelector.label}</p>
-      <SegmentedControl
-        variant="choice"
-        role="group"
-        aria-label={ANNUAL_REPORTS_MESSAGES.transitionTargetSelector.ariaLabel}
-      >
+      <SegmentedControl variant="choice" role="group" aria-label={ANNUAL_REPORTS_MESSAGES.transitionTargetSelector.ariaLabel}>
         {allowed.map((status) => (
           <SegmentedControlItem
             key={status}

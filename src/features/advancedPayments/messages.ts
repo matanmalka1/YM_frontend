@@ -35,8 +35,7 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
       'המחזור לתקופה זו מגיע מדוח מע״מ שטרם הוגש, והוא עשוי להשתנות. הקיבוע יישאר על הסכום הנוכחי גם אם הדוח ישתנה.',
     confirmLabel: 'קבע בכל זאת',
     /** Reads as an offer, not as the period's turnover. */
-    available: (source: AvailableTurnover['source'], amount: string) =>
-      `${AVAILABLE_TURNOVER_LABELS[source]} · ${amount}`,
+    available: (source: AvailableTurnover['source'], amount: string) => `${AVAILABLE_TURNOVER_LABELS[source]} · ${amount}`,
     availableBadge: 'ניתן לקיבוע',
     /** Field label that names the provenance of a held turnover. */
     turnoverLabel: (source: TurnoverSource) => `מחזור (${TURNOVER_SOURCE_SHORT_LABELS[source]})`,
@@ -81,8 +80,7 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     overdueLabel: 'באיחור',
     idNumberLabel: 'ת.ז / ח.פ',
     advanceRateLabel: 'שיעור מקדמה',
-    turnoverWithSource: (amount: string, source: TurnoverSource) =>
-      `${amount} (${TURNOVER_SOURCE_SHORT_LABELS[source]})`,
+    turnoverWithSource: (amount: string, source: TurnoverSource) => `${amount} (${TURNOVER_SOURCE_SHORT_LABELS[source]})`,
     title: (period: string) => `מקדמה - ${period}`,
     clientNumberPrefix: (num: number) => `מס׳ לקוח ${num}`,
     missingTurnoverAlert: 'חסר מחזור לתקופה — לא ניתן לחשב מקדמה מדויקת',

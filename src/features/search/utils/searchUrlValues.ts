@@ -1,8 +1,18 @@
 import { parseClientStatus, parseEntityType, type ClientStatus, type EntityType } from '@/features/clients'
-import { isBinderCapacityStatus, isBinderLocationStatus, type BinderCapacityStatus, type BinderLocationStatus } from '@/features/binders'
+import {
+  isBinderCapacityStatus,
+  isBinderLocationStatus,
+  type BinderCapacityStatus,
+  type BinderLocationStatus,
+} from '@/features/binders'
 
 /** The filters whose values are backed by a backend enum, and are therefore rejectable. */
-export const SEARCH_ENUM_FILTER_KEYS = ['client_status', 'entity_type', 'binder_location_status', 'binder_capacity_status'] as const
+export const SEARCH_ENUM_FILTER_KEYS = [
+  'client_status',
+  'entity_type',
+  'binder_location_status',
+  'binder_capacity_status',
+] as const
 
 export type SearchEnumFilterKey = (typeof SEARCH_ENUM_FILTER_KEYS)[number]
 

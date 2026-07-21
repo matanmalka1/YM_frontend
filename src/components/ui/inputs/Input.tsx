@@ -47,22 +47,14 @@ export const Input = ({
   const padding = inputIconPadding[size]
 
   return (
-    <FormField
-      id={id}
-      label={label}
-      error={error}
-      labelClassName={labelClassName}
-      className={cn('w-full', fieldClassName)}
-    >
+    <FormField id={id} label={label} error={error} labelClassName={labelClassName} className={cn('w-full', fieldClassName)}>
       {(controlProps) => {
         const describedBy = [ariaDescribedBy, controlProps['aria-describedby']].filter(Boolean).join(' ') || undefined
 
         return (
           <div className="relative">
             {startIcon && (
-              <span className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-gray-400">
-                {startIcon}
-              </span>
+              <span className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-gray-400">{startIcon}</span>
             )}
 
             <input
@@ -86,9 +78,7 @@ export const Input = ({
               <span className="absolute end-2 top-1/2 -translate-y-1/2">{endElement}</span>
             ) : (
               endIcon && (
-                <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-gray-400">
-                  {endIcon}
-                </span>
+                <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-gray-400">{endIcon}</span>
               )
             )}
           </div>

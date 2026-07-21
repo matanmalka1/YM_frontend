@@ -38,12 +38,7 @@ const FILTER_BY_EVENT_TYPE: Record<string, TimelineFilterKey[]> = {
 }
 
 // Audit-sourced change events — rendered from raw audit fields in metadata.
-const CHANGE_EVENT_TYPES = new Set([
-  'client_record_changed',
-  'business_changed',
-  'charge_changed',
-  'annual_report_changed',
-])
+const CHANGE_EVENT_TYPES = new Set(['client_record_changed', 'business_changed', 'charge_changed', 'annual_report_changed'])
 
 const STRONG_EVENTS = new Set([
   'charge_created',

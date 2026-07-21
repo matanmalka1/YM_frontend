@@ -57,8 +57,7 @@ export const buildAdvancePaymentBatchColumns = ({
   textColumn({
     key: 'period',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.periodHeader,
-    getValue: (row) =>
-      `${getAdvancePaymentMonthLabel(row.period, row.period_months_count)} ${row.period.substring(0, 4)}`,
+    getValue: (row) => `${getAdvancePaymentMonthLabel(row.period, row.period_months_count)} ${row.period.substring(0, 4)}`,
   }),
   {
     key: 'due_date',

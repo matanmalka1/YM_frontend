@@ -4972,13 +4972,7 @@ export interface components {
      * ChargeType
      * @enum {string}
      */
-    ChargeType:
-      | 'monthly_retainer'
-      | 'annual_report_fee'
-      | 'vat_filing_fee'
-      | 'representation_fee'
-      | 'consultation_fee'
-      | 'other'
+    ChargeType: 'monthly_retainer' | 'annual_report_fee' | 'vat_filing_fee' | 'representation_fee' | 'consultation_fee' | 'other'
     /**
      * ChargeUpdateRequest
      * @description Partial update for a draft charge.
@@ -6729,13 +6723,7 @@ export interface components {
      * @description Higher-level workflow stages used by dashboards.
      * @enum {string}
      */
-    ReportStage:
-      | 'material_collection'
-      | 'in_progress'
-      | 'final_review'
-      | 'client_signature'
-      | 'transmitted'
-      | 'post_submission'
+    ReportStage: 'material_collection' | 'in_progress' | 'final_review' | 'client_signature' | 'transmitted' | 'post_submission'
     /** ResetPasswordRequest */
     ResetPasswordRequest: {
       /** Token */

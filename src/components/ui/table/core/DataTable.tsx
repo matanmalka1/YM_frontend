@@ -105,13 +105,7 @@ export const DataTable = <T,>({
 
   if (isLoading) {
     return (
-      <TableSkeleton
-        rows={5}
-        columns={Math.max(columns.length, 1)}
-        className={className}
-        surface={surface}
-        density={density}
-      />
+      <TableSkeleton rows={5} columns={Math.max(columns.length, 1)} className={className} surface={surface} density={density} />
     )
   }
 

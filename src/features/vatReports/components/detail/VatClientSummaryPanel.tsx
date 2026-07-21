@@ -81,9 +81,7 @@ export const VatClientSummaryPanel = ({ clientId }: VatClientSummaryPanelProps) 
         onYearChange={setSelectedYear}
       />
 
-      {error && (
-        <InlineState variant="error" icon={AlertTriangle} title={VAT_ERROR_MESSAGES.detail.loadClientVatError} />
-      )}
+      {error && <InlineState variant="error" icon={AlertTriangle} title={VAT_ERROR_MESSAGES.detail.loadClientVatError} />}
 
       {!error && selectedAnnual && <YearSummary annual={selectedAnnual} />}
 

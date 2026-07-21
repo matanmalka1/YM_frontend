@@ -20,31 +20,24 @@ export const advancePaymentsApi = {
     const { client_record_id, ...queryParams } = params
     const response = await api.get<PaginatedResponse<AdvancePaymentRow>>(
       ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePayments(client_record_id),
-      { params: toQueryParams(queryParams) },
+      {
+        params: toQueryParams(queryParams),
+      },
     )
     return response.data
   },
 
   create: async (clientRecordId: number, payload: CreateAdvancePaymentPayload): Promise<AdvancePaymentRow> => {
-    const response = await api.post<AdvancePaymentRow>(
-      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePayments(clientRecordId),
-      payload,
-    )
+    const response = await api.post<AdvancePaymentRow>(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePayments(clientRecordId), payload)
     return response.data
   },
 
   getById: async (clientRecordId: number, id: number): Promise<AdvancePaymentRow> => {
-    const response = await api.get<AdvancePaymentRow>(
-      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientRecordId, id),
-    )
+    const response = await api.get<AdvancePaymentRow>(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientRecordId, id))
     return response.data
   },
 
-  update: async (
-    clientRecordId: number,
-    id: number,
-    payload: UpdateAdvancePaymentPayload,
-  ): Promise<AdvancePaymentRow> => {
+  update: async (clientRecordId: number, id: number, payload: UpdateAdvancePaymentPayload): Promise<AdvancePaymentRow> => {
     const response = await api.patch<AdvancePaymentRow>(
       ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientRecordId, id),
       payload,
@@ -64,12 +57,9 @@ export const advancePaymentsApi = {
   },
 
   getAnnualKPIs: async (clientRecordId: number, year: number): Promise<AnnualKPIResponse> => {
-    const response = await api.get<AnnualKPIResponse>(
-      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentsKPI(clientRecordId),
-      {
-        params: toQueryParams({ year }),
-      },
-    )
+    const response = await api.get<AnnualKPIResponse>(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentsKPI(clientRecordId), {
+      params: toQueryParams({ year }),
+    })
     return response.data
   },
 
@@ -86,19 +76,19 @@ export const advancePaymentsApi = {
   refreshTurnoverBulk: async (clientRecordId: number, paymentIds: number[]): Promise<BulkRefreshTurnoverResponse> => {
     const response = await api.post<BulkRefreshTurnoverResponse>(
       ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentsRefreshTurnover(clientRecordId),
-      { payment_ids: paymentIds },
+      {
+        payment_ids: paymentIds,
+      },
     )
     return response.data
   },
 
-  refreshTurnover: async (
-    clientRecordId: number,
-    paymentId: number,
-    confirmPending = false,
-  ): Promise<AdvancePaymentRow> => {
+  refreshTurnover: async (clientRecordId: number, paymentId: number, confirmPending = false): Promise<AdvancePaymentRow> => {
     const response = await api.post<AdvancePaymentRow>(
       ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentRefreshTurnover(clientRecordId, paymentId),
-      { confirm_pending: confirmPending },
+      {
+        confirm_pending: confirmPending,
+      },
     )
     return response.data
   },

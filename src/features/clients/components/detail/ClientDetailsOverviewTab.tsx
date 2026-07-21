@@ -96,11 +96,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
           <ClientInfoSection client={client} />
           <div className="grid items-start gap-6 lg:grid-cols-2">
             <ClientStatusCard clientId={client.id} />
-            <ClientBusinessesCard
-              clientId={client.id}
-              canEdit={canEditClients}
-              onAddBusiness={() => setIsAddingBusiness(true)}
-            />
+            <ClientBusinessesCard clientId={client.id} canEdit={canEditClients} onAddBusiness={() => setIsAddingBusiness(true)} />
           </div>
           <ClientRelatedData
             clientId={client.id}
@@ -124,9 +120,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
           />
           <ChargesCreateModal
             open={isAddingCharge}
-            createError={
-              createChargeError ? getErrorMessage(createChargeError, CLIENTS_ERROR_MESSAGES.charges.create) : null
-            }
+            createError={createChargeError ? getErrorMessage(createChargeError, CLIENTS_ERROR_MESSAGES.charges.create) : null}
             createLoading={isCreatingCharge}
             onClose={() => setIsAddingCharge(false)}
             onSubmit={handleCreateCharge}

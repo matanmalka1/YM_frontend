@@ -1,10 +1,6 @@
 import { PAGE_SIZE_25 } from '@/constants/pagination.constants'
 import type { TaxCalendarGroupsParams, TaxCalendarObligationType } from './api'
-import {
-  TAX_CALENDAR_GROUP_STATUSES,
-  TAX_CALENDAR_OBLIGATION_TYPES,
-  type TaxCalendarGroupStatusFilter,
-} from './constants'
+import { TAX_CALENDAR_GROUP_STATUSES, TAX_CALENDAR_OBLIGATION_TYPES, type TaxCalendarGroupStatusFilter } from './constants'
 
 export const parseTaxCalendarGroupStatusFilter = (value: string | null): TaxCalendarGroupStatusFilter =>
   TAX_CALENDAR_GROUP_STATUSES.find((status) => status === value) ?? 'all'

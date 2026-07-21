@@ -17,14 +17,7 @@ interface UseNotesResourceOptions<TNote> {
 
 export const notesPageParams = PAGE_PARAMS
 
-export const useNotesResource = <TNote>({
-  enabled,
-  queryKey,
-  list,
-  create,
-  update,
-  remove,
-}: UseNotesResourceOptions<TNote>) => {
+export const useNotesResource = <TNote>({ enabled, queryKey, list, create, update, remove }: UseNotesResourceOptions<TNote>) => {
   const {
     data: listData,
     isLoading: listLoading,

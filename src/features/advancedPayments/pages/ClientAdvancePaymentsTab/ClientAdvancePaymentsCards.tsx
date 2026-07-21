@@ -66,17 +66,11 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
             label: ADVANCED_PAYMENTS_MESSAGES.clientCards.dueDateLabel,
             value: formatDate(row.due_date_effective ?? row.due_date),
           },
-          ...(row.paid_at
-            ? [{ label: ADVANCED_PAYMENTS_MESSAGES.clientCards.paidAtLabel, value: formatDate(row.paid_at) }]
-            : []),
+          ...(row.paid_at ? [{ label: ADVANCED_PAYMENTS_MESSAGES.clientCards.paidAtLabel, value: formatDate(row.paid_at) }] : []),
           { label: ADVANCED_PAYMENTS_MESSAGES.clientCards.paidLabel, value: formatShekelAmount(paid) },
           {
             label: ADVANCED_PAYMENTS_MESSAGES.clientCards.balanceLabel,
-            value: (
-              <span className={balance > 0 ? 'text-negative-600' : 'text-positive-600'}>
-                {formatShekelAmount(balance)}
-              </span>
-            ),
+            value: <span className={balance > 0 ? 'text-negative-600' : 'text-positive-600'}>{formatShekelAmount(balance)}</span>,
           },
           {
             label: turnoverLabel,
@@ -127,25 +121,13 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
               </div>
 
               <div>
-                <div className="text-xs text-gray-400 mb-0.5">
-                  {ADVANCED_PAYMENTS_MESSAGES.clientCards.expectedLabel}
-                </div>
+                <div className="text-xs text-gray-400 mb-0.5">{ADVANCED_PAYMENTS_MESSAGES.clientCards.expectedLabel}</div>
                 <div className="text-2xl font-bold text-positive-700">{formatShekelAmount(expected)}</div>
               </div>
 
-              <DefinitionList
-                items={detailItems}
-                columns={2}
-                className="gap-x-4 gap-y-2"
-                valueClassName="text-gray-800"
-              />
+              <DefinitionList items={detailItems} columns={2} className="gap-x-4 gap-y-2" valueClassName="text-gray-800" />
 
-              <Button
-                variant={isPaid ? 'outline' : 'primary'}
-                fullWidth
-                onClick={() => onRowClick(row)}
-                className="mt-auto"
-              >
+              <Button variant={isPaid ? 'outline' : 'primary'} fullWidth onClick={() => onRowClick(row)} className="mt-auto">
                 {isPaid
                   ? ADVANCED_PAYMENTS_MESSAGES.clientCards.viewDetails
                   : ADVANCED_PAYMENTS_MESSAGES.clientCards.updatePayment}

@@ -71,8 +71,7 @@ const buildInvoicePayloadBase = (values: VatInvoiceEditValues) => ({
   counterparty_id_type: values.counterparty_id_type || inferCounterpartyIdType(values.counterparty_id),
 })
 
-export const toInvoiceEditPayload = (values: VatInvoiceEditValues): UpdateVatInvoicePayload =>
-  buildInvoicePayloadBase(values)
+export const toInvoiceEditPayload = (values: VatInvoiceEditValues): UpdateVatInvoicePayload => buildInvoicePayloadBase(values)
 
 export const toInvoiceRowPayload = (values: VatInvoiceRowValues): CreateVatInvoicePayload => ({
   invoice_type: values.invoice_type,

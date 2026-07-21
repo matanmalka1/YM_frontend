@@ -34,13 +34,7 @@ export const StateCard: React.FC<StateCardProps> = ({
   return (
     <Card className={cn(!isError && 'border-dashed', className)} variant="elevated">
       <div className={cn('flex flex-col items-center justify-center px-6 text-center', isCompact ? 'py-4' : 'py-12')}>
-        <div
-          className={cn(
-            'relative animate-scale-in',
-            isCompact ? 'mb-3' : 'mb-6',
-            isIllustration && !isCompact && 'mb-8',
-          )}
-        >
+        <div className={cn('relative animate-scale-in', isCompact ? 'mb-3' : 'mb-6', isIllustration && !isCompact && 'mb-8')}>
           {isIllustration && (
             <div className="absolute inset-0 -z-10">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-primary-100 rounded-full opacity-40 animate-pulse" />
@@ -75,10 +69,7 @@ export const StateCard: React.FC<StateCardProps> = ({
 
         {title && (
           <h3
-            className={cn(
-              'mb-3 font-semibold text-gray-900',
-              isCompact ? 'text-sm' : isError ? 'text-2xl font-bold' : 'text-xl',
-            )}
+            className={cn('mb-3 font-semibold text-gray-900', isCompact ? 'text-sm' : isError ? 'text-2xl font-bold' : 'text-xl')}
           >
             {title}
           </h3>

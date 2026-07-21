@@ -40,11 +40,7 @@ export const DatePickerCalendar: React.FC<DatePickerCalendarProps> = ({
   }))
 
   return (
-    <div
-      ref={containerRef}
-      className={cn('rounded-xl border border-gray-200 bg-white shadow-lg', className)}
-      style={style}
-    >
+    <div ref={containerRef} className={cn('rounded-xl border border-gray-200 bg-white shadow-lg', className)} style={style}>
       <div className="p-3">
         <div className="flex items-center justify-between mb-3">
           <button

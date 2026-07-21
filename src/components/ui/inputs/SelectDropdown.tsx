@@ -4,11 +4,7 @@ import { Check, ChevronDown } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { getOverlayPortalOffset, useOverlayPortalContainer } from '../overlays/OverlayPortalContext'
 import { useDismissibleLayer } from '../overlays/useDismissibleLayer'
-import {
-  getSelectDropdownDisplay,
-  getSelectDropdownOptionId,
-  type SelectDropdownOption,
-} from './SelectDropdown.helpers'
+import { getSelectDropdownDisplay, getSelectDropdownOptionId, type SelectDropdownOption } from './SelectDropdown.helpers'
 
 interface SelectDropdownProps {
   value?: string | number | readonly string[]
@@ -247,12 +243,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
       >
-        <span
-          className={cn(
-            'flex-1 truncate text-right',
-            selectedDisplay.isPlaceholder ? 'text-gray-400' : 'text-gray-800',
-          )}
-        >
+        <span className={cn('flex-1 truncate text-right', selectedDisplay.isPlaceholder ? 'text-gray-400' : 'text-gray-800')}>
           {selectedDisplay.label}
         </span>
         <ChevronDown className={cn('shrink-0 text-gray-400', iconSizeClasses[size])} />

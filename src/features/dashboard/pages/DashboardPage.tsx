@@ -108,10 +108,7 @@ export const DashboardPage: React.FC = () => {
           {/* Right column: charges + insights + season + quick actions */}
           <div className="flex flex-col gap-5 min-w-0">
             {dashboard.data && (
-              <OpenChargesCard
-                count={dashboard.data.open_charges_count}
-                amountIls={dashboard.data.open_charges_amount_ils}
-              />
+              <OpenChargesCard count={dashboard.data.open_charges_count} amountIls={dashboard.data.open_charges_amount_ils} />
             )}
             {vatStats && <SeasonInsightsCarousel vatStats={vatStats} />}
             <QuickActionsPanel onOpenModal={setActiveCreateModal} />

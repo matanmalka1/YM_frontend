@@ -44,12 +44,7 @@ export const AnnualReportOverviewTab: React.FC<Props> = ({
           <ReportMetaGrid report={report} />
         </Card>
         <Card title={ANNUAL_REPORTS_MESSAGES.overviewSection.updateDataCardTitle} size="compact">
-          <AnnualReportDetailForm
-            detail={detail}
-            onSave={onDetailSave}
-            onDirtyChange={onDirtyChange}
-            submitRef={submitRef}
-          />
+          <AnnualReportDetailForm detail={detail} onSave={onDetailSave} onDirtyChange={onDirtyChange} submitRef={submitRef} />
         </Card>
       </div>
 
@@ -65,11 +60,7 @@ export const AnnualReportOverviewTab: React.FC<Props> = ({
             <BarChart3 className="h-4 w-4 text-gray-400" />
             <span>{ANNUAL_REPORTS_MESSAGES.overviewSection.plSummaryTitle}</span>
           </div>
-          {plExpanded ? (
-            <ChevronUp className="h-4 w-4 text-gray-400" />
-          ) : (
-            <ChevronDown className="h-4 w-4 text-gray-400" />
-          )}
+          {plExpanded ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400" />}
         </Button>
         {plExpanded && (
           <div className="border-t border-gray-100 px-5 pb-5 pt-4">

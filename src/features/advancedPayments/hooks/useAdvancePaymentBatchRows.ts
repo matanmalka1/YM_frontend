@@ -2,11 +2,7 @@ import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
-import type {
-  AdvancePaymentDueDateGroup,
-  AdvancePaymentStatus,
-  ListAdvancePaymentsOverviewParams,
-} from '../api/contracts'
+import type { AdvancePaymentDueDateGroup, AdvancePaymentStatus, ListAdvancePaymentsOverviewParams } from '../api/contracts'
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 
 export const ADVANCE_PAYMENT_BATCH_PAGE_SIZE = PAGE_SIZE_SM
@@ -47,9 +43,7 @@ export const useAdvancePaymentBatchRows = ({
     staleTime: QUERY_STALE_TIME.default,
   })
 
-  const rows = (data?.items ?? []).toSorted(
-    (first, second) => Number(second.missing_turnover) - Number(first.missing_turnover),
-  )
+  const rows = (data?.items ?? []).toSorted((first, second) => Number(second.missing_turnover) - Number(first.missing_turnover))
 
   return {
     page,

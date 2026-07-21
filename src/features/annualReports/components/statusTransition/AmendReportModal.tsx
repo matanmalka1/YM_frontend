@@ -8,14 +8,7 @@ import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../../errorMessages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 
-export const AmendReportModal = ({
-  open,
-  reason,
-  isPending,
-  onReasonChange,
-  onClose,
-  onSubmit,
-}: AmendReportModalProps) => {
+export const AmendReportModal = ({ open, reason, isPending, onReasonChange, onClose, onSubmit }: AmendReportModalProps) => {
   const trimmedReason = reason.trim()
   const isReasonValid = isValidAmendReason(trimmedReason)
   const showValidation = trimmedReason.length > 0 && !isReasonValid
@@ -44,9 +37,7 @@ export const AmendReportModal = ({
         placeholder={ANNUAL_REPORTS_MESSAGES.amendModal.reasonPlaceholder(AMEND_REASON_MIN_LENGTH)}
       />
       {showValidation && (
-        <p className="mt-1 text-xs text-negative-500">
-          {ANNUAL_REPORTS_ERROR_MESSAGES.amend.minLength(AMEND_REASON_MIN_LENGTH)}
-        </p>
+        <p className="mt-1 text-xs text-negative-500">{ANNUAL_REPORTS_ERROR_MESSAGES.amend.minLength(AMEND_REASON_MIN_LENGTH)}</p>
       )}
     </Modal>
   )

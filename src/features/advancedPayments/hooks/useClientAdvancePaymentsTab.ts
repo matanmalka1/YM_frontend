@@ -43,8 +43,7 @@ export const useClientAdvancePaymentsTab = ({ clientRecordId }: UseClientAdvance
     queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.clientYear(clientRecordId, taxYear) })
 
   const generateMutation = useMutation({
-    mutationFn: (periodMonthsCount: 1 | 2) =>
-      advancePaymentsApi.generateSchedule(clientRecordId, year, periodMonthsCount),
+    mutationFn: (periodMonthsCount: 1 | 2) => advancePaymentsApi.generateSchedule(clientRecordId, year, periodMonthsCount),
     onSuccess: (data) => {
       toast.success(data.created > 0 ? `נוצרו ${data.created} מקדמות` : 'הכול קיים')
       void invalidateClientYear()
@@ -63,9 +62,7 @@ export const useClientAdvancePaymentsTab = ({ clientRecordId }: UseClientAdvance
   // Ids come from the rows actually on screen, never from a server-side filter:
   // this command writes to every row it is given, so nothing invisible is included.
   const readyToSnapshotIds = rows
-    .filter(
-      (row) => row.turnover_amount == null && row.status !== 'paid' && row.available_turnover?.source === 'vat_filed',
-    )
+    .filter((row) => row.turnover_amount == null && row.status !== 'paid' && row.available_turnover?.source === 'vat_filed')
     .map((row) => row.id)
 
   const refreshTurnoverBulkMutation = useMutation({

@@ -30,4 +30,11 @@ export { ClientVatWorkItemDetail } from './pages/ClientVatWorkItemDetailPage'
 export { Clients } from './pages/ClientsPage'
 export { extractClientErrorCode } from './utils/clientErrors'
 export type { ClientStatus, EntityType } from './api/contracts'
-export type { ClientRecordResponse, ClientRecordListItem, ClientSidebarResponse, UpdateClientPayload, BusinessResponse, BusinessStatus } from './api'
+export type {
+  ClientRecordResponse,
+  ClientRecordListItem,
+  ClientSidebarResponse,
+  UpdateClientPayload,
+  BusinessResponse,
+  BusinessStatus,
+} from './api'

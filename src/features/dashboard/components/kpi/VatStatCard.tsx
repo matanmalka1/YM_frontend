@@ -27,13 +27,7 @@ export const VatStatCard = ({ title, unit, icon: Icon, stat, href, className }: 
   const { iconBg, value: pctClass } = semanticStatToneClasses[tone]
 
   const content = (
-    <Card
-      variant="soft"
-      size="compact"
-      interactive={Boolean(href)}
-      bodyClassName="flex flex-col gap-3"
-      className={className}
-    >
+    <Card variant="soft" size="compact" interactive={Boolean(href)} bodyClassName="flex flex-col gap-3" className={className}>
       <div className="flex items-center gap-3">
         <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl', iconBg)}>
           <Icon className="h-4 w-4" />

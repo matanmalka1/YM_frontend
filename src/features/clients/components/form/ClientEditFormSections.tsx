@@ -72,9 +72,7 @@ export const ClientIdentitySection = ({
       />
       <ReadonlyField
         label={CLIENTS_MESSAGES.edit.idNumberType}
-        value={
-          client.id_number_type ? CLIENT_ID_NUMBER_TYPE_LABELS[client.id_number_type] : CLIENTS_MESSAGES.edit.notDefined
-        }
+        value={client.id_number_type ? CLIENT_ID_NUMBER_TYPE_LABELS[client.id_number_type] : CLIENTS_MESSAGES.edit.notDefined}
         help={CLIENTS_MESSAGES.edit.idNumberTypeHelp}
       />
     </div>
@@ -210,11 +208,7 @@ export const ClientTaxProfileSection = ({
         />
         <ReadonlyField
           label={CLIENTS_MESSAGES.edit.advanceRateUpdatedAt}
-          value={
-            client.advance_rate_updated_at
-              ? formatDate(client.advance_rate_updated_at)
-              : CLIENTS_MESSAGES.edit.notAvailable
-          }
+          value={client.advance_rate_updated_at ? formatDate(client.advance_rate_updated_at) : CLIENTS_MESSAGES.edit.notAvailable}
           help={CLIENTS_MESSAGES.edit.advanceRateUpdatedAtHelp}
         />
         <Input

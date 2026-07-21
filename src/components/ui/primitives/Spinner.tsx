@@ -18,11 +18,7 @@ export const Spinner: React.FC<SpinnerProps> = ({ size = 'md', className, label 
     role="status"
     aria-label={label}
     aria-hidden={label ? undefined : true}
-    className={cn(
-      'animate-spin rounded-full border-2 border-gray-200 border-t-primary-600',
-      sizeClass[size],
-      className,
-    )}
+    className={cn('animate-spin rounded-full border-2 border-gray-200 border-t-primary-600', sizeClass[size], className)}
   />
 )
 

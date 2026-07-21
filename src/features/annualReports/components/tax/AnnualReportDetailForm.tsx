@@ -20,12 +20,7 @@ const toFormValues = (detail: AnnualReportDetail | null): AnnualReportDetailForm
   internal_notes: detail?.internal_notes ?? '',
 })
 
-export const AnnualReportDetailForm: React.FC<AnnualReportDetailFormProps> = ({
-  detail,
-  onSave,
-  onDirtyChange,
-  submitRef,
-}) => {
+export const AnnualReportDetailForm: React.FC<AnnualReportDetailFormProps> = ({ detail, onSave, onDirtyChange, submitRef }) => {
   const onDirtyChangeRef = useRef(onDirtyChange)
   onDirtyChangeRef.current = onDirtyChange
 

@@ -9,7 +9,6 @@ import type { SearchEnumFilters } from './utils/searchUrlValues'
 export interface SearchFilters extends SearchEnumFilters {
   search: string
   client_record_id: string
-  id_number: string
   binder_number: string
   page: number
   page_size: number
@@ -35,19 +34,21 @@ interface SearchTextFilterDraft {
 export interface SearchFiltersBarProps {
   filters: SearchFilters
   textDrafts: {
-    id_number: SearchTextFilterDraft
     binder_number: SearchTextFilterDraft
   }
-  hydratedClient: ClientPickerValue | null
   onFilterChange: (name: keyof SearchFilters, value: string) => void
   onReset: () => void
   isOpen: boolean
   onToggle: () => void
 }
 
+/**
+ * What the advanced panel holds, and what its badge counts. `client_record_id` is not here: it
+ * picks a client rather than narrowing the list, so it lives beside the search box, not inside
+ * the filters. There is no ID-number filter either — the typed term already matches ID numbers,
+ * and a second input over the same column only raised the question of how the two combined.
+ */
 export const SEARCH_ADVANCED_FILTER_KEYS: (keyof SearchFilters)[] = [
-  'client_record_id',
-  'id_number',
   'binder_number',
   'client_status',
   'entity_type',

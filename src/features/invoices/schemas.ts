@@ -30,9 +30,7 @@ export const getInvoiceAttachDefaultValues = (): InvoiceAttachFormValues => {
   return {
     provider: '',
     external_invoice_id: '',
-    issued_at: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(
-      now.getMinutes(),
-    )}`,
+    issued_at: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`,
     document_url: '',
   }
 }

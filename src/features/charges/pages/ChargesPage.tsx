@@ -26,19 +26,10 @@ export const Charges: React.FC = () => {
   )
 
   return (
-    <PageStateGuard
-      isLoading={status.isLoading}
-      error={status.error}
-      header={header}
-      loadingMessage={status.loadingMessage}
-    >
+    <PageStateGuard isLoading={status.isLoading} error={status.error} header={header} loadingMessage={status.loadingMessage}>
       <ChargesStatsSection stats={stats.stats} isAdvisor={stats.isAdvisor} />
 
-      <FilterPanel
-        {...filters}
-        title={CHARGES_MESSAGES.list.filterTitle}
-        subtitle={CHARGES_MESSAGES.list.filterSubtitle}
-      />
+      <FilterPanel {...filters} title={CHARGES_MESSAGES.list.filterTitle} subtitle={CHARGES_MESSAGES.list.filterSubtitle} />
 
       <ChargesTableBlock
         charges={table.data}

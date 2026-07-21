@@ -101,8 +101,7 @@ export const buildClientColumns = ({
       onToggleSelect,
       onToggleAll,
       getId: (client) => client.id,
-      getItemAriaLabel: (client) =>
-        CLIENTS_MESSAGES.list.selectAriaLabel(formatClientOfficeId(client.office_client_number)),
+      getItemAriaLabel: (client) => CLIENTS_MESSAGES.list.selectAriaLabel(formatClientOfficeId(client.office_client_number)),
     }),
     ...dataColumns,
   ]

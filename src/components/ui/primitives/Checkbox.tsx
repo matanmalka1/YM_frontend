@@ -59,9 +59,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       <label className={cn('flex cursor-pointer select-none items-start gap-2', containerClassName, className)}>
         {checkbox}
         <span className="min-w-0">
-          {label ? (
-            <span className={cn('block font-medium text-gray-700', labelSizeClasses[size])}>{label}</span>
-          ) : null}
+          {label ? <span className={cn('block font-medium text-gray-700', labelSizeClasses[size])}>{label}</span> : null}
           {description ? <span className="block text-xs text-gray-500">{description}</span> : null}
         </span>
       </label>

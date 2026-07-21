@@ -152,9 +152,7 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
               disabled={businessesLoading || isClientScopedType}
               options={businessOptions}
             />
-            {isClientScopedType && (
-              <p className="mt-1 text-xs text-gray-400">{DOCUMENTS_MESSAGES.form.clientScopedTypeNote}</p>
-            )}
+            {isClientScopedType && <p className="mt-1 text-xs text-gray-400">{DOCUMENTS_MESSAGES.form.clientScopedTypeNote}</p>}
           </div>
         )}
       </div>
@@ -230,9 +228,7 @@ export const DocumentsUploadCard: React.FC<DocumentsUploadCardProps> = ({
             e.target.value = ''
           }}
         />
-        {(fileError || errors.file?.message) && (
-          <p className="text-xs text-negative-600">{fileError ?? errors.file?.message}</p>
-        )}
+        {(fileError || errors.file?.message) && <p className="text-xs text-negative-600">{fileError ?? errors.file?.message}</p>}
       </div>
 
       {uploadError && <p className="text-sm text-negative-600">{uploadError}</p>}

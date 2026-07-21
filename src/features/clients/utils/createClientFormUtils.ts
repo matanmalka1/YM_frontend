@@ -88,14 +88,8 @@ export const buildCreateClientReviewModel = (
     isCompany,
     isExempt,
     entityLabel: values.entity_type ? ENTITY_TYPE_LABELS[values.entity_type] : null,
-    vatLabel: isExempt
-      ? 'פטור'
-      : values.vat_reporting_frequency
-        ? VAT_TYPE_LABELS[values.vat_reporting_frequency]
-        : null,
-    advanceLabel: values.advance_payment_frequency
-      ? ADVANCE_PAYMENT_FREQUENCY_LABELS[values.advance_payment_frequency]
-      : null,
+    vatLabel: isExempt ? 'פטור' : values.vat_reporting_frequency ? VAT_TYPE_LABELS[values.vat_reporting_frequency] : null,
+    advanceLabel: values.advance_payment_frequency ? ADVANCE_PAYMENT_FREQUENCY_LABELS[values.advance_payment_frequency] : null,
     advisorLabel: advisorOptions.find((option) => option.value === values.accountant_id)?.label ?? null,
     businessDisplayName:
       (isCompany ? values.full_name?.trim() : values.business_name?.trim() || values.full_name?.trim()) || null,

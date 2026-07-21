@@ -21,7 +21,11 @@ interface SearchParamFilters {
  * selection transitions can be verified without a router, and so every writer below goes
  * through one place rather than cloning and mutating params of its own.
  */
-export const nextFilterParams = (current: URLSearchParams, updates: Record<string, string>, resetPage = true): URLSearchParams => {
+export const nextFilterParams = (
+  current: URLSearchParams,
+  updates: Record<string, string>,
+  resetPage = true,
+): URLSearchParams => {
   const next = new URLSearchParams(current)
   for (const [key, value] of Object.entries(updates)) {
     if (value) next.set(key, value)
@@ -32,7 +36,8 @@ export const nextFilterParams = (current: URLSearchParams, updates: Record<strin
 }
 
 /** The URL a reset produces: nothing but the given defaults, back on page one. */
-export const resetFilterParams = (defaults: Record<string, string> = {}): URLSearchParams => nextFilterParams(new URLSearchParams(), defaults)
+export const resetFilterParams = (defaults: Record<string, string> = {}): URLSearchParams =>
+  nextFilterParams(new URLSearchParams(), defaults)
 
 export const useSearchParamFilters = (): SearchParamFilters => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -77,7 +82,10 @@ export const useSearchParamFilters = (): SearchParamFilters => {
   const getParam = useCallback((key: string): string => searchParams.get(key) ?? '', [searchParams])
 
   /** Reads the global `page` param only. Do not use for namespaced page params (e.g. audit trail). */
-  const getPage = useCallback((defaultPage = 1): number => parsePositiveInt(searchParams.get('page'), defaultPage), [searchParams])
+  const getPage = useCallback(
+    (defaultPage = 1): number => parsePositiveInt(searchParams.get('page'), defaultPage),
+    [searchParams],
+  )
 
   return {
     searchParams,

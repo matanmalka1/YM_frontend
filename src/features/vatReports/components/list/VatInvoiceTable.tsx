@@ -118,9 +118,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
       header: VAT_MESSAGES.invoices.documentType,
       render: (inv) =>
         inv.document_type ? (
-          <Badge variant="neutral">
-            {DOCUMENT_TYPE_LABELS[inv.document_type as VatDocumentTypeValue] ?? inv.document_type}
-          </Badge>
+          <Badge variant="neutral">{DOCUMENT_TYPE_LABELS[inv.document_type as VatDocumentTypeValue] ?? inv.document_type}</Badge>
         ) : (
           '—'
         ),
@@ -158,9 +156,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
       header: VAT_MESSAGES.invoices.recognitionPercent,
       className: 'whitespace-nowrap',
       render: (inv) => (
-        <span className={getVatDeductionRateClass(inv.deduction_rate)}>
-          {getVatDeductionRateLabel(inv.deduction_rate)}
-        </span>
+        <span className={getVatDeductionRateClass(inv.deduction_rate)}>{getVatDeductionRateLabel(inv.deduction_rate)}</span>
       ),
     },
     moneyColumn({
@@ -255,9 +251,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
               </span>
             </td>
             <td className="px-3 py-2 font-mono tabular-nums font-bold text-gray-900">{formatVatAmount(totalNet)}</td>
-            <td className="px-3 py-2 font-mono tabular-nums font-semibold text-gray-700">
-              {formatVatAmount(totalVat)}
-            </td>
+            <td className="px-3 py-2 font-mono tabular-nums font-semibold text-gray-700">{formatVatAmount(totalVat)}</td>
             {isExpense && (
               <td className={`px-3 py-2 font-mono tabular-nums font-bold ${semanticMonoToneClasses.positive}`}>
                 {formatVatAmount(totalDeductibleVat)}

@@ -37,8 +37,7 @@ export const SEARCH_MESSAGES = {
   filters: {
     advanced: 'פילטרים מתקדמים',
     clientFallback: (id: string) => `לקוח #${id}`,
-    idNumber: 'ת.ז / ח.פ',
-    idNumberPlaceholder: 'מספר מזהה',
+    jumpToClient: 'קפיצה ללקוח',
     binderNumber: 'מספר קלסר',
     binderNumberPlaceholder: 'לדוגמה: 100020/1',
     clientStatus: 'סטטוס לקוח',

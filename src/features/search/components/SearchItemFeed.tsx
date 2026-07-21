@@ -26,7 +26,14 @@ interface SearchItemFeedProps {
  * Every item of the selected client, in one uniform list. Picking a type chip swaps the
  * mixed preview for that type's full, paginated list.
  */
-export const SearchItemFeed: React.FC<SearchItemFeedProps> = ({ chips, activeType, onTypeChange, items, isLoading, pagination }) => {
+export const SearchItemFeed: React.FC<SearchItemFeedProps> = ({
+  chips,
+  activeType,
+  onTypeChange,
+  items,
+  isLoading,
+  pagination,
+}) => {
   if (chips.length === 0) {
     return <StateCard icon={Inbox} title={SEARCH_MESSAGES.feed.emptyTitle} message={SEARCH_MESSAGES.feed.emptyMessage} />
   }
@@ -55,7 +62,12 @@ export const SearchItemFeed: React.FC<SearchItemFeedProps> = ({ chips, activeTyp
       )}
 
       {pagination && !isLoading && pagination.totalPages > 1 && (
-        <PaginationCard page={pagination.page} totalPages={pagination.totalPages} total={pagination.total} onPageChange={pagination.onPageChange} />
+        <PaginationCard
+          page={pagination.page}
+          totalPages={pagination.totalPages}
+          total={pagination.total}
+          onPageChange={pagination.onPageChange}
+        />
       )}
     </section>
   )

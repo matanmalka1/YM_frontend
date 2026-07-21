@@ -89,8 +89,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   const submitForm = (values: TaskFormValues) => {
     if (!onSubmit) return
     if (isLinkMode) {
-      if (!hasExistingSource && pendingSource)
-        onSubmit({ source_domain: pendingSource.domain, source_id: pendingSource.id })
+      if (!hasExistingSource && pendingSource) onSubmit({ source_domain: pendingSource.domain, source_id: pendingSource.id })
       return
     }
     if (readonly) return

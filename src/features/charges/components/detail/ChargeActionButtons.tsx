@@ -30,35 +30,17 @@ export const ChargeActionButtons = ({
       </Button>
     )}
     {canIssue(actions) && (
-      <Button
-        size={size}
-        variant="primary"
-        icon={<CircleDollarSign className="h-4 w-4" />}
-        disabled={disabled}
-        onClick={onIssue}
-      >
+      <Button size={size} variant="primary" icon={<CircleDollarSign className="h-4 w-4" />} disabled={disabled} onClick={onIssue}>
         {CHARGES_MESSAGES.actions.issue}
       </Button>
     )}
     {canMarkPaid(actions) && (
-      <Button
-        size={size}
-        variant="primary"
-        icon={<Check className="h-4 w-4" />}
-        disabled={disabled}
-        onClick={onMarkPaid}
-      >
+      <Button size={size} variant="primary" icon={<Check className="h-4 w-4" />} disabled={disabled} onClick={onMarkPaid}>
         {CHARGES_MESSAGES.actions.markPaid}
       </Button>
     )}
     {canCancel(actions) && (
-      <Button
-        size={size}
-        variant="outline"
-        icon={<XCircle className="h-4 w-4" />}
-        disabled={disabled}
-        onClick={onCancel}
-      >
+      <Button size={size} variant="outline" icon={<XCircle className="h-4 w-4" />} disabled={disabled} onClick={onCancel}>
         {CHARGES_MESSAGES.actions.cancelCharge}
       </Button>
     )}

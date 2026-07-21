@@ -105,11 +105,7 @@ export const vatReportsApi = {
     return response.data
   },
 
-  updateInvoice: async (
-    id: number,
-    invoiceId: number,
-    payload: UpdateVatInvoicePayload,
-  ): Promise<VatInvoiceResponse> => {
+  updateInvoice: async (id: number, invoiceId: number, payload: UpdateVatInvoicePayload): Promise<VatInvoiceResponse> => {
     const response = await api.patch<VatInvoiceResponse>(VAT_ENDPOINTS.vatWorkItemInvoiceById(id, invoiceId), payload)
     return response.data
   },
@@ -142,10 +138,7 @@ export const vatReportsApi = {
     return response.data
   },
 
-  listGroupItems: async (
-    groupKey: string,
-    params: VatWorkItemGroupItemsParams = {},
-  ): Promise<VatWorkItemGroupItemsResponse> => {
+  listGroupItems: async (groupKey: string, params: VatWorkItemGroupItemsParams = {}): Promise<VatWorkItemGroupItemsResponse> => {
     const response = await api.get<VatWorkItemGroupItemsResponse>(VAT_ENDPOINTS.vatWorkItemGroupItems(groupKey), {
       params: toQueryParams(params),
     })
@@ -161,8 +154,7 @@ export const vatReportsApi = {
     const filenameMatch = contentDisposition?.match(/filename="?([^";]+)"?/)
     const ext = format === 'excel' ? 'xlsx' : 'pdf'
     const filename = filenameMatch?.[1] || `vat_client_${clientId}_${year}.${ext}`
-    const mimeType =
-      format === 'excel' ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'application/pdf'
+    const mimeType = format === 'excel' ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'application/pdf'
     const contentType = response.headers['content-type']
     downloadBlob(response.data, filename, typeof contentType === 'string' ? contentType : mimeType)
   },

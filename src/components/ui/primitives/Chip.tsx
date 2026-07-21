@@ -88,13 +88,7 @@ export const Chip: React.FC<ChipProps> = ({
   </button>
 )
 
-export const ChipLabel: React.FC<ChipLabelProps> = ({
-  tone = 'neutral',
-  size = 'sm',
-  className,
-  children,
-  ...props
-}) => (
+export const ChipLabel: React.FC<ChipLabelProps> = ({ tone = 'neutral', size = 'sm', className, children, ...props }) => (
   <span
     className={cn(
       'inline-flex items-center rounded border font-semibold',

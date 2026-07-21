@@ -32,12 +32,7 @@ import { TaxDashboardPage } from '../features/taxDashboard'
 import { TasksPage } from '../features/tasks'
 import { Users } from '../features/users'
 import { VatWorkItemDetail, VatWorkItems } from '../features/vatReports'
-import {
-  AdvancePaymentReportView,
-  AgingReportView,
-  AnnualReportStatusView,
-  VatComplianceReportView,
-} from '../features/reports'
+import { AdvancePaymentReportView, AgingReportView, AnnualReportStatusView, VatComplianceReportView } from '../features/reports'
 
 const AuthExpiredNavigationHandler: React.FC = () => {
   const navigate = useNavigate()
@@ -162,10 +157,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="clients/:clientId/vat" element={<ClientDetails initialTab="vat" />} />
             <Route path="clients/:clientId/vat/:workItemId" element={<ClientVatWorkItemDetail />} />
             <Route path="clients/:clientId/tax-calendar" element={<ClientDetails initialTab="tax-calendar" />} />
-            <Route
-              path="clients/:clientId/advance-payments"
-              element={<ClientDetails initialTab="advance-payments" />}
-            />
+            <Route path="clients/:clientId/advance-payments" element={<ClientDetails initialTab="advance-payments" />} />
             <Route path="clients/:clientId/advance-payments/:paymentId" element={<ClientAdvancePaymentDetail />} />
             <Route path="clients/:clientId/annual-reports" element={<ClientDetails initialTab="annual-reports" />} />
             <Route path="clients/:clientId/annual-reports/:reportId" element={<ClientAnnualReportDetail />} />

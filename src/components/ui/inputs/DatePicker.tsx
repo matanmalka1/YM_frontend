@@ -189,9 +189,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
             !disabled && 'hover:border-gray-400',
           )}
         >
-          <span className={cn('flex-1 text-right', !displayValue && 'text-gray-400')}>
-            {displayValue || 'בחר תאריך'}
-          </span>
+          <span className={cn('flex-1 text-right', !displayValue && 'text-gray-400')}>{displayValue || 'בחר תאריך'}</span>
           <CalendarIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
         </button>
 

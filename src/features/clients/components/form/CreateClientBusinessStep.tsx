@@ -13,13 +13,7 @@ interface Props {
   register: UseFormRegister<CreateClientFormValues>
 }
 
-export const CreateClientBusinessStep: React.FC<Props> = ({
-  businessOpenedAtField,
-  disabled,
-  errors,
-  isCompany,
-  register,
-}) => (
+export const CreateClientBusinessStep: React.FC<Props> = ({ businessOpenedAtField, disabled, errors, isCompany, register }) => (
   <div className="space-y-4">
     <p className="text-xs text-gray-500">{CLIENTS_MESSAGES.createBusinessStep.requiredFieldsNote}</p>
     <div className="space-y-4 border-t border-gray-200 pt-4">

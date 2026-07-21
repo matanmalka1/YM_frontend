@@ -30,10 +30,7 @@ export const ClientTimelineTab: React.FC<ClientTimelineTabProps> = ({ clientId }
 
   // Default expansion derived from the current filters/groups (no effect).
   const defaultExpandedKeys = useMemo(
-    () =>
-      filters.hasActiveFilters
-        ? new Set(timelineGroups.map((g) => g.date))
-        : getDefaultOpenTimelineGroups(timelineGroups),
+    () => (filters.hasActiveFilters ? new Set(timelineGroups.map((g) => g.date)) : getDefaultOpenTimelineGroups(timelineGroups)),
     [timelineGroups, filters.hasActiveFilters],
   )
   const [overrideKeys, setOverrideKeys] = useState<Set<string> | null>(null)

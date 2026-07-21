@@ -18,14 +18,7 @@ interface AddLineTriggerButtonProps {
 }
 
 const AddLineTriggerButton: React.FC<AddLineTriggerButtonProps> = ({ label, onClick }) => (
-  <Button
-    type="button"
-    variant="ghost"
-    size="xs"
-    icon={<Plus className="h-3.5 w-3.5" />}
-    onClick={onClick}
-    className="mt-1"
-  >
+  <Button type="button" variant="ghost" size="xs" icon={<Plus className="h-3.5 w-3.5" />} onClick={onClick} className="mt-1">
     {label}
   </Button>
 )
@@ -37,12 +30,7 @@ interface FinancialSelectFieldProps {
   placeholder?: string
 }
 
-export const FinancialSelectField: React.FC<FinancialSelectFieldProps> = ({
-  value,
-  onChange,
-  options,
-  placeholder,
-}) => (
+export const FinancialSelectField: React.FC<FinancialSelectFieldProps> = ({ value, onChange, options, placeholder }) => (
   <Select
     value={value}
     onChange={(event) => onChange(event.target.value)}
@@ -104,11 +92,7 @@ export const FinancialAmountDescriptionFields: React.FC<FinancialAmountDescripti
       {...MONEY_INPUT_PROPS}
       placeholder={FIELD_PLACEHOLDERS.amount}
     />
-    <FinancialInputField
-      value={description}
-      onChange={onDescriptionChange}
-      placeholder={FIELD_PLACEHOLDERS.description}
-    />
+    <FinancialInputField value={description} onChange={onDescriptionChange} placeholder={FIELD_PLACEHOLDERS.description} />
   </>
 )
 
@@ -194,11 +178,7 @@ export const FinancialAddFormShell: React.FC<FinancialAddFormShellProps> = ({
       <div className={INLINE_ADD_FORM_CLASS}>
         {children}
         <FinancialFormError error={error} />
-        <FinancialFormActions
-          isSubmitting={isSubmitting}
-          submitLabel={GLOBAL_UI_MESSAGES.actions.add}
-          onCancel={onCancel}
-        />
+        <FinancialFormActions isSubmitting={isSubmitting} submitLabel={GLOBAL_UI_MESSAGES.actions.add} onCancel={onCancel} />
       </div>
     </form>
   )

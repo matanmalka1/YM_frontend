@@ -41,8 +41,7 @@ export const parseWorkQueueSourceType = (value: string | null): WorkQueueSourceT
 const isWorkQueueUrgency = (value: string | null): value is WorkQueueUrgency =>
   value !== null && workQueueUrgencyValues.includes(value as WorkQueueUrgency)
 
-export const parseWorkQueueUrgency = (value: string | null): WorkQueueUrgency | null =>
-  isWorkQueueUrgency(value) ? value : null
+export const parseWorkQueueUrgency = (value: string | null): WorkQueueUrgency | null => (isWorkQueueUrgency(value) ? value : null)
 
 export const workQueueSourceTypeLabels: Record<WorkQueueSourceType, string> = {
   vat_work_item: 'דוח מע"מ',

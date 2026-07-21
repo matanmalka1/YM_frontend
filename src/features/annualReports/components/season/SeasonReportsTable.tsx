@@ -114,9 +114,7 @@ export const SeasonReportsTable: React.FC<SeasonReportsTableProps> = ({ reports,
     isLoading={isLoading}
     onRowClick={onSelect}
     emptyMessage={
-      taxYear
-        ? ANNUAL_REPORTS_MESSAGES.season.noReportsForYear(taxYear)
-        : ANNUAL_REPORTS_MESSAGES.season.noReportsThisYear
+      taxYear ? ANNUAL_REPORTS_MESSAGES.season.noReportsForYear(taxYear) : ANNUAL_REPORTS_MESSAGES.season.noReportsThisYear
     }
     getRowVariant={(r) => {
       const days = daysUntil(r.filing_deadline)

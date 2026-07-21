@@ -34,9 +34,7 @@ const MonthlyAccordionGroup = memo(
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-sm font-bold text-gray-900">{title}</span>
             {isCurrent && (
-              <span className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-semibold text-primary-700">
-                חודש נוכחי
-              </span>
+              <span className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-semibold text-primary-700">חודש נוכחי</span>
             )}
             <span className="text-sm font-normal text-gray-400">{summary}</span>
             {badges}

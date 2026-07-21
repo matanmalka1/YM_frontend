@@ -24,9 +24,7 @@ export const VatFiledBanner: React.FC<VatFiledBannerProps> = ({
         {byLabel && <span className="font-normal text-positive-700">{VAT_MESSAGES.filedBanner.by(byLabel)}</span>}
         {methodLabel && <span className="font-normal text-positive-600"> · {methodLabel}</span>}
         {submissionReference && (
-          <span className="font-normal text-positive-600">
-            {VAT_MESSAGES.filedBanner.reference(submissionReference)}
-          </span>
+          <span className="font-normal text-positive-600">{VAT_MESSAGES.filedBanner.reference(submissionReference)}</span>
         )}
         {isAmendment && amendsItemId && (
           <span className="font-normal text-positive-600">{VAT_MESSAGES.filedBanner.amendment(amendsItemId)}</span>

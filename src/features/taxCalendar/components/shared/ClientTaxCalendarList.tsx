@@ -96,10 +96,7 @@ const ClientTaxCalendarRow = ({ group, isOpening, errorMessage, isMissing, onOpe
           </p>
           <p className="truncate text-xs font-medium text-gray-500">
             {hasTaxCalendarGroupOverride(group)
-              ? TAX_CALENDAR_MESSAGES.group.officialAndEffectiveDue(
-                  formatDate(group.regulatory_due_date),
-                  effectiveDueDate,
-                )
+              ? TAX_CALENDAR_MESSAGES.group.officialAndEffectiveDue(formatDate(group.regulatory_due_date), effectiveDueDate)
               : TAX_CALENDAR_MESSAGES.group.officialDue(formatDate(group.regulatory_due_date))}
           </p>
         </div>
@@ -126,17 +123,14 @@ const ClientTaxCalendarRow = ({ group, isOpening, errorMessage, isMissing, onOpe
         </Button>
 
         {errorMessage ? <Alert size="sm" variant="error" message={errorMessage} /> : null}
-        {isMissing ? (
-          <Alert size="sm" variant="error" message={TAX_CALENDAR_MESSAGES.clientTab.openUnavailable} />
-        ) : null}
+        {isMissing ? <Alert size="sm" variant="error" message={TAX_CALENDAR_MESSAGES.clientTab.openUnavailable} /> : null}
       </div>
     </li>
   )
 }
 
 export const ClientTaxCalendarList = ({ groups, isLoading, clientRecordId }: ClientTaxCalendarListProps) => {
-  const { openItem, openingEntryId, errorEntryId, errorMessage, missingEntryId } =
-    useOpenClientTaxCalendarItem(clientRecordId)
+  const { openItem, openingEntryId, errorEntryId, errorMessage, missingEntryId } = useOpenClientTaxCalendarItem(clientRecordId)
 
   if (isLoading) return <ClientTaxCalendarListSkeleton />
 

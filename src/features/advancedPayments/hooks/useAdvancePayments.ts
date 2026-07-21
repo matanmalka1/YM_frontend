@@ -6,12 +6,7 @@ import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
 import { useAdvancePaymentMutations } from './useAdvancePaymentMutations'
 
-export const useAdvancePayments = (
-  clientRecordId: number,
-  year: number,
-  statusFilter?: AdvancePaymentStatus[],
-  page = 1,
-) => {
+export const useAdvancePayments = (clientRecordId: number, year: number, statusFilter?: AdvancePaymentStatus[], page = 1) => {
   const queryClient = useQueryClient()
   const qk = advancedPaymentsQK.clientYear(clientRecordId, year)
   const enabled = clientRecordId > 0
@@ -51,10 +46,7 @@ export const useAdvancePayments = (
   return {
     rows,
     isLoading: enabled && listPending,
-    error:
-      enabled && listError
-        ? getErrorMessage(listError, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.listLoad)
-        : null,
+    error: enabled && listError ? getErrorMessage(listError, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.listLoad) : null,
     totalExpected,
     totalPaid,
     total: listData?.total ?? 0,

@@ -4,11 +4,7 @@ import { taskPriorityValues } from './constants/labels'
 import { TASKS_ERROR_MESSAGES } from './errorMessages'
 
 export const taskFormSchema = z.object({
-  title: z
-    .string()
-    .trim()
-    .min(1, TASKS_ERROR_MESSAGES.form.titleRequired)
-    .max(500, TASKS_ERROR_MESSAGES.form.titleTooLong),
+  title: z.string().trim().min(1, TASKS_ERROR_MESSAGES.form.titleRequired).max(500, TASKS_ERROR_MESSAGES.form.titleTooLong),
   description: z.string(),
   priority: z.enum(taskPriorityValues),
   dueDate: z.string(),
