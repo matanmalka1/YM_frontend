@@ -110,6 +110,12 @@ export const BINDERS_MESSAGES = {
     description: 'תיאור',
     receivedBy: 'נקלט ע״י',
   },
+  clientTab: {
+    title: 'קלסרים',
+    subtitle: 'קלסרים המקושרים ללקוח זה',
+    emptyTitle: 'אין קלסרים ללקוח זה',
+    emptyMessage: 'קלסרים יופיעו כאן לאחר קליטת חומר מהלקוח',
+  },
   columns: {
     officeClientNumber: "מס' לקוח",
     idNumber: 'ת.ז / ח.פ',

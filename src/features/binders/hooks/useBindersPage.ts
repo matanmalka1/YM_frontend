@@ -9,7 +9,7 @@ import { useBinderSelection } from './useBinderSelection'
 import { useBinderMutations } from './useBinderMutations'
 import { useBindersPageDialogs } from './useBindersPageDialogs'
 import { useReceiveBinderDrawer } from './useReceiveBinderDrawer'
-import { buildBindersColumns } from '../components/list/BindersColumns'
+import { buildGlobalBinderColumns } from '../components/list/BindersColumns'
 import { BINDER_CAPACITY_STATUS_OPTIONS, BINDER_LOCATION_STATUS_OPTIONS } from '../constants'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { ALL_PERIODS_OPTION } from '@/constants/filterOptions.constants'
@@ -123,7 +123,7 @@ export const useBindersPage = () => {
 
   const columns = useMemo(
     () =>
-      buildBindersColumns({
+      buildGlobalBinderColumns({
         actionLoadingId,
         onReceiveMaterial: (id) => void receiveMaterial(id),
         onMarkFull: (id) => void markFull(id),
