@@ -49,6 +49,7 @@ export const PageHeader = ({ title, description, breadcrumbs, actions, size, den
       title={title}
       subtitle={description}
       size={size ?? (density === 'compact' ? 'md' : 'lg')}
+      headingLevel={1}
       actions={
         actions ? (
           <div className="flex items-center gap-2 animate-slide-in" style={{ animationDelay: staggerDelay(1, 100) }}>

@@ -9,13 +9,27 @@ interface SectionHeaderProps {
   /**
    * xs  — DrawerSection label (uppercase, tracking-wide)
    * sm  — Card header
-   * md  — Compact page header (h2, bold, text-xl)
-   * lg  — PageHeader (h1, bold)
+   * md  — Compact page header (bold, text-xl)
+   * lg  — PageHeader (bold)
    */
   size?: 'xs' | 'sm' | 'md' | 'lg'
+  /**
+   * Heading level is document structure, size is looks — a compact page header
+   * must still be the page's h1. Defaults follow size (lg→h1, md→h2, sm→h3).
+   */
+  headingLevel?: 1 | 2 | 3
   border?: 'bottom' | 'none'
   className?: string
 }
+
+const titleClasses = {
+  lg: 'font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-black md:text-3xl',
+  md: 'text-xl font-bold tracking-tight text-gray-900',
+  sm: 'text-lg font-semibold text-gray-900 tracking-tight',
+  xs: 'text-xs font-semibold uppercase tracking-wide text-gray-400',
+} as const
+
+const defaultTitleTag = { lg: 'h1', md: 'h2', sm: 'h3', xs: 'p' } as const
 
 export const SectionHeader: React.FC<SectionHeaderProps> = ({
   title,
@@ -23,26 +37,22 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   actions,
   icon,
   size = 'sm',
+  headingLevel,
   border = 'none',
   className,
-}) => (
+}) => {
+  const TitleTag = (headingLevel ? `h${headingLevel}` : defaultTitleTag[size]) as
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'p'
+  return (
   <div
     className={cn('flex items-start justify-between gap-4', border === 'bottom' && 'border-b border-gray-100/80 pb-3', className)}
   >
     <div className={cn(icon && 'flex items-center gap-2')}>
       {icon && <span className="shrink-0">{icon}</span>}
-      {title != null &&
-        (size === 'lg' ? (
-          <h1 className="font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-black md:text-3xl">
-            {title}
-          </h1>
-        ) : size === 'md' ? (
-          <h2 className="text-xl font-bold tracking-tight text-gray-900">{title}</h2>
-        ) : size === 'xs' ? (
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">{title}</p>
-        ) : (
-          <h3 className="text-lg font-semibold text-gray-900 tracking-tight">{title}</h3>
-        ))}
+      {title != null && <TitleTag className={titleClasses[size]}>{title}</TitleTag>}
       {subtitle && (
         <div
           className={cn(
@@ -56,6 +66,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
     </div>
     {actions && <div className="shrink-0">{actions}</div>}
   </div>
-)
+  )
+}
 
 SectionHeader.displayName = 'SectionHeader'
