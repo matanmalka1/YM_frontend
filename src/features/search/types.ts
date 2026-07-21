@@ -1,4 +1,3 @@
-import type { ClientPickerValue } from '@/components/shared/client'
 import type { SearchEnumFilters } from './utils/searchUrlValues'
 
 /**
@@ -9,7 +8,6 @@ import type { SearchEnumFilters } from './utils/searchUrlValues'
 export interface SearchFilters extends SearchEnumFilters {
   search: string
   client_record_id: string
-  binder_number: string
   page: number
   page_size: number
 }
@@ -25,17 +23,8 @@ export interface SearchPagination {
   onPageChange: (page: number) => void
 }
 
-/** A URL-backed text filter typed into an input: local draft value + debounced commit. */
-interface SearchTextFilterDraft {
-  value: string
-  onChange: (value: string) => void
-}
-
 export interface SearchFiltersBarProps {
   filters: SearchFilters
-  textDrafts: {
-    binder_number: SearchTextFilterDraft
-  }
   onFilterChange: (name: keyof SearchFilters, value: string) => void
   onReset: () => void
   isOpen: boolean
@@ -43,13 +32,14 @@ export interface SearchFiltersBarProps {
 }
 
 /**
- * What the advanced panel holds, and what its badge counts. `client_record_id` is not here: it
- * picks a client rather than narrowing the list, so it lives beside the search box, not inside
- * the filters. There is no ID-number filter either — the typed term already matches ID numbers,
- * and a second input over the same column only raised the question of how the two combined.
+ * What the advanced panel holds, and what its badge counts — enumerated values only.
+ *
+ * There is exactly one place to type on this page. Identifiers the term already matches (ID
+ * number, binder number) had inputs of their own, which only raised the question of how they
+ * combined with the term, and `client_record_id` had a picker, which was a second client search
+ * beside the one the page is. Selection happens by choosing a match; typing happens once.
  */
 export const SEARCH_ADVANCED_FILTER_KEYS: (keyof SearchFilters)[] = [
-  'binder_number',
   'client_status',
   'entity_type',
   'binder_location_status',

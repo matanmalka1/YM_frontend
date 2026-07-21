@@ -6,6 +6,13 @@ import {
   type BinderLocationStatus,
 } from '@/features/binders'
 
+/**
+ * Filters the page no longer offers. The API still accepts them, and the term already matches
+ * both columns, so an old bookmark is not honoured as a hidden narrowing — it is cleaned out of
+ * the URL and the term stands on its own.
+ */
+export const SEARCH_DROPPED_FILTER_KEYS = ['id_number', 'binder_number'] as const
+
 /** The filters whose values are backed by a backend enum, and are therefore rejectable. */
 export const SEARCH_ENUM_FILTER_KEYS = [
   'client_status',

@@ -8,7 +8,6 @@ import type { SearchFilters } from '../types'
  */
 export const SEARCH_RESOLUTION_FILTER_KEYS = [
   'search',
-  'binder_number',
   'client_status',
   'entity_type',
   'binder_location_status',

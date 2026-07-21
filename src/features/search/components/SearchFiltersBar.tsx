@@ -1,5 +1,4 @@
 import { RotateCcw, SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-react'
-import { Input } from '../../../components/ui/inputs/Input'
 import { Select } from '../../../components/ui/inputs/Select'
 import { Button } from '../../../components/ui/primitives/Button'
 import { Badge } from '@/components/ui/primitives/Badge'
@@ -12,14 +11,7 @@ import { SEARCH_MESSAGES } from '../messages'
 /** Named so the toggle can point at the panel it controls. */
 const ADVANCED_FILTERS_PANEL_ID = 'search-advanced-filters'
 
-export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
-  filters,
-  textDrafts,
-  onFilterChange,
-  onReset,
-  isOpen,
-  onToggle,
-}) => {
+export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({ filters, onFilterChange, onReset, isOpen, onToggle }) => {
   const advancedCount = SEARCH_ADVANCED_FILTER_KEYS.filter((k) => Boolean(filters[k])).length
 
   return (
@@ -46,13 +38,6 @@ export const SearchFiltersBar: React.FC<SearchFiltersBarProps> = ({
       {/* Rendered while collapsed too, so `aria-controls` always points at a real element. */}
       <div id={ADVANCED_FILTERS_PANEL_ID} hidden={!isOpen} className="mt-3 w-full space-y-4 border-t border-gray-100 pt-4">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <Input
-            label={SEARCH_MESSAGES.filters.binderNumber}
-            type="text"
-            value={textDrafts.binder_number.value}
-            onChange={(e) => textDrafts.binder_number.onChange(e.target.value)}
-            placeholder={SEARCH_MESSAGES.filters.binderNumberPlaceholder}
-          />
           <Select
             label={SEARCH_MESSAGES.filters.clientStatus}
             value={filters.client_status}

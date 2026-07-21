@@ -36,10 +36,6 @@ export const SEARCH_MESSAGES = {
   },
   filters: {
     advanced: 'פילטרים מתקדמים',
-    clientFallback: (id: string) => `לקוח #${id}`,
-    jumpToClient: 'קפיצה ללקוח',
-    binderNumber: 'מספר קלסר',
-    binderNumberPlaceholder: 'לדוגמה: 100020/1',
     clientStatus: 'סטטוס לקוח',
     entityType: 'סוג יישות',
     binderLocation: 'מיקום קלסר',

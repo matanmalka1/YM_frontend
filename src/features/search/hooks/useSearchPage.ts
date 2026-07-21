@@ -6,7 +6,6 @@ import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { SEARCH_ADVANCED_FILTER_KEYS, type SearchFilters } from '../types'
 import { PAGE_SIZE_SM, PAGE_SIZE_MD } from '@/constants/pagination.constants'
 import { SEARCH_ERROR_MESSAGES } from '../errorMessages'
-import { useFilterClient } from '@/features/clients'
 import type { SearchItem, SearchItemGroups, SearchItemType } from '../api/contracts'
 import { useSearchDebounce } from '@/hooks/useSearchDebounce'
 import { getTotalPages } from '@/utils/paginationUtils'
@@ -19,7 +18,7 @@ import {
   resolutionFilterUpdate,
   resolveSelectedClient,
 } from '../utils/searchSelection'
-import { parseSearchEnumFilters } from '../utils/searchUrlValues'
+import { SEARCH_DROPPED_FILTER_KEYS, parseSearchEnumFilters } from '../utils/searchUrlValues'
 import type { SearchFeedChip } from '../components/SearchItemFeed'
 
 const EMPTY_GROUP = { items: [], total: 0 }
@@ -54,8 +53,6 @@ export const useSearchPage = () => {
     ...enumFilters,
     search: getParam('search').trim(),
     client_record_id: getParam('client_record_id'),
-    id_number: getParam('id_number').trim(),
-    binder_number: getParam('binder_number').trim(),
     page: getPage(),
     page_size: parsePositiveInt(searchParams.get('page_size'), PAGE_SIZE_SM),
   }
@@ -64,9 +61,10 @@ export const useSearchPage = () => {
 
   // The URL asks for this client; only client resolution can grant it.
   const requestedClientId = parsePositiveInt(filters.client_record_id, 0) || null
-  const hydratedClient = useFilterClient(requestedClientId)
 
-  const hasAnyFilter = Boolean(filters.search) || SEARCH_ADVANCED_FILTER_KEYS.some((k) => Boolean(filters[k]))
+  const hasAdvancedFilter = SEARCH_ADVANCED_FILTER_KEYS.some((key) => Boolean(filters[key]))
+  // A picked client is reason enough to search, even though it is a selection rather than a filter.
+  const hasAnyFilter = Boolean(filters.search) || Boolean(filters.client_record_id) || hasAdvancedFilter
 
   // One atomic URL write per change: the filter itself plus whatever it invalidates. The selection
   // sits in the URL beside the filters that produced it, so a filter that changes which clients
@@ -88,8 +86,6 @@ export const useSearchPage = () => {
   const resolutionParams = {
     search: filters.search || undefined,
     client_record_id: requestedClientId ?? undefined,
-    id_number: filters.id_number || undefined,
-    binder_number: filters.binder_number || undefined,
     client_status: filters.client_status || undefined,
     entity_type: filters.entity_type || undefined,
     binder_location_status: filters.binder_location_status || undefined,
@@ -128,7 +124,7 @@ export const useSearchPage = () => {
   // judged only once resolution has settled, so a deep link keeps its type while it loads.
   const resolutionSettled = !hasAnyFilter || (!searchPending && !searchFetching)
   const hasStaleType = activeType !== null && selectedClient === null && resolutionSettled
-  const staleParams = [...invalidKeys, ...(hasStaleType ? ['type'] : [])].join(',')
+  const staleParams = [...invalidKeys, ...(hasStaleType ? ['type'] : []), ...SEARCH_DROPPED_FILTER_KEYS.filter((key) => getParam(key))].join(',')
 
   useEffect(() => {
     if (!staleParams) return
@@ -161,20 +157,10 @@ export const useSearchPage = () => {
   // Every free-text filter is URL-backed, so each needs a local draft with a debounced
   // commit — otherwise each keystroke writes history and refires the request.
   const [queryDraft, setQueryDraft] = useSearchDebounce(filters.search, (value) => handleFilterChange('search', value))
-  const [idNumberDraft, setIdNumberDraft] = useSearchDebounce(filters.id_number, (value) =>
-    handleFilterChange('id_number', value),
-  )
-  const [binderNumberDraft, setBinderNumberDraft] = useSearchDebounce(filters.binder_number, (value) =>
-    handleFilterChange('binder_number', value),
-  )
   // A typed change is committed only after the debounce, so between the keystroke and the request
   // the rows on screen answer the previous term. That window counts as fetching, or the stale
   // results read as an answer to what was just typed.
-  const hasPendingTextEdit =
-    queryDraft.trim() !== filters.search ||
-    idNumberDraft.trim() !== filters.id_number ||
-    binderNumberDraft.trim() !== filters.binder_number
-  const hasAdvancedFilter = SEARCH_ADVANCED_FILTER_KEYS.some((key) => Boolean(filters[key]))
+  const hasPendingTextEdit = queryDraft.trim() !== filters.search
   const [advancedFiltersOpen, setAdvancedFiltersOpen] = useState(hasAdvancedFilter)
 
   // Whether the panel is open is the user's business, with one exception: arriving at a URL that
@@ -227,11 +213,6 @@ export const useSearchPage = () => {
       queryDraft,
       onQueryDraftChange: setQueryDraft,
       filters,
-      textDrafts: {
-        id_number: { value: idNumberDraft, onChange: setIdNumberDraft },
-        binder_number: { value: binderNumberDraft, onChange: setBinderNumberDraft },
-      },
-      hydratedClient,
       onFilterChange: handleFilterChange,
       onReset: handleResetAll,
       advancedFiltersOpen,

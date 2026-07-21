@@ -11,21 +11,18 @@ interface SearchToolbarProps {
   queryDraft: string
   onQueryDraftChange: (value: string) => void
   filters: SearchFilters
-  textDrafts: SearchFiltersBarProps['textDrafts']
-  hydratedClient: SearchFiltersBarProps['hydratedClient']
   onFilterChange: SearchFiltersBarProps['onFilterChange']
   onReset: () => void
   advancedFiltersOpen: boolean
   onToggleAdvancedFilters: () => void
 }
 
+/** One place to type, and the enumerated filters beside it. */
 export const SearchToolbar: React.FC<SearchToolbarProps> = ({
   inputRef,
   queryDraft,
   onQueryDraftChange,
   filters,
-  textDrafts,
-  hydratedClient,
   onFilterChange,
   onReset,
   advancedFiltersOpen,
@@ -46,8 +43,6 @@ export const SearchToolbar: React.FC<SearchToolbarProps> = ({
       </div>
       <SearchFiltersBar
         filters={filters}
-        textDrafts={textDrafts}
-        hydratedClient={hydratedClient}
         onFilterChange={onFilterChange}
         onReset={onReset}
         isOpen={advancedFiltersOpen}

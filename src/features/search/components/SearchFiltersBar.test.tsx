@@ -6,8 +6,6 @@ import { SearchFiltersBar } from './SearchFiltersBar'
 const filters: SearchFilters = {
   search: '',
   client_record_id: '',
-  id_number: '',
-  binder_number: '',
   client_status: '',
   entity_type: '',
   binder_location_status: '',
@@ -20,11 +18,6 @@ const render = (isOpen: boolean, overrides: Partial<SearchFilters> = {}) =>
   renderToStaticMarkup(
     <SearchFiltersBar
       filters={{ ...filters, ...overrides }}
-      textDrafts={{
-        id_number: { value: '', onChange: () => undefined },
-        binder_number: { value: '', onChange: () => undefined },
-      }}
-      hydratedClient={null}
       onFilterChange={() => undefined}
       onReset={() => undefined}
       isOpen={isOpen}
@@ -57,6 +50,10 @@ describe('SearchFiltersBar', () => {
     // worse than rendering them.
     expect(collapsed).toContain('search-advanced-filters')
     expect(collapsed).toContain('סטטוס לקוח')
+  })
+
+  it('holds enumerated values only — nothing to type', () => {
+    expect(render(true)).not.toContain('type="text"')
   })
 
   it('counts the active advanced filters on the toggle', () => {
