@@ -25,8 +25,8 @@ export const DOCUMENT_SEARCH_PLACEHOLDER = 'חיפוש לפי שם קובץ או
 /** User search by name or email address. */
 export const USER_SEARCH_PLACEHOLDER = 'חיפוש לפי שם או כתובת מייל'
 
-/** Global free-text search (client name, binder number, file name). */
-export const GLOBAL_SEARCH_PLACEHOLDER = 'חיפוש חופשי — שם לקוח, מספר קלסר, שם קובץ'
+/** Global free-text search: clients and records (binder, file, period, charge, task). */
+export const GLOBAL_SEARCH_PLACEHOLDER = 'חיפוש חופשי — לקוח, קלסר, קובץ, תקופה, חיוב או משימה'
 
 /** Timeline search across description, binder, charge and document. */
 export const TIMELINE_SEARCH_PLACEHOLDER = 'חיפוש לפי תיאור, קלסר, חיוב או מסמך'
