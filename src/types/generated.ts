@@ -2105,7 +2105,7 @@ export interface paths {
     }
     /**
      * Search
-     * @description Resolve the term to clients, and preview the selected client's items by type.
+     * @description Resolve the term to clients and to matching records; pagination pages the clients.
      */
     get: operations['search_api_v1_search_get']
     put?: never
@@ -2125,7 +2125,7 @@ export interface paths {
     }
     /**
      * List Items
-     * @description One client's items of a single type, paginated — an expanded preview group.
+     * @description One type's matches for the term, in full — an expanded preview group.
      */
     get: operations['list_items_api_v1_search_items_get']
     put?: never
@@ -6441,10 +6441,10 @@ export interface components {
       /** Total */
       total: number
     }
-    /** PaginatedResponse[SearchItem] */
-    PaginatedResponse_SearchItem_: {
+    /** PaginatedResponse[SearchMatch] */
+    PaginatedResponse_SearchMatch_: {
       /** Items */
-      items: components['schemas']['SearchItem'][]
+      items: components['schemas']['SearchMatch'][]
       /** Page */
       page: number
       /** Page Size */
@@ -6785,7 +6785,7 @@ export interface components {
     }
     /**
      * SearchClientMatch
-     * @description A client the typed term resolved to, offered for selection.
+     * @description A client the typed term resolved to.
      */
     SearchClientMatch: {
       /** Id */
@@ -6804,16 +6804,16 @@ export interface components {
       href: string
     }
     /**
-     * SearchItem
-     * @description One item belonging to the selected client, in the one shape every type shares.
+     * SearchMatch
+     * @description One record the typed term matched, carrying its owning client's identity.
      *
-     *     `status` is nullable because documents carry no work status; their type is shown
-     *     in its place. `amount` is set only by the money-carrying types. `occurred_on` is the
-     *     date the row is anchored to (due date, upload date, issue date), so a mixed feed can
-     *     be read chronologically.
+     *     A match row is meaningless without its client, so every row names it. `status` is
+     *     nullable because documents carry no work status. `amount` is set only by the
+     *     money-carrying types. `occurred_on` is the date the row is anchored to (due date,
+     *     upload date, issue date), so a type's matches read chronologically.
      */
-    SearchItem: {
-      result_type: components['schemas']['SearchItemType']
+    SearchMatch: {
+      result_type: components['schemas']['SearchMatchType']
       /** Id */
       id: number
       /** Title */
@@ -6828,40 +6828,46 @@ export interface components {
       occurred_on?: string | null
       /** Href */
       href: string
+      /** Client Record Id */
+      client_record_id: number
+      /** Client Name */
+      client_name: string
+      /** Client Office Number */
+      client_office_number?: number | null
     }
     /**
-     * SearchItemGroup
+     * SearchMatchGroup
      * @description Preview rows for one type plus the exact total behind them.
      */
-    SearchItemGroup: {
+    SearchMatchGroup: {
       /** Items */
-      items?: components['schemas']['SearchItem'][]
+      items?: components['schemas']['SearchMatch'][]
       /**
        * Total
        * @default 0
        */
       total: number
     }
-    /** SearchItemGroups */
-    SearchItemGroups: {
-      binders?: components['schemas']['SearchItemGroup']
-      documents?: components['schemas']['SearchItemGroup']
-      vat_work_items?: components['schemas']['SearchItemGroup']
-      annual_reports?: components['schemas']['SearchItemGroup']
-      advance_payments?: components['schemas']['SearchItemGroup']
-      charges?: components['schemas']['SearchItemGroup']
-      tasks?: components['schemas']['SearchItemGroup']
-      notifications?: components['schemas']['SearchItemGroup']
+    /** SearchMatchGroups */
+    SearchMatchGroups: {
+      binders?: components['schemas']['SearchMatchGroup']
+      documents?: components['schemas']['SearchMatchGroup']
+      vat_work_items?: components['schemas']['SearchMatchGroup']
+      annual_reports?: components['schemas']['SearchMatchGroup']
+      advance_payments?: components['schemas']['SearchMatchGroup']
+      charges?: components['schemas']['SearchMatchGroup']
+      tasks?: components['schemas']['SearchMatchGroup']
+      notifications?: components['schemas']['SearchMatchGroup']
     }
     /**
-     * SearchItemType
-     * @description Entity types that appear as rows in a client's item feed.
+     * SearchMatchType
+     * @description Entity types that appear as match rows.
      *
-     *     Deliberately excludes `client`: the client is the feed's subject, not a row in it.
+     *     Deliberately excludes `client`: a client is a resolution result, not a record row.
      *     Every member is also a `LinkedEntity`, which owns the route each row links to.
      * @enum {string}
      */
-    SearchItemType:
+    SearchMatchType:
       | 'binder'
       | 'document'
       | 'vat_work_item'
@@ -6872,11 +6878,11 @@ export interface components {
       | 'notification'
     /**
      * SearchResponse
-     * @description Both search phases in one payload: which client, then everything of that client.
+     * @description Client resolution plus the record matches, side by side.
      */
     SearchResponse: {
       clients: components['schemas']['PaginatedResponse_SearchClientMatch_']
-      items?: components['schemas']['SearchItemGroups']
+      matches?: components['schemas']['SearchMatchGroups']
     }
     /** SeasonSummaryResponse */
     SeasonSummaryResponse: {
@@ -16953,15 +16959,8 @@ export interface operations {
   }
   search_api_v1_search_get: {
     parameters: {
-      query?: {
-        search?: string | null
-        client_record_id?: number | null
-        id_number?: string | null
-        binder_number?: string | null
-        client_status?: components['schemas']['ClientStatus'] | null
-        entity_type?: components['schemas']['EntityType'] | null
-        binder_location_status?: components['schemas']['BinderLocationStatus'] | null
-        binder_capacity_status?: components['schemas']['BinderCapacityStatus'] | null
+      query: {
+        search: string
         page?: number
         page_size?: number
       }
@@ -17012,8 +17011,8 @@ export interface operations {
   list_items_api_v1_search_items_get: {
     parameters: {
       query: {
-        client_record_id: number
-        result_type: components['schemas']['SearchItemType']
+        search: string
+        result_type: components['schemas']['SearchMatchType']
         page?: number
         page_size?: number
       }
@@ -17029,7 +17028,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['PaginatedResponse_SearchItem_']
+          'application/json': components['schemas']['PaginatedResponse_SearchMatch_']
         }
       }
       /** @description Authentication required */

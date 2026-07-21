@@ -3,11 +3,9 @@ import { Alert } from '@/components/ui/overlays/Alert'
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { PageLoading } from '@/components/ui/layout/PageLoading'
 import { cn } from '@/utils/utils'
-import type { SearchClientMatch } from '../api/contracts'
 import { SEARCH_MESSAGES } from '../messages'
 import { SearchClientMatches } from './SearchClientMatches'
-import { SearchItemFeed } from './SearchItemFeed'
-import { SearchSelectedClient } from './SearchSelectedClient'
+import { SearchMatchesSection } from './SearchMatchesSection'
 
 interface SearchResultsSectionProps {
   status: {
@@ -16,25 +14,22 @@ interface SearchResultsSectionProps {
     error: string | null
   }
   prompt: { visible: boolean }
+  /** One no-match state for the whole page: zero clients and zero record matches. */
   emptyState: { visible: boolean; onReset: () => void }
   clientMatches: React.ComponentProps<typeof SearchClientMatches> & { visible: boolean }
-  /**
-   * The resolved client and its feed, or nothing. One slot, because a feed is a client's
-   * records: it may not appear without the client it belongs to, nor beside the empty state.
-   */
-  selected: {
-    client: SearchClientMatch
-    onChange: (() => void) | null
-    feed: React.ComponentProps<typeof SearchItemFeed>
-  } | null
+  matches: React.ComponentProps<typeof SearchMatchesSection> & { visible: boolean }
 }
 
+/**
+ * The page's two labelled sections, side by side: the clients the term resolved to, and the
+ * records it matched. Both can be non-empty at once — that is the point of the page.
+ */
 export const SearchResultsSection: React.FC<SearchResultsSectionProps> = ({
   status,
   prompt,
   emptyState,
   clientMatches,
-  selected,
+  matches,
 }) => (
   <>
     {status.error && <Alert variant="error" message={status.error} />}
@@ -65,13 +60,7 @@ export const SearchResultsSection: React.FC<SearchResultsSectionProps> = ({
       className={cn('space-y-4 transition-opacity', status.isFetching && 'pointer-events-none opacity-50')}
     >
       {clientMatches.visible && <SearchClientMatches {...clientMatches} />}
-
-      {selected && (
-        <>
-          <SearchSelectedClient client={selected.client} onChange={selected.onChange} />
-          <SearchItemFeed {...selected.feed} />
-        </>
-      )}
+      {matches.visible && <SearchMatchesSection {...matches} />}
     </div>
   </>
 )

@@ -1,5 +1,5 @@
 import { Building2 } from 'lucide-react'
-import { ActionSurfaceButton } from '@/components/ui/primitives/ActionSurface'
+import { ActionSurfaceLink } from '@/components/ui/primitives/ActionSurface'
 import { Card } from '@/components/ui/primitives/Card'
 import { PaginationCard } from '@/components/ui/table'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
@@ -12,16 +12,15 @@ import { SEARCH_MESSAGES } from '../messages'
 interface SearchClientMatchesProps {
   clients: SearchClientMatch[]
   total: number
-  onSelect: (clientRecordId: number) => void
-  /** More matches than one page holds — otherwise every match is already on screen. */
+  /** Null while a match type is expanded — the clients section then shows its first page only. */
   pagination: SearchPagination | null
 }
 
 /**
- * Phase one of the page: which client did the term mean. Shown only while the answer is
- * ambiguous — a single match is auto-selected by the backend and goes straight to the feed.
+ * The clients the term resolved to. A row click navigates to the client's page, whose tabs
+ * are the dossier — never automatically, whatever the match count.
  */
-export const SearchClientMatches: React.FC<SearchClientMatchesProps> = ({ clients, total, onSelect, pagination }) => (
+export const SearchClientMatches: React.FC<SearchClientMatchesProps> = ({ clients, total, pagination }) => (
   <>
     <Card
       title={SEARCH_MESSAGES.clients.title}
@@ -31,10 +30,10 @@ export const SearchClientMatches: React.FC<SearchClientMatchesProps> = ({ client
       disablePadding
     >
       {clients.map((client) => (
-        <ActionSurfaceButton
+        <ActionSurfaceLink
           key={client.id}
           variant="plainRow"
-          onClick={() => onSelect(client.id)}
+          to={client.href}
           className="border-b border-gray-100 last:border-b-0"
         >
           <div className="min-w-0 flex-1">
@@ -55,7 +54,7 @@ export const SearchClientMatches: React.FC<SearchClientMatchesProps> = ({ client
                 : ''}
             </p>
           </div>
-        </ActionSurfaceButton>
+        </ActionSurfaceLink>
       ))}
     </Card>
     {pagination && pagination.totalPages > 1 && (

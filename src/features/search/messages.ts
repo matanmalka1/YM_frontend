@@ -4,24 +4,23 @@
  */
 export const SEARCH_MESSAGES = {
   page: {
-    description: 'חיפוש לקוח והצגת כל הפריטים שלו במקום אחד',
-    promptTitle: 'את מי תרצה למצוא?',
-    promptMessage: 'הקלד שם לקוח, ת.ז / ח.פ, מספר לקוח או מספר קלסר',
-    emptyTitle: 'לא נמצא לקוח',
-    emptyMessage: 'נסה מזהה אחר או אפס את הפילטרים',
+    description: 'חיפוש לקוחות ורשומות לפי שם או מזהה',
+    promptTitle: 'מה תרצה למצוא?',
+    promptMessage: 'הקלד שם לקוח, ת.ז / ח.פ, מספר לקוח, מספר קלסר, שם קובץ או תקופה',
+    emptyTitle: 'לא נמצאו תוצאות',
+    emptyMessage: 'נסה מונח אחר או אפס את החיפוש',
     resetSearch: 'איפוס חיפוש',
   },
   clients: {
     title: 'לקוחות תואמים',
-    subtitle: (count: number) => `${count} לקוחות תואמים — בחר אחד`,
+    subtitle: (count: number) => `${count} לקוחות תואמים`,
     matchedBinders: (numbers: string[]) => `נמצא לפי קלסר ${numbers.join(', ')}`,
     idNumber: 'ת.ז / ח.פ',
     officeNumber: "מס' לקוח",
-    change: 'החלף לקוח',
   },
-  feed: {
-    emptyTitle: 'אין פריטים ללקוח זה',
-    emptyMessage: 'עדיין לא נרשמו קלסרים, מסמכים או פעילות עבור הלקוח',
+  matches: {
+    title: 'רשומות תואמות',
+    subtitle: (count: number) => `${count} רשומות תואמות`,
     allTypes: 'הכל',
     typeLabels: {
       binder: 'קלסרים',
@@ -33,14 +32,5 @@ export const SEARCH_MESSAGES = {
       task: 'משימות',
       notification: 'הודעות',
     },
-  },
-  filters: {
-    advanced: 'פילטרים מתקדמים',
-    clientStatus: 'סטטוס לקוח',
-    entityType: 'סוג יישות',
-    binderLocation: 'מיקום קלסר',
-    binderCapacity: 'קיבולת קלסר',
-    activeFilters: (count: number) => `${count} פילטרים פעילים`,
-    resetAll: 'איפוס הכל',
   },
 } as const

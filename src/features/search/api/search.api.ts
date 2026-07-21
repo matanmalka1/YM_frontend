@@ -1,7 +1,7 @@
 import { api } from '@/api/client'
 import { toQueryParams } from '@/api/queryParams'
 import { SEARCH_ENDPOINTS } from './endpoints'
-import type { SearchItemsParams, SearchItemsResponse, SearchParams, SearchResponse } from './contracts'
+import type { SearchMatchesParams, SearchMatchesResponse, SearchParams, SearchResponse } from './contracts'
 
 export const searchApi = {
   search: async (params: SearchParams): Promise<SearchResponse> => {
@@ -10,8 +10,8 @@ export const searchApi = {
     })
     return response.data
   },
-  listItems: async (params: SearchItemsParams): Promise<SearchItemsResponse> => {
-    const response = await api.get<SearchItemsResponse>(SEARCH_ENDPOINTS.items, {
+  listMatches: async (params: SearchMatchesParams): Promise<SearchMatchesResponse> => {
+    const response = await api.get<SearchMatchesResponse>(SEARCH_ENDPOINTS.items, {
       params: toQueryParams(params),
     })
     return response.data

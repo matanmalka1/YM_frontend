@@ -1,6 +1,6 @@
-import type { SearchItemsParams } from './contracts'
+import type { SearchMatchesParams, SearchParams } from './contracts'
 
 export const searchQK = {
-  clients: (filters: object) => ['search', 'clients', filters] as const,
-  items: (params: SearchItemsParams) => ['search', 'items', params] as const,
+  clients: (params: SearchParams) => ['search', 'clients', params] as const,
+  matches: (params: SearchMatchesParams) => ['search', 'matches', params] as const,
 } as const

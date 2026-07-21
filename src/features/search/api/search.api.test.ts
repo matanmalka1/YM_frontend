@@ -17,7 +17,7 @@ describe('searchApi.search', () => {
     mockedGet.mockResolvedValue({
       data: {
         clients: { items: [], page: 1, page_size: 20, total: 0 },
-        items: {
+        matches: {
           binders: emptyGroup,
           documents: emptyGroup,
           vat_work_items: emptyGroup,
@@ -32,45 +32,36 @@ describe('searchApi.search', () => {
     mockedGet.mockClear()
   })
 
-  it('sends broad text search as search', async () => {
-    await searchApi.search({ search: 'רפאל', page: 1, page_size: 20 })
+  it('sends the term as search with the clients-list page', async () => {
+    await searchApi.search({ search: 'רפאל', page: 2, page_size: 20 })
 
     const params = mockedGet.mock.calls[0]?.[1]?.params as URLSearchParams
     expect(params.get('search')).toBe('רפאל')
-    expect(params.has('query')).toBe(false)
-    expect(params.has('client_name')).toBe(false)
-    expect(params.has('client_search')).toBe(false)
+    expect(params.get('page')).toBe('2')
+    expect(params.get('page_size')).toBe('20')
   })
 
-  it('sends selected client scope as client_record_id', async () => {
-    await searchApi.search({ search: 'audit_report', client_record_id: 42 })
+  it('sends nothing beyond the contract — the filter and selection params are gone', async () => {
+    await searchApi.search({ search: '2026-03', page: 1, page_size: 20 })
 
     const params = mockedGet.mock.calls[0]?.[1]?.params as URLSearchParams
-    expect(params.get('search')).toBe('audit_report')
-    expect(params.get('client_record_id')).toBe('42')
-    expect(params.has('client_name')).toBe(false)
-  })
-
-  it('sends binder capacity status filter', async () => {
-    await searchApi.search({ binder_capacity_status: 'full', page: 1, page_size: 20 })
-
-    const params = mockedGet.mock.calls[0]?.[1]?.params as URLSearchParams
-    expect(params.get('binder_capacity_status')).toBe('full')
+    expect([...params.keys()].sort()).toEqual(['page', 'page_size', 'search'])
   })
 })
 
-describe('searchApi.listItems', () => {
+describe('searchApi.listMatches', () => {
   beforeEach(() => {
     mockedGet.mockResolvedValue({ data: { items: [], page: 1, page_size: 20, total: 0 } })
     mockedGet.mockClear()
   })
 
-  it('scopes an expanded group to one client and one type', async () => {
-    await searchApi.listItems({ client_record_id: 7, result_type: 'vat_work_item', page: 2, page_size: 20 })
+  it('expands one type of the term, paginated', async () => {
+    await searchApi.listMatches({ search: '2026-03', result_type: 'vat_work_item', page: 2, page_size: 20 })
 
     const params = mockedGet.mock.calls[0]?.[1]?.params as URLSearchParams
-    expect(params.get('client_record_id')).toBe('7')
+    expect(params.get('search')).toBe('2026-03')
     expect(params.get('result_type')).toBe('vat_work_item')
     expect(params.get('page')).toBe('2')
+    expect(params.has('client_record_id')).toBe(false)
   })
 })

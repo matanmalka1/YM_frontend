@@ -1,7 +1,8 @@
-import type { BinderCapacityStatus, BinderLocationStatus } from '@/features/binders'
-import type { ClientStatus, EntityType } from '@/features/clients'
-
-export type SearchItemType =
+/**
+ * Entity types that appear as match rows. Deliberately excludes `client` — a client is a
+ * resolution result, not a record row, and `result_type=client` is a 422 on `/search/items`.
+ */
+export type SearchMatchType =
   | 'binder'
   | 'document'
   | 'vat_work_item'
@@ -21,8 +22,12 @@ export interface SearchClientMatch {
   href: string
 }
 
-export interface SearchItem {
-  result_type: SearchItemType
+/**
+ * One record the typed term matched. A match row is meaningless without its client, so every
+ * row carries its owning client's identity.
+ */
+export interface SearchMatch {
+  result_type: SearchMatchType
   id: number
   title: string
   detail: string | null
@@ -32,14 +37,18 @@ export interface SearchItem {
   /** Date the row is anchored to — due date, upload date, issue date. */
   occurred_on: string | null
   href: string
+  client_record_id: number
+  client_name: string
+  client_office_number: number | null
 }
 
-interface SearchItemGroup {
-  items: SearchItem[]
+/** Up to five preview rows for one type plus the exact total behind them. */
+export interface SearchMatchGroup {
+  items: SearchMatch[]
   total: number
 }
 
-export type SearchItemGroupKey =
+export type SearchMatchGroupKey =
   | 'binders'
   | 'documents'
   | 'vat_work_items'
@@ -49,7 +58,7 @@ export type SearchItemGroupKey =
   | 'tasks'
   | 'notifications'
 
-export type SearchItemGroups = Record<SearchItemGroupKey, SearchItemGroup>
+export type SearchMatchGroups = Record<SearchMatchGroupKey, SearchMatchGroup>
 
 export interface PaginatedClientMatches {
   items: SearchClientMatch[]
@@ -60,32 +69,25 @@ export interface PaginatedClientMatches {
 
 export interface SearchResponse {
   clients: PaginatedClientMatches
-  items: SearchItemGroups
+  matches: SearchMatchGroups
 }
 
+/** `page`/`page_size` page the clients list; the match previews are fixed-size. */
 export interface SearchParams {
-  search?: string
-  client_record_id?: number
-  id_number?: string
-  binder_number?: string
-  /** Enum-backed: only values the API accepts reach here — see `utils/searchUrlValues`. */
-  client_status?: ClientStatus
-  entity_type?: EntityType
-  binder_location_status?: BinderLocationStatus
-  binder_capacity_status?: BinderCapacityStatus
+  search: string
   page?: number
   page_size?: number
 }
 
-export interface SearchItemsParams {
-  client_record_id: number
-  result_type: SearchItemType
+export interface SearchMatchesParams {
+  search: string
+  result_type: SearchMatchType
   page?: number
   page_size?: number
 }
 
-export interface SearchItemsResponse {
-  items: SearchItem[]
+export interface SearchMatchesResponse {
+  items: SearchMatch[]
   page: number
   page_size: number
   total: number
