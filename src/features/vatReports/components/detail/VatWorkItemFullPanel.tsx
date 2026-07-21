@@ -58,11 +58,11 @@ export const VatWorkItemFullPanel = ({ workItemId, leadingBreadcrumbs }: VatWork
 
       <VatWorkItemSummaryBar workItem={workItem} filedBanner={filedBanner} />
 
-      <SegmentedControl variant="tabBar" aria-label={VAT_MESSAGES.detail.tabsAriaLabel}>
+      <SegmentedControl variant="underline" aria-label={VAT_MESSAGES.detail.tabsAriaLabel}>
         {tabs.map(({ key, label, icon: Icon, badge }) => (
           <SegmentedControlItem
             key={key}
-            variant="tabBar"
+            variant="underline"
             selected={activeTab === key}
             onClick={() => setTab(key)}
             icon={<Icon className="h-4 w-4 shrink-0" />}

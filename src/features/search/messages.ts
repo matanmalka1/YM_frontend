@@ -31,14 +31,14 @@ export const SEARCH_MESSAGES = {
   ],
   clients: {
     title: 'לקוחות תואמים',
-    subtitle: (count: number) => `${count} לקוחות תואמים`,
+    subtitle: (count: number) => `${count} תוצאות`,
     matchedBinders: (numbers: string[]) => `נמצא לפי קלסר ${numbers.join(', ')}`,
     idNumber: 'ת.ז / ח.פ',
     officeNumber: "מס' לקוח",
   },
   matches: {
     title: 'רשומות תואמות',
-    subtitle: (count: number) => `${count} רשומות תואמות`,
+    subtitle: (count: number) => `${count} תוצאות`,
     allTypes: 'הכל',
     typeLabels: {
       binder: 'קלסרים',

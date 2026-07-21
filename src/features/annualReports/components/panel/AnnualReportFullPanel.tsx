@@ -111,11 +111,11 @@ export const AnnualReportFullPanel = ({
         />
 
         {/* Navbar tabs */}
-        <SegmentedControl variant="boxed" className="mt-6" aria-label={ANNUAL_REPORTS_MESSAGES.panelNav.ariaLabel}>
+        <SegmentedControl variant="underline" className="mt-6" aria-label={ANNUAL_REPORTS_MESSAGES.panelNav.ariaLabel}>
           {PANEL_NAV_ITEMS.map(({ key, icon: Icon, label }) => (
             <SegmentedControlItem
               key={key}
-              variant="boxed"
+              variant="underline"
               selected={activeSection === key}
               onClick={() => setActiveSection(key)}
               icon={<Icon size={15} />}

@@ -1,6 +1,6 @@
 import { cn } from '@/utils/utils'
 
-type SegmentedControlVariant = 'underline' | 'tabBar' | 'boxed' | 'choice' | 'vertical' | 'switch'
+type SegmentedControlVariant = 'underline' | 'choice' | 'vertical' | 'switch'
 
 interface SegmentedControlProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: SegmentedControlVariant
@@ -16,17 +16,13 @@ interface SegmentedControlItemProps extends React.ButtonHTMLAttributes<HTMLButto
 
 const controlClasses: Record<SegmentedControlVariant, string> = {
   underline: 'flex flex-wrap items-center gap-1 border-b border-gray-200',
-  tabBar: 'flex gap-1 border-b border-gray-200 bg-white/95 px-1 backdrop-blur-sm',
-  boxed: 'flex overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm',
   choice: 'flex flex-wrap gap-2',
   vertical: 'flex min-w-20 flex-col gap-1',
   switch: 'grid grid-flow-col auto-cols-fr gap-1 rounded-xl bg-gray-100 p-1',
 }
 
 const itemBaseClasses: Record<SegmentedControlVariant, string> = {
-  underline: 'relative shrink-0 rounded-t-md px-4 py-2 text-sm font-medium transition-colors',
-  tabBar: 'inline-flex items-center gap-2 rounded-t-lg border-b-2 px-5 py-3 text-sm font-medium transition-colors',
-  boxed: 'flex items-center gap-2 px-5 py-3 text-sm whitespace-nowrap transition-colors first:rounded-r-xl last:rounded-l-xl',
+  underline: 'relative inline-flex shrink-0 items-center gap-2 rounded-t-md px-4 py-2 text-sm font-medium transition-colors',
   choice: 'rounded-lg border px-3.5 py-2 text-sm font-medium transition-all',
   vertical: 'rounded-lg px-3 py-2 text-right text-sm font-medium transition-all',
   switch: 'h-8 rounded-nav text-xs font-medium transition',
@@ -36,14 +32,6 @@ const itemStateClasses: Record<SegmentedControlVariant, { selected: string; idle
   underline: {
     selected: 'bg-white text-primary',
     idle: 'text-gray-500 hover:bg-gray-50 hover:text-gray-700',
-  },
-  tabBar: {
-    selected: 'border-primary-600 bg-primary-50 text-primary-800 shadow-sm',
-    idle: 'border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-800',
-  },
-  boxed: {
-    selected: 'bg-primary-50 text-primary-700',
-    idle: 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
   },
   choice: {
     selected: 'border-primary-500 bg-primary-50 text-primary-700 shadow-sm ring-1 ring-primary-200',
@@ -60,11 +48,11 @@ const itemStateClasses: Record<SegmentedControlVariant, { selected: string; idle
 }
 
 const badgeClasses: Partial<Record<SegmentedControlVariant, string>> = {
-  tabBar: 'min-w-[1.35rem] rounded-full bg-gray-100 px-1.5 py-0.5 text-center text-xs font-medium tabular-nums text-gray-700',
+  underline: 'min-w-[1.35rem] rounded-full bg-gray-100 px-1.5 py-0.5 text-center text-xs font-medium tabular-nums text-gray-700',
 }
 
 const selectedBadgeClasses: Partial<Record<SegmentedControlVariant, string>> = {
-  tabBar: 'bg-white text-primary-800 ring-1 ring-primary-200',
+  underline: 'bg-primary-50 text-primary ring-1 ring-primary-200',
 }
 
 export const SegmentedControl: React.FC<SegmentedControlProps> = ({
