@@ -11,7 +11,6 @@ import {
   WORK_QUEUE_PAGE_SIZE,
   parseWorkQueueSourceType,
   parseWorkQueueUrgency,
-  workQueueUrgencyLabels,
   type WorkQueueFilterParamKey,
 } from '../constants'
 import { buildWorkQueueColumns } from '../components/WorkQueueColumns'
@@ -25,11 +24,15 @@ import {
 import { useWorkQueue } from './useWorkQueue'
 import { useWorkQueueActions } from './useWorkQueueActions'
 import type { WorkQueueParams } from '../api/contracts'
-import type { FilterBadge } from '@/components/ui/filters/ActiveFilterBadges'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { WORK_QUEUE_MESSAGES } from '../messages'
 import { WORK_QUEUE_ERROR_MESSAGES } from '../errorMessages'
 import { WORK_QUEUE_FILTER_FIELDS } from '../utils/workQueueFilterConfig'
+import {
+  getWorkQueueAssignedRoleLabel,
+  getWorkQueueAssignedUserName,
+  getWorkQueueTaskPriorityLabel,
+} from '../utils/workQueueTaskDisplay'
 
 export const useWorkQueuePage = () => {
   const { getParam, getPage, setFilter, setFilters, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
@@ -66,6 +69,19 @@ export const useWorkQueuePage = () => {
   const items = useMemo(() => data?.items ?? [], [data?.items])
   const total = data?.total ?? 0
   const summary = data?.summary
+
+  // The stat cards are a stable urgency overview *and* the urgency selector. When an urgency is
+  // active they read a summary computed without the urgency filter, so selecting one bucket never
+  // collapses the others to zero. The extra request only fires while an urgency filter is set;
+  // otherwise the main list summary already holds the true bucket totals.
+  const isUrgencyFiltered = urgencyFilter !== null
+  const overviewParams = useMemo<WorkQueueParams>(
+    () => ({ ...listParams, urgency: undefined, page: 1, page_size: 1 }),
+    [listParams],
+  )
+  const { data: overviewData, isFetching: isOverviewFetching } = useWorkQueue(overviewParams, hasRole && isUrgencyFiltered)
+  const overviewSummary = isUrgencyFiltered ? overviewData?.summary : summary
+  const isOverviewLoading = isUrgencyFiltered ? isOverviewFetching : isFetching
 
   const hasContentFilters =
     search.trim() !== '' ||
@@ -115,17 +131,6 @@ export const useWorkQueuePage = () => {
     handleFilterChange(key as WorkQueueFilterParamKey, value)
   }
 
-  // Urgency is set by clicking the stats cards (no dropdown), so surface it as a removable badge.
-  const filterBadges: FilterBadge[] | undefined = urgencyFilter
-    ? [
-        {
-          key: WORK_QUEUE_FILTER_PARAM_KEYS.urgency,
-          label: WORK_QUEUE_MESSAGES.filters.urgencyBadge(workQueueUrgencyLabels[urgencyFilter]),
-          onRemove: () => handleFilterChange(WORK_QUEUE_FILTER_PARAM_KEYS.urgency, ''),
-        },
-      ]
-    : undefined
-
   const actions = useWorkQueueActions()
   const {
     pendingConfirm,
@@ -143,16 +148,22 @@ export const useWorkQueuePage = () => {
     submitTask,
   } = actions
 
-  const { showLinkedTasks, showWarnings } = useMemo(
+  const { showLinkedTasks, showWarnings, showTaskMeta } = useMemo(
     () => ({
       showLinkedTasks: items.some((item) => item.linked_tasks_count > 0),
       showWarnings: items.some((item) => item.warnings.length > 0),
+      showTaskMeta: items.some(
+        (item) =>
+          Boolean(getWorkQueueTaskPriorityLabel(item)) ||
+          Boolean(getWorkQueueAssignedRoleLabel(item)) ||
+          Boolean(getWorkQueueAssignedUserName(item)),
+      ),
     }),
     [items],
   )
   const columns = useMemo(
-    () => buildWorkQueueColumns({ activeActionKey, onAction: runAction, showLinkedTasks, showWarnings }),
-    [activeActionKey, runAction, showLinkedTasks, showWarnings],
+    () => buildWorkQueueColumns({ activeActionKey, onAction: runAction, showLinkedTasks, showWarnings, showTaskMeta }),
+    [activeActionKey, runAction, showLinkedTasks, showWarnings, showTaskMeta],
   )
 
   const emptyState = hasContentFilters
@@ -185,8 +196,8 @@ export const useWorkQueuePage = () => {
       description: WORK_QUEUE_MESSAGES.page.description,
     },
     stats: {
-      summary,
-      isLoading: isFetching,
+      summary: overviewSummary,
+      isLoading: isOverviewLoading,
       summaryError: requestError,
       activeUrgency: urgencyFilter,
       onUrgencyChange: (urgency: typeof urgencyFilter) => handleFilterChange(WORK_QUEUE_FILTER_PARAM_KEYS.urgency, urgency ?? ''),
@@ -196,7 +207,6 @@ export const useWorkQueuePage = () => {
       values: filterValues,
       onChange: handleFilterPanelChange,
       onReset: clearFilters,
-      extraBadges: filterBadges,
     },
     table: {
       data: items,

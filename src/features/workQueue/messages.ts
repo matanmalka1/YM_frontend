@@ -23,7 +23,6 @@ export const WORK_QUEUE_MESSAGES = {
     type: 'סוג',
     taskStatus: 'קשר למשימה',
     workType: 'סוג עבודה',
-    urgencyBadge: (label: string) => `דחיפות: ${label}`,
     taskRelationOptions: {
       all: 'כל העבודה הפעילה',
       manual: 'משימות עצמאיות בלבד',

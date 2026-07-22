@@ -42,9 +42,10 @@ interface BuildColumnsParams {
   onAction: (item: WorkQueueItem, action: WorkQueueAction, focusTarget?: HTMLElement | null) => void
   showLinkedTasks: boolean
   showWarnings: boolean
+  showTaskMeta: boolean
 }
 
-export const buildWorkQueueColumns = ({ activeActionKey, onAction, showLinkedTasks, showWarnings }: BuildColumnsParams) =>
+export const buildWorkQueueColumns = ({ activeActionKey, onAction, showLinkedTasks, showWarnings, showTaskMeta }: BuildColumnsParams) =>
   (
     [
       {
@@ -239,5 +240,6 @@ export const buildWorkQueueColumns = ({ activeActionKey, onAction, showLinkedTas
   ).filter((column) => {
     if (column.key === 'linked_tasks') return showLinkedTasks
     if (column.key === 'warnings') return showWarnings
+    if (column.key === 'task_meta') return showTaskMeta
     return true
   })
