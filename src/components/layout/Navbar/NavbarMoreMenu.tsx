@@ -4,6 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 
 import { Button } from '@/components/ui/primitives/Button'
 import { useDismissibleLayer } from '@/components/ui/overlays/useDismissibleLayer'
+import { useMenuRovingFocus } from '@/components/ui/overlays/useMenuRovingFocus'
 import { cn } from '@/utils/utils'
 
 import type { MoreNavGroup } from './Navbar.utils'
@@ -31,7 +32,7 @@ export const NavbarMoreMenu: React.FC<NavbarMoreMenuProps> = ({ groups }) => {
     closeOnEscape: true,
   })
 
-  const getMenuItems = () => Array.from(menuRef.current?.querySelectorAll<HTMLAnchorElement>('[role="menuitem"]') ?? [])
+  const { focusItem, focusBoundary } = useMenuRovingFocus(menuRef)
 
   const closeMenu = () => {
     setOpen(false)
@@ -40,36 +41,25 @@ export const NavbarMoreMenu: React.FC<NavbarMoreMenuProps> = ({ groups }) => {
 
   const focusMenuBoundary = (position: 'first' | 'last') => {
     setOpen(true)
-    requestAnimationFrame(() => {
-      const items = getMenuItems()
-      const item = position === 'first' ? items[0] : items[items.length - 1]
-      item?.focus()
-    })
+    requestAnimationFrame(() => focusBoundary(position))
   }
 
   const handleMenuKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    const items = getMenuItems()
-    if (items.length === 0) return
-
-    const currentIndex = items.findIndex((item) => item === document.activeElement)
-
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault()
-      const direction = event.key === 'ArrowDown' ? 1 : -1
-      const nextIndex = currentIndex === -1 ? 0 : (currentIndex + direction + items.length) % items.length
-      items[nextIndex]?.focus()
+      focusItem(event.key === 'ArrowDown' ? 1 : -1, document.activeElement as HTMLElement | null)
       return
     }
 
     if (event.key === 'Home') {
       event.preventDefault()
-      items[0]?.focus()
+      focusBoundary('first')
       return
     }
 
     if (event.key === 'End') {
       event.preventDefault()
-      items[items.length - 1]?.focus()
+      focusBoundary('last')
       return
     }
 
