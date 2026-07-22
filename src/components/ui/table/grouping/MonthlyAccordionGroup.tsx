@@ -1,13 +1,14 @@
 import { Inbox } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { TableSkeleton } from '../core/TableSkeleton'
-import { StateCard } from '@/components/ui/feedback/StateCard'
+import { StateCard, type StateCardProps } from '@/components/ui/feedback/StateCard'
 
 interface EmptyState {
   icon?: LucideIcon
   title?: string
   message?: string
   action?: { label: string; onClick: () => void }
+  variant?: StateCardProps['variant']
 }
 
 interface MonthlyAccordionListProps {
@@ -36,6 +37,7 @@ export const MonthlyAccordionList = ({
         title={emptyState?.title}
         message={emptyState?.message ?? 'אין פריטים'}
         action={emptyState?.action}
+        variant={emptyState?.variant}
       />
     )
   }

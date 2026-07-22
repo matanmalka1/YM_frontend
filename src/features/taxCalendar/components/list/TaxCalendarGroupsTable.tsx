@@ -2,11 +2,10 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ExternalLink, FileText, Inbox } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
-import { StateCard } from '@/components/ui/feedback/StateCard'
 import {
-  TableSkeleton,
   actionsColumn,
   monoColumn,
+  MonthlyAccordionList,
   PaginatedDataTable,
   RowActionItem,
   RowActionsMenu,
@@ -162,21 +161,18 @@ export const TaxCalendarGroupsTable = ({
   const getDueDate = useCallback((g: TaxCalendarGroup) => g.effective_due_date_min, [])
   const defaultOpenKey = useDefaultOpenGroup(groups, getKey, getDueDate)
 
-  if (isLoading) return <TableSkeleton rows={5} columns={8} />
-
-  if (groups.length === 0) {
-    return (
-      <StateCard
-        icon={Inbox}
-        title={TAX_CALENDAR_MESSAGES.list.noGroupsTitle}
-        message={TAX_CALENDAR_MESSAGES.list.noGroupsMessage}
-        variant="illustration"
-      />
-    )
-  }
-
   return (
-    <div className="space-y-2">
+    <MonthlyAccordionList
+      isLoading={isLoading}
+      isEmpty={groups.length === 0}
+      skeletonCols={8}
+      emptyState={{
+        icon: Inbox,
+        title: TAX_CALENDAR_MESSAGES.list.noGroupsTitle,
+        message: TAX_CALENDAR_MESSAGES.list.noGroupsMessage,
+        variant: 'illustration',
+      }}
+    >
       {groups.map((group) => {
         const isCurrentPeriod = isCurrentReportingPeriod(group.period, group.period_months_count)
         const effectiveRelativeLabel = formatRelativeDueLabel(group.effective_due_date_min)
@@ -224,7 +220,7 @@ export const TaxCalendarGroupsTable = ({
           </GroupedPeriodRow>
         )
       })}
-    </div>
+    </MonthlyAccordionList>
   )
 }
 
