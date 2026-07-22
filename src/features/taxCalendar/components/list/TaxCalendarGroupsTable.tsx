@@ -86,9 +86,14 @@ const GroupItemsRows = ({
   }
 
   const columns: Column<TaxCalendarGroupItem>[] = [
+    monoColumn({
+      key: 'office',
+      header: TAX_CALENDAR_MESSAGES.item.clientNumber,
+      getValue: (item) => formatPlainIdentifier(item.office_client_number),
+    }),
     {
       key: 'client',
-      header: GLOBAL_UI_MESSAGES.common.client,
+      header: GLOBAL_UI_MESSAGES.common.clientName,
       render: (item) => (
         <Link
           className="block max-w-[240px] truncate font-semibold text-gray-900 hover:text-info-600 hover:underline"
@@ -98,11 +103,6 @@ const GroupItemsRows = ({
         </Link>
       ),
     },
-    monoColumn({
-      key: 'office',
-      header: TAX_CALENDAR_MESSAGES.item.clientNumber,
-      getValue: (item) => formatPlainIdentifier(item.office_client_number),
-    }),
     textColumn({
       key: 'type',
       header: TAX_CALENDAR_MESSAGES.item.recordType,

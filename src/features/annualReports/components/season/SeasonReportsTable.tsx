@@ -62,7 +62,7 @@ const columns: Column<AnnualReportListItem>[] = [
   },
   textColumn({
     key: 'client_name',
-    header: GLOBAL_UI_MESSAGES.common.client,
+    header: GLOBAL_UI_MESSAGES.common.clientName,
     tone: 'strong',
     getValue: (r) => r.client_name ?? ANNUAL_REPORTS_MESSAGES.season.clientFallbackName(r.client_record_id),
   }),

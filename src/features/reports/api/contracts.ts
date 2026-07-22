@@ -31,6 +31,8 @@ export interface AgingReportResponse {
 export interface AnnualReportClientEntry {
   client_record_id: number;
   client_name: string;
+  client_id_number: string;
+  office_client_number: number;
   form_type: string | null;
   filing_deadline: string | null;
   days_until_deadline: number | null;
@@ -52,6 +54,7 @@ export interface AdvancePaymentReportItem {
   client_record_id: number;
   office_client_number?: number | null;
   client_name: string;
+  client_id_number: string;
   total_expected: string;
   total_paid: string;
   overdue_count: number;

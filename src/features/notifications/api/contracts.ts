@@ -68,6 +68,8 @@ export interface NotificationItem {
   id: number
   client_record_id: number
   client_name?: string | null
+  client_id_number?: string | null
+  office_client_number?: number | null
   business_name?: string | null
   trigger: NotificationTrigger
   trigger_label: string

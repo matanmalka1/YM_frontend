@@ -43,6 +43,8 @@ export const NOTIFICATIONS_MESSAGES = {
     fallbackTrigger: 'הודעה',
     fallbackDomain: 'כללי',
     type: 'סוג',
+    idNumber: 'ת.ז / ח.פ',
+    clientNumber: 'מס׳ לקוח',
     recipient: 'נמען',
     rowActionsAriaLabel: 'פעולות הודעה',
   },

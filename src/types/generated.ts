@@ -3357,6 +3357,8 @@ export interface components {
       office_client_number?: number | null
       /** Client Name */
       client_name: string
+      /** Client Id Number */
+      client_id_number: string
       /**
        * Total Expected
        * Format: decimal
@@ -4030,6 +4032,10 @@ export interface components {
       client_record_id: number
       /** Client Name */
       client_name: string
+      /** Client Id Number */
+      client_id_number: string
+      /** Office Client Number */
+      office_client_number: number
       form_type?: components['schemas']['PrimaryAnnualReportForm'] | null
       /** Filing Deadline */
       filing_deadline?: string | null
@@ -6163,8 +6169,8 @@ export interface components {
      *
      *     Contains the fields rendered by notification list rows across the
      *     notifications table, the bell drawer, and the per-client tab — including
-     *     the ``content_snapshot`` preview and ``business_name`` shown inline in the
-     *     compact lists. Routing references and delivery/debug fields
+     *     client identity fields for the global table and the ``content_snapshot``
+     *     preview and ``business_name`` shown inline in the compact lists. Routing references and delivery/debug fields
      *     (entity_*, channel, sent_at/failed_at, error_message, retry_count,
      *     triggered_by) stay on ``NotificationResponse`` and are served by
      *     ``GET /notifications/{notification_id}``.
@@ -6176,6 +6182,10 @@ export interface components {
       client_record_id: number
       /** Client Name */
       client_name?: string | null
+      /** Client Id Number */
+      client_id_number?: string | null
+      /** Office Client Number */
+      office_client_number?: number | null
       /** Business Name */
       business_name?: string | null
       trigger: components['schemas']['NotificationTrigger']

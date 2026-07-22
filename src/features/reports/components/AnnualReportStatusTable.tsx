@@ -5,6 +5,7 @@ import {
   DataTable,
   dateColumn,
   EmptyCell,
+  monoColumn,
   textColumn,
   type Column,
 } from "../../../components/ui/table";
@@ -14,6 +15,7 @@ import {
   getStatusVariant,
 } from "@/features/annualReports";
 import { REPORTS_MESSAGES } from "../messages";
+import { formatClientOfficeId } from "../../../utils/utils";
 
 interface Props {
   statuses: AnnualReportStatusGroup[];
@@ -22,9 +24,19 @@ interface Props {
 const clientColumns: Column<AnnualReportClientEntry>[] = [
   textColumn({
     key: "client_name",
-    header: GLOBAL_UI_MESSAGES.common.client,
+    header: GLOBAL_UI_MESSAGES.common.clientName,
     tone: "strong",
     getValue: (r) => r.client_name,
+  }),
+  monoColumn({
+    key: "client_id_number",
+    header: REPORTS_MESSAGES.annualStatus.idNumber,
+    getValue: (r) => r.client_id_number,
+  }),
+  monoColumn({
+    key: "office_client_number",
+    header: REPORTS_MESSAGES.annualStatus.clientNumber,
+    getValue: (r) => formatClientOfficeId(r.office_client_number),
   }),
   textColumn({
     key: "form_type",

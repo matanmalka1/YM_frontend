@@ -1,7 +1,16 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { Eye, Send } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
-import { actionsColumn, dateTimeColumn, RowActionItem, RowActionsMenu, textColumn, type Column } from '@/components/ui/table'
+import {
+  actionsColumn,
+  dateTimeColumn,
+  monoColumn,
+  RowActionItem,
+  RowActionsMenu,
+  textColumn,
+  type Column,
+} from '@/components/ui/table'
+import { formatClientOfficeId } from '@/utils/utils'
 import { TRIGGER_LABELS, type NotificationItem } from '../../api'
 import { NOTIFICATION_DOMAIN_LABELS, NOTIFICATION_STATUS_LABELS, getNotificationStatusVariant } from '../../constants'
 import { NOTIFICATIONS_MESSAGES } from '../../messages'
@@ -50,8 +59,18 @@ export const buildNotificationColumns = ({
     ? [
         textColumn<NotificationItem>({
           key: 'client',
-          header: GLOBAL_UI_MESSAGES.common.client,
+          header: GLOBAL_UI_MESSAGES.common.clientName,
           getValue: (item) => item.client_name ?? `#${item.client_record_id}`,
+        }),
+        monoColumn<NotificationItem>({
+          key: 'client_id_number',
+          header: NOTIFICATIONS_MESSAGES.columns.idNumber,
+          getValue: (item) => item.client_id_number,
+        }),
+        monoColumn<NotificationItem>({
+          key: 'office_client_number',
+          header: NOTIFICATIONS_MESSAGES.columns.clientNumber,
+          getValue: (item) => formatClientOfficeId(item.office_client_number),
         }),
       ]
     : []),

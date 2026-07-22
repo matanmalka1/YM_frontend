@@ -53,7 +53,7 @@ export const buildChargeColumns = ({
     }),
     {
       key: 'client_record_id',
-      header: GLOBAL_UI_MESSAGES.common.client,
+      header: GLOBAL_UI_MESSAGES.common.clientName,
       render: (charge) => <ChargeClientCell charge={charge} />,
     },
   ]

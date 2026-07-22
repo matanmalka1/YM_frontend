@@ -1,5 +1,5 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
-import { DataTable, type Column } from '@/components/ui/table';
+import { DataTable, monoColumn, type Column } from '@/components/ui/table';
 import { formatClientOfficeId, formatPercent } from "../../../utils/utils";
 import type { AdvancePaymentReportItem, AdvancePaymentReportResponse } from "../api";
 import { formatILS, toReportNumber } from "../utils";
@@ -9,22 +9,22 @@ interface Props {
   data: AdvancePaymentReportResponse;
 }
 
-const getClientNumberLabel = (r: AdvancePaymentReportItem) => {
-  const number = r.office_client_number ?? r.client_record_id;
-  return REPORTS_MESSAGES.advances.clientNumber(formatClientOfficeId(number));
-};
-
 const columns: Column<AdvancePaymentReportItem>[] = [
   {
     key: "client_name",
-    header: GLOBAL_UI_MESSAGES.common.client,
-    render: (r) => (
-      <div className="min-w-0">
-        <div className="font-medium text-gray-900">{r.client_name}</div>
-        <div className="text-xs text-gray-500">{getClientNumberLabel(r)}</div>
-      </div>
-    ),
+    header: GLOBAL_UI_MESSAGES.common.clientName,
+    render: (r) => <span className="font-medium text-gray-900">{r.client_name}</span>,
   },
+  monoColumn({
+    key: "client_id_number",
+    header: REPORTS_MESSAGES.advances.idNumber,
+    getValue: (r) => r.client_id_number,
+  }),
+  monoColumn({
+    key: "office_client_number",
+    header: REPORTS_MESSAGES.advances.clientNumber,
+    getValue: (r) => formatClientOfficeId(r.office_client_number),
+  }),
   {
     key: "total_expected",
     header: REPORTS_MESSAGES.advances.expected,

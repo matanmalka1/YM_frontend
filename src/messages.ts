@@ -36,6 +36,7 @@ export const GLOBAL_UI_MESSAGES = {
     search: 'חיפוש',
     status: 'סטטוס',
     client: 'לקוח',
+    clientName: 'שם לקוח',
     clients: 'לקוחות',
     notes: 'הערות',
     details: 'פרטים',

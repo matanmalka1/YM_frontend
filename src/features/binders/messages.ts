@@ -119,7 +119,7 @@ export const BINDERS_MESSAGES = {
   columns: {
     officeClientNumber: "מס' לקוח",
     idNumber: 'ת.ז / ח.פ',
-    binderNumber: 'מספר קלסר',
+    binderNumber: 'מס׳ קלסר',
     location: 'מיקום',
     capacity: 'קיבולת',
     period: 'תקופה',

@@ -54,6 +54,11 @@ export const buildAdvancePaymentBatchColumns = ({
       </>
     ),
   },
+  monoColumn({
+    key: 'id_number',
+    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.idNumberHeader,
+    getValue: (row) => row.id_number,
+  }),
   textColumn({
     key: 'period',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.periodHeader,

@@ -38,6 +38,8 @@ export const REPORTS_MESSAGES = {
     title: 'סטטוס דוחות שנתיים',
     description: (total: number, year: number) => `סה"כ ${total} דוחות לשנת ${year}`,
     form: 'טופס',
+    idNumber: 'ת.ז / ח.פ',
+    clientNumber: 'מס׳ לקוח',
     filingDeadline: 'מועד הגשה',
     daysUntilDeadline: 'ימים לסיום',
     overdueDays: (days: number) => `באיחור ${days} ימים`,
@@ -46,7 +48,8 @@ export const REPORTS_MESSAGES = {
   advances: {
     title: 'דוח גבייה — מקדמות',
     description: (clients: number, rate: string) => `${clients} לקוחות · אחוז גבייה: ${rate}`,
-    clientNumber: (number: string) => `לקוח ${number}`,
+    idNumber: 'ת.ז / ח.פ',
+    clientNumber: 'מס׳ לקוח',
     expected: 'צפוי',
     paid: 'שולם',
     gap: 'פער',

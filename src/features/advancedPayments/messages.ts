@@ -106,10 +106,11 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     notesPlaceholder: 'הערות...',
   },
   batchColumns: {
-    officeNumberHeader: 'מס׳',
+    officeNumberHeader: 'מס׳ לקוח',
     clientNameHeader: 'שם לקוח',
+    idNumberHeader: 'ת.ז / ח.פ',
     missingTurnoverBadge: 'חסר מחזור',
-    periodHeader: 'תקופת מקדמה',
+    periodHeader: 'תקופת דיווח',
     dueDateHeader: 'תאריך יעד',
     turnoverHeader: 'מחזור מדווח',
     expectedHeader: 'צפוי',

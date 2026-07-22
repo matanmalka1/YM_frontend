@@ -99,7 +99,7 @@ export const buildGlobalBinderColumns = ({
         }),
         textColumn<BinderResponse>({
           key: 'client_name',
-          header: GLOBAL_UI_MESSAGES.common.client,
+          header: GLOBAL_UI_MESSAGES.common.clientName,
           getValue: (binder) => renderClientCell(binder),
         }),
         monoColumn<BinderResponse>({

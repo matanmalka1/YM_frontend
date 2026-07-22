@@ -21,7 +21,7 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
   }),
   {
     key: 'client_id',
-    header: GLOBAL_UI_MESSAGES.common.client,
+    header: GLOBAL_UI_MESSAGES.common.clientName,
     render: (item) => {
       const name = item.client_name ?? formatClientOfficeId(item.office_client_number)
       const showPeriod = opts.duplicateClientIds?.has(item.client_record_id)
