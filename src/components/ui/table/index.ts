@@ -17,5 +17,4 @@ export * from './grouping/groupedPeriodRow.utils'
 // Toolbar / chrome
 export * from './toolbar/RowActions'
 export * from './toolbar/BulkSelectionToolbar'
-export * from './toolbar/ActiveFilterBadges'
 export * from './toolbar/PaginationCard'

@@ -1,7 +1,7 @@
-import { cn } from '../../../../utils/utils'
-import { Badge } from '../../primitives/Badge'
-import { Button } from '../../primitives/Button'
-import { GLOBAL_UI_MESSAGES } from '../../../../messages'
+import { cn } from '../../../utils/utils'
+import { Badge } from '../primitives/Badge'
+import { Button } from '../primitives/Button'
+import { GLOBAL_UI_MESSAGES } from '../../../messages'
 
 export interface FilterBadge {
   key: string

@@ -30,7 +30,7 @@ import { useWorkQueue } from './useWorkQueue'
 import { useWorkQueueActions } from './useWorkQueueActions'
 import type { WorkQueueParams } from '../api/contracts'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
-import type { FilterBadge } from '@/components/ui/table'
+import type { FilterBadge } from '@/components/ui/filters/ActiveFilterBadges'
 import { WORK_QUEUE_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 // eslint-disable-next-line no-restricted-imports -- avoid the tasks feature barrel here; it imports workQueue-backed components.
 import { taskStatusLabels, taskStatusValues } from '@/features/tasks/constants/labels'
