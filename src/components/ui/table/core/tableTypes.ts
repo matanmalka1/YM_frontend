@@ -33,7 +33,6 @@ export interface Column<T> {
   header: string
   headerRender?: () => ReactNode
   render: (item: T, index: number) => ReactNode
-  editRender?: (item: T, index: number) => ReactNode
   kind?: TableColumnKind
   tone?: TableCellTone
   truncate?: boolean

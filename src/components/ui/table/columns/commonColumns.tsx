@@ -49,7 +49,6 @@ interface ActionsColumnOptions<T> {
   className?: string
   headerClassName?: string
   render: (item: T, index: number) => ReactNode
-  editRender?: (item: T, index: number) => ReactNode
 }
 
 type ValueColumnKind = 'text' | 'mono' | 'number' | 'money'
@@ -110,7 +109,6 @@ export const actionsColumn = <T,>({
   className,
   headerClassName,
   render,
-  editRender,
 }: ActionsColumnOptions<T>): Column<T> => ({
   key,
   header,
@@ -118,5 +116,4 @@ export const actionsColumn = <T,>({
   className,
   headerClassName,
   render,
-  editRender,
 })

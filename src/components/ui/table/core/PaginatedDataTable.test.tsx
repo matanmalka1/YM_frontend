@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { DataTable, type Column } from './DataTable'
+import { type Column } from './DataTable'
 import { PaginatedDataTable } from './PaginatedDataTable'
 
 type Row = {
@@ -37,40 +37,41 @@ describe('PaginatedDataTable', () => {
     expect(html).not.toContain('לא נמצאו נתונים')
   })
 
-  it('suppresses a custom empty renderer when an error exists with no rows', () => {
+  it('suppresses the empty state during a background refetch with no rows', () => {
     const html = renderToStaticMarkup(
       <PaginatedDataTable
         data={[]}
         columns={columns}
         getRowKey={(row) => row.id}
-        error="טעינת הנתונים נכשלה"
+        isFetching
         page={1}
         pageSize={10}
         total={0}
         onPageChange={() => undefined}
-        renderEmpty={() => <div>מצב ריק מותאם</div>}
+        emptyState={{ title: 'אין רשומות', message: 'לא נמצאו נתונים' }}
       />,
     )
 
-    expect(html).toContain('טעינת הנתונים נכשלה')
-    expect(html).not.toContain('מצב ריק מותאם')
+    expect(html).not.toContain('אין רשומות')
+    expect(html).not.toContain('לא נמצאו נתונים')
+    expect(html).not.toContain('<table')
   })
-})
 
-describe('DataTable', () => {
-  it('shows only the error alert when the raw table fails with no rows', () => {
+  it('shows the empty state when the list is settled and empty', () => {
     const html = renderToStaticMarkup(
-      <DataTable
+      <PaginatedDataTable
         data={[]}
         columns={columns}
         getRowKey={(row) => row.id}
-        error="טעינת הרשימה נכשלה"
-        emptyState={{ title: 'אין נתונים', message: 'הרשימה ריקה' }}
+        page={1}
+        pageSize={10}
+        total={0}
+        onPageChange={() => undefined}
+        emptyState={{ title: 'אין רשומות', message: 'לא נמצאו נתונים' }}
       />,
     )
 
-    expect(html).toContain('טעינת הרשימה נכשלה')
-    expect(html).not.toContain('אין נתונים')
-    expect(html).not.toContain('הרשימה ריקה')
+    expect(html).toContain('אין רשומות')
+    expect(html).toContain('לא נמצאו נתונים')
   })
 })

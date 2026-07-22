@@ -7,7 +7,6 @@ import type { LucideIcon } from 'lucide-react'
 import { Inbox } from 'lucide-react'
 import { TableSkeleton } from './TableSkeleton'
 import { GLOBAL_UI_MESSAGES } from '../../../../messages'
-import { Alert } from '../../overlays/Alert'
 import type { Column, TableSurface, TableDensity, TableRowVariant } from './tableTypes'
 import { getAlignClass, getCellClass, getRowVariantClass } from './tableStyles'
 
@@ -17,30 +16,20 @@ export interface DataTableProps<T> {
   data: T[]
   columns: Column<T>[]
   getRowKey: (item: T) => string | number
-  /** Key of the row currently being inline-edited; its cells use `Column.editRender` where defined. */
+  /** Key of the row currently being inline-edited; `renderEditRow` replaces that row. */
   editingRowKey?: string | number | null
   /**
    * Replaces the entire <tr> for the row whose key === `editingRowKey` — use when the edit UI is a
-   * cohesive form spanning the row (returns a full `<tr>`). Takes precedence over per-cell `editRender`.
+   * cohesive form spanning the row (returns a full `<tr>`).
    */
   renderEditRow?: (item: T) => ReactNode
   /** Replaces the auto per-column `<tfoot>` with a custom footer row (e.g. spanning/colSpan totals). Returns `<tr>` content. */
   renderFooter?: () => ReactNode
   onRowClick?: (item: T) => void
   className?: string
-  error?: string | null
   emptyMessage?: string
   isLoading?: boolean
-  onRetry?: () => void
-  rowClassName?: (item: T, index: number) => string
   getRowVariant?: (item: T, index: number) => TableRowVariant | undefined
-  stickyHeader?: boolean
-  /**
-   * Max height of the scroll area. Required for stickyHeader to work — the
-   * thead sticks against this bounded scroll container. Tailwind class or CSS value.
-   * @default 'max-h-[70vh]' when stickyHeader is set
-   */
-  maxHeight?: string
   emptyState?: Omit<EmptyStateProps, 'icon' | 'message'> & {
     icon?: LucideIcon
     message?: string
@@ -60,14 +49,9 @@ export const DataTable = <T,>({
   renderFooter,
   onRowClick,
   className,
-  error,
   emptyMessage = GLOBAL_UI_MESSAGES.common.noData,
   isLoading = false,
-  onRetry,
-  rowClassName,
   getRowVariant,
-  stickyHeader = false,
-  maxHeight,
   emptyState,
   footerClassName,
   surface = 'card',
@@ -109,10 +93,6 @@ export const DataTable = <T,>({
     )
   }
 
-  if (error && data.length === 0) {
-    return <Alert variant="error" message={error} onRetry={onRetry} className={className} />
-  }
-
   if (data.length === 0) {
     return (
       <StateCard
@@ -127,12 +107,10 @@ export const DataTable = <T,>({
     )
   }
 
-  const heightClass = stickyHeader ? (maxHeight ?? 'max-h-[70vh]') : undefined
-
   const table = (
-    <div className={cn('overflow-x-auto', stickyHeader && cn('overflow-y-auto', heightClass))}>
+    <div className="overflow-x-auto">
       <table className="w-full border-collapse">
-        <thead className={cn(stickyHeader && 'sticky top-0 z-20')}>
+        <thead>
           <tr className={cn('border-b border-gray-200 text-right', !isBare && 'bg-gray-100')}>
             {columns.map((column) => (
               <th
@@ -141,7 +119,6 @@ export const DataTable = <T,>({
                   headerCellClass,
                   'font-semibold uppercase tracking-wider text-gray-500',
                   'first:ps-5 last:pe-5',
-                  stickyHeader && 'border-b border-gray-200 bg-gray-100/95 backdrop-blur-sm',
                   getAlignClass(column),
                   column.headerClassName,
                 )}
@@ -167,7 +144,6 @@ export const DataTable = <T,>({
                     'cursor-pointer hover:bg-primary-50/60 active:bg-primary-50/80 hover:shadow-[inset_-3px_0_0_0_var(--color-primary-400)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset',
                   !onRowClick && 'hover:bg-gray-50/80',
                   rowVariant && getRowVariantClass(rowVariant),
-                  rowClassName?.(item, index),
                 )}
                 onClick={() => onRowClick?.(item)}
                 onKeyDown={(event) => handleRowKeyDown(event, item)}
@@ -176,9 +152,7 @@ export const DataTable = <T,>({
               >
                 {columns.map((column) => (
                   <td key={column.key} className={cellClass(column)}>
-                    {isRowEditing && column.editRender
-                      ? column.editRender(item, index)
-                      : cellContent(column.render(item, index), column)}
+                    {cellContent(column.render(item, index), column)}
                   </td>
                 ))}
               </tr>

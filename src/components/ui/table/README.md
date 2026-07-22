@@ -107,7 +107,7 @@ Feature columns describe intent with:
 - `align`, `truncate`, `wrap`, and `verticalAlign`
 - `getRowVariant`: `primarySoft`, `warningSoft`, `dangerSoft`, or `muted`
 
-Do not use column `className`, `headerClassName`, or table `rowClassName` for default colour, font weight, tabular numbers, padding, alignment, hover, row background state, or per-column width/height tuning. Use them only for layout that the semantic API cannot express, such as a domain accent border, `whitespace-nowrap`, or `break-words`.
+Do not use column `className` or `headerClassName` for default colour, font weight, tabular numbers, padding, alignment, hover, row background state, or per-column width/height tuning. Use them only for layout that the semantic API cannot express, such as a domain accent border, `whitespace-nowrap`, or `break-words`.
 
 In a custom `render` whose cell can collapse to "no value", return `<EmptyCell />` instead of hand-rolling `<span className="text-gray-400">—</span>`. The `kind`-based helpers (`textColumn`, `dateColumn`, …) already emit it for empty `getValue` results.
 
