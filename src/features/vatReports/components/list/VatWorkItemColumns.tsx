@@ -27,7 +27,7 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
       const showPeriod = opts.duplicateClientIds?.has(item.client_record_id)
 
       return (
-        <span className="mx-auto block max-w-[220px]">
+        <span className="block max-w-[220px]">
           <span className="block truncate font-semibold text-gray-900">{name}</span>
           {showPeriod && <span className="block text-xs text-gray-500">{VAT_MESSAGES.columns.vatItemId(item.id)}</span>}
         </span>
