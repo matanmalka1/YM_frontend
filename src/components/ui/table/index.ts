@@ -9,11 +9,6 @@ export * from './columns/commonColumns'
 export * from './columns/EmptyCell'
 export * from './columns/tableSelection'
 
-// Grouping (accordion / period rows)
-export * from './grouping/MonthlyAccordionGroup'
-export * from './grouping/GroupedPeriodRow'
-export * from './grouping/groupedPeriodRow.utils'
-
 // Toolbar / chrome
 export * from './toolbar/RowActions'
 export * from './toolbar/BulkSelectionToolbar'

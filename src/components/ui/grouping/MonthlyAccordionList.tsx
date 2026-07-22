@@ -1,6 +1,6 @@
 import { Inbox } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import { TableSkeleton } from '../core/TableSkeleton'
+import { TableSkeleton } from '@/components/ui/table'
 import { StateCard, type StateCardProps } from '@/components/ui/feedback/StateCard'
 
 interface EmptyState {

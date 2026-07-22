@@ -2,17 +2,10 @@ import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { Inbox } from 'lucide-react'
 import { Alert } from '@/components/ui/overlays/Alert'
-import {
-  TableSkeleton,
-  PaginationCard,
-  DataTable,
-  MonthlyAccordionList,
-  GroupedPeriodRow,
-  formatDueDateLabel,
-  formatRelativeDueLabel,
-  type Column,
-  type PeriodSummaryMetric,
-} from '@/components/ui/table'
+import { TableSkeleton, PaginationCard, DataTable, type Column } from '@/components/ui/table'
+import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/grouping/GroupedPeriodRow'
+import { MonthlyAccordionList } from '@/components/ui/grouping/MonthlyAccordionList'
+import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/grouping/groupedPeriodRow.utils'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'

@@ -5,16 +5,15 @@ import { Badge } from '@/components/ui/primitives/Badge'
 import {
   actionsColumn,
   monoColumn,
-  MonthlyAccordionList,
   PaginatedDataTable,
   RowActionItem,
   RowActionsMenu,
   textColumn,
-  GroupedPeriodRow,
-  formatRelativeDueLabel,
   type Column,
-  type PeriodSummaryMetric,
 } from '@/components/ui/table'
+import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/grouping/GroupedPeriodRow'
+import { MonthlyAccordionList } from '@/components/ui/grouping/MonthlyAccordionList'
+import { formatRelativeDueLabel } from '@/components/ui/grouping/groupedPeriodRow.utils'
 import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
 import { cn, formatDate, formatPlainIdentifier, getErrorMessage } from '@/utils/utils'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
