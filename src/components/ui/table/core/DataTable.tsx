@@ -2,8 +2,7 @@ import { Fragment, type KeyboardEvent, type ReactNode } from 'react'
 import { Card } from '../../primitives/Card'
 import { cn } from '../../../../utils/utils'
 import { StateCard } from '../../feedback/StateCard'
-import type { StateCardProps as EmptyStateProps } from '../../feedback/StateCard'
-import type { LucideIcon } from 'lucide-react'
+import type { StateCardProps } from '../../feedback/StateCard'
 import { Inbox } from 'lucide-react'
 import { TableSkeleton } from './TableSkeleton'
 import { GLOBAL_UI_MESSAGES } from '../../../../messages'
@@ -30,10 +29,7 @@ export interface DataTableProps<T> {
   emptyMessage?: string
   isLoading?: boolean
   getRowVariant?: (item: T, index: number) => TableRowVariant | undefined
-  emptyState?: Omit<EmptyStateProps, 'icon' | 'message'> & {
-    icon?: LucideIcon
-    message?: string
-  }
+  emptyState?: Partial<StateCardProps>
   /** Classes applied to the totals <tfoot> (rendered only when a column defines `footer`). */
   footerClassName?: string
   surface?: TableSurface

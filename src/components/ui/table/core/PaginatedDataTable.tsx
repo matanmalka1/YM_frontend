@@ -3,19 +3,8 @@ import { DataTable, type DataTableProps } from './DataTable'
 import { getTotalPages } from '../../../../utils/paginationUtils'
 import { PaginationCard } from '../toolbar/PaginationCard'
 
-type BasePaginatedDataTableProps<T> = Pick<
-  DataTableProps<T>,
-  | 'className'
-  | 'columns'
-  | 'data'
-  | 'density'
-  | 'emptyMessage'
-  | 'emptyState'
-  | 'getRowKey'
-  | 'onRowClick'
-  | 'getRowVariant'
-  | 'surface'
->
+/** Every DataTable prop flows through; `isLoading` is re-declared here to drive pagination visibility too. */
+type BasePaginatedDataTableProps<T> = Omit<DataTableProps<T>, 'isLoading'>
 
 export interface PaginatedDataTableProps<T> extends BasePaginatedDataTableProps<T> {
   error?: string | null
@@ -32,26 +21,18 @@ export interface PaginatedDataTableProps<T> extends BasePaginatedDataTableProps<
 }
 
 export const PaginatedDataTable = <T,>({
-  className,
-  columns,
   data,
-  emptyMessage,
-  emptyState,
   error,
-  getRowKey,
   isLoading = false,
   isFetching = false,
   label,
   onPageChange,
   onRetry,
-  onRowClick,
-  getRowVariant,
   page,
   pageSize,
   showPagination,
-  surface,
-  density,
   total,
+  ...dataTableProps
 }: PaginatedDataTableProps<T>) => {
   const shouldShowPagination = showPagination ?? (!isLoading && total > 0 && data.length > 0)
   const isEmpty = !isLoading && data.length === 0
@@ -64,19 +45,7 @@ export const PaginatedDataTable = <T,>({
     <>
       {error && <Alert variant="error" message={error} onRetry={onRetry} />}
       {suppressEmpty || shouldShowErrorOnly ? null : (
-        <DataTable
-          data={data}
-          columns={columns}
-          getRowKey={getRowKey}
-          onRowClick={onRowClick}
-          getRowVariant={getRowVariant}
-          className={className}
-          emptyMessage={emptyMessage}
-          isLoading={isLoading}
-          emptyState={emptyState}
-          surface={surface}
-          density={density}
-        />
+        <DataTable {...dataTableProps} data={data} isLoading={isLoading} />
       )}
       {shouldShowPagination && (
         <PaginationCard
