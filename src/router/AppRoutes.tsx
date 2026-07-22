@@ -29,7 +29,6 @@ import { NotificationsPage } from '../features/notifications/pages/Notifications
 import { WorkQueuePage } from '../features/workQueue/pages/WorkQueuePage'
 import { Search } from '../features/search/pages/SearchPage'
 import { SigningPage } from '../features/signing/pages/SigningPage'
-import { TaxCalendarGroupsPage } from '../features/taxCalendar/pages/TaxCalendarGroupsPage'
 import { TaxCalendarSettingsPage } from '../features/taxCalendarSettings/pages/TaxCalendarSettingsPage'
 import { TaxDashboardPage } from '../features/taxDashboard/pages/TaxDashboardPage'
 import { TasksPage } from '../features/tasks/pages/TasksPage'
@@ -164,7 +163,6 @@ export const AppRoutes: React.FC = () => {
             <Route path="clients/:clientId/charges/:chargeId" element={<ClientChargeDetail />} />
             <Route path="clients/:clientId/vat" element={<ClientDetails initialTab="vat" />} />
             <Route path="clients/:clientId/vat/:workItemId" element={<ClientVatWorkItemDetail />} />
-            <Route path="clients/:clientId/tax-calendar" element={<ClientDetails initialTab="tax-calendar" />} />
             <Route path="clients/:clientId/advance-payments" element={<ClientDetails initialTab="advance-payments" />} />
             <Route path="clients/:clientId/advance-payments/:paymentId" element={<ClientAdvancePaymentDetail />} />
             <Route path="clients/:clientId/annual-reports" element={<ClientDetails initialTab="annual-reports" />} />
@@ -178,11 +176,10 @@ export const AppRoutes: React.FC = () => {
             <Route path="charges" element={<Charges />} />
             <Route path="charges/:chargeId" element={<ChargeDetail />} />
             <Route path="notifications" element={<NotificationsPage />} />
-            <Route path="tax" element={<Navigate to="/tax/calendar" replace />} />
+            <Route path="tax" element={<Navigate to="/tax/vat" replace />} />
             <Route path="tax/dashboard" element={<TaxDashboardPage />} />
             <Route path="tax/reports" element={<AnnualReportsPage />} />
             <Route path="tax/reports/:reportId" element={<AnnualReportDetail />} />
-            <Route path="tax/calendar" element={<TaxCalendarGroupsPage />} />
             <Route path="tax/advance-payments" element={<AdvancePayments />} />
             <Route path="tax/advance-payments/:clientId/:paymentId" element={<AdvancePaymentDetail />} />
             <Route path="tax/vat" element={<VatWorkItems />} />

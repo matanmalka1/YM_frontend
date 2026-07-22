@@ -52,7 +52,6 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { to: '/tax/vat', label: 'מע״מ', icon: ClipboardList, placement: 'top' },
       { to: '/tax/advance-payments', label: 'מקדמות', icon: CalendarDays, placement: 'top' },
-      { to: '/tax/calendar', label: 'יומן מס', icon: CalendarDays, placement: 'top' },
       { to: '/tax/reports', label: 'דוחות שנתיים', icon: TableProperties, placement: 'top' },
     ],
   },

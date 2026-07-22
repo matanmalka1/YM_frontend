@@ -22,7 +22,6 @@ import { ClientBindersTab } from '@/features/binders'
 import { ClientDocumentsTab } from '@/features/documents'
 import { NotesCard } from '@/features/notes'
 import { NotificationsTab } from '@/features/notifications'
-import { ClientTaxCalendarTab } from '@/features/taxCalendar'
 import { VatClientSummaryPanel } from '@/features/vatReports'
 import { ClientTasksTab } from '@/features/tasks'
 import type { UpdateClientPayload, ClientRecordResponse } from '../../api'
@@ -103,7 +102,6 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
       {activeTab === 'binders' && <ClientBindersTab clientId={client.id} clientName={client.full_name} />}
       {activeTab === 'charges' && <ClientChargesTab clientId={client.id} clientName={client.full_name} />}
       {activeTab === 'vat' && <VatClientSummaryPanel clientId={client.id} />}
-      {activeTab === 'tax-calendar' && <ClientTaxCalendarTab clientId={client.id} />}
       {activeTab === 'advance-payments' && <ClientAdvancePaymentsTab clientRecordId={client.id} />}
       {activeTab === 'annual-reports' && <ClientAnnualReportsTab clientId={client.id} />}
       {activeTab === 'notifications' && <NotificationsTab clientRecordId={client.id} clientName={client.full_name} />}

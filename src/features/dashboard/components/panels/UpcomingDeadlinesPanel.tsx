@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom'
-import { CalendarDays, ChevronLeft, Landmark } from 'lucide-react'
+import { CalendarDays, Landmark } from 'lucide-react'
 import { DashboardPanel, DashboardSectionHeader } from '../shared/DashboardLayout'
 import { InlineState } from '@/components/ui/feedback/InlineState'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
@@ -9,14 +8,10 @@ import { DASHBOARD_MESSAGES } from '../../messages'
 
 const UPCOMING_DEADLINES_LIMIT = 4
 
-/**
- * Local-midnight epoch for a `YYYY-MM-DD` due date. Parsed in local time (not `new Date(str)`,
- * which is UTC) so it compares correctly against a local start-of-day boundary.
- */
-const toLocalDueTime = (value: string): number => {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value)
-  if (!match) return Number.POSITIVE_INFINITY
-  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])).getTime()
+/** Local calendar date as `YYYY-MM-DD` for the server-side `due_after` cutoff. */
+const todayIsoDate = (): string => {
+  const now = new Date()
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
 }
 
 const formatObligationTitle = (group: TaxCalendarGroup): string => {
@@ -65,20 +60,19 @@ const UpcomingDeadlineRow = ({ group }: { group: TaxCalendarGroup }) => {
 
 export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string }) => {
   const currentYear = new Date().getFullYear()
+  // The backend owns "upcoming open, nearest first": status=open + due_after=today + order=due, capped
+  // to the limit. The panel just renders what it returns — no client-side filter/sort/slice/TZ math.
   const groupsQuery = useTaxCalendarGroups({
     tax_year_after: currentYear,
     tax_year_before: currentYear + 1,
     include_empty: false,
+    status: 'open',
+    due_after: todayIsoDate(),
+    order: 'due',
+    page_size: UPCOMING_DEADLINES_LIMIT,
   })
 
-  const startOfToday = new Date()
-  startOfToday.setHours(0, 0, 0, 0)
-  const startOfTodayTime = startOfToday.getTime()
-
-  const groups = (groupsQuery.data?.items ?? [])
-    .filter((group) => group.open_count > 0 && toLocalDueTime(group.effective_due_date_min) >= startOfTodayTime)
-    .sort((a, b) => toLocalDueTime(a.effective_due_date_min) - toLocalDueTime(b.effective_due_date_min))
-    .slice(0, UPCOMING_DEADLINES_LIMIT)
+  const groups = groupsQuery.data?.items ?? []
 
   return (
     <DashboardPanel className={`flex flex-col ${className}`}>
@@ -105,16 +99,6 @@ export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string 
             description={DASHBOARD_MESSAGES.deadlines.emptyDescription}
           />
         )}
-      </div>
-
-      <div className="border-t border-slate-100 px-4 py-3 text-center">
-        <Link
-          to="/tax/calendar"
-          className="inline-flex items-center justify-center gap-1 text-sm font-bold text-primary-600 hover:text-primary-700 hover:underline"
-        >
-          <ChevronLeft className="h-4 w-4" />
-          {DASHBOARD_MESSAGES.deadlines.viewAll}
-        </Link>
       </div>
     </DashboardPanel>
   )

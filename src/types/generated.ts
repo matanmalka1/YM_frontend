@@ -934,23 +934,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v1/tax-calendar/groups/{tax_calendar_entry_id}/items': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Get Tax Calendar Group Items */
-    get: operations['get_tax_calendar_group_items_api_v1_tax_calendar_groups__tax_calendar_entry_id__items_get']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/api/v1/settings/tax-calendar/rules': {
     parameters: {
       query?: never
@@ -7747,58 +7730,6 @@ export interface components {
       /** Deadline Rule Id */
       deadline_rule_id: number
     }
-    /** TaxCalendarGroupItem */
-    TaxCalendarGroupItem: {
-      /** Source Type */
-      source_type: string
-      /** Source Id */
-      source_id: number
-      /** Client Record Id */
-      client_record_id: number
-      /** Office Client Number */
-      office_client_number?: number | null
-      /** Client Name */
-      client_name?: string | null
-      /** Id Number */
-      id_number?: string | null
-      /** Period */
-      period?: string | null
-      /** Period Months Count */
-      period_months_count?: number | null
-      /** Tax Year */
-      tax_year?: number | null
-      /** Status */
-      status: string
-      /**
-       * Regulatory Due Date
-       * Format: date
-       */
-      regulatory_due_date: string
-      /**
-       * Effective Due Date
-       * Format: date
-       */
-      effective_due_date: string
-      /** Done */
-      done: boolean
-      /** Overdue */
-      overdue: boolean
-    }
-    /** TaxCalendarGroupItemsResponse */
-    TaxCalendarGroupItemsResponse: {
-      /** Items */
-      items: components['schemas']['TaxCalendarGroupItem'][]
-      /** Page */
-      page: number
-      /** Page Size */
-      page_size: number
-      /** Total */
-      total: number
-      /** Tax Calendar Entry Id */
-      tax_calendar_entry_id: number
-      /** Obligation Type */
-      obligation_type: string
-    }
     /** TaxCalendarGroupListResponse */
     TaxCalendarGroupListResponse: {
       /** Items */
@@ -12495,6 +12426,8 @@ export interface operations {
         client_record_id?: number | null
         client_search?: string | null
         status?: string
+        due_after?: string | null
+        order?: string
         page?: number
         page_size?: number
       }
@@ -12524,69 +12457,6 @@ export interface operations {
       }
       /** @description Forbidden */
       403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HTTPValidationError']
-        }
-      }
-    }
-  }
-  get_tax_calendar_group_items_api_v1_tax_calendar_groups__tax_calendar_entry_id__items_get: {
-    parameters: {
-      query?: {
-        page?: number
-        page_size?: number
-        client_search?: string | null
-        client_record_id?: number | null
-      }
-      header?: never
-      path: {
-        tax_calendar_entry_id: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['TaxCalendarGroupItemsResponse']
-        }
-      }
-      /** @description Authentication required */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Resource not found */
-      404: {
         headers: {
           [name: string]: unknown
         }

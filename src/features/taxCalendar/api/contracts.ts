@@ -36,44 +36,11 @@ export interface TaxCalendarGroupsParams {
   tax_year_before?: number
   obligation_type?: TaxCalendarObligationType
   status?: 'all' | 'open' | 'overdue' | 'done'
+  due_after?: string
+  order?: 'period' | 'due'
   include_empty?: boolean
   client_record_id?: number
   client_search?: string
   page?: number
   page_size?: number
-}
-
-export type TaxCalendarGroupItemSourceType = 'vat_work_item' | 'advance_payment' | 'annual_report'
-
-export interface TaxCalendarGroupItem {
-  source_type: TaxCalendarGroupItemSourceType
-  source_id: number
-  client_record_id: number
-  office_client_number: number | null
-  client_name: string | null
-  id_number: string | null
-  period: string | null
-  period_months_count: number | null
-  tax_year: number | null
-  status: string
-  regulatory_due_date: string
-  effective_due_date: string
-  done: boolean
-  overdue: boolean
-}
-
-export interface TaxCalendarGroupItemResponse {
-  tax_calendar_entry_id: number
-  obligation_type: TaxCalendarObligationType
-  items: TaxCalendarGroupItem[]
-  page: number
-  page_size: number
-  total: number
-}
-
-export interface TaxCalendarGroupItemsParams {
-  page?: number
-  page_size?: number
-  client_search?: string
-  client_record_id?: number
 }
