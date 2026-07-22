@@ -16,7 +16,6 @@ export interface PaginatedDataTableProps<T> extends BasePaginatedDataTableProps<
   onRetry?: () => void
   page: number
   pageSize: number
-  showPagination?: boolean
   total: number
 }
 
@@ -30,11 +29,10 @@ export const PaginatedDataTable = <T,>({
   onRetry,
   page,
   pageSize,
-  showPagination,
   total,
   ...dataTableProps
 }: PaginatedDataTableProps<T>) => {
-  const shouldShowPagination = showPagination ?? (!isLoading && total > 0 && data.length > 0)
+  const shouldShowPagination = !isLoading && data.length > 0 && total > pageSize
   const isEmpty = !isLoading && data.length === 0
   const shouldShowErrorOnly = Boolean(error) && isEmpty
   // While a background refetch holds an empty list, suppress the empty state

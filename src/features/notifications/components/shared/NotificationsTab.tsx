@@ -52,7 +52,6 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
         total={table.pagination.total}
         label={table.label}
         onPageChange={table.pagination.onPageChange}
-        showPagination={table.showPagination}
         emptyState={{ icon: Bell, message: NOTIFICATIONS_MESSAGES.tab.emptyClient }}
       />
 

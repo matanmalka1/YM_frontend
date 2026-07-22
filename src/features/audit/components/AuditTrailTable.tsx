@@ -89,7 +89,6 @@ export const AuditTrailTable = <TEntry extends AuditTrailTableEntry>({
       pageSize={pageSize}
       total={total}
       onPageChange={(nextPage) => onPageChange(nextPage - 1)}
-      showPagination={total > pageSize}
     />
   )
 }

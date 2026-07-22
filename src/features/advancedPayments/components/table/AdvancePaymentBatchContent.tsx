@@ -44,7 +44,6 @@ export const AdvancePaymentBatchContent = ({
       total={content.total}
       onPageChange={content.setPage}
       label={ADVANCED_PAYMENTS_MESSAGES.batchContent.paginationLabel}
-      showPagination={content.total > ADVANCE_PAYMENT_BATCH_PAGE_SIZE}
     />
   )
 }

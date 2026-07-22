@@ -166,7 +166,6 @@ export const useNotificationsPage = ({ pinnedClient }: UseNotificationsPageOptio
         onPageChange: setUrlPage,
       },
       label: 'הודעות',
-      showPagination: total > 0,
       emptyState: {
         icon: Bell,
         message: NOTIFICATIONS_MESSAGES.page.empty,

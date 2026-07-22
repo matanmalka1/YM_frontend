@@ -43,7 +43,6 @@ export const NotificationsPage: React.FC = () => {
         total={table.pagination.total}
         label={table.label}
         onPageChange={table.pagination.onPageChange}
-        showPagination={table.showPagination}
         emptyMessage={table.emptyState.message}
         emptyState={table.emptyState}
       />

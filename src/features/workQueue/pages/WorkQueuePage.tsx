@@ -47,7 +47,6 @@ export const WorkQueuePage: React.FC = () => {
         total={table.pagination.total}
         label={table.label}
         onPageChange={table.pagination.onPageChange}
-        showPagination={table.showPagination}
         emptyState={{
           icon: table.emptyState.icon,
           variant: table.emptyState.variant,

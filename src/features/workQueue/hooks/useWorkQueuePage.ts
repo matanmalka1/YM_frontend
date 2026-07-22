@@ -246,7 +246,6 @@ export const useWorkQueuePage = () => {
         onPageChange: setPage,
       },
       label: WORK_QUEUE_MESSAGES.page.tableLabel,
-      showPagination: total > 0,
       emptyState,
     },
     modals: {

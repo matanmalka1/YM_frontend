@@ -148,7 +148,6 @@ const GroupItemsRows = ({
       total={data?.total ?? 0}
       label={TAX_CALENDAR_MESSAGES.list.records}
       onPageChange={setPage}
-      showPagination={Boolean(data && data.total > ITEM_PAGE_SIZE)}
     />
   )
 }
