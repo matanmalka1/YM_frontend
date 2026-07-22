@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { getErrorMessage } from '@/utils/utils'
+import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
+import { invalidateTaskDerivedQueries } from '@/lib/taskDerivedQueries'
 import { tasksApi } from '../api/tasks.api'
 import { tasksQK } from '../api/queryKeys'
 import type { TaskCreateRequest, TaskUpdateRequest } from '../api/contracts'
@@ -17,7 +18,9 @@ export const useTaskActions = (initialViewTaskId: number | null = null) => {
   const [pendingConfirm, setPendingConfirm] = useState<TaskConfirmState | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
 
-  const invalidateTaskLists = () => qc.invalidateQueries({ queryKey: tasksQK.all })
+  const invalidateTaskLists = async () => {
+    await Promise.all([qc.invalidateQueries({ queryKey: tasksQK.all }), invalidateTaskDerivedQueries(qc)])
+  }
 
   const createMutation = useMutation({
     mutationFn: (data: TaskCreateRequest) => tasksApi.create(data),
@@ -48,9 +51,10 @@ export const useTaskActions = (initialViewTaskId: number | null = null) => {
       toast.success(TASKS_MESSAGES.mutations.completeSuccess)
       qc.setQueryData(tasksQK.detail(task.id), task)
       await invalidateTaskLists()
+      setPendingConfirm(null)
       setActionError(null)
     },
-    onError: (error) => setActionError(getMutationError(error, TASKS_ERROR_MESSAGES.mutations.completeError)),
+    onError: (error) => showErrorToast(error, TASKS_ERROR_MESSAGES.mutations.completeError),
   })
 
   const cancelMutation = useMutation({
@@ -62,7 +66,7 @@ export const useTaskActions = (initialViewTaskId: number | null = null) => {
       setPendingConfirm(null)
       setActionError(null)
     },
-    onError: (error) => setActionError(getMutationError(error, TASKS_ERROR_MESSAGES.mutations.cancelError)),
+    onError: (error) => showErrorToast(error, TASKS_ERROR_MESSAGES.mutations.cancelError),
   })
 
   const deleteMutation = useMutation({
@@ -74,13 +78,17 @@ export const useTaskActions = (initialViewTaskId: number | null = null) => {
       setPendingConfirm(null)
       setActionError(null)
     },
-    onError: (error) => setActionError(getMutationError(error, TASKS_ERROR_MESSAGES.mutations.deleteError)),
+    onError: (error) => showErrorToast(error, TASKS_ERROR_MESSAGES.mutations.deleteError),
   })
 
   const openConfirm = (action: TaskConfirmAction, taskId: number) => setPendingConfirm({ action, taskId })
 
   const confirmPendingAction = () => {
     if (!pendingConfirm) return
+    if (pendingConfirm.action === 'complete') {
+      completeMutation.mutate(pendingConfirm.taskId)
+      return
+    }
     if (pendingConfirm.action === 'cancel') {
       cancelMutation.mutate(pendingConfirm.taskId)
       return
@@ -124,7 +132,7 @@ export const useTaskActions = (initialViewTaskId: number | null = null) => {
         updateMutation.mutate({ id: modal.taskId, data: data as TaskUpdateRequest })
       }
     },
-    completeTask: (taskId: number) => completeMutation.mutate(taskId),
+    completeTask: (taskId: number) => openConfirm('complete', taskId),
     cancelTask: (taskId: number) => openConfirm('cancel', taskId),
     deleteTask: (taskId: number) => openConfirm('delete', taskId),
   }

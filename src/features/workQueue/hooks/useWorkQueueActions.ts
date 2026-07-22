@@ -6,78 +6,23 @@ import type { TaskSourceContext } from '@/features/tasks'
 import { toast } from '@/utils/toast'
 import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { workQueueQK } from '../api'
-import type { WorkQueueAction, WorkQueueItem, WorkQueueListResponse, WorkQueueSourceType } from '../api'
+import type { WorkQueueAction, WorkQueueItem, WorkQueueListResponse } from '../api'
 import { WORK_QUEUE_MESSAGES } from '../messages'
 import { WORK_QUEUE_ERROR_MESSAGES } from '../errorMessages'
+import {
+  getLinkedTaskSourceContext,
+  getTaskSourceContext,
+  getWorkQueueActionKey,
+  isTaskActionKey,
+  optimisticallyRemoveTask,
+  type WorkQueueListSnapshot,
+} from '../utils/workQueueActionHelpers'
 
 type TaskModalState = {
   mode: 'create' | 'edit' | 'view' | 'link'
   taskId?: number
   source?: TaskSourceContext | null
 }
-
-type TaskActionKeyBase = 'cancel_task' | 'complete_task' | 'continue_task' | 'delete_task' | 'edit_task'
-
-const actionKey = (item: WorkQueueItem, action: WorkQueueAction) => `${item.id}:${action.key}`
-
-const isTaskActionKey = (key: string, base: TaskActionKeyBase) => {
-  if (key === base) return true
-  const suffixPrefix = `${base}_`
-  if (!key.startsWith(suffixPrefix)) return false
-  return /^\d+$/.test(key.slice(suffixPrefix.length))
-}
-
-const sourceContext = (item: WorkQueueItem): TaskSourceContext => ({
-  source_domain: item.source_type,
-  source_id: item.source_id,
-  title: item.title,
-  client_name: item.client_name,
-  due_date: item.due_date,
-  linked_tasks_count: item.linked_tasks_count,
-  linked_tasks: item.linked_tasks,
-})
-
-const linkedTaskSourceContext = (item: WorkQueueItem): TaskSourceContext | null => {
-  if (item.source_type !== 'task' || !item.source_summary) return null
-  return {
-    source_domain: item.source_summary.source_type as WorkQueueSourceType,
-    source_id: item.source_summary.source_id,
-    title: item.source_summary.label,
-    client_name: item.client_name,
-    due_date: item.due_date,
-  }
-}
-
-const optimisticallyRemoveTask = (data: WorkQueueListResponse | undefined, taskId: number) => {
-  if (!data) return data
-  let changed = false
-  let removedStandaloneRow = false
-  const items = data.items
-    .map((item) => {
-      if (item.source_type === 'task' && item.source_id === taskId) {
-        changed = true
-        removedStandaloneRow = true
-        return null
-      }
-      const linked_tasks = item.linked_tasks.filter((task) => task.id !== taskId)
-      if (linked_tasks.length === item.linked_tasks.length) return item
-      changed = true
-      return {
-        ...item,
-        linked_tasks,
-        linked_tasks_count: linked_tasks.length,
-      }
-    })
-    .filter((item): item is WorkQueueItem => item !== null)
-  if (!changed) return data
-  return {
-    ...data,
-    items,
-    total: removedStandaloneRow ? Math.max(0, data.total - 1) : data.total,
-  }
-}
-
-type WorkQueueListSnapshot = Array<[readonly unknown[], WorkQueueListResponse | undefined]>
 
 export const useWorkQueueActions = () => {
   const navigate = useNavigate()
@@ -198,7 +143,7 @@ export const useWorkQueueActions = () => {
     }
     if (action.type === 'modal') {
       if (action.key === 'create_linked_task') {
-        setTaskModal({ mode: 'create', source: sourceContext(item) })
+        setTaskModal({ mode: 'create', source: getTaskSourceContext(item) })
         return
       }
       if (action.key === 'link_task_to_source') {
@@ -213,9 +158,9 @@ export const useWorkQueueActions = () => {
         return
       }
       setTaskModal({
-        mode: isTaskActionKey(action.key, 'continue_task') || isTaskActionKey(action.key, 'edit_task') ? 'edit' : 'view',
+        mode: isTaskActionKey(action.key, 'edit_task') ? 'edit' : 'view',
         taskId,
-        source: linkedTaskSourceContext(item),
+        source: getLinkedTaskSourceContext(item),
       })
       return
     }
@@ -224,14 +169,14 @@ export const useWorkQueueActions = () => {
       return
     }
     if (actionMutation.isPending) return
-    setActiveActionKey(actionKey(item, action))
+    setActiveActionKey(getWorkQueueActionKey(item, action))
     actionMutation.mutate({ item, action })
   }
 
   const confirmAction = () => {
     if (!pendingConfirm) return
     const { item, action } = pendingConfirm
-    setActiveActionKey(actionKey(item, action))
+    setActiveActionKey(getWorkQueueActionKey(item, action))
     actionMutation.mutate({ item, action })
     setPendingConfirm(null)
   }

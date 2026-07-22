@@ -1,16 +1,20 @@
 import { CalendarClock, CheckCircle2, Eye, Pencil, Trash2, XCircle } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
 import { Checkbox } from '@/components/ui/primitives/Checkbox'
 import { RowActionItem, RowActionsMenu, type Column } from '@/components/ui/table'
-import { workQueueSourceTypeLabels } from '@/features/workQueue'
-import type { WorkQueueSourceType } from '@/features/workQueue'
+import {
+  workItemSourceTypeLabels as workQueueSourceTypeLabels,
+  type WorkItemSourceType,
+} from '@/constants/workItemSources.constants'
 import type { Task } from '../../api/contracts'
-import { taskPriorityLabels, taskStatusLabels } from '../../constants/labels'
+import { taskPriorityLabels, taskRoleLabels, taskStatusLabels } from '../../constants/labels'
 import { taskPriorityBadgeVariants, getTaskStatusBadgeVariant, taskStatusDotClass } from '../../utils/taskDisplay'
 import { formatTaskDueDate, isTaskTerminal } from '../../utils/taskFormatters'
 import { TASKS_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { formatDate } from '@/utils/utils'
 
 export interface TaskSelectionConfig {
   selectedIds: Set<number>
@@ -22,6 +26,7 @@ export interface TaskSelectionConfig {
 
 interface TaskColumnActions {
   isActionBusy: boolean
+  includeClientColumn?: boolean
   /** Bulk-selection checkbox column (client-details tab only). */
   selection?: TaskSelectionConfig
   onView: (taskId: number) => void
@@ -33,6 +38,7 @@ interface TaskColumnActions {
 
 export const buildTaskListColumns = ({
   isActionBusy,
+  includeClientColumn = true,
   selection,
   onView,
   onEdit,
@@ -80,13 +86,32 @@ export const buildTaskListColumns = ({
           </Badge>
           {task.source_domain ? (
             <Badge variant="neutral" size="2xs" className="text-gray-600">
-              {workQueueSourceTypeLabels[task.source_domain as WorkQueueSourceType] ?? task.source_domain}
+              {workQueueSourceTypeLabels[task.source_domain as WorkItemSourceType] ?? task.source_domain}
             </Badge>
           ) : null}
         </div>
       </div>
     ),
   },
+  ...(includeClientColumn
+    ? [
+        {
+          key: 'client',
+          header: GLOBAL_UI_MESSAGES.common.client,
+          render: (task) =>
+            task.client_record_id ? (
+              <Link to={`/clients/${task.client_record_id}/tasks`} className="block max-w-44 text-primary-600 hover:underline">
+                <span className="block truncate">{task.client_name ?? `#${task.client_record_id}`}</span>
+                {task.office_client_number != null ? (
+                  <span className="block text-xs text-gray-500">{task.office_client_number}</span>
+                ) : null}
+              </Link>
+            ) : (
+              '—'
+            ),
+        } satisfies Column<Task>,
+      ]
+    : []),
   {
     key: 'status',
     header: GLOBAL_UI_MESSAGES.common.status,
@@ -106,6 +131,21 @@ export const buildTaskListColumns = ({
     ),
   },
   {
+    key: 'assignee',
+    header: TASKS_MESSAGES.columns.assignee,
+    wrap: true,
+    render: (task) => (
+      <div className="space-y-1">
+        <span className="block text-sm text-gray-900">{task.assigned_to_user_name ?? TASKS_MESSAGES.form.unassigned}</span>
+        {task.assigned_role ? (
+          <Badge variant="info" size="2xs">
+            {taskRoleLabels[task.assigned_role] ?? task.assigned_role}
+          </Badge>
+        ) : null}
+      </div>
+    ),
+  },
+  {
     key: 'dueDate',
     header: TASKS_MESSAGES.columns.dueDate,
     render: (task) => (
@@ -114,6 +154,11 @@ export const buildTaskListColumns = ({
         {formatTaskDueDate(task.due_date)}
       </span>
     ),
+  },
+  {
+    key: 'createdAt',
+    header: TASKS_MESSAGES.columns.createdAt,
+    render: (task) => formatDate(task.created_at),
   },
   {
     key: 'actions',
@@ -145,6 +190,13 @@ export const buildTaskListColumns = ({
                 label={TASKS_MESSAGES.actions.cancelTask}
                 icon={<XCircle className="h-4 w-4" />}
                 onClick={() => onCancel(task.id)}
+                disabled={isActionBusy}
+                danger
+              />
+              <RowActionItem
+                label={TASKS_MESSAGES.actions.deleteTask}
+                icon={<Trash2 className="h-4 w-4" />}
+                onClick={() => onDelete(task.id)}
                 disabled={isActionBusy}
                 danger
               />

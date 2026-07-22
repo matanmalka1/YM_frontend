@@ -5,11 +5,17 @@ import { Button } from '@/components/ui/primitives/Button'
 import { Spinner } from '@/components/ui/primitives/Spinner'
 import { Tooltip } from '@/components/ui/primitives/Tooltip'
 import { RowActionItem, RowActionsMenu, actionsColumn, dateColumn, EmptyCell, type Column } from '@/components/ui/table'
-import { taskPriorityLabels, taskRoleLabels } from '@/features/tasks'
 import type { WorkQueueAction, WorkQueueItem, WorkQueueSourceType, WorkQueueWarning } from '../api/contracts'
 import { getWorkQueueUrgencyVariant, workQueueSourceTypeLabels, workQueueUrgencyLabels } from '../constants'
 import { WORK_QUEUE_MESSAGES } from '../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
+import {
+  getWorkQueueAssignedRoleLabel,
+  getWorkQueueAssignedUserName,
+  getWorkQueueMetadataValue,
+  getWorkQueueTaskPriority,
+  getWorkQueueTaskPriorityLabel,
+} from '../utils/workQueueTaskDisplay'
 
 const typeLabel = (sourceType: WorkQueueSourceType): string => workQueueSourceTypeLabels[sourceType] ?? sourceType
 
@@ -30,37 +36,6 @@ const actionIcon = (action: WorkQueueAction) => {
 }
 
 const actionVariant = (action: WorkQueueAction): 'ghost' | 'danger' => (action.variant === 'danger' ? 'danger' : 'ghost')
-
-const metadataValue = (item: WorkQueueItem, key: string): unknown =>
-  item.metadata && typeof item.metadata === 'object' ? (item.metadata as Record<string, unknown>)[key] : undefined
-
-const taskPriority = (item: WorkQueueItem): string | null => {
-  const priority =
-    item.source_type === 'task'
-      ? metadataValue(item, 'priority')
-      : item.linked_tasks.length === 1
-        ? item.linked_tasks[0].priority
-        : null
-  if (typeof priority !== 'string') return null
-  return priority
-}
-
-const taskPriorityLabel = (item: WorkQueueItem): string | null => {
-  const priority = taskPriority(item)
-  if (!priority) return null
-  return taskPriorityLabels[priority] ?? priority
-}
-
-const assignedRoleLabel = (item: WorkQueueItem): string | null => {
-  const role =
-    item.source_type === 'task'
-      ? metadataValue(item, 'assigned_role')
-      : item.linked_tasks.length === 1
-        ? item.linked_tasks[0].assigned_role
-        : null
-  if (typeof role !== 'string' || !role) return null
-  return taskRoleLabels[role] ?? role
-}
 
 interface BuildColumnsParams {
   activeActionKey?: string | null
@@ -94,7 +69,7 @@ export const buildWorkQueueColumns = ({ activeActionKey, onAction, showLinkedTas
             <Link
               to={`/clients/${item.client_record_id}`}
               className="block max-w-44 text-sm text-primary-600 hover:underline"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(event) => event.stopPropagation()}
             >
               <span className="block truncate">{item.client_name ?? WORK_QUEUE_MESSAGES.columns.clientProfile}</span>
               {item.office_client_number != null && (
@@ -136,14 +111,18 @@ export const buildWorkQueueColumns = ({ activeActionKey, onAction, showLinkedTas
         key: 'task_meta',
         header: WORK_QUEUE_MESSAGES.columns.taskMeta,
         render: (item: WorkQueueItem) => {
-          const priorityKey = taskPriority(item)
-          const priority = taskPriorityLabel(item)
-          const assignedRole = assignedRoleLabel(item)
-          if (!priority && !assignedRole) return <EmptyCell />
+          const priorityKey = getWorkQueueTaskPriority(item)
+          const priority = getWorkQueueTaskPriorityLabel(item)
+          const assignedRole = getWorkQueueAssignedRoleLabel(item)
+          const assignedUser = getWorkQueueAssignedUserName(item)
+          if (!priority && !assignedRole && !assignedUser) return <EmptyCell />
           return (
-            <div className="flex flex-wrap justify-center gap-1">
-              {priority && <Badge variant={priorityKey === 'urgent' ? 'negative' : 'neutral'}>{priority}</Badge>}
-              {assignedRole && <Badge variant="info">{assignedRole}</Badge>}
+            <div className="flex flex-col items-center gap-1">
+              <div className="flex flex-wrap justify-center gap-1">
+                {priority && <Badge variant={priorityKey === 'urgent' ? 'negative' : 'neutral'}>{priority}</Badge>}
+                {assignedRole && <Badge variant="info">{assignedRole}</Badge>}
+              </div>
+              {assignedUser && <span className="max-w-36 truncate text-xs text-gray-500">{assignedUser}</span>}
             </div>
           )
         },
@@ -199,8 +178,8 @@ export const buildWorkQueueColumns = ({ activeActionKey, onAction, showLinkedTas
           const actions = item.available_actions
           const isUnlinkedTask =
             item.source_type === 'task' &&
-            metadataValue(item, 'source_domain') == null &&
-            metadataValue(item, 'source_id') == null
+            getWorkQueueMetadataValue(item, 'source_domain') == null &&
+            getWorkQueueMetadataValue(item, 'source_id') == null
           if (actions.length === 0 && !isUnlinkedTask) return <EmptyCell />
           const [primary, ...secondary] = actions
           const primaryKey = primary ? `${item.id}:${primary.key}` : ''
@@ -216,7 +195,7 @@ export const buildWorkQueueColumns = ({ activeActionKey, onAction, showLinkedTas
             type: 'modal',
           }
           const secondaryActions = isUnlinkedTask ? [linkAction, ...secondary] : secondary
-          const primaryBtn = primary ? (
+          const primaryButton = primary ? (
             <Button
               variant={actionVariant(primary)}
               size="sm"
@@ -233,7 +212,7 @@ export const buildWorkQueueColumns = ({ activeActionKey, onAction, showLinkedTas
           ) : null
           return (
             <div className="flex items-center justify-center gap-2">
-              {primaryBtn && tooltipText ? <Tooltip text={tooltipText}>{primaryBtn}</Tooltip> : primaryBtn}
+              {primaryButton && tooltipText ? <Tooltip text={tooltipText}>{primaryButton}</Tooltip> : primaryButton}
               {secondaryActions.length > 0 && (
                 <RowActionsMenu menuClassName="w-50">
                   {secondaryActions.map((action) => {

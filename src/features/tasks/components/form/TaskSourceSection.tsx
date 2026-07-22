@@ -2,7 +2,8 @@ import { Link2Off } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { Select } from '@/components/ui/inputs/Select'
 import { ClientSearchInput, SelectedClientDisplay } from '@/features/clients/public'
-import type { WorkQueueItem, WorkQueueSourceType } from '@/features/workQueue'
+import type { WorkItemSourceType } from '@/constants/workItemSources.constants'
+import type { TaskLinkableSource } from '../../api/contracts'
 import type { TaskSourceContext } from '../../types'
 import { TASKS_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
@@ -20,18 +21,18 @@ interface TaskSourceSectionProps {
   selectedClientId: number | null
   selectedClientName: string | null
   selectedClientOfficeNumber: number | null
-  workQueueItems: WorkQueueItem[]
+  workQueueItems: TaskLinkableSource[]
   isLoadingItems: boolean
   clientSearch: string
   sourceOptions: Array<{ value: string; label: string }>
-  pendingSource: { domain: WorkQueueSourceType; id: number } | null
+  pendingSource: { domain: WorkItemSourceType; id: number } | null
   onClearSource: () => void
   onOpenPicker: () => void
   onCancelPicker: () => void
   onClientSearchChange: (value: string) => void
   onClientSelect: (id: number, name: string, officeClientNumber?: number | null) => void
   onClientClear: () => void
-  onSourceSelect: (domain: WorkQueueSourceType, id: number) => void
+  onSourceSelect: (domain: WorkItemSourceType, id: number) => void
   onSourceDeselect: () => void
 }
 
@@ -86,7 +87,7 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
     )
   }
 
-  if (hasExistingSource && !pendingSource) {
+  if (hasExistingSource && !pendingSource && !sourcePickerOpen) {
     return (
       <div className="flex items-center justify-between gap-3 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm">
         <div className="min-w-0">
@@ -107,6 +108,11 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
             {TASKS_MESSAGES.actions.unlink}
           </Button>
         )}
+        {!readonly && !isLinkMode && sourceCleared ? (
+          <Button type="button" variant="ghost" size="sm" onClick={onOpenPicker}>
+            {TASKS_MESSAGES.actions.linkToItem}
+          </Button>
+        ) : null}
       </div>
     )
   }
@@ -176,8 +182,8 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
                 onSourceDeselect()
                 return
               }
-              const item = workQueueItems.find((i) => `${i.source_type}:${i.source_id}` === val)
-              if (item) onSourceSelect(item.source_type, item.source_id)
+              const item = workQueueItems.find((i) => `${i.source_domain}:${i.source_id}` === val)
+              if (item) onSourceSelect(item.source_domain, item.source_id)
             }}
             disabled={isLoadingItems || sourceOptions.length === 0}
           />

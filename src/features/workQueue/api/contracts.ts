@@ -29,6 +29,7 @@ const linkedTaskSummarySchema = z.object({
   due_date: z.string().nullable().optional(),
   priority: z.string().nullable().optional(),
   assigned_user_id: z.number().int().nullable().optional(),
+  assigned_user_name: z.string().nullable().optional(),
   assigned_role: z.string().nullable().optional(),
 })
 

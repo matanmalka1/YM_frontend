@@ -4,6 +4,5 @@ export {
   type WorkQueueItem,
   type WorkQueueAction,
   type WorkQueueParams,
-  type WorkQueueSourceType,
   type WorkQueueListResponse,
 } from './contracts'

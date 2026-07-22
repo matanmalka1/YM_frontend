@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { AlertTriangle, Clock, Calendar } from 'lucide-react'
+import { AlertTriangle, Clock, Calendar, ClipboardList, ListChecks, Link2 } from 'lucide-react'
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { StatsCard } from '@/components/ui/layout/StatsCard'
 import type { WorkQueueSummary, WorkQueueUrgency } from '../api/contracts'
@@ -11,9 +11,17 @@ interface WorkQueueStatsSectionProps {
   summary: WorkQueueSummary | undefined
   isLoading?: boolean
   summaryError?: string | null
+  activeUrgency?: WorkQueueUrgency | null
+  onUrgencyChange?: (urgency: WorkQueueUrgency | null) => void
 }
 
-export const WorkQueueStatsSection: React.FC<WorkQueueStatsSectionProps> = ({ summary, isLoading, summaryError }) => {
+export const WorkQueueStatsSection: React.FC<WorkQueueStatsSectionProps> = ({
+  summary,
+  isLoading,
+  summaryError,
+  activeUrgency,
+  onUrgencyChange,
+}) => {
   const isInitialLoading = Boolean(isLoading) && !summary
   const stats = useMemo(
     () => [
@@ -65,20 +73,50 @@ export const WorkQueueStatsSection: React.FC<WorkQueueStatsSectionProps> = ({ su
     )
   }
 
+  const composition = [
+    {
+      icon: ClipboardList,
+      title: WORK_QUEUE_MESSAGES.stats.systemWork,
+      value: Math.max(0, (summary?.total ?? 0) - (summary?.manual_tasks ?? 0)),
+      description: WORK_QUEUE_MESSAGES.stats.systemWorkDescription,
+    },
+    {
+      icon: ListChecks,
+      title: WORK_QUEUE_MESSAGES.stats.manualTasks,
+      value: summary?.manual_tasks ?? 0,
+      description: WORK_QUEUE_MESSAGES.stats.manualTasksDescription,
+    },
+    {
+      icon: Link2,
+      title: WORK_QUEUE_MESSAGES.stats.linkedWork,
+      value: summary?.linked ?? 0,
+      description: WORK_QUEUE_MESSAGES.stats.linkedWorkDescription,
+    },
+  ]
+
   return (
-    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
-      {stats.map(({ icon, variant, count, label, description, value }) => (
-        <StatsCard
-          key={value}
-          title={label}
-          value={count}
-          description={description}
-          loading={isInitialLoading}
-          icon={icon}
-          variant={variant}
-          className="h-full w-full"
-        />
-      ))}
+    <div className="space-y-3">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+        {stats.map(({ icon, variant, count, label, description, value }) => (
+          <StatsCard
+            key={value}
+            title={label}
+            value={count}
+            description={description}
+            loading={isInitialLoading}
+            icon={icon}
+            variant={variant}
+            selected={activeUrgency === value}
+            onClick={onUrgencyChange ? () => onUrgencyChange(activeUrgency === value ? null : value) : undefined}
+            className="h-full w-full"
+          />
+        ))}
+      </div>
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+        {composition.map((item) => (
+          <StatsCard key={item.title} {...item} loading={isInitialLoading} variant="neutral" className="h-full w-full" />
+        ))}
+      </div>
     </div>
   )
 }

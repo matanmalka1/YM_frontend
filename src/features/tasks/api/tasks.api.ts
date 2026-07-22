@@ -5,12 +5,14 @@ import {
   taskSchema,
   taskListResponseSchema,
   taskBulkActionResponseSchema,
+  taskLinkableSourceListSchema,
   type Task,
   type TaskCreateRequest,
   type TaskUpdateRequest,
   type TaskListParams,
   type TaskListResponse,
   type TaskBulkActionResponse,
+  type TaskLinkableSourceListResponse,
 } from './contracts'
 
 const toSearchParams = (params?: TaskListParams): URLSearchParams | undefined => {
@@ -29,6 +31,13 @@ export const tasksApi = {
   get: async (id: number): Promise<Task> => {
     const response = await api.get<Task>(TASKS_ENDPOINTS.get(id))
     return taskSchema.parse(response.data)
+  },
+
+  listLinkableSources: async (clientRecordId: number): Promise<TaskLinkableSourceListResponse> => {
+    const response = await api.get<TaskLinkableSourceListResponse>(TASKS_ENDPOINTS.linkableSources, {
+      params: toQueryParams({ client_record_id: clientRecordId, page: 1, page_size: 200 }),
+    })
+    return taskLinkableSourceListSchema.parse(response.data)
   },
 
   create: async (data: TaskCreateRequest): Promise<Task> => {

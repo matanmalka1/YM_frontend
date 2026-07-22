@@ -1,10 +1,11 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { workQueueApi, workQueueQK, workQueueSourceTypeLabels } from '@/features/workQueue'
-import type { WorkQueueItem } from '@/features/workQueue'
+import { workItemSourceTypeLabels } from '@/constants/workItemSources.constants'
 import { formatDate } from '@/utils/utils'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
-import { PAGE_SIZE_LG } from '@/constants/pagination.constants'
+import { tasksApi } from '../api/tasks.api'
+import { tasksQK } from '../api/queryKeys'
+import type { TaskLinkableSource } from '../api/contracts'
 
 export const useTaskSourcePicker = () => {
   const [selectedClientId, setSelectedClientId] = useState<number | null>(null)
@@ -12,19 +13,8 @@ export const useTaskSourcePicker = () => {
   const [selectedClientOfficeNumber, setSelectedClientOfficeNumber] = useState<number | null>(null)
 
   const { data: workQueueData, isFetching: workQueueFetching } = useQuery({
-    queryKey: workQueueQK.list(
-      selectedClientId
-        ? { client_record_id: selectedClientId, scope: 'system', linked: 'unlinked', page: 1, page_size: PAGE_SIZE_LG }
-        : undefined,
-    ),
-    queryFn: () =>
-      workQueueApi.list({
-        client_record_id: selectedClientId!,
-        scope: 'system',
-        linked: 'unlinked',
-        page: 1,
-        page_size: PAGE_SIZE_LG,
-      }),
+    queryKey: tasksQK.linkableSources(selectedClientId ?? 0),
+    queryFn: () => tasksApi.listLinkableSources(selectedClientId!),
     enabled: selectedClientId !== null,
     staleTime: QUERY_STALE_TIME.short,
   })
@@ -41,16 +31,14 @@ export const useTaskSourcePicker = () => {
     setSelectedClientOfficeNumber(null)
   }, [])
 
-  const sourceLabel = useCallback((item: WorkQueueItem): string => {
-    const typeLabel = workQueueSourceTypeLabels[item.source_type] ?? item.source_type
+  const sourceLabel = useCallback((item: TaskLinkableSource): string => {
+    const typeLabel = workItemSourceTypeLabels[item.source_domain] ?? item.source_domain
     const dueDate = item.due_date ? ` · ${formatDate(item.due_date)}` : ''
-    return `${typeLabel} · ${item.title}${dueDate}`
+    const linked = item.linked_tasks_count > 0 ? ` · ${item.linked_tasks_count} משימות קשורות` : ''
+    return `${typeLabel} · ${item.title}${dueDate}${linked}`
   }, [])
 
-  const workQueueItems = useMemo(
-    () => (workQueueData?.items ?? []).filter((item) => item.source_type !== 'task'),
-    [workQueueData?.items],
-  )
+  const workQueueItems = useMemo(() => workQueueData?.items ?? [], [workQueueData?.items])
 
   return {
     selectedClientId,

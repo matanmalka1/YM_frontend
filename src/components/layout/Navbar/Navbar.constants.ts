@@ -12,6 +12,7 @@ import {
   Settings,
   TableProperties,
   Users,
+  Inbox,
 } from 'lucide-react'
 
 export interface NavItem {
@@ -60,8 +61,8 @@ export const NAV_GROUPS: NavGroup[] = [
     label: 'מסמכים ותפעול',
     items: [
       { to: '/binders', label: 'קלסרים', icon: Briefcase, placement: 'top' },
-      { to: '/tasks', label: 'משימות', icon: CheckSquare, placement: 'top' },
-      { to: '/work-queue', label: 'עבודה לטיפול', icon: CheckSquare, placement: 'top' },
+      { to: '/work-queue', label: 'עבודה לטיפול', icon: Inbox, placement: 'top' },
+      { to: '/tasks', label: 'ניהול משימות', icon: CheckSquare, placement: 'top' },
       { to: '/notifications', label: 'הודעות', icon: Bell, placement: 'top' },
     ],
   },

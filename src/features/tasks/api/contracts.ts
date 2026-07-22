@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { UserRole } from '@/types'
-import type { WorkQueueSourceType } from '@/features/workQueue'
+import { workItemSourceTypeValues, type WorkItemSourceType } from '@/constants/workItemSources.constants'
 import { taskStatusValues, taskPriorityValues } from '../constants/labels'
 import type { TaskStatus } from '../constants/labels'
 
@@ -35,7 +35,13 @@ export const taskSchema = z.object({
   canceled_by_user_id: z.number().int().nullable().optional(),
   canceled_at: z.string().nullable().optional(),
   created_at: z.string(),
-  updated_at: z.string(),
+  updated_at: z.string().optional(),
+  assigned_to_user_name: z.string().nullable().optional(),
+  client_name: z.string().nullable().optional(),
+  office_client_number: z.number().int().nullable().optional(),
+  created_by_user_name: z.string().nullable().optional(),
+  completed_by_user_name: z.string().nullable().optional(),
+  canceled_by_user_name: z.string().nullable().optional(),
 })
 
 export type Task = z.infer<typeof taskSchema>
@@ -45,9 +51,34 @@ export const taskListResponseSchema = z.object({
   page: z.number(),
   page_size: z.number(),
   total: z.number(),
+  summary: z.object({
+    total: z.number().int(),
+    open: z.number().int(),
+    done: z.number().int(),
+    canceled: z.number().int(),
+  }),
 })
 
 export type TaskListResponse = z.infer<typeof taskListResponseSchema>
+
+const taskLinkableSourceSchema = z.object({
+  source_domain: z.enum(workItemSourceTypeValues),
+  source_id: z.number().int(),
+  title: z.string(),
+  type_label: z.string().nullable().optional(),
+  client_name: z.string().nullable().optional(),
+  due_date: z.string().nullable().optional(),
+  linked_tasks_count: z.number().int(),
+})
+export type TaskLinkableSource = z.infer<typeof taskLinkableSourceSchema>
+
+export const taskLinkableSourceListSchema = z.object({
+  items: z.array(taskLinkableSourceSchema),
+  page: z.number().int(),
+  page_size: z.number().int(),
+  total: z.number().int(),
+})
+export type TaskLinkableSourceListResponse = z.infer<typeof taskLinkableSourceListSchema>
 
 export interface TaskCreateRequest {
   title: string
@@ -56,7 +87,7 @@ export interface TaskCreateRequest {
   due_date?: string
   assigned_to_user_id?: number
   assigned_role?: UserRole
-  source_domain?: WorkQueueSourceType
+  source_domain?: WorkItemSourceType
   source_id?: number
   client_record_id?: number
   action_key?: string
@@ -70,7 +101,7 @@ export interface TaskUpdateRequest {
   due_date?: string | null
   assigned_to_user_id?: number | null
   assigned_role?: UserRole | null
-  source_domain?: WorkQueueSourceType | null
+  source_domain?: WorkItemSourceType | null
   source_id?: number | null
   action_key?: string
   action_payload?: Record<string, unknown>
@@ -94,10 +125,13 @@ export interface TaskListParams {
   priority?: TaskPriority
   assigned_to_user_id?: number
   assigned_role?: UserRole
-  source_domain?: WorkQueueSourceType
+  source_domain?: WorkItemSourceType
   source_id?: number
   due_before?: string
   due_after?: string
+  search?: string
+  sort_by?: 'created_at' | 'due_date' | 'priority' | 'title'
+  order?: 'asc' | 'desc'
   page?: number
   page_size?: number
 }

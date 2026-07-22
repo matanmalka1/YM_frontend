@@ -3078,6 +3078,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/tasks/linkable-sources': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Linkable Task Sources */
+    get: operations['list_linkable_task_sources_api_v1_tasks_linkable_sources_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/tasks/{task_id}': {
     parameters: {
       query?: never
@@ -6116,6 +6133,8 @@ export interface components {
       priority?: string | null
       /** Assigned User Id */
       assigned_user_id?: number | null
+      /** Assigned User Name */
+      assigned_user_name?: string | null
       assigned_role?: components['schemas']['UserRole'] | null
     }
     /** LoginRequest */
@@ -7396,16 +7415,93 @@ export interface components {
         [key: string]: unknown
       } | null
     }
-    /** TaskListResponse */
-    TaskListResponse: {
+    /** TaskLinkableSourceListResponse */
+    TaskLinkableSourceListResponse: {
       /** Items */
-      items: components['schemas']['TaskResponse'][]
+      items: components['schemas']['TaskLinkableSourceResponse'][]
       /** Page */
       page: number
       /** Page Size */
       page_size: number
       /** Total */
       total: number
+    }
+    /** TaskLinkableSourceResponse */
+    TaskLinkableSourceResponse: {
+      /** Source Domain */
+      source_domain: string
+      /** Source Id */
+      source_id: number
+      /** Title */
+      title: string
+      /** Type Label */
+      type_label?: string | null
+      /** Client Name */
+      client_name?: string | null
+      /** Due Date */
+      due_date?: string | null
+      /**
+       * Linked Tasks Count
+       * @default 0
+       */
+      linked_tasks_count: number
+    }
+    /** TaskListItemResponse */
+    TaskListItemResponse: {
+      /** Id */
+      id: number
+      /** Title */
+      title: string
+      /** Description */
+      description?: string | null
+      status: components['schemas']['TaskStatus']
+      priority: components['schemas']['TaskPriority']
+      /** Due Date */
+      due_date?: string | null
+      /** Assigned To User Id */
+      assigned_to_user_id?: number | null
+      /** Assigned To User Name */
+      assigned_to_user_name?: string | null
+      assigned_role?: components['schemas']['UserRole'] | null
+      /** Source Domain */
+      source_domain?: string | null
+      /** Source Id */
+      source_id?: number | null
+      /** Client Record Id */
+      client_record_id?: number | null
+      /** Client Name */
+      client_name?: string | null
+      /** Office Client Number */
+      office_client_number?: number | null
+      /**
+       * Created At
+       * Format: date-time
+       * @example 2026-01-02T03:04:05Z
+       */
+      created_at: string
+    }
+    /** TaskListResponse */
+    TaskListResponse: {
+      /** Items */
+      items: components['schemas']['TaskListItemResponse'][]
+      /** Page */
+      page: number
+      /** Page Size */
+      page_size: number
+      /** Total */
+      total: number
+      summary: components['schemas']['TaskListSummary']
+    }
+    /** TaskListSummary */
+    TaskListSummary: {
+      /** Total */
+      total: number
+      /** Open */
+      open: number
+      /** Done */
+      done: number
+      /** Canceled */
+      canceled: number
     }
     /**
      * TaskPriority
@@ -7461,6 +7557,18 @@ export interface components {
        * @example 2026-01-02T03:04:05Z
        */
       updated_at: string
+      /** Assigned To User Name */
+      assigned_to_user_name?: string | null
+      /** Client Name */
+      client_name?: string | null
+      /** Office Client Number */
+      office_client_number?: number | null
+      /** Created By User Name */
+      created_by_user_name?: string | null
+      /** Completed By User Name */
+      completed_by_user_name?: string | null
+      /** Canceled By User Name */
+      canceled_by_user_name?: string | null
     }
     /**
      * TaskStatus
@@ -21159,6 +21267,9 @@ export interface operations {
         source_id?: number | null
         due_before?: string | null
         due_after?: string | null
+        search?: string | null
+        sort_by?: string
+        order?: components['schemas']['SortOrder']
         page?: number
         page_size?: number
       }
@@ -21399,6 +21510,57 @@ export interface operations {
       }
       /** @description Conflict */
       409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  list_linkable_task_sources_api_v1_tasks_linkable_sources_get: {
+    parameters: {
+      query: {
+        client_record_id: number
+        page?: number
+        page_size?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TaskLinkableSourceListResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
         headers: {
           [name: string]: unknown
         }

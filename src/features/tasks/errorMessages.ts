@@ -17,5 +17,6 @@ export const TASKS_ERROR_MESSAGES = {
     bulkAssignPartial: (succeeded: number, failed: number) => `שויכו ${succeeded} משימות, ${failed} נכשלו`,
     createError: 'יצירת המשימה נכשלה',
     loadError: 'שגיאה בטעינת משימות',
+    loadDetailsError: 'שגיאה בטעינת פרטי המשימה',
   },
 } as const

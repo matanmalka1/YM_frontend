@@ -6,15 +6,21 @@ import { Button } from '@/components/ui/primitives/Button'
 import { Modal } from '@/components/ui/overlays/Modal'
 import { ModalFormActions } from '@/components/ui/overlays/ModalFormActions'
 import { useActiveUserOptions } from '@/features/users'
-import { workQueueSourceTypeLabels, type WorkQueueSourceType } from '@/features/workQueue'
+import {
+  workItemSourceTypeLabels as workQueueSourceTypeLabels,
+  type WorkItemSourceType,
+} from '@/constants/workItemSources.constants'
 import type { Task, TaskCreateRequest, TaskUpdateRequest } from '../../api/contracts'
 import { useTaskSourcePicker } from '../../hooks/useTaskSourcePicker'
 import { getTaskFormDefaultValues, taskFormSchema, type TaskFormValues } from '../../schemas'
 import type { TaskSourceContext } from '../../types'
 import { TaskDetailsFields } from './TaskDetailsFields'
 import { TaskSourceSection } from './TaskSourceSection'
+import { TaskHistoryDetails } from './TaskHistoryDetails'
 import { TASKS_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { TASKS_ERROR_MESSAGES } from '../../errorMessages'
+import { getTaskModalTitle } from '../../utils/taskDisplay'
 
 interface TaskModalProps {
   mode: 'create' | 'edit' | 'view' | 'link'
@@ -22,6 +28,7 @@ interface TaskModalProps {
   source?: TaskSourceContext | null
   clientRecordId?: number
   error?: string | null
+  detailsError?: string | null
   isLoading?: boolean
   onSubmit?: (data: TaskCreateRequest | TaskUpdateRequest) => void
   onClose: () => void
@@ -38,6 +45,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   source,
   clientRecordId,
   error,
+  detailsError,
   isLoading,
   onSubmit,
   onClose,
@@ -56,20 +64,22 @@ export const TaskModal: React.FC<TaskModalProps> = ({
     formState: { errors, isDirty },
   } = form
   const [clientSearch, setClientSearch] = useState('')
-  const [pendingSource, setPendingSource] = useState<{ domain: WorkQueueSourceType; id: number } | null>(null)
+  const [pendingSource, setPendingSource] = useState<{ domain: WorkItemSourceType; id: number } | null>(null)
   const [sourceCleared, setSourceCleared] = useState(false)
   const [sourcePickerOpen, setSourcePickerOpen] = useState(() => mode === 'link')
   const usersQuery = useActiveUserOptions()
   const sourcePicker = useTaskSourcePicker()
 
   const linkedCount = source?.linked_tasks_count ?? source?.linked_tasks?.length ?? 0
-  const isTaskLoading = (mode === 'edit' || mode === 'link') && !task
+  const needsExistingTask = mode === 'edit' || mode === 'view' || mode === 'link'
+  const isTaskLoading = needsExistingTask && !task && Boolean(isLoading) && !detailsError
+  const isTaskUnavailable = needsExistingTask && !task && !isTaskLoading
   const existingSourceDomain = task?.source_domain ?? null
   const existingSourceId = task?.source_id ?? null
   const hasExistingSource = existingSourceDomain != null && existingSourceId != null
   const existingSourceTitle = source?.title ?? `${sourceTypeLabel(existingSourceDomain)} #${existingSourceId}`
   const sourceOptions = sourcePicker.workQueueItems.map((item) => ({
-    value: `${item.source_type}:${item.source_id}`,
+    value: `${item.source_domain}:${item.source_id}`,
     label: sourcePicker.sourceLabel(item),
   }))
   const assigneeOptions = (usersQuery.data?.items ?? []).map((user) => ({
@@ -159,7 +169,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
       setClientSearch('')
       setPendingSource(null)
     },
-    onSourceSelect: (domain: WorkQueueSourceType, id: number) => {
+    onSourceSelect: (domain: WorkItemSourceType, id: number) => {
       setSourceCleared(false)
       setPendingSource({ domain, id })
     },
@@ -170,18 +180,10 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   }
   const formId = 'task-form'
   const hasUnsavedChanges = isDirty || pendingSource !== null || sourceCleared
-  const modalTitle = isLinkMode
-    ? TASKS_MESSAGES.modal.linkTitle
-    : mode === 'create'
-      ? source
-        ? TASKS_MESSAGES.modal.createForWorkItemTitle
-        : TASKS_MESSAGES.modal.createTitle
-      : mode === 'edit'
-        ? TASKS_MESSAGES.modal.editTitle
-        : TASKS_MESSAGES.modal.viewTitle
+  const modalTitle = getTaskModalTitle(mode, Boolean(source))
 
   const footer =
-    isTaskLoading || readonly ? (
+    isTaskLoading || isTaskUnavailable || readonly ? (
       <div className="flex justify-end">
         <Button type="button" variant="ghost" onClick={onClose}>
           {TASKS_MESSAGES.actions.close}
@@ -212,6 +214,8 @@ export const TaskModal: React.FC<TaskModalProps> = ({
         <div className="rounded-md border border-gray-200 bg-gray-50 px-4 py-8 text-center text-sm text-gray-600">
           {TASKS_MESSAGES.modal.loadingDetails}
         </div>
+      ) : isTaskUnavailable ? (
+        <Alert variant="error" message={detailsError ?? TASKS_ERROR_MESSAGES.clientTab.loadDetailsError} />
       ) : (
         <form id={formId} onSubmit={handleSubmit(submitForm)} className="space-y-4">
           {error ? <Alert variant="error" message={error} /> : null}
@@ -230,6 +234,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 onAssigneeChange={(value) => setValue('assignedToUserId', value, { shouldDirty: true })}
                 onRoleChange={(value) => setValue('assignedRole', value, { shouldDirty: true })}
               />
+              {readonly && task ? <TaskHistoryDetails task={task} /> : null}
               {!source && !hasExistingSource ? <TaskSourceSection {...sourceSectionProps} /> : null}
             </>
           )}

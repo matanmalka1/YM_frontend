@@ -1,116 +1,21 @@
-import { useEffect, useState } from 'react'
 import { Plus } from 'lucide-react'
-import { Alert } from '@/components/ui/overlays/Alert'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { DetailTabPanel } from '@/components/ui/layout'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
-import { Select } from '@/components/ui/inputs'
 import { Button } from '@/components/ui/primitives/Button'
-import { BulkSelectionActionButton, BulkSelectionToolbar } from '@/components/ui/table'
-import { randomUUID } from '@/utils/random'
-import { getErrorMessage } from '@/utils/utils'
-import { useActiveUserOptions } from '@/features/users'
 import { TaskModal } from '../form/TaskModal'
+import { TasksBulkToolbar } from '../list/TasksBulkToolbar'
 import { TasksListPanel } from '../list/TasksListPanel'
-import { useBulkAssignTasks } from '../../hooks/useBulkAssignTasks'
-import { useBulkCompleteTasks } from '../../hooks/useBulkCompleteTasks'
+import { TasksListSummary } from '../list/TasksListSummary'
 import { useTasksPage } from '../../hooks/useTasksPage'
-import { isTaskTerminal } from '../../utils/taskFormatters'
-import type { Task } from '../../api/contracts'
 import { TASKS_MESSAGES } from '../../messages'
-import { TASKS_ERROR_MESSAGES } from '../../errorMessages'
 
 interface ClientTasksTabProps {
   clientRecordId: number
 }
 
-interface Feedback {
-  message: string
-  hasFailures: boolean
-}
-
 export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }) => {
   const page = useTasksPage({ pinnedClientId: clientRecordId })
-  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set())
-  const [assigneeId, setAssigneeId] = useState('')
-  const [feedback, setFeedback] = useState<Feedback | null>(null)
-  const bulkComplete = useBulkCompleteTasks()
-  const bulkAssign = useBulkAssignTasks()
-  const usersQuery = useActiveUserOptions()
-
-  const selectableTasks = page.tasks.filter((task) => !isTaskTerminal(task.status))
-  const isBulkLoading = bulkComplete.isPending || bulkAssign.isPending
-
-  // Clear selection whenever the client or the active filters change, so a bulk action
-  // can never target rows that are no longer shown.
-  const filterSignature = JSON.stringify(page.filterBar.values)
-  useEffect(() => {
-    setSelectedIds(new Set())
-    setFeedback(null)
-  }, [clientRecordId, filterSignature])
-
-  const toggleAll = () => {
-    setSelectedIds((current) =>
-      current.size === selectableTasks.length ? new Set() : new Set(selectableTasks.map((task) => task.id)),
-    )
-  }
-  const toggleOne = (task: Task) => {
-    if (isTaskTerminal(task.status)) return
-    setSelectedIds((current) => {
-      const next = new Set(current)
-      if (next.has(task.id)) next.delete(task.id)
-      else next.add(task.id)
-      return next
-    })
-  }
-  const clearSelection = () => setSelectedIds(new Set())
-  const handlePageChange = (nextPage: number) => {
-    page.setPage(nextPage)
-    clearSelection()
-  }
-  const handleBulkComplete = async () => {
-    try {
-      const result = await bulkComplete.mutateAsync({ taskIds: [...selectedIds], idempotencyKey: randomUUID() })
-      clearSelection()
-      setFeedback({
-        message:
-          result.failed.length === 0
-            ? TASKS_MESSAGES.clientTab.bulkCompleteSuccess(result.succeeded.length)
-            : TASKS_ERROR_MESSAGES.clientTab.bulkCompletePartial(result.succeeded.length, result.failed.length),
-        hasFailures: result.failed.length > 0,
-      })
-    } catch (error) {
-      setFeedback({
-        message: getErrorMessage(error, TASKS_ERROR_MESSAGES.clientTab.bulkCompleteFailed),
-        hasFailures: true,
-      })
-    }
-  }
-  const handleBulkAssign = async (targetAssigneeId: number | null) => {
-    try {
-      const result = await bulkAssign.mutateAsync({
-        taskIds: [...selectedIds],
-        assigneeUserId: targetAssigneeId,
-        idempotencyKey: randomUUID(),
-      })
-      clearSelection()
-      setAssigneeId('')
-      setFeedback({
-        message:
-          result.failed.length === 0
-            ? TASKS_MESSAGES.clientTab.bulkAssignSuccess(result.succeeded.length)
-            : TASKS_ERROR_MESSAGES.clientTab.bulkAssignPartial(result.succeeded.length, result.failed.length),
-        hasFailures: result.failed.length > 0,
-      })
-    } catch (error) {
-      setFeedback({
-        message: getErrorMessage(error, TASKS_ERROR_MESSAGES.clientTab.bulkAssignFailed),
-        hasFailures: true,
-      })
-    }
-  }
-
-  const userOptions = (usersQuery.data?.items ?? []).map((user) => ({ value: String(user.id), label: user.full_name }))
 
   return (
     <DetailTabPanel
@@ -133,46 +38,29 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
           </Button>
         </div>
       }
-    >
-      {feedback ? (
-        <Alert
-          variant={feedback.hasFailures ? 'warning' : 'success'}
-          message={feedback.message}
-          onDismiss={() => setFeedback(null)}
-          dismissible
+      summary={
+        <TasksListSummary
+          summary={page.summary}
+          activeStatus={page.activeStatus}
+          isLoading={page.isLoading}
+          onStatusChange={(status) => page.filterBar.onChange('status', status ?? '')}
         />
-      ) : null}
-      {selectedIds.size > 0 ? (
-        <BulkSelectionToolbar selectedCount={selectedIds.size} loading={isBulkLoading} onClear={clearSelection}>
-          <BulkSelectionActionButton
-            label={TASKS_MESSAGES.actions.completeBulk}
-            onClick={handleBulkComplete}
-            loading={bulkComplete.isPending}
-            disabled={isBulkLoading}
-          />
-          <div className="flex flex-wrap items-center gap-2">
-            <Select
-              size="xs"
-              value={assigneeId}
-              options={[{ value: '', label: TASKS_MESSAGES.clientTab.chooseAssignee }, ...userOptions]}
-              onChange={(event) => setAssigneeId(event.target.value)}
-              disabled={isBulkLoading}
-            />
-            <BulkSelectionActionButton
-              label={TASKS_MESSAGES.actions.assign}
-              onClick={() => handleBulkAssign(Number(assigneeId))}
-              loading={bulkAssign.isPending}
-              disabled={isBulkLoading || assigneeId === ''}
-            />
-            <BulkSelectionActionButton
-              label={TASKS_MESSAGES.actions.unassign}
-              onClick={() => handleBulkAssign(null)}
-              loading={bulkAssign.isPending}
-              disabled={isBulkLoading}
-            />
-          </div>
-        </BulkSelectionToolbar>
-      ) : null}
+      }
+    >
+      <TasksBulkToolbar
+        feedback={page.bulk.feedback}
+        selectedCount={page.bulk.selectedCount}
+        assigneeId={page.bulk.assigneeId}
+        assigneeOptions={page.bulk.assigneeOptions}
+        isLoading={page.bulk.isLoading}
+        isCompleteLoading={page.bulk.isCompleteLoading}
+        isAssignLoading={page.bulk.isAssignLoading}
+        onDismissFeedback={page.bulk.dismissFeedback}
+        onAssigneeChange={page.bulk.setAssigneeId}
+        onClear={page.bulk.clearSelection}
+        onComplete={() => void page.bulk.completeSelected()}
+        onAssign={(id) => void page.bulk.assignSelected(id)}
+      />
       <TasksListPanel
         tasks={page.tasks}
         isLoading={page.isLoading}
@@ -182,13 +70,8 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
         page={page.page}
         total={page.total}
         isActionBusy={page.isActionBusy}
-        selection={{
-          selectedIds,
-          selectableCount: selectableTasks.length,
-          disabled: isBulkLoading,
-          onToggle: toggleOne,
-          onToggleAll: toggleAll,
-        }}
+        selection={page.bulk.selection}
+        includeClientColumn={false}
         emptyState={{
           title: TASKS_MESSAGES.clientTab.emptyTitle,
           message: TASKS_MESSAGES.clientTab.emptyMessage,
@@ -199,7 +82,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
         onComplete={page.completeTask}
         onCancel={page.cancelTask}
         onDelete={page.deleteTask}
-        onPageChange={handlePageChange}
+        onPageChange={page.setPage}
         onRetry={() => void page.retryList()}
       />
 
@@ -211,6 +94,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
           clientRecordId={clientRecordId}
           isLoading={page.isModalLoading}
           error={page.actionError}
+          detailsError={page.modalLoadError}
           onSubmit={page.submitModal}
           onClose={page.closeModal}
         />
@@ -221,7 +105,7 @@ export const ClientTasksTab: React.FC<ClientTasksTabProps> = ({ clientRecordId }
         title={page.confirmDialog.title}
         message={page.confirmDialog.message}
         confirmLabel={page.confirmDialog.confirmLabel}
-        confirmVariant="danger"
+        confirmVariant={page.confirmDialog.confirmVariant}
         isLoading={page.confirmDialog.isLoading}
         onConfirm={page.confirmDialog.onConfirm}
         onCancel={page.confirmDialog.onCancel}

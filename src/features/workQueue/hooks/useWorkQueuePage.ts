@@ -5,67 +5,31 @@ import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { getErrorMessage } from '@/utils/utils'
 import { toast } from '@/utils/toast'
-import { parseTaskStatus, taskStatusLabels, taskStatusValues } from '@/features/tasks/public'
+import { parseTaskStatus } from '@/features/tasks'
 import {
   WORK_QUEUE_FILTER_PARAM_KEYS,
   WORK_QUEUE_PAGE_SIZE,
   parseWorkQueueSourceType,
   parseWorkQueueUrgency,
-  workQueueSourceTypeLabels,
-  workQueueSourceTypeValues,
   workQueueUrgencyLabels,
   type WorkQueueFilterParamKey,
 } from '../constants'
-import { buildWorkQueueColumns } from '../components/workQueueColumns'
+import { buildWorkQueueColumns } from '../components/WorkQueueColumns'
 import {
   TASK_RELATION_KEY,
   expandTaskRelation,
   parseLinkedFilter,
   parseScopeFilter,
-  taskRelationOptions,
   taskRelationValue,
 } from '../utils/taskRelationFilter'
 import { useWorkQueue } from './useWorkQueue'
 import { useWorkQueueActions } from './useWorkQueueActions'
 import type { WorkQueueParams } from '../api/contracts'
-import type { FilterFieldDef } from '@/components/ui/filters/types'
 import type { FilterBadge } from '@/components/ui/filters/ActiveFilterBadges'
-import { WORK_QUEUE_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { WORK_QUEUE_MESSAGES } from '../messages'
 import { WORK_QUEUE_ERROR_MESSAGES } from '../errorMessages'
-
-const typeOptions = [
-  { value: '', label: WORK_QUEUE_MESSAGES.filters.allTypes },
-  ...workQueueSourceTypeValues.map((v) => ({ value: v, label: workQueueSourceTypeLabels[v] })),
-]
-
-const statusOptions = [
-  { value: '', label: WORK_QUEUE_MESSAGES.filters.allTaskStatuses },
-  ...taskStatusValues.map((v) => ({ value: v, label: taskStatusLabels[v] })),
-]
-
-const WORK_QUEUE_FILTER_FIELDS: FilterFieldDef[] = [
-  {
-    type: 'search',
-    key: WORK_QUEUE_FILTER_PARAM_KEYS.search,
-    label: GLOBAL_UI_MESSAGES.common.search,
-    placeholder: WORK_QUEUE_SEARCH_PLACEHOLDER,
-  },
-  {
-    type: 'select',
-    key: WORK_QUEUE_FILTER_PARAM_KEYS.sourceType,
-    label: WORK_QUEUE_MESSAGES.filters.type,
-    options: typeOptions,
-  },
-  {
-    type: 'select',
-    key: WORK_QUEUE_FILTER_PARAM_KEYS.taskStatus,
-    label: WORK_QUEUE_MESSAGES.filters.taskStatus,
-    options: statusOptions,
-  },
-  { type: 'select', key: TASK_RELATION_KEY, label: WORK_QUEUE_MESSAGES.filters.workType, options: taskRelationOptions },
-]
+import { WORK_QUEUE_FILTER_FIELDS } from '../utils/workQueueFilterConfig'
 
 export const useWorkQueuePage = () => {
   const { getParam, getPage, setFilter, setFilters, setPage: setUrlPage, resetFilters } = useSearchParamFilters()
@@ -75,7 +39,8 @@ export const useWorkQueuePage = () => {
   const search = getParam(WORK_QUEUE_FILTER_PARAM_KEYS.search)
   const urgencyFilter = parseWorkQueueUrgency(getParam(WORK_QUEUE_FILTER_PARAM_KEYS.urgency))
   const typeFilter = parseWorkQueueSourceType(getParam(WORK_QUEUE_FILTER_PARAM_KEYS.sourceType))
-  const statusFilter = parseTaskStatus(getParam(WORK_QUEUE_FILTER_PARAM_KEYS.taskStatus))
+  const parsedTaskStatus = parseTaskStatus(getParam(WORK_QUEUE_FILTER_PARAM_KEYS.taskStatus))
+  const statusFilter = parsedTaskStatus === 'open' ? parsedTaskStatus : null
   const linkedFilter = parseLinkedFilter(getParam(WORK_QUEUE_FILTER_PARAM_KEYS.linked))
   const scopeFilter = parseScopeFilter(getParam(WORK_QUEUE_FILTER_PARAM_KEYS.scope))
   const page = getPage()
@@ -223,6 +188,8 @@ export const useWorkQueuePage = () => {
       summary,
       isLoading: isFetching,
       summaryError: requestError,
+      activeUrgency: urgencyFilter,
+      onUrgencyChange: (urgency: typeof urgencyFilter) => handleFilterChange(WORK_QUEUE_FILTER_PARAM_KEYS.urgency, urgency ?? ''),
     },
     filters: {
       fields: WORK_QUEUE_FILTER_FIELDS,
@@ -261,6 +228,9 @@ export const useWorkQueuePage = () => {
         ? {
             mode: taskModal.mode,
             task: taskDetail.data,
+            detailsError: taskDetail.error
+              ? getErrorMessage(taskDetail.error, WORK_QUEUE_ERROR_MESSAGES.actions.taskNotFound)
+              : null,
             source: taskModal.source,
             isLoading: createTaskMutation.isPending || updateTaskMutation.isPending || taskDetail.isLoading,
             onClose: closeTaskModal,

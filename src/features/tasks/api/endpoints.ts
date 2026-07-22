@@ -8,4 +8,5 @@ export const TASKS_ENDPOINTS = {
   cancel: (id: number) => `/tasks/${id}/cancel`,
   bulkComplete: '/tasks/bulk-complete',
   bulkAssign: '/tasks/bulk-assign',
+  linkableSources: '/tasks/linkable-sources',
 } as const

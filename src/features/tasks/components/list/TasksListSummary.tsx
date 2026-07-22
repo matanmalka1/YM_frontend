@@ -1,62 +1,52 @@
-import { GLOBAL_UI_MESSAGES } from '@/messages'
-import { ListChecks } from 'lucide-react'
-import { Badge } from '@/components/ui/primitives/Badge'
-import { Card } from '@/components/ui/primitives/Card'
-import { taskPriorityLabels, taskStatusLabels } from '../../constants/labels'
-import { formatTaskDueDate } from '../../utils/taskFormatters'
-import type { Task } from '../../api/contracts'
+import { Ban, CheckCircle2, CircleDot, ListChecks } from 'lucide-react'
+import { StatsCard } from '@/components/ui/layout/StatsCard'
+import type { TaskListResponse, TaskStatus } from '../../api/contracts'
 import { TASKS_MESSAGES } from '../../messages'
 
 interface TasksListSummaryProps {
-  total: number
-  visibleCount: number
-  featuredTask: Task | null
+  summary: TaskListResponse['summary'] | undefined
+  activeStatus: TaskStatus | null
+  onStatusChange: (status: TaskStatus | null) => void
+  isLoading?: boolean
 }
 
-export const TasksListSummary: React.FC<TasksListSummaryProps> = ({ total, visibleCount, featuredTask }) => (
-  <section className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_20rem]">
-    <Card size="compact">
-      <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-tile border border-gray-200 bg-gray-100 text-gray-700">
-          <ListChecks className="h-5 w-5" aria-hidden="true" />
-        </span>
-        <div className="min-w-0">
-          <p className="text-sm font-semibold text-gray-950">{TASKS_MESSAGES.summary.title}</p>
-          <p className="mt-1 text-xs text-gray-500">{TASKS_MESSAGES.summary.visibleCount(visibleCount, total)}</p>
-        </div>
-      </div>
-    </Card>
-
-    <Card size="compact">
-      <div className="flex items-center justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-xs font-semibold text-gray-500">{TASKS_MESSAGES.summary.currentFocus}</p>
-          <p className="mt-1 line-clamp-2 text-sm font-semibold leading-5 text-gray-950">
-            {featuredTask?.title ?? TASKS_MESSAGES.summary.noTask}
-          </p>
-        </div>
-        <Badge variant="neutral" size="2xs" className="shrink-0 tabular-nums shadow-sm">
-          {featuredTask ? `#${featuredTask.id}` : '—'}
-        </Badge>
-      </div>
-      <div className="mt-3 grid grid-cols-3 gap-1.5 text-2xs">
-        <TaskFocusPill
-          label={GLOBAL_UI_MESSAGES.common.status}
-          value={featuredTask ? taskStatusLabels[featuredTask.status] : '—'}
-        />
-        <TaskFocusPill
-          label={TASKS_MESSAGES.summary.priority}
-          value={featuredTask ? taskPriorityLabels[featuredTask.priority] : '—'}
-        />
-        <TaskFocusPill label={TASKS_MESSAGES.summary.target} value={formatTaskDueDate(featuredTask?.due_date)} />
-      </div>
-    </Card>
+export const TasksListSummary: React.FC<TasksListSummaryProps> = ({ summary, activeStatus, onStatusChange, isLoading }) => (
+  <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+    <StatsCard
+      title={TASKS_MESSAGES.summary.all}
+      value={summary?.total ?? 0}
+      description={TASKS_MESSAGES.summary.allDescription}
+      icon={ListChecks}
+      loading={isLoading && !summary}
+      selected={activeStatus === null}
+      onClick={() => onStatusChange(null)}
+    />
+    <StatsCard
+      title={TASKS_MESSAGES.summary.open}
+      value={summary?.open ?? 0}
+      icon={CircleDot}
+      variant="info"
+      loading={isLoading && !summary}
+      selected={activeStatus === 'open'}
+      onClick={() => onStatusChange(activeStatus === 'open' ? null : 'open')}
+    />
+    <StatsCard
+      title={TASKS_MESSAGES.summary.done}
+      value={summary?.done ?? 0}
+      icon={CheckCircle2}
+      variant="positive"
+      loading={isLoading && !summary}
+      selected={activeStatus === 'done'}
+      onClick={() => onStatusChange(activeStatus === 'done' ? null : 'done')}
+    />
+    <StatsCard
+      title={TASKS_MESSAGES.summary.canceled}
+      value={summary?.canceled ?? 0}
+      icon={Ban}
+      variant="neutral"
+      loading={isLoading && !summary}
+      selected={activeStatus === 'canceled'}
+      onClick={() => onStatusChange(activeStatus === 'canceled' ? null : 'canceled')}
+    />
   </section>
-)
-
-const TaskFocusPill = ({ label, value }: { label: string; value: string }) => (
-  <div className="rounded-xl bg-white px-2 py-1.5 shadow-sm">
-    <p className="text-gray-400">{label}</p>
-    <p className="mt-0.5 truncate font-semibold text-gray-800">{value}</p>
-  </div>
 )

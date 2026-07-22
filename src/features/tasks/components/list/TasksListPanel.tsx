@@ -16,6 +16,7 @@ interface TasksListPanelProps {
   total: number
   isActionBusy: boolean
   selection?: TaskSelectionConfig
+  includeClientColumn?: boolean
   emptyState?: DataTableProps<Task>['emptyState']
   onView: (taskId: number) => void
   onEdit: (taskId: number) => void
@@ -36,6 +37,7 @@ export const TasksListPanel: React.FC<TasksListPanelProps> = ({
   total,
   isActionBusy,
   selection,
+  includeClientColumn = true,
   emptyState,
   onView,
   onEdit,
@@ -46,8 +48,18 @@ export const TasksListPanel: React.FC<TasksListPanelProps> = ({
   onRetry,
 }) => {
   const columns = useMemo(
-    () => buildTaskListColumns({ isActionBusy, selection, onView, onEdit, onComplete, onCancel, onDelete }),
-    [isActionBusy, selection, onView, onEdit, onComplete, onCancel, onDelete],
+    () =>
+      buildTaskListColumns({
+        isActionBusy,
+        includeClientColumn,
+        selection,
+        onView,
+        onEdit,
+        onComplete,
+        onCancel,
+        onDelete,
+      }),
+    [includeClientColumn, isActionBusy, selection, onView, onEdit, onComplete, onCancel, onDelete],
   )
   return (
     <section aria-label={TASKS_MESSAGES.list.ariaLabel}>

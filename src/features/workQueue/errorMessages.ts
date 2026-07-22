@@ -1,7 +1,7 @@
 export const WORK_QUEUE_ERROR_MESSAGES = {
   page: {
     roleError: 'לא ניתן לזהות תפקיד משתמש',
-    loadError: 'שגיאה בטעינת המשימות',
+    loadError: 'שגיאה בטעינת תור העבודה',
     loadToast: 'טעינת העבודה לטיפול נכשלה',
   },
   stats: {
