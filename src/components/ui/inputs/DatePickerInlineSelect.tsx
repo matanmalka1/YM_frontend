@@ -22,7 +22,7 @@ export const DatePickerInlineSelect: React.FC<InlineSelectProps> = ({ value, opt
     }
   }, [open])
 
-  useDismissibleLayer({ open, triggerRef: ref, layerRef: listRef, onDismiss: () => setOpen(false) })
+  useDismissibleLayer({ open, triggerRef: ref, layerRef: listRef, onDismiss: () => setOpen(false), closeOnEscape: true })
 
   const current = options.find((o) => o.value === value)
 
