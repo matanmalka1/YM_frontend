@@ -74,4 +74,36 @@ describe('PaginatedDataTable', () => {
     expect(html).toContain('אין רשומות')
     expect(html).toContain('לא נמצאו נתונים')
   })
+
+  it('hides the pagination card when everything fits on one page', () => {
+    const html = renderToStaticMarkup(
+      <PaginatedDataTable
+        data={[{ id: 1, name: 'ראשון' }]}
+        columns={columns}
+        getRowKey={(row) => row.id}
+        page={1}
+        pageSize={10}
+        total={1}
+        onPageChange={() => undefined}
+      />,
+    )
+
+    expect(html).not.toContain('עמוד 1 מתוך')
+  })
+
+  it('shows the pagination card when total exceeds the page size', () => {
+    const html = renderToStaticMarkup(
+      <PaginatedDataTable
+        data={[{ id: 1, name: 'ראשון' }]}
+        columns={columns}
+        getRowKey={(row) => row.id}
+        page={1}
+        pageSize={10}
+        total={25}
+        onPageChange={() => undefined}
+      />,
+    )
+
+    expect(html).toContain('עמוד 1 מתוך 3')
+  })
 })
