@@ -60,14 +60,14 @@ export const DashboardPage: React.FC = () => {
             unit={DASHBOARD_MESSAGES.stats.advancesDue}
             icon={Wallet}
             stat={vatStats.advance_payments.monthly}
-            href={DASHBOARD_HREFS.advancePayments(vatStats.advance_payments.monthly.period.slice(0, 4), 1)}
+            href={DASHBOARD_HREFS.advancePayments(vatStats.advance_payments.monthly.period, 1)}
           />
           <VatStatCard
             title={VAT_STAT_LABELS.advanceBimonthly}
             unit={DASHBOARD_MESSAGES.stats.advancesDue}
             icon={Wallet}
             stat={vatStats.advance_payments.bimonthly}
-            href={DASHBOARD_HREFS.advancePayments(vatStats.advance_payments.bimonthly.period.slice(0, 4), 2)}
+            href={DASHBOARD_HREFS.advancePayments(vatStats.advance_payments.bimonthly.period, 2)}
           />
         </section>
       ) : null}

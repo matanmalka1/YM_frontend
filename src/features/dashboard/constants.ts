@@ -8,8 +8,13 @@ export type VatPeriodType = 'monthly' | 'bimonthly'
 
 export const DASHBOARD_HREFS = {
   vat: (period: string, periodType: VatPeriodType) => withParams('/tax/vat', { period, period_type: periodType }),
-  advancePayments: (year: string | number, periodMonthsCount: 1 | 2) =>
-    withParams('/tax/advance-payments', { year: String(year), period: String(periodMonthsCount) }),
+  advancePayments: (period: string, periodMonthsCount: 1 | 2) =>
+    withParams('/tax/advance-payments', {
+      year: period.slice(0, 4),
+      period: String(periodMonthsCount),
+      // Deep-link month (1-12) — target page opens + scrolls to its batch
+      month: String(Number(period.slice(5, 7)) || ''),
+    }),
   openCharges: withParams('/charges', { status: 'issued' }),
 }
 

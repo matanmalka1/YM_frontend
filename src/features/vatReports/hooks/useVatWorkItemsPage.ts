@@ -70,6 +70,7 @@ export const useVatWorkItemsPage = () => {
       error: groupsQuery.error,
       onRowClick: handleRowClick,
       groupFilters: { status: filters.status || undefined, client_record_id: clientRecordId },
+      focusPeriod: filterState.focusPeriod,
       emptyState: {
         title: buildVatEmptyStateTitle(filters),
         message: actions.permissions.canCreateVatWorkItem ? 'נסה לשנות את הסינון או לפתוח תיק חדש' : 'נסה לשנות את הסינון',

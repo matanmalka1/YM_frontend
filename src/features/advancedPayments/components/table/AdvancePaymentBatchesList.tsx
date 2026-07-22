@@ -11,6 +11,8 @@ interface AdvancePaymentBatchesListProps {
   displayBatches: AdvancePaymentDueDateGroup[]
   year: number | null
   defaultOpenBatchKey: string | null
+  /** Deep-linked batch (dashboard stat card) — scrolls into view on mount */
+  focusBatchKey: string | null
   currentReportingYear: number
   currentReportingMonth: number
   clientRecordId?: number
@@ -26,6 +28,7 @@ export const AdvancePaymentBatchesList = ({
   displayBatches,
   year,
   defaultOpenBatchKey,
+  focusBatchKey,
   currentReportingYear,
   currentReportingMonth,
   clientRecordId,
@@ -60,6 +63,7 @@ export const AdvancePaymentBatchesList = ({
           key={stableKey}
           batch={batch}
           defaultOpen={stableKey === defaultOpenBatchKey}
+          scrollOnMount={stableKey === focusBatchKey}
           isCurrentPeriod={isCurrentPeriod}
           clientRecordId={clientRecordId}
           statusFilter={statusFilter}

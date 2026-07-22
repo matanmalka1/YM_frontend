@@ -23,7 +23,12 @@ interface VatWorkItemsGroupedCardsProps {
   onRowClick: (item: VatWorkItemListItem) => void
   emptyState?: { title?: string; message?: string; action?: { label: string; onClick: () => void } }
   filters?: { status?: VatWorkItemStatus; client_record_id?: number }
+  /** Deep-linked period (YYYY-MM) — its group opens and scrolls into view */
+  focusPeriod?: string
 }
+
+const groupIncludesPeriod = (group: VatWorkItemGroupSummary, period: string): boolean =>
+  (group.periods?.length ? group.periods : [{ period: group.period }]).some((p) => p.period === period)
 
 const getVatGroupSecondaryLabel = (group: VatWorkItemGroupSummary): string | null => {
   const seen = new Set<string>()
@@ -98,12 +103,17 @@ export const VatWorkItemsGroupedCards = ({
   onRowClick,
   emptyState,
   filters,
+  focusPeriod,
 }: VatWorkItemsGroupedCardsProps) => {
   const sortedGroups = groups.toSorted((a, b) => a.due_date.localeCompare(b.due_date))
 
   const getKey = useCallback((g: VatWorkItemGroupSummary) => g.group_key, [])
   const getDueDate = useCallback((g: VatWorkItemGroupSummary) => g.due_date, [])
-  const defaultOpenKey = useDefaultOpenGroup(sortedGroups, getKey, getDueDate)
+  const nearestDueKey = useDefaultOpenGroup(sortedGroups, getKey, getDueDate)
+  const focusedKey = focusPeriod
+    ? (sortedGroups.find((g) => groupIncludesPeriod(g, focusPeriod))?.group_key ?? null)
+    : null
+  const defaultOpenKey = focusedKey ?? nearestDueKey
 
   return (
     <MonthlyAccordionList
@@ -153,6 +163,7 @@ export const VatWorkItemsGroupedCards = ({
             relativeDueLabel={formatRelativeDueLabel(group.due_date)}
             isCurrentPeriod={isCurrentPeriod}
             defaultOpen={group.group_key === defaultOpenKey}
+            scrollOnMount={group.group_key === focusedKey}
             metrics={metrics}
             ctaLabel={VAT_MESSAGES.actions.openClients}
           >

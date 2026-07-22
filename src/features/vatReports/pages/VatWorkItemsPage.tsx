@@ -40,6 +40,7 @@ export const VatWorkItems: React.FC = () => {
         error={table.error}
         onRowClick={table.onRowClick}
         filters={table.groupFilters}
+        focusPeriod={table.focusPeriod}
         emptyState={table.emptyState}
       />
 

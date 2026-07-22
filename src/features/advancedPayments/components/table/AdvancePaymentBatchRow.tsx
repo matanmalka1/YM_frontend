@@ -9,6 +9,7 @@ import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 interface AdvancePaymentBatchRowProps {
   batch: AdvancePaymentDueDateGroup
   defaultOpen: boolean
+  scrollOnMount?: boolean
   isCurrentPeriod: boolean
   clientRecordId?: number
   statusFilter: AdvancePaymentStatus | ''
@@ -54,6 +55,7 @@ const getBatchSummary = (batch: AdvancePaymentDueDateGroup): PeriodSummaryMetric
 export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   batch,
   defaultOpen,
+  scrollOnMount,
   isCurrentPeriod,
   clientRecordId,
   statusFilter,
@@ -70,6 +72,7 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
       relativeDueLabel={formatRelativeDueLabel(dueDate, { showPastDue: batch.overdue_count > 0 })}
       isCurrentPeriod={isCurrentPeriod}
       defaultOpen={defaultOpen}
+      scrollOnMount={scrollOnMount}
       metrics={getBatchSummary(batch)}
       ctaLabel={ADVANCED_PAYMENTS_MESSAGES.batchRow.ctaLabel}
     >

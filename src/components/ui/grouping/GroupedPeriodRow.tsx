@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { ChevronDown, ChevronLeft } from 'lucide-react'
 import { Card } from '@/components/ui/primitives/Card'
 import { cn } from '@/utils/utils'
@@ -23,6 +23,8 @@ interface GroupedPeriodRowProps {
   closeLabel?: string
   isOpen?: boolean
   defaultOpen?: boolean
+  /** Scroll this row into view when it first mounts (e.g. deep-linked period) */
+  scrollOnMount?: boolean
   onToggle?: (isOpen: boolean) => void
   children: React.ReactNode
   className?: string
@@ -48,6 +50,7 @@ export const GroupedPeriodRow = memo(
     closeLabel = 'סגור',
     isOpen,
     defaultOpen,
+    scrollOnMount = false,
     onToggle,
     children,
     className,
@@ -55,6 +58,11 @@ export const GroupedPeriodRow = memo(
     const isControlled = isOpen !== undefined
     const [internalOpen, setInternalOpen] = useState(() => defaultOpen ?? isCurrentPeriod)
     const open = isControlled ? isOpen : internalOpen
+    const headerRef = useRef<HTMLButtonElement>(null)
+
+    useEffect(() => {
+      if (scrollOnMount) headerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }, [scrollOnMount])
 
     const toggle = () => {
       const nextOpen = !open
@@ -65,6 +73,7 @@ export const GroupedPeriodRow = memo(
     return (
       <Card className={cn('overflow-hidden p-0 [&>div]:p-0', isCurrentPeriod && 'ring-1 ring-primary-300', className)}>
         <button
+          ref={headerRef}
           type="button"
           aria-expanded={open}
           onClick={toggle}

@@ -53,6 +53,8 @@ export const useVatWorkItemsFilters = () => {
 
   return {
     filters,
+    // Deep-link target period (e.g. dashboard stat card) — used to open + scroll to its group
+    focusPeriod: getParam('period') || undefined,
     fields: useMemo(buildFilterFields, []),
     values: {
       client_record_id: filters.client_record_id,

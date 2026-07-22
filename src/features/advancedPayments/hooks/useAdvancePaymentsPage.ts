@@ -5,6 +5,7 @@ import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import { parsePositiveInt } from '@/utils/utils'
+import { reportingPeriodIncludesMonth } from '@/utils/reportingPeriod'
 import type { AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../api/contracts'
 import { isAdvancePaymentStatus, ADVANCE_PAYMENTS_FILTER_FIELDS } from '../constants'
 import { useAdvancePaymentBatches } from './useAdvancePaymentBatches'
@@ -41,7 +42,16 @@ export const useAdvancePaymentsPage = () => {
   const [generateOpen, setGenerateOpen] = useState(false)
   const { batches, isLoading } = useAdvancePaymentBatches(year, clientRecordId)
   const displayBatches = useMemo(() => mergeAdvancePaymentBatches(batches, periodFilter), [batches, periodFilter])
-  const defaultOpenBatchKey = useDefaultOpenGroup(displayBatches, getAdvancePaymentBatchKey, (batch) => batch.due_date ?? null)
+  const nearestDueBatchKey = useDefaultOpenGroup(displayBatches, getAdvancePaymentBatchKey, (batch) => batch.due_date ?? null)
+  // Deep-link target month (dashboard stat card) — open + scroll to its batch instead of nearest due
+  const focusMonth = parsePositiveInt(getParam('month'), 0)
+  const focusBatchKey =
+    focusMonth >= 1 && focusMonth <= 12 && year !== null
+      ? (displayBatches.find((batch) =>
+          reportingPeriodIncludesMonth(batch.year, batch.month, batch.period_months_count, year, focusMonth),
+        ) ?? null)
+      : null
+  const defaultOpenBatchKey = focusBatchKey ? getAdvancePaymentBatchKey(focusBatchKey) : nearestDueBatchKey
   const workflowStats = useMemo(() => getAdvancePaymentWorkflowStats(displayBatches), [displayBatches])
 
   const changeFilter = (key: string, value: string) => {
@@ -91,6 +101,7 @@ export const useAdvancePaymentsPage = () => {
       periodFilter,
       statusFilter,
       defaultOpenBatchKey,
+      focusBatchKey: focusBatchKey ? getAdvancePaymentBatchKey(focusBatchKey) : null,
       currentReportingYear: todayYear,
       currentReportingMonth,
       onRowClick: openRow,
