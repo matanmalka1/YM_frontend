@@ -144,8 +144,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
             <Badge variant="neutral" size="md" className="min-w-8 justify-center tabular-nums">
               {total}
             </Badge>
-            <Button variant="ghost" size="sm" onClick={() => setShowCreate(true)}>
-              <Plus className="h-3.5 w-3.5" />
+            <Button icon={<Plus className="h-3.5 w-3.5" />} onClick={() => setShowCreate(true)}>
               {SIGNATURE_REQUESTS_MESSAGES.actions.newRequest}
             </Button>
           </div>
