@@ -1,6 +1,7 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { Inbox } from 'lucide-react'
+import { Alert } from '@/components/ui/overlays/Alert'
 import {
   TableSkeleton,
   PaginationCard,
@@ -122,7 +123,7 @@ export const VatWorkItemsGroupedCards = ({
         action: emptyState?.action,
       }}
     >
-      {error && <div className="text-sm text-negative-600">{error}</div>}
+      {error && <Alert variant="error" message={error} />}
       {sortedGroups.map((group) => {
         const periodMonthsCount = group.period_type === 'bimonthly' ? 2 : 1
         const isCurrentPeriod = isCurrentReportingPeriod(group.period, periodMonthsCount)
