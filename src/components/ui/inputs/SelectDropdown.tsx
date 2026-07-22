@@ -1,0 +1,305 @@
+import { useRef, useState, useEffect, useId } from 'react'
+import { createPortal } from 'react-dom'
+import { Check, ChevronDown } from 'lucide-react'
+import { cn } from '../../../utils/utils'
+import { getOverlayPortalOffset, useOverlayPortalContainer } from '../overlays/OverlayPortalContext'
+import { useDismissibleLayer } from '../overlays/useDismissibleLayer'
+import { getSelectDropdownDisplay, getSelectDropdownOptionId, type SelectDropdownOption } from './SelectDropdown.helpers'
+
+interface SelectDropdownProps {
+  value?: string | number | readonly string[]
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
+  onBlur?: React.FocusEventHandler<HTMLSelectElement>
+  onKeyDown?: React.KeyboardEventHandler<HTMLButtonElement>
+  options: SelectDropdownOption[]
+  disabled?: boolean
+  size?: 'xs' | 'sm' | 'md'
+  error?: boolean
+  placeholder?: string
+  menuWidth?: 'trigger' | 'content'
+  className?: string
+  name?: string
+  id?: string
+  'aria-describedby'?: string
+  'aria-label'?: string
+  'aria-labelledby'?: string
+}
+
+const triggerSizeClasses = {
+  xs: 'h-7 px-2 py-1 text-xs',
+  sm: 'h-8 px-2.5 py-1.5 text-sm',
+  md: 'h-9 px-3 py-2 text-sm',
+}
+
+const optionSizeClasses = {
+  xs: 'px-2 py-1.5 text-xs',
+  sm: 'px-2.5 py-1.5 text-sm',
+  md: 'px-3 py-2 text-sm',
+}
+
+const iconSizeClasses = {
+  xs: 'h-3.5 w-3.5',
+  sm: 'h-4 w-4',
+  md: 'h-4 w-4',
+}
+
+export const SelectDropdown: React.FC<SelectDropdownProps> = ({
+  value,
+  onChange,
+  onBlur,
+  onKeyDown,
+  options,
+  disabled,
+  size = 'md',
+  error = false,
+  placeholder = 'בחר...',
+  menuWidth = 'trigger',
+  className,
+  name,
+  id,
+  'aria-describedby': ariaDescribedBy,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+}) => {
+  const [open, setOpen] = useState(false)
+  const [internalValue, setInternalValue] = useState<string>('')
+  const [highlightedIndex, setHighlightedIndex] = useState(-1)
+  // Menu placement is measured as one unit (position + flip direction), so it lives in a
+  // single state object rather than two correlated useState calls.
+  const [placement, setPlacement] = useState<{
+    top: number
+    bottom: number
+    left: number
+    width: number
+    above: boolean
+  } | null>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const portalRef = useRef<HTMLDivElement>(null)
+  const portalContainer = useOverlayPortalContainer()
+  const generatedId = useId()
+  const isControlled = value !== undefined
+  const currentValue = isControlled ? String(value ?? '') : internalValue
+  const triggerId = id ?? `select-dropdown-${generatedId}`
+  const listboxId = `${triggerId}-listbox`
+
+  useDismissibleLayer({
+    open,
+    triggerRef,
+    layerRef: portalRef,
+    onDismiss: () => setOpen(false),
+    closeOnEscape: true,
+  })
+
+  const selectedDisplay = getSelectDropdownDisplay(options, currentValue, placeholder)
+  const highlightedOptionId =
+    open && highlightedIndex >= 0 && options[highlightedIndex]
+      ? getSelectDropdownOptionId(listboxId, highlightedIndex)
+      : undefined
+
+  const updateCoords = () => {
+    const rect = triggerRef.current?.getBoundingClientRect()
+    if (!rect) return
+    const spaceBelow = window.innerHeight - rect.bottom
+    setPlacement({
+      above: spaceBelow < 220,
+      top: rect.bottom,
+      bottom: window.innerHeight - rect.top,
+      left: rect.left,
+      width: rect.width,
+    })
+  }
+
+  useEffect(() => {
+    if (!open) return
+    window.addEventListener('scroll', updateCoords, true)
+    return () => window.removeEventListener('scroll', updateCoords, true)
+  }, [open])
+
+  // Measure placement and seed the keyboard highlight to the selected (or first enabled)
+  // option as we open — instead of resetting highlight from props via an effect.
+  const openMenu = () => {
+    const selectedIndex = options.findIndex((opt) => !opt.disabled && String(opt.value) === currentValue)
+    const firstEnabledIndex = options.findIndex((opt) => !opt.disabled)
+    setHighlightedIndex(selectedIndex >= 0 ? selectedIndex : firstEnabledIndex)
+    updateCoords()
+    setOpen(true)
+  }
+
+  const toggle = () => {
+    if (disabled) return
+    if (open) {
+      setOpen(false)
+      return
+    }
+    openMenu()
+  }
+
+  const moveHighlight = (direction: 1 | -1) => {
+    if (options.length === 0) return
+
+    let nextIndex = highlightedIndex
+    for (let i = 0; i < options.length; i += 1) {
+      nextIndex = (nextIndex + direction + options.length) % options.length
+      if (!options[nextIndex]?.disabled) {
+        setHighlightedIndex(nextIndex)
+        break
+      }
+    }
+  }
+
+  const handleTriggerKeyDown: React.KeyboardEventHandler<HTMLButtonElement> = (event) => {
+    onKeyDown?.(event)
+    if (event.defaultPrevented || disabled) return
+
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault()
+      if (!open) {
+        openMenu()
+        return
+      }
+      moveHighlight(event.key === 'ArrowDown' ? 1 : -1)
+      return
+    }
+
+    if ((event.key === 'Enter' || event.key === ' ') && !open) {
+      event.preventDefault()
+      openMenu()
+      return
+    }
+
+    if (event.key === 'Home' && open) {
+      event.preventDefault()
+      const firstEnabledIndex = options.findIndex((opt) => !opt.disabled)
+      setHighlightedIndex(firstEnabledIndex)
+      return
+    }
+
+    if (event.key === 'End' && open) {
+      event.preventDefault()
+      const lastEnabledIndex = [...options].reverse().findIndex((opt) => !opt.disabled)
+      if (lastEnabledIndex >= 0) setHighlightedIndex(options.length - 1 - lastEnabledIndex)
+      return
+    }
+
+    if ((event.key === 'Enter' || event.key === ' ') && open) {
+      const highlighted = options[highlightedIndex]
+      if (!highlighted || highlighted.disabled) return
+      event.preventDefault()
+      select(highlighted.value)
+    }
+  }
+
+  const select = (optValue: string) => {
+    if (!isControlled) setInternalValue(optValue)
+    if (onChange) {
+      const syntheticEvent = {
+        type: 'change',
+        target: { value: optValue, name: name ?? '', type: 'select-one' },
+        currentTarget: { value: optValue, name: name ?? '', type: 'select-one' },
+      } as React.ChangeEvent<HTMLSelectElement>
+      onChange(syntheticEvent)
+    }
+    setOpen(false)
+    if (onBlur) {
+      const blurEvent = {
+        target: { name: name ?? '', value: optValue },
+        currentTarget: { name: name ?? '', value: optValue },
+      } as React.FocusEvent<HTMLSelectElement>
+      onBlur(blurEvent)
+    }
+  }
+
+  const triggerClass = cn(
+    'flex w-full items-center gap-2 bg-white border rounded-lg transition-colors',
+    triggerSizeClasses[size],
+    'hover:border-primary-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:border-primary-500',
+    'disabled:opacity-50 disabled:cursor-not-allowed',
+    open ? 'border-primary-500 ring-2 ring-primary-500' : error ? 'border-negative-500' : 'border-gray-200',
+    className,
+  )
+
+  const portalOffset = getOverlayPortalOffset(portalContainer)
+  const portalRect = portalContainer?.getBoundingClientRect()
+  const viewportBottomToPortalBottom = portalRect ? window.innerHeight - portalRect.bottom : 0
+  const fitMenuToContent = menuWidth === 'content'
+
+  return (
+    <>
+      <button
+        ref={triggerRef}
+        type="button"
+        id={triggerId}
+        onClick={toggle}
+        onKeyDown={handleTriggerKeyDown}
+        disabled={disabled}
+        className={triggerClass}
+        dir="rtl"
+        role="combobox"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={open ? listboxId : undefined}
+        aria-activedescendant={highlightedOptionId}
+        aria-describedby={ariaDescribedBy}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+      >
+        <span className={cn('flex-1 truncate text-right', selectedDisplay.isPlaceholder ? 'text-gray-400' : 'text-gray-800')}>
+          {selectedDisplay.label}
+        </span>
+        <ChevronDown className={cn('shrink-0 text-gray-400', iconSizeClasses[size])} />
+      </button>
+
+      {open &&
+        placement &&
+        portalContainer &&
+        createPortal(
+          <div
+            ref={portalRef}
+            style={{
+              position: 'fixed',
+              top: placement.above ? undefined : placement.top + 4 - portalOffset.top,
+              bottom: placement.above ? placement.bottom + 4 - viewportBottomToPortalBottom : undefined,
+              left: placement.left + (fitMenuToContent ? placement.width : 0) - portalOffset.left,
+              width: fitMenuToContent ? 'max-content' : placement.width,
+              minWidth: placement.width,
+              maxWidth: fitMenuToContent
+                ? Math.max(placement.width, placement.left + placement.width - portalOffset.left - 16)
+                : undefined,
+              transform: fitMenuToContent ? 'translateX(-100%)' : undefined,
+              zIndex: 9999,
+            }}
+            className="pointer-events-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg overflow-auto max-h-60 overscroll-contain"
+            role="listbox"
+            id={listboxId}
+            aria-labelledby={triggerId}
+          >
+            {options.map((opt, index) => (
+              <button
+                key={opt.value}
+                id={getSelectDropdownOptionId(listboxId, index)}
+                type="button"
+                disabled={opt.disabled}
+                onClick={() => select(opt.value)}
+                onMouseEnter={() => !opt.disabled && setHighlightedIndex(index)}
+                className={cn(
+                  'flex w-full items-center gap-2 text-right transition-colors',
+                  optionSizeClasses[size],
+                  'disabled:opacity-40 disabled:cursor-not-allowed',
+                  highlightedIndex === index ? 'bg-primary-50' : 'hover:bg-primary-50',
+                  currentValue === String(opt.value) ? 'text-primary-600 font-medium' : 'text-gray-700',
+                )}
+                role="option"
+                aria-selected={currentValue === String(opt.value)}
+              >
+                <span className={cn('flex-1', fitMenuToContent ? 'whitespace-nowrap' : 'truncate')}>{opt.label}</span>
+                {currentValue === String(opt.value) && (
+                  <Check className={cn('shrink-0 text-primary-500', iconSizeClasses[size])} />
+                )}
+              </button>
+            ))}
+          </div>,
+          portalContainer,
+        )}
+    </>
+  )
+}
