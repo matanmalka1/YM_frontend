@@ -11,11 +11,11 @@ import { formatDate, formatDateTime, formatPhoneNumber } from '../../../../utils
 import {
   SIGNATURE_REQUEST_ACTOR_TYPE_LABELS,
   SIGNATURE_REQUEST_AUDIT_FIELD_LABELS,
+  SIGNATURE_REQUEST_STATUS_VARIANTS,
   getSignatureRequestAuditActionLabel,
   getSignatureRequestTypeLabel,
   getSignatureRequestStatusLabel,
 } from '../../constants'
-import { signatureRequestStatusVariants } from '../../utils'
 import { SIGNATURE_REQUESTS_MESSAGES } from '../../messages'
 
 interface Props {
@@ -85,7 +85,7 @@ export const SignatureRequestAuditDrawer: React.FC<Props> = ({ requestId, onClos
                     <StatusBadge
                       status={data.status}
                       getLabel={getSignatureRequestStatusLabel}
-                      variantMap={signatureRequestStatusVariants}
+                      variantMap={SIGNATURE_REQUEST_STATUS_VARIANTS}
                     />
                   ),
                 },

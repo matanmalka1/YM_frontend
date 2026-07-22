@@ -1,7 +1,7 @@
 import type { KeyboardEvent } from 'react'
-import { formatClientOfficeId, formatPercent, getReportingPeriodMonthLabel } from '@/utils/utils'
+import { formatClientOfficeId, getReportingPeriodMonthLabel } from '@/utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
-import { DEDUCTION_RATES, VAT_NUMERIC_KEYS } from '../constants/vatConstants'
+import { VAT_NUMERIC_KEYS } from '../constants/vatConstants'
 import type { VatPeriodRow, VatType } from '../api'
 
 export const formatVatPeriodTitle = (period: string, periodType: VatType): string => {
@@ -27,16 +27,6 @@ export const getVatClientTitle = (name: string | null, clientRecordId: number): 
 
 export const getNetVatTone = (value: string | number | null | undefined): string =>
   Number(value) >= 0 ? semanticMonoToneClasses.negative : semanticMonoToneClasses.positive
-
-export const getDeductionRateHint = (category: string | undefined): { label: string; className: string } | null => {
-  if (category === undefined) return null
-  const rate = DEDUCTION_RATES[category]
-  if (rate === undefined || rate === 1) return null
-  return {
-    label: rate === 0 ? 'ניכוי אסור' : `ניכוי ${formatPercent(rate, { isRatio: true, fractionDigits: 0 })}`,
-    className: rate === 0 ? 'text-negative-600' : 'text-warning-600',
-  }
-}
 
 export const shouldRequireCounterpartyId = (invoiceType: 'income' | 'expense', documentType?: string): boolean =>
   invoiceType === 'expense' && documentType === 'tax_invoice'

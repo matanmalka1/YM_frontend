@@ -28,12 +28,24 @@ export interface TaxCalendarSettingsEntry {
   deadline_rule_id: number
 }
 
+export type TaxCalendarWarning =
+  | { code: 'count_mismatch'; year: number; obligation_type: string; expected: number; found: number }
+  | { code: 'registry_data_missing'; year: number }
+  | {
+      code: 'bootstrap_count_mismatch'
+      tax_year_after: number
+      tax_year_before: number
+      expected: number
+      found: number
+      expected_per_year: number
+    }
+
 export interface TaxCalendarSettingsSummary {
   tax_year_after: number | null
   tax_year_before: number | null
   total_entries: number
   per_year: Record<string, Record<string, number>>
-  warnings: string[]
+  warnings: TaxCalendarWarning[]
 }
 
 export interface TaxCalendarBootstrapResult {
@@ -45,5 +57,5 @@ export interface TaxCalendarBootstrapResult {
   entries_created: number
   entries_skipped: number
   total_entries_for_range: number
-  warnings: string[]
+  warnings: TaxCalendarWarning[]
 }

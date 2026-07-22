@@ -62,5 +62,6 @@ export const SIGNATURE_REQUESTS_MESSAGES = {
     signerDetails: 'פרטי חותם',
     signerName: 'שם חותם',
     signerEmail: 'דוא"ל חותם',
+    signerPhone: 'טלפון חותם',
   },
 } as const

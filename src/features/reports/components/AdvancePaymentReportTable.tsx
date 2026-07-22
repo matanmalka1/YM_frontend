@@ -1,59 +1,57 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
-import { DataTable, monoColumn, type Column } from '@/components/ui/table';
-import { formatClientOfficeId, formatPercent } from "../../../utils/utils";
-import type { AdvancePaymentReportItem, AdvancePaymentReportResponse } from "../api";
-import { formatILS, toReportNumber } from "../utils";
-import { REPORTS_MESSAGES } from "../messages";
+import { DataTable, monoColumn, type Column } from '@/components/ui/table'
+import { formatClientOfficeId, formatPercent } from '../../../utils/utils'
+import type { AdvancePaymentReportItem, AdvancePaymentReportResponse } from '../api'
+import { formatILS, toReportNumber } from '../utils'
+import { REPORTS_MESSAGES } from '../messages'
 
 interface Props {
-  data: AdvancePaymentReportResponse;
+  data: AdvancePaymentReportResponse
 }
 
 const columns: Column<AdvancePaymentReportItem>[] = [
   monoColumn({
-    key: "office_client_number",
+    key: 'office_client_number',
     header: REPORTS_MESSAGES.advances.clientNumber,
     getValue: (r) => formatClientOfficeId(r.office_client_number),
   }),
   {
-    key: "client_name",
+    key: 'client_name',
     header: GLOBAL_UI_MESSAGES.common.clientName,
     render: (r) => <span className="font-medium text-gray-900">{r.client_name}</span>,
   },
   monoColumn({
-    key: "client_id_number",
+    key: 'client_id_number',
     header: REPORTS_MESSAGES.advances.idNumber,
     getValue: (r) => r.client_id_number,
   }),
   {
-    key: "total_expected",
+    key: 'total_expected',
     header: REPORTS_MESSAGES.advances.expected,
     render: (r) => formatILS(r.total_expected),
   },
   {
-    key: "total_paid",
+    key: 'total_paid',
     header: REPORTS_MESSAGES.advances.paid,
     render: (r) => <span className="text-positive-700">{formatILS(r.total_paid)}</span>,
   },
   {
-    key: "gap",
+    key: 'gap',
     header: REPORTS_MESSAGES.advances.gap,
     render: (r) => (
-      <span className={`font-medium ${toReportNumber(r.gap) > 0 ? "text-negative-600" : "text-gray-500"}`}>
+      <span className={`font-medium ${toReportNumber(r.gap) > 0 ? 'text-negative-600' : 'text-gray-500'}`}>
         {formatILS(r.gap)}
       </span>
     ),
   },
   {
-    key: "overdue_count",
+    key: 'overdue_count',
     header: REPORTS_MESSAGES.advances.overdueCharges,
     render: (r) => (
-      <span className={r.overdue_count > 0 ? "text-negative-600 font-semibold" : "text-gray-400"}>
-        {r.overdue_count}
-      </span>
+      <span className={r.overdue_count > 0 ? 'text-negative-600 font-semibold' : 'text-gray-400'}>{r.overdue_count}</span>
     ),
   },
-];
+]
 
 export const AdvancePaymentReportTable: React.FC<Props> = ({ data }) => (
   <DataTable
@@ -68,7 +66,7 @@ export const AdvancePaymentReportTable: React.FC<Props> = ({ data }) => (
           <div className="flex items-center gap-6">
             <span>{REPORTS_MESSAGES.advances.totalExpected(formatILS(data.total_expected))}</span>
             <span className="text-positive-700">{REPORTS_MESSAGES.advances.totalPaid(formatILS(data.total_paid))}</span>
-            <span className={toReportNumber(data.total_gap) > 0 ? "text-negative-600" : "text-gray-500"}>
+            <span className={toReportNumber(data.total_gap) > 0 ? 'text-negative-600' : 'text-gray-500'}>
               {REPORTS_MESSAGES.advances.totalGap(formatILS(data.total_gap))}
             </span>
             <span className="ms-auto text-primary-700">
@@ -79,4 +77,4 @@ export const AdvancePaymentReportTable: React.FC<Props> = ({ data }) => (
       </tr>
     )}
   />
-);
+)

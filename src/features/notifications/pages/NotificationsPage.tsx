@@ -16,7 +16,7 @@ export const NotificationsPage: React.FC = () => {
     <PageHeader
       {...headerProps}
       actions={
-        permissions.isAdvisor ? (
+        permissions.canSendNotifications ? (
           <Button variant="primary" size="sm" icon={<Plus className="h-4 w-4" />} onClick={() => modals.openSend()}>
             {NOTIFICATIONS_MESSAGES.actions.sendMessage}
           </Button>
@@ -49,7 +49,7 @@ export const NotificationsPage: React.FC = () => {
 
       <NotificationDetailDrawer {...drawers.detail} />
 
-      {permissions.isAdvisor && <SendNotificationModal {...modals.sendProps} />}
+      {permissions.canSendNotifications && <SendNotificationModal {...modals.sendProps} />}
     </PageStateGuard>
   )
 }

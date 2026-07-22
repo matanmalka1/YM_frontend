@@ -1,4 +1,7 @@
 export const ADVANCED_PAYMENTS_ERROR_MESSAGES = {
+  clientConfig: {
+    load: 'טעינת הגדרות המקדמות של הלקוח נכשלה',
+  },
   advancePayment: {
     create: 'שגיאה ביצירת מקדמה',
     update: 'שגיאה בעדכון מקדמה',

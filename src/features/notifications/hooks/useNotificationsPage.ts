@@ -5,17 +5,14 @@ import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { parsePositiveInt } from '@/utils/utils'
 import { useActiveUserFilterOptions } from '@/features/users'
+import { createClientPickerFilter } from '@/features/clients/public'
 
-import {
-  CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS,
-  isNotificationStatus,
-  isNotificationTrigger,
-  type ListNotificationsParams,
-} from '../api'
+import { isNotificationStatus, isNotificationTrigger, type ListNotificationsParams } from '../api'
 import { useNotifications } from './useNotifications'
 import { useNotificationDetail } from './useNotificationDetail'
+import { useNotificationMetadata } from './useNotificationMetadata'
 import { buildNotificationColumns } from '../components/list/NotificationsColumns'
-import { NOTIFICATION_STATUS_OPTIONS, NOTIFICATION_TRIGGER_OPTIONS } from '../constants'
+import { NOTIFICATION_STATUS_OPTIONS } from '../constants'
 import { NOTIFICATIONS_MESSAGES } from '../messages'
 import { NOTIFICATIONS_ERROR_MESSAGES } from '../errorMessages'
 
@@ -32,7 +29,7 @@ interface UseNotificationsPageOptions {
 }
 
 export const useNotificationsPage = ({ pinnedClient }: UseNotificationsPageOptions = {}) => {
-  const { isAdvisor } = useRole()
+  const { can } = useRole()
   const { searchParams, getParam, getPage, setFilter, setFilters, setPage: setUrlPage } = useSearchParamFilters()
 
   const page = getPage(FIRST_PAGE)
@@ -70,6 +67,7 @@ export const useNotificationsPage = ({ pinnedClient }: UseNotificationsPageOptio
   }
 
   const { data, isPending, isFetching, error } = useNotifications(params)
+  const metadataQuery = useNotificationMetadata()
   const { options: userOptions, isPending: usersPending } = useActiveUserFilterOptions()
   const items = data?.items ?? []
   const total = data?.total ?? 0
@@ -86,16 +84,28 @@ export const useNotificationsPage = ({ pinnedClient }: UseNotificationsPageOptio
 
   const columns = useMemo(
     () =>
-      buildNotificationColumns({ isAdvisor, includeClientColumn: !pinnedClient, onView: setSelectedId, onSend: openSendModal }),
-    [isAdvisor, pinnedClient, openSendModal],
+      buildNotificationColumns({
+        canSendNotifications: can.sendNotifications,
+        includeClientColumn: !pinnedClient,
+        onView: setSelectedId,
+        onSend: openSendModal,
+      }),
+    [can.sendNotifications, pinnedClient, openSendModal],
   )
 
   const filterFields = useMemo(
     () => [
-      ...(pinnedClient
-        ? []
-        : [{ type: 'client-picker' as const, idKey: 'client_record_id', nameKey: 'client_name', label: 'לקוח' }]),
-      { type: 'select' as const, key: 'trigger', label: 'סוג הודעה', options: NOTIFICATION_TRIGGER_OPTIONS },
+      ...(pinnedClient ? [] : [createClientPickerFilter({ idKey: 'client_record_id', nameKey: 'client_name', label: 'לקוח' })]),
+      {
+        type: 'select' as const,
+        key: 'trigger',
+        label: 'סוג הודעה',
+        options: [
+          { value: '', label: 'כל הסוגים' },
+          ...(metadataQuery.data?.triggers.map(({ value, label }) => ({ value, label })) ?? []),
+        ],
+        disabled: metadataQuery.isPending,
+      },
       { type: 'select' as const, key: 'status', label: 'סטטוס', options: NOTIFICATION_STATUS_OPTIONS },
       {
         type: 'date-range' as const,
@@ -112,7 +122,7 @@ export const useNotificationsPage = ({ pinnedClient }: UseNotificationsPageOptio
         disabled: usersPending,
       },
     ],
-    [pinnedClient, userOptions, usersPending],
+    [metadataQuery.data?.triggers, metadataQuery.isPending, pinnedClient, userOptions, usersPending],
   )
 
   const filterValues = {
@@ -147,7 +157,7 @@ export const useNotificationsPage = ({ pinnedClient }: UseNotificationsPageOptio
       title: NOTIFICATIONS_MESSAGES.page.title,
       description: NOTIFICATIONS_MESSAGES.page.description,
     },
-    permissions: { isAdvisor },
+    permissions: { canSendNotifications: can.sendNotifications },
     filters: {
       fields: filterFields,
       values: filterValues,
@@ -179,7 +189,7 @@ export const useNotificationsPage = ({ pinnedClient }: UseNotificationsPageOptio
         error: selectedError,
         onClose: () => setSelectedId(null),
         onSend:
-          selected && !isForeignSelected && isAdvisor
+          selected && !isForeignSelected && can.sendNotifications
             ? () =>
                 openSendModal(
                   pinnedClient ?? {
@@ -196,7 +206,6 @@ export const useNotificationsPage = ({ pinnedClient }: UseNotificationsPageOptio
         open: sendOpen,
         onClose: closeSendModal,
         clientRecordId: sendClient?.id ?? pinnedClient?.id,
-        allowedTriggers: CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS,
       },
     },
   }

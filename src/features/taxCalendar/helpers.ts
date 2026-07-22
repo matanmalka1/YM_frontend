@@ -1,5 +1,6 @@
 import { formatDate, getReportingPeriodLabelWithYear } from '@/utils/utils'
-import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarGroup, type TaxCalendarGroupItem } from './api'
+import type { TaxCalendarGroup, TaxCalendarGroupItem } from './api'
+import { TAX_CALENDAR_OBLIGATION_LABELS } from './constants'
 import { TAX_CALENDAR_SOURCE_TYPE_LABELS } from './constants'
 import { TAX_CALENDAR_MESSAGES } from './messages'
 
@@ -48,14 +49,14 @@ export const getTaxCalendarItemStateVariant = (item: TaxCalendarGroupItem): 'pos
 }
 
 export const getTaxCalendarGroupStateLabel = (group: TaxCalendarGroup): string => {
-  if (group.done_count > 0) return TAX_CALENDAR_MESSAGES.item.done
   if (group.overdue_count > 0) return TAX_CALENDAR_MESSAGES.item.overdue
+  if (group.done_count > 0 && group.open_count === 0) return TAX_CALENDAR_MESSAGES.item.done
   return TAX_CALENDAR_MESSAGES.item.open
 }
 
 export const getTaxCalendarGroupStateVariant = (group: TaxCalendarGroup): 'positive' | 'warning' | 'negative' => {
-  if (group.done_count > 0) return 'positive'
   if (group.overdue_count > 0) return 'negative'
+  if (group.done_count > 0 && group.open_count === 0) return 'positive'
   return 'warning'
 }
 

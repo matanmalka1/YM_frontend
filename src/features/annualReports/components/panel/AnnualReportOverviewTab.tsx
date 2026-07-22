@@ -7,15 +7,14 @@ import { AnnualReportSummaryStrip } from './AnnualReportSummaryStrip'
 import { ReportMetaGrid } from './ReportMetaGrid'
 import { AnnualReportDetailForm } from '../tax/AnnualReportDetailForm'
 import { AnnualPLSummary } from '../financials/AnnualPLSummary'
-import type { AnnualReportDetail } from '../../types'
-import type { AnnualReportFull } from '../../api'
+import type { AnnualReportDetailUpdatePayload, AnnualReportFull } from '../../api'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface Props {
   report: AnnualReportFull
-  detail: AnnualReportDetail | null
+  detail: AnnualReportFull | null
   advances?: { balance_type: 'due' | 'refund' | 'zero'; final_balance: number }
-  onDetailSave: (data: Partial<AnnualReportDetail>) => void
+  onDetailSave: (data: AnnualReportDetailUpdatePayload) => void
   clientId: number
   onDirtyChange?: (dirty: boolean) => void
   submitRef?: React.RefObject<(() => void) | null>

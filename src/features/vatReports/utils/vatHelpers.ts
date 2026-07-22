@@ -1,9 +1,9 @@
-import { EXPENSE_CATEGORIES } from '../constants/vatConstants'
 import type { VatInvoiceRowValues } from '../schemas/invoice.schema'
 import { formatCurrencyILS, formatPercent } from '../../../utils/utils'
 import { semanticMonoToneClasses } from '../../../utils/semanticColors'
 import type { BackendAction } from '@/lib/actions/types'
 import type { VatInvoiceResponse, VatWorkItemStatus } from '../api'
+import { VAT_MESSAGES } from '../messages'
 
 const hasVatAction = (actions: BackendAction[] | null | undefined, key: string): boolean =>
   actions?.some((action) => action.key === key) ?? false
@@ -11,9 +11,11 @@ const hasVatAction = (actions: BackendAction[] | null | undefined, key: string):
 export const canMarkMaterialsComplete = (actions: BackendAction[] | null | undefined): boolean =>
   hasVatAction(actions, 'materials_complete')
 
-const canAddInvoice = (actions: BackendAction[] | null | undefined): boolean => hasVatAction(actions, 'add_invoice')
+export const canAddOrEditVatInvoices = (actions: BackendAction[] | null | undefined): boolean =>
+  hasVatAction(actions, 'add_invoice')
 
-export const canMutateVatInvoices = (actions: BackendAction[] | null | undefined): boolean => canAddInvoice(actions)
+export const canDeleteVatInvoices = (actions: BackendAction[] | null | undefined, hasDeletePermission: boolean): boolean =>
+  hasDeletePermission && canAddOrEditVatInvoices(actions)
 
 export const canMarkReadyForReview = (actions: BackendAction[] | null | undefined): boolean =>
   hasVatAction(actions, 'ready_for_review')
@@ -41,6 +43,9 @@ export const getVatInvoiceActionLabel = (invoice: Pick<VatInvoiceResponse, 'id' 
   return displayNumber === MISSING_INVOICE_NUMBER_LABEL ? `חשבונית ללא מספר (#${invoice.id})` : `חשבונית ${displayNumber}`
 }
 
+export const getVatInvoiceCreationWarning = (invoice: Pick<VatInvoiceResponse, 'ceiling_warning'>): string | null =>
+  invoice.ceiling_warning ? VAT_MESSAGES.mutations.osekPaturCeilingWarning : null
+
 export const formatVatAmount = (amount: string | number | null | undefined): string =>
   formatCurrencyILS(amount, { fractionDigits: 2 })
 
@@ -66,11 +71,11 @@ export const toDateInputValue = (dateStr: string): string => {
   }
 }
 
-export const getVatInvoiceGrossAmount = (netAmount: string | number, vatAmount: string | number): string =>
-  (Number(netAmount) + Number(vatAmount)).toFixed(2)
-
-export const getVatInvoiceDefaultValues = (invoiceType: 'income' | 'expense'): VatInvoiceRowValues => ({
+export const getVatInvoiceDefaultValues = (
+  invoiceType: 'income' | 'expense',
+  defaultExpenseCategory?: string,
+): VatInvoiceRowValues => ({
   invoice_type: invoiceType,
   gross_amount: '',
-  expense_category: invoiceType === 'expense' ? EXPENSE_CATEGORIES[0] : undefined,
+  expense_category: invoiceType === 'expense' ? defaultExpenseCategory : undefined,
 })

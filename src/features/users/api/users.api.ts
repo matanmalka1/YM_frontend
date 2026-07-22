@@ -20,11 +20,6 @@ export const usersApi = {
     return response.data
   },
 
-  getById: async (userId: number): Promise<UserResponse> => {
-    const response = await api.get<UserResponse>(USER_ENDPOINTS.userById(userId))
-    return response.data
-  },
-
   create: async (payload: CreateUserPayload): Promise<UserResponse> => {
     const response = await api.post<UserResponse>(USER_ENDPOINTS.users, payload)
     return response.data

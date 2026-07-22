@@ -1,17 +1,15 @@
 import { useMemo, useEffect, useRef } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Controller, useForm } from 'react-hook-form'
-import { ClientPickerField, createClientIdPickerHandlers, useClientPickerState } from '@/components/shared/client'
-import { MONTHS_COVERED_OPTIONS } from '@/constants/periodOptions.constants'
-import { Input, Select } from '@/components/ui/inputs'
+import { FormProvider, useForm } from 'react-hook-form'
+import { ClientPickerField, createClientIdPickerHandlers, useClientPickerState } from '@/features/clients/public'
 import { Modal, ModalFormActions } from '@/components/ui/overlays'
 import type { BusinessResponse } from '@/features/clients'
 import type { CreateChargePayload } from '../../api'
-import { CHARGE_CREATE_FORM_ID, CHARGE_TYPE_OPTIONS } from '../../constants'
+import { CHARGE_CREATE_FORM_ID } from '../../constants'
 import { chargeCreateDefaultValues, chargeCreateSchema, toCreateChargePayload, type ChargeCreateFormValues } from '../../schemas'
-import { buildChargePeriodOptions } from '../../utils/chargeHelpers'
 import { getChargeBusinessLabel } from '../../utils/chargeUtils'
 import { CHARGES_MESSAGES } from '../../messages'
+import { ChargeCoreFields } from './ChargeCoreFields'
 
 interface ChargesCreateModalProps {
   open: boolean
@@ -36,18 +34,17 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
   initialBusiness,
   businesses = EMPTY_BUSINESSES,
 }) => {
-  const {
-    formState: { errors, isDirty },
-    handleSubmit,
-    control,
-    register,
-    reset,
-    setValue,
-    watch,
-  } = useForm<ChargeCreateFormValues>({
+  const form = useForm<ChargeCreateFormValues>({
     defaultValues: chargeCreateDefaultValues,
     resolver: zodResolver(chargeCreateSchema),
   })
+  const {
+    formState: { errors, isDirty },
+    handleSubmit,
+    register,
+    reset,
+    setValue,
+  } = form
 
   const { clientQuery, selectedClient, handleSelectClient, handleClearClient, handleClientQueryChange, resetClientPicker } =
     useClientPickerState(createClientIdPickerHandlers((value, options) => setValue('client_record_id', value, options)))
@@ -84,9 +81,6 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
 
     setValue('business_id', selectedSingleBusiness.id, { shouldDirty: false })
   }, [open, selectedSingleBusiness, setValue])
-
-  const monthsCovered = watch('months_covered') ?? 1
-  const periodOptions = useMemo(() => buildChargePeriodOptions(monthsCovered), [monthsCovered])
 
   const businessOptions = useMemo(
     () => [
@@ -129,100 +123,26 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
     >
       <form id={CHARGE_CREATE_FORM_ID} onSubmit={submitForm} className="space-y-4">
         <input type="hidden" {...register('client_record_id')} />
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <div className="col-span-2">
-            <ClientPickerField
-              selectedClient={selectedClient}
-              clientQuery={clientQuery}
-              onQueryChange={handleClientQueryChange}
-              onSelect={handleSelectClient}
-              onClear={handleClearClient}
-              error={errors.client_record_id?.message}
-              label={CHARGES_MESSAGES.create.client}
+        <FormProvider {...form}>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="col-span-2">
+              <ClientPickerField
+                selectedClient={selectedClient}
+                clientQuery={clientQuery}
+                onQueryChange={handleClientQueryChange}
+                onSelect={handleSelectClient}
+                onClear={handleClearClient}
+                error={errors.client_record_id?.message}
+                label={CHARGES_MESSAGES.create.client}
+              />
+            </div>
+            <ChargeCoreFields
+              businessOptions={businessOptions}
+              showBusinessSelect={businesses.length > 1}
+              singleBusinessLabel={businesses.length === 1 ? selectedSingleBusiness?.name : undefined}
             />
           </div>
-
-          {businesses.length > 1 && (
-            <div className="col-span-2">
-              <Controller
-                control={control}
-                name="business_id"
-                render={({ field }) => (
-                  <Select
-                    label={CHARGES_MESSAGES.create.business}
-                    value={field.value != null ? String(field.value) : ''}
-                    onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : null)}
-                    onBlur={field.onBlur}
-                    name={field.name}
-                    options={businessOptions}
-                  />
-                )}
-              />
-            </div>
-          )}
-
-          {businesses.length === 1 && selectedSingleBusiness && (
-            <div className="col-span-2">
-              <Input label={CHARGES_MESSAGES.create.business} value={selectedSingleBusiness.name} readOnly disabled />
-            </div>
-          )}
-
-          <Input
-            label={CHARGES_MESSAGES.create.amount}
-            type="number"
-            min={0.01}
-            step="0.01"
-            placeholder="0.00"
-            error={errors.amount?.message}
-            endElement={<span className="text-sm text-gray-400">₪</span>}
-            {...register('amount')}
-          />
-          <Controller
-            control={control}
-            name="charge_type"
-            render={({ field }) => (
-              <Select
-                label={CHARGES_MESSAGES.create.type}
-                error={errors.charge_type?.message}
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                name={field.name}
-                options={CHARGE_TYPE_OPTIONS}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="months_covered"
-            render={({ field }) => (
-              <Select
-                label={CHARGES_MESSAGES.create.monthsCovered}
-                error={errors.months_covered?.message}
-                value={field.value != null ? String(field.value) : '1'}
-                onChange={(e) => field.onChange(Number(e.target.value) as 1 | 2)}
-                onBlur={field.onBlur}
-                name={field.name}
-                options={MONTHS_COVERED_OPTIONS}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="period"
-            render={({ field }) => (
-              <Select
-                label={CHARGES_MESSAGES.create.period}
-                error={errors.period?.message}
-                value={field.value ?? ''}
-                onChange={(e) => field.onChange(e.target.value)}
-                onBlur={field.onBlur}
-                name={field.name}
-                options={periodOptions}
-              />
-            )}
-          />
-        </div>
+        </FormProvider>
 
         {createError && <p className="text-sm text-negative-600">{createError}</p>}
       </form>

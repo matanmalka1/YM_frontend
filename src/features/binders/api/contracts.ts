@@ -54,11 +54,3 @@ export interface BinderHandoverToClientBulkResponse {
   notes: string | null
   created_at: string
 }
-
-export interface BinderIntakeUpdatePayload {
-  received_at?: string
-  received_by?: number
-  notes?: string | null
-  client_record_id?: number
-  binder_id?: number
-}

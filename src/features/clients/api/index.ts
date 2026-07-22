@@ -13,7 +13,6 @@ export type {
   ClientStatus,
   BusinessStatus,
   EntityType,
-  VatType,
   BusinessResponse,
   CreateBusinessPayload,
   UpdateBusinessPayload,

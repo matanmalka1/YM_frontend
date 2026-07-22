@@ -1,5 +1,5 @@
 import type { AnnualReportScheduleKey, AnnexDataLine, ScheduleEntry } from '../api'
-import { getScheduleLabel } from '../api'
+import { getScheduleLabel } from '../constants/display'
 import { ALL_SCHEDULES, type FieldDef } from '../constants/annexConstants'
 import { formatCount, formatDate, formatShekelAmount } from '@/utils/utils'
 

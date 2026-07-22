@@ -7,7 +7,6 @@ import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
 import { cn } from '@/utils/utils'
 import { ActiveFilterBadges, type FilterBadge } from './ActiveFilterBadges'
 import { SearchFilter } from './SearchFilter'
-import { ClientPickerFilter } from './ClientPickerFilter'
 import { buildFilterBadges } from './filterBadges'
 import type { FilterFieldDef } from './types'
 
@@ -160,8 +159,8 @@ const FilterField: React.FC<FilterFieldProps> = ({ field, values, size, onChange
           />
         </>
       )
-    case 'client-picker':
-      return <ClientPickerFilter field={field} values={values} onMultiChange={onMultiChange} size={size === 'md' ? 'md' : 'sm'} />
+    case 'custom':
+      return field.render({ values, onMultiChange, size: size === 'md' ? 'md' : 'sm' })
     default:
       return null
   }
@@ -169,7 +168,6 @@ const FilterField: React.FC<FilterFieldProps> = ({ field, values, size, onChange
 
 const fieldKey = (field: FilterFieldDef): string => {
   if (field.type === 'date-range') return `${field.fromKey}__${field.toKey}`
-  if (field.type === 'client-picker') return field.nameKey ? `${field.idKey}__${field.nameKey}` : field.idKey
   return field.key
 }
 

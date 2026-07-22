@@ -1,13 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { clientsApi, clientsQK } from '../api'
-import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 export const useFirstBusinessId = (clientId: number, enabled = true) => {
   const { data, isLoading } = useQuery({
     queryKey: clientsQK.businessesAll(clientId),
     queryFn: () => clientsApi.listAllBusinessesForClient(clientId),
     enabled: enabled && clientId > 0,
-    staleTime: QUERY_STALE_TIME.default,
     retry: 1,
     refetchOnWindowFocus: false,
   })

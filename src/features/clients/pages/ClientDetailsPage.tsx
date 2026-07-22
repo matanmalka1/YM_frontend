@@ -1,7 +1,6 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
-import { type FC, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { type FC } from 'react'
+import { Link } from 'react-router-dom'
 import { BriefcaseBusiness, Edit2, Fingerprint, IdCard } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageContent } from '@/components/layout/PageContent'
@@ -12,7 +11,6 @@ import { MetaItem, MetaStrip } from '@/components/ui/layout'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
 import { formatPlainIdentifier } from '@/utils/utils'
-import { DOC_TYPE_LABELS, documentsApi, documentsQK } from '@/features/documents'
 import { CLIENT_ROUTES } from '../api/endpoints'
 import {
   CLIENT_DETAILS_TAB_LABELS,
@@ -22,9 +20,9 @@ import {
   getEntityTypeLabel,
   type ActiveClientDetailsTab,
 } from '../constants'
-import { ClientDetailsTabContent, useClientQuery, useClientMutations } from '@/features/clients'
+import { ClientDetailsTabContent } from '../components/detail/ClientDetailsTabContent'
+import { useClientDetailsPage } from '../hooks/useClientDetailsPage'
 import type { ClientRecordResponse } from '../api'
-import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { CLIENTS_MESSAGES } from '../messages'
 import { CLIENTS_ERROR_MESSAGES } from '../errorMessages'
 
@@ -58,30 +56,22 @@ const ClientHeaderMeta: FC<{ client: ClientRecordResponse }> = ({ client }) => (
     )}
   </MetaStrip>
 )
-const ClientHeaderMissingDocuments: FC<{ clientId: number; active: boolean }> = ({ clientId, active }) => {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: documentsQK.clientSignals(clientId),
-    queryFn: () => documentsApi.getSignalsByClient(clientId),
-    enabled: active && clientId > 0,
-    staleTime: QUERY_STALE_TIME.default,
-    retry: 1,
-  })
-
-  if (!active || isLoading || isError) return null
-
-  const missingDocuments = data?.missing_documents ?? []
-  if (missingDocuments.length === 0) return null
-
-  const labels = missingDocuments.map((documentType) => DOC_TYPE_LABELS[documentType] ?? documentType)
-
+const ClientHeaderMissingDocuments: FC<{
+  clientId: number
+  labels: string[]
+  count: number
+  error: string | null
+}> = ({ clientId, labels, count, error }) => {
+  if (error) return <AlertBanner tone="negative">{error}</AlertBanner>
+  if (count === 0) return null
   return (
     <AlertBanner tone="warning">
       <span className="flex min-w-0 items-center gap-2">
         <Badge variant="warning" size="xs" className="shrink-0">
-          {CLIENTS_MESSAGES.details.missingCount(missingDocuments.length)}
+          {CLIENTS_MESSAGES.details.missingCount(count)}
         </Badge>
         <span className="min-w-0 flex-1 truncate">{labels.join(' · ')}</span>
-        <Link to={`/clients/${clientId}/documents`} className="shrink-0 font-semibold underline-offset-4 hover:underline">
+        <Link to={CLIENT_ROUTES.documents(clientId)} className="shrink-0 font-semibold underline-offset-4 hover:underline">
           {CLIENTS_MESSAGES.details.goToDocuments}
         </Link>
       </span>
@@ -90,14 +80,8 @@ const ClientHeaderMissingDocuments: FC<{ clientId: number; active: boolean }> = 
 }
 
 export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }) => {
-  const { clientId } = useParams<{ clientId: string }>()
-  const clientIdNum = clientId ? Number(clientId) : null
-  const [isEditingRequested, setIsEditingRequested] = useState(false)
-  // Editing is only meaningful on the details tab; derive it so switching tabs clears it
-  // automatically instead of resetting state in an effect.
-  const isEditing = isEditingRequested && initialTab === 'details'
-  const { client, isValidId, isLoading, error, can } = useClientQuery({ clientId: clientIdNum })
-  const { updateClient, isUpdating, deleteClient, isDeleting } = useClientMutations(Number(clientIdNum))
+  const page = useClientDetailsPage(initialTab)
+  const { client, isValidId, isLoading, error, can } = page
 
   if (!isValidId)
     return (
@@ -114,14 +98,14 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
     { label: GLOBAL_UI_MESSAGES.common.clients, to: CLIENT_ROUTES.list },
     {
       label: client?.full_name ?? CLIENTS_MESSAGES.details.pageTitle,
-      to: clientId ? CLIENT_ROUTES.detail(clientId) : CLIENT_ROUTES.list,
+      to: page.routeClientId ? CLIENT_ROUTES.detail(page.routeClientId) : CLIENT_ROUTES.list,
     },
     ...(initialTab === 'details'
       ? []
       : [
           {
             label: CLIENT_DETAILS_TAB_LABELS[initialTab],
-            to: clientId ? CLIENT_ROUTES.tab(clientId, initialTab) : CLIENT_ROUTES.list,
+            to: page.routeClientId ? CLIENT_ROUTES.tab(page.routeClientId, initialTab) : CLIENT_ROUTES.list,
           },
         ]),
   ]
@@ -138,16 +122,18 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
               size="md"
               title={client ? buildClientTitle(client) : CLIENTS_MESSAGES.details.pageTitle}
               description={
-                client && initialTab === 'details' ? <ClientHeaderMissingDocuments clientId={client.id} active /> : undefined
+                client && initialTab === 'details' && !page.documentSignals.isLoading ? (
+                  <ClientHeaderMissingDocuments
+                    clientId={client.id}
+                    labels={page.documentSignals.labels}
+                    count={page.documentSignals.missingDocuments.length}
+                    error={page.documentSignals.error}
+                  />
+                ) : undefined
               }
               actions={
                 can.editClients && initialTab === 'details' ? (
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    icon={<Edit2 className="h-4 w-4" />}
-                    onClick={() => setIsEditingRequested(true)}
-                  >
+                  <Button variant="primary" size="sm" icon={<Edit2 className="h-4 w-4" />} onClick={page.requestEdit}>
                     {CLIENTS_MESSAGES.details.editDetails}
                   </Button>
                 ) : undefined
@@ -167,12 +153,13 @@ export const ClientDetails: FC<ClientDetailsProps> = ({ initialTab = 'details' }
             client,
             clientId: client.id,
             canEditClients: can.editClients,
-            updateClient,
-            isUpdating,
-            deleteClient,
-            isDeleting,
-            isEditing,
-            onEditClose: () => setIsEditingRequested(false),
+            canManageSignatureRequests: can.manageSignatureRequests,
+            updateClient: page.updateClient,
+            isUpdating: page.isUpdating,
+            deleteClient: page.deleteClient,
+            isDeleting: page.isDeleting,
+            isEditing: page.isEditing,
+            onEditClose: page.closeEdit,
           }}
         />
       ) : null}

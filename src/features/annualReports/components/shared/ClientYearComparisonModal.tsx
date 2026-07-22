@@ -1,7 +1,7 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { Modal } from '../../../../components/ui/overlays/Modal'
 import { DataTable, textColumn, type Column } from '../../../../components/ui/table'
-import { getStatusLabel } from '../../api/utils'
+import { getStatusLabel } from '../../constants/display'
 import type { AnnualReportListItem } from '../../api/contracts'
 import { formatShekelAmount } from '@/utils/utils'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'

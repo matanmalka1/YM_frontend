@@ -1,14 +1,4 @@
-import { differenceInCalendarDays } from 'date-fns'
 import type { TransitionForm } from '../types'
-import { parseAnnualReportCalendarDate } from '../constants/sharedConstants'
-
-export const TERMINAL_STATUSES = new Set(['submitted', 'closed', 'canceled'])
-
-export const daysUntil = (dateStr: string | null): number | null => {
-  const deadline = parseAnnualReportCalendarDate(dateStr)
-  if (!deadline) return null
-  return differenceInCalendarDays(deadline, new Date())
-}
 
 type FlagFieldName = 'has_rental_income' | 'has_capital_gains' | 'has_foreign_income' | 'has_depreciation'
 

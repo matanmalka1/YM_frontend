@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { vatReportsApi, type CreateVatWorkItemPayload } from '../api'
 import { vatReportsQK } from '../api/queryKeys'
 import { toast } from '@/utils/toast'
-import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { VAT_MESSAGES } from '../messages'
 
 export const useVatClientSummary = (
@@ -18,7 +17,6 @@ export const useVatClientSummary = (
   } = useQuery({
     queryKey: vatReportsQK.clientSummary(clientId, yearParams),
     queryFn: () => vatReportsApi.getClientSummary(clientId, yearParams),
-    staleTime: QUERY_STALE_TIME.default,
   })
 
   // Raw mutation: caller surfaces the failure inline (createError in the modal),

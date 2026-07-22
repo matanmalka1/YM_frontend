@@ -1,11 +1,6 @@
 import type { CreateClientPayload, ISODateString } from '../api'
 import type { ClientCreationImpactResponse } from '../api/contracts'
-import {
-  ADVANCE_PAYMENT_FREQUENCY_LABELS,
-  ENTITY_TYPE_LABELS,
-  VAT_TYPE_LABELS,
-  deriveCreateClientIdNumberType,
-} from '../constants'
+import { ADVANCE_PAYMENT_FREQUENCY_LABELS, ENTITY_TYPE_LABELS, VAT_TYPE_LABELS } from '../constants'
 import type { CreateClientFormValues } from '../schemas'
 
 export const stripNonDigits = (e: React.FormEvent<HTMLInputElement>) => {
@@ -32,7 +27,6 @@ export const buildCreateClientPayload = (data: CreateClientFormValues): CreateCl
   return {
     full_name: data.full_name.trim(),
     id_number: trimmedIdNumber,
-    id_number_type: deriveCreateClientIdNumberType(data.entity_type),
     entity_type: data.entity_type,
     phone: data.phone,
     email: data.email,

@@ -1,6 +1,6 @@
 import type { MutableRefObject } from 'react'
-import type { SectionKey, AnnualReportDetail } from '../../types'
-import type { ReportDetailResponse, AnnualReportScheduleKey } from '../../api'
+import type { SectionKey } from '../../types'
+import type { AnnualReportDetailUpdatePayload, AnnualReportFull, AnnualReportScheduleKey } from '../../api'
 import { AnnualReportOverviewTab } from './AnnualReportOverviewTab'
 import { IncomeExpenseTab } from '../financials/IncomeExpenseTab'
 import { TaxCalculationTab } from '../tax/TaxCalculationTab'
@@ -11,8 +11,8 @@ import { AnnualReportTimelineTab } from './AnnualReportTimelineTab'
 interface AnnualReportSectionContentProps {
   reportId: number
   activeSection: SectionKey
-  report: AnnualReportDetail
-  updateDetail: (payload: Partial<ReportDetailResponse>) => void
+  report: AnnualReportFull
+  updateDetail: (payload: AnnualReportDetailUpdatePayload) => void
   completeSchedule: (schedule: AnnualReportScheduleKey) => void
   addSchedule: (schedule: AnnualReportScheduleKey, notes?: string) => void
   isCompletingSchedule: boolean
@@ -50,7 +50,7 @@ export const AnnualReportSectionContent = ({
     case 'tax':
       return <TaxCalculationTab reportId={reportId} />
     case 'deductions':
-      return <DeductionsTab reportId={reportId} taxYear={report.tax_year} />
+      return <DeductionsTab reportId={reportId} />
     case 'annex':
       return (
         <AnnualReportAnnexesTab

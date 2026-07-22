@@ -2,12 +2,11 @@ import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { DataTable, dateColumn, monoColumn, textColumn, type Column } from '../../../../components/ui/table'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import type { AnnualReportListItem } from '../../api'
-import { getStatusLabel, getStatusVariant, getClientTypeLabel } from '../../api'
+import { getStatusLabel, getStatusVariant, getClientTypeLabel } from '../../constants/display'
 import { getDeadlineTypeLabel } from '../../constants/sharedConstants'
 import { formatClientOfficeId, formatDate } from '../../../../utils/utils'
 import { AlertTriangle, Clock } from 'lucide-react'
 import { cn } from '../../../../utils/utils'
-import { TERMINAL_STATUSES, daysUntil } from '../../utils/annualReportsUtils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
@@ -19,16 +18,15 @@ interface SeasonReportsTableProps {
 }
 
 const DeadlineCell: React.FC<{ report: AnnualReportListItem }> = ({ report }) => {
-  const days = daysUntil(report.filing_deadline)
-  const isTerminal = TERMINAL_STATUSES.has(report.status)
-  const overdue = days !== null && days < 0 && !isTerminal
+  const days = report.days_until_deadline
+  const overdue = report.is_overdue
 
   return (
     <div className="flex flex-col gap-0.5">
       <span className={cn('tabular-nums', overdue ? semanticMonoToneClasses.negative : 'text-gray-600')}>
         {formatDate(report.filing_deadline)}
       </span>
-      {days !== null && !isTerminal && (
+      {days !== null && (
         <span
           className={cn(
             'inline-flex items-center gap-1 text-xs',
@@ -117,9 +115,7 @@ export const SeasonReportsTable: React.FC<SeasonReportsTableProps> = ({ reports,
       taxYear ? ANNUAL_REPORTS_MESSAGES.season.noReportsForYear(taxYear) : ANNUAL_REPORTS_MESSAGES.season.noReportsThisYear
     }
     getRowVariant={(r) => {
-      const days = daysUntil(r.filing_deadline)
-      const overdue = days !== null && days < 0 && !TERMINAL_STATUSES.has(r.status)
-      return overdue ? 'dangerSoft' : undefined
+      return r.is_overdue ? 'dangerSoft' : undefined
     }}
   />
 )

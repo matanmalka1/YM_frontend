@@ -25,7 +25,7 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
             title={NOTIFICATIONS_MESSAGES.page.filterTitle}
             subtitle={NOTIFICATIONS_MESSAGES.page.filterSubtitle}
           />
-          {permissions.isAdvisor && (
+          {permissions.canSendNotifications && (
             <Button
               type="button"
               variant="primary"
@@ -57,7 +57,7 @@ export const NotificationsTab: React.FC<NotificationsTabProps> = ({ clientRecord
 
       <NotificationDetailDrawer {...drawers.detail} />
 
-      {permissions.isAdvisor && <SendNotificationModal {...modals.sendProps} />}
+      {permissions.canSendNotifications && <SendNotificationModal {...modals.sendProps} />}
     </DetailTabPanel>
   )
 }

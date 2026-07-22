@@ -7,7 +7,15 @@ export const receiveBinderSchema = z
   .object({
     client_record_id: z
       .number({ error: BINDERS_ERROR_MESSAGES.validation.clientRequired })
-      .positive(BINDERS_ERROR_MESSAGES.validation.clientRequired),
+      .positive(BINDERS_ERROR_MESSAGES.validation.clientRequired)
+      .optional()
+      .transform((value, ctx) => {
+        if (value === undefined) {
+          ctx.addIssue({ code: 'custom', message: BINDERS_ERROR_MESSAGES.validation.clientRequired })
+          return z.NEVER
+        }
+        return value
+      }),
     business_id: z
       .number({ error: BINDERS_ERROR_MESSAGES.validation.businessRequired })
       .positive(BINDERS_ERROR_MESSAGES.validation.businessRequired)
@@ -72,4 +80,5 @@ export const receiveBinderSchema = z
     }
   })
 
-export type ReceiveBinderFormValues = z.infer<typeof receiveBinderSchema>
+export type ReceiveBinderFormInput = z.input<typeof receiveBinderSchema>
+export type ReceiveBinderFormValues = z.output<typeof receiveBinderSchema>

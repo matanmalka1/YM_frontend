@@ -4,13 +4,12 @@ import { FileText, Receipt, CreditCard, TrendingUp, FolderOpen, FileCheck, ListT
 import { Select } from '@/components/ui/inputs/Select'
 import { clientsApi, clientsQK } from '../../api'
 import { CLIENT_ROUTES } from '../../api/endpoints'
-import { vatReportsApi, vatReportsQK } from '@/features/vatReports'
+import { vatReportsApi, vatReportsQK } from '@/features/vatReports/api'
 import { useFirstBusinessId } from '../../hooks/useFirstBusinessId'
 import { formatShekelAmount, formatDate } from '@/utils/utils'
 import { ActionSurfaceButton, ActionSurfaceLink } from '@/components/ui/primitives/ActionSurface'
 import { Card } from '@/components/ui/primitives/Card'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
-import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { CLIENTS_MESSAGES } from '../../messages'
 interface Props {
   clientId: number
@@ -59,7 +58,6 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
     queryKey: vatReportsQK.clientSummary(clientId),
     queryFn: () => vatReportsApi.getClientSummary(clientId),
     enabled: clientId > 0,
-    staleTime: QUERY_STALE_TIME.default,
     retry: 1,
   })
 
@@ -67,7 +65,6 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
     queryKey: clientsQK.statusCard(clientId, selectedYear),
     queryFn: () => clientsApi.getStatusCard(clientId, selectedYear),
     enabled: clientId > 0,
-    staleTime: QUERY_STALE_TIME.default,
     retry: 1,
   })
 

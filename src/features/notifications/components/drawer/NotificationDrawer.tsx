@@ -7,7 +7,6 @@ import { useNotifications } from '../../hooks/useNotifications'
 import { useRole } from '../../../../hooks/useRole'
 import { DrawerNotificationListItem } from '../list/NotificationListItem'
 import { SendNotificationModal } from '../form/SendNotificationModal'
-import { CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS } from '../../api'
 import type { NotificationDrawerProps } from '../../types'
 import { NOTIFICATIONS_MESSAGES } from '../../messages'
 
@@ -21,7 +20,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
     },
     open,
   )
-  const { isAdvisor } = useRole()
+  const { can } = useRole()
   const [sendOpen, setSendOpen] = useState(false)
   const notifications = data?.items ?? []
   const total = data?.total ?? 0
@@ -40,9 +39,9 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
         onClose={handleClose}
         className="sm:max-w-sm"
         footer={
-          isAdvisor || hasMore ? (
+          can.sendNotifications || hasMore ? (
             <div className="space-y-3">
-              {isAdvisor && (
+              {can.sendNotifications && (
                 <Button
                   type="button"
                   variant="ghost"
@@ -73,13 +72,8 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ open, on
         </div>
       </DetailDrawer>
 
-      {isAdvisor && (
-        <SendNotificationModal
-          open={sendOpen}
-          onClose={() => setSendOpen(false)}
-          clientRecordId={clientRecordId}
-          allowedTriggers={CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS}
-        />
+      {can.sendNotifications && (
+        <SendNotificationModal open={sendOpen} onClose={() => setSendOpen(false)} clientRecordId={clientRecordId} />
       )}
     </>
   )

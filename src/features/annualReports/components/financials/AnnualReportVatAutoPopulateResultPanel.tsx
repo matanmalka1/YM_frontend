@@ -3,13 +3,11 @@ import { Alert } from '../../../../components/ui/overlays/Alert'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { MonoValue } from '../../../../components/ui/primitives/MonoValue'
 import { formatCurrencyILS } from '../../../../utils/utils'
-import { CATEGORY_LABELS as VAT_CATEGORY_LABELS } from '../../../vatReports'
+import { useVatDeductionMetadata } from '../../../vatReports'
 import type { VatAutoPopulateResponse } from '../../api'
 import { VAT_AUTO_POPULATE_ITEM_TYPE_LABELS, VAT_AUTO_POPULATE_SKIPPED_REASON_LABELS } from '../../constants/financialConstants'
 import { EXPENSE_LABELS } from '../../constants/reportConstants'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
-
-const getVatCategoryLabel = (category: string): string => VAT_CATEGORY_LABELS[category] ?? category
 
 const getAnnualExpenseLabel = (category?: string | null): string | null => {
   if (!category) return null
@@ -26,6 +24,8 @@ export const AnnualReportVatAutoPopulateResultPanel: React.FC<AnnualReportVatAut
   result,
   onDismiss,
 }) => {
+  const { categoryLabels: vatCategoryLabels } = useVatDeductionMetadata()
+  const getVatCategoryLabel = (category: string): string => vatCategoryLabels[category] ?? category
   const warnings = result.warnings ?? []
   const skippedItems = result.skipped_items ?? []
   const expenseBreakdown = result.expense_breakdown ?? []

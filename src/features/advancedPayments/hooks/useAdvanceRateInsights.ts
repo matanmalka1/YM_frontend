@@ -1,15 +1,13 @@
-import { useTaxProfile } from '@/features/taxProfile'
+import { useAdvancePaymentClientConfig } from './useAdvancePaymentClientConfig'
 
 export const useAdvanceRateInsights = (clientId: number) => {
-  const { profile, updateProfile, isUpdating } = useTaxProfile(clientId)
+  const { config } = useAdvancePaymentClientConfig(clientId)
 
-  const advanceRate = profile?.advance_rate != null ? Number(profile.advance_rate) : null
-  const advancePaymentFrequency = profile?.advance_payment_frequency ?? null
+  const advanceRate = config?.advance_rate != null ? Number(config.advance_rate) : null
+  const advancePaymentFrequency = config?.advance_payment_frequency ?? null
 
   return {
     advanceRate,
     advancePaymentFrequency,
-    updateAdvanceRate: (rate: number) => updateProfile({ advance_rate: String(rate) }),
-    isUpdatingRate: isUpdating,
   }
 }

@@ -1,5 +1,4 @@
 import type { PaginatedResponse } from '@/types'
-import type { ChargeResponse } from '@/features/charges'
 
 export type AnnualReportStatus =
   | 'not_started'
@@ -27,7 +26,7 @@ export type ClientTypeForReport =
   | 'control_holder'
   | 'exempt_dealer'
 
-export type DeadlineType = 'standard' | 'extended' | 'custom'
+type DeadlineType = 'standard' | 'extended' | 'custom'
 
 export type AnnualReportScheduleKey =
   | 'schedule_a'
@@ -89,6 +88,8 @@ export interface AnnualReportListItem {
   status: AnnualReportStatus
   deadline_type: DeadlineType
   filing_deadline: string | null
+  is_overdue: boolean
+  days_until_deadline: number | null
   submitted_at: string | null
   assessment_amount: string | null
   refund_due: string | null
@@ -108,6 +109,8 @@ interface AnnualReportTaxCalculation {
   profit?: string | null
   tax_after_credits?: string | null
   final_balance?: string | null
+  credit_points_value?: string | null
+  donation_credit?: string | null
   credit_points?: string | null
   pension_credit_points?: string | null
   life_insurance_credit_points?: string | null
@@ -127,6 +130,8 @@ export interface AnnualReportFull {
   status: AnnualReportStatus
   deadline_type: DeadlineType
   filing_deadline: string | null
+  is_overdue: boolean
+  days_until_deadline: number | null
   custom_deadline_note: string | null
   submitted_at: string | null
   ita_reference: string | null
@@ -167,6 +172,15 @@ export interface ReportDetailResponse {
   updated_at: string | null
 }
 
+export interface AnnualReportDetailUpdatePayload {
+  pension_contribution?: string | null
+  donation_amount?: string | null
+  other_credits?: string | null
+  client_approved_at?: string | null
+  internal_notes?: string | null
+  amendment_reason?: string | null
+}
+
 export interface ScheduleEntry {
   id: number
   annual_report_id: number
@@ -199,7 +213,6 @@ export interface DefaultTaxYearResponse {
 }
 
 export type AnnualReportListResponse = PaginatedResponse<AnnualReportListItem>
-export type AnnualReportChargesResponse = PaginatedResponse<ChargeResponse>
 
 export interface CreateAnnualReportPayload {
   client_record_id: number

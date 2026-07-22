@@ -11,7 +11,7 @@ const getProgressColor = (pct: number) => {
   return 'bg-warning-500'
 }
 
-const buildStats = (data: SeasonSummaryData) => {
+export const buildSeasonStats = (data: SeasonSummaryData) => {
   const completionPct = Math.round(Number(data.completion_rate))
   const done = data.submitted + data.closed
   return {
@@ -21,9 +21,10 @@ const buildStats = (data: SeasonSummaryData) => {
     notStarted: data.not_started,
     submitted: data.submitted,
     closed: data.closed,
+    canceled: data.canceled,
     overdueCount: data.overdue_count,
     done,
-    inProgress: data.total - data.not_started - done,
+    inProgress: data.total - data.not_started - done - data.canceled,
     completionPct,
     hasOverdue: data.overdue_count > 0,
     progressColor: getProgressColor(completionPct),
@@ -36,7 +37,7 @@ export const useSeasonSummary = () => {
     queryFn: annualReportSeasonApi.getActiveSeasonSummary,
   })
 
-  const activeStats = useMemo(() => (activeSummaryData ? buildStats(activeSummaryData) : null), [activeSummaryData])
+  const activeStats = useMemo(() => (activeSummaryData ? buildSeasonStats(activeSummaryData) : null), [activeSummaryData])
   const shouldCheckNextTaxYear = activeStats !== null && activeStats.total === 0
   const nextTaxYear = activeStats ? activeStats.taxYear + 1 : null
 
@@ -46,7 +47,7 @@ export const useSeasonSummary = () => {
     queryFn: () => annualReportSeasonApi.getSeasonSummary(nextTaxYear!),
   })
 
-  const nextStats = useMemo(() => (nextSummaryData ? buildStats(nextSummaryData) : null), [nextSummaryData])
+  const nextStats = useMemo(() => (nextSummaryData ? buildSeasonStats(nextSummaryData) : null), [nextSummaryData])
 
   const stats = nextStats && nextStats.total > 0 ? nextStats : activeStats
   const isPending = activeSummaryPending || (shouldCheckNextTaxYear && nextSummaryPending)

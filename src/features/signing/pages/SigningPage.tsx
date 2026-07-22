@@ -1,7 +1,10 @@
 import { useParams } from 'react-router-dom'
 import { FileSignature } from 'lucide-react'
 import { Card } from '@/components/ui/primitives/Card'
-import { SigningForm, SigningStatus, useSigningPageState, type SigningTerminalState } from '@/features/signing'
+import { SigningForm } from '../components/SigningForm'
+import { SigningStatus } from '../components/SigningStatus'
+import { useSigningPageState } from '../hooks/useSigningPageState'
+import type { SigningTerminalState } from '../types'
 import { SIGNING_MESSAGES } from '../messages'
 
 const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => (

@@ -44,6 +44,7 @@ export const DASHBOARD_MESSAGES = {
     closed: 'נסגרו',
     inProgress: 'בתהליך',
     notStarted: 'טרם החלו',
+    canceled: 'בוטלו',
     reportsInSeason: (count: string) => `${count} דוחות בעונה`,
     overdue: (count: number) => `${count} באיחור`,
     pending: 'ממתינים',

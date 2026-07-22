@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { workQueueSourceTypeValues, workQueueUrgencyValues } from '../constants'
 import type { WorkQueueSourceType, WorkQueueUrgency } from '../constants'
-import { taskStatusValues } from '@/features/tasks'
 
 export type { WorkQueueSourceType, WorkQueueUrgency }
 
@@ -110,7 +109,7 @@ const workQueueSummarySchema = z.object({
   important: z.number().int(),
   upcoming: z.number().int(),
   by_source_type: z.record(z.enum(workQueueSourceTypeValues), z.number().int()),
-  by_task_status: z.record(z.enum(taskStatusValues), z.number().int()),
+  by_task_status: z.record(z.string(), z.number().int()),
 })
 
 export type WorkQueueSummary = z.infer<typeof workQueueSummarySchema>
@@ -130,7 +129,7 @@ export interface WorkQueueParams {
   search?: string
   source_type?: WorkQueueSourceType
   urgency?: WorkQueueUrgency
-  task_status?: (typeof taskStatusValues)[number]
+  task_status?: string
   linked?: 'linked' | 'unlinked'
   scope?: 'system' | 'manual'
   page?: number

@@ -2,6 +2,8 @@ import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { makeVariantGetter } from '@/utils/labels'
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 
+export const WORK_QUEUE_ROUTE = '/work-queue'
+
 export const APPROACHING_DAYS = 7
 export const IMPORTANT_DAYS = 21
 export const WORK_QUEUE_PAGE_SIZE = PAGE_SIZE_SM

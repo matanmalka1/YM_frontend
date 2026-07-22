@@ -7,7 +7,6 @@ import type {
   BinderReceiveResult,
   BinderResponse,
   ListBindersParams,
-  ListOpenBindersParams,
   ListOperationalBindersParams,
   ReceiveBinderPayload,
   HandoverToClientPayload,
@@ -15,7 +14,6 @@ import type {
 import type {
   BinderHandoverToClientBulkPayload,
   BinderHandoverToClientBulkResponse,
-  BinderIntakeUpdatePayload,
   BinderListResponseExtended,
   BinderMarkReadyForHandoverBulkPayload,
   BinderMarkReadyForHandoverBulkResponse,
@@ -85,13 +83,6 @@ export const bindersApi = {
     return response.data
   },
 
-  getOpenBinders: async (params: ListOpenBindersParams = {}): Promise<BinderListResponseExtended> => {
-    const response = await api.get<BinderListResponseExtended>(BINDER_ENDPOINTS.bindersOpen, {
-      params: toQueryParams(params),
-    })
-    return response.data
-  },
-
   listClientBinders: async (clientId: number, params: ListOperationalBindersParams): Promise<BinderListResponseExtended> => {
     const response = await api.get<BinderListResponseExtended>(BINDER_ENDPOINTS.clientBinders(clientId), {
       params: toQueryParams(params),
@@ -105,18 +96,6 @@ export const bindersApi = {
 
   getIntakes: async (binderId: number): Promise<BinderIntakeListResponse> => {
     const response = await api.get<BinderIntakeListResponse>(BINDER_ENDPOINTS.binderIntakes(binderId))
-    return response.data
-  },
-
-  updateIntake: async (
-    binderId: number,
-    intakeId: number,
-    payload: BinderIntakeUpdatePayload,
-  ): Promise<BinderIntakeListResponse['items'][number]> => {
-    const response = await api.patch<BinderIntakeListResponse['items'][number]>(
-      BINDER_ENDPOINTS.binderIntakeById(binderId, intakeId),
-      payload,
-    )
     return response.data
   },
 }

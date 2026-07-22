@@ -1,6 +1,5 @@
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { makeVariantGetter } from '@/utils/labels'
-import { DOCUMENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 import type { UploadDocumentPayload } from './api'
 
 export const DOCUMENT_TYPES = [
@@ -76,7 +75,6 @@ const ALL_DOCUMENT_TYPES_OPTION = { value: '', label: 'כל הסוגים' }
 const ALL_TAX_YEARS_OPTION = { value: '', label: 'כל השנים' }
 
 export const UPLOAD_FORM_ID = 'documents-upload-form'
-export const SEARCH_PLACEHOLDER = DOCUMENT_SEARCH_PLACEHOLDER
 const DOCUMENT_TYPE_PLACEHOLDER = 'בחר סוג מסמך'
 const WITHOUT_TAX_YEAR_LABEL = 'ללא שנה'
 export const GENERAL_CLIENT_DOCUMENT_LABEL = 'מסמך כללי ללקוח'

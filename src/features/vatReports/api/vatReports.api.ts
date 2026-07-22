@@ -4,8 +4,6 @@ import { downloadBlob } from '@/utils/download'
 import { VAT_ENDPOINTS } from './endpoints'
 import type {
   VatWorkItemResponse,
-  VatWorkItemListResponse,
-  VatWorkItemsListParams,
   VatWorkItemLookupResponse,
   VatWorkItemGroupsResponse,
   VatWorkItemGroupsParams,
@@ -13,9 +11,7 @@ import type {
   VatWorkItemGroupItemsParams,
   VatWorkItemStatusSummaryParams,
   VatWorkItemStatusSummaryResponse,
-  VatClientWorkItemsParams,
   CreateVatWorkItemPayload,
-  UpdateVatWorkItemPayload,
   VatPeriodOptionsResponse,
   VatInvoiceResponse,
   VatInvoiceListResponse,
@@ -23,13 +19,12 @@ import type {
   UpdateVatInvoicePayload,
   VatClientSummaryResponse,
   FileVatReturnPayload,
+  VatDeductionMetadataResponse,
 } from './contracts'
 
 export const vatReportsApi = {
-  list: async (params: VatWorkItemsListParams): Promise<VatWorkItemListResponse> => {
-    const response = await api.get<VatWorkItemListResponse>(VAT_ENDPOINTS.vatWorkItems, {
-      params: toQueryParams(params),
-    })
+  getDeductionMetadata: async (): Promise<VatDeductionMetadataResponse> => {
+    const response = await api.get<VatDeductionMetadataResponse>(VAT_ENDPOINTS.deductionMetadata)
     return response.data
   },
 
@@ -54,11 +49,6 @@ export const vatReportsApi = {
 
   create: async (payload: CreateVatWorkItemPayload): Promise<VatWorkItemResponse> => {
     const response = await api.post<VatWorkItemResponse>(VAT_ENDPOINTS.vatWorkItems, payload)
-    return response.data
-  },
-
-  updateWorkItem: async (id: number, payload: UpdateVatWorkItemPayload): Promise<VatWorkItemResponse> => {
-    const response = await api.patch<VatWorkItemResponse>(VAT_ENDPOINTS.vatWorkItemById(id), payload)
     return response.data
   },
 
@@ -112,13 +102,6 @@ export const vatReportsApi = {
 
   deleteInvoice: async (id: number, invoiceId: number): Promise<void> => {
     await api.delete(VAT_ENDPOINTS.vatWorkItemInvoiceById(id, invoiceId))
-  },
-
-  listByClient: async (clientId: number, params: VatClientWorkItemsParams = {}): Promise<VatWorkItemListResponse> => {
-    const response = await api.get<VatWorkItemListResponse>(VAT_ENDPOINTS.vatWorkItemsByClient(clientId), {
-      params: toQueryParams(params),
-    })
-    return response.data
   },
 
   getClientSummary: async (

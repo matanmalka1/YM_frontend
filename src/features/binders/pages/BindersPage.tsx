@@ -1,17 +1,14 @@
 import { Button } from '@/components/ui/primitives/Button'
-import { PaginatedDataTable } from '@/components/ui/table'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
-import { DetailDrawer } from '@/components/ui/overlays/DetailDrawer'
-import { FilterPanel } from '@/components/ui/filters/FilterPanel'
-import { BinderDetailDrawer, BindersStatsSection, useBindersPage } from '@/features/binders'
-import { BinderReceivePanel } from '../components/drawer/BinderReceivePanel'
-import { BindersPageDialogs } from '../components/dialogs/BindersPageDialogs'
+import { useBindersPage } from '../hooks/useBindersPage'
 import { Plus } from 'lucide-react'
 import { BINDERS_MESSAGES } from '../messages'
+import { BindersWorkspaceBody } from '../components/shared/BindersWorkspaceBody'
 
 export const Binders: React.FC = () => {
-  const { status, headerProps, stats, filters, table, modals, drawers } = useBindersPage()
+  const model = useBindersPage()
+  const { status, headerProps, drawers } = model
 
   const header = (
     <PageHeader
@@ -26,39 +23,7 @@ export const Binders: React.FC = () => {
 
   return (
     <PageStateGuard isLoading={status.isLoading} error={status.error} header={header} loadingMessage={status.loadingMessage}>
-      <BindersStatsSection counters={stats.counters} countersLoading={stats.countersLoading} />
-
-      <FilterPanel {...filters} title={BINDERS_MESSAGES.page.filterTitle} subtitle={BINDERS_MESSAGES.page.filterSubtitle} />
-
-      <PaginatedDataTable
-        data={table.data}
-        columns={table.columns}
-        getRowKey={(binder) => binder.id}
-        onRowClick={table.onRowClick}
-        page={table.pagination.page}
-        pageSize={table.pagination.pageSize}
-        total={table.pagination.total}
-        onPageChange={table.pagination.onPageChange}
-        emptyMessage={table.emptyState.emptyMessage}
-        emptyState={{
-          title: table.emptyState.title,
-          message: table.emptyState.message,
-          action: table.emptyState.action,
-        }}
-      />
-
-      <BindersPageDialogs {...modals.dialogsProps} />
-
-      <BinderDetailDrawer {...drawers.detail} />
-
-      <DetailDrawer
-        open={drawers.receive.open}
-        title={BINDERS_MESSAGES.page.receiveDrawerTitle}
-        onClose={drawers.receive.onClose}
-        isDirty={drawers.receive.form.formState.isDirty}
-      >
-        <BinderReceivePanel {...drawers.receive} />
-      </DetailDrawer>
+      <BindersWorkspaceBody model={model} />
     </PageStateGuard>
   )
 }

@@ -7,15 +7,15 @@ import { cn, formatCurrencyILS } from '../../../../utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { CATEGORY_ICONS } from '../../constants/taxConstants'
 import { getRecognitionTone } from '../../utils/taxHelpers'
+import { formatRecognitionRate } from '../../utils/financialHelpers'
 import { Card } from '../../../../components/ui/primitives/Card'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface Props {
   reportId: number
-  taxYear: number
 }
 
-export const DeductionsTab: React.FC<Props> = ({ reportId, taxYear }) => {
+export const DeductionsTab: React.FC<Props> = ({ reportId }) => {
   const { data, isLoading } = useQuery({
     queryKey: annualReportsQK.financials(reportId),
     queryFn: () => annualReportFinancialsApi.getFinancials(reportId),
@@ -57,9 +57,9 @@ export const DeductionsTab: React.FC<Props> = ({ reportId, taxYear }) => {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-800">{EXPENSE_LABELS[e.category] ?? e.category}</p>
-                      {Number(e.recognition_rate) < 100 && (
+                      {Number(e.recognition_rate) < 1 && (
                         <p className={cn('text-xs', getRecognitionTone(e.recognition_rate))}>
-                          {ANNUAL_REPORTS_MESSAGES.deductionsTab.recognizedPercent(Number(e.recognition_rate))}
+                          {ANNUAL_REPORTS_MESSAGES.deductionsTab.recognizedPercent(formatRecognitionRate(e.recognition_rate))}
                         </p>
                       )}
                     </div>
@@ -73,7 +73,7 @@ export const DeductionsTab: React.FC<Props> = ({ reportId, taxYear }) => {
           </div>
         </Card>
 
-        <TaxCreditsPanel reportId={reportId} taxYear={taxYear} />
+        <TaxCreditsPanel reportId={reportId} />
       </div>
     </div>
   )

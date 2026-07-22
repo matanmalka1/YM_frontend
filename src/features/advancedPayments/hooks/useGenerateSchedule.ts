@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useClientPickerState } from '@/components/shared/client/useClientPickerState'
-import { useTaxProfile } from '@/features/taxProfile'
+import { useClientPickerState } from '@/features/clients/public'
+import { useAdvancePaymentClientConfig } from './useAdvancePaymentClientConfig'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import { toast } from '@/utils/toast'
 import { showErrorToast } from '@/utils/utils'
@@ -11,7 +11,7 @@ export const useGenerateSchedule = (year: number) => {
   const picker = useClientPickerState()
   const clientRecordId = picker.selectedClient?.id ?? 0
 
-  const { profile, isLoading: isProfileLoading, error: profileError } = useTaxProfile(clientRecordId)
+  const { config: profile, isLoading: isProfileLoading, error: profileError } = useAdvancePaymentClientConfig(clientRecordId)
   const isProfileError = profileError !== null && clientRecordId > 0
 
   const frequency: 1 | 2 | null =

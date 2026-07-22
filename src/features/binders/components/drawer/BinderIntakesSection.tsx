@@ -8,16 +8,16 @@ import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
 import { Timeline, TimelineEntry } from '@/components/ui/feedback/Timeline'
 import { bindersApi, bindersQK } from '../../api'
-import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS, annualReportsApi, annualReportsQK, getStatusLabel } from '@/features/annualReports'
-import { clientsApi, clientsQK } from '@/features/clients'
-import { vatReportsApi, vatReportsQK } from '@/features/vatReports'
-import { getVatWorkItemStatusVariant } from '@/features/vatReports'
+import { annualReportsApi, annualReportsQK } from '@/features/annualReports/api'
+import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS, getStatusLabel } from '@/features/annualReports/public'
+import { clientsApi, clientsQK } from '@/features/clients/api'
+import { vatReportsApi, vatReportsQK } from '@/features/vatReports/api'
+import { getVatWorkItemStatusVariant } from '@/features/vatReports/public'
 import { staggerDelay } from '@/utils/animation'
 import { getBinderTypeLabel } from '../../constants'
-import { getVatWorkItemStatusLabel } from '@/features/vatReports'
+import { getVatWorkItemStatusLabel } from '@/features/vatReports/public'
 import type { BinderIntakeMaterialResponse } from '../../types'
 import { formatStructuredBinderPeriod, toBinderPeriodValue } from '../../utils'
-import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { BINDERS_MESSAGES } from '../../messages'
 
 const VatStatusBadge: React.FC<{ material: BinderIntakeMaterialResponse; clientId: number }> = ({ material, clientId }) => {
@@ -30,7 +30,6 @@ const VatStatusBadge: React.FC<{ material: BinderIntakeMaterialResponse; clientI
     queryKey: vatReportsQK.lookup(clientId, period!),
     queryFn: () => vatReportsApi.lookup(clientId, period!),
     enabled: clientId > 0 && !!period,
-    staleTime: QUERY_STALE_TIME.default,
   })
 
   if (!lookup) return null
@@ -58,13 +57,11 @@ export const BinderIntakesSection: React.FC<BinderIntakesSectionProps> = ({ bind
     queryKey: clientsQK.businessesAll(clientId),
     queryFn: () => clientsApi.listAllBusinessesForClient(clientId),
     enabled: clientId > 0,
-    staleTime: QUERY_STALE_TIME.default,
   })
   const { data: annualReportsData } = useQuery({
     queryKey: annualReportsQK.forClient(clientId),
     queryFn: () => annualReportsApi.listClientReports(clientId, ANNUAL_REPORTS_COMPLETE_LIST_PARAMS),
     enabled: clientId > 0,
-    staleTime: QUERY_STALE_TIME.default,
   })
 
   const intakes = data?.items ?? []

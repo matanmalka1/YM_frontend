@@ -6,13 +6,11 @@ import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { StateCard } from '@/components/ui/feedback/StateCard'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
-import {
-  CreateReportModal,
-  OverdueBanner,
-  SeasonProgressBar,
-  SeasonReportsTable,
-  useAnnualReportsPage,
-} from '@/features/annualReports'
+import { CreateReportModal } from '../components/shared/CreateReportModal'
+import { OverdueBanner } from '../components/shared/OverdueBanner'
+import { SeasonProgressBar } from '../components/season/SeasonProgressBar'
+import { SeasonReportsTable } from '../components/season/SeasonReportsTable'
+import { useAnnualReportsPage } from '../hooks/useAnnualReportsPage'
 import { ANNUAL_REPORTS_MESSAGES } from '@/features/annualReports/messages'
 
 export const AnnualReportsPage: React.FC = () => {

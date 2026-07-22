@@ -20,6 +20,8 @@ export const TAX_CALENDAR_SETTINGS_MESSAGES = {
     countMismatch: (year: string, label: string, expected: string, found: string) =>
       `שנת ${year}: ${label} — צפויות ${expected} רשומות, נמצאו ${found}.`,
     fallbackDates: (year: string) => `שנת ${year} משתמשת בתאריכי ברירת מחדל משום שחסרים נתוני יומן מס רשמיים.`,
+    bootstrapCountMismatch: (startYear: string, endYear: string, expected: string, found: string) =>
+      `בטווח ${startYear}–${endYear}: צפויות ${expected} רשומות לאחר האתחול, נמצאו ${found}.`,
   },
   columns: {
     ruleType: 'סוג כלל',

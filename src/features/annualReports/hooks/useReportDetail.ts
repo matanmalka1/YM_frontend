@@ -1,17 +1,19 @@
+import { useQuery } from '@tanstack/react-query'
 import { annualReportsApi, annualReportsQK } from '../api'
-import type { AnnualReportDetail } from '../types'
-import { useDetailQuery } from '../../../hooks/useDetailQuery'
 import { useReportMutations } from './useReportMutations'
 import { useReportSchedules } from './useReportSchedules'
 import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useReportDetail = (reportId: number | null, onDeleted?: () => void) => {
-  const reportQuery = useDetailQuery<AnnualReportDetail>(
-    annualReportsQK.detail(reportId ?? 0),
-    () => annualReportsApi.getReport(reportId as number) as Promise<AnnualReportDetail>,
-    reportId,
-    { retry: false },
-  )
+  const reportQuery = useQuery({
+    queryKey: annualReportsQK.detail(reportId ?? 0),
+    queryFn: () => {
+      if (reportId === null) throw new Error('A report ID is required')
+      return annualReportsApi.getReport(reportId)
+    },
+    enabled: reportId !== null && reportId > 0,
+    retry: false,
+  })
 
   const schedules = useReportSchedules(reportId)
   const mutations = useReportMutations(reportId, onDeleted)

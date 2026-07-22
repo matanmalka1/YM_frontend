@@ -5,21 +5,21 @@ import { Button } from '../../../../components/ui/primitives/Button'
 import { Select } from '../../../../components/ui/inputs/Select'
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Textarea } from '../../../../components/ui/inputs/Textarea'
-import { ClientPickerField, useClientPickerState } from '../../../../components/shared/client'
+import { ClientPickerField, useClientPickerState } from '@/features/clients/public'
 import { usePreviewNotification, useSendNotification } from '../../hooks/useSendNotification'
-import { CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS, TRIGGER_LABELS, isNotificationTrigger } from '../../api'
+import { isNotificationTrigger } from '../../api'
 import type { NotificationTrigger } from '../../api'
+import { useNotificationMetadata } from '../../hooks/useNotificationMetadata'
 import { NOTIFICATIONS_MESSAGES } from '../../messages'
 import { NOTIFICATIONS_ERROR_MESSAGES } from '../../errorMessages'
-import { NOTIFICATION_TRIGGER_DOMAIN_LABELS } from '../../constants'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 
-const buildTriggerOptions = (triggers: readonly NotificationTrigger[]) =>
+const buildTriggerOptions = (triggers: { value: NotificationTrigger; label: string; domain_label: string }[]) =>
   triggers.map((trigger) => ({
-    value: trigger,
+    value: trigger.value,
     label: NOTIFICATIONS_MESSAGES.form.triggerOptionLabel(
-      NOTIFICATION_TRIGGER_DOMAIN_LABELS[trigger] ?? NOTIFICATIONS_MESSAGES.form.generalDomain,
-      TRIGGER_LABELS[trigger],
+      trigger.domain_label || NOTIFICATIONS_MESSAGES.form.generalDomain,
+      trigger.label,
     ),
   }))
 
@@ -46,19 +46,21 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
 }) => {
   const { previewAsync, isPreviewing } = usePreviewNotification()
   const { sendAsync, isSending } = useSendNotification()
+  const metadataQuery = useNotificationMetadata()
 
-  const availableTriggers = useMemo<readonly NotificationTrigger[]>(() => {
-    const base = allowedTriggers && allowedTriggers.length > 0 ? allowedTriggers : CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS
-    if (initialTrigger && !base.includes(initialTrigger)) {
-      return [initialTrigger, ...base]
-    }
-    return base
-  }, [allowedTriggers, initialTrigger])
-  const defaultTrigger = initialTrigger ?? availableTriggers[0]
+  const availableTriggers = useMemo(() => {
+    const all = metadataQuery.data?.triggers ?? []
+    const base = allowedTriggers?.length
+      ? all.filter(({ value }) => allowedTriggers.includes(value))
+      : all.filter(({ client_level_manual }) => client_level_manual)
+    const initial = initialTrigger ? all.find(({ value }) => value === initialTrigger) : undefined
+    return initial && !base.some(({ value }) => value === initial.value) ? [initial, ...base] : base
+  }, [allowedTriggers, initialTrigger, metadataQuery.data?.triggers])
+  const defaultTrigger = initialTrigger ?? availableTriggers[0]?.value ?? null
   const triggerOptions = buildTriggerOptions(availableTriggers)
 
   const [step, setStep] = useState<Step>('compose')
-  const [trigger, setTrigger] = useState<NotificationTrigger>(defaultTrigger)
+  const [trigger, setTrigger] = useState<NotificationTrigger | null>(defaultTrigger)
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
   const [subjectError, setSubjectError] = useState<string | undefined>()
@@ -84,6 +86,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
       setClientError(NOTIFICATIONS_ERROR_MESSAGES.form.clientRequired)
       return
     }
+    if (trigger === null) return
     setClientError(undefined)
     setBlockedReason(undefined)
     setWarnings([])
@@ -122,7 +125,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
   // on the context props/handler (which are fresh each render).
   const autoPreviewRef = useRef<() => void>(() => {})
   autoPreviewRef.current = () => {
-    if (initialTrigger && entityId != null && clientRecordId != null) {
+    if (initialTrigger && trigger !== null && entityId != null && clientRecordId != null) {
       void handlePreview(clientRecordId)
     }
   }
@@ -150,7 +153,7 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
     } else {
       setBodyError(undefined)
     }
-    if (!valid || resolvedClientRecordId == null) return
+    if (!valid || resolvedClientRecordId == null || trigger === null) return
 
     await sendAsync({
       payload: {
@@ -218,10 +221,13 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
             <Select
               label={NOTIFICATIONS_MESSAGES.form.typeLabel}
               options={triggerOptions}
-              value={trigger}
+              value={trigger ?? ''}
               onChange={(event) => handleTriggerChange(event.target.value)}
-              disabled={disableTriggerChange}
+              disabled={disableTriggerChange || metadataQuery.isPending}
             />
+            {metadataQuery.isError ? (
+              <Alert variant="error" size="sm" message={NOTIFICATIONS_ERROR_MESSAGES.form.metadataLoad} />
+            ) : null}
             {blockedReason && <p className="text-sm text-negative-600 font-medium">{blockedReason}</p>}
           </>
         )}

@@ -61,16 +61,8 @@ export const buildFilterBadges = (
           label: `${field.toLabel}: ${formatDate(to as string)}`,
           onRemove: () => onChange(field.toKey, ''),
         })
-    } else if (field.type === 'client-picker') {
-      const id = values[field.idKey]
-      const nameKey = field.nameKey
-      const name = nameKey ? values[nameKey] : undefined
-      if (id)
-        badges.push({
-          key: field.idKey,
-          label: `לקוח: ${name ?? `#${id}`}`,
-          onRemove: () => onMultiChange(nameKey ? { [field.idKey]: '', [nameKey]: '' } : { [field.idKey]: '' }),
-        })
+    } else if (field.type === 'custom') {
+      badges.push(...(field.getBadges?.(values, onMultiChange) ?? []))
     }
   }
   return badges

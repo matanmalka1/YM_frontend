@@ -10,12 +10,12 @@ import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { actionsColumn, DataTable, dateColumn } from '@/components/ui/table'
-import { getSignatureRequestStatusLabel, getSignatureRequestTypeLabel } from '@/features/signatureRequests'
+import { SIGNATURE_REQUEST_STATUS_VARIANTS, getSignatureRequestStatusLabel, getSignatureRequestTypeLabel } from '../../constants'
 import { cn, formatClientOfficeId, formatDate, showErrorToast } from '@/utils/utils'
 import type { SignatureRequestResponse } from '../../api'
 import { usePendingSignatureRequests } from '../../hooks/usePendingSignatureRequests'
 import { useSignatureRequestActions } from '../../hooks/useSignatureRequestActions'
-import { signatureRequestStatusVariants, useSignatureRequestSigningUrls } from '../../utils'
+import { useSignatureRequestSigningUrls } from '../../utils'
 import { CreateSignatureRequestModal } from '../form/CreateSignatureRequestModal'
 import { SignatureRequestAuditDrawer } from '../drawer/SignatureRequestAuditDrawer'
 import { SignatureRequestRowActions } from '../list/SignatureRequestRowActions'
@@ -92,7 +92,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
           <StatusBadge
             status={req.status}
             getLabel={getSignatureRequestStatusLabel}
-            variantMap={signatureRequestStatusVariants}
+            variantMap={SIGNATURE_REQUEST_STATUS_VARIANTS}
           />
         ),
       },
@@ -182,7 +182,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
                   <StatusBadge
                     status={req.status}
                     getLabel={getSignatureRequestStatusLabel}
-                    variantMap={signatureRequestStatusVariants}
+                    variantMap={SIGNATURE_REQUEST_STATUS_VARIANTS}
                   />
                 </ActionSurfaceButton>
               ))

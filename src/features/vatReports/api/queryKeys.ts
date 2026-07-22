@@ -2,6 +2,7 @@ import { createQueryKeys } from '@/lib/queryKeys'
 
 export const vatReportsQK = {
   ...createQueryKeys(['tax', 'vat-work-items'] as const),
+  deductionMetadata: () => ['tax', 'vat-deduction-metadata'] as const,
   lookup: (clientId: number, period: string) => ['tax', 'vat-work-items', 'lookup', clientId, period] as const,
   periodOptions: (clientId: number, year?: number) =>
     ['tax', 'vat-work-items', 'period-options', clientId, year ?? null] as const,

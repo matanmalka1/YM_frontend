@@ -4,7 +4,7 @@ import { Badge } from '../../../../components/ui/primitives/Badge'
 import { cn, formatDate } from '../../../../utils/utils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import type { ScheduleEntry, AnnualReportScheduleKey } from '../../api'
-import { getScheduleLabel } from '../../api'
+import { getScheduleLabel } from '../../constants/display'
 import { ANNEX_TEXT } from '../../constants/annexTextConstants'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 

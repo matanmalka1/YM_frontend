@@ -11,7 +11,6 @@ import { Checkbox } from '@/components/ui/primitives/Checkbox'
 import { bindersApi, bindersQK } from '../../api'
 import { formatMonthYear } from '@/utils/utils'
 import { NUMERIC_MONTH_OPTIONS, getOperationalYearOptions } from '@/constants/periodOptions.constants'
-import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { PAGE_SIZE_LG } from '@/constants/pagination.constants'
 import { BINDERS_MESSAGES } from '../../messages'
 
@@ -51,7 +50,6 @@ export const BinderHandoverPanel: React.FC<BinderHandoverPanelProps> = ({
     queryFn: () =>
       bindersApi.list({ client_record_id: clientId, location_status: 'ready_for_handover', page_size: PAGE_SIZE_LG }),
     enabled: clientId > 0,
-    staleTime: QUERY_STALE_TIME.default,
   })
 
   const readyBinders = data?.items ?? []

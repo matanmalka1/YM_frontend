@@ -1,6 +1,6 @@
 // ── Enums ──────────────────────────────────────────────────────────────────────
 
-export const NOTIFICATION_TRIGGER_VALUES = [
+const NOTIFICATION_TRIGGER_VALUES = [
   'binder_ready_for_handover',
   'binder_missing_documents',
   'binder_general_reminder',
@@ -18,28 +18,15 @@ export const NOTIFICATION_TRIGGER_VALUES = [
 
 export type NotificationTrigger = (typeof NOTIFICATION_TRIGGER_VALUES)[number]
 
-export const CLIENT_LEVEL_MANUAL_NOTIFICATION_TRIGGERS = [
-  'client_missing_information',
-  'client_documents_request',
-  'client_general_message',
-  'binder_missing_documents',
-  'binder_general_reminder',
-] as const satisfies readonly NotificationTrigger[]
+interface NotificationTriggerOption {
+  value: NotificationTrigger
+  label: string
+  domain_label: string
+  client_level_manual: boolean
+}
 
-export const TRIGGER_LABELS: Record<NotificationTrigger, string> = {
-  binder_ready_for_handover: 'קלסר מוכן למסירה',
-  binder_missing_documents: 'מסמכים חסרים בקלסר',
-  binder_general_reminder: 'תזכורת כללית - קלסר',
-  invoice_issued: 'חשבונית הונפקה',
-  payment_reminder: 'תזכורת לתשלום',
-  vat_documents_reminder: 'תזכורת מסמכי מע"מ',
-  annual_report_documents_request: 'בקשת מסמכים לדוח שנתי',
-  annual_report_client_reminder: 'תזכורת אישור דוח שנתי',
-  signature_request_sent: 'בקשה לחתימה',
-  signature_request_reminder: 'תזכורת לחתימה',
-  client_missing_information: 'פרטים חסרים',
-  client_documents_request: 'בקשת מסמכים',
-  client_general_message: 'הודעה כללית',
+export interface NotificationMetadata {
+  triggers: NotificationTriggerOption[]
 }
 
 const NOTIFICATION_CHANNEL_VALUES = ['email', 'whatsapp'] as const

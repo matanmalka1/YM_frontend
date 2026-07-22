@@ -4,7 +4,7 @@ import { ActionSurfaceButton } from '../../../../components/ui/primitives/Action
 import { Button } from '../../../../components/ui/primitives/Button'
 import type { AnnualReportListItem } from '../../api'
 import { formatDate } from '../../../../utils/utils'
-import { getClientReportName, getDaysOverdue } from '../../utils/sharedHelpers'
+import { getClientReportName } from '../../utils/sharedHelpers'
 import { OVERDUE_PREVIEW_LIMIT } from '../../constants/sharedConstants'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
@@ -58,7 +58,7 @@ export const OverdueBanner: React.FC<OverdueBannerProps> = ({ overdue, onSelect 
       {/* Report list */}
       <div className="border-t border-negative-200/60 px-4 pb-3 pt-2 space-y-1.5">
         {visible.map((report) => {
-          const days = getDaysOverdue(report.filing_deadline)
+          const days = report.days_until_deadline === null ? null : Math.abs(report.days_until_deadline)
           return (
             <ActionSurfaceButton variant="row" key={report.id} onClick={() => onSelect(report.id)}>
               <span className="text-sm font-medium text-gray-900 truncate">{getClientReportName(report)}</span>

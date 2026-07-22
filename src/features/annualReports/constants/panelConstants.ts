@@ -13,14 +13,4 @@ export const PANEL_NAV_ITEMS: { key: SectionKey; icon: IconComponent; label: str
   { key: 'timeline', icon: CalendarClock, label: 'ציר זמן' },
 ]
 
-export const CLIENT_TYPE_LABELS = {
-  individual: 'יחיד (1301)',
-  self_employed: 'עצמאי (1301)',
-  corporation: 'חברה (1214)',
-  public_institution: 'מלכ"ר / מוסד ציבורי (1215)',
-  partnership: 'שותף בשותפות (1301)',
-  control_holder: 'בעל שליטה (1301)',
-  exempt_dealer: 'עוסק פטור (1301)',
-} as const
-
 export const ALERT_WINDOW_DAYS = 60

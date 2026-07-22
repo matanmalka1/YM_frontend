@@ -1,3 +1,6 @@
+import type { ReactNode } from 'react'
+import type { FilterBadge } from './ActiveFilterBadges'
+
 type FilterKey<TValues> = Extract<keyof TValues, string>
 
 export interface SearchFieldDef<TValues extends Record<string, unknown> = Record<string, unknown>> {
@@ -43,12 +46,18 @@ interface DateRangeFieldDef<TValues extends Record<string, unknown> = Record<str
   toLabel: string
 }
 
-export interface ClientPickerFieldDef<TValues extends Record<string, unknown> = Record<string, unknown>> {
-  type: 'client-picker'
-  idKey: FilterKey<TValues>
-  nameKey?: FilterKey<TValues>
-  label?: string
-  placeholder?: string
+export interface CustomFilterFieldDef {
+  type: 'custom'
+  key: string
+  render: (context: {
+    values: Readonly<Record<string, string | undefined>>
+    onMultiChange: (updates: Record<string, string>) => void
+    size: 'sm' | 'md'
+  }) => ReactNode
+  getBadges?: (
+    values: Readonly<Record<string, unknown>>,
+    onMultiChange: (updates: Record<string, string>) => void,
+  ) => FilterBadge[]
 }
 
 type FilterDefinition<TValues extends Record<string, unknown> = Record<string, unknown>> =
@@ -57,6 +66,6 @@ type FilterDefinition<TValues extends Record<string, unknown> = Record<string, u
   | ToggleFieldDef<TValues>
   | DateFieldDef<TValues>
   | DateRangeFieldDef<TValues>
-  | ClientPickerFieldDef<TValues>
+  | CustomFilterFieldDef
 
 export type FilterFieldDef = FilterDefinition<Record<string, unknown>>

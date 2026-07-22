@@ -23,8 +23,4 @@ describe('authorityContactsQK', () => {
     ])
     expect(listKey.slice(0, rootKey.length)).toEqual(rootKey)
   })
-
-  it('scopes detail keys by client and contact', () => {
-    expect(authorityContactsQK.detail(42, 7)).toEqual(['authority-contacts', 'client', 42, 'detail', 7])
-  })
 })

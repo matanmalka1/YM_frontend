@@ -1,18 +1,17 @@
-import { PageHeader } from "../../../components/layout/PageHeader";
-import { PageStateGuard } from "../../../components/ui/layout/PageStateGuard";
-import { AdvancePaymentReportTable } from "../components/AdvancePaymentReportTable";
-import { useAdvancePaymentReport } from "../hooks/useAdvancePaymentReport";
-import { MONTH_OPTIONS as BASE_MONTH_OPTIONS, formatPercent } from "../../../utils/utils";
-import { getOperationalYearOptions } from "@/constants/periodOptions.constants";
-import { Select } from "../../../components/ui/inputs/Select";
-import { ALL_MONTHS_OPTION } from "@/constants/filterOptions.constants";
-import { REPORTS_MESSAGES } from "../messages";
+import { PageHeader } from '../../../components/layout/PageHeader'
+import { PageStateGuard } from '../../../components/ui/layout/PageStateGuard'
+import { AdvancePaymentReportTable } from '../components/AdvancePaymentReportTable'
+import { useAdvancePaymentReport } from '../hooks/useAdvancePaymentReport'
+import { MONTH_OPTIONS as BASE_MONTH_OPTIONS, formatPercent } from '../../../utils/utils'
+import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
+import { Select } from '../../../components/ui/inputs/Select'
+import { ALL_MONTHS_OPTION } from '@/constants/filterOptions.constants'
+import { REPORTS_MESSAGES } from '../messages'
 
-const MONTH_OPTIONS = [ALL_MONTHS_OPTION, ...BASE_MONTH_OPTIONS];
+const MONTH_OPTIONS = [ALL_MONTHS_OPTION, ...BASE_MONTH_OPTIONS]
 
 export const AdvancePaymentReportView: React.FC = () => {
-  const { year, setYear, month, setMonth, data, isLoading, error } =
-    useAdvancePaymentReport();
+  const { year, setYear, month, setMonth, data, isLoading, error } = useAdvancePaymentReport()
 
   const actions = (
     <div className="flex items-center gap-2">
@@ -23,33 +22,23 @@ export const AdvancePaymentReportView: React.FC = () => {
         fieldClassName="w-28"
       />
       <Select
-        value={month != null ? String(month) : ""}
-        onChange={(e) =>
-          setMonth(e.target.value ? Number(e.target.value) : undefined)
-        }
+        value={month != null ? String(month) : ''}
+        onChange={(e) => setMonth(e.target.value ? Number(e.target.value) : undefined)}
         options={MONTH_OPTIONS}
         fieldClassName="w-36"
       />
     </div>
-  );
+  )
 
-  const description = data
-    ? REPORTS_MESSAGES.advances.description(data.items.length, formatPercent(data.collection_rate))
-    : "";
+  const description = data ? REPORTS_MESSAGES.advances.description(data.items.length, formatPercent(data.collection_rate)) : ''
 
-  const header = (
-    <PageHeader
-      title={REPORTS_MESSAGES.advances.title}
-      description={description}
-      actions={actions}
-    />
-  );
+  const header = <PageHeader title={REPORTS_MESSAGES.advances.title} description={description} actions={actions} />
 
   return (
-    <PageStateGuard isLoading={isLoading} error={error?.message ?? null} header={header} loadingMessage={REPORTS_MESSAGES.common.loadingReport}>
+    <PageStateGuard isLoading={isLoading} error={error} header={header} loadingMessage={REPORTS_MESSAGES.common.loadingReport}>
       {data && <AdvancePaymentReportTable data={data} />}
     </PageStateGuard>
-  );
-};
+  )
+}
 
-AdvancePaymentReportView.displayName = "AdvancePaymentReportView";
+AdvancePaymentReportView.displayName = 'AdvancePaymentReportView'

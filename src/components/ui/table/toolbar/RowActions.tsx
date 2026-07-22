@@ -110,12 +110,10 @@ interface RowActionButtonProps {
   icon: React.ReactNode
   onClick: () => void
   disabled?: boolean
-  /** Semantic colour. Defaults to `neutral` (or `danger` if the legacy `danger` flag is set). */
+  /** Semantic colour. Defaults to `neutral`. */
   tone?: RowActionTone
   /** `sm` (h-6) for dense / inline-edit rows; `md` (h-8, default) for standard tables. */
   size?: 'sm' | 'md'
-  /** @deprecated use `tone="danger"`. */
-  danger?: boolean
   className?: string
 }
 
@@ -126,10 +124,9 @@ export const RowActionButton: React.FC<RowActionButtonProps> = ({
   disabled = false,
   tone,
   size = 'md',
-  danger = false,
   className,
 }) => {
-  const resolvedTone = tone ?? (danger ? 'danger' : 'neutral')
+  const resolvedTone = tone ?? 'neutral'
   const button = (
     <button
       type="button"

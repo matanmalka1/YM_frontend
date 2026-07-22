@@ -3,18 +3,18 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DatePicker } from '../../../../components/ui/inputs/DatePicker'
 import { Textarea } from '../../../../components/ui/inputs/Textarea'
-import type { AnnualReportDetail } from '../../types'
+import type { AnnualReportDetailUpdatePayload, AnnualReportFull } from '../../api'
 import { annualReportDetailSchema, annualReportDetailDefaults, type AnnualReportDetailFormValues } from '../../schemas'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface AnnualReportDetailFormProps {
-  detail: AnnualReportDetail | null
-  onSave: (data: Partial<AnnualReportDetail>) => void
+  detail: AnnualReportFull | null
+  onSave: (data: AnnualReportDetailUpdatePayload) => void
   onDirtyChange?: (dirty: boolean) => void
   submitRef?: React.RefObject<(() => void) | null>
 }
 
-const toFormValues = (detail: AnnualReportDetail | null): AnnualReportDetailFormValues => ({
+const toFormValues = (detail: AnnualReportFull | null): AnnualReportDetailFormValues => ({
   ...annualReportDetailDefaults,
   client_approved_at: detail?.client_approved_at?.split('T')[0] ?? '',
   internal_notes: detail?.internal_notes ?? '',

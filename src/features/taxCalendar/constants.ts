@@ -1,4 +1,4 @@
-import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarObligationType, type TaxCalendarGroupItemSourceType } from './api'
+import type { TaxCalendarObligationType, TaxCalendarGroupItemSourceType } from './api'
 import { TAX_CALENDAR_MESSAGES } from './messages'
 
 export const TAX_CALENDAR_OBLIGATION_TYPES = [
@@ -6,6 +6,12 @@ export const TAX_CALENDAR_OBLIGATION_TYPES = [
   'advance_payment',
   'annual_report',
 ] as const satisfies readonly TaxCalendarObligationType[]
+
+export const TAX_CALENDAR_OBLIGATION_LABELS: Record<TaxCalendarObligationType, string> = {
+  vat: TAX_CALENDAR_MESSAGES.obligations.vat,
+  advance_payment: TAX_CALENDAR_MESSAGES.obligations.advancePayment,
+  annual_report: TAX_CALENDAR_MESSAGES.obligations.annualReport,
+}
 
 export const TAX_CALENDAR_GROUP_STATUSES = ['all', 'open', 'overdue', 'done'] as const
 

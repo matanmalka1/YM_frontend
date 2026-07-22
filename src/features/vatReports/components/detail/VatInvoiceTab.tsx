@@ -2,22 +2,33 @@ import { useState } from 'react'
 import { Card } from '@/components/ui/primitives/Card'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Select } from '@/components/ui/inputs/Select'
-import { canMutateVatInvoices } from '../../utils/vatHelpers'
-import { isClientClosed } from '@/utils/clientStatus'
+import { canAddOrEditVatInvoices, canDeleteVatInvoices } from '../../utils/vatHelpers'
+import { isClientClosed } from '@/features/clients/public'
+import { useRole } from '@/hooks/useRole'
 import { useAddInvoice } from '../../hooks/useVatInvoiceMutations'
 import { useVatLifecyclePending } from '../../hooks/useVatLifecyclePending'
-import { VAT_EXPENSE_CATEGORY_FILTER_OPTIONS } from '../../constants/vatConstants'
+import { ALL_CATEGORIES_OPTION } from '@/constants/filterOptions.constants'
 import { VatInvoiceTable } from '../list/VatInvoiceTable'
 import { VatInvoiceAddForm } from '../form/VatInvoiceAddForm'
 import type { VatInvoiceTabProps } from '../../types'
 import { VAT_MESSAGES } from '../../messages'
+import { useVatDeductionMetadata } from '../../hooks/useVatDeductionMetadata'
 
 export const VatInvoiceTab: React.FC<VatInvoiceTabProps> = ({ invoiceType, workItemId, workItem, invoices }) => {
   const isLifecyclePending = useVatLifecyclePending(workItemId)
+  const { can } = useRole()
   const canEdit =
-    canMutateVatInvoices(workItem.available_actions) && !isClientClosed(workItem.client_status) && !isLifecyclePending
+    can.addOrEditVatInvoices &&
+    canAddOrEditVatInvoices(workItem.available_actions) &&
+    !isClientClosed(workItem.client_status) &&
+    !isLifecyclePending
+  const canDelete =
+    canDeleteVatInvoices(workItem.available_actions, can.deleteVatInvoices) &&
+    !isClientClosed(workItem.client_status) &&
+    !isLifecyclePending
   const { addInvoice, isAdding } = useAddInvoice(workItemId)
   const [categoryFilter, setCategoryFilter] = useState('')
+  const { categoryOptions } = useVatDeductionMetadata()
 
   const isExpense = invoiceType === 'expense'
   const byType = invoices.filter((i) => i.invoice_type === invoiceType)
@@ -44,12 +55,13 @@ export const VatInvoiceTab: React.FC<VatInvoiceTabProps> = ({ invoiceType, workI
             fieldClassName="mb-3 w-52"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            options={VAT_EXPENSE_CATEGORY_FILTER_OPTIONS}
+            options={[ALL_CATEGORIES_OPTION, ...categoryOptions]}
           />
         )}
         <VatInvoiceTable
           invoices={filtered}
           canEdit={canEdit}
+          canDelete={canDelete}
           workItemId={workItemId}
           sectionType={invoiceType}
           emptyMessage={emptyMessage}

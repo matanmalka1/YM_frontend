@@ -12,27 +12,31 @@ interface VatWorkItemHeaderActionsProps {
 }
 
 export const VatWorkItemHeaderActions: React.FC<VatWorkItemHeaderActionsProps> = ({ workItem }) => {
-  const { isAdvisor } = useRole()
+  const { isAdvisor, can } = useRole()
   const [showNotificationModal, setShowNotificationModal] = useState(false)
 
-  if (!isAdvisor) return null
+  if (!can.sendNotifications && !isAdvisor) return null
 
   return (
     <>
       <div className="flex flex-wrap items-center justify-end gap-2">
         <VatExportButtons clientId={workItem.client_record_id} period={workItem.period} />
-        <Button variant="primary" size="sm" icon={<Bell className="h-4 w-4" />} onClick={() => setShowNotificationModal(true)}>
-          {VAT_MESSAGES.actions.documentsReminder}
-        </Button>
+        {can.sendNotifications && (
+          <Button variant="primary" size="sm" icon={<Bell className="h-4 w-4" />} onClick={() => setShowNotificationModal(true)}>
+            {VAT_MESSAGES.actions.documentsReminder}
+          </Button>
+        )}
       </div>
-      <SendNotificationModal
-        open={showNotificationModal}
-        onClose={() => setShowNotificationModal(false)}
-        clientRecordId={workItem.client_record_id}
-        initialTrigger="vat_documents_reminder"
-        entityId={workItem.id}
-        disableTriggerChange
-      />
+      {can.sendNotifications && (
+        <SendNotificationModal
+          open={showNotificationModal}
+          onClose={() => setShowNotificationModal(false)}
+          clientRecordId={workItem.client_record_id}
+          initialTrigger="vat_documents_reminder"
+          entityId={workItem.id}
+          disableTriggerChange
+        />
+      )}
     </>
   )
 }

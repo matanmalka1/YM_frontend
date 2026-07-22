@@ -2,8 +2,9 @@ import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
 import { formatCount } from '@/utils/utils'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { CATEGORY_COLOR_TOKENS } from './visualizationTokens'
-import { ALL_STATUSES_OPTION, ALL_CATEGORIES_OPTION } from '@/constants/filterOptions.constants'
+import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 import type { VatWorkItemStatus } from '../api'
+import { VAT_REPORTING_FREQUENCY_LABELS } from '@/types/vatReporting'
 
 /** @auditContract Read by the backend enum-sync audit. */
 export const VAT_WORK_ITEM_STATUS_VALUES = [
@@ -48,12 +49,10 @@ const VAT_WORK_ITEM_STATUS_LABELS: Record<VatWorkItemStatus, string> = {
 }
 export const getVatWorkItemStatusLabel = makeLabelGetter(VAT_WORK_ITEM_STATUS_LABELS)
 
-const INCOME_KEY = 'income'
-
 export const VAT_PERIOD_TYPE_OPTIONS = [
   { value: '', label: 'כל סוגי הדיווח' },
-  { value: 'monthly', label: 'חודשי' },
-  { value: 'bimonthly', label: 'דו־חודשי' },
+  { value: 'monthly', label: VAT_REPORTING_FREQUENCY_LABELS.monthly },
+  { value: 'bimonthly', label: VAT_REPORTING_FREQUENCY_LABELS.bimonthly },
 ] as const
 
 export const VAT_PERIOD_TYPE_SELECT_OPTIONS = [...VAT_PERIOD_TYPE_OPTIONS]
@@ -61,96 +60,7 @@ export const VAT_PERIOD_TYPE_SELECT_OPTIONS = [...VAT_PERIOD_TYPE_OPTIONS]
 export const VAT_PERIOD_TYPES = ['monthly', 'bimonthly'] as const
 export type VatPeriodTypeFilter = (typeof VAT_PERIOD_TYPES)[number]
 
-export const EXPENSE_CATEGORIES = [
-  'inventory',
-  'office',
-  'travel',
-  'professional_services',
-  'equipment',
-  'rent',
-  'salary',
-  'marketing',
-  'vehicle',
-  'fuel',
-  'vehicle_maintenance',
-  'vehicle_insurance',
-  'vehicle_leasing',
-  'tolls_and_parking',
-  'entertainment',
-  'gifts',
-  'communication',
-  'insurance',
-  'maintenance',
-  'municipal_tax',
-  'utilities',
-  'postage_and_shipping',
-  'bank_fees',
-  'mixed_expense',
-] as const
-
-export const CATEGORY_LABELS: Record<string, string> = {
-  [INCOME_KEY]: 'הכנסות',
-  inventory: 'קניית סחורה / מלאי',
-  office: 'משרד',
-  travel: 'נסיעות',
-  professional_services: 'שירותים מקצועיים',
-  equipment: 'ציוד',
-  rent: 'שכירות',
-  salary: 'שכר עבודה',
-  marketing: 'שיווק',
-  vehicle: 'רכב פרטי',
-  fuel: 'דלק',
-  vehicle_maintenance: 'תחזוקת רכב',
-  vehicle_insurance: 'ביטוח רכב',
-  vehicle_leasing: 'ליסינג רכב',
-  tolls_and_parking: 'חניה וכבישי אגרה',
-  entertainment: 'אירוח וכיבוד',
-  gifts: 'מתנות',
-  communication: 'תקשורת',
-  insurance: 'ביטוח',
-  maintenance: 'תחזוקה',
-  municipal_tax: 'ארנונה',
-  utilities: 'חשמל ומים',
-  postage_and_shipping: 'משלוחים ודואר',
-  bank_fees: 'עמלות בנק',
-  mixed_expense: 'הוצאה מעורבת',
-}
-
 export const CATEGORY_COLORS: Record<string, string> = CATEGORY_COLOR_TOKENS
-
-/** VAT deduction rates per expense category (frontend display only) */
-export const DEDUCTION_RATES: Record<string, number> = {
-  inventory: 1.0,
-  office: 1.0,
-  travel: 2 / 3, // רכב — 66.67%
-  professional_services: 1.0,
-  equipment: 1.0,
-  rent: 1.0,
-  salary: 0.0,
-  marketing: 1.0,
-  vehicle: 2 / 3,
-  fuel: 2 / 3,
-  vehicle_maintenance: 2 / 3,
-  vehicle_insurance: 0.0,
-  vehicle_leasing: 2 / 3,
-  tolls_and_parking: 2 / 3,
-  entertainment: 0.0,
-  gifts: 0.0,
-  communication: 2 / 3,
-  insurance: 0.0,
-  maintenance: 1.0,
-  municipal_tax: 0.0,
-  utilities: 1.0,
-  postage_and_shipping: 1.0,
-  bank_fees: 1.0,
-  mixed_expense: 2 / 3,
-}
-
-/** Like CATEGORY_LABELS but travel → "נסיעות/רכב" for the breakdown table */
-export const CATEGORY_TABLE_LABELS: Record<string, string> = {
-  ...CATEGORY_LABELS,
-  travel: 'רכב',
-}
 
 export const VAT_STATUS_BADGE_VARIANTS: Record<VatWorkItemStatus, BadgeVariant> = {
   pending_materials: 'warning',
@@ -194,16 +104,6 @@ export const VAT_WORK_ITEMS_STATUS_OPTIONS: Array<{ value: string; label: string
     label: getVatWorkItemStatusLabel(status),
   })),
 ]
-
-export const VAT_EXPENSE_CATEGORY_FILTER_OPTIONS = [
-  ALL_CATEGORIES_OPTION,
-  ...EXPENSE_CATEGORIES.map((c) => ({ value: c, label: CATEGORY_LABELS[c] ?? c })),
-]
-
-export const VAT_EXPENSE_CATEGORY_OPTIONS = EXPENSE_CATEGORIES.map((category) => ({
-  value: category,
-  label: CATEGORY_LABELS[category],
-}))
 
 export const VAT_FILING_METHOD_LABELS: Record<string, string> = {
   manual: 'ידנית',

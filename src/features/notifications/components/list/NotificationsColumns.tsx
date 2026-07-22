@@ -11,23 +11,22 @@ import {
   type Column,
 } from '@/components/ui/table'
 import { formatClientOfficeId } from '@/utils/utils'
-import { TRIGGER_LABELS, type NotificationItem } from '../../api'
-import { NOTIFICATION_DOMAIN_LABELS, NOTIFICATION_STATUS_LABELS, getNotificationStatusVariant } from '../../constants'
+import type { NotificationItem } from '../../api'
+import { NOTIFICATION_STATUS_LABELS, getNotificationStatusVariant } from '../../constants'
 import { NOTIFICATIONS_MESSAGES } from '../../messages'
 
 const ENGLISH_TEXT_PATTERN = /[A-Za-z]/
 
 export const getTriggerLabel = (item: Pick<NotificationItem, 'trigger' | 'trigger_label'>) =>
-  item.trigger_label || TRIGGER_LABELS[item.trigger] || NOTIFICATIONS_MESSAGES.columns.fallbackTrigger
+  item.trigger_label || NOTIFICATIONS_MESSAGES.columns.fallbackTrigger
 
 export const getDomainLabel = (domain: string | null | undefined) => {
   if (!domain) return NOTIFICATIONS_MESSAGES.columns.fallbackDomain
-  if (NOTIFICATION_DOMAIN_LABELS[domain]) return NOTIFICATION_DOMAIN_LABELS[domain]
   return ENGLISH_TEXT_PATTERN.test(domain) ? NOTIFICATIONS_MESSAGES.columns.fallbackDomain : domain
 }
 
 interface BuildNotificationColumnsParams {
-  isAdvisor: boolean
+  canSendNotifications: boolean
   /** false on the client-details tab — the page already is the client. */
   includeClientColumn: boolean
   onView: (id: number) => void
@@ -35,7 +34,7 @@ interface BuildNotificationColumnsParams {
 }
 
 export const buildNotificationColumns = ({
-  isAdvisor,
+  canSendNotifications,
   includeClientColumn,
   onView,
   onSend,
@@ -100,7 +99,7 @@ export const buildNotificationColumns = ({
           icon={<Eye className="h-4 w-4" />}
           onClick={() => onView(item.id)}
         />
-        {isAdvisor && (
+        {canSendNotifications && (
           <RowActionItem
             label={NOTIFICATIONS_MESSAGES.actions.sendToClient}
             icon={<Send className="h-4 w-4" />}

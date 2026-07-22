@@ -1,6 +1,7 @@
 import type { ExpenseCategoryType, FinancialSummaryResponse, IncomeSourceType, TaxCalculationResult } from '../api'
-import { DEFAULT_RECOGNITION_RATE, FINANCIAL_MESSAGES, MAX_PERCENTAGE, MIN_PERCENTAGE } from '../constants/financialConstants'
+import { FINANCIAL_MESSAGES, MAX_PERCENTAGE, MIN_PERCENTAGE } from '../constants/financialConstants'
 import { EXPENSE_LABELS, INCOME_LABELS } from '../constants/reportConstants'
+import { formatPercent } from '@/utils/utils'
 
 const VAT_EXPENSE_DESC_RE = /^הוצאות ([a-z_]+) — יובא ממע"מ$/
 
@@ -68,7 +69,7 @@ export const buildExpensePayload = (
   category: string,
   amount: string,
   description: string,
-  recognitionRate = DEFAULT_RECOGNITION_RATE,
+  recognitionRate = '',
   documentReference = '',
 ): { payload?: AddExpensePayload; error?: string } => {
   if (!isExpenseCategoryType(category)) return { error: FINANCIAL_MESSAGES.chooseCategory }
@@ -76,19 +77,21 @@ export const buildExpensePayload = (
   const parsedAmount = validatePositiveAmount(amount)
   if (parsedAmount == null) return { error: FINANCIAL_MESSAGES.positiveAmount }
 
-  const rate = validatePercentage(recognitionRate)
-  if (rate == null) return { error: FINANCIAL_MESSAGES.recognitionRate }
+  const rate = recognitionRate === '' ? null : validatePercentage(recognitionRate)
+  if (recognitionRate !== '' && rate == null) return { error: FINANCIAL_MESSAGES.recognitionRate }
 
   return {
     payload: {
       category,
       amount: String(parsedAmount),
       description: toOptionalText(description),
-      recognition_rate: String(rate / 100),
+      ...(rate == null ? {} : { recognition_rate: String(rate / 100) }),
       external_document_reference: toOptionalText(documentReference),
     },
   }
 }
+
+export const formatRecognitionRate = (rate: string | number) => formatPercent(rate, { isRatio: true, fractionDigits: 0 })
 
 export const getFinancialTotals = (data?: FinancialSummaryResponse) => ({
   income: Number(data?.total_income ?? 0),

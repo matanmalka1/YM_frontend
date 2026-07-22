@@ -1,4 +1,4 @@
-import { getStatusLabel } from '../../api'
+import { getStatusLabel } from '../../constants/display'
 import { SegmentedControl, SegmentedControlItem } from '../../../../components/ui/primitives/SegmentedControl'
 import type { TransitionTargetSelectorProps } from '../../types'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'

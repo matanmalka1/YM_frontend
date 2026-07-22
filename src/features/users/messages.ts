@@ -57,6 +57,9 @@ export const USERS_MESSAGES = {
     empty: 'אין רשומות להצגה',
     success: 'הצלחה',
     failure: 'כישלון',
+    unknownActor: 'מערכת',
+    attribution: (actor: string, target: string | null) =>
+      target ? `בוצע על ידי ${actor} עבור ${target}` : `בוצע על ידי ${actor}`,
     emailPrefix: (email: string) => `אימייל: ${email}`,
     reasonPrefix: (reason: string) => `סיבה: ${reason}`,
     loadMore: (count: number) => `טען עוד (${count} נותרו)`,

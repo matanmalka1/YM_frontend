@@ -3,7 +3,6 @@ export const DOCUMENT_ENDPOINTS = {
   documentsByClient: (clientId: number | string) => `/documents/client/${clientId}`,
   documentSignalsByClient: (clientId: number | string) => `/documents/client/${clientId}/signals`,
   documentVersionsByClient: (clientId: number | string) => `/documents/client/${clientId}/versions`,
-  documentsByAnnualReport: (reportId: number | string) => `/documents/annual-report/${reportId}`,
   documentsByBinder: (binderId: number | string) => `/documents/binder/${binderId}`,
   documentDetail: (clientId: number | string, id: number | string) => `/documents/client/${clientId}/${id}`,
   documentDelete: (clientId: number | string, id: number | string) => `/documents/client/${clientId}/${id}`,

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { documentsApi, documentsQK, type PermanentDocumentListResponse, type UpdateDocumentPayload } from '../api'
-import { useBusinessesForClient } from '@/hooks/useBusinessesForClient'
+import { useBusinessesForClient } from '@/features/clients/public'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { parsePositiveInt } from '@/utils/utils'
 import { getErrorMessage } from '../../../utils/utils'

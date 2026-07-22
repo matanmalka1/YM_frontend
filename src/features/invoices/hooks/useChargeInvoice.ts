@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { invoicesApi, type InvoiceAttachRequest } from '../api'
 import { invoicesQK } from '../api/queryKeys'
 import { toast } from '@/utils/toast'
@@ -26,7 +25,6 @@ export const useChargeInvoice = (chargeId: number | null | undefined) => {
         throw err
       }
     },
-    staleTime: QUERY_STALE_TIME.default,
   })
 
   const attachMutation = useMutation({

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import type { ClientPickerValue } from '@/components/shared/client'
+import type { ClientPickerValue } from '../components/picker'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { clientsApi, clientsQK } from '../api'
 

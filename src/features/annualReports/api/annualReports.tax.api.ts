@@ -1,7 +1,6 @@
 import { api } from '@/api/client'
 import { ANNUAL_REPORT_ENDPOINTS } from './endpoints'
 import type {
-  AdvancesSummary,
   ReadinessCheckResponse,
   TaxCalculationResult,
   TaxCalculationSaveRequest,
@@ -11,11 +10,6 @@ import type {
 export const annualReportTaxApi = {
   getTaxCalculation: async (reportId: number): Promise<TaxCalculationResult> => {
     const response = await api.get<TaxCalculationResult>(ANNUAL_REPORT_ENDPOINTS.taxCalculation(reportId))
-    return response.data
-  },
-
-  getAdvancesSummary: async (reportId: number): Promise<AdvancesSummary> => {
-    const response = await api.get<AdvancesSummary>(ANNUAL_REPORT_ENDPOINTS.advancesSummary(reportId))
     return response.data
   },
 

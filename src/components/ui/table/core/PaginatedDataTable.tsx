@@ -42,9 +42,7 @@ export const PaginatedDataTable = <T,>({
   return (
     <>
       {error && <Alert variant="error" message={error} onRetry={onRetry} />}
-      {suppressEmpty || shouldShowErrorOnly ? null : (
-        <DataTable {...dataTableProps} data={data} isLoading={isLoading} />
-      )}
+      {suppressEmpty || shouldShowErrorOnly ? null : <DataTable {...dataTableProps} data={data} isLoading={isLoading} />}
       {shouldShowPagination && (
         <PaginationCard
           page={page}

@@ -82,8 +82,6 @@ export interface CreateChargePayload {
   charge_type: 'monthly_retainer' | 'annual_report_fee' | 'vat_filing_fee' | 'representation_fee' | 'consultation_fee' | 'other'
   period?: string | null
   months_covered?: number | null
-  description?: string | null
-  annual_report_id?: number | null
 }
 
 // Partial update for a draft charge (PATCH /charges/{id}). Omitted keys are left

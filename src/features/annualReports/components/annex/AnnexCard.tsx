@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { cn } from '../../../../utils/utils'
 import type { ScheduleEntry, AnnualReportScheduleKey } from '../../api'
-import { getScheduleLabel } from '../../api'
+import { getScheduleLabel } from '../../constants/display'
 import { AnnexHeader } from './AnnexHeader'
 import { AnnexDataPanel } from './AnnexDataPanel'
 

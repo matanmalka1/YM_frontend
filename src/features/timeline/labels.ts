@@ -1,20 +1,17 @@
 import type { TimelineBinderStatus } from './api/contracts'
 import type { FieldValueLabels } from '@/features/audit'
-// eslint-disable-next-line no-restricted-imports -- avoid the binders feature barrel here; it loads timeline-adjacent drawer components.
-import { BINDER_CAPACITY_STATUS_LABELS, BINDER_LOCATION_STATUS_LABELS } from '@/features/binders/constants'
-// eslint-disable-next-line no-restricted-imports -- avoid the clients feature barrel here; it imports timeline detail components.
+import { BINDER_CAPACITY_STATUS_LABELS, BINDER_LOCATION_STATUS_LABELS } from '@/features/binders/public'
 import {
   ADVANCE_PAYMENT_FREQUENCY_LABELS,
   CLIENT_STATUS_LABELS,
   ENTITY_TYPE_LABELS,
   VAT_TYPE_LABELS,
-} from '@/features/clients/constants'
-// eslint-disable-next-line no-restricted-imports -- avoid the annualReports feature barrel here; it imports timeline query keys.
-import { STATUS_LABELS as ANNUAL_REPORT_STATUS_LABELS } from '@/features/annualReports/api/utils'
-// eslint-disable-next-line no-restricted-imports -- avoid the annualReports feature barrel here; it imports timeline query keys.
-import { CLIENT_TYPE_LABELS as ANNUAL_REPORT_CLIENT_TYPE_LABELS } from '@/features/annualReports/constants/panelConstants'
-// eslint-disable-next-line no-restricted-imports -- keep timeline label reuse scoped to charge constants, not the full feature barrel.
-import { CHARGE_STATUS_LABELS, CHARGE_TYPE_LABELS } from '@/features/charges/constants'
+} from '@/features/clients/public'
+import {
+  CLIENT_TYPE_LABELS as ANNUAL_REPORT_CLIENT_TYPE_LABELS,
+  STATUS_LABELS as ANNUAL_REPORT_STATUS_LABELS,
+} from '@/features/annualReports/public'
+import { CHARGE_STATUS_LABELS, CHARGE_TYPE_LABELS } from '@/features/charges/public'
 
 const BINDER_LIFECYCLE_LABEL_MAP: Record<TimelineBinderStatus, string> = {
   null: 'חדש',
@@ -23,16 +20,6 @@ const BINDER_LIFECYCLE_LABEL_MAP: Record<TimelineBinderStatus, string> = {
   handed_over: BINDER_LOCATION_STATUS_LABELS.handed_over,
   open: BINDER_CAPACITY_STATUS_LABELS.open,
   full: BINDER_CAPACITY_STATUS_LABELS.full,
-}
-
-const ANNUAL_REPORT_STATUS_LABEL_MAP: Record<string, string> = {
-  not_started: 'טרם התחיל',
-  collecting_docs: 'איסוף מסמכים',
-  in_preparation: 'בהכנה',
-  pending_client: 'ממתין ללקוח',
-  submitted: 'הוגש',
-  closed: 'נסגר',
-  canceled: 'בוטל',
 }
 
 const STATUS_FIELD_VALUE_LABELS = {
@@ -54,4 +41,5 @@ export const TIMELINE_AUDIT_FIELD_VALUE_LABELS: FieldValueLabels = {
 export const getTimelineStatusLabel = (status: string): string =>
   BINDER_LIFECYCLE_LABEL_MAP[status as TimelineBinderStatus] ?? 'לא ידוע'
 
-export const getAnnualReportStatusLabel = (status: string): string => ANNUAL_REPORT_STATUS_LABEL_MAP[status] ?? status
+export const getAnnualReportStatusLabel = (status: string): string =>
+  ANNUAL_REPORT_STATUS_LABELS[status as keyof typeof ANNUAL_REPORT_STATUS_LABELS] ?? status

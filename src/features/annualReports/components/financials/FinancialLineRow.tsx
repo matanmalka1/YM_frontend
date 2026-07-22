@@ -2,7 +2,8 @@ import { Paperclip, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { RowActionButton } from '@/components/ui/table'
 import { formatCurrencyILS } from '@/utils/utils'
-import { documentsApi } from '@/features/documents'
+import { formatRecognitionRate } from '../../utils/financialHelpers'
+import { documentsApi } from '@/features/documents/api'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 export interface LineRowProps {
@@ -43,9 +44,9 @@ export const LineRow: React.FC<LineRowProps> = ({
       <div className="flex-1 min-w-0 flex items-center gap-1.5 flex-wrap">
         <span className="font-medium text-gray-800">{label}</span>
         {description && <span className="text-gray-500 mr-1">— {description}</span>}
-        {recognitionRate != null && Number(recognitionRate) < 100 && (
+        {recognitionRate != null && Number(recognitionRate) < 1 && (
           <span className="inline-flex items-center rounded bg-warning-100 px-1.5 py-0.5 text-xs font-medium text-warning-800">
-            {Number(recognitionRate)}%
+            {formatRecognitionRate(recognitionRate)}
           </span>
         )}
         {supportingDocumentId ? (

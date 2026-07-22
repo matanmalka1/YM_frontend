@@ -1,8 +1,20 @@
 import type { BackendAction } from '@/lib/actions/types'
-import type { VatType } from '@/features/clients/api'
+import type { ClientStatus } from '@/features/clients/api'
+import type { VatReportingFrequency } from '@/types/vatReporting'
 import type { VatPeriodTypeFilter } from '../constants/vatConstants'
 
-export type { VatType }
+export type VatType = VatReportingFrequency
+
+interface VatDeductionCategoryMetadata {
+  category: string
+  rate: number
+  label: string
+  condition: string
+}
+
+export interface VatDeductionMetadataResponse {
+  categories: VatDeductionCategoryMetadata[]
+}
 
 export type VatWorkItemStatus =
   | 'pending_materials'
@@ -36,7 +48,7 @@ export interface VatWorkItemResponse {
   office_client_number?: number | null
   client_name: string | null
   client_id_number?: string | null
-  client_status: string | null
+  client_status: ClientStatus | null
   period: string
   period_type: VatType
   status: VatWorkItemStatus
@@ -93,34 +105,6 @@ export interface VatWorkItemListItem {
   available_actions?: BackendAction[]
 }
 
-export interface VatWorkItemListResponse {
-  items: VatWorkItemListItem[]
-  total: number
-  page: number
-  page_size: number
-}
-
-export interface VatWorkItemsListParams {
-  status?: VatWorkItemStatus
-  page?: number
-  page_size?: number
-  period?: string
-  period_type?: VatPeriodTypeFilter
-  client_record_id?: number
-  client_name?: string
-}
-
-export interface VatClientWorkItemsParams {
-  page?: number
-  page_size?: number
-  year?: number | null
-  period?: string | null
-  status?: VatWorkItemStatus | null
-  assigned_to?: number | null
-  due_after?: string | null
-  due_before?: string | null
-}
-
 export interface VatWorkItemStatusSummaryParams {
   year?: number
   period_type?: VatPeriodTypeFilter
@@ -159,10 +143,6 @@ export interface CreateVatWorkItemPayload {
   pending_materials_note?: string | null
 }
 
-export type UpdateVatWorkItemPayload =
-  | { assigned_to: number | null; pending_materials_note?: string | null }
-  | { assigned_to?: number | null; pending_materials_note: string | null }
-
 export interface VatInvoiceResponse {
   id: number
   work_item_id: number
@@ -181,6 +161,7 @@ export interface VatInvoiceResponse {
   rate_type: string
   deduction_rate: string
   is_exceptional: boolean
+  ceiling_warning: boolean
   created_by: number
   created_at: string
 }

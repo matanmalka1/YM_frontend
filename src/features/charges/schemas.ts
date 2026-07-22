@@ -5,7 +5,7 @@ import { CHARGES_MESSAGES } from './messages'
 
 // Fields shared by the create and edit forms. Create adds the client picker;
 // edit adds description and keeps the client fixed.
-const chargeCoreSchema = z.object({
+export const chargeCoreSchema = z.object({
   amount: z
     .string()
     .trim()
@@ -41,6 +41,7 @@ export const chargeEditSchema = chargeCoreSchema.extend({
 
 export type ChargeCreateFormValues = z.infer<typeof chargeCreateSchema>
 export type ChargeEditFormValues = z.infer<typeof chargeEditSchema>
+export type ChargeCoreFormValues = z.infer<typeof chargeCoreSchema>
 
 export const chargeCreateDefaultValues: ChargeCreateFormValues = {
   client_record_id: '',

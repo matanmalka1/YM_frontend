@@ -1,7 +1,7 @@
 import { Card } from '../../../../components/ui/primitives/Card'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import type { SeasonSummary } from '../../api'
-import { SEASON_PROGRESS_STAGES } from '../../api'
+import { SEASON_PROGRESS_STAGES } from './seasonProgressConfig'
 import { cn } from '../../../../utils/utils'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
@@ -46,7 +46,7 @@ export const SeasonProgressBar: React.FC<SeasonProgressBarProps> = ({ summary })
       </div>
 
       {/* Legend */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
         {SEASON_PROGRESS_STAGES.map((stage) => {
           const count = (summary[stage.key as keyof SeasonSummary] as number) ?? 0
           const pct = total > 0 ? Math.round((count / total) * 100) : 0

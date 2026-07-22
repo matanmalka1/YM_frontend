@@ -1,6 +1,6 @@
 import { cn } from '@/utils/utils'
 
-export type ProgressTone = 'primary' | 'info' | 'positive' | 'warning' | 'negative' | 'neutral'
+type ProgressTone = 'primary' | 'info' | 'positive' | 'warning' | 'negative' | 'neutral'
 
 interface ProgressBarProps {
   /** Fill percentage 0–100 (clamped). */

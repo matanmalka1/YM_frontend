@@ -17,7 +17,9 @@ interface UserAuditLogResponse {
   id: number
   action: string
   actor_user_id: number | null
+  actor_display_name: string | null
   target_user_id: number | null
+  target_display_name: string | null
   email: string | null
   status: 'success' | 'failure'
   reason: string | null

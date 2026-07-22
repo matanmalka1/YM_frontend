@@ -1,4 +1,4 @@
-import { Input, Select } from '@/components/ui/inputs'
+import { Input } from '@/components/ui/inputs'
 import { Checkbox } from '@/components/ui/primitives/Checkbox'
 import { FLAG_FIELDS } from '../../utils/annualReportsUtils'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
@@ -89,15 +89,4 @@ export const RequiredAppendices = ({ register }: FinancialFieldsProps) => (
       ))}
     </div>
   </div>
-)
-
-interface SelectOptionsProps {
-  label: string
-  options: { value: string; label: string }[]
-  error?: string
-  registerProps: object
-}
-
-export const SelectOptions = ({ label, options, error, registerProps }: SelectOptionsProps) => (
-  <Select label={label} error={error} options={options} {...registerProps} />
 )

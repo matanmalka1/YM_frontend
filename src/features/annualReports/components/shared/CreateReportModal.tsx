@@ -1,7 +1,7 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useEffect } from 'react'
-import { ClientPickerField, createClientIdPickerHandlers, useClientPickerState } from '@/components/shared/client'
-import { Input, Textarea } from '@/components/ui/inputs'
+import { ClientPickerField, createClientIdPickerHandlers, useClientPickerState } from '@/features/clients/public'
+import { Input, Select, Textarea } from '@/components/ui/inputs'
 import { Modal, ModalFormActions } from '@/components/ui/overlays'
 import { useCreateReport } from '../../hooks/useCreateReport'
 import { SUBMISSION_METHOD_OPTIONS } from '../../constants/submissionMethodOptions'
@@ -11,7 +11,7 @@ import {
   EXTENSION_REASON_OPTIONS,
   TAX_YEAR_LIMITS,
 } from '../../constants/sharedConstants'
-import { FinancialFields, RequiredAppendices, SelectOptions, TaxPreview } from './CreateReportModalParts'
+import { FinancialFields, RequiredAppendices, TaxPreview } from './CreateReportModalParts'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 interface CreateReportModalProps {
@@ -80,30 +80,30 @@ export const CreateReportModal: React.FC<CreateReportModalProps> = ({ open, onCl
           />
         </div>
 
-        <SelectOptions
+        <Select
           label={ANNUAL_REPORTS_MESSAGES.createModal.clientTypeLabel}
           options={CLIENT_TYPE_OPTIONS}
           error={errors.client_type?.message}
-          registerProps={register('client_type')}
+          {...register('client_type')}
         />
 
-        <SelectOptions
+        <Select
           label={ANNUAL_REPORTS_MESSAGES.createModal.deadlineTypeLabel}
           options={DEADLINE_TYPE_OPTIONS}
           error={errors.deadline_type?.message}
-          registerProps={register('deadline_type')}
+          {...register('deadline_type')}
         />
 
-        <SelectOptions
+        <Select
           label={ANNUAL_REPORTS_MESSAGES.createModal.submissionMethodLabel}
           options={SUBMISSION_METHOD_OPTIONS}
-          registerProps={register('submission_method')}
+          {...register('submission_method')}
         />
 
-        <SelectOptions
+        <Select
           label={ANNUAL_REPORTS_MESSAGES.createModal.extensionReasonLabel}
           options={EXTENSION_REASON_OPTIONS}
-          registerProps={register('extension_reason')}
+          {...register('extension_reason')}
         />
 
         <FinancialFields register={register} />

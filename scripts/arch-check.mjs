@@ -9,9 +9,10 @@
 //   4. Design-token drift: no raw Tailwind color families that have a semantic ramp in index.css
 
 import { readFileSync, readdirSync, statSync } from 'node:fs'
-import { resolve, relative, dirname, extname } from 'node:path'
+import { resolve, relative, dirname } from 'node:path'
+import ts from 'typescript'
 
-const SRC = resolve('src')
+const SRC = resolve(process.env.ARCH_CHECK_SRC ?? 'src')
 const STRICT = process.argv.includes('--strict')
 const violations = []
 let exitCode = 0
@@ -32,38 +33,58 @@ function walk(dir) {
 }
 
 // ── Import extraction ─────────────────────────────────────────────────────────
-const IMPORT_RE = /from\s+["']([^"']+)["']/g
-
 function extractImports(filePath) {
-  const src = readFileSync(filePath, 'utf8')
-  const lines = src.split('\n')
+  const sourceText = readFileSync(filePath, 'utf8')
+  const source = ts.createSourceFile(filePath, sourceText, ts.ScriptTarget.Latest, true)
   const imports = []
-  let skipNext = false
-  for (const line of lines) {
-    if (line.includes('arch-check-disable') || line.includes('eslint-disable-next-line no-restricted-imports')) {
-      skipNext = true
-      continue
-    }
-    if (skipNext) {
-      skipNext = false
-      continue
-    }
-    for (const m of line.matchAll(IMPORT_RE)) {
-      imports.push(m[1])
+
+  const isSuppressed = (node) => {
+    const line = source.getLineAndCharacterOfPosition(node.getStart(source)).line
+    const previousLine = sourceText.split('\n')[line - 1] ?? ''
+    const ownLine = sourceText.split('\n')[line] ?? ''
+    return previousLine.includes('arch-check-disable') || ownLine.includes('arch-check-disable')
+  }
+
+  const add = (node, specifier, typeOnly = false) => {
+    if (!isSuppressed(node) && ts.isStringLiteralLike(specifier)) {
+      imports.push({ spec: specifier.text, typeOnly })
     }
   }
+
+  const visit = (node) => {
+    if (ts.isImportDeclaration(node)) {
+      add(node, node.moduleSpecifier, Boolean(node.importClause?.isTypeOnly))
+    } else if (ts.isExportDeclaration(node) && node.moduleSpecifier) {
+      add(node, node.moduleSpecifier, Boolean(node.isTypeOnly))
+    } else if (ts.isCallExpression(node) && node.expression.kind === ts.SyntaxKind.ImportKeyword && node.arguments.length === 1) {
+      add(node, node.arguments[0], false)
+    }
+    ts.forEachChild(node, visit)
+  }
+  visit(source)
   return imports
 }
 
 function resolveImport(from, spec) {
-  if (!spec.startsWith('.')) return spec // external or alias
-  const base = dirname(from)
+  let base
+  let candidate
+  if (spec === '@') {
+    base = dirname(SRC)
+    candidate = SRC
+  } else if (spec.startsWith('@/')) {
+    base = SRC
+    candidate = resolve(SRC, spec.slice(2))
+  } else if (spec.startsWith('.')) {
+    base = dirname(from)
+    candidate = resolve(base, spec)
+  } else {
+    return null
+  }
   // Try with extensions
   for (const ext of ['', '.ts', '.tsx', '/index.ts', '/index.tsx']) {
     try {
-      const full = resolve(base, spec + ext)
-      statSync(full)
-      return full
+      const full = candidate + ext
+      if (statSync(full).isFile()) return full
     } catch {}
   }
   return null
@@ -78,9 +99,9 @@ for (const file of files) {
   const imports = extractImports(file)
   rawImports.set(file, imports)
   adj.set(file, new Set())
-  for (const spec of imports) {
+  for (const { spec, typeOnly } of imports) {
     const resolved = resolveImport(file, spec)
-    if (resolved) adj.get(file).add(resolved)
+    if (resolved && !typeOnly) adj.get(file).add(resolved)
   }
 }
 
@@ -121,7 +142,7 @@ const UI_DIR = resolve(SRC, 'components/ui')
 
 for (const file of files) {
   if (!file.startsWith(UI_DIR)) continue
-  for (const spec of rawImports.get(file) ?? []) {
+  for (const { spec } of rawImports.get(file) ?? []) {
     if (spec.includes('/api/') || spec.includes('@/api/') || spec === '@tanstack/react-query') {
       exitCode = 1
       violations.push(`UI_IMPURE: ${relative(SRC, file)} imports "${spec}"`)
@@ -144,14 +165,32 @@ if (STRICT) {
     const fileFeature = featureNames.find((f) => file.startsWith(resolve(FEATURES_DIR, f) + '/'))
     // Pages are composition shells — they may import feature internals directly
     if (!fileFeature) continue
-    for (const spec of rawImports.get(file) ?? []) {
+    for (const { spec, typeOnly } of rawImports.get(file) ?? []) {
       const resolved = resolveImport(file, spec)
       if (!resolved) continue
       const importFeature = featureNames.find((f) => resolved.startsWith(resolve(FEATURES_DIR, f) + '/'))
-      if (!importFeature || importFeature === fileFeature) continue
+      if (!importFeature) continue
+      if (importFeature === fileFeature) {
+        const ownBarrel = resolve(FEATURES_DIR, fileFeature, 'index.ts')
+        if (resolved === ownBarrel && file !== ownBarrel) {
+          exitCode = 1
+          violations.push(`SELF_BARREL: ${relative(SRC, file)} imports its own feature root "${spec}"`)
+        }
+        continue
+      }
       // Cross-feature component imports are allowed (composition pattern)
       if (resolved.includes('/components/')) continue
-      // Cross-feature import of non-component: must point to index.ts
+      // Explicit contract-only feature entry points are public and deliberately
+      // avoid loading broad UI barrels. Type-only edges are also dependency-safe.
+      const featureDir = resolve(FEATURES_DIR, importFeature)
+      const isPublicContract =
+        typeOnly ||
+        resolved === resolve(featureDir, 'public.ts') ||
+        resolved === resolve(featureDir, 'api/index.ts') ||
+        resolved === resolve(featureDir, 'constants.ts') ||
+        resolved.startsWith(resolve(featureDir, 'constants') + '/')
+      if (isPublicContract) continue
+      // Other cross-feature imports must point to the feature's public root.
       const barrel = resolve(FEATURES_DIR, importFeature, 'index.ts')
       if (resolved !== barrel) {
         exitCode = 1

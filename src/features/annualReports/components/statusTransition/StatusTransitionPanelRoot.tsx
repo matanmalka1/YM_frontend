@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ChevronDown, ChevronUp, ShieldCheck } from 'lucide-react'
-import { getStatusLabel, getStatusVariant } from '../../api'
+import { getStatusLabel, getStatusVariant } from '../../constants/display'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { Card } from '../../../../components/ui/primitives/Card'

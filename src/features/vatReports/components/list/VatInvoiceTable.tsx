@@ -25,7 +25,6 @@ import {
 } from '../../utils/vatHelpers'
 import {
   CATEGORY_COLORS,
-  CATEGORY_LABELS,
   DOCUMENT_TYPE_LABELS,
   VAT_EXCEPTIONAL_INVOICE_TOOLTIP,
   VAT_RATE_TYPE_LABELS,
@@ -38,19 +37,22 @@ import { VatInvoiceEditRow } from './VatInvoiceEditRow'
 import type { VatInvoiceTableProps } from '../../types'
 import { VAT_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { useVatDeductionMetadata } from '../../hooks/useVatDeductionMetadata'
 
 type Invoice = VatInvoiceTableProps['invoices'][number]
 
 export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
   invoices,
   canEdit,
+  canDelete,
   workItemId,
   sectionType,
   emptyMessage,
   emptyHint,
 }) => {
-  const { deleteInvoice, isDeleting } = useDeleteInvoice(workItemId)
+  const { deleteInvoice, isDeleting } = useDeleteInvoice(workItemId, canDelete)
   const { updateInvoice, isUpdating } = useUpdateInvoice(workItemId)
+  const { categoryLabels } = useVatDeductionMetadata()
   const [confirmId, setConfirmId] = useState<number | null>(null)
   const [editingId, setEditingId] = useState<number | null>(null)
 
@@ -148,7 +150,7 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
                   className={`h-2 w-2 rounded-full ${(inv.expense_category ? CATEGORY_COLORS[inv.expense_category] : '') || 'bg-gray-300'}`}
                 />
                 <span className="text-gray-700">
-                  {inv.expense_category ? (CATEGORY_LABELS[inv.expense_category] ?? inv.expense_category) : '—'}
+                  {inv.expense_category ? (categoryLabels[inv.expense_category] ?? inv.expense_category) : '—'}
                 </span>
               </span>
             ),
@@ -203,27 +205,31 @@ export const VatInvoiceTable: React.FC<VatInvoiceTableProps> = ({
       className: 'whitespace-nowrap',
       getValue: (inv) => inv.created_at,
     }),
-    ...(canEdit
+    ...(canEdit || canDelete
       ? ([
           actionsColumn({
             key: '__actions',
             header: '',
             render: (inv) => (
               <RowActionsMenu ariaLabel={VAT_MESSAGES.invoices.rowActionsAriaLabel(getVatInvoiceActionLabel(inv))}>
-                <RowActionItem
-                  label={GLOBAL_UI_MESSAGES.actions.edit}
-                  onClick={() => setEditingId(inv.id)}
-                  disabled={editingId !== null}
-                  icon={<Pencil className="h-4 w-4" />}
-                />
-                <RowActionSeparator />
-                <RowActionItem
-                  label={GLOBAL_UI_MESSAGES.actions.delete}
-                  onClick={() => setConfirmId(inv.id)}
-                  disabled={editingId !== null}
-                  icon={<Trash2 className="h-4 w-4" />}
-                  danger
-                />
+                {canEdit && (
+                  <RowActionItem
+                    label={GLOBAL_UI_MESSAGES.actions.edit}
+                    onClick={() => setEditingId(inv.id)}
+                    disabled={editingId !== null}
+                    icon={<Pencil className="h-4 w-4" />}
+                  />
+                )}
+                {canEdit && canDelete && <RowActionSeparator />}
+                {canDelete && (
+                  <RowActionItem
+                    label={GLOBAL_UI_MESSAGES.actions.delete}
+                    onClick={() => setConfirmId(inv.id)}
+                    disabled={editingId !== null}
+                    icon={<Trash2 className="h-4 w-4" />}
+                    danger
+                  />
+                )}
               </RowActionsMenu>
             ),
           }),

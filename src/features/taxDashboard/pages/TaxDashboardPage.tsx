@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageStateGuard } from '@/components/ui/layout/PageStateGuard'
-import { TaxSubmissionStats, useTaxDashboard } from '@/features/taxDashboard'
+import { TaxSubmissionStats } from '../components/TaxSubmissionStats'
+import { useTaxDashboard } from '../hooks/useTaxDashboard'
 import { TAX_DASHBOARD_MESSAGES } from '../messages'
 import { TAX_DASHBOARD_ERROR_MESSAGES } from '../errorMessages'
 

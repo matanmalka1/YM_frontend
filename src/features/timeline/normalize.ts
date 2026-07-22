@@ -4,7 +4,7 @@ import type { TimelineEvent, TimelineEventMetadata } from './api'
 import { getTimelineStatusLabel, TIMELINE_AUDIT_FIELD_VALUE_LABELS } from './labels'
 import { getEventTypeLabel } from './utils'
 
-export type TimelineFilterKey = 'all' | 'past' | 'future' | 'finance' | 'binders' | 'documents' | 'tax' | 'changes'
+export type TimelineFilterKey = 'all' | 'past' | 'finance' | 'binders' | 'documents' | 'tax' | 'changes'
 
 export interface NormalizedTimelineEvent extends TimelineEvent {
   title: string
@@ -142,5 +142,5 @@ export const normalizeTimelineEvents = (events: TimelineEvent[]) => {
     .flatMap((event) => (shouldHideEvent(event) ? [] : [normalizeEvent(event)]))
     .sort((a, b) => parseISO(b.timestamp).getTime() - parseISO(a.timestamp).getTime())
 
-  return { historicalEvents, upcomingDeadlines: [] as NormalizedTimelineEvent[] }
+  return { historicalEvents }
 }

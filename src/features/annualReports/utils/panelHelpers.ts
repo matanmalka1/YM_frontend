@@ -1,7 +1,6 @@
 import type { AnnualReportFull, AnnualReportListItem, AdvancesSummary } from '../api'
 import { formatClientOfficeId, formatCurrencyILS, formatDate } from '@/utils/utils'
-import { ALERT_WINDOW_DAYS, CLIENT_TYPE_LABELS } from '../constants/panelConstants'
-import { parseAnnualReportCalendarDate } from '../constants/sharedConstants'
+import { ALERT_WINDOW_DAYS } from '../constants/panelConstants'
 
 export type AlertVariant = 'error' | 'warning' | 'info' | 'success'
 export type AlertIcon = 'alert' | 'check' | 'info' | 'x'
@@ -23,9 +22,6 @@ export const getClientLabel = (report: AnnualReportFull): string => {
   return report.client_name ? `${report.client_name} (${officeId})` : `לקוח ${officeId}`
 }
 
-export const getClientTypeLabel = (report: AnnualReportFull): string =>
-  CLIENT_TYPE_LABELS[report.client_type] ?? report.client_type
-
 export const clampPercent = (value: number): number => Math.max(0, Math.min(100, value))
 
 export const sortReportsByTaxYearDesc = (reports: AnnualReportListItem[]): AnnualReportListItem[] =>
@@ -44,10 +40,8 @@ export const getAlertBanners = (report: AnnualReportFull, advances?: BalanceAler
     })
   }
 
-  if (report.filing_deadline) {
-    const deadline = parseAnnualReportCalendarDate(report.filing_deadline)
-    if (!deadline) return banners
-    const daysLeft = Math.ceil((deadline.getTime() - Date.now()) / 86_400_000)
+  if (report.filing_deadline && report.days_until_deadline !== null) {
+    const daysLeft = report.days_until_deadline
 
     if (daysLeft > 0 && daysLeft <= ALERT_WINDOW_DAYS) {
       banners.push({
@@ -57,7 +51,7 @@ export const getAlertBanners = (report: AnnualReportFull, advances?: BalanceAler
       })
     }
 
-    if (daysLeft < 0) {
+    if (report.is_overdue) {
       banners.push({
         variant: 'error',
         icon: 'x',

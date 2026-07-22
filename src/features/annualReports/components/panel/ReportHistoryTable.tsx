@@ -4,10 +4,9 @@ import { Eye } from 'lucide-react'
 import { annualReportsApi, annualReportsQK, type AnnualReportListItem } from '../../api'
 import { actionsColumn, DataTable, dateColumn, moneyColumn, RowActionItem, RowActionsMenu } from '@/components/ui/table'
 import { Badge } from '@/components/ui/primitives/Badge'
-import { getStatusLabel, getStatusVariant } from '../../api'
+import { getStatusLabel, getStatusVariant } from '../../constants/display'
 import { formatCurrencyILS } from '@/utils/utils'
 import { sortReportsByTaxYearDesc } from '../../utils/panelHelpers'
-import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { ANNUAL_REPORTS_COMPLETE_LIST_PARAMS } from '../../constants/reportConstants'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
@@ -22,7 +21,6 @@ export const ReportHistoryTable: React.FC<Props> = ({ clientId, currentReportId,
   const { data: reports = [], isLoading } = useQuery({
     queryKey: annualReportsQK.forClient(clientId),
     queryFn: () => annualReportsApi.listClientReports(clientId, ANNUAL_REPORTS_COMPLETE_LIST_PARAMS),
-    staleTime: QUERY_STALE_TIME.default,
     enabled: !!clientId,
   })
 

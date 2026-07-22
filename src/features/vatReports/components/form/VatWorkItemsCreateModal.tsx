@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { ClientPickerField, useClientPickerState } from '@/components/shared/client'
+import { ClientPickerField, useClientPickerState } from '@/features/clients/public'
 import { Input } from '@/components/ui/inputs'
 import { Checkbox } from '@/components/ui/primitives/Checkbox'
 import { Modal, ModalFormActions } from '@/components/ui/overlays'

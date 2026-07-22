@@ -8,7 +8,7 @@ import { PasswordInput } from '@/components/ui/inputs/PasswordInput'
 import { Button } from '@/components/ui/primitives/Button'
 import { getErrorMessage } from '@/utils/utils'
 import { passwordSchema } from '@/utils/passwordSchema'
-import { AuthPageShell } from '@/features/auth'
+import { AuthPageShell } from '../components/AuthPageShell'
 import { AUTH_MESSAGES } from '../messages'
 import { AUTH_ERROR_MESSAGES } from '../errorMessages'
 

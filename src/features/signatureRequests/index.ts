@@ -4,4 +4,3 @@ export { SignatureRequestsCard } from './components/shared/SignatureRequestsCard
 export { SignatureRequestsDashboardPanel } from './components/shared/SignatureRequestsDashboardPanel'
 
 export type { SignatureRequestStatus, SignerViewResponse } from './api'
-export { getSignatureRequestStatusLabel, getSignatureRequestTypeLabel } from './constants'

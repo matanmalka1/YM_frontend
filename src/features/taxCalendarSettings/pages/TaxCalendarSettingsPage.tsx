@@ -1,4 +1,3 @@
-import { useMemo, useState } from 'react'
 import { Play } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageContent } from '@/components/layout/PageContent'
@@ -6,201 +5,17 @@ import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
 import { Select } from '@/components/ui/inputs/Select'
 import { ToolbarContainer } from '@/components/ui/layout/ToolbarContainer'
-import { DataTable, type Column } from '@/components/ui/table'
-import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
-import { formatCount, formatDate, getErrorMessage, getHttpStatus } from '@/utils/utils'
-import { useTaxCalendarSettings } from '../hooks/useTaxCalendarSettings'
+import { formatCount } from '@/utils/utils'
 import { TaxCalendarSettingsStatsSection } from '../components/TaxCalendarSettingsStatsSection'
-import type { TaxCalendarDeadlineRule, TaxCalendarSettingsEntry } from '../api'
+import { TaxCalendarEntriesTables, TaxCalendarRulesTable } from '../components/TaxCalendarSettingsTables'
+import { useTaxCalendarSettingsPage } from '../hooks/useTaxCalendarSettingsPage'
 import { TAX_CALENDAR_SETTINGS_MESSAGES } from '../messages'
 import { TAX_CALENDAR_SETTINGS_ERROR_MESSAGES } from '../errorMessages'
-import {
-  TAX_CALENDAR_DEADLINE_RULE_TYPE_LABELS,
-  TAX_CALENDAR_OBLIGATION_TYPE_LABELS,
-  TAX_CALENDAR_SUMMARY_TYPE_LABELS,
-} from '../constants'
-
-const currentYear = new Date().getFullYear()
-const MIN_YEAR = 2000
-const MAX_YEAR = 2100
-
-const formatYear = (value: number | null | undefined): string => {
-  if (value == null) return '—'
-  return String(value)
-}
-
-const formatText = (value: string | null | undefined): string => value || '—'
-
-const getRuleTypeLabel = (value: string): string =>
-  TAX_CALENDAR_DEADLINE_RULE_TYPE_LABELS[value as keyof typeof TAX_CALENDAR_DEADLINE_RULE_TYPE_LABELS] ?? value
-
-const getObligationLabel = (value: string): string =>
-  TAX_CALENDAR_OBLIGATION_TYPE_LABELS[value as keyof typeof TAX_CALENDAR_OBLIGATION_TYPE_LABELS] ?? value
-
-const getYearOptions = () => {
-  const nextYear = String(currentYear + 1)
-  const options = getOperationalYearOptions()
-  if (options.some((option) => option.value === nextYear)) return options
-  return [{ value: nextYear, label: nextYear }, ...options]
-}
-
-const isForbidden = (...errors: unknown[]): boolean => errors.some((error) => getHttpStatus(error) === 403)
-
-const parseYearInput = (value: string, label: string): { value: number | null; error: string | null } => {
-  const trimmed = value.trim()
-  if (!trimmed) return { value: null, error: TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.validation.required(label) }
-
-  const parsed = Number(trimmed)
-  if (!Number.isInteger(parsed)) return { value: null, error: TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.validation.invalidYear(label) }
-  if (parsed < MIN_YEAR || parsed > MAX_YEAR) {
-    return { value: null, error: TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.validation.yearRange(label, MIN_YEAR, MAX_YEAR) }
-  }
-
-  return { value: parsed, error: null }
-}
-
-const translateWarning = (warning: string): string => {
-  const countWarning = /^Year (\d+): ([\w_]+) — expected (\d+), found (\d+)\.$/.exec(warning)
-  if (countWarning) {
-    const [, year, key, expected, found] = countWarning
-    const label = TAX_CALENDAR_SUMMARY_TYPE_LABELS[key as keyof typeof TAX_CALENDAR_SUMMARY_TYPE_LABELS] ?? key
-    return TAX_CALENDAR_SETTINGS_MESSAGES.warnings.countMismatch(year, label, expected, found)
-  }
-
-  const fallbackWarning =
-    /^Year (\d+) uses fallback DeadlineRule dates because official tax calendar registry data is missing\.$/.exec(warning)
-  if (fallbackWarning) {
-    return TAX_CALENDAR_SETTINGS_MESSAGES.warnings.fallbackDates(fallbackWarning[1])
-  }
-
-  return warning
-}
-
-type EntryGroup = {
-  key: string
-  taxYear: number
-  obligationType: string
-  entries: TaxCalendarSettingsEntry[]
-}
-
-const groupEntries = (entries: TaxCalendarSettingsEntry[]): EntryGroup[] => {
-  const groups = new Map<string, EntryGroup>()
-
-  entries.forEach((entry) => {
-    const key = `${entry.tax_year}-${entry.obligation_type}`
-    const group = groups.get(key)
-    if (group) {
-      group.entries.push(entry)
-      return
-    }
-
-    groups.set(key, {
-      key,
-      taxYear: entry.tax_year,
-      obligationType: entry.obligation_type,
-      entries: [entry],
-    })
-  })
-
-  return Array.from(groups.values())
-    .sort(
-      (a, b) =>
-        a.taxYear - b.taxYear || getObligationLabel(a.obligationType).localeCompare(getObligationLabel(b.obligationType), 'he'),
-    )
-    .map((group) => ({
-      ...group,
-      entries: group.entries.slice().sort((a, b) => {
-        const periodCompare = formatText(a.period).localeCompare(formatText(b.period), 'he')
-        if (periodCompare !== 0) return periodCompare
-        return a.due_date.localeCompare(b.due_date)
-      }),
-    }))
-}
-
-const rulesColumns: Column<TaxCalendarDeadlineRule>[] = [
-  {
-    key: 'rule_type',
-    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.ruleType,
-    render: (rule) => <span className="font-semibold text-gray-900">{getRuleTypeLabel(rule.rule_type)}</span>,
-  },
-  {
-    key: 'due_day_of_month',
-    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.dueDayOfMonth,
-    render: (rule) => <span className="font-mono tabular-nums">{formatCount(rule.due_day_of_month)}</span>,
-  },
-  {
-    key: 'offset_months',
-    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.offsetMonths,
-    render: (rule) => <span className="font-mono tabular-nums">{formatCount(rule.offset_months)}</span>,
-  },
-  {
-    key: 'effective_from',
-    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.effectiveFrom,
-    render: (rule) => <span className="font-mono tabular-nums">{formatDate(rule.effective_from)}</span>,
-  },
-  {
-    key: 'effective_to',
-    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.effectiveTo,
-    render: (rule) => <span className="font-mono tabular-nums">{formatDate(rule.effective_to)}</span>,
-  },
-]
-
-const groupedEntriesColumns: Column<TaxCalendarSettingsEntry>[] = [
-  {
-    key: 'period',
-    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.period,
-    render: (entry) => <span className="font-mono tabular-nums">{formatText(entry.period)}</span>,
-  },
-  {
-    key: 'period_months_count',
-    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.periodMonthsCount,
-    render: (entry) => <span className="font-mono tabular-nums">{formatCount(entry.period_months_count)}</span>,
-  },
-  {
-    key: 'due_date',
-    header: TAX_CALENDAR_SETTINGS_MESSAGES.columns.dueDate,
-    render: (entry) => <span className="font-mono tabular-nums">{formatDate(entry.due_date)}</span>,
-  },
-]
 
 export const TaxCalendarSettingsPage = () => {
-  const [startYear, setStartYear] = useState(String(currentYear))
-  const [endYear, setEndYear] = useState(String(currentYear))
-  const yearOptions = useMemo(getYearOptions, [])
+  const page = useTaxCalendarSettingsPage()
 
-  const startYearState = useMemo(() => parseYearInput(startYear, TAX_CALENDAR_SETTINGS_MESSAGES.labels.startYear), [startYear])
-  const endYearState = useMemo(() => parseYearInput(endYear, TAX_CALENDAR_SETTINGS_MESSAGES.labels.endYear), [endYear])
-  const hasInvalidRange =
-    startYearState.value !== null && endYearState.value !== null && startYearState.value > endYearState.value
-  const params = useMemo(() => {
-    if (startYearState.value === null || endYearState.value === null || hasInvalidRange) return null
-    return {
-      tax_year_after: startYearState.value,
-      tax_year_before: endYearState.value,
-    }
-  }, [endYearState.value, hasInvalidRange, startYearState.value])
-
-  const { rulesQuery, entriesQuery, summaryQuery, bootstrapMutation } = useTaxCalendarSettings(params, params !== null)
-  const hasForbiddenError = isForbidden(rulesQuery.error, entriesQuery.error, summaryQuery.error)
-  const rules = rulesQuery.data ?? []
-  const entryGroups = useMemo(() => groupEntries(entriesQuery.data ?? []), [entriesQuery.data])
-  const summary = summaryQuery.data
-  const warnings = useMemo(() => (summary?.warnings ?? []).map(translateWarning), [summary?.warnings])
-
-  const resetFilters = () => {
-    setStartYear(String(currentYear))
-    setEndYear(String(currentYear + 1))
-  }
-
-  const handleBootstrap = () => {
-    if (!params) return
-    bootstrapMutation.mutate({
-      tax_year_after: params.tax_year_after,
-      tax_year_before: params.tax_year_before,
-    })
-  }
-
-  if (hasForbiddenError) {
+  if (page.denied) {
     return (
       <PageContent>
         <PageHeader
@@ -223,20 +38,20 @@ export const TaxCalendarSettingsPage = () => {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,180px)_minmax(0,180px)_auto_auto]">
           <Select
             label={TAX_CALENDAR_SETTINGS_MESSAGES.labels.startYearField}
-            value={startYear}
-            options={yearOptions}
-            onChange={(event) => setStartYear(event.target.value)}
-            error={startYearState.error ?? undefined}
+            value={page.filters.startYear}
+            options={page.filters.yearOptions}
+            onChange={(event) => page.filters.setStartYear(event.target.value)}
+            error={page.filters.startYearError ?? undefined}
           />
           <Select
             label={TAX_CALENDAR_SETTINGS_MESSAGES.labels.endYearField}
-            value={endYear}
-            options={yearOptions}
-            onChange={(event) => setEndYear(event.target.value)}
-            error={endYearState.error ?? undefined}
+            value={page.filters.endYear}
+            options={page.filters.yearOptions}
+            onChange={(event) => page.filters.setEndYear(event.target.value)}
+            error={page.filters.endYearError ?? undefined}
           />
           <div className="flex items-end">
-            <Button type="button" variant="outline" size="sm" onClick={resetFilters}>
+            <Button type="button" variant="outline" size="sm" onClick={page.filters.reset}>
               {TAX_CALENDAR_SETTINGS_MESSAGES.labels.resetYears}
             </Button>
           </div>
@@ -245,9 +60,9 @@ export const TaxCalendarSettingsPage = () => {
               type="button"
               size="sm"
               icon={<Play className="h-4 w-4" />}
-              onClick={handleBootstrap}
-              disabled={params === null || hasInvalidRange}
-              isLoading={bootstrapMutation.isPending}
+              onClick={page.bootstrap.run}
+              disabled={!page.filters.isLoadable}
+              isLoading={page.bootstrap.isLoading}
               loadingLabel={TAX_CALENDAR_SETTINGS_MESSAGES.labels.initializing}
             >
               {TAX_CALENDAR_SETTINGS_MESSAGES.labels.initializeCalendar}
@@ -256,104 +71,42 @@ export const TaxCalendarSettingsPage = () => {
         </div>
       </ToolbarContainer>
 
-      {hasInvalidRange ? (
+      {page.filters.hasInvalidRange ? (
         <Alert variant="warning" message={TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.validation.invalidRange} />
-      ) : null}
-      {!hasInvalidRange && params === null ? (
+      ) : !page.filters.isLoadable ? (
         <Alert variant="warning" message={TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.validation.invalidRangeToLoad} />
       ) : null}
-
-      {summaryQuery.isError && !hasInvalidRange ? (
-        <Alert variant="error" message={getErrorMessage(summaryQuery.error, TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.load.summary)} />
-      ) : null}
+      {page.stats.error && !page.filters.hasInvalidRange ? <Alert variant="error" message={page.stats.error} /> : null}
 
       <TaxCalendarSettingsStatsSection
-        yearRange={`${formatYear(startYearState.value)}–${formatYear(endYearState.value)}`}
-        totalEntries={summary?.total_entries ?? 0}
-        warningsCount={warnings.length}
-        isLoading={summaryQuery.isPending}
+        yearRange={page.stats.yearRange}
+        totalEntries={page.stats.totalEntries}
+        warningsCount={page.stats.warnings.length}
+        isLoading={page.stats.isLoading}
       />
 
-      {warnings.length > 0 ? (
+      {page.stats.warnings.map((warning) => (
+        <Alert key={warning} variant="warning" message={warning} className="border-warning-300 bg-warning-50" />
+      ))}
+
+      {page.bootstrap.result ? (
         <div className="space-y-2">
-          {warnings.map((warning) => (
-            <Alert key={warning} variant="warning" message={warning} className="border-warning-300 bg-warning-50" />
+          <Alert
+            variant={page.bootstrap.warnings.length > 0 ? 'warning' : 'success'}
+            message={TAX_CALENDAR_SETTINGS_MESSAGES.bootstrap.complete(
+              formatCount(page.bootstrap.result.entries_created),
+              formatCount(page.bootstrap.result.entries_skipped),
+              formatCount(page.bootstrap.result.total_entries_for_range),
+            )}
+          />
+          {page.bootstrap.warnings.map((warning) => (
+            <Alert key={warning} variant="warning" message={warning} />
           ))}
         </div>
       ) : null}
 
-      {bootstrapMutation.data ? (
-        <Alert
-          variant={bootstrapMutation.data.warnings.length > 0 ? 'warning' : 'success'}
-          message={TAX_CALENDAR_SETTINGS_MESSAGES.bootstrap.complete(
-            formatCount(bootstrapMutation.data.entries_created),
-            formatCount(bootstrapMutation.data.entries_skipped),
-            formatCount(bootstrapMutation.data.total_entries_for_range),
-          )}
-        />
-      ) : null}
-
-      <section className="space-y-3">
-        <h2 className="text-base font-semibold text-gray-900">{TAX_CALENDAR_SETTINGS_MESSAGES.labels.deadlineRulesTitle}</h2>
-        {rulesQuery.isError ? (
-          <Alert variant="error" message={getErrorMessage(rulesQuery.error, TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.load.rules)} />
-        ) : (
-          <DataTable
-            data={rules}
-            columns={rulesColumns}
-            getRowKey={(rule) => rule.id}
-            isLoading={rulesQuery.isPending}
-            emptyState={{
-              title: TAX_CALENDAR_SETTINGS_MESSAGES.emptyStates.noRulesTitle,
-              message: TAX_CALENDAR_SETTINGS_MESSAGES.emptyStates.noRulesMessage,
-            }}
-          />
-        )}
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-base font-semibold text-gray-900">{TAX_CALENDAR_SETTINGS_MESSAGES.labels.calendarEntriesTitle}</h2>
-        {entriesQuery.isError ? (
-          <Alert
-            variant="error"
-            message={getErrorMessage(entriesQuery.error, TAX_CALENDAR_SETTINGS_ERROR_MESSAGES.load.entries)}
-          />
-        ) : entriesQuery.isPending || entryGroups.length === 0 ? (
-          <DataTable
-            data={[]}
-            columns={groupedEntriesColumns}
-            getRowKey={(entry) => entry.id}
-            isLoading={entriesQuery.isPending}
-            emptyState={{
-              title: TAX_CALENDAR_SETTINGS_MESSAGES.emptyStates.noEntriesTitle,
-              message: TAX_CALENDAR_SETTINGS_MESSAGES.emptyStates.noEntriesMessage,
-            }}
-          />
-        ) : (
-          <div className="space-y-5">
-            {Array.from(new Set(entryGroups.map((group) => group.taxYear))).map((taxYear) => (
-              <div key={taxYear} className="space-y-3">
-                <h3 className="text-sm font-semibold text-gray-700">
-                  {TAX_CALENDAR_SETTINGS_MESSAGES.labels.taxYear(formatYear(taxYear))}
-                </h3>
-                {entryGroups
-                  .filter((group) => group.taxYear === taxYear)
-                  .map((group) => (
-                    <div key={group.key} className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-sm font-medium text-gray-900">{getObligationLabel(group.obligationType)}</h4>
-                        <span className="text-xs font-medium text-gray-500">
-                          {TAX_CALENDAR_SETTINGS_MESSAGES.labels.entriesCount(formatCount(group.entries.length))}
-                        </span>
-                      </div>
-                      <DataTable data={group.entries} columns={groupedEntriesColumns} getRowKey={(entry) => entry.id} />
-                    </div>
-                  ))}
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+      <TaxCalendarRulesTable {...page.rules} rules={page.rules.data} />
+      <TaxCalendarEntriesTables {...page.entries} />
     </PageContent>
   )
 }

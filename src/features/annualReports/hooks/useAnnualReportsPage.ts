@@ -9,16 +9,18 @@ import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { useState } from 'react'
 import { ANNUAL_REPORTS_TAX_YEAR_DESC_PARAMS } from '../constants/reportConstants'
-import { STATUS_LABELS } from '../api/utils'
+import { STATUS_LABELS } from '../constants/display'
 import type { AnnualReportStatus } from '../api/contracts'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
+import { createClientPickerFilter } from '@/features/clients/public'
+import { ALL_ANNUAL_REPORT_YEARS, getAnnualReportResetFilters, getInitializedAnnualReportYear } from '../utils/reportFilters'
 
 // All-years uses an explicit sentinel (not '') so an empty `year` param unambiguously means
 // "uninitialized" → apply the default tax year. This keeps re-navigating to /tax/reports (which
 // drops the query string) from silently falling into all-years mode instead of the default view.
-const ALL_YEARS_VALUE = 'all'
+const ALL_YEARS_VALUE = ALL_ANNUAL_REPORT_YEARS
 const ALL_YEARS_OPTION = { value: ALL_YEARS_VALUE, label: 'כל השנים' } as const
 
 const STATUS_OPTIONS = [
@@ -36,7 +38,7 @@ const getYearOptions = (defaultYear?: number) => {
 }
 
 const buildAnnualReportsFilterFields = (defaultYear?: number) => [
-  { type: 'client-picker' as const, idKey: 'client_record_id', nameKey: 'client_name' },
+  createClientPickerFilter({ idKey: 'client_record_id', nameKey: 'client_name' }),
   { type: 'select' as const, key: 'status', label: 'סטטוס', options: STATUS_OPTIONS },
   {
     type: 'select' as const,
@@ -73,9 +75,9 @@ export const useAnnualReportsPage = () => {
   // which is cached and never changes) so this fires on every reset; the ALL_YEARS_VALUE sentinel
   // means an explicit all-years selection is not empty and is left untouched.
   useEffect(() => {
-    if (defaultTaxYear == null) return
-    if (!year) setFilter('year', String(defaultTaxYear), false)
-  }, [defaultTaxYear, year]) // eslint-disable-line react-hooks/exhaustive-deps
+    const initializedYear = getInitializedAnnualReportYear(year, defaultTaxYear)
+    if (initializedYear) setFilter('year', initializedYear, false)
+  }, [defaultTaxYear, setFilter, year])
 
   const allYearsMode = year === ALL_YEARS_VALUE
   const isInitializing = !year
@@ -100,7 +102,6 @@ export const useAnnualReportsPage = () => {
         ...ANNUAL_REPORTS_TAX_YEAR_DESC_PARAMS,
         ...apiFilters,
       }),
-    staleTime: QUERY_STALE_TIME.default,
   })
 
   const taxYear = allYearsMode ? undefined : (season.summary?.tax_year ?? selectedTaxYear)
@@ -113,7 +114,7 @@ export const useAnnualReportsPage = () => {
 
   const handleFilterChange = (key: string, value: string) => setFilter(key, value)
 
-  const handleResetFilters = () => resetFilters(defaultTaxYear != null ? { year: String(defaultTaxYear) } : {})
+  const handleResetFilters = () => resetFilters(getAnnualReportResetFilters(defaultTaxYear))
 
   const filteredReports = useMemo(
     () => (allYearsMode ? (allReportsData?.items ?? []) : season.reports),

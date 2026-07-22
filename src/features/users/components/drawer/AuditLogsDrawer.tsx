@@ -96,6 +96,14 @@ export const AuditLogsDrawer: React.FC<AuditLogsDrawerProps> = ({ open, onClose 
                       {log.status === 'success' ? USERS_MESSAGES.auditLog.success : USERS_MESSAGES.auditLog.failure}
                     </Badge>
                   </div>
+                  {(log.actor_display_name || log.target_display_name) && (
+                    <p className="text-xs text-gray-500">
+                      {USERS_MESSAGES.auditLog.attribution(
+                        log.actor_display_name ?? USERS_MESSAGES.auditLog.unknownActor,
+                        log.target_display_name,
+                      )}
+                    </p>
+                  )}
                   {log.email && <p className="text-xs text-gray-500">{USERS_MESSAGES.auditLog.emailPrefix(log.email)}</p>}
                   {log.reason && <p className="text-xs text-gray-500">{USERS_MESSAGES.auditLog.reasonPrefix(log.reason)}</p>}
                   <p className="text-xs text-gray-400">{formatDateTime(log.created_at)}</p>

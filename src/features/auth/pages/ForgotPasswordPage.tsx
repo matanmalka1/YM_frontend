@@ -7,7 +7,7 @@ import { Alert } from '@/components/ui/overlays/Alert'
 import { Input } from '@/components/ui/inputs/Input'
 import { Button } from '@/components/ui/primitives/Button'
 import { getErrorMessage } from '@/utils/utils'
-import { AuthPageShell } from '@/features/auth'
+import { AuthPageShell } from '../components/AuthPageShell'
 import { AUTH_MESSAGES } from '../messages'
 import { AUTH_ERROR_MESSAGES } from '../errorMessages'
 

@@ -66,17 +66,6 @@ export interface ListOperationalBindersParams {
   page_size?: number
 }
 
-export interface ListOpenBindersParams {
-  page?: number
-  page_size?: number
-  client_record_id?: number | null
-  binder_number?: string | null
-  location_status?: BinderLocationStatus | null
-  capacity_status?: BinderCapacityStatus | null
-  created_after?: string | null
-  created_before?: string | null
-}
-
 export interface ReceiveBinderPayload {
   client_record_id: number
   received_at: string

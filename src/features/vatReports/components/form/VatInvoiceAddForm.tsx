@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus } from 'lucide-react'
@@ -6,17 +7,14 @@ import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import { vatInvoiceRowSchema, toInvoiceRowPayload, type VatInvoiceRowValues } from '../../schemas/invoice.schema'
-import {
-  DEFAULT_RATE_TYPE,
-  DOCUMENT_TYPE_OPTIONS,
-  VAT_EXPENSE_CATEGORY_OPTIONS,
-  VAT_RATE_TYPE_OPTIONS,
-} from '../../constants/vatConstants'
+import { DEFAULT_RATE_TYPE, DOCUMENT_TYPE_OPTIONS, VAT_RATE_TYPE_OPTIONS } from '../../constants/vatConstants'
 import { getVatInvoiceDefaultValues } from '../../utils/vatHelpers'
 import type { VatInvoiceAddFormProps } from '../../types'
-import { blockNonNumericKey, getDeductionRateHint, shouldRequireCounterpartyId } from '../../utils/viewHelpers'
+import { blockNonNumericKey, shouldRequireCounterpartyId } from '../../utils/viewHelpers'
 import { VAT_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { useVatDeductionMetadata } from '../../hooks/useVatDeductionMetadata'
+import { formatPercent } from '@/utils/utils'
 
 export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({ invoiceType, addInvoice, isAdding, onCancel }) => {
   const {
@@ -25,6 +23,7 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({ invoiceTyp
     reset,
     watch,
     control,
+    setValue,
     formState: { errors },
   } = useForm<VatInvoiceRowValues>({
     resolver: zodResolver(vatInvoiceRowSchema),
@@ -35,14 +34,22 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({ invoiceTyp
   })
 
   const isExpense = invoiceType === 'expense'
-  const selectedCategory = watch('expense_category')
+  const { categories, categoryOptions, isError: isCategoryMetadataError } = useVatDeductionMetadata()
+  const defaultExpenseCategory = categories[0]?.category
+  const selectedExpenseCategory = watch('expense_category')
   const selectedDocumentType = watch('document_type')
-  const deductionRateHint = getDeductionRateHint(selectedCategory)
   const requiresCounterpartyId = shouldRequireCounterpartyId(invoiceType, selectedDocumentType)
+  const selectedCategoryMetadata = categories.find(({ category }) => category === selectedExpenseCategory)
+
+  useEffect(() => {
+    if (isExpense && !selectedExpenseCategory && defaultExpenseCategory) {
+      setValue('expense_category', defaultExpenseCategory)
+    }
+  }, [defaultExpenseCategory, isExpense, selectedExpenseCategory, setValue])
 
   const onSubmit = async (values: VatInvoiceRowValues) => {
     const ok = await addInvoice(toInvoiceRowPayload(values))
-    if (ok) reset({ ...getVatInvoiceDefaultValues(invoiceType), rate_type: DEFAULT_RATE_TYPE })
+    if (ok) reset({ ...getVatInvoiceDefaultValues(invoiceType, defaultExpenseCategory), rate_type: DEFAULT_RATE_TYPE })
   }
 
   return (
@@ -108,10 +115,20 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({ invoiceTyp
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
-                options={VAT_EXPENSE_CATEGORY_OPTIONS}
+                options={categoryOptions}
               />
             )}
           />
+        )}
+
+        {isExpense && selectedCategoryMetadata && (
+          <p className="basis-full text-xs text-gray-600">
+            {selectedCategoryMetadata.condition} (
+            {formatPercent(selectedCategoryMetadata.rate, { isRatio: true, fractionDigits: 2 })})
+          </p>
+        )}
+        {isExpense && isCategoryMetadataError && (
+          <p className="basis-full text-xs text-danger-600">לא ניתן לטעון את כללי ניכוי המע״מ.</p>
         )}
 
         {/* Expense-only: document type */}
@@ -164,12 +181,15 @@ export const VatInvoiceAddForm: React.FC<VatInvoiceAddFormProps> = ({ invoiceTyp
           />
         )}
 
-        {/* Deduction rate hint inline with submit */}
         <div className="flex items-end gap-3 pb-0.5">
-          {isExpense && deductionRateHint && (
-            <span className={`text-xs font-medium ${deductionRateHint.className}`}>{deductionRateHint.label}</span>
-          )}
-          <Button type="submit" variant="ghost" size="sm" icon={<Plus className="h-3.5 w-3.5" />} isLoading={isAdding}>
+          <Button
+            type="submit"
+            variant="ghost"
+            size="sm"
+            icon={<Plus className="h-3.5 w-3.5" />}
+            isLoading={isAdding}
+            disabled={isExpense && categoryOptions.length === 0}
+          >
             {GLOBAL_UI_MESSAGES.actions.add}
           </Button>
           {onCancel && (

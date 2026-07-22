@@ -7,7 +7,6 @@ import { annualReportsApi, annualReportsQK, type CreateAnnualReportPayload } fro
 import { formatCurrencyILS, showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
 import { createReportSchema, type CreateReportFormValues } from '../schemas'
-import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 
 type CreateReportFormOutput = z.output<typeof createReportSchema>
@@ -72,7 +71,6 @@ export const useCreateReport = (taxYear?: number, onSuccess?: () => void) => {
     queryKey: annualReportsQK.taxPreview(previewParams),
     queryFn: () => annualReportsApi.taxPreview(previewParams),
     enabled: previewParams.tax_year > 0,
-    staleTime: QUERY_STALE_TIME.default,
     placeholderData: (prev) => prev,
   })
 

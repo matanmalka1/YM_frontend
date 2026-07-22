@@ -2171,6 +2171,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/notifications/metadata': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get Notification Metadata */
+    get: operations['get_notification_metadata_api_v1_notifications_metadata_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/notifications': {
     parameters: {
       query?: never
@@ -2790,6 +2807,23 @@ export interface paths {
     }
     /** List Work Item Group Items */
     get: operations['list_work_item_group_items_api_v1_vat_work_items_groups__group_key__items_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/vat/deduction-metadata': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get Deduction Metadata */
+    get: operations['get_deduction_metadata_api_v1_vat_deduction_metadata_get']
     put?: never
     post?: never
     delete?: never
@@ -3766,6 +3800,13 @@ export interface components {
       deadline_type: components['schemas']['FilingDeadlineType']
       /** Filing Deadline */
       filing_deadline?: string | null
+      /**
+       * Is Overdue
+       * @default false
+       */
+      is_overdue: boolean
+      /** Days Until Deadline */
+      days_until_deadline?: number | null
       /** Custom Deadline Note */
       custom_deadline_note?: string | null
       /** Submitted At */
@@ -3884,6 +3925,13 @@ export interface components {
       deadline_type: components['schemas']['FilingDeadlineType']
       /** Filing Deadline */
       filing_deadline?: string | null
+      /**
+       * Is Overdue
+       * @default false
+       */
+      is_overdue: boolean
+      /** Days Until Deadline */
+      days_until_deadline?: number | null
       /** Submitted At */
       submitted_at?: string | null
       /** Assessment Amount */
@@ -3924,6 +3972,13 @@ export interface components {
       deadline_type: components['schemas']['FilingDeadlineType']
       /** Filing Deadline */
       filing_deadline?: string | null
+      /**
+       * Is Overdue
+       * @default false
+       */
+      is_overdue: boolean
+      /** Days Until Deadline */
+      days_until_deadline?: number | null
       /** Custom Deadline Note */
       custom_deadline_note?: string | null
       /** Submitted At */
@@ -4084,6 +4139,10 @@ export interface components {
       tax_after_credits?: string | null
       /** Final Balance */
       final_balance?: string | null
+      /** Credit Points Value */
+      credit_points_value?: string | null
+      /** Donation Credit */
+      donation_credit?: string | null
       /** Credit Points */
       credit_points?: string | null
       /** Pension Credit Points */
@@ -6224,6 +6283,11 @@ export interface components {
       /** Total */
       total: number
     }
+    /** NotificationMetadataResponse */
+    NotificationMetadataResponse: {
+      /** Triggers */
+      triggers: components['schemas']['NotificationTriggerOption'][]
+    }
     /** NotificationPreviewRequest */
     NotificationPreviewRequest: {
       /** Client Record Id */
@@ -6407,6 +6471,16 @@ export interface components {
       | 'client_missing_information'
       | 'client_documents_request'
       | 'client_general_message'
+    /** NotificationTriggerOption */
+    NotificationTriggerOption: {
+      value: components['schemas']['NotificationTrigger']
+      /** Label */
+      label: string
+      /** Domain Label */
+      domain_label: string
+      /** Client Level Manual */
+      client_level_manual: boolean
+    }
     /**
      * ObligationType
      * @description Regulatory obligation category for TaxCalendarEntry.
@@ -7543,7 +7617,7 @@ export interface components {
       /** Total Entries For Range */
       total_entries_for_range: number
       /** Warnings */
-      warnings: string[]
+      warnings: components['schemas']['TaxCalendarWarning'][]
     }
     /** TaxCalendarEntryResponse */
     TaxCalendarEntryResponse: {
@@ -7693,7 +7767,29 @@ export interface components {
         }
       }
       /** Warnings */
-      warnings: string[]
+      warnings: components['schemas']['TaxCalendarWarning'][]
+    }
+    /** TaxCalendarWarning */
+    TaxCalendarWarning: {
+      /**
+       * Code
+       * @enum {string}
+       */
+      code: 'count_mismatch' | 'registry_data_missing' | 'bootstrap_count_mismatch'
+      /** Year */
+      year?: number | null
+      /** Obligation Type */
+      obligation_type?: string | null
+      /** Expected */
+      expected?: number | null
+      /** Found */
+      found?: number | null
+      /** Tax Year After */
+      tax_year_after?: number | null
+      /** Tax Year Before */
+      tax_year_before?: number | null
+      /** Expected Per Year */
+      expected_per_year?: number | null
     }
     /** TaxPreviewRequest */
     TaxPreviewRequest: {
@@ -8167,6 +8263,22 @@ export interface components {
       monthly: components['schemas']['VatDashboardPeriodStat']
       bimonthly: components['schemas']['VatDashboardPeriodStat']
       advance_payments: components['schemas']['AdvancePaymentDashboardStats']
+    }
+    /** VatDeductionCategoryMetadata */
+    VatDeductionCategoryMetadata: {
+      /** Category */
+      category: string
+      /** Rate */
+      rate: number
+      /** Label */
+      label: string
+      /** Condition */
+      condition: string
+    }
+    /** VatDeductionMetadataResponse */
+    VatDeductionMetadataResponse: {
+      /** Categories */
+      categories: components['schemas']['VatDeductionCategoryMetadata'][]
     }
     /** VatExpenseCategoryBreakdownResponse */
     VatExpenseCategoryBreakdownResponse: {
@@ -17223,6 +17335,44 @@ export interface operations {
       }
     }
   }
+  get_notification_metadata_api_v1_notifications_metadata_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['NotificationMetadataResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+    }
+  }
   list_notifications_api_v1_notifications_get: {
     parameters: {
       query?: {
@@ -20002,6 +20152,44 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  get_deduction_metadata_api_v1_vat_deduction_metadata_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VatDeductionMetadataResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
     }

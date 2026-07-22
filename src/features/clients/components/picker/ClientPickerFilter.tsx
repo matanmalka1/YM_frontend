@@ -1,0 +1,58 @@
+import { useEffect, useState } from 'react'
+import { ClientSearchInput, SelectedClientDisplay } from './ClientSearchInput'
+
+interface Props {
+  field: ClientPickerFilterConfig
+  values: Readonly<Record<string, string | undefined>>
+  onMultiChange: (updates: Record<string, string>) => void
+  size?: 'sm' | 'md'
+}
+
+export interface ClientPickerFilterConfig {
+  idKey: string
+  nameKey?: string
+  label?: string
+  placeholder?: string
+}
+
+export const ClientPickerFilter: React.FC<Props> = ({ field, values, onMultiChange, size = 'md' }) => {
+  const idVal = values[field.idKey]
+  const nameVal = field.nameKey ? values[field.nameKey] : undefined
+  const [clientQuery, setClientQuery] = useState(nameVal ?? '')
+  const selectedClient = idVal ? { id: Number(idVal), name: nameVal ?? `#${idVal}` } : null
+
+  useEffect(() => {
+    if (!idVal) setClientQuery('')
+  }, [idVal])
+
+  return (
+    <div>
+      {selectedClient ? (
+        <SelectedClientDisplay
+          name={selectedClient.name}
+          label={field.label}
+          size={size}
+          onClear={() => {
+            const updates: Record<string, string> = { [field.idKey]: '' }
+            if (field.nameKey) updates[field.nameKey] = ''
+            onMultiChange(updates)
+          }}
+        />
+      ) : (
+        <ClientSearchInput
+          label={field.label}
+          size={size}
+          value={clientQuery}
+          onChange={setClientQuery}
+          placeholder={field.placeholder}
+          onSelect={(client) => {
+            setClientQuery(client.name)
+            const updates: Record<string, string> = { [field.idKey]: String(client.id) }
+            if (field.nameKey) updates[field.nameKey] = client.name
+            onMultiChange(updates)
+          }}
+        />
+      )}
+    </div>
+  )
+}

@@ -1,7 +1,7 @@
 import { Send, RotateCcw, PackageCheck } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { canMarkMaterialsComplete, canMarkReadyForReview, canFile, canSendBack } from '../../utils/vatHelpers'
-import { isClientClosed } from '@/utils/clientStatus'
+import { isClientClosed } from '@/features/clients/public'
 import type { VatActionButtonsProps } from '../../types'
 import { VAT_MESSAGES } from '../../messages'
 

@@ -15,7 +15,7 @@ import { BUSINESS_STATUS_BADGE_VARIANTS, BUSINESS_STATUS_OPTIONS, getBusinessSta
 import { CLIENT_ROUTES } from '../../api/endpoints'
 import { formatDate } from '@/utils/utils'
 import { useBusinessActions } from '../../hooks/useBusinessActions'
-import { useBusinessesForClient } from '@/hooks/useBusinessesForClient'
+import { useBusinessesForClient } from '@/features/clients/public'
 import { CLIENTS_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 

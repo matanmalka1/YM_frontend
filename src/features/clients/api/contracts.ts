@@ -1,4 +1,7 @@
 import type { ISODateString, PaginatedResponse } from '@/types'
+import type { VatReportingFrequency } from '@/types/vatReporting'
+
+type VatType = VatReportingFrequency
 
 export interface ClientRecordResponse {
   id: number
@@ -178,7 +181,6 @@ export interface UpdateClientPayload {
 export type EntityType = 'osek_patur' | 'osek_murshe' | 'company_ltd' | 'employee'
 export type BusinessStatus = 'active' | 'frozen' | 'closed'
 export type ClientStatus = 'active' | 'frozen' | 'closed'
-export type VatType = 'monthly' | 'bimonthly' | 'exempt'
 export type AdvancePaymentFrequency = 'monthly' | 'bimonthly'
 
 export interface BusinessResponse {

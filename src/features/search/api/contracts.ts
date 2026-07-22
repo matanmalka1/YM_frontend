@@ -43,7 +43,7 @@ export interface SearchMatch {
 }
 
 /** Up to five preview rows for one type plus the exact total behind them. */
-export interface SearchMatchGroup {
+interface SearchMatchGroup {
   items: SearchMatch[]
   total: number
 }
@@ -60,7 +60,7 @@ export type SearchMatchGroupKey =
 
 export type SearchMatchGroups = Record<SearchMatchGroupKey, SearchMatchGroup>
 
-export interface PaginatedClientMatches {
+interface PaginatedClientMatches {
   items: SearchClientMatch[]
   page: number
   page_size: number

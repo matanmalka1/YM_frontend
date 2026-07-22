@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentStatus, ListAdvancePaymentsOverviewParams } from '../api/contracts'
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
@@ -40,7 +39,6 @@ export const useAdvancePaymentBatchRows = ({
   const { data, isLoading, isFetching } = useQuery({
     queryKey: advancedPaymentsQK.overview(params),
     queryFn: () => advancePaymentsApi.overview(params),
-    staleTime: QUERY_STALE_TIME.default,
   })
 
   const rows = (data?.items ?? []).toSorted((first, second) => Number(second.missing_turnover) - Number(first.missing_turnover))

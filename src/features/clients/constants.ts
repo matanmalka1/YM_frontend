@@ -1,6 +1,7 @@
 import { makeLabelGetter, makeVariantGetter } from '../../utils/labels'
-import type { AdvancePaymentFrequency, ClientRecordResponse, ClientStatus, EntityType, VatType } from './api'
+import type { AdvancePaymentFrequency, ClientRecordResponse, ClientStatus, EntityType } from './api'
 import { CLIENTS_MESSAGES } from './messages'
+import { VAT_REPORTING_FREQUENCIES, VAT_REPORTING_FREQUENCY_LABELS } from '@/types/vatReporting'
 
 export const TURNOVER_SOURCE_LABELS: Record<string, string> = {
   reported: CLIENTS_MESSAGES.info.turnoverSourceReported,
@@ -69,7 +70,6 @@ export const CLIENT_DETAILS_TAB_LABELS: Record<ActiveClientDetailsTab, string> =
 export const ENTITY_TYPES = ['osek_patur', 'osek_murshe', 'company_ltd', 'employee'] as const satisfies readonly EntityType[]
 
 export const CREATE_ENTITY_TYPES = ['osek_patur', 'osek_murshe', 'company_ltd'] as const
-export type CreateEntityType = (typeof CREATE_ENTITY_TYPES)[number]
 
 export const CLIENT_ID_NUMBER_TYPE_LABELS: Record<ClientIdNumberType, string> = {
   individual: 'יחיד / עוסק',
@@ -103,13 +103,8 @@ export const CLIENT_STATUS_BADGE_VARIANTS = {
 } as const satisfies Record<ClientStatus, 'positive' | 'warning' | 'neutral'>
 export const getClientStatusBadgeVariant = makeVariantGetter(CLIENT_STATUS_BADGE_VARIANTS)
 
-export const VAT_TYPES = ['monthly', 'bimonthly', 'exempt'] as const satisfies readonly VatType[]
-
-export const VAT_TYPE_LABELS: Record<VatType, string> = {
-  monthly: 'חודשי',
-  bimonthly: 'דו-חודשי',
-  exempt: 'פטור',
-}
+export const VAT_TYPES = VAT_REPORTING_FREQUENCIES
+export const VAT_TYPE_LABELS = VAT_REPORTING_FREQUENCY_LABELS
 
 export const CLIENT_STATUS_OPTIONS = CLIENT_STATUSES.map((status) => ({
   value: status,
@@ -217,9 +212,6 @@ export const CREATE_CLIENT_VALIDATION_MESSAGES = {
   idChecksumIndividual: 'מספר תעודת זהות אינו תקין',
   streetContainsNumber: 'שדה הרחוב צריך להכיל שם בלבד — הזן מספר בניין בשדה הייעודי',
 } as const
-
-export const deriveCreateClientIdNumberType = (entityType: CreateEntityType): ClientIdNumberType =>
-  entityType === 'company_ltd' ? 'corporation' : 'individual'
 
 /**
  * Entity-type-driven field labels used across the create-client form steps and review.

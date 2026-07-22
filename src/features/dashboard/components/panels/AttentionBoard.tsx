@@ -1,6 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 import { Briefcase, CheckCircle2, ClipboardList, ReceiptText, ShieldAlert, Table2, TriangleAlert, Wallet } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { WORK_QUEUE_ROUTE } from '@/features/workQueue'
 import { cn, formatCurrencyILS, formatDate } from '@/utils/utils'
 import { semanticDotClasses, semanticStatToneClasses } from '@/utils/semanticColors'
 import type { AttentionBoardItem, AttentionUrgency } from '../../api/contracts'
@@ -142,7 +143,7 @@ export const AttentionBoard = ({ items, total }: AttentionBoardProps) => {
           action={
             !isEmpty && displayTotal > items.length ? (
               <Link
-                to="/work"
+                to={WORK_QUEUE_ROUTE}
                 className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-primary-700 transition-colors hover:bg-primary-50"
               >
                 {DASHBOARD_MESSAGES.attention.showAll}

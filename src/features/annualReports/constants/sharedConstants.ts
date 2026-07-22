@@ -1,22 +1,11 @@
-export const parseAnnualReportCalendarDate = (dateStr: string | null | undefined): Date | null => {
-  if (!dateStr) return null
-  const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/)
-  if (!match) return new Date(dateStr)
-  const [, year, month, day] = match
-  return new Date(Number(year), Number(month) - 1, Number(day))
-}
-
 export const TAX_YEAR_LIMITS = { min: 2015, max: 2099 }
 
-export const CLIENT_TYPE_OPTIONS = [
-  { value: 'individual', label: 'יחיד (טופס 1301)' },
-  { value: 'self_employed', label: 'עצמאי (טופס 1301)' },
-  { value: 'corporation', label: 'חברה (טופס 1214)' },
-  { value: 'public_institution', label: 'מלכ"ר / מוסד ציבורי (טופס 1215)' },
-  { value: 'partnership', label: 'שותף בשותפות (טופס 1301)' },
-  { value: 'control_holder', label: 'בעל שליטה (טופס 1301)' },
-  { value: 'exempt_dealer', label: 'עוסק פטור (טופס 1301)' },
-]
+import { CLIENT_TYPE_LABELS } from './display'
+
+export const CLIENT_TYPE_OPTIONS = Object.entries(CLIENT_TYPE_LABELS).map(([value, label]) => ({
+  value,
+  label: label.replace(/\((\d+)\)$/, '(טופס $1)'),
+}))
 
 export const DEADLINE_TYPE_OPTIONS = [
   { value: 'standard', label: 'סטנדרטי (29.05 ידני / 30.06 מקוון / 31.07 חברה)' },

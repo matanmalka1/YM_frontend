@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import {
-  canMutateVatInvoices,
+  canAddOrEditVatInvoices,
+  canDeleteVatInvoices,
   getVatInvoiceActionLabel,
   getVatInvoiceDisplayNumber,
   isGeneratedVatInvoiceNumber,
+  getVatInvoiceDefaultValues,
+  getVatInvoiceCreationWarning,
 } from './vatHelpers'
 import type { BackendAction } from '@/lib/actions/types'
 import type { VatInvoiceResponse } from '../api'
@@ -45,12 +48,31 @@ describe('VAT invoice display helpers', () => {
   })
 })
 
-describe('canMutateVatInvoices', () => {
-  it('uses backend available_actions as the source of truth for invoice row mutations', () => {
-    expect(canMutateVatInvoices([addInvoiceAction])).toBe(true)
+describe('VAT invoice capabilities', () => {
+  it('uses backend available_actions for add and edit access', () => {
+    expect(canAddOrEditVatInvoices([addInvoiceAction])).toBe(true)
   })
 
-  it('blocks invoice row mutations when the backend action is unavailable', () => {
-    expect(canMutateVatInvoices([])).toBe(false)
+  it('blocks add and edit when the backend action is unavailable', () => {
+    expect(canAddOrEditVatInvoices([])).toBe(false)
+  })
+
+  it('requires the advisor-only delete capability in addition to an editable work item', () => {
+    expect(canDeleteVatInvoices([addInvoiceAction], true)).toBe(true)
+    expect(canDeleteVatInvoices([addInvoiceAction], false)).toBe(false)
+  })
+})
+
+describe('VAT invoice defaults', () => {
+  it('uses the category supplied by backend metadata instead of a frontend-owned legal default', () => {
+    expect(getVatInvoiceDefaultValues('expense', 'canonical-category').expense_category).toBe('canonical-category')
+    expect(getVatInvoiceDefaultValues('expense').expense_category).toBeUndefined()
+  })
+})
+
+describe('VAT invoice creation feedback', () => {
+  it('preserves the backend OSEK-PATUR ceiling warning for display', () => {
+    expect(getVatInvoiceCreationWarning({ ceiling_warning: true })).toContain('תקרת')
+    expect(getVatInvoiceCreationWarning({ ceiling_warning: false })).toBeNull()
   })
 })

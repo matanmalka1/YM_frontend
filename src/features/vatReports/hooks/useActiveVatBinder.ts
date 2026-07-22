@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { bindersApi, bindersQK } from '@/features/binders'
+import { bindersApi, bindersQK } from '@/features/binders/api'
 import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 
 export const useActiveVatBinder = (clientRecordId: number) => {

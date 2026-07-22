@@ -48,11 +48,6 @@ export const documentsApi = {
     return response.data
   },
 
-  listByAnnualReport: async (reportId: number): Promise<DocumentVersionsResponse> => {
-    const response = await api.get<DocumentVersionsResponse>(DOCUMENT_ENDPOINTS.documentsByAnnualReport(reportId))
-    return response.data
-  },
-
   listByBinder: async (binderId: number, params?: ListDocumentsByBinderParams): Promise<PermanentDocumentListResponse> => {
     const response = await api.get<PermanentDocumentListResponse>(
       DOCUMENT_ENDPOINTS.documentsByBinder(binderId),

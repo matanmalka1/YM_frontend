@@ -1,7 +1,7 @@
 import { Link2Off } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { Select } from '@/components/ui/inputs/Select'
-import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client/ClientSearchInput'
+import { ClientSearchInput, SelectedClientDisplay } from '@/features/clients/public'
 import type { WorkQueueItem, WorkQueueSourceType } from '@/features/workQueue'
 import type { TaskSourceContext } from '../../types'
 import { TASKS_MESSAGES } from '../../messages'

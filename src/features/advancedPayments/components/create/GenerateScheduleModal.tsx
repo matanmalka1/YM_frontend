@@ -1,6 +1,6 @@
 import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
-import { ClientPickerField } from '@/components/shared/client/ClientPickerField'
+import { ClientPickerField } from '@/features/clients/public'
 import { useGenerateSchedule } from '../../hooks/useGenerateSchedule'
 import { ADVANCE_PAYMENT_FREQUENCY_PREFIX, ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT } from '../../constants'
 import { getMonthsCoveredLabel } from '@/constants/periodOptions.constants'

@@ -15,17 +15,17 @@ import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { ALL_PERIODS_OPTION } from '@/constants/filterOptions.constants'
 import { BINDER_NUMBER_SEARCH_PLACEHOLDER, CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 import { BINDERS_ERROR_MESSAGES } from '../errorMessages'
+import { createClientPickerFilter } from '@/features/clients/public'
 
 const buildBindersFilterFields = (includeClientPicker: boolean) => [
   ...(includeClientPicker
     ? [
-        {
-          type: 'client-picker' as const,
+        createClientPickerFilter({
           idKey: 'client_record_id',
           nameKey: 'client_name',
           label: 'לקוח',
           placeholder: CLIENT_SEARCH_PLACEHOLDER,
-        },
+        }),
       ]
     : []),
   {
@@ -291,6 +291,9 @@ export const useBindersPage = ({ pinnedClient }: UseBindersPageOptions = {}) => 
         vatType: receiveDrawer.vatType,
         onClientSelect: receiveDrawer.handleClientSelect,
         onClientQueryChange: receiveDrawer.handleClientQueryChange,
+        onBinderTypesChange: receiveDrawer.handleBinderTypesChange,
+        onBusinessChange: receiveDrawer.handleBusinessChange,
+        onPeriodMonthStartChange: receiveDrawer.handlePeriodMonthStartChange,
         onSubmit: receiveDrawer.handleSubmit,
         isSubmitting: receiveDrawer.isSubmitting,
       },

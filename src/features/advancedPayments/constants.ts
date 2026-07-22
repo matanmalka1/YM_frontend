@@ -4,6 +4,7 @@ import { getOperationalTaxYear, getOperationalYearOptions, MONTHS_COVERED_OPTION
 import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION, ALL_YEARS_URL_OPTION } from '@/constants/filterOptions.constants'
 import type { AdvancePaymentMethod, AdvancePaymentStatus } from './api/contracts'
 import { ADVANCED_PAYMENTS_MESSAGES } from './messages'
+import { createClientPickerFilter } from '@/features/clients/public'
 
 /** Backend signals a decision point, not a failure — see useAdvancePaymentMutations. */
 export const ADVANCE_PAYMENT_VAT_NOT_FILED_CODE = 'ADVANCE_PAYMENT.VAT_NOT_FILED'
@@ -76,7 +77,7 @@ const PERIOD_OPTIONS = [ALL_TYPES_OPTION, ...MONTHS_COVERED_OPTIONS]
 const YEAR_OPTIONS = [ALL_YEARS_URL_OPTION, ...getOperationalYearOptions()]
 
 export const ADVANCE_PAYMENTS_FILTER_FIELDS = [
-  { type: 'client-picker' as const, idKey: 'client_record_id', nameKey: 'client_name', label: 'לקוח' },
+  createClientPickerFilter({ idKey: 'client_record_id', nameKey: 'client_name', label: 'לקוח' }),
   {
     type: 'select' as const,
     key: 'year',

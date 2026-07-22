@@ -35,6 +35,7 @@ export type ClientDetailsOverviewTabProps = {
   client: ClientRecordResponse
   clientId: number
   canEditClients: boolean
+  canManageSignatureRequests: boolean
   updateClient: (payload: UpdateClientPayload) => Promise<void>
   isUpdating: boolean
   deleteClient: () => Promise<void>
@@ -47,6 +48,7 @@ export type ClientDetailsOverviewTabProps = {
 export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
   client,
   canEditClients,
+  canManageSignatureRequests,
   updateClient,
   isUpdating,
   deleteClient,
@@ -92,7 +94,7 @@ export const ClientDetailsOverviewTab: FC<ClientDetailsOverviewTabProps> = ({
         <div className="space-y-6">
           <AuthorityContactsCard clientId={client.id} />
           <CorrespondenceCard clientId={client.id} />
-          <SignatureRequestsCard client={client} canManage={canEditClients} />
+          <SignatureRequestsCard client={client} canManage={canManageSignatureRequests} />
         </div>
       )}
 

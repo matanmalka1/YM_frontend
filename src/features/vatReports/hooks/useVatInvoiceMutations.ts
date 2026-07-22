@@ -5,6 +5,7 @@ import { toast } from '../../../utils/toast'
 import { invalidateVatWorkItem } from './useVatInvalidation'
 import { VAT_MESSAGES } from '../messages'
 import { VAT_ERROR_MESSAGES } from '../errorMessages'
+import { getVatInvoiceCreationWarning } from '../utils/vatHelpers'
 
 const invalidateVatInvoiceQueries = async (queryClient: QueryClient, workItemId: number) => {
   await invalidateVatWorkItem(queryClient, {
@@ -36,17 +37,23 @@ export const useAddInvoice = (workItemId: number) => {
     onSuccess: async () => invalidateVatInvoiceQueries(queryClient, workItemId),
   })
 
-  const addInvoice = async (payload: CreateVatInvoicePayload): Promise<boolean> =>
-    runMutationWithFeedback(
-      () => mutation.mutateAsync(payload),
-      VAT_MESSAGES.mutations.invoiceAdded,
-      VAT_ERROR_MESSAGES.mutations.invoiceAddError,
-    )
+  const addInvoice = async (payload: CreateVatInvoicePayload): Promise<boolean> => {
+    try {
+      const invoice = await mutation.mutateAsync(payload)
+      toast.success(VAT_MESSAGES.mutations.invoiceAdded)
+      const warning = getVatInvoiceCreationWarning(invoice)
+      if (warning) toast.warning(warning)
+      return true
+    } catch (err) {
+      showErrorToast(err, VAT_ERROR_MESSAGES.mutations.invoiceAddError)
+      return false
+    }
+  }
 
   return { addInvoice, isAdding: mutation.isPending }
 }
 
-export const useDeleteInvoice = (workItemId: number) => {
+export const useDeleteInvoice = (workItemId: number, canDelete: boolean) => {
   const queryClient = useQueryClient()
 
   const mutation = useMutation({
@@ -54,12 +61,14 @@ export const useDeleteInvoice = (workItemId: number) => {
     onSuccess: async () => invalidateVatInvoiceQueries(queryClient, workItemId),
   })
 
-  const deleteInvoice = async (invoiceId: number): Promise<boolean> =>
-    runMutationWithFeedback(
+  const deleteInvoice = async (invoiceId: number): Promise<boolean> => {
+    if (!canDelete) return false
+    return runMutationWithFeedback(
       () => mutation.mutateAsync(invoiceId),
       VAT_MESSAGES.mutations.invoiceDeleted,
       VAT_ERROR_MESSAGES.mutations.invoiceDeleteError,
     )
+  }
 
   return { deleteInvoice, isDeleting: mutation.isPending }
 }

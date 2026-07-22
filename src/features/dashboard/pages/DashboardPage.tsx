@@ -2,15 +2,17 @@ import { ClipboardList, Wallet } from 'lucide-react'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
-import { ClientPickerField } from '@/components/shared/client/ClientPickerField'
+import { ClientPickerField } from '@/features/clients/public'
 import { CreateAdvancePaymentModal } from '@/features/advancedPayments'
 import { ChargesCreateModal } from '@/features/charges'
-import { CreateClientModal, DeletedClientDialog, type ClientRecordResponse } from '@/features/clients'
+import { CreateClientModal, DeletedClientDialog } from '@/features/clients'
 import { SignatureRequestsDashboardPanel } from '@/features/signatureRequests'
 import { VatWorkItemsCreateModal } from '@/features/vatReports'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
-import { AttentionBoard, DashboardOnboardingEmptyState, useDashboardPage } from '@/features/dashboard'
+import { AttentionBoard } from '../components/panels/AttentionBoard'
+import { DashboardOnboardingEmptyState } from '../components/shared/DashboardOnboardingEmptyState'
+import { useDashboardPage } from '../hooks/useDashboardPage'
 import { DASHBOARD_COPY, DASHBOARD_HREFS, VAT_STAT_LABELS } from '../constants'
 import { DashboardSurface } from '../components/shared/DashboardLayout'
 import { DashboardStatsSkeleton } from '../components/kpi/DashboardStatsSkeleton'
@@ -20,35 +22,13 @@ import { VatStatCard } from '../components/kpi/VatStatCard'
 import { OpenChargesCard } from '../components/panels/OpenChargesCard'
 import { SeasonInsightsCarousel } from '../components/panels/SeasonInsightsCarousel'
 import { UpcomingDeadlinesPanel } from '../components/panels/UpcomingDeadlinesPanel'
-import { useDashboardCreateModals } from '../hooks/useDashboardCreateModals'
 import { DASHBOARD_MESSAGES } from '../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 const AttentionSkeleton = () => <SkeletonBlock height="h-80" width="w-full" className="rounded-3xl" />
 
 export const DashboardPage: React.FC = () => {
-  const { attentionItems, dashboard, denied, isAdvisorView, emptyState, vatStats, recentActivity } = useDashboardPage()
-
-  const {
-    activeCreateModal,
-    setActiveCreateModal,
-    deletedClientInfo,
-    setDeletedClientInfo,
-    closeCreateModal,
-    chargeCreateMutation,
-    vatCreateMutation,
-    advancePaymentCreateMutation,
-    clientCreateMutation,
-    restoreClientMutation,
-    submitChargeCreate,
-    submitVatCreate,
-    submitAdvancePaymentCreate,
-    submitClientCreate,
-    chargeCreateError,
-    vatCreateError,
-    advancePaymentClientId,
-    advancePaymentClientPicker,
-  } = useDashboardCreateModals()
+  const { attentionItems, dashboard, denied, isAdvisorView, emptyState, vatStats, recentActivity, modals } = useDashboardPage()
 
   return (
     <DashboardSurface>
@@ -111,7 +91,7 @@ export const DashboardPage: React.FC = () => {
               <OpenChargesCard count={dashboard.data.open_charges_count} amountIls={dashboard.data.open_charges_amount_ils} />
             )}
             {vatStats && <SeasonInsightsCarousel vatStats={vatStats} />}
-            <QuickActionsPanel onOpenModal={setActiveCreateModal} />
+            <QuickActionsPanel onOpenModal={modals.openCreate} />
             <UpcomingDeadlinesPanel />
           </div>
         </div>
@@ -121,73 +101,30 @@ export const DashboardPage: React.FC = () => {
         !emptyState?.is_empty &&
         (dashboard.status === 'loading' ? <AttentionSkeleton /> : <AttentionBoard items={attentionItems} />)}
 
-      <ChargesCreateModal
-        open={activeCreateModal === 'charge'}
-        createError={chargeCreateError}
-        createLoading={chargeCreateMutation.isPending}
-        onClose={closeCreateModal}
-        onSubmit={submitChargeCreate}
-      />
-      <VatWorkItemsCreateModal
-        open={activeCreateModal === 'vat'}
-        createError={vatCreateError}
-        createLoading={vatCreateMutation.isPending}
-        onClose={closeCreateModal}
-        onSubmit={submitVatCreate}
-      />
+      <ChargesCreateModal {...modals.chargeProps} />
+      <VatWorkItemsCreateModal {...modals.vatProps} />
       <Modal
-        open={activeCreateModal === 'advancePayment' && advancePaymentClientId === null}
+        open={modals.advancePaymentClientPickerProps.open}
         title={DASHBOARD_MESSAGES.modals.chooseAdvancePaymentClient}
         className="min-h-[240px]"
-        onClose={closeCreateModal}
+        onClose={modals.advancePaymentClientPickerProps.onClose}
         footer={
-          <Button variant="outline" onClick={closeCreateModal}>
+          <Button variant="outline" onClick={modals.advancePaymentClientPickerProps.onClose}>
             {GLOBAL_UI_MESSAGES.actions.cancel}
           </Button>
         }
       >
         <ClientPickerField
-          selectedClient={advancePaymentClientPicker.selectedClient}
-          clientQuery={advancePaymentClientPicker.clientQuery}
-          onQueryChange={advancePaymentClientPicker.handleClientQueryChange}
-          onSelect={advancePaymentClientPicker.handleSelectClient}
-          onClear={advancePaymentClientPicker.handleClearClient}
+          selectedClient={modals.advancePaymentClientPickerProps.picker.selectedClient}
+          clientQuery={modals.advancePaymentClientPickerProps.picker.clientQuery}
+          onQueryChange={modals.advancePaymentClientPickerProps.picker.handleClientQueryChange}
+          onSelect={modals.advancePaymentClientPickerProps.picker.handleSelectClient}
+          onClear={modals.advancePaymentClientPickerProps.picker.handleClearClient}
         />
       </Modal>
-      {activeCreateModal === 'advancePayment' && advancePaymentClientId !== null && (
-        <CreateAdvancePaymentModal
-          open={true}
-          clientRecordId={advancePaymentClientId}
-          year={getOperationalTaxYear()}
-          isCreating={advancePaymentCreateMutation.isPending}
-          onClose={closeCreateModal}
-          onCreate={submitAdvancePaymentCreate}
-        />
-      )}
-      <CreateClientModal
-        open={activeCreateModal === 'client' && deletedClientInfo === null}
-        onClose={closeCreateModal}
-        onSubmit={submitClientCreate}
-        onRestoreDeletedClient={async (clientId): Promise<ClientRecordResponse> => {
-          const restored = await restoreClientMutation.mutateAsync(clientId)
-          return restored
-        }}
-        isAdvisor={isAdvisorView}
-        isLoading={clientCreateMutation.isPending}
-        restoreLoading={restoreClientMutation.isPending}
-      />
-      <DeletedClientDialog
-        open={deletedClientInfo !== null}
-        deletedClient={deletedClientInfo}
-        isAdvisor={isAdvisorView}
-        onRestore={() => {
-          if (deletedClientInfo) restoreClientMutation.mutate(deletedClientInfo.id)
-        }}
-        onForceCreate={() => setDeletedClientInfo(null)}
-        onDismiss={() => setDeletedClientInfo(null)}
-        restoreLoading={restoreClientMutation.isPending}
-        forceCreateLoading={false}
-      />
+      {modals.advancePaymentProps && <CreateAdvancePaymentModal {...modals.advancePaymentProps} year={getOperationalTaxYear()} />}
+      <CreateClientModal {...modals.clientProps} />
+      <DeletedClientDialog {...modals.deletedClientProps} />
     </DashboardSurface>
   )
 }

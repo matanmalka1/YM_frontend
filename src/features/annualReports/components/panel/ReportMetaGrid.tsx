@@ -1,6 +1,6 @@
 import type { AnnualReportFull } from '../../api'
 import { DefinitionList } from '../../../../components/ui/layout/DefinitionList'
-import { getClientTypeLabel } from '../../utils/panelHelpers'
+import { getClientTypeLabel } from '../../constants/display'
 import { formatDate } from '@/utils/utils'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
@@ -13,7 +13,7 @@ export const ReportMetaGrid = ({ report }: ReportMetaGridProps) => (
     columns={2}
     items={[
       { label: ANNUAL_REPORTS_MESSAGES.reportMetaGrid.taxYear, value: report.tax_year },
-      { label: ANNUAL_REPORTS_MESSAGES.reportMetaGrid.clientType, value: getClientTypeLabel(report) },
+      { label: ANNUAL_REPORTS_MESSAGES.reportMetaGrid.clientType, value: getClientTypeLabel(report.client_type) },
       {
         label: ANNUAL_REPORTS_MESSAGES.reportMetaGrid.formTypeHeader,
         value: report.form_type ? ANNUAL_REPORTS_MESSAGES.reportMetaGrid.formTypeValue(report.form_type) : '—',

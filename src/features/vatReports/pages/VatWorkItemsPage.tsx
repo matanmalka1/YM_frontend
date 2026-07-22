@@ -1,12 +1,10 @@
 import { Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageContent } from '@/components/layout/PageContent'
-import {
-  useVatWorkItemsPage,
-  VatWorkItemsCreateModal,
-  VatWorkItemsGroupedCards,
-  VatWorkItemsStatsSection,
-} from '@/features/vatReports'
+import { useVatWorkItemsPage } from '../hooks/useVatWorkItemsPage'
+import { VatWorkItemsCreateModal } from '../components/form/VatWorkItemsCreateModal'
+import { VatWorkItemsGroupedCards } from '../components/list/VatWorkItemsGroupedCards'
+import { VatWorkItemsStatsSection } from '../components/list/VatWorkItemsStatsSection'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Button } from '@/components/ui/primitives/Button'
@@ -21,7 +19,7 @@ export const VatWorkItems: React.FC = () => {
       <PageHeader
         {...headerProps}
         actions={
-          permissions.isAdvisor ? (
+          permissions.canCreateVatWorkItem ? (
             <Button variant="primary" size="sm" icon={<Plus className="h-4 w-4" />} onClick={modals.openCreate}>
               {VAT_MESSAGES.actions.newVatReport}
             </Button>
@@ -29,7 +27,7 @@ export const VatWorkItems: React.FC = () => {
         }
       />
 
-      {!permissions.isAdvisor && <Alert variant="info" message={VAT_MESSAGES.list.viewOnlyNotice} />}
+      {!permissions.canCreateVatWorkItem && <Alert variant="info" message={VAT_MESSAGES.list.viewOnlyNotice} />}
 
       {stats.visible && <VatWorkItemsStatsSection stats={stats} />}
 

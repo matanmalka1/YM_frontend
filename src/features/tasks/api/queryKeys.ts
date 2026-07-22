@@ -16,7 +16,6 @@ const normalizeParams = (params?: TaskListParams) => ({
 
 export const tasksQK = {
   all: ['tasks'] as const,
-  lists: ['tasks', 'list'] as const,
   list: (params?: TaskListParams) => ['tasks', 'list', normalizeParams(params)] as const,
   detail: (id: number) => ['tasks', 'detail', id] as const,
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useClientPickerState } from '@/components/shared/client/useClientPickerState'
-import { useTaxProfile } from '@/features/taxProfile'
+import { useClientPickerState } from '@/features/clients/public'
+import { useAdvancePaymentClientConfig } from './useAdvancePaymentClientConfig'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import type { CreateAdvancePaymentPayload } from '../api/contracts'
 import { toast } from '@/utils/toast'
@@ -17,7 +17,7 @@ export const useCreateAdvancePayment = () => {
     onClear: () => setClientRecordId(null),
   })
 
-  const { profile } = useTaxProfile(clientRecordId ?? 0)
+  const { config: profile } = useAdvancePaymentClientConfig(clientRecordId ?? 0)
   const frequency: 1 | 2 | null =
     profile?.advance_payment_frequency === 'bimonthly' ? 2 : profile?.advance_payment_frequency === 'monthly' ? 1 : null
 

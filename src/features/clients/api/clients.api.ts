@@ -152,9 +152,4 @@ export const clientsApi = {
   deleteBusiness: async (clientId: number, businessId: number): Promise<void> => {
     await api.delete(BUSINESS_ENDPOINTS.businessById(clientId, businessId))
   },
-
-  restoreBusiness: async (clientId: number, businessId: number): Promise<BusinessResponse> => {
-    const response = await api.post<BusinessResponse>(BUSINESS_ENDPOINTS.businessRestore(clientId, businessId))
-    return response.data
-  },
 }

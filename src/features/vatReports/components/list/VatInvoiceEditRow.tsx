@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, X } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { Input } from '@/components/ui/inputs/Input'
-import { SelectDropdown } from '@/components/ui/inputs/SelectDropdown'
+import { Select } from '@/components/ui/inputs/Select'
 import { DatePicker } from '@/components/ui/inputs/DatePicker'
 import {
   vatInvoiceEditSchema,
@@ -11,12 +11,11 @@ import {
   toInvoiceEditPayload,
   type VatInvoiceEditValues,
 } from '../../schemas/invoice.schema'
-import { EXPENSE_CATEGORIES, CATEGORY_COLORS, VAT_EXPENSE_CATEGORY_OPTIONS } from '../../constants/vatConstants'
+import { CATEGORY_COLORS } from '../../constants/vatConstants'
 import {
   formatVatAmount,
   getVatDeductionRateClass,
   getVatDeductionRateLabel,
-  getVatInvoiceGrossAmount,
   isGeneratedVatInvoiceNumber,
   toDateInputValue,
 } from '../../utils/vatHelpers'
@@ -25,6 +24,7 @@ import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { blockNonNumericKey } from '../../utils/viewHelpers'
 import { VAT_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { useVatDeductionMetadata } from '../../hooks/useVatDeductionMetadata'
 
 export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
   invoice,
@@ -35,11 +35,12 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
   isSaving,
 }) => {
   const counterpartyIdType = isCounterpartyIdType(invoice.counterparty_id_type) ? invoice.counterparty_id_type : undefined
+  const { categoryOptions } = useVatDeductionMetadata()
 
   const { register, handleSubmit, control } = useForm<VatInvoiceEditValues>({
     resolver: zodResolver(vatInvoiceEditSchema),
     defaultValues: {
-      gross_amount: getVatInvoiceGrossAmount(invoice.net_amount, invoice.vat_amount),
+      gross_amount: invoice.gross_amount,
       expense_category: invoice.expense_category ?? undefined,
       invoice_number: isGeneratedVatInvoiceNumber(invoice) ? '' : invoice.invoice_number,
       invoice_date: toDateInputValue(invoice.invoice_date),
@@ -54,7 +55,7 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
     if (ok) onCancel()
   }
 
-  const watchedCategory = useWatch({ control, name: 'expense_category' }) ?? EXPENSE_CATEGORIES[0]
+  const watchedCategory = useWatch({ control, name: 'expense_category' })
   const catColor = watchedCategory ? CATEGORY_COLORS[watchedCategory] : ''
   const handleEscapeKeyDown: React.KeyboardEventHandler<HTMLElement> = (e) => {
     if (e.key === 'Escape') {
@@ -107,7 +108,7 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
               control={control}
               name="expense_category"
               render={({ field }) => (
-                <SelectDropdown
+                <Select
                   name={field.name}
                   value={field.value}
                   onChange={field.onChange}
@@ -115,7 +116,7 @@ export const VatInvoiceEditRow: React.FC<VatInvoiceEditRowProps> = ({
                   onKeyDown={handleEscapeKeyDown}
                   size="xs"
                   className="flex-1"
-                  options={VAT_EXPENSE_CATEGORY_OPTIONS}
+                  options={categoryOptions}
                 />
               )}
             />

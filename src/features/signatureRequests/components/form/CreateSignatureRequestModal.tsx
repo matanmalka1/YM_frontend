@@ -1,21 +1,20 @@
 import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Modal } from '../../../../components/ui/overlays/Modal'
 import { ModalFormActions } from '../../../../components/ui/overlays/ModalFormActions'
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
 import { Textarea } from '../../../../components/ui/inputs/Textarea'
-import { ClientSearchInput, SelectedClientDisplay } from '@/components/shared/client'
-import type { CreateSignatureRequestPayload, SignatureRequestType } from '../../api'
-import { getSignatureRequestTypeLabel } from '../../constants'
+import { ClientSearchInput, SelectedClientDisplay } from '@/features/clients/public'
+import type { CreateSignatureRequestPayload } from '../../api'
+import { getSignatureRequestTypeLabel, SIGNATURE_REQUEST_TYPE_VALUES } from '../../constants'
 import { SIGNATURE_REQUESTS_MESSAGES } from '../../messages'
-
-const REQUEST_TYPES: SignatureRequestType[] = [
-  'engagement_agreement',
-  'annual_report_approval',
-  'power_of_attorney',
-  'vat_return_approval',
-  'custom',
-]
+import {
+  signatureRequestCreateFormSchema,
+  toCreateSignatureRequestPayload,
+  type SignatureRequestCreateFormValues,
+} from '../../schemas'
 const CREATE_SIGNATURE_REQUEST_FORM_ID = 'create-signature-request-form'
 
 interface Props {
@@ -36,6 +35,7 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
   businessId,
   signerName: initialSignerName = '',
   signerEmail,
+  signerPhone,
   isLoading,
   onClose,
   onCreate,
@@ -46,42 +46,48 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
     office_client_number?: number | null
   } | null>(initialClientId != null ? { id: initialClientId, name: initialSignerName } : null)
   const [clientQuery, setClientQuery] = useState('')
-  const [requestType, setRequestType] = useState<SignatureRequestType>('engagement_agreement')
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [overrideName, setOverrideName] = useState(initialSignerName)
-  const [overrideEmail, setOverrideEmail] = useState(signerEmail ?? '')
-
-  const resolvedClientId = initialClientId ?? selectedClient?.id
-  const resolvedSignerName = initialSignerName || selectedClient?.name || ''
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<SignatureRequestCreateFormValues>({
+    resolver: zodResolver(signatureRequestCreateFormSchema),
+    defaultValues: {
+      client_record_id: initialClientId,
+      request_type: 'engagement_agreement',
+      title: '',
+      description: '',
+      signer_name: initialSignerName,
+      signer_email: signerEmail ?? '',
+      signer_phone: signerPhone ?? '',
+    },
+  })
 
   const handleClose = () => {
     onClose()
-    setTitle('')
-    setDescription('')
-    setOverrideName(initialSignerName)
-    setOverrideEmail(signerEmail ?? '')
+    reset({
+      client_record_id: initialClientId,
+      request_type: 'engagement_agreement',
+      title: '',
+      description: '',
+      signer_name: initialSignerName,
+      signer_email: signerEmail ?? '',
+      signer_phone: signerPhone ?? '',
+    })
     if (initialClientId == null) {
       setSelectedClient(null)
       setClientQuery('')
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const resolvedSignerNameFinal = overrideName.trim() || resolvedSignerName
-    if (!title.trim() || !resolvedClientId || !resolvedSignerNameFinal) return
-    await onCreate({
-      client_record_id: resolvedClientId,
-      business_id: businessId,
-      request_type: requestType,
-      title: title.trim(),
-      description: description.trim() || undefined,
-      signer_name: resolvedSignerNameFinal,
-      signer_email: overrideEmail.trim() || undefined,
-    })
+  const submit = handleSubmit(async (values) => {
+    const parsed = signatureRequestCreateFormSchema.parse(values)
+    await onCreate(toCreateSignatureRequestPayload(parsed, businessId))
     handleClose()
-  }
+  })
 
   return (
     <Modal
@@ -99,7 +105,7 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
         />
       }
     >
-      <form id={CREATE_SIGNATURE_REQUEST_FORM_ID} onSubmit={handleSubmit} className="space-y-4">
+      <form id={CREATE_SIGNATURE_REQUEST_FORM_ID} onSubmit={submit} className="space-y-4">
         {initialClientId == null &&
           (selectedClient ? (
             <SelectedClientDisplay
@@ -108,7 +114,8 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
               onClear={() => {
                 setSelectedClient(null)
                 setClientQuery('')
-                setOverrideName('')
+                setValue('client_record_id', 0, { shouldValidate: true })
+                setValue('signer_name', '')
               }}
             />
           ) : (
@@ -117,32 +124,39 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
               onChange={setClientQuery}
               onSelect={(c) => {
                 setSelectedClient({ id: c.id, name: c.name, office_client_number: c.office_client_number })
-                setOverrideName(c.name)
+                setValue('client_record_id', c.id, { shouldValidate: true })
+                setValue('signer_name', c.name)
                 setClientQuery(c.name)
               }}
             />
           ))}
-        <Select
-          label={SIGNATURE_REQUESTS_MESSAGES.form.documentType}
-          value={requestType}
-          onChange={(e) => setRequestType(e.target.value as SignatureRequestType)}
-          options={REQUEST_TYPES.map((t) => ({
-            value: t,
-            label: getSignatureRequestTypeLabel(t),
-          }))}
-          required
+        <Controller
+          control={control}
+          name="request_type"
+          render={({ field }) => (
+            <Select
+              label={SIGNATURE_REQUESTS_MESSAGES.form.documentType}
+              name={field.name}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              options={SIGNATURE_REQUEST_TYPE_VALUES.map((type) => ({
+                value: type,
+                label: getSignatureRequestTypeLabel(type),
+              }))}
+            />
+          )}
         />
         <Input
+          {...register('title')}
           label={SIGNATURE_REQUESTS_MESSAGES.form.requestTitle}
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          error={errors.title?.message}
           placeholder={SIGNATURE_REQUESTS_MESSAGES.form.titlePlaceholder}
-          required
         />
         <Textarea
+          {...register('description')}
           label={SIGNATURE_REQUESTS_MESSAGES.form.description}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          error={errors.description?.message}
           placeholder={SIGNATURE_REQUESTS_MESSAGES.form.descriptionPlaceholder}
           rows={3}
         />
@@ -150,18 +164,24 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
           <p className="text-xs text-gray-500 mb-3">{SIGNATURE_REQUESTS_MESSAGES.form.signerDetails}</p>
           <div className="grid grid-cols-2 gap-3">
             <Input
+              {...register('signer_name')}
               label={SIGNATURE_REQUESTS_MESSAGES.form.signerName}
-              value={overrideName}
-              onChange={(e) => setOverrideName(e.target.value)}
-              placeholder={resolvedSignerName}
-              required
+              error={errors.signer_name?.message}
+              placeholder={initialSignerName || selectedClient?.name || ''}
             />
             <Input
+              {...register('signer_email')}
               label={SIGNATURE_REQUESTS_MESSAGES.form.signerEmail}
-              value={overrideEmail}
-              onChange={(e) => setOverrideEmail(e.target.value)}
+              error={errors.signer_email?.message}
               placeholder={signerEmail ?? ''}
               type="email"
+            />
+            <Input
+              {...register('signer_phone')}
+              label={SIGNATURE_REQUESTS_MESSAGES.form.signerPhone}
+              placeholder={signerPhone ?? ''}
+              type="tel"
+              dir="ltr"
             />
           </div>
         </div>

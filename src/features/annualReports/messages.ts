@@ -220,7 +220,7 @@ export const ANNUAL_REPORTS_MESSAGES = {
     loading: 'טוען ניכויים...',
     recognizedDeductionsTitle: 'ניכויים מוכרים',
     empty: 'אין ניכויים להצגה',
-    recognizedPercent: (rate: number) => `${rate}% מוכר`,
+    recognizedPercent: (rate: string) => `${rate} מוכר`,
   },
   bracketsTable: {
     rateHeader: 'מדרגה',
@@ -258,6 +258,12 @@ export const ANNUAL_REPORTS_MESSAGES = {
   creditsPanel: {
     loading: 'טוען זיכויים...',
     title: 'זיכויי מס אישיים',
+    creditPoints: 'נקודות זיכוי',
+    creditPointsDescription: (points: string) => `${points} נקודות לפי חישוב השרת`,
+    donations: 'זיכוי תרומות',
+    donationsDescription: 'לפי כללי שנת המס',
+    other: 'זיכויים אחרים',
+    otherDescription: 'זיכויים נוספים שהוזנו בדוח',
     total: 'סה"כ זיכויים',
   },
   annexDataTable: {

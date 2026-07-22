@@ -5,10 +5,10 @@ import type {
   AnnualReportFull,
   AnnualReportListResponse,
   AnnualReportListItem,
-  AnnualReportChargesResponse,
   AnnualReportScheduleKey,
   CreateAnnualReportPayload,
   ReportDetailResponse,
+  AnnualReportDetailUpdatePayload,
   ScheduleEntry,
   AnnexDataPagedResponse,
   AnnexDataLine,
@@ -52,16 +52,6 @@ export const annualReportsApi = {
     return response.data.items
   },
 
-  listReportCharges: async (
-    reportId: number,
-    params: { page?: number; page_size?: number } = {},
-  ): Promise<AnnualReportChargesResponse> => {
-    const response = await api.get<AnnualReportChargesResponse>(ANNUAL_REPORT_ENDPOINTS.charges(reportId), {
-      params: toQueryParams(params),
-    })
-    return response.data
-  },
-
   addSchedule: async (
     reportId: number,
     payload: { schedule: AnnualReportScheduleKey; notes?: string | null },
@@ -77,7 +67,7 @@ export const annualReportsApi = {
     return response.data
   },
 
-  patchReportDetails: async (reportId: number, payload: Partial<ReportDetailResponse>): Promise<ReportDetailResponse> => {
+  patchReportDetails: async (reportId: number, payload: AnnualReportDetailUpdatePayload): Promise<ReportDetailResponse> => {
     const response = await api.patch<ReportDetailResponse>(ANNUAL_REPORT_ENDPOINTS.details(reportId), payload)
     return response.data
   },

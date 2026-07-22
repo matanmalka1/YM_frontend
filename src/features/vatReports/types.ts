@@ -100,6 +100,7 @@ export interface VatSummaryTabProps {
 export interface VatInvoiceTableProps {
   invoices: VatInvoiceResponse[]
   canEdit: boolean
+  canDelete: boolean
   workItemId: number
   sectionType: 'income' | 'expense'
   emptyMessage?: string

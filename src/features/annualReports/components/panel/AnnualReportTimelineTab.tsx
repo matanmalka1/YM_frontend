@@ -1,8 +1,8 @@
 import { EntityAuditTrailSection, type FieldValueLabels } from '@/features/audit'
-import { STATUS_LABELS, SCHEDULE_LABELS } from '../../api'
-import { CLIENT_TYPE_LABELS } from '../../constants/panelConstants'
+import { STATUS_LABELS, SCHEDULE_LABELS } from '../../constants/display'
+import { CLIENT_TYPE_LABELS } from '../../constants/display'
 import { ANNEX_FIELD_LABELS } from '../../constants/annexConstants'
-import type { AnnualReportDetail } from '../../types'
+import type { AnnualReportFull } from '../../api'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 
 const AUDIT_FIELD_VALUE_LABELS: FieldValueLabels = {
@@ -12,7 +12,7 @@ const AUDIT_FIELD_VALUE_LABELS: FieldValueLabels = {
 }
 
 interface AnnualReportTimelineTabProps {
-  report: AnnualReportDetail
+  report: AnnualReportFull
 }
 
 export const AnnualReportTimelineTab = ({ report }: AnnualReportTimelineTabProps) => {

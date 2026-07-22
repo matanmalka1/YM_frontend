@@ -5,7 +5,7 @@ import { advancePaymentsApi, advancedPaymentsQK, type CreateAdvancePaymentPayloa
 import { type CreateChargePayload, useChargeCreateMutation } from '@/features/charges'
 import { CLIENT_ROUTES, clientsApi, clientsQK, extractClientErrorCode } from '@/features/clients'
 import { vatReportsApi, vatReportsQK, type CreateVatWorkItemPayload } from '@/features/vatReports'
-import { useClientPickerState } from '@/components/shared/client/useClientPickerState'
+import { useClientPickerState } from '@/features/clients/public'
 import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { dashboardQK } from '../api/queryKeys'
@@ -21,7 +21,7 @@ type DeletedClientInfo = {
   deleted_at: string
 }
 
-export const useDashboardCreateModals = () => {
+export const useDashboardCreateModals = (isAdvisor: boolean) => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [activeCreateModal, setActiveCreateModal] = useState<DashboardCreateModal | null>(null)
@@ -129,26 +129,58 @@ export const useDashboardCreateModals = () => {
   }
 
   return {
-    activeCreateModal,
-    setActiveCreateModal,
-    deletedClientInfo,
-    setDeletedClientInfo,
-    closeCreateModal,
-    chargeCreateMutation,
-    vatCreateMutation,
-    advancePaymentCreateMutation,
-    clientCreateMutation,
-    restoreClientMutation,
-    submitChargeCreate,
-    submitVatCreate,
-    submitAdvancePaymentCreate,
-    submitClientCreate,
-    advancePaymentClientId,
-    setAdvancePaymentClientId,
-    advancePaymentClientPicker,
-    chargeCreateError: chargeCreateMutation.error
-      ? getErrorMessage(chargeCreateMutation.error, DASHBOARD_ERROR_MESSAGES.chargeCreate)
-      : null,
-    vatCreateError: vatCreateMutation.error ? getErrorMessage(vatCreateMutation.error, DASHBOARD_ERROR_MESSAGES.vatCreate) : null,
+    openCreate: setActiveCreateModal,
+    chargeProps: {
+      open: activeCreateModal === 'charge',
+      createError: chargeCreateMutation.error
+        ? getErrorMessage(chargeCreateMutation.error, DASHBOARD_ERROR_MESSAGES.chargeCreate)
+        : null,
+      createLoading: chargeCreateMutation.isPending,
+      onClose: closeCreateModal,
+      onSubmit: submitChargeCreate,
+    },
+    vatProps: {
+      open: activeCreateModal === 'vat',
+      createError: vatCreateMutation.error ? getErrorMessage(vatCreateMutation.error, DASHBOARD_ERROR_MESSAGES.vatCreate) : null,
+      createLoading: vatCreateMutation.isPending,
+      onClose: closeCreateModal,
+      onSubmit: submitVatCreate,
+    },
+    advancePaymentClientPickerProps: {
+      open: activeCreateModal === 'advancePayment' && advancePaymentClientId === null,
+      onClose: closeCreateModal,
+      picker: advancePaymentClientPicker,
+    },
+    advancePaymentProps:
+      activeCreateModal === 'advancePayment' && advancePaymentClientId !== null
+        ? {
+            open: true,
+            clientRecordId: advancePaymentClientId,
+            isCreating: advancePaymentCreateMutation.isPending,
+            onClose: closeCreateModal,
+            onCreate: submitAdvancePaymentCreate,
+          }
+        : null,
+    clientProps: {
+      open: activeCreateModal === 'client' && deletedClientInfo === null,
+      onClose: closeCreateModal,
+      onSubmit: submitClientCreate,
+      onRestoreDeletedClient: (clientId: number) => restoreClientMutation.mutateAsync(clientId),
+      isAdvisor,
+      isLoading: clientCreateMutation.isPending,
+      restoreLoading: restoreClientMutation.isPending,
+    },
+    deletedClientProps: {
+      open: deletedClientInfo !== null,
+      deletedClient: deletedClientInfo,
+      isAdvisor,
+      onRestore: () => {
+        if (deletedClientInfo) restoreClientMutation.mutate(deletedClientInfo.id)
+      },
+      onForceCreate: () => setDeletedClientInfo(null),
+      onDismiss: () => setDeletedClientInfo(null),
+      restoreLoading: restoreClientMutation.isPending,
+      forceCreateLoading: false,
+    },
   }
 }

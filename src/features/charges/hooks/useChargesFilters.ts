@@ -1,7 +1,7 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useState } from 'react'
-import { useFilterClient } from '@/features/clients'
-import type { BusinessResponse } from '@/features/clients'
+import { useFilterClient, type BusinessResponse } from '@/features/clients/public'
+import { createClientPickerFilter } from '@/features/clients/public'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
 import { CHARGE_STATUS_OPTIONS, CHARGE_TYPE_OPTIONS_WITH_ALL, CHARGE_PERIOD_OPTIONS } from '../constants'
 import { getChargeBusinessLabel } from '../utils/chargeUtils'
@@ -21,7 +21,10 @@ const COMMON_FIELDS: FilterFieldDef[] = [
   },
 ]
 
-const FIELDS: FilterFieldDef[] = [{ type: 'client-picker', idKey: 'client_record_id', nameKey: 'client_name' }, ...COMMON_FIELDS]
+const FIELDS: FilterFieldDef[] = [
+  createClientPickerFilter({ idKey: 'client_record_id', nameKey: 'client_name' }),
+  ...COMMON_FIELDS,
+]
 
 interface PinnedBusinessFilter {
   businesses: BusinessResponse[]

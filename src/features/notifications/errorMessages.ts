@@ -1,5 +1,6 @@
 export const NOTIFICATIONS_ERROR_MESSAGES = {
   form: {
+    metadataLoad: 'לא ניתן לטעון את סוגי ההודעות. נסו שוב.',
     clientRequired: 'יש לבחור לקוח',
     blockedFallback: 'שליחת ההודעה חסומה',
     previewError: 'שגיאה בטעינת תצוגה מקדימה',

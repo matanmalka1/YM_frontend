@@ -4,9 +4,8 @@ import { Button } from '../../../../components/ui/primitives/Button'
 import { Card } from '../../../../components/ui/primitives/Card'
 import { StatusBadge } from '../../../../components/ui/primitives/StatusBadge'
 import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
-import { getSignatureRequestTypeLabel, getSignatureRequestStatusLabel } from '../../constants'
+import { SIGNATURE_REQUEST_STATUS_VARIANTS, getSignatureRequestTypeLabel, getSignatureRequestStatusLabel } from '../../constants'
 import { formatDate, formatDateTime, showErrorToast } from '../../../../utils/utils'
-import { signatureRequestStatusVariants } from '../../utils'
 import { SignatureRequestRowActions } from './SignatureRequestRowActions'
 import type { SignatureRequestResponse } from '../../api'
 import { SIGNATURE_REQUESTS_MESSAGES } from '../../messages'
@@ -70,7 +69,7 @@ export const SignatureRequestRow: React.FC<SignatureRequestRowProps> = ({
             <StatusBadge
               status={request.status}
               getLabel={getSignatureRequestStatusLabel}
-              variantMap={signatureRequestStatusVariants}
+              variantMap={SIGNATURE_REQUEST_STATUS_VARIANTS}
             />
           </div>
           <p className="mt-0.5 text-xs text-gray-500">

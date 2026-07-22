@@ -2,18 +2,7 @@ import type { AnnualReportFull } from './api'
 import type { AnnualReportStatus, StatusTransitionPayload } from './api'
 import type { ChangeEvent } from 'react'
 
-type StageKey = 'material_collection' | 'in_progress' | 'final_review' | 'client_signature' | 'transmitted' | 'post_submission'
-
-export const CURRENT_YEAR = new Date().getFullYear()
-
 export type SectionKey = 'overview' | 'financials' | 'tax' | 'deductions' | 'annex' | 'timeline'
-
-export interface AnnualReportDetail extends AnnualReportFull {
-  client_approved_at: string | null
-  internal_notes: string | null
-  stage?: StageKey
-  due_date?: string | null
-}
 
 export interface TransitionForm {
   note: string

@@ -180,6 +180,7 @@ export const VAT_MESSAGES = {
     sendBackSuccess: 'התיק הוחזר לתיקון',
     filingSuccess: 'התיק הוגש בהצלחה',
     invoiceAdded: 'החשבונית נוספה בהצלחה',
+    osekPaturCeilingWarning: 'מחזור העסק מתקרב לתקרת עוסק פטור',
     invoiceDeleted: 'החשבונית נמחקה',
     workItemDeleted: 'התיק נמחק בהצלחה',
     invoiceUpdated: 'החשבונית עודכנה',

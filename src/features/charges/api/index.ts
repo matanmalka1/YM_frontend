@@ -1,6 +1,5 @@
 export { chargesApi } from './charges.api'
 export { chargesQK } from './queryKeys'
-export { CHARGE_ROUTES } from './endpoints'
 export type {
   ChargeListItem,
   ChargeResponse,

@@ -1,6 +1,5 @@
 import { useState, type FormEvent } from 'react'
 import type { ExpenseCategoryType, ExpenseLineResponse, IncomeLineResponse, IncomeSourceType } from '../api'
-import { DEFAULT_RECOGNITION_RATE } from '../constants/financialConstants'
 import {
   buildExpensePayload,
   buildIncomePayload,
@@ -48,9 +47,7 @@ export const useExpenseLineForm = (initial?: ExpenseLineResponse, onSubmit?: (pa
   const [category, setCategory] = useState<ExpenseCategoryType | ''>(initial?.category ?? '')
   const [amount, setAmount] = useState(initial ? String(initial.amount) : '')
   const [description, setDescription] = useState(initial?.description ?? '')
-  const [recognitionRate, setRecognitionRate] = useState(
-    initial ? String(Number(initial.recognition_rate) * 100) : DEFAULT_RECOGNITION_RATE,
-  )
+  const [recognitionRate, setRecognitionRate] = useState(initial ? String(Number(initial.recognition_rate) * 100) : '')
   const [documentReference, setDocumentReference] = useState(initial?.external_document_reference ?? '')
   const [error, setError] = useState<string | null>(null)
 
@@ -58,7 +55,7 @@ export const useExpenseLineForm = (initial?: ExpenseLineResponse, onSubmit?: (pa
     setCategory('')
     setAmount('')
     setDescription('')
-    setRecognitionRate(DEFAULT_RECOGNITION_RATE)
+    setRecognitionRate('')
     setDocumentReference('')
     setError(null)
   }

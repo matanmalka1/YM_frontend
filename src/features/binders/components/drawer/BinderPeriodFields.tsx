@@ -1,17 +1,18 @@
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import { Select } from '@/components/ui/inputs/Select'
 import { BIMONTHLY_START_MONTH_VALUES, MONTH_OPTIONS, getOperationalYearOptions } from '@/constants/periodOptions.constants'
-import type { ReceiveBinderFormValues } from '../../schemas'
+import type { ReceiveBinderFormInput, ReceiveBinderFormValues } from '../../schemas'
 import { PERIODIC_BINDER_TYPES, type BinderTypeValue } from '../../constants'
 import { BINDERS_MESSAGES } from '../../messages'
 
 interface BinderPeriodFieldsProps {
-  form: UseFormReturn<ReceiveBinderFormValues>
+  form: UseFormReturn<ReceiveBinderFormInput, unknown, ReceiveBinderFormValues>
   materialType?: BinderTypeValue
   vatType: 'monthly' | 'bimonthly' | 'exempt' | null
+  onMonthStartChange: (month: number | null) => void
 }
 
-export const BinderPeriodFields: React.FC<BinderPeriodFieldsProps> = ({ form, materialType, vatType }) => {
+export const BinderPeriodFields: React.FC<BinderPeriodFieldsProps> = ({ form, materialType, vatType, onMonthStartChange }) => {
   const {
     control,
     formState: { errors },
@@ -51,7 +52,7 @@ export const BinderPeriodFields: React.FC<BinderPeriodFieldsProps> = ({ form, ma
               error={errors.period_month_start?.message}
               options={[{ value: '', label: BINDERS_MESSAGES.period.chooseMonth, disabled: true }, ...monthOptions]}
               value={field.value ? String(field.value) : ''}
-              onChange={(event) => field.onChange(event.target.value ? Number(event.target.value) : null)}
+              onChange={(event) => onMonthStartChange(event.target.value ? Number(event.target.value) : null)}
               onBlur={field.onBlur}
               name={field.name}
             />

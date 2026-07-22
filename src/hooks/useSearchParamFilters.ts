@@ -21,11 +21,7 @@ interface SearchParamFilters {
  * selection transitions can be verified without a router, and so every writer below goes
  * through one place rather than cloning and mutating params of its own.
  */
-export const nextFilterParams = (
-  current: URLSearchParams,
-  updates: Record<string, string>,
-  resetPage = true,
-): URLSearchParams => {
+const nextFilterParams = (current: URLSearchParams, updates: Record<string, string>, resetPage = true): URLSearchParams => {
   const next = new URLSearchParams(current)
   for (const [key, value] of Object.entries(updates)) {
     if (value) next.set(key, value)
@@ -36,7 +32,7 @@ export const nextFilterParams = (
 }
 
 /** The URL a reset produces: nothing but the given defaults, back on page one. */
-export const resetFilterParams = (defaults: Record<string, string> = {}): URLSearchParams =>
+const resetFilterParams = (defaults: Record<string, string> = {}): URLSearchParams =>
   nextFilterParams(new URLSearchParams(), defaults)
 
 export const useSearchParamFilters = (): SearchParamFilters => {

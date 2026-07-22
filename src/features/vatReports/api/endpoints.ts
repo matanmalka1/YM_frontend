@@ -1,8 +1,8 @@
 export const VAT_ENDPOINTS = {
+  deductionMetadata: '/vat/deduction-metadata',
   vatWorkItemLookup: '/vat/work-items/lookup',
   vatWorkItems: '/vat/work-items',
   vatWorkItemById: (id: number | string) => `/vat/work-items/${id}`,
-  vatWorkItemsByClient: (clientId: number | string) => `/vat/clients/${clientId}/work-items`,
   vatPeriodOptions: (clientId: number | string) => `/vat/clients/${clientId}/period-options`,
   vatWorkItemMaterialsComplete: (id: number | string) => `/vat/work-items/${id}/materials-complete`,
   vatWorkItemInvoices: (id: number | string) => `/vat/work-items/${id}/invoices`,

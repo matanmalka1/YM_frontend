@@ -5,8 +5,7 @@ import { useRole } from '@/hooks/useRole'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { getErrorMessage } from '@/utils/utils'
 import { toast } from '@/utils/toast'
-// eslint-disable-next-line no-restricted-imports -- avoid the tasks feature barrel here; it imports workQueue-backed components.
-import { parseTaskStatus } from '@/features/tasks/api/contracts'
+import { parseTaskStatus, taskStatusLabels, taskStatusValues } from '@/features/tasks/public'
 import {
   WORK_QUEUE_FILTER_PARAM_KEYS,
   WORK_QUEUE_PAGE_SIZE,
@@ -32,8 +31,6 @@ import type { WorkQueueParams } from '../api/contracts'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
 import type { FilterBadge } from '@/components/ui/filters/ActiveFilterBadges'
 import { WORK_QUEUE_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
-// eslint-disable-next-line no-restricted-imports -- avoid the tasks feature barrel here; it imports workQueue-backed components.
-import { taskStatusLabels, taskStatusValues } from '@/features/tasks/constants/labels'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { WORK_QUEUE_MESSAGES } from '../messages'
 import { WORK_QUEUE_ERROR_MESSAGES } from '../errorMessages'

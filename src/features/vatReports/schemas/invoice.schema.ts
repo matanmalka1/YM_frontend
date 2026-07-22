@@ -59,7 +59,7 @@ const inferCounterpartyIdType = (counterpartyId?: string): 'il_business' | undef
   return counterpartyId ? 'il_business' : undefined
 }
 
-const buildInvoicePayloadBase = (values: VatInvoiceEditValues) => ({
+const buildCreateInvoicePayload = (values: VatInvoiceEditValues) => ({
   gross_amount: values.gross_amount,
   expense_category: values.expense_category || null,
   rate_type: values.rate_type || undefined,
@@ -71,9 +71,21 @@ const buildInvoicePayloadBase = (values: VatInvoiceEditValues) => ({
   counterparty_id_type: values.counterparty_id_type || inferCounterpartyIdType(values.counterparty_id),
 })
 
-export const toInvoiceEditPayload = (values: VatInvoiceEditValues): UpdateVatInvoicePayload => buildInvoicePayloadBase(values)
+export const toInvoiceEditPayload = (values: VatInvoiceEditValues): UpdateVatInvoicePayload => {
+  const counterpartyId = values.counterparty_id?.trim()
+
+  return {
+    gross_amount: values.gross_amount,
+    ...(values.expense_category ? { expense_category: values.expense_category } : {}),
+    ...(values.invoice_number ? { invoice_number: values.invoice_number } : {}),
+    ...(values.invoice_date ? { invoice_date: values.invoice_date } : {}),
+    ...(values.counterparty_name ? { counterparty_name: values.counterparty_name } : {}),
+    counterparty_id: counterpartyId || null,
+    counterparty_id_type: counterpartyId ? values.counterparty_id_type || inferCounterpartyIdType(counterpartyId) : null,
+  }
+}
 
 export const toInvoiceRowPayload = (values: VatInvoiceRowValues): CreateVatInvoicePayload => ({
   invoice_type: values.invoice_type,
-  ...buildInvoicePayloadBase(values),
+  ...buildCreateInvoicePayload(values),
 })

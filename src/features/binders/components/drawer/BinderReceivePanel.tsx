@@ -1,32 +1,37 @@
 import type { UseFormReturn } from 'react-hook-form'
 import { Controller } from 'react-hook-form'
-import { Alert } from '@/components/ui'
-import { Button } from '@/components/ui'
+import { Alert } from '@/components/ui/overlays'
+import { Button } from '@/components/ui/primitives'
 import { Checkbox } from '@/components/ui/primitives/Checkbox'
-import { ClientSearchInput } from '@/components/shared/client'
-import { DatePicker } from '@/components/ui'
+import { ClientSearchInput } from '@/features/clients/public'
+import { DatePicker } from '@/components/ui/inputs'
 import { Select } from '@/components/ui/inputs/Select'
-import { Textarea } from '@/components/ui'
+import { Textarea } from '@/components/ui/inputs'
 import { useOverlayDismiss } from '@/components/ui/overlays/useOverlayDismiss'
-import { isClientLockedForCreate } from '@/utils/clientStatus'
-import { getStatusLabel, type AnnualReportListItem } from '@/features/annualReports'
+import { isClientLockedForCreate } from '@/features/clients/public'
+import type { AnnualReportListItem } from '@/features/annualReports/api'
+import { getStatusLabel } from '@/features/annualReports/public'
 import { MONTH_OPTIONS } from '@/constants/periodOptions.constants'
 import { BINDER_TYPE_OPTIONS, PERIODIC_BINDER_TYPES } from '../../constants'
-import type { ReceiveBinderFormValues } from '../../schemas'
+import type { ReceiveBinderFormInput, ReceiveBinderFormValues } from '../../schemas'
 import { BinderPeriodFields } from './BinderPeriodFields'
 import { BINDERS_MESSAGES } from '../../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
+import type { ClientStatus } from '@/features/clients/api'
 
 export interface BinderReceivePanelProps {
-  form: UseFormReturn<ReceiveBinderFormValues>
+  form: UseFormReturn<ReceiveBinderFormInput, unknown, ReceiveBinderFormValues>
   clientQuery: string
-  selectedClient: { id: number; name: string; client_status?: string | null } | null
+  selectedClient: { id: number; name: string; client_status?: ClientStatus | null } | null
   businesses: { id: number; business_name: string | null }[]
   annualReports: AnnualReportListItem[]
   hasActiveBinder: boolean
   vatType: 'monthly' | 'bimonthly' | 'exempt' | null
-  onClientSelect: (client: { id: number; name: string; id_number: string; client_status?: string | null }) => void
+  onClientSelect: (client: { id: number; name: string; id_number: string; client_status?: ClientStatus | null }) => void
   onClientQueryChange: (query: string) => void
+  onBinderTypesChange: (types: ReceiveBinderFormInput['binder_types']) => void
+  onBusinessChange: (businessId: number | null | undefined) => void
+  onPeriodMonthStartChange: (month: number | null) => void
   onSubmit: (e?: React.BaseSyntheticEvent) => void
   isSubmitting: boolean
 }
@@ -41,6 +46,9 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
   vatType,
   onClientSelect,
   onClientQueryChange,
+  onBinderTypesChange,
+  onBusinessChange,
+  onPeriodMonthStartChange,
   onSubmit,
   isSubmitting,
 }) => {
@@ -134,7 +142,7 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
                     checked={selectedTypes.includes(option.value as ReceiveBinderFormValues['binder_types'][number])}
                     onChange={(event) => {
                       const nextType = option.value as ReceiveBinderFormValues['binder_types'][number]
-                      field.onChange(
+                      onBinderTypesChange(
                         event.target.checked ? [...selectedTypes, nextType] : selectedTypes.filter((type) => type !== nextType),
                       )
                     }}
@@ -160,14 +168,14 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
               onChange={(e) => {
                 const v = e.target.value
                 if (v === '') {
-                  field.onChange(undefined)
+                  onBusinessChange(undefined)
                   return
                 }
                 if (v === 'all') {
-                  field.onChange(null)
+                  onBusinessChange(null)
                   return
                 }
-                field.onChange(Number(v))
+                onBusinessChange(Number(v))
               }}
               onBlur={field.onBlur}
               name={field.name}
@@ -177,7 +185,12 @@ export const BinderReceivePanel: React.FC<BinderReceivePanelProps> = ({
       )}
 
       {selectedClient && hasSelectedTypes && (
-        <BinderPeriodFields form={form} materialType={periodMaterialType} vatType={vatType} />
+        <BinderPeriodFields
+          form={form}
+          materialType={periodMaterialType}
+          vatType={vatType}
+          onMonthStartChange={onPeriodMonthStartChange}
+        />
       )}
 
       {selectedClient && hasVatMaterial && hasSalaryMaterial && (

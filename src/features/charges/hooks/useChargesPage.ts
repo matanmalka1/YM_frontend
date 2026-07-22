@@ -2,12 +2,12 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSearchParamFilters } from '../../../hooks/useSearchParamFilters'
-import { useBusinessesForClient } from '../../../hooks/useBusinessesForClient'
+import { useBusinessesForClient } from '@/features/clients/public'
 import { chargesApi, chargesQK, type CreateChargePayload, type ChargeListItem } from '../api'
 import { getErrorMessage, parsePositiveInt } from '../../../utils/utils'
 import { useRole } from '../../../hooks/useRole'
 import { toast } from '../../../utils/toast'
-import { useTableSelection } from '../../../hooks/useTableSelection'
+import { useChargeTableSelection } from './useChargeTableSelection'
 import { DEFAULT_CHARGE_LIST_STATS } from '../constants'
 import { getChargesFilters, toChargesListParams } from '../utils/chargeHelpers'
 import { getChargeBusinessLabel } from '../utils/chargeUtils'
@@ -66,12 +66,13 @@ export const useChargesPage = ({ pinnedClient }: UseChargesPageOptions = {}) => 
   const stats = listData?.stats ?? DEFAULT_CHARGE_LIST_STATS
   const error = listError ? getErrorMessage(listError, CHARGES_ERROR_MESSAGES.list.load) : null
 
-  const { isAdvisor, isSecretary } = useRole()
+  const { can } = useRole()
+  const canManageCharges = can.manageCharges
   const createMutation = useChargeCreateMutation()
-  const { clearSelection, selectedIds, toggleSelect, toggleSelectAll } = useTableSelection<number>()
+  const { clearSelection, selectedIds, toggleSelect, toggleSelectAll } = useChargeTableSelection<number>()
   const { actionLoadingId, bulkLoading, runAction, runBulkAction } = useChargeActions({
     clearSelection,
-    canAct: isAdvisor || isSecretary,
+    canAct: canManageCharges,
     selectedIds,
   })
 
@@ -89,20 +90,20 @@ export const useChargesPage = ({ pinnedClient }: UseChargesPageOptions = {}) => 
     [],
   )
 
-  // Deep-link: ?create=1 auto-opens the create modal (advisor only) then strips the param.
+  // Deep-link: ?create=1 auto-opens the create modal for a role authorized by the backend.
   useEffect(() => {
-    if (searchParams.get('create') !== '1' || !isAdvisor) return
+    if (searchParams.get('create') !== '1' || !canManageCharges) return
     setShowCreateModal(true)
     const next = new URLSearchParams(searchParams)
     next.delete('create')
     setSearchParams(next, { replace: true })
-  }, [isAdvisor, searchParams, setSearchParams])
+  }, [canManageCharges, searchParams, setSearchParams])
 
   const allIds = useMemo(() => chargeItems.map((charge) => charge.id), [chargeItems])
   const columns = useMemo(
     () =>
       buildChargeColumns({
-        isAdvisor,
+        isAdvisor: canManageCharges,
         includeClientColumns: !pinnedClient,
         actionLoadingId,
         runAction,
@@ -115,7 +116,7 @@ export const useChargesPage = ({ pinnedClient }: UseChargesPageOptions = {}) => 
         onSendNotification: openNotification,
       }),
     [
-      isAdvisor,
+      canManageCharges,
       actionLoadingId,
       runAction,
       selectedIds,
@@ -129,7 +130,7 @@ export const useChargesPage = ({ pinnedClient }: UseChargesPageOptions = {}) => 
   )
 
   const submitCreate = async (payload: CreateChargePayload): Promise<boolean> => {
-    if (!isAdvisor) {
+    if (!canManageCharges) {
       toast.error(CHARGES_ERROR_MESSAGES.permissions.create)
       return false
     }
@@ -155,7 +156,7 @@ export const useChargesPage = ({ pinnedClient }: UseChargesPageOptions = {}) => 
     },
     stats: {
       stats,
-      isAdvisor,
+      isAdvisor: canManageCharges,
     },
     filters: filterBar,
     table: {
@@ -207,7 +208,7 @@ export const useChargesPage = ({ pinnedClient }: UseChargesPageOptions = {}) => 
         : null,
     },
     permissions: {
-      isAdvisor,
+      canManageCharges,
     },
   }
 }

@@ -9,9 +9,15 @@ import type {
   NotificationPreviewResponse,
   NotificationSendRequest,
   NotificationResult,
+  NotificationMetadata,
 } from './contracts'
 
 export const notificationsApi = {
+  getMetadata: async (): Promise<NotificationMetadata> => {
+    const response = await api.get<NotificationMetadata>(NOTIFICATION_ENDPOINTS.metadata)
+    return response.data
+  },
+
   listPaginated: async (params: ListNotificationsParams = {}): Promise<NotificationListResponse> => {
     const response = await api.get<NotificationListResponse>(NOTIFICATION_ENDPOINTS.notifications, {
       params: toQueryParams(params),

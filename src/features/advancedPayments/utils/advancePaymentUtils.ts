@@ -38,6 +38,8 @@ export const mergeAdvancePaymentBatches = (
       client_count: existing.client_count + batch.client_count,
       pending_count: existing.pending_count + batch.pending_count,
       overdue_count: existing.overdue_count + batch.overdue_count,
+      paid_count: existing.paid_count + batch.paid_count,
+      not_paid_count: existing.not_paid_count + batch.not_paid_count,
       missing_turnover_count: existing.missing_turnover_count + batch.missing_turnover_count,
       due_this_month_count: existing.due_this_month_count + batch.due_this_month_count,
       total_expected: String(totalExpected),

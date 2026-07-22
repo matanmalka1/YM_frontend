@@ -1,11 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import { annualReportsApi, annualReportsQK, type StatusTransitionPayload, type ReportDetailResponse } from '../api'
+import {
+  annualReportsApi,
+  annualReportsQK,
+  type AnnualReportDetailUpdatePayload,
+  type AnnualReportFull,
+  type StatusTransitionPayload,
+} from '../api'
 import { annualReportStatusApi } from '../api'
 import { showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
-import { timelineQK } from '@/features/timeline'
-import type { AnnualReportDetail } from '../types'
 import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 
 export const useReportMutations = (reportId: number | null, onDeleted?: () => void) => {
@@ -16,22 +20,23 @@ export const useReportMutations = (reportId: number | null, onDeleted?: () => vo
   const qk = enabled ? queryKey : null
 
   const transitionMutation = useMutation({
-    mutationFn: (payload: StatusTransitionPayload) => {
+    mutationFn: async (payload: StatusTransitionPayload): Promise<void> => {
       if (payload.status === 'submitted') {
-        return annualReportStatusApi.submitReport(reportId as number, {
+        await annualReportStatusApi.submitReport(reportId as number, {
           note: payload.note ?? undefined,
           ita_reference: payload.ita_reference ?? undefined,
           submission_method: payload.submission_method ?? undefined,
         })
+        return
       }
-      return annualReportStatusApi.transitionStatus(reportId as number, payload)
+      await annualReportStatusApi.transitionStatus(reportId as number, payload)
     },
     onMutate: async (payload) => {
       if (!qk) return
       await queryClient.cancelQueries({ queryKey: qk })
-      const previous = queryClient.getQueryData<AnnualReportDetail>(qk)
-      queryClient.setQueryData<AnnualReportDetail>(qk, (prev) =>
-        prev ? { ...prev, status: payload.status as AnnualReportDetail['status'] } : prev,
+      const previous = queryClient.getQueryData<AnnualReportFull>(qk)
+      queryClient.setQueryData<AnnualReportFull>(qk, (prev) =>
+        prev ? { ...prev, status: payload.status as AnnualReportFull['status'] } : prev,
       )
       return { previous }
     },
@@ -45,16 +50,15 @@ export const useReportMutations = (reportId: number | null, onDeleted?: () => vo
       toast.success('סטטוס עודכן בהצלחה')
       if (qk) void queryClient.invalidateQueries({ queryKey: qk })
       void queryClient.invalidateQueries({ queryKey: annualReportsQK.all })
-      void queryClient.invalidateQueries({ queryKey: timelineQK.all })
     },
   })
 
   const updateMutation = useMutation({
-    mutationFn: (payload: Partial<ReportDetailResponse>) => annualReportsApi.patchReportDetails(reportId as number, payload),
+    mutationFn: (payload: AnnualReportDetailUpdatePayload) => annualReportsApi.patchReportDetails(reportId as number, payload),
     onSuccess: (updated) => {
       toast.success('דוח עודכן בהצלחה')
       if (qk) {
-        queryClient.setQueryData<AnnualReportDetail>(qk, (prev) =>
+        queryClient.setQueryData<AnnualReportFull>(qk, (prev) =>
           prev
             ? {
                 ...prev,
@@ -86,7 +90,7 @@ export const useReportMutations = (reportId: number | null, onDeleted?: () => vo
   return {
     transition: (payload: StatusTransitionPayload) => transitionMutation.mutate(payload),
     isTransitioning: transitionMutation.isPending,
-    updateDetail: (payload: Partial<ReportDetailResponse>) => updateMutation.mutate(payload),
+    updateDetail: (payload: AnnualReportDetailUpdatePayload) => updateMutation.mutate(payload),
     isUpdating: updateMutation.isPending,
     deleteReport: () => deleteMutation.mutateAsync(),
     isDeleting: deleteMutation.isPending,
