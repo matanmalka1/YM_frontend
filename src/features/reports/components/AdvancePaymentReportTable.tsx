@@ -10,6 +10,11 @@ interface Props {
 }
 
 const columns: Column<AdvancePaymentReportItem>[] = [
+  monoColumn({
+    key: "office_client_number",
+    header: REPORTS_MESSAGES.advances.clientNumber,
+    getValue: (r) => formatClientOfficeId(r.office_client_number),
+  }),
   {
     key: "client_name",
     header: GLOBAL_UI_MESSAGES.common.clientName,
@@ -19,11 +24,6 @@ const columns: Column<AdvancePaymentReportItem>[] = [
     key: "client_id_number",
     header: REPORTS_MESSAGES.advances.idNumber,
     getValue: (r) => r.client_id_number,
-  }),
-  monoColumn({
-    key: "office_client_number",
-    header: REPORTS_MESSAGES.advances.clientNumber,
-    getValue: (r) => formatClientOfficeId(r.office_client_number),
   }),
   {
     key: "total_expected",
