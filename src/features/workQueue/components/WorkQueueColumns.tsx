@@ -214,7 +214,7 @@ export const buildWorkQueueColumns = ({ activeActionKey, onAction, showLinkedTas
             <div className="flex items-center justify-center gap-2">
               {primaryButton && tooltipText ? <Tooltip text={tooltipText}>{primaryButton}</Tooltip> : primaryButton}
               {secondaryActions.length > 0 && (
-                <RowActionsMenu menuClassName="w-50">
+                <RowActionsMenu>
                   {secondaryActions.map((action) => {
                     const key = `${item.id}:${action.key}`
                     return (

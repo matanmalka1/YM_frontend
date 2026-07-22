@@ -174,8 +174,8 @@ export const Menu = ({ ariaLabel, children, title, menuClassName }: MenuProps) =
                     }
               }
               className={cn(
-                'pointer-events-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg',
-                menuClassName ?? 'min-w-40',
+                'pointer-events-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg w-56 max-w-[min(90vw,20rem)]',
+                menuClassName,
               )}
               onClick={(event) => event.stopPropagation()}
               onKeyDown={handleMenuKeyDown}
