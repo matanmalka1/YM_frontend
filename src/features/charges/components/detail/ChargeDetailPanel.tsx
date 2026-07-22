@@ -169,6 +169,7 @@ export const ChargeDetailPanel = ({ chargeId, leadingBreadcrumbs, onDeleted }: C
                 className="w-full justify-center"
                 variant="outline"
                 icon={<Bell className="h-4 w-4" />}
+                disabled={charge.status === 'paid' || charge.status === 'canceled'}
                 onClick={() => setNotificationTrigger('payment_reminder')}
               >
                 {CHARGES_MESSAGES.actions.paymentReminder}
