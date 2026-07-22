@@ -65,6 +65,10 @@ export const DataTable = <T,>({
 
   const handleRowKeyDown = (event: KeyboardEvent<HTMLTableRowElement>, item: T) => {
     if (!onRowClick) return
+    // Only act on keys pressed on the row itself. Bubbled keydowns from nested
+    // interactive cells (selection checkbox, action buttons) must keep their
+    // native behavior — preventDefault here would swallow a checkbox toggle.
+    if (event.target !== event.currentTarget) return
 
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
