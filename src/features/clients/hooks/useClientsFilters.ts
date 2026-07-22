@@ -41,6 +41,7 @@ export const useClientsFilters = ({ filters, onFilterChange, onReset, showAccoun
         key: 'search',
         label: 'חיפוש לקוח',
         placeholder: CLIENT_SEARCH_PLACEHOLDER,
+        inline: true,
       },
       { type: 'select' as const, key: 'status', label: 'סטטוס', options: STATUS_OPTIONS },
       {

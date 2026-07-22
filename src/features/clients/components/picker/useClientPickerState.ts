@@ -8,7 +8,7 @@ export interface ClientPickerValue {
   client_status?: ClientStatus | null
 }
 
-interface ClientPickerFieldOptions {
+interface ClientPickerSetterOptions {
   shouldDirty: boolean
   shouldValidate: boolean
 }
@@ -21,10 +21,10 @@ interface UseClientPickerStateOptions {
 const clientPickerFieldOptions = {
   shouldDirty: true,
   shouldValidate: true,
-} as const satisfies ClientPickerFieldOptions
+} as const satisfies ClientPickerSetterOptions
 
 export const createClientIdPickerHandlers = (
-  setClientId: (value: string, options: ClientPickerFieldOptions) => void,
+  setClientId: (value: string, options: ClientPickerSetterOptions) => void,
 ): UseClientPickerStateOptions => ({
   onSelect: (client) => setClientId(String(client.id), clientPickerFieldOptions),
   onClear: () => setClientId('', clientPickerFieldOptions),

@@ -5,7 +5,7 @@ import { Button } from '../../../../components/ui/primitives/Button'
 import { Select } from '../../../../components/ui/inputs/Select'
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Textarea } from '../../../../components/ui/inputs/Textarea'
-import { ClientPickerField, useClientPickerState } from '@/features/clients/public'
+import { ClientSearchInput, useClientPickerState } from '@/features/clients/public'
 import { usePreviewNotification, useSendNotification } from '../../hooks/useSendNotification'
 import { isNotificationTrigger } from '../../api'
 import type { NotificationTrigger } from '../../api'
@@ -206,10 +206,10 @@ export const SendNotificationModal: React.FC<SendNotificationModalProps> = ({
     >
       <div className="space-y-4">
         {clientRecordId == null && (
-          <ClientPickerField
+          <ClientSearchInput
             selectedClient={selectedClient}
-            clientQuery={clientQuery}
-            onQueryChange={handleClientQueryChange}
+            value={clientQuery}
+            onChange={handleClientQueryChange}
             onSelect={handleSelectClient}
             onClear={handleClearClient}
             error={clientError}

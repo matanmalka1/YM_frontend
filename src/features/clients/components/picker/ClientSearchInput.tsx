@@ -12,7 +12,7 @@ import { CLIENT_SEARCH_PLACEHOLDER } from '@/constants/searchPlaceholders.consta
 
 // ── Controlled search input (value/onChange) ──────────────────────────────────
 
-interface ClientSearchSelection {
+export interface ClientSearchSelection {
   id: number
   name: string
   id_number: string
@@ -20,12 +20,26 @@ interface ClientSearchSelection {
   office_client_number?: number | null
 }
 
+interface SelectedClientValue {
+  name: string
+  /** Omit (undefined) when unknown to hide the number; null renders the "not available" fallback. */
+  office_client_number?: number | null
+}
+
 interface ClientSearchInputProps {
   value: string
   onChange: (query: string) => void
   onSelect: (client: ClientSearchSelection) => void
+  /**
+   * Selected state: the input shows the client name (primary tint, office number +
+   * clear button inside). Typing or clearing calls onClear and resumes search.
+   */
+  selectedClient?: SelectedClientValue | null
+  onClear?: () => void
   error?: string
   label?: string
+  /** Inline placement: no visible label, label moves to aria-label. */
+  hideLabel?: boolean
   placeholder?: string
   helperText?: string
   size?: 'sm' | 'md'
@@ -35,8 +49,11 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
   value,
   onChange,
   onSelect,
+  selectedClient,
+  onClear,
   error,
   label = 'לקוח',
+  hideLabel,
   placeholder = CLIENT_SEARCH_PLACEHOLDER,
   helperText,
   size = 'md',
@@ -108,6 +125,8 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
   }, [])
 
   const handleChange = (query: string) => {
+    // Editing a selected client dissolves the selection and resumes searching.
+    if (selectedClient) onClear?.()
     onChange(query)
     invalidatePendingSearch()
 
@@ -155,6 +174,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
 
   const handleClear = () => {
     invalidatePendingSearch()
+    if (selectedClient) onClear?.()
     onChange('')
     setResults([])
     setOpen(false)
@@ -210,9 +230,15 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
     <div ref={containerRef} className="relative w-full">
       <Input
         ref={inputRef}
-        label={label}
+        label={hideLabel ? undefined : label}
+        aria-label={hideLabel ? label : undefined}
+        className={cn(
+          // Inline (toolbar row) placement: pill shape to match the toolbar buttons.
+          hideLabel && 'rounded-full',
+          selectedClient && 'border-primary-200 bg-primary-50 font-medium text-primary-900',
+        )}
         size={size}
-        value={value}
+        value={selectedClient ? selectedClient.name : value}
         onChange={(e) => handleChange(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
@@ -224,7 +250,26 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
         aria-activedescendant={highlightedIndex >= 0 ? `${listboxId}-option-${results[highlightedIndex]?.id}` : undefined}
         startIcon={<Search className="h-4 w-4" />}
         endElement={
-          loading ? (
+          selectedClient ? (
+            <span className="flex items-center gap-1">
+              {selectedClient.office_client_number !== undefined && (
+                <span className="text-xs text-primary-500">
+                  {selectedClient.office_client_number != null
+                    ? formatClientOfficeId(selectedClient.office_client_number)
+                    : 'מס׳ לקוח לא זמין'}
+                </span>
+              )}
+              <Button
+                type="button"
+                variant="ghost"
+                shape="square"
+                size="sm"
+                icon={<X className="h-3.5 w-3.5" />}
+                onClick={handleClear}
+                aria-label="נקה בחירה"
+              />
+            </span>
+          ) : loading ? (
             <Spinner size="sm" label="מחפש..." />
           ) : value ? (
             <Button
@@ -240,7 +285,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
         }
       />
 
-      {helperText && !value.trim() && <p className="mt-1 text-xs text-gray-500">{helperText}</p>}
+      {helperText && !selectedClient && !value.trim() && <p className="mt-1 text-xs text-gray-500">{helperText}</p>}
 
       {open &&
         (results.length > 0 || showNoResults) &&
@@ -286,47 +331,3 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
 }
 
 ClientSearchInput.displayName = 'ClientSearchInput'
-
-// ── Selected-client display (with clear button) ───────────────────────────────
-
-interface SelectedClientDisplayProps {
-  name: string
-  officeClientNumber?: number | null
-  onClear: () => void
-  label?: string
-  size?: 'sm' | 'md'
-}
-
-export const SelectedClientDisplay: React.FC<SelectedClientDisplayProps> = ({
-  name,
-  officeClientNumber,
-  onClear,
-  label = 'לקוח',
-  size = 'md',
-}) => (
-  <div className="space-y-1">
-    <label className="block text-sm font-medium text-gray-700">{label}</label>
-    <div
-      className={cn(
-        'flex items-center gap-2 rounded-lg border border-primary-200 bg-primary-50 px-3',
-        size === 'sm' ? 'h-8 py-1.5' : 'h-9 py-2',
-      )}
-    >
-      <span className="flex-1 text-sm font-medium text-primary-900">{name}</span>
-      <span className="text-xs text-primary-500">
-        {officeClientNumber != null ? formatClientOfficeId(officeClientNumber) : 'מס׳ לקוח לא זמין'}
-      </span>
-      <Button
-        type="button"
-        variant="ghost"
-        shape="square"
-        size="sm"
-        icon={<X className="h-3.5 w-3.5" />}
-        onClick={onClear}
-        aria-label="נקה בחירה"
-      />
-    </div>
-  </div>
-)
-
-SelectedClientDisplay.displayName = 'SelectedClientDisplay'

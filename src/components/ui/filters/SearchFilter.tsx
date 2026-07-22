@@ -9,16 +9,21 @@ interface Props {
   onChange: (key: string, value: string) => void
   size?: 'xs' | 'sm' | 'md'
   fieldClassName?: string
+  /** Inline placement (toolbar row): no visible label, label moves to aria-label, pill shape. */
+  hideLabel?: boolean
 }
 
 // Controlled via `externalValue`: useSearchDebounce syncs the local draft back to it,
 // so a parent reset (values[key] -> '') clears the input — no imperative handle needed.
-export const SearchFilter = ({ field, externalValue, onChange, size = 'md', fieldClassName }: Props) => {
+export const SearchFilter = ({ field, externalValue, onChange, size = 'md', fieldClassName, hideLabel }: Props) => {
   const [draft, setDraft] = useSearchDebounce(externalValue, (v) => onChange(field.key, v))
 
   return (
     <Input
-      label={field.label}
+      label={hideLabel ? undefined : field.label}
+      aria-label={hideLabel ? field.label : undefined}
+      // Inline (toolbar row) placement: pill shape to match the toolbar buttons.
+      className={hideLabel ? 'rounded-full' : undefined}
       size={size}
       fieldClassName={fieldClassName}
       value={draft}

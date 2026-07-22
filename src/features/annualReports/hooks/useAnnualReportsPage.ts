@@ -50,7 +50,7 @@ const buildAnnualReportsFilterFields = (defaultYear?: number) => [
 ]
 
 export const useAnnualReportsPage = () => {
-  const { getParam, setFilter, resetFilters } = useSearchParamFilters()
+  const { getParam, setFilter, setFilters, resetFilters } = useSearchParamFilters()
   const [showCreate, setShowCreate] = useState(false)
   const navigate = useNavigate()
 
@@ -147,6 +147,7 @@ export const useAnnualReportsPage = () => {
       fields: filterFields,
       values: filters,
       onChange: handleFilterChange,
+      onMultiChange: setFilters,
       onReset: handleResetFilters,
     },
     table: {

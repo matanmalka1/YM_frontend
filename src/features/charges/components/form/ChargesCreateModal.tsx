@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useRef } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
-import { ClientPickerField, createClientIdPickerHandlers, useClientPickerState } from '@/features/clients/public'
+import { ClientSearchInput, createClientIdPickerHandlers, useClientPickerState } from '@/features/clients/public'
 import { Modal, ModalFormActions } from '@/components/ui/overlays'
 import type { BusinessResponse } from '@/features/clients'
 import type { CreateChargePayload } from '../../api'
@@ -126,10 +126,10 @@ export const ChargesCreateModal: React.FC<ChargesCreateModalProps> = ({
         <FormProvider {...form}>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="col-span-2">
-              <ClientPickerField
+              <ClientSearchInput
                 selectedClient={selectedClient}
-                clientQuery={clientQuery}
-                onQueryChange={handleClientQueryChange}
+                value={clientQuery}
+                onChange={handleClientQueryChange}
                 onSelect={handleSelectClient}
                 onClear={handleClearClient}
                 error={errors.client_record_id?.message}

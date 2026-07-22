@@ -6,7 +6,7 @@ import { ModalFormActions } from '../../../../components/ui/overlays/ModalFormAc
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
 import { Textarea } from '../../../../components/ui/inputs/Textarea'
-import { ClientSearchInput, SelectedClientDisplay } from '@/features/clients/public'
+import { ClientSearchInput } from '@/features/clients/public'
 import type { CreateSignatureRequestPayload } from '../../api'
 import { getSignatureRequestTypeLabel, SIGNATURE_REQUEST_TYPE_VALUES } from '../../constants'
 import { SIGNATURE_REQUESTS_MESSAGES } from '../../messages'
@@ -106,30 +106,25 @@ export const CreateSignatureRequestModal: React.FC<Props> = ({
       }
     >
       <form id={CREATE_SIGNATURE_REQUEST_FORM_ID} onSubmit={submit} className="space-y-4">
-        {initialClientId == null &&
-          (selectedClient ? (
-            <SelectedClientDisplay
-              name={selectedClient.name}
-              officeClientNumber={selectedClient.office_client_number}
-              onClear={() => {
-                setSelectedClient(null)
-                setClientQuery('')
-                setValue('client_record_id', 0, { shouldValidate: true })
-                setValue('signer_name', '')
-              }}
-            />
-          ) : (
-            <ClientSearchInput
-              value={clientQuery}
-              onChange={setClientQuery}
-              onSelect={(c) => {
-                setSelectedClient({ id: c.id, name: c.name, office_client_number: c.office_client_number })
-                setValue('client_record_id', c.id, { shouldValidate: true })
-                setValue('signer_name', c.name)
-                setClientQuery(c.name)
-              }}
-            />
-          ))}
+        {initialClientId == null && (
+          <ClientSearchInput
+            value={clientQuery}
+            onChange={setClientQuery}
+            selectedClient={selectedClient}
+            onClear={() => {
+              setSelectedClient(null)
+              setClientQuery('')
+              setValue('client_record_id', 0, { shouldValidate: true })
+              setValue('signer_name', '')
+            }}
+            onSelect={(c) => {
+              setSelectedClient({ id: c.id, name: c.name, office_client_number: c.office_client_number })
+              setValue('client_record_id', c.id, { shouldValidate: true })
+              setValue('signer_name', c.name)
+              setClientQuery(c.name)
+            }}
+          />
+        )}
         <Controller
           control={control}
           name="request_type"

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { ClientPickerField, useClientPickerState } from '@/features/clients/public'
+import { ClientSearchInput, useClientPickerState } from '@/features/clients/public'
 import { Input } from '@/components/ui/inputs'
 import { Checkbox } from '@/components/ui/primitives/Checkbox'
 import { Modal, ModalFormActions } from '@/components/ui/overlays'
@@ -122,10 +122,10 @@ export const VatWorkItemsCreateModal: React.FC<VatWorkItemsCreateModalProps> = (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {initialClientId === undefined && (
             <div className="col-span-2">
-              <ClientPickerField
+              <ClientSearchInput
                 selectedClient={selectedClient}
-                clientQuery={clientQuery}
-                onQueryChange={handleClientQueryChange}
+                value={clientQuery}
+                onChange={handleClientQueryChange}
                 onSelect={handleSelectClient}
                 onClear={handleClearClient}
                 label={VAT_MESSAGES.form.clientLabel}

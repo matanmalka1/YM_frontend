@@ -4,8 +4,9 @@ import { ClientPickerFilter, type ClientPickerFilterConfig } from './ClientPicke
 export const createClientPickerFilter = (field: ClientPickerFilterConfig): CustomFilterFieldDef => ({
   type: 'custom',
   key: field.nameKey ? `${field.idKey}__${field.nameKey}` : field.idKey,
-  render: ({ values, onMultiChange, size }) => (
-    <ClientPickerFilter field={field} values={values} onMultiChange={onMultiChange} size={size} />
+  inline: true,
+  render: ({ values, onMultiChange, size, hideLabel }) => (
+    <ClientPickerFilter field={field} values={values} onMultiChange={onMultiChange} size={size} hideLabel={hideLabel} />
   ),
   getBadges: (values, onMultiChange) => {
     const id = values[field.idKey]

@@ -1,7 +1,7 @@
 import { Link2Off } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
 import { Select } from '@/components/ui/inputs/Select'
-import { ClientSearchInput, SelectedClientDisplay } from '@/features/clients/public'
+import { ClientSearchInput } from '@/features/clients/public'
 import type { WorkItemSourceType } from '@/constants/workItemSources.constants'
 import type { TaskLinkableSource } from '../../api/contracts'
 import type { TaskSourceContext } from '../../types'
@@ -143,22 +143,19 @@ export const TaskSourceSection: React.FC<TaskSourceSectionProps> = ({
         <div className="text-xs text-gray-500">{TASKS_MESSAGES.source.linkWorkItemHelp}</div>
       </div>
 
-      {selectedClientId && selectedClientName ? (
-        <SelectedClientDisplay
-          name={selectedClientName}
-          officeClientNumber={selectedClientOfficeNumber}
-          onClear={onClientClear}
-          label={GLOBAL_UI_MESSAGES.common.client}
-        />
-      ) : (
-        <ClientSearchInput
-          value={clientSearch}
-          onChange={onClientSearchChange}
-          onSelect={(c) => onClientSelect(c.id, c.name, c.office_client_number)}
-          label={GLOBAL_UI_MESSAGES.common.client}
-          helperText={TASKS_MESSAGES.source.clientSearchHelp}
-        />
-      )}
+      <ClientSearchInput
+        value={clientSearch}
+        onChange={onClientSearchChange}
+        onSelect={(c) => onClientSelect(c.id, c.name, c.office_client_number)}
+        selectedClient={
+          selectedClientId && selectedClientName
+            ? { name: selectedClientName, office_client_number: selectedClientOfficeNumber }
+            : null
+        }
+        onClear={onClientClear}
+        label={GLOBAL_UI_MESSAGES.common.client}
+        helperText={TASKS_MESSAGES.source.clientSearchHelp}
+      />
 
       {selectedClientId && (
         <>

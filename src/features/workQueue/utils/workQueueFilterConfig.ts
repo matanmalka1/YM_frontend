@@ -12,6 +12,7 @@ export const WORK_QUEUE_FILTER_FIELDS: FilterFieldDef[] = [
     key: WORK_QUEUE_FILTER_PARAM_KEYS.search,
     label: GLOBAL_UI_MESSAGES.common.search,
     placeholder: WORK_QUEUE_SEARCH_PLACEHOLDER,
+    inline: true,
   },
   {
     type: 'select',

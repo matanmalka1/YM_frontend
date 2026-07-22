@@ -2,7 +2,7 @@ import { ClipboardList, Wallet } from 'lucide-react'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
-import { ClientPickerField } from '@/features/clients/public'
+import { ClientSearchInput } from '@/features/clients/public'
 import { CreateAdvancePaymentModal } from '@/features/advancedPayments'
 import { ChargesCreateModal } from '@/features/charges'
 import { CreateClientModal, DeletedClientDialog } from '@/features/clients'
@@ -114,10 +114,10 @@ export const DashboardPage: React.FC = () => {
           </Button>
         }
       >
-        <ClientPickerField
+        <ClientSearchInput
           selectedClient={modals.advancePaymentClientPickerProps.picker.selectedClient}
-          clientQuery={modals.advancePaymentClientPickerProps.picker.clientQuery}
-          onQueryChange={modals.advancePaymentClientPickerProps.picker.handleClientQueryChange}
+          value={modals.advancePaymentClientPickerProps.picker.clientQuery}
+          onChange={modals.advancePaymentClientPickerProps.picker.handleClientQueryChange}
           onSelect={modals.advancePaymentClientPickerProps.picker.handleSelectClient}
           onClear={modals.advancePaymentClientPickerProps.picker.handleClearClient}
         />

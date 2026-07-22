@@ -1,6 +1,6 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useEffect } from 'react'
-import { ClientPickerField, createClientIdPickerHandlers, useClientPickerState } from '@/features/clients/public'
+import { ClientSearchInput, createClientIdPickerHandlers, useClientPickerState } from '@/features/clients/public'
 import { Input, Select, Textarea } from '@/components/ui/inputs'
 import { Modal, ModalFormActions } from '@/components/ui/overlays'
 import { useCreateReport } from '../../hooks/useCreateReport'
@@ -60,10 +60,10 @@ export const CreateReportModal: React.FC<CreateReportModalProps> = ({ open, onCl
         <input type="hidden" {...register('client_id')} />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <ClientPickerField
+            <ClientSearchInput
               selectedClient={selectedClient}
-              clientQuery={clientQuery}
-              onQueryChange={handleClientQueryChange}
+              value={clientQuery}
+              onChange={handleClientQueryChange}
               onSelect={handleSelectClient}
               onClear={handleClearClient}
               error={errors.client_id?.message}

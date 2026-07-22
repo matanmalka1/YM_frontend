@@ -3,9 +3,7 @@ export { useBusinessesForClient } from './hooks/queries/useBusinessesForClient'
 export { isClientClosed, isClientLockedForCreate } from './utils/clientLifecycle'
 export type { BusinessResponse } from './api'
 export {
-  ClientPickerField,
   ClientSearchInput,
-  SelectedClientDisplay,
   createClientIdPickerHandlers,
   createClientPickerFilter,
   useClientPickerState,

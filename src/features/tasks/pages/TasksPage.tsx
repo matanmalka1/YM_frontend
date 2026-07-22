@@ -1,5 +1,6 @@
 import { Plus } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { PageContent } from '@/components/layout/PageContent'
 import { Button } from '@/components/ui/primitives/Button'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
@@ -14,7 +15,7 @@ export const TasksPage: React.FC = () => {
   const page = useTasksPage()
 
   return (
-    <div className="mx-auto max-w-7xl space-y-4">
+    <PageContent>
       <PageHeader
         title={TASKS_MESSAGES.page.title}
         description={TASKS_MESSAGES.page.description}
@@ -95,6 +96,6 @@ export const TasksPage: React.FC = () => {
         onConfirm={page.confirmDialog.onConfirm}
         onCancel={page.confirmDialog.onCancel}
       />
-    </div>
+    </PageContent>
   )
 }

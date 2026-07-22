@@ -196,28 +196,54 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     [onMultiChange, onChange],
   )
 
-  const badges = buildFilterBadges(fields, values, onChange, handleMulti)
+  // Fields opted in via `inline` (e.g. the client picker, page-level search) render in the
+  // toolbar row; the remaining fields live in the popover, so the trigger badge count
+  // reflects filters that are otherwise hidden.
+  const isInline = (field: FilterFieldDef) => (field.type === 'custom' || field.type === 'search') && Boolean(field.inline)
+  const inlineFields = fields.filter(isInline)
+  const panelFields = fields.filter((field) => !isInline(field))
+
+  const badges = buildFilterBadges(panelFields, values, onChange, handleMulti)
   const allBadges = extraBadges ? [...badges, ...extraBadges] : badges
 
   return (
-    <div onPointerDownCapture={markInside} className="relative flex justify-end">
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        icon={icon ?? <Filter className="h-4 w-4" aria-hidden="true" />}
-        aria-expanded={open}
-        aria-controls={open ? panelId : undefined}
-        aria-label={title ?? FALLBACK_TITLE}
-        onClick={() => setOpen((v) => !v)}
-      >
-        {title ?? FALLBACK_TITLE}
-        {allBadges.length > 0 ? (
-          <span className="ms-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-600 px-1.5 text-2xs font-semibold text-white">
-            {allBadges.length}
-          </span>
-        ) : null}
-      </Button>
+    <div onPointerDownCapture={markInside} className="relative flex items-center justify-end gap-2">
+      {inlineFields.map((field) =>
+        field.type === 'search' ? (
+          <SearchFilter
+            key={field.key}
+            field={field}
+            size="sm"
+            hideLabel
+            externalValue={values[field.key] ?? ''}
+            onChange={onChange}
+            fieldClassName="min-w-0 flex-1"
+          />
+        ) : field.type === 'custom' ? (
+          <div key={field.key} className="min-w-0 flex-1">
+            {field.render({ values, onMultiChange: handleMulti, size: 'sm', hideLabel: true })}
+          </div>
+        ) : null,
+      )}
+      {panelFields.length > 0 ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          icon={icon ?? <Filter className="h-4 w-4" aria-hidden="true" />}
+          aria-expanded={open}
+          aria-controls={open ? panelId : undefined}
+          aria-label={title ?? FALLBACK_TITLE}
+          onClick={() => setOpen((v) => !v)}
+        >
+          {title ?? FALLBACK_TITLE}
+          {allBadges.length > 0 ? (
+            <span className="ms-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-600 px-1.5 text-2xs font-semibold text-white">
+              {allBadges.length}
+            </span>
+          ) : null}
+        </Button>
+      ) : null}
       {open ? (
         <div
           id={panelId}
@@ -242,7 +268,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                 />
               </div>
               <div className={cn('grid gap-2.5', STACKED_GRID)}>
-                {fields.map((field) => (
+                {panelFields.map((field) => (
                   <FilterField
                     key={fieldKey(field)}
                     field={field}

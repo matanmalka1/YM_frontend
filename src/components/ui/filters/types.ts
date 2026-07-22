@@ -10,6 +10,8 @@ export interface SearchFieldDef<TValues extends Record<string, unknown> = Record
   placeholder?: string
   /** Span both columns of the panel grid (default: half width). */
   fullWidth?: boolean
+  /** Render in the toolbar row (next to the filter trigger) instead of inside the popover. */
+  inline?: boolean
 }
 
 interface SelectFieldDef<TValues extends Record<string, unknown> = Record<string, unknown>> {
@@ -49,10 +51,14 @@ interface DateRangeFieldDef<TValues extends Record<string, unknown> = Record<str
 export interface CustomFilterFieldDef {
   type: 'custom'
   key: string
+  /** Render in the toolbar row (next to the filter trigger) instead of inside the popover. */
+  inline?: boolean
   render: (context: {
     values: Readonly<Record<string, string | undefined>>
     onMultiChange: (updates: Record<string, string>) => void
     size: 'sm' | 'md'
+    /** True for inline (toolbar row) placement — hide the visible label. */
+    hideLabel?: boolean
   }) => ReactNode
   getBadges?: (
     values: Readonly<Record<string, unknown>>,

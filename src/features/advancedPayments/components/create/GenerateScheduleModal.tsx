@@ -1,6 +1,6 @@
 import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
-import { ClientPickerField } from '@/features/clients/public'
+import { ClientSearchInput } from '@/features/clients/public'
 import { useGenerateSchedule } from '../../hooks/useGenerateSchedule'
 import { ADVANCE_PAYMENT_FREQUENCY_PREFIX, ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT } from '../../constants'
 import { getMonthsCoveredLabel } from '@/constants/periodOptions.constants'
@@ -49,10 +49,10 @@ export const GenerateScheduleModal: React.FC<Props> = ({ open, year, onClose }) 
       }
     >
       <div className="space-y-4">
-        <ClientPickerField
+        <ClientSearchInput
           selectedClient={picker.selectedClient}
-          clientQuery={picker.clientQuery}
-          onQueryChange={picker.handleClientQueryChange}
+          value={picker.clientQuery}
+          onChange={picker.handleClientQueryChange}
           onSelect={picker.handleSelectClient}
           onClear={picker.handleClearClient}
         />

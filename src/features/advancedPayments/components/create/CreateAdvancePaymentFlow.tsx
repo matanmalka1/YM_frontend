@@ -1,6 +1,6 @@
 import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
-import { ClientPickerField } from '@/features/clients/public'
+import { ClientSearchInput } from '@/features/clients/public'
 import { CreateAdvancePaymentModal } from './CreateAdvancePaymentModal'
 import { useCreateAdvancePayment } from '../../hooks/useCreateAdvancePayment'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
@@ -46,10 +46,10 @@ export const CreateAdvancePaymentFlow: React.FC<Props> = ({ open, year, onClose 
         </Button>
       }
     >
-      <ClientPickerField
+      <ClientSearchInput
         selectedClient={picker.selectedClient}
-        clientQuery={picker.clientQuery}
-        onQueryChange={picker.handleClientQueryChange}
+        value={picker.clientQuery}
+        onChange={picker.handleClientQueryChange}
         onSelect={picker.handleSelectClient}
         onClear={picker.handleClearClient}
       />
