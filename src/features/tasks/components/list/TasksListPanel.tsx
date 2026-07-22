@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { ListChecks } from 'lucide-react'
 import { PaginatedDataTable, type DataTableProps } from '@/components/ui/table'
-import { Alert } from '@/components/ui/overlays/Alert'
 import type { Task } from '../../api/contracts'
 import { TASKS_PAGE_SIZE } from '../../constants/pageConstants'
 import { buildTaskListColumns, type TaskSelectionConfig } from './TaskListColumns'
@@ -52,29 +51,27 @@ export const TasksListPanel: React.FC<TasksListPanelProps> = ({
   )
   return (
     <section aria-label={TASKS_MESSAGES.list.ariaLabel}>
-      {error ? (
-        <Alert variant="error" message={error} onRetry={onRetry} />
-      ) : (
-        <PaginatedDataTable
-          columns={columns}
-          data={tasks}
-          getRowKey={(task) => task.id}
-          isLoading={isLoading}
-          isFetching={isFetching}
-          page={page}
-          pageSize={TASKS_PAGE_SIZE}
-          total={total}
-          label={TASKS_MESSAGES.list.label}
-          onPageChange={onPageChange}
-          emptyState={
-            emptyState ?? {
-              icon: ListChecks,
-              title: hasFilters ? TASKS_MESSAGES.list.emptyFilteredTitle : TASKS_MESSAGES.list.emptyTitle,
-              message: hasFilters ? TASKS_MESSAGES.list.emptyFilteredMessage : TASKS_MESSAGES.list.emptyMessage,
-            }
+      <PaginatedDataTable
+        columns={columns}
+        data={tasks}
+        getRowKey={(task) => task.id}
+        error={error}
+        onRetry={onRetry}
+        isLoading={isLoading}
+        isFetching={isFetching}
+        page={page}
+        pageSize={TASKS_PAGE_SIZE}
+        total={total}
+        label={TASKS_MESSAGES.list.label}
+        onPageChange={onPageChange}
+        emptyState={
+          emptyState ?? {
+            icon: ListChecks,
+            title: hasFilters ? TASKS_MESSAGES.list.emptyFilteredTitle : TASKS_MESSAGES.list.emptyTitle,
+            message: hasFilters ? TASKS_MESSAGES.list.emptyFilteredMessage : TASKS_MESSAGES.list.emptyMessage,
           }
-        />
-      )}
+        }
+      />
     </section>
   )
 }
