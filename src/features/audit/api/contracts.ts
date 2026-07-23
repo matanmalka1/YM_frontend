@@ -9,6 +9,7 @@ export type EntityAuditType =
   | 'vat_invoice'
   | 'binder'
   | 'binder_intake'
+  | 'advance_payment'
 
 // old_value / new_value / metadata_json are JSON objects (dict | list | null) —
 // the backend stores them as JSONB and no longer json.dumps them into strings.

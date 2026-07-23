@@ -12,7 +12,7 @@ export const ADVANCE_PAYMENT_VAT_NOT_FILED_CODE = 'ADVANCE_PAYMENT.VAT_NOT_FILED
 
 const ADVANCE_PAYMENT_STATUS_VALUES = ['pending', 'paid', 'partial'] as const satisfies readonly AdvancePaymentStatus[]
 const ADVANCE_PAYMENT_STATUS_VALUE_SET = new Set<string>(ADVANCE_PAYMENT_STATUS_VALUES)
-const ADVANCE_PAYMENT_STATUS_LABELS: Record<AdvancePaymentStatus, string> = {
+export const ADVANCE_PAYMENT_STATUS_LABELS: Record<AdvancePaymentStatus, string> = {
   pending: 'ממתין',
   paid: 'שולם',
   partial: 'חלקי',
@@ -33,7 +33,7 @@ const ADVANCE_PAYMENT_METHOD_VALUES = [
   'cash',
   'other',
 ] as const satisfies readonly AdvancePaymentMethod[]
-const ADVANCE_PAYMENT_METHOD_LABELS: Record<AdvancePaymentMethod, string> = {
+export const ADVANCE_PAYMENT_METHOD_LABELS: Record<AdvancePaymentMethod, string> = {
   bank_transfer: 'העברה בנקאית',
   credit_card: 'כרטיס אשראי',
   check: "צ'ק",

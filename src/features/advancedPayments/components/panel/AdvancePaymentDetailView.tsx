@@ -6,18 +6,30 @@ import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Textarea } from '@/components/ui/inputs/Textarea'
 import { Button } from '@/components/ui/primitives/Button'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
+import { EntityAuditTrailSection, type FieldValueLabels } from '@/features/audit'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { formatShekelAmount } from '@/utils/utils'
 import { useBeforeUnloadGuard } from '@/hooks/useBeforeUnloadGuard'
 import type { AdvancePaymentRow, UpdateAdvancePaymentPayload } from '../../api/contracts'
-import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
+import {
+  ADVANCE_PAYMENT_METHOD_LABELS,
+  ADVANCE_PAYMENT_STATUS_LABELS,
+  ADVANCE_PAYMENT_STATUS_VARIANTS,
+  getAdvancePaymentStatusLabel,
+} from '../../constants'
 import { useAdvancePaymentDetailForm } from '../../hooks/useAdvancePaymentDetailForm'
 import { toEditableAmount } from '../../utils/advancePaymentComponentUtils'
 import { AdvancePaymentContextCard } from './AdvancePaymentContextCard'
 import { AdvancePaymentEditableSections } from './AdvancePaymentEditableSections'
 import { AdvancePaymentReadonlySections } from './AdvancePaymentReadonlySections'
 import { AdvancePaymentSummaryStrip } from './AdvancePaymentSummaryStrip'
-import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
+import { ADVANCED_PAYMENTS_MESSAGES, TURNOVER_SOURCE_SHORT_LABELS } from '../../messages'
+
+const FIELD_VALUE_LABELS: FieldValueLabels = {
+  status: ADVANCE_PAYMENT_STATUS_LABELS,
+  payment_method: ADVANCE_PAYMENT_METHOD_LABELS,
+  turnover_source: TURNOVER_SOURCE_SHORT_LABELS,
+}
 
 interface AdvancePaymentDetailViewProps {
   payment: AdvancePaymentRow
@@ -137,6 +149,10 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
         />
       )}
 
+      {payment.timing_status === 'overdue' && (
+        <Alert variant="warning" size="sm" message={ADVANCED_PAYMENTS_MESSAGES.detail.interestIndicationNote} />
+      )}
+
       <AdvancePaymentSummaryStrip payment={payment} />
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
@@ -155,6 +171,15 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
 
         <AdvancePaymentContextCard payment={payment} clientIdNumber={clientIdNumber} />
       </div>
+
+      <EntityAuditTrailSection
+        entityType="advance_payment"
+        entityId={payment.id}
+        title={ADVANCED_PAYMENTS_MESSAGES.detail.auditTitle}
+        subtitle={ADVANCED_PAYMENTS_MESSAGES.detail.auditSubtitle}
+        compact
+        fieldValueLabels={FIELD_VALUE_LABELS}
+      />
 
       <ConfirmDialog
         open={turnoverRefresh.isConfirmingPending}

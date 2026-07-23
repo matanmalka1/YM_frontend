@@ -13,7 +13,7 @@ const TURNOVER_SOURCE_LABELS: Record<TurnoverSource, string> = {
 }
 
 /** Same distinction, short enough to sit inside a list value. */
-const TURNOVER_SOURCE_SHORT_LABELS: Record<TurnoverSource, string> = {
+export const TURNOVER_SOURCE_SHORT_LABELS: Record<TurnoverSource, string> = {
   manual: 'מוזן ידנית',
   vat_filed: 'ממע״מ',
   vat_pending: 'ממע״מ בהכנה',
@@ -105,6 +105,9 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     periodTurnoverLabel: 'מחזור לתקופה',
     noVatReportNote: 'אין דוח מע״מ לתקופה',
     timingStatusLabel: 'סטטוס עמידה',
+    auditTitle: 'יומן שינויים',
+    auditSubtitle: 'שינויים שבוצעו במקדמה',
+    interestIndicationNote: 'ריבית והצמדה נצברות לפי סעיף 190 — הסכום הרשמי בשע״מ',
   },
   editableSections: {
     calculationSectionTitle: 'חישוב מקדמה',

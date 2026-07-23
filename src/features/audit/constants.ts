@@ -54,8 +54,15 @@ const VAT_VERB_LABELS: Record<string, string> = {
   amount_changed: 'שינוי סכום',
 }
 
+const ADVANCE_PAYMENT_VERB_LABELS: Record<string, string> = {
+  turnover_refreshed: 'עודכן מחזור',
+}
+
 const VAT_WORK_ITEM_VERBS = ['created', 'status_changed', 'filed', 'amount_overridden', 'updated', 'deleted']
 const VAT_INVOICE_VERBS = ['created', 'updated', 'amount_changed', 'deleted']
+
+// Backend emits exactly these four actions for advance_payment — no 'restored'.
+const ADVANCE_PAYMENT_VERBS = ['created', 'updated', 'deleted', 'turnover_refreshed']
 
 const CLIENT_LIKE_VERBS = ['created', 'updated', 'deleted', 'restored']
 
@@ -81,6 +88,7 @@ export const AUDIT_ACTIONS_BY_ENTITY_TYPE: Record<EntityAuditType, string[]> = {
   vat_invoice: VAT_INVOICE_VERBS.map((v) => auditAction('vat_invoice', v)),
   binder: BINDER_VERBS.map((v) => auditAction('binder', v)),
   binder_intake: BINDER_INTAKE_VERBS.map((v) => auditAction('binder_intake', v)),
+  advance_payment: ADVANCE_PAYMENT_VERBS.map((v) => auditAction('advance_payment', v)),
 }
 
 const buildActionLabels = (): Record<string, string> => {
@@ -91,7 +99,8 @@ const buildActionLabels = (): Record<string, string> => {
     CHARGE_VERB_LABELS[verb] ??
     ANNUAL_REPORT_VERB_LABELS[verb] ??
     VAT_VERB_LABELS[verb] ??
-    BINDER_VERB_LABELS[verb]
+    BINDER_VERB_LABELS[verb] ??
+    ADVANCE_PAYMENT_VERB_LABELS[verb]
   for (const actions of Object.values(AUDIT_ACTIONS_BY_ENTITY_TYPE)) {
     for (const action of actions) {
       const verb = action.split('.').slice(1).join('.')
@@ -171,4 +180,17 @@ export const AUDIT_FIELD_LABELS: Record<string, string> = {
   value: 'ערך',
   intake_id: 'אירוע קבלה',
   binder_id: 'קלסר',
+  // Advance-payment fields (status / period / paid_at / advance_rate / notes already above)
+  period_months_count: 'מספר חודשים',
+  due_date: 'תאריך יעד',
+  expected_amount: 'סכום צפוי',
+  paid_amount: 'סכום שולם',
+  calculated_amount: 'סכום מחושב',
+  override_amount: 'סכום עקיפה',
+  payment_method: 'שיטת תשלום',
+  payment_reference: 'מספר אסמכתא',
+  annual_report_id: 'דוח שנתי',
+  turnover_amount: 'מחזור לתקופה',
+  turnover_source: 'מקור מחזור',
+  turnover_snapshot_at: 'תאריך קיבוע מחזור',
 }
