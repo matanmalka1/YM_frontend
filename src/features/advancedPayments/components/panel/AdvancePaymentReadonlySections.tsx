@@ -1,6 +1,8 @@
+import { Wallet } from 'lucide-react'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { DefinitionList } from '@/components/ui/layout/DefinitionList'
 import { Card } from '@/components/ui/primitives/Card'
+import { IconChip } from '@/components/ui/primitives/IconChip'
 import { formatShekelAmount, formatDate, formatPercent } from '@/utils/utils'
 import type { AdvancePaymentRow } from '../../api/contracts'
 import { getAdvancePaymentMethodLabel } from '../../constants'
@@ -11,9 +13,15 @@ interface AdvancePaymentReadonlySectionsProps {
 }
 
 export const AdvancePaymentReadonlySections: React.FC<AdvancePaymentReadonlySectionsProps> = ({ payment }) => (
-  <Card title={ADVANCED_PAYMENTS_MESSAGES.readonlySections.sectionTitle} size="compact" variant="outlined">
+  <Card
+    title={ADVANCED_PAYMENTS_MESSAGES.readonlySections.sectionTitle}
+    icon={<IconChip icon={Wallet} tone="info" size="sm" />}
+    size="compact"
+    variant="outlined"
+  >
     <DefinitionList
-      layout="stacked"
+      layout="grid"
+      columns={2}
       items={[
         {
           label: ADVANCED_PAYMENTS_MESSAGES.readonlySections.paidAmountLabel,
@@ -55,7 +63,7 @@ export const AdvancePaymentReadonlySections: React.FC<AdvancePaymentReadonlySect
           label: ADVANCED_PAYMENTS_MESSAGES.readonlySections.paidAtLabel,
           value: payment.paid_at ? formatDate(payment.paid_at) : null,
         },
-        { label: GLOBAL_UI_MESSAGES.common.notes, value: payment.notes },
+        { label: GLOBAL_UI_MESSAGES.common.notes, value: payment.notes, fullWidth: true },
       ]}
     />
   </Card>

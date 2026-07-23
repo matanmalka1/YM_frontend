@@ -16,6 +16,8 @@ export interface StatsCardProps {
   className?: string
   /** Show a placeholder instead of value while the backing query is loading. */
   loading?: boolean
+  /** Rendered under the value/description — progress bars, badges, secondary signals. */
+  footer?: React.ReactNode
 }
 
 const STAT_VARIANTS: Record<
@@ -62,6 +64,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
   onClick,
   className,
   loading = false,
+  footer,
 }) => {
   const config = STAT_VARIANTS[variant]
   const isInteractive = Boolean(onClick)
@@ -92,6 +95,8 @@ export const StatsCard: React.FC<StatsCardProps> = ({
             </div>
 
             {description && <p className="mt-1 text-sm leading-relaxed text-gray-600">{description}</p>}
+
+            {footer && <div className="mt-2">{footer}</div>}
           </div>
         </div>
       </div>

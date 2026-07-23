@@ -9,6 +9,7 @@ import { GLOBAL_UI_MESSAGES } from '@/messages'
 import type { AdvancePaymentRow, UpdateAdvancePaymentPayload } from '../../api/contracts'
 import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
 import { useAdvancePaymentDetailForm } from '../../hooks/useAdvancePaymentDetailForm'
+import { toEditableAmount } from '../../utils/advancePaymentComponentUtils'
 import { AdvancePaymentContextCard } from './AdvancePaymentContextCard'
 import { AdvancePaymentEditableSections } from './AdvancePaymentEditableSections'
 import { AdvancePaymentReadonlySections } from './AdvancePaymentReadonlySections'
@@ -28,9 +29,9 @@ interface AdvancePaymentDetailViewProps {
   onDelete?: () => Promise<void>
   turnoverRefresh: {
     isRefreshing: boolean
-    onRefresh: () => Promise<void>
+    onRefresh: () => Promise<AdvancePaymentRow | undefined>
     isConfirmingPending: boolean
-    onConfirmPending: () => Promise<void>
+    onConfirmPending: () => Promise<AdvancePaymentRow | undefined>
     onCancelPending: () => void
   }
 }
@@ -55,6 +56,17 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
 }) => {
   const form = useAdvancePaymentDetailForm({ payment, onSave })
   const [confirmDelete, setConfirmDelete] = useState(false)
+
+  // A snapshot rewrites the turnover server-side; the seeded input must follow,
+  // or the next save would send the stale pre-snapshot value and wipe it.
+  const handleRefreshTurnover = async () => {
+    const refreshed = await turnoverRefresh.onRefresh()
+    if (refreshed) form.setTurnoverAmount(toEditableAmount(refreshed.turnover_amount))
+  }
+  const handleConfirmPendingRefresh = async () => {
+    const refreshed = await turnoverRefresh.onConfirmPending()
+    if (refreshed) form.setTurnoverAmount(toEditableAmount(refreshed.turnover_amount))
+  }
 
   return (
     <div className="space-y-5">
@@ -101,6 +113,10 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
         }
       />
 
+      {form.isDirty && (
+        <Alert variant="info" size="sm" message={ADVANCED_PAYMENTS_MESSAGES.detail.unsavedChangesNotice} />
+      )}
+
       {payment.missing_turnover && (
         <Alert variant="warning" size="sm" message={ADVANCED_PAYMENTS_MESSAGES.detail.missingTurnoverAlert} />
       )}
@@ -114,7 +130,7 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
               form={form}
               payment={payment}
               isRefreshingTurnover={turnoverRefresh.isRefreshing}
-              onRefreshTurnover={turnoverRefresh.onRefresh}
+              onRefreshTurnover={handleRefreshTurnover}
             />
           ) : (
             <AdvancePaymentReadonlySections payment={payment} />
@@ -130,7 +146,7 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
         message={ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.confirmMessage}
         confirmLabel={ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.confirmLabel}
         isLoading={turnoverRefresh.isRefreshing}
-        onConfirm={turnoverRefresh.onConfirmPending}
+        onConfirm={handleConfirmPendingRefresh}
         onCancel={turnoverRefresh.onCancelPending}
       />
 

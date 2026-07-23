@@ -100,13 +100,13 @@ export const useAdvancePaymentDetailPage = ({
       isRefreshing: paymentMutations.isRefreshingTurnover,
       // mutateAsync rejects on the 409 the confirm dialog handles; the mutation's
       // onError owns every outcome, so the rejection is deliberately swallowed.
-      onRefresh: async () => {
-        await paymentMutations.refreshTurnover({ id: paymentId, confirmPending: false }).catch(() => undefined)
-      },
+      // The refreshed payment is returned so the edit form can sync its turnover
+      // field — otherwise a later save would send the stale pre-snapshot value.
+      onRefresh: async () =>
+        await paymentMutations.refreshTurnover({ id: paymentId, confirmPending: false }).catch(() => undefined),
       isConfirmingPending: pendingVatConfirm,
-      onConfirmPending: async () => {
-        await paymentMutations.refreshTurnover({ id: paymentId, confirmPending: true }).catch(() => undefined)
-      },
+      onConfirmPending: async () =>
+        await paymentMutations.refreshTurnover({ id: paymentId, confirmPending: true }).catch(() => undefined),
       onCancelPending: () => setPendingVatConfirm(false),
     },
   }
