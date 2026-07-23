@@ -1,4 +1,5 @@
-import { CalendarDays, Landmark } from 'lucide-react'
+import { CalendarDays, Landmark, ArrowLeft } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { DashboardPanel, DashboardSectionHeader } from '../shared/DashboardLayout'
 import { InlineState } from '@/components/ui/feedback/InlineState'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
@@ -31,28 +32,32 @@ const UpcomingDeadlineRow = ({ group }: { group: TaxCalendarGroup }) => {
     group.obligation_type === 'advance_payment' ? DASHBOARD_MESSAGES.deadlines.payments : DASHBOARD_MESSAGES.deadlines.reports
   const iconClassName =
     group.obligation_type !== 'vat'
-      ? 'bg-positive-50 text-positive-600'
+      ? 'bg-positive-50 text-positive-600 ring-1 ring-positive-100'
       : group.period_months_count === 2
-        ? 'bg-violet-50 text-violet-500'
-        : 'bg-primary-50 text-primary-600'
+        ? 'bg-violet-50 text-violet-500 ring-1 ring-violet-100'
+        : 'bg-primary-50 text-primary-600 ring-1 ring-primary-100'
 
   return (
-    <li className="relative grid min-h-[126px] grid-cols-[48px_minmax(0,1fr)] border-b border-slate-100 last:border-b-0">
-      <div className="relative flex justify-center pt-4">
-        <span className="absolute bottom-0 top-0 left-1/2 w-px -translate-x-1/2 bg-slate-100" />
-        <span className={`relative z-10 flex h-11 w-11 items-center justify-center rounded-2xl ${iconClassName}`}>
-          <Icon className="h-5 w-5" />
-        </span>
-      </div>
+    <li className="flex items-center gap-3.5 rounded-2xl border border-transparent p-3.5 transition-colors hover:border-slate-200/60 hover:bg-slate-50">
+      <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${iconClassName}`}>
+        <Icon className="h-5 w-5" />
+      </span>
 
-      <div className="min-w-0 py-4 text-center">
-        <p className="text-md font-bold tabular-nums text-slate-900">{formatDate(group.effective_due_date_min)}</p>
-        <p className="mt-1 text-xs font-semibold text-slate-400">({weekday})</p>
-        <p className="mt-2 truncate text-sm font-bold text-slate-900">{formatObligationTitle(group)}</p>
-        <p className="mt-1 truncate text-sm text-slate-400">
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center justify-between gap-1">
+          <p className="truncate text-sm font-semibold text-slate-900">{formatObligationTitle(group)}</p>
+          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-2xs font-semibold text-slate-600">
+            {group.open_count} {countLabel}
+          </span>
+        </div>
+        <p className="mt-0.5 truncate text-xs font-medium text-slate-500">
           {getReportingPeriodLabelWithYear(group.period, group.period_months_count, group.tax_year)}
         </p>
-        <p className="mt-1 truncate text-sm text-slate-400">{`${group.open_count} ${countLabel}`}</p>
+      </div>
+
+      <div className="flex shrink-0 flex-col items-end rounded-xl border border-slate-200/60 bg-slate-50 px-2.5 py-1.5 text-end">
+        <span className="text-xs font-bold tabular-nums text-slate-900">{formatDate(group.effective_due_date_min)}</span>
+        <span className="text-2xs font-semibold text-slate-400">({weekday})</span>
       </div>
     </li>
   )
@@ -77,18 +82,30 @@ export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string 
   return (
     <DashboardPanel className={`flex flex-col ${className}`}>
       <div className="border-b border-slate-100 px-5 py-4">
-        <DashboardSectionHeader title={DASHBOARD_MESSAGES.deadlines.title} icon={CalendarDays} />
+        <DashboardSectionHeader
+          title={DASHBOARD_MESSAGES.deadlines.title}
+          icon={CalendarDays}
+          action={
+            <Link
+              to="/settings/tax-calendar"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-primary-50 px-3 py-1.5 text-xs font-semibold text-primary-700 transition-colors hover:bg-primary-100"
+            >
+              <span>{DASHBOARD_MESSAGES.deadlines.viewAll}</span>
+              <ArrowLeft className="h-3.5 w-3.5" />
+            </Link>
+          }
+        />
       </div>
 
-      <div className="mx-3 mt-3 mb-3 flex-1 overflow-hidden rounded-2xl border border-slate-100">
+      <div className="p-3">
         {groupsQuery.isPending ? (
-          <div className="space-y-3 p-4">
+          <div className="space-y-2 p-2">
             {Array.from({ length: UPCOMING_DEADLINES_LIMIT }, (_, index) => (
-              <SkeletonBlock key={index} height="h-24" width="w-full" rounded="xl" className="rounded-2xl" />
+              <SkeletonBlock key={index} height="h-16" width="w-full" rounded="xl" className="rounded-2xl" />
             ))}
           </div>
         ) : groups.length > 0 ? (
-          <ol>
+          <ol className="space-y-1">
             {groups.map((group) => (
               <UpcomingDeadlineRow key={group.tax_calendar_entry_id} group={group} />
             ))}
@@ -103,3 +120,5 @@ export const UpcomingDeadlinesPanel = ({ className = '' }: { className?: string 
     </DashboardPanel>
   )
 }
+
+UpcomingDeadlinesPanel.displayName = 'UpcomingDeadlinesPanel'

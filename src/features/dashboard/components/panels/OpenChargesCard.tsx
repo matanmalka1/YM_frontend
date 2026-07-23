@@ -1,6 +1,7 @@
 import { ArrowLeft, ReceiptText } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn, formatCount, formatShekelAmount } from '@/utils/utils'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { Card } from '@/components/ui/primitives/Card'
 import { DASHBOARD_HREFS } from '../../constants'
 import { DASHBOARD_MESSAGES } from '../../messages'
@@ -15,18 +16,27 @@ export const OpenChargesCard = ({ count, amountIls }: OpenChargesCardProps) => {
 
   return (
     <Card variant="soft" size="compact">
-      <div className="mb-3 flex items-center justify-between">
-        <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">
-          {DASHBOARD_MESSAGES.openCharges.title}
-        </span>
-        <span
-          className={cn(
-            'flex h-8 w-8 items-center justify-center rounded-xl',
-            hasCharges ? 'bg-warning-50 text-warning-600' : 'bg-positive-50 text-positive-600',
-          )}
-        >
-          <ReceiptText className="h-4 w-4" />
-        </span>
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <span
+            className={cn(
+              'flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ring-1',
+              hasCharges
+                ? 'bg-warning-50 text-warning-600 ring-warning-100'
+                : 'bg-positive-50 text-positive-600 ring-positive-100',
+            )}
+          >
+            <ReceiptText className="h-5 w-5" />
+          </span>
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            {DASHBOARD_MESSAGES.openCharges.title}
+          </span>
+        </div>
+        {hasCharges && (
+          <Badge variant="warning" size="2xs" className="shrink-0 font-bold tabular-nums">
+            {formatCount(count)}
+          </Badge>
+        )}
       </div>
 
       <p className="font-bold tabular-nums text-xl leading-none text-slate-900">{amountIls ?? formatShekelAmount(0)}</p>

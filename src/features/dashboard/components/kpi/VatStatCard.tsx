@@ -27,33 +27,38 @@ export const VatStatCard = ({ title, unit, icon: Icon, stat, href, className }: 
   const { iconBg, value: pctClass } = semanticStatToneClasses[tone]
 
   const content = (
-    <Card variant="soft" size="compact" interactive={Boolean(href)} bodyClassName="flex flex-col gap-3" className={className}>
-      <div className="flex items-center gap-3">
-        <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl', iconBg)}>
-          <Icon className="h-4 w-4" />
-        </span>
-        <span className="text-sm font-semibold text-slate-500">{title}</span>
-      </div>
-
-      <div className="flex items-baseline gap-1.5">
-        <span className="font-bold tabular-nums text-4xl leading-none text-slate-900">{formatCount(stat.pending)}</span>
-        <span className="text-xs font-medium text-slate-400">{unit}</span>
-      </div>
-
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-xs text-slate-500">{stat.period_label}</span>
+    <Card variant="soft" size="compact" interactive={Boolean(href)} bodyClassName="flex flex-col gap-3.5" className={className}>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <span className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl', iconBg)}>
+            <Icon className="h-5 w-5" />
+          </span>
+          <span className="text-sm font-semibold text-slate-500">{title}</span>
+        </div>
         <Badge variant={tone} size="2xs" className="whitespace-nowrap">
           {stat.status_label}
         </Badge>
       </div>
 
-      <ProgressBar value={stat.completion_percent} size="sm" tone={tone} trackClassName="bg-slate-100" />
+      <div className="flex items-baseline justify-between gap-2">
+        <div className="flex items-baseline gap-1.5">
+          <span className="font-bold tabular-nums text-4xl leading-none tracking-tight text-slate-900">
+            {formatCount(stat.pending)}
+          </span>
+          <span className="text-xs font-medium text-slate-400">{unit}</span>
+        </div>
+        <span className="text-xs text-slate-500">{stat.period_label}</span>
+      </div>
 
-      <div className="flex items-center justify-between text-2xs font-medium text-slate-500">
-        <span className="tabular-nums">
-          {formatCount(stat.submitted)} / {formatCount(stat.required)} {DASHBOARD_MESSAGES.stats.completed}
-        </span>
-        <span className={cn('font-bold tabular-nums', pctClass)}>{stat.completion_percent}%</span>
+      <div className="space-y-1.5 pt-1">
+        <ProgressBar value={stat.completion_percent} size="sm" tone={tone} trackClassName="bg-slate-100" />
+
+        <div className="flex items-center justify-between text-2xs font-medium text-slate-500">
+          <span className="tabular-nums">
+            {formatCount(stat.submitted)} / {formatCount(stat.required)} {DASHBOARD_MESSAGES.stats.completed}
+          </span>
+          <span className={cn('font-bold tabular-nums', pctClass)}>{stat.completion_percent}%</span>
+        </div>
       </div>
     </Card>
   )

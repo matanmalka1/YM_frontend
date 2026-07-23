@@ -44,13 +44,13 @@ export const DashboardSectionHeader = ({
   <div className={cn('flex items-center justify-between gap-4', className)}>
     <div className="flex min-w-0 items-center gap-3">
       {Icon && (
-        <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl', getToneClasses(tone).iconBg)}>
-          <Icon className="h-4 w-4" />
+        <span className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl', getToneClasses(tone).iconBg)}>
+          <Icon className="h-5 w-5" />
         </span>
       )}
       <div className="min-w-0">
         <h2 className="truncate text-sm font-bold text-slate-900">{title}</h2>
-        {subtitle && <p className="mt-0.5 truncate text-xs text-slate-400">{subtitle}</p>}
+        {subtitle && <p className="mt-0.5 truncate text-xs font-medium text-slate-500">{subtitle}</p>}
       </div>
     </div>
     <div className="flex shrink-0 items-center gap-2">

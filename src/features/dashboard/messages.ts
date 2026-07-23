@@ -23,6 +23,8 @@ export const DASHBOARD_MESSAGES = {
     general: 'כללי',
     prioritySummary: (total: number, displayed: number) => `${total} פריטים פתוחים · ${displayed} בראש סדר העדיפויות`,
     showAll: 'הצג הכל',
+    filterAll: 'הכל',
+    filteredEmpty: 'אין פריטים בקטגוריה הנבחרת',
   },
   openCharges: {
     title: 'חיובים פתוחים',

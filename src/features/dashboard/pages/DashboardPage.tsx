@@ -81,8 +81,8 @@ export const DashboardPage: React.FC = () => {
             ) : (
               <AttentionBoard items={attentionItems} total={dashboard.data?.attention.total} />
             )}
-            <SignatureRequestsDashboardPanel />
             <RecentActivityPanel items={recentActivity} className="flex-1" />
+            <SignatureRequestsDashboardPanel />
           </div>
 
           {/* Right column: charges + insights + season + quick actions */}
