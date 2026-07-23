@@ -15,6 +15,11 @@ interface RefreshTurnoverVariables {
   confirmPending: boolean
 }
 
+interface DeleteAdvancePaymentVariables {
+  paymentId: number
+  reason: string
+}
+
 interface UseAdvancePaymentMutationsOptions {
   clientRecordId: number
   onUpdateSuccess?: (payment: AdvancePaymentRow) => void
@@ -43,8 +48,9 @@ export const useAdvancePaymentMutations = ({
   })
 
   const deleteMutation = useMutation({
-    mutationFn: (paymentId: number) => advancePaymentsApi.delete(clientRecordId, paymentId),
-    onSuccess: (_result, paymentId) => {
+    mutationFn: ({ paymentId, reason }: DeleteAdvancePaymentVariables) =>
+      advancePaymentsApi.delete(clientRecordId, paymentId, { reason }),
+    onSuccess: (_result, { paymentId }) => {
       onDeleteSuccess?.(paymentId)
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
     },
@@ -77,6 +83,6 @@ export const useAdvancePaymentMutations = ({
     updatingId: updateMutation.isPending ? (updateMutation.variables?.id ?? null) : null,
     deletePayment: deleteMutation.mutateAsync,
     isDeleting: deleteMutation.isPending,
-    deletingId: deleteMutation.isPending ? (deleteMutation.variables ?? null) : null,
+    deletingId: deleteMutation.isPending ? (deleteMutation.variables?.paymentId ?? null) : null,
   }
 }

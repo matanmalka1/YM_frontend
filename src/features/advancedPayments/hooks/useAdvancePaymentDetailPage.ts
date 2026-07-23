@@ -94,7 +94,9 @@ export const useAdvancePaymentDetailPage = ({
       onSave: async (payload: UpdateAdvancePaymentPayload) => {
         await paymentMutations.updatePayment({ id: paymentId, payload })
       },
-      onDelete: isAdvisor ? async () => void (await paymentMutations.deletePayment(paymentId)) : undefined,
+      onDelete: isAdvisor
+        ? async (reason: string) => void (await paymentMutations.deletePayment({ paymentId, reason }))
+        : undefined,
     },
     turnoverRefresh: {
       isRefreshing: paymentMutations.isRefreshingTurnover,

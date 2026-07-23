@@ -7,6 +7,7 @@ import type {
   AdvancePaymentRow,
   ListAdvancePaymentsParams,
   CreateAdvancePaymentPayload,
+  DeleteAdvancePaymentPayload,
   UpdateAdvancePaymentPayload,
   ListAdvancePaymentsOverviewParams,
   AdvancePaymentOverviewResponse,
@@ -62,8 +63,8 @@ export const advancePaymentsApi = {
     return response.data
   },
 
-  delete: async (clientRecordId: number, id: number): Promise<void> => {
-    await api.delete(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientRecordId, id))
+  delete: async (clientRecordId: number, id: number, payload: DeleteAdvancePaymentPayload): Promise<void> => {
+    await api.delete(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientRecordId, id), { data: payload })
   },
 
   getAnnualKPIs: async (clientRecordId: number, year: number): Promise<AnnualKPIResponse> => {

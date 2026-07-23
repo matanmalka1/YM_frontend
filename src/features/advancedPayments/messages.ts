@@ -71,6 +71,7 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     deleteTitle: 'מחק מקדמה',
     deleteModalTitle: 'מחיקת מקדמה',
     deleteModalMessage: 'האם למחוק מקדמה זו?',
+    deleteReasonPlaceholder: 'סיבת המחיקה (חובה)',
     deleteConfirm: 'כן, מחק',
   },
   detail: {

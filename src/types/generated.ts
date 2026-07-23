@@ -3320,6 +3320,11 @@ export interface components {
       monthly: components['schemas']['VatDashboardPeriodStat']
       bimonthly: components['schemas']['VatDashboardPeriodStat']
     }
+    /** AdvancePaymentDeleteRequest */
+    AdvancePaymentDeleteRequest: {
+      /** Reason */
+      reason: string
+    }
     /**
      * AdvancePaymentFrequency
      * @description Advance payment reporting frequency — independent from VAT frequency.
@@ -18477,7 +18482,11 @@ export interface operations {
       }
       cookie?: never
     }
-    requestBody?: never
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AdvancePaymentDeleteRequest']
+      }
+    }
     responses: {
       /** @description Successful Response */
       204: {

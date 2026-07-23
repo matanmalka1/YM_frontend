@@ -3,6 +3,7 @@ import { Trash2 } from 'lucide-react'
 import { PageHeader, type Breadcrumb } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
+import { Textarea } from '@/components/ui/inputs/Textarea'
 import { Button } from '@/components/ui/primitives/Button'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
@@ -28,7 +29,7 @@ interface AdvancePaymentDetailViewProps {
   isUpdating: boolean
   isDeleting: boolean
   onSave: (payload: UpdateAdvancePaymentPayload) => Promise<void>
-  onDelete?: () => Promise<void>
+  onDelete?: (reason: string) => Promise<void>
   turnoverRefresh: {
     isRefreshing: boolean
     onRefresh: () => Promise<AdvancePaymentRow | undefined>
@@ -58,6 +59,7 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
 }) => {
   const form = useAdvancePaymentDetailForm({ payment, onSave })
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleteReason, setDeleteReason] = useState('')
   useBeforeUnloadGuard(form.isDirty)
 
   // A snapshot rewrites the turnover server-side; the seeded input must follow,
@@ -172,9 +174,21 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
           confirmLabel={ADVANCED_PAYMENTS_MESSAGES.detailActions.deleteConfirm}
           confirmVariant="danger"
           isLoading={isDeleting}
-          onConfirm={onDelete}
-          onCancel={() => setConfirmDelete(false)}
-        />
+          confirmDisabled={!deleteReason.trim()}
+          onConfirm={() => onDelete(deleteReason.trim())}
+          onCancel={() => {
+            setConfirmDelete(false)
+            setDeleteReason('')
+          }}
+        >
+          <Textarea
+            className="mt-3 resize-none"
+            rows={3}
+            placeholder={ADVANCED_PAYMENTS_MESSAGES.detailActions.deleteReasonPlaceholder}
+            value={deleteReason}
+            onChange={(event) => setDeleteReason(event.target.value)}
+          />
+        </ConfirmDialog>
       )}
     </div>
   )

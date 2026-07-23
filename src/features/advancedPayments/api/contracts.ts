@@ -65,6 +65,10 @@ export interface UpdateAdvancePaymentPayload {
   notes?: string | null
 }
 
+export interface DeleteAdvancePaymentPayload {
+  reason: string
+}
+
 export type TurnoverSource = 'manual' | 'vat_filed' | 'vat_pending'
 
 /**
