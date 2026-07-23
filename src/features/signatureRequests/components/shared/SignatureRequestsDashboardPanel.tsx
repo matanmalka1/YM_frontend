@@ -6,6 +6,7 @@ import { ActionSurfaceButton } from '@/components/ui/primitives/ActionSurface'
 import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
 import { IconChip } from '@/components/ui/primitives/IconChip'
+import { SectionHeader } from '@/components/ui/layout/SectionHeader'
 import { InlineState } from '@/components/ui/feedback'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { Badge } from '@/components/ui/primitives/Badge'
@@ -124,30 +125,24 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
 
   return (
     <Card size="compact" disablePadding className="shadow-sm">
-      <div className={cn('border-b border-gray-100', compact ? 'px-5 py-4' : 'px-5 py-4')}>
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex min-w-0 items-center gap-3">
-            <IconChip icon={FileSignature} size="xs" tone="neutral" />
-            <div className="min-w-0">
-              <h2 className={cn('truncate font-bold text-gray-900', compact ? 'text-base' : 'text-sm')}>
-                {SIGNATURE_REQUESTS_MESSAGES.dashboard.title}
-              </h2>
-              {!compact && (
-                <p className="mt-0.5 truncate text-xs text-gray-500">
-                  {error ?? SIGNATURE_REQUESTS_MESSAGES.dashboard.description}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="flex shrink-0 items-center gap-2">
-            <Badge variant="neutral" size="md" className="min-w-8 justify-center tabular-nums">
-              {total}
-            </Badge>
-            <Button icon={<Plus className="h-3.5 w-3.5" />} onClick={() => setShowCreate(true)}>
-              {SIGNATURE_REQUESTS_MESSAGES.actions.newRequest}
-            </Button>
-          </div>
-        </div>
+      <div className="border-b border-gray-100 px-5 py-4">
+        <SectionHeader
+          size="panel"
+          headingLevel={2}
+          title={SIGNATURE_REQUESTS_MESSAGES.dashboard.title}
+          subtitle={compact ? undefined : (error ?? SIGNATURE_REQUESTS_MESSAGES.dashboard.description)}
+          icon={<IconChip icon={FileSignature} size="xs" tone="neutral" />}
+          actions={
+            <>
+              <Badge variant="neutral" size="md" className="min-w-8 justify-center tabular-nums">
+                {total}
+              </Badge>
+              <Button icon={<Plus className="h-3.5 w-3.5" />} onClick={() => setShowCreate(true)}>
+                {SIGNATURE_REQUESTS_MESSAGES.actions.newRequest}
+              </Button>
+            </>
+          }
+        />
       </div>
 
       <div className={cn('space-y-4', compact ? 'p-5' : 'p-4')}>

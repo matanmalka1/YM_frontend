@@ -25,3 +25,25 @@ describe('SectionHeader default heading levels', () => {
     expect(renderToStaticMarkup(<SectionHeader title="תווית" size="xs" />)).toContain('<p')
   })
 })
+
+describe('SectionHeader panel variant', () => {
+  it('defaults to h3 and honors an explicit headingLevel', () => {
+    expect(renderToStaticMarkup(<SectionHeader size="panel" title="פאנל" />)).toContain('<h3')
+    expect(renderToStaticMarkup(<SectionHeader size="panel" headingLevel={2} title="פאנל" />)).toContain('<h2')
+  })
+
+  it('stacks a truncated title over a truncated subtitle', () => {
+    const html = renderToStaticMarkup(<SectionHeader size="panel" title="כותרת" subtitle="תיאור" />)
+    expect(html).toContain('truncate text-sm font-bold')
+    expect(html).toContain('truncate text-xs text-gray-500')
+    expect(html).toContain('min-w-0')
+  })
+
+  it('renders icon and actions slots', () => {
+    const html = renderToStaticMarkup(
+      <SectionHeader size="panel" title="כותרת" icon={<i data-testid="chip" />} actions={<button>פעולה</button>} />,
+    )
+    expect(html).toContain('data-testid="chip"')
+    expect(html).toContain('<button')
+  })
+})
