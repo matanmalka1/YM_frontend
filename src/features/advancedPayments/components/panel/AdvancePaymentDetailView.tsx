@@ -6,6 +6,7 @@ import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Button } from '@/components/ui/primitives/Button'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { useBeforeUnloadGuard } from '@/hooks/useBeforeUnloadGuard'
 import type { AdvancePaymentRow, UpdateAdvancePaymentPayload } from '../../api/contracts'
 import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
 import { useAdvancePaymentDetailForm } from '../../hooks/useAdvancePaymentDetailForm'
@@ -56,6 +57,7 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
 }) => {
   const form = useAdvancePaymentDetailForm({ payment, onSave })
   const [confirmDelete, setConfirmDelete] = useState(false)
+  useBeforeUnloadGuard(form.isDirty)
 
   // A snapshot rewrites the turnover server-side; the seeded input must follow,
   // or the next save would send the stale pre-snapshot value and wipe it.

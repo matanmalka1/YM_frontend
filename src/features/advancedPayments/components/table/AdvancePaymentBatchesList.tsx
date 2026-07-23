@@ -1,3 +1,4 @@
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { MonthlyAccordionList } from '@/components/ui/grouping/MonthlyAccordionList'
 import { reportingPeriodIncludesMonth } from '@/utils/reportingPeriod'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
@@ -16,6 +17,7 @@ interface AdvancePaymentBatchesListProps {
   currentReportingYear: number
   currentReportingMonth: number
   clientRecordId?: number
+  clientSearch?: string
   statusFilter: AdvancePaymentStatus | ''
   periodFilter: 1 | 2 | null
   onRowClick: (row: AdvancePaymentOverviewRow) => void
@@ -32,6 +34,7 @@ export const AdvancePaymentBatchesList = ({
   currentReportingYear,
   currentReportingMonth,
   clientRecordId,
+  clientSearch,
   statusFilter,
   periodFilter,
   onRowClick,
@@ -39,12 +42,14 @@ export const AdvancePaymentBatchesList = ({
 }: AdvancePaymentBatchesListProps) => (
   <MonthlyAccordionList
     isLoading={isLoading}
-    isEmpty={!isLoading && batches.length === 0}
+    isEmpty={!isLoading && displayBatches.length === 0}
     emptyState={{
       message:
-        year === null
-          ? ADVANCED_PAYMENTS_MESSAGES.batchesList.emptyNoYear
-          : ADVANCED_PAYMENTS_MESSAGES.batchesList.emptyWithYear(year),
+        batches.length > 0
+          ? GLOBAL_UI_MESSAGES.common.noResults
+          : year === null
+            ? ADVANCED_PAYMENTS_MESSAGES.batchesList.emptyNoYear
+            : ADVANCED_PAYMENTS_MESSAGES.batchesList.emptyWithYear(year),
     }}
     skeletonCols={11}
   >
@@ -66,6 +71,7 @@ export const AdvancePaymentBatchesList = ({
           scrollOnMount={stableKey === focusBatchKey}
           isCurrentPeriod={isCurrentPeriod}
           clientRecordId={clientRecordId}
+          clientSearch={clientSearch}
           statusFilter={statusFilter}
           periodFilter={periodFilter}
           onRowClick={onRowClick}

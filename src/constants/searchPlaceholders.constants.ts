@@ -13,6 +13,9 @@ export const CLIENT_SEARCH_PLACEHOLDER = 'חיפוש לפי שם, ת.ז. / ח.פ
 /** Client search that also matches contact details (used in the client sidebar). */
 export const CLIENT_SEARCH_WITH_CONTACT_PLACEHOLDER = 'חיפוש לפי שם, ת.ז. / ח.פ. או פרטי קשר'
 
+/** Client search that also matches the office client number (advance-payments overview). */
+export const CLIENT_SEARCH_WITH_OFFICE_NUMBER_PLACEHOLDER = 'חיפוש לפי שם, ת.ז. / ח.פ. או מס׳ לקוח'
+
 /** Work-queue search across client, number, title and task. */
 export const WORK_QUEUE_SEARCH_PLACEHOLDER = 'חיפוש לפי לקוח, מספר, כותרת או משימה'
 

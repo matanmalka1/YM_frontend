@@ -43,6 +43,13 @@ interface ClientSearchInputProps {
   placeholder?: string
   helperText?: string
   size?: 'sm' | 'md'
+  /**
+   * When false, results open with no highlighted option and Enter with no
+   * highlight just closes the list instead of selecting the first result.
+   * Used by free-search mode, where typing already filters and Enter must not
+   * accidentally lock a client; ArrowDown+Enter still selects.
+   */
+  autoHighlight?: boolean
 }
 
 export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
@@ -57,6 +64,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
   placeholder = CLIENT_SEARCH_PLACEHOLDER,
   helperText,
   size = 'md',
+  autoHighlight = true,
 }) => {
   const [results, setResults] = useState<ClientRecordListItem[]>([])
   const [open, setOpen] = useState(false)
@@ -147,7 +155,7 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
         setResults(res.items)
         setOpen(true)
         requestAnimationFrame(updateListPosition)
-        setHighlightedIndex(res.items.length > 0 ? 0 : -1)
+        setHighlightedIndex(autoHighlight && res.items.length > 0 ? 0 : -1)
       } catch {
         if (requestId !== requestIdRef.current) return
         setResults([])
@@ -204,9 +212,12 @@ export const ClientSearchInput: React.FC<ClientSearchInputProps> = ({
     }
 
     if (event.key === 'Enter') {
-      const selected = results[highlightedIndex] ?? results[0]
-      if (!selected) return
+      const selected = results[highlightedIndex] ?? (autoHighlight ? results[0] : undefined)
       event.preventDefault()
+      if (!selected) {
+        setOpen(false)
+        return
+      }
       handleSelect(selected)
       return
     }

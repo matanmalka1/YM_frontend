@@ -9,6 +9,7 @@ import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 interface AdvancePaymentBatchContentProps {
   batch: AdvancePaymentDueDateGroup
   clientRecordId?: number
+  clientSearch?: string
   statusFilter: AdvancePaymentStatus | ''
   periodFilter: 1 | 2 | null
   onRowClick: (row: AdvancePaymentOverviewRow) => void
@@ -18,12 +19,13 @@ interface AdvancePaymentBatchContentProps {
 export const AdvancePaymentBatchContent = ({
   batch,
   clientRecordId,
+  clientSearch,
   statusFilter,
   periodFilter,
   onRowClick,
   onNavigateToClient,
 }: AdvancePaymentBatchContentProps) => {
-  const content = useAdvancePaymentBatchRows({ batch, clientRecordId, statusFilter, periodFilter })
+  const content = useAdvancePaymentBatchRows({ batch, clientRecordId, clientSearch, statusFilter, periodFilter })
   const columns = useMemo(
     () => buildAdvancePaymentBatchColumns({ onRowClick, onNavigateToClient }),
     [onRowClick, onNavigateToClient],

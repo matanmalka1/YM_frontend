@@ -8,6 +8,7 @@ import { StateCard } from '@/components/ui/feedback'
 import { DefinitionList, type DefinitionItem } from '@/components/ui/layout/DefinitionList'
 import type { AdvancePaymentRow } from '../../api/contracts'
 import { formatShekelAmount, formatDate } from '@/utils/utils'
+import { formatRelativeDueLabel } from '@/components/ui/grouping/groupedPeriodRow.utils'
 import { getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
 import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
@@ -115,7 +116,10 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
                   {row.paid_late ? (
                     <Badge variant="warning">{ADVANCED_PAYMENTS_MESSAGES.clientCards.paidLate}</Badge>
                   ) : row.timing_status === 'overdue' ? (
-                    <Badge variant="negative">{ADVANCED_PAYMENTS_MESSAGES.clientCards.overdue}</Badge>
+                    <Badge variant="negative">
+                      {formatRelativeDueLabel(row.due_date_effective ?? row.due_date) ??
+                        ADVANCED_PAYMENTS_MESSAGES.clientCards.overdue}
+                    </Badge>
                   ) : null}
                 </div>
               </div>

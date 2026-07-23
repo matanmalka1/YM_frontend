@@ -1,4 +1,5 @@
 import { makeLabelGetter } from '@/utils/labels'
+import { CLIENT_SEARCH_WITH_OFFICE_NUMBER_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { getOperationalTaxYear, getOperationalYearOptions, MONTHS_COVERED_OPTIONS } from '@/constants/periodOptions.constants'
 import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION, ALL_YEARS_URL_OPTION } from '@/constants/filterOptions.constants'
@@ -77,7 +78,15 @@ const PERIOD_OPTIONS = [ALL_TYPES_OPTION, ...MONTHS_COVERED_OPTIONS]
 const YEAR_OPTIONS = [ALL_YEARS_URL_OPTION, ...getOperationalYearOptions()]
 
 export const ADVANCE_PAYMENTS_FILTER_FIELDS = [
-  createClientPickerFilter({ idKey: 'client_record_id', nameKey: 'client_name', label: 'לקוח' }),
+  // One input, two modes: typing filters free-text (client_search); picking a
+  // suggestion locks the exact client (client_record_id). See ClientPickerFilter.
+  createClientPickerFilter({
+    idKey: 'client_record_id',
+    nameKey: 'client_name',
+    searchKey: 'client_search',
+    label: 'לקוח',
+    placeholder: CLIENT_SEARCH_WITH_OFFICE_NUMBER_PLACEHOLDER,
+  }),
   {
     type: 'select' as const,
     key: 'year',

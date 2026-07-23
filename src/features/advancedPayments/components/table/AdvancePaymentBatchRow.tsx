@@ -12,6 +12,7 @@ interface AdvancePaymentBatchRowProps {
   scrollOnMount?: boolean
   isCurrentPeriod: boolean
   clientRecordId?: number
+  clientSearch?: string
   statusFilter: AdvancePaymentStatus | ''
   periodFilter: 1 | 2 | null
   onRowClick: (row: AdvancePaymentOverviewRow) => void
@@ -58,6 +59,7 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   scrollOnMount,
   isCurrentPeriod,
   clientRecordId,
+  clientSearch,
   statusFilter,
   periodFilter,
   onRowClick,
@@ -79,6 +81,7 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
       <AdvancePaymentBatchContent
         batch={batch}
         clientRecordId={clientRecordId}
+        clientSearch={clientSearch}
         statusFilter={statusFilter}
         periodFilter={periodFilter}
         onRowClick={onRowClick}

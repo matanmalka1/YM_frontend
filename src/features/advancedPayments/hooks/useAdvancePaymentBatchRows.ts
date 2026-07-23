@@ -9,6 +9,7 @@ export const ADVANCE_PAYMENT_BATCH_PAGE_SIZE = PAGE_SIZE_SM
 interface UseAdvancePaymentBatchRowsParams {
   batch: AdvancePaymentDueDateGroup
   clientRecordId?: number
+  clientSearch?: string
   statusFilter: AdvancePaymentStatus | ''
   periodFilter: 1 | 2 | null
 }
@@ -16,6 +17,7 @@ interface UseAdvancePaymentBatchRowsParams {
 export const useAdvancePaymentBatchRows = ({
   batch,
   clientRecordId,
+  clientSearch,
   statusFilter,
   periodFilter,
 }: UseAdvancePaymentBatchRowsParams) => {
@@ -24,7 +26,7 @@ export const useAdvancePaymentBatchRows = ({
 
   useEffect(() => {
     setPage(1)
-  }, [batch.due_date, batch.month, batch.period_months_count, clientRecordId, periodFilter, statusFilter])
+  }, [batch.due_date, batch.month, batch.period_months_count, clientRecordId, clientSearch, periodFilter, statusFilter])
 
   const params: ListAdvancePaymentsOverviewParams = {
     year: batch.year,
@@ -32,6 +34,7 @@ export const useAdvancePaymentBatchRows = ({
     due_date: batch.due_date ?? undefined,
     period_months_count: periodFilter ?? (batch.due_date ? undefined : batch.period_months_count),
     client_record_id: clientRecordId,
+    client_search: clientSearch,
     page,
     page_size: ADVANCE_PAYMENT_BATCH_PAGE_SIZE,
     status,

@@ -31,6 +31,7 @@ export const useAdvancePaymentsPage = () => {
   const filters = {
     client_record_id: getParam('client_record_id'),
     client_name: getParam('client_name'),
+    client_search: getParam('client_search'),
     status: normalizedStatus,
     period: rawPeriod === '1' || rawPeriod === '2' ? rawPeriod : '',
   }
@@ -98,6 +99,7 @@ export const useAdvancePaymentsPage = () => {
       displayBatches,
       year,
       clientRecordId,
+      clientSearch: filters.client_search.trim() || undefined,
       periodFilter,
       statusFilter,
       defaultOpenBatchKey,

@@ -1,9 +1,16 @@
 import { useEffect, useState } from 'react'
+import { useSearchDebounce } from '@/hooks/useSearchDebounce'
 import { ClientSearchInput } from './ClientSearchInput'
 
 export interface ClientPickerFilterConfig {
   idKey: string
   nameKey?: string
+  /**
+   * Hybrid free-search mode: while typing, the raw query commits (debounced)
+   * to this URL key and filters the list; picking a suggestion switches to
+   * exact `idKey` filtering and clears it. One input, two filter modes.
+   */
+  searchKey?: string
   label?: string
   placeholder?: string
 }
@@ -17,7 +24,7 @@ interface ClientPickerFilterProps {
   hideLabel?: boolean
 }
 
-/** Adapts URL filter values (id/name string params) to the controlled ClientSearchInput. */
+/** Adapts URL filter values (id/name/search string params) to the controlled ClientSearchInput. */
 export const ClientPickerFilter: React.FC<ClientPickerFilterProps> = ({
   field,
   values,
@@ -27,32 +34,49 @@ export const ClientPickerFilter: React.FC<ClientPickerFilterProps> = ({
 }) => {
   const idVal = values[field.idKey]
   const nameVal = field.nameKey ? values[field.nameKey] : undefined
-  const [clientQuery, setClientQuery] = useState(nameVal ?? '')
+  const searchVal = field.searchKey ? (values[field.searchKey] ?? '') : ''
   const selectedClient = idVal ? { name: nameVal ?? `#${idVal}` } : null
+
+  // Free-search draft, committed debounced to the URL. Guarded by the current
+  // selection: a commit racing a just-made selection must not resurrect the
+  // free-text param next to the exact id.
+  const [searchDraft, setSearchDraft] = useSearchDebounce(searchVal, (value) => {
+    if (!field.searchKey || idVal) return
+    onMultiChange({ [field.searchKey]: value.trim() })
+  })
+  const [clientQuery, setClientQuery] = useState(nameVal ?? '')
 
   useEffect(() => {
     if (!idVal) setClientQuery('')
   }, [idVal])
 
+  const clearedUpdates = (): Record<string, string> => {
+    const updates: Record<string, string> = { [field.idKey]: '' }
+    if (field.nameKey) updates[field.nameKey] = ''
+    if (field.searchKey) updates[field.searchKey] = ''
+    return updates
+  }
+
   return (
     <ClientSearchInput
-      value={clientQuery}
-      onChange={setClientQuery}
+      value={field.searchKey ? searchDraft : clientQuery}
+      onChange={field.searchKey ? setSearchDraft : setClientQuery}
       selectedClient={selectedClient}
       label={field.label}
       placeholder={field.placeholder}
       size={size}
       hideLabel={hideLabel}
+      autoHighlight={!field.searchKey}
       onSelect={(client) => {
         setClientQuery(client.name)
-        const updates: Record<string, string> = { [field.idKey]: String(client.id) }
+        setSearchDraft('')
+        const updates: Record<string, string> = { ...clearedUpdates(), [field.idKey]: String(client.id) }
         if (field.nameKey) updates[field.nameKey] = client.name
         onMultiChange(updates)
       }}
       onClear={() => {
-        const updates: Record<string, string> = { [field.idKey]: '' }
-        if (field.nameKey) updates[field.nameKey] = ''
-        onMultiChange(updates)
+        setSearchDraft('')
+        onMultiChange(clearedUpdates())
       }}
     />
   )
