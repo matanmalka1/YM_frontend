@@ -47,6 +47,19 @@ export const getAdvancePaymentMethodLabel = makeLabelGetter(ADVANCE_PAYMENT_METH
 export const isAdvancePaymentStatus = (value: string): value is AdvancePaymentStatus =>
   ADVANCE_PAYMENT_STATUS_VALUE_SET.has(value)
 
+/**
+ * URL-facing status filter values: the real backend status enum plus the
+ * presentation-level 'overdue' pseudo-status (server-computed timing_status,
+ * never a stored AdvancePaymentStatus). Kept separate from AdvancePaymentStatus
+ * so that type keeps mirroring the backend enum exactly.
+ */
+export type AdvancePaymentStatusFilterValue = AdvancePaymentStatus | 'overdue'
+
+const ADVANCE_PAYMENT_STATUS_FILTER_VALUE_SET = new Set<string>([...ADVANCE_PAYMENT_STATUS_VALUES, 'overdue'])
+
+export const isAdvancePaymentStatusFilterValue = (value: string): value is AdvancePaymentStatusFilterValue =>
+  ADVANCE_PAYMENT_STATUS_FILTER_VALUE_SET.has(value)
+
 export const isAdvancePaymentMethod = (value: string): value is AdvancePaymentMethod =>
   ADVANCE_PAYMENT_METHOD_VALUE_SET.has(value)
 
@@ -100,9 +113,14 @@ export const ADVANCE_PAYMENT_STATUS_OPTIONS: { value: AdvancePaymentStatus; labe
 )
 
 const ADVANCE_PAYMENT_STATUS_OPTIONS_WITH_ALL: {
-  value: AdvancePaymentStatus | ''
+  value: AdvancePaymentStatusFilterValue | ''
   label: string
-}[] = [ALL_STATUSES_OPTION, ...ADVANCE_PAYMENT_STATUS_OPTIONS]
+}[] = [
+  ALL_STATUSES_OPTION,
+  ...ADVANCE_PAYMENT_STATUS_OPTIONS,
+  // Presentation-level pseudo-status: server-computed timing_status, not a real status.
+  { value: 'overdue', label: ADVANCED_PAYMENTS_MESSAGES.stats.overdueTitle },
+]
 
 export const ADVANCE_PAYMENT_METHOD_OPTIONS: { value: AdvancePaymentMethod; label: string }[] = ADVANCE_PAYMENT_METHOD_VALUES.map(
   (method) => ({

@@ -16,6 +16,7 @@ interface AdvancePaymentBatchRowProps {
   clientRecordId?: number
   clientSearch?: string
   statusFilter: AdvancePaymentStatus | ''
+  timingFilter?: 'overdue'
   periodFilter: 1 | 2 | null
   sortBy: AdvancePaymentOverviewSortBy
   order: AdvancePaymentOverviewSortOrder
@@ -66,6 +67,7 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   clientRecordId,
   clientSearch,
   statusFilter,
+  timingFilter,
   periodFilter,
   sortBy,
   order,
@@ -91,6 +93,7 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
         clientRecordId={clientRecordId}
         clientSearch={clientSearch}
         statusFilter={statusFilter}
+        timingFilter={timingFilter}
         periodFilter={periodFilter}
         sortBy={sortBy}
         order={order}

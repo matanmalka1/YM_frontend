@@ -8,7 +8,7 @@ import { parsePositiveInt } from '@/utils/utils'
 import { reportingPeriodIncludesMonth } from '@/utils/reportingPeriod'
 import type { AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../api/contracts'
 import {
-  isAdvancePaymentStatus,
+  isAdvancePaymentStatusFilterValue,
   isAdvancePaymentOverviewSortBy,
   isAdvancePaymentOverviewSortOrder,
   DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_BY,
@@ -35,7 +35,11 @@ export const useAdvancePaymentsPage = () => {
   const year = rawYear === 'all' ? null : parsePositiveInt(rawYear, todayYear)
   const rawPeriod = getParam('period')
   const rawStatus = getParam('status')
-  const normalizedStatus: AdvancePaymentStatus | '' = isAdvancePaymentStatus(rawStatus) ? rawStatus : ''
+  const normalizedFilterValue = isAdvancePaymentStatusFilterValue(rawStatus) ? rawStatus : ''
+  const isOverdueFilter = normalizedFilterValue === 'overdue'
+  // 'overdue' is a presentation-level pseudo-status: it never reaches the real
+  // status query param, it only turns on the server-computed timing filter.
+  const normalizedStatus: AdvancePaymentStatus | '' = isOverdueFilter ? '' : normalizedFilterValue
   const rawSortBy = getParam('sort_by')
   const rawOrder = getParam('order')
   const sortBy = isAdvancePaymentOverviewSortBy(rawSortBy) ? rawSortBy : DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_BY
@@ -44,7 +48,7 @@ export const useAdvancePaymentsPage = () => {
     client_record_id: getParam('client_record_id'),
     client_name: getParam('client_name'),
     client_search: getParam('client_search'),
-    status: normalizedStatus,
+    status: normalizedFilterValue,
     period: rawPeriod === '1' || rawPeriod === '2' ? rawPeriod : '',
     sort_by: sortBy,
     order,
@@ -53,11 +57,17 @@ export const useAdvancePaymentsPage = () => {
   const clientRecordId = parsedClientRecordId > 0 ? parsedClientRecordId : undefined
   const periodFilter: 1 | 2 | null = filters.period === '1' ? 1 : filters.period === '2' ? 2 : null
   const statusFilter = normalizedStatus
+  const timingFilter: 'overdue' | undefined = isOverdueFilter ? 'overdue' : undefined
   const [createOpen, setCreateOpen] = useState(false)
   const [generateOpen, setGenerateOpen] = useState(false)
   const bulkMarkPaid = useBulkMarkPaid()
   const { batches, isLoading } = useAdvancePaymentBatches(year, clientRecordId)
-  const displayBatches = useMemo(() => mergeAdvancePaymentBatches(batches, periodFilter), [batches, periodFilter])
+  const mergedBatches = useMemo(() => mergeAdvancePaymentBatches(batches, periodFilter), [batches, periodFilter])
+  // Batch-level narrowing by server-provided overdue_count — never re-derived from dates.
+  const displayBatches = useMemo(
+    () => (timingFilter === 'overdue' ? mergedBatches.filter((batch) => batch.overdue_count > 0) : mergedBatches),
+    [mergedBatches, timingFilter],
+  )
   const nearestDueBatchKey = useDefaultOpenGroup(displayBatches, getAdvancePaymentBatchKey, (batch) => batch.due_date ?? null)
   // Deep-link target month (dashboard stat card) — open + scroll to its batch instead of nearest due
   const focusMonth = parsePositiveInt(getParam('month'), 0)
@@ -117,6 +127,7 @@ export const useAdvancePaymentsPage = () => {
       clientSearch: filters.client_search.trim() || undefined,
       periodFilter,
       statusFilter,
+      timingFilter,
       sortBy,
       order,
       selection: isAdvisor

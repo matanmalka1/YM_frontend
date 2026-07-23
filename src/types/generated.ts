@@ -3407,6 +3407,7 @@ export interface components {
       /** Override Amount */
       override_amount?: string | null
       available_turnover?: components['schemas']['AvailableTurnover'] | null
+      vat_turnover_mismatch?: components['schemas']['VatTurnoverMismatch'] | null
       /**
        * Missing Turnover
        * @default false
@@ -3512,6 +3513,7 @@ export interface components {
       /** Override Amount */
       override_amount?: string | null
       available_turnover?: components['schemas']['AvailableTurnover'] | null
+      vat_turnover_mismatch?: components['schemas']['VatTurnoverMismatch'] | null
       /**
        * Missing Turnover
        * @default false
@@ -8669,6 +8671,34 @@ export interface components {
       periods_total: number
       /** Latest Period */
       latest_period?: string | null
+    }
+    /**
+     * VatTurnoverMismatch
+     * @description The stored turnover disagrees with the period's current VAT figure.
+     *
+     *     Computed server-side against ``VAT_TURNOVER_MISMATCH_TOLERANCE`` — the
+     *     frontend must render, never re-derive. ``None`` on a row means "no
+     *     disagreement detectable": no stored turnover, no VAT return, or a
+     *     difference within tolerance.
+     */
+    VatTurnoverMismatch: {
+      /**
+       * Vat Amount
+       * Format: decimal
+       * @example 123.45
+       */
+      vat_amount: string
+      /**
+       * Difference
+       * Format: decimal
+       * @example 123.45
+       */
+      difference: string
+      /**
+       * Source
+       * @enum {string}
+       */
+      source: 'vat_filed' | 'vat_pending'
     }
     /**
      * VatType
@@ -18657,6 +18687,7 @@ export interface operations {
         client_record_id?: number | null
         client_search?: string | null
         status?: components['schemas']['AdvancePaymentStatus'][] | null
+        timing_status?: ('overdue' | 'on_time') | null
         sort_by?: string
         order?: components['schemas']['SortOrder']
         page?: number

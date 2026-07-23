@@ -17,6 +17,7 @@ interface UseAdvancePaymentBatchRowsParams {
   clientRecordId?: number
   clientSearch?: string
   statusFilter: AdvancePaymentStatus | ''
+  timingFilter?: 'overdue'
   periodFilter: 1 | 2 | null
   sortBy: AdvancePaymentOverviewSortBy
   order: AdvancePaymentOverviewSortOrder
@@ -27,6 +28,7 @@ export const useAdvancePaymentBatchRows = ({
   clientRecordId,
   clientSearch,
   statusFilter,
+  timingFilter,
   periodFilter,
   sortBy,
   order,
@@ -36,7 +38,18 @@ export const useAdvancePaymentBatchRows = ({
 
   useEffect(() => {
     setPage(1)
-  }, [batch.due_date, batch.month, batch.period_months_count, clientRecordId, clientSearch, periodFilter, statusFilter, sortBy, order])
+  }, [
+    batch.due_date,
+    batch.month,
+    batch.period_months_count,
+    clientRecordId,
+    clientSearch,
+    periodFilter,
+    statusFilter,
+    timingFilter,
+    sortBy,
+    order,
+  ])
 
   const params: ListAdvancePaymentsOverviewParams = {
     year: batch.year,
@@ -50,6 +63,7 @@ export const useAdvancePaymentBatchRows = ({
     page,
     page_size: ADVANCE_PAYMENT_BATCH_PAGE_SIZE,
     status,
+    timing_status: timingFilter,
   }
   const { data, isLoading, isFetching } = useQuery({
     queryKey: advancedPaymentsQK.overview(params),

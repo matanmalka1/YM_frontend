@@ -12,6 +12,7 @@ interface AdvancePaymentBatchContentProps {
   clientRecordId?: number
   clientSearch?: string
   statusFilter: AdvancePaymentStatus | ''
+  timingFilter?: 'overdue'
   periodFilter: 1 | 2 | null
   sortBy: AdvancePaymentOverviewSortBy
   order: AdvancePaymentOverviewSortOrder
@@ -25,6 +26,7 @@ export const AdvancePaymentBatchContent = ({
   clientRecordId,
   clientSearch,
   statusFilter,
+  timingFilter,
   periodFilter,
   sortBy,
   order,
@@ -32,7 +34,16 @@ export const AdvancePaymentBatchContent = ({
   onRowClick,
   onNavigateToClient,
 }: AdvancePaymentBatchContentProps) => {
-  const content = useAdvancePaymentBatchRows({ batch, clientRecordId, clientSearch, statusFilter, periodFilter, sortBy, order })
+  const content = useAdvancePaymentBatchRows({
+    batch,
+    clientRecordId,
+    clientSearch,
+    statusFilter,
+    timingFilter,
+    periodFilter,
+    sortBy,
+    order,
+  })
   const visibleRowIds = content.rows.map((row) => row.id)
   const columns = useMemo(
     () => buildAdvancePaymentBatchColumns({ visibleRowIds, selection, onRowClick, onNavigateToClient }),

@@ -77,6 +77,12 @@ export const buildAdvancePaymentBatchColumns = ({
             {ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.availableBadge}
           </span>
         )}
+        {row.vat_turnover_mismatch != null && (
+          <span className="mt-0.5 inline-flex items-center gap-1 rounded border border-warning-200 bg-warning-50 px-1.5 py-0.5 text-xs font-semibold text-warning-700">
+            <AlertTriangle className="h-2.5 w-2.5" />
+            {ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.mismatchBadge}
+          </span>
+        )}
       </>
     ),
   },

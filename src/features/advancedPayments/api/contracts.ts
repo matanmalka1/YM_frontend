@@ -1,5 +1,5 @@
 export type AdvancePaymentStatus = 'pending' | 'paid' | 'partial'
-type AdvancePaymentTimingStatus = 'on_time' | 'overdue'
+export type AdvancePaymentTimingStatus = 'on_time' | 'overdue'
 export type AdvancePaymentMethod = 'bank_transfer' | 'credit_card' | 'check' | 'direct_debit' | 'cash' | 'other'
 
 export interface AdvancePaymentRow {
@@ -25,6 +25,7 @@ export interface AdvancePaymentRow {
   calculated_amount: string
   override_amount: string | null
   available_turnover: AvailableTurnover | null
+  vat_turnover_mismatch: VatTurnoverMismatch | null
   missing_turnover: boolean
   timing_status: AdvancePaymentTimingStatus
   paid_late: boolean
@@ -76,6 +77,17 @@ export interface AvailableTurnover {
   source: Extract<TurnoverSource, 'vat_filed' | 'vat_pending'>
 }
 
+/**
+ * Server-computed disagreement between the stored turnover and the period's
+ * current VAT figure (beyond the backend tolerance). Render only — never
+ * re-derive client-side. Mutually exclusive with `available_turnover`.
+ */
+export interface VatTurnoverMismatch {
+  vat_amount: string
+  difference: string
+  source: Extract<TurnoverSource, 'vat_filed' | 'vat_pending'>
+}
+
 export interface AdvancePaymentOverviewRow {
   id: number
   client_record_id: number
@@ -99,6 +111,7 @@ export interface AdvancePaymentOverviewRow {
   calculated_amount: string
   override_amount: string | null
   available_turnover: AvailableTurnover | null
+  vat_turnover_mismatch: VatTurnoverMismatch | null
   missing_turnover: boolean
   advance_rate: string | null
 }
@@ -111,6 +124,7 @@ export interface ListAdvancePaymentsOverviewParams {
   client_record_id?: number
   client_search?: string
   status?: AdvancePaymentStatus[]
+  timing_status?: AdvancePaymentTimingStatus
   sort_by?: 'client_name' | 'expected_amount' | 'paid_amount' | 'delta'
   order?: 'asc' | 'desc'
   page?: number

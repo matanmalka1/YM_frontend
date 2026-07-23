@@ -6,6 +6,7 @@ import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Button } from '@/components/ui/primitives/Button'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { formatShekelAmount } from '@/utils/utils'
 import { useBeforeUnloadGuard } from '@/hooks/useBeforeUnloadGuard'
 import type { AdvancePaymentRow, UpdateAdvancePaymentPayload } from '../../api/contracts'
 import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
@@ -121,6 +122,17 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
 
       {payment.missing_turnover && (
         <Alert variant="warning" size="sm" message={ADVANCED_PAYMENTS_MESSAGES.detail.missingTurnoverAlert} />
+      )}
+
+      {payment.vat_turnover_mismatch && (
+        <Alert
+          variant="warning"
+          size="sm"
+          message={ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.mismatchAlert(
+            formatShekelAmount(payment.vat_turnover_mismatch.vat_amount),
+            formatShekelAmount(payment.vat_turnover_mismatch.difference),
+          )}
+        />
       )}
 
       <AdvancePaymentSummaryStrip payment={payment} />

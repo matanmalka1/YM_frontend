@@ -41,6 +41,9 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     turnoverLabel: (source: TurnoverSource) => `מחזור (${TURNOVER_SOURCE_SHORT_LABELS[source]})`,
     bulkAvailable: (count: number) => `ל-${count} מקדמות יש דוח מע״מ מוגש שטרם קובע`,
     bulkButton: (count: number) => `קבע מחזור ל-${count} מקדמות`,
+    mismatchBadge: 'אי-התאמת מע״מ',
+    mismatchAlert: (vatAmount: string, difference: string) =>
+      `המחזור הרשום שונה מדוח המע״מ לתקופה (${vatAmount}) — הפרש ${difference}. ניתן לקבע מחדש בכפתור "קבע לפי מע״מ".`,
     /** Skips are reported by reason: each one calls for a different follow-up. */
     bulkResult: ({ refreshed, skipped_no_vat, skipped_not_filed, skipped_paid }: BulkRefreshTurnoverResponse) =>
       [

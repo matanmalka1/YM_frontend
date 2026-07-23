@@ -69,7 +69,7 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
             </Button>
           </div>
           {hasNoVatReport && <p className="text-xs text-gray-400">{ADVANCED_PAYMENTS_MESSAGES.detail.noVatReportNote}</p>}
-          {vatSource != null && (
+          {vatSource != null && payment.vat_turnover_mismatch == null && (
             <p className="flex items-center gap-1.5 text-xs text-positive-700">
               <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
               {ADVANCED_PAYMENTS_MESSAGES.editableSections.vatSyncedNote}

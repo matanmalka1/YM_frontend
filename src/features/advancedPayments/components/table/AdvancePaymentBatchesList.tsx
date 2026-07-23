@@ -21,6 +21,7 @@ interface AdvancePaymentBatchesListProps {
   clientRecordId?: number
   clientSearch?: string
   statusFilter: AdvancePaymentStatus | ''
+  timingFilter?: 'overdue'
   periodFilter: 1 | 2 | null
   sortBy: AdvancePaymentOverviewSortBy
   order: AdvancePaymentOverviewSortOrder
@@ -42,6 +43,7 @@ export const AdvancePaymentBatchesList = ({
   clientRecordId,
   clientSearch,
   statusFilter,
+  timingFilter,
   periodFilter,
   sortBy,
   order,
@@ -82,6 +84,7 @@ export const AdvancePaymentBatchesList = ({
           clientRecordId={clientRecordId}
           clientSearch={clientSearch}
           statusFilter={statusFilter}
+          timingFilter={timingFilter}
           periodFilter={periodFilter}
           sortBy={sortBy}
           order={order}
