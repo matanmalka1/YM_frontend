@@ -16,25 +16,29 @@ const QuickActionItem = ({
   onOpenModal: (modal: DashboardCreateModal) => void
 }) => {
   const { icon: Icon } = action
+
   const inner = (
     <>
-      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-50 text-primary-600">
-        <Icon className="h-4 w-4" />
+      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary-50 text-primary-600 ring-1 ring-primary-100">
+        <Icon className="h-5 w-5" />
       </span>
-      <span>{action.label}</span>
+      <div className="min-w-0">
+        <span className="block text-sm font-bold text-slate-900">{action.label}</span>
+        <span className="mt-0.5 block text-2xs font-medium leading-relaxed text-slate-500">{action.description}</span>
+      </div>
     </>
   )
 
   if (action.modal) {
     return (
-      <ActionSurfaceButton variant="tile" onClick={() => onOpenModal(action.modal!)} title={action.description}>
+      <ActionSurfaceButton variant="tile" className="w-full"onClick={() => onOpenModal(action.modal!)}title={action.description}>
         {inner}
       </ActionSurfaceButton>
     )
   }
 
   return (
-    <ActionSurfaceLink variant="tile" to={action.href ?? '/'} title={action.description}>
+    <ActionSurfaceLink variant="tile" className="w-full" to={action.href ?? '/'} title={action.description}>
       {inner}
     </ActionSurfaceLink>
   )
@@ -42,7 +46,7 @@ const QuickActionItem = ({
 
 export const QuickActionsPanel = ({ onOpenModal }: QuickActionsPanelProps) => (
   <Card variant="soft" size="compact">
-    <span className="mb-3 block text-2xs font-semibold uppercase tracking-wider text-slate-400">
+    <span className="mb-3.5 block text-xs font-bold uppercase tracking-wider text-slate-500">
       {DASHBOARD_MESSAGES.quickActions.title}
     </span>
     <div className="grid grid-cols-2 gap-2.5">
