@@ -7,7 +7,14 @@ import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import { parsePositiveInt } from '@/utils/utils'
 import { reportingPeriodIncludesMonth } from '@/utils/reportingPeriod'
 import type { AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../api/contracts'
-import { isAdvancePaymentStatus, ADVANCE_PAYMENTS_FILTER_FIELDS } from '../constants'
+import {
+  isAdvancePaymentStatus,
+  isAdvancePaymentOverviewSortBy,
+  isAdvancePaymentOverviewSortOrder,
+  DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_BY,
+  DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER,
+  ADVANCE_PAYMENTS_FILTER_FIELDS,
+} from '../constants'
 import { useAdvancePaymentBatches } from './useAdvancePaymentBatches'
 import { useBulkMarkPaid } from './useBulkMarkPaid'
 import {
@@ -29,12 +36,18 @@ export const useAdvancePaymentsPage = () => {
   const rawPeriod = getParam('period')
   const rawStatus = getParam('status')
   const normalizedStatus: AdvancePaymentStatus | '' = isAdvancePaymentStatus(rawStatus) ? rawStatus : ''
+  const rawSortBy = getParam('sort_by')
+  const rawOrder = getParam('order')
+  const sortBy = isAdvancePaymentOverviewSortBy(rawSortBy) ? rawSortBy : DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_BY
+  const order = isAdvancePaymentOverviewSortOrder(rawOrder) ? rawOrder : DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER
   const filters = {
     client_record_id: getParam('client_record_id'),
     client_name: getParam('client_name'),
     client_search: getParam('client_search'),
     status: normalizedStatus,
     period: rawPeriod === '1' || rawPeriod === '2' ? rawPeriod : '',
+    sort_by: sortBy,
+    order,
   }
   const parsedClientRecordId = parsePositiveInt(filters.client_record_id, 0)
   const clientRecordId = parsedClientRecordId > 0 ? parsedClientRecordId : undefined
@@ -104,6 +117,8 @@ export const useAdvancePaymentsPage = () => {
       clientSearch: filters.client_search.trim() || undefined,
       periodFilter,
       statusFilter,
+      sortBy,
+      order,
       selection: isAdvisor
         ? {
             selectedIds: bulkMarkPaid.selectedIds,

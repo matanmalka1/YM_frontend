@@ -111,6 +111,8 @@ export interface ListAdvancePaymentsOverviewParams {
   client_record_id?: number
   client_search?: string
   status?: AdvancePaymentStatus[]
+  sort_by?: 'client_name' | 'expected_amount' | 'paid_amount' | 'delta'
+  order?: 'asc' | 'desc'
   page?: number
   page_size?: number
 }

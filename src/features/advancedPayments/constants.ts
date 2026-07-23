@@ -3,7 +3,7 @@ import { CLIENT_SEARCH_WITH_OFFICE_NUMBER_PLACEHOLDER } from '@/constants/search
 import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { getOperationalTaxYear, getOperationalYearOptions, MONTHS_COVERED_OPTIONS } from '@/constants/periodOptions.constants'
 import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION, ALL_YEARS_URL_OPTION } from '@/constants/filterOptions.constants'
-import type { AdvancePaymentMethod, AdvancePaymentStatus } from './api/contracts'
+import type { AdvancePaymentMethod, AdvancePaymentStatus, ListAdvancePaymentsOverviewParams } from './api/contracts'
 import { ADVANCED_PAYMENTS_MESSAGES } from './messages'
 import { createClientPickerFilter } from '@/features/clients/public'
 
@@ -49,6 +49,48 @@ export const isAdvancePaymentStatus = (value: string): value is AdvancePaymentSt
 
 export const isAdvancePaymentMethod = (value: string): value is AdvancePaymentMethod =>
   ADVANCE_PAYMENT_METHOD_VALUE_SET.has(value)
+
+export type AdvancePaymentOverviewSortBy = NonNullable<ListAdvancePaymentsOverviewParams['sort_by']>
+export type AdvancePaymentOverviewSortOrder = NonNullable<ListAdvancePaymentsOverviewParams['order']>
+
+const ADVANCE_PAYMENT_OVERVIEW_SORT_BY_VALUES = [
+  'client_name',
+  'expected_amount',
+  'paid_amount',
+  'delta',
+] as const satisfies readonly AdvancePaymentOverviewSortBy[]
+
+const ADVANCE_PAYMENT_OVERVIEW_SORT_BY_VALUE_SET = new Set<string>(ADVANCE_PAYMENT_OVERVIEW_SORT_BY_VALUES)
+const ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER_VALUE_SET = new Set(['asc', 'desc'])
+
+export const isAdvancePaymentOverviewSortBy = (value: string): value is AdvancePaymentOverviewSortBy =>
+  ADVANCE_PAYMENT_OVERVIEW_SORT_BY_VALUE_SET.has(value)
+
+export const isAdvancePaymentOverviewSortOrder = (value: string): value is AdvancePaymentOverviewSortOrder =>
+  ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER_VALUE_SET.has(value)
+
+export const DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_BY: AdvancePaymentOverviewSortBy = 'client_name'
+export const DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER: AdvancePaymentOverviewSortOrder = 'asc'
+
+const ADVANCE_PAYMENT_OVERVIEW_SORT_BY_LABELS: Record<AdvancePaymentOverviewSortBy, string> = {
+  client_name: ADVANCED_PAYMENTS_MESSAGES.overviewSort.clientNameLabel,
+  expected_amount: ADVANCED_PAYMENTS_MESSAGES.overviewSort.expectedAmountLabel,
+  paid_amount: ADVANCED_PAYMENTS_MESSAGES.overviewSort.paidAmountLabel,
+  delta: ADVANCED_PAYMENTS_MESSAGES.overviewSort.deltaLabel,
+}
+
+const ADVANCE_PAYMENT_OVERVIEW_SORT_BY_OPTIONS: { value: AdvancePaymentOverviewSortBy; label: string }[] =
+  ADVANCE_PAYMENT_OVERVIEW_SORT_BY_VALUES.map((value) => ({
+    value,
+    label: ADVANCE_PAYMENT_OVERVIEW_SORT_BY_LABELS[value],
+  }))
+
+/** Generic asc/desc wording (mirrors the clients-page SORT_ORDER_LABELS fallback) — the
+ * order field is a static FilterFieldDef, so its options can't vary with the selected sort_by. */
+const ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER_OPTIONS: { value: AdvancePaymentOverviewSortOrder; label: string }[] = [
+  { value: 'asc', label: ADVANCED_PAYMENTS_MESSAGES.overviewSort.orderAsc },
+  { value: 'desc', label: ADVANCED_PAYMENTS_MESSAGES.overviewSort.orderDesc },
+]
 
 export const ADVANCE_PAYMENT_STATUS_OPTIONS: { value: AdvancePaymentStatus; label: string }[] = ADVANCE_PAYMENT_STATUS_VALUES.map(
   (status) => ({
@@ -101,4 +143,18 @@ export const ADVANCE_PAYMENTS_FILTER_FIELDS = [
     options: ADVANCE_PAYMENT_STATUS_OPTIONS_WITH_ALL,
   },
   { type: 'select' as const, key: 'period', label: 'תקופת מקדמה', options: PERIOD_OPTIONS },
+  {
+    type: 'select' as const,
+    key: 'sort_by',
+    label: ADVANCED_PAYMENTS_MESSAGES.overviewSort.sortByLabel,
+    options: ADVANCE_PAYMENT_OVERVIEW_SORT_BY_OPTIONS,
+    defaultValue: DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_BY,
+  },
+  {
+    type: 'select' as const,
+    key: 'order',
+    label: ADVANCED_PAYMENTS_MESSAGES.overviewSort.orderLabel,
+    options: ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER_OPTIONS,
+    defaultValue: DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER,
+  },
 ]

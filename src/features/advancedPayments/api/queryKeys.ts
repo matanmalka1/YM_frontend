@@ -14,6 +14,8 @@ const normalizeOverviewParams = (params: ListAdvancePaymentsOverviewParams) => (
   client_record_id: params.client_record_id ?? null,
   client_search: params.client_search ?? null,
   status: params.status ?? null,
+  sort_by: params.sort_by ?? null,
+  order: params.order ?? null,
   page: params.page ?? 1,
   page_size: params.page_size ?? 20,
 })

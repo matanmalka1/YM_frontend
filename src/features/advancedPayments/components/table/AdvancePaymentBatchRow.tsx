@@ -2,6 +2,7 @@ import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/grouping/GroupedPeriodRow'
 import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/grouping/groupedPeriodRow.utils'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
+import type { AdvancePaymentOverviewSortBy, AdvancePaymentOverviewSortOrder } from '../../constants'
 import type { AdvancePaymentRowSelection } from './AdvancePaymentBatchColumns'
 import { getIncludedPeriodLabel } from '../../utils/advancePaymentComponentUtils'
 import { AdvancePaymentBatchContent } from './AdvancePaymentBatchContent'
@@ -16,6 +17,8 @@ interface AdvancePaymentBatchRowProps {
   clientSearch?: string
   statusFilter: AdvancePaymentStatus | ''
   periodFilter: 1 | 2 | null
+  sortBy: AdvancePaymentOverviewSortBy
+  order: AdvancePaymentOverviewSortOrder
   selection?: AdvancePaymentRowSelection
   onRowClick: (row: AdvancePaymentOverviewRow) => void
   onNavigateToClient: (clientRecordId: number) => void
@@ -64,6 +67,8 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   clientSearch,
   statusFilter,
   periodFilter,
+  sortBy,
+  order,
   selection,
   onRowClick,
   onNavigateToClient,
@@ -87,6 +92,8 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
         clientSearch={clientSearch}
         statusFilter={statusFilter}
         periodFilter={periodFilter}
+        sortBy={sortBy}
+        order={order}
         selection={selection}
         onRowClick={onRowClick}
         onNavigateToClient={onNavigateToClient}

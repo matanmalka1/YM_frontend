@@ -18657,6 +18657,8 @@ export interface operations {
         client_record_id?: number | null
         client_search?: string | null
         status?: components['schemas']['AdvancePaymentStatus'][] | null
+        sort_by?: string
+        order?: components['schemas']['SortOrder']
         page?: number
         page_size?: number
       }

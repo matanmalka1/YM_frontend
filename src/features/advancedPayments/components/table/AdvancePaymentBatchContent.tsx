@@ -2,6 +2,7 @@ import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useMemo } from 'react'
 import { PaginatedDataTable } from '@/components/ui/table'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
+import type { AdvancePaymentOverviewSortBy, AdvancePaymentOverviewSortOrder } from '../../constants'
 import { ADVANCE_PAYMENT_BATCH_PAGE_SIZE, useAdvancePaymentBatchRows } from '../../hooks/useAdvancePaymentBatchRows'
 import { buildAdvancePaymentBatchColumns, type AdvancePaymentRowSelection } from './AdvancePaymentBatchColumns'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
@@ -12,6 +13,8 @@ interface AdvancePaymentBatchContentProps {
   clientSearch?: string
   statusFilter: AdvancePaymentStatus | ''
   periodFilter: 1 | 2 | null
+  sortBy: AdvancePaymentOverviewSortBy
+  order: AdvancePaymentOverviewSortOrder
   selection?: AdvancePaymentRowSelection
   onRowClick: (row: AdvancePaymentOverviewRow) => void
   onNavigateToClient: (clientRecordId: number) => void
@@ -23,11 +26,13 @@ export const AdvancePaymentBatchContent = ({
   clientSearch,
   statusFilter,
   periodFilter,
+  sortBy,
+  order,
   selection,
   onRowClick,
   onNavigateToClient,
 }: AdvancePaymentBatchContentProps) => {
-  const content = useAdvancePaymentBatchRows({ batch, clientRecordId, clientSearch, statusFilter, periodFilter })
+  const content = useAdvancePaymentBatchRows({ batch, clientRecordId, clientSearch, statusFilter, periodFilter, sortBy, order })
   const visibleRowIds = content.rows.map((row) => row.id)
   const columns = useMemo(
     () => buildAdvancePaymentBatchColumns({ visibleRowIds, selection, onRowClick, onNavigateToClient }),

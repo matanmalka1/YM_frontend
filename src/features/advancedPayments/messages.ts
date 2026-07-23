@@ -264,4 +264,14 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     overdueTitle: 'באיחור',
     overdueDescription: 'בסינון השנה הנוכחי',
   },
+  overviewSort: {
+    sortByLabel: 'מיין לפי',
+    orderLabel: 'כיוון מיון',
+    orderAsc: 'סדר עולה',
+    orderDesc: 'סדר יורד',
+    clientNameLabel: 'שם לקוח',
+    expectedAmountLabel: 'צפוי לתשלום',
+    paidAmountLabel: 'שולם',
+    deltaLabel: 'יתרה',
+  },
 } as const
