@@ -3,6 +3,7 @@ import { useDebounce } from 'use-debounce'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
+import { IconChip } from '@/components/ui/primitives/IconChip'
 import { DismissBackdrop } from '@/components/ui/primitives/DismissBackdrop'
 import { SegmentedControl, SegmentedControlItem } from '@/components/ui/primitives/SegmentedControl'
 import { ActionSurfaceLink } from '@/components/ui/primitives/ActionSurface'
@@ -139,9 +140,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobi
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gray-100 text-gray-600">
-                  <Users className="h-3.5 w-3.5" />
-                </span>
+                <IconChip icon={Users} size="xs" tone="neutral" />
                 <div>
                   <p className="text-xs font-semibold leading-tight text-gray-900">{GLOBAL_UI_MESSAGES.common.clients}</p>
                   <p className="mt-0.5 text-2xs leading-tight text-gray-500">
@@ -237,9 +236,7 @@ export const ClientSidebar: React.FC<ClientSidebarProps> = ({ mobileOpen, onMobi
           <div className="shrink-0 border-t border-gray-100 p-2.5">
             <div className="flex items-center justify-between gap-2 rounded-xl bg-gray-50 px-2.5 py-2">
               <div className="flex min-w-0 items-center gap-2">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm">
-                  <UserIcon className="h-3.5 w-3.5 text-gray-500" />
-                </div>
+                <IconChip icon={UserIcon} size="xs" className="bg-white text-gray-500 shadow-sm" />
                 <div className="min-w-0 text-right">
                   <p className="truncate text-xs font-semibold leading-tight text-gray-900">
                     {user?.full_name || CLIENT_SIDEBAR_TEXT.guestUserName}

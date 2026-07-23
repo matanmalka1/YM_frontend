@@ -1,5 +1,6 @@
 import { ActionSurfaceButton, ActionSurfaceLink } from '@/components/ui/primitives/ActionSurface'
 import { Card } from '@/components/ui/primitives/Card'
+import { IconChip } from '@/components/ui/primitives/IconChip'
 import { QUICK_ACTIONS, type QuickActionDef } from '../../constants'
 import type { DashboardCreateModal } from '../../hooks/useDashboardCreateModals'
 import { DASHBOARD_MESSAGES } from '../../messages'
@@ -19,9 +20,7 @@ const QuickActionItem = ({
 
   const inner = (
     <>
-      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary-50 text-primary-600 ring-1 ring-primary-100">
-        <Icon className="h-5 w-5" />
-      </span>
+      <IconChip icon={Icon} tone="primary" ring />
       <div className="min-w-0">
         <span className="block text-sm font-bold text-slate-900">{action.label}</span>
         <span className="mt-0.5 block text-2xs font-medium leading-relaxed text-slate-500">{action.description}</span>

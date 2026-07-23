@@ -1,15 +1,12 @@
 import type { ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import { cn } from '@/utils/utils'
-import { semanticStatToneClasses, type SemanticTone } from '@/utils/semanticColors'
+import type { SemanticTone } from '@/utils/semanticColors'
 import { Badge, type BadgeVariant } from '@/components/ui/primitives/Badge'
 import { Card } from '@/components/ui/primitives/Card'
+import { IconChip } from '@/components/ui/primitives/IconChip'
 
 type Tone = SemanticTone | 'purple'
-
-const purpleTone = { iconBg: 'bg-violet-50 text-violet-500' }
-
-const getToneClasses = (tone: Tone) => (tone === 'purple' ? purpleTone : semanticStatToneClasses[tone])
 
 const getBadgeVariant = (tone: Tone): BadgeVariant => (tone === 'purple' ? 'info' : tone)
 
@@ -43,11 +40,7 @@ export const DashboardSectionHeader = ({
 }: DashboardSectionHeaderProps) => (
   <div className={cn('flex items-center justify-between gap-4', className)}>
     <div className="flex min-w-0 items-center gap-3">
-      {Icon && (
-        <span className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl', getToneClasses(tone).iconBg)}>
-          <Icon className="h-5 w-5" />
-        </span>
-      )}
+      {Icon && <IconChip icon={Icon} tone={tone} />}
       <div className="min-w-0">
         <h2 className="truncate text-sm font-bold text-slate-900">{title}</h2>
         {subtitle && <p className="mt-0.5 truncate text-xs font-medium text-slate-500">{subtitle}</p>}

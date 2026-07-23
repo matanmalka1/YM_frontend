@@ -1,8 +1,9 @@
 import { ArrowLeft, ReceiptText } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { cn, formatCount, formatShekelAmount } from '@/utils/utils'
+import { formatCount, formatShekelAmount } from '@/utils/utils'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Card } from '@/components/ui/primitives/Card'
+import { IconChip } from '@/components/ui/primitives/IconChip'
 import { DASHBOARD_HREFS } from '../../constants'
 import { DASHBOARD_MESSAGES } from '../../messages'
 
@@ -18,16 +19,7 @@ export const OpenChargesCard = ({ count, amountIls }: OpenChargesCardProps) => {
     <Card variant="soft" size="compact">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <span
-            className={cn(
-              'flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ring-1',
-              hasCharges
-                ? 'bg-warning-50 text-warning-600 ring-warning-100'
-                : 'bg-positive-50 text-positive-600 ring-positive-100',
-            )}
-          >
-            <ReceiptText className="h-5 w-5" />
-          </span>
+          <IconChip icon={ReceiptText} tone={hasCharges ? 'warning' : 'positive'} ring />
           <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
             {DASHBOARD_MESSAGES.openCharges.title}
           </span>

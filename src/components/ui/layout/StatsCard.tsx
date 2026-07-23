@@ -1,4 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
+import { IconChip } from '@/components/ui/primitives/IconChip'
 import { cn, formatCount } from '../../../utils/utils'
 import { semanticStatToneClasses } from '@/utils/semanticColors'
 
@@ -80,11 +81,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
       <div className={cn('absolute bottom-0 right-0 top-0 w-0.5 rounded-r-xl', config.accent)} />
 
       <div className={cn('relative flex h-full min-w-0', 'flex-row-reverse items-start gap-4')}>
-        {Icon && (
-          <div className={cn('flex shrink-0 items-center justify-center rounded-lg', 'h-10 w-10', config.iconBg)}>
-            <Icon className="h-5 w-5" />
-          </div>
-        )}
+        {Icon && <IconChip icon={Icon} tone={variant} />}
 
         <div className="min-w-0 flex-1 text-right">
           <p className="mb-0.5 text-xs text-gray-500">{title}</p>

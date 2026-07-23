@@ -3,6 +3,8 @@ import type { LucideIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from '@/utils/utils'
 import { InlineState } from '@/components/ui/feedback/InlineState'
+import { IconChip } from '@/components/ui/primitives/IconChip'
+import type { IconChipTone } from '@/utils/semanticColors'
 import { DashboardPanel, DashboardSectionHeader } from '../shared/DashboardLayout'
 import type { RecentActivityItem } from '../../api'
 import { DASHBOARD_MESSAGES } from '../../messages'
@@ -23,11 +25,11 @@ const ACTIVITY_CONFIG: Record<string, ActivityConfig> = {
   report_submitted: { icon: Table2, tone: 'info' },
 }
 
-const TONE_CLASSES: Record<ActivityTone, string> = {
-  info: 'bg-primary-50 text-primary-600 ring-1 ring-primary-100',
-  pos: 'bg-positive-50 text-positive-600 ring-1 ring-positive-100',
-  warn: 'bg-warning-50 text-warning-600 ring-1 ring-warning-100',
-  mut: 'bg-slate-100 text-slate-600 ring-1 ring-slate-200/50',
+const ACTIVITY_CHIP_TONES: Record<ActivityTone, IconChipTone> = {
+  info: 'primary',
+  pos: 'positive',
+  warn: 'warning',
+  mut: 'neutral',
 }
 
 interface ActivityRowProps {
@@ -42,9 +44,7 @@ const ActivityRow = ({ item, isLast }: ActivityRowProps) => {
   return (
     <li className="flex gap-3.5">
       <div className="flex shrink-0 flex-col items-center">
-        <span className={cn('flex h-9 w-9 items-center justify-center rounded-2xl', TONE_CLASSES[tone])}>
-          <Icon className="h-4 w-4" />
-        </span>
+        <IconChip icon={Icon} size="sm" tone={ACTIVITY_CHIP_TONES[tone]} ring />
         {!isLast && <span className="my-1.5 w-0.5 flex-1 rounded-full bg-slate-200/70" />}
       </div>
 

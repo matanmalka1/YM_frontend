@@ -1,6 +1,7 @@
 export * from './ActionSurface'
 export * from './Badge'
 export * from './GroupSection'
+export * from './IconChip'
 export * from './Button'
 export * from './Card'
 export * from './Chip'

@@ -1,4 +1,4 @@
-import type { ElementType } from 'react'
+import type { LucideIcon } from 'lucide-react'
 import {
   Briefcase,
   Bell,
@@ -18,7 +18,7 @@ import {
 export interface NavItem {
   to: string
   label: string
-  icon: ElementType
+  icon: LucideIcon
   placement: 'top' | 'more'
   end?: boolean
   roles?: Array<'advisor' | 'secretary'>

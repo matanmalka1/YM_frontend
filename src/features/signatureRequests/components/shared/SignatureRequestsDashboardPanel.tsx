@@ -5,6 +5,7 @@ import { AlertCircle, FileSignature, Plus } from 'lucide-react'
 import { ActionSurfaceButton } from '@/components/ui/primitives/ActionSurface'
 import { Button } from '@/components/ui/primitives/Button'
 import { Card } from '@/components/ui/primitives/Card'
+import { IconChip } from '@/components/ui/primitives/IconChip'
 import { InlineState } from '@/components/ui/feedback'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { Badge } from '@/components/ui/primitives/Badge'
@@ -126,9 +127,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
       <div className={cn('border-b border-gray-100', compact ? 'px-5 py-4' : 'px-5 py-4')}>
         <div className="flex items-center justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
-              <FileSignature className="h-3.5 w-3.5" />
-            </span>
+            <IconChip icon={FileSignature} size="xs" tone="neutral" />
             <div className="min-w-0">
               <h2 className={cn('truncate font-bold text-gray-900', compact ? 'text-base' : 'text-sm')}>
                 {SIGNATURE_REQUESTS_MESSAGES.dashboard.title}

@@ -4,20 +4,21 @@ import { ArrowLeft, Briefcase, CheckCircle2, ClipboardList, ReceiptText, ShieldA
 import { Link } from 'react-router-dom'
 import { WORK_QUEUE_ROUTE } from '@/features/workQueue'
 import { cn, formatCurrencyILS, formatDate } from '@/utils/utils'
-import { semanticDotClasses, semanticStatToneClasses } from '@/utils/semanticColors'
+import { semanticDotClasses, type IconChipTone } from '@/utils/semanticColors'
 import type { AttentionBoardItem, AttentionUrgency } from '../../api/contracts'
 import { ATTENTION_BOARD_COPY } from '../../constants'
 import { dueDateLabel } from '../../utils/dashboardUtils'
 import { InlineState } from '@/components/ui/feedback/InlineState'
 import { DashboardPanel, DashboardSectionHeader } from '../shared/DashboardLayout'
 import { Badge, type BadgeVariant } from '@/components/ui/primitives/Badge'
+import { IconChip } from '@/components/ui/primitives/IconChip'
 import { SegmentedControl, SegmentedControlItem } from '@/components/ui/primitives/SegmentedControl'
 import { DASHBOARD_MESSAGES } from '../../messages'
 
 interface UrgencyStyle {
   label: string
   dot: string
-  iconBg: string
+  chipTone: IconChipTone
   badge: BadgeVariant
   delta: string
 }
@@ -26,28 +27,28 @@ const URGENCY_CONFIG: Record<AttentionUrgency, UrgencyStyle> = {
   overdue: {
     label: DASHBOARD_MESSAGES.attention.overdue,
     dot: semanticDotClasses.negative,
-    iconBg: semanticStatToneClasses.negative.iconBg,
+    chipTone: 'negative',
     badge: 'negative',
     delta: 'text-negative-600',
   },
   approaching: {
     label: DASHBOARD_MESSAGES.attention.approaching,
     dot: semanticDotClasses.warning,
-    iconBg: semanticStatToneClasses.warning.iconBg,
+    chipTone: 'warning',
     badge: 'warning',
     delta: 'text-warning-600',
   },
   important: {
     label: DASHBOARD_MESSAGES.attention.important,
     dot: semanticDotClasses.info,
-    iconBg: semanticStatToneClasses.info.iconBg,
+    chipTone: 'info',
     badge: 'info',
     delta: 'text-info-600',
   },
   upcoming: {
     label: DASHBOARD_MESSAGES.attention.upcoming,
     dot: 'bg-slate-300',
-    iconBg: 'bg-slate-100 text-slate-500',
+    chipTone: 'neutral',
     badge: 'neutral',
     delta: 'text-slate-500',
   },
@@ -83,9 +84,7 @@ const AttentionItemRow = ({ item }: AttentionItemRowProps) => {
       to={item.href}
       className="flex items-center gap-3.5 rounded-2xl border border-transparent p-3.5 transition-colors hover:border-slate-200/60 hover:bg-slate-50"
     >
-      <span className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl', urgency.iconBg)}>
-        <SourceIcon className="h-5 w-5" />
-      </span>
+      <IconChip icon={SourceIcon} tone={urgency.chipTone} />
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">

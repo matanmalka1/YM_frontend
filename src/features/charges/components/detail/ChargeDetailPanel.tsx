@@ -5,6 +5,7 @@ import type { Breadcrumb } from '@/components/layout/PageHeader'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Card } from '@/components/ui/primitives/Card'
 import { Button } from '@/components/ui/primitives/Button'
+import { IconChip } from '@/components/ui/primitives/IconChip'
 import { StatusBadge } from '@/components/ui/primitives/StatusBadge'
 import { DefinitionList } from '@/components/ui/layout/DefinitionList'
 import { PageLoading } from '@/components/ui/layout/PageLoading'
@@ -105,9 +106,7 @@ export const ChargeDetailPanel = ({ chargeId, leadingBreadcrumbs, onDeleted }: C
         bodyClassName="grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-center"
       >
         <div className="flex min-w-0 items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
-            <ReceiptText className="h-6 w-6" />
-          </div>
+          <IconChip icon={ReceiptText} size="xl" tone="primary" />
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <p className="text-xl font-bold tabular-nums text-gray-950">{getChargeAmountText(charge)}</p>

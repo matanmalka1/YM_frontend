@@ -78,6 +78,19 @@ export const badgeSoftSignalVariantClasses: Record<BadgeVariant, string> = {
   purple: badgeExtras.purple.soft,
 }
 
+export type IconChipTone = SemanticTone | 'primary' | 'purple'
+
+/** IconChip color recipes — `base` always applies; `ring` is the tone-matched subtle ring opt-in. */
+export const iconChipToneClasses: Record<IconChipTone, { base: string; ring: string }> = {
+  neutral: { base: 'bg-gray-100 text-gray-500', ring: 'ring-1 ring-gray-200/60' },
+  info: { base: 'bg-info-50 text-info-600', ring: 'ring-1 ring-info-100' },
+  positive: { base: 'bg-positive-50 text-positive-600', ring: 'ring-1 ring-positive-100' },
+  warning: { base: 'bg-warning-50 text-warning-600', ring: 'ring-1 ring-warning-100' },
+  negative: { base: 'bg-negative-50 text-negative-600', ring: 'ring-1 ring-negative-100' },
+  primary: { base: 'bg-primary-50 text-primary-600', ring: 'ring-1 ring-primary-100' },
+  purple: { base: 'bg-violet-50 text-violet-500', ring: 'ring-1 ring-violet-100' },
+}
+
 export const semanticStatToneClasses: Record<SemanticTone, StatToneClasses> = {
   neutral: {
     accent: semanticDotClasses.neutral,

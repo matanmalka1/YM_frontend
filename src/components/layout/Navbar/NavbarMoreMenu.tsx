@@ -3,6 +3,7 @@ import { ChevronDown } from 'lucide-react'
 import { NavLink, useLocation } from 'react-router-dom'
 
 import { Button } from '@/components/ui/primitives/Button'
+import { IconChip } from '@/components/ui/primitives/IconChip'
 import { useDismissibleLayer } from '@/components/ui/overlays/useDismissibleLayer'
 import { useMenuRovingFocus } from '@/components/ui/overlays/useMenuRovingFocus'
 import { cn } from '@/utils/utils'
@@ -121,9 +122,7 @@ export const NavbarMoreMenu: React.FC<NavbarMoreMenuProps> = ({ groups }) => {
                     )}
                     role="menuitem"
                   >
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
-                      <Icon className="h-3.5 w-3.5" />
-                    </span>
+                    <IconChip icon={Icon} size="xs" tone="neutral" />
                     <span className="min-w-0 flex-1 truncate">{item.menuLabel ?? item.label}</span>
                   </NavLink>
                 )

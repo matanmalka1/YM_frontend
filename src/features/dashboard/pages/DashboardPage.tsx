@@ -32,6 +32,8 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <DashboardSurface>
+      <h1 className="sr-only">{DASHBOARD_COPY.pageTitle}</h1>
+
       {denied && <Alert variant="warning" message={DASHBOARD_COPY.permissionDenied} />}
       {dashboard.status === 'error' && !denied && <Alert variant="error" message={dashboard.message} />}
 

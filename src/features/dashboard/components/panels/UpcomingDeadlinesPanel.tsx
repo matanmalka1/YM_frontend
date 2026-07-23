@@ -2,9 +2,11 @@ import { CalendarDays, Landmark, ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { DashboardPanel, DashboardSectionHeader } from '../shared/DashboardLayout'
 import { InlineState } from '@/components/ui/feedback/InlineState'
+import { IconChip } from '@/components/ui/primitives/IconChip'
 import { SkeletonBlock } from '@/components/ui/primitives/SkeletonBlock'
 import { TAX_CALENDAR_OBLIGATION_LABELS, type TaxCalendarGroup, useTaxCalendarGroups } from '@/features/taxCalendar'
 import { formatDate, formatWeekday, getReportingPeriodLabelWithYear } from '@/utils/utils'
+import type { IconChipTone } from '@/utils/semanticColors'
 import { DASHBOARD_MESSAGES } from '../../messages'
 
 const UPCOMING_DEADLINES_LIMIT = 4
@@ -30,18 +32,12 @@ const UpcomingDeadlineRow = ({ group }: { group: TaxCalendarGroup }) => {
   const Icon = group.obligation_type === 'vat' ? CalendarDays : Landmark
   const countLabel =
     group.obligation_type === 'advance_payment' ? DASHBOARD_MESSAGES.deadlines.payments : DASHBOARD_MESSAGES.deadlines.reports
-  const iconClassName =
-    group.obligation_type !== 'vat'
-      ? 'bg-positive-50 text-positive-600 ring-1 ring-positive-100'
-      : group.period_months_count === 2
-        ? 'bg-violet-50 text-violet-500 ring-1 ring-violet-100'
-        : 'bg-primary-50 text-primary-600 ring-1 ring-primary-100'
+  const chipTone: IconChipTone =
+    group.obligation_type !== 'vat' ? 'positive' : group.period_months_count === 2 ? 'purple' : 'primary'
 
   return (
     <li className="flex items-center gap-3.5 rounded-2xl border border-transparent p-3.5 transition-colors hover:border-slate-200/60 hover:bg-slate-50">
-      <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${iconClassName}`}>
-        <Icon className="h-5 w-5" />
-      </span>
+      <IconChip icon={Icon} size="lg" tone={chipTone} ring />
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center justify-between gap-1">

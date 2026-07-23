@@ -4,6 +4,7 @@ import { cn, formatCount } from '@/utils/utils'
 import { semanticStatToneClasses, type SemanticTone } from '@/utils/semanticColors'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Card } from '@/components/ui/primitives/Card'
+import { IconChip } from '@/components/ui/primitives/IconChip'
 import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
 import type { VatDashboardPeriodStat } from '../../api/contracts'
 import { DASHBOARD_MESSAGES } from '../../messages'
@@ -24,15 +25,13 @@ interface VatStatCardProps {
 
 export const VatStatCard = ({ title, unit, icon: Icon, stat, href, className }: VatStatCardProps) => {
   const tone = getTone(stat)
-  const { iconBg, value: pctClass } = semanticStatToneClasses[tone]
+  const { value: pctClass } = semanticStatToneClasses[tone]
 
   const content = (
     <Card variant="soft" size="compact" interactive={Boolean(href)} bodyClassName="flex flex-col gap-3.5" className={className}>
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <span className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl', iconBg)}>
-            <Icon className="h-5 w-5" />
-          </span>
+          <IconChip icon={Icon} tone={tone} />
           <span className="text-sm font-semibold text-slate-500">{title}</span>
         </div>
         <Badge variant={tone} size="2xs" className="whitespace-nowrap">
