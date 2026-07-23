@@ -1,4 +1,4 @@
-import { FileSpreadsheet } from 'lucide-react'
+import { FileDown, FileSpreadsheet } from 'lucide-react'
 import { PageHeader } from '../../../components/layout/PageHeader'
 import { PageStateGuard } from '../../../components/ui/layout/PageStateGuard'
 import { Button } from '../../../components/ui/primitives/Button'
@@ -21,11 +21,21 @@ export const AdvancePaymentReportView: React.FC = () => {
         variant="primary"
         size="sm"
         icon={<FileSpreadsheet className="h-4 w-4" />}
-        onClick={() => void handleExport()}
-        isLoading={exporting}
-        disabled={exporting}
+        onClick={() => void handleExport('excel')}
+        isLoading={exporting === 'excel'}
+        disabled={exporting !== null}
       >
         Excel
+      </Button>
+      <Button
+        variant="primary"
+        size="sm"
+        icon={<FileDown className="h-4 w-4" />}
+        onClick={() => void handleExport('pdf')}
+        isLoading={exporting === 'pdf'}
+        disabled={exporting !== null}
+      >
+        PDF
       </Button>
       <Select
         value={String(year)}
