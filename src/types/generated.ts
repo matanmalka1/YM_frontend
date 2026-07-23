@@ -16848,6 +16848,7 @@ export interface operations {
   export_advance_payment_report_api_v1_reports_advance_payments_export_get: {
     parameters: {
       query: {
+        format: string
         year: number
         month?: number | null
       }
@@ -16864,6 +16865,7 @@ export interface operations {
         }
         content: {
           'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': string
+          'application/pdf': string
         }
       }
       /** @description Authentication required */
