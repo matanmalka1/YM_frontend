@@ -60,6 +60,10 @@ export const AdvancePaymentReadonlySections: React.FC<AdvancePaymentReadonlySect
           value: payment.payment_method ? getAdvancePaymentMethodLabel(payment.payment_method) : null,
         },
         {
+          label: ADVANCED_PAYMENTS_MESSAGES.readonlySections.paymentReferenceLabel,
+          value: payment.payment_reference,
+        },
+        {
           label: ADVANCED_PAYMENTS_MESSAGES.readonlySections.paidAtLabel,
           value: payment.paid_at ? formatDate(payment.paid_at) : null,
         },

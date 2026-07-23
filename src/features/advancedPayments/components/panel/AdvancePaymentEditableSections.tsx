@@ -196,6 +196,13 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
                 ...ADVANCE_PAYMENT_METHOD_OPTIONS,
               ]}
             />
+            <Input
+              label={ADVANCED_PAYMENTS_MESSAGES.editableSections.paymentReferenceLabel}
+              placeholder={ADVANCED_PAYMENTS_MESSAGES.editableSections.paymentReferencePlaceholder}
+              maxLength={100}
+              value={form.paymentReference}
+              onChange={(e) => form.setPaymentReference(e.target.value)}
+            />
             <div className="flex items-end gap-2">
               <div className="flex-1">
                 <DatePicker

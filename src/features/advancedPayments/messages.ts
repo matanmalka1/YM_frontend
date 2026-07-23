@@ -60,6 +60,7 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     calculatedAmountLabel: 'סכום מחושב',
     overrideAmountLabel: 'סכום עקיפה',
     paymentMethodLabel: 'שיטת תשלום',
+    paymentReferenceLabel: 'מספר אסמכתא',
     paidAtLabel: 'תאריך ביצוע',
   },
   detailActions: {
@@ -116,6 +117,8 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     paidAmountLabel: 'סכום שולם',
     paymentMethodLabel: 'שיטת תשלום',
     noMethodOption: 'ללא',
+    paymentReferenceLabel: 'מספר אסמכתא (לא חובה)',
+    paymentReferencePlaceholder: 'אסמכתת ההעברה / שובר',
     paidAtLabel: 'תאריך ביצוע תשלום',
     notesPlaceholder: 'הערות...',
     fillFullAmountButton: 'שולם במלואו',
@@ -145,6 +148,29 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
   },
   batchContent: {
     paginationLabel: 'מקדמות',
+  },
+  bulkMarkPaid: {
+    actionButton: 'סמן כשולם',
+    modalTitle: 'סימון כשולם באצווה',
+    modalMessage: (count: number) => `${count} מקדמות יסומנו כשולמות במלואן (חלקיות יושלמו ליתרה).`,
+    paidAtLabel: 'תאריך תשלום',
+    referencePrefixLabel: 'קידומת אסמכתא (לא חובה)',
+    referencePrefixPlaceholder: 'למשל BATCH-07',
+    referencePrefixHint: 'כל מקדמה תקבל אסמכתא בצורת "קידומת-מזהה"',
+    confirmButton: 'בצע',
+    selectRowAriaLabel: (id: number) => `בחר מקדמה ${id}`,
+    selectAllAriaLabel: 'בחר את כל המקדמות בעמוד',
+    result: ({ updated, skipped }: { updated: number[]; skipped: { reason: string }[] }) => {
+      const alreadyPaid = skipped.filter((item) => item.reason === 'already_paid').length
+      const noAmount = skipped.filter((item) => item.reason === 'no_amount').length
+      return [
+        `${updated.length} מקדמות עודכנו`,
+        alreadyPaid > 0 ? `${alreadyPaid} כבר שולמו` : null,
+        noAmount > 0 ? `${noAmount} ללא סכום לתשלום` : null,
+      ]
+        .filter(Boolean)
+        .join(' · ')
+    },
   },
   batchRow: {
     typeLabel: 'מקדמות',

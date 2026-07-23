@@ -10,4 +10,5 @@ export const ADVANCE_PAYMENT_ENDPOINTS = {
     `/clients/${clientRecordId}/advance-payments/refresh-turnover`,
   advancePaymentsOverview: '/advance-payments/overview',
   advancePaymentsBatches: '/advance-payments/overview/batches',
+  advancePaymentsBulkMarkPaid: '/advance-payments/bulk-mark-paid',
 } as const

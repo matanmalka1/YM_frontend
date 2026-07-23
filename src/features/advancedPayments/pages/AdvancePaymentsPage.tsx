@@ -2,8 +2,10 @@ import { PlusCircle, Calendar } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PageContent } from '@/components/layout/PageContent'
 import { Button } from '@/components/ui/primitives/Button'
+import { BulkSelectionActionButton, BulkSelectionToolbar } from '@/components/ui/table'
 import { AdvancePaymentsStatsSection } from '../components/stats/AdvancePaymentsStatsSection'
 import { AdvancePaymentBatchesList } from '../components/table/AdvancePaymentBatchesList'
+import { AdvancePaymentBulkMarkPaidModal } from '../components/table/AdvancePaymentBulkMarkPaidModal'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import { CreateAdvancePaymentFlow } from '../components/create/CreateAdvancePaymentFlow'
 import { GenerateScheduleModal } from '../components/create/GenerateScheduleModal'
@@ -11,7 +13,7 @@ import { useAdvancePaymentsPage } from '../hooks/useAdvancePaymentsPage'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../messages'
 
 export const AdvancePayments: React.FC = () => {
-  const { status, headerProps, permissions, stats, filters, table, modals } = useAdvancePaymentsPage()
+  const { status, headerProps, permissions, stats, filters, table, bulkMarkPaid, modals } = useAdvancePaymentsPage()
 
   return (
     <PageContent>
@@ -44,7 +46,24 @@ export const AdvancePayments: React.FC = () => {
         subtitle={ADVANCED_PAYMENTS_MESSAGES.page.filterSubtitle}
       />
 
+      {permissions.isAdvisor && bulkMarkPaid.selectedIds.size > 0 && (
+        <BulkSelectionToolbar
+          selectedCount={bulkMarkPaid.selectedIds.size}
+          loading={bulkMarkPaid.isSubmitting}
+          onClear={bulkMarkPaid.clearSelection}
+        >
+          <BulkSelectionActionButton
+            label={ADVANCED_PAYMENTS_MESSAGES.bulkMarkPaid.actionButton}
+            disabled={bulkMarkPaid.isSubmitting}
+            loading={bulkMarkPaid.isSubmitting}
+            onClick={bulkMarkPaid.openModal}
+          />
+        </BulkSelectionToolbar>
+      )}
+
       <AdvancePaymentBatchesList isLoading={status.isLoading} {...table} />
+
+      <AdvancePaymentBulkMarkPaidModal bulk={bulkMarkPaid} />
 
       <CreateAdvancePaymentFlow {...modals.create} />
 

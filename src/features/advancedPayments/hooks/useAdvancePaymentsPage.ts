@@ -9,6 +9,7 @@ import { reportingPeriodIncludesMonth } from '@/utils/reportingPeriod'
 import type { AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../api/contracts'
 import { isAdvancePaymentStatus, ADVANCE_PAYMENTS_FILTER_FIELDS } from '../constants'
 import { useAdvancePaymentBatches } from './useAdvancePaymentBatches'
+import { useBulkMarkPaid } from './useBulkMarkPaid'
 import {
   getAdvancePaymentBatchKey,
   getAdvancePaymentWorkflowStats,
@@ -41,6 +42,7 @@ export const useAdvancePaymentsPage = () => {
   const statusFilter = normalizedStatus
   const [createOpen, setCreateOpen] = useState(false)
   const [generateOpen, setGenerateOpen] = useState(false)
+  const bulkMarkPaid = useBulkMarkPaid()
   const { batches, isLoading } = useAdvancePaymentBatches(year, clientRecordId)
   const displayBatches = useMemo(() => mergeAdvancePaymentBatches(batches, periodFilter), [batches, periodFilter])
   const nearestDueBatchKey = useDefaultOpenGroup(displayBatches, getAdvancePaymentBatchKey, (batch) => batch.due_date ?? null)
@@ -102,6 +104,13 @@ export const useAdvancePaymentsPage = () => {
       clientSearch: filters.client_search.trim() || undefined,
       periodFilter,
       statusFilter,
+      selection: isAdvisor
+        ? {
+            selectedIds: bulkMarkPaid.selectedIds,
+            onToggleSelect: bulkMarkPaid.toggleSelect,
+            onToggleAll: bulkMarkPaid.toggleAll,
+          }
+        : undefined,
       defaultOpenBatchKey,
       focusBatchKey: focusBatchKey ? getAdvancePaymentBatchKey(focusBatchKey) : null,
       currentReportingYear: todayYear,
@@ -109,6 +118,7 @@ export const useAdvancePaymentsPage = () => {
       onRowClick: openRow,
       onNavigateToClient: navigateToClient,
     },
+    bulkMarkPaid,
     modals: {
       create: {
         open: createOpen,

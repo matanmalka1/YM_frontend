@@ -64,4 +64,23 @@ export const reportsApi = {
 
     return { filename }
   },
+
+  exportAdvancePaymentReport: async (format: ExportFormat, year: number, month?: number): Promise<ReportExportResult> => {
+    const response = await api.get<Blob>(REPORT_ENDPOINTS.reportsAdvancePaymentsExport, {
+      params: toQueryParams({ format, year, month }),
+      responseType: 'blob',
+    })
+
+    const contentDisposition = response.headers['content-disposition']
+    const filenameMatch = contentDisposition?.match(/filename="?([^";]+)"?/)
+    const filename = filenameMatch?.[1] || `advance_payments_report.${format === 'excel' ? 'xlsx' : 'pdf'}`
+
+    const fallbackMimeType =
+      format === 'excel' ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'application/pdf'
+    const contentType = response.headers['content-type']
+
+    downloadBlob(response.data, filename, typeof contentType === 'string' ? contentType : fallbackMimeType)
+
+    return { filename }
+  },
 }

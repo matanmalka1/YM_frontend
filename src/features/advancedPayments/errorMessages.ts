@@ -13,6 +13,9 @@ export const ADVANCED_PAYMENTS_ERROR_MESSAGES = {
     paidAmountInvalid: 'סכום ששולם חייב להיות מספר תקין שאינו שלילי',
     paymentMethodInvalid: 'שיטת תשלום אינה תקינה',
   },
+  bulkMarkPaid: {
+    failed: 'סימון המקדמות כשולמו נכשל',
+  },
   generateSchedule: {
     create: 'שגיאה ביצירת לוח מקדמות',
     profileLoad: 'שגיאה בטעינת פרופיל הלקוח',

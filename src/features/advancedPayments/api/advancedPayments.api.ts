@@ -1,6 +1,7 @@
 import { api } from '@/api/client'
 import { ADVANCE_PAYMENT_ENDPOINTS } from './endpoints'
 import { toQueryParams } from '@/api/queryParams'
+import { randomUUID } from '@/utils/random'
 import type { PaginatedResponse } from '@/types'
 import type {
   AdvancePaymentRow,
@@ -11,6 +12,8 @@ import type {
   AdvancePaymentOverviewResponse,
   AnnualKPIResponse,
   MonthBatchSummary,
+  BulkMarkPaidPayload,
+  BulkMarkPaidResponse,
   BulkRefreshTurnoverResponse,
   GenerateScheduleResponse,
 } from './contracts'
@@ -42,6 +45,13 @@ export const advancePaymentsApi = {
       ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientRecordId, id),
       payload,
     )
+    return response.data
+  },
+
+  bulkMarkPaid: async (payload: BulkMarkPaidPayload): Promise<BulkMarkPaidResponse> => {
+    const response = await api.post<BulkMarkPaidResponse>(ADVANCE_PAYMENT_ENDPOINTS.advancePaymentsBulkMarkPaid, payload, {
+      headers: { 'X-Idempotency-Key': randomUUID() },
+    })
     return response.data
   },
 

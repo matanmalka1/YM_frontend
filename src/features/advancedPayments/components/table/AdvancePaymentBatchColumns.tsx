@@ -2,6 +2,7 @@ import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { AlertTriangle, Edit, ExternalLink, Info } from 'lucide-react'
 import {
   actionsColumn,
+  buildSelectionColumn,
   EmptyCell,
   moneyColumn,
   monoColumn,
@@ -19,15 +20,39 @@ import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '.
 import { getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
+export interface AdvancePaymentRowSelection {
+  selectedIds: Set<number>
+  onToggleSelect: (id: number) => void
+  onToggleAll: (ids: number[]) => void
+}
+
 interface AdvancePaymentBatchColumnOpts {
+  /** Ids of the rows currently rendered — the select-all scope. */
+  visibleRowIds: number[]
+  selection?: AdvancePaymentRowSelection
   onRowClick: (row: AdvancePaymentOverviewRow) => void
   onNavigateToClient: (clientRecordId: number) => void
 }
 
 export const buildAdvancePaymentBatchColumns = ({
+  visibleRowIds,
+  selection,
   onRowClick,
   onNavigateToClient,
 }: AdvancePaymentBatchColumnOpts): Column<AdvancePaymentOverviewRow>[] => [
+  ...(selection
+    ? [
+        buildSelectionColumn<AdvancePaymentOverviewRow>({
+          allIds: visibleRowIds,
+          getId: (row) => row.id,
+          getItemAriaLabel: (row) => ADVANCED_PAYMENTS_MESSAGES.bulkMarkPaid.selectRowAriaLabel(row.id),
+          selectAllAriaLabel: ADVANCED_PAYMENTS_MESSAGES.bulkMarkPaid.selectAllAriaLabel,
+          selectedIds: selection.selectedIds,
+          onToggleSelect: selection.onToggleSelect,
+          onToggleAll: selection.onToggleAll,
+        }),
+      ]
+    : []),
   monoColumn({
     key: 'office_client_number',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.officeNumberHeader,

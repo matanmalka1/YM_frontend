@@ -14,6 +14,7 @@ export interface AdvancePaymentRow {
   due_date_effective?: string | null
   paid_at: string | null
   payment_method: AdvancePaymentMethod | null
+  payment_reference: string | null
   annual_report_id: number | null
   notes: string | null
   delta: string
@@ -47,6 +48,7 @@ export interface CreateAdvancePaymentPayload {
   override_amount?: string | null
   paid_amount?: string | null
   payment_method?: AdvancePaymentMethod | null
+  payment_reference?: string | null
   annual_report_id?: number | null
   notes?: string | null
 }
@@ -58,6 +60,7 @@ export interface UpdateAdvancePaymentPayload {
   override_amount?: string | null
   paid_at?: string | null
   payment_method?: AdvancePaymentMethod | null
+  payment_reference?: string | null
   notes?: string | null
 }
 
@@ -89,6 +92,7 @@ export interface AdvancePaymentOverviewRow {
   due_date: string
   due_date_effective?: string | null
   payment_method: AdvancePaymentMethod | null
+  payment_reference: string | null
   turnover_amount: string | null
   turnover_source: TurnoverSource | null
   turnover_snapshot_at: string | null
@@ -156,6 +160,21 @@ export interface BulkRefreshTurnoverResponse {
   skipped_no_vat: number
   skipped_not_filed: number
   skipped_paid: number
+}
+
+export interface BulkMarkPaidPayload {
+  payment_ids: number[]
+  paid_at?: string | null
+  payment_method?: AdvancePaymentMethod | null
+  /** Each updated row gets a reference of the form `<prefix>-<payment_id>`. */
+  reference_prefix?: string | null
+}
+
+export type BulkMarkPaidSkipReason = 'already_paid' | 'no_amount' | 'not_found'
+
+export interface BulkMarkPaidResponse {
+  updated: number[]
+  skipped: { id: number; reason: BulkMarkPaidSkipReason }[]
 }
 
 export interface GenerateScheduleResponse {

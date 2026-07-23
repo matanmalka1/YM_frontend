@@ -1991,6 +1991,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/reports/advance-payments/export': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Export Advance Payment Report */
+    get: operations['export_advance_payment_report_api_v1_reports_advance_payments_export_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/reports/annual-reports': {
     parameters: {
       query?: never
@@ -2424,6 +2441,28 @@ export interface paths {
     get: operations['list_advance_payment_batches_api_v1_advance_payments_overview_batches_get']
     put?: never
     post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/advance-payments/bulk-mark-paid': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Bulk Mark Paid
+     * @description Org-level bulk: top up each listed payment to its expected amount.
+     *
+     *     ADVISOR-only (mutation), unlike the read routes on this router.
+     */
+    post: operations['bulk_mark_paid_api_v1_advance_payments_bulk_mark_paid_post']
     delete?: never
     options?: never
     head?: never
@@ -3269,6 +3308,8 @@ export interface components {
       /** Paid Amount */
       paid_amount?: string | null
       payment_method?: components['schemas']['PaymentMethod'] | null
+      /** Payment Reference */
+      payment_reference?: string | null
       /** Annual Report Id */
       annual_report_id?: number | null
       /** Notes */
@@ -3350,6 +3391,8 @@ export interface components {
       paid_amount: string
       status: components['schemas']['AdvancePaymentStatus']
       payment_method?: components['schemas']['PaymentMethod'] | null
+      /** Payment Reference */
+      payment_reference?: string | null
       /** Turnover Amount */
       turnover_amount?: string | null
       turnover_source?: components['schemas']['TurnoverSource'] | null
@@ -3447,6 +3490,8 @@ export interface components {
       /** Paid At */
       paid_at?: string | null
       payment_method?: components['schemas']['PaymentMethod'] | null
+      /** Payment Reference */
+      payment_reference?: string | null
       /** Annual Report Id */
       annual_report_id?: number | null
       /** Notes */
@@ -3509,6 +3554,8 @@ export interface components {
       /** Paid At */
       paid_at?: string | null
       payment_method?: components['schemas']['PaymentMethod'] | null
+      /** Payment Reference */
+      payment_reference?: string | null
       /** Notes */
       notes?: string | null
       /** Turnover Amount */
@@ -4729,6 +4776,46 @@ export interface components {
       id: number
       /** Error */
       error: string
+    }
+    /**
+     * BulkMarkPaidRequest
+     * @description Explicit ids only — same principle as ``BulkRefreshTurnoverRequest``.
+     *
+     *     Marks each listed payment as paid in full: ``paid_amount`` is topped up to
+     *     ``expected_amount`` (partial payments included — the client settled the
+     *     difference). Fully-paid rows are skipped, never rewritten.
+     */
+    BulkMarkPaidRequest: {
+      /** Payment Ids */
+      payment_ids: number[]
+      /**
+       * Paid At
+       * @description ברירת מחדל: עכשיו
+       */
+      paid_at?: string | null
+      payment_method?: components['schemas']['PaymentMethod'] | null
+      /**
+       * Reference Prefix
+       * @description אם סופק, כל רשומה תקבל אסמכתא בצורת '<prefix>-<payment_id>'
+       */
+      reference_prefix?: string | null
+    }
+    /** BulkMarkPaidResponse */
+    BulkMarkPaidResponse: {
+      /** Updated */
+      updated: number[]
+      /** Skipped */
+      skipped: components['schemas']['BulkMarkPaidSkippedItem'][]
+    }
+    /** BulkMarkPaidSkippedItem */
+    BulkMarkPaidSkippedItem: {
+      /** Id */
+      id: number
+      /**
+       * Reason
+       * @enum {string}
+       */
+      reason: 'already_paid' | 'no_amount' | 'not_found'
     }
     /**
      * BulkRefreshTurnoverRequest
@@ -16758,6 +16845,56 @@ export interface operations {
       }
     }
   }
+  export_advance_payment_report_api_v1_reports_advance_payments_export_get: {
+    parameters: {
+      query: {
+        year: number
+        month?: number | null
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description File download */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': string
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
   get_annual_report_status_report_api_v1_reports_annual_reports_get: {
     parameters: {
       query: {
@@ -18584,6 +18721,68 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['MonthBatchSummary'][]
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  bulk_mark_paid_api_v1_advance_payments_bulk_mark_paid_post: {
+    parameters: {
+      query?: never
+      header: {
+        'X-Idempotency-Key': string
+      }
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['BulkMarkPaidRequest']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BulkMarkPaidResponse']
+        }
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
         }
       }
       /** @description Authentication required */

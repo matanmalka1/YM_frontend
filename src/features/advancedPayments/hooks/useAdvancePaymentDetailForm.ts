@@ -25,6 +25,8 @@ export interface AdvancePaymentDetailForm {
   setPaidAmount: (value: string) => void
   paymentMethod: string
   setPaymentMethod: (value: string) => void
+  paymentReference: string
+  setPaymentReference: (value: string) => void
   paidAt: string
   setPaidAt: (value: string) => void
   notes: string
@@ -52,6 +54,7 @@ export const useAdvancePaymentDetailForm = ({ payment, onSave }: UseAdvancePayme
   // in-progress edits.
   const [paidAmount, setPaidAmount] = useState(() => toEditableAmount(payment.paid_amount))
   const [paymentMethod, setPaymentMethod] = useState<string>(() => payment.payment_method ?? '')
+  const [paymentReference, setPaymentReference] = useState(() => payment.payment_reference ?? '')
   const [paidAt, setPaidAt] = useState(() => (payment.paid_at ? payment.paid_at.split('T')[0] : ''))
   const [notes, setNotes] = useState(() => payment.notes ?? '')
   const [turnoverAmount, setTurnoverAmount] = useState(() => toEditableAmount(payment.turnover_amount))
@@ -60,6 +63,7 @@ export const useAdvancePaymentDetailForm = ({ payment, onSave }: UseAdvancePayme
   // baseline values derived from the loaded payment
   const baselinePaidAmount = toEditableAmount(payment.paid_amount)
   const baselinePaymentMethod = payment.payment_method ?? ''
+  const baselinePaymentReference = payment.payment_reference ?? ''
   const baselinePaidAt = payment.paid_at ? payment.paid_at.split('T')[0] : ''
   const baselineNotes = payment.notes ?? ''
   const baselineTurnover = toEditableAmount(payment.turnover_amount)
@@ -68,6 +72,7 @@ export const useAdvancePaymentDetailForm = ({ payment, onSave }: UseAdvancePayme
   // normalized form values
   const normalizedPaidAmount = paidAmount.trim()
   const normalizedPaymentMethod = paymentMethod.trim()
+  const normalizedPaymentReference = paymentReference.trim()
   const normalizedPaidAt = paidAt.trim()
   const normalizedNotes = notes.trim()
 
@@ -83,6 +88,7 @@ export const useAdvancePaymentDetailForm = ({ payment, onSave }: UseAdvancePayme
   const isDirty =
     !amountsEqual(baselinePaidAmount, paidAmount) ||
     baselinePaymentMethod !== paymentMethod ||
+    baselinePaymentReference !== paymentReference ||
     baselinePaidAt !== paidAt ||
     baselineNotes !== notes ||
     !amountsEqual(baselineTurnover, turnoverAmount) ||
@@ -104,6 +110,7 @@ export const useAdvancePaymentDetailForm = ({ payment, onSave }: UseAdvancePayme
     if (!amountsEqual(paidAmount, baselinePaidAmount)) payload.paid_amount = paidAmountPayload
     if (paymentMethod !== baselinePaymentMethod)
       payload.payment_method = normalizedPaymentMethod === '' ? null : normalizedPaymentMethod
+    if (paymentReference !== baselinePaymentReference) payload.payment_reference = normalizedPaymentReference || null
     if (paidAt !== baselinePaidAt) payload.paid_at = normalizedPaidAt || null
     if (notes !== baselineNotes) payload.notes = normalizedNotes || null
     if (!amountsEqual(turnoverAmount, baselineTurnover)) payload.turnover_amount = toStringOrNull(turnoverAmount)
@@ -138,6 +145,8 @@ export const useAdvancePaymentDetailForm = ({ payment, onSave }: UseAdvancePayme
     setPaidAmount,
     paymentMethod,
     setPaymentMethod,
+    paymentReference,
+    setPaymentReference,
     paidAt,
     setPaidAt,
     notes,

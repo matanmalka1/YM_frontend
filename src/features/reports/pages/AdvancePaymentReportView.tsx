@@ -1,5 +1,7 @@
+import { FileSpreadsheet } from 'lucide-react'
 import { PageHeader } from '../../../components/layout/PageHeader'
 import { PageStateGuard } from '../../../components/ui/layout/PageStateGuard'
+import { Button } from '../../../components/ui/primitives/Button'
 import { AdvancePaymentReportTable } from '../components/AdvancePaymentReportTable'
 import { useAdvancePaymentReport } from '../hooks/useAdvancePaymentReport'
 import { MONTH_OPTIONS as BASE_MONTH_OPTIONS, formatPercent } from '../../../utils/utils'
@@ -11,10 +13,20 @@ import { REPORTS_MESSAGES } from '../messages'
 const MONTH_OPTIONS = [ALL_MONTHS_OPTION, ...BASE_MONTH_OPTIONS]
 
 export const AdvancePaymentReportView: React.FC = () => {
-  const { year, setYear, month, setMonth, data, isLoading, error } = useAdvancePaymentReport()
+  const { year, setYear, month, setMonth, exporting, handleExport, data, isLoading, error } = useAdvancePaymentReport()
 
   const actions = (
     <div className="flex items-center gap-2">
+      <Button
+        variant="primary"
+        size="sm"
+        icon={<FileSpreadsheet className="h-4 w-4" />}
+        onClick={() => void handleExport()}
+        isLoading={exporting}
+        disabled={exporting}
+      >
+        Excel
+      </Button>
       <Select
         value={String(year)}
         onChange={(e) => setYear(Number(e.target.value))}

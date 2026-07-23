@@ -2,6 +2,7 @@ import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { MonthlyAccordionList } from '@/components/ui/grouping/MonthlyAccordionList'
 import { reportingPeriodIncludesMonth } from '@/utils/reportingPeriod'
 import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
+import type { AdvancePaymentRowSelection } from './AdvancePaymentBatchColumns'
 import { getAdvancePaymentBatchKey } from '../../utils/advancePaymentUtils'
 import { AdvancePaymentBatchRow } from './AdvancePaymentBatchRow'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
@@ -20,6 +21,8 @@ interface AdvancePaymentBatchesListProps {
   clientSearch?: string
   statusFilter: AdvancePaymentStatus | ''
   periodFilter: 1 | 2 | null
+  /** Present only when the viewer may run bulk actions (advisor). */
+  selection?: AdvancePaymentRowSelection
   onRowClick: (row: AdvancePaymentOverviewRow) => void
   onNavigateToClient: (clientRecordId: number) => void
 }
@@ -37,6 +40,7 @@ export const AdvancePaymentBatchesList = ({
   clientSearch,
   statusFilter,
   periodFilter,
+  selection,
   onRowClick,
   onNavigateToClient,
 }: AdvancePaymentBatchesListProps) => (
@@ -74,6 +78,7 @@ export const AdvancePaymentBatchesList = ({
           clientSearch={clientSearch}
           statusFilter={statusFilter}
           periodFilter={periodFilter}
+          selection={selection}
           onRowClick={onRowClick}
           onNavigateToClient={onNavigateToClient}
         />

@@ -68,6 +68,9 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
             value: formatDate(row.due_date_effective ?? row.due_date),
           },
           ...(row.paid_at ? [{ label: ADVANCED_PAYMENTS_MESSAGES.clientCards.paidAtLabel, value: formatDate(row.paid_at) }] : []),
+          ...(row.payment_reference
+            ? [{ label: ADVANCED_PAYMENTS_MESSAGES.readonlySections.paymentReferenceLabel, value: row.payment_reference }]
+            : []),
           { label: ADVANCED_PAYMENTS_MESSAGES.clientCards.paidLabel, value: formatShekelAmount(paid) },
           {
             label: ADVANCED_PAYMENTS_MESSAGES.clientCards.balanceLabel,

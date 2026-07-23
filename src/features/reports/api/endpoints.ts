@@ -3,5 +3,6 @@ export const REPORT_ENDPOINTS = {
   reportsAgingExport: '/reports/aging/export',
   reportsAnnualReportStatus: '/reports/annual-reports',
   reportsAdvancePayments: '/reports/advance-payments',
+  reportsAdvancePaymentsExport: '/reports/advance-payments/export',
   reportsVatCompliance: '/reports/vat-compliance',
 } as const
