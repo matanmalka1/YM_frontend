@@ -10,7 +10,7 @@ import { EntityAuditTrailSection, type FieldValueLabels } from '@/features/audit
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { formatShekelAmount } from '@/utils/utils'
 import { useBeforeUnloadGuard } from '@/hooks/useBeforeUnloadGuard'
-import type { AdvancePaymentRow, UpdateAdvancePaymentPayload } from '../../api/contracts'
+import type { AdvancePaymentRow, AnnualKPIResponse, UpdateAdvancePaymentPayload } from '../../api/contracts'
 import {
   ADVANCE_PAYMENT_METHOD_LABELS,
   ADVANCE_PAYMENT_STATUS_LABELS,
@@ -21,6 +21,7 @@ import { useAdvancePaymentDetailForm } from '../../hooks/useAdvancePaymentDetail
 import { useAdvancePaymentPeriodNavigation } from '../../hooks/useAdvancePaymentPeriodNavigation'
 import { toEditableAmount } from '../../utils/advancePaymentComponentUtils'
 import { AdvancePaymentContextCard } from './AdvancePaymentContextCard'
+import { AdvancePaymentAnnualContextCard } from './AdvancePaymentAnnualContextCard'
 import { AdvancePaymentPeriodNavigator } from './AdvancePaymentPeriodNavigator'
 import { AdvancePaymentEditableSections } from './AdvancePaymentEditableSections'
 import { AdvancePaymentReadonlySections } from './AdvancePaymentReadonlySections'
@@ -39,6 +40,13 @@ interface AdvancePaymentDetailViewProps {
   description?: string
   breadcrumbs: Breadcrumb[]
   clientIdNumber?: string | null
+  annualContext: {
+    year: number
+    data: AnnualKPIResponse | null
+    isLoading: boolean
+    error: string | null
+    onRetry: () => void
+  }
   canEdit: boolean
   isUpdating: boolean
   isDeleting: boolean
@@ -64,6 +72,7 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
   description,
   breadcrumbs,
   clientIdNumber,
+  annualContext,
   canEdit,
   isUpdating,
   isDeleting,
@@ -181,7 +190,10 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
           )}
         </div>
 
-        <AdvancePaymentContextCard payment={payment} clientIdNumber={clientIdNumber} />
+        <div className="space-y-5">
+          <AdvancePaymentAnnualContextCard {...annualContext} />
+          <AdvancePaymentContextCard payment={payment} clientIdNumber={clientIdNumber} />
+        </div>
       </div>
 
       <EntityAuditTrailSection

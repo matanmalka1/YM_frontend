@@ -8,6 +8,7 @@ export const ADVANCED_PAYMENTS_ERROR_MESSAGES = {
     delete: 'שגיאה במחיקת מקדמה',
     listLoad: 'שגיאה בטעינת מקדמות',
     detailLoad: 'שגיאה בטעינת מקדמה',
+    annualKpiLoad: 'טעינת הסיכום השנתי נכשלה',
     turnoverRefresh: 'קיבוע המחזור מדוח המע״מ נכשל',
     alreadyExists: 'מקדמה לחודש זה כבר קיימת',
     paidAmountInvalid: 'סכום ששולם חייב להיות מספר תקין שאינו שלילי',

@@ -88,6 +88,11 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     paidStatTitle: 'שולם',
     balanceStatTitle: 'יתרה לתשלום',
     turnoverStatTitle: 'מחזור לתקופה',
+    annualContextTitle: (year: number) => `סיכום שנתי · ${year}`,
+    annualContextLoading: 'טוען סיכום שנתי',
+    annualExpectedLabel: 'סה״כ צפוי',
+    annualPaidLabel: 'סה״כ שולם',
+    annualBalanceLabel: 'יתרה שנתית',
     contextSectionTitle: 'פרטי לקוח ותקופה',
     paidLateLabel: 'שולם באיחור',
     overdueLabel: 'באיחור',
@@ -204,11 +209,7 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     fromPeriodPlaceholder: 'בחר',
     confirmButton: 'עדכן שיעור',
     result: ({ updated, skipped }: { updated: number; skipped: number }) =>
-      [
-        `${updated} תקופות עודכנו`,
-        skipped > 0 ? `${skipped} דולגו (שולמו / שולמו חלקית)` : null,
-        'ברירת המחדל של הלקוח עודכנה',
-      ]
+      [`${updated} תקופות עודכנו`, skipped > 0 ? `${skipped} דולגו (שולמו / שולמו חלקית)` : null, 'ברירת המחדל של הלקוח עודכנה']
         .filter(Boolean)
         .join(' · '),
   },
@@ -251,8 +252,7 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
       'כדי להמשיך יש למחוק אותן. מקדמות ששולמו במלואן או בחלקן לא יימחקו.',
     confirmButton: 'מחק וצור לוח חדש',
     removedNote: (removed: number) => `הוסרו ${removed} מקדמות עתידיות בתדירות הקודמת`,
-    settledNote: (settled: number) =>
-      `${settled} תקופות בתדירות הקודמת כבר שולמו — הן יישארו כפי שהן ויש לטפל בהן ידנית`,
+    settledNote: (settled: number) => `${settled} תקופות בתדירות הקודמת כבר שולמו — הן יישארו כפי שהן ויש לטפל בהן ידנית`,
     officeTitle: (pending: number) => `${pending} מקדמות בתדירות קודמת חוסמות חלק מהלקוחות`,
     officeNote: 'לקוחות שתדירות המקדמות שלהם שונתה לא קיבלו לוח חדש. אישור ימחק את המקדמות העתידיות שטרם שולמו ויריץ שוב.',
     officeConfirmButton: 'מחק וצור מחדש למשרד',
@@ -263,8 +263,7 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     noEligibleClients: 'אין לקוחות זכאים ליצירת לוח שנתי',
     createButton: 'צור לוחות למשרד',
     runningProgress: ({ processed, total }: { processed: number; total: number }) => `מעבד ${processed} מתוך ${total} לקוחות...`,
-    doneSummary: ({ clients, created }: { clients: number; created: number }) =>
-      `נוצרו ${created} מקדמות עבור ${clients} לקוחות`,
+    doneSummary: ({ clients, created }: { clients: number; created: number }) => `נוצרו ${created} מקדמות עבור ${clients} לקוחות`,
     skippedNote: (skipped: number) => `דולגו ${skipped} תקופות שכבר קיימות או שמועד התשלום שלהן חלף`,
     ineligibleTitle: (count: number) => `${count} לקוחות ללא תדירות מקדמות מוגדרת — לא נוצר להם לוח`,
     ineligibleNote: 'הגדירו תדירות מקדמות בכרטיס הלקוח ואז הריצו יצירה פרטנית',

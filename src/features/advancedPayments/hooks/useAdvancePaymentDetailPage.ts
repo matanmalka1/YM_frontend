@@ -43,6 +43,18 @@ export const useAdvancePaymentDetailPage = ({
     queryFn: () => advancePaymentsApi.getById(clientRecordId, paymentId),
   })
 
+  const year = payment ? Number(payment.period.slice(0, 4)) : 0
+  const {
+    data: annualKpis,
+    isPending: isAnnualKpisPending,
+    error: annualKpisError,
+    refetch: refetchAnnualKpis,
+  } = useQuery({
+    queryKey: advancedPaymentsQK.kpi(clientRecordId, year),
+    queryFn: () => advancePaymentsApi.getAnnualKPIs(clientRecordId, year),
+    enabled: year > 0,
+  })
+
   const [pendingVatConfirm, setPendingVatConfirm] = useState(false)
 
   const paymentMutations = useAdvancePaymentMutations({
@@ -88,6 +100,15 @@ export const useAdvancePaymentDetailPage = ({
       canEdit: isAdvisor,
     },
     payment: payment ?? null,
+    annualContext: {
+      year,
+      data: annualKpis ?? null,
+      isLoading: isAnnualKpisPending,
+      error: annualKpisError
+        ? getErrorMessage(annualKpisError, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.annualKpiLoad)
+        : null,
+      onRetry: () => void refetchAnnualKpis(),
+    },
     actions: {
       isUpdating: paymentMutations.isUpdating,
       isDeleting: paymentMutations.isDeleting,
