@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
 import { Select } from '@/components/ui/inputs/Select'
+import { Alert } from '@/components/ui/overlays/Alert'
 import { SegmentedControl, SegmentedControlItem } from '@/components/ui/primitives/SegmentedControl'
 import { ClientSearchInput } from '@/features/clients/public'
 import { useGenerateSchedule } from '../../hooks/useGenerateSchedule'
@@ -22,6 +23,7 @@ interface Props {
 type GenerateMode = 'client' | 'office'
 
 const MESSAGES = ADVANCED_PAYMENTS_MESSAGES.generateScheduleModal
+const STALE_MESSAGES = ADVANCED_PAYMENTS_MESSAGES.staleCadence
 
 export const GenerateScheduleModal: React.FC<Props> = ({ open, onClose }) => {
   const [mode, setMode] = useState<GenerateMode>('client')
@@ -30,25 +32,24 @@ export const GenerateScheduleModal: React.FC<Props> = ({ open, onClose }) => {
   // the outgoing one.
   const [year, setYear] = useState(String(getOperationalTaxYear()))
 
-  const single = useGenerateSchedule(Number(year))
+  // The modal stays open when a frequency change blocked the run, so the
+  // confirmation is visible; it closes only once something actually generated.
+  const single = useGenerateSchedule(Number(year), onClose)
   const bulk = useBulkGenerateSchedule(open && mode === 'office')
-
-  useEffect(() => {
-    if (open) {
-      setMode('client')
-      setYear(String(getOperationalTaxYear()))
-    }
-  }, [open])
 
   const handleClose = () => {
     single.picker.resetClientPicker()
     onClose()
   }
 
-  const handleSingleConfirm = () => {
-    single.handleGenerate()
-    if (!single.isPending) handleClose()
-  }
+  const { reset: resetSingle } = single
+  useEffect(() => {
+    if (open) {
+      setMode('client')
+      setYear(String(getOperationalTaxYear()))
+      resetSingle()
+    }
+  }, [open, resetSingle])
 
   const isSingleDisabled =
     single.picker.selectedClient === null ||
@@ -68,7 +69,7 @@ export const GenerateScheduleModal: React.FC<Props> = ({ open, onClose }) => {
             {bulk.isDone ? GLOBAL_UI_MESSAGES.actions.close : GLOBAL_UI_MESSAGES.actions.cancel}
           </Button>
           {mode === 'client' ? (
-            <Button variant="primary" isLoading={single.isPending} disabled={isSingleDisabled} onClick={handleSingleConfirm}>
+            <Button variant="primary" isLoading={single.isPending} disabled={isSingleDisabled} onClick={single.handleGenerate}>
               {MESSAGES.createButton}
             </Button>
           ) : (
@@ -132,6 +133,32 @@ export const GenerateScheduleModal: React.FC<Props> = ({ open, onClose }) => {
                       : ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT}
               </p>
             )}
+            {/* The run wrote nothing: the client's frequency changed and the old
+                cadence still occupies the periods. Deleting is opt-in. */}
+            {single.staleCadence !== null && (
+              <Alert
+                variant="warning"
+                size="sm"
+                message={
+                  <div className="space-y-2">
+                    <p className="font-medium">{STALE_MESSAGES.confirmTitle}</p>
+                    <p className="text-xs">{STALE_MESSAGES.confirmMessage(single.staleCadence.pending)}</p>
+                    {single.staleCadence.settled > 0 && (
+                      <p className="text-xs">{STALE_MESSAGES.settledNote(single.staleCadence.settled)}</p>
+                    )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      isLoading={single.isPending}
+                      disabled={single.isPending}
+                      onClick={single.handleConfirmCleanup}
+                    >
+                      {STALE_MESSAGES.confirmButton}
+                    </Button>
+                  </div>
+                }
+              />
+            )}
           </>
         ) : (
           <BulkGenerateSection
@@ -142,6 +169,7 @@ export const GenerateScheduleModal: React.FC<Props> = ({ open, onClose }) => {
             totals={bulk.totals}
             isRunning={bulk.isRunning}
             isDone={bulk.isDone}
+            onConfirmCleanup={() => bulk.confirmCleanup(Number(year))}
           />
         )}
 

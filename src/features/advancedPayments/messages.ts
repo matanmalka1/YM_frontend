@@ -227,6 +227,28 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     singleClientMode: 'לקוח בודד',
     officeMode: 'כל המשרד',
     yearLabel: 'שנת מס',
+    result: ({ created, skipped, removed, settled }: { created: number; skipped: number; removed: number; settled: number }) =>
+      [
+        created > 0 ? `נוצרו ${created} מקדמות` : 'לא נוצרו מקדמות חדשות',
+        skipped > 0 ? `דולגו ${skipped}` : null,
+        removed > 0 ? `הוסרו ${removed} מקדמות בתדירות הקודמת` : null,
+        settled > 0 ? `${settled} תקופות בתדירות הקודמת כבר שולמו ונשארו` : null,
+      ]
+        .filter(Boolean)
+        .join(' · '),
+  },
+  staleCadence: {
+    confirmTitle: 'תדירות המקדמות של הלקוח השתנתה',
+    confirmMessage: (pending: number) =>
+      `קיימות ${pending} מקדמות עתידיות שטרם שולמו בתדירות הקודמת, והן חוסמות את יצירת הלוח החדש. ` +
+      'כדי להמשיך יש למחוק אותן. מקדמות ששולמו במלואן או בחלקן לא יימחקו.',
+    confirmButton: 'מחק וצור לוח חדש',
+    removedNote: (removed: number) => `הוסרו ${removed} מקדמות עתידיות בתדירות הקודמת`,
+    settledNote: (settled: number) =>
+      `${settled} תקופות בתדירות הקודמת כבר שולמו — הן יישארו כפי שהן ויש לטפל בהן ידנית`,
+    officeTitle: (pending: number) => `${pending} מקדמות בתדירות קודמת חוסמות חלק מהלקוחות`,
+    officeNote: 'לקוחות שתדירות המקדמות שלהם שונתה לא קיבלו לוח חדש. אישור ימחק את המקדמות העתידיות שטרם שולמו ויריץ שוב.',
+    officeConfirmButton: 'מחק וצור מחדש למשרד',
   },
   bulkGenerate: {
     loadingPreview: 'טוען את רשימת הלקוחות...',

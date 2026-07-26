@@ -10,10 +10,21 @@ export interface BulkGenerateTotals {
   clientsProcessed: number
   created: number
   skipped: number
+  staleRemoved: number
+  stalePending: number
+  staleSettled: number
   failed: BulkGenerateFailedClient[]
 }
 
-const EMPTY_TOTALS: BulkGenerateTotals = { clientsProcessed: 0, created: 0, skipped: 0, failed: [] }
+const EMPTY_TOTALS: BulkGenerateTotals = {
+  clientsProcessed: 0,
+  created: 0,
+  skipped: 0,
+  staleRemoved: 0,
+  stalePending: 0,
+  staleSettled: 0,
+  failed: [],
+}
 
 /**
  * Drives an office-wide annual generation, which the server splits into chunks.
@@ -34,17 +45,23 @@ export const useBulkGenerateSchedule = (open: boolean) => {
   })
 
   const mutation = useMutation({
-    mutationFn: async (year: number) => {
+    mutationFn: async ({ year, cleanupStaleCadence = false }: { year: number; cleanupStaleCadence?: boolean }) => {
       const runId = randomUUID()
       let cursor: number | null = null
       let running: BulkGenerateTotals = EMPTY_TOTALS
 
       do {
-        const chunk = await advancePaymentsApi.bulkGenerate({ year, cursor }, `${runId}:${cursor ?? 'start'}`)
+        const chunk = await advancePaymentsApi.bulkGenerate(
+          { year, cursor, cleanup_stale_cadence: cleanupStaleCadence },
+          `${runId}:${cursor ?? 'start'}`,
+        )
         running = {
           clientsProcessed: running.clientsProcessed + chunk.clients_processed,
           created: running.created + chunk.created,
           skipped: running.skipped + chunk.skipped,
+          staleRemoved: running.staleRemoved + chunk.stale_cadence.removed,
+          stalePending: running.stalePending + chunk.stale_cadence.pending,
+          staleSettled: running.staleSettled + chunk.stale_cadence.settled,
           failed: [...running.failed, ...chunk.failed],
         }
         // Published per chunk so the progress bar advances during the run,
@@ -80,6 +97,9 @@ export const useBulkGenerateSchedule = (open: boolean) => {
     totals,
     isRunning: mutation.isPending,
     isDone: mutation.isSuccess,
-    generate: mutation.mutate,
+    generate: (year: number) => mutation.mutate({ year }),
+    // Re-runs the whole office with the cleanup flag. Clients whose cadence did
+    // not change are unaffected — their periods already exist and are skipped.
+    confirmCleanup: (year: number) => mutation.mutate({ year, cleanupStaleCadence: true }),
   }
 }

@@ -18,6 +18,7 @@ import type {
   BulkRateUpdatePayload,
   BulkRateUpdateResponse,
   BulkRefreshTurnoverResponse,
+  GenerateSchedulePayload,
   BulkGeneratePayload,
   BulkGeneratePreviewResponse,
   BulkGenerateResponse,
@@ -118,20 +119,19 @@ export const advancePaymentsApi = {
     return response.data
   },
 
-  generateSchedule: async (
-    clientRecordId: number,
-    year: number,
-    periodMonthsCount?: 1 | 2,
-    referenceDate?: string,
-  ): Promise<GenerateScheduleResponse> => {
-    const payload = {
-      year,
-      ...(periodMonthsCount == null ? {} : { period_months_count: periodMonthsCount }),
-      ...(referenceDate == null ? {} : { reference_date: referenceDate }),
-    }
+  generateSchedule: async ({
+    clientRecordId,
+    year,
+    periodMonthsCount,
+    cleanupStaleCadence = false,
+  }: GenerateSchedulePayload): Promise<GenerateScheduleResponse> => {
     const response = await api.post<GenerateScheduleResponse>(
       ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentsGenerate(clientRecordId),
-      payload,
+      {
+        year,
+        ...(periodMonthsCount == null ? {} : { period_months_count: periodMonthsCount }),
+        cleanup_stale_cadence: cleanupStaleCadence,
+      },
     )
     return response.data
   },

@@ -1,12 +1,12 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useClientPickerState } from '@/features/clients/public'
 import { useAdvancePaymentClientConfig } from './useAdvancePaymentClientConfig'
-import { advancePaymentsApi, advancedPaymentsQK } from '../api'
+import { useScheduleGeneration } from './useScheduleGeneration'
+import { advancedPaymentsQK } from '../api'
 import { toast } from '@/utils/toast'
-import { showErrorToast } from '@/utils/utils'
 import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
 
-export const useGenerateSchedule = (year: number) => {
+export const useGenerateSchedule = (year: number, onGenerated: () => void) => {
   const queryClient = useQueryClient()
   const picker = useClientPickerState()
   const clientRecordId = picker.selectedClient?.id ?? 0
@@ -23,13 +23,15 @@ export const useGenerateSchedule = (year: number) => {
           ? 1
           : null
 
-  const mutation = useMutation({
-    mutationFn: (periodMonthsCount: 1 | 2) => advancePaymentsApi.generateSchedule(clientRecordId, year, periodMonthsCount),
-    onSuccess: (data) => {
-      toast.success(data.created > 0 ? `נוצרו ${data.created} מקדמות, דולגו ${data.skipped}` : 'לא נוצרו מקדמות חדשות')
+  const generation = useScheduleGeneration({
+    year,
+    onGenerated: () => {
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
+      // The picker belongs to this hook, so clearing it belongs here too —
+      // callers should not have to remember to undo our state.
+      picker.resetClientPicker()
+      onGenerated()
     },
-    onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.generateSchedule.create),
   })
 
   const handleGenerate = () => {
@@ -49,7 +51,12 @@ export const useGenerateSchedule = (year: number) => {
       toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.generateSchedule.missingFrequency)
       return
     }
-    mutation.mutate(frequency)
+    generation.generate(clientRecordId, frequency)
+  }
+
+  const handleConfirmCleanup = () => {
+    if (frequency == null) return
+    generation.confirmCleanup(frequency)
   }
 
   return {
@@ -58,8 +65,11 @@ export const useGenerateSchedule = (year: number) => {
     isProfileLoading,
     isProfileError,
     frequency,
-    isPending: mutation.isPending,
-    isSuccess: mutation.isSuccess,
+    isPending: generation.isPending,
+    staleCadence: generation.staleCadence,
     handleGenerate,
+    handleConfirmCleanup,
+    dismissStaleCadence: generation.dismissStaleCadence,
+    reset: generation.reset,
   }
 }

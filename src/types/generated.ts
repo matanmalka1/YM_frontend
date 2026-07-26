@@ -2549,7 +2549,14 @@ export interface paths {
     }
     get?: never
     put?: never
-    /** Generate Advance Payment Schedule */
+    /**
+     * Generate Advance Payment Schedule
+     * @description Generate a client's annual schedule.
+     *
+     *     ``cleanup_stale_cadence`` is opt-in. Without it a client whose frequency
+     *     changed gets a report of the superseded rows blocking the new schedule and
+     *     nothing is deleted; the caller confirms and calls again with the flag.
+     */
     post: operations['generate_advance_payment_schedule_api_v1_clients__client_record_id__advance_payments_generate_post']
     delete?: never
     options?: never
@@ -4894,6 +4901,12 @@ export interface components {
        * @description מזהה הלקוח האחרון שעובד; השאר ריק בבקשה הראשונה של הריצה
        */
       cursor?: number | null
+      /**
+       * Cleanup Stale Cadence
+       * @description מחק מקדמות עתידיות שטרם שולמו שנוצרו בתדירות הקודמת של הלקוח, כדי שהלוח החדש ייווצר במקומן. ברירת מחדל: לא מוחק.
+       * @default false
+       */
+      cleanup_stale_cadence: boolean
     }
     /**
      * BulkGenerateResponse
@@ -4906,6 +4919,7 @@ export interface components {
       created: number
       /** Skipped */
       skipped: number
+      stale_cadence: components['schemas']['StaleCadenceSummary']
       /** Failed */
       failed: components['schemas']['BulkGenerateFailedClient'][]
       /** Next Cursor */
@@ -6205,6 +6219,12 @@ export interface components {
        * @description אם מסופק, ידלג על תקופות שתאריך היעד שלהן קודם לתאריך זה. ברירת מחדל: היום.
        */
       reference_date?: string | null
+      /**
+       * Cleanup Stale Cadence
+       * @description מחק מקדמות עתידיות שטרם שולמו שנוצרו בתדירות הקודמת של הלקוח, כדי שהלוח החדש ייווצר במקומן. ברירת מחדל: לא מוחק.
+       * @default false
+       */
+      cleanup_stale_cadence: boolean
     }
     /** GenerateScheduleResponse */
     GenerateScheduleResponse: {
@@ -6212,6 +6232,7 @@ export interface components {
       created: number
       /** Skipped */
       skipped: number
+      stale_cadence: components['schemas']['StaleCadenceSummary']
     }
     /** HTTPValidationError */
     HTTPValidationError: {
@@ -7568,6 +7589,30 @@ export interface components {
     /** StageTransitionRequest */
     StageTransitionRequest: {
       to_stage: components['schemas']['ReportStage']
+    }
+    /**
+     * StaleCadenceSummary
+     * @description Superseded-cadence rows standing in the new schedule's way.
+     *
+     *     ``pending`` is what a confirmed cleanup would remove (or has just removed,
+     *     reported as ``removed``); ``settled`` is what it never will.
+     */
+    StaleCadenceSummary: {
+      /**
+       * Removed
+       * @default 0
+       */
+      removed: number
+      /**
+       * Pending
+       * @default 0
+       */
+      pending: number
+      /**
+       * Settled
+       * @default 0
+       */
+      settled: number
     }
     /** StatusTransitionRequest */
     StatusTransitionRequest: {

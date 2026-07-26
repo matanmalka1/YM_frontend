@@ -12,6 +12,7 @@ import type { AdvancePaymentRow } from '../api/contracts'
 import { isAdvancePaymentStatus } from '../constants'
 import { useAdvancePayments } from './useAdvancePayments'
 import { useAdvanceRateInsights } from './useAdvanceRateInsights'
+import { useScheduleGeneration } from './useScheduleGeneration'
 import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../messages'
 
@@ -42,13 +43,11 @@ export const useClientAdvancePaymentsTab = ({ clientRecordId }: UseClientAdvance
   const invalidateClientYear = (taxYear = year) =>
     queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.clientYear(clientRecordId, taxYear) })
 
-  const generateMutation = useMutation({
-    mutationFn: (periodMonthsCount: 1 | 2) => advancePaymentsApi.generateSchedule(clientRecordId, year, periodMonthsCount),
-    onSuccess: (data) => {
-      toast.success(data.created > 0 ? `נוצרו ${data.created} מקדמות` : 'הכול קיים')
-      void invalidateClientYear()
-    },
-    onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.generateSchedule.create),
+  // Shares the frequency-change confirmation with the org-level modal: a client
+  // whose cadence changed generates nothing until the stale rows are confirmed.
+  const generation = useScheduleGeneration({
+    year,
+    onGenerated: () => void invalidateClientYear(),
   })
 
   const handleGenerateSchedule = () => {
@@ -56,7 +55,12 @@ export const useClientAdvancePaymentsTab = ({ clientRecordId }: UseClientAdvance
       toast.error(ADVANCED_PAYMENTS_ERROR_MESSAGES.generateSchedule.missingFrequency)
       return
     }
-    generateMutation.mutate(generationFrequency)
+    generation.generate(clientRecordId, generationFrequency)
+  }
+
+  const handleConfirmStaleCleanup = () => {
+    if (generationFrequency == null) return
+    generation.confirmCleanup(generationFrequency)
   }
 
   // Ids come from the rows actually on screen, never from a server-side filter:
@@ -92,13 +96,19 @@ export const useClientAdvancePaymentsTab = ({ clientRecordId }: UseClientAdvance
   return {
     permissions: { isAdvisor },
     onOpenCreate: () => setModalOpen(true),
+    staleCadence: {
+      summary: generation.staleCadence,
+      isConfirming: generation.isPending,
+      onConfirm: handleConfirmStaleCleanup,
+      onDismiss: generation.dismissStaleCadence,
+    },
     toolbar: {
       isAdvisor,
       year,
       onGenerateSchedule: handleGenerateSchedule,
       displayFrequency,
       generationFrequency,
-      isGenerating: generateMutation.isPending,
+      isGenerating: generation.isPending,
       advanceRate,
       readyToSnapshotCount: readyToSnapshotIds.length,
       isRefreshingTurnover: refreshTurnoverBulkMutation.isPending,

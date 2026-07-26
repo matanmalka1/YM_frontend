@@ -2,6 +2,7 @@ import { PlusCircle } from 'lucide-react'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { Button } from '@/components/ui/primitives/Button'
 import { DetailTabPanel } from '@/components/ui/layout'
+import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
 import type { FilterFieldDef } from '@/components/ui/filters/types'
 import { getOperationalYearOptions, getOperationalTaxYear } from '@/constants/periodOptions.constants'
@@ -36,7 +37,7 @@ const CLIENT_ADVANCE_PAYMENTS_FILTER_FIELDS: FilterFieldDef[] = [
 ]
 
 export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> = (props) => {
-  const { permissions, onOpenCreate, toolbar, filters, kpi, table, pagination, createModal } =
+  const { permissions, onOpenCreate, toolbar, filters, kpi, table, pagination, createModal, staleCadence } =
     useClientAdvancePaymentsTab(props)
 
   return (
@@ -78,6 +79,25 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
       )}
 
       {permissions.isAdvisor && <CreateAdvancePaymentModal {...createModal} />}
+
+      {/* Generating for a client whose frequency changed writes nothing until the
+          superseded rows are confirmed for deletion. */}
+      <ConfirmDialog
+        open={staleCadence.summary !== null}
+        title={ADVANCED_PAYMENTS_MESSAGES.staleCadence.confirmTitle}
+        message={ADVANCED_PAYMENTS_MESSAGES.staleCadence.confirmMessage(staleCadence.summary?.pending ?? 0)}
+        confirmLabel={ADVANCED_PAYMENTS_MESSAGES.staleCadence.confirmButton}
+        confirmVariant="danger"
+        isLoading={staleCadence.isConfirming}
+        onConfirm={staleCadence.onConfirm}
+        onCancel={staleCadence.onDismiss}
+      >
+        {(staleCadence.summary?.settled ?? 0) > 0 && (
+          <p className="text-sm text-gray-600">
+            {ADVANCED_PAYMENTS_MESSAGES.staleCadence.settledNote(staleCadence.summary?.settled ?? 0)}
+          </p>
+        )}
+      </ConfirmDialog>
     </DetailTabPanel>
   )
 }

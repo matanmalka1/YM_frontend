@@ -1,4 +1,5 @@
 import { Spinner } from '@/components/ui/primitives/Spinner'
+import { Button } from '@/components/ui/primitives/Button'
 import { ProgressBar } from '@/components/ui/primitives/ProgressBar'
 import { InlineState } from '@/components/ui/feedback/InlineState'
 import { Alert } from '@/components/ui/overlays/Alert'
@@ -15,9 +16,11 @@ interface BulkGenerateSectionProps {
   totals: BulkGenerateTotals | null
   isRunning: boolean
   isDone: boolean
+  onConfirmCleanup: () => void
 }
 
 const MESSAGES = ADVANCED_PAYMENTS_MESSAGES.bulkGenerate
+const STALE_MESSAGES = ADVANCED_PAYMENTS_MESSAGES.staleCadence
 
 export const BulkGenerateSection: React.FC<BulkGenerateSectionProps> = ({
   isPreviewLoading,
@@ -27,6 +30,7 @@ export const BulkGenerateSection: React.FC<BulkGenerateSectionProps> = ({
   totals,
   isRunning,
   isDone,
+  onConfirmCleanup,
 }) => {
   if (isPreviewLoading) {
     return (
@@ -64,7 +68,32 @@ export const BulkGenerateSection: React.FC<BulkGenerateSectionProps> = ({
             {MESSAGES.doneSummary({ clients: totals.clientsProcessed, created: totals.created })}
           </p>
           {totals.skipped > 0 && <p className="text-xs text-gray-500">{MESSAGES.skippedNote(totals.skipped)}</p>}
+          {totals.staleRemoved > 0 && (
+            <p className="text-xs text-gray-500">{STALE_MESSAGES.removedNote(totals.staleRemoved)}</p>
+          )}
         </div>
+      )}
+
+      {/* Clients whose reporting frequency changed generated nothing at all. The
+          server refuses a half-migrated year, so this is the confirmation. */}
+      {totals !== null && totals.stalePending > 0 && (
+        <Alert
+          variant="warning"
+          size="sm"
+          message={
+            <div className="space-y-2">
+              <p className="font-medium">{STALE_MESSAGES.officeTitle(totals.stalePending)}</p>
+              <p className="text-xs">{STALE_MESSAGES.officeNote}</p>
+              <Button variant="outline" size="sm" disabled={isRunning} onClick={onConfirmCleanup}>
+                {STALE_MESSAGES.officeConfirmButton}
+              </Button>
+            </div>
+          }
+        />
+      )}
+
+      {totals !== null && totals.staleSettled > 0 && (
+        <p className="text-xs text-gray-500">{STALE_MESSAGES.settledNote(totals.staleSettled)}</p>
       )}
 
       {totals !== null && totals.failed.length > 0 && (

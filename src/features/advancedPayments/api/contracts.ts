@@ -211,9 +211,28 @@ export interface BulkMarkPaidResponse {
   skipped: { id: number; reason: BulkMarkPaidSkipReason }[]
 }
 
+/**
+ * Rows left over from the client's previous reporting cadence.
+ * `pending` is what a confirmed cleanup would remove (`removed` once it has);
+ * `settled` is paid or part-paid and is never removed.
+ */
+export interface StaleCadenceSummary {
+  removed: number
+  pending: number
+  settled: number
+}
+
+export interface GenerateSchedulePayload {
+  clientRecordId: number
+  year: number
+  periodMonthsCount?: 1 | 2
+  cleanupStaleCadence?: boolean
+}
+
 export interface GenerateScheduleResponse {
   created: number
   skipped: number
+  stale_cadence: StaleCadenceSummary
 }
 
 export interface IneligibleClient {
@@ -230,6 +249,7 @@ export interface BulkGeneratePreviewResponse {
 export interface BulkGeneratePayload {
   year: number
   cursor?: number | null
+  cleanup_stale_cadence?: boolean
 }
 
 export interface BulkGenerateFailedClient {
@@ -242,6 +262,7 @@ export interface BulkGenerateResponse {
   clients_processed: number
   created: number
   skipped: number
+  stale_cadence: StaleCadenceSummary
   failed: BulkGenerateFailedClient[]
   next_cursor: number | null
 }
