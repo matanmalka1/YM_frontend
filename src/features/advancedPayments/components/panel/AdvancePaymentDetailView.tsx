@@ -18,8 +18,10 @@ import {
   getAdvancePaymentStatusLabel,
 } from '../../constants'
 import { useAdvancePaymentDetailForm } from '../../hooks/useAdvancePaymentDetailForm'
+import { useAdvancePaymentPeriodNavigation } from '../../hooks/useAdvancePaymentPeriodNavigation'
 import { toEditableAmount } from '../../utils/advancePaymentComponentUtils'
 import { AdvancePaymentContextCard } from './AdvancePaymentContextCard'
+import { AdvancePaymentPeriodNavigator } from './AdvancePaymentPeriodNavigator'
 import { AdvancePaymentEditableSections } from './AdvancePaymentEditableSections'
 import { AdvancePaymentReadonlySections } from './AdvancePaymentReadonlySections'
 import { AdvancePaymentSummaryStrip } from './AdvancePaymentSummaryStrip'
@@ -70,6 +72,7 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
   turnoverRefresh,
 }) => {
   const form = useAdvancePaymentDetailForm({ payment, onSave })
+  const periodNavigation = useAdvancePaymentPeriodNavigation(payment)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [deleteReason, setDeleteReason] = useState('')
   useBeforeUnloadGuard(form.isDirty)
@@ -130,9 +133,18 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
         }
       />
 
-      {form.isDirty && (
-        <Alert variant="info" size="sm" message={ADVANCED_PAYMENTS_MESSAGES.detail.unsavedChangesNotice} />
-      )}
+      <AdvancePaymentPeriodNavigator
+        paymentId={payment.id}
+        options={periodNavigation.options}
+        previousPaymentId={periodNavigation.previousPaymentId}
+        nextPaymentId={periodNavigation.nextPaymentId}
+        isLoading={periodNavigation.isLoading}
+        isError={periodNavigation.isError}
+        disabled={form.isDirty}
+        onNavigate={periodNavigation.goToPayment}
+      />
+
+      {form.isDirty && <Alert variant="info" size="sm" message={ADVANCED_PAYMENTS_MESSAGES.detail.unsavedChangesNotice} />}
 
       {payment.missing_turnover && (
         <Alert variant="warning" size="sm" message={ADVANCED_PAYMENTS_MESSAGES.detail.missingTurnoverAlert} />

@@ -26,6 +26,13 @@ const AVAILABLE_TURNOVER_LABELS: Record<AvailableTurnover['source'], string> = {
 }
 
 export const ADVANCED_PAYMENTS_MESSAGES = {
+  periodNavigation: {
+    ariaLabel: 'ניווט בין תקופות המקדמה',
+    pickerLabel: 'תקופת דיווח',
+    previous: 'לתקופה הקודמת',
+    next: 'לתקופה הבאה',
+    loadError: 'לא ניתן לטעון תקופות נוספות',
+  },
   turnoverRefresh: {
     success: 'המחזור קובע מדוח המע״מ',
     provenance: (source: TurnoverSource, snapshotAt: string | null): string =>
