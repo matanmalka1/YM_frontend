@@ -28,10 +28,8 @@ export const buildClientUpdatePayload = (
   if (dirtyFields.advance_payment_frequency) {
     payload.advance_payment_frequency = data.advance_payment_frequency || null
   }
-  if (dirtyFields.advance_rate) {
-    payload.advance_rate = blankToNull(data.advance_rate)
-    // advance_rate_updated_at is server-owned; the backend stamps it on change.
-  }
+  // advance_rate is not edited here — it changes only through the dedicated
+  // "change rate" action (rate + from-period), which reprices existing periods.
   if (dirtyFields.annual_revenue) {
     payload.annual_revenue = blankToNull(data.annual_revenue)
   }

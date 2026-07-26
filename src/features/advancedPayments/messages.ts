@@ -62,6 +62,7 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     advanceRateLabel: 'אחוז מקדמה',
     calculatedAmountLabel: 'סכום מחושב',
     overrideAmountLabel: 'סכום עקיפה',
+    withheldAmountLabel: 'ניכוי במקור',
     paymentMethodLabel: 'שיטת תשלום',
     paymentReferenceLabel: 'מספר אסמכתא',
     paidAtLabel: 'תאריך ביצוע',
@@ -119,6 +120,9 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     calculatedAmountLabel: 'סכום מחושב',
     overrideAmountLabel: 'סכום עקיפה (אופציונלי)',
     overrideHint: 'השאירו ריק לשימוש בסכום המחושב — כל ערך שמוזן (כולל 0) קובע את הסכום הסופי',
+    withheldAmountLabel: 'ניכוי במקור (אופציונלי)',
+    withheldHint: 'מנוכה מהסכום המחושב לפני קביעת הסכום הסופי — אינו משפיע כאשר קיימת עקיפה',
+    withheldBreakdownCell: 'ניכוי במקור',
     finalAmountLabel: 'סכום סופי',
     paymentSectionTitle: 'עדכון תשלום',
     paidAmountLabel: 'סכום שולם',
@@ -147,6 +151,7 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     turnoverHeader: 'מחזור מדווח',
     expectedHeader: 'צפוי',
     paidHeader: 'שולם',
+    withheldHeader: 'ניכוי במקור',
     balanceHeader: 'יתרה',
     advanceRateHeader: 'אחוז מקדמה',
     rowActionsAriaLabel: (id: number) => `פעולות למקדמה ${id}`,
@@ -178,6 +183,27 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
         .filter(Boolean)
         .join(' · ')
     },
+  },
+  bulkRateUpdate: {
+    actionButton: 'עדכן שיעור מקדמה',
+    modalTitle: 'עדכון שיעור מקדמה מתקופה',
+    description: (currentRate: number | null) =>
+      currentRate != null
+        ? `השיעור הנוכחי הוא ${currentRate}%. השיעור החדש יחול על התקופות שטרם שולמו מהתקופה שנבחרה ואילך, ויוגדר כברירת המחדל של הלקוח.`
+        : 'השיעור החדש יחול על התקופות שטרם שולמו מהתקופה שנבחרה ואילך, ויוגדר כברירת המחדל של הלקוח.',
+    rateLabel: 'שיעור מקדמה חדש (%)',
+    fromYearLabel: 'החל משנת מס',
+    fromMonthLabel: 'החל מחודש',
+    fromPeriodPlaceholder: 'בחר',
+    confirmButton: 'עדכן שיעור',
+    result: ({ updated, skipped }: { updated: number; skipped: number }) =>
+      [
+        `${updated} תקופות עודכנו`,
+        skipped > 0 ? `${skipped} דולגו (שולמו / שולמו חלקית)` : null,
+        'ברירת המחדל של הלקוח עודכנה',
+      ]
+        .filter(Boolean)
+        .join(' · '),
   },
   batchRow: {
     typeLabel: 'מקדמות',

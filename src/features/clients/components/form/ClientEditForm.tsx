@@ -42,7 +42,6 @@ const getClientDefaultValues = (client: ClientRecordResponse): ClientEditFormVal
   entity_type: client.entity_type ?? null,
   vat_reporting_frequency: client.vat_reporting_frequency ?? null,
   advance_payment_frequency: client.advance_payment_frequency ?? null,
-  advance_rate: client.advance_rate ?? '',
   annual_revenue: client.annual_revenue ?? '',
   accountant_id: client.accountant_id != null ? String(client.accountant_id) : '',
 })

@@ -10,7 +10,7 @@ import {
   ENTITY_TYPE_OPTIONS,
   VAT_REPORTING_FREQUENCY_OPTIONS,
 } from '../../constants'
-import { formatDate, formatPlainIdentifier, formatShekelAmount } from '@/utils/utils'
+import { formatAdvanceRatePercent, formatDate, formatPlainIdentifier, formatShekelAmount } from '@/utils/utils'
 import type { ClientEditFormValues } from '../../schemas'
 import { CLIENTS_MESSAGES } from '../../messages'
 
@@ -199,12 +199,14 @@ export const ClientTaxProfileSection = ({
           onBlur={advancePaymentFrequencyField.onBlur}
           name={advancePaymentFrequencyField.name}
         />
-        <Input
+        <ReadonlyField
           label={CLIENTS_MESSAGES.edit.advanceRate}
-          placeholder="8.5"
-          error={errors.advance_rate?.message}
-          disabled={isLoading}
-          {...register('advance_rate')}
+          value={
+            client.advance_rate != null
+              ? formatAdvanceRatePercent(client.advance_rate)
+              : CLIENTS_MESSAGES.edit.notAvailable
+          }
+          help={CLIENTS_MESSAGES.edit.advanceRateReadonlyHelp}
         />
         <ReadonlyField
           label={CLIENTS_MESSAGES.edit.advanceRateUpdatedAt}

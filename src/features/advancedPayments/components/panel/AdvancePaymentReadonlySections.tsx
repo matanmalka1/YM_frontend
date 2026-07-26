@@ -56,6 +56,10 @@ export const AdvancePaymentReadonlySections: React.FC<AdvancePaymentReadonlySect
           value: payment.override_amount != null ? formatShekelAmount(payment.override_amount) : null,
         },
         {
+          label: ADVANCED_PAYMENTS_MESSAGES.readonlySections.withheldAmountLabel,
+          value: payment.withheld_amount != null ? formatShekelAmount(payment.withheld_amount) : null,
+        },
+        {
           label: ADVANCED_PAYMENTS_MESSAGES.readonlySections.paymentMethodLabel,
           value: payment.payment_method ? getAdvancePaymentMethodLabel(payment.payment_method) : null,
         },

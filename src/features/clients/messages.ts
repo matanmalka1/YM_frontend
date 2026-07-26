@@ -206,6 +206,7 @@ export const CLIENTS_MESSAGES = {
     vatExemptCeilingHelp: 'ערך מערכת/תצורה, לא שדה ידני.',
     advancePaymentFrequency: 'תדירות מקדמות מס הכנסה',
     advanceRate: 'אחוז מקדמה %',
+    advanceRateReadonlyHelp: 'שינוי השיעור מתבצע בפעולת "עדכן שיעור מקדמה", שם בוחרים מאיזו תקופה הוא חל.',
     advanceRateUpdatedAt: 'תאריך עדכון מקדמה',
     advanceRateUpdatedAtHelp: 'מתעדכן רק כשקיים מקור עדכון במערכת.',
     annualTurnover: 'מחזור שנתי (₪)',

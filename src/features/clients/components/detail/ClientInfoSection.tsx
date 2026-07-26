@@ -9,6 +9,8 @@ import {
 } from '../../constants'
 import { useClientAuthorityContacts } from '../../hooks/useClientAuthorityContacts'
 import { useAdvisorOptions } from '@/features/users'
+import { AdvanceRateChangeButton } from '@/features/advancedPayments'
+import { useRole } from '@/hooks/useRole'
 import { InlineLink } from '@/components/ui/primitives/InlineLink'
 import { DefinitionSectionCard, EMPTY_VALUE } from './ClientInfoSectionParts'
 import { CLIENTS_MESSAGES } from '../../messages'
@@ -20,6 +22,7 @@ type ClientInfoSectionProps = {
 export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client }) => {
   const { nameById } = useAdvisorOptions()
   const { officeByType } = useClientAuthorityContacts(client.id, client.address_city)
+  const { isAdvisor } = useRole()
 
   const contactItems = [
     {
@@ -60,10 +63,14 @@ export const ClientInfoSection: FC<ClientInfoSectionProps> = ({ client }) => {
       : []),
     {
       label: CLIENTS_MESSAGES.info.advanceRate,
-      value:
-        client.advance_rate != null
-          ? formatAdvanceRatePercent(client.advance_rate)
-          : CLIENTS_MESSAGES.info.advanceRateNotVerified,
+      value: (
+        <span className="flex flex-wrap items-center gap-2">
+          {client.advance_rate != null
+            ? formatAdvanceRatePercent(client.advance_rate)
+            : CLIENTS_MESSAGES.info.advanceRateNotVerified}
+          {isAdvisor && <AdvanceRateChangeButton clientRecordId={client.id} variant="outline" size="xs" />}
+        </span>
+      ),
     },
     {
       label: CLIENTS_MESSAGES.info.advancePaymentFrequency,

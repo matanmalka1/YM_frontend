@@ -134,6 +134,13 @@ export const buildAdvancePaymentBatchColumns = ({
     getValue: (row) => formatShekelAmount(row.paid_amount),
   }),
   {
+    key: 'withheld_amount',
+    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.withheldHeader,
+    dir: 'ltr',
+    kind: 'money',
+    render: (row) => (row.withheld_amount ? formatShekelAmount(row.withheld_amount) : <EmptyCell />),
+  },
+  {
     key: 'delta',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.balanceHeader,
     dir: 'ltr',

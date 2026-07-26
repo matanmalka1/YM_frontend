@@ -24,6 +24,7 @@ export interface AdvancePaymentRow {
   advance_rate: string | null
   calculated_amount: string
   override_amount: string | null
+  withheld_amount: string | null
   available_turnover: AvailableTurnover | null
   vat_turnover_mismatch: VatTurnoverMismatch | null
   missing_turnover: boolean
@@ -47,6 +48,7 @@ export interface CreateAdvancePaymentPayload {
   turnover_amount?: string | null
   advance_rate?: string | null
   override_amount?: string | null
+  withheld_amount?: string | null
   paid_amount?: string | null
   payment_method?: AdvancePaymentMethod | null
   payment_reference?: string | null
@@ -59,6 +61,7 @@ export interface UpdateAdvancePaymentPayload {
   expected_amount?: string | null
   turnover_amount?: string | null
   override_amount?: string | null
+  withheld_amount?: string | null
   paid_at?: string | null
   payment_method?: AdvancePaymentMethod | null
   payment_reference?: string | null
@@ -67,6 +70,16 @@ export interface UpdateAdvancePaymentPayload {
 
 export interface DeleteAdvancePaymentPayload {
   reason: string
+}
+
+export interface BulkRateUpdatePayload {
+  advance_rate: string
+  from_period: string
+}
+
+export interface BulkRateUpdateResponse {
+  updated: number
+  skipped: number
 }
 
 export type TurnoverSource = 'manual' | 'vat_filed' | 'vat_pending'
@@ -114,6 +127,7 @@ export interface AdvancePaymentOverviewRow {
   turnover_snapshot_at: string | null
   calculated_amount: string
   override_amount: string | null
+  withheld_amount: string | null
   available_turnover: AvailableTurnover | null
   vat_turnover_mismatch: VatTurnoverMismatch | null
   missing_turnover: boolean

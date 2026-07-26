@@ -15,6 +15,8 @@ import type {
   MonthBatchSummary,
   BulkMarkPaidPayload,
   BulkMarkPaidResponse,
+  BulkRateUpdatePayload,
+  BulkRateUpdateResponse,
   BulkRefreshTurnoverResponse,
   GenerateScheduleResponse,
 } from './contracts'
@@ -65,6 +67,15 @@ export const advancePaymentsApi = {
 
   delete: async (clientRecordId: number, id: number, payload: DeleteAdvancePaymentPayload): Promise<void> => {
     await api.delete(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientRecordId, id), { data: payload })
+  },
+
+  bulkRateUpdate: async (clientRecordId: number, payload: BulkRateUpdatePayload): Promise<BulkRateUpdateResponse> => {
+    const response = await api.post<BulkRateUpdateResponse>(
+      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentsBulkRateUpdate(clientRecordId),
+      payload,
+      { headers: { 'X-Idempotency-Key': randomUUID() } },
+    )
+    return response.data
   },
 
   getAnnualKPIs: async (clientRecordId: number, year: number): Promise<AnnualKPIResponse> => {

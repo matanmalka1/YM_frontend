@@ -16,6 +16,9 @@ export const ADVANCED_PAYMENTS_ERROR_MESSAGES = {
   bulkMarkPaid: {
     failed: 'סימון המקדמות כשולמו נכשל',
   },
+  bulkRateUpdate: {
+    failed: 'עדכון שיעור המקדמה נכשל',
+  },
   generateSchedule: {
     create: 'שגיאה ביצירת לוח מקדמות',
     profileLoad: 'שגיאה בטעינת פרופיל הלקוח',

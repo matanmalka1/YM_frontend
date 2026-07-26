@@ -2407,6 +2407,29 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/clients/{client_record_id}/advance-payments/bulk-rate-update': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Bulk Update Advance Rate
+     * @description Apply a new advance rate to the client's pending periods from a month onward.
+     *
+     *     ADVISOR-only. Reprices only PENDING rows at or after ``from_period`` and
+     *     rewrites the legal-entity default so future generations follow.
+     */
+    post: operations['bulk_update_advance_rate_api_v1_clients__client_record_id__advance_payments_bulk_rate_update_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/advance-payments/overview': {
     parameters: {
       query?: never
@@ -3305,6 +3328,8 @@ export interface components {
       advance_rate?: string | null
       /** Override Amount */
       override_amount?: string | null
+      /** Withheld Amount */
+      withheld_amount?: string | null
       /** Paid Amount */
       paid_amount?: string | null
       payment_method?: components['schemas']['PaymentMethod'] | null
@@ -3420,6 +3445,8 @@ export interface components {
       missing_turnover: boolean
       /** Advance Rate */
       advance_rate?: string | null
+      /** Withheld Amount */
+      withheld_amount?: string | null
       /**
        * Delta
        * Format: decimal
@@ -3517,6 +3544,8 @@ export interface components {
       calculated_amount: string
       /** Override Amount */
       override_amount?: string | null
+      /** Withheld Amount */
+      withheld_amount?: string | null
       available_turnover?: components['schemas']['AvailableTurnover'] | null
       vat_turnover_mismatch?: components['schemas']['VatTurnoverMismatch'] | null
       /**
@@ -3569,6 +3598,8 @@ export interface components {
       turnover_amount?: string | null
       /** Override Amount */
       override_amount?: string | null
+      /** Withheld Amount */
+      withheld_amount?: string | null
     }
     /** AdvancePaymentsCard */
     AdvancePaymentsCard: {
@@ -4823,6 +4854,27 @@ export interface components {
        * @enum {string}
        */
       reason: 'already_paid' | 'no_amount' | 'not_found'
+    }
+    /** BulkRateUpdateRequest */
+    BulkRateUpdateRequest: {
+      /**
+       * Advance Rate
+       * Format: decimal
+       * @example 123.45
+       */
+      advance_rate: string
+      /**
+       * From Period
+       * @example 2026-06
+       */
+      from_period: string
+    }
+    /** BulkRateUpdateResponse */
+    BulkRateUpdateResponse: {
+      /** Updated */
+      updated: number
+      /** Skipped */
+      skipped: number
     }
     /**
      * BulkRefreshTurnoverRequest
@@ -18668,6 +18720,70 @@ export interface operations {
       }
       /** @description Conflict */
       409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  bulk_update_advance_rate_api_v1_clients__client_record_id__advance_payments_bulk_rate_update_post: {
+    parameters: {
+      query?: never
+      header: {
+        'X-Idempotency-Key': string
+      }
+      path: {
+        client_record_id: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['BulkRateUpdateRequest']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BulkRateUpdateResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
         headers: {
           [name: string]: unknown
         }

@@ -141,7 +141,6 @@ export const clientEditSchema = z.object({
   entity_type: z.enum(ENTITY_TYPES).nullable().optional(),
   vat_reporting_frequency: z.enum(VAT_TYPES).nullable().optional(),
   advance_payment_frequency: z.enum(ADVANCE_PAYMENT_FREQUENCY_VALUES).nullable().optional(),
-  advance_rate: z.string().optional().nullable(),
   annual_revenue: optionalNonNegativeNumberString('מחזור שנתי חייב להיות מספר חיובי'),
   accountant_id: z.string().trim().optional().nullable(),
 })

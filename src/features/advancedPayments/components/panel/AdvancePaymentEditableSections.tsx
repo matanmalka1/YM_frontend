@@ -100,12 +100,12 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
               {ADVANCED_PAYMENTS_MESSAGES.editableSections.availableActionHint}
             </p>
           )}
-          {/* Live breakdown: turnover × rate = calculated, recomputed as the user types. */}
+          {/* Live breakdown: turnover × rate = calculated, minus withheld, recomputed as the user types. */}
           <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50/60 p-3.5">
             <div className="mb-2 text-xs font-medium text-gray-500">
               {ADVANCED_PAYMENTS_MESSAGES.editableSections.calcBreakdownTitle}
             </div>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               <div className="rounded-lg border border-gray-100 bg-white px-3 py-2 text-center">
                 <div className="text-xs text-gray-500">{ADVANCED_PAYMENTS_MESSAGES.editableSections.reportedTurnoverCell}</div>
                 <div className="text-sm font-semibold text-gray-800 tabular-nums">
@@ -118,7 +118,23 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
                   {form.liveCalculated != null ? formatShekelAmount(form.liveCalculated) : '—'}
                 </div>
               </div>
+              <div className="rounded-lg border border-warning-200 bg-warning-50/60 px-3 py-2 text-center">
+                <div className="text-xs text-warning-700">{ADVANCED_PAYMENTS_MESSAGES.editableSections.withheldBreakdownCell}</div>
+                <div className="text-sm font-bold text-warning-700 tabular-nums">
+                  {form.withheldAmount !== '' ? formatShekelAmount(form.withheldAmount) : '—'}
+                </div>
+              </div>
             </div>
+          </div>
+          <div className="space-y-1">
+            <Input
+              label={ADVANCED_PAYMENTS_MESSAGES.editableSections.withheldAmountLabel}
+              type="number"
+              min={0}
+              value={form.withheldAmount}
+              onChange={(e) => form.setWithheldAmount(e.target.value)}
+            />
+            <p className="text-xs text-gray-500">{ADVANCED_PAYMENTS_MESSAGES.editableSections.withheldHint}</p>
           </div>
           <div className="space-y-1">
             <Input

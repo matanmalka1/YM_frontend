@@ -9,6 +9,7 @@ import { ADVANCE_PAYMENT_STATUS_OPTIONS } from '../../constants'
 import { useClientAdvancePaymentsTab } from '../../hooks/useClientAdvancePaymentsTab'
 import { ClientAdvancePaymentsHeader } from './ClientAdvancePaymentsHeader'
 import { ClientAdvancePaymentsCards } from './ClientAdvancePaymentsCards'
+import { AdvanceRateChangeButton } from '../rateChange/AdvanceRateChangeButton'
 import { ClientAdvancePaymentsStatsSection } from './ClientAdvancePaymentsStatsSection'
 import { CreateAdvancePaymentModal } from '../../components/create/CreateAdvancePaymentModal'
 import { PaginationCard } from '@/components/ui/table'
@@ -35,7 +36,8 @@ const CLIENT_ADVANCE_PAYMENTS_FILTER_FIELDS: FilterFieldDef[] = [
 ]
 
 export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> = (props) => {
-  const { permissions, onOpenCreate, toolbar, filters, kpi, table, pagination, createModal } = useClientAdvancePaymentsTab(props)
+  const { permissions, onOpenCreate, toolbar, filters, kpi, table, pagination, createModal } =
+    useClientAdvancePaymentsTab(props)
 
   return (
     <DetailTabPanel
@@ -43,9 +45,12 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
       subtitle={ADVANCED_PAYMENTS_MESSAGES.clientTab.subtitle}
       actions={
         permissions.isAdvisor && (
-          <Button variant="primary" size="sm" icon={<PlusCircle className="h-4 w-4" />} onClick={onOpenCreate}>
-            {ADVANCED_PAYMENTS_MESSAGES.clientHeader.addPayment}
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <AdvanceRateChangeButton clientRecordId={props.clientRecordId} />
+            <Button variant="primary" size="sm" icon={<PlusCircle className="h-4 w-4" />} onClick={onOpenCreate}>
+              {ADVANCED_PAYMENTS_MESSAGES.clientHeader.addPayment}
+            </Button>
+          </div>
         )
       }
       summary={<ClientAdvancePaymentsStatsSection {...kpi} />}

@@ -35,6 +35,8 @@ export interface AdvancePaymentDetailForm {
   setTurnoverAmount: (value: string) => void
   overrideAmount: string
   setOverrideAmount: (value: string) => void
+  withheldAmount: string
+  setWithheldAmount: (value: string) => void
 
   isDirty: boolean
   liveCalculated: string | null
@@ -59,6 +61,7 @@ export const useAdvancePaymentDetailForm = ({ payment, onSave }: UseAdvancePayme
   const [notes, setNotes] = useState(() => payment.notes ?? '')
   const [turnoverAmount, setTurnoverAmount] = useState(() => toEditableAmount(payment.turnover_amount))
   const [overrideAmount, setOverrideAmount] = useState(() => toEditableAmount(payment.override_amount))
+  const [withheldAmount, setWithheldAmount] = useState(() => toEditableAmount(payment.withheld_amount))
 
   // baseline values derived from the loaded payment
   const baselinePaidAmount = toEditableAmount(payment.paid_amount)
@@ -68,6 +71,7 @@ export const useAdvancePaymentDetailForm = ({ payment, onSave }: UseAdvancePayme
   const baselineNotes = payment.notes ?? ''
   const baselineTurnover = toEditableAmount(payment.turnover_amount)
   const baselineOverride = toEditableAmount(payment.override_amount)
+  const baselineWithheld = toEditableAmount(payment.withheld_amount)
 
   // normalized form values
   const normalizedPaidAmount = paidAmount.trim()
@@ -83,7 +87,13 @@ export const useAdvancePaymentDetailForm = ({ payment, onSave }: UseAdvancePayme
     turnoverAmount !== '' && payment.advance_rate != null && Number.isFinite(numT) && Number.isFinite(numR)
       ? calcAdvanceAmount(numT, numR)
       : null
-  const liveExpected = overrideAmount !== '' ? overrideAmount : liveCalculated
+  // Withheld is a deduction line off the gross calculated amount, floored at
+  // zero — never folded into liveCalculated itself. override_amount still wins.
+  const numW = Number(withheldAmount)
+  const withheld = withheldAmount !== '' && Number.isFinite(numW) ? numW : 0
+  const liveDeducted =
+    liveCalculated != null ? Math.max(0, Number(liveCalculated) - withheld).toFixed(2) : null
+  const liveExpected = overrideAmount !== '' ? overrideAmount : liveDeducted
 
   const isDirty =
     !amountsEqual(baselinePaidAmount, paidAmount) ||
@@ -92,7 +102,8 @@ export const useAdvancePaymentDetailForm = ({ payment, onSave }: UseAdvancePayme
     baselinePaidAt !== paidAt ||
     baselineNotes !== notes ||
     !amountsEqual(baselineTurnover, turnoverAmount) ||
-    !amountsEqual(baselineOverride, overrideAmount)
+    !amountsEqual(baselineOverride, overrideAmount) ||
+    !amountsEqual(baselineWithheld, withheldAmount)
 
   const handleSave = async () => {
     const payload: UpdateAdvancePaymentPayload = {}
@@ -115,6 +126,7 @@ export const useAdvancePaymentDetailForm = ({ payment, onSave }: UseAdvancePayme
     if (notes !== baselineNotes) payload.notes = normalizedNotes || null
     if (!amountsEqual(turnoverAmount, baselineTurnover)) payload.turnover_amount = toStringOrNull(turnoverAmount)
     if (!amountsEqual(overrideAmount, baselineOverride)) payload.override_amount = toStringOrNull(overrideAmount)
+    if (!amountsEqual(withheldAmount, baselineWithheld)) payload.withheld_amount = toStringOrNull(withheldAmount)
 
     if (Object.keys(payload).length === 0) return
     await onSave(payload)
@@ -155,6 +167,8 @@ export const useAdvancePaymentDetailForm = ({ payment, onSave }: UseAdvancePayme
     setTurnoverAmount,
     overrideAmount,
     setOverrideAmount,
+    withheldAmount,
+    setWithheldAmount,
     isDirty,
     liveCalculated,
     liveExpected,

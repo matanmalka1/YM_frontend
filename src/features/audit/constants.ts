@@ -187,6 +187,7 @@ export const AUDIT_FIELD_LABELS: Record<string, string> = {
   paid_amount: 'סכום שולם',
   calculated_amount: 'סכום מחושב',
   override_amount: 'סכום עקיפה',
+  withheld_amount: 'ניכוי במקור',
   payment_method: 'שיטת תשלום',
   payment_reference: 'מספר אסמכתא',
   annual_report_id: 'דוח שנתי',
