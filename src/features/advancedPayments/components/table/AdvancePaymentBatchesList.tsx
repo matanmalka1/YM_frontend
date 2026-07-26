@@ -22,6 +22,8 @@ interface AdvancePaymentBatchesListProps {
   clientSearch?: string
   statusFilter: AdvancePaymentStatus | ''
   timingFilter?: 'overdue'
+  /** Server-computed flag; true keeps only rows disagreeing with their VAT return. */
+  vatMismatchFilter?: true
   periodFilter: 1 | 2 | null
   sortBy: AdvancePaymentOverviewSortBy
   order: AdvancePaymentOverviewSortOrder
@@ -44,6 +46,7 @@ export const AdvancePaymentBatchesList = ({
   clientSearch,
   statusFilter,
   timingFilter,
+  vatMismatchFilter,
   periodFilter,
   sortBy,
   order,
@@ -85,6 +88,7 @@ export const AdvancePaymentBatchesList = ({
           clientSearch={clientSearch}
           statusFilter={statusFilter}
           timingFilter={timingFilter}
+          vatMismatchFilter={vatMismatchFilter}
           periodFilter={periodFilter}
           sortBy={sortBy}
           order={order}

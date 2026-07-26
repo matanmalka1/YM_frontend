@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from '@/utils/toast'
 import { showErrorToast } from '@/utils/utils'
@@ -71,16 +71,22 @@ export const useScheduleGeneration = ({ year, onGenerated }: ScheduleGenerationO
     setPendingClientRecordId(null)
   }
 
+  // Stable identity: callers put `reset` in an effect's deps, and resetting the
+  // mutation notifies react-query — a fresh arrow each render would make that
+  // effect re-run on its own output, forever.
+  const { reset: resetMutation } = mutation
+  const reset = useCallback(() => {
+    setStaleCadence(null)
+    setPendingClientRecordId(null)
+    resetMutation()
+  }, [resetMutation])
+
   return {
     generate,
     confirmCleanup,
     dismissStaleCadence,
     staleCadence,
     isPending: mutation.isPending,
-    reset: () => {
-      setStaleCadence(null)
-      setPendingClientRecordId(null)
-      mutation.reset()
-    },
+    reset,
   }
 }

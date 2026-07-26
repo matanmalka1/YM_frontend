@@ -41,6 +41,7 @@ export const mergeAdvancePaymentBatches = (
       paid_count: existing.paid_count + batch.paid_count,
       not_paid_count: existing.not_paid_count + batch.not_paid_count,
       missing_turnover_count: existing.missing_turnover_count + batch.missing_turnover_count,
+      vat_mismatch_count: existing.vat_mismatch_count + batch.vat_mismatch_count,
       due_this_month_count: existing.due_this_month_count + batch.due_this_month_count,
       total_expected: String(totalExpected),
       total_paid: String(totalPaid),

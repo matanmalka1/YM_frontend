@@ -6439,6 +6439,11 @@ export interface components {
       client_count: number
       /** Missing Turnover Count */
       missing_turnover_count: number
+      /**
+       * Vat Mismatch Count
+       * @default 0
+       */
+      vat_mismatch_count: number
       /** Overdue Count */
       overdue_count: number
       /**
@@ -18966,6 +18971,8 @@ export interface operations {
         client_search?: string | null
         status?: components['schemas']['AdvancePaymentStatus'][] | null
         timing_status?: ('overdue' | 'on_time') | null
+        /** @description Narrow to rows whose stored turnover disagrees with the period's current VAT figure (or, when false, to rows that do not). Same rule as the row's vat_turnover_mismatch field. */
+        vat_mismatch?: boolean | null
         sort_by?: string
         order?: components['schemas']['SortOrder']
         page?: number

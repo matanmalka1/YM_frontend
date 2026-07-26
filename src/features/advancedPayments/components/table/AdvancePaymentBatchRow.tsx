@@ -17,6 +17,8 @@ interface AdvancePaymentBatchRowProps {
   clientSearch?: string
   statusFilter: AdvancePaymentStatus | ''
   timingFilter?: 'overdue'
+  /** Server-computed flag; true keeps only rows disagreeing with their VAT return. */
+  vatMismatchFilter?: true
   periodFilter: 1 | 2 | null
   sortBy: AdvancePaymentOverviewSortBy
   order: AdvancePaymentOverviewSortOrder
@@ -56,6 +58,13 @@ const getBatchSummary = (batch: AdvancePaymentDueDateGroup): PeriodSummaryMetric
       tone: 'warning',
     })
   }
+  if (batch.vat_mismatch_count > 0) {
+    summary.push({
+      label: ADVANCED_PAYMENTS_MESSAGES.batchRow.vatMismatchLabel,
+      value: batch.vat_mismatch_count,
+      tone: 'warning',
+    })
+  }
   return summary
 }
 
@@ -68,6 +77,7 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
   clientSearch,
   statusFilter,
   timingFilter,
+  vatMismatchFilter,
   periodFilter,
   sortBy,
   order,
@@ -94,6 +104,7 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
         clientSearch={clientSearch}
         statusFilter={statusFilter}
         timingFilter={timingFilter}
+        vatMismatchFilter={vatMismatchFilter}
         periodFilter={periodFilter}
         sortBy={sortBy}
         order={order}

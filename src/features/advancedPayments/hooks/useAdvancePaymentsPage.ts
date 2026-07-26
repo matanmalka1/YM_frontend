@@ -14,6 +14,7 @@ import {
   DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_BY,
   DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER,
   ADVANCE_PAYMENTS_FILTER_FIELDS,
+  VAT_MISMATCH_FILTER_ON,
 } from '../constants'
 import { useAdvancePaymentBatches } from './useAdvancePaymentBatches'
 import { useBulkMarkPaid } from './useBulkMarkPaid'
@@ -50,6 +51,7 @@ export const useAdvancePaymentsPage = () => {
     client_search: getParam('client_search'),
     status: normalizedFilterValue,
     period: rawPeriod === '1' || rawPeriod === '2' ? rawPeriod : '',
+    vat_mismatch: getParam('vat_mismatch') === VAT_MISMATCH_FILTER_ON ? VAT_MISMATCH_FILTER_ON : '',
     sort_by: sortBy,
     order,
   }
@@ -58,15 +60,21 @@ export const useAdvancePaymentsPage = () => {
   const periodFilter: 1 | 2 | null = filters.period === '1' ? 1 : filters.period === '2' ? 2 : null
   const statusFilter = normalizedStatus
   const timingFilter: 'overdue' | undefined = isOverdueFilter ? 'overdue' : undefined
+  const vatMismatchFilter: true | undefined = filters.vat_mismatch === VAT_MISMATCH_FILTER_ON ? true : undefined
   const [createOpen, setCreateOpen] = useState(false)
   const [generateOpen, setGenerateOpen] = useState(false)
   const bulkMarkPaid = useBulkMarkPaid()
   const { batches, isLoading } = useAdvancePaymentBatches(year, clientRecordId)
   const mergedBatches = useMemo(() => mergeAdvancePaymentBatches(batches, periodFilter), [batches, periodFilter])
-  // Batch-level narrowing by server-provided overdue_count — never re-derived from dates.
+  // Batch-level narrowing by the server-provided counts — never re-derived from
+  // dates or from the rows' own mismatch flags.
   const displayBatches = useMemo(
-    () => (timingFilter === 'overdue' ? mergedBatches.filter((batch) => batch.overdue_count > 0) : mergedBatches),
-    [mergedBatches, timingFilter],
+    () =>
+      mergedBatches.filter(
+        (batch) =>
+          (timingFilter !== 'overdue' || batch.overdue_count > 0) && (!vatMismatchFilter || batch.vat_mismatch_count > 0),
+      ),
+    [mergedBatches, timingFilter, vatMismatchFilter],
   )
   const nearestDueBatchKey = useDefaultOpenGroup(displayBatches, getAdvancePaymentBatchKey, (batch) => batch.due_date ?? null)
   // Deep-link target month (dashboard stat card) — open + scroll to its batch instead of nearest due
@@ -128,6 +136,7 @@ export const useAdvancePaymentsPage = () => {
       periodFilter,
       statusFilter,
       timingFilter,
+      vatMismatchFilter,
       sortBy,
       order,
       selection: isAdvisor

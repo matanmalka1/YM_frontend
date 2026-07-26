@@ -134,6 +134,9 @@ export const ADVANCE_PAYMENT_FREQUENCY_OPTIONS = MONTHS_COVERED_OPTIONS
 export const ADVANCE_PAYMENT_FREQUENCY_PREFIX = ADVANCED_PAYMENTS_MESSAGES.frequency.prefix
 export const ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT = ADVANCED_PAYMENTS_MESSAGES.frequency.unset
 
+/** URL value of the VAT-mismatch toggle when it is on; absent/'' means no filter. */
+export const VAT_MISMATCH_FILTER_ON = 'true'
+
 const PERIOD_OPTIONS = [ALL_TYPES_OPTION, ...MONTHS_COVERED_OPTIONS]
 const YEAR_OPTIONS = [ALL_YEARS_URL_OPTION, ...getOperationalYearOptions()]
 
@@ -161,6 +164,14 @@ export const ADVANCE_PAYMENTS_FILTER_FIELDS = [
     options: ADVANCE_PAYMENT_STATUS_OPTIONS_WITH_ALL,
   },
   { type: 'select' as const, key: 'period', label: 'תקופת מקדמה', options: PERIOD_OPTIONS },
+  // Orthogonal to status — a paid period can disagree with its VAT return — so
+  // it is its own control rather than another option in the status select.
+  {
+    type: 'toggle' as const,
+    key: 'vat_mismatch',
+    label: ADVANCED_PAYMENTS_MESSAGES.vatMismatchFilter.label,
+    options: [{ value: VAT_MISMATCH_FILTER_ON, label: ADVANCED_PAYMENTS_MESSAGES.vatMismatchFilter.mismatchOnlyOption }],
+  },
   {
     type: 'select' as const,
     key: 'sort_by',

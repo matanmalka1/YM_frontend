@@ -18,6 +18,7 @@ interface UseAdvancePaymentBatchRowsParams {
   clientSearch?: string
   statusFilter: AdvancePaymentStatus | ''
   timingFilter?: 'overdue'
+  vatMismatchFilter?: true
   periodFilter: 1 | 2 | null
   sortBy: AdvancePaymentOverviewSortBy
   order: AdvancePaymentOverviewSortOrder
@@ -29,6 +30,7 @@ export const useAdvancePaymentBatchRows = ({
   clientSearch,
   statusFilter,
   timingFilter,
+  vatMismatchFilter,
   periodFilter,
   sortBy,
   order,
@@ -47,6 +49,7 @@ export const useAdvancePaymentBatchRows = ({
     periodFilter,
     statusFilter,
     timingFilter,
+    vatMismatchFilter,
     sortBy,
     order,
   ])
@@ -64,6 +67,7 @@ export const useAdvancePaymentBatchRows = ({
     page_size: ADVANCE_PAYMENT_BATCH_PAGE_SIZE,
     status,
     timing_status: timingFilter,
+    vat_mismatch: vatMismatchFilter,
   }
   const { data, isLoading, isFetching } = useQuery({
     queryKey: advancedPaymentsQK.overview(params),

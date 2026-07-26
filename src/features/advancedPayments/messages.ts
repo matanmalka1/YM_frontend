@@ -222,6 +222,7 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     unpaidLabel: 'לא שולם',
     overdueLabel: 'באיחור',
     missingTurnoverLabel: 'חסרי מחזור',
+    vatMismatchLabel: 'אי-התאמת מע״מ',
   },
   batchesList: {
     emptyNoYear: 'אין מקדמות',
@@ -350,5 +351,9 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     expectedAmountLabel: 'צפוי לתשלום',
     paidAmountLabel: 'שולם',
     deltaLabel: 'יתרה',
+  },
+  vatMismatchFilter: {
+    label: 'התאמת מע״מ',
+    mismatchOnlyOption: 'אי-התאמות בלבד',
   },
 } as const

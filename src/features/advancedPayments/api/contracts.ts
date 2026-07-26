@@ -143,6 +143,8 @@ export interface ListAdvancePaymentsOverviewParams {
   client_search?: string
   status?: AdvancePaymentStatus[]
   timing_status?: AdvancePaymentTimingStatus
+  /** Server-computed: true keeps only rows carrying `vat_turnover_mismatch`. */
+  vat_mismatch?: boolean
   sort_by?: 'client_name' | 'expected_amount' | 'paid_amount' | 'delta'
   order?: 'asc' | 'desc'
   page?: number
@@ -167,6 +169,7 @@ export interface MonthBatchSummary {
   period_months_count: 1 | 2
   client_count: number
   missing_turnover_count: number
+  vat_mismatch_count: number
   overdue_count: number
   pending_count: number
   paid_count: number
