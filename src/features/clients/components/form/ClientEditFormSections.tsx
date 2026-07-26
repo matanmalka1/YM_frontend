@@ -201,11 +201,7 @@ export const ClientTaxProfileSection = ({
         />
         <ReadonlyField
           label={CLIENTS_MESSAGES.edit.advanceRate}
-          value={
-            client.advance_rate != null
-              ? formatAdvanceRatePercent(client.advance_rate)
-              : CLIENTS_MESSAGES.edit.notAvailable
-          }
+          value={client.advance_rate != null ? formatAdvanceRatePercent(client.advance_rate) : CLIENTS_MESSAGES.edit.notAvailable}
           help={CLIENTS_MESSAGES.edit.advanceRateReadonlyHelp}
         />
         <ReadonlyField

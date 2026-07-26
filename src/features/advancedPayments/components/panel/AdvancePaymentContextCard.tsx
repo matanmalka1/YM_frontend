@@ -85,7 +85,13 @@ export const AdvancePaymentContextCard: React.FC<AdvancePaymentContextCardProps>
         />
       </Card>
 
-      <Card title={ADVANCED_PAYMENTS_MESSAGES.detail.quickNavTitle} size="compact" variant="outlined" disablePadding bodyClassName="p-2">
+      <Card
+        title={ADVANCED_PAYMENTS_MESSAGES.detail.quickNavTitle}
+        size="compact"
+        variant="outlined"
+        disablePadding
+        bodyClassName="p-2"
+      >
         {QUICK_NAV_LINKS.map(({ icon: Icon, label, tab }) => (
           <ActionSurfaceLink key={tab} variant="plainRow" to={`/clients/${payment.client_record_id}/${tab}`}>
             <span className="flex items-center gap-2 text-sm font-medium text-gray-700">

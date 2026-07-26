@@ -91,8 +91,7 @@ export const useAdvancePaymentDetailForm = ({ payment, onSave }: UseAdvancePayme
   // zero — never folded into liveCalculated itself. override_amount still wins.
   const numW = Number(withheldAmount)
   const withheld = withheldAmount !== '' && Number.isFinite(numW) ? numW : 0
-  const liveDeducted =
-    liveCalculated != null ? Math.max(0, Number(liveCalculated) - withheld).toFixed(2) : null
+  const liveDeducted = liveCalculated != null ? Math.max(0, Number(liveCalculated) - withheld).toFixed(2) : null
   const liveExpected = overrideAmount !== '' ? overrideAmount : liveDeducted
 
   const isDirty =

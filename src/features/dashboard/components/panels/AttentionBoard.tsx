@@ -1,6 +1,16 @@
 import { useState, useMemo } from 'react'
 import type { LucideIcon } from 'lucide-react'
-import { ArrowLeft, Briefcase, CheckCircle2, ClipboardList, ReceiptText, ShieldAlert, Table2, TriangleAlert, Wallet } from 'lucide-react'
+import {
+  ArrowLeft,
+  Briefcase,
+  CheckCircle2,
+  ClipboardList,
+  ReceiptText,
+  ShieldAlert,
+  Table2,
+  TriangleAlert,
+  Wallet,
+} from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { WORK_QUEUE_ROUTE } from '@/features/workQueue'
 import { cn, formatCurrencyILS, formatDate } from '@/utils/utils'

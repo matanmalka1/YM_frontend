@@ -45,7 +45,13 @@ interface BuildColumnsParams {
   showTaskMeta: boolean
 }
 
-export const buildWorkQueueColumns = ({ activeActionKey, onAction, showLinkedTasks, showWarnings, showTaskMeta }: BuildColumnsParams) =>
+export const buildWorkQueueColumns = ({
+  activeActionKey,
+  onAction,
+  showLinkedTasks,
+  showWarnings,
+  showTaskMeta,
+}: BuildColumnsParams) =>
   (
     [
       {

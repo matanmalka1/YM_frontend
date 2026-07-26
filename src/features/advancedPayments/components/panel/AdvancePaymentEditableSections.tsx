@@ -119,7 +119,9 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
                 </div>
               </div>
               <div className="rounded-lg border border-warning-200 bg-warning-50/60 px-3 py-2 text-center">
-                <div className="text-xs text-warning-700">{ADVANCED_PAYMENTS_MESSAGES.editableSections.withheldBreakdownCell}</div>
+                <div className="text-xs text-warning-700">
+                  {ADVANCED_PAYMENTS_MESSAGES.editableSections.withheldBreakdownCell}
+                </div>
                 <div className="text-sm font-bold text-warning-700 tabular-nums">
                   {form.withheldAmount !== '' ? formatShekelAmount(form.withheldAmount) : '—'}
                 </div>

@@ -255,11 +255,7 @@ export const SeasonInsightsCarousel = ({ vatStats }: SeasonInsightsCarouselProps
             stat={ap.bimonthly}
             href={DASHBOARD_HREFS.advancePayments(ap.bimonthly.period, 2)}
           />,
-          <StatSlide
-            key="advance-monthly"
-            stat={ap.monthly}
-            href={DASHBOARD_HREFS.advancePayments(ap.monthly.period, 1)}
-          />,
+          <StatSlide key="advance-monthly" stat={ap.monthly} href={DASHBOARD_HREFS.advancePayments(ap.monthly.period, 1)} />,
           <StatSlide key="vat-bimonthly" stat={bimonthly} href={DASHBOARD_HREFS.vat(bimonthly.period, 'bimonthly')} />,
           <StatSlide key="vat-monthly" stat={monthly} href={DASHBOARD_HREFS.vat(monthly.period, 'monthly')} />,
           <SeasonSlide key="season" />,

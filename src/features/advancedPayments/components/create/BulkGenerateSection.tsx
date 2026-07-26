@@ -68,9 +68,7 @@ export const BulkGenerateSection: React.FC<BulkGenerateSectionProps> = ({
             {MESSAGES.doneSummary({ clients: totals.clientsProcessed, created: totals.created })}
           </p>
           {totals.skipped > 0 && <p className="text-xs text-gray-500">{MESSAGES.skippedNote(totals.skipped)}</p>}
-          {totals.staleRemoved > 0 && (
-            <p className="text-xs text-gray-500">{STALE_MESSAGES.removedNote(totals.staleRemoved)}</p>
-          )}
+          {totals.staleRemoved > 0 && <p className="text-xs text-gray-500">{STALE_MESSAGES.removedNote(totals.staleRemoved)}</p>}
         </div>
       )}
 

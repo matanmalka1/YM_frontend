@@ -110,9 +110,7 @@ export const VatWorkItemsGroupedCards = ({
   const getKey = useCallback((g: VatWorkItemGroupSummary) => g.group_key, [])
   const getDueDate = useCallback((g: VatWorkItemGroupSummary) => g.due_date, [])
   const nearestDueKey = useDefaultOpenGroup(sortedGroups, getKey, getDueDate)
-  const focusedKey = focusPeriod
-    ? (sortedGroups.find((g) => groupIncludesPeriod(g, focusPeriod))?.group_key ?? null)
-    : null
+  const focusedKey = focusPeriod ? (sortedGroups.find((g) => groupIncludesPeriod(g, focusPeriod))?.group_key ?? null) : null
   const defaultOpenKey = focusedKey ?? nearestDueKey
 
   return (

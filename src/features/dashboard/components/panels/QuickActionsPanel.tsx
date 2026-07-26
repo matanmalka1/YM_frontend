@@ -30,7 +30,12 @@ const QuickActionItem = ({
 
   if (action.modal) {
     return (
-      <ActionSurfaceButton variant="tile" className="w-full"onClick={() => onOpenModal(action.modal!)}title={action.description}>
+      <ActionSurfaceButton
+        variant="tile"
+        className="w-full"
+        onClick={() => onOpenModal(action.modal!)}
+        title={action.description}
+      >
         {inner}
       </ActionSurfaceButton>
     )

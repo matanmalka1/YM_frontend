@@ -69,9 +69,7 @@ export const AdvanceRateChangeModal: React.FC<AdvanceRateChangeModalProps> = ({
       }
     >
       <div className="space-y-4">
-        <p className="text-sm leading-6 text-gray-600">
-          {ADVANCED_PAYMENTS_MESSAGES.bulkRateUpdate.description(currentRate)}
-        </p>
+        <p className="text-sm leading-6 text-gray-600">{ADVANCED_PAYMENTS_MESSAGES.bulkRateUpdate.description(currentRate)}</p>
         <Input
           label={ADVANCED_PAYMENTS_MESSAGES.bulkRateUpdate.rateLabel}
           type="number"

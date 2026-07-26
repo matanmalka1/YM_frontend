@@ -73,7 +73,8 @@ export const useAdvancePaymentBatchRows = ({
   // An explicit non-default sort means the user chose an order — the server's
   // order must win. The missing-turnover-first resort only applies to the
   // default view, where no explicit sort has been requested.
-  const isDefaultSort = sortBy === DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_BY && order === DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER
+  const isDefaultSort =
+    sortBy === DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_BY && order === DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER
   const items = data?.items ?? []
   const rows = isDefaultSort
     ? items.toSorted((first, second) => Number(second.missing_turnover) - Number(first.missing_turnover))
