@@ -54,6 +54,7 @@ export const AdvancePayments: React.FC = () => {
         >
           <BulkSelectionActionButton
             label={ADVANCED_PAYMENTS_MESSAGES.bulkMarkPaid.actionButton}
+            variant="primary"
             disabled={bulkMarkPaid.isSubmitting}
             loading={bulkMarkPaid.isSubmitting}
             onClick={bulkMarkPaid.openModal}

@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import { X } from 'lucide-react'
 import { Button } from '../../primitives/Button'
-import { Divider } from '../../primitives/Divider'
 import { GLOBAL_UI_MESSAGES } from '../../../../messages'
 
 interface BulkSelectionToolbarProps {
@@ -21,25 +20,27 @@ export const BulkSelectionToolbar: React.FC<BulkSelectionToolbarProps> = ({
   onClear,
   selectedCount,
 }) => (
-  <div className="animate-fade-in rounded-xl border border-primary-200 bg-primary-50/60 px-4 py-3 flex flex-col gap-3">
-    <div className="flex flex-wrap items-center gap-3">
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-100 border border-primary-200 px-3 py-1 text-xs font-semibold text-primary-700 tabular-nums">
-        <span className="h-1.5 w-1.5 rounded-full bg-primary-500" />
-        {selectedCount} נבחרו
-      </span>
+  <div className="pointer-events-none fixed inset-x-0 bottom-6 z-40 flex justify-center px-4">
+    <div className="animate-fade-in pointer-events-auto flex max-w-full flex-col gap-3 rounded-2xl border border-gray-200 bg-white px-3 py-2.5 shadow-xl">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="ps-2 pe-1 text-sm font-semibold text-gray-900 tabular-nums">{selectedCount} נבחרו</span>
 
-      <Divider orientation="vertical" className="h-4 bg-primary-200" />
+        <Button
+          variant="ghost"
+          size="xs"
+          shape="square"
+          icon={<X className="h-4 w-4" />}
+          onClick={onClear}
+          disabled={loading}
+          aria-label={clearLabel}
+          className="text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+        />
 
-      <div className="flex flex-wrap items-center gap-2">{children}</div>
-
-      <div className="ms-auto">
-        <Button variant="ghost" size="xs" icon={<X className="h-3 w-3" />} onClick={onClear} disabled={loading}>
-          {clearLabel}
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">{children}</div>
       </div>
-    </div>
 
-    {extra && <div className="border-t border-primary-200/70 pt-3">{extra}</div>}
+      {extra && <div className="border-t border-gray-200 pt-3">{extra}</div>}
+    </div>
   </div>
 )
 
@@ -48,7 +49,13 @@ interface BulkSelectionActionButtonProps {
   label: string
   loading: boolean
   onClick: () => void
-  variant?: 'default' | 'danger'
+  variant?: 'default' | 'primary' | 'danger'
+}
+
+const actionButtonStyles: Record<NonNullable<BulkSelectionActionButtonProps['variant']>, string> = {
+  default: 'rounded-xl bg-gray-100 text-gray-900 hover:bg-gray-200 active:bg-gray-300',
+  primary: 'rounded-xl bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800',
+  danger: 'rounded-xl bg-negative-600 text-white hover:bg-negative-700 active:bg-negative-800',
 }
 
 export const BulkSelectionActionButton: React.FC<BulkSelectionActionButtonProps> = ({
@@ -59,11 +66,12 @@ export const BulkSelectionActionButton: React.FC<BulkSelectionActionButtonProps>
   variant = 'default',
 }) => (
   <Button
-    variant={variant === 'danger' ? 'danger' : 'outline'}
-    size="xs"
+    variant="ghost"
+    size="sm"
     onClick={onClick}
     disabled={disabled}
     isLoading={loading}
+    className={actionButtonStyles[variant]}
   >
     {label}
   </Button>
