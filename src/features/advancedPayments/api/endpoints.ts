@@ -13,4 +13,6 @@ export const ADVANCE_PAYMENT_ENDPOINTS = {
   advancePaymentsOverview: '/advance-payments/overview',
   advancePaymentsBatches: '/advance-payments/overview/batches',
   advancePaymentsBulkMarkPaid: '/advance-payments/bulk-mark-paid',
+  advancePaymentsBulkGenerate: '/advance-payments/bulk-generate',
+  advancePaymentsBulkGeneratePreview: '/advance-payments/bulk-generate/preview',
 } as const

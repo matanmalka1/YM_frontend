@@ -19,6 +19,10 @@ export const ADVANCED_PAYMENTS_ERROR_MESSAGES = {
   bulkRateUpdate: {
     failed: 'עדכון שיעור המקדמה נכשל',
   },
+  bulkGenerate: {
+    run: 'יצירת לוחות המקדמות למשרד נכשלה',
+    previewLoad: 'טעינת נתוני הלקוחות ליצירה כלל-משרדית נכשלה',
+  },
   generateSchedule: {
     create: 'שגיאה ביצירת לוח מקדמות',
     profileLoad: 'שגיאה בטעינת פרופיל הלקוח',

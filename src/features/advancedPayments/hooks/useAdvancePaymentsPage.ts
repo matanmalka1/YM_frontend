@@ -153,7 +153,6 @@ export const useAdvancePaymentsPage = () => {
       },
       generate: {
         open: generateOpen,
-        year: year ?? todayYear,
         onClose: () => setGenerateOpen(false),
       },
       openCreate: () => setCreateOpen(true),

@@ -224,6 +224,22 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     createButton: 'צור לוח',
     loadingProfile: 'טוען פרופיל לקוח...',
     scheduleNote: 'ייווצרו רק מקדמות שתאריך היעד שלהן מהיום והלאה',
+    singleClientMode: 'לקוח בודד',
+    officeMode: 'כל המשרד',
+    yearLabel: 'שנת מס',
+  },
+  bulkGenerate: {
+    loadingPreview: 'טוען את רשימת הלקוחות...',
+    eligibleCount: (count: number) => `${count} לקוחות זכאים ליצירת לוח שנתי`,
+    noEligibleClients: 'אין לקוחות זכאים ליצירת לוח שנתי',
+    createButton: 'צור לוחות למשרד',
+    runningProgress: ({ processed, total }: { processed: number; total: number }) => `מעבד ${processed} מתוך ${total} לקוחות...`,
+    doneSummary: ({ clients, created }: { clients: number; created: number }) =>
+      `נוצרו ${created} מקדמות עבור ${clients} לקוחות`,
+    skippedNote: (skipped: number) => `דולגו ${skipped} תקופות שכבר קיימות או שמועד התשלום שלהן חלף`,
+    ineligibleTitle: (count: number) => `${count} לקוחות ללא תדירות מקדמות מוגדרת — לא נוצר להם לוח`,
+    ineligibleNote: 'הגדירו תדירות מקדמות בכרטיס הלקוח ואז הריצו יצירה פרטנית',
+    failedTitle: (count: number) => `${count} לקוחות נכשלו`,
   },
   frequency: {
     prefix: 'תדירות מקדמות:',

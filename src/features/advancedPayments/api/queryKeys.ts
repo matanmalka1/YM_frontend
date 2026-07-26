@@ -34,6 +34,7 @@ export const advancedPaymentsQK = {
     [...advancedPaymentsQK.overviews(), normalizeOverviewParams(params)] as const,
   kpis: () => [...advancedPaymentsQK.all, 'kpi'] as const,
   kpi: (clientRecordId: number, year: number) => [...advancedPaymentsQK.kpis(), 'client', clientRecordId, year] as const,
+  bulkGeneratePreview: () => [...advancedPaymentsQK.all, 'bulk-generate-preview'] as const,
   batchesRoot: () => [...advancedPaymentsQK.all, 'batches'] as const,
   batches: (year: number | null, clientRecordId?: number) =>
     [...advancedPaymentsQK.batchesRoot(), { year, client_record_id: clientRecordId ?? null }] as const,

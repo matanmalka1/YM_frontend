@@ -2492,6 +2492,54 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/advance-payments/bulk-generate/preview': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Preview Bulk Generate
+     * @description What an office-wide annual generation would cover.
+     *
+     *     Year-independent on purpose: eligibility is a client property (active, with
+     *     a configured frequency), not a property of the year being generated.
+     */
+    get: operations['preview_bulk_generate_api_v1_advance_payments_bulk_generate_preview_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/advance-payments/bulk-generate': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Bulk Generate Annual Schedules
+     * @description Generate annual schedules for one chunk of the office's eligible clients.
+     *
+     *     Call repeatedly, passing back the returned ``next_cursor``, until it is
+     *     ``null``. The whole office cannot be one request: the frontend times out at
+     *     15s and the office runs to hundreds of clients. Each chunk needs its own
+     *     idempotency key, so retrying a failed chunk cannot double-create.
+     */
+    post: operations['bulk_generate_annual_schedules_api_v1_advance_payments_bulk_generate_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/clients/{client_record_id}/advance-payments/generate': {
     parameters: {
       query?: never
@@ -4815,6 +4863,54 @@ export interface components {
       /** Error */
       error: string
     }
+    /** BulkGenerateFailedClient */
+    BulkGenerateFailedClient: {
+      /** Client Record Id */
+      client_record_id: number
+      /** Client Name */
+      client_name: string
+      /** Reason */
+      reason: string
+    }
+    /**
+     * BulkGeneratePreviewResponse
+     * @description What an office-wide generation would cover, before it runs.
+     *
+     *     Serves the modal twice: the eligible count is the progress denominator
+     *     shown up front, and ``ineligible`` is the exceptions list shown afterwards.
+     */
+    BulkGeneratePreviewResponse: {
+      /** Eligible Count */
+      eligible_count: number
+      /** Ineligible */
+      ineligible: components['schemas']['IneligibleClient'][]
+    }
+    /** BulkGenerateRequest */
+    BulkGenerateRequest: {
+      /** Year */
+      year: number
+      /**
+       * Cursor
+       * @description מזהה הלקוח האחרון שעובד; השאר ריק בבקשה הראשונה של הריצה
+       */
+      cursor?: number | null
+    }
+    /**
+     * BulkGenerateResponse
+     * @description One chunk's outcome. The caller repeats while ``next_cursor`` is set.
+     */
+    BulkGenerateResponse: {
+      /** Clients Processed */
+      clients_processed: number
+      /** Created */
+      created: number
+      /** Skipped */
+      skipped: number
+      /** Failed */
+      failed: components['schemas']['BulkGenerateFailedClient'][]
+      /** Next Cursor */
+      next_cursor: number | null
+    }
     /**
      * BulkMarkPaidRequest
      * @description Explicit ids only — same principle as ``BulkRefreshTurnoverRequest``.
@@ -6198,6 +6294,18 @@ export interface components {
       | 'foreign'
       | 'pension'
       | 'other'
+    /** IneligibleClient */
+    IneligibleClient: {
+      /** Client Record Id */
+      client_record_id: number
+      /** Client Name */
+      client_name: string
+      /**
+       * Reason
+       * @constant
+       */
+      reason: 'frequency_not_set'
+    }
     /**
      * InvoiceAttachRequest
      * @description צירוף חשבונית חיצונית לחיוב קיים.
@@ -18934,6 +19042,106 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['BulkMarkPaidResponse']
+        }
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  preview_bulk_generate_api_v1_advance_payments_bulk_generate_preview_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BulkGeneratePreviewResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+    }
+  }
+  bulk_generate_annual_schedules_api_v1_advance_payments_bulk_generate_post: {
+    parameters: {
+      query?: never
+      header: {
+        'X-Idempotency-Key': string
+      }
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['BulkGenerateRequest']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BulkGenerateResponse']
         }
       }
       /** @description Bad request */

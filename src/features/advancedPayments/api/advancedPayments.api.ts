@@ -18,6 +18,9 @@ import type {
   BulkRateUpdatePayload,
   BulkRateUpdateResponse,
   BulkRefreshTurnoverResponse,
+  BulkGeneratePayload,
+  BulkGeneratePreviewResponse,
+  BulkGenerateResponse,
   GenerateScheduleResponse,
 } from './contracts'
 
@@ -130,6 +133,21 @@ export const advancePaymentsApi = {
       ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentsGenerate(clientRecordId),
       payload,
     )
+    return response.data
+  },
+
+  bulkGeneratePreview: async (): Promise<BulkGeneratePreviewResponse> => {
+    const response = await api.get<BulkGeneratePreviewResponse>(ADVANCE_PAYMENT_ENDPOINTS.advancePaymentsBulkGeneratePreview)
+    return response.data
+  },
+
+  // The idempotency key is the caller's, not a fresh UUID per call: an office-wide
+  // run is a sequence of chunk requests, and retrying one chunk must reuse its key
+  // so the retry cannot create the same schedules twice.
+  bulkGenerate: async (payload: BulkGeneratePayload, idempotencyKey: string): Promise<BulkGenerateResponse> => {
+    const response = await api.post<BulkGenerateResponse>(ADVANCE_PAYMENT_ENDPOINTS.advancePaymentsBulkGenerate, payload, {
+      headers: { 'X-Idempotency-Key': idempotencyKey },
+    })
     return response.data
   },
 }

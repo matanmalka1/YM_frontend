@@ -4,9 +4,8 @@ import { Input } from '@/components/ui/inputs/Input'
 import { Select } from '@/components/ui/inputs/Select'
 import { Button } from '@/components/ui/primitives/Button'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
-import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
-import { getAdvancePaymentMonthOptions } from '../../utils/advancePaymentComponentUtils'
+import { getAdvancePaymentMonthOptions, getForwardLookingYearOptions } from '../../utils/advancePaymentComponentUtils'
 import type { BulkRateUpdatePayload } from '../../api/contracts'
 
 const MAX_ADVANCE_RATE = 100
@@ -18,13 +17,6 @@ interface AdvanceRateChangeModalProps {
   isSubmitting: boolean
   onClose: () => void
   onSubmit: (payload: BulkRateUpdatePayload) => void
-}
-
-// Effective year can run one ahead of the operational year (a rate set late in a
-// year that takes effect next year), descending a few years back for corrections.
-const getRateChangeYearOptions = (): { value: string; label: string }[] => {
-  const top = getOperationalTaxYear() + 1
-  return Array.from({ length: 6 }, (_, i) => ({ value: String(top - i), label: String(top - i) }))
 }
 
 export const AdvanceRateChangeModal: React.FC<AdvanceRateChangeModalProps> = ({
@@ -49,7 +41,7 @@ export const AdvanceRateChangeModal: React.FC<AdvanceRateChangeModalProps> = ({
     }
   }, [open])
 
-  const yearOptions = getRateChangeYearOptions()
+  const yearOptions = getForwardLookingYearOptions()
   const monthOptions = getAdvancePaymentMonthOptions(periodMonthsCount)
   const numericRate = Number(rate)
   const isValidRate = rate.trim() !== '' && Number.isFinite(numericRate) && numericRate >= 0 && numericRate <= MAX_ADVANCE_RATE

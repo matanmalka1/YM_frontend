@@ -1,73 +1,151 @@
+import { useEffect, useState } from 'react'
 import { Modal } from '@/components/ui/overlays/Modal'
 import { Button } from '@/components/ui/primitives/Button'
+import { Select } from '@/components/ui/inputs/Select'
+import { SegmentedControl, SegmentedControlItem } from '@/components/ui/primitives/SegmentedControl'
 import { ClientSearchInput } from '@/features/clients/public'
 import { useGenerateSchedule } from '../../hooks/useGenerateSchedule'
+import { useBulkGenerateSchedule } from '../../hooks/useBulkGenerateSchedule'
+import { BulkGenerateSection } from './BulkGenerateSection'
 import { ADVANCE_PAYMENT_FREQUENCY_PREFIX, ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT } from '../../constants'
-import { getMonthsCoveredLabel } from '@/constants/periodOptions.constants'
+import { getMonthsCoveredLabel, getOperationalTaxYear } from '@/constants/periodOptions.constants'
+import { getForwardLookingYearOptions } from '../../utils/advancePaymentComponentUtils'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../../errorMessages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface Props {
   open: boolean
-  year: number
   onClose: () => void
 }
 
-export const GenerateScheduleModal: React.FC<Props> = ({ open, year, onClose }) => {
-  const { picker, isProfileLoading, isProfileError, frequency, isPending, handleGenerate } = useGenerateSchedule(year)
+type GenerateMode = 'client' | 'office'
+
+const MESSAGES = ADVANCED_PAYMENTS_MESSAGES.generateScheduleModal
+
+export const GenerateScheduleModal: React.FC<Props> = ({ open, onClose }) => {
+  const [mode, setMode] = useState<GenerateMode>('client')
+  // The year is chosen here rather than inherited from the page filter: this
+  // action is run at the turn of a tax year, when the filter still points at
+  // the outgoing one.
+  const [year, setYear] = useState(String(getOperationalTaxYear()))
+
+  const single = useGenerateSchedule(Number(year))
+  const bulk = useBulkGenerateSchedule(open && mode === 'office')
+
+  useEffect(() => {
+    if (open) {
+      setMode('client')
+      setYear(String(getOperationalTaxYear()))
+    }
+  }, [open])
 
   const handleClose = () => {
-    picker.resetClientPicker()
+    single.picker.resetClientPicker()
     onClose()
   }
 
-  const handleConfirm = () => {
-    handleGenerate()
-    if (!isPending) handleClose()
+  const handleSingleConfirm = () => {
+    single.handleGenerate()
+    if (!single.isPending) handleClose()
   }
+
+  const isSingleDisabled =
+    single.picker.selectedClient === null ||
+    single.isProfileLoading ||
+    single.isProfileError ||
+    single.frequency == null ||
+    single.isPending
 
   return (
     <Modal
       open={open}
-      title={ADVANCED_PAYMENTS_MESSAGES.generateScheduleModal.title}
+      title={MESSAGES.title}
       onClose={handleClose}
       footer={
         <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={handleClose}>
-            {GLOBAL_UI_MESSAGES.actions.cancel}
+          <Button variant="outline" disabled={bulk.isRunning} onClick={handleClose}>
+            {bulk.isDone ? GLOBAL_UI_MESSAGES.actions.close : GLOBAL_UI_MESSAGES.actions.cancel}
           </Button>
-          <Button
-            variant="primary"
-            isLoading={isPending}
-            disabled={picker.selectedClient === null || isProfileLoading || isProfileError || frequency == null || isPending}
-            onClick={handleConfirm}
-          >
-            {ADVANCED_PAYMENTS_MESSAGES.generateScheduleModal.createButton}
-          </Button>
+          {mode === 'client' ? (
+            <Button variant="primary" isLoading={single.isPending} disabled={isSingleDisabled} onClick={handleSingleConfirm}>
+              {MESSAGES.createButton}
+            </Button>
+          ) : (
+            <Button
+              variant="primary"
+              isLoading={bulk.isRunning}
+              disabled={bulk.isRunning || bulk.isDone || bulk.eligibleCount === 0}
+              onClick={() => bulk.generate(Number(year))}
+            >
+              {ADVANCED_PAYMENTS_MESSAGES.bulkGenerate.createButton}
+            </Button>
+          )}
         </div>
       }
     >
       <div className="space-y-4">
-        <ClientSearchInput
-          selectedClient={picker.selectedClient}
-          value={picker.clientQuery}
-          onChange={picker.handleClientQueryChange}
-          onSelect={picker.handleSelectClient}
-          onClear={picker.handleClearClient}
+        <SegmentedControl variant="switch">
+          <SegmentedControlItem
+            variant="switch"
+            selected={mode === 'client'}
+            disabled={bulk.isRunning}
+            onClick={() => setMode('client')}
+          >
+            {MESSAGES.singleClientMode}
+          </SegmentedControlItem>
+          <SegmentedControlItem
+            variant="switch"
+            selected={mode === 'office'}
+            disabled={bulk.isRunning}
+            onClick={() => setMode('office')}
+          >
+            {MESSAGES.officeMode}
+          </SegmentedControlItem>
+        </SegmentedControl>
+
+        <Select
+          label={MESSAGES.yearLabel}
+          options={getForwardLookingYearOptions()}
+          value={year}
+          disabled={bulk.isRunning}
+          onChange={(event) => setYear(event.target.value)}
         />
-        {picker.selectedClient !== null && (
-          <p className="text-sm text-gray-500">
-            {isProfileLoading
-              ? ADVANCED_PAYMENTS_MESSAGES.generateScheduleModal.loadingProfile
-              : isProfileError
-                ? ADVANCED_PAYMENTS_ERROR_MESSAGES.generateSchedule.profileLoad
-                : frequency != null
-                  ? `${ADVANCE_PAYMENT_FREQUENCY_PREFIX} ${getMonthsCoveredLabel(frequency)}`
-                  : ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT}
-          </p>
+
+        {mode === 'client' ? (
+          <>
+            <ClientSearchInput
+              selectedClient={single.picker.selectedClient}
+              value={single.picker.clientQuery}
+              onChange={single.picker.handleClientQueryChange}
+              onSelect={single.picker.handleSelectClient}
+              onClear={single.picker.handleClearClient}
+            />
+            {single.picker.selectedClient !== null && (
+              <p className="text-sm text-gray-500">
+                {single.isProfileLoading
+                  ? MESSAGES.loadingProfile
+                  : single.isProfileError
+                    ? ADVANCED_PAYMENTS_ERROR_MESSAGES.generateSchedule.profileLoad
+                    : single.frequency != null
+                      ? `${ADVANCE_PAYMENT_FREQUENCY_PREFIX} ${getMonthsCoveredLabel(single.frequency)}`
+                      : ADVANCE_PAYMENT_FREQUENCY_UNSET_TEXT}
+              </p>
+            )}
+          </>
+        ) : (
+          <BulkGenerateSection
+            isPreviewLoading={bulk.isPreviewLoading}
+            previewError={bulk.previewError}
+            eligibleCount={bulk.eligibleCount}
+            ineligible={bulk.ineligible}
+            totals={bulk.totals}
+            isRunning={bulk.isRunning}
+            isDone={bulk.isDone}
+          />
         )}
-        <p className="text-sm text-gray-500">{ADVANCED_PAYMENTS_MESSAGES.generateScheduleModal.scheduleNote}</p>
+
+        <p className="text-sm text-gray-500">{MESSAGES.scheduleNote}</p>
       </div>
     </Modal>
   )

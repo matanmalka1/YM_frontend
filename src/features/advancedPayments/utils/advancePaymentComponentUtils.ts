@@ -1,4 +1,8 @@
-import { BIMONTHLY_START_MONTH_VALUES, getReportingPeriodMonthLabel } from '@/constants/periodOptions.constants'
+import {
+  BIMONTHLY_START_MONTH_VALUES,
+  getOperationalTaxYear,
+  getReportingPeriodMonthLabel,
+} from '@/constants/periodOptions.constants'
 import type { CreateAdvancePaymentFormValues } from '../schemas'
 import type { CreateAdvancePaymentPayload } from '../api/contracts'
 import { MONTH_OPTIONS } from '@/utils/utils'
@@ -12,6 +16,18 @@ export const getCollectionPercent = (rate: string | number | null, cap = false) 
   if (!Number.isFinite(numericRate)) return null
   const roundedRate = Math.round(numericRate)
   return cap ? Math.min(roundedRate, 100) : roundedRate
+}
+
+/**
+ * Tax years for forward-looking advance actions, newest first.
+ *
+ * Tops out one year past the operational year rather than at it: both callers —
+ * changing a rate and generating a schedule — are done ahead of the year they
+ * apply to. Older years stay available for corrections.
+ */
+export const getForwardLookingYearOptions = (count = 6): { value: string; label: string }[] => {
+  const top = getOperationalTaxYear() + 1
+  return Array.from({ length: count }, (_, i) => ({ value: String(top - i), label: String(top - i) }))
 }
 
 export const getAdvancePaymentMonthOptions = (periodMonthsCount: 1 | 2) =>

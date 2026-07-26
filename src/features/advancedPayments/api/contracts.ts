@@ -215,3 +215,33 @@ export interface GenerateScheduleResponse {
   created: number
   skipped: number
 }
+
+export interface IneligibleClient {
+  client_record_id: number
+  client_name: string
+  reason: 'frequency_not_set'
+}
+
+export interface BulkGeneratePreviewResponse {
+  eligible_count: number
+  ineligible: IneligibleClient[]
+}
+
+export interface BulkGeneratePayload {
+  year: number
+  cursor?: number | null
+}
+
+export interface BulkGenerateFailedClient {
+  client_record_id: number
+  client_name: string
+  reason: string
+}
+
+export interface BulkGenerateResponse {
+  clients_processed: number
+  created: number
+  skipped: number
+  failed: BulkGenerateFailedClient[]
+  next_cursor: number | null
+}
