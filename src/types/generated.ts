@@ -8058,21 +8058,12 @@ export interface components {
       period_months_count?: number | null
       /** Tax Year */
       tax_year: number
-      /**
-       * Regulatory Due Date
-       * Format: date
-       */
-      regulatory_due_date: string
-      /**
-       * Effective Due Date Min
-       * Format: date
-       */
-      effective_due_date_min: string
-      /**
-       * Effective Due Date Max
-       * Format: date
-       */
-      effective_due_date_max: string
+      /** Regulatory Due Date */
+      regulatory_due_date?: string | null
+      /** Effective Due Date Min */
+      effective_due_date_min?: string | null
+      /** Effective Due Date Max */
+      effective_due_date_max?: string | null
       /** Linked Count */
       linked_count: number
       /** Open Count */

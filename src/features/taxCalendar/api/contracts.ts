@@ -22,9 +22,11 @@ export interface TaxCalendarGroup {
   period: string | null
   period_months_count: number | null
   tax_year: number
-  regulatory_due_date: string
-  effective_due_date_min: string
-  effective_due_date_max: string
+  /** Null for annual obligations — no single statutory date applies to every client. */
+  regulatory_due_date: string | null
+  /** Null when nothing linked has a known deadline (e.g. custom-deadline annual reports). */
+  effective_due_date_min: string | null
+  effective_due_date_max: string | null
   linked_count: number
   open_count: number
   done_count: number
