@@ -10,6 +10,11 @@ const buildImpactPreviewPayload = (params: ImpactParams): ClientImpactPreviewPay
   ...(params.vat_reporting_frequency ? { vat_reporting_frequency: params.vat_reporting_frequency } : {}),
   ...(params.advance_payment_frequency ? { advance_payment_frequency: params.advance_payment_frequency } : {}),
   ...(params.advance_rate ? { advance_rate: params.advance_rate } : {}),
+  // Forwarded so the preview counts the same periods the create will produce.
+  ...(params.vat_liable_from ? { vat_liable_from: params.vat_liable_from } : {}),
+  ...(params.vat_liable_to ? { vat_liable_to: params.vat_liable_to } : {}),
+  ...(params.advance_liable_from ? { advance_liable_from: params.advance_liable_from } : {}),
+  ...(params.advance_liable_to ? { advance_liable_to: params.advance_liable_to } : {}),
 })
 
 export const useClientCreationImpact = (
@@ -34,6 +39,10 @@ export const useClientCreationImpact = (
           vat_reporting_frequency: params!.vat_reporting_frequency,
           advance_payment_frequency: params!.advance_payment_frequency,
           advance_rate: params!.advance_rate,
+          vat_liable_from: params!.vat_liable_from,
+          vat_liable_to: params!.vat_liable_to,
+          advance_liable_from: params!.advance_liable_from,
+          advance_liable_to: params!.advance_liable_to,
         }),
       ),
     enabled,

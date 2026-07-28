@@ -1,6 +1,9 @@
 import type { FieldNamesMarkedBoolean } from 'react-hook-form'
-import type { UpdateClientPayload } from '../api'
+import type { ISODateString, UpdateClientPayload } from '../api'
+import { CLIENT_LIABILITY_RANGES } from '../constants'
 import type { ClientEditFormValues } from '../schemas'
+
+const LIABILITY_FIELDS = CLIENT_LIABILITY_RANGES.flatMap((r) => [r.from, r.to] as const)
 
 const blankToNull = (value: string | null | undefined): string | null => (value?.trim() ? value.trim() : null)
 
@@ -32,6 +35,11 @@ export const buildClientUpdatePayload = (
   // "change rate" action (rate + from-period), which reprices existing periods.
   if (dirtyFields.annual_revenue) {
     payload.annual_revenue = blankToNull(data.annual_revenue)
+  }
+  // Each range end is sent independently: clearing one side is a real edit, and
+  // the backend reads null as "unbounded" rather than "unchanged".
+  for (const field of LIABILITY_FIELDS) {
+    if (dirtyFields[field]) payload[field] = blankToNull(data[field]) as ISODateString | null
   }
   if (dirtyFields.accountant_id) {
     payload.accountant_id = data.accountant_id ? Number(data.accountant_id) : null

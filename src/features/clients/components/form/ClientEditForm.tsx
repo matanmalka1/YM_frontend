@@ -149,6 +149,7 @@ export const ClientEditForm: React.FC<ClientEditFormProps> = ({
         <ClientContactSection client={client} errors={errors} isLoading={isLoading} register={register} />
         <ClientTaxProfileSection
           client={client}
+          control={control}
           errors={errors}
           isLoading={isLoading}
           register={register}

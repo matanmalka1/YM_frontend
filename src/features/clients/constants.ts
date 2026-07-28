@@ -235,3 +235,19 @@ export const getClientVatReportingLabel = (
   if (client.entity_type === 'employee') return 'לא רלוונטי'
   return client.vat_reporting_frequency ? getVatTypeLabel(client.vat_reporting_frequency) : '—'
 }
+
+/**
+ * The three per-obligation-type liability ranges, described once.
+ *
+ * They are per type, not one client-wide date, because they move independently:
+ * a client can register for VAT in June, receive an ITA advance rate in September,
+ * and still owe a full-year annual report for the same year. Both ends are
+ * optional — an empty range means "liable for every period the frequency implies".
+ */
+export const CLIENT_LIABILITY_RANGES = [
+  { key: 'vat', from: 'vat_liable_from', to: 'vat_liable_to' },
+  { key: 'advance', from: 'advance_liable_from', to: 'advance_liable_to' },
+  { key: 'annual', from: 'annual_liable_from', to: 'annual_liable_to' },
+] as const satisfies ReadonlyArray<{ key: string; from: string; to: string }>
+
+export type ClientLiabilityRangeKey = (typeof CLIENT_LIABILITY_RANGES)[number]['key']

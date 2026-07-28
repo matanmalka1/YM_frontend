@@ -9,6 +9,7 @@ import type { ClientCreationImpactResponse } from '../../api/contracts'
 import type { CreateClientFormValues } from '../../schemas'
 import { formatShekelAmount } from '@/utils/utils'
 import { stripNonDecimal } from '../../utils/createClientFormUtils'
+import { ClientLiabilityRangeFields } from './ClientLiabilityRangeFields'
 import { CLIENTS_MESSAGES } from '../../messages'
 import { CLIENTS_ERROR_MESSAGES } from '../../errorMessages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
@@ -115,6 +116,14 @@ export const CreateClientTaxStep: React.FC<Props> = ({
             {...register('advance_rate')}
           />
         </div>
+      </div>
+      <div className="border-t border-gray-200 pt-4">
+        <ClientLiabilityRangeFields
+          control={control}
+          disabled={disabled}
+          errors={errors}
+          only={showVatFrequency ? undefined : ['advance', 'annual']}
+        />
       </div>
       <Select
         label={CLIENTS_MESSAGES.createTax.accountantLabel}

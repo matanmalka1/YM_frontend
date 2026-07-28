@@ -21,6 +21,10 @@ export const stripNonDecimal = (e: React.FormEvent<HTMLInputElement>) => {
   if (cleaned !== input.value) input.value = cleaned
 }
 
+/** An empty date input means "unbounded", which the API expects as null. */
+const dateOrNull = (value: string | null | undefined): ISODateString | null =>
+  value?.trim() ? (value.trim() as ISODateString) : null
+
 export const buildCreateClientPayload = (data: CreateClientFormValues): CreateClientPayload => {
   const trimmedIdNumber = data.id_number.trim()
 
@@ -38,6 +42,12 @@ export const buildCreateClientPayload = (data: CreateClientFormValues): CreateCl
     vat_reporting_frequency: data.entity_type === 'osek_patur' ? undefined : data.vat_reporting_frequency,
     advance_payment_frequency: data.advance_payment_frequency ?? null,
     advance_rate: data.advance_rate?.trim() ? data.advance_rate.trim() : null,
+    vat_liable_from: dateOrNull(data.vat_liable_from),
+    vat_liable_to: dateOrNull(data.vat_liable_to),
+    advance_liable_from: dateOrNull(data.advance_liable_from),
+    advance_liable_to: dateOrNull(data.advance_liable_to),
+    annual_liable_from: dateOrNull(data.annual_liable_from),
+    annual_liable_to: dateOrNull(data.annual_liable_to),
     accountant_id: data.accountant_id ? Number(data.accountant_id) : null,
     business_name:
       data.entity_type === 'company_ltd' ? data.full_name.trim() : data.business_name?.trim() || data.full_name.trim(),

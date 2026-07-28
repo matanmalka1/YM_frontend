@@ -25,6 +25,12 @@ export interface ClientRecordResponse {
   advance_rate: string | null
   advance_rate_updated_at: string | null
   annual_revenue: string | null
+  vat_liable_from: ISODateString | null
+  vat_liable_to: ISODateString | null
+  advance_liable_from: ISODateString | null
+  advance_liable_to: ISODateString | null
+  annual_liable_from: ISODateString | null
+  annual_liable_to: ISODateString | null
   accountant_id: number | null
   created_at: string | null
   updated_at: string | null
@@ -130,6 +136,12 @@ export interface CreateClientPayload {
   advance_rate?: string | null
   advance_rate_updated_at?: string | null
   accountant_id?: number | null
+  vat_liable_from?: ISODateString | null
+  vat_liable_to?: ISODateString | null
+  advance_liable_from?: ISODateString | null
+  advance_liable_to?: ISODateString | null
+  annual_liable_from?: ISODateString | null
+  annual_liable_to?: ISODateString | null
   business_name: string
   business_opened_at?: ISODateString | null
 }
@@ -139,6 +151,12 @@ export interface ClientImpactPreviewPayload {
   vat_reporting_frequency?: VatType | null
   advance_payment_frequency?: AdvancePaymentFrequency | null
   advance_rate?: string | null
+  // The preview must receive the same ranges the create will carry, or it
+  // predicts a different number of obligations than the create produces.
+  vat_liable_from?: ISODateString | null
+  vat_liable_to?: ISODateString | null
+  advance_liable_from?: ISODateString | null
+  advance_liable_to?: ISODateString | null
 }
 
 interface CreationImpactItem {
@@ -176,6 +194,12 @@ export interface UpdateClientPayload {
   advance_rate?: string | null
   annual_revenue?: string | null
   accountant_id?: number | null
+  vat_liable_from?: ISODateString | null
+  vat_liable_to?: ISODateString | null
+  advance_liable_from?: ISODateString | null
+  advance_liable_to?: ISODateString | null
+  annual_liable_from?: ISODateString | null
+  annual_liable_to?: ISODateString | null
 }
 
 export type EntityType = 'osek_patur' | 'osek_murshe' | 'company_ltd' | 'employee'

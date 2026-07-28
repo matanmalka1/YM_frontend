@@ -274,6 +274,16 @@ export const CLIENTS_MESSAGES = {
     accountantsLoading: 'טוען רואי חשבון...',
     accountantPlaceholder: 'בחר רואה חשבון',
   },
+  liability: {
+    sectionTitle: 'טווחי חבות',
+    sectionHelp: 'מתי הלקוח התחיל, והפסיק, להיות חייב בכל סוג דיווח. השארה ריקה = חבות לכל התקופות שהתדירות מחייבת.',
+    fromLabel: 'מתאריך',
+    toLabel: 'עד תאריך',
+    vatLabel: 'חבות מע״מ',
+    advanceLabel: 'חבות מקדמות',
+    annualLabel: 'חבות דוח שנתי',
+    partialPeriodNote: 'תקופה שהלקוח היה חייב בחלק ממנה נוצרת במלואה.',
+  },
   createReview: {
     intro: 'בדוק את הפרטים לפני יצירת הלקוח.',
     sectionIdentity: 'זיהוי',

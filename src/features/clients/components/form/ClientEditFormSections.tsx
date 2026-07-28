@@ -1,4 +1,4 @@
-import type { ControllerRenderProps, FieldErrors, UseFormRegister } from 'react-hook-form'
+import type { Control, ControllerRenderProps, FieldErrors, UseFormRegister } from 'react-hook-form'
 import { Input } from '../../../../components/ui/inputs/Input'
 import { Select } from '../../../../components/ui/inputs/Select'
 import { useAdvisorOptions } from '@/features/users'
@@ -12,6 +12,7 @@ import {
 } from '../../constants'
 import { formatAdvanceRatePercent, formatDate, formatPlainIdentifier, formatShekelAmount } from '@/utils/utils'
 import type { ClientEditFormValues } from '../../schemas'
+import { ClientLiabilityRangeFields } from './ClientLiabilityRangeFields'
 import { CLIENTS_MESSAGES } from '../../messages'
 
 type EntityTypeField = ControllerRenderProps<ClientEditFormValues, 'entity_type'>
@@ -146,6 +147,7 @@ export const ClientContactSection = ({ errors, isLoading, register }: SharedSect
 
 export const ClientTaxProfileSection = ({
   client,
+  control,
   errors,
   isLoading,
   register,
@@ -153,6 +155,7 @@ export const ClientTaxProfileSection = ({
   vatReportingFrequencyField,
   advancePaymentFrequencyField,
 }: SharedSectionProps & {
+  control: Control<ClientEditFormValues>
   isOsekPatur: boolean
   vatReportingFrequencyField: VatReportingFrequencyField
   advancePaymentFrequencyField: AdvancePaymentFrequencyField
@@ -215,6 +218,14 @@ export const ClientTaxProfileSection = ({
           error={errors.annual_revenue?.message}
           disabled={isLoading}
           {...register('annual_revenue')}
+        />
+      </div>
+      <div className="border-t border-gray-200 pt-4">
+        <ClientLiabilityRangeFields
+          control={control}
+          disabled={isLoading}
+          errors={errors}
+          only={isOsekPatur ? ['advance', 'annual'] : undefined}
         />
       </div>
     </section>

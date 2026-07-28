@@ -3,7 +3,7 @@ import { useController, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Modal } from '../../../../components/ui/overlays/Modal'
 import { useAdvisorOptions } from '@/features/users'
-import type { ClientRecordResponse, CreateClientPayload } from '../../api'
+import type { ClientRecordResponse, CreateClientPayload, ISODateString } from '../../api'
 import { useClientCreationImpact } from '../../hooks/useClientCreationImpact'
 import { CREATE_CLIENT_DEFAULT_VALUES } from '../../constants'
 import { createClientSchema, type CreateClientFormValues } from '../../schemas'
@@ -56,6 +56,10 @@ export const CreateClientModal: React.FC<Props> = ({
   const currentVatFrequency = watch('vat_reporting_frequency')
   const currentAdvancePaymentFrequency = watch('advance_payment_frequency')
   const currentAdvanceRate = watch('advance_rate')
+  const currentVatLiableFrom = watch('vat_liable_from')
+  const currentVatLiableTo = watch('vat_liable_to')
+  const currentAdvanceLiableFrom = watch('advance_liable_from')
+  const currentAdvanceLiableTo = watch('advance_liable_to')
   const currentIdNumber = watch('id_number')
   const { options: advisorOptions, isLoading: advisorsLoading } = useAdvisorOptions(open)
   const isCompany = currentEntityType === 'company_ltd'
@@ -75,6 +79,10 @@ export const CreateClientModal: React.FC<Props> = ({
           vat_reporting_frequency: isExempt ? 'exempt' : currentVatFrequency,
           advance_payment_frequency: currentAdvancePaymentFrequency,
           advance_rate: currentAdvanceRate,
+          vat_liable_from: currentVatLiableFrom as ISODateString | null | undefined,
+          vat_liable_to: currentVatLiableTo as ISODateString | null | undefined,
+          advance_liable_from: currentAdvanceLiableFrom as ISODateString | null | undefined,
+          advance_liable_to: currentAdvanceLiableTo as ISODateString | null | undefined,
         }
       : null,
   )

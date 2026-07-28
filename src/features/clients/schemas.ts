@@ -7,7 +7,27 @@ import {
   CLIENT_STATUSES,
   ENTITY_TYPES,
   VAT_TYPES,
+  CLIENT_LIABILITY_RANGES,
 } from './constants'
+import { CLIENTS_ERROR_MESSAGES } from './errorMessages'
+
+/** An optional YYYY-MM-DD date, empty string included, as the date inputs emit. */
+const optionalDateString = z.string().trim().optional().nullable().or(z.literal(''))
+
+/** Adds one issue per liability range whose start is after its end. */
+const refineLiabilityRanges = (data: Record<string, unknown>, ctx: z.RefinementCtx): void => {
+  for (const { from, to } of CLIENT_LIABILITY_RANGES) {
+    const start = data[from]
+    const end = data[to]
+    if (typeof start === 'string' && typeof end === 'string' && start && end && start > end) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: [to],
+        message: CLIENTS_ERROR_MESSAGES.liability.inverted,
+      })
+    }
+  }
+}
 
 /** Optional/nullable numeric string that must be >= 0 (and <= `max` when given). */
 const optionalNonNegativeNumberString = (message: string, max?: number) =>
@@ -55,10 +75,17 @@ export const createClientSchema = z
       .optional(),
     advance_rate: optionalNonNegativeNumberString('שיעור מקדמות חייב להיות בין 0 ל-100', 100),
     accountant_id: z.string().trim().optional().or(z.literal('')),
+    vat_liable_from: optionalDateString,
+    vat_liable_to: optionalDateString,
+    advance_liable_from: optionalDateString,
+    advance_liable_to: optionalDateString,
+    annual_liable_from: optionalDateString,
+    annual_liable_to: optionalDateString,
     business_name: z.string().trim().max(100, 'שם עסק ארוך מדי').optional().or(z.literal('')),
     business_opened_at: z.string().optional().nullable(),
   })
   .superRefine((data, ctx) => {
+    refineLiabilityRanges(data, ctx)
     const isCompany = data.entity_type === 'company_ltd'
     const isExempt = data.entity_type === 'osek_patur'
     const trimmedId = data.id_number.trim()
@@ -127,23 +154,31 @@ export const createClientSchema = z
     }
   })
 
-export const clientEditSchema = z.object({
-  full_name: z.string().trim().min(1, 'יש להזין שם מלא'),
-  status: z.enum(CLIENT_STATUSES),
-  phone: z.string().trim().optional().or(z.literal('')),
-  email: z.string().trim().email('כתובת אימייל לא תקינה').optional().or(z.literal('')),
-  // Structured address fields
-  address_street: z.string().trim().optional().or(z.literal('')),
-  address_building_number: z.string().trim().optional().or(z.literal('')),
-  address_apartment: z.string().trim().optional().or(z.literal('')),
-  address_city: z.string().trim().optional().or(z.literal('')),
-  address_zip_code: z.string().trim().optional().or(z.literal('')),
-  entity_type: z.enum(ENTITY_TYPES).nullable().optional(),
-  vat_reporting_frequency: z.enum(VAT_TYPES).nullable().optional(),
-  advance_payment_frequency: z.enum(ADVANCE_PAYMENT_FREQUENCY_VALUES).nullable().optional(),
-  annual_revenue: optionalNonNegativeNumberString('מחזור שנתי חייב להיות מספר חיובי'),
-  accountant_id: z.string().trim().optional().nullable(),
-})
+export const clientEditSchema = z
+  .object({
+    full_name: z.string().trim().min(1, 'יש להזין שם מלא'),
+    status: z.enum(CLIENT_STATUSES),
+    phone: z.string().trim().optional().or(z.literal('')),
+    email: z.string().trim().email('כתובת אימייל לא תקינה').optional().or(z.literal('')),
+    // Structured address fields
+    address_street: z.string().trim().optional().or(z.literal('')),
+    address_building_number: z.string().trim().optional().or(z.literal('')),
+    address_apartment: z.string().trim().optional().or(z.literal('')),
+    address_city: z.string().trim().optional().or(z.literal('')),
+    address_zip_code: z.string().trim().optional().or(z.literal('')),
+    entity_type: z.enum(ENTITY_TYPES).nullable().optional(),
+    vat_reporting_frequency: z.enum(VAT_TYPES).nullable().optional(),
+    advance_payment_frequency: z.enum(ADVANCE_PAYMENT_FREQUENCY_VALUES).nullable().optional(),
+    annual_revenue: optionalNonNegativeNumberString('מחזור שנתי חייב להיות מספר חיובי'),
+    vat_liable_from: optionalDateString,
+    vat_liable_to: optionalDateString,
+    advance_liable_from: optionalDateString,
+    advance_liable_to: optionalDateString,
+    annual_liable_from: optionalDateString,
+    annual_liable_to: optionalDateString,
+    accountant_id: z.string().trim().optional().nullable(),
+  })
+  .superRefine(refineLiabilityRanges)
 
 export type CreateClientFormValues = z.infer<typeof createClientSchema>
 export type ClientEditFormValues = z.infer<typeof clientEditSchema>

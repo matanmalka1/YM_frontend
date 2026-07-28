@@ -20,7 +20,18 @@ export const CREATE_CLIENT_STEPS = [
   {
     key: 'tax',
     label: 'מס ומע״מ',
-    fields: ['vat_reporting_frequency', 'advance_payment_frequency', 'advance_rate', 'accountant_id'],
+    fields: [
+      'vat_reporting_frequency',
+      'advance_payment_frequency',
+      'advance_rate',
+      'accountant_id',
+      'vat_liable_from',
+      'vat_liable_to',
+      'advance_liable_from',
+      'advance_liable_to',
+      'annual_liable_from',
+      'annual_liable_to',
+    ],
   },
   {
     key: 'review',

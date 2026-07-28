@@ -1171,6 +1171,10 @@ export interface paths {
     /**
      * Preview creation impact
      * @description מחזיר תצוגה מקדימה של הישויות שייווצרו אוטומטית עם פתיחת הלקוח.
+     *
+     *     Pure computation over the obligation plan — no DB session, because a preview
+     *     must not write. It previously materialized tax-calendar entries as a side
+     *     effect of the due-date filter it used, which the liability range replaced.
      */
     post: operations['preview_creation_impact_api_v1_clients_preview_impact_post']
     delete?: never
@@ -5393,6 +5397,18 @@ export interface components {
       advance_rate?: string | null
       /** Accountant Id */
       accountant_id?: number | null
+      /** Vat Liable From */
+      vat_liable_from?: string | null
+      /** Vat Liable To */
+      vat_liable_to?: string | null
+      /** Advance Liable From */
+      advance_liable_from?: string | null
+      /** Advance Liable To */
+      advance_liable_to?: string | null
+      /** Annual Liable From */
+      annual_liable_from?: string | null
+      /** Annual Liable To */
+      annual_liable_to?: string | null
     }
     /** ClientCreationImpactResponse */
     ClientCreationImpactResponse: {
@@ -5412,6 +5428,14 @@ export interface components {
       advance_payment_frequency?: components['schemas']['AdvancePaymentFrequency'] | null
       /** Advance Rate */
       advance_rate?: string | null
+      /** Vat Liable From */
+      vat_liable_from?: string | null
+      /** Vat Liable To */
+      vat_liable_to?: string | null
+      /** Advance Liable From */
+      advance_liable_from?: string | null
+      /** Advance Liable To */
+      advance_liable_to?: string | null
     }
     /** ClientImpactPreviewRequest */
     ClientImpactPreviewRequest: {
@@ -5531,6 +5555,18 @@ export interface components {
       advance_rate_updated_at?: string | null
       /** Annual Revenue */
       annual_revenue?: string | null
+      /** Vat Liable From */
+      vat_liable_from?: string | null
+      /** Vat Liable To */
+      vat_liable_to?: string | null
+      /** Advance Liable From */
+      advance_liable_from?: string | null
+      /** Advance Liable To */
+      advance_liable_to?: string | null
+      /** Annual Liable From */
+      annual_liable_from?: string | null
+      /** Annual Liable To */
+      annual_liable_to?: string | null
       /** Phone */
       phone?: string | null
       /** Email */
@@ -5646,6 +5682,18 @@ export interface components {
       annual_revenue?: string | null
       /** Accountant Id */
       accountant_id?: number | null
+      /** Vat Liable From */
+      vat_liable_from?: string | null
+      /** Vat Liable To */
+      vat_liable_to?: string | null
+      /** Advance Liable From */
+      advance_liable_from?: string | null
+      /** Advance Liable To */
+      advance_liable_to?: string | null
+      /** Annual Liable From */
+      annual_liable_from?: string | null
+      /** Annual Liable To */
+      annual_liable_to?: string | null
     }
     /**
      * ContactType

@@ -13,6 +13,9 @@ export const CLIENTS_ERROR_MESSAGES = {
     detailsUpdate: 'שגיאה בעדכון פרטי לקוח',
     delete: 'שגיאה במחיקת לקוח',
   },
+  liability: {
+    inverted: 'תאריך תחילת החבות חייב להקדים את תאריך סיומה',
+  },
   business: {
     update: 'שגיאה בעדכון עסק',
     delete: 'שגיאה במחיקת עסק',
