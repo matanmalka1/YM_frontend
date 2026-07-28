@@ -7961,6 +7961,18 @@ export interface components {
        * @example 123.45
        */
       total_credit_points: string
+      /**
+       * Advances Paid
+       * Format: decimal
+       * @example 123.45
+       */
+      advances_paid: string
+      /**
+       * Final Balance
+       * Format: decimal
+       * @example 123.45
+       */
+      final_balance: string
     }
     /** TaxCalculationSaveRequest */
     TaxCalculationSaveRequest: {
