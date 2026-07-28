@@ -19,6 +19,7 @@ const OBLIGATION_STAGES = [
   'submitted',
 ] as const satisfies readonly ObligationStatus[]
 
+/** @auditContract Read by the backend enum-sync audit. */
 export const OBLIGATION_STATUS_VALUES = [...OBLIGATION_STAGES, 'canceled'] as const satisfies readonly ObligationStatus[]
 
 export const OBLIGATION_STATUS_LABELS: Record<ObligationStatus, string> = {

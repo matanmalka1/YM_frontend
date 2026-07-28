@@ -1,20 +1,14 @@
-import { OBLIGATION_STATUS_LABELS, OBLIGATION_STATUS_VARIANTS } from '@/constants/obligationStatus.constants'
+import {
+  OBLIGATION_STATUS_LABELS,
+  OBLIGATION_STATUS_VALUES,
+  OBLIGATION_STATUS_VARIANTS,
+} from '@/constants/obligationStatus.constants'
 import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
 import { formatCount } from '@/utils/utils'
 import { CATEGORY_COLOR_TOKENS } from './visualizationTokens'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 import type { VatWorkItemStatus } from '../api'
 import { VAT_REPORTING_FREQUENCY_LABELS } from '@/types/vatReporting'
-
-/** @auditContract Read by the backend enum-sync audit. */
-export const VAT_WORK_ITEM_STATUS_VALUES = [
-  'awaiting_input',
-  'input_received',
-  'in_progress',
-  'awaiting_verification',
-  'submitted',
-  'canceled',
-] as const satisfies readonly VatWorkItemStatus[]
 
 export type VatRateTypeValue = 'standard' | 'exempt' | 'zero_rate'
 export const VAT_RATE_TYPE_LABELS: Record<VatRateTypeValue, string> = {
@@ -38,6 +32,10 @@ export const DOCUMENT_TYPE_LABELS: Record<VatDocumentTypeValue, string> = {
   self_invoice: 'חשבונית עצמית',
   credit_note: 'הודעת זיכוי',
 }
+
+// VAT runs the shared obligation lifecycle: same values, same labels. The list is
+// re-exported rather than restated so there is one place to add a stage.
+export const VAT_WORK_ITEM_STATUS_VALUES = OBLIGATION_STATUS_VALUES
 
 // VAT runs the shared obligation lifecycle, so it renders its vocabulary.
 const VAT_WORK_ITEM_STATUS_LABELS = OBLIGATION_STATUS_LABELS
