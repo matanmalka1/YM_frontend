@@ -6,7 +6,6 @@ export const ANNUAL_REPORT_ENDPOINTS = {
   schedules: (id: number | string) => `/annual-reports/${id}/schedules`,
   completeSchedules: (id: number | string) => `/annual-reports/${id}/schedules/complete`,
   details: (id: number | string) => `/annual-reports/${id}/details`,
-  amend: (id: number | string) => `/annual-reports/${id}/amend`,
   exportPdf: (id: number | string) => `/annual-reports/${id}/export/pdf`,
   financials: (id: number | string) => `/annual-reports/${id}/financials`,
   readiness: (id: number | string) => `/annual-reports/${id}/readiness`,

@@ -197,12 +197,12 @@ export interface SeasonSummary {
   tax_year: number
   filing_season_year: number
   total: number
-  not_started: number
-  collecting_docs: number
-  in_preparation: number
-  pending_client: number
+  // One count per stage of the shared obligation lifecycle.
+  awaiting_input: number
+  input_received: number
+  in_progress: number
+  awaiting_verification: number
   submitted: number
-  closed: number
   canceled: number
   completion_rate: string
   overdue_count: number

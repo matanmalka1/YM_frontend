@@ -112,13 +112,6 @@ export const annualReportsApi = {
     return response.data
   },
 
-  amend: async (reportId: number, reason: string): Promise<AnnualReportFull> => {
-    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.amend(reportId), {
-      reason,
-    })
-    return response.data
-  },
-
   exportPdf: async (reportId: number, taxYear: number): Promise<void> => {
     const response = await api.get<Blob>(ANNUAL_REPORT_ENDPOINTS.exportPdf(reportId), {
       responseType: 'blob',

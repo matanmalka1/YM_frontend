@@ -7,17 +7,16 @@ describe('buildSeasonStats', () => {
       tax_year: 2025,
       filing_season_year: 2026,
       total: 6,
-      not_started: 1,
-      collecting_docs: 1,
-      in_preparation: 1,
-      pending_client: 0,
-      submitted: 1,
-      closed: 1,
+      awaiting_input: 2,
+      input_received: 1,
+      in_progress: 1,
+      awaiting_verification: 0,
+      submitted: 2,
       canceled: 1,
       completion_rate: '33.3',
       overdue_count: 0,
     })
 
-    expect(stats).toMatchObject({ done: 2, canceled: 1, inProgress: 2 })
+    expect(stats).toMatchObject({ done: 2, canceled: 1, inProgress: 2, notStarted: 2 })
   })
 })

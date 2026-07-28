@@ -602,26 +602,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/api/v1/annual-reports/{report_id}/amend': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Amend Annual Report
-     * @description Reopen a SUBMITTED report for amendment and record the reason (ADVISOR only).
-     */
-    post: operations['amend_annual_report_api_v1_annual_reports__report_id__amend_post']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/api/v1/annual-reports/{report_id}/schedules': {
     parameters: {
       query?: never
@@ -660,23 +640,6 @@ export interface paths {
      * @description Mark a specific schedule as complete.
      */
     post: operations['complete_schedule_api_v1_annual_reports__report_id__schedules_complete_post']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/v1/annual-reports/{report_id}/transition': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /** Transition Stage */
-    post: operations['transition_stage_api_v1_annual_reports__report_id__transition_post']
     delete?: never
     options?: never
     head?: never
@@ -3779,11 +3742,6 @@ export interface components {
        * @example 123.45
        */
       total_90_plus: string
-    }
-    /** AmendRequest */
-    AmendRequest: {
-      /** Reason */
-      reason: string
     }
     /** AnnexDataAddRequest */
     AnnexDataAddRequest: {
@@ -7150,12 +7108,6 @@ export interface components {
       /** Updated At */
       updated_at?: string | null
     }
-    /**
-     * ReportStage
-     * @description Higher-level workflow stages used by dashboards.
-     * @enum {string}
-     */
-    ReportStage: 'material_collection' | 'in_progress' | 'final_review' | 'client_signature' | 'transmitted' | 'post_submission'
     /** ResetPasswordRequest */
     ResetPasswordRequest: {
       /** Token */
@@ -7324,18 +7276,16 @@ export interface components {
       filing_season_year: number
       /** Total */
       total: number
-      /** Not Started */
-      not_started: number
-      /** Collecting Docs */
-      collecting_docs: number
-      /** In Preparation */
-      in_preparation: number
-      /** Pending Client */
-      pending_client: number
+      /** Awaiting Input */
+      awaiting_input: number
+      /** Input Received */
+      input_received: number
+      /** In Progress */
+      in_progress: number
+      /** Awaiting Verification */
+      awaiting_verification: number
       /** Submitted */
       submitted: number
-      /** Closed */
-      closed: number
       /**
        * Canceled
        * @default 0
@@ -7674,10 +7624,6 @@ export interface components {
      * @enum {string}
      */
     SortOrder: 'asc' | 'desc'
-    /** StageTransitionRequest */
-    StageTransitionRequest: {
-      to_stage: components['schemas']['ReportStage']
-    }
     /**
      * StaleCadenceSummary
      * @description Superseded-cadence rows standing in the new schedule's way.
@@ -11714,86 +11660,6 @@ export interface operations {
       }
     }
   }
-  amend_annual_report_api_v1_annual_reports__report_id__amend_post: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        report_id: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['AmendRequest']
-      }
-    }
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['AnnualReportDetailResponse']
-        }
-      }
-      /** @description Bad request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Authentication required */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Resource not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Conflict */
-      409: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HTTPValidationError']
-        }
-      }
-    }
-  }
   list_schedules_api_v1_annual_reports__report_id__schedules_get: {
     parameters: {
       query?: {
@@ -11979,86 +11845,6 @@ export interface operations {
       }
       /** @description Resource not found */
       404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HTTPValidationError']
-        }
-      }
-    }
-  }
-  transition_stage_api_v1_annual_reports__report_id__transition_post: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        report_id: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['StageTransitionRequest']
-      }
-    }
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['AnnualReportDetailResponse']
-        }
-      }
-      /** @description Bad request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Authentication required */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Resource not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorEnvelope']
-        }
-      }
-      /** @description Conflict */
-      409: {
         headers: {
           [name: string]: unknown
         }

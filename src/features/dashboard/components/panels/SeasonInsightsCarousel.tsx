@@ -99,7 +99,6 @@ const SeasonSlide = () => {
 
   const legend: LegendItem[] = [
     { label: DASHBOARD_MESSAGES.season.submitted, value: stats.submitted, color: 'var(--color-positive-500)' },
-    { label: DASHBOARD_MESSAGES.season.closed, value: stats.closed, color: 'var(--color-info-500)' },
     { label: DASHBOARD_MESSAGES.season.inProgress, value: stats.inProgress, color: 'var(--color-warning-500)' },
     { label: DASHBOARD_MESSAGES.season.notStarted, value: stats.notStarted, color: 'var(--color-chart-muted)' },
     { label: DASHBOARD_MESSAGES.season.canceled, value: stats.canceled, color: 'var(--color-slate-400)' },

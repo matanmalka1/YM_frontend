@@ -13,18 +13,18 @@ const getProgressColor = (pct: number) => {
 
 export const buildSeasonStats = (data: SeasonSummaryData) => {
   const completionPct = Math.round(Number(data.completion_rate))
-  const done = data.submitted + data.closed
+  // `submitted` and `closed` merged, so done is one count now.
+  const done = data.submitted
   return {
     taxYear: data.tax_year,
     filingSeasonYear: data.filing_season_year,
     total: data.total,
-    notStarted: data.not_started,
+    notStarted: data.awaiting_input,
     submitted: data.submitted,
-    closed: data.closed,
     canceled: data.canceled,
     overdueCount: data.overdue_count,
     done,
-    inProgress: data.total - data.not_started - done - data.canceled,
+    inProgress: data.input_received + data.in_progress + data.awaiting_verification,
     completionPct,
     hasOverdue: data.overdue_count > 0,
     progressColor: getProgressColor(completionPct),

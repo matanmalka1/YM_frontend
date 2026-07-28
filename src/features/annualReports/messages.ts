@@ -182,17 +182,11 @@ export const ANNUAL_REPORTS_MESSAGES = {
     showMoreAriaLabel: (count: number) => `הצג ${count} דוחות נוספים שחרגו ממועד ההגשה`,
     daysUnit: (days: number) => `${days} ימים`,
   },
-  amendModal: {
-    title: 'תיקון דוח',
-    reasonLabel: 'סיבת תיקון *',
-    reasonPlaceholder: (minLength: number) => `תאר את סיבת התיקון (לפחות ${minLength} תווים)...`,
-  },
   statusTransitionPanel: {
     noTransitions: (statusLabel: string) => `אין מעברי סטטוס זמינים (הדוח ${statusLabel})`,
     title: 'מעבר סטטוס',
     readinessCheck: 'בדיקת מוכנות להגשה',
     currentStatus: 'סטטוס נוכחי:',
-    amendReport: 'תיקון דוח',
     changeStatus: 'שנה סטטוס',
   },
   transitionDetailsForm: {

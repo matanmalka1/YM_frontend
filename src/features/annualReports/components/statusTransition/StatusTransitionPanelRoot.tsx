@@ -5,7 +5,6 @@ import { Badge } from '../../../../components/ui/primitives/Badge'
 import { Button } from '../../../../components/ui/primitives/Button'
 import { Card } from '../../../../components/ui/primitives/Card'
 import type { StatusTransitionPanelProps } from '../../types'
-import { AmendReportModal } from './AmendReportModal'
 import { TransitionDetailsForm } from './TransitionDetailsForm'
 import { TransitionTargetSelector } from './TransitionTargetSelector'
 import { ReadinessCheckPanel } from '../panel/ReadinessCheckPanel'
@@ -20,15 +19,6 @@ export const StatusTransitionPanel = ({ report, onTransition, isLoading }: Statu
 
   return (
     <>
-      <AmendReportModal
-        open={panel.amendOpen}
-        reason={panel.amendReason}
-        isPending={panel.isAmending}
-        onReasonChange={panel.setAmendReason}
-        onClose={panel.closeAmendModal}
-        onSubmit={panel.submitAmend}
-      />
-
       <Card size="compact" disablePadding className="shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3">
           <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -47,11 +37,6 @@ export const StatusTransitionPanel = ({ report, onTransition, isLoading }: Statu
             >
               {msg.readinessCheck}
             </Button>
-            {report.status === 'submitted' && (
-              <Button type="button" variant="outline" size="sm" onClick={panel.openAmendModal}>
-                {msg.amendReport}
-              </Button>
-            )}
             {hasTransitions ? (
               <Button
                 type="button"

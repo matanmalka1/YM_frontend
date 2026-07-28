@@ -1,6 +1,5 @@
 export const ANNUAL_REPORTS_ERROR_MESSAGES = {
   fullPanel: { loadError: 'שגיאה בטעינת הדוח' },
-  amend: { minLength: (minLength: number) => `נדרשים לפחות ${minLength} תווים` },
   reports: {
     create: 'שגיאה ביצירת דוח',
     load: 'שגיאה בטעינת דוח',
@@ -22,7 +21,6 @@ export const ANNUAL_REPORTS_ERROR_MESSAGES = {
     update: 'שגיאה בעדכון שורה',
     delete: 'שגיאה במחיקת שורה',
   },
-  statusTransition: { amend: 'שגיאה בשליחת תיקון' },
   taxCalculation: {
     loadError: 'שגיאה בטעינת חישוב מס',
     detailSave: 'שגיאה בשמירת נתוני דוח',
