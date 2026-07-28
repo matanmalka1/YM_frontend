@@ -4165,6 +4165,39 @@ export interface components {
       /** Total */
       total: number
     }
+    /** AnnualReportStatusClientResponse */
+    AnnualReportStatusClientResponse: {
+      /** Client Record Id */
+      client_record_id: number
+      /** Client Name */
+      client_name: string
+      /** Client Id Number */
+      client_id_number: string
+      /** Office Client Number */
+      office_client_number: number
+      form_type?: components['schemas']['PrimaryAnnualReportForm'] | null
+      /** Filing Deadline */
+      filing_deadline?: string | null
+      /** Days Until Deadline */
+      days_until_deadline?: number | null
+    }
+    /** AnnualReportStatusGroupResponse */
+    AnnualReportStatusGroupResponse: {
+      status: components['schemas']['ObligationStatus']
+      /** Count */
+      count: number
+      /** Clients */
+      clients: components['schemas']['AnnualReportStatusClientResponse'][]
+    }
+    /** AnnualReportStatusReportResponse */
+    AnnualReportStatusReportResponse: {
+      /** Tax Year */
+      tax_year: number
+      /** Total */
+      total: number
+      /** Statuses */
+      statuses: components['schemas']['AnnualReportStatusGroupResponse'][]
+    }
     /**
      * AnnualReportTaxCalculationResponse
      * @description Computed financial/tax outputs for a report detail view.
@@ -6738,72 +6771,6 @@ export interface components {
      * @enum {string}
      */
     ObligationStatus: 'awaiting_input' | 'input_received' | 'in_progress' | 'awaiting_verification' | 'submitted' | 'canceled'
-    /** ObligationStatusClientResponse */
-    ObligationStatusClientResponse: {
-      /** Client Record Id */
-      client_record_id: number
-      /** Client Name */
-      client_name: string
-      /** Client Id Number */
-      client_id_number: string
-      /** Office Client Number */
-      office_client_number: number
-      form_type?: components['schemas']['PrimaryAnnualReportForm'] | null
-      /** Filing Deadline */
-      filing_deadline?: string | null
-      /** Days Until Deadline */
-      days_until_deadline?: number | null
-    }
-    /** ObligationStatusGroupResponse */
-    ObligationStatusGroupResponse: {
-      status: components['schemas']['ObligationStatus']
-      /** Count */
-      count: number
-      /** Clients */
-      clients: components['schemas']['ObligationStatusClientResponse'][]
-    }
-    /** ObligationStatusReportResponse */
-    ObligationStatusReportResponse: {
-      /** Tax Year */
-      tax_year: number
-      /** Total */
-      total: number
-      /** Statuses */
-      statuses: components['schemas']['ObligationStatusGroupResponse'][]
-    }
-    /** ObligationStatusSummaryResponse */
-    ObligationStatusSummaryResponse: {
-      /**
-       * Pending Materials
-       * @default 0
-       */
-      pending_materials: number
-      /**
-       * Material Received
-       * @default 0
-       */
-      material_received: number
-      /**
-       * Data Entry In Progress
-       * @default 0
-       */
-      data_entry_in_progress: number
-      /**
-       * Ready For Review
-       * @default 0
-       */
-      ready_for_review: number
-      /**
-       * Filed
-       * @default 0
-       */
-      filed: number
-      /**
-       * Canceled
-       * @default 0
-       */
-      canceled: number
-    }
     /**
      * ObligationType
      * @description Regulatory obligation category for TaxCalendarEntry.
@@ -9186,6 +9153,46 @@ export interface components {
       /** Available Actions */
       available_actions?: components['schemas']['ActionDescriptor'][]
       breakdown: components['schemas']['VatBreakdownResponse']
+    }
+    /**
+     * VatWorkItemStatusSummaryResponse
+     * @description One count per stage of the shared obligation lifecycle.
+     *
+     *     The builder keys this by the stored status value, so the field names have to
+     *     be the stage names — they were still the VAT-only ones, which meant every
+     *     count came back zero under a field nobody was reading.
+     */
+    VatWorkItemStatusSummaryResponse: {
+      /**
+       * Awaiting Input
+       * @default 0
+       */
+      awaiting_input: number
+      /**
+       * Input Received
+       * @default 0
+       */
+      input_received: number
+      /**
+       * In Progress
+       * @default 0
+       */
+      in_progress: number
+      /**
+       * Awaiting Verification
+       * @default 0
+       */
+      awaiting_verification: number
+      /**
+       * Submitted
+       * @default 0
+       */
+      submitted: number
+      /**
+       * Canceled
+       * @default 0
+       */
+      canceled: number
     }
     /** VatWorkItemUpdateRequest */
     VatWorkItemUpdateRequest: {
@@ -16987,7 +16994,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ObligationStatusReportResponse']
+          'application/json': components['schemas']['AnnualReportStatusReportResponse']
         }
       }
       /** @description Authentication required */
@@ -20749,7 +20756,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ObligationStatusSummaryResponse']
+          'application/json': components['schemas']['VatWorkItemStatusSummaryResponse']
         }
       }
       /** @description Authentication required */
