@@ -1,6 +1,10 @@
+import {
+  OBLIGATION_STATUS_LABELS,
+  OBLIGATION_STATUS_VALUES,
+  OBLIGATION_STATUS_VARIANTS,
+} from '@/constants/obligationStatus.constants'
 import { makeLabelGetter } from '@/utils/labels'
 import { CLIENT_SEARCH_WITH_OFFICE_NUMBER_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
-import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { getOperationalTaxYear, getOperationalYearOptions, MONTHS_COVERED_OPTIONS } from '@/constants/periodOptions.constants'
 import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION, ALL_YEARS_URL_OPTION } from '@/constants/filterOptions.constants'
 import type { AdvancePaymentMethod, AdvancePaymentStatus, ListAdvancePaymentsOverviewParams } from './api/contracts'
@@ -11,20 +15,12 @@ import { GLOBAL_UI_MESSAGES } from '@/messages'
 /** Backend signals a decision point, not a failure — see useAdvancePaymentMutations. */
 export const ADVANCE_PAYMENT_VAT_NOT_FILED_CODE = 'ADVANCE_PAYMENT.VAT_NOT_FILED'
 
-const ADVANCE_PAYMENT_STATUS_VALUES = ['pending', 'paid', 'partial'] as const satisfies readonly AdvancePaymentStatus[]
+const ADVANCE_PAYMENT_STATUS_VALUES = OBLIGATION_STATUS_VALUES
 const ADVANCE_PAYMENT_STATUS_VALUE_SET = new Set<string>(ADVANCE_PAYMENT_STATUS_VALUES)
-export const ADVANCE_PAYMENT_STATUS_LABELS: Record<AdvancePaymentStatus, string> = {
-  pending: 'ממתין',
-  paid: 'שולם',
-  partial: 'חלקי',
-}
+export const ADVANCE_PAYMENT_STATUS_LABELS = OBLIGATION_STATUS_LABELS
 export const getAdvancePaymentStatusLabel = makeLabelGetter(ADVANCE_PAYMENT_STATUS_LABELS)
 
-export const ADVANCE_PAYMENT_STATUS_VARIANTS: Record<AdvancePaymentStatus, BadgeVariant> = {
-  paid: 'positive',
-  partial: 'warning',
-  pending: 'neutral',
-}
+export const ADVANCE_PAYMENT_STATUS_VARIANTS = OBLIGATION_STATUS_VARIANTS
 
 const ADVANCE_PAYMENT_METHOD_VALUES = [
   'bank_transfer',
@@ -188,3 +184,13 @@ export const ADVANCE_PAYMENTS_FILTER_FIELDS = [
     defaultValue: DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER,
   },
 ]
+
+/**
+ * Money, not lifecycle — the frontend twin of the backend's `is_paid_in_full`.
+ *
+ * These were the same question while the status was derived from the amounts.
+ * They are not any more: an advisor may close an underpaid period, and a period
+ * paid in full is not closed until someone confirms it was reported.
+ */
+export const isAdvancePaymentPaidInFull = (row: { expected_amount: string | number; paid_amount: string | number }): boolean =>
+  Number(row.expected_amount) > 0 && Number(row.paid_amount) >= Number(row.expected_amount)

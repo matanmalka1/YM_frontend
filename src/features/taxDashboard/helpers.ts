@@ -42,7 +42,7 @@ export const buildTaxSubmissionStats = (data: TaxSubmissionWidgetResponse): TaxS
       filterValue: TAX_SUBMISSION_FILTERS.inProgress,
     },
     {
-      key: 'not_started',
+      key: 'awaiting_input',
       title: TAX_SUBMISSION_STAT_TITLES.notStarted,
       value: data.reports_not_started,
       icon: XCircle,

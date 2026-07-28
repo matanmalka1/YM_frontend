@@ -1,3 +1,4 @@
+import { isAdvancePaymentPaidInFull } from '../../constants'
 import { Wallet } from 'lucide-react'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Button } from '@/components/ui/primitives/Button'
@@ -60,7 +61,7 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
           row.turnover_amount != null && row.turnover_source != null
             ? ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.turnoverLabel(row.turnover_source)
             : ADVANCED_PAYMENTS_MESSAGES.detail.turnoverMissingBadge
-        const isPaid = row.status === 'paid'
+        const isPaid = isAdvancePaymentPaidInFull(row)
 
         const detailItems: DefinitionItem[] = [
           {

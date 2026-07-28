@@ -68,14 +68,6 @@ export const getAlertBanners = (report: AnnualReportFull, advances?: BalanceAler
     })
   }
 
-  if (report.status === 'closed') {
-    banners.push({
-      variant: 'success',
-      icon: 'check',
-      message: `דוח שנת מס ${report.tax_year} אושר וסגור בהצלחה.`,
-    })
-  }
-
   if (advances?.balance_type === 'refund' && finalBalance < 0) {
     banners.push({
       variant: 'success',

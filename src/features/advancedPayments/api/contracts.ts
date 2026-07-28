@@ -1,4 +1,9 @@
-export type AdvancePaymentStatus = 'pending' | 'paid' | 'partial'
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
+
+// Advance payments run the shared obligation lifecycle. `partial` is gone: a
+// part-paid advance is `in_progress` with an outstanding balance, which is what
+// partial always described — a fact about the amount, not a stage.
+export type AdvancePaymentStatus = ObligationStatus
 export type AdvancePaymentTimingStatus = 'on_time' | 'overdue'
 export type AdvancePaymentMethod = 'bank_transfer' | 'credit_card' | 'check' | 'direct_debit' | 'cash' | 'other'
 

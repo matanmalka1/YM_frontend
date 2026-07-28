@@ -13,7 +13,7 @@ const createPayment = (overrides: Partial<AdvancePaymentRow> = {}): AdvancePayme
   period_months_count: 1,
   expected_amount: '0',
   paid_amount: '0',
-  status: 'pending',
+  status: 'awaiting_input',
   due_date: '2026-02-15',
   due_date_effective: null,
   paid_at: null,

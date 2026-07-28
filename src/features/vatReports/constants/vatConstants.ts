@@ -1,6 +1,6 @@
+import { OBLIGATION_STATUS_LABELS, OBLIGATION_STATUS_VARIANTS } from '@/constants/obligationStatus.constants'
 import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
 import { formatCount } from '@/utils/utils'
-import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { CATEGORY_COLOR_TOKENS } from './visualizationTokens'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 import type { VatWorkItemStatus } from '../api'
@@ -8,11 +8,11 @@ import { VAT_REPORTING_FREQUENCY_LABELS } from '@/types/vatReporting'
 
 /** @auditContract Read by the backend enum-sync audit. */
 export const VAT_WORK_ITEM_STATUS_VALUES = [
-  'pending_materials',
-  'material_received',
-  'data_entry_in_progress',
-  'ready_for_review',
-  'filed',
+  'awaiting_input',
+  'input_received',
+  'in_progress',
+  'awaiting_verification',
+  'submitted',
   'canceled',
 ] as const satisfies readonly VatWorkItemStatus[]
 
@@ -39,14 +39,8 @@ export const DOCUMENT_TYPE_LABELS: Record<VatDocumentTypeValue, string> = {
   credit_note: 'הודעת זיכוי',
 }
 
-const VAT_WORK_ITEM_STATUS_LABELS: Record<VatWorkItemStatus, string> = {
-  pending_materials: 'ממתין לחומרים',
-  material_received: 'חומרים התקבלו',
-  data_entry_in_progress: 'הקלדה בתהליך',
-  ready_for_review: 'ממתין לבדיקה',
-  filed: 'הוגש',
-  canceled: 'בוטל',
-}
+// VAT runs the shared obligation lifecycle, so it renders its vocabulary.
+const VAT_WORK_ITEM_STATUS_LABELS = OBLIGATION_STATUS_LABELS
 export const getVatWorkItemStatusLabel = makeLabelGetter(VAT_WORK_ITEM_STATUS_LABELS)
 
 export const VAT_PERIOD_TYPE_OPTIONS = [
@@ -62,39 +56,26 @@ export type VatPeriodTypeFilter = (typeof VAT_PERIOD_TYPES)[number]
 
 export const CATEGORY_COLORS: Record<string, string> = CATEGORY_COLOR_TOKENS
 
-export const VAT_STATUS_BADGE_VARIANTS: Record<VatWorkItemStatus, BadgeVariant> = {
-  pending_materials: 'warning',
-  material_received: 'info',
-  data_entry_in_progress: 'info',
-  ready_for_review: 'warning',
-  filed: 'positive',
-  canceled: 'neutral',
-}
+export const VAT_STATUS_BADGE_VARIANTS = OBLIGATION_STATUS_VARIANTS
 export const getVatWorkItemStatusVariant = makeVariantGetter(VAT_STATUS_BADGE_VARIANTS)
 
-const VAT_CLIENT_SUMMARY_STATUS_VARIANTS: Record<VatWorkItemStatus, BadgeVariant> = {
-  filed: 'positive',
-  canceled: 'neutral',
-  ready_for_review: 'warning',
-  data_entry_in_progress: 'info',
-  material_received: 'info',
-  pending_materials: 'warning',
-}
+// Identical to VAT_STATUS_BADGE_VARIANTS — it was a second copy of the same map.
+const VAT_CLIENT_SUMMARY_STATUS_VARIANTS = OBLIGATION_STATUS_VARIANTS
 export const getVatClientSummaryStatusVariant = makeVariantGetter(VAT_CLIENT_SUMMARY_STATUS_VARIANTS)
 
 export const VAT_WORKFLOW_STEPS = [
-  'pending_materials',
-  'material_received',
-  'data_entry_in_progress',
-  'ready_for_review',
-  'filed',
+  'awaiting_input',
+  'input_received',
+  'in_progress',
+  'awaiting_verification',
+  'submitted',
 ] as const satisfies readonly VatWorkItemStatus[]
 
 export const VAT_WORK_ITEMS_STATS_STATUS_GROUPS = {
-  pending: ['pending_materials'],
-  typing: ['material_received', 'data_entry_in_progress'],
-  review: ['ready_for_review'],
-  filed: ['filed'],
+  pending: ['awaiting_input'],
+  typing: ['input_received', 'in_progress'],
+  review: ['awaiting_verification'],
+  filed: ['submitted'],
 } as const
 
 export const VAT_WORK_ITEMS_STATUS_OPTIONS: Array<{ value: string; label: string }> = [

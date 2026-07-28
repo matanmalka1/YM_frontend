@@ -7,7 +7,7 @@ describe('advancedPaymentsQK', () => {
       advancedPaymentsQK.list({
         client_record_id: 12,
         year: 2026,
-        status: ['pending'],
+        status: ['awaiting_input'],
       }),
     ).toEqual([
       'tax',
@@ -18,7 +18,7 @@ describe('advancedPaymentsQK', () => {
       'year',
       2026,
       {
-        status: ['pending'],
+        status: ['awaiting_input'],
         page: 1,
         page_size: 20,
       },
@@ -50,7 +50,7 @@ describe('advancedPaymentsQK', () => {
         period_months_count: 2,
         client_record_id: 45,
         client_search: 'acme',
-        status: ['partial'],
+        status: ['in_progress'],
         timing_status: 'overdue',
         vat_mismatch: true,
         sort_by: 'expected_amount',
@@ -69,7 +69,7 @@ describe('advancedPaymentsQK', () => {
         period_months_count: 2,
         client_record_id: 45,
         client_search: 'acme',
-        status: ['partial'],
+        status: ['in_progress'],
         timing_status: 'overdue',
         vat_mismatch: true,
         sort_by: 'expected_amount',

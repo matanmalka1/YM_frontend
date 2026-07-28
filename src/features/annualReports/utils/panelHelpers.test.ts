@@ -8,7 +8,7 @@ const report = (overrides: Partial<AnnualReportFull> = {}): AnnualReportFull => 
   tax_year: 2025,
   client_type: 'individual',
   form_type: '1301',
-  status: 'in_preparation',
+  status: 'in_progress',
   deadline_type: 'standard',
   filing_deadline: '2025-06-30',
   is_overdue: true,
@@ -41,7 +41,7 @@ describe('annual report alert banners', () => {
 
   afterEach(() => vi.useRealTimers())
 
-  it.each(['submitted', 'closed', 'canceled'] as const)('does not show an overdue banner for terminal status %s', (status) => {
+  it.each(['submitted', 'submitted', 'canceled'] as const)('does not show an overdue banner for terminal status %s', (status) => {
     const banners = getAlertBanners(
       report({
         status,

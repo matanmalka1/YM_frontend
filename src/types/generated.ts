@@ -3478,7 +3478,7 @@ export interface components {
        * @example 123.45
        */
       paid_amount: string
-      status: components['schemas']['AdvancePaymentStatus']
+      status: components['schemas']['ObligationStatus']
       payment_method?: components['schemas']['PaymentMethod'] | null
       /** Payment Reference */
       payment_reference?: string | null
@@ -3578,7 +3578,7 @@ export interface components {
        * @example 123.45
        */
       paid_amount: string
-      status: components['schemas']['AdvancePaymentStatus']
+      status: components['schemas']['ObligationStatus']
       /** Paid At */
       paid_at?: string | null
       payment_method?: components['schemas']['PaymentMethod'] | null
@@ -3634,12 +3634,6 @@ export interface components {
       /** Paid Late */
       readonly paid_late: boolean
     }
-    /**
-     * AdvancePaymentStatus
-     * @description Lifecycle status of an advance payment.
-     * @enum {string}
-     */
-    AdvancePaymentStatus: 'pending' | 'paid' | 'partial'
     /** AdvancePaymentUpdateRequest */
     AdvancePaymentUpdateRequest: {
       /** Paid Amount */
@@ -3940,7 +3934,7 @@ export interface components {
       tax_year: number
       client_type: components['schemas']['ClientAnnualFilingType']
       form_type: components['schemas']['PrimaryAnnualReportForm']
-      status: components['schemas']['AnnualReportStatus']
+      status: components['schemas']['ObligationStatus']
       deadline_type: components['schemas']['FilingDeadlineType']
       /** Filing Deadline */
       filing_deadline?: string | null
@@ -4007,7 +4001,7 @@ export interface components {
        * Available Transitions
        * @default []
        */
-      available_transitions: components['schemas']['AnnualReportStatus'][]
+      available_transitions: components['schemas']['ObligationStatus'][]
       /**
        * Schedules
        * @default []
@@ -4065,7 +4059,7 @@ export interface components {
       tax_year: number
       client_type: components['schemas']['ClientAnnualFilingType']
       form_type: components['schemas']['PrimaryAnnualReportForm']
-      status: components['schemas']['AnnualReportStatus']
+      status: components['schemas']['ObligationStatus']
       deadline_type: components['schemas']['FilingDeadlineType']
       /** Filing Deadline */
       filing_deadline?: string | null
@@ -4112,7 +4106,7 @@ export interface components {
       tax_year: number
       client_type: components['schemas']['ClientAnnualFilingType']
       form_type: components['schemas']['PrimaryAnnualReportForm']
-      status: components['schemas']['AnnualReportStatus']
+      status: components['schemas']['ObligationStatus']
       deadline_type: components['schemas']['FilingDeadlineType']
       /** Filing Deadline */
       filing_deadline?: string | null
@@ -4179,7 +4173,7 @@ export interface components {
        * Available Transitions
        * @default []
        */
-      available_transitions: components['schemas']['AnnualReportStatus'][]
+      available_transitions: components['schemas']['ObligationStatus'][]
     }
     /**
      * AnnualReportSchedule
@@ -4212,51 +4206,6 @@ export interface components {
       page_size: number
       /** Total */
       total: number
-    }
-    /**
-     * AnnualReportStatus
-     * @enum {string}
-     */
-    AnnualReportStatus:
-      | 'not_started'
-      | 'collecting_docs'
-      | 'in_preparation'
-      | 'pending_client'
-      | 'submitted'
-      | 'closed'
-      | 'canceled'
-    /** AnnualReportStatusClientResponse */
-    AnnualReportStatusClientResponse: {
-      /** Client Record Id */
-      client_record_id: number
-      /** Client Name */
-      client_name: string
-      /** Client Id Number */
-      client_id_number: string
-      /** Office Client Number */
-      office_client_number: number
-      form_type?: components['schemas']['PrimaryAnnualReportForm'] | null
-      /** Filing Deadline */
-      filing_deadline?: string | null
-      /** Days Until Deadline */
-      days_until_deadline?: number | null
-    }
-    /** AnnualReportStatusGroupResponse */
-    AnnualReportStatusGroupResponse: {
-      status: components['schemas']['AnnualReportStatus']
-      /** Count */
-      count: number
-      /** Clients */
-      clients: components['schemas']['AnnualReportStatusClientResponse'][]
-    }
-    /** AnnualReportStatusReportResponse */
-    AnnualReportStatusReportResponse: {
-      /** Tax Year */
-      tax_year: number
-      /** Total */
-      total: number
-      /** Statuses */
-      statuses: components['schemas']['AnnualReportStatusGroupResponse'][]
     }
     /**
      * AnnualReportTaxCalculationResponse
@@ -6812,6 +6761,92 @@ export interface components {
       client_level_manual: boolean
     }
     /**
+     * ObligationStatus
+     * @description The lifecycle every tax obligation runs, whatever its type.
+     *
+     *     VAT, advance payments and annual reports are three views of one thing: a client
+     *     owes an obligation for a period, works it through, and settles it by a deadline.
+     *     They previously ran this sequence under three different names, with three
+     *     transition tables, because they were written separately and never compared.
+     *
+     *     Stage order is the declaration order, and it is load-bearing — the transition
+     *     graph reads it (``app/common/obligation_lifecycle.py``). ``CANCELED`` sits off
+     *     the ladder: it is reachable from any unlocked stage and has no position on it.
+     *
+     *     An obligation that exists is by definition waiting for its inputs, so there is
+     *     no separate "not started" stage. What counts as the input differs by type — the
+     *     client's documents for VAT, the filed VAT return for an advance, the year's
+     *     material for an annual report — but the stage is the same.
+     * @enum {string}
+     */
+    ObligationStatus: 'awaiting_input' | 'input_received' | 'in_progress' | 'awaiting_verification' | 'submitted' | 'canceled'
+    /** ObligationStatusClientResponse */
+    ObligationStatusClientResponse: {
+      /** Client Record Id */
+      client_record_id: number
+      /** Client Name */
+      client_name: string
+      /** Client Id Number */
+      client_id_number: string
+      /** Office Client Number */
+      office_client_number: number
+      form_type?: components['schemas']['PrimaryAnnualReportForm'] | null
+      /** Filing Deadline */
+      filing_deadline?: string | null
+      /** Days Until Deadline */
+      days_until_deadline?: number | null
+    }
+    /** ObligationStatusGroupResponse */
+    ObligationStatusGroupResponse: {
+      status: components['schemas']['ObligationStatus']
+      /** Count */
+      count: number
+      /** Clients */
+      clients: components['schemas']['ObligationStatusClientResponse'][]
+    }
+    /** ObligationStatusReportResponse */
+    ObligationStatusReportResponse: {
+      /** Tax Year */
+      tax_year: number
+      /** Total */
+      total: number
+      /** Statuses */
+      statuses: components['schemas']['ObligationStatusGroupResponse'][]
+    }
+    /** ObligationStatusSummaryResponse */
+    ObligationStatusSummaryResponse: {
+      /**
+       * Pending Materials
+       * @default 0
+       */
+      pending_materials: number
+      /**
+       * Material Received
+       * @default 0
+       */
+      material_received: number
+      /**
+       * Data Entry In Progress
+       * @default 0
+       */
+      data_entry_in_progress: number
+      /**
+       * Ready For Review
+       * @default 0
+       */
+      ready_for_review: number
+      /**
+       * Filed
+       * @default 0
+       */
+      filed: number
+      /**
+       * Canceled
+       * @default 0
+       */
+      canceled: number
+    }
+    /**
      * ObligationType
      * @description Regulatory obligation category for TaxCalendarEntry.
      *
@@ -7669,7 +7704,7 @@ export interface components {
     }
     /** StatusTransitionRequest */
     StatusTransitionRequest: {
-      status: components['schemas']['AnnualReportStatus']
+      status: components['schemas']['ObligationStatus']
       /** Note */
       note?: string | null
       /** Ita Reference */
@@ -8870,7 +8905,7 @@ export interface components {
       period: string
       /** Period Type */
       period_type?: string | null
-      status: components['schemas']['VatWorkItemStatus']
+      status: components['schemas']['ObligationStatus']
       /**
        * Total Output Vat
        * Format: decimal
@@ -9053,7 +9088,7 @@ export interface components {
       /** Period */
       period: string
       period_type: components['schemas']['VatType']
-      status: components['schemas']['VatWorkItemStatus']
+      status: components['schemas']['ObligationStatus']
       /**
        * Net Vat
        * Format: decimal
@@ -9098,7 +9133,7 @@ export interface components {
     VatWorkItemLookupResponse: {
       /** Id */
       id: number
-      status: components['schemas']['VatWorkItemStatus']
+      status: components['schemas']['ObligationStatus']
       /** Period */
       period: string
     }
@@ -9119,7 +9154,7 @@ export interface components {
       /** Period */
       period: string
       period_type: components['schemas']['VatType']
-      status: components['schemas']['VatWorkItemStatus']
+      status: components['schemas']['ObligationStatus']
       /** Pending Materials Note */
       pending_materials_note?: string | null
       /**
@@ -9205,50 +9240,6 @@ export interface components {
       /** Available Actions */
       available_actions?: components['schemas']['ActionDescriptor'][]
       breakdown: components['schemas']['VatBreakdownResponse']
-    }
-    /**
-     * VatWorkItemStatus
-     * @enum {string}
-     */
-    VatWorkItemStatus:
-      | 'pending_materials'
-      | 'material_received'
-      | 'data_entry_in_progress'
-      | 'ready_for_review'
-      | 'filed'
-      | 'canceled'
-    /** VatWorkItemStatusSummaryResponse */
-    VatWorkItemStatusSummaryResponse: {
-      /**
-       * Pending Materials
-       * @default 0
-       */
-      pending_materials: number
-      /**
-       * Material Received
-       * @default 0
-       */
-      material_received: number
-      /**
-       * Data Entry In Progress
-       * @default 0
-       */
-      data_entry_in_progress: number
-      /**
-       * Ready For Review
-       * @default 0
-       */
-      ready_for_review: number
-      /**
-       * Filed
-       * @default 0
-       */
-      filed: number
-      /**
-       * Canceled
-       * @default 0
-       */
-      canceled: number
     }
     /** VatWorkItemUpdateRequest */
     VatWorkItemUpdateRequest: {
@@ -11439,7 +11430,7 @@ export interface operations {
       query?: {
         tax_year?: number | null
         client_record_id?: number | null
-        status?: components['schemas']['AnnualReportStatus'] | null
+        status?: components['schemas']['ObligationStatus'] | null
         page?: number
         page_size?: number
         sort_by?: string
@@ -12382,7 +12373,7 @@ export interface operations {
     parameters: {
       query?: {
         client_record_id?: number | null
-        status?: components['schemas']['AnnualReportStatus'] | null
+        status?: components['schemas']['ObligationStatus'] | null
         page?: number
         page_size?: number
       }
@@ -12510,7 +12501,7 @@ export interface operations {
     parameters: {
       query?: {
         client_record_id?: number | null
-        status?: components['schemas']['AnnualReportStatus'] | null
+        status?: components['schemas']['ObligationStatus'] | null
         page?: number
         page_size?: number
       }
@@ -17210,7 +17201,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['AnnualReportStatusReportResponse']
+          'application/json': components['schemas']['ObligationStatusReportResponse']
         }
       }
       /** @description Authentication required */
@@ -18404,7 +18395,7 @@ export interface operations {
     parameters: {
       query?: {
         year?: number | null
-        status?: components['schemas']['AdvancePaymentStatus'][]
+        status?: components['schemas']['ObligationStatus'][]
         page?: number
         page_size?: number
       }
@@ -19020,7 +19011,7 @@ export interface operations {
         period_months_count?: number | null
         client_record_id?: number | null
         client_search?: string | null
-        status?: components['schemas']['AdvancePaymentStatus'][] | null
+        status?: components['schemas']['ObligationStatus'][] | null
         timing_status?: ('overdue' | 'on_time') | null
         /** @description Narrow to rows whose stored turnover disagrees with the period's current VAT figure (or, when false, to rows that do not). Same rule as the row's vat_turnover_mismatch field. */
         vat_mismatch?: boolean | null
@@ -19782,7 +19773,7 @@ export interface operations {
   list_work_items_api_v1_vat_work_items_get: {
     parameters: {
       query?: {
-        status?: components['schemas']['VatWorkItemStatus'] | null
+        status?: components['schemas']['ObligationStatus'] | null
         page?: number
         page_size?: number
         period?: string | null
@@ -20700,7 +20691,7 @@ export interface operations {
     parameters: {
       query?: {
         period_type?: components['schemas']['VatType'] | null
-        status?: components['schemas']['VatWorkItemStatus'] | null
+        status?: components['schemas']['ObligationStatus'] | null
         client_record_id?: number | null
         client_name?: string | null
         year?: number | null
@@ -20754,7 +20745,7 @@ export interface operations {
       query?: {
         page?: number
         page_size?: number
-        status?: components['schemas']['VatWorkItemStatus'] | null
+        status?: components['schemas']['ObligationStatus'] | null
         client_record_id?: number | null
         client_name?: string | null
       }
@@ -20972,7 +20963,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['VatWorkItemStatusSummaryResponse']
+          'application/json': components['schemas']['ObligationStatusSummaryResponse']
         }
       }
       /** @description Authentication required */
@@ -21011,7 +21002,7 @@ export interface operations {
         page_size?: number
         year?: number | null
         period?: string | null
-        status?: components['schemas']['VatWorkItemStatus'] | null
+        status?: components['schemas']['ObligationStatus'] | null
         assigned_to?: number | null
         due_after?: string | null
         due_before?: string | null

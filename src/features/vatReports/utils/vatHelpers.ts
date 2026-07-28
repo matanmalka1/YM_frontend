@@ -18,13 +18,13 @@ export const canDeleteVatInvoices = (actions: BackendAction[] | null | undefined
   hasDeletePermission && canAddOrEditVatInvoices(actions)
 
 export const canMarkReadyForReview = (actions: BackendAction[] | null | undefined): boolean =>
-  hasVatAction(actions, 'ready_for_review')
+  hasVatAction(actions, 'awaiting_verification')
 
 export const canSendBack = (actions: BackendAction[] | null | undefined): boolean => hasVatAction(actions, 'send_back')
 
 export const canFile = (actions: BackendAction[] | null | undefined): boolean => hasVatAction(actions, 'file_vat_return')
 
-export const isFiled = (status: VatWorkItemStatus): boolean => status === 'filed'
+export const isFiled = (status: VatWorkItemStatus): boolean => status === 'submitted'
 
 const MISSING_INVOICE_NUMBER_LABEL = 'לא צוין'
 const GENERATED_INVOICE_NUMBER_PATTERN = /^(?:\d{4}-\d{2}-(?:income|expense)|(?:income|expense)-\d{4}-\d{2})-[a-f0-9]{8}$/i

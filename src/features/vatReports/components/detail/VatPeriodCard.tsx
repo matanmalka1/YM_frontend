@@ -52,7 +52,7 @@ export const VatPeriodCard = ({ row, onOpen, disabled, className }: VatPeriodCar
   const statusVariant = getVatClientSummaryStatusVariant(row.status)
   const statusLabel = getVatWorkItemStatusLabel(row.status)
 
-  const isFiled = row.status === 'filed'
+  const isFiled = row.status === 'submitted'
 
   const dueDateLabel = isFiled && row.filed_at ? formatDate(row.filed_at) : formatDate(row.submission_deadline)
 

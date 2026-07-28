@@ -1,12 +1,12 @@
 import type { PaginatedResponse } from '@/types'
 
 export type AnnualReportStatus =
-  | 'not_started'
-  | 'collecting_docs'
-  | 'in_preparation'
-  | 'pending_client'
+  | 'awaiting_input'
+  | 'awaiting_input'
+  | 'in_progress'
+  | 'awaiting_verification'
   | 'submitted'
-  | 'closed'
+  | 'submitted'
   | 'canceled'
 
 export interface TaxPreviewParams {

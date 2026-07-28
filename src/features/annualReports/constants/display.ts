@@ -1,32 +1,21 @@
-import type { BadgeVariant } from '@/components/ui/primitives/Badge'
 import { makeVariantGetter } from '@/utils/labels'
+import {
+  OBLIGATION_STATUS_LABELS,
+  OBLIGATION_STATUS_VARIANTS,
+  getObligationStatusLabel,
+} from '@/constants/obligationStatus.constants'
 import type { AnnualReportFull, AnnualReportStatus, ClientTypeForReport, AnnualReportScheduleKey } from '../api/contracts'
 
 // ── Status labels ──────────────────────────────────────────────────────────
 
-export const STATUS_LABELS: Record<AnnualReportStatus, string> = {
-  not_started: 'טרם התחיל',
-  collecting_docs: 'איסוף מסמכים',
-  in_preparation: 'בהכנה',
-  pending_client: 'ממתין לאישור לקוח',
-  submitted: 'הוגש',
-  closed: 'סגור',
-  canceled: 'בוטל',
-}
+// Annual reports run the shared obligation lifecycle, so they render its vocabulary.
+export const STATUS_LABELS = OBLIGATION_STATUS_LABELS
 
-export const getStatusLabel = (status: string): string => (STATUS_LABELS as Record<string, string>)[status] ?? status
+export const getStatusLabel = getObligationStatusLabel
 
 // ── Status badge variants ──────────────────────────────────────────────────
 
-const statusVariants: Record<AnnualReportStatus, BadgeVariant> = {
-  not_started: 'neutral',
-  collecting_docs: 'info',
-  in_preparation: 'info',
-  pending_client: 'warning',
-  submitted: 'positive',
-  closed: 'neutral',
-  canceled: 'neutral',
-}
+const statusVariants = OBLIGATION_STATUS_VARIANTS
 
 export const getStatusVariant = makeVariantGetter(statusVariants)
 

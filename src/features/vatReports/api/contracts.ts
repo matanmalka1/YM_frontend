@@ -17,11 +17,11 @@ export interface VatDeductionMetadataResponse {
 }
 
 export type VatWorkItemStatus =
-  | 'pending_materials'
-  | 'material_received'
-  | 'data_entry_in_progress'
-  | 'ready_for_review'
-  | 'filed'
+  | 'awaiting_input'
+  | 'input_received'
+  | 'in_progress'
+  | 'awaiting_verification'
+  | 'submitted'
   | 'canceled'
 
 export interface VatExpenseCategoryBreakdown {

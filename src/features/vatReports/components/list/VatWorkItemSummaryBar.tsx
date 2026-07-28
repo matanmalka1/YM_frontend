@@ -27,7 +27,7 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
     <Card size="compact" disablePadding className="shadow-sm" bodyClassName="p-4 space-y-3">
       {filed && filedBanner && <VatFiledBanner {...filedBanner} />}
 
-      {workItem.status === 'pending_materials' && workItem.pending_materials_note && (
+      {workItem.status === 'awaiting_input' && workItem.pending_materials_note && (
         <AlertBanner tone="warning" icon={Info}>
           {workItem.pending_materials_note}
         </AlertBanner>

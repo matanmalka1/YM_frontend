@@ -41,7 +41,9 @@ export const TransitionDetailsForm = ({
         </>
       )}
 
-      {selected === 'closed' && (
+      {/* The assessment outcome used to be collected on a separate 'closed'
+          transition that followed 'submitted'. The two were one act. */}
+      {selected === 'submitted' && (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <Input
             label={ANNUAL_REPORTS_MESSAGES.transitionDetailsForm.assessmentAmountLabel}
