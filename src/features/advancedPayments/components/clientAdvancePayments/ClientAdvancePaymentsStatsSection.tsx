@@ -22,14 +22,14 @@ export const ClientAdvancePaymentsStatsSection: React.FC<ClientAdvancePaymentsSt
   const statCards = [
     {
       key: 'total-expected',
-      title: ADVANCED_PAYMENTS_MESSAGES.clientStats.totalExpectedTitle,
+      title: ADVANCED_PAYMENTS_MESSAGES.detail.annualExpectedLabel,
       value: data ? formatShekelAmount(data.total_expected) : '—',
       icon: BarChart2,
       variant: 'info' as const,
     },
     {
       key: 'total-paid',
-      title: ADVANCED_PAYMENTS_MESSAGES.clientStats.totalPaidTitle,
+      title: ADVANCED_PAYMENTS_MESSAGES.detail.annualPaidLabel,
       value: data ? formatShekelAmount(data.total_paid) : '—',
       icon: Wallet,
       variant: 'positive' as const,

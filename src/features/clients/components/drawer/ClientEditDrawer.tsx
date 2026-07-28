@@ -48,7 +48,7 @@ export const ClientEditDrawer = ({
         ) : undefined
       }
     >
-      {isLoading && <Alert variant="info" message={CLIENTS_MESSAGES.edit.loadingClient} />}
+      {isLoading && <Alert variant="info" message={CLIENTS_MESSAGES.details.loadingMessage} />}
       {error && <Alert variant="error" message={error} />}
       {client && (
         <ClientEditForm

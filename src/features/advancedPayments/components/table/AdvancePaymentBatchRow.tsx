@@ -60,7 +60,7 @@ const getBatchSummary = (batch: AdvancePaymentDueDateGroup): PeriodSummaryMetric
   }
   if (batch.vat_mismatch_count > 0) {
     summary.push({
-      label: ADVANCED_PAYMENTS_MESSAGES.batchRow.vatMismatchLabel,
+      label: ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.mismatchBadge,
       value: batch.vat_mismatch_count,
       tone: 'warning',
     })
@@ -96,7 +96,7 @@ export const AdvancePaymentBatchRow: React.FC<AdvancePaymentBatchRowProps> = ({
       defaultOpen={defaultOpen}
       scrollOnMount={scrollOnMount}
       metrics={getBatchSummary(batch)}
-      ctaLabel={ADVANCED_PAYMENTS_MESSAGES.batchRow.ctaLabel}
+      ctaLabel={GLOBAL_UI_MESSAGES.actions.openClients}
     >
       <AdvancePaymentBatchContent
         batch={batch}

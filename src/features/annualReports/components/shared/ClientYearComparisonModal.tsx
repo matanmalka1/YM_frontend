@@ -21,9 +21,9 @@ interface MetricRow {
 // `data`; the year columns are computed per-report below.
 const ROWS: MetricRow[] = [
   { label: GLOBAL_UI_MESSAGES.common.status, render: (r) => getStatusLabel(r.status) },
-  { label: ANNUAL_REPORTS_MESSAGES.yearComparisonModal.taxDueLabel, render: (r) => formatShekelAmount(r.tax_due) },
+  { label: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.taxDueHeader, render: (r) => formatShekelAmount(r.tax_due) },
   {
-    label: ANNUAL_REPORTS_MESSAGES.yearComparisonModal.refundDueLabel,
+    label: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.refundDueHeader,
     render: (r) => formatShekelAmount(r.refund_due),
   },
   {

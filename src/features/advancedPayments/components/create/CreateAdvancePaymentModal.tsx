@@ -164,13 +164,13 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
         ))}
         {liveCalculated != null && (
           <div>
-            <div className="text-xs text-gray-500 mb-1">{ADVANCED_PAYMENTS_MESSAGES.createModal.calculatedAmountLabel}</div>
+            <div className="text-xs text-gray-500 mb-1">{ADVANCED_PAYMENTS_MESSAGES.editableSections.calculatedAmountLabel}</div>
             <div className="text-sm font-medium text-gray-800">{formatShekelAmount(liveCalculated)}</div>
           </div>
         )}
         {(
           [
-            { name: 'override_amount', label: ADVANCED_PAYMENTS_MESSAGES.createModal.overrideAmountLabel },
+            { name: 'override_amount', label: ADVANCED_PAYMENTS_MESSAGES.editableSections.overrideAmountLabel },
             { name: 'paid_amount', label: ADVANCED_PAYMENTS_MESSAGES.createModal.paidAmountLabel },
           ] as const
         ).map(({ name, label }) => (
@@ -181,7 +181,7 @@ export const CreateAdvancePaymentModal: React.FC<CreateAdvancePaymentModalProps>
           id="create-advance-payment-notes"
           rows={2}
           className="resize-none"
-          placeholder={ADVANCED_PAYMENTS_MESSAGES.createModal.notesPlaceholder}
+          placeholder={ADVANCED_PAYMENTS_MESSAGES.editableSections.notesPlaceholder}
           {...register('notes')}
         />
       </form>

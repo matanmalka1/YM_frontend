@@ -30,7 +30,7 @@ export const AdvancePaymentBulkMarkPaidModal: React.FC<{ bulk: BulkMarkPaidContr
       <p className="text-sm text-gray-600">{MESSAGES.modalMessage(bulk.selectedIds.size)}</p>
       <DatePicker label={MESSAGES.paidAtLabel} value={bulk.paidAt} onChange={bulk.setPaidAt} />
       <Select
-        label={ADVANCED_PAYMENTS_MESSAGES.editableSections.paymentMethodLabel}
+        label={ADVANCED_PAYMENTS_MESSAGES.readonlySections.paymentMethodLabel}
         value={bulk.paymentMethod}
         onChange={(e) => bulk.setPaymentMethod(e.target.value)}
         options={[

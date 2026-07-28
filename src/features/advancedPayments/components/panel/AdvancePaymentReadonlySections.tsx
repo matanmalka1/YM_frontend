@@ -37,7 +37,7 @@ export const AdvancePaymentReadonlySections: React.FC<AdvancePaymentReadonlySect
           label:
             payment.turnover_source != null
               ? ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.turnoverLabel(payment.turnover_source)
-              : ADVANCED_PAYMENTS_MESSAGES.detail.periodTurnoverLabel,
+              : ADVANCED_PAYMENTS_MESSAGES.editableSections.periodTurnoverLabel,
           value: payment.turnover_amount != null ? formatShekelAmount(payment.turnover_amount) : null,
         },
         {
@@ -48,7 +48,7 @@ export const AdvancePaymentReadonlySections: React.FC<AdvancePaymentReadonlySect
               : null,
         },
         {
-          label: ADVANCED_PAYMENTS_MESSAGES.readonlySections.calculatedAmountLabel,
+          label: ADVANCED_PAYMENTS_MESSAGES.editableSections.calculatedAmountLabel,
           value: payment.calculated_amount != null ? formatShekelAmount(payment.calculated_amount) : null,
         },
         {

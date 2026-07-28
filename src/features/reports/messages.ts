@@ -17,11 +17,11 @@ export const REPORTS_MESSAGES = {
     noOpenDebts: 'אין חובות פתוחים',
     clientNumber: (id: number) => `לקוח #${id}`,
     requiresAttention: 'דורש טיפול',
-    totalOpenDebt: 'סה"כ חוב פתוח',
+    totalOpenDebt: 'סה״כ חוב פתוח',
     debtSince: (date: string) => `חוב מאז ${date}`,
     shareOfDebt: (percent: number) => `${percent}% מסך החוב`,
     zeroShareOfDebt: '0% מסך החוב',
-    totalDebts: 'סה"כ חובות',
+    totalDebts: 'סה״כ חובות',
     openBalanceClients: (count: number) => `${count} לקוחות עם יתרות פתוחות`,
     buckets: {
       currentShort: 'עד 30',
@@ -36,7 +36,7 @@ export const REPORTS_MESSAGES = {
   },
   annualStatus: {
     title: 'סטטוס דוחות שנתיים',
-    description: (total: number, year: number) => `סה"כ ${total} דוחות לשנת ${year}`,
+    description: (total: number, year: number) => `סה״כ ${total} דוחות לשנת ${year}`,
     form: 'טופס',
     idNumber: 'ת.ז / ח.פ',
     clientNumber: 'מס׳ לקוח',
@@ -61,7 +61,7 @@ export const REPORTS_MESSAGES = {
     collectionRate: (rate: string) => `אחוז גבייה: ${rate}`,
   },
   vatCompliance: {
-    title: 'דוח ציות מע"מ',
+    title: 'דוח ציות מע״מ',
     description: (clients: number) => `${clients} לקוחות`,
     expectedPeriods: 'תקופות צפויות',
     filed: 'הוגשו',

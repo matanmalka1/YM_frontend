@@ -6,7 +6,7 @@
 export const AUDIT_MESSAGES = {
   table: {
     columnAction: 'פעולה',
-    columnPerformedBy: 'בוצע ע"י',
+    columnPerformedBy: 'בוצע ע״י',
   },
   section: {
     defaultTitle: 'היסטוריית שינויים',

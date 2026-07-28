@@ -5,4 +5,5 @@ export { CreateAdvancePaymentModal } from './components/create/CreateAdvancePaym
 export { AdvancePaymentFullPanel } from './components/panel/AdvancePaymentFullPanel'
 export { advancePaymentsApi, advancedPaymentsQK } from './api'
 export { getAdvancePaymentStatusLabel } from './constants'
+export { ADVANCED_PAYMENTS_ERROR_MESSAGES } from './errorMessages'
 export type { CreateAdvancePaymentPayload } from './api'

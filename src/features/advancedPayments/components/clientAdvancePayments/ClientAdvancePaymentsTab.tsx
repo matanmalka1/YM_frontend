@@ -49,7 +49,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
           <div className="flex flex-wrap items-center gap-2">
             <AdvanceRateChangeButton clientRecordId={props.clientRecordId} />
             <Button variant="primary" size="sm" icon={<PlusCircle className="h-4 w-4" />} onClick={onOpenCreate}>
-              {ADVANCED_PAYMENTS_MESSAGES.clientHeader.addPayment}
+              {ADVANCED_PAYMENTS_MESSAGES.page.addPayment}
             </Button>
           </div>
         )
@@ -73,7 +73,7 @@ export const ClientAdvancePaymentsTab: React.FC<ClientAdvancePaymentsTabProps> =
           page={pagination.page}
           totalPages={pagination.totalPages}
           total={pagination.total}
-          label={ADVANCED_PAYMENTS_MESSAGES.clientTab.paginationLabel}
+          label={ADVANCED_PAYMENTS_MESSAGES.clientTab.title}
           onPageChange={pagination.onPageChange}
         />
       )}

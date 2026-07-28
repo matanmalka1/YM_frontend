@@ -4,7 +4,6 @@ export const CLIENTS_ERROR_MESSAGES = {
     vatExemptCeiling: 'לא ניתן לטעון את תקרת הפטור כרגע',
     impact: 'לא ניתן לטעון את הפרטים כרגע',
   },
-  charges: { create: 'שגיאה ביצירת חיוב' },
   client: {
     restore: 'שגיאה בשחזור לקוח',
     create: 'שגיאה ביצירת לקוח',

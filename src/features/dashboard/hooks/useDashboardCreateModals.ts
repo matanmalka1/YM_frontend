@@ -1,15 +1,25 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import { advancePaymentsApi, advancedPaymentsQK, type CreateAdvancePaymentPayload } from '@/features/advancedPayments'
-import { type CreateChargePayload, useChargeCreateMutation } from '@/features/charges'
-import { CLIENT_ROUTES, clientsApi, clientsQK, extractClientErrorCode } from '@/features/clients'
-import { vatReportsApi, vatReportsQK, type CreateVatWorkItemPayload } from '@/features/vatReports'
+import {
+  ADVANCED_PAYMENTS_ERROR_MESSAGES,
+  advancePaymentsApi,
+  advancedPaymentsQK,
+  type CreateAdvancePaymentPayload,
+} from '@/features/advancedPayments'
+import { CHARGES_ERROR_MESSAGES, type CreateChargePayload, useChargeCreateMutation } from '@/features/charges'
+import { CLIENT_ROUTES, CLIENTS_ERROR_MESSAGES, clientsApi, clientsQK, extractClientErrorCode } from '@/features/clients'
+import {
+  VAT_ERROR_MESSAGES,
+  VAT_MESSAGES,
+  vatReportsApi,
+  vatReportsQK,
+  type CreateVatWorkItemPayload,
+} from '@/features/vatReports'
 import { useClientPickerState } from '@/features/clients/public'
 import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { dashboardQK } from '../api/queryKeys'
-import { DASHBOARD_ERROR_MESSAGES } from '../errorMessages'
 import { DASHBOARD_MESSAGES } from '../messages'
 
 export type DashboardCreateModal = 'charge' | 'client' | 'vat' | 'advancePayment'
@@ -41,7 +51,7 @@ export const useDashboardCreateModals = (isAdvisor: boolean) => {
   const vatCreateMutation = useMutation({
     mutationFn: (payload: CreateVatWorkItemPayload) => vatReportsApi.create(payload),
     onSuccess: async () => {
-      toast.success(DASHBOARD_MESSAGES.success.vatFileCreated)
+      toast.success(VAT_MESSAGES.mutations.createWorkItemSuccess)
       await Promise.all([queryClient.invalidateQueries({ queryKey: vatReportsQK.all }), invalidateDashboardData()])
     },
   })
@@ -56,7 +66,7 @@ export const useDashboardCreateModals = (isAdvisor: boolean) => {
       advancePaymentClientPicker.resetClientPicker()
       await Promise.all([queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all }), invalidateDashboardData()])
     },
-    onError: (err) => showErrorToast(err, DASHBOARD_ERROR_MESSAGES.advancePaymentCreate),
+    onError: (err) => showErrorToast(err, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.create),
   })
 
   const clientCreateMutation = useMutation({
@@ -69,14 +79,14 @@ export const useDashboardCreateModals = (isAdvisor: boolean) => {
     },
     onError: async (err, payload) => {
       if (extractClientErrorCode(err) !== 'CLIENT.DELETED_EXISTS') {
-        showErrorToast(err, DASHBOARD_ERROR_MESSAGES.clientCreate)
+        showErrorToast(err, CLIENTS_ERROR_MESSAGES.client.create)
         return
       }
       try {
         const deleted = await clientsApi.getConflictByIdNumber(payload.id_number)
         setDeletedClientInfo(deleted.deleted_clients[0] ?? null)
       } catch {
-        showErrorToast(err, DASHBOARD_ERROR_MESSAGES.clientCreate)
+        showErrorToast(err, CLIENTS_ERROR_MESSAGES.client.create)
       }
     },
   })
@@ -90,7 +100,7 @@ export const useDashboardCreateModals = (isAdvisor: boolean) => {
       await Promise.all([queryClient.invalidateQueries({ queryKey: clientsQK.all }), invalidateDashboardData()])
       navigate(CLIENT_ROUTES.detail(client.id))
     },
-    onError: (err) => showErrorToast(err, DASHBOARD_ERROR_MESSAGES.clientRestore),
+    onError: (err) => showErrorToast(err, CLIENTS_ERROR_MESSAGES.client.restore),
   })
 
   const closeCreateModal = () => {
@@ -114,7 +124,7 @@ export const useDashboardCreateModals = (isAdvisor: boolean) => {
       await vatCreateMutation.mutateAsync(payload)
       return true
     } catch (err) {
-      showErrorToast(err, DASHBOARD_ERROR_MESSAGES.vatCreate)
+      showErrorToast(err, VAT_ERROR_MESSAGES.page.createWorkItemError)
       return false
     }
   }
@@ -133,7 +143,7 @@ export const useDashboardCreateModals = (isAdvisor: boolean) => {
     chargeProps: {
       open: activeCreateModal === 'charge',
       createError: chargeCreateMutation.error
-        ? getErrorMessage(chargeCreateMutation.error, DASHBOARD_ERROR_MESSAGES.chargeCreate)
+        ? getErrorMessage(chargeCreateMutation.error, CHARGES_ERROR_MESSAGES.mutations.create)
         : null,
       createLoading: chargeCreateMutation.isPending,
       onClose: closeCreateModal,
@@ -141,7 +151,9 @@ export const useDashboardCreateModals = (isAdvisor: boolean) => {
     },
     vatProps: {
       open: activeCreateModal === 'vat',
-      createError: vatCreateMutation.error ? getErrorMessage(vatCreateMutation.error, DASHBOARD_ERROR_MESSAGES.vatCreate) : null,
+      createError: vatCreateMutation.error
+        ? getErrorMessage(vatCreateMutation.error, VAT_ERROR_MESSAGES.page.createWorkItemError)
+        : null,
       createLoading: vatCreateMutation.isPending,
       onClose: closeCreateModal,
       onSubmit: submitVatCreate,

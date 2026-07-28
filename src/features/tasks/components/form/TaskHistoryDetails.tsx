@@ -4,6 +4,7 @@ import { formatDateTime } from '@/utils/utils'
 import type { Task } from '../../api/contracts'
 import { taskRoleLabels, taskStatusLabels } from '../../constants/labels'
 import { TASKS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface TaskHistoryDetailsProps {
   task: Task
@@ -24,8 +25,8 @@ export const TaskHistoryDetails: React.FC<TaskHistoryDetailsProps> = ({ task }) 
       <DefinitionList
         columns={2}
         items={[
-          { label: TASKS_MESSAGES.details.status, value: taskStatusLabels[task.status] },
-          { label: TASKS_MESSAGES.details.client, value: client },
+          { label: GLOBAL_UI_MESSAGES.common.status, value: taskStatusLabels[task.status] },
+          { label: GLOBAL_UI_MESSAGES.common.client, value: client },
           { label: TASKS_MESSAGES.details.assignee, value: task.assigned_to_user_name },
           {
             label: TASKS_MESSAGES.details.role,

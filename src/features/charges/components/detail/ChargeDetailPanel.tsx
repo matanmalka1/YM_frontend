@@ -196,7 +196,7 @@ export const ChargeDetailPanel = ({ chargeId, leadingBreadcrumbs, onDeleted }: C
         title={CHARGES_MESSAGES.detail.cancelTitle}
         message={CHARGES_MESSAGES.detail.cancelMessage(charge.id)}
         confirmLabel={CHARGES_MESSAGES.actions.cancelCharge}
-        cancelLabel={CHARGES_MESSAGES.actions.back}
+        cancelLabel={GLOBAL_UI_MESSAGES.actions.back}
         isLoading={actionLoading}
         onConfirm={async () => {
           await runAction('cancel_charge', cancelReason || undefined)

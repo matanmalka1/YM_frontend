@@ -1,6 +1,8 @@
 /**
  * Centralized Hebrew UI strings for auth screens.
  */
+import { GLOBAL_UI_MESSAGES } from '@/messages'
+
 export const AUTH_MESSAGES = {
   common: {
     emailLabel: 'כתובת דוא״ל',
@@ -27,7 +29,7 @@ export const AUTH_MESSAGES = {
     headlineMiddle: 'קלסרים חיובים ודוחות',
     headlineEnd: 'במקום אחד',
     description: 'פלטפורמת הניהול הפנים ארגונית של יוסף מאיר מרוכזת, מאובטחת, ויעילה.',
-    featurePills: ['לקוחות', 'קלסרים', 'חיובים', 'מסמכים', 'דוחות מס'],
+    featurePills: [GLOBAL_UI_MESSAGES.common.clients, 'קלסרים', 'חיובים', 'מסמכים', 'דוחות מס'],
     legal: (year: number) => `© ${year} יוסף מאיר — כל הזכויות שמורות`,
   },
   forgotPassword: {

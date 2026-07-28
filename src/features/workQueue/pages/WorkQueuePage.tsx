@@ -5,7 +5,7 @@ import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Button } from '@/components/ui/primitives/Button'
 import { PaginatedDataTable } from '@/components/ui/table'
 import { FilterPanel } from '@/components/ui/filters/FilterPanel'
-import { TaskModal } from '@/features/tasks'
+import { TASKS_MESSAGES, TaskModal } from '@/features/tasks'
 import { useWorkQueuePage } from '../hooks/useWorkQueuePage'
 import { WorkQueueStatsSection } from '../components/WorkQueueStatsSection'
 import { WORK_QUEUE_MESSAGES } from '../messages'
@@ -24,7 +24,7 @@ export const WorkQueuePage: React.FC = () => {
           data-work-queue-focus-fallback="true"
           onClick={modals.openCreateTask}
         >
-          {WORK_QUEUE_MESSAGES.page.newTask}
+          {TASKS_MESSAGES.actions.newTask}
         </Button>
       }
     />

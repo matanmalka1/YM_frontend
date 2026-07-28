@@ -60,7 +60,7 @@ export const buildAdvancePaymentBatchColumns = ({
   }),
   {
     key: 'client_name',
-    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.clientNameHeader,
+    header: GLOBAL_UI_MESSAGES.common.clientName,
     wrap: true,
     render: (row) => (
       <>
@@ -68,7 +68,7 @@ export const buildAdvancePaymentBatchColumns = ({
         {row.missing_turnover && (
           <span className="mt-0.5 inline-flex items-center gap-1 rounded border border-warning-200 bg-warning-50 px-1.5 py-0.5 text-xs font-semibold text-warning-700">
             <AlertTriangle className="h-2.5 w-2.5" />
-            {ADVANCED_PAYMENTS_MESSAGES.batchColumns.missingTurnoverBadge}
+            {ADVANCED_PAYMENTS_MESSAGES.detail.turnoverMissingBadge}
           </span>
         )}
         {row.turnover_amount == null && row.available_turnover != null && (
@@ -98,7 +98,7 @@ export const buildAdvancePaymentBatchColumns = ({
   }),
   {
     key: 'due_date',
-    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.dueDateHeader,
+    header: ADVANCED_PAYMENTS_MESSAGES.detail.dueDateLabel,
     kind: 'date',
     render: (row) => {
       const isOverdue = row.timing_status === 'overdue'
@@ -114,7 +114,7 @@ export const buildAdvancePaymentBatchColumns = ({
   },
   {
     key: 'turnover',
-    header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.turnoverHeader,
+    header: ADVANCED_PAYMENTS_MESSAGES.editableSections.reportedTurnoverCell,
     dir: 'ltr',
     kind: 'money',
     // The money cell shows only what the payment holds. An available VAT figure

@@ -22,7 +22,6 @@ export const NOTIFICATIONS_MESSAGES = {
     subtitle: 'הודעות שנשלחו ללקוח',
     sent: (count: number) => `נשלחו: ${count}`,
     pending: (count: number) => `בהמתנה: ${count}`,
-    loading: 'טוען הודעות...',
     emptyClient: 'אין הודעות ללקוח זה',
   },
   detail: {

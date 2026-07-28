@@ -249,7 +249,7 @@ export const NotesCard = ({ canEdit, ...target }: NotesCardProps) => {
   return (
     <>
       {target.scope === 'client' ? (
-        <DetailTabPanel title={NOTES_MESSAGES.clientTab.title} subtitle={NOTES_MESSAGES.clientTab.subtitle(total)}>
+        <DetailTabPanel title={GLOBAL_UI_MESSAGES.common.notes} subtitle={NOTES_MESSAGES.clientTab.subtitle(total)}>
           {content}
         </DetailTabPanel>
       ) : (

@@ -59,7 +59,7 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
         const turnoverLabel =
           row.turnover_amount != null && row.turnover_source != null
             ? ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.turnoverLabel(row.turnover_source)
-            : ADVANCED_PAYMENTS_MESSAGES.clientCards.missingTurnoverLabel
+            : ADVANCED_PAYMENTS_MESSAGES.detail.turnoverMissingBadge
         const isPaid = row.status === 'paid'
 
         const detailItems: DefinitionItem[] = [
@@ -120,7 +120,7 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
                     <Badge variant="warning">{ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.mismatchBadge}</Badge>
                   )}
                   {row.paid_late ? (
-                    <Badge variant="warning">{ADVANCED_PAYMENTS_MESSAGES.clientCards.paidLate}</Badge>
+                    <Badge variant="warning">{ADVANCED_PAYMENTS_MESSAGES.detail.paidLateLabel}</Badge>
                   ) : row.timing_status === 'overdue' ? (
                     <Badge variant="negative">
                       {formatRelativeDueLabel(row.due_date_effective ?? row.due_date) ??
@@ -140,7 +140,7 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
               <Button variant={isPaid ? 'outline' : 'primary'} fullWidth onClick={() => onRowClick(row)} className="mt-auto">
                 {isPaid
                   ? ADVANCED_PAYMENTS_MESSAGES.clientCards.viewDetails
-                  : ADVANCED_PAYMENTS_MESSAGES.clientCards.updatePayment}
+                  : ADVANCED_PAYMENTS_MESSAGES.batchColumns.updatePaymentAction}
               </Button>
             </div>
           </Card>

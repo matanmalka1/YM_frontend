@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { clientsApi, clientsQK } from '@/features/clients'
+import { CLIENTS_ERROR_MESSAGES, clientsApi, clientsQK } from '@/features/clients'
 import { getErrorMessage, isPositiveInt } from '@/utils/utils'
 import { BUSINESSES_ERROR_MESSAGES } from '../errorMessages'
 
@@ -39,7 +39,7 @@ export const useBusinessDetails = ({ clientId, businessId }: UseBusinessDetailsP
 
   const isLoading = clientLoading || businessLoading
   const error = clientError
-    ? getErrorMessage(clientError, BUSINESSES_ERROR_MESSAGES.details.clientLoadError)
+    ? getErrorMessage(clientError, CLIENTS_ERROR_MESSAGES.client.detailLoad)
     : businessError
       ? getErrorMessage(businessError, BUSINESSES_ERROR_MESSAGES.details.businessLoadError)
       : businessData && businessData.client_id !== clientId

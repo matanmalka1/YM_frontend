@@ -63,7 +63,7 @@ export const ClientAdvancePaymentsHeader: React.FC<ClientAdvancePaymentsHeaderPr
                 tooltip={generationFrequency == null ? ADVANCED_PAYMENTS_MESSAGES.clientHeader.noFrequencyTooltip : undefined}
                 className="rounded-lg text-gray-700 hover:bg-white hover:shadow-sm"
               >
-                {ADVANCED_PAYMENTS_MESSAGES.clientHeader.createYearlySchedule}
+                {ADVANCED_PAYMENTS_MESSAGES.page.createYearlySchedule}
               </Button>
             </div>
             {generationFrequency != null && (

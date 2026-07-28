@@ -1,7 +1,14 @@
 import { useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import { tasksApi, tasksQK, type TaskCreateRequest, type TaskUpdateRequest } from '@/features/tasks'
+import {
+  TASKS_ERROR_MESSAGES,
+  TASKS_MESSAGES,
+  tasksApi,
+  tasksQK,
+  type TaskCreateRequest,
+  type TaskUpdateRequest,
+} from '@/features/tasks'
 import type { TaskSourceContext } from '@/features/tasks'
 import { toast } from '@/utils/toast'
 import { getErrorMessage, showErrorToast } from '@/utils/utils'
@@ -92,13 +99,13 @@ export const useWorkQueueActions = () => {
 
   const createTaskMutation = useMutation({
     mutationFn: (data: TaskCreateRequest) => tasksApi.create(data),
-    onSuccess: () => handleTaskMutationSuccess(WORK_QUEUE_MESSAGES.actions.createTaskSuccess),
-    onError: (err) => showErrorToast(err, WORK_QUEUE_ERROR_MESSAGES.actions.createTaskError),
+    onSuccess: () => handleTaskMutationSuccess(TASKS_MESSAGES.mutations.createSuccess),
+    onError: (err) => showErrorToast(err, TASKS_ERROR_MESSAGES.clientTab.createError),
   })
 
   const updateTaskMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: TaskUpdateRequest }) => tasksApi.update(id, data),
-    onSuccess: () => handleTaskMutationSuccess(WORK_QUEUE_MESSAGES.actions.updateTaskSuccess),
+    onSuccess: () => handleTaskMutationSuccess(TASKS_MESSAGES.mutations.updateSuccess),
     onError: (err) => showErrorToast(err, WORK_QUEUE_ERROR_MESSAGES.actions.updateTaskError),
   })
 

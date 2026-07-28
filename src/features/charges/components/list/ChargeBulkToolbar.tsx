@@ -60,7 +60,7 @@ export const ChargeBulkToolbar: React.FC<ChargeBulkToolbarProps> = ({ selectedCo
               }}
               className="text-xs text-gray-500 hover:text-gray-700 px-2"
             >
-              {CHARGES_MESSAGES.actions.back}
+              {GLOBAL_UI_MESSAGES.actions.back}
             </Button>
           </div>
         ) : null
@@ -73,7 +73,7 @@ export const ChargeBulkToolbar: React.FC<ChargeBulkToolbarProps> = ({ selectedCo
         onClick={() => void onAction('issue')}
       />
       <BulkSelectionActionButton
-        label={CHARGES_MESSAGES.actions.markPaidBulk}
+        label={GLOBAL_UI_MESSAGES.actions.markPaid}
         disabled={loading}
         loading={loading}
         onClick={() => void onAction('mark-paid')}

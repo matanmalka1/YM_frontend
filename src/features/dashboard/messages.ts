@@ -69,7 +69,6 @@ export const DASHBOARD_MESSAGES = {
     chooseAdvancePaymentClient: 'מקדמה חדשה — בחר לקוח',
   },
   success: {
-    vatFileCreated: 'תיק מע"מ נוצר בהצלחה',
     advancePaymentCreated: 'מקדמה נוצרה בהצלחה',
     clientCreated: (summary: string) => `לקוח נוצר בהצלחה\n${summary}`,
     clientRestored: 'הלקוח שוחזר בהצלחה',

@@ -163,7 +163,7 @@ export const VatWorkItemsGroupedCards = ({
             defaultOpen={group.group_key === defaultOpenKey}
             scrollOnMount={group.group_key === focusedKey}
             metrics={metrics}
-            ctaLabel={VAT_MESSAGES.actions.openClients}
+            ctaLabel={GLOBAL_UI_MESSAGES.actions.openClients}
           >
             <GroupContent group={group} columns={columns} onRowClick={onRowClick} filters={filters} />
           </GroupedPeriodRow>

@@ -34,7 +34,7 @@ export const AdvancePaymentsStatsSection: React.FC<AdvancePaymentsStatsSectionPr
     },
     {
       key: 'missing-turnover',
-      title: ADVANCED_PAYMENTS_MESSAGES.stats.missingTurnoverTitle,
+      title: ADVANCED_PAYMENTS_MESSAGES.batchRow.missingTurnoverLabel,
       value: missingTurnoverCount,
       icon: AlertTriangle,
       variant: 'warning' as const,

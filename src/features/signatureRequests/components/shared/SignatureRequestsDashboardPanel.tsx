@@ -213,7 +213,7 @@ export const SignatureRequestsDashboardPanel: React.FC<Props> = ({ compact = fal
         title={SIGNATURE_REQUESTS_MESSAGES.cancel.title}
         message={SIGNATURE_REQUESTS_MESSAGES.cancel.message}
         confirmLabel={SIGNATURE_REQUESTS_MESSAGES.actions.cancelRequest}
-        cancelLabel={SIGNATURE_REQUESTS_MESSAGES.actions.back}
+        cancelLabel={GLOBAL_UI_MESSAGES.actions.back}
         isLoading={isCanceling}
         onConfirm={handleConfirmCancel}
         onCancel={() => setCancelTarget(null)}

@@ -4,7 +4,6 @@
  */
 export const WORK_QUEUE_MESSAGES = {
   page: {
-    newTask: 'משימה חדשה',
     filterTitle: 'סינון עבודה',
     filterSubtitle: 'סוג, סטטוס וסוג עבודה',
     loading: 'טוען את תור העבודה...',
@@ -43,7 +42,6 @@ export const WORK_QUEUE_MESSAGES = {
     linkedTask: 'משימה קשורה',
     taskCount: (count: number) => `${count} משימות`,
     warnings: 'אזהרות',
-    linkToItem: 'קשר לפריט',
     actionRunning: 'מבצע פעולה...',
   },
   stats: {
@@ -64,7 +62,5 @@ export const WORK_QUEUE_MESSAGES = {
   },
   actions: {
     success: 'הפעולה בוצעה בהצלחה',
-    createTaskSuccess: 'המשימה נוצרה בהצלחה',
-    updateTaskSuccess: 'המשימה עודכנה בהצלחה',
   },
 } as const

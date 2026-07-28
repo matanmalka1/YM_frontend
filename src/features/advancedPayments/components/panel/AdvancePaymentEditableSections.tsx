@@ -176,7 +176,7 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
             <div className="flex items-end gap-2">
               <div className="flex-1">
                 <Input
-                  label={ADVANCED_PAYMENTS_MESSAGES.editableSections.paidAmountLabel}
+                  label={ADVANCED_PAYMENTS_MESSAGES.readonlySections.paidAmountLabel}
                   type="number"
                   min={0}
                   value={form.paidAmount}
@@ -206,7 +206,7 @@ export const AdvancePaymentEditableSections: React.FC<AdvancePaymentEditableSect
           </div>
           <div className="space-y-3">
             <Select
-              label={ADVANCED_PAYMENTS_MESSAGES.editableSections.paymentMethodLabel}
+              label={ADVANCED_PAYMENTS_MESSAGES.readonlySections.paymentMethodLabel}
               value={form.paymentMethod}
               onChange={(e) => form.setPaymentMethod(e.target.value)}
               options={[

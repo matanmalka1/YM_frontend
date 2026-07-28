@@ -170,7 +170,7 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
           primary={firstBusinessId == null ? '—' : CLIENTS_MESSAGES.statusCard.bindersActive(binders.active_count)}
           secondary={
             firstBusinessId == null
-              ? CLIENTS_MESSAGES.statusCard.noBusinesses
+              ? CLIENTS_MESSAGES.businessesCard.empty
               : CLIENTS_MESSAGES.statusCard.bindersInOffice(binders.in_office_count)
           }
           to={`/binders?client_record_id=${clientId}`}
@@ -180,9 +180,7 @@ export const ClientStatusCard: React.FC<Props> = ({ clientId }) => {
           icon={<FileCheck size={14} />}
           title={CLIENTS_MESSAGES.statusCard.documentsTitle}
           primary={firstBusinessId == null ? '—' : `${documents.present_count}/${documents.total_count}`}
-          secondary={
-            firstBusinessId == null ? CLIENTS_MESSAGES.statusCard.noBusinesses : CLIENTS_MESSAGES.statusCard.documentsExist
-          }
+          secondary={firstBusinessId == null ? CLIENTS_MESSAGES.businessesCard.empty : CLIENTS_MESSAGES.statusCard.documentsExist}
           to={CLIENT_ROUTES.documents(clientId)}
           disabled={firstBusinessId == null}
         />

@@ -46,7 +46,7 @@ export const AdvancePaymentDetail = () => {
         clientIdNumber={navigationState.idNumber}
         officeClientNumber={navigationState.officeClientNumber}
         backPath={backPath}
-        leadingBreadcrumbs={[{ label: ADVANCED_PAYMENTS_MESSAGES.clientTab.paginationLabel, to: backPath }]}
+        leadingBreadcrumbs={[{ label: ADVANCED_PAYMENTS_MESSAGES.clientTab.title, to: backPath }]}
       />
     </PageContent>
   )

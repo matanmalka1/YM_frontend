@@ -69,6 +69,5 @@ export const TAX_CALENDAR_MESSAGES = {
     officialDue: (date: string) => `מועד רשמי: ${date}`,
     officialAndEffectiveDue: (officialDate: string, effectiveDate: string) =>
       `מועד רשמי: ${officialDate} · מועד אפקטיבי: ${effectiveDate}`,
-    openClients: 'פתח לקוחות',
   },
 } as const

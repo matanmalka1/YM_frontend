@@ -38,7 +38,7 @@ export const VatCategoryTable: React.FC<VatCategoryTableProps> = ({ rows, totalE
     }),
     moneyColumn({
       key: 'invoiceVat',
-      header: VAT_MESSAGES.categoryTable.invoiceVat,
+      header: VAT_MESSAGES.breakdown.invoiceVat,
       getValue: (row) => formatVatAmount(row.gross_vat),
       footer: formatVatAmount(totalGrossVat),
     }),

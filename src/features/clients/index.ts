@@ -2,6 +2,7 @@
 export { clientsApi, clientsQK } from './api'
 export { CLIENT_ENDPOINTS, CLIENT_ROUTES } from './api/endpoints'
 export { CLIENT_STATUS_BADGE_VARIANTS, getClientStatusLabel, getVatTypeLabel } from './constants'
+export { CLIENTS_ERROR_MESSAGES } from './errorMessages'
 
 export { CreateClientModal } from './components/form/CreateClientModal'
 export { DeletedClientDialog } from './components/dialogs/DeletedClientDialog'

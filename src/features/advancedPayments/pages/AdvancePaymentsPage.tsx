@@ -11,6 +11,7 @@ import { CreateAdvancePaymentFlow } from '../components/create/CreateAdvancePaym
 import { GenerateScheduleModal } from '../components/create/GenerateScheduleModal'
 import { useAdvancePaymentsPage } from '../hooks/useAdvancePaymentsPage'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 export const AdvancePayments: React.FC = () => {
   const { status, headerProps, permissions, stats, filters, table, bulkMarkPaid, modals } = useAdvancePaymentsPage()
@@ -53,7 +54,7 @@ export const AdvancePayments: React.FC = () => {
           onClear={bulkMarkPaid.clearSelection}
         >
           <BulkSelectionActionButton
-            label={ADVANCED_PAYMENTS_MESSAGES.bulkMarkPaid.actionButton}
+            label={GLOBAL_UI_MESSAGES.actions.markPaid}
             variant="primary"
             disabled={bulkMarkPaid.isSubmitting}
             loading={bulkMarkPaid.isSubmitting}

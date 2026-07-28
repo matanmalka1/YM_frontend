@@ -37,7 +37,7 @@ export const buildClientColumns = ({
     }),
     textColumn({
       key: 'full_name',
-      header: CLIENTS_MESSAGES.columns.fullName,
+      header: GLOBAL_UI_MESSAGES.common.clientName,
       tone: 'strong',
       getValue: (client) => client.full_name,
     }),

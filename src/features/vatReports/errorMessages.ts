@@ -11,17 +11,16 @@ export const VAT_ERROR_MESSAGES = {
     counterpartyIdRequired: 'חובה להזין מספר עוסק של הספק',
   },
   detail: {
-    loadingWorkItemError: 'שגיאה בטעינת תיק מע"מ',
-    loadingHistoryError: 'שגיאה בטעינת היסטוריית מע"מ',
-    createWorkItemError: 'שגיאה ביצירת תיק המע״מ',
+    loadingWorkItemError: 'שגיאה בטעינת תיק מע״מ',
+    loadingHistoryError: 'שגיאה בטעינת היסטוריית מע״מ',
     loadClientVatError: 'שגיאה בטעינת נתוני מע״מ. אנא נסה שוב מאוחר יותר.',
   },
   page: {
-    loadingGroupsError: 'שגיאה בטעינת קבוצות תיקי מע"מ',
+    loadingGroupsError: 'שגיאה בטעינת קבוצות תיקי מע״מ',
     actionAdvisorOnly: 'פעולה זו זמינה ליועץ בלבד',
     actionError: 'שגיאה בביצוע הפעולה',
     sendBackError: 'שגיאה בהחזרת התיק לתיקון',
-    createWorkItemError: 'שגיאה ביצירת תיק מע"מ',
+    createWorkItemError: 'שגיאה ביצירת תיק מע״מ',
   },
   mutations: {
     exportError: 'ייצוא נכשל, נסה שוב',

@@ -24,6 +24,8 @@ export const GLOBAL_UI_MESSAGES = {
     collapseAll: 'כווץ הכל',
     clearSelection: 'נקה בחירה',
     selectAll: 'בחר הכל',
+    openClients: 'פתח לקוחות',
+    markPaid: 'סמן כשולם',
   },
   common: {
     actions: 'פעולות',

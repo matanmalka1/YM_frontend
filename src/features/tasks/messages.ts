@@ -105,8 +105,6 @@ export const TASKS_MESSAGES = {
   },
   details: {
     title: 'מידע והיסטוריה',
-    status: 'סטטוס',
-    client: 'לקוח',
     assignee: 'משתמש אחראי',
     role: 'תפקיד',
     source: 'מקור מקושר',

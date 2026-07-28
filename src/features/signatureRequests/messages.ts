@@ -11,7 +11,6 @@ export const SIGNATURE_REQUESTS_MESSAGES = {
     sendReminder: 'שלח תזכורת לחתימה',
     activityHistory: 'היסטוריית פעילות',
     cancelRequest: 'בטל בקשה',
-    back: 'חזור',
   },
   cancel: {
     title: 'ביטול בקשת חתימה',
@@ -40,7 +39,7 @@ export const SIGNATURE_REQUESTS_MESSAGES = {
     description: 'ניהול בקשות חתימה פעילות מכל הלקוחות',
     noRequests: 'אין בקשות חתימה',
     noActiveRequests: 'אין בקשות חתימה פעילות',
-    clientOfficeNumber: "מס' לקוח",
+    clientOfficeNumber: 'מס׳ לקוח',
     request: 'בקשה',
     clientReference: (clientId: number) => `לקוח #${clientId}`,
   },

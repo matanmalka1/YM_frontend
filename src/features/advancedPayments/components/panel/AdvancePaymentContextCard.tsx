@@ -67,7 +67,7 @@ export const AdvancePaymentContextCard: React.FC<AdvancePaymentContextCardProps>
               value: formatDate(payment.due_date_effective ?? payment.due_date),
             },
             {
-              label: ADVANCED_PAYMENTS_MESSAGES.detail.periodTurnoverLabel,
+              label: ADVANCED_PAYMENTS_MESSAGES.editableSections.periodTurnoverLabel,
               // The fallback states why nothing is held — a filed return waiting to
               // be snapshotted is a different situation from no return at all.
               value: turnoverLabel ?? (

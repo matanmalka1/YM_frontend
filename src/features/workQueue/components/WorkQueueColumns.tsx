@@ -9,6 +9,7 @@ import type { WorkQueueAction, WorkQueueItem, WorkQueueSourceType, WorkQueueWarn
 import { getWorkQueueUrgencyVariant, workQueueSourceTypeLabels, workQueueUrgencyLabels } from '../constants'
 import { WORK_QUEUE_MESSAGES } from '../messages'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
+import { TASKS_MESSAGES } from '@/features/tasks'
 import {
   getWorkQueueAssignedRoleLabel,
   getWorkQueueAssignedUserName,
@@ -198,7 +199,7 @@ export const buildWorkQueueColumns = ({
                 : undefined
           const linkAction: WorkQueueAction = {
             key: 'link_task_to_source',
-            label: WORK_QUEUE_MESSAGES.columns.linkToItem,
+            label: TASKS_MESSAGES.actions.linkToItem,
             type: 'modal',
           }
           const secondaryActions = isUnlinkedTask ? [linkAction, ...secondary] : secondary

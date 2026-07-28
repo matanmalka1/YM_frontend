@@ -19,7 +19,6 @@ export const NOTES_MESSAGES = {
     editTitle: 'ערוך',
   },
   clientTab: {
-    title: 'הערות',
     subtitle: formatNotesCount,
   },
   card: {

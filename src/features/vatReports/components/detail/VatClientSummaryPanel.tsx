@@ -49,7 +49,7 @@ export const VatClientSummaryPanel = ({ clientId }: VatClientSummaryPanelProps) 
       setCreateOpen(false)
       return true
     } catch (err) {
-      setCreateError(showErrorToast(err, VAT_ERROR_MESSAGES.detail.createWorkItemError))
+      setCreateError(showErrorToast(err, VAT_ERROR_MESSAGES.page.createWorkItemError))
       return false
     }
   }

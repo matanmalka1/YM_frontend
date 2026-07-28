@@ -43,7 +43,7 @@ export const BINDERS_MESSAGES = {
     newBinderReceived: 'קלסר חדש נפתח והחומר נקלט',
     materialAddedToExisting: 'החומר נוסף לקלסר קיים',
     existingVatReport: 'קיים דוח מע״מ לתקופה זו',
-    missingVatReport: 'לא קיים תיק מע"מ לתקופה זו',
+    missingVatReport: 'לא קיים תיק מע״מ לתקופה זו',
     createVatReport: 'צור דוח מע״מ',
   },
   period: {
@@ -62,7 +62,7 @@ export const BINDERS_MESSAGES = {
     sectionTitle: 'פרטי קלסר',
     binderNumber: 'מספר קלסר',
     clientFallback: (id: number) => `לקוח #${id}`,
-    officeClientNumber: "מס' לקוח ",
+    officeClientNumber: 'מס׳ לקוח',
     idNumber: 'ת.ז / ח.פ',
     period: 'תקופה',
     location: 'מיקום',
@@ -117,7 +117,7 @@ export const BINDERS_MESSAGES = {
     emptyMessage: 'קלסרים יופיעו כאן לאחר קליטת חומר מהלקוח',
   },
   columns: {
-    officeClientNumber: "מס' לקוח",
+    officeClientNumber: 'מס׳ לקוח',
     idNumber: 'ת.ז / ח.פ',
     binderNumber: 'מס׳ קלסר',
     location: 'מיקום',
@@ -129,7 +129,7 @@ export const BINDERS_MESSAGES = {
     ariaLabel: (id: number) => `פעולות לקלסר ${id}`,
   },
   stats: {
-    totalLabel: 'סה"כ קלסרים',
+    totalLabel: 'סה״כ קלסרים',
     totalDescription: 'כל הקלסרים בהתאם לסינון הנוכחי',
     inOfficeLabel: 'במשרד',
     inOfficeDescription: 'קלסרים שנמצאים במשרד',

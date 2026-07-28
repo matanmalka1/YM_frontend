@@ -6,6 +6,7 @@ import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION, ALL_YEARS_URL_OPTION } from '@/c
 import type { AdvancePaymentMethod, AdvancePaymentStatus, ListAdvancePaymentsOverviewParams } from './api/contracts'
 import { ADVANCED_PAYMENTS_MESSAGES } from './messages'
 import { createClientPickerFilter } from '@/features/clients/public'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 /** Backend signals a decision point, not a failure — see useAdvancePaymentMutations. */
 export const ADVANCE_PAYMENT_VAT_NOT_FILED_CODE = 'ADVANCE_PAYMENT.VAT_NOT_FILED'
@@ -86,8 +87,8 @@ export const DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_BY: AdvancePaymentOverviewSor
 export const DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER: AdvancePaymentOverviewSortOrder = 'asc'
 
 const ADVANCE_PAYMENT_OVERVIEW_SORT_BY_LABELS: Record<AdvancePaymentOverviewSortBy, string> = {
-  client_name: ADVANCED_PAYMENTS_MESSAGES.overviewSort.clientNameLabel,
-  expected_amount: ADVANCED_PAYMENTS_MESSAGES.overviewSort.expectedAmountLabel,
+  client_name: GLOBAL_UI_MESSAGES.common.clientName,
+  expected_amount: ADVANCED_PAYMENTS_MESSAGES.clientCards.expectedLabel,
   paid_amount: ADVANCED_PAYMENTS_MESSAGES.overviewSort.paidAmountLabel,
   delta: ADVANCED_PAYMENTS_MESSAGES.overviewSort.deltaLabel,
 }

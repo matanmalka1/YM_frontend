@@ -2,6 +2,8 @@
  * Centralized Hebrew UI strings for the search feature. Shared placeholders and
  * option labels that already live in constants remain at their existing owners.
  */
+import { GLOBAL_UI_MESSAGES } from '@/messages'
+
 export const SEARCH_MESSAGES = {
   page: {
     description: 'חיפוש לקוחות ורשומות לפי שם או מזהה',
@@ -19,7 +21,7 @@ export const SEARCH_MESSAGES = {
    * identifier, every record type matches exactly on its own column.
    */
   hints: [
-    { label: 'לקוחות', hint: 'שם, ת.ז / ח.פ, מס׳ לקוח או מספר קלסר — גם התאמה חלקית' },
+    { label: GLOBAL_UI_MESSAGES.common.clients, hint: 'שם, ת.ז / ח.פ, מס׳ לקוח או מספר קלסר — גם התאמה חלקית' },
     { label: 'קלסרים', hint: 'מספר קלסר מלא, למשל 1042' },
     { label: 'מסמכים', hint: 'שם הקובץ המלא כולל סיומת, למשל דוח.pdf' },
     { label: 'דוחות מע״מ', hint: 'תקופה בפורמט 03/2026' },
@@ -34,7 +36,7 @@ export const SEARCH_MESSAGES = {
     subtitle: (count: number) => `${count} תוצאות`,
     matchedBinders: (numbers: string[]) => `נמצא לפי קלסר ${numbers.join(', ')}`,
     idNumber: 'ת.ז / ח.פ',
-    officeNumber: "מס' לקוח",
+    officeNumber: 'מס׳ לקוח',
   },
   matches: {
     title: 'רשומות תואמות',

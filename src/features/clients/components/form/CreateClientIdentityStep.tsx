@@ -11,6 +11,7 @@ import type { CreateClientFormValues } from '../../schemas'
 import { stripNonDigits } from '../../utils/createClientFormUtils'
 import { CLIENT_ROUTES } from '../../api/endpoints'
 import { CLIENTS_MESSAGES } from '../../messages'
+import { GLOBAL_UI_MESSAGES } from '@/messages'
 
 interface Props {
   control: Control<CreateClientFormValues>
@@ -80,7 +81,7 @@ export const CreateClientIdentityStep: React.FC<Props> = ({
               </div>
               <dl className="grid gap-2 rounded-md border border-warning-200 bg-white/70 p-3 text-sm sm:grid-cols-2">
                 <div>
-                  <dt className="text-warning-700">{CLIENTS_MESSAGES.createIdentity.clientNameField}</dt>
+                  <dt className="text-warning-700">{GLOBAL_UI_MESSAGES.common.clientName}</dt>
                   <dd className="font-medium text-gray-950">{deletedClient.full_name}</dd>
                 </div>
                 <div>
