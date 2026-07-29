@@ -191,6 +191,16 @@ export const ANNUAL_REPORTS_MESSAGES = {
     assigneeLabel: 'נציג אחראי',
     assigneeUnassigned: 'לא הוקצה',
     assigneeUpdated: 'הנציג האחראי עודכן',
+    viewChain: 'הצג היסטוריית תיקונים',
+  },
+  chain: {
+    title: 'היסטוריית תיקונים',
+    empty: 'אין תיקונים לשנת מס זו',
+    original: 'מקורי',
+    amendment: 'דוח מתקן',
+    current: 'נוכחי',
+    closedAt: (date: string) => `נסגר ${date}`,
+    open: 'פתוח',
   },
   transitionDetailsForm: {
     noteLabel: 'הערה (אופציונלי)',

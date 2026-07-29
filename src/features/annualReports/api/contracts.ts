@@ -138,6 +138,11 @@ export interface AnnualReportFull {
   closed_at: string | null
   closed_by: number | null
   closed_late: boolean | null
+  chain_closed_late: boolean | null
+  // Amendment chain (D-10/D-12). `amends_id` set => this record corrects
+  // another; `superseded_at` set => a later record corrects this one.
+  amends_id: number | null
+  superseded_at: string | null
   ita_reference: string | null
   assessment_amount: string | null
   refund_due: string | null

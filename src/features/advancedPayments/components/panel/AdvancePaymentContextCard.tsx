@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Building2, ChevronLeft, CreditCard, FileText, Receipt } from 'lucide-react'
 import { DefinitionList } from '@/components/ui/layout/DefinitionList'
 import { Badge } from '@/components/ui/primitives/Badge'
@@ -8,6 +9,7 @@ import { formatShekelAmount, formatDate, formatPercent } from '@/utils/utils'
 import type { AdvancePaymentRow } from '../../api/contracts'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 import { getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
+import { AdvancePaymentChainModal } from './AdvancePaymentChainModal'
 
 interface AdvancePaymentContextCardProps {
   payment: AdvancePaymentRow
@@ -21,6 +23,11 @@ const QUICK_NAV_LINKS = [
 ] as const
 
 export const AdvancePaymentContextCard: React.FC<AdvancePaymentContextCardProps> = ({ payment, clientIdNumber }) => {
+  const [showChain, setShowChain] = useState(false)
+  // An untouched period has no history to open — offered only once the period
+  // actually has more than one record.
+  const hasChain = payment.amends_id != null || payment.superseded_at != null
+
   const advanceRateDisplay =
     payment.advance_rate != null
       ? formatPercent(payment.advance_rate, { fractionDigits: 2, fallback: `${payment.advance_rate}%` })
@@ -32,7 +39,7 @@ export const AdvancePaymentContextCard: React.FC<AdvancePaymentContextCardProps>
       ? ADVANCED_PAYMENTS_MESSAGES.detail.turnoverWithSource(formatShekelAmount(payment.turnover_amount), payment.turnover_source)
       : null
 
-  const timingBadge = payment.closed_late
+  const timingBadge = payment.chain_closed_late
     ? { variant: 'warning' as const, label: ADVANCED_PAYMENTS_MESSAGES.detail.paidLateLabel }
     : payment.timing_status === 'overdue'
       ? { variant: 'negative' as const, label: ADVANCED_PAYMENTS_MESSAGES.detail.overdueLabel }
@@ -50,6 +57,17 @@ export const AdvancePaymentContextCard: React.FC<AdvancePaymentContextCardProps>
         }
         size="compact"
         variant="outlined"
+        footer={
+          hasChain && (
+            <button
+              type="button"
+              onClick={() => setShowChain(true)}
+              className="text-sm font-medium text-gray-600 underline underline-offset-2 hover:text-gray-800"
+            >
+              {ADVANCED_PAYMENTS_MESSAGES.chain.trigger}
+            </button>
+          )
+        }
       >
         <DefinitionList
           layout="stacked"
@@ -102,6 +120,13 @@ export const AdvancePaymentContextCard: React.FC<AdvancePaymentContextCardProps>
           </ActionSurfaceLink>
         ))}
       </Card>
+
+      <AdvancePaymentChainModal
+        open={showChain}
+        clientRecordId={payment.client_record_id}
+        paymentId={payment.id}
+        onClose={() => setShowChain(false)}
+      />
     </div>
   )
 }

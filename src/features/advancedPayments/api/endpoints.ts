@@ -8,6 +8,8 @@ export const ADVANCE_PAYMENT_ENDPOINTS = {
     `/clients/${clientRecordId}/advance-payments/${id}/readiness`,
   clientAdvancePaymentStatus: (clientRecordId: number | string, id: number | string) =>
     `/clients/${clientRecordId}/advance-payments/${id}/status`,
+  clientAdvancePaymentChain: (clientRecordId: number | string, id: number | string) =>
+    `/clients/${clientRecordId}/advance-payments/${id}/chain`,
   clientAdvancePaymentRefreshTurnover: (clientRecordId: number | string, id: number | string) =>
     `/clients/${clientRecordId}/advance-payments/${id}/refresh-turnover`,
   clientAdvancePaymentsRefreshTurnover: (clientRecordId: number | string) =>

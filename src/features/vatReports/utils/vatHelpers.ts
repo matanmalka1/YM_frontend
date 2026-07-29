@@ -24,6 +24,9 @@ export const canSendBack = (actions: BackendAction[] | null | undefined): boolea
 
 export const canFile = (actions: BackendAction[] | null | undefined): boolean => hasVatAction(actions, 'file_vat_return')
 
+export const canCreateAmendment = (actions: BackendAction[] | null | undefined): boolean =>
+  hasVatAction(actions, 'create_amendment')
+
 export const isFiled = (status: VatWorkItemStatus): boolean => status === 'submitted'
 
 const MISSING_INVOICE_NUMBER_LABEL = 'לא צוין'

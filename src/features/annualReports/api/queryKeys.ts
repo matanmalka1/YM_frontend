@@ -10,6 +10,7 @@ export const annualReportsQK = {
   activeSeasonList: ['tax', 'annual-reports', 'season', 'active', 'list'] as const,
   overdue: (taxYear: number) => ['tax', 'annual-reports', 'overdue', taxYear] as const,
   forClient: (clientId: number) => ['tax', 'annual-reports', 'client', clientId] as const,
+  chain: (id: number) => ['tax', 'annual-reports', 'chain', id] as const,
   financials: (id: number) => ['tax', 'annual-reports', 'financials', id] as const,
   readiness: (id: number) => ['tax', 'annual-reports', 'readiness', id] as const,
   taxCalc: (id: number) => ['tax', 'annual-reports', id, 'tax-calc'] as const,

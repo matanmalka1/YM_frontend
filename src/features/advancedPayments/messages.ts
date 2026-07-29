@@ -100,6 +100,16 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     deleteReasonPlaceholder: 'סיבת המחיקה (חובה)',
     deleteConfirm: 'כן, מחק',
   },
+  chain: {
+    title: 'היסטוריית תיקונים',
+    trigger: 'הצג היסטוריית תיקונים',
+    empty: 'אין תיקונים לתקופה זו',
+    original: 'מקורי',
+    amendment: 'דוח מתקן',
+    current: 'נוכחי',
+    closedAt: (date: string) => `נסגר ${date}`,
+    open: 'פתוח',
+  },
   detail: {
     fallbackTitle: 'מקדמה',
     expectedStatTitle: 'סכום צפוי',

@@ -35,9 +35,17 @@ export interface AdvancePaymentRow {
   missing_turnover: boolean
   timing_status: AdvancePaymentTimingStatus
   assigned_to: number | null
+  // Amendment chain (D-10/D-12), same convention as VAT and annual reports:
+  // `amends_id` set => this record corrects another; `superseded_at` set =>
+  // a later record corrects this one, so it is not the tip.
+  amends_id: number | null
+  superseded_at: string | null
   closed_at: string | null
   closed_by: number | null
   closed_late: boolean | null
+  // The period's answer, not this row's (D-34): an amendment has no due date of
+  // its own, but the period it corrects may have been filed late.
+  chain_closed_late: boolean | null
   created_at: string
   updated_at: string | null
 }

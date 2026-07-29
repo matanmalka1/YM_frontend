@@ -5,10 +5,12 @@ import { AlertBanner } from '@/components/ui/overlays/AlertBanner'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Card } from '@/components/ui/primitives/Card'
 import { useVatWorkItemActions } from '../../hooks/useVatWorkItemActions'
+import { useCreateVatAmendment } from '../../hooks/useCreateVatAmendment'
 import { useVatLifecyclePending } from '../../hooks/useVatLifecyclePending'
 import { VAT_DEADLINE_WARNING_DAYS } from '../../constants/vatConstants'
 import { VatProgressBar } from '../shared/VatProgressBar'
 import { VatFiledBanner } from '../shared/VatFiledBanner'
+import { VatChainModal } from '../shared/VatChainModal'
 import { VatActionButtons } from '../shared/VatActionButtons'
 import { VatSendBackForm } from '../form/VatSendBackForm'
 import { VatFileModal } from '../form/VatFileModal'
@@ -21,11 +23,13 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
   const isPending = useVatLifecyclePending(workItem.id)
   const [showSendBack, setShowSendBack] = useState(false)
   const [showFileModal, setShowFileModal] = useState(false)
+  const { createAmendment } = useCreateVatAmendment(workItem.id)
+  const [showChain, setShowChain] = useState(false)
   const filed = isFiled(workItem.status)
 
   return (
     <Card size="compact" disablePadding className="shadow-sm" bodyClassName="p-4 space-y-3">
-      {filed && filedBanner && <VatFiledBanner {...filedBanner} />}
+      {filed && filedBanner && <VatFiledBanner {...filedBanner} onViewChain={() => setShowChain(true)} />}
 
       {workItem.status === 'awaiting_input' && workItem.pending_materials_note && (
         <AlertBanner tone="warning" icon={Info}>
@@ -61,31 +65,35 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
 
       <VatProgressBar currentStatus={workItem.status} />
 
-      {!filed && (
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-100 pt-3">
-          {showSendBack ? (
-            <div className="w-full">
-              <p className="mb-2 text-sm font-medium text-warning-700">{VAT_MESSAGES.summary.sendBackNoteTitle}</p>
-              <VatSendBackForm
-                loading={isPending}
-                onCancel={() => setShowSendBack(false)}
-                onSubmit={async (note) => {
-                  if (await handleSendBack(note)) setShowSendBack(false)
-                }}
-              />
-            </div>
-          ) : (
-            <VatActionButtons
-              workItem={workItem}
-              isLoading={isPending}
-              onMaterialsComplete={handleMaterialsComplete}
-              onReadyForReview={handleReadyForReview}
-              onFile={() => setShowFileModal(true)}
-              onSendBack={() => setShowSendBack(true)}
+      {/* The action row is not gated on `filed` any more: "create amendment" is
+          the one act a closed period still offers (D-10). Which actions exist at
+          all stays the backend's answer, in available_actions. */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-100 pt-3">
+        {showSendBack ? (
+          <div className="w-full">
+            <p className="mb-2 text-sm font-medium text-warning-700">{VAT_MESSAGES.summary.sendBackNoteTitle}</p>
+            <VatSendBackForm
+              loading={isPending}
+              onCancel={() => setShowSendBack(false)}
+              onSubmit={async (note) => {
+                if (await handleSendBack(note)) setShowSendBack(false)
+              }}
             />
-          )}
-        </div>
-      )}
+          </div>
+        ) : (
+          <VatActionButtons
+            workItem={workItem}
+            isLoading={isPending}
+            onMaterialsComplete={handleMaterialsComplete}
+            onReadyForReview={handleReadyForReview}
+            onFile={() => setShowFileModal(true)}
+            onSendBack={() => setShowSendBack(true)}
+            onCreateAmendment={() => createAmendment()}
+          />
+        )}
+      </div>
+
+      <VatChainModal open={showChain} workItemId={workItem.id} onClose={() => setShowChain(false)} />
 
       <VatFileModal open={showFileModal} workItemId={workItem.id} onClose={() => setShowFileModal(false)} />
     </Card>

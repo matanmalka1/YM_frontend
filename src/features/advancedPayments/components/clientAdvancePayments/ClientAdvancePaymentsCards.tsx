@@ -120,7 +120,7 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
                   {row.vat_turnover_mismatch != null && (
                     <Badge variant="warning">{ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.mismatchBadge}</Badge>
                   )}
-                  {row.closed_late ? (
+                  {row.chain_closed_late ? (
                     <Badge variant="warning">{ADVANCED_PAYMENTS_MESSAGES.detail.paidLateLabel}</Badge>
                   ) : row.timing_status === 'overdue' ? (
                     <Badge variant="negative">

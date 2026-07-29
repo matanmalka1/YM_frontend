@@ -64,6 +64,13 @@ export const advancePaymentsApi = {
     return response.data
   },
 
+  // Every record for this period, oldest first — the one read that includes
+  // superseded records, because they are the history being asked for.
+  listChain: async (clientRecordId: number, id: number): Promise<AdvancePaymentRow[]> => {
+    const response = await api.get<AdvancePaymentRow[]>(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentChain(clientRecordId, id))
+    return response.data
+  },
+
   transitionStatus: async (
     clientRecordId: number,
     id: number,

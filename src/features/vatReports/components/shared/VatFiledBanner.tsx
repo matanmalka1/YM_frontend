@@ -10,8 +10,9 @@ export const VatFiledBanner: React.FC<VatFiledBannerProps> = ({
   filedBy,
   filingMethod,
   submissionReference,
-  isAmendment,
-  amendsItemId,
+  amendsId,
+  supersededAt,
+  onViewChain,
 }) => {
   const methodLabel = filingMethod ? VAT_FILING_METHOD_LABELS[filingMethod] : null
   const byLabel = filedByName ?? (filedBy != null ? `#${filedBy}` : null)
@@ -26,10 +27,22 @@ export const VatFiledBanner: React.FC<VatFiledBannerProps> = ({
         {submissionReference && (
           <span className="font-normal text-positive-600">{VAT_MESSAGES.filedBanner.reference(submissionReference)}</span>
         )}
-        {isAmendment && amendsItemId && (
-          <span className="font-normal text-positive-600">{VAT_MESSAGES.filedBanner.amendment(amendsItemId)}</span>
+        {amendsId != null && (
+          <span className="font-normal text-positive-600">{VAT_MESSAGES.filedBanner.amendment(amendsId)}</span>
         )}
+        {supersededAt != null && <span className="font-normal text-positive-600">{VAT_MESSAGES.filedBanner.superseded}</span>}
       </p>
+      {/* Offered only when the period has more than one record — on an
+          untouched period there is no history to open. */}
+      {onViewChain && (amendsId != null || supersededAt != null) && (
+        <button
+          type="button"
+          onClick={onViewChain}
+          className="mr-auto shrink-0 text-sm font-medium text-positive-700 underline underline-offset-2 hover:text-positive-800"
+        >
+          {VAT_MESSAGES.filedBanner.viewChain}
+        </button>
+      )}
     </div>
   )
 }

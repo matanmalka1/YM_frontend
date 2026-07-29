@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { ChevronDown, ChevronUp, ShieldCheck } from 'lucide-react'
+import { ChevronDown, ChevronUp, History, ShieldCheck } from 'lucide-react'
 import { getStatusLabel, getStatusVariant } from '../../constants/display'
 import { Badge } from '../../../../components/ui/primitives/Badge'
 import { Button } from '../../../../components/ui/primitives/Button'
@@ -15,6 +15,7 @@ import { annualReportsApi, annualReportsQK } from '../../api'
 import { TransitionDetailsForm } from './TransitionDetailsForm'
 import { TransitionTargetSelector } from './TransitionTargetSelector'
 import { ReadinessCheckPanel } from '../panel/ReadinessCheckPanel'
+import { AnnualReportChainModal } from '../shared/AnnualReportChainModal'
 import { useStatusTransitionPanel } from '../../hooks/useStatusTransitionPanel'
 import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../../errorMessages'
@@ -22,8 +23,12 @@ import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../../errorMessages'
 export const StatusTransitionPanel = ({ report, onTransition, isLoading }: StatusTransitionPanelProps) => {
   const panel = useStatusTransitionPanel(report, onTransition)
   const [expanded, setExpanded] = useState(false)
+  const [showChain, setShowChain] = useState(false)
   const hasTransitions = panel.allowed.length > 0
   const msg = ANNUAL_REPORTS_MESSAGES.statusTransitionPanel
+  // Offered only when the tax year has more than one record — on an
+  // untouched year there is no history to open.
+  const hasChain = report.amends_id != null || report.superseded_at != null
 
   const isLocked = isObligationLocked(report.status)
   const advisorOptions = useAdvisorOptions(!isLocked)
@@ -68,6 +73,18 @@ export const StatusTransitionPanel = ({ report, onTransition, isLoading }: Statu
           </div>
 
           <div className="flex items-center gap-2">
+            {hasChain && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                icon={<History className="h-3.5 w-3.5" />}
+                onClick={() => setShowChain(true)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                {msg.viewChain}
+              </Button>
+            )}
             <Button
               type="button"
               variant="ghost"
@@ -116,6 +133,8 @@ export const StatusTransitionPanel = ({ report, onTransition, isLoading }: Statu
           </div>
         )}
       </Card>
+
+      <AnnualReportChainModal open={showChain} reportId={report.id} onClose={() => setShowChain(false)} />
     </>
   )
 }

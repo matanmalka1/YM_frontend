@@ -1,7 +1,5 @@
 export const VAT_ERROR_MESSAGES = {
   validation: {
-    originalSubmissionRequired: 'יש להזין מזהה ההגשה המקורית',
-    originalSubmissionNumeric: 'מזהה ההגשה המקורית חייב להיות מספר',
     clientRequired: 'יש לבחור לקוח',
     validClientRequired: 'יש לבחור לקוח תקין',
     periodRequired: 'יש להזין תקופה',
@@ -25,6 +23,7 @@ export const VAT_ERROR_MESSAGES = {
   mutations: {
     exportError: 'ייצוא נכשל, נסה שוב',
     filingError: 'שגיאה בהגשה',
+    amendmentError: 'שגיאה ביצירת דוח מתקן',
     invoiceAddError: 'שגיאה בהוספת חשבונית',
     invoiceDeleteError: 'שגיאה במחיקת חשבונית',
     workItemDeleteError: 'שגיאה במחיקת התיק',

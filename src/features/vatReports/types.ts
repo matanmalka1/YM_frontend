@@ -43,8 +43,9 @@ export interface VatFiledBannerProps {
   filedBy?: number | null
   filingMethod?: string | null
   submissionReference?: string | null
-  isAmendment?: boolean
-  amendsItemId?: number | null
+  amendsId?: number | null
+  supersededAt?: string | null
+  onViewChain?: () => void
 }
 
 export interface VatClientSummaryPanelProps {
@@ -64,6 +65,7 @@ export interface VatActionButtonsProps {
   onMaterialsComplete: () => void
   onReadyForReview: () => void
   onFile: () => void
+  onCreateAmendment: () => void
   onSendBack: () => void
 }
 

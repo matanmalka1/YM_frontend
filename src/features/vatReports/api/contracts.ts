@@ -66,14 +66,17 @@ export interface VatWorkItemResponse {
   closed_by: number | null
   closed_by_name?: string | null
   closed_late?: boolean | null
+  chain_closed_late?: boolean | null
   created_by: number
   assigned_to: number | null
   assigned_to_name?: string | null
   created_at: string
   updated_at: string
   submission_reference: string | null
-  is_amendment: boolean
-  amends_item_id: number | null
+  // Amendment chain (D-10/D-12). `amends_id` set => this record corrects
+  // another; `superseded_at` set => a later record corrects this one.
+  amends_id: number | null
+  superseded_at: string | null
   submission_deadline: string | null
   statutory_deadline: string | null
   extended_deadline: string | null

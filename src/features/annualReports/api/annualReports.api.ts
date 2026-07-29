@@ -82,6 +82,13 @@ export const annualReportsApi = {
     await api.delete(ANNUAL_REPORT_ENDPOINTS.byId(reportId))
   },
 
+  // Every record for this tax year, oldest first — the one read that includes
+  // superseded records, because they are the history being asked for.
+  listChain: async (reportId: number): Promise<AnnualReportFull[]> => {
+    const response = await api.get<AnnualReportFull[]>(ANNUAL_REPORT_ENDPOINTS.chain(reportId))
+    return response.data
+  },
+
   getAnnexLines: async (reportId: number, schedule: AnnualReportScheduleKey): Promise<AnnexDataPagedResponse> => {
     const response = await api.get<AnnexDataPagedResponse>(ANNUAL_REPORT_ENDPOINTS.annex(reportId, schedule))
     return response.data

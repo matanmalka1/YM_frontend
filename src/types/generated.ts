@@ -713,6 +713,53 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/annual-reports/{report_id}/amend': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Create Amendment
+     * @description Open a correction of a closed annual report as a new record (D-10, D-21).
+     *
+     *     Advisor only. The original stays closed and keeps its figures; the new record
+     *     copies the whole material — detail, lines, credit points, schedules and their
+     *     annexes — and opens at "in progress". Returns the amendment, not the original.
+     */
+    post: operations['create_amendment_api_v1_annual_reports__report_id__amend_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/annual-reports/{report_id}/chain': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Amendment Chain
+     * @description Every report for this tax year, oldest first — the correction history.
+     *
+     *     The one read that deliberately includes superseded records; every other list
+     *     shows the chain as a single row (D-12).
+     */
+    get: operations['list_amendment_chain_api_v1_annual_reports__report_id__chain_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/clients/{client_record_id}/annual-reports': {
     parameters: {
       query?: never
@@ -2444,6 +2491,53 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/clients/{client_record_id}/advance-payments/{payment_id}/amend': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Create Advance Payment Amendment
+     * @description Open a correction of a closed advance period as a new record (D-10, D-21).
+     *
+     *     Advisor only. The original stays closed and keeps its figures; the new record
+     *     copies them — including the payment that was actually made — and opens at
+     *     "in progress". Returns the amendment, not the original.
+     */
+    post: operations['create_advance_payment_amendment_api_v1_clients__client_record_id__advance_payments__payment_id__amend_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/clients/{client_record_id}/advance-payments/{payment_id}/chain': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Advance Payment Chain
+     * @description Every payment for this period, oldest first — the correction history.
+     *
+     *     The one read that deliberately includes superseded records; every other list
+     *     shows the chain as a single row (D-12).
+     */
+    get: operations['list_advance_payment_chain_api_v1_clients__client_record_id__advance_payments__payment_id__chain_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/advance-payments/overview': {
     parameters: {
       query?: never
@@ -2909,6 +3003,53 @@ export interface paths {
      *     Override amount requires written justification.
      */
     post: operations['file_vat_return_api_v1_vat_work_items__item_id__file_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/vat/work-items/{item_id}/amend': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Create Amendment
+     * @description Open a correction of a closed VAT period as a new record (D-10, D-21).
+     *
+     *     Advisor only. The original stays closed and keeps its figures; the new
+     *     record is a full copy, invoices included, opening at "in progress".
+     *     Returns the amendment, not the original.
+     */
+    post: operations['create_amendment_api_v1_vat_work_items__item_id__amend_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/vat/work-items/{item_id}/chain': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Amendment Chain
+     * @description Every record for this period, oldest first — the correction history.
+     *
+     *     The one read that deliberately includes superseded records: the corrected
+     *     ones are the point. Every other list shows the chain as a single row (D-12).
+     */
+    get: operations['list_amendment_chain_api_v1_vat_work_items__item_id__chain_get']
+    put?: never
+    post?: never
     delete?: never
     options?: never
     head?: never
@@ -3636,6 +3777,12 @@ export interface components {
       closed_by?: number | null
       /** Closed Late */
       closed_late?: boolean | null
+      /** Chain Closed Late */
+      chain_closed_late?: boolean | null
+      /** Amends Id */
+      amends_id?: number | null
+      /** Superseded At */
+      superseded_at?: string | null
       /** Annual Report Id */
       annual_report_id?: number | null
       /** Notes */
@@ -4006,6 +4153,12 @@ export interface components {
       closed_by?: number | null
       /** Closed Late */
       closed_late?: boolean | null
+      /** Chain Closed Late */
+      chain_closed_late?: boolean | null
+      /** Amends Id */
+      amends_id?: number | null
+      /** Superseded At */
+      superseded_at?: string | null
       /** Ita Reference */
       ita_reference?: string | null
       /** Assessment Amount */
@@ -4183,6 +4336,12 @@ export interface components {
       closed_by?: number | null
       /** Closed Late */
       closed_late?: boolean | null
+      /** Chain Closed Late */
+      chain_closed_late?: boolean | null
+      /** Amends Id */
+      amends_id?: number | null
+      /** Superseded At */
+      superseded_at?: string | null
       /** Ita Reference */
       ita_reference?: string | null
       /** Assessment Amount */
@@ -6237,13 +6396,6 @@ export interface components {
       override_justification?: string | null
       /** Submission Reference */
       submission_reference?: string | null
-      /**
-       * Is Amendment
-       * @default false
-       */
-      is_amendment: boolean
-      /** Amends Item Id */
-      amends_item_id?: number | null
     }
     /**
      * FilingDeadlineType
@@ -9219,15 +9371,14 @@ export interface components {
       closed_by_name?: string | null
       /** Closed Late */
       closed_late?: boolean | null
+      /** Chain Closed Late */
+      chain_closed_late?: boolean | null
       /** Submission Reference */
       submission_reference?: string | null
-      /**
-       * Is Amendment
-       * @default false
-       */
-      is_amendment: boolean
-      /** Amends Item Id */
-      amends_item_id?: number | null
+      /** Amends Id */
+      amends_id?: number | null
+      /** Superseded At */
+      superseded_at?: string | null
       /** Created By */
       created_by: number
       /** Assigned To */
@@ -12247,6 +12398,140 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  create_amendment_api_v1_annual_reports__report_id__amend_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        report_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AnnualReportResponse']
+        }
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  list_amendment_chain_api_v1_annual_reports__report_id__chain_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        report_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AnnualReportResponse'][]
         }
       }
       /** @description Authentication required */
@@ -19121,6 +19406,142 @@ export interface operations {
       }
     }
   }
+  create_advance_payment_amendment_api_v1_clients__client_record_id__advance_payments__payment_id__amend_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        client_record_id: number
+        payment_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AdvancePaymentRow']
+        }
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  list_advance_payment_chain_api_v1_clients__client_record_id__advance_payments__payment_id__chain_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        client_record_id: number
+        payment_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AdvancePaymentRow'][]
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
   list_advance_payments_overview_api_v1_advance_payments_overview_get: {
     parameters: {
       query: {
@@ -20837,6 +21258,131 @@ export interface operations {
       }
       /** @description Conflict */
       409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  create_amendment_api_v1_vat_work_items__item_id__amend_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        item_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VatWorkItemResponse']
+        }
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  list_amendment_chain_api_v1_vat_work_items__item_id__chain_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        item_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VatWorkItemResponse'][]
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
         headers: {
           [name: string]: unknown
         }

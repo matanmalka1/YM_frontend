@@ -85,6 +85,20 @@ export const vatReportsApi = {
     return response.data
   },
 
+  // Returns the amendment, not the original: the caller navigates to the new
+  // record, which is where the corrected figures are entered (D-21).
+  createAmendment: async (id: number): Promise<VatWorkItemResponse> => {
+    const response = await api.post<VatWorkItemResponse>(VAT_ENDPOINTS.vatWorkItemAmend(id))
+    return response.data
+  },
+
+  // Every record for this period, oldest first — the one read that includes
+  // superseded records, because they are the history being asked for.
+  listChain: async (id: number): Promise<VatWorkItemResponse[]> => {
+    const response = await api.get<VatWorkItemResponse[]>(VAT_ENDPOINTS.vatWorkItemChain(id))
+    return response.data
+  },
+
   listInvoices: async (id: number): Promise<VatInvoiceListResponse> => {
     const response = await api.get<VatInvoiceListResponse>(VAT_ENDPOINTS.vatWorkItemInvoices(id))
     return response.data

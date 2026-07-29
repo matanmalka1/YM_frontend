@@ -1,6 +1,6 @@
-import { Send, RotateCcw, PackageCheck } from 'lucide-react'
+import { Send, RotateCcw, PackageCheck, FilePlus2 } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
-import { canMarkMaterialsComplete, canMarkReadyForReview, canFile, canSendBack } from '../../utils/vatHelpers'
+import { canMarkMaterialsComplete, canMarkReadyForReview, canFile, canSendBack, canCreateAmendment } from '../../utils/vatHelpers'
 import { isClientClosed } from '@/features/clients/public'
 import type { VatActionButtonsProps } from '../../types'
 import { VAT_MESSAGES } from '../../messages'
@@ -12,6 +12,7 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
   onReadyForReview,
   onFile,
   onSendBack,
+  onCreateAmendment,
 }) => {
   const actionsDisabled = isClientClosed(workItem.client_status) || isLoading
   // available_actions is already role-filtered by the backend: filing and send-back are
@@ -21,8 +22,9 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
   const showReadyForReview = canMarkReadyForReview(actions)
   const showFile = canFile(actions)
   const showSendBack = canSendBack(actions)
+  const showCreateAmendment = canCreateAmendment(actions)
 
-  if (!showMaterialsComplete && !showReadyForReview && !showFile && !showSendBack) return null
+  if (!showMaterialsComplete && !showReadyForReview && !showFile && !showSendBack && !showCreateAmendment) return null
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -60,6 +62,18 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
           onClick={onFile}
         >
           {VAT_MESSAGES.actions.fileVat}
+        </Button>
+      )}
+      {showCreateAmendment && (
+        <Button
+          variant="outline"
+          size="sm"
+          icon={<FilePlus2 className="h-4 w-4" />}
+          isLoading={isLoading}
+          disabled={actionsDisabled}
+          onClick={onCreateAmendment}
+        >
+          {VAT_MESSAGES.actions.createAmendment}
         </Button>
       )}
       {showSendBack && (

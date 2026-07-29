@@ -59,8 +59,8 @@ export const useVatWorkItemDetailPage = (workItemId: number, leadingBreadcrumbs?
           filedByName: workItem.closed_by_name,
           filingMethod: workItem.submission_method,
           submissionReference: workItem.submission_reference,
-          isAmendment: workItem.is_amendment,
-          amendsItemId: workItem.amends_item_id,
+          amendsId: workItem.amends_id,
+          supersededAt: workItem.superseded_at,
         }
       : null
 
