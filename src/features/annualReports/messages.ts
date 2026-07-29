@@ -208,7 +208,6 @@ export const ANNUAL_REPORTS_MESSAGES = {
     ariaLabel: 'בחירת סטטוס יעד',
   },
   detailForm: {
-    clientApprovedAtLabel: 'תאריך אישור לקוח',
     internalNotesLabel: 'הערות פנימיות',
   },
   deductionsTab: {

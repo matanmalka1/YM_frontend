@@ -2,12 +2,7 @@ import type { PaginatedResponse } from '@/types'
 
 export type SignatureRequestStatus = 'pending_signature' | 'signed' | 'declined' | 'expired' | 'canceled'
 
-export type SignatureRequestType =
-  | 'engagement_agreement'
-  | 'annual_report_approval'
-  | 'power_of_attorney'
-  | 'vat_return_approval'
-  | 'custom'
+export type SignatureRequestType = 'engagement_agreement' | 'power_of_attorney' | 'custom'
 
 export interface SignatureRequestResponse {
   id: number
@@ -25,7 +20,6 @@ export interface SignatureRequestResponse {
   status: SignatureRequestStatus
   content_hash: string | null
   storage_key: string | null
-  annual_report_id: number | null
   document_id: number | null
   created_at: string
   updated_at: string | null
@@ -62,7 +56,6 @@ interface SignatureRequestAuditItem {
   signer_name: string | null
   signer_email: string | null
   business_id: number | null
-  annual_report_id: number | null
   document_id: number | null
   ip_address: string | null
   user_agent: string | null
@@ -85,7 +78,6 @@ export interface CreateSignatureRequestPayload {
   signer_name: string
   signer_email?: string
   signer_phone?: string
-  annual_report_id?: number
   document_id?: number
   content_to_hash?: string
   expiry_days?: number

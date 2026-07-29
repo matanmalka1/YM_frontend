@@ -32,13 +32,11 @@ export type CreateReportFormValues = z.input<typeof createReportSchema>
 // ── Report Detail ──────────────────────────────────────────────────────────
 
 export const annualReportDetailSchema = z.object({
-  client_approved_at: z.string().trim().optional().or(z.literal('')),
   internal_notes: z.string().trim().optional().or(z.literal('')),
 })
 
 export type AnnualReportDetailFormValues = z.infer<typeof annualReportDetailSchema>
 
 export const annualReportDetailDefaults: AnnualReportDetailFormValues = {
-  client_approved_at: '',
   internal_notes: '',
 }

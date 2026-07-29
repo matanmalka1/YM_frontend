@@ -4070,8 +4070,6 @@ export interface components {
       donation_amount?: string | null
       /** Other Credits */
       other_credits?: string | null
-      /** Client Approved At */
-      client_approved_at?: string | null
       /** Internal Notes */
       internal_notes?: string | null
       /** Amendment Reason */
@@ -4086,8 +4084,6 @@ export interface components {
       donation_amount?: string | null
       /** Other Credits */
       other_credits?: string | null
-      /** Client Approved At */
-      client_approved_at?: string | null
       /** Internal Notes */
       internal_notes?: string | null
       /** Amendment Reason */
@@ -7166,7 +7162,7 @@ export interface components {
     ReminderStatus: 'scheduled' | 'fired' | 'canceled' | 'failed'
     /**
      * ReportDetailResponse
-     * @description AnnualReportDetail — ניכויים, אישור לקוח, הערות.
+     * @description AnnualReportDetail — ניכויים, הערות.
      */
     ReportDetailResponse: {
       /** Report Id */
@@ -7177,8 +7173,6 @@ export interface components {
       donation_amount?: string | null
       /** Other Credits */
       other_credits?: string | null
-      /** Client Approved At */
-      client_approved_at?: string | null
       /** Internal Notes */
       internal_notes?: string | null
       /** Amendment Reason */
@@ -7411,8 +7405,6 @@ export interface components {
       signer_email?: string | null
       /** Business Id */
       business_id?: number | null
-      /** Annual Report Id */
-      annual_report_id?: number | null
       /** Document Id */
       document_id?: number | null
       /** Ip Address */
@@ -7445,8 +7437,6 @@ export interface components {
       signer_email?: string | null
       /** Signer Phone */
       signer_phone?: string | null
-      /** Annual Report Id */
-      annual_report_id?: number | null
       /** Document Id */
       document_id?: number | null
       /** Content To Hash */
@@ -7490,8 +7480,6 @@ export interface components {
       content_hash?: string | null
       /** Storage Key */
       storage_key?: string | null
-      /** Annual Report Id */
-      annual_report_id?: number | null
       /** Document Id */
       document_id?: number | null
       /**
@@ -7564,8 +7552,6 @@ export interface components {
       content_hash?: string | null
       /** Storage Key */
       storage_key?: string | null
-      /** Annual Report Id */
-      annual_report_id?: number | null
       /** Document Id */
       document_id?: number | null
       /**
@@ -7602,12 +7588,7 @@ export interface components {
      * SignatureRequestType
      * @enum {string}
      */
-    SignatureRequestType:
-      | 'engagement_agreement'
-      | 'annual_report_approval'
-      | 'power_of_attorney'
-      | 'vat_return_approval'
-      | 'custom'
+    SignatureRequestType: 'engagement_agreement' | 'power_of_attorney' | 'custom'
     /** SignatureRequestWithAuditResponse */
     SignatureRequestWithAuditResponse: {
       /** Id */
@@ -7638,8 +7619,6 @@ export interface components {
       content_hash?: string | null
       /** Storage Key */
       storage_key?: string | null
-      /** Annual Report Id */
-      annual_report_id?: number | null
       /** Document Id */
       document_id?: number | null
       /**

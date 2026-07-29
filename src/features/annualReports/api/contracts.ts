@@ -158,7 +158,6 @@ export interface AnnualReportFull {
   pension_contribution?: string | null
   donation_amount?: string | null
   other_credits?: string | null
-  client_approved_at?: string | null
   internal_notes?: string | null
   amendment_reason?: string | null
   tax_calculation?: AnnualReportTaxCalculation | null
@@ -169,7 +168,6 @@ export interface ReportDetailResponse {
   pension_contribution: string | null
   donation_amount: string | null
   other_credits: string | null
-  client_approved_at: string | null
   internal_notes: string | null
   amendment_reason: string | null
   created_at: string | null
@@ -180,7 +178,6 @@ export interface AnnualReportDetailUpdatePayload {
   pension_contribution?: string | null
   donation_amount?: string | null
   other_credits?: string | null
-  client_approved_at?: string | null
   internal_notes?: string | null
   amendment_reason?: string | null
 }

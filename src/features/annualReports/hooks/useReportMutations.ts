@@ -62,7 +62,6 @@ export const useReportMutations = (reportId: number | null, onDeleted?: () => vo
           prev
             ? {
                 ...prev,
-                client_approved_at: updated.client_approved_at,
                 internal_notes: updated.internal_notes,
               }
             : prev,
