@@ -24,6 +24,7 @@ import { AdvancePaymentContextCard } from './AdvancePaymentContextCard'
 import { AdvancePaymentAnnualContextCard } from './AdvancePaymentAnnualContextCard'
 import { AdvancePaymentPeriodNavigator } from './AdvancePaymentPeriodNavigator'
 import { AdvancePaymentEditableSections } from './AdvancePaymentEditableSections'
+import { AdvancePaymentStatusPanel } from './AdvancePaymentStatusPanel'
 import { AdvancePaymentReadonlySections } from './AdvancePaymentReadonlySections'
 import { AdvancePaymentSummaryStrip } from './AdvancePaymentSummaryStrip'
 import { ADVANCED_PAYMENTS_MESSAGES, TURNOVER_SOURCE_SHORT_LABELS } from '../../messages'
@@ -191,6 +192,7 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
         </div>
 
         <div className="space-y-5">
+          <AdvancePaymentStatusPanel payment={payment} />
           <AdvancePaymentAnnualContextCard {...annualContext} />
           <AdvancePaymentContextCard payment={payment} clientIdNumber={clientIdNumber} />
         </div>

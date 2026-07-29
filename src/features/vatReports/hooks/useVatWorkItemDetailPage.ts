@@ -52,11 +52,11 @@ export const useVatWorkItemDetailPage = (workItemId: number, leadingBreadcrumbs?
     : null
 
   const filedBanner: VatFiledBannerProps | null =
-    workItem && isFiled(workItem.status) && workItem.filed_at
+    workItem && isFiled(workItem.status) && workItem.closed_at
       ? {
-          filedAt: workItem.filed_at,
-          filedBy: workItem.filed_by,
-          filedByName: workItem.filed_by_name,
+          filedAt: workItem.closed_at,
+          filedBy: workItem.closed_by,
+          filedByName: workItem.closed_by_name,
           filingMethod: workItem.submission_method,
           submissionReference: workItem.submission_reference,
           isAmendment: workItem.is_amendment,

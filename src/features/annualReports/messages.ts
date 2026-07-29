@@ -188,6 +188,9 @@ export const ANNUAL_REPORTS_MESSAGES = {
     readinessCheck: 'בדיקת מוכנות להגשה',
     currentStatus: 'סטטוס נוכחי:',
     changeStatus: 'שנה סטטוס',
+    assigneeLabel: 'נציג אחראי',
+    assigneeUnassigned: 'לא הוקצה',
+    assigneeUpdated: 'הנציג האחראי עודכן',
   },
   transitionDetailsForm: {
     noteLabel: 'הערה (אופציונלי)',

@@ -3,6 +3,7 @@ import { toQueryParams } from '@/api/queryParams'
 import { ANNUAL_REPORT_ENDPOINTS } from './endpoints'
 import type {
   AnnualReportFull,
+  AnnualReportMetadataUpdatePayload,
   AnnualReportListResponse,
   AnnualReportListItem,
   AnnualReportScheduleKey,
@@ -64,6 +65,11 @@ export const annualReportsApi = {
     const response = await api.post<ScheduleEntry>(ANNUAL_REPORT_ENDPOINTS.completeSchedules(reportId), {
       schedule,
     })
+    return response.data
+  },
+
+  updateMetadata: async (reportId: number, payload: AnnualReportMetadataUpdatePayload): Promise<AnnualReportFull> => {
+    const response = await api.patch<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.byId(reportId), payload)
     return response.data
   },
 

@@ -62,9 +62,10 @@ export interface VatWorkItemResponse {
   is_overridden: boolean
   override_justification: string | null
   submission_method: string | null
-  filed_at: string | null
-  filed_by: number | null
-  filed_by_name?: string | null
+  closed_at: string | null
+  closed_by: number | null
+  closed_by_name?: string | null
+  closed_late?: boolean | null
   created_by: number
   assigned_to: number | null
   assigned_to_name?: string | null
@@ -96,7 +97,7 @@ export interface VatWorkItemListItem {
   net_vat: string
   final_vat_amount: string | null
   is_overridden: boolean
-  filed_at: string | null
+  closed_at: string | null
   updated_at: string
   submission_deadline: string | null
   extended_deadline: string | null
@@ -210,7 +211,7 @@ export interface VatPeriodRow {
   total_output_net: string
   total_input_net: string
   final_vat_amount: string | null
-  filed_at: string | null
+  closed_at: string | null
   submission_deadline: string | null
   statutory_deadline: string | null
   extended_deadline: string | null

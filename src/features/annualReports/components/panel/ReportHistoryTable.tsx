@@ -53,9 +53,9 @@ export const ReportHistoryTable: React.FC<Props> = ({ clientId, currentReportId,
         getValue: (r) => (r.tax_due == null ? null : formatCurrencyILS(r.tax_due)),
       }),
       dateColumn<AnnualReportListItem>({
-        key: 'submitted_at',
+        key: 'closed_at',
         header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.submittedAtHeader,
-        getValue: (r) => r.submitted_at,
+        getValue: (r) => r.closed_at,
       }),
       {
         key: 'status',

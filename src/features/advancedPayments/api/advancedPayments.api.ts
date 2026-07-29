@@ -4,6 +4,8 @@ import { toQueryParams } from '@/api/queryParams'
 import { randomUUID } from '@/utils/random'
 import type { PaginatedResponse } from '@/types'
 import type {
+  AdvancePaymentClosingReadiness,
+  AdvancePaymentStatusTransitionPayload,
   AdvancePaymentRow,
   ListAdvancePaymentsParams,
   CreateAdvancePaymentPayload,
@@ -50,6 +52,25 @@ export const advancePaymentsApi = {
   update: async (clientRecordId: number, id: number, payload: UpdateAdvancePaymentPayload): Promise<AdvancePaymentRow> => {
     const response = await api.patch<AdvancePaymentRow>(
       ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentById(clientRecordId, id),
+      payload,
+    )
+    return response.data
+  },
+
+  getClosingReadiness: async (clientRecordId: number, id: number): Promise<AdvancePaymentClosingReadiness> => {
+    const response = await api.get<AdvancePaymentClosingReadiness>(
+      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentReadiness(clientRecordId, id),
+    )
+    return response.data
+  },
+
+  transitionStatus: async (
+    clientRecordId: number,
+    id: number,
+    payload: AdvancePaymentStatusTransitionPayload,
+  ): Promise<AdvancePaymentRow> => {
+    const response = await api.post<AdvancePaymentRow>(
+      ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentStatus(clientRecordId, id),
       payload,
     )
     return response.data

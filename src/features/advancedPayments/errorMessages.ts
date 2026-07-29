@@ -14,6 +14,10 @@ export const ADVANCED_PAYMENTS_ERROR_MESSAGES = {
     paidAmountInvalid: 'סכום ששולם חייב להיות מספר תקין שאינו שלילי',
     paymentMethodInvalid: 'שיטת תשלום אינה תקינה',
   },
+  statusTransition: {
+    transition: 'שינוי סטטוס המקדמה נכשל',
+    readinessLoad: 'טעינת בדיקת המוכנות נכשלה',
+  },
   bulkMarkPaid: {
     failed: 'סימון המקדמות כשולמו נכשל',
   },

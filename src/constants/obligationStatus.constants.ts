@@ -45,3 +45,19 @@ export const getObligationStatusLabel = (status: string): string =>
 
 /** No further work: submitted or cancelled. Mirrors the backend's resolved set. */
 export const isObligationResolved = (status: ObligationStatus): boolean => status === 'submitted' || status === 'canceled'
+
+/** D-13: nothing on a submitted record changes — every change is an amendment.
+ * Mirrors the backend's `is_locked`; edit surfaces hide/disable on it. */
+export const isObligationLocked = (status: ObligationStatus): boolean => status === 'submitted'
+
+/** The single stage forward on the ladder, or null at the end / off-ladder. */
+export const nextObligationStage = (status: ObligationStatus): ObligationStatus | null => {
+  const index = (OBLIGATION_STAGES as readonly string[]).indexOf(status)
+  return index >= 0 && index + 1 < OBLIGATION_STAGES.length ? OBLIGATION_STAGES[index + 1] : null
+}
+
+/** The single stage back on the ladder, or null at the start / off-ladder. */
+export const previousObligationStage = (status: ObligationStatus): ObligationStatus | null => {
+  const index = (OBLIGATION_STAGES as readonly string[]).indexOf(status)
+  return index > 0 ? OBLIGATION_STAGES[index - 1] : null
+}

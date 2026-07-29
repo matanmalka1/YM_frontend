@@ -16,7 +16,7 @@ export interface LineRowProps {
   supportingDocumentClientRecordId?: number | null
   supportingDocumentFilename?: string | null
   onEdit?: () => void
-  onDelete: () => void
+  onDelete?: () => void
   isDeleting: boolean
 }
 
@@ -79,14 +79,16 @@ export const LineRow: React.FC<LineRowProps> = ({
             onClick={onEdit}
           />
         ) : null}
-        <RowActionButton
-          label={ANNUAL_REPORTS_MESSAGES.financialLineRow.deleteLine}
-          icon={<Trash2 className="h-3.5 w-3.5" />}
-          tone="danger"
-          size="sm"
-          onClick={onDelete}
-          disabled={isDeleting}
-        />
+        {onDelete ? (
+          <RowActionButton
+            label={ANNUAL_REPORTS_MESSAGES.financialLineRow.deleteLine}
+            icon={<Trash2 className="h-3.5 w-3.5" />}
+            tone="danger"
+            size="sm"
+            onClick={onDelete}
+            disabled={isDeleting}
+          />
+        ) : null}
       </div>
     </div>
   )

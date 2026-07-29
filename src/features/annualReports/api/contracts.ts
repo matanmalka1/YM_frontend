@@ -90,7 +90,9 @@ export interface AnnualReportListItem {
   filing_deadline: string | null
   is_overdue: boolean
   days_until_deadline: number | null
-  submitted_at: string | null
+  closed_at: string | null
+  closed_by: number | null
+  closed_late: boolean | null
   assessment_amount: string | null
   refund_due: string | null
   tax_due: string | null
@@ -133,7 +135,9 @@ export interface AnnualReportFull {
   is_overdue: boolean
   days_until_deadline: number | null
   custom_deadline_note: string | null
-  submitted_at: string | null
+  closed_at: string | null
+  closed_by: number | null
+  closed_late: boolean | null
   ita_reference: string | null
   assessment_amount: string | null
   refund_due: string | null
@@ -387,4 +391,8 @@ interface VatAutoPopulateExpenseBreakdownItem {
   annual_category: ExpenseCategoryType
   amount: string
   source_vat_categories: Record<string, string>
+}
+
+export interface AnnualReportMetadataUpdatePayload {
+  assigned_to: number | null
 }

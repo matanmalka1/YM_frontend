@@ -16,8 +16,9 @@ import { ANNUAL_REPORTS_MESSAGES } from '../../messages'
 interface IncomeExpenseTabProps {
   reportId: number
   clientRecordId: number
+  isLocked: boolean
 }
-export const IncomeExpenseTab: React.FC<IncomeExpenseTabProps> = ({ reportId, clientRecordId }) => {
+export const IncomeExpenseTab: React.FC<IncomeExpenseTabProps> = ({ reportId, clientRecordId, isLocked }) => {
   const panel = useIncomeExpenseTab(reportId)
 
   if (panel.isLoading) {
@@ -26,7 +27,7 @@ export const IncomeExpenseTab: React.FC<IncomeExpenseTabProps> = ({ reportId, cl
 
   return (
     <div className="space-y-5">
-      {panel.isAdvisor && (
+      {panel.isAdvisor && !isLocked && (
         <AnnualReportVatAutoPopulateControls
           showForceConfirm={panel.showForceConfirm}
           isPending={panel.isAutoPopulating}
@@ -48,12 +49,14 @@ export const IncomeExpenseTab: React.FC<IncomeExpenseTabProps> = ({ reportId, cl
           emptyMessage={FINANCIAL_MESSAGES.noIncome}
           isEmpty={panel.incomeLines.length === 0}
           footer={
-            <AnnualReportAddIncomeLineForm
-              typeOptions={INCOME_LABELS}
-              onAdd={panel.addIncome}
-              isAdding={panel.isAddingIncome}
-              label={ANNUAL_REPORTS_MESSAGES.incomeExpense.addIncome}
-            />
+            isLocked ? undefined : (
+              <AnnualReportAddIncomeLineForm
+                typeOptions={INCOME_LABELS}
+                onAdd={panel.addIncome}
+                isAdding={panel.isAddingIncome}
+                label={ANNUAL_REPORTS_MESSAGES.incomeExpense.addIncome}
+              />
+            )
           }
         >
           {panel.incomeLines.map((l) => (
@@ -62,8 +65,8 @@ export const IncomeExpenseTab: React.FC<IncomeExpenseTabProps> = ({ reportId, cl
                 label={INCOME_LABELS[l.source_type] ?? l.source_type}
                 amount={l.amount}
                 description={l.description}
-                onEdit={() => panel.toggleEdit('income', l.id)}
-                onDelete={() => panel.deleteIncome(l)}
+                onEdit={isLocked ? undefined : () => panel.toggleEdit('income', l.id)}
+                onDelete={isLocked ? undefined : () => panel.deleteIncome(l)}
                 isDeleting={panel.deletingIncomeIds.has(l.id)}
               />
               {panel.editingLine?.type === 'income' && panel.editingLine.id === l.id && (
@@ -88,7 +91,7 @@ export const IncomeExpenseTab: React.FC<IncomeExpenseTabProps> = ({ reportId, cl
           totalClassName="text-negative-600"
           emptyMessage={FINANCIAL_MESSAGES.noExpenses}
           isEmpty={panel.expenseLines.length === 0}
-          footer={<AddExpenseLineForm onAdd={panel.addExpense} isAdding={panel.isAddingExpense} />}
+          footer={isLocked ? undefined : <AddExpenseLineForm onAdd={panel.addExpense} isAdding={panel.isAddingExpense} />}
         >
           {panel.expenseLines.map((l) => (
             <div key={l.id}>
@@ -101,8 +104,8 @@ export const IncomeExpenseTab: React.FC<IncomeExpenseTabProps> = ({ reportId, cl
                 supportingDocumentId={l.supporting_document_id}
                 supportingDocumentClientRecordId={l.supporting_document_id != null ? clientRecordId : null}
                 supportingDocumentFilename={l.supporting_document_filename}
-                onEdit={() => panel.toggleEdit('expense', l.id)}
-                onDelete={() => panel.deleteExpense(l)}
+                onEdit={isLocked ? undefined : () => panel.toggleEdit('expense', l.id)}
+                onDelete={isLocked ? undefined : () => panel.deleteExpense(l)}
                 isDeleting={panel.deletingExpenseIds.has(l.id)}
               />
               {panel.editingLine?.type === 'expense' && panel.editingLine.id === l.id && (

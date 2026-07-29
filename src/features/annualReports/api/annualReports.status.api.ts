@@ -10,7 +10,7 @@ export const annualReportStatusApi = {
   submitReport: async (
     reportId: number,
     payload: {
-      submitted_at?: string
+      closed_at?: string
       ita_reference?: string | null
       submission_method?: string | null
       note?: string | null

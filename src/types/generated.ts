@@ -599,7 +599,11 @@ export interface paths {
     delete: operations['delete_annual_report_api_v1_annual_reports__report_id__delete']
     options?: never
     head?: never
-    patch?: never
+    /**
+     * Update Annual Report Metadata
+     * @description Reassign the report — required so the assignee closing gate is satisfiable.
+     */
+    patch: operations['update_annual_report_metadata_api_v1_annual_reports__report_id__patch']
     trace?: never
   }
   '/api/v1/annual-reports/{report_id}/schedules': {
@@ -2357,6 +2361,49 @@ export interface paths {
     patch: operations['update_advance_payment_api_v1_clients__client_record_id__advance_payments__payment_id__patch']
     trace?: never
   }
+  '/api/v1/clients/{client_record_id}/advance-payments/{payment_id}/readiness': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Advance Payment Readiness
+     * @description Can this period be closed, and if not, what is missing (§4.1.8).
+     */
+    get: operations['get_advance_payment_readiness_api_v1_clients__client_record_id__advance_payments__payment_id__readiness_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/clients/{client_record_id}/advance-payments/{payment_id}/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Transition Advance Payment Status
+     * @description Move the period one step on the shared obligation ladder.
+     *
+     *     Advisor only. Backward moves require a note; moving to SUBMITTED asserts the
+     *     closing gate and records who closed the period and whether it was late.
+     */
+    post: operations['transition_advance_payment_status_api_v1_clients__client_record_id__advance_payments__payment_id__status_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/clients/{client_record_id}/advance-payments/{payment_id}/refresh-turnover': {
     parameters: {
       query?: never
@@ -2819,6 +2866,26 @@ export interface paths {
      *     READY_FOR_REVIEW → DATA_ENTRY_IN_PROGRESS.
      */
     post: operations['send_back_for_correction_api_v1_vat_work_items__item_id__send_back_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/vat/work-items/{item_id}/readiness': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Closing Readiness
+     * @description Return list of issues blocking this VAT period from being filed.
+     */
+    get: operations['get_closing_readiness_api_v1_vat_work_items__item_id__readiness_get']
+    put?: never
+    post?: never
     delete?: never
     options?: never
     head?: never
@@ -3294,6 +3361,18 @@ export interface components {
       /** Id Number */
       id_number: string
     }
+    /**
+     * AdvancePaymentClosingReadinessResponse
+     * @description The shared closing-gate shape (§4.1.8) for an advance payment.
+     */
+    AdvancePaymentClosingReadinessResponse: {
+      /** Is Ready */
+      is_ready: boolean
+      /** Issues */
+      issues: string[]
+      /** Advance Payment Id */
+      advance_payment_id: number
+    }
     /** AdvancePaymentCollectionsReportResponse */
     AdvancePaymentCollectionsReportResponse: {
       /** Year */
@@ -3344,6 +3423,8 @@ export interface components {
       period: string
       /** Period Months Count */
       period_months_count?: number | null
+      /** Assigned To */
+      assigned_to?: number | null
       /** Turnover Amount */
       turnover_amount?: string | null
       /** Advance Rate */
@@ -3518,6 +3599,8 @@ export interface components {
       id: number
       /** Client Record Id */
       client_record_id: number
+      /** Assigned To */
+      assigned_to?: number | null
       /** Period */
       period: string
       /** Period Months Count */
@@ -3547,6 +3630,12 @@ export interface components {
       payment_method?: components['schemas']['PaymentMethod'] | null
       /** Payment Reference */
       payment_reference?: string | null
+      /** Closed At */
+      closed_at?: string | null
+      /** Closed By */
+      closed_by?: number | null
+      /** Closed Late */
+      closed_late?: boolean | null
       /** Annual Report Id */
       annual_report_id?: number | null
       /** Notes */
@@ -3594,8 +3683,12 @@ export interface components {
        * @enum {string}
        */
       readonly timing_status: 'overdue' | 'on_time'
-      /** Paid Late */
-      readonly paid_late: boolean
+    }
+    /** AdvancePaymentStatusTransitionRequest */
+    AdvancePaymentStatusTransitionRequest: {
+      status: components['schemas']['ObligationStatus']
+      /** Note */
+      note?: string | null
     }
     /** AdvancePaymentUpdateRequest */
     AdvancePaymentUpdateRequest: {
@@ -3616,6 +3709,8 @@ export interface components {
       override_amount?: string | null
       /** Withheld Amount */
       withheld_amount?: string | null
+      /** Assigned To */
+      assigned_to?: number | null
     }
     /** AdvancePaymentsCard */
     AdvancePaymentsCard: {
@@ -3905,8 +4000,12 @@ export interface components {
       days_until_deadline?: number | null
       /** Custom Deadline Note */
       custom_deadline_note?: string | null
-      /** Submitted At */
-      submitted_at?: string | null
+      /** Closed At */
+      closed_at?: string | null
+      /** Closed By */
+      closed_by?: number | null
+      /** Closed Late */
+      closed_late?: boolean | null
       /** Ita Reference */
       ita_reference?: string | null
       /** Assessment Amount */
@@ -4028,8 +4127,8 @@ export interface components {
       is_overdue: boolean
       /** Days Until Deadline */
       days_until_deadline?: number | null
-      /** Submitted At */
-      submitted_at?: string | null
+      /** Closed At */
+      closed_at?: string | null
       /** Assessment Amount */
       assessment_amount?: string | null
       /** Refund Due */
@@ -4047,6 +4146,11 @@ export interface components {
       page_size: number
       /** Total */
       total: number
+    }
+    /** AnnualReportMetadataUpdateRequest */
+    AnnualReportMetadataUpdateRequest: {
+      /** Assigned To */
+      assigned_to?: number | null
     }
     /** AnnualReportResponse */
     AnnualReportResponse: {
@@ -4077,8 +4181,12 @@ export interface components {
       days_until_deadline?: number | null
       /** Custom Deadline Note */
       custom_deadline_note?: string | null
-      /** Submitted At */
-      submitted_at?: string | null
+      /** Closed At */
+      closed_at?: string | null
+      /** Closed By */
+      closed_by?: number | null
+      /** Closed Late */
+      closed_late?: boolean | null
       /** Ita Reference */
       ita_reference?: string | null
       /** Assessment Amount */
@@ -4907,7 +5015,7 @@ export interface components {
        * Reason
        * @enum {string}
        */
-      reason: 'already_paid' | 'no_amount' | 'not_found'
+      reason: 'already_paid' | 'no_amount' | 'not_found' | 'closed'
     }
     /** BulkRateUpdateRequest */
     BulkRateUpdateRequest: {
@@ -4951,6 +5059,8 @@ export interface components {
       skipped_not_filed: number
       /** Skipped Paid */
       skipped_paid: number
+      /** Skipped Closed */
+      skipped_closed: number
     }
     /**
      * BusinessCreateRequest
@@ -6912,14 +7022,17 @@ export interface components {
      * @enum {string}
      */
     PrimaryAnnualReportForm: '1301' | '1214' | '1215'
-    /** ReadinessCheckResponse */
+    /**
+     * ReadinessCheckResponse
+     * @description The shared closing-gate shape plus this domain's extras.
+     */
     ReadinessCheckResponse: {
-      /** Annual Report Id */
-      annual_report_id: number
       /** Is Ready */
       is_ready: boolean
       /** Issues */
       issues: string[]
+      /** Annual Report Id */
+      annual_report_id: number
       /** Completion Pct */
       completion_pct: number
     }
@@ -7636,8 +7749,8 @@ export interface components {
     SubmissionMethod: 'online' | 'manual' | 'representative'
     /** SubmitRequest */
     SubmitRequest: {
-      /** Submitted At */
-      submitted_at?: string | null
+      /** Closed At */
+      closed_at?: string | null
       /** Ita Reference */
       ita_reference?: string | null
       submission_method?: components['schemas']['SubmissionMethod'] | null
@@ -8511,6 +8624,18 @@ export interface components {
       /** Annual */
       annual: components['schemas']['VatAnnualSummary'][]
     }
+    /**
+     * VatClosingReadinessResponse
+     * @description The shared closing-gate shape (§4.1.8) for a VAT period.
+     */
+    VatClosingReadinessResponse: {
+      /** Is Ready */
+      is_ready: boolean
+      /** Issues */
+      issues: string[]
+      /** Work Item Id */
+      work_item_id: number
+    }
     /** VatComplianceReportItemResponse */
     VatComplianceReportItemResponse: {
       /** Client Record Id */
@@ -8853,8 +8978,8 @@ export interface components {
       total_input_net: string
       /** Final Vat Amount */
       final_vat_amount?: string | null
-      /** Filed At */
-      filed_at?: string | null
+      /** Closed At */
+      closed_at?: string | null
       /** Submission Deadline */
       submission_deadline?: string | null
       /** Statutory Deadline */
@@ -9012,8 +9137,8 @@ export interface components {
       final_vat_amount?: string | null
       /** Is Overridden */
       is_overridden: boolean
-      /** Filed At */
-      filed_at?: string | null
+      /** Closed At */
+      closed_at?: string | null
       /**
        * Updated At
        * Format: date-time
@@ -9107,12 +9232,14 @@ export interface components {
       /** Override Justification */
       override_justification?: string | null
       submission_method?: components['schemas']['SubmissionMethod'] | null
-      /** Filed At */
-      filed_at?: string | null
-      /** Filed By */
-      filed_by?: number | null
-      /** Filed By Name */
-      filed_by_name?: string | null
+      /** Closed At */
+      closed_at?: string | null
+      /** Closed By */
+      closed_by?: number | null
+      /** Closed By Name */
+      closed_by_name?: string | null
+      /** Closed Late */
+      closed_late?: boolean | null
       /** Submission Reference */
       submission_reference?: string | null
       /**
@@ -11628,6 +11755,86 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  update_annual_report_metadata_api_v1_annual_reports__report_id__patch: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        report_id: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AnnualReportMetadataUpdateRequest']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AnnualReportDetailResponse']
+        }
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
       }
       /** @description Authentication required */
       401: {
@@ -18540,6 +18747,15 @@ export interface operations {
         }
         content?: never
       }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Authentication required */
       401: {
         headers: {
@@ -18641,6 +18857,137 @@ export interface operations {
       }
       /** @description Conflict */
       409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  get_advance_payment_readiness_api_v1_clients__client_record_id__advance_payments__payment_id__readiness_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        client_record_id: number
+        payment_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AdvancePaymentClosingReadinessResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  transition_advance_payment_status_api_v1_clients__client_record_id__advance_payments__payment_id__status_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        client_record_id: number
+        payment_id: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AdvancePaymentStatusTransitionRequest']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AdvancePaymentRow']
+        }
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
         headers: {
           [name: string]: unknown
         }
@@ -20382,6 +20729,55 @@ export interface operations {
       }
       /** @description Conflict */
       409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  get_closing_readiness_api_v1_vat_work_items__item_id__readiness_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        item_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VatClosingReadinessResponse']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
         headers: {
           [name: string]: unknown
         }

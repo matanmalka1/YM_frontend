@@ -14,7 +14,9 @@ const report = (overrides: Partial<AnnualReportFull> = {}): AnnualReportFull => 
   is_overdue: true,
   days_until_deadline: -387,
   custom_deadline_note: null,
-  submitted_at: null,
+  closed_at: null,
+  closed_by: null,
+  closed_late: null,
   ita_reference: null,
   assessment_amount: null,
   refund_due: null,
@@ -46,7 +48,7 @@ describe('annual report alert banners', () => {
       report({
         status,
         is_overdue: false,
-        submitted_at: status === 'submitted' ? '2025-06-01T00:00:00Z' : null,
+        closed_at: status === 'submitted' ? '2025-06-01T00:00:00Z' : null,
       }),
     )
 

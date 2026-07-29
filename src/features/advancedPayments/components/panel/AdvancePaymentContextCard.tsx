@@ -32,7 +32,7 @@ export const AdvancePaymentContextCard: React.FC<AdvancePaymentContextCardProps>
       ? ADVANCED_PAYMENTS_MESSAGES.detail.turnoverWithSource(formatShekelAmount(payment.turnover_amount), payment.turnover_source)
       : null
 
-  const timingBadge = payment.paid_late
+  const timingBadge = payment.closed_late
     ? { variant: 'warning' as const, label: ADVANCED_PAYMENTS_MESSAGES.detail.paidLateLabel }
     : payment.timing_status === 'overdue'
       ? { variant: 'negative' as const, label: ADVANCED_PAYMENTS_MESSAGES.detail.overdueLabel }

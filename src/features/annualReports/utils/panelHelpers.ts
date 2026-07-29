@@ -60,11 +60,11 @@ export const getAlertBanners = (report: AnnualReportFull, advances?: BalanceAler
     }
   }
 
-  if (report.status === 'submitted' && report.submitted_at) {
+  if (report.status === 'submitted' && report.closed_at) {
     banners.push({
       variant: 'info',
       icon: 'info',
-      message: `הדוח הוגש ב-${formatDate(report.submitted_at)} ממתין לאישור רשות המסים.`,
+      message: `הדוח הוגש ב-${formatDate(report.closed_at)} ממתין לאישור רשות המסים.`,
     })
   }
 

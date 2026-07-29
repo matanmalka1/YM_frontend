@@ -19,7 +19,7 @@ export const ReportMetaGrid = ({ report }: ReportMetaGridProps) => (
         value: report.form_type ? ANNUAL_REPORTS_MESSAGES.reportMetaGrid.formTypeValue(report.form_type) : '—',
       },
       { label: ANNUAL_REPORTS_MESSAGES.reportMetaGrid.itaReference, value: report.ita_reference },
-      { label: ANNUAL_REPORTS_MESSAGES.reportMetaGrid.submittedAt, value: formatDate(report.submitted_at) },
+      { label: ANNUAL_REPORTS_MESSAGES.reportMetaGrid.submittedAt, value: formatDate(report.closed_at) },
       { label: ANNUAL_REPORTS_MESSAGES.reportMetaGrid.filingDeadline, value: formatDate(report.filing_deadline) },
     ]}
   />

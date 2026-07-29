@@ -1,4 +1,5 @@
 import type { MutableRefObject } from 'react'
+import { isObligationLocked } from '@/constants/obligationStatus.constants'
 import type { SectionKey } from '../../types'
 import type { AnnualReportDetailUpdatePayload, AnnualReportFull, AnnualReportScheduleKey } from '../../api'
 import { AnnualReportOverviewTab } from './AnnualReportOverviewTab'
@@ -46,7 +47,13 @@ export const AnnualReportSectionContent = ({
         />
       )
     case 'financials':
-      return <IncomeExpenseTab reportId={reportId} clientRecordId={report.client_record_id} />
+      return (
+        <IncomeExpenseTab
+          reportId={reportId}
+          clientRecordId={report.client_record_id}
+          isLocked={isObligationLocked(report.status)}
+        />
+      )
     case 'tax':
       return <TaxCalculationTab reportId={reportId} />
     case 'deductions':

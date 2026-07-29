@@ -34,9 +34,23 @@ export interface AdvancePaymentRow {
   vat_turnover_mismatch: VatTurnoverMismatch | null
   missing_turnover: boolean
   timing_status: AdvancePaymentTimingStatus
-  paid_late: boolean
+  assigned_to: number | null
+  closed_at: string | null
+  closed_by: number | null
+  closed_late: boolean | null
   created_at: string
   updated_at: string | null
+}
+
+export interface AdvancePaymentClosingReadiness {
+  advance_payment_id: number
+  is_ready: boolean
+  issues: string[]
+}
+
+export interface AdvancePaymentStatusTransitionPayload {
+  status: AdvancePaymentStatus
+  note?: string | null
 }
 
 export interface ListAdvancePaymentsParams {

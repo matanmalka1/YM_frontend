@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import type { Breadcrumb } from '@/components/layout/PageHeader'
+import { isObligationLocked } from '@/constants/obligationStatus.constants'
 import { useRole } from '@/hooks/useRole'
 import { toast } from '@/utils/toast'
 import { getErrorMessage } from '@/utils/utils'
@@ -97,7 +98,8 @@ export const useAdvancePaymentDetailPage = ({
       breadcrumbs: [...leadingBreadcrumbs, { label: title }] satisfies Breadcrumb[],
     },
     permissions: {
-      canEdit: isAdvisor,
+      // D-13: a submitted advance is locked — nothing on it changes
+      canEdit: isAdvisor && !(payment && isObligationLocked(payment.status)),
     },
     payment: payment ?? null,
     annualContext: {
@@ -115,9 +117,10 @@ export const useAdvancePaymentDetailPage = ({
       onSave: async (payload: UpdateAdvancePaymentPayload) => {
         await paymentMutations.updatePayment({ id: paymentId, payload })
       },
-      onDelete: isAdvisor
-        ? async (reason: string) => void (await paymentMutations.deletePayment({ paymentId, reason }))
-        : undefined,
+      onDelete:
+        isAdvisor && !(payment && isObligationLocked(payment.status))
+          ? async (reason: string) => void (await paymentMutations.deletePayment({ paymentId, reason }))
+          : undefined,
     },
     turnoverRefresh: {
       isRefreshing: paymentMutations.isRefreshingTurnover,

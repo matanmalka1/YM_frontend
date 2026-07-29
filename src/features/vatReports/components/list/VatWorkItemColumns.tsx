@@ -109,9 +109,9 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
     getValue: (item) => item.updated_at,
   }),
   dateColumn({
-    key: 'filed_at',
+    key: 'closed_at',
     header: VAT_MESSAGES.columns.filedAt,
-    getValue: (item) => item.filed_at,
+    getValue: (item) => item.closed_at,
   }),
   {
     key: 'actions',

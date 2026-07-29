@@ -98,9 +98,9 @@ const columns: Column<AnnualReportListItem>[] = [
     render: (r) => getDeadlineTypeLabel(r.deadline_type),
   },
   dateColumn({
-    key: 'submitted_at',
+    key: 'closed_at',
     header: ANNUAL_REPORTS_MESSAGES.season.submittedAtHeader,
-    getValue: (r) => r.submitted_at,
+    getValue: (r) => r.closed_at,
   }),
 ]
 
