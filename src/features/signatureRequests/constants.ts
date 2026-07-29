@@ -15,7 +15,6 @@ const SIGNATURE_REQUEST_AUDIT_ACTIONS = [
   'signature_request.declined',
   'signature_request.canceled',
   'signature_request.expired',
-  'signature_request.annual_report_signed',
 ] as const satisfies readonly SignatureRequestAuditAction[]
 
 const SIGNATURE_REQUEST_ACTION_LABELS: Record<SignatureRequestAuditAction, string> = {
@@ -23,7 +22,6 @@ const SIGNATURE_REQUEST_ACTION_LABELS: Record<SignatureRequestAuditAction, strin
   'signature_request.sent': 'נשלחה',
   'signature_request.viewed': 'נצפתה',
   'signature_request.signed': 'נחתמה',
-  'signature_request.annual_report_signed': 'דוח שנתי נחתם',
   'signature_request.declined': 'נדחתה',
   'signature_request.canceled': 'בוטלה',
   'signature_request.expired': 'פגה תוקף',

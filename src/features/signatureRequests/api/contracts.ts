@@ -41,7 +41,6 @@ export type SignatureRequestAuditAction =
   | 'signature_request.declined'
   | 'signature_request.canceled'
   | 'signature_request.expired'
-  | 'signature_request.annual_report_signed'
 
 export type SignatureRequestAuditActorType = 'user' | 'external_signer' | 'system'
 
