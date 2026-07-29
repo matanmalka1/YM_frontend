@@ -19,15 +19,6 @@ export interface StatusTransitionPanelProps {
   isLoading: boolean
 }
 
-export interface AmendReportModalProps {
-  open: boolean
-  reason: string
-  isPending: boolean
-  onReasonChange: (value: string) => void
-  onClose: () => void
-  onSubmit: () => void
-}
-
 export interface TransitionTargetSelectorProps {
   allowed: AnnualReportStatus[]
   selected: AnnualReportStatus | null

@@ -90,7 +90,7 @@ export interface VatInvoiceEditRowProps {
 }
 
 export interface VatProgressBarProps {
-  currentStatus: string
+  currentStatus: VatWorkItemStatus
 }
 
 export interface VatSummaryTabProps {

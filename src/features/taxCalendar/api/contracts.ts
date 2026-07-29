@@ -1,6 +1,6 @@
 export type TaxCalendarObligationType = 'vat' | 'advance_payment' | 'annual_report'
 
-export interface TaxCalendarGroupsSummary {
+interface TaxCalendarGroupsSummary {
   groups: number
   linked: number
   open: number

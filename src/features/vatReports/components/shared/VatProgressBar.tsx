@@ -9,7 +9,7 @@ export const VatProgressBar: React.FC<VatProgressBarProps> = ({ currentStatus })
   const step = currentIdx >= 0 ? currentIdx + 1 : 1
   const total = VAT_WORKFLOW_STEPS.length
   const percent = Math.round((step / total) * 100)
-  const isFiled = currentStatus === 'filed'
+  const isSubmitted = currentStatus === 'submitted'
 
   return (
     <div className="flex items-center gap-3 rounded-lg border border-gray-100 bg-gray-50 px-3 py-2">
@@ -20,7 +20,7 @@ export const VatProgressBar: React.FC<VatProgressBarProps> = ({ currentStatus })
         value={percent}
         className="flex-1"
         trackClassName="bg-gray-200"
-        fillClassName={isFiled ? 'bg-positive-500' : 'bg-primary-500'}
+        fillClassName={isSubmitted ? 'bg-positive-500' : 'bg-primary-500'}
       />
       <span className="shrink-0 text-xs font-medium text-gray-500 tabular-nums" dir="ltr">
         {percent}%

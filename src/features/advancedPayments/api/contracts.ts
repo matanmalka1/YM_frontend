@@ -4,7 +4,7 @@ import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 // part-paid advance is `in_progress` with an outstanding balance, which is what
 // partial always described — a fact about the amount, not a stage.
 export type AdvancePaymentStatus = ObligationStatus
-export type AdvancePaymentTimingStatus = 'on_time' | 'overdue'
+type AdvancePaymentTimingStatus = 'on_time' | 'overdue'
 export type AdvancePaymentMethod = 'bank_transfer' | 'credit_card' | 'check' | 'direct_debit' | 'cash' | 'other'
 
 export interface AdvancePaymentRow {
@@ -104,7 +104,7 @@ export interface AvailableTurnover {
  * current VAT figure (beyond the backend tolerance). Render only — never
  * re-derive client-side. Mutually exclusive with `available_turnover`.
  */
-export interface VatTurnoverMismatch {
+interface VatTurnoverMismatch {
   vat_amount: string
   difference: string
   source: Extract<TurnoverSource, 'vat_filed' | 'vat_pending'>
@@ -212,7 +212,7 @@ export interface BulkMarkPaidPayload {
   reference_prefix?: string | null
 }
 
-export type BulkMarkPaidSkipReason = 'already_paid' | 'no_amount' | 'not_found'
+type BulkMarkPaidSkipReason = 'already_paid' | 'no_amount' | 'not_found'
 
 export interface BulkMarkPaidResponse {
   updated: number[]
