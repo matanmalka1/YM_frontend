@@ -18,7 +18,7 @@ export const canDeleteVatInvoices = (actions: BackendAction[] | null | undefined
   hasDeletePermission && canAddOrEditVatInvoices(actions)
 
 export const canMarkReadyForReview = (actions: BackendAction[] | null | undefined): boolean =>
-  hasVatAction(actions, 'awaiting_verification')
+  hasVatAction(actions, 'ready_for_review')
 
 export const canSendBack = (actions: BackendAction[] | null | undefined): boolean => hasVatAction(actions, 'send_back')
 

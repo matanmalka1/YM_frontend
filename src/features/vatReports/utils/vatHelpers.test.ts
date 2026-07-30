@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   canAddOrEditVatInvoices,
   canDeleteVatInvoices,
+  canMarkReadyForReview,
   getVatInvoiceActionLabel,
   getVatInvoiceDisplayNumber,
   isGeneratedVatInvoiceNumber,
@@ -60,6 +61,14 @@ describe('VAT invoice capabilities', () => {
   it('requires the advisor-only delete capability in addition to an editable work item', () => {
     expect(canDeleteVatInvoices([addInvoiceAction], true)).toBe(true)
     expect(canDeleteVatInvoices([addInvoiceAction], false)).toBe(false)
+  })
+
+  // The backend action key is `ready_for_review` (vat_report_actions.py); the target
+  // status it moves the item to is `awaiting_verification`. Matching on the status
+  // name hides the button for every in_progress item.
+  it('matches the backend ready_for_review action key, not the target status name', () => {
+    expect(canMarkReadyForReview([{ key: 'ready_for_review' }])).toBe(true)
+    expect(canMarkReadyForReview([{ key: 'awaiting_verification' }])).toBe(false)
   })
 })
 
