@@ -101,7 +101,11 @@ describe('useAdvancePaymentDetailPage — amendment chain', () => {
   })
 
   it('offers "create amendment" on a closed payment that has no correction yet', async () => {
-    const { result } = renderAt('/tax/advance-payments/7/12', '/tax/advance-payments/:clientId/:paymentId', '/tax/advance-payments')
+    const { result } = renderAt(
+      '/tax/advance-payments/7/12',
+      '/tax/advance-payments/:clientId/:paymentId',
+      '/tax/advance-payments',
+    )
 
     await waitFor(() => expect(result.current.payment).not.toBeNull())
     expect(result.current.actions.onCreateAmendment).toBeDefined()
@@ -112,7 +116,11 @@ describe('useAdvancePaymentDetailPage — amendment chain', () => {
 
   it('withholds it on an open payment — an open obligation is corrected by editing it', async () => {
     mockedGetById.mockResolvedValue(createPayment({ status: 'in_progress' }))
-    const { result } = renderAt('/tax/advance-payments/7/12', '/tax/advance-payments/:clientId/:paymentId', '/tax/advance-payments')
+    const { result } = renderAt(
+      '/tax/advance-payments/7/12',
+      '/tax/advance-payments/:clientId/:paymentId',
+      '/tax/advance-payments',
+    )
 
     await waitFor(() => expect(result.current.payment).not.toBeNull())
     expect(result.current.actions.onCreateAmendment).toBeUndefined()
@@ -120,7 +128,11 @@ describe('useAdvancePaymentDetailPage — amendment chain', () => {
 
   it('withholds it on a payment that already has a correction — a chain is a line', async () => {
     mockedGetById.mockResolvedValue(createPayment({ superseded_at: '2026-02-01T00:00:00Z' }))
-    const { result } = renderAt('/tax/advance-payments/7/12', '/tax/advance-payments/:clientId/:paymentId', '/tax/advance-payments')
+    const { result } = renderAt(
+      '/tax/advance-payments/7/12',
+      '/tax/advance-payments/:clientId/:paymentId',
+      '/tax/advance-payments',
+    )
 
     await waitFor(() => expect(result.current.payment).not.toBeNull())
     expect(result.current.actions.onCreateAmendment).toBeUndefined()
