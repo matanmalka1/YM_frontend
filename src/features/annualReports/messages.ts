@@ -64,8 +64,7 @@ export const ANNUAL_REPORTS_MESSAGES = {
     deleteReport: 'מחק דוח',
     withdrawAmendment: 'בטל תיקון',
     withdrawModalTitle: 'ביטול הדוח המתקן',
-    withdrawModalMessage:
-      'הדוח המתקן יוסר, והדוח שהוגש יחזור להיות הדוח של שנת המס. ההיסטוריה תישמר וניתן יהיה ליצור תיקון חדש.',
+    withdrawModalMessage: 'הדוח המתקן יוסר, והדוח שהוגש יחזור להיות הדוח של שנת המס. ההיסטוריה תישמר וניתן יהיה ליצור תיקון חדש.',
     withdrawSuccess: 'התיקון בוטל, הדוח שהוגש חזר להיות הדוח של שנת המס',
     deleteModalTitle: 'מחיקת דוח',
     deleteModalMessage: 'האם למחוק את הדוח? פעולה זו אינה הפיכה.',

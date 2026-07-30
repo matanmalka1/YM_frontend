@@ -112,12 +112,22 @@ export const AnnualReportFullPanel = ({
                   being the year's live one (D-12). A superseded amendment is not the
                   tip and cannot be withdrawn either. */}
               {canMutateReport && report.amends_id == null && (
-                <Button variant="danger" size="sm" icon={<Trash2 className="h-4 w-4" />} onClick={() => setShowDeleteConfirm(true)}>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  icon={<Trash2 className="h-4 w-4" />}
+                  onClick={() => setShowDeleteConfirm(true)}
+                >
                   {ANNUAL_REPORTS_MESSAGES.fullPanel.deleteReport}
                 </Button>
               )}
               {canMutateReport && report.amends_id != null && report.superseded_at == null && (
-                <Button variant="outline" size="sm" icon={<Undo2 className="h-4 w-4" />} onClick={() => setShowWithdrawConfirm(true)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  icon={<Undo2 className="h-4 w-4" />}
+                  onClick={() => setShowWithdrawConfirm(true)}
+                >
                   {ANNUAL_REPORTS_MESSAGES.fullPanel.withdrawAmendment}
                 </Button>
               )}

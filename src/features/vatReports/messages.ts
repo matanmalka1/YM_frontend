@@ -190,8 +190,7 @@ export const VAT_MESSAGES = {
     amendmentSuccess: 'נוצר דוח מתקן',
     withdrawSuccess: 'התיקון בוטל, הדוח שהוגש חזר להיות הדוח של התקופה',
     withdrawModalTitle: 'ביטול הדוח המתקן',
-    withdrawModalMessage:
-      'הדוח המתקן יוסר, והדוח שהוגש יחזור להיות הדוח של התקופה. ההיסטוריה תישמר וניתן יהיה ליצור תיקון חדש.',
+    withdrawModalMessage: 'הדוח המתקן יוסר, והדוח שהוגש יחזור להיות הדוח של התקופה. ההיסטוריה תישמר וניתן יהיה ליצור תיקון חדש.',
     withdrawConfirm: 'כן, בטל תיקון',
     invoiceAdded: 'החשבונית נוספה בהצלחה',
     osekPaturCeilingWarning: 'מחזור העסק מתקרב לתקרת עוסק פטור',
