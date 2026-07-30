@@ -85,7 +85,15 @@ const columns: Column<AnnualReportListItem>[] = [
     key: 'status',
     header: GLOBAL_UI_MESSAGES.common.status,
     kind: 'status',
-    render: (r) => <Badge variant={getStatusVariant(r.status)}>{getStatusLabel(r.status)}</Badge>,
+    // The season table is one row per client for one tax year, so the chain is
+    // invisible in every other cell: a correction and the report it replaced
+    // differ in nothing the row shows (D-12).
+    render: (r) => (
+      <span className="flex flex-wrap items-center gap-1.5">
+        <Badge variant={getStatusVariant(r.status)}>{getStatusLabel(r.status)}</Badge>
+        {r.amends_id != null && <Badge variant="warning">{ANNUAL_REPORTS_MESSAGES.chain.amendment}</Badge>}
+      </span>
+    ),
   },
   {
     key: 'filing_deadline',

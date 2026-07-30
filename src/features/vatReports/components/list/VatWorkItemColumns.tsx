@@ -1,6 +1,6 @@
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { PencilLine } from 'lucide-react'
-import { dateColumn, EmptyCell, monoColumn, statusColumn, textColumn, type Column } from '@/components/ui/table'
+import { dateColumn, EmptyCell, monoColumn, statusColumn, type Column } from '@/components/ui/table'
 import type { VatWorkItemListItem } from '../../api'
 import { getVatWorkItemStatusLabel } from '../../constants/vatConstants'
 import { formatClientOfficeId, formatDate } from '@/utils/utils'
@@ -8,6 +8,7 @@ import { VAT_DEADLINE_WARNING_DAYS, VAT_STATUS_BADGE_VARIANTS } from '../../cons
 import { formatVatAmount, isFiled } from '../../utils/vatHelpers'
 import { VatWorkItemRowActions } from './VatWorkItemRowActions'
 import type { ColumnOpts } from '../../types'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { Tooltip } from '@/components/ui/primitives/Tooltip'
 import { semanticMonoToneClasses } from '@/utils/semanticColors'
 import { formatVatPeriodTitle } from '../../utils/viewHelpers'
@@ -39,11 +40,19 @@ export const buildVatWorkItemColumns = (opts: ColumnOpts): Column<VatWorkItemLis
     header: VAT_MESSAGES.columns.idNumber,
     getValue: (item) => item.client_id_number,
   }),
-  textColumn({
+  {
     key: 'period',
     header: VAT_MESSAGES.columns.reportingPeriod,
-    getValue: (item) => formatVatPeriodTitle(item.period, item.period_type),
-  }),
+    // A chain shows as one row everywhere (D-12), so without the badge this cell
+    // reads as the return originally filed for the period rather than as the
+    // correction that replaced it.
+    render: (item) => (
+      <span className="flex flex-wrap items-center gap-1.5">
+        {formatVatPeriodTitle(item.period, item.period_type)}
+        {item.amends_id != null && <Badge variant="warning">{VAT_MESSAGES.chain.amendment}</Badge>}
+      </span>
+    ),
+  },
   statusColumn({
     key: 'status',
     header: GLOBAL_UI_MESSAGES.common.status,

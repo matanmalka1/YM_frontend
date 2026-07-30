@@ -33,7 +33,15 @@ export const ReportHistoryTable: React.FC<Props> = ({ clientId, currentReportId,
         header: ANNUAL_REPORTS_MESSAGES.reportHistoryTable.yearHeader,
         kind: 'number' as const,
         tone: 'strong' as const,
-        render: (r: AnnualReportListItem) => r.tax_year,
+        // A chain shows as one row everywhere (D-12), so without the badge this
+        // cell reads as the report originally filed for the year rather than as
+        // the correction that replaced it.
+        render: (r: AnnualReportListItem) => (
+          <span className="flex flex-wrap items-center gap-1.5">
+            {r.tax_year}
+            {r.amends_id != null && <Badge variant="warning">{ANNUAL_REPORTS_MESSAGES.chain.amendment}</Badge>}
+          </span>
+        ),
       },
       moneyColumn<AnnualReportListItem>({
         key: 'assessment_amount',

@@ -118,6 +118,10 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
                     getLabel={getAdvancePaymentStatusLabel}
                     variantMap={ADVANCE_PAYMENT_STATUS_VARIANTS}
                   />
+                  {/* A chain shows as one row everywhere (D-12), so without this
+                      the card reads as the payment originally closed for the
+                      period rather than as the correction that replaced it. */}
+                  {row.amends_id != null && <Badge variant="warning">{ADVANCED_PAYMENTS_MESSAGES.chain.amendment}</Badge>}
                   {row.vat_turnover_mismatch != null && (
                     <Badge variant="warning">{ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.mismatchBadge}</Badge>
                   )}

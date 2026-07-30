@@ -10,9 +10,9 @@ import {
   RowActionItem,
   RowActionsMenu,
   statusColumn,
-  textColumn,
   type Column,
 } from '@/components/ui/table'
+import { Badge } from '@/components/ui/primitives/Badge'
 import { formatClientOfficeId, formatDate, formatPercent, formatShekelAmount } from '@/utils/utils'
 import type { AdvancePaymentOverviewRow } from '../../api/contracts'
 import { formatRelativeDueLabel } from '@/components/ui/grouping/groupedPeriodRow.utils'
@@ -91,11 +91,19 @@ export const buildAdvancePaymentBatchColumns = ({
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.idNumberHeader,
     getValue: (row) => row.id_number,
   }),
-  textColumn({
+  {
     key: 'period',
     header: ADVANCED_PAYMENTS_MESSAGES.batchColumns.periodHeader,
-    getValue: (row) => `${getAdvancePaymentMonthLabel(row.period, row.period_months_count)} ${row.period.substring(0, 4)}`,
-  }),
+    // A chain shows as one row everywhere (D-12), so without the badge this cell
+    // reads as the payment originally closed for the period rather than as the
+    // correction that replaced it.
+    render: (row) => (
+      <span className="flex flex-wrap items-center gap-1.5">
+        {`${getAdvancePaymentMonthLabel(row.period, row.period_months_count)} ${row.period.substring(0, 4)}`}
+        {row.amends_id != null && <Badge variant="warning">{ADVANCED_PAYMENTS_MESSAGES.chain.amendment}</Badge>}
+      </span>
+    ),
+  },
   {
     key: 'due_date',
     header: ADVANCED_PAYMENTS_MESSAGES.detail.dueDateLabel,
