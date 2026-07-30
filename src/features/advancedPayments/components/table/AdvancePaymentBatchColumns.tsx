@@ -17,7 +17,7 @@ import { formatClientOfficeId, formatDate, formatPercent, formatShekelAmount } f
 import type { AdvancePaymentOverviewRow } from '../../api/contracts'
 import { formatRelativeDueLabel } from '@/components/ui/grouping/groupedPeriodRow.utils'
 import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
-import { getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
+import { getAdvancePaymentDueDate, getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
 export interface AdvancePaymentRowSelection {
@@ -102,11 +102,11 @@ export const buildAdvancePaymentBatchColumns = ({
     kind: 'date',
     render: (row) => {
       const isOverdue = row.timing_status === 'overdue'
-      const dueDate = row.due_date_effective ?? row.due_date
-      const overdueLabel = isOverdue ? formatRelativeDueLabel(dueDate) : null
+      const dueDate = getAdvancePaymentDueDate(row)
+      const overdueLabel = isOverdue && dueDate != null ? formatRelativeDueLabel(dueDate) : null
       return (
         <span className={isOverdue ? 'font-medium text-negative-600' : undefined}>
-          {formatDate(dueDate)}
+          {formatDate(dueDate, ADVANCED_PAYMENTS_MESSAGES.detail.noNewDueDateDescription)}
           {overdueLabel != null && <span className="block text-xs font-semibold">{overdueLabel}</span>}
         </span>
       )

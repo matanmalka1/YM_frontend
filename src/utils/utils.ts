@@ -144,8 +144,8 @@ const formatSafeDate = (value: string | null | undefined, pattern: string, fallb
   return format(date, pattern, { locale: he })
 }
 
-export const formatDate = (value: string | null | undefined): string => {
-  return formatSafeDate(value, 'dd/MM/yyyy')
+export const formatDate = (value: string | null | undefined, fallback = EMPTY_VALUE): string => {
+  return formatSafeDate(value, 'dd/MM/yyyy', fallback)
 }
 
 export const formatMonthYear = (value: string | null | undefined): string => {

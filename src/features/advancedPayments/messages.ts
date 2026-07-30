@@ -128,6 +128,8 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     advanceRateLabel: 'שיעור מקדמה',
     periodLabel: 'תקופת דיווח',
     paidOnTimeLabel: 'בזמן',
+    noNewDueDateLabel: 'ללא מועד חדש',
+    noNewDueDateDescription: 'אין מועד חדש — דוח מתקן',
     unsavedChangesNotice: 'קיימים שינויים שטרם נשמרו',
     paidInFullBadge: 'שולם במלואו',
     balanceDueBadge: 'נדרשת הסדרת תשלום',

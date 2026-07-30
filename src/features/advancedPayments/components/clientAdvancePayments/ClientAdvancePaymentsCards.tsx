@@ -10,7 +10,7 @@ import { DefinitionList, type DefinitionItem } from '@/components/ui/layout/Defi
 import type { AdvancePaymentRow } from '../../api/contracts'
 import { formatShekelAmount, formatDate } from '@/utils/utils'
 import { formatRelativeDueLabel } from '@/components/ui/grouping/groupedPeriodRow.utils'
-import { getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
+import { getAdvancePaymentDueDate, getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
 import { ADVANCE_PAYMENT_STATUS_VARIANTS, getAdvancePaymentStatusLabel } from '../../constants'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
 
@@ -62,11 +62,12 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
             ? ADVANCED_PAYMENTS_MESSAGES.turnoverRefresh.turnoverLabel(row.turnover_source)
             : ADVANCED_PAYMENTS_MESSAGES.detail.turnoverMissingBadge
         const isPaid = isAdvancePaymentPaidInFull(row)
+        const dueDate = getAdvancePaymentDueDate(row)
 
         const detailItems: DefinitionItem[] = [
           {
             label: ADVANCED_PAYMENTS_MESSAGES.clientCards.dueDateLabel,
-            value: formatDate(row.due_date_effective ?? row.due_date),
+            value: formatDate(dueDate, ADVANCED_PAYMENTS_MESSAGES.detail.noNewDueDateDescription),
           },
           ...(row.paid_at ? [{ label: ADVANCED_PAYMENTS_MESSAGES.clientCards.paidAtLabel, value: formatDate(row.paid_at) }] : []),
           ...(row.payment_reference
@@ -124,7 +125,7 @@ export const ClientAdvancePaymentsCards: React.FC<Props> = ({ rows, isLoading, o
                     <Badge variant="warning">{ADVANCED_PAYMENTS_MESSAGES.detail.paidLateLabel}</Badge>
                   ) : row.timing_status === 'overdue' ? (
                     <Badge variant="negative">
-                      {formatRelativeDueLabel(row.due_date_effective ?? row.due_date) ??
+                      {(dueDate != null ? formatRelativeDueLabel(dueDate) : null) ??
                         ADVANCED_PAYMENTS_MESSAGES.clientCards.overdue}
                     </Badge>
                   ) : null}

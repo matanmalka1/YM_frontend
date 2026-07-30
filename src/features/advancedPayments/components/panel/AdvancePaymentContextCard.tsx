@@ -5,10 +5,10 @@ import { Badge } from '@/components/ui/primitives/Badge'
 import { Card } from '@/components/ui/primitives/Card'
 import { IconChip } from '@/components/ui/primitives/IconChip'
 import { ActionSurfaceLink } from '@/components/ui/primitives/ActionSurface'
-import { formatShekelAmount, formatDate, formatPercent } from '@/utils/utils'
+import { formatDate, formatShekelAmount, formatPercent } from '@/utils/utils'
 import type { AdvancePaymentRow } from '../../api/contracts'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../../messages'
-import { getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
+import { getAdvancePaymentDueDate, getAdvancePaymentMonthLabel } from '../../utils/advancePaymentComponentUtils'
 import { AdvancePaymentChainModal } from './AdvancePaymentChainModal'
 
 interface AdvancePaymentContextCardProps {
@@ -43,7 +43,9 @@ export const AdvancePaymentContextCard: React.FC<AdvancePaymentContextCardProps>
     ? { variant: 'warning' as const, label: ADVANCED_PAYMENTS_MESSAGES.detail.paidLateLabel }
     : payment.timing_status === 'overdue'
       ? { variant: 'negative' as const, label: ADVANCED_PAYMENTS_MESSAGES.detail.overdueLabel }
-      : { variant: 'positive' as const, label: ADVANCED_PAYMENTS_MESSAGES.detail.paidOnTimeLabel }
+      : payment.timing_status === 'not_applicable'
+        ? { variant: 'neutral' as const, label: ADVANCED_PAYMENTS_MESSAGES.detail.noNewDueDateLabel }
+        : { variant: 'positive' as const, label: ADVANCED_PAYMENTS_MESSAGES.detail.paidOnTimeLabel }
 
   return (
     <div className="space-y-5">
@@ -82,7 +84,7 @@ export const AdvancePaymentContextCard: React.FC<AdvancePaymentContextCardProps>
               : []),
             {
               label: ADVANCED_PAYMENTS_MESSAGES.detail.dueDateLabel,
-              value: formatDate(payment.due_date_effective ?? payment.due_date),
+              value: formatDate(getAdvancePaymentDueDate(payment), ADVANCED_PAYMENTS_MESSAGES.detail.noNewDueDateDescription),
             },
             {
               label: ADVANCED_PAYMENTS_MESSAGES.editableSections.periodTurnoverLabel,

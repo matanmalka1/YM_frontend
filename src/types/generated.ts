@@ -3644,11 +3644,8 @@ export interface components {
       period: string
       /** Period Months Count */
       period_months_count: number
-      /**
-       * Due Date
-       * Format: date
-       */
-      due_date: string
+      /** Due Date */
+      due_date: string | null
       /** Due Date Effective */
       due_date_effective?: string | null
       /**
@@ -3701,7 +3698,7 @@ export interface components {
        * Timing Status
        * @enum {string}
        */
-      readonly timing_status: 'overdue' | 'on_time'
+      readonly timing_status: 'overdue' | 'on_time' | 'not_applicable'
     }
     /** AdvancePaymentReportItemResponse */
     AdvancePaymentReportItemResponse: {
@@ -3746,11 +3743,8 @@ export interface components {
       period: string
       /** Period Months Count */
       period_months_count: number
-      /**
-       * Due Date
-       * Format: date
-       */
-      due_date: string
+      /** Due Date */
+      due_date: string | null
       /** Due Date Effective */
       due_date_effective?: string | null
       /**
@@ -3829,7 +3823,7 @@ export interface components {
        * Timing Status
        * @enum {string}
        */
-      readonly timing_status: 'overdue' | 'on_time'
+      readonly timing_status: 'overdue' | 'on_time' | 'not_applicable'
     }
     /** AdvancePaymentStatusTransitionRequest */
     AdvancePaymentStatusTransitionRequest: {

@@ -4,7 +4,7 @@ import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 // part-paid advance is `in_progress` with an outstanding balance, which is what
 // partial always described — a fact about the amount, not a stage.
 export type AdvancePaymentStatus = ObligationStatus
-type AdvancePaymentTimingStatus = 'on_time' | 'overdue'
+type AdvancePaymentTimingStatus = 'on_time' | 'overdue' | 'not_applicable'
 export type AdvancePaymentMethod = 'bank_transfer' | 'credit_card' | 'check' | 'direct_debit' | 'cash' | 'other'
 
 export interface AdvancePaymentRow {
@@ -15,7 +15,7 @@ export interface AdvancePaymentRow {
   expected_amount: string
   paid_amount: string
   status: AdvancePaymentStatus
-  due_date: string
+  due_date: string | null
   due_date_effective?: string | null
   paid_at: string | null
   payment_method: AdvancePaymentMethod | null
@@ -145,7 +145,7 @@ export interface AdvancePaymentOverviewRow {
   delta: string
   status: AdvancePaymentStatus
   timing_status: AdvancePaymentTimingStatus
-  due_date: string
+  due_date: string | null
   due_date_effective?: string | null
   payment_method: AdvancePaymentMethod | null
   payment_reference: string | null
@@ -169,7 +169,7 @@ export interface ListAdvancePaymentsOverviewParams {
   client_record_id?: number
   client_search?: string
   status?: AdvancePaymentStatus[]
-  timing_status?: AdvancePaymentTimingStatus
+  timing_status?: 'on_time' | 'overdue'
   /** Server-computed: true keeps only rows carrying `vat_turnover_mismatch`. */
   vat_mismatch?: boolean
   sort_by?: 'client_name' | 'expected_amount' | 'paid_amount' | 'delta'

@@ -4,11 +4,16 @@ import {
   getReportingPeriodMonthLabel,
 } from '@/constants/periodOptions.constants'
 import type { CreateAdvancePaymentFormValues } from '../schemas'
-import type { CreateAdvancePaymentPayload } from '../api/contracts'
+import type { AdvancePaymentRow, CreateAdvancePaymentPayload } from '../api/contracts'
 import { MONTH_OPTIONS } from '@/utils/utils'
 
 export const getAdvancePaymentMonthLabel = (period: string, periodMonthsCount: 1 | 2 = 1) =>
   getReportingPeriodMonthLabel(period, periodMonthsCount)
+
+type AdvancePaymentDueDateFields = Pick<AdvancePaymentRow, 'due_date' | 'due_date_effective'>
+
+export const getAdvancePaymentDueDate = (payment: AdvancePaymentDueDateFields): string | null =>
+  payment.due_date_effective ?? payment.due_date
 
 export const getCollectionPercent = (rate: string | number | null, cap = false) => {
   if (rate === null) return null
