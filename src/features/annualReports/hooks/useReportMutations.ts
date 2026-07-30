@@ -9,6 +9,7 @@ import {
 } from '../api'
 import { annualReportStatusApi } from '../api'
 import { showErrorToast } from '../../../utils/utils'
+import { toSiblingRecordPath } from '../../../utils/recordPath'
 import { toast } from '../../../utils/toast'
 import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
 import { ANNUAL_REPORTS_MESSAGES } from '../messages'
@@ -88,21 +89,37 @@ export const useReportMutations = (reportId: number | null, onDeleted?: () => vo
     onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.reports.delete),
   })
 
+  // Correcting touches two rows — the new amendment and the report it corrects,
+  // which has just gained a `superseded_at` — so the whole key space is
+  // invalidated rather than this report's detail key. The chain key lives under
+  // it, so the history view refreshes with them.
+  //
+  // The page then moves to the correction. The report left behind is submitted
+  // and locked (D-13), so staying on it leaves the advisor on the one screen
+  // where the corrected figures cannot be entered. Pushed rather than replaced:
+  // the original still exists, so Back is a real place to go.
+  const createAmendmentMutation = useMutation({
+    mutationFn: () => annualReportsApi.createAmendment(reportId as number),
+    onSuccess: async (amendment) => {
+      toast.success(ANNUAL_REPORTS_MESSAGES.fullPanel.amendSuccess)
+      await queryClient.invalidateQueries({ queryKey: annualReportsQK.all })
+      navigate(toSiblingRecordPath(pathname, amendment.id))
+    },
+    onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.reports.amend),
+  })
+
   // Withdrawing touches two rows — this amendment and the report it corrected —
   // so the whole key space is invalidated rather than this report's detail key.
   //
   // The page cannot stay on the withdrawn amendment: it no longer exists, so the
-  // next fetch of this URL answers 404. It moves to the restored original by
-  // swapping the trailing id of the current path rather than by naming a route —
-  // the panel is mounted both standalone and inside the client tab, and naming
-  // `/tax/reports/:id` would drop a client-scoped visitor out of that tab, its
-  // breadcrumbs and its navigation.
+  // next fetch of this URL answers 404. It replaces the entry rather than pushing
+  // one, because Back would land on that same dead URL.
   const withdrawMutation = useMutation({
     mutationFn: () => annualReportsApi.withdrawAmendment(reportId as number),
     onSuccess: async (original) => {
       toast.success(ANNUAL_REPORTS_MESSAGES.fullPanel.withdrawSuccess)
       await queryClient.invalidateQueries({ queryKey: annualReportsQK.all })
-      navigate(pathname.replace(/[^/]+$/, String(original.id)), { replace: true })
+      navigate(toSiblingRecordPath(pathname, original.id), { replace: true })
     },
     onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.reports.withdraw),
   })
@@ -114,6 +131,8 @@ export const useReportMutations = (reportId: number | null, onDeleted?: () => vo
     isUpdating: updateMutation.isPending,
     deleteReport: () => deleteMutation.mutateAsync(),
     isDeleting: deleteMutation.isPending,
+    createAmendment: () => createAmendmentMutation.mutateAsync(),
+    isCreatingAmendment: createAmendmentMutation.isPending,
     withdrawAmendment: () => withdrawMutation.mutateAsync(),
     isWithdrawing: withdrawMutation.isPending,
   }

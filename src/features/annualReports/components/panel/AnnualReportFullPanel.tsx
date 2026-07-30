@@ -1,4 +1,4 @@
-import { Download, Trash2, Save, Undo2 } from 'lucide-react'
+import { Download, Trash2, Save, Undo2, FilePlus2 } from 'lucide-react'
 import { useAnnualReportDetailPage } from '../../hooks/useAnnualReportDetailPage'
 import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
 import { StatusTransitionPanel } from '../statusTransition/StatusTransitionPanelRoot'
@@ -57,6 +57,8 @@ export const AnnualReportFullPanel = ({
     handleTransition,
     handleDeleteConfirm,
     handleWithdrawConfirm,
+    handleCreateAmendment,
+    isCreatingAmendment,
   } = useAnnualReportDetailPage(reportId, backPath)
 
   if (isLoading) {
@@ -71,6 +73,13 @@ export const AnnualReportFullPanel = ({
   // submitted report. Both are enforced by the backend; gating here keeps a button
   // from existing that can only answer 403 or 400.
   const canMutateReport = isAdvisor && report?.status !== 'submitted'
+
+  // "Create amendment" is gated on the opposite fact, and so cannot live inside
+  // `canMutateReport`: correcting a report is the one act a *submitted* one still
+  // offers (D-10). `superseded_at` is the second half of the backend's
+  // `assert_amendable` — a chain is a line, so a report that already has a
+  // correction has no second one to give and the backend answers 409.
+  const canAmendReport = isAdvisor && report?.status === 'submitted' && report?.superseded_at == null
 
   if (error || !report) {
     return (
@@ -129,6 +138,19 @@ export const AnnualReportFullPanel = ({
                   onClick={() => setShowWithdrawConfirm(true)}
                 >
                   {ANNUAL_REPORTS_MESSAGES.fullPanel.withdrawAmendment}
+                </Button>
+              )}
+              {/* Unconfirmed, unlike delete and withdraw: it only adds a record,
+                  and the record it opens carries "בטל תיקון" to undo it. */}
+              {canAmendReport && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  icon={<FilePlus2 className="h-4 w-4" />}
+                  isLoading={isCreatingAmendment}
+                  onClick={handleCreateAmendment}
+                >
+                  {ANNUAL_REPORTS_MESSAGES.fullPanel.createAmendment}
                 </Button>
               )}
               <Button

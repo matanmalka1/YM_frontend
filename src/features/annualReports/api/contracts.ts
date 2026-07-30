@@ -88,6 +88,10 @@ export interface AnnualReportListItem {
   assessment_amount: string | null
   refund_due: string | null
   tax_due: string | null
+  // Not a figure the list renders — the row's own identity. A chain shows as one
+  // row everywhere (D-12), so without this the list cannot say *which* record of
+  // the year it is showing, and a correction reads as the original.
+  amends_id: number | null
 }
 
 /**

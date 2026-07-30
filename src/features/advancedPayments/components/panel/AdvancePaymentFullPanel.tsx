@@ -50,8 +50,10 @@ export const AdvancePaymentFullPanel: React.FC<AdvancePaymentFullPanelProps> = (
       isUpdating={actions.isUpdating}
       isDeleting={actions.isDeleting}
       isWithdrawing={actions.isWithdrawing}
+      isCreatingAmendment={actions.isCreatingAmendment}
       onSave={actions.onSave}
       onDelete={actions.onDelete}
+      onCreateAmendment={actions.onCreateAmendment}
       onWithdraw={actions.onWithdraw}
       turnoverRefresh={turnoverRefresh}
     />

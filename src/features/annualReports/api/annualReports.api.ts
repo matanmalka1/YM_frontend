@@ -82,6 +82,13 @@ export const annualReportsApi = {
     await api.delete(ANNUAL_REPORT_ENDPOINTS.byId(reportId))
   },
 
+  // Returns the amendment, not the original: the caller navigates to the new
+  // record, which is where the corrected figures are entered (D-21).
+  createAmendment: async (reportId: number): Promise<AnnualReportFull> => {
+    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.amend(reportId))
+    return response.data
+  },
+
   // Returns the restored original, not the withdrawn amendment: the caller
   // navigates back to the report the year is filed under (D-12).
   withdrawAmendment: async (reportId: number): Promise<AnnualReportFull> => {

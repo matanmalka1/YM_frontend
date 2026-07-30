@@ -26,6 +26,8 @@ interface UseAdvancePaymentMutationsOptions {
   clientRecordId: number
   onUpdateSuccess?: (payment: AdvancePaymentRow) => void
   onDeleteSuccess?: (paymentId: number) => void
+  /** Receives the new correction, which is where the advisor continues. */
+  onCreateAmendmentSuccess?: (amendment: AdvancePaymentRow) => void
   /** Receives the restored original, which is where the advisor continues. */
   onWithdrawSuccess?: (original: AdvancePaymentRow) => void
   onRefreshTurnoverSuccess?: (payment: AdvancePaymentRow) => void
@@ -37,6 +39,7 @@ export const useAdvancePaymentMutations = ({
   clientRecordId,
   onUpdateSuccess,
   onDeleteSuccess,
+  onCreateAmendmentSuccess,
   onWithdrawSuccess,
   onRefreshTurnoverSuccess,
   onRefreshTurnoverNotFiled,
@@ -60,6 +63,19 @@ export const useAdvancePaymentMutations = ({
       void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
     },
     onError: (error) => showErrorToast(error, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.delete),
+  })
+
+  // Correcting touches two rows — the new amendment and the payment it corrects,
+  // which has just gained a `superseded_at` — so the whole key space is
+  // invalidated rather than the two ids. The chain key lives under it.
+  const createAmendmentMutation = useMutation({
+    mutationFn: (paymentId: number) => advancePaymentsApi.createAmendment(clientRecordId, paymentId),
+    onSuccess: (amendment) => {
+      toast.success(ADVANCED_PAYMENTS_MESSAGES.detailActions.amendSuccess)
+      onCreateAmendmentSuccess?.(amendment)
+      void queryClient.invalidateQueries({ queryKey: advancedPaymentsQK.all })
+    },
+    onError: (error) => showErrorToast(error, ADVANCED_PAYMENTS_ERROR_MESSAGES.advancePayment.amend),
   })
 
   // Withdrawing touches two rows — the amendment and the payment it corrected —
@@ -100,6 +116,8 @@ export const useAdvancePaymentMutations = ({
     updatingId: updateMutation.isPending ? (updateMutation.variables?.id ?? null) : null,
     deletePayment: deleteMutation.mutateAsync,
     isDeleting: deleteMutation.isPending,
+    createAmendment: createAmendmentMutation.mutateAsync,
+    isCreatingAmendment: createAmendmentMutation.isPending,
     withdrawAmendment: withdrawMutation.mutateAsync,
     isWithdrawing: withdrawMutation.isPending,
     deletingId: deleteMutation.isPending ? (deleteMutation.variables?.paymentId ?? null) : null,

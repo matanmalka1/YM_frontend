@@ -1,6 +1,7 @@
 export const ANNUAL_REPORT_ENDPOINTS = {
   list: '/annual-reports',
   byId: (id: number | string) => `/annual-reports/${id}`,
+  amend: (id: number | string) => `/annual-reports/${id}/amend`,
   withdraw: (id: number | string) => `/annual-reports/${id}/withdraw`,
   chain: (id: number | string) => `/annual-reports/${id}/chain`,
   submit: (id: number | string) => `/annual-reports/${id}/submit`,

@@ -62,6 +62,8 @@ export const ANNUAL_REPORTS_MESSAGES = {
     breadcrumbReport: (year: number) => `דוח ${year}`,
     downloadDraft: 'הורד טיוטה',
     deleteReport: 'מחק דוח',
+    createAmendment: 'צור דוח מתקן',
+    amendSuccess: 'נוצר דוח מתקן',
     withdrawAmendment: 'בטל תיקון',
     withdrawModalTitle: 'ביטול הדוח המתקן',
     withdrawModalMessage: 'הדוח המתקן יוסר, והדוח שהוגש יחזור להיות הדוח של שנת המס. ההיסטוריה תישמר וניתן יהיה ליצור תיקון חדש.',

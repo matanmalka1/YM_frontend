@@ -55,6 +55,12 @@ export const useAnnualReportDetailPage = (reportId: number, backPath: string) =>
     setShowWithdrawConfirm(false)
   }, [detail])
 
+  // Unconfirmed, unlike withdrawing and deleting: opening a correction only adds
+  // a record, and taking it back is one click away on the record it opens.
+  const handleCreateAmendment = useCallback(async () => {
+    await detail.createAmendment()
+  }, [detail])
+
   return {
     ...detail,
     activeSection,
@@ -73,5 +79,6 @@ export const useAnnualReportDetailPage = (reportId: number, backPath: string) =>
     handleTransition,
     handleDeleteConfirm,
     handleWithdrawConfirm,
+    handleCreateAmendment,
   }
 }

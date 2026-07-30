@@ -99,6 +99,8 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     deleteModalMessage: 'האם למחוק מקדמה זו?',
     deleteReasonPlaceholder: 'סיבת המחיקה (חובה)',
     deleteConfirm: 'כן, מחק',
+    amendTitle: 'צור מקדמה מתקנת',
+    amendSuccess: 'נוצרה מקדמה מתקנת',
     withdrawTitle: 'בטל תיקון',
     withdrawModalTitle: 'ביטול המקדמה המתקנת',
     withdrawModalMessage:

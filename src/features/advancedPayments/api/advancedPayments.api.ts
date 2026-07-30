@@ -64,6 +64,13 @@ export const advancePaymentsApi = {
     return response.data
   },
 
+  // Returns the amendment, not the original: the caller navigates to the new
+  // record, which is where the corrected figures are entered (D-21).
+  createAmendment: async (clientRecordId: number, id: number): Promise<AdvancePaymentRow> => {
+    const response = await api.post<AdvancePaymentRow>(ADVANCE_PAYMENT_ENDPOINTS.clientAdvancePaymentAmend(clientRecordId, id))
+    return response.data
+  },
+
   // Returns the restored original, not the withdrawn amendment: the caller
   // navigates back to the payment the period is closed under (D-12).
   withdrawAmendment: async (clientRecordId: number, id: number): Promise<AdvancePaymentRow> => {

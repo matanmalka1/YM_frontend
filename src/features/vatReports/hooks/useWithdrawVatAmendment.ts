@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useMutationWithToast } from '@/hooks/useMutationWithToast'
+import { toSiblingRecordPath } from '@/utils/recordPath'
 import { vatReportsApi } from '../api'
 import { vatMutationKeys } from '../api/mutationKeys'
 import { invalidateVatWorkItem } from './useVatInvalidation'
@@ -16,11 +17,12 @@ import { VAT_ERROR_MESSAGES } from '../errorMessages'
  * hiding it as corrected and would keep withholding "amend" on a record that can
  * now be corrected again.
  *
- * The page cannot stay where it is: the record it is showing no longer exists, so
- * the next fetch of this URL answers 404. It navigates to the restored original by
- * swapping the trailing id of the current path rather than by naming a route —
- * this panel is mounted both standalone and inside the client tab, and in both the
- * last segment is the work item being viewed.
+ * Both chains go with them: the key sits outside the list/detail space, so a
+ * chain already on screen would keep showing the withdrawn correction as live.
+ *
+ * The page cannot stay where it is — the record it is showing no longer exists,
+ * so the next fetch of this URL answers 404. It replaces the entry rather than
+ * pushing one, because Back would land on that same dead URL.
  */
 export const useWithdrawVatAmendment = (workItemId: number) => {
   const queryClient = useQueryClient()
@@ -32,18 +34,22 @@ export const useWithdrawVatAmendment = (workItemId: number) => {
     mutationFn: () => vatReportsApi.withdrawAmendment(workItemId),
     successMessage: VAT_MESSAGES.mutations.withdrawSuccess,
     errorMessage: VAT_ERROR_MESSAGES.mutations.withdrawError,
-    onSuccess: (original) => {
-      invalidateVatWorkItem(queryClient, {
-        workItemId,
-        clientRecordId: original.client_record_id,
-        includeAudit: true,
-      })
-      invalidateVatWorkItem(queryClient, {
-        workItemId: original.id,
-        clientRecordId: original.client_record_id,
-        includeAudit: true,
-      })
-      navigate(pathname.replace(/[^/]+$/, String(original.id)), { replace: true })
+    onSuccess: async (original) => {
+      await Promise.all([
+        invalidateVatWorkItem(queryClient, {
+          workItemId,
+          clientRecordId: original.client_record_id,
+          includeAudit: true,
+          includeChain: true,
+        }),
+        invalidateVatWorkItem(queryClient, {
+          workItemId: original.id,
+          clientRecordId: original.client_record_id,
+          includeAudit: true,
+          includeChain: true,
+        }),
+      ])
+      navigate(toSiblingRecordPath(pathname, original.id), { replace: true })
     },
   })
 

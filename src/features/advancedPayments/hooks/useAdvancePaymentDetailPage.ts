@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import type { Breadcrumb } from '@/components/layout/PageHeader'
 import { isObligationLocked } from '@/constants/obligationStatus.constants'
 import { useRole } from '@/hooks/useRole'
 import { toast } from '@/utils/toast'
+import { toSiblingRecordPath } from '@/utils/recordPath'
 import { getErrorMessage } from '@/utils/utils'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
 import type { UpdateAdvancePaymentPayload } from '../api/contracts'
@@ -32,6 +33,7 @@ export const useAdvancePaymentDetailPage = ({
   leadingBreadcrumbs,
 }: UseAdvancePaymentDetailPageArgs) => {
   const navigate = useNavigate()
+  const { pathname } = useLocation()
   const queryClient = useQueryClient()
   const { isAdvisor } = useRole()
 
@@ -75,11 +77,22 @@ export const useAdvancePaymentDetailPage = ({
       queryClient.removeQueries({ queryKey: advancedPaymentsQK.detail(clientRecordId, deletedPaymentId) })
       navigate(backPath, { replace: true })
     },
+    // The correction is where the corrected figures are entered; the payment left
+    // behind is closed and locked (D-13). Pushed, not replaced — it still exists.
+    onCreateAmendmentSuccess: (amendment) => {
+      navigate(toSiblingRecordPath(pathname, amendment.id))
+    },
     // The withdrawn correction no longer exists, so this page cannot stay on it:
     // the restored original is where the period now lives.
+    //
+    // Built from the current path, not from `backPath`. On the standalone screen
+    // `backPath` is the *list* path (`/tax/advance-payments`) while the detail
+    // route is `/tax/advance-payments/:clientId/:paymentId`, so appending an id
+    // to it drops the client segment and lands on a route that does not exist —
+    // and when the list path carries a query string the id is appended after it.
     onWithdrawSuccess: (original) => {
       queryClient.removeQueries({ queryKey: advancedPaymentsQK.detail(clientRecordId, paymentId) })
-      navigate(`${backPath}/${original.id}`, { replace: true })
+      navigate(toSiblingRecordPath(pathname, original.id), { replace: true })
     },
   })
 
@@ -130,6 +143,16 @@ export const useAdvancePaymentDetailPage = ({
       onDelete:
         isAdvisor && !(payment && isObligationLocked(payment.status)) && payment?.amends_id == null
           ? async (reason: string) => void (await paymentMutations.deletePayment({ paymentId, reason }))
+          : undefined,
+      // The one act a closed payment still offers (D-10), so it is gated on the
+      // opposite of every other action here: the record must be locked, not
+      // unlocked. `superseded_at` is the second half of `assert_amendable` — a
+      // chain is a line, so a payment that already has a correction has no
+      // second one to give, and the backend answers 409.
+      isCreatingAmendment: paymentMutations.isCreatingAmendment,
+      onCreateAmendment:
+        isAdvisor && payment != null && isObligationLocked(payment.status) && payment.superseded_at == null
+          ? async () => void (await paymentMutations.createAmendment(paymentId))
           : undefined,
       // The correction's counterpart to delete, and offered on exactly the rows
       // delete is not: an open amendment.

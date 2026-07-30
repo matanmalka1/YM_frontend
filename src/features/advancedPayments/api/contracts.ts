@@ -157,6 +157,10 @@ export interface AdvancePaymentOverviewRow {
   vat_turnover_mismatch: VatTurnoverMismatch | null
   missing_turnover: boolean
   advance_rate: string | null
+  // Not a figure the overview renders — the row's own identity. A chain shows as
+  // one row everywhere (D-12), so without this the overview cannot say *which*
+  // record of the period it is showing, and a correction reads as the original.
+  amends_id: number | null
 }
 
 export interface ListAdvancePaymentsOverviewParams {

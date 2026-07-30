@@ -3769,6 +3769,8 @@ export interface components {
       advance_rate?: string | null
       /** Withheld Amount */
       withheld_amount?: string | null
+      /** Amends Id */
+      amends_id?: number | null
       /**
        * Delta
        * Format: decimal
@@ -4369,6 +4371,8 @@ export interface components {
       refund_due?: string | null
       /** Tax Due */
       tax_due?: string | null
+      /** Amends Id */
+      amends_id?: number | null
     }
     /** AnnualReportListResponse */
     AnnualReportListResponse: {

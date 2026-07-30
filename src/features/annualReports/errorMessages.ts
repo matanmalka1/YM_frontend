@@ -5,6 +5,7 @@ export const ANNUAL_REPORTS_ERROR_MESSAGES = {
     load: 'שגיאה בטעינת דוח',
     update: 'שגיאה בעדכון דוח',
     delete: 'שגיאה במחיקת דוח',
+    amend: 'שגיאה ביצירת דוח מתקן',
     withdraw: 'שגיאה בביטול הדוח המתקן',
     statusUpdate: 'שגיאה בעדכון סטטוס',
     draftExport: 'שגיאה בהפקת הטיוטה',

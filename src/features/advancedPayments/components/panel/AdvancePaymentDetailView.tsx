@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Trash2, Undo2 } from 'lucide-react'
+import { Trash2, Undo2, FilePlus2 } from 'lucide-react'
 import { PageHeader, type Breadcrumb } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
@@ -52,8 +52,15 @@ interface AdvancePaymentDetailViewProps {
   isUpdating: boolean
   isDeleting: boolean
   isWithdrawing: boolean
+  isCreatingAmendment: boolean
   onSave: (payload: UpdateAdvancePaymentPayload) => Promise<void>
   onDelete?: (reason: string) => Promise<void>
+  /**
+   * Present only on a closed payment that has no correction yet — the one act
+   * a locked record still offers (D-10). Notably not gated on `canEdit`, which
+   * is false on exactly the records this is offered on.
+   */
+  onCreateAmendment?: () => Promise<void>
   /** Present only on an open correction — the act that undoes its creation (D-12). */
   onWithdraw?: () => Promise<void>
   turnoverRefresh: {
@@ -81,8 +88,10 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
   isUpdating,
   isDeleting,
   isWithdrawing,
+  isCreatingAmendment,
   onSave,
   onDelete,
+  onCreateAmendment,
   onWithdraw,
   turnoverRefresh,
 }) => {
@@ -121,7 +130,10 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
         description={description}
         breadcrumbs={breadcrumbs}
         actions={
-          canEdit ? (
+          // Not `canEdit` alone any more: "create amendment" is the one act a
+          // closed payment still offers (D-10), and `canEdit` is false on exactly
+          // those records. Delete, withdraw and save stay behind their own gates.
+          canEdit || onCreateAmendment ? (
             <>
               {onDelete && (
                 <Button
@@ -148,15 +160,30 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
                   {ADVANCED_PAYMENTS_MESSAGES.detailActions.withdrawTitle}
                 </Button>
               )}
-              <Button
-                variant="primary"
-                size="sm"
-                isLoading={isUpdating}
-                onClick={form.handleSave}
-                disabled={!form.isDirty || isUpdating || isDeleting}
-              >
-                {GLOBAL_UI_MESSAGES.actions.save}
-              </Button>
+              {/* Unconfirmed, unlike delete and withdraw: it only adds a record,
+                  and the record it opens carries "בטל תיקון" to undo it. */}
+              {onCreateAmendment && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  icon={<FilePlus2 className="h-4 w-4" />}
+                  isLoading={isCreatingAmendment}
+                  onClick={onCreateAmendment}
+                >
+                  {ADVANCED_PAYMENTS_MESSAGES.detailActions.amendTitle}
+                </Button>
+              )}
+              {canEdit && (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  isLoading={isUpdating}
+                  onClick={form.handleSave}
+                  disabled={!form.isDirty || isUpdating || isDeleting}
+                >
+                  {GLOBAL_UI_MESSAGES.actions.save}
+                </Button>
+              )}
             </>
           ) : undefined
         }
