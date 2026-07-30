@@ -1,3 +1,4 @@
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { Inbox } from 'lucide-react'
@@ -10,7 +11,7 @@ import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
 import { getTotalPages } from '@/utils/paginationUtils'
 import { isCurrentReportingPeriod } from '@/utils/reportingPeriod'
 import { useVatGroupItems } from '../../hooks/useVatGroupItems'
-import type { VatWorkItemListItem, VatWorkItemGroupSummary, VatWorkItemStatus } from '../../api'
+import type { VatWorkItemListItem, VatWorkItemGroupSummary } from '../../api'
 import { formatVatPeriodTitle } from '../../utils/viewHelpers'
 import { PAGE_SIZE_SM as PAGE_SIZE } from '@/constants/pagination.constants'
 import { VAT_MESSAGES } from '../../messages'
@@ -22,7 +23,7 @@ interface VatWorkItemsGroupedCardsProps {
   error?: string | null
   onRowClick: (item: VatWorkItemListItem) => void
   emptyState?: { title?: string; message?: string; action?: { label: string; onClick: () => void } }
-  filters?: { status?: VatWorkItemStatus; client_record_id?: number }
+  filters?: { status?: ObligationStatus; client_record_id?: number }
   /** Deep-linked period (YYYY-MM) — its group opens and scrolls into view */
   focusPeriod?: string
 }
@@ -53,7 +54,7 @@ const GroupContent = memo(
     group: VatWorkItemGroupSummary
     columns: Column<VatWorkItemListItem>[]
     onRowClick: (item: VatWorkItemListItem) => void
-    filters?: { status?: VatWorkItemStatus; client_record_id?: number }
+    filters?: { status?: ObligationStatus; client_record_id?: number }
   }) => {
     const [page, setPage] = useState(1)
 

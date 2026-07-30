@@ -1,10 +1,11 @@
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import { EMPTY_FORM } from './annualReportsUtils'
 import type { TransitionForm } from '../types'
-import type { AnnualReportStatus, StatusTransitionPayload } from '../api'
+import type { StatusTransitionPayload } from '../api'
 
 export const getEmptyTransitionForm = (): TransitionForm => ({ ...EMPTY_FORM })
 
-export const buildTransitionPayload = (status: AnnualReportStatus, form: TransitionForm): StatusTransitionPayload => ({
+export const buildTransitionPayload = (status: ObligationStatus, form: TransitionForm): StatusTransitionPayload => ({
   status,
   note: form.note || null,
   ita_reference: form.itaRef || null,

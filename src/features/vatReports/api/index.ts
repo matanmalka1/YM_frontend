@@ -3,7 +3,6 @@ export { vatReportsQK } from './queryKeys'
 
 export type {
   VatType,
-  VatWorkItemStatus,
   VatWorkItemResponse,
   VatBreakdown,
   VatExpenseCategoryBreakdown,

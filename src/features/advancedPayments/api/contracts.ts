@@ -1,9 +1,5 @@
 import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 
-// Advance payments run the shared obligation lifecycle. `partial` is gone: a
-// part-paid advance is `in_progress` with an outstanding balance, which is what
-// partial always described — a fact about the amount, not a stage.
-export type AdvancePaymentStatus = ObligationStatus
 type AdvancePaymentTimingStatus = 'on_time' | 'overdue' | 'not_applicable'
 export type AdvancePaymentMethod = 'bank_transfer' | 'credit_card' | 'check' | 'direct_debit' | 'cash' | 'other'
 
@@ -14,7 +10,7 @@ export interface AdvancePaymentRow {
   period_months_count: 1 | 2
   expected_amount: string
   paid_amount: string
-  status: AdvancePaymentStatus
+  status: ObligationStatus
   due_date: string | null
   due_date_effective?: string | null
   paid_at: string | null
@@ -57,14 +53,14 @@ export interface AdvancePaymentClosingReadiness {
 }
 
 export interface AdvancePaymentStatusTransitionPayload {
-  status: AdvancePaymentStatus
+  status: ObligationStatus
   note?: string | null
 }
 
 export interface ListAdvancePaymentsParams {
   client_record_id: number
   year: number
-  status?: AdvancePaymentStatus[]
+  status?: ObligationStatus[]
   page?: number
   page_size?: number
 }
@@ -143,7 +139,7 @@ export interface AdvancePaymentOverviewRow {
   expected_amount: string
   paid_amount: string
   delta: string
-  status: AdvancePaymentStatus
+  status: ObligationStatus
   timing_status: AdvancePaymentTimingStatus
   due_date: string | null
   due_date_effective?: string | null
@@ -168,7 +164,7 @@ export interface ListAdvancePaymentsOverviewParams {
   period_months_count?: 1 | 2
   client_record_id?: number
   client_search?: string
-  status?: AdvancePaymentStatus[]
+  status?: ObligationStatus[]
   timing_status?: 'on_time' | 'overdue'
   /** Server-computed: true keeps only rows carrying `vat_turnover_mismatch`. */
   vat_mismatch?: boolean

@@ -3,8 +3,9 @@ import {
   OBLIGATION_STATUS_LABELS,
   OBLIGATION_STATUS_VARIANTS,
   getObligationStatusLabel,
+  type ObligationStatus,
 } from '@/constants/obligationStatus.constants'
-import type { AnnualReportFull, AnnualReportStatus, ClientTypeForReport, AnnualReportScheduleKey } from '../api/contracts'
+import type { AnnualReportFull, ClientTypeForReport, AnnualReportScheduleKey } from '../api/contracts'
 
 // ── Status labels ──────────────────────────────────────────────────────────
 
@@ -19,7 +20,7 @@ const statusVariants = OBLIGATION_STATUS_VARIANTS
 
 export const getStatusVariant = makeVariantGetter(statusVariants)
 
-export const getAllowedTransitions = (report: Pick<AnnualReportFull, 'available_transitions'>): AnnualReportStatus[] =>
+export const getAllowedTransitions = (report: Pick<AnnualReportFull, 'available_transitions'>): ObligationStatus[] =>
   report.available_transitions ?? []
 
 // ── Client type labels ────────────────────────────────────────────────────

@@ -1,8 +1,9 @@
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import type { VatInvoiceRowValues } from '../schemas/invoice.schema'
 import { formatCurrencyILS, formatPercent } from '../../../utils/utils'
 import { semanticMonoToneClasses } from '../../../utils/semanticColors'
 import type { BackendAction } from '@/lib/actions/types'
-import type { VatInvoiceResponse, VatWorkItemStatus } from '../api'
+import type { VatInvoiceResponse } from '../api'
 import { VAT_MESSAGES } from '../messages'
 
 const hasVatAction = (actions: BackendAction[] | null | undefined, key: string): boolean =>
@@ -27,7 +28,7 @@ export const canFile = (actions: BackendAction[] | null | undefined): boolean =>
 export const canCreateAmendment = (actions: BackendAction[] | null | undefined): boolean =>
   hasVatAction(actions, 'create_amendment')
 
-export const isFiled = (status: VatWorkItemStatus): boolean => status === 'submitted'
+export const isFiled = (status: ObligationStatus): boolean => status === 'submitted'
 
 const MISSING_INVOICE_NUMBER_LABEL = 'לא צוין'
 const GENERATED_INVOICE_NUMBER_PATTERN = /^(?:\d{4}-\d{2}-(?:income|expense)|(?:income|expense)-\d{4}-\d{2})-[a-f0-9]{8}$/i

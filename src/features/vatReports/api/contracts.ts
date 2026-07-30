@@ -1,4 +1,5 @@
 import type { BackendAction } from '@/lib/actions/types'
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import type { ClientStatus } from '@/features/clients/api'
 import type { VatReportingFrequency } from '@/types/vatReporting'
 import type { VatPeriodTypeFilter } from '../constants/vatConstants'
@@ -15,14 +16,6 @@ interface VatDeductionCategoryMetadata {
 export interface VatDeductionMetadataResponse {
   categories: VatDeductionCategoryMetadata[]
 }
-
-export type VatWorkItemStatus =
-  | 'awaiting_input'
-  | 'input_received'
-  | 'in_progress'
-  | 'awaiting_verification'
-  | 'submitted'
-  | 'canceled'
 
 export interface VatExpenseCategoryBreakdown {
   category: string
@@ -51,7 +44,7 @@ export interface VatWorkItemResponse {
   client_status: ClientStatus | null
   period: string
   period_type: VatType
-  status: VatWorkItemStatus
+  status: ObligationStatus
   pending_materials_note: string | null
   total_output_vat: string
   total_input_vat: string
@@ -96,7 +89,7 @@ export interface VatWorkItemListItem {
   client_id_number?: string | null
   period: string
   period_type: VatType
-  status: VatWorkItemStatus
+  status: ObligationStatus
   net_vat: string
   final_vat_amount: string | null
   is_overridden: boolean
@@ -116,11 +109,11 @@ export interface VatWorkItemStatusSummaryParams {
   client_name?: string
 }
 
-export type VatWorkItemStatusSummaryResponse = Record<VatWorkItemStatus, number>
+export type VatWorkItemStatusSummaryResponse = Record<ObligationStatus, number>
 
 export interface VatWorkItemLookupResponse {
   id: number
-  status: VatWorkItemStatus
+  status: ObligationStatus
   period: string
 }
 
@@ -207,7 +200,7 @@ export interface VatPeriodRow {
   work_item_id: number
   period: string
   period_type: VatType | null
-  status: VatWorkItemStatus
+  status: ObligationStatus
   total_output_vat: string
   total_input_vat: string
   net_vat: string
@@ -247,13 +240,13 @@ export interface VatWorkItemGroupsResponse {
 export interface VatWorkItemGroupItemsParams {
   page?: number
   page_size?: number
-  status?: VatWorkItemStatus
+  status?: ObligationStatus
   client_record_id?: number
   client_name?: string
 }
 
 export interface VatWorkItemGroupsParams {
-  status?: VatWorkItemStatus
+  status?: ObligationStatus
   client_record_id?: number
   client_name?: string
   period_type?: VatPeriodTypeFilter

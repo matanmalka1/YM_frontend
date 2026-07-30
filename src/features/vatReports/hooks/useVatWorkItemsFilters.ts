@@ -1,9 +1,9 @@
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { createClientPickerFilter } from '@/features/clients/public'
 import { ALL_YEARS_URL_OPTION } from '@/constants/filterOptions.constants'
 import { getOperationalTaxYear, getOperationalYearOptions } from '@/constants/periodOptions.constants'
-import type { VatWorkItemStatus } from '../api'
 import {
   VAT_PERIOD_TYPE_SELECT_OPTIONS,
   VAT_WORK_ITEMS_STATUS_OPTIONS,
@@ -12,7 +12,7 @@ import {
 import type { VatWorkItemsFilters } from '../types'
 import { toVatPeriodTypeFilter } from '../utils/filters'
 
-const isVatWorkItemStatus = (value: string): value is VatWorkItemStatus =>
+const isVatWorkItemStatus = (value: string): value is ObligationStatus =>
   VAT_WORK_ITEM_STATUS_VALUES.some((status) => status === value)
 
 const buildFilterFields = () => [

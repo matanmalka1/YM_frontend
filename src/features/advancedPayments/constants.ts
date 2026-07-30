@@ -2,12 +2,13 @@ import {
   OBLIGATION_STATUS_LABELS,
   OBLIGATION_STATUS_VALUES,
   OBLIGATION_STATUS_VARIANTS,
+  type ObligationStatus,
 } from '@/constants/obligationStatus.constants'
 import { makeLabelGetter } from '@/utils/labels'
 import { CLIENT_SEARCH_WITH_OFFICE_NUMBER_PLACEHOLDER } from '@/constants/searchPlaceholders.constants'
 import { getOperationalTaxYear, getOperationalYearOptions, MONTHS_COVERED_OPTIONS } from '@/constants/periodOptions.constants'
 import { ALL_STATUSES_OPTION, ALL_TYPES_OPTION, ALL_YEARS_URL_OPTION } from '@/constants/filterOptions.constants'
-import type { AdvancePaymentMethod, AdvancePaymentStatus, ListAdvancePaymentsOverviewParams } from './api/contracts'
+import type { AdvancePaymentMethod, ListAdvancePaymentsOverviewParams } from './api/contracts'
 import { ADVANCED_PAYMENTS_MESSAGES } from './messages'
 import { createClientPickerFilter } from '@/features/clients/public'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
@@ -41,16 +42,15 @@ export const ADVANCE_PAYMENT_METHOD_LABELS: Record<AdvancePaymentMethod, string>
 const ADVANCE_PAYMENT_METHOD_VALUE_SET = new Set<string>(ADVANCE_PAYMENT_METHOD_VALUES)
 export const getAdvancePaymentMethodLabel = makeLabelGetter(ADVANCE_PAYMENT_METHOD_LABELS)
 
-export const isAdvancePaymentStatus = (value: string): value is AdvancePaymentStatus =>
-  ADVANCE_PAYMENT_STATUS_VALUE_SET.has(value)
+export const isAdvancePaymentStatus = (value: string): value is ObligationStatus => ADVANCE_PAYMENT_STATUS_VALUE_SET.has(value)
 
 /**
- * URL-facing status filter values: the real backend status enum plus the
+ * URL-facing status filter values: the shared lifecycle enum plus the
  * presentation-level 'overdue' pseudo-status (server-computed timing_status,
- * never a stored AdvancePaymentStatus). Kept separate from AdvancePaymentStatus
- * so that type keeps mirroring the backend enum exactly.
+ * never a stored ObligationStatus). A widening, not a rename — which is why it
+ * is its own type and ObligationStatus is used bare everywhere else.
  */
-export type AdvancePaymentStatusFilterValue = AdvancePaymentStatus | 'overdue'
+export type AdvancePaymentStatusFilterValue = ObligationStatus | 'overdue'
 
 const ADVANCE_PAYMENT_STATUS_FILTER_VALUE_SET = new Set<string>([...ADVANCE_PAYMENT_STATUS_VALUES, 'overdue'])
 
@@ -102,7 +102,7 @@ const ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER_OPTIONS: { value: AdvancePaymentOvervi
   { value: 'desc', label: ADVANCED_PAYMENTS_MESSAGES.overviewSort.orderDesc },
 ]
 
-export const ADVANCE_PAYMENT_STATUS_OPTIONS: { value: AdvancePaymentStatus; label: string }[] = ADVANCE_PAYMENT_STATUS_VALUES.map(
+export const ADVANCE_PAYMENT_STATUS_OPTIONS: { value: ObligationStatus; label: string }[] = ADVANCE_PAYMENT_STATUS_VALUES.map(
   (status) => ({
     value: status,
     label: ADVANCE_PAYMENT_STATUS_LABELS[status],

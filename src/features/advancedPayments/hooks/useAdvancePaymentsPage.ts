@@ -1,3 +1,4 @@
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import { useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useDefaultOpenGroup } from '@/hooks/useDefaultOpenGroup'
@@ -6,7 +7,7 @@ import { useSearchParamFilters } from '@/hooks/useSearchParamFilters'
 import { getOperationalTaxYear } from '@/constants/periodOptions.constants'
 import { parsePositiveInt } from '@/utils/utils'
 import { reportingPeriodIncludesMonth } from '@/utils/reportingPeriod'
-import type { AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../api/contracts'
+import type { AdvancePaymentOverviewRow } from '../api/contracts'
 import {
   isAdvancePaymentStatusFilterValue,
   isAdvancePaymentOverviewSortBy,
@@ -40,7 +41,7 @@ export const useAdvancePaymentsPage = () => {
   const isOverdueFilter = normalizedFilterValue === 'overdue'
   // 'overdue' is a presentation-level pseudo-status: it never reaches the real
   // status query param, it only turns on the server-computed timing filter.
-  const normalizedStatus: AdvancePaymentStatus | '' = isOverdueFilter ? '' : normalizedFilterValue
+  const normalizedStatus: ObligationStatus | '' = isOverdueFilter ? '' : normalizedFilterValue
   const rawSortBy = getParam('sort_by')
   const rawOrder = getParam('order')
   const sortBy = isAdvancePaymentOverviewSortBy(rawSortBy) ? rawSortBy : DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_BY

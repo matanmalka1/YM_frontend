@@ -1,8 +1,8 @@
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { showErrorToast } from '@/utils/utils'
 import { toast } from '@/utils/toast'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
-import type { AdvancePaymentStatus } from '../api/contracts'
 import { ADVANCED_PAYMENTS_MESSAGES } from '../messages'
 import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
 
@@ -27,7 +27,7 @@ export const useAdvancePaymentStatusActions = ({
   })
 
   const transitionMutation = useMutation({
-    mutationFn: ({ status, note }: { status: AdvancePaymentStatus; note?: string }) =>
+    mutationFn: ({ status, note }: { status: ObligationStatus; note?: string }) =>
       advancePaymentsApi.transitionStatus(clientRecordId, paymentId, { status, note: note ?? null }),
     onSuccess: (payment) => {
       toast.success(
@@ -46,7 +46,7 @@ export const useAdvancePaymentStatusActions = ({
       data: readiness.data ?? null,
       isLoading: readiness.isLoading,
     },
-    transition: (status: AdvancePaymentStatus, note?: string) => transitionMutation.mutateAsync({ status, note }),
+    transition: (status: ObligationStatus, note?: string) => transitionMutation.mutateAsync({ status, note }),
     isTransitioning: transitionMutation.isPending,
   }
 }

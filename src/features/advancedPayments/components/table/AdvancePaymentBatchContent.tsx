@@ -1,7 +1,8 @@
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { useMemo } from 'react'
 import { PaginatedDataTable } from '@/components/ui/table'
-import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
+import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow } from '../../api/contracts'
 import type { AdvancePaymentOverviewSortBy, AdvancePaymentOverviewSortOrder } from '../../constants'
 import { ADVANCE_PAYMENT_BATCH_PAGE_SIZE, useAdvancePaymentBatchRows } from '../../hooks/useAdvancePaymentBatchRows'
 import { buildAdvancePaymentBatchColumns, type AdvancePaymentRowSelection } from './AdvancePaymentBatchColumns'
@@ -11,7 +12,7 @@ interface AdvancePaymentBatchContentProps {
   batch: AdvancePaymentDueDateGroup
   clientRecordId?: number
   clientSearch?: string
-  statusFilter: AdvancePaymentStatus | ''
+  statusFilter: ObligationStatus | ''
   timingFilter?: 'overdue'
   /** Server-computed flag; true keeps only rows disagreeing with their VAT return. */
   vatMismatchFilter?: true

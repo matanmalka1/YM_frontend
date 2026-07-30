@@ -1,3 +1,4 @@
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import { useEffect, useMemo } from 'react'
 import { FileText } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -10,7 +11,6 @@ import { QUERY_STALE_TIME } from '@/lib/queryDefaults'
 import { useState } from 'react'
 import { ANNUAL_REPORTS_TAX_YEAR_DESC_PARAMS } from '../constants/reportConstants'
 import { STATUS_LABELS } from '../constants/display'
-import type { AnnualReportStatus } from '../api/contracts'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
 import { getOperationalYearOptions } from '@/constants/periodOptions.constants'
 import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
@@ -25,7 +25,7 @@ const ALL_YEARS_OPTION = { value: ALL_YEARS_VALUE, label: 'כל השנים' } as
 
 const STATUS_OPTIONS = [
   ALL_STATUSES_OPTION,
-  ...(Object.entries(STATUS_LABELS) as [AnnualReportStatus, string][]).map(([value, label]) => ({
+  ...(Object.entries(STATUS_LABELS) as [ObligationStatus, string][]).map(([value, label]) => ({
     value,
     label,
   })),

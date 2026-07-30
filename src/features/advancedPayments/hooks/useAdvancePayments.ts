@@ -1,12 +1,13 @@
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
-import type { AdvancePaymentStatus, CreateAdvancePaymentPayload } from '../api/contracts'
+import type { CreateAdvancePaymentPayload } from '../api/contracts'
 import { getErrorMessage, showErrorToast } from '@/utils/utils'
 import { PAGE_SIZE_SM } from '@/constants/pagination.constants'
 import { ADVANCED_PAYMENTS_ERROR_MESSAGES } from '../errorMessages'
 import { useAdvancePaymentMutations } from './useAdvancePaymentMutations'
 
-export const useAdvancePayments = (clientRecordId: number, year: number, statusFilter?: AdvancePaymentStatus[], page = 1) => {
+export const useAdvancePayments = (clientRecordId: number, year: number, statusFilter?: ObligationStatus[], page = 1) => {
   const queryClient = useQueryClient()
   const qk = advancedPaymentsQK.clientYear(clientRecordId, year)
   const enabled = clientRecordId > 0

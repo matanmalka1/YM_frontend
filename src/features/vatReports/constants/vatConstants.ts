@@ -2,12 +2,12 @@ import {
   OBLIGATION_STATUS_LABELS,
   OBLIGATION_STATUS_VALUES,
   OBLIGATION_STATUS_VARIANTS,
+  type ObligationStatus,
 } from '@/constants/obligationStatus.constants'
 import { makeLabelGetter, makeVariantGetter } from '@/utils/labels'
 import { formatCount } from '@/utils/utils'
 import { CATEGORY_COLOR_TOKENS } from './visualizationTokens'
 import { ALL_STATUSES_OPTION } from '@/constants/filterOptions.constants'
-import type { VatWorkItemStatus } from '../api'
 import { VAT_REPORTING_FREQUENCY_LABELS } from '@/types/vatReporting'
 
 export type VatRateTypeValue = 'standard' | 'exempt' | 'zero_rate'
@@ -67,7 +67,7 @@ export const VAT_WORKFLOW_STEPS = [
   'in_progress',
   'awaiting_verification',
   'submitted',
-] as const satisfies readonly VatWorkItemStatus[]
+] as const satisfies readonly ObligationStatus[]
 
 export const VAT_WORK_ITEMS_STATS_STATUS_GROUPS = {
   pending: ['awaiting_input'],

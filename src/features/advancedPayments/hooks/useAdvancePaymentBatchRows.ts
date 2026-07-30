@@ -1,7 +1,8 @@
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { advancePaymentsApi, advancedPaymentsQK } from '../api'
-import type { AdvancePaymentDueDateGroup, AdvancePaymentStatus, ListAdvancePaymentsOverviewParams } from '../api/contracts'
+import type { AdvancePaymentDueDateGroup, ListAdvancePaymentsOverviewParams } from '../api/contracts'
 import {
   DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_BY,
   DEFAULT_ADVANCE_PAYMENT_OVERVIEW_SORT_ORDER,
@@ -16,7 +17,7 @@ interface UseAdvancePaymentBatchRowsParams {
   batch: AdvancePaymentDueDateGroup
   clientRecordId?: number
   clientSearch?: string
-  statusFilter: AdvancePaymentStatus | ''
+  statusFilter: ObligationStatus | ''
   timingFilter?: 'overdue'
   vatMismatchFilter?: true
   periodFilter: 1 | 2 | null

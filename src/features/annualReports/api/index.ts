@@ -5,7 +5,6 @@ export { annualReportTaxApi } from './annualReports.tax.api'
 export { annualReportSeasonApi } from './annualReports.season.api'
 export { annualReportsQK } from './queryKeys'
 export type {
-  AnnualReportStatus,
   AnnualReportListItem,
   AnnualReportFull,
   AnnualReportScheduleKey,

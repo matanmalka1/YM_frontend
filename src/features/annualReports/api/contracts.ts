@@ -1,13 +1,5 @@
 import type { PaginatedResponse } from '@/types'
-
-export type AnnualReportStatus =
-  | 'awaiting_input'
-  | 'awaiting_input'
-  | 'in_progress'
-  | 'awaiting_verification'
-  | 'submitted'
-  | 'submitted'
-  | 'canceled'
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 
 export interface TaxPreviewParams {
   tax_year: number
@@ -85,7 +77,7 @@ export interface AnnualReportListItem {
   tax_year: number
   client_type: ClientTypeForReport
   form_type: string
-  status: AnnualReportStatus
+  status: ObligationStatus
   deadline_type: DeadlineType
   filing_deadline: string | null
   is_overdue: boolean
@@ -129,7 +121,7 @@ export interface AnnualReportFull {
   tax_year: number
   client_type: ClientTypeForReport
   form_type: string
-  status: AnnualReportStatus
+  status: ObligationStatus
   deadline_type: DeadlineType
   filing_deadline: string | null
   is_overdue: boolean
@@ -158,7 +150,7 @@ export interface AnnualReportFull {
   updated_at: string
   assigned_to: number | null
   created_by: number
-  available_transitions?: AnnualReportStatus[]
+  available_transitions?: ObligationStatus[]
   schedules?: ScheduleEntry[]
   pension_contribution?: string | null
   donation_amount?: string | null
@@ -236,7 +228,7 @@ export interface CreateAnnualReportPayload {
 }
 
 export interface StatusTransitionPayload {
-  status: AnnualReportStatus
+  status: ObligationStatus
   note?: string | null
   ita_reference?: string | null
   submission_method?: string | null

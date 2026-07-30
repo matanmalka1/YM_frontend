@@ -1,7 +1,8 @@
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import { GLOBAL_UI_MESSAGES } from '@/messages'
 import { GroupedPeriodRow, type PeriodSummaryMetric } from '@/components/ui/grouping/GroupedPeriodRow'
 import { formatDueDateLabel, formatRelativeDueLabel } from '@/components/ui/grouping/groupedPeriodRow.utils'
-import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow, AdvancePaymentStatus } from '../../api/contracts'
+import type { AdvancePaymentDueDateGroup, AdvancePaymentOverviewRow } from '../../api/contracts'
 import type { AdvancePaymentOverviewSortBy, AdvancePaymentOverviewSortOrder } from '../../constants'
 import type { AdvancePaymentRowSelection } from './AdvancePaymentBatchColumns'
 import { getIncludedPeriodLabel } from '../../utils/advancePaymentComponentUtils'
@@ -15,7 +16,7 @@ interface AdvancePaymentBatchRowProps {
   isCurrentPeriod: boolean
   clientRecordId?: number
   clientSearch?: string
-  statusFilter: AdvancePaymentStatus | ''
+  statusFilter: ObligationStatus | ''
   timingFilter?: 'overdue'
   /** Server-computed flag; true keeps only rows disagreeing with their VAT return. */
   vatMismatchFilter?: true

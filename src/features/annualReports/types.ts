@@ -1,5 +1,6 @@
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import type { AnnualReportFull } from './api'
-import type { AnnualReportStatus, StatusTransitionPayload } from './api'
+import type { StatusTransitionPayload } from './api'
 import type { ChangeEvent } from 'react'
 
 export type SectionKey = 'overview' | 'financials' | 'tax' | 'deductions' | 'annex' | 'timeline'
@@ -20,13 +21,13 @@ export interface StatusTransitionPanelProps {
 }
 
 export interface TransitionTargetSelectorProps {
-  allowed: AnnualReportStatus[]
-  selected: AnnualReportStatus | null
-  onSelect: (status: AnnualReportStatus) => void
+  allowed: ObligationStatus[]
+  selected: ObligationStatus | null
+  onSelect: (status: ObligationStatus) => void
 }
 
 export interface TransitionDetailsFormProps {
-  selected: AnnualReportStatus
+  selected: ObligationStatus
   form: TransitionForm
   isLoading: boolean
   onFieldChange: (field: keyof TransitionForm) => (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void

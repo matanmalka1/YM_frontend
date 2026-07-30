@@ -1,7 +1,8 @@
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { vatReportsApi, vatReportsQK, type VatWorkItemStatus, type VatWorkItemStatusSummaryParams } from '../api'
+import { vatReportsApi, vatReportsQK, type VatWorkItemStatusSummaryParams } from '../api'
 import { VAT_WORK_ITEMS_STATS_STATUS_GROUPS } from '../constants/vatConstants'
 import { toOptionalVatPeriodTypeFilter } from '../utils/filters'
 import { buildVatEmptyStateTitle } from '../utils/filters'
@@ -37,7 +38,7 @@ export const useVatWorkItemsPage = () => {
     client_record_id: clientRecordId,
     year,
   })
-  const statsTotal = (statuses: readonly VatWorkItemStatus[]) =>
+  const statsTotal = (statuses: readonly ObligationStatus[]) =>
     statuses.reduce((total, status) => total + (summaryQuery.data?.[status] ?? 0), 0)
   const handleRowClick = useCallback((item: { id: number }) => navigate(`/tax/vat/${item.id}`), [navigate])
 

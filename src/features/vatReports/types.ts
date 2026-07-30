@@ -1,9 +1,9 @@
+import type { ObligationStatus } from '@/constants/obligationStatus.constants'
 import type {
   CreateVatInvoicePayload,
   CreateVatWorkItemPayload,
   UpdateVatInvoicePayload,
   VatInvoiceResponse,
-  VatWorkItemStatus,
   VatWorkItemResponse,
   VatWorkItemListItem,
   VatExpenseCategoryBreakdown,
@@ -11,7 +11,7 @@ import type {
 import type { VatPeriodTypeFilter } from './constants/vatConstants'
 
 export interface VatWorkItemsFilters {
-  status: VatWorkItemStatus | ''
+  status: ObligationStatus | ''
   year: string
   period_type: VatPeriodTypeFilter | ''
   client_record_id: string
@@ -92,7 +92,7 @@ export interface VatInvoiceEditRowProps {
 }
 
 export interface VatProgressBarProps {
-  currentStatus: VatWorkItemStatus
+  currentStatus: ObligationStatus
 }
 
 export interface VatSummaryTabProps {
