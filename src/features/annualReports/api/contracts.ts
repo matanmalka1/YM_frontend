@@ -135,6 +135,8 @@ export interface AnnualReportFull {
   // another; `superseded_at` set => a later record corrects this one.
   amends_id: number | null
   superseded_at: string | null
+  // Derived. Only the chain read ever returns a withdrawn record; it marks them.
+  is_withdrawn: boolean
   ita_reference: string | null
   assessment_amount: string | null
   refund_due: string | null

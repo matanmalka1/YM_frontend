@@ -1,6 +1,13 @@
-import { Send, RotateCcw, PackageCheck, FilePlus2 } from 'lucide-react'
+import { Send, RotateCcw, PackageCheck, FilePlus2, Undo2 } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/Button'
-import { canMarkMaterialsComplete, canMarkReadyForReview, canFile, canSendBack, canCreateAmendment } from '../../utils/vatHelpers'
+import {
+  canMarkMaterialsComplete,
+  canMarkReadyForReview,
+  canFile,
+  canSendBack,
+  canCreateAmendment,
+  canWithdrawAmendment,
+} from '../../utils/vatHelpers'
 import { isClientClosed } from '@/features/clients/public'
 import type { VatActionButtonsProps } from '../../types'
 import { VAT_MESSAGES } from '../../messages'
@@ -13,6 +20,7 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
   onFile,
   onSendBack,
   onCreateAmendment,
+  onWithdrawAmendment,
 }) => {
   const actionsDisabled = isClientClosed(workItem.client_status) || isLoading
   // available_actions is already role-filtered by the backend: filing and send-back are
@@ -23,8 +31,17 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
   const showFile = canFile(actions)
   const showSendBack = canSendBack(actions)
   const showCreateAmendment = canCreateAmendment(actions)
+  const showWithdrawAmendment = canWithdrawAmendment(actions)
 
-  if (!showMaterialsComplete && !showReadyForReview && !showFile && !showSendBack && !showCreateAmendment) return null
+  if (
+    !showMaterialsComplete &&
+    !showReadyForReview &&
+    !showFile &&
+    !showSendBack &&
+    !showCreateAmendment &&
+    !showWithdrawAmendment
+  )
+    return null
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -74,6 +91,21 @@ export const VatActionButtons: React.FC<VatActionButtonsProps> = ({
           onClick={onCreateAmendment}
         >
           {VAT_MESSAGES.actions.createAmendment}
+        </Button>
+      )}
+      {/* The inverse of "create amendment", offered on the correction itself: it
+          removes this record and returns the period to the one it corrected. */}
+      {showWithdrawAmendment && (
+        <Button
+          variant="outline"
+          size="sm"
+          icon={<Undo2 className="h-4 w-4" />}
+          isLoading={isLoading}
+          disabled={actionsDisabled}
+          onClick={onWithdrawAmendment}
+          className="border-warning-200 bg-warning-50 text-warning-700 hover:bg-warning-100"
+        >
+          {VAT_MESSAGES.actions.withdrawAmendment}
         </Button>
       )}
       {showSendBack && (

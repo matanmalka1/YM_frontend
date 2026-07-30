@@ -70,6 +70,8 @@ export interface VatWorkItemResponse {
   // another; `superseded_at` set => a later record corrects this one.
   amends_id: number | null
   superseded_at: string | null
+  // Derived. Only the chain read ever returns a withdrawn record; it marks them.
+  is_withdrawn: boolean
   submission_deadline: string | null
   statutory_deadline: string | null
   extended_deadline: string | null
@@ -95,6 +97,9 @@ export interface VatWorkItemListItem {
   is_overridden: boolean
   closed_at: string | null
   updated_at: string
+  // Not rendered — gates the row's delete control. An amendment is never
+  // deletable (D-12).
+  amends_id: number | null
   submission_deadline: string | null
   extended_deadline: string | null
   days_until_deadline: number | null

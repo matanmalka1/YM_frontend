@@ -82,6 +82,13 @@ export const annualReportsApi = {
     await api.delete(ANNUAL_REPORT_ENDPOINTS.byId(reportId))
   },
 
+  // Returns the restored original, not the withdrawn amendment: the caller
+  // navigates back to the report the year is filed under (D-12).
+  withdrawAmendment: async (reportId: number): Promise<AnnualReportFull> => {
+    const response = await api.post<AnnualReportFull>(ANNUAL_REPORT_ENDPOINTS.withdraw(reportId))
+    return response.data
+  },
+
   // Every record for this tax year, oldest first — the one read that includes
   // superseded records, because they are the history being asked for.
   listChain: async (reportId: number): Promise<AnnualReportFull[]> => {

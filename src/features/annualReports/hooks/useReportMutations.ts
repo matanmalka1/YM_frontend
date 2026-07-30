@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
   annualReportsApi,
   annualReportsQK,
@@ -11,10 +11,12 @@ import { annualReportStatusApi } from '../api'
 import { showErrorToast } from '../../../utils/utils'
 import { toast } from '../../../utils/toast'
 import { ANNUAL_REPORTS_ERROR_MESSAGES } from '../errorMessages'
+import { ANNUAL_REPORTS_MESSAGES } from '../messages'
 
 export const useReportMutations = (reportId: number | null, onDeleted?: () => void) => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
+  const { pathname } = useLocation()
   const enabled = reportId !== null && reportId > 0
   const queryKey = annualReportsQK.detail(reportId ?? 0)
   const qk = enabled ? queryKey : null
@@ -86,6 +88,25 @@ export const useReportMutations = (reportId: number | null, onDeleted?: () => vo
     onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.reports.delete),
   })
 
+  // Withdrawing touches two rows — this amendment and the report it corrected —
+  // so the whole key space is invalidated rather than this report's detail key.
+  //
+  // The page cannot stay on the withdrawn amendment: it no longer exists, so the
+  // next fetch of this URL answers 404. It moves to the restored original by
+  // swapping the trailing id of the current path rather than by naming a route —
+  // the panel is mounted both standalone and inside the client tab, and naming
+  // `/tax/reports/:id` would drop a client-scoped visitor out of that tab, its
+  // breadcrumbs and its navigation.
+  const withdrawMutation = useMutation({
+    mutationFn: () => annualReportsApi.withdrawAmendment(reportId as number),
+    onSuccess: async (original) => {
+      toast.success(ANNUAL_REPORTS_MESSAGES.fullPanel.withdrawSuccess)
+      await queryClient.invalidateQueries({ queryKey: annualReportsQK.all })
+      navigate(pathname.replace(/[^/]+$/, String(original.id)), { replace: true })
+    },
+    onError: (err) => showErrorToast(err, ANNUAL_REPORTS_ERROR_MESSAGES.reports.withdraw),
+  })
+
   return {
     transition: (payload: StatusTransitionPayload) => transitionMutation.mutate(payload),
     isTransitioning: transitionMutation.isPending,
@@ -93,5 +114,7 @@ export const useReportMutations = (reportId: number | null, onDeleted?: () => vo
     isUpdating: updateMutation.isPending,
     deleteReport: () => deleteMutation.mutateAsync(),
     isDeleting: deleteMutation.isPending,
+    withdrawAmendment: () => withdrawMutation.mutateAsync(),
+    isWithdrawing: withdrawMutation.isPending,
   }
 }

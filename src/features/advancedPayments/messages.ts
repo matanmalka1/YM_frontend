@@ -99,6 +99,12 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     deleteModalMessage: 'האם למחוק מקדמה זו?',
     deleteReasonPlaceholder: 'סיבת המחיקה (חובה)',
     deleteConfirm: 'כן, מחק',
+    withdrawTitle: 'בטל תיקון',
+    withdrawModalTitle: 'ביטול המקדמה המתקנת',
+    withdrawModalMessage:
+      'המקדמה המתקנת תוסר, והמקדמה שנסגרה תחזור להיות המקדמה של התקופה. ההיסטוריה תישמר וניתן יהיה ליצור תיקון חדש.',
+    withdrawConfirm: 'כן, בטל תיקון',
+    withdrawSuccess: 'התיקון בוטל, המקדמה שנסגרה חזרה להיות המקדמה של התקופה',
   },
   chain: {
     title: 'היסטוריית תיקונים',
@@ -107,6 +113,7 @@ export const ADVANCED_PAYMENTS_MESSAGES = {
     original: 'מקורי',
     amendment: 'דוח מתקן',
     current: 'נוכחי',
+    withdrawn: 'בוטל',
     closedAt: (date: string) => `נסגר ${date}`,
     open: 'פתוח',
   },

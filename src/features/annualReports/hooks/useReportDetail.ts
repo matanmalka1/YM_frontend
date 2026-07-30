@@ -32,5 +32,7 @@ export const useReportDetail = (reportId: number | null, onDeleted?: () => void)
     isUpdating: mutations.isUpdating,
     deleteReport: mutations.deleteReport,
     isDeleting: mutations.isDeleting,
+    withdrawAmendment: mutations.withdrawAmendment,
+    isWithdrawing: mutations.isWithdrawing,
   }
 }

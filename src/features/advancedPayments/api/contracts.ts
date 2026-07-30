@@ -36,6 +36,8 @@ export interface AdvancePaymentRow {
   // a later record corrects this one, so it is not the tip.
   amends_id: number | null
   superseded_at: string | null
+  // Derived. Only the chain read ever returns a withdrawn record; it marks them.
+  is_withdrawn: boolean
   closed_at: string | null
   closed_by: number | null
   closed_late: boolean | null

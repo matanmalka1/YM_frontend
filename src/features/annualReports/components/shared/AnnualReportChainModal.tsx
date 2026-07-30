@@ -47,8 +47,13 @@ export const AnnualReportChainModal: React.FC<AnnualReportChainModalProps> = ({ 
                   : ANNUAL_REPORTS_MESSAGES.chain.open}
               </span>
               {/* The tip is the record every other screen shows. Naming it here
-                  is what stops the list reading as several live tax years. */}
-              {record.superseded_at == null && <Badge variant="positive">{ANNUAL_REPORTS_MESSAGES.chain.current}</Badge>}
+                  is what stops the list reading as several live records. A withdrawn
+                  correction also has no `superseded_at` — nothing replaced it — so it
+                  has to be excluded here or it would read as the live one. */}
+              {record.is_withdrawn && <Badge variant="neutral">{ANNUAL_REPORTS_MESSAGES.chain.withdrawn}</Badge>}
+              {!record.is_withdrawn && record.superseded_at == null && (
+                <Badge variant="positive">{ANNUAL_REPORTS_MESSAGES.chain.current}</Badge>
+              )}
             </li>
           ))}
         </ol>

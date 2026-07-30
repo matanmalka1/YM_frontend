@@ -66,6 +66,7 @@ export interface VatActionButtonsProps {
   onReadyForReview: () => void
   onFile: () => void
   onCreateAmendment: () => void
+  onWithdrawAmendment: () => void
   onSendBack: () => void
 }
 

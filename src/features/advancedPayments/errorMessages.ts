@@ -6,6 +6,7 @@ export const ADVANCED_PAYMENTS_ERROR_MESSAGES = {
     create: 'שגיאה ביצירת מקדמה',
     update: 'שגיאה בעדכון מקדמה',
     delete: 'שגיאה במחיקת מקדמה',
+    withdraw: 'שגיאה בביטול המקדמה המתקנת',
     listLoad: 'שגיאה בטעינת מקדמות',
     detailLoad: 'שגיאה בטעינת מקדמה',
     annualKpiLoad: 'טעינת הסיכום השנתי נכשלה',

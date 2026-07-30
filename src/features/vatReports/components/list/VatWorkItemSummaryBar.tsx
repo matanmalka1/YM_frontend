@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { Clock, Info } from 'lucide-react'
 import { formatDate } from '@/utils/utils'
 import { AlertBanner } from '@/components/ui/overlays/AlertBanner'
+import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
 import { Badge } from '@/components/ui/primitives/Badge'
 import { Card } from '@/components/ui/primitives/Card'
 import { useVatWorkItemActions } from '../../hooks/useVatWorkItemActions'
 import { useCreateVatAmendment } from '../../hooks/useCreateVatAmendment'
+import { useWithdrawVatAmendment } from '../../hooks/useWithdrawVatAmendment'
 import { useVatLifecyclePending } from '../../hooks/useVatLifecyclePending'
 import { VAT_DEADLINE_WARNING_DAYS } from '../../constants/vatConstants'
 import { VatProgressBar } from '../shared/VatProgressBar'
@@ -24,7 +26,9 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
   const [showSendBack, setShowSendBack] = useState(false)
   const [showFileModal, setShowFileModal] = useState(false)
   const { createAmendment } = useCreateVatAmendment(workItem.id)
+  const { withdrawAmendment, isLoading: isWithdrawing } = useWithdrawVatAmendment(workItem.id)
   const [showChain, setShowChain] = useState(false)
+  const [showWithdraw, setShowWithdraw] = useState(false)
   const filed = isFiled(workItem.status)
 
   return (
@@ -89,9 +93,26 @@ export const VatWorkItemSummaryBar: React.FC<VatWorkItemSummaryBarProps> = ({ wo
             onFile={() => setShowFileModal(true)}
             onSendBack={() => setShowSendBack(true)}
             onCreateAmendment={() => createAmendment()}
+            onWithdrawAmendment={() => setShowWithdraw(true)}
           />
         )}
       </div>
+
+      {/* Withdrawing rewrites two records and cannot be undone from the UI, so it
+          is confirmed — unlike creating a correction, which only adds one. */}
+      <ConfirmDialog
+        open={showWithdraw}
+        title={VAT_MESSAGES.mutations.withdrawModalTitle}
+        message={VAT_MESSAGES.mutations.withdrawModalMessage}
+        confirmLabel={VAT_MESSAGES.mutations.withdrawConfirm}
+        closeOnBackdrop={false}
+        isLoading={isWithdrawing}
+        onConfirm={async () => {
+          await withdrawAmendment()
+          setShowWithdraw(false)
+        }}
+        onCancel={() => setShowWithdraw(false)}
+      />
 
       <VatChainModal open={showChain} workItemId={workItem.id} onClose={() => setShowChain(false)} />
 

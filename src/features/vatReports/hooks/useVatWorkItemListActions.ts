@@ -88,8 +88,12 @@ export const useVatWorkItemListActions = () => {
     [isAdvisor, sendBackMutation],
   )
 
+  // An amendment is excluded whatever its status: deleting it would leave the
+  // record it corrects stamped as superseded, so the period would show no row at
+  // all. The backend rejects it with 409 — the button is hidden to match.
   const canDeleteWorkItem = useCallback(
-    (item: VatWorkItemListItem) => (isAdvisor || isSecretary) && !isFiled(item.status),
+    (item: VatWorkItemListItem) =>
+      (isAdvisor || isSecretary) && !isFiled(item.status) && item.amends_id == null,
     [isAdvisor, isSecretary],
   )
 

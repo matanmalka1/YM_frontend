@@ -49,8 +49,10 @@ export const AdvancePaymentFullPanel: React.FC<AdvancePaymentFullPanelProps> = (
       canEdit={permissions.canEdit}
       isUpdating={actions.isUpdating}
       isDeleting={actions.isDeleting}
+      isWithdrawing={actions.isWithdrawing}
       onSave={actions.onSave}
       onDelete={actions.onDelete}
+      onWithdraw={actions.onWithdraw}
       turnoverRefresh={turnoverRefresh}
     />
   )

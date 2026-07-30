@@ -12,6 +12,7 @@ export const useAnnualReportDetailPage = (reportId: number, backPath: string) =>
   const [activeSection, setActiveSection] = useState<SectionKey>('overview')
   const [isDirty, setIsDirty] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [showWithdrawConfirm, setShowWithdrawConfirm] = useState(false)
   const [isExportingPdf, setIsExportingPdf] = useState(false)
   const submitRef = useRef<(() => void) | null>(null)
   const navigate = useNavigate()
@@ -49,6 +50,11 @@ export const useAnnualReportDetailPage = (reportId: number, backPath: string) =>
     setShowDeleteConfirm(false)
   }, [detail])
 
+  const handleWithdrawConfirm = useCallback(async () => {
+    await detail.withdrawAmendment()
+    setShowWithdrawConfirm(false)
+  }, [detail])
+
   return {
     ...detail,
     activeSection,
@@ -57,6 +63,8 @@ export const useAnnualReportDetailPage = (reportId: number, backPath: string) =>
     setIsDirty,
     showDeleteConfirm,
     setShowDeleteConfirm,
+    showWithdrawConfirm,
+    setShowWithdrawConfirm,
     isExportingPdf,
     isAdvisor,
     submitRef,
@@ -64,5 +72,6 @@ export const useAnnualReportDetailPage = (reportId: number, backPath: string) =>
     handleExportPdf,
     handleTransition,
     handleDeleteConfirm,
+    handleWithdrawConfirm,
   }
 }

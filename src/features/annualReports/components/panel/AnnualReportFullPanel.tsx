@@ -1,4 +1,4 @@
-import { Download, Trash2, Save } from 'lucide-react'
+import { Download, Trash2, Save, Undo2 } from 'lucide-react'
 import { useAnnualReportDetailPage } from '../../hooks/useAnnualReportDetailPage'
 import { ConfirmDialog } from '../../../../components/ui/overlays/ConfirmDialog'
 import { StatusTransitionPanel } from '../statusTransition/StatusTransitionPanelRoot'
@@ -38,11 +38,14 @@ export const AnnualReportFullPanel = ({
     setIsDirty,
     showDeleteConfirm,
     setShowDeleteConfirm,
+    showWithdrawConfirm,
+    setShowWithdrawConfirm,
     isExportingPdf,
     isAdvisor,
     submitRef,
     isUpdating,
     isDeleting,
+    isWithdrawing,
     isTransitioning,
     completeSchedule,
     addSchedule,
@@ -53,6 +56,7 @@ export const AnnualReportFullPanel = ({
     handleExportPdf,
     handleTransition,
     handleDeleteConfirm,
+    handleWithdrawConfirm,
   } = useAnnualReportDetailPage(reportId, backPath)
 
   if (isLoading) {
@@ -62,6 +66,11 @@ export const AnnualReportFullPanel = ({
       </div>
     )
   }
+
+  // Delete and withdraw share their preconditions: advisor only, and never on a
+  // submitted report. Both are enforced by the backend; gating here keeps a button
+  // from existing that can only answer 403 or 400.
+  const canMutateReport = isAdvisor && report?.status !== 'submitted'
 
   if (error || !report) {
     return (
@@ -94,9 +103,24 @@ export const AnnualReportFullPanel = ({
                   {ANNUAL_REPORTS_MESSAGES.fullPanel.downloadDraft}
                 </Button>
               )}
-              <Button variant="danger" size="sm" icon={<Trash2 className="h-4 w-4" />} onClick={() => setShowDeleteConfirm(true)}>
-                {ANNUAL_REPORTS_MESSAGES.fullPanel.deleteReport}
-              </Button>
+              {/* Both acts are advisor-only and neither touches a submitted report
+                  (D-13), so both are gated on the same two facts the backend checks.
+                  Which of the two is offered is the chain question: an amendment is
+                  never deletable — removing it would leave the report it corrects
+                  stamped as superseded, so the tax year would show no report at all
+                  — and it is taken back instead, which also returns that report to
+                  being the year's live one (D-12). A superseded amendment is not the
+                  tip and cannot be withdrawn either. */}
+              {canMutateReport && report.amends_id == null && (
+                <Button variant="danger" size="sm" icon={<Trash2 className="h-4 w-4" />} onClick={() => setShowDeleteConfirm(true)}>
+                  {ANNUAL_REPORTS_MESSAGES.fullPanel.deleteReport}
+                </Button>
+              )}
+              {canMutateReport && report.amends_id != null && report.superseded_at == null && (
+                <Button variant="outline" size="sm" icon={<Undo2 className="h-4 w-4" />} onClick={() => setShowWithdrawConfirm(true)}>
+                  {ANNUAL_REPORTS_MESSAGES.fullPanel.withdrawAmendment}
+                </Button>
+              )}
               <Button
                 variant="primary"
                 size="sm"
@@ -157,6 +181,17 @@ export const AnnualReportFullPanel = ({
         isLoading={isDeleting}
         onConfirm={handleDeleteConfirm}
         onCancel={() => setShowDeleteConfirm(false)}
+      />
+
+      <ConfirmDialog
+        open={showWithdrawConfirm}
+        title={ANNUAL_REPORTS_MESSAGES.fullPanel.withdrawModalTitle}
+        message={ANNUAL_REPORTS_MESSAGES.fullPanel.withdrawModalMessage}
+        confirmLabel={ANNUAL_REPORTS_MESSAGES.fullPanel.withdrawAmendment}
+        closeOnBackdrop={false}
+        isLoading={isWithdrawing}
+        onConfirm={handleWithdrawConfirm}
+        onCancel={() => setShowWithdrawConfirm(false)}
       />
     </>
   )

@@ -75,6 +75,12 @@ export const useAdvancePaymentDetailPage = ({
       queryClient.removeQueries({ queryKey: advancedPaymentsQK.detail(clientRecordId, deletedPaymentId) })
       navigate(backPath, { replace: true })
     },
+    // The withdrawn correction no longer exists, so this page cannot stay on it:
+    // the restored original is where the period now lives.
+    onWithdrawSuccess: (original) => {
+      queryClient.removeQueries({ queryKey: advancedPaymentsQK.detail(clientRecordId, paymentId) })
+      navigate(`${backPath}/${original.id}`, { replace: true })
+    },
   })
 
   const title = payment
@@ -114,12 +120,22 @@ export const useAdvancePaymentDetailPage = ({
     actions: {
       isUpdating: paymentMutations.isUpdating,
       isDeleting: paymentMutations.isDeleting,
+      isWithdrawing: paymentMutations.isWithdrawing,
       onSave: async (payload: UpdateAdvancePaymentPayload) => {
         await paymentMutations.updatePayment({ id: paymentId, payload })
       },
+      // An amendment is excluded whatever its status: deleting it would leave the
+      // payment it corrects stamped as superseded, so the period would show no
+      // row at all. The backend rejects it with 409 — the button is hidden to match.
       onDelete:
-        isAdvisor && !(payment && isObligationLocked(payment.status))
+        isAdvisor && !(payment && isObligationLocked(payment.status)) && payment?.amends_id == null
           ? async (reason: string) => void (await paymentMutations.deletePayment({ paymentId, reason }))
+          : undefined,
+      // The correction's counterpart to delete, and offered on exactly the rows
+      // delete is not: an open amendment.
+      onWithdraw:
+        isAdvisor && payment != null && !isObligationLocked(payment.status) && payment.amends_id != null
+          ? async () => void (await paymentMutations.withdrawAmendment(paymentId))
           : undefined,
     },
     turnoverRefresh: {

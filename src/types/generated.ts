@@ -737,6 +737,33 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/annual-reports/{report_id}/withdraw': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Withdraw Amendment
+     * @description Take back a correction that was never filed, returning the year to its filed
+     *     report (D-12).
+     *
+     *     Advisor only. The correction is removed and the report it corrected becomes
+     *     the year's one visible row again, in one transaction — either both or neither,
+     *     because a year with no visible report and a year counted twice are the two
+     *     ways this can go wrong. The withdrawn correction stays readable in
+     *     ``GET /chain``. Returns the restored original, not the withdrawn amendment.
+     */
+    post: operations['withdraw_amendment_api_v1_annual_reports__report_id__withdraw_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/annual-reports/{report_id}/chain': {
     parameters: {
       query?: never
@@ -2515,6 +2542,33 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/clients/{client_record_id}/advance-payments/{payment_id}/withdraw': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Withdraw Advance Payment Amendment
+     * @description Take back a correction that was never filed, returning the period to its
+     *     closed payment (D-12).
+     *
+     *     Advisor only. The correction is removed and the payment it corrected becomes
+     *     the period's one visible row again, in one transaction — either both or
+     *     neither, because a period with no visible row and a period counted twice are
+     *     the two ways this can go wrong. The withdrawn correction stays readable in
+     *     ``GET /chain``. Returns the restored original, not the withdrawn amendment.
+     */
+    post: operations['withdraw_advance_payment_amendment_api_v1_clients__client_record_id__advance_payments__payment_id__withdraw_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/clients/{client_record_id}/advance-payments/{payment_id}/chain': {
     parameters: {
       query?: never
@@ -3027,6 +3081,33 @@ export interface paths {
      *     Returns the amendment, not the original.
      */
     post: operations['create_amendment_api_v1_vat_work_items__item_id__amend_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/vat/work-items/{item_id}/withdraw': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Withdraw Amendment
+     * @description Take back a correction that was never filed, returning the period to its
+     *     filed record (D-12).
+     *
+     *     Advisor only. The correction is removed and the record it corrected becomes
+     *     the period's one visible row again, in one transaction — either both or
+     *     neither, because a period with no visible row and a period counted twice are
+     *     the two ways this can go wrong. The withdrawn correction stays readable in
+     *     ``GET /chain``. Returns the restored original, not the withdrawn amendment.
+     */
+    post: operations['withdraw_amendment_api_v1_vat_work_items__item_id__withdraw_post']
     delete?: never
     options?: never
     head?: never
@@ -3777,6 +3858,11 @@ export interface components {
       amends_id?: number | null
       /** Superseded At */
       superseded_at?: string | null
+      /**
+       * Is Withdrawn
+       * @default false
+       */
+      is_withdrawn: boolean
       /** Annual Report Id */
       annual_report_id?: number | null
       /** Notes */
@@ -4153,6 +4239,11 @@ export interface components {
       amends_id?: number | null
       /** Superseded At */
       superseded_at?: string | null
+      /**
+       * Is Withdrawn
+       * @default false
+       */
+      is_withdrawn: boolean
       /** Ita Reference */
       ita_reference?: string | null
       /** Assessment Amount */
@@ -4336,6 +4427,11 @@ export interface components {
       amends_id?: number | null
       /** Superseded At */
       superseded_at?: string | null
+      /**
+       * Is Withdrawn
+       * @default false
+       */
+      is_withdrawn: boolean
       /** Ita Reference */
       ita_reference?: string | null
       /** Assessment Amount */
@@ -9270,6 +9366,8 @@ export interface components {
        * @example 2026-01-02T03:04:05Z
        */
       updated_at: string
+      /** Amends Id */
+      amends_id?: number | null
       /** Submission Deadline */
       submission_deadline?: string | null
       /** Extended Deadline */
@@ -9373,6 +9471,11 @@ export interface components {
       amends_id?: number | null
       /** Superseded At */
       superseded_at?: string | null
+      /**
+       * Is Withdrawn
+       * @default false
+       */
+      is_withdrawn: boolean
       /** Created By */
       created_by: number
       /** Assigned To */
@@ -11916,6 +12019,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorEnvelope']
         }
       }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -12445,6 +12557,82 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AnnualReportResponse']
+        }
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  withdraw_amendment_api_v1_annual_reports__report_id__withdraw_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        report_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
         headers: {
           [name: string]: unknown
         }
@@ -19041,6 +19229,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorEnvelope']
         }
       }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -19414,6 +19611,83 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AdvancePaymentRow']
+        }
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  withdraw_advance_payment_amendment_api_v1_clients__client_record_id__advance_payments__payment_id__withdraw_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        client_record_id: number
+        payment_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
         headers: {
           [name: string]: unknown
         }
@@ -20616,6 +20890,15 @@ export interface operations {
           'application/json': components['schemas']['ErrorEnvelope']
         }
       }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
       /** @description Validation Error */
       422: {
         headers: {
@@ -21283,6 +21566,82 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VatWorkItemResponse']
+        }
+      }
+      /** @description Bad request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Authentication required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Resource not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorEnvelope']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  withdraw_amendment_api_v1_vat_work_items__item_id__withdraw_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        item_id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
         headers: {
           [name: string]: unknown
         }

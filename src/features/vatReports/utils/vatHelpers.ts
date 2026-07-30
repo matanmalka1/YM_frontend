@@ -28,6 +28,9 @@ export const canFile = (actions: BackendAction[] | null | undefined): boolean =>
 export const canCreateAmendment = (actions: BackendAction[] | null | undefined): boolean =>
   hasVatAction(actions, 'create_amendment')
 
+export const canWithdrawAmendment = (actions: BackendAction[] | null | undefined): boolean =>
+  hasVatAction(actions, 'withdraw_amendment')
+
 export const isFiled = (status: ObligationStatus): boolean => status === 'submitted'
 
 const MISSING_INVOICE_NUMBER_LABEL = 'לא צוין'

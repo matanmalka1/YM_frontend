@@ -46,8 +46,13 @@ export const VatChainModal: React.FC<VatChainModalProps> = ({ open, workItemId, 
                 {record.closed_at ? VAT_MESSAGES.chain.closedAt(formatDateTime(record.closed_at)) : VAT_MESSAGES.chain.open}
               </span>
               {/* The tip is the record every other screen shows. Naming it here
-                  is what stops the list reading as several live periods. */}
-              {record.superseded_at == null && <Badge variant="positive">{VAT_MESSAGES.chain.current}</Badge>}
+                  is what stops the list reading as several live records. A withdrawn
+                  correction also has no `superseded_at` — nothing replaced it — so it
+                  has to be excluded here or it would read as the live one. */}
+              {record.is_withdrawn && <Badge variant="neutral">{VAT_MESSAGES.chain.withdrawn}</Badge>}
+              {!record.is_withdrawn && record.superseded_at == null && (
+                <Badge variant="positive">{VAT_MESSAGES.chain.current}</Badge>
+              )}
             </li>
           ))}
         </ol>

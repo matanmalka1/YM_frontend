@@ -92,6 +92,13 @@ export const vatReportsApi = {
     return response.data
   },
 
+  // Returns the restored original, not the withdrawn amendment: the caller
+  // navigates back to the record the period is filed under (D-12).
+  withdrawAmendment: async (id: number): Promise<VatWorkItemResponse> => {
+    const response = await api.post<VatWorkItemResponse>(VAT_ENDPOINTS.vatWorkItemWithdraw(id))
+    return response.data
+  },
+
   // Every record for this period, oldest first — the one read that includes
   // superseded records, because they are the history being asked for.
   listChain: async (id: number): Promise<VatWorkItemResponse[]> => {

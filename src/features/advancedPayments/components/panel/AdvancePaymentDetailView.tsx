@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Trash2 } from 'lucide-react'
+import { Trash2, Undo2 } from 'lucide-react'
 import { PageHeader, type Breadcrumb } from '@/components/layout/PageHeader'
 import { Alert } from '@/components/ui/overlays/Alert'
 import { ConfirmDialog } from '@/components/ui/overlays/ConfirmDialog'
@@ -51,8 +51,11 @@ interface AdvancePaymentDetailViewProps {
   canEdit: boolean
   isUpdating: boolean
   isDeleting: boolean
+  isWithdrawing: boolean
   onSave: (payload: UpdateAdvancePaymentPayload) => Promise<void>
   onDelete?: (reason: string) => Promise<void>
+  /** Present only on an open correction — the act that undoes its creation (D-12). */
+  onWithdraw?: () => Promise<void>
   turnoverRefresh: {
     isRefreshing: boolean
     onRefresh: () => Promise<AdvancePaymentRow | undefined>
@@ -77,13 +80,16 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
   canEdit,
   isUpdating,
   isDeleting,
+  isWithdrawing,
   onSave,
   onDelete,
+  onWithdraw,
   turnoverRefresh,
 }) => {
   const form = useAdvancePaymentDetailForm({ payment, onSave })
   const periodNavigation = useAdvancePaymentPeriodNavigation(payment)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [confirmWithdraw, setConfirmWithdraw] = useState(false)
   const [deleteReason, setDeleteReason] = useState('')
   useBeforeUnloadGuard(form.isDirty)
 
@@ -127,6 +133,19 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
                   aria-label={ADVANCED_PAYMENTS_MESSAGES.detailActions.deleteAriaLabel}
                 >
                   {ADVANCED_PAYMENTS_MESSAGES.detailActions.deleteTitle}
+                </Button>
+              )}
+              {/* A correction is taken back, not deleted: withdrawing also returns
+                  the payment it corrects to being the period's live row (D-12). */}
+              {onWithdraw && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  icon={<Undo2 className="h-4 w-4" />}
+                  onClick={() => setConfirmWithdraw(true)}
+                  disabled={isUpdating || isWithdrawing}
+                >
+                  {ADVANCED_PAYMENTS_MESSAGES.detailActions.withdrawTitle}
                 </Button>
               )}
               <Button
@@ -216,6 +235,18 @@ export const AdvancePaymentDetailView: React.FC<AdvancePaymentDetailViewProps> =
         onConfirm={handleConfirmPendingRefresh}
         onCancel={turnoverRefresh.onCancelPending}
       />
+
+      {onWithdraw && (
+        <ConfirmDialog
+          open={confirmWithdraw}
+          title={ADVANCED_PAYMENTS_MESSAGES.detailActions.withdrawModalTitle}
+          message={ADVANCED_PAYMENTS_MESSAGES.detailActions.withdrawModalMessage}
+          confirmLabel={ADVANCED_PAYMENTS_MESSAGES.detailActions.withdrawConfirm}
+          isLoading={isWithdrawing}
+          onConfirm={onWithdraw}
+          onCancel={() => setConfirmWithdraw(false)}
+        />
+      )}
 
       {onDelete && (
         <ConfirmDialog

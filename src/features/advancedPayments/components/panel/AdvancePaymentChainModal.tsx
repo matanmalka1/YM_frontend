@@ -56,8 +56,13 @@ export const AdvancePaymentChainModal: React.FC<AdvancePaymentChainModalProps> =
                   : ADVANCED_PAYMENTS_MESSAGES.chain.open}
               </span>
               {/* The tip is the record every other screen shows. Naming it here
-                  is what stops the list reading as several live periods. */}
-              {record.superseded_at == null && <Badge variant="positive">{ADVANCED_PAYMENTS_MESSAGES.chain.current}</Badge>}
+                  is what stops the list reading as several live records. A withdrawn
+                  correction also has no `superseded_at` — nothing replaced it — so it
+                  has to be excluded here or it would read as the live one. */}
+              {record.is_withdrawn && <Badge variant="neutral">{ADVANCED_PAYMENTS_MESSAGES.chain.withdrawn}</Badge>}
+              {!record.is_withdrawn && record.superseded_at == null && (
+                <Badge variant="positive">{ADVANCED_PAYMENTS_MESSAGES.chain.current}</Badge>
+              )}
             </li>
           ))}
         </ol>

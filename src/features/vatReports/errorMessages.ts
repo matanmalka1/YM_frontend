@@ -24,6 +24,7 @@ export const VAT_ERROR_MESSAGES = {
     exportError: 'ייצוא נכשל, נסה שוב',
     filingError: 'שגיאה בהגשה',
     amendmentError: 'שגיאה ביצירת דוח מתקן',
+    withdrawError: 'שגיאה בביטול הדוח המתקן',
     invoiceAddError: 'שגיאה בהוספת חשבונית',
     invoiceDeleteError: 'שגיאה במחיקת חשבונית',
     workItemDeleteError: 'שגיאה במחיקת התיק',

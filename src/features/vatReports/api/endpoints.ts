@@ -11,6 +11,7 @@ export const VAT_ENDPOINTS = {
   vatWorkItemSendBack: (id: number | string) => `/vat/work-items/${id}/send-back`,
   vatWorkItemFile: (id: number | string) => `/vat/work-items/${id}/file`,
   vatWorkItemAmend: (id: number | string) => `/vat/work-items/${id}/amend`,
+  vatWorkItemWithdraw: (id: number | string) => `/vat/work-items/${id}/withdraw`,
   vatWorkItemChain: (id: number | string) => `/vat/work-items/${id}/chain`,
   vatWorkItemStatusSummary: '/vat/work-items/status-summary',
   vatClientSummary: (clientId: number | string) => `/vat/clients/${clientId}/summary`,

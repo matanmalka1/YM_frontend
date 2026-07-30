@@ -36,6 +36,7 @@ const createPayment = (overrides: Partial<AdvancePaymentRow> = {}): AdvancePayme
   assigned_to: null,
   amends_id: null,
   superseded_at: null,
+  is_withdrawn: false,
   closed_at: null,
   closed_by: null,
   closed_late: null,

@@ -20,6 +20,7 @@ const report = (overrides: Partial<AnnualReportFull> = {}): AnnualReportFull => 
   chain_closed_late: null,
   amends_id: null,
   superseded_at: null,
+  is_withdrawn: false,
   ita_reference: null,
   assessment_amount: null,
   refund_due: null,
